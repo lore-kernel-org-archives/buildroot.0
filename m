@@ -1,61 +1,194 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 14 Aug 2014 10:35:19 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/freescale_imx6dlsabresd: add
-	defconfig for iMX6DL SabreSD
-Message-ID: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu, 14 Aug 2014 10:35:20 +0200
+Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: document how to
+	create a bootable SD
+In-Reply-To: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
+References: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1408005320-6100-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is very similar to freescale_imx6sabresd_defconfig, which supports the
-i.MX6Q ("Quad", quad core CPU) version of the board, except it supports the
-i.MX6DL (DualLite, dual core CPU) version.
+Document how to create a bootable SD card for the two supported SABRESD cards:
+i.MX6Q and i.MX6DL.
 
-The differences are in the U-boot configuration and the device tree file.
+The SD card creation relies on an ad-hoc script.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Gilles Talis <gilles.talis@gmail.com>
 Cc: Gary Bisson <bisson.gary@gmail.com>
 Cc: Vincent Stehl? <vincent.stehle@freescale.com>
 ---
- configs/freescale_imx6dlsabresd_defconfig | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 configs/freescale_imx6dlsabresd_defconfig
+ board/freescale/imx6sabresd/create-boot-sd.sh | 85 +++++++++++++++++++++++++++
+ board/freescale/imx6sabresd/readme.txt        | 66 +++++++++++++++++++++
+ 2 files changed, 151 insertions(+)
+ create mode 100755 board/freescale/imx6sabresd/create-boot-sd.sh
+ create mode 100644 board/freescale/imx6sabresd/readme.txt
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-new file mode 100644
-index 0000000..4177e16
+diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/imx6sabresd/create-boot-sd.sh
+new file mode 100755
+index 0000000..ebe3002
 --- /dev/null
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -0,0 +1,27 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
++++ b/board/freescale/imx6sabresd/create-boot-sd.sh
+@@ -0,0 +1,85 @@
++#!/bin/sh
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++set -u
++set -e
 +
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
++PROGNAME=$(basename $0)
 +
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
++usage()
++{
++    echo "Create an SD card that boots on an i.MX6DL SABRESD board."
++    echo "It is supposed to work also for the i.MX6Q SABRESD board, but"
++    echo "it this is not tested."
++    echo
++    echo "Note: all data on the the card will be completely deleted!"
++    echo "Use with care!"
++    echo "Superuser permissions may be required to write to the device."
++    echo
++    echo "Usage: ${PROGNAME} <sd_block_device>"
++    echo "Arguments:"
++    echo "  <sd_block_device>     The device to be written to"
++    echo
++    echo "Example: ${PROGNAME} /dev/mmcblk0"
++    echo
++}
 +
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++if [ $# -ne 1 ]; then
++    usage
++    exit 1
++fi
++
++if [ $(id -u) -ne 0 ]; then
++    echo "${PROGNAME} must be run as root"
++    exit 1
++fi
++
++DEV=${1}
++PART1=${DEV}p1
++PART2=${DEV}p2
++
++# Unmount the partitions if mounted
++umount ${PART1} || true
++umount ${PART2} || true
++
++# First, clear the card
++dd if=/dev/zero of=${DEV} bs=1M count=2
++
++sync
++
++# Partition the card.
++# SD layout for i.MX6 boot:
++# - Bootloader at offset 1024
++# - FAT partition starting at 1MB offset, containing uImage and *.dtb
++# - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
++sfdisk ${DEV} <<EOF
++32,480,b
++512,,L
++EOF
++
++sync
++
++# Copy the bootloader@offset 1024
++dd if=output/images/u-boot.imx of=${DEV} obs=512 seek=2
++
++# Prepare a temp dir for mounting partitions
++TMPDIR=$(mktemp -d)
++
++# FAT partition: kernel and DTBs
++mkfs.vfat ${PART1}
++mount ${PART1} ${TMPDIR}
++cp output/images/uImage ${TMPDIR}/
++cp output/images/*.dtb  ${TMPDIR}/
++sync
++umount ${TMPDIR}
++
++# ext2 partition: root filesystem
++mkfs.ext2 ${PART2}
++mount ${PART2} ${TMPDIR}
++tar -C ${TMPDIR}/ -xf output/images/rootfs.tar
++sync
++umount ${TMPDIR}
++
++# Cleanup
++rmdir ${TMPDIR}
++sync
++echo Done
+diff --git a/board/freescale/imx6sabresd/readme.txt b/board/freescale/imx6sabresd/readme.txt
+new file mode 100644
+index 0000000..c93347f
+--- /dev/null
++++ b/board/freescale/imx6sabresd/readme.txt
+@@ -0,0 +1,66 @@
++*******************************************************
++Freescale i.MX6Q and i.MX6DL SABRESD development boards
++*******************************************************
++
++This file documents the Buildroot support for the Freescale SABRE Board for
++Smart Devices Based on the i.MX 6 Series (SABRESD).
++
++Read the SABRESD Quick Start Guide for an introduction to the board:
++http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
++
++Build
++=====
++
++First, configure Buildroot for your SABRESD board.
++For i.MX6Q:
++
++  make freescale_imx6sabresd_defconfig
++
++For i.MX6DL:
++
++  make freescale_imx6dlsabresd_defconfig
++
++Build all components:
++
++  make
++
++You will find in ./output/images/ the following files:
++  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb
++  - rootfs.ext2
++  - rootfs.tar
++  - u-boot.imx
++  - uImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Run the following script as root on your SD card. This will partition the card
++and copy the bootloader, kernel, DTBs and root filesystem as needed.
++
++*** WARNING! The script will destroy all the card content. Use with care! ***
++
++  ./board/freescale/imx6sabresd/create-boot-sd.sh <your-sd-device>
++
++Boot the SABRESD board
++======================
++
++To boot your newly created system (refer to the SABRESD Quick Start Guide for
++guidance):
++- insert the SD card in the SD3 slot of the board;
++- locate the BOOT dip switches (SW6), set dips 2 and 7 to ON, all others to OFF;
++- connect a Micro USB cable to Debug Port and connect using a terminal emulator;
++- power on the board.
++
++Enjoy!
++
++References
++==========
++
++https://community.freescale.com/docs/DOC-95015
++https://community.freescale.com/docs/DOC-95017
++https://community.freescale.com/docs/DOC-99218
 -- 
 1.9.1
