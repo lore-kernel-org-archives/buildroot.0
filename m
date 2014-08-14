@@ -1,52 +1,71 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Fri, 15 Aug 2014 02:09:37 +0800
-Subject: [Buildroot] [PATCH 1/1] bandwidthd: incorporate fixes for
-	autobuilders
-Message-ID: <1408039777-23988-1-git-send-email-nroach44@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Aug 2014 20:28:34 +0200
+Subject: [Buildroot] [PATCH] bluez5_utils: gatttool depends on bluez5_utils
+	client
+Message-ID: <1408040914-23320-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version bump to -r08
-	"[patched] the configure.ac script to remove the hardcoded
-	-L/usr/local/lib and -I/usr/local/include. The bandwidthd package
-	-was already autoreconfigured, so there is no need to add it."
+The gatttool utility uses readline, and is therefore built only if
+--enable-client is used, i.e when bluez5_utils client applications are
+enabled. Therefore, this commit makes
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL depend on
+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT. It also moves
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to be right below the
+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT definition.
 
-"Adding the --without-x option, which ensures that the configure.ac
-	script will not add -L/usr/lib to the compiler flags (and we anyway
-	haven't added any sort of X.org support to bandwidthd for the
-	moment)."
+Fixes:
 
-Both fixes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  http://autobuild.buildroot.org/results/f2b/f2b8b1bf5d50e6223a9a6d6858320975edb2a25a/
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bandwidthd/bandwidthd.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/bluez5_utils/Config.in | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index 9b1eb32..3e11d6a 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 10588db..ec1352f 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -39,18 +39,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Enable the Bluez 5.x command line client.
  
--BANDWIDTHD_VERSION = v2.0.1-auto-r07
-+BANDWIDTHD_VERSION = v2.0.1-auto-r08
- BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+-config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+-	bool "build experimental plugins"
+-	help
+-	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
+-
+-config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+-	bool "build tests"
+-	help
+-	  Build BlueZ 5.x tests
+-
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "install GATT tool"
++	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Generic Attribute Profile (GATT) support. This provides
+ 	  profile discovery and description services for Bluetooth Low
+@@ -59,6 +50,16 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	  It is always built with BlueZ 5.x, but upstream choose not
+ 	  to install it by default.
  
- # Specified as "any version of the GPL that is current as of your
-@@ -15,6 +15,8 @@ BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
- 
- BANDWIDTHD_AUTORECONF = YES
- 
-+BANDWIDTHD_CONF_OPT += --without-x
++config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
++	bool "build experimental plugins"
++	help
++	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
 +
- ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
- BANDWIDTHD_DEPENDENCIES += postgresql
- BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
++config BR2_PACKAGE_BLUEZ5_UTILS_TEST
++	bool "build tests"
++	help
++	  Build BlueZ 5.x tests
++
+ endif
+ 
+ comment "bluez5-utils needs a toolchain w/ wchar, threads, IPv6, headers >= 3.4"
 -- 
-2.0.1
+2.0.0
