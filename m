@@ -1,27 +1,42 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Thu, 14 Aug 2014 11:34:32 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/freescale_imx6dlsabresd: add
- defconfig for iMX6DL SabreSD
-In-Reply-To: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
-References: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <53EC82A8.5080304@freescale.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 14 Aug 2014 11:57:52 +0200
+Subject: [Buildroot] [PATCH] qt: don't install translation files by
+	default
+In-Reply-To: <CANxTyt5VK1XKYXe8Y3RbqDAoraWC_heS0p0HoCExfH3pbEbORA@mail.gmail.com>
+References: <1407961570-10684-1-git-send-email-luca@lucaceresoli.net>
+ <CANxTyt5VK1XKYXe8Y3RbqDAoraWC_heS0p0HoCExfH3pbEbORA@mail.gmail.com>
+Message-ID: <53EC8820.6050202@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/14/2014 10:35 AM, Luca Ceresoli wrote:
-> This is very similar to freescale_imx6sabresd_defconfig
+Dear Danomi,
 
-Hi Luca,
+thanks for reviewing this patch.
 
-Thanks for adding this board!
+Danomi Manchego wrote:
+> On Wed, Aug 13, 2014 at 4:26 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>> Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e (2013.11) introduced
+>> the installation of the binary .qm translation files, unconditionally.
+>>
+>> However, the installed size is very large for some embedded systems
+>> (about 8 MB), and they are not needed in many cases.
+>>
+>> In order to avoid such a waste of storage space, commit
+>> 2ff329412f490dc916bab3377073ef5950a46298 (2014.08) made this
+>> installation an option that could be disabled. For backward
+>> compatibility, the option defaults to yes.
+>>
+>> Given the relevant size of these files, and that they had never been
+>
+> Nitpick: "relevant"?  Do you mean "relative" or "relatively large"?
 
-It does build fine for me on top of
-86b830d70a079f3b935b6afc8f429961fb738027. (I can't try to boot it
-though, as I only have an i.MX6 quad.)
+Ah, yes, that makes no sense. I just meant "large", but the sentence
+would be fixed even by simply removing that word: s/ relevant//.
 
-Best regards,
+I'll wait a little more for any comments, then resend.
 
-V.
+-- 
+Luca
