@@ -1,41 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 14 Aug 2014 08:14:57 -0300
-Subject: [Buildroot] [PATCHv2 2/2] linux: bump default to version 3.16.1
-In-Reply-To: <1408014897-1339-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1408014897-1339-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1408014897-1339-2-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 14 Aug 2014 13:16:12 +0100
+Subject: [Buildroot] [PATCH] gnupg2: Needs a suitable iconv implementation
+Message-ID: <1408018572-57330-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+gnupg2 needs a toolchain with locale support or a package which provides
+a suitable iconv implementation (libiconv). Otherwise it will fail at
+the configure phase with an error like this one:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 101c90b..611dcf2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.16"
-+	bool "3.16.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.16" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.16.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+*** It is now required to build with support for iconv
+*** Please install a suitable iconv implementation.
+
+Fixes:
+  http://autobuild.buildroot.net/results/8c9/8c93c28533dfebffa8b2e34b1421d3fa3cdeb278/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+---
+ package/gnupg2/Config.in |    1 +
+ package/gnupg2/gnupg2.mk |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
+index be97a20..d24eaae 100644
+--- a/package/gnupg2/Config.in
++++ b/package/gnupg2/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_GNUPG2
+ 	select BR2_PACKAGE_LIBKSBA
+ 	select BR2_PACKAGE_LIBPTHSEM
+ 	select BR2_PACKAGE_LIBPTHSEM_COMPAT
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on BR2_USE_MMU # libassuan
+ 	help
+ 	  GnuPG is the GNU project's complete and free implementation
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 9502a82..5e108d9 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -9,7 +9,8 @@ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
+ GNUPG2_LICENSE_FILES = COPYING
+-GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libpthsem
++GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libpthsem \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG2_CONF_OPT = \
+ 	--disable-rpath --disable-regex --disable-doc \
+ 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
 -- 
-1.8.5.5
+1.7.1
