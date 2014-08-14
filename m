@@ -1,34 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Aug 2014 10:09:44 +0200
-Subject: [Buildroot] [git commit] pppd: security bump to version 2.4.7
-Message-ID: <20140814081045.0EAF59D1C6@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 14 Aug 2014 10:35:19 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/freescale_imx6dlsabresd: add
+	defconfig for iMX6DL SabreSD
+Message-ID: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86b830d70a079f3b935b6afc8f429961fb738027
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is very similar to freescale_imx6sabresd_defconfig, which supports the
+i.MX6Q ("Quad", quad core CPU) version of the board, except it supports the
+i.MX6DL (DualLite, dual core CPU) version.
 
-Fixes CVE-2014-3158 - potential security issue in parsing option files.
+The differences are in the U-boot configuration and the device tree file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>
+Cc: Vincent Stehl? <vincent.stehle@freescale.com>
 ---
- package/pppd/pppd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/freescale_imx6dlsabresd_defconfig | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 configs/freescale_imx6dlsabresd_defconfig
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 03118ca..46caa36 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PPPD_VERSION = 2.4.6
-+PPPD_VERSION = 2.4.7
- PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
- PPPD_SITE = ftp://ftp.samba.org/pub/ppp
- PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+new file mode 100644
+index 0000000..4177e16
+--- /dev/null
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -0,0 +1,27 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-- 
+1.9.1
