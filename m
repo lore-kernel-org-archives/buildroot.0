@@ -1,53 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 Aug 2014 21:36:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7322] New: libgomp dependency issue with
-	imagemagick
-Message-ID: <bug-7322-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 14 Aug 2014 19:02:12 -0300
+Subject: [Buildroot] [PATCH] synergy: needs mmu
+Message-ID: <1408053732-945-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7322
+Fixes:
+http://autobuild.buildroot.net/results/8d4/8d435c1605204f154c8a0a94ebc06d9c29a1768a/
 
-           Summary: libgomp dependency issue with imagemagick
-           Product: buildroot
-           Version: 2014.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: benoit.thebaudeau.dev at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/synergy/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-With the current master head, if an external toolchain with libgomp support is
-used to build imagemagick, libgomp is installed to staging/, but not to target/
-by default, so imagemagick's configure detects libgomp as supported and enables
-its usage for the build stage, but then it fails to run on the target because
-libgomp is missing.
-
-This can be worked around by manually adding libgomp.so* to the list of
-toolchain libraries to be installed to the target, but this should be an
-automatic dependency. However, AFAIK, there is currently no dependency
-mechanism in BuildRoot to trigger the installation of a toolchain library to
-the target.
-
-A solution could be to create an automatic or manual
-BR2_TOOLCHAIN_SUPPORTS_LIBGOMP config option, and a hidden
-BR2_PACKAGE_IMAGEMAGICK_USES_LIBGOMP defaulting to
-BR2_TOOLCHAIN_SUPPORTS_LIBGOMP and selecting a
-BR2_TOOLCHAIN_INSTALL_TARGET_LIBGOMP, which would trigger the installation of
-libgomp.so* from one of the toolchain make files.
-
-What do you think?
-
+diff --git a/package/synergy/Config.in b/package/synergy/Config.in
+index 20a3a9a..6b64b79 100644
+--- a/package/synergy/Config.in
++++ b/package/synergy/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYNERGY
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+ 	  Synergy lets you easily share a single mouse and
+@@ -14,4 +15,5 @@ config BR2_PACKAGE_SYNERGY
+ 
+ comment "synergy needs a toolchain w/ C++, wchar"
+ 	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.5.5
