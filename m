@@ -1,37 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Aug 2014 20:30:10 +0200
-Subject: [Buildroot] [PATCH 1/1] bandwidthd: incorporate fixes for
- autobuilders
-In-Reply-To: <1408039777-23988-1-git-send-email-nroach44@gmail.com>
-References: <1408039777-23988-1-git-send-email-nroach44@gmail.com>
-Message-ID: <20140814203010.2664881b@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 14 Aug 2014 20:49:59 +0200
+Subject: [Buildroot] [PATCH] pkg-perl: fix build of perl XS packages
+Message-ID: <1408042199-28433-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nathaniel Roach,
+Set OPTIMIZE in order to avoid the use of the host $Config{optimize} value
+which could cause breakage when cross-compiling for the target.
 
-On Fri, 15 Aug 2014 02:09:37 +0800, Nathaniel Roach wrote:
-> Version bump to -r08
-> 	"[patched] the configure.ac script to remove the hardcoded
-> 	-L/usr/local/lib and -I/usr/local/include. The bandwidthd package
-> 	-was already autoreconfigured, so there is no need to add it."
-> 
-> "Adding the --without-x option, which ensures that the configure.ac
-> 	script will not add -L/usr/lib to the compiler flags (and we anyway
-> 	haven't added any sort of X.org support to bandwidthd for the
-> 	moment)."
-> 
-> Both fixes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+See discussion in http://lists.busybox.net/pipermail/buildroot/2014-August/104129.html
 
-This patch lacks the reference to the autobuilder failure.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-perl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index f073d70..51eaf52 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -56,6 +56,7 @@ define $(2)_CONFIGURE_CMDS
+ 			--config full_ar="$$(TARGET_AR)" \
+ 			--config cc="$$(TARGET_CC)" \
+ 			--config ccflags="$$(TARGET_CFLAGS)" \
++			--config optimize=" " \
+ 			--config ld="$$(TARGET_CC)" \
+ 			--config lddlflags="-shared $$(TARGET_LDFLAGS)" \
+ 			--config ldflags="$$(TARGET_LDFLAGS)" \
+@@ -78,6 +79,7 @@ define $(2)_CONFIGURE_CMDS
+ 			FULL_AR="$$(TARGET_AR)" \
+ 			CC="$$(TARGET_CC)" \
+ 			CCFLAGS="$$(TARGET_CFLAGS)" \
++			OPTIMIZE=" " \
+ 			LD="$$(TARGET_CC)" \
+ 			LDDLFLAGS="-shared $$(TARGET_LDFLAGS)" \
+ 			LDFLAGS="$$(TARGET_LDFLAGS)" \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
