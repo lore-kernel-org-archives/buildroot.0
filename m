@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Aug 2014 00:17:25 +0200
-Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
- dependencies section
-In-Reply-To: <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <20140803113216.03e0fb94@free-electrons.com>
- <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <20140816001725.27388fce@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 16 Aug 2014 00:18:00 +0200
+Subject: [Buildroot] [PATCH 2/2 v3] support/download: fix the git helper
+	output file format
+In-Reply-To: <20140815172816.GA22918@free.fr> (Yann E. MORIN's message of
+ "Fri, 15 Aug 2014 19:28:16 +0200")
+References: <cover.1407343550.git.yann.morin.1998@free.fr>
+ <2205cccc9b1580208e604067224448da94599151.1407343550.git.yann.morin.1998@free.fr>
+ <87ppg11xdg.fsf@dell.be.48ers.dk> <20140815172816.GA22918@free.fr>
+Message-ID: <87lhqp1jon.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anton Kolesov,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon,  4 Aug 2014 16:17:08 +0400, Anton Kolesov wrote:
+Hi,
 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 93e6a3e..4b4d056 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -265,6 +265,10 @@ use in the comment.
->  ** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
->  ** Comment string: +dynamic library+
->  
-> +* Atomic intrinsics
-> +** Dependency symbol: +!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS+
-> +** Comment string: +atomic intrinsics+
+ >> > -gzip "${output}"
+ >> > +gzip <"${output}.tmp" >"${output}"
+ >> 
+ >> Don't we then end up with a bunch of foo.tmp files?
 
-Actually, the more I think about this, and the more I believe it should
-be a property of the architecture rather than a property of the
-toolchain. So it should probably rather be
-BR2_ARCH_HAS_ATOMIC_INTRINSICS. And then, since it's a property of the
-architecture, i.e not something the user can enable/disable, there is
-no point in adding Config.in comment for that. So we would handle that
-like we handle BR2_USE_MMU, not like we handle BR2_LARGEFILE.
+ > Nope, because the wrapper scripts first 'cd' into a temp dir, that ets
+ > removed at the end of the wrapper.
 
-Thoughts?
+ > See:
+ >     http://git.buildroot.org/buildroot/tree/support/download/wrapper#n42
+ > and:
+ >     http://git.buildroot.org/buildroot/tree/support/download/wrapper#n91
 
-Thomas
+Ahh yes, good - Thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
