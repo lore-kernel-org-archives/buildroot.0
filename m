@@ -1,119 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 23:09:37 +0200
-Subject: [Buildroot] [PATCH v5 2/2] apply-patches.sh: don't print
- anything when "make -s" is used
-In-Reply-To: <1407399309-5926-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1407399309-5926-1-git-send-email-fabio.porcedda@gmail.com>
- <1407399309-5926-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140815210937.GF25897@free.fr>
+Date: Sat, 16 Aug 2014 00:04:07 +0200
+Subject: [Buildroot] [PATCH 1 of 5 v4 for 2014.08] Makefile:
+ unconditionally include pkg-utils.mk
+In-Reply-To: <232206819ca1e46d14b1.1408110034@localhost>
+References: <patchbomb.1408110033@localhost>
+ <232206819ca1e46d14b1.1408110034@localhost>
+Message-ID: <20140815220407.GA27341@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Thomas, All,
 
-On 2014-08-07 10:15 +0200, Fabio Porcedda spake thusly:
-> The make "-s" option is used to enable the "Silent operation" so if that
-> option is used don't print anything as far as there isn't any error.
+On 2014-08-15 15:40 +0200, Thomas De Schampheleire spake thusly:
+> Currently, pkg-utils.mk (included via package/Makefile.in) is only included
+> when a configuration file already exists. This means that none of the
+> utilities it defines are available without .config.
 > 
-> Add the "-s" option to "apply-patches.sh" to enable silent operation.
+> In particular:
+> - the MESSAGE macro, causing pretty build output. Since some make targets
+>   can be run even without .config, like 'make manual', not having this
+>   pretty printing is odd.
 > 
-> Also add the "BR_SILENT" variable the contain "YES" when "make -s" is
-> used so others parts can use it to silence the build as well.
+> - pkgname, pkgdir: in a subsequent patch, these functions will be used for
+>   the generation of the manual, and since this should work also without
+>   .config, we need these functions to be available.
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> This patch moves the include of pkg-utils.mk from package/Makefile.in to
+> Makefile, outside of the check for .config.
+> 
+> This is a quick fix. The full solution involves to minimize the amount of
+> Makefile code that is guarded by a check on .config. This approach will be
+> taken in the 2014.11 release cycle.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-For -next.
+Tested by generating the manual with and without a .config.
+Tested that running make with no .config will popup the menuconfig.
+Tested that a defconfig still builds OK.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  Makefile                         |  2 ++
->  package/Makefile.in              |  2 +-
->  support/scripts/apply-patches.sh | 17 ++++++++++++++---
->  3 files changed, 17 insertions(+), 4 deletions(-)
+> v4: no changes
+> v3: new patch, fixing the issue detected by Yann that 'make manual' no
+> longer worked without .config
 > 
-> diff --git a/Makefile b/Makefile
-> index c82b07f..dfb49be 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -198,6 +198,8 @@ else
->    Q = @
+>  Makefile            |  2 ++
+>  package/Makefile.in |  1 -
+>  2 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff -r 3bcf63a46bc1 -r 232206819ca1 Makefile
+> --- a/Makefile	Tue Aug 05 18:25:11 2014 -0300
+> +++ b/Makefile	Wed Aug 13 11:30:25 2014 +0200
+> @@ -271,6 +271,8 @@
+>  # Causes breakage with packages that needs host-ruby
+>  unexport RUBYOPT
+>  
+> +include package/pkg-utils.mk
+> +
+>  ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>  
+>  ################################################################################
+> diff -r 3bcf63a46bc1 -r 232206819ca1 package/Makefile.in
+> --- a/package/Makefile.in	Tue Aug 05 18:25:11 2014 -0300
+> +++ b/package/Makefile.in	Wed Aug 13 11:30:25 2014 +0200
+> @@ -385,7 +385,6 @@
+>  SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
 >  endif
 >  
-> +BR_SILENT = $(if $(filter s -s,$(MAKEFLAGS)),YES)
-> +
->  # we want bash as shell
->  SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
->  	 else if [ -x /bin/bash ]; then echo /bin/bash; \
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index bf22123..6ef3c3d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -222,7 +222,7 @@ FLEX := $(shell which flex || type -p flex)
->  BISON := $(shell which bison || type -p bison)
->  SED := $(shell which sed || type -p sed) -i -e
->  
-> -APPLY_PATCHES = support/scripts/apply-patches.sh
-> +APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
->  
->  HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
->  HOST_CFLAGS   ?= -O2
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 37f2d81..16e0b41 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -6,6 +6,8 @@
->  # (c) 2002 Erik Andersen <andersen@codepoet.org>
->  #
->  # Parameters:
-> +# - "-s",optional. Silent operation, don't print anything if there
-> +# isn't any error.
->  # - the build directory, optional, default value is '.'. The place where are
->  # the package sources.
->  # - the patch directory, optional, default '../kernel-patches'. The place
-> @@ -28,6 +30,13 @@
->  # applied. The list of the patches applied is stored in '.applied_patches_list'
->  # file in the build directory.
->  
-> +silent=
-> +if [ "$1" = "-s" ] ; then
-> +    # add option to be used by the patch tool
-> +    silent=-s
-> +    shift
-> +fi
-> +
->  # Set directories from arguments, or use defaults.
->  builddir=${1-.}
->  patchdir=${2-../kernel-patches}
-> @@ -77,14 +86,16 @@ function apply_patch {
->  	return 0
->  	;;
->      esac
-> -    echo ""
-> -    echo "Applying $patch using ${type}: "
-> +    if [ -z "$silent" ] ; then
-> +	echo ""
-> +	echo "Applying $patch using ${type}: "
-> +    fi
->      if [ ! -e "${path}/$patch" ] ; then
->  	echo "Error: missing patch file ${path}/$patch"
->  	exit 1
->      fi
->      echo $patch >> ${builddir}/.applied_patches_list
-> -    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
-> +    ${uncomp} "${path}/$patch" | patch $silent -g0 -p1 -E -d "${builddir}" -t -N
->      if [ $? != 0 ] ; then
->          echo "Patch failed!  Please fix ${patch}!"
->  	exit 1
-> -- 
-> 2.0.4
-> 
+> -include package/pkg-utils.mk
+>  include package/pkg-download.mk
+>  include package/pkg-autotools.mk
+>  include package/pkg-cmake.mk
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
