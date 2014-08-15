@@ -1,60 +1,74 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Fri, 15 Aug 2014 08:27:09 +0800
-Subject: [Buildroot] [PATCH v2] bandwidthd: incorporate fixes for
-	autobuilders
-Message-ID: <1408062429-25594-1-git-send-email-nroach44@gmail.com>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 15 Aug 2014 08:55:09 +0300
+Subject: [Buildroot] [PATCH 1/1] qt5base: add postgresql driver support
+In-Reply-To: <1407938742-25932-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1407938742-25932-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <201408150855.10038.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"The build failures of bandwidthd observed in the autobuilders in
-	relation to libpng are caused by the usage of -L/usr/lib
-	-L/usr/local/lib in the compiler flags, which leads the configure
-	script to try to link against a host libpng library."
+On Wednesday 13 August 2014 17:05:41 Floris Bos wrote:
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-These issues are fixed by:
+Reviewed-by: Fatih A??c? <fatih.asici@gmail.com>
 
-* Version bump to -r08
-	"[patched] the configure.ac script to remove the hardcoded
-	-L/usr/local/lib and -I/usr/local/include. The bandwidthd package
-	-was already autoreconfigured, so there is no need to add it."
-
-* "Adding the --without-x option, which ensures that the configure.ac
-	script will not add -L/usr/lib to the compiler flags (and we anyway
-	haven't added any sort of X.org support to bandwidthd for the
-	moment)."
-Both fixes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes v1 to v2
- - Added details of the failure this patch fixes
-
----
- package/bandwidthd/bandwidthd.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index 9b1eb32..3e11d6a 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BANDWIDTHD_VERSION = v2.0.1-auto-r07
-+BANDWIDTHD_VERSION = v2.0.1-auto-r08
- BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
- 
- # Specified as "any version of the GPL that is current as of your
-@@ -15,6 +15,8 @@ BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
- 
- BANDWIDTHD_AUTORECONF = YES
- 
-+BANDWIDTHD_CONF_OPT += --without-x
-+
- ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
- BANDWIDTHD_DEPENDENCIES += postgresql
- BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
--- 
-2.0.1
+> ---
+>  package/qt5/qt5base/Config.in  | 12 ++++++++++++
+>  package/qt5/qt5base/qt5base.mk |  9 +++++++++
+>  2 files changed, 21 insertions(+)
+> 
+> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> index 67f211c..12f983f 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -62,6 +62,18 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+>  	help
+>  	  Build MySQL plugin
+>  	  If unsure, say n.
+> +
+> +config BR2_PACKAGE_QT5BASE_PSQL
+> +	bool "PostgreSQL Plugin"
+> +	select BR2_PACKAGE_POSTGRESQL
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  Build PostgreSQL plugin
+> +	  If unsure, say n.
+> +
+> +comment "PostgreSQL needs an (e)glibc toolchain"
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +
+>  choice
+>  	prompt "SQLite 3 support"
+>  	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
+> diff --git a/package/qt5/qt5base/qt5base.mk
+> b/package/qt5/qt5base/qt5base.mk index 712208f..88e86c4 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -66,6 +66,14 @@ else
+>  QT5BASE_CONFIGURE_OPTS += -no-sql-mysql
+>  endif
+> 
+> +ifeq ($(BR2_PACKAGE_QT5BASE_PSQL),y)
+> +QT5BASE_CONFIGURE_OPTS += -plugin-sql-psql
+> +QT5BASE_CONFIGURE_ENV  += PSQL_LIBS=-L$(STAGING_DIR)/usr/lib
+> +QT5BASE_DEPENDENCIES   += postgresql
+> +else
+> +QT5BASE_CONFIGURE_OPTS += -no-sql-psql
+> +endif
+> +
+>  QT5BASE_CONFIGURE_OPTS += $(if
+> $(BR2_PACKAGE_QT5BASE_SQLITE_QT),-plugin-sql-sqlite)
+> QT5BASE_CONFIGURE_OPTS += $(if
+> $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),-system-sqlite) QT5BASE_DEPENDENCIES 
+>  += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),sqlite) @@ -170,6 +178,7 @@
+> define QT5BASE_CONFIGURE_CMDS
+>  		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+>  		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+>  		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
+> +		$(QT5BASE_CONFIGURE_ENV) \
+>  		./configure \
+>  		-v \
+>  		-prefix /usr \
