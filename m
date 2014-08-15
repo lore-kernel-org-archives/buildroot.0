@@ -1,32 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Aug 2014 10:18:29 +0200
-Subject: [Buildroot] [PATCH] bluez5_utils: gatttool depends on
-	bluez5_utils client
-In-Reply-To: <1408040914-23320-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 14 Aug 2014 20:28:34 +0200")
-References: <1408040914-23320-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a976414a.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Aug 2014 10:19:20 +0200
+Subject: [Buildroot] [PATCH] pkg-perl: fix build of perl XS packages
+In-Reply-To: <1408042199-28433-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Thu, 14 Aug 2014 20:49:59 +0200")
+References: <1408042199-28433-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <8761hu412v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > The gatttool utility uses readline, and is therefore built only if
- > --enable-client is used, i.e when bluez5_utils client applications are
- > enabled. Therefore, this commit makes
- > BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL depend on
- > BR2_PACKAGE_BLUEZ5_UTILS_CLIENT. It also moves
- > BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to be right below the
- > BR2_PACKAGE_BLUEZ5_UTILS_CLIENT definition.
+ > Set OPTIMIZE in order to avoid the use of the host $Config{optimize} value
+ > which could cause breakage when cross-compiling for the target.
 
- > Fixes:
+ > See discussion in http://lists.busybox.net/pipermail/buildroot/2014-August/104129.html
 
- >   http://autobuild.buildroot.org/results/f2b/f2b8b1bf5d50e6223a9a6d6858320975edb2a25a/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
