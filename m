@@ -1,73 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 10:18:23 +0200
-Subject: [Buildroot] [git commit] bluez5_utils: gatttool depends on
-	bluez5_utils client
-Message-ID: <20140815090111.5AE119D462@busybox.osuosl.org>
+Date: Fri, 15 Aug 2014 10:14:17 +0200
+Subject: [Buildroot] [git commit] ltrace: disable on mips/mipsel
+Message-ID: <20140815090111.3BC909D3E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e9d40fc2396d823c21fa624651f3bd7c28f4b87
+commit: http://git.buildroot.net/buildroot/commit/?id=dfaa18af00dfcff71a0159adaafb0880e58fa6a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gatttool utility uses readline, and is therefore built only if
---enable-client is used, i.e when bluez5_utils client applications are
-enabled. Therefore, this commit makes
-BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL depend on
-BR2_PACKAGE_BLUEZ5_UTILS_CLIENT. It also moves
-BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to be right below the
-BR2_PACKAGE_BLUEZ5_UTILS_CLIENT definition.
+ltrace currently doesn't build on mips/mipsel, and it's an upstream
+issue that has been reported. Until it get fixed, let's disable ltrace
+for mips/mipsel.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/f2b/f2b8b1bf5d50e6223a9a6d6858320975edb2a25a/
+  http://autobuild.buildroot.org/results/43a/43a8fc7075f52eab74ebfee4c9f25dd2b886e75e/
 
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bluez5_utils/Config.in |   21 +++++++++++----------
- 1 files changed, 11 insertions(+), 10 deletions(-)
+ package/ltrace/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 10588db..ec1352f 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -39,18 +39,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	help
- 	  Enable the Bluez 5.x command line client.
- 
--config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
--	bool "build experimental plugins"
--	help
--	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
--
--config BR2_PACKAGE_BLUEZ5_UTILS_TEST
--	bool "build tests"
--	help
--	  Build BlueZ 5.x tests
--
- config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- 	bool "install GATT tool"
-+	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	help
- 	  Generic Attribute Profile (GATT) support. This provides
- 	  profile discovery and description services for Bluetooth Low
-@@ -59,6 +50,16 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- 	  It is always built with BlueZ 5.x, but upstream choose not
- 	  to install it by default.
- 
-+config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
-+	bool "build experimental plugins"
-+	help
-+	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
-+
-+config BR2_PACKAGE_BLUEZ5_UTILS_TEST
-+	bool "build tests"
-+	help
-+	  Build BlueZ 5.x tests
-+
- endif
- 
- comment "bluez5-utils needs a toolchain w/ wchar, threads, IPv6, headers >= 3.4"
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 4d1acfa..8cabfa2 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+-	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
++	# ltrace normally has mips/mipsel support, but it's currently
++	# broken (error: 'struct ltelf' has no member named
++	# 'relplt_count'). Issue reported upstream at
++	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
++	depends on (BR2_i386 || BR2_arm \
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+ 	select BR2_PACKAGE_LIBELF
+ 	select BR2_PACKAGE_ELFUTILS
