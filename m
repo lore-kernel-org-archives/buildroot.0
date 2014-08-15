@@ -1,60 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 12:04:02 +0200
-Subject: [Buildroot] [git commit] qt: don't install translation files by
-	default
-Message-ID: <20140815100618.A6F339D1C6@busybox.osuosl.org>
+Date: Fri, 15 Aug 2014 12:02:05 +0200
+Subject: [Buildroot] [git commit] libcuefile: fix static linking
+Message-ID: <20140815100618.995649D1C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=533b17a65f7ecd80e1349cdee1a080cfe252ad07
+commit: http://git.buildroot.net/buildroot/commit/?id=91ff8611957d0581760d9a3a19ea332b440fdbc5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e (2013.11) introduced
-the installation of the binary .qm translation files, unconditionally.
+Add a patch to libcuefile to fix BR2_PREFER_STATIC_LIB=y configurations.
 
-However, the installed size is very large for some embedded systems
-(about 8 MB), and they are not needed in many cases.
+Fixes:
 
-In order to avoid such a waste of storage space, commit
-2ff329412f490dc916bab3377073ef5950a46298 (2014.08) made this
-installation an option that could be disabled. For backward
-compatibility, the option default was set to yes.
+  http://autobuild.buildroot.org/results/13e/13ecdab5bb132532674a51e0e0e1136d417dfcd9/
 
-Given the size of these files, and that they had never been installed
-by Buildroot versions before 2013.11, change the default to not
-installing them.
-
-Interested users can still activate it as needed.
-
-Also update and improve the help text.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Danomi Manchego <danomimanchego123@gmail.com>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../libcuefile-0001-fix-static-link.patch          |   25 ++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 93751cd..da159b4 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -30,10 +30,10 @@ config BR2_PACKAGE_QT_DEMOS
- 
- config BR2_PACKAGE_QT_TRANSLATION_FILES
- 	bool "Install translation files"
--	default y
- 	help
- 	  Install binary .qm translation files.
--	  If unsure, say y.
-+	  Say y if you need these files. They will take about 8 MB
-+	  on the target root filesystem.
- 
- config BR2_PACKAGE_QT_EXAMPLES
- 	bool "Compile and install Qt examples (with code)"
+diff --git a/package/libcuefile/libcuefile-0001-fix-static-link.patch b/package/libcuefile/libcuefile-0001-fix-static-link.patch
+new file mode 100644
+index 0000000..6eb5890
+--- /dev/null
++++ b/package/libcuefile/libcuefile-0001-fix-static-link.patch
+@@ -0,0 +1,25 @@
++Fix static only build
++
++Make sure to build the shared library only if BUILD_SHARED_LIBS is
++ON. Normally, CMake takes care of this automatically, but libcuefile
++wants to build both the shared and static variants, so the normal
++logic of CMake doesn't apply.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/CMakeLists.txt
++===================================================================
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -4,7 +4,11 @@
++ add_library(cuefile-static STATIC cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
++ set_target_properties(cuefile-static PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1)
++ 
+++if (BUILD_SHARED_LIBS)
++ add_library(cuefile-shared SHARED cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
++ set_target_properties(cuefile-shared PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1 VERSION 0.0.0 SOVERSION 0)
++ 
++ install(TARGETS cuefile-static cuefile-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
+++else (BUILD_SHARED_LIBS)
+++install(TARGETS cuefile-static LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
+++endif (BUILD_SHARED_LIBS)
