@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Aug 2014 20:39:57 +0200
-Subject: [Buildroot] [PATCHv2 1/3] gettext: allow building when
-	BR2_NEEDS_GETTEXT is not selected
-In-Reply-To: <1408127999-2352-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1408127999-2352-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408127999-2352-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Aug 2014 20:39:56 +0200
+Subject: [Buildroot] [PATCHv2 0/3] gettext changes to solve bug #7124
+Message-ID: <1408127999-2352-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we thought that gettext was only needed for the target for
-uClibc toolchains, to provide the gettext functions that are normally
-provided directly by glibc.
+Hello,
 
-However, the gettext runtime actually does more than providing the
-equivalent of those C library functions: it also provides certain
-command line tools, like 'gettext' to get translated strings from the
-shell. This tool is for example used by certain ecryptfs-utils scripts
-to get translated strings. It is therefore necessary to be able to
-build the gettext package even for glibc toolchains.
+A previous version of those patches were sent on June, 1st, but were
+not merged. Since they actually fix a runtime issue with
+ecryptfs-utils, reported as bug #7124, I'd like them to be considered
+for 2014.08.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gettext/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Basically, the core of the issue is that the numerous ecryptfs-utils
+shell scripts use the "gettext" program on the target to query
+translated strings. However, with glibc toolchains, we do not allow
+the selection of the gettext package, because the gettext *functions*
+are already part of the C library.
 
-diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-index 158b14e..7871a48 100644
---- a/package/gettext/Config.in
-+++ b/package/gettext/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_GETTEXT
- 	bool "gettext"
--	depends on BR2_NEEDS_GETTEXT
- 	depends on BR2_USE_WCHAR
- 	help
- 	  The GNU `gettext' utilities are a set of tools that provide a
+However, this totally overlooks the fact that gettext provides more
+than a library, it also provides utilities, which in the case of
+ecryptfs-utils, are needed on the target.
+
+Moreover, the gettext configure script is smart enough to *not*
+generate libintl.so when the C library already has the gettext
+function. It therefore has the right behavior depending on the C
+library: for glibc, only the gettext "utilities" are installed, for
+uClibc, both libintl and the gettext utilities are installed.
+
+These three patches are just a new version rebased on top of master,
+and re-tested.
+
+Long term, maybe we should rename BR2_NEEDS_GETTEXT and
+BR2_NEEDS_GETTEXT_IF_LOCALE to BR2_NEEDS_LIBINTL and
+BR2_NEEDS_LIBINTL_IF_LOCALE, because this is really what those config
+knobs mean.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (3):
+  gettext: allow building when BR2_NEEDS_GETTEXT is not selected
+  ecryptfs-utils: select gettext, needed for command line utilities
+  docs/manual: update documentation about gettext handling
+
+ docs/manual/adding-packages-gettext.txt | 22 ++++++++++++++++++----
+ package/ecryptfs-utils/Config.in        |  8 ++++++--
+ package/gettext/Config.in               |  1 -
+ 3 files changed, 24 insertions(+), 7 deletions(-)
+
 -- 
 2.0.0
