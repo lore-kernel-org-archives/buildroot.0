@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Aug 2014 12:02:11 +0200
-Subject: [Buildroot] [PATCH] libebml: properly support static only builds
-In-Reply-To: <1408094588-16997-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 15 Aug 2014 11:23:08 +0200")
-References: <1408094588-16997-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877g2a2hr0.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Aug 2014 12:03:23 +0200
+Subject: [Buildroot] [PATCH] libcuefile: fix static linking
+In-Reply-To: <1408096082-12007-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 15 Aug 2014 11:48:02 +0200")
+References: <1408096082-12007-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738cy2hp0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This commit adjusts the libebml package to not build a shared library
- > when BR2_PREFER_STATIC_LIB=y.
-
+ > Add a patch to libcuefile to fix BR2_PREFER_STATIC_LIB=y configurations.
  > Fixes:
 
- >   http://autobuild.buildroot.org/results/262/26279f72b6c5708f363b3cce2102afa0eccc3a72/
+ >   http://autobuild.buildroot.org/results/13e/13ecdab5bb132532674a51e0e0e1136d417dfcd9/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
