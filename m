@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 15 Aug 2014 12:14:49 +0200
-Subject: [Buildroot] [PATCH 3 of 5 v3 for 2014.08] gendoc infra: add
- support for asciidoc configuration files
-In-Reply-To: <7437dd86ef456d137451.1407957949@localhost>
+Date: Fri, 15 Aug 2014 12:14:57 +0200
+Subject: [Buildroot] [PATCH 4 of 5 v3 for 2014.08] manual-text: make
+ sure URLs are displayed if a link text was provided
+In-Reply-To: <72d825eab688116985f2.1407957950@localhost>
 References: <patchbomb.1407957946@localhost>
- <7437dd86ef456d137451.1407957949@localhost>
-Message-ID: <CAHXCMML-Nj1+-XCdm8sYZSFQ0_5xhmJ6rRfiT3a7T_+0uQtvYw@mail.gmail.com>
+ <72d825eab688116985f2.1407957950@localhost>
+Message-ID: <CAHXCMMJ6oVjSpCHMgtvb6dPH7hL9jQeUXE_r3c6DOo-cYqKYig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,18 @@ To: buildroot@busybox.net
 
 On Wed, Aug 13, 2014 at 9:25 PM, Thomas De Schampheleire
 <patrickdepinguin@gmail.com> wrote:
-> This patch introduces support for asciidoc configuration files, specific for
-> each output format (html, text, pdf, ...). This is useful to make certain
-> tweaks in the document generation.
+> When the asciidoc source contain URLs of the form:
+>     http://example.com[An example website]
+> the text representation of the manual would only contain:
+>     An example website
+> without displaying the actual URL.
 >
-> If a file docs/manual/asciidoc-<format>.conf is present, it is passed to
-> asciidoc as configuration file. If no file for the current format is
-> present, the options passed to asciidoc are empty.
+> This patch adds an asciidoc configuration file that sets the inline macros
+> for several URL types so that the display becomes:
+>     An example website [http://example.com]
+> For URLs where no link text was provided, the display becomes:
+>     http://example.com
+> which is the same as before.
 >
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
