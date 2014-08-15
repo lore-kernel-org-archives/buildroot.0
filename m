@@ -1,33 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Aug 2014 00:52:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iftop: fix static build
-In-Reply-To: <1407437800-13027-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Thu, 7 Aug 2014 20:56:40 +0200")
-References: <1407437800-13027-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87vbptz7qg.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 Aug 2014 00:32:53 +0200
+Subject: [Buildroot] [git commit] package/ngrep: fix static build
+Message-ID: <20140815225509.AE5069D462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f68d9bcac415c275db551a27a852d3edf09e0146
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Use pcap-config to list optional libpcap dependencies that we need to list
- > when building statically.
+Use pcap-config to list optional libpcap dependencies that we need to list
+when building statically.
 
- > Inspired by Baruch Siach
- > http://git.buildroot.net/buildroot/commit/package/dhcpdump/dhcpdump.mk?id=429f4415cd153c6809394a8b3245d4d15bba3ec3
+Inspired by Baruch Siach
+http://git.buildroot.net/buildroot/commit/package/dhcpdump/dhcpdump.mk?id=429f4415cd153c6809394a8b3245d4d15bba3ec3
 
- > Fixes
- > http://autobuild.buildroot.net/results/c7e/c7e3b2897a9cb9ab55dc7b1a2cd1961235d2d1a4/
- > http://autobuild.buildroot.net/results/60f/60f82bedae255f6b69c9a5ac22686c76c6276301/
- > http://autobuild.buildroot.net/results/1b7/1b771af04a95a78144141a5d555c97bbb5a7e13f/
- > http://autobuild.buildroot.net/results/1f4/1f45e2adcc80c4a209aa5895260985460933575c/
+Fixes
+http://autobuild.buildroot.net/results/3c5/3c584b850cabebcf93dfd61c59e28988165a41c4/
+http://autobuild.buildroot.net/results/938/93842b54767cca51c68ad33ddc93ec58d70602c8/
+http://autobuild.buildroot.net/results/0ae/0ae4adec7fe66f819c7b3dabf13648fb29247de6/
+http://autobuild.buildroot.net/results/9c2/9c203bc6ca91da68c9e7335611c1fb56224380bc/
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ngrep/ngrep.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
+index 0bb5d7e..18a2e74 100644
+--- a/package/ngrep/ngrep.mk
++++ b/package/ngrep/ngrep.mk
+@@ -10,7 +10,13 @@ NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSIO
+ NGREP_LICENSE = BSD-4c-like
+ NGREP_LICENSE_FILES = LICENSE.txt
+ NGREP_INSTALL_STAGING = YES
+-NGREP_CONF_ENV = LIBS="-lpcre"
++
++NGREP_LIBS = -lpcap -lpcre
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++NGREP_LIBS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++endif
++NGREP_CONF_ENV += LIBS+="$(NGREP_LIBS)"
++
+ NGREP_CONF_OPT =  \
+ 	--with-pcap-includes=$(STAGING_DIR)/usr/include \
+ 	--enable-pcre \
