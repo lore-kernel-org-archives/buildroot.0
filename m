@@ -1,66 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Aug 2014 00:45:26 +0200
-Subject: [Buildroot] [PATCH 5 of 5 v4 for 2014.08] manual-text: hide
- image representations
-In-Reply-To: <6b930ce9f5cbbfdc688b.1408110038@localhost>
-References: <patchbomb.1408110033@localhost>
- <6b930ce9f5cbbfdc688b.1408110038@localhost>
-Message-ID: <20140815224526.GG27341@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 16 Aug 2014 00:50:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ngrep: fix static build
+In-Reply-To: <1407599682-23233-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 9 Aug 2014 17:54:42 +0200")
+References: <1407599682-23233-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87zjf5z7t4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On 2014-08-15 15:40 +0200, Thomas De Schampheleire spake thusly:
-> Images specified in the asciidoc sources (currently only the logo) are
-> displayed as the file name in the text version of the manual. This causes an
-> odd line to appear:
->     logo.png
-> 
-> Avoid this by setting the image representation macros to {empty} in
-> manual-text.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Acked-by: Samuel Martin <s.martin49@gmail.com>
+ > Use pcap-config to list optional libpcap dependencies that we need to list
+ > when building statically.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Inspired by Baruch Siach
+ > http://git.buildroot.net/buildroot/commit/package/dhcpdump/dhcpdump.mk?id=429f4415cd153c6809394a8b3245d4d15bba3ec3
 
-Tested that the filenames no longer appears, and that's the only
-difference. :-)
+ > Fixes
+ > http://autobuild.buildroot.net/results/3c5/3c584b850cabebcf93dfd61c59e28988165a41c4/
+ > http://autobuild.buildroot.net/results/938/93842b54767cca51c68ad33ddc93ec58d70602c8/
+ > http://autobuild.buildroot.net/results/0ae/0ae4adec7fe66f819c7b3dabf13648fb29247de6/
+ > http://autobuild.buildroot.net/results/9c2/9c203bc6ca91da68c9e7335611c1fb56224380bc/
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> ---
-> v4: no changes
-> v3: no changes
-> v2: no changes
-> 
->  docs/manual/asciidoc-text.conf |  6 ++++++
->  1 files changed, 6 insertions(+), 0 deletions(-)
-> 
-> diff -r 93b82c1cf8a4 -r 6b930ce9f5cb docs/manual/asciidoc-text.conf
-> --- a/docs/manual/asciidoc-text.conf	Sat Aug 09 19:42:30 2014 +0200
-> +++ b/docs/manual/asciidoc-text.conf	Sun Aug 10 17:55:54 2014 +0200
-> @@ -15,3 +15,9 @@
->  {0=}{0? &#91;}{name}:{target}{0?&#93;}
->  [mailto-inlinemacro]
->  {0=}{0? &#91;}{name}:{target}{0?&#93;}
-> +
-> +# Hide image representation from text manual
-> +[image-inlinemacro]
-> +{empty}
-> +[image-blockmacro]
-> +{empty}
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
