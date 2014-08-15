@@ -1,61 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Aug 2014 00:34:16 +0200
-Subject: [Buildroot] [PATCH] package/infozip: Rename HOST_CC to HOSTCC
-In-Reply-To: <1408141375-3893-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1408141375-3893-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140815223416.GF27341@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 16 Aug 2014 00:34:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/matchbox: Depends on MMU
+In-Reply-To: <1407588855-24583-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 9 Aug 2014 14:54:15 +0200")
+References: <1407588855-24583-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <878ump1ix1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On 2014-08-16 00:22 +0200, Bernd Kuhls spake thusly:
-> Wrong variable name is used which can lead to build errors for the host variant:
-> 
-> [...] -I. -DUNIX" AS=" -c" -f unix/Makefile generic
-> 
-> c _match.s
-> make[1]: c: command not found
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes matchbox-panel:
+ > http://autobuild.buildroot.net/results/8d5/8d5ad404fab7ec2a501972ba9c08b0109e420b80/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > and matchbox-desktop:
+ > mbdesktop_win_plugin.o: In function `mbdesktop_win_plugin_load':
+ > /home/br/br/output/build/matchbox-desktop-0.9.1/src/mbdesktop_win_plugin.c:22: undefined reference to `_fork'
 
-Regards,
-Yann E. MORIN.
+ > and matchbox-wm:
+ > matchbox-remote.o: In function `mbcommand':
+ > /home/fli4l/br3/output/build/matchbox-wm-1.2/src/matchbox-remote.c:147: undefined reference to `_fork'
 
-> ---
->  package/infozip/infozip.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-> index 42cd1db..229299c 100644
-> --- a/package/infozip/infozip.mk
-> +++ b/package/infozip/infozip.mk
-> @@ -29,7 +29,7 @@ endef
->  define HOST_INFOZIP_BUILD_CMDS
->  	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
->  		CFLAGS="$(HOST_CFLAGS) -I. -DUNIX" \
-> -		AS="$(HOST_CC) -c" \
-> +		AS="$(HOSTCC) -c" \
->  		-f unix/Makefile generic
->  endef
->  
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
