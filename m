@@ -1,44 +1,43 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 15 Aug 2014 16:39:11 +0200
-Subject: [Buildroot] [PATCH 6/6] [RFC] package/pkg-cmake.mk: add ccache
-	support for host packages
-In-Reply-To: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
-References: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1408113551-29932-7-git-send-email-s.martin49@gmail.com>
+Date: Fri, 15 Aug 2014 16:50:23 +0200
+Subject: [Buildroot] [PATCH 2 of 5 v4 for 2014.08] gendoc infra: use
+ $(pkgname) instead of explicitly passing 'manual'
+In-Reply-To: <9d9af165df7bfedeefb6.1408110035@localhost>
+References: <patchbomb.1408110033@localhost>
+ <9d9af165df7bfedeefb6.1408110035@localhost>
+Message-ID: <CAHXCMMJWPdoxi9bMyHRDVeKHVGseB0vDJ-N2Mz4C9n8v58nZtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This ccache support for host-cmake-package uses the same logic as the
-one done for the target packages in the toolchainfile.cmake file.
+On Fri, Aug 15, 2014 at 3:40 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> In the gendoc infrastructure, using an assignment of the form
+>     FOO = docs/$(1)/bar
+> inside GENDOC_INNER does not work as expected: the $(1) value is empty here
+> and the value of FOO becomes 'docs//bar'.
+>
+> Parameters $(2), $(3), etc. do not have this problem. The specific thing
+> about $(1) is that it is a parameter to GENDOC itself (indicating the
+> document to create) and passed transparently to GENDOC_INNER.
+>
+> This is different from the package infrastructures, where $(1) is set from
+> $(pkgname). In fact, the same strategy could be used by the gendoc
+> infrastructure as well, as $(pkgname) resolves to 'manual' for file
+> docs/manual/manual.mk. This has the advantage that the described problem
+> does not occur.
+>
+> Note that this means that if we want to use the same GENDOC infrastructure
+> for another document, it will have to reside in a separate directory than
+> the manual.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/pkg-cmake.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 2006b76..3a6b7e6 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -89,6 +89,16 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
-+		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
-+		$$(if $$(BR2_CCACHE),\
-+			-DCMAKE_C_COMPILER="$$(HOST_DIR)/usr/bin/ccache" \
-+			-DCMAKE_CXX_COMPILER="$$(HOST_DIR)/usr/bin/ccache" \
-+			-DCMAKE_C_COMPILER_ARG1="$$(HOSTCC)" \
-+			-DCMAKE_CXX_COMPILER_ARG1="$$(HOSTCXX)" \
-+		, \
-+			-DCMAKE_C_COMPILER="$$(HOSTCC)" \
-+			-DCMAKE_CXX_COMPILER="$$(HOSTCXX)" \
-+		) \
- 		-DBUILD_TESTING=OFF \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
+Regards,
+
 -- 
-2.0.4
+Samuel
