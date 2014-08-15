@@ -1,26 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Aug 2014 12:03:23 +0200
-Subject: [Buildroot] [PATCH] libcuefile: fix static linking
-In-Reply-To: <1408096082-12007-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 15 Aug 2014 11:48:02 +0200")
-References: <1408096082-12007-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738cy2hp0.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 15 Aug 2014 14:03:33 +0400
+Subject: [Buildroot] [PATCH] uclibc: synchronize bits/time.h with latest
+	glibc
+Message-ID: <1408097013-6159-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This fixes NetworkManager build on uClibc.
 
- > Add a patch to libcuefile to fix BR2_PREFER_STATIC_LIB=y configurations.
- > Fixes:
+Fixes:
+  http://autobuild.buildroot.net/results/d33/d33ed1c3bf1be7c8f8ea02590a770b0d29c7d9fa/
 
- >   http://autobuild.buildroot.org/results/13e/13ecdab5bb132532674a51e0e0e1136d417dfcd9/
+Backported from: e2cf30bb7543a99defd457226a39de8d8860fa9e
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...c-0003-bits-time.h-sync-with-latest-glibc.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
+new file mode 100644
+index 0000000..de3fe13
+--- /dev/null
++++ b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
+@@ -0,0 +1,38 @@
++From e2cf30bb7543a99defd457226a39de8d8860fa9e Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Fri, 1 Aug 2014 04:16:12 -0400
++Subject: [PATCH] bits/time.h: sync with latest glibc
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ libc/sysdeps/linux/common/bits/time.h | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/bits/time.h b/libc/sysdeps/linux/common/bits/time.h
++index b397b60..c4269ae 100644
++--- a/libc/sysdeps/linux/common/bits/time.h
+++++ b/libc/sysdeps/linux/common/bits/time.h
++@@ -1,5 +1,5 @@
++-/* System-dependent timing definitions.  Generic version.
++-   Copyright (C) 1996,1997,1999-2002,2003 Free Software Foundation, Inc.
+++/* System-dependent timing definitions.  Linux version.
+++   Copyright (C) 1996-2014 Free Software Foundation, Inc.
++    This file is part of the GNU C Library.
++ 
++    The GNU C Library is free software; you can redistribute it and/or
++@@ -59,6 +59,12 @@
++ #   define CLOCK_REALTIME_COARSE	5
++ /* Monotonic system-wide clock, updated only on ticks.  */
++ #   define CLOCK_MONOTONIC_COARSE	6
+++/* Monotonic system-wide clock that includes time spent in suspension.  */
+++#   define CLOCK_BOOTTIME		7
+++/* Like CLOCK_REALTIME but also wakes suspended system.  */
+++#   define CLOCK_REALTIME_ALARM		8
+++/* Like CLOCK_BOOTTIME but also wakes suspended system.  */
+++#   define CLOCK_BOOTTIME_ALARM		9
++ 
++ /* Flag to indicate time is absolute.  */
++ #   define TIMER_ABSTIME		1
++-- 
++1.8.1.4
++
 -- 
-Bye, Peter Korsgaard
+1.8.1.4
