@@ -1,30 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Aug 2014 10:14:39 +0200
-Subject: [Buildroot] [PATCH] ltrace: disable on mips/mipsel
-In-Reply-To: <1408038104-9440-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 14 Aug 2014 19:41:44 +0200")
-References: <1408038104-9440-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87iolu41ao.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Aug 2014 10:17:17 +0200
+Subject: [Buildroot] [PATCHv2 1/2] linux-headers: bump 3.{4, 10, 14, 15,
+	16}.x series
+In-Reply-To: <1408014897-1339-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 14 Aug 2014 08:14:56 -0300")
+References: <1408014897-1339-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87egwi416a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > ltrace currently doesn't build on mips/mipsel, and it's an upstream
- > issue that has been reported. Until it get fixed, let's disable ltrace
- > for mips/mipsel.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/43a/43a8fc7075f52eab74ebfee4c9f25dd2b886e75e/
-
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
