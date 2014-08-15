@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Aug 2014 00:32:04 +0200
-Subject: [Buildroot] [git commit] package/matchbox: Depends on MMU
-Message-ID: <20140815225509.999379D462@busybox.osuosl.org>
+Date: Sat, 16 Aug 2014 00:50:51 +0200
+Subject: [Buildroot] [git commit] package/iftop: fix static build
+Message-ID: <20140815225509.B78779D462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7502da865b512078cf5094ce750ffeffb57aabcf
+commit: http://git.buildroot.net/buildroot/commit/?id=2ca9b88b3774a0dc509316d79759b873e4588c0f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes matchbox-panel:
-http://autobuild.buildroot.net/results/8d5/8d5ad404fab7ec2a501972ba9c08b0109e420b80/
+Use pcap-config to list optional libpcap dependencies that we need to list
+when building statically.
 
-and matchbox-desktop:
-mbdesktop_win_plugin.o: In function `mbdesktop_win_plugin_load':
-/home/br/br/output/build/matchbox-desktop-0.9.1/src/mbdesktop_win_plugin.c:22: undefined reference to `_fork'
+Inspired by Baruch Siach
+http://git.buildroot.net/buildroot/commit/package/dhcpdump/dhcpdump.mk?id=429f4415cd153c6809394a8b3245d4d15bba3ec3
 
-and matchbox-wm:
-matchbox-remote.o: In function `mbcommand':
-/home/fli4l/br3/output/build/matchbox-wm-1.2/src/matchbox-remote.c:147: undefined reference to `_fork'
+Fixes
+http://autobuild.buildroot.net/results/c7e/c7e3b2897a9cb9ab55dc7b1a2cd1961235d2d1a4/
+http://autobuild.buildroot.net/results/60f/60f82bedae255f6b69c9a5ac22686c76c6276301/
+http://autobuild.buildroot.net/results/1b7/1b771af04a95a78144141a5d555c97bbb5a7e13f/
+http://autobuild.buildroot.net/results/1f4/1f45e2adcc80c4a209aa5895260985460933575c/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/iftop/iftop.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index da02df3..b70133e 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MATCHBOX
- 	bool "MatchBox Window Manager"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
+diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
+index 24f8b53..ef162a8 100644
+--- a/package/iftop/iftop.mk
++++ b/package/iftop/iftop.mk
+@@ -10,4 +10,10 @@ IFTOP_DEPENDENCIES = ncurses libpcap
+ IFTOP_LICENSE = GPLv2+
+ IFTOP_LICENSE_FILES = COPYING
+ 
++IFTOP_LIBS = -lpcap
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++IFTOP_LIBS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++endif
++IFTOP_CONF_ENV += LIBS+="$(IFTOP_LIBS)"
++
+ $(eval $(autotools-package))
