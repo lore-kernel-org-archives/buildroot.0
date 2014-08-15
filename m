@@ -1,61 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Aug 2014 15:40:37 +0200
-Subject: [Buildroot] [PATCH 4 of 5 v4 for 2014.08] manual-text: make sure
- URLs are displayed if a link text was provided
-In-Reply-To: <patchbomb.1408110033@localhost>
-References: <patchbomb.1408110033@localhost>
-Message-ID: <93b82c1cf8a4a7cf3212.1408110037@localhost>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Aug 2014 13:52:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 7322] libgomp dependency issue with imagemagick
+In-Reply-To: <bug-7322-163@https.bugs.busybox.net/>
+References: <bug-7322-163@https.bugs.busybox.net/>
+Message-ID: <20140815135221.5A14F9D462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the asciidoc source contain URLs of the form:
-    http://example.com[An example website]
-the text representation of the manual would only contain:
-    An example website
-without displaying the actual URL.
+https://bugs.busybox.net/show_bug.cgi?id=7322
 
-This patch adds an asciidoc configuration file that sets the inline macros
-for several URL types so that the display becomes:
-    An example website [http://example.com]
-For URLs where no link text was provided, the display becomes:
-    http://example.com
-which is the same as before.
+--- Comment #4 from Samuel Martin <s.martin49@gmail.com> 2014-08-15 13:52:21 UTC ---
+I agree about disabling OpenMP support for imagemagick for the release.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+However, for the long-term solution, I would perfer having a knob and a check
+for external toolchain.
 
----
-v4: no changes
-v3: no changes
-v2:
-- link to relevant documentation (which was hard to find)
-- refine so that the display is identical to before when no link text is
-  provided.
+Having a knob allows to avoid relying on the package's build-system black
+magics, so one excatly knows how a package is configure/built, so what is put
+in its image.
+E.g. OpenCV can takes benefit from OpenMP but it is disabled
+(http://git.buildroot.net/buildroot/commit/package/opencv/opencv.mk?id=2abfd50aefdc89cf1b858c6c965a5e7d94a413b4),
+mostly because of the magics that is done at configure time:
+- if you don't ask for OpenMP support (default) or force ot be off, then it is
+disabled;
+- if you ask for OpenMP support:
+  - if OpenMP is found, then it is enabled;
+  - if OpenMP is not found, then it is disabled.
 
- docs/manual/asciidoc-text.conf |  17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+So, in the OpenCV case, if we don't have a knob, we should always ask for
+OpenMP support on the configure cmdline to get it only if available.
 
-diff -r 81d40b841073 -r 93b82c1cf8a4 docs/manual/asciidoc-text.conf
---- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/docs/manual/asciidoc-text.conf	Sat Aug 09 19:42:30 2014 +0200
-@@ -0,0 +1,17 @@
-+# Refer to following asciidoc documentation:
-+#     http://www.methods.co.nz/asciidoc/userguide.html
-+# In particular sections "Macros" and "Attribute References"
-+#
-+# For hyperlinks, show 'link text [URL]' (if link text provided) or 'URL'
-+[http-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
-+[https-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
-+[ftp-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
-+[file-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
-+[irc-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
-+[mailto-inlinemacro]
-+{0=}{0? &#91;}{name}:{target}{0?&#93;}
+This is completely missleading for the buildroot user, that will see
+"-DWITH_OPENMP=ON" in the package/opencv.mk file, but he/she won't get OpenMP
+support without any warning (unless he/she carefully read the build logs) if
+its toolchain does not have it.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
