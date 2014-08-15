@@ -1,52 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 17:43:44 +0200
-Subject: [Buildroot] [PATCH] package/erlang: build host erlang with ssl
- support to match target
-In-Reply-To: <CA+-urNQ5OWd9ZF3xeOVnPz7QZDuJiNjgv3RGhP+iPVjB9hbzdw@mail.gmail.com>
-References: <1407968827-12487-1-git-send-email-yann.morin.1998@free.fr>
- <20140815103634.00751fb4@free-electrons.com>
- <CA+-urNQ5OWd9ZF3xeOVnPz7QZDuJiNjgv3RGhP+iPVjB9hbzdw@mail.gmail.com>
-Message-ID: <20140815154344.GA3863@free.fr>
+Date: Fri, 15 Aug 2014 17:49:15 +0200
+Subject: [Buildroot] [PATCH] package/erlang: build host-erlang with support
+	for openssl
+Message-ID: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Erlang uses openssl for all things crypto.
 
-On 2014-08-15 08:33 -0400, Frank Hunleth spake thusly:
-> On Fri, Aug 15, 2014 at 4:36 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Yann E. MORIN,
-> >
-> > On Thu, 14 Aug 2014 00:27:07 +0200, Yann E. MORIN wrote:
-> >
-> >> If the target erlang has SSL support, so shoud the host-erlang.
-> >
-> > Why?
-> 
-> After more thought, I think that the reasoning should be that the
-> common Erlang build tools reference openssl. (openssl is used for
-> Erlang's crypto support, so the moment you run code that computes a
-> SHA1, you need it.) I'd be fine with host-erlang always having ssl
-> enabled since the error message you get when you don't have it enabled
-> is not obvious to anyone who doesn't use Erlang.
+Since there are host Erlang tools that use crypto (such as rebar), we
+need to build host-erlang with support for crypto, and thus it shall
+depends on openssl.
 
-Yes, after giving it more thought, and your input above, I believe we
-should always build host-erlang with SSL support.
+Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
 
-I'll update my patch accordingly.
+---
+Note: I am not sure whether this is the correct solution, to match the
+host SSL support to the target SSL support. I'll let the erlang experts
+enhance that patch if need be. ;-)
+---
+ package/erlang/erlang.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 1278682..b616e99 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -8,7 +8,6 @@ ERLANG_VERSION = 17.0
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+-HOST_ERLANG_DEPENDENCIES =
+ 
+ ERLANG_LICENSE = EPL
+ ERLANG_LICENSE_FILES = EPLICENCE
+@@ -22,7 +21,11 @@ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
+ 
+ ERLANG_CONF_OPT = --without-javac
+-HOST_ERLANG_CONF_OPT = --without-javac
++
++# erlang uses openssl for all things crypto. Since the host tools (such as
++# rebar) uses crypto, we need to build host-erlang with support for openssl.
++HOST_ERLANG_DEPENDENCIES = host-openssl
++HOST_ERLANG_CONF_OPT = --without-javac --with-ssl=$(HOST_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ ERLANG_CONF_OPT += --with-termcap
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
