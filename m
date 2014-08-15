@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 15 Aug 2014 13:04:31 +0200
+Date: Fri, 15 Aug 2014 13:07:22 +0200
 Subject: [Buildroot] [PATCH 2 of 5 v3 for 2014.08] gendoc infra: use
  $(pkgname) instead of explicitly passing 'manual'
 In-Reply-To: <f7050051dd5a40307465.1407957948@localhost>
 References: <patchbomb.1407957946@localhost>
  <f7050051dd5a40307465.1407957948@localhost>
-Message-ID: <CAHXCMMJiNgmHhRnL2L8Bw8Q1eeP2uUmr=Jcr3FtCyyQhdWacqg@mail.gmail.com>
+Message-ID: <CAHXCMMJ=HLguk221pG7RZV1Xsc+1LqpgoZJhZoJFzPpyEM91jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
