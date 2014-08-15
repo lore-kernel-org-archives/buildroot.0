@@ -1,61 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Aug 2014 00:23:08 +0200
-Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
- dependencies section
-In-Reply-To: <20140816001725.27388fce@free-electrons.com>
-References: <20140803113216.03e0fb94@free-electrons.com>
- <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
- <20140816001725.27388fce@free-electrons.com>
-Message-ID: <20140815222308.GC27341@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 16 Aug 2014 00:22:55 +0200
+Subject: [Buildroot] [PATCH] package/infozip: Rename HOST_CC to HOSTCC
+Message-ID: <1408141375-3893-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Anton, All,
+Wrong variable name is used which can lead to build errors for the host variant:
 
-On 2014-08-16 00:17 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  4 Aug 2014 16:17:08 +0400, Anton Kolesov wrote:
-> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> > index 93e6a3e..4b4d056 100644
-> > --- a/docs/manual/adding-packages-directory.txt
-> > +++ b/docs/manual/adding-packages-directory.txt
-> > @@ -265,6 +265,10 @@ use in the comment.
-> >  ** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
-> >  ** Comment string: +dynamic library+
-> >  
-> > +* Atomic intrinsics
-> > +** Dependency symbol: +!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS+
-> > +** Comment string: +atomic intrinsics+
-> 
-> Actually, the more I think about this, and the more I believe it should
-> be a property of the architecture rather than a property of the
-> toolchain. So it should probably rather be
-> BR2_ARCH_HAS_ATOMIC_INTRINSICS. And then, since it's a property of the
-> architecture, i.e not something the user can enable/disable, there is
-> no point in adding Config.in comment for that. So we would handle that
-> like we handle BR2_USE_MMU, not like we handle BR2_LARGEFILE.
-> 
-> Thoughts?
+[...] -I. -DUNIX" AS=" -c" -f unix/Makefile generic
 
-Ah, I remember now, that we talked about that. My bad, I had forgotten
-during the review.
+c _match.s
+make[1]: c: command not found
 
-However, we can't really change the implementation now, we're frozen for
-the release.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/infozip/infozip.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What about adding this to the manual for now, since it does reflect the
-current status of the code, and switch to an architecture option in
--next, or after the release is cut?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
+index 42cd1db..229299c 100644
+--- a/package/infozip/infozip.mk
++++ b/package/infozip/infozip.mk
+@@ -29,7 +29,7 @@ endef
+ define HOST_INFOZIP_BUILD_CMDS
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
+ 		CFLAGS="$(HOST_CFLAGS) -I. -DUNIX" \
+-		AS="$(HOST_CC) -c" \
++		AS="$(HOSTCC) -c" \
+ 		-f unix/Makefile generic
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
