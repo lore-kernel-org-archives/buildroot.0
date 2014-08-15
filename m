@@ -1,43 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 10:17:05 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14, 15,
-	16}.x series
-Message-ID: <20140815090111.48BB69D3E2@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 15 Aug 2014 11:03:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: prevent stripping the
+	ffmpeg binary
+In-Reply-To: <1407674806-11614-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 10 Aug 2014 14:46:46 +0200")
+References: <1407674806-11614-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <871tsi3z0o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98f9a739621d3439a686531d23a88032a7d99519
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ > Packages shouldn't strip executables by themselves, so that Buildroot
+ > controls whether stripping should occur or not. This also fixes the
+ > build on Blackfin FLAT where stripping actually doesn't work because
+ > stripping FLAT binaries is not supported.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6957a51..1f2094a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -157,13 +157,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.102"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.103"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.52"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.53"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.26"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.16"	if BR2_KERNEL_HEADERS_3_14
--	default "3.15.9"	if BR2_KERNEL_HEADERS_3_15
--	default "3.16"		if BR2_KERNEL_HEADERS_3_16
-+	default "3.14.17"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
-+	default "3.16.1"	if BR2_KERNEL_HEADERS_3_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ > Inspired by Thomas:
+ > http://git.buildroot.net/buildroot/commit/package/hdparm/hdparm.mk?id=11dbb615338cd768acc2c3138064ddf557e9b60b
+
+ > Fixes
+ > http://autobuild.buildroot.net/results/581/581c43b50c9717e53334eb156ece95fe499ccb04/
+ > http://autobuild.buildroot.net/results/57a/57a1bdc22b803114c018fa007884385bf8355151/
+ > http://autobuild.buildroot.net/results/d8a/d8a1aadebd302abc923bc4865e1242ab2479d641/
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
