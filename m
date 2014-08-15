@@ -1,37 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Aug 2014 00:18:00 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] support/download: fix the git helper
-	output file format
-In-Reply-To: <20140815172816.GA22918@free.fr> (Yann E. MORIN's message of
- "Fri, 15 Aug 2014 19:28:16 +0200")
-References: <cover.1407343550.git.yann.morin.1998@free.fr>
- <2205cccc9b1580208e604067224448da94599151.1407343550.git.yann.morin.1998@free.fr>
- <87ppg11xdg.fsf@dell.be.48ers.dk> <20140815172816.GA22918@free.fr>
-Message-ID: <87lhqp1jon.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Aug 2014 00:23:08 +0200
+Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
+ dependencies section
+In-Reply-To: <20140816001725.27388fce@free-electrons.com>
+References: <20140803113216.03e0fb94@free-electrons.com>
+ <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <20140816001725.27388fce@free-electrons.com>
+Message-ID: <20140815222308.GC27341@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Thomas, Anton, All,
 
-Hi,
+On 2014-08-16 00:17 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  4 Aug 2014 16:17:08 +0400, Anton Kolesov wrote:
+> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> > index 93e6a3e..4b4d056 100644
+> > --- a/docs/manual/adding-packages-directory.txt
+> > +++ b/docs/manual/adding-packages-directory.txt
+> > @@ -265,6 +265,10 @@ use in the comment.
+> >  ** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
+> >  ** Comment string: +dynamic library+
+> >  
+> > +* Atomic intrinsics
+> > +** Dependency symbol: +!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS+
+> > +** Comment string: +atomic intrinsics+
+> 
+> Actually, the more I think about this, and the more I believe it should
+> be a property of the architecture rather than a property of the
+> toolchain. So it should probably rather be
+> BR2_ARCH_HAS_ATOMIC_INTRINSICS. And then, since it's a property of the
+> architecture, i.e not something the user can enable/disable, there is
+> no point in adding Config.in comment for that. So we would handle that
+> like we handle BR2_USE_MMU, not like we handle BR2_LARGEFILE.
+> 
+> Thoughts?
 
- >> > -gzip "${output}"
- >> > +gzip <"${output}.tmp" >"${output}"
- >> 
- >> Don't we then end up with a bunch of foo.tmp files?
+Ah, I remember now, that we talked about that. My bad, I had forgotten
+during the review.
 
- > Nope, because the wrapper scripts first 'cd' into a temp dir, that ets
- > removed at the end of the wrapper.
+However, we can't really change the implementation now, we're frozen for
+the release.
 
- > See:
- >     http://git.buildroot.org/buildroot/tree/support/download/wrapper#n42
- > and:
- >     http://git.buildroot.org/buildroot/tree/support/download/wrapper#n91
+What about adding this to the manual for now, since it does reflect the
+current status of the code, and switch to an architecture option in
+-next, or after the release is cut?
 
-Ahh yes, good - Thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
