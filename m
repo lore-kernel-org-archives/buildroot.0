@@ -1,48 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 15 Aug 2014 16:39:10 +0200
-Subject: [Buildroot] [PATCH 5/6] toolchainfile.cmake.in: do not force the
-	CMAKE_{C, CXX}_FLAGS to the cache
+Date: Fri, 15 Aug 2014 16:39:11 +0200
+Subject: [Buildroot] [PATCH 6/6] [RFC] package/pkg-cmake.mk: add ccache
+	support for host packages
 In-Reply-To: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
 References: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1408113551-29932-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1408113551-29932-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix #7280 [1]
-
-When FORCE option is passed to the set command, the variable is
-added/updated in the CMake cache every single time CMake process this
-command.
-
-Because the toochainfile.cmake prepends architecture/toolchain flags to
-the CMAKE_{C,CXX}_FLAGS, this makes the CFLAGS being updated in the
-generated Makefiles each time ones reconfigures its project. So it
-forces the compilation of everything, even when nothing has changed.
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=7280
+This ccache support for host-cmake-package uses the same logic as the
+one done for the target packages in the toolchainfile.cmake file.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- support/misc/toolchainfile.cmake.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-cmake.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 1dfbdba..4ca3d35 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -12,8 +12,8 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
- 
- set(CMAKE_SYSTEM_NAME Linux)
- 
--set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
--set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
-+set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
-+set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
- set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
- set(CMAKE_INSTALL_SO_NO_EXE 0)
- 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2006b76..3a6b7e6 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -89,6 +89,16 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
+ 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
+ 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
++		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
++		$$(if $$(BR2_CCACHE),\
++			-DCMAKE_C_COMPILER="$$(HOST_DIR)/usr/bin/ccache" \
++			-DCMAKE_CXX_COMPILER="$$(HOST_DIR)/usr/bin/ccache" \
++			-DCMAKE_C_COMPILER_ARG1="$$(HOSTCC)" \
++			-DCMAKE_CXX_COMPILER_ARG1="$$(HOSTCXX)" \
++		, \
++			-DCMAKE_C_COMPILER="$$(HOSTCC)" \
++			-DCMAKE_CXX_COMPILER="$$(HOSTCXX)" \
++		) \
+ 		-DBUILD_TESTING=OFF \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
 -- 
 2.0.4
