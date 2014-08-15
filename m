@@ -1,26 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Aug 2014 10:36:34 +0200
-Subject: [Buildroot] [PATCH] package/erlang: build host erlang with ssl
- support to match target
-In-Reply-To: <1407968827-12487-1-git-send-email-yann.morin.1998@free.fr>
-References: <1407968827-12487-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140815103634.00751fb4@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Aug 2014 10:18:23 +0200
+Subject: [Buildroot] [git commit] bluez5_utils: gatttool depends on
+	bluez5_utils client
+Message-ID: <20140815090111.5AE119D462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=1e9d40fc2396d823c21fa624651f3bd7c28f4b87
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Aug 2014 00:27:07 +0200, Yann E. MORIN wrote:
+The gatttool utility uses readline, and is therefore built only if
+--enable-client is used, i.e when bluez5_utils client applications are
+enabled. Therefore, this commit makes
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL depend on
+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT. It also moves
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to be right below the
+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT definition.
 
-> If the target erlang has SSL support, so shoud the host-erlang.
+Fixes:
 
-Why?
+  http://autobuild.buildroot.org/results/f2b/f2b8b1bf5d50e6223a9a6d6858320975edb2a25a/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bluez5_utils/Config.in |   21 +++++++++++----------
+ 1 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 10588db..ec1352f 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -39,18 +39,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Enable the Bluez 5.x command line client.
+ 
+-config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+-	bool "build experimental plugins"
+-	help
+-	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
+-
+-config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+-	bool "build tests"
+-	help
+-	  Build BlueZ 5.x tests
+-
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "install GATT tool"
++	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Generic Attribute Profile (GATT) support. This provides
+ 	  profile discovery and description services for Bluetooth Low
+@@ -59,6 +50,16 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	  It is always built with BlueZ 5.x, but upstream choose not
+ 	  to install it by default.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
++	bool "build experimental plugins"
++	help
++	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
++
++config BR2_PACKAGE_BLUEZ5_UTILS_TEST
++	bool "build tests"
++	help
++	  Build BlueZ 5.x tests
++
+ endif
+ 
+ comment "bluez5-utils needs a toolchain w/ wchar, threads, IPv6, headers >= 3.4"
