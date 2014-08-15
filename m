@@ -1,57 +1,95 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 17:49:15 +0200
-Subject: [Buildroot] [PATCH] package/erlang: build host-erlang with support
-	for openssl
-Message-ID: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr>
+Date: Fri, 15 Aug 2014 18:06:45 +0200
+Subject: [Buildroot] Understanding a sysroot issue with 2014.08-rc1
+In-Reply-To: <CALo-6+hcfoU04dwydZvdLr7sh6bMQEUzNsAjJqUv7e5_jr=Ezg@mail.gmail.com>
+References: <CALo-6+hcfoU04dwydZvdLr7sh6bMQEUzNsAjJqUv7e5_jr=Ezg@mail.gmail.com>
+Message-ID: <20140815160645.GB3863@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erlang uses openssl for all things crypto.
+Charles, All,
 
-Since there are host Erlang tools that use crypto (such as rebar), we
-need to build host-erlang with support for crypto, and thus it shall
-depends on openssl.
+On 2014-08-15 08:31 -0700, Charles Krinke spake thusly:
+> I am trying to work with the latest buildroot-2014.08-rc1 with a currently
+> used external toolchain. I am currently using buildroot-2013.08 which is
+> working fine with the Linaro 2013.04 external toolchain. My project is an
+> ARM AM3517 based project using Qt5.
+> 
+> In trying to use this same external toolchain with buildroot-2014.08, I get
+> caught up in
+> 
+> Incorrect selection of kernel headers: expected 2.6.x, got 3.2.x
+> 
+> I can see what is happening is that buildroot is looking at the version of
+> the headers on the development Linux PC, which are 3.2 and
+> check-kernel-headers.sh is looking in /usr/include/linux/version.h.
+> 
+> I do have a kernel tree for the 2.6.37 kernel we are working in and it is
+> in ~/.../linux-2.6.37, so its partial path to version.h is
+> linux-2.6.37/include/linux/version.h.
+> 
+> Since there is no .../usr/... in this path, I have a little trouble
+> visualizing how to set SYSROOT as an environment variable to allow the
+> toolchain to pick up the custom 2.6 headers instead of the development PC's
+> system headers.
+> 
+> Could someone help me understand the path through the "Valley of
+> Uncertainty" around the "Swamp of Ambiguity" past the "Rocks of Confusion"
+> to the top of the "Ridge of Enlightment", please.
 
-Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Frank Hunleth <fhunleth@troodon-software.com>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+I'll nominate you for a quote on LWN.net for next weeks' edition! :-)
 
----
-Note: I am not sure whether this is the correct solution, to match the
-host SSL support to the target SSL support. I'll let the erlang experts
-enhance that patch if need be. ;-)
----
- package/erlang/erlang.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+OK, so to the answer, now.
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 1278682..b616e99 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -8,7 +8,6 @@ ERLANG_VERSION = 17.0
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
--HOST_ERLANG_DEPENDENCIES =
- 
- ERLANG_LICENSE = EPL
- ERLANG_LICENSE_FILES = EPLICENCE
-@@ -22,7 +21,11 @@ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
- ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
- 
- ERLANG_CONF_OPT = --without-javac
--HOST_ERLANG_CONF_OPT = --without-javac
-+
-+# erlang uses openssl for all things crypto. Since the host tools (such as
-+# rebar) uses crypto, we need to build host-erlang with support for openssl.
-+HOST_ERLANG_DEPENDENCIES = host-openssl
-+HOST_ERLANG_CONF_OPT = --without-javac --with-ssl=$(HOST_DIR)/usr
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- ERLANG_CONF_OPT += --with-termcap
+Some packages need a specific version of the kernel headers to be used
+in the toolchain, or they fail to build.
+
+Note that needs not match the running kernel. In fact, on first sight,
+one needs not be concerned about matching both (although that is better),
+since the C library has (by default) fallback methods when running on an
+older kernel.
+
+So, Buildroot needs to know what version of the kernel headers were used
+to build the toolchain, so we can hide the packages that require a more
+recent version (to avoid build breakage.)
+
+When using an internal toolchain, Buildroot explcitly knows what version
+of the kernel headers you're using, since you have to tell so in the
+toolchain menuconfig.
+
+But when using an external toolchain, Buildroot can only know the
+version at build time, which is too late since the configuration is
+laready done, so we can't hide the affected pacakges.
+
+Thus, we recently added a new choice in the menuconfig, where the user
+must tell what kernel version is used in the toolchain. This is located
+in the same menu where you select the toolchain and its options:
+
+    Toolchain  --->  External toolchain kernel headers series (X.Y)
+
+In your case, you should set this choice to "3.2.x" since that's what
+the error message is about:
+
+    expected 2.6.x, got 3.2.x
+
+It says Buildroot was configured for an external toolchain with headers
+from the 2.6.x kernel (the default, since we want to be conservative),
+but it found that the version is actually 3.2.x.
+
+
+Thanks so much for the little fun I had reading you!
+I hope this will help you pass the Ridge of Enlightment. :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
