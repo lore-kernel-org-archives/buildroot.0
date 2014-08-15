@@ -1,52 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Aug 2014 21:15:30 +0200
-Subject: [Buildroot] [PATCHv2 3/3] docs/manual: update documentation
- about gettext handling
-In-Reply-To: <1408127999-2352-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1408127999-2352-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408127999-2352-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVEOXAr_kc9X-9OwXRNe_OacDCB00_4kVj-Uo3hQPDO=w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Aug 2014 22:25:49 +0200
+Subject: [Buildroot] [PATCHv3 0/3] gettext changes to solve bug #7124
+Message-ID: <1408134352-5083-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Fri, Aug 15, 2014 at 8:39 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/adding-packages-gettext.txt | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
-> index d265607..580787f 100644
-> --- a/docs/manual/adding-packages-gettext.txt
-> +++ b/docs/manual/adding-packages-gettext.txt
-> @@ -8,10 +8,16 @@ library. Dependencies for this library are fairly complicated and
->  therefore, deserve some explanation.
->
->  The 'uClibc' C library doesn't implement gettext functionality;
-> -therefore with this C library, a separate gettext must be compiled. On
-> -the other hand, the 'glibc' C library does integrate its own gettext,
-> -and in this case the separate gettext library should not be compiled,
-> -because it creates various kinds of build failures.
-> +therefore with this C library, a separate gettext must be compiled,
-> +which will provide the libintl library.
-> +
-> +On the other hand, the 'glibc' C library does integrate its own
-> +gettext library functions, so it is not necessary to build a separate
-> +libintl library.
-> +
-> +However, certain packages will need some gettext utilities on the
+Here is a third version of the gettext changes, that include the
+comments made by Thomas DS on the manual (PATCH 3/3).
 
-I would remove 'will' here.
+Since they actually fix a runtime issue with ecryptfs-utils, reported
+as bug #7124, I'd like them to be considered for 2014.08.
 
-In addition to the above new comment, I already provided feedback on
-this patch in June, but you must have missed it:
-http://lists.busybox.net/pipermail/buildroot/2014-June/098211.html
+Basically, the core of the issue is that the numerous ecryptfs-utils
+shell scripts use the "gettext" program on the target to query
+translated strings. However, with glibc toolchains, we do not allow
+the selection of the gettext package, because the gettext *functions*
+are already part of the C library.
 
-Best regards,
+However, this totally overlooks the fact that gettext provides more
+than a library, it also provides utilities, which in the case of
+ecryptfs-utils, are needed on the target.
+
+Moreover, the gettext configure script is smart enough to *not*
+generate libintl.so when the C library already has the gettext
+function. It therefore has the right behavior depending on the C
+library: for glibc, only the gettext "utilities" are installed, for
+uClibc, both libintl and the gettext utilities are installed.
+
+These three patches are just a new version rebased on top of master,
+and re-tested.
+
+Long term, maybe we should rename BR2_NEEDS_GETTEXT and
+BR2_NEEDS_GETTEXT_IF_LOCALE to BR2_NEEDS_LIBINTL and
+BR2_NEEDS_LIBINTL_IF_LOCALE, because this is really what those config
+knobs mean.
+
+Thanks,
+
 Thomas
+
+Thomas Petazzoni (3):
+  gettext: allow building when BR2_NEEDS_GETTEXT is not selected
+  ecryptfs-utils: select gettext, needed for command line utilities
+  docs/manual: update documentation about gettext handling
+
+ docs/manual/adding-packages-gettext.txt | 29 ++++++++++++++++++++++-------
+ package/ecryptfs-utils/Config.in        |  8 ++++++--
+ package/gettext/Config.in               |  1 -
+ 3 files changed, 28 insertions(+), 10 deletions(-)
+
+-- 
+2.0.0
