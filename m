@@ -1,65 +1,57 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 15 Aug 2014 08:56:13 +0300
-Subject: [Buildroot] [PATCH 1/1] qt: add postgresql driver support
-In-Reply-To: <1407938742-25932-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1407938742-25932-1-git-send-email-bos@je-eigen-domein.nl>
- <1407938742-25932-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <201408150856.13522.fatih.asici@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Aug 2014 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-14
+Message-ID: <20140815063012.5AFFC100DF0@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 13 August 2014 17:05:42 Floris Bos wrote:
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Build statistics for 2014-08-14
+===============================
 
-Reviewed-by: Fatih A??c? <fatih.asici@gmail.com>
+        success : 93 
+       failures : 14 
+       timeouts : 1  
+          TOTAL : 108
 
-> ---
->  package/qt/Config.sql.in | 6 +++++-
->  package/qt/qt.mk         | 3 +++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-> index 259a574..fd62657 100644
-> --- a/package/qt/Config.sql.in
-> +++ b/package/qt/Config.sql.in
-> @@ -30,11 +30,15 @@ config BR2_PACKAGE_QT_ODBC
-> 
->  config BR2_PACKAGE_QT_PSQL
->  	bool "PostgreSQL Driver"
-> -	depends on BROKEN # libpgsql not in BR
-> +	select BR2_PACKAGE_POSTGRESQL
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	help
->  	  Build PostgreSQL driver
->  	  If unsure, say n.
-> 
-> +comment "PostgreSQL needs an (e)glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +
->  choice
->  	prompt "SQLite 3 support"
->  	default BR2_PACKAGE_QT_SQLITE_NONE
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index 880e835..92a090f 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -343,6 +343,8 @@ QT_CONFIGURE_OPTS += -qt-sql-odbc
->  endif
->  ifeq ($(BR2_PACKAGE_QT_PSQL),y)
->  QT_CONFIGURE_OPTS += -qt-sql-psql
-> +QT_CONFIGURE_ENV  += PSQL_LIBS=-L$(STAGING_DIR)/usr/lib
-> +QT_DEPENDENCIES   += postgresql
->  endif
->  ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
->  QT_CONFIGURE_OPTS += -qt-sql-sqlite
-> @@ -503,6 +505,7 @@ define QT_CONFIGURE_CMDS
->  		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
->  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
-> +		$(QT_CONFIGURE_ENV) \
->  		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" ./configure \
->  		$(if $(VERBOSE),-verbose,-silent) \
->  		-force-pkg-config \
+Classification of failures by reason
+====================================
+
+             bluez5_utils-5.21 | 2 
+ltrace-0896ce554f80afdcba81... | 2 
+                 synergy-1.3.1 | 1 
+                libinput-0.3.0 | 1 
+                      bash-4.3 | 1 
+               ruby-1.9.3-p545 | 1 
+                  perl-gd-2.53 | 1 
+                   geoip-1.6.0 | 1 
+                  thrift-0.9.1 | 1 
+                 python3-3.4.1 | 1 
+                 gnupg2-2.0.25 | 1 
+                 webkit-1.11.5 | 1 
+              gutenprint-5.2.9 | 1 
+
+Detail of failures
+===================
+
+       arm |                       bash-4.3 | NOK | http://autobuild.buildroot.net/results/84ae678e9b056e0bc2eedd24c85c6884646f2e19/
+      sh4a |              bluez5_utils-5.21 | NOK | http://autobuild.buildroot.net/results/f2b8b1bf5d50e6223a9a6d6858320975edb2a25a/
+   powerpc |              bluez5_utils-5.21 | NOK | http://autobuild.buildroot.net/results/1218e2269de20772b96df22e64ed86c58de07ff2/
+       arc |                    geoip-1.6.0 | TIM | http://autobuild.buildroot.net/results/842907a28193f87a1f94fd85290cc227e72c4fba/
+   powerpc |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/e7c873ff9aa9075f7699317718ede8555ff13d3e/
+      mips |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/09971cd5e709096c534d7c57721c835406467d45/
+  mips64el |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/5c7cfbc69b27bec8a3188f6ca17b63e08c7429db/
+    mipsel | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/43a8fc7075f52eab74ebfee4c9f25dd2b886e75e/
+      mips | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/530fd6d3217900684ed2092433675e1d3ed4561f/
+       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/bf89f7f3b158d6706b97ed8bf2d57d02a7a7a7b6/
+  mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/87be3a93982206338d3ed750c7456be199295a13/
+      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/b2c5fe062475b0c65d63a42d938ec8bfe3a2c7cb/
+      bfin |                  synergy-1.3.1 | NOK | http://autobuild.buildroot.net/results/8d435c1605204f154c8a0a94ebc06d9c29a1768a/
+  mips64el |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/9bbd99a5a3a0d16aa101ddc2b2f7fcc5de907323/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c606594604e94a55801567e990ed1bea01459cff/
+
+
+-- 
+http://autobuild.buildroot.net
