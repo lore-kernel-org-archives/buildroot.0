@@ -1,103 +1,119 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 23:04:10 +0200
-Subject: [Buildroot] [PATCH v4 4/4] msgpack: Add dependency on atomic
- intrinsics
-In-Reply-To: <1407510572-20603-4-git-send-email-Anton.Kolesov@synopsys.com>
-References: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
- <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
- <1407510572-20603-4-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <20140815210410.GE25897@free.fr>
+Date: Fri, 15 Aug 2014 23:09:37 +0200
+Subject: [Buildroot] [PATCH v5 2/2] apply-patches.sh: don't print
+ anything when "make -s" is used
+In-Reply-To: <1407399309-5926-3-git-send-email-fabio.porcedda@gmail.com>
+References: <1407399309-5926-1-git-send-email-fabio.porcedda@gmail.com>
+ <1407399309-5926-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140815210937.GF25897@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anton, All,
+Fabio, All,
 
-On 2014-08-08 19:09 +0400, Anton Kolesov spake thusly:
-> Msgpack requires GCC built-in atomic functions which are architecture specific
-> and may not be implemented.
+On 2014-08-07 10:15 +0200, Fabio Porcedda spake thusly:
+> The make "-s" option is used to enable the "Silent operation" so if that
+> option is used don't print anything as far as there isn't any error.
+> 
+> Add the "-s" option to "apply-patches.sh" to enable silent operation.
+> 
+> Also add the "BR_SILENT" variable the contain "YES" when "make -s" is
+> used so others parts can use it to silence the build as well.
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Well, this patch does a bit more than that: it replaces the dependency
-on !ARC with the new generic dependency.
-
-What about enhancing the commit log as thus, for example:
-
-    Msgpack requires GCC built-in atomic functions which are
-    architecture specific and may not be implemented.
-
-    Replace the current dependency on !ARC (which was the sole
-    architecture so far to not have intrinsics), to the generic
-    _HAS_ATOMIC_INTRINSICS dependency.
-
-Otherwise:
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+For -next.
 
 Regards,
 Yann E. MORIN.
 
-> This fixes:
-> http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
-> 
-> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 > ---
->  package/msgpack/Config.in        | 7 +++----
->  package/python-msgpack/Config.in | 7 +++----
->  2 files changed, 6 insertions(+), 8 deletions(-)
+>  Makefile                         |  2 ++
+>  package/Makefile.in              |  2 +-
+>  support/scripts/apply-patches.sh | 17 ++++++++++++++---
+>  3 files changed, 17 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-> index b380c58..7d6277f 100644
-> --- a/package/msgpack/Config.in
-> +++ b/package/msgpack/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_MSGPACK
->  	bool "msgpack"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_arc # atomic builtins
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
->  	help
->  	  MessagePack is an efficient binary serialization format.
+> diff --git a/Makefile b/Makefile
+> index c82b07f..dfb49be 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -198,6 +198,8 @@ else
+>    Q = @
+>  endif
 >  
-> @@ -10,6 +10,5 @@ config BR2_PACKAGE_MSGPACK
+> +BR_SILENT = $(if $(filter s -s,$(MAKEFLAGS)),YES)
+> +
+>  # we want bash as shell
+>  SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+>  	 else if [ -x /bin/bash ]; then echo /bin/bash; \
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index bf22123..6ef3c3d 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -222,7 +222,7 @@ FLEX := $(shell which flex || type -p flex)
+>  BISON := $(shell which bison || type -p bison)
+>  SED := $(shell which sed || type -p sed) -i -e
 >  
->  	  http://msgpack.org/
+> -APPLY_PATCHES = support/scripts/apply-patches.sh
+> +APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
 >  
-> -comment "msgpack needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_arc
-> +comment "msgpack needs a toolchain w/ C++, atomic intrinsics"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-> diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-> index c4b68a3..3b825a1 100644
-> --- a/package/python-msgpack/Config.in
-> +++ b/package/python-msgpack/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
->  	depends on BR2_PACKAGE_PYTHON
->  	select BR2_PACKAGE_MSGPACK
->  	depends on BR2_INSTALL_LIBSTDCPP # msgpack
-> -	depends on !BR2_arc # msgpack - atomic builtins
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # msgpack
->  	help
->  	  MessagePack (http://msgpack.org/) is a fast, compact binary
->  	  serialization format, suitable for similar data to JSON.
-> @@ -12,7 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+>  HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+>  HOST_CFLAGS   ?= -O2
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 37f2d81..16e0b41 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -6,6 +6,8 @@
+>  # (c) 2002 Erik Andersen <andersen@codepoet.org>
+>  #
+>  # Parameters:
+> +# - "-s",optional. Silent operation, don't print anything if there
+> +# isn't any error.
+>  # - the build directory, optional, default value is '.'. The place where are
+>  # the package sources.
+>  # - the patch directory, optional, default '../kernel-patches'. The place
+> @@ -28,6 +30,13 @@
+>  # applied. The list of the patches applied is stored in '.applied_patches_list'
+>  # file in the build directory.
 >  
->  	  https://pypi.python.org/pypi/msgpack-python/
->  
-> -comment "python-msgpack needs a toolchain w/ C++"
-> +comment "python-msgpack needs a toolchain w/ C++, atomic intrinsics"
->  	depends on BR2_PACKAGE_PYTHON
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_arc
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> +silent=
+> +if [ "$1" = "-s" ] ; then
+> +    # add option to be used by the patch tool
+> +    silent=-s
+> +    shift
+> +fi
+> +
+>  # Set directories from arguments, or use defaults.
+>  builddir=${1-.}
+>  patchdir=${2-../kernel-patches}
+> @@ -77,14 +86,16 @@ function apply_patch {
+>  	return 0
+>  	;;
+>      esac
+> -    echo ""
+> -    echo "Applying $patch using ${type}: "
+> +    if [ -z "$silent" ] ; then
+> +	echo ""
+> +	echo "Applying $patch using ${type}: "
+> +    fi
+>      if [ ! -e "${path}/$patch" ] ; then
+>  	echo "Error: missing patch file ${path}/$patch"
+>  	exit 1
+>      fi
+>      echo $patch >> ${builddir}/.applied_patches_list
+> -    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
+> +    ${uncomp} "${path}/$patch" | patch $silent -g0 -p1 -E -d "${builddir}" -t -N
+>      if [ $? != 0 ] ; then
+>          echo "Patch failed!  Please fix ${patch}!"
+>  	exit 1
 > -- 
-> 1.8.4.1
+> 2.0.4
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
