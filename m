@@ -1,40 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Aug 2014 18:16:05 +0200
-Subject: [Buildroot] Understanding a sysroot issue with 2014.08-rc1
-In-Reply-To: <CALo-6+hcfoU04dwydZvdLr7sh6bMQEUzNsAjJqUv7e5_jr=Ezg@mail.gmail.com>
-References: <CALo-6+hcfoU04dwydZvdLr7sh6bMQEUzNsAjJqUv7e5_jr=Ezg@mail.gmail.com>
-Message-ID: <CAAXf6LU410JEE=zbmWtfKJK61AY=G-n8xVk97ssYzsD4iZLTUA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Aug 2014 18:29:27 +0200
+Subject: [Buildroot] [PATCH] package/erlang: build host erlang with ssl
+ support to match target
+In-Reply-To: <20140815154344.GA3863@free.fr>
+References: <1407968827-12487-1-git-send-email-yann.morin.1998@free.fr>
+ <20140815103634.00751fb4@free-electrons.com>
+ <CA+-urNQ5OWd9ZF3xeOVnPz7QZDuJiNjgv3RGhP+iPVjB9hbzdw@mail.gmail.com>
+ <20140815154344.GA3863@free.fr>
+Message-ID: <20140815182927.4731c6e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
+Dear Yann E. MORIN,
 
-On Fri, Aug 15, 2014 at 5:31 PM, Charles Krinke
-<charles.krinke@gmail.com> wrote:
-> Gentlemen:
->
-> I am trying to work with the latest buildroot-2014.08-rc1 with a currently
-> used external toolchain. I am currently using buildroot-2013.08 which is
-> working fine with the Linaro 2013.04 external toolchain. My project is an
-> ARM AM3517 based project using Qt5.
->
-> In trying to use this same external toolchain with buildroot-2014.08, I get
-> caught up in
->
-> Incorrect selection of kernel headers: expected 2.6.x, got 3.2.x
->
-> I can see what is happening is that buildroot is looking at the version of
-> the headers on the development Linux PC, which are 3.2 and
-> check-kernel-headers.sh is looking in /usr/include/linux/version.h.
+On Fri, 15 Aug 2014 17:43:44 +0200, Yann E. MORIN wrote:
 
-Small clarification on top of Yann's answer:
+> > After more thought, I think that the reasoning should be that the
+> > common Erlang build tools reference openssl. (openssl is used for
+> > Erlang's crypto support, so the moment you run code that computes a
+> > SHA1, you need it.) I'd be fine with host-erlang always having ssl
+> > enabled since the error message you get when you don't have it enabled
+> > is not obvious to anyone who doesn't use Erlang.
+> 
+> Yes, after giving it more thought, and your input above, I believe we
+> should always build host-erlang with SSL support.
+> 
+> I'll update my patch accordingly.
 
-Buildroot is not checking the headers of the development PC, but
-rather the kernel headers that come with the toolchain. The kernel
-running on the development PC is not relevant here.
+Can you include in the commit log the rationale for this change?
 
-Best regards,
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
