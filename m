@@ -1,39 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Aug 2014 13:04:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 7322] libgomp dependency issue with imagemagick
-In-Reply-To: <bug-7322-163@https.bugs.busybox.net/>
-References: <bug-7322-163@https.bugs.busybox.net/>
-Message-ID: <20140815130448.9D4949D463@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 15 Aug 2014 15:40:33 +0200
+Subject: [Buildroot] [PATCH 0 of 5 v4 for 2014.08] manual-text generation
+	improvements
+Message-ID: <patchbomb.1408110033@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7322
+This patch series makes some improvements to the generation of the text
+version of the manual:
+- make sure that URLs are visible
+- remove the 'logo' (logo.png) reference
 
---- Comment #3 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2014-08-15 13:04:47 UTC ---
-Yes, libgomp is not very big. It seems to be now present in most toolchains,
-but it is optional.
+To achieve this, three preparatory patches are needed.
 
-I also think that doing something for imagemagick here is the wrong way to go,
-not only because it complicates things, but also because other packages may
-silently (unless they're run on the target) be affected by the same issue,
-either for libgomp or for another toolchain library.
+Note that this series stands on its own, it can already be applied.
+A subsequent series will make structural and content-wise changes to the
+manual itself.
 
-I agree that something like BR2_TOOLCHAIN_EXTERNAL_INET_RPC would be overkill,
-because this is rather used for feature / package filtering than for library
-installation.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Looking at copy_toolchain_lib_root, adding libgomp.so* to LIB_EXTERNAL_LIBS
-should work even if this library is not available, so this is indeed a good
-solution. And this will make it possible to easily add other optional standard
-(i.e. non-exotic) libraries in the same way in the future if a similar issue
-happens elsewhere.
+---
+v4: fix 'make clean' (detected by Samuel)
+v3: fix 'make manual' without .config (extra patch) (detected by Yann)
+v2: refine patch 4 (changing URLs)
 
-I will probably send a patch next week if nobody beats me at it.
+Thomas De Schampheleire (5)
+  Makefile: unconditionally include pkg-utils.mk
+  gendoc infra: use $(pkgname) instead of explicitly passing 'manual'
+  gendoc infra: add support for asciidoc configuration files
+  manual-text: make sure URLs are displayed if a link text was provided
+  manual-text: hide image representations
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+ Makefile                       |   2 ++
+ docs/manual/asciidoc-text.conf |  23 +++++++++++++++++++++++
+ docs/manual/manual.mk          |  28 +++++++++++++++++-----------
+ package/Makefile.in            |   1 -
+ 4 files changed, 42 insertions(+), 12 deletions(-)
