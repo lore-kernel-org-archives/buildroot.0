@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Aug 2014 22:31:43 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: disable link time optimization
-In-Reply-To: <1407875307-12036-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1407875307-12036-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140815223143.72de054d@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Aug 2014 20:32:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 7286] systemd 215 doesn't build
+In-Reply-To: <bug-7286-163@https.bugs.busybox.net/>
+References: <bug-7286-163@https.bugs.busybox.net/>
+Message-ID: <20140815203222.198B09D439@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+https://bugs.busybox.net/show_bug.cgi?id=7286
 
-On Tue, 12 Aug 2014 22:28:27 +0200, Eric Le Bihan wrote:
-> As reported in https://bugs.busybox.net/show_bug.cgi?id=7286,
-> systemd fails to build with BR2_OPTIMIZE_2=y. This mode activates the GCC
-> options -flto and -ffat-lto-objects, which do not mix well with the GCC
-> tricks used in src/compat-libs/linkwarning.h to build the compatibility
-> libraries.
-> 
-> As a temporary workaround, this patch disables link time optimization for
-> systemd.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/systemd/systemd.mk | 3 +++
->  1 file changed, 3 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Thomas
+--- Comment #10 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-15 20:32:21 UTC ---
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=d9054017cfc25c8f89225e1d18c71f112d25f9a0.
+Closing bug. Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
