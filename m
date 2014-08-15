@@ -1,53 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 11:23:50 +0200
-Subject: [Buildroot] [git commit branch/next] erlang: bump to version 17.1
-Message-ID: <20140815092504.0B7E19C769@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Aug 2014 11:48:02 +0200
+Subject: [Buildroot] [PATCH] libcuefile: fix static linking
+Message-ID: <1408096082-12007-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7abc724b78519895b95b43175b45eb7d244716ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Add a patch to libcuefile to fix BR2_PREFER_STATIC_LIB=y configurations.
 
-Erlang/OTP 17.1 is a service release on the 17 track with mostly bug
-fixes, but it does contain a number of new features and characteristics
-improvements as well.
+Fixes:
 
-Some highlights of the release are:
-  - crypto: Add aes_cfb8 cypher to crypto:block_encrypt and block_decrypt.
-  - diameter: Add result code counters for CEA, DWA, and DPA.
-  - erts: The following built in functions in the erlang and binary modules
-    now bump an appropriate amount of reductions and yield when out of
-    reductions:
-    binary_to_list/1, binary_to_list/3, bitstring_to_list/1,
-    list_to_binary/1,
-    iolist_to_binary/1, list_to_bitstring/1, binary:list_to_bin/1
-  - hipe: Handle Maps instructions get_map_elements, put_map_assoc,
-    put_map_exact in the HiPE native code compiler.
-  - mnesia: The time for inserting locks for a transaction with large
-    number of locks is reduced significantly.
-  - ssh: Option max_sessions added to ssh:daemon/{2,3}.
-  - stdlib: Add maps:get/3 to maps module. The function will return the
-    supplied default value if the key does not exist in the map.
+  http://autobuild.buildroot.org/results/13e/13ecdab5bb132532674a51e0e0e1136d417dfcd9/
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang/erlang.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../libcuefile-0001-fix-static-link.patch          | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/libcuefile/libcuefile-0001-fix-static-link.patch
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 1278682..5474952 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = 17.0
-+ERLANG_VERSION = 17.1
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
+diff --git a/package/libcuefile/libcuefile-0001-fix-static-link.patch b/package/libcuefile/libcuefile-0001-fix-static-link.patch
+new file mode 100644
+index 0000000..6eb5890
+--- /dev/null
++++ b/package/libcuefile/libcuefile-0001-fix-static-link.patch
+@@ -0,0 +1,25 @@
++Fix static only build
++
++Make sure to build the shared library only if BUILD_SHARED_LIBS is
++ON. Normally, CMake takes care of this automatically, but libcuefile
++wants to build both the shared and static variants, so the normal
++logic of CMake doesn't apply.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/CMakeLists.txt
++===================================================================
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -4,7 +4,11 @@
++ add_library(cuefile-static STATIC cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
++ set_target_properties(cuefile-static PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1)
++ 
+++if (BUILD_SHARED_LIBS)
++ add_library(cuefile-shared SHARED cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
++ set_target_properties(cuefile-shared PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1 VERSION 0.0.0 SOVERSION 0)
++ 
++ install(TARGETS cuefile-static cuefile-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
+++else (BUILD_SHARED_LIBS)
+++install(TARGETS cuefile-static LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
+++endif (BUILD_SHARED_LIBS)
+-- 
+2.0.0
