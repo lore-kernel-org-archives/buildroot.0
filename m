@@ -1,85 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Aug 2014 00:04:07 +0200
-Subject: [Buildroot] [PATCH 1 of 5 v4 for 2014.08] Makefile:
- unconditionally include pkg-utils.mk
-In-Reply-To: <232206819ca1e46d14b1.1408110034@localhost>
+Date: Sat, 16 Aug 2014 00:13:29 +0200
+Subject: [Buildroot] [PATCH 2 of 5 v4 for 2014.08] gendoc infra: use
+ $(pkgname) instead of explicitly passing 'manual'
+In-Reply-To: <9d9af165df7bfedeefb6.1408110035@localhost>
 References: <patchbomb.1408110033@localhost>
- <232206819ca1e46d14b1.1408110034@localhost>
-Message-ID: <20140815220407.GA27341@free.fr>
+ <9d9af165df7bfedeefb6.1408110035@localhost>
+Message-ID: <20140815221329.GB27341@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+THomas, All,
 
 On 2014-08-15 15:40 +0200, Thomas De Schampheleire spake thusly:
-> Currently, pkg-utils.mk (included via package/Makefile.in) is only included
-> when a configuration file already exists. This means that none of the
-> utilities it defines are available without .config.
+> In the gendoc infrastructure, using an assignment of the form
+>     FOO = docs/$(1)/bar
+> inside GENDOC_INNER does not work as expected: the $(1) value is empty here
+> and the value of FOO becomes 'docs//bar'.
 > 
-> In particular:
-> - the MESSAGE macro, causing pretty build output. Since some make targets
->   can be run even without .config, like 'make manual', not having this
->   pretty printing is odd.
+> Parameters $(2), $(3), etc. do not have this problem. The specific thing
+> about $(1) is that it is a parameter to GENDOC itself (indicating the
+> document to create) and passed transparently to GENDOC_INNER.
 > 
-> - pkgname, pkgdir: in a subsequent patch, these functions will be used for
->   the generation of the manual, and since this should work also without
->   .config, we need these functions to be available.
+> This is different from the package infrastructures, where $(1) is set from
+> $(pkgname). In fact, the same strategy could be used by the gendoc
+> infrastructure as well, as $(pkgname) resolves to 'manual' for file
+> docs/manual/manual.mk. This has the advantage that the described problem
+> does not occur.
 > 
-> This patch moves the include of pkg-utils.mk from package/Makefile.in to
-> Makefile, outside of the check for .config.
-> 
-> This is a quick fix. The full solution involves to minimize the amount of
-> Makefile code that is guarded by a check on .config. This approach will be
-> taken in the 2014.11 release cycle.
+> Note that this means that if we want to use the same GENDOC infrastructure
+> for another document, it will have to reside in a separate directory than
+> the manual.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Tested by generating the manual with and without a .config.
-Tested that running make with no .config will popup the menuconfig.
-Tested that a defconfig still builds OK.
+Tested by building the manual with and without a .config.
 
 Regards,
 Yann E. MORIN.
 
 > ---
-> v4: no changes
-> v3: new patch, fixing the issue detected by Yann that 'make manual' no
-> longer worked without .config
+> v4: fix 'make clean' due to missing replacement of $(1) (Samuel)
+> v3: no changes
+> v2: no changes
 > 
->  Makefile            |  2 ++
->  package/Makefile.in |  1 -
->  2 files changed, 2 insertions(+), 1 deletions(-)
+>  docs/manual/manual.mk |  20 ++++++++++----------
+>  1 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> diff -r 3bcf63a46bc1 -r 232206819ca1 Makefile
-> --- a/Makefile	Tue Aug 05 18:25:11 2014 -0300
-> +++ b/Makefile	Wed Aug 13 11:30:25 2014 +0200
-> @@ -271,6 +271,8 @@
->  # Causes breakage with packages that needs host-ruby
->  unexport RUBYOPT
->  
-> +include package/pkg-utils.mk
-> +
->  ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->  
+> diff -r 232206819ca1 -r 9d9af165df7b docs/manual/manual.mk
+> --- a/docs/manual/manual.mk	Wed Aug 13 11:30:25 2014 +0200
+> +++ b/docs/manual/manual.mk	Sat Aug 09 18:18:58 2014 +0200
+> @@ -78,16 +78,16 @@
+>  # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
 >  ################################################################################
-> diff -r 3bcf63a46bc1 -r 232206819ca1 package/Makefile.in
-> --- a/package/Makefile.in	Tue Aug 05 18:25:11 2014 -0300
-> +++ b/package/Makefile.in	Wed Aug 13 11:30:25 2014 +0200
-> @@ -385,7 +385,6 @@
->  SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
->  endif
+>  define GENDOC
+> -$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+> -$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+> -$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+> -$(call GENDOC_INNER,$(1),text,text,text,text)
+> -$(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
+> -clean: $(1)-clean
+> -$(1)-clean:
+> -	$$(Q)$$(RM) -rf $$(O)/docs/$(1)
+> -.PHONY: $(1) $(1)-clean manual-update-lists
+> +$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+> +$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+> +$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+> +$(call GENDOC_INNER,$(pkgname),text,text,text,text)
+> +$(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
+> +clean: $(pkgname)-clean
+> +$(pkgname)-clean:
+> +	$$(Q)$$(RM) -rf $$(O)/docs/$(pkgname)
+> +.PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
+>  endef
 >  
-> -include package/pkg-utils.mk
->  include package/pkg-download.mk
->  include package/pkg-autotools.mk
->  include package/pkg-cmake.mk
+>  MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+> -$(eval $(call GENDOC,manual))
+> +$(eval $(call GENDOC))
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
