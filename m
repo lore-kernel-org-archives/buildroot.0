@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 22:40:21 +0200
-Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
- dependencies section
-In-Reply-To: <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <20140803113216.03e0fb94@free-electrons.com>
- <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <20140815204021.GA25897@free.fr>
+Date: Fri, 15 Aug 2014 22:46:42 +0200
+Subject: [Buildroot] [PATCH v4 1/4] cairo: Add dependency on atomic
+ intrinsics
+In-Reply-To: <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
+ <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <20140815204642.GB25897@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,38 @@ To: buildroot@busybox.net
 
 Anton, All,
 
-On 2014-08-04 16:17 +0400, Anton Kolesov spake thusly:
-> Add atomic intrinsics to the examples of dependencies comments.
+On 2014-08-08 19:09 +0400, Anton Kolesov spake thusly:
+> Cairo requires GCC built-in atomic functions which are architecture specific
+> and may not be implemented.
+> 
+> This fixes:
+> http://autobuild.buildroot.net/results/fadfaa9916724d310d0dda555a1db31bee1601d0/
 > 
 > Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+However, a small comment, unrelated to your change...
+
+[--SNIP--]
+> diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+> index b7f903c..f42a96f 100644
+> --- a/package/webkit/Config.in
+> +++ b/package/webkit/Config.in
+> @@ -17,6 +17,7 @@ config BR2_PACKAGE_WEBKIT
+>  	depends on BR2_PACKAGE_LIBGTK2
+>  	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	depends on !BR2_BINFMT_FLAT # icu
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>  	select BR2_PACKAGE_CAIRO_PNG
+
+This should also 'select BR2_PACKAGE_CAIRO' but that's not the fault of
+your patch.
+
+I'll send a fix for that shortly.
+
 Regards,
 Yann E. MORIN.
-
-> ---
->  docs/manual/adding-packages-directory.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 93e6a3e..4b4d056 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -265,6 +265,10 @@ use in the comment.
->  ** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
->  ** Comment string: +dynamic library+
->  
-> +* Atomic intrinsics
-> +** Dependency symbol: +!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS+
-> +** Comment string: +atomic intrinsics+
-> +
->  ==== Dependencies on a Linux kernel built by buildroot
->  
->  Some packages need a Linux kernel to be built by buildroot. These are
-> -- 
-> 1.8.4.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
