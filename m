@@ -1,44 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Aug 2014 13:52:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 7322] libgomp dependency issue with imagemagick
-In-Reply-To: <bug-7322-163@https.bugs.busybox.net/>
-References: <bug-7322-163@https.bugs.busybox.net/>
-Message-ID: <20140815135221.5A14F9D462@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 15 Aug 2014 16:39:06 +0200
+Subject: [Buildroot] [PATCH 1/6] package/pkg-cmake.mk: remove the USE_CCACHE
+	CMake flag for host-package
+In-Reply-To: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
+References: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1408113551-29932-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7322
+The USE_CCACHE CMake flag is only useful when building target package
+(only the toolchainfile.cmake uses it).
 
---- Comment #4 from Samuel Martin <s.martin49@gmail.com> 2014-08-15 13:52:21 UTC ---
-I agree about disabling OpenMP support for imagemagick for the release.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/pkg-cmake.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-However, for the long-term solution, I would perfer having a knob and a check
-for external toolchain.
-
-Having a knob allows to avoid relying on the package's build-system black
-magics, so one excatly knows how a package is configure/built, so what is put
-in its image.
-E.g. OpenCV can takes benefit from OpenMP but it is disabled
-(http://git.buildroot.net/buildroot/commit/package/opencv/opencv.mk?id=2abfd50aefdc89cf1b858c6c965a5e7d94a413b4),
-mostly because of the magics that is done at configure time:
-- if you don't ask for OpenMP support (default) or force ot be off, then it is
-disabled;
-- if you ask for OpenMP support:
-  - if OpenMP is found, then it is enabled;
-  - if OpenMP is not found, then it is disabled.
-
-So, in the OpenCV case, if we don't have a knob, we should always ask for
-OpenMP support on the configure cmdline to get it only if available.
-
-This is completely missleading for the buildroot user, that will see
-"-DWITH_OPENMP=ON" in the package/opencv.mk file, but he/she won't get OpenMP
-support without any warning (unless he/she carefully read the build logs) if
-its toolchain does not have it.
-
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 30198a9..f5aefae 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -86,7 +86,6 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
+ 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
+-		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
+ 		-DBUILD_TESTING=OFF \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.4
