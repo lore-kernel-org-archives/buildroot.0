@@ -1,51 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Aug 2014 18:44:22 +0200
-Subject: [Buildroot] [PATCH] package/erlang: build host erlang with ssl
- support to match target
-In-Reply-To: <20140815182927.4731c6e6@free-electrons.com>
-References: <1407968827-12487-1-git-send-email-yann.morin.1998@free.fr>
- <20140815103634.00751fb4@free-electrons.com>
- <CA+-urNQ5OWd9ZF3xeOVnPz7QZDuJiNjgv3RGhP+iPVjB9hbzdw@mail.gmail.com>
- <20140815154344.GA3863@free.fr>
- <20140815182927.4731c6e6@free-electrons.com>
-Message-ID: <20140815164422.GA3998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Aug 2014 18:50:34 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: v4l2 plugin needs
+	kernel headers 3.0+
+Message-ID: <20140815165247.0CE009D44A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=921d6185660b1fe30a877efd06cb7598714d933d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-08-15 18:29 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 15 Aug 2014 17:43:44 +0200, Yann E. MORIN wrote:
-> 
-> > > After more thought, I think that the reasoning should be that the
-> > > common Erlang build tools reference openssl. (openssl is used for
-> > > Erlang's crypto support, so the moment you run code that computes a
-> > > SHA1, you need it.) I'd be fine with host-erlang always having ssl
-> > > enabled since the error message you get when you don't have it enabled
-> > > is not obvious to anyone who doesn't use Erlang.
-> > 
-> > Yes, after giving it more thought, and your input above, I believe we
-> > should always build host-erlang with SSL support.
-> > 
-> > I'll update my patch accordingly.
-> 
-> Can you include in the commit log the rationale for this change?
+Fixes http://autobuild.buildroot.net/results/284/284313e660c3c9fad891fd71aa56ca5751946dc6/
 
-Err.. I think I did, didn't I?
-    http://patchwork.ozlabs.org/patch/380305/
+For the multi planar api (mp_pix). It was actually added in 2.6.39 (commit
+f8f3914cf9), but we only have symbols for 3.x kernels, so use 3.0 instead.
 
-;-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 7159c5a..65dc7b1 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -269,9 +269,13 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+ 	bool "v4l2"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+ 	help
+ 	  elements for Video 4 Linux
+ 
++comment "v4l2 needs toolchain w/ headers >= 3.0"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
+ 	bool "cairo"
+ 	select BR2_PACKAGE_CAIRO
