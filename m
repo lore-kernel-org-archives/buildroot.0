@@ -1,25 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Aug 2014 00:29:58 +0200
-Subject: [Buildroot] [PATCH] package/infozip: Rename HOST_CC to HOSTCC
-In-Reply-To: <1408141375-3893-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 16 Aug 2014 00:22:55 +0200")
-References: <1408141375-3893-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87ha1d1j4p.fsf@dell.be.48ers.dk>
+Date: Sat, 16 Aug 2014 00:30:57 +0200
+Subject: [Buildroot] [PATCH] package/webkit: select cairo,
+	since we select one of its options
+In-Reply-To: <1408135786-1195-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 15 Aug 2014 22:49:46 +0200")
+References: <1408135786-1195-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87d2c11j32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Wrong variable name is used which can lead to build errors for the host variant:
- > [...] -I. -DUNIX" AS=" -c" -f unix/Makefile generic
+ > When selecting an option of a package, that package must also be
+ > selected, otherwise the package is not built.
 
- > c _match.s
- > make[1]: c: command not found
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
