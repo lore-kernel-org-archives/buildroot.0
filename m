@@ -1,69 +1,45 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 15 Aug 2014 14:03:33 +0400
-Subject: [Buildroot] [PATCH] uclibc: synchronize bits/time.h with latest
-	glibc
-Message-ID: <1408097013-6159-1-git-send-email-jcmvbkbc@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 15 Aug 2014 12:05:58 +0200
+Subject: [Buildroot] [PATCH v2] qt: don't install translation files by
+	default
+In-Reply-To: <1408091487-5340-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Fri, 15 Aug 2014 10:31:27 +0200")
+References: <1408091487-5340-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87y4uq1309.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes NetworkManager build on uClibc.
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Fixes:
-  http://autobuild.buildroot.net/results/d33/d33ed1c3bf1be7c8f8ea02590a770b0d29c7d9fa/
+ > Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e (2013.11) introduced
+ > the installation of the binary .qm translation files, unconditionally.
 
-Backported from: e2cf30bb7543a99defd457226a39de8d8860fa9e
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...c-0003-bits-time.h-sync-with-latest-glibc.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
+ > However, the installed size is very large for some embedded systems
+ > (about 8 MB), and they are not needed in many cases.
 
-diff --git a/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
-new file mode 100644
-index 0000000..de3fe13
---- /dev/null
-+++ b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0003-bits-time.h-sync-with-latest-glibc.patch
-@@ -0,0 +1,38 @@
-+From e2cf30bb7543a99defd457226a39de8d8860fa9e Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 1 Aug 2014 04:16:12 -0400
-+Subject: [PATCH] bits/time.h: sync with latest glibc
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ libc/sysdeps/linux/common/bits/time.h | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/common/bits/time.h b/libc/sysdeps/linux/common/bits/time.h
-+index b397b60..c4269ae 100644
-+--- a/libc/sysdeps/linux/common/bits/time.h
-++++ b/libc/sysdeps/linux/common/bits/time.h
-+@@ -1,5 +1,5 @@
-+-/* System-dependent timing definitions.  Generic version.
-+-   Copyright (C) 1996,1997,1999-2002,2003 Free Software Foundation, Inc.
-++/* System-dependent timing definitions.  Linux version.
-++   Copyright (C) 1996-2014 Free Software Foundation, Inc.
-+    This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -59,6 +59,12 @@
-+ #   define CLOCK_REALTIME_COARSE	5
-+ /* Monotonic system-wide clock, updated only on ticks.  */
-+ #   define CLOCK_MONOTONIC_COARSE	6
-++/* Monotonic system-wide clock that includes time spent in suspension.  */
-++#   define CLOCK_BOOTTIME		7
-++/* Like CLOCK_REALTIME but also wakes suspended system.  */
-++#   define CLOCK_REALTIME_ALARM		8
-++/* Like CLOCK_BOOTTIME but also wakes suspended system.  */
-++#   define CLOCK_BOOTTIME_ALARM		9
-+ 
-+ /* Flag to indicate time is absolute.  */
-+ #   define TIMER_ABSTIME		1
-+-- 
-+1.8.1.4
-+
+ > In order to avoid such a waste of storage space, commit
+ > 2ff329412f490dc916bab3377073ef5950a46298 (2014.08) made this
+ > installation an option that could be disabled. For backward
+ > compatibility, the option default was set to yes.
+
+ > Given the size of these files, and that they had never been installed
+ > by Buildroot versions before 2013.11, change the default to not
+ > installing them.
+
+ > Interested users can still activate it as needed.
+
+ > Also update and improve the help text.
+
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Reviewed-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > Cc: Danomi Manchego <danomimanchego123@gmail.com>
+ > Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.8.1.4
+Bye, Peter Korsgaard
