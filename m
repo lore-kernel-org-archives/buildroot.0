@@ -1,56 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 12:02:05 +0200
-Subject: [Buildroot] [git commit] libcuefile: fix static linking
-Message-ID: <20140815100618.995649D1C6@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 15 Aug 2014 12:14:16 +0200
+Subject: [Buildroot] [PATCH 1 of 5 v3 for 2014.08] Makefile:
+ unconditionally include pkg-utils.mk
+In-Reply-To: <9000c07087a57b11c709.1407957947@localhost>
+References: <patchbomb.1407957946@localhost>
+ <9000c07087a57b11c709.1407957947@localhost>
+Message-ID: <CAHXCMMKL0OmckLCgxD8aDuO=6CSnovfRR5QvUcrqOjrdXSs8PQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=91ff8611957d0581760d9a3a19ea332b440fdbc5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Aug 13, 2014 at 9:25 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Currently, pkg-utils.mk (included via package/Makefile.in) is only included
+> when a configuration file already exists. This means that none of the
+> utilities it defines are available without .config.
+>
+> In particular:
+> - the MESSAGE macro, causing pretty build output. Since some make targets
+>   can be run even without .config, like 'make manual', not having this
+>   pretty printing is odd.
+>
+> - pkgname, pkgdir: in a subsequent patch, these functions will be used for
+>   the generation of the manual, and since this should work also without
+>   .config, we need these functions to be available.
+>
+> This patch moves the include of pkg-utils.mk from package/Makefile.in to
+> Makefile, outside of the check for .config.
+>
+> This is a quick fix. The full solution involves to minimize the amount of
+> Makefile code that is guarded by a check on .config. This approach will be
+> taken in the 2014.11 release cycle.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Add a patch to libcuefile to fix BR2_PREFER_STATIC_LIB=y configurations.
 
-Fixes:
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-  http://autobuild.buildroot.org/results/13e/13ecdab5bb132532674a51e0e0e1136d417dfcd9/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../libcuefile-0001-fix-static-link.patch          |   25 ++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+Regards,
 
-diff --git a/package/libcuefile/libcuefile-0001-fix-static-link.patch b/package/libcuefile/libcuefile-0001-fix-static-link.patch
-new file mode 100644
-index 0000000..6eb5890
---- /dev/null
-+++ b/package/libcuefile/libcuefile-0001-fix-static-link.patch
-@@ -0,0 +1,25 @@
-+Fix static only build
-+
-+Make sure to build the shared library only if BUILD_SHARED_LIBS is
-+ON. Normally, CMake takes care of this automatically, but libcuefile
-+wants to build both the shared and static variants, so the normal
-+logic of CMake doesn't apply.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/CMakeLists.txt
-+===================================================================
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -4,7 +4,11 @@
-+ add_library(cuefile-static STATIC cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
-+ set_target_properties(cuefile-static PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1)
-+ 
-++if (BUILD_SHARED_LIBS)
-+ add_library(cuefile-shared SHARED cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
-+ set_target_properties(cuefile-shared PROPERTIES OUTPUT_NAME cuefile CLEAN_DIRECT_OUTPUT 1 VERSION 0.0.0 SOVERSION 0)
-+ 
-+ install(TARGETS cuefile-static cuefile-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
-++else (BUILD_SHARED_LIBS)
-++install(TARGETS cuefile-static LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
-++endif (BUILD_SHARED_LIBS)
+--
+Samuel
