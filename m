@@ -1,40 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Aug 2014 19:16:11 +0200
-Subject: [Buildroot] [git commit] package/tar: Depends on MMU
-Message-ID: <20140815171725.ECC309D42B@busybox.osuosl.org>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Fri, 15 Aug 2014 19:19:38 +0200
+Subject: [Buildroot] [PATCH v2] glm: Added package
+Message-ID: <1408123178-6202-1-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=916b21a7fbf266f452b8dc4116133cc57fdad269
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+OpenGL Mathematics (GLM) is a header only C++ mathematics library for
+graphics software based on the OpenGL Shading Language (GLSL)
+specification.
 
-Fixes
-misc.o: In function `_xfork':
-misc.c:(.text+0x614): undefined reference to `_fork'
-../lib/libtar.a(rtapelib.o): In function `_rmt_open__':
-rtapelib.c:(.text+0x6d2): undefined reference to `_fork'
+http://glm.g-truc.net/
 
-To reproduce use this defconfig
-http://autobuild.buildroot.net/results/8d5/8d5ad404fab7ec2a501972ba9c08b0109e420b80/defconfig
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/tar/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Config.in     |  1 +
+ package/glm/Config.in | 10 ++++++++++
+ package/glm/glm.mk    | 17 +++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/glm/Config.in
+ create mode 100644 package/glm/glm.mk
 
-diff --git a/package/tar/Config.in b/package/tar/Config.in
-index 06a5825..74b0219 100644
---- a/package/tar/Config.in
-+++ b/package/tar/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TAR
- 	bool "tar"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  A program that saves many files together into a single tape or disk
- 	  archive, and can restore individual files from the archive.
+diff --git a/package/Config.in b/package/Config.in
+index 4520ba6..1e4bc50 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -828,6 +828,7 @@ menu "Other"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/glibmm/Config.in"
++	source "package/glm/Config.in"
+ 	source "package/gmp/Config.in"
+ 	source "package/gsl/Config.in"
+ 	source "package/gtest/Config.in"
+diff --git a/package/glm/Config.in b/package/glm/Config.in
+new file mode 100644
+index 0000000..41b3608
+--- /dev/null
++++ b/package/glm/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_GLM
++	bool "glm"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  OpenGL Mathematics (GLM)
++
++	  http://glm.g-truc.net
++
++comment "glm needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/glm/glm.mk b/package/glm/glm.mk
+new file mode 100644
+index 0000000..ff9423d
+--- /dev/null
++++ b/package/glm/glm.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# glm
++#
++################################################################################
++
++GLM_VERSION = 0.9.5.4
++GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
++GLM_LICENSE = MIT
++GLM_LICENSE_FILES = copying.txt
++
++# GLM is a header-only library, it only makes sense
++# to have it installed into the staging directory.
++GLM_INSTALL_STAGING = YES
++GLM_INSTALL_TARGET = NO
++
++$(eval $(cmake-package))
+-- 
+2.0.1
