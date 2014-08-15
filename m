@@ -1,65 +1,52 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Fri, 15 Aug 2014 19:20:03 +0200
-Subject: [Buildroot] [PATCH v2] nodejs: Add dependency on zlib
-Message-ID: <1408123203-6255-1-git-send-email-paul@crapouillou.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 15 Aug 2014 19:22:19 +0200
+Subject: [Buildroot] [PATCH 2/2 v3] support/download: fix the git helper
+	output file format
+In-Reply-To: <2205cccc9b1580208e604067224448da94599151.1407343550.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 6 Aug 2014 18:47:53 +0200")
+References: <cover.1407343550.git.yann.morin.1998@free.fr>
+ <2205cccc9b1580208e604067224448da94599151.1407343550.git.yann.morin.1998@free.fr>
+Message-ID: <87ppg11xdg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prior to this commit, nodejs would build zlib itself and link statically
-to it.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- package/nodejs/Config.in | 1 +
- package/nodejs/nodejs.mk | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ > The git helper uses gzip to compress the intermediate tarball. But gzip
+ > removes the source file, and create a new file named by appending .gz to
+ > the original file name.
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 344b7f6..077a043 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_NODEJS
- 	depends on !(BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Event-driven I/O server-side JavaScript environment based on V8.
+ > Thus, we end up with output.gz, while the download wrapper expects jsut
+ > output, and thus believes the downlaod failed.
+
+ > Fix that by storing the tar from git to a temporary file, then pipe this
+ > file to gzip's stdin, and redirect gzip's stdout to the output file.
+
+ > Reported-by: Graham Newton <gnewton@peavey-eu.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  support/download/git | 4 ++--
+ >  1 file changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/support/download/git b/support/download/git
+ > index d451530..ff6b5c3 100755
+ > --- a/support/download/git
+ > +++ b/support/download/git
+ > @@ -34,6 +34,6 @@ if [ ${git_done} -eq 0 ]; then
+ >  fi
  
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index d59fb57..ed09b53 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -7,9 +7,9 @@
- NODEJS_VERSION = 0.10.30
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
--NODEJS_DEPENDENCIES = host-python host-nodejs \
-+NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
-     $(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-python
-+HOST_NODEJS_DEPENDENCIES = host-python host-zlib
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
+ >  GIT_DIR="${basename}" \
+ > -${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
+ > +${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
  
-@@ -32,6 +32,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 		--without-snapshot \
- 		--without-dtrace \
- 		--without-etw \
-+		--shared-zlib \
- 	)
- endef
- 
-@@ -69,6 +70,7 @@ define NODEJS_CONFIGURE_CMDS
- 		$(HOST_DIR)/usr/bin/python2 ./configure \
- 		--prefix=/usr \
- 		--without-snapshot \
-+		--shared-zlib \
- 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
- 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
- 		--without-dtrace \
+ > -gzip "${output}"
+ > +gzip <"${output}.tmp" >"${output}"
+
+Don't we then end up with a bunch of foo.tmp files?
+
 -- 
-2.0.1
+Bye, Peter Korsgaard
