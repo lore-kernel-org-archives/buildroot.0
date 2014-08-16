@@ -1,31 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 Aug 2014 13:44:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 7262] Generating locale en_US.UTF-8 fails on 64bit
- fedora linux host
-In-Reply-To: <bug-7262-163@https.bugs.busybox.net/>
-References: <bug-7262-163@https.bugs.busybox.net/>
-Message-ID: <20140816134418.48B389D471@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Aug 2014 15:47:19 +0200
+Subject: [Buildroot] [PATCHv4 0/3] gettext changes to solve bug #7124
+Message-ID: <1408196842-16740-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7262
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Here is a fourth version of the gettext changes, that include fixes
+for the additional comments made by Thomas DS on the manual (PATCH
+3/3).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|                            |FIXED
+Since they actually fix a runtime issue with ecryptfs-utils, reported
+as bug #7124, I'd like them to be considered for 2014.08.
 
---- Comment #9 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-16 13:44:17 UTC ---
-Proposed patch was applied as commit
-http://git.buildroot.net/buildroot/commit/?id=85448febb3c9f21e6e4082fc344b3ef46261c782.
-Closing bug.
+Basically, the core of the issue is that the numerous ecryptfs-utils
+shell scripts use the "gettext" program on the target to query
+translated strings. However, with glibc toolchains, we do not allow
+the selection of the gettext package, because the gettext *functions*
+are already part of the C library.
+
+However, this totally overlooks the fact that gettext provides more
+than a library, it also provides utilities, which in the case of
+ecryptfs-utils, are needed on the target.
+
+Moreover, the gettext configure script is smart enough to *not*
+generate libintl.so when the C library already has the gettext
+function. It therefore has the right behavior depending on the C
+library: for glibc, only the gettext "utilities" are installed, for
+uClibc, both libintl and the gettext utilities are installed.
+
+These three patches are just a new version rebased on top of master,
+and re-tested.
+
+Long term, maybe we should rename BR2_NEEDS_GETTEXT and
+BR2_NEEDS_GETTEXT_IF_LOCALE to BR2_NEEDS_LIBINTL and
+BR2_NEEDS_LIBINTL_IF_LOCALE, because this is really what those config
+knobs mean.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (3):
+  gettext: allow building when BR2_NEEDS_GETTEXT is not selected
+  ecryptfs-utils: select gettext, needed for command line utilities
+  docs/manual: update documentation about gettext handling
+
+ docs/manual/adding-packages-gettext.txt | 29 ++++++++++++++++++++++-------
+ package/ecryptfs-utils/Config.in        |  8 ++++++--
+ package/gettext/Config.in               |  1 -
+ 3 files changed, 28 insertions(+), 10 deletions(-)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.0
