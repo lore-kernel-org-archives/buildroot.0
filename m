@@ -1,59 +1,34 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Aug 2014 11:44:38 +0200
-Subject: [Buildroot] [PATCH v2] dependencies: Reject gcj in
+Date: Sat, 16 Aug 2014 11:42:32 +0200
+Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
 	BR2_NEEDS_HOST_JAVA check
-Message-ID: <1408182278-5026-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140813141110.GF3939@free.fr>
+ <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20140813212312.GI3939@free.fr>
+Message-ID: <XnsA38B771BEC920berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xbmc uses the Groovy java package to generate API code, for details see
-http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:20140813212312.GI3939 at free.fr:
 
-Groovy itself is broken when used with gcj:
-http://jira.codehaus.org/browse/GROOVY-3701
+> check_prog_host already calls 'which $1' so we're sure we can call 'java'.
 
-Xbmc recommends to use another java package instead, like openjdk:
-http://forum.xbmc.org/showthread.php?tid=199742
+Hi,
 
-Until we come up with a host package to provide a java setup and
-in order to make autobuilder happy let?s reject gcj when we check
-for a java installation on the host.
+ok, I am going to send v2 with your suggestion added, but I would like to 
+keep the $JAVA_GCJ part to have a nicer looking error message, examples:
 
-Currently Xbmc is the only package using BR2_NEEDS_HOST_JAVA
-so changing the behaviour of dependencies.sh has no side effects.
+gij (GNU libgcj) version 4.7.2 is not sufficient to compile your package 
+selection.
+Please install an OpenJDK/IcedTea/Oracle Java.
 
-Fixes
-http://autobuild.buildroot.net/results/213/213d7454a1dc68cfb8f4c8d9508f52ebf8e58e33/
-http://autobuild.buildroot.net/results/639/639cda872cf36c122cbd6139dd76f6b51ac1864e/
-http://autobuild.buildroot.net/results/c9e/c9eb12c95b2939c64590692a82af8d84bbd90956/
+gij (GNU libgcj) version 4.6.3 is not sufficient to compile your package 
+selection.
+Please install an OpenJDK/IcedTea/Oracle Java.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Keep check_prog_host function (Yann)
-
- support/dependencies/dependencies.sh |    7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 88e5ad2..a9c5b31 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -189,6 +189,13 @@ fi
- 
- if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
- 	check_prog_host "java"
-+	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
-+	if [ ! -z "$JAVA_GCJ" ] ; then
-+		echo
-+		echo "$JAVA_GCJ is not sufficient to compile your package selection."
-+		echo "Please install an OpenJDK/IcedTea/Oracle Java."
-+		exit 1 ;
-+	fi
- fi
- 
- if grep -q ^BR2_NEEDS_HOST_JAVAC=y $BR2_CONFIG ; then
--- 
-1.7.10.4
+Regards, Bernd
