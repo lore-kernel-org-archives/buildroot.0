@@ -1,38 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Aug 2014 09:40:03 +0200
-Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
- dependencies section
-In-Reply-To: <20140815222308.GC27341@free.fr>
-References: <20140803113216.03e0fb94@free-electrons.com>
- <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
- <20140816001725.27388fce@free-electrons.com>
- <20140815222308.GC27341@free.fr>
-Message-ID: <20140816094003.7e55e67e@free-electrons.com>
+Date: Sat, 16 Aug 2014 09:44:21 +0200
+Subject: [Buildroot] [PATCH] configs/{atngw100,
+	atstk100x}: fix build of AVR32 defconfigs
+Message-ID: <1408175061-13238-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Since we marked the AVR32 architecture deprecated, it can no longer be
+selected in a normal configuration. This has caused the AVR32
+defconfigs to fail to build in our daily Jenkins tests. In order to
+make them build again, they must use BR2_DEPRECATED=y. Of course, when
+we remove AVR32 completely, we'll remove those defconfigs as well.
 
-On Sat, 16 Aug 2014 00:23:08 +0200, Yann E. MORIN wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/atngw100_defconfig  | 3 +++
+ configs/atstk100x_defconfig | 3 +++
+ 2 files changed, 6 insertions(+)
 
-> Ah, I remember now, that we talked about that. My bad, I had forgotten
-> during the review.
-> 
-> However, we can't really change the implementation now, we're frozen for
-> the release.
-> 
-> What about adding this to the manual for now, since it does reflect the
-> current status of the code, and switch to an architecture option in
-> -next, or after the release is cut?
-
-I disagree: it's still time to change this, before it gets set in stone
-by doing a release.
-
-Thomas
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index cf727f9..d410f5b 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -1,3 +1,6 @@
++# AVR32 is deprecated
++BR2_DEPRECATED=y
++
+ # Architecture
+ BR2_avr32=y
+ 
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index 6a77b41..0e17e36 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -1,3 +1,6 @@
++# AVR32 is deprecated
++BR2_DEPRECATED=y
++
+ # Architecture
+ BR2_avr32=y
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
