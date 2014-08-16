@@ -1,21 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 Aug 2014 13:43:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 7280] CMake toolchain file uses the FORCE
- attribute on CMAKE_CXX_FLAGS
-In-Reply-To: <bug-7280-163@https.bugs.busybox.net/>
-References: <bug-7280-163@https.bugs.busybox.net/>
-Message-ID: <20140816134325.6B7C39D471@busybox.osuosl.org>
+Date: Sat, 16 Aug 2014 13:44:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 7262] Generating locale en_US.UTF-8 fails on 64bit
+ fedora linux host
+In-Reply-To: <bug-7262-163@https.bugs.busybox.net/>
+References: <bug-7262-163@https.bugs.busybox.net/>
+Message-ID: <20140816134418.48B389D471@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7280
+https://bugs.busybox.net/show_bug.cgi?id=7262
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-16 13:43:24 UTC ---
-Patch series sent by Samuel at
-http://lists.busybox.net/pipermail/buildroot/2014-August/104293.html.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #9 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-16 13:44:17 UTC ---
+Proposed patch was applied as commit
+http://git.buildroot.net/buildroot/commit/?id=85448febb3c9f21e6e4082fc344b3ef46261c782.
+Closing bug.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
