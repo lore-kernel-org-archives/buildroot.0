@@ -1,35 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Aug 2014 16:39:52 +0200
-Subject: [Buildroot] [PATCH 2/2] ecryptfs-utils: ensure getent is installed
-	on the target
-In-Reply-To: <1408199992-26942-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1408199992-26942-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408199992-26942-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 Aug 2014 14:43:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 7142] ecryptfs needs getent to run
+In-Reply-To: <bug-7142-163@https.bugs.busybox.net/>
+References: <bug-7142-163@https.bugs.busybox.net/>
+Message-ID: <20140816144346.EF5F69C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #7142.
+https://bugs.busybox.net/show_bug.cgi?id=7142
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ecryptfs-utils/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-16 14:43:46 UTC ---
+A solution for this problem was proposed at
+http://lists.busybox.net/pipermail/buildroot/2014-August/104410.html.
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 7999ea5..1a92b47 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	# runtime dependency only, some scripts are using the
- 	# 'gettext' program to get translations
- 	select BR2_PACKAGE_GETTEXT
-+	# runtime dependency only
-+	select BR2_TOOLCHAIN_INSTALL_GETENT
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # keyutils
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
 -- 
-2.0.0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
