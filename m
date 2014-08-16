@@ -1,33 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Aug 2014 16:46:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/empty: Respect LDFLAGS,
- fix link order
-In-Reply-To: <1407682672-25468-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407682672-25468-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140816164635.3d86eea6@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Aug 2014 17:26:42 +0200
+Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
+ dependencies section
+In-Reply-To: <20140816094003.7e55e67e@free-electrons.com>
+References: <20140803113216.03e0fb94@free-electrons.com>
+ <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <20140816001725.27388fce@free-electrons.com>
+ <20140815222308.GC27341@free.fr>
+ <20140816094003.7e55e67e@free-electrons.com>
+Message-ID: <20140816152642.GI27341@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomas, All,
 
-On Sun, 10 Aug 2014 16:57:52 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/50f/50fedb54cf005d1177d85c5a34fd10a1c354ba5b/
-> http://autobuild.buildroot.net/results/9fc/9fce0825772e99de3c6808b729641147385413aa/
+On 2014-08-16 09:40 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 16 Aug 2014 00:23:08 +0200, Yann E. MORIN wrote:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/empty/empty-0001-respect-LDFLAGS.patch |   22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/empty/empty-0001-respect-LDFLAGS.patch
+> > Ah, I remember now, that we talked about that. My bad, I had forgotten
+> > during the review.
+> > 
+> > However, we can't really change the implementation now, we're frozen for
+> > the release.
+> > 
+> > What about adding this to the manual for now, since it does reflect the
+> > current status of the code, and switch to an architecture option in
+> > -next, or after the release is cut?
+> 
+> I disagree: it's still time to change this, before it gets set in stone
+> by doing a release.
 
-Applied, thanks.
+OK, I'll see to send a patch series for that tonight.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
