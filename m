@@ -1,46 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:48:57 +0200
-Subject: [Buildroot] [PATCH 05/24 v4] package/thrift: use the new
-	ARCH_HAS_ATOMICS as dependency
+Date: Sun, 17 Aug 2014 14:48:58 +0200
+Subject: [Buildroot] [PATCH 06/24 v4] toolchain: drop the now-unused old
+	BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <12966fa82e169c159e4189d0e32d2927ea4b5b0a.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <9691404924201a04cd36d28fe1c358189498611e.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It's now been replaced with BR2_ARCH_HAS_ATOMICS, annd all packages have
+been changed to use that instead.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/thrift/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/Config.in                | 1 -
+ toolchain/toolchain-common.in | 3 ---
+ 2 files changed, 4 deletions(-)
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index 23b99e5..7c7272a 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_THRIFT
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_OPENSSL
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_THRIFT
+diff --git a/arch/Config.in b/arch/Config.in
+index 5cee0d7..6bcafd4 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -254,7 +254,6 @@ config BR2_GCC_TARGET_MODE
+ config BR2_ARCH_HAS_ATOMICS
+ 	bool
+ 	default y if !BR2_arc
+-	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
  
- 	  http://thrift.apache.org/
+ # Set up target binary format
+ choice
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2fa4f61..82ac26a 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -44,9 +44,6 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
  
--comment "thrift needs a toolchain w/ C++, largefile, wchar, threads, atomic intrinsics"
-+comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+-	bool
+-
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
 -- 
 1.9.1
