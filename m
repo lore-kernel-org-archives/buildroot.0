@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:15:09 +0200
-Subject: [Buildroot] [git commit] gcc/4.7: add patch to enable more C++
-	features with uClibc
-Message-ID: <20140817072258.472B89C769@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 09:17:18 +0200
+Subject: [Buildroot] [git commit] gcc/arc-4.8-R3: add patch to enable more
+	C++ features with uClibc
+Message-ID: <20140817072258.61D369C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48f182ece057b8dedf72a0c601310d72b3d91a86
+commit: http://git.buildroot.net/buildroot/commit/?id=4bb2a05e8133f2f553b8e0cd6af53dfa8b8208b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit fixes bug #7250, by allowing more libstdc++ features to be
@@ -33,34 +33,14 @@ Cc: Richard <tarka.t.otter@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/4.7.4/302-c99-snprintf.patch         |   13 -
- package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch |  273 ++++++++++++++++++++++
- 2 files changed, 273 insertions(+), 13 deletions(-)
+ .../gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch  |  273 ++++++++++++++++++++
+ 1 files changed, 273 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/4.7.4/302-c99-snprintf.patch b/package/gcc/4.7.4/302-c99-snprintf.patch
-deleted file mode 100644
-index ba51a0e..0000000
---- a/package/gcc/4.7.4/302-c99-snprintf.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.3.0/libstdc++-v3/include/c_global/cstdio
--===================================================================
----- gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(revision 129202)
--+++ gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(working copy)
--@@ -144,7 +144,7 @@
-- 
-- _GLIBCXX_END_NAMESPACE
-- 
---#if _GLIBCXX_USE_C99
--+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-- 
-- #undef snprintf
-- #undef vfscanf
-diff --git a/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
+diff --git a/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 new file mode 100644
-index 0000000..79cd7a9
+index 0000000..0d02ef0
 --- /dev/null
-+++ b/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
++++ b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 @@ -0,0 +1,273 @@
 +Allow C99-depending features of libstdc++ with uClibc
 +
@@ -83,7 +63,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/config/locale/generic/c_locale.h
 ++++ b/libstdc++-v3/config/locale/generic/c_locale.h
-+@@ -71,7 +71,7 @@
++@@ -70,7 +70,7 @@
 +     __builtin_va_list __args;
 +     __builtin_va_start(__args, __fmt);
 + 
@@ -96,7 +76,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/config/locale/gnu/c_locale.h
 ++++ b/libstdc++-v3/config/locale/gnu/c_locale.h
-+@@ -89,7 +89,7 @@
++@@ -88,7 +88,7 @@
 +     __builtin_va_list __args;
 +     __builtin_va_start(__args, __fmt);
 + 
@@ -109,12 +89,12 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/bits/basic_string.h
 ++++ b/libstdc++-v3/include/bits/basic_string.h
-+@@ -2806,7 +2806,7 @@
++@@ -2811,7 +2811,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
-+-#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(_GLIBCXX_USE_C99) \
-++#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)) \
++-#if ((__cplusplus >= 201103L) && defined(_GLIBCXX_USE_C99) \
+++#if ((__cplusplus >= 201103L) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)) \
 +      && !defined(_GLIBCXX_HAVE_BROKEN_VSWPRINTF))
 + 
 + #include <ext/string_conversions.h>
@@ -122,7 +102,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/bits/locale_facets.tcc
 ++++ b/libstdc++-v3/include/bits/locale_facets.tcc
-+@@ -989,7 +989,7 @@
++@@ -987,7 +987,7 @@
 + 	char __fbuf[16];
 + 	__num_base::_S_format_float(__io, __fbuf, __mod);
 + 
@@ -148,7 +128,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_compatibility/math.h
 ++++ b/libstdc++-v3/include/c_compatibility/math.h
-+@@ -57,7 +57,7 @@
++@@ -56,7 +56,7 @@
 + using std::floor;
 + using std::fmod;
 + 
@@ -174,7 +154,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cstdlib
 ++++ b/libstdc++-v3/include/c_global/cstdlib
-+@@ -146,7 +146,7 @@
++@@ -182,7 +182,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -187,7 +167,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cwchar
 ++++ b/libstdc++-v3/include/c_global/cwchar
-+@@ -234,7 +234,7 @@
++@@ -232,7 +232,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -196,7 +176,7 @@ index 0000000..79cd7a9
 + 
 + #undef wcstold
 + #undef wcstoll
-+@@ -291,7 +291,7 @@
++@@ -289,7 +289,7 @@
 +   using std::vwscanf;
 + #endif
 + 
@@ -209,7 +189,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_std/cstdio
 ++++ b/libstdc++-v3/include/c_std/cstdio
-+@@ -140,7 +140,7 @@
++@@ -139,7 +139,7 @@
 +   using ::vsprintf;
 + } // namespace std
 + 
@@ -222,7 +202,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_std/cstdlib
 ++++ b/libstdc++-v3/include/c_std/cstdlib
-+@@ -143,7 +143,7 @@
++@@ -180,7 +180,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -235,7 +215,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_std/cwchar
 ++++ b/libstdc++-v3/include/c_std/cwchar
-+@@ -230,7 +230,7 @@
++@@ -228,7 +228,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -248,12 +228,12 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/ext/vstring.h
 ++++ b/libstdc++-v3/include/ext/vstring.h
-+@@ -2537,7 +2537,7 @@
++@@ -2571,7 +2571,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
-+-#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(_GLIBCXX_USE_C99))
-++#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)))
++-#if ((__cplusplus >= 201103L) && defined(_GLIBCXX_USE_C99))
+++#if ((__cplusplus >= 201103L) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)))
 + 
 + #include <ext/string_conversions.h>
 + 
@@ -313,7 +293,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/src/c++11/debug.cc
 ++++ b/libstdc++-v3/src/c++11/debug.cc
-+@@ -783,7 +783,7 @@
++@@ -787,7 +787,7 @@
 + 				     int __n __attribute__ ((__unused__)), 
 + 				     const char* __fmt, _Tp __s) const throw ()
 +     {
@@ -326,7 +306,7 @@ index 0000000..79cd7a9
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cstdio
 ++++ b/libstdc++-v3/include/c_global/cstdio
-+@@ -140,7 +140,7 @@
++@@ -138,7 +138,7 @@
 +   using ::vsprintf;
 + } // namespace
 + 
