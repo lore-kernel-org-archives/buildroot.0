@@ -1,72 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Aug 2014 09:21:13 +0200
-Subject: [Buildroot] [PATCHv2 0/7] Toolchain fixes
-In-Reply-To: <1408120684-18295-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 15 Aug 2014 18:37:57 +0200")
-References: <1408120684-18295-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87oavjy42e.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Aug 2014 09:10:12 +0200
+Subject: [Buildroot] [git commit] nftables: fix build in static scenarios
+Message-ID: <20140817072258.27B449D44A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=34e3857d9855197bb52a4056ad1f2a95a67d08f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > Here is a new version of the patch series with toolchain
- > fixes. It fixes bugs #7208 and #7250. Changes since v1:
+When linking against readline, it forgets to link against ncurses,
+which is needed by readline. Fix this by passing LIBS="-lcurses" to
+the configure script.
 
- >  - Fix minor typo noticed by Thomas DS in the commit log of the first
- >    four patches.
+Fixes:
 
- >  - Add three patches to fix bug #7208.
+  http://autobuild.buildroot.org/results/98b/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
 
- > Those patches are aimed for 2014.08.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nftables/nftables.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
- > Thanks,
-
- > Thomas
-
- > Thomas Petazzoni (7):
- >   gcc/4.7: add patch to enable more C++ features with uClibc
- >   gcc/4.8: add patch to enable more C++ features with uClibc
- >   gcc/4.9: add patch to enable more C++ features with uClibc
- >   gcc/arc-4.8-R3: add patch to enable more C++ features with uClibc
- >   gcc/4.7: fix C++ exceptions and pthread_exit()
- >   gcc/4.8: fix C++ exceptions and pthread_exit()
- >   gcc/4.9: fix C++ exceptions and pthread_exit()
-
-Committed series, thanks!
-
-
- >  package/gcc/4.7.4/302-c99-snprintf.patch           |  13 -
- >  package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
- >  package/gcc/4.7.4/900-musl-support.patch           |  61 ++---
- >  package/gcc/4.8.3/302-c99-snprintf.patch           |  13 -
- >  package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
- >  package/gcc/4.8.3/900-musl-support.patch           | 213 ++++++++--------
- >  package/gcc/4.9.1/302-c99-snprintf.patch           |  13 -
- >  package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
- >  package/gcc/4.9.1/900-musl-support.patch           |  66 ++---
- >  .../gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch  | 273 +++++++++++++++++++++
- >  10 files changed, 1246 insertions(+), 225 deletions(-)
- >  delete mode 100644 package/gcc/4.7.4/302-c99-snprintf.patch
- >  create mode 100644 package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
- >  delete mode 100644 package/gcc/4.8.3/302-c99-snprintf.patch
- >  create mode 100644 package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
- >  delete mode 100644 package/gcc/4.9.1/302-c99-snprintf.patch
- >  create mode 100644 package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
- >  create mode 100644 package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
-
- > -- 
- > 2.0.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index b25e8f2..b3abbc0 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -12,6 +12,8 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
+ NFTABLES_LICENSE = GPLv2
+ NFTABLES_LICENSE_FILES = COPYING
+ 
+-NFTABLES_CONF_ENV = ac_cv_prog_CONFIG_PDF=no
++NFTABLES_CONF_ENV = \
++	ac_cv_prog_CONFIG_PDF=no \
++	LIBS="-lncurses"
+ 
+ $(eval $(autotools-package))
