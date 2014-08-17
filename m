@@ -1,75 +1,152 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:48:53 +0200
-Subject: [Buildroot] [PATCH 01/24 v4] arch: add an option to specify if the
-	arch has atomic ops
+Date: Sun, 17 Aug 2014 14:48:54 +0200
+Subject: [Buildroot] [PATCH 02/24 v4] package/icu: use the new
+	ARCH_HAS_ATOMICS as dependency
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <0f0239fc5e2c7193d730d8ff56b963890e919742.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fact that atomic operations are available is not really a
-specificity of the toolchain, but rather of the architecture.
+And propagate to the reverse dependencies of icu.
+Also, fix beecrypt's comment: only the C++ support needs atomics.
 
-So, add a new option that architectures that have atomic operations
-can select. This in turn selects the current toolchain atomic option,
-until all packages have been converted, at which point the old
-toolchain option can be removed.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in                | 6 ++++++
- arch/Config.in.arc            | 2 +-
- toolchain/toolchain-common.in | 1 -
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ package/beecrypt/Config.in    | 12 ++++++------
+ package/cppcms/Config.in      |  7 ++++---
+ package/icu/Config.in         |  7 ++++---
+ package/php/Config.ext        |  8 ++++----
+ package/qt5/qt5base/Config.in |  5 +----
+ 5 files changed, 19 insertions(+), 20 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 9cd85a5..5cee0d7 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -250,6 +250,12 @@ config BR2_GCC_TARGET_FLOAT_ABI
- config BR2_GCC_TARGET_MODE
- 	string
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index e0f9181..b9685ef 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -1,5 +1,5 @@
+-comment "beecrypt needs a toolchain w/ threads, atomic intrinsics"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++comment "beecrypt needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
-+# If the architecture has atomic operations, select this:
-+config BR2_ARCH_HAS_ATOMICS
-+	bool
-+	default y if !BR2_arc
-+	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index 836cfef..8a7f290 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -1,7 +1,7 @@
- # Choise of atomic instructions presence
- config BR2_ARC_ATOMIC_EXT
- 	bool "Atomic extension (LLOCK/SCOND instructions)"
--	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+	select BR2_ARCH_HAS_ATOMICS
+ config BR2_PACKAGE_BEECRYPT
+ 	bool "beecrypt"
+@@ -15,15 +15,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
+ 	bool "C++ support"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # icu
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
++	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Enable C++ support. This pulls in the (large) icu package.
  
- config BR2_ARCH
- 	default "arc"	if BR2_arcle
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 6d43700..2fa4f61 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -46,7 +46,6 @@ config BR2_TOOLCHAIN_HAS_SSP
+-comment "C++ support needs a toolchain w/ wchar, atomic intrinsics"
++comment "C++ support needs a toolchain w/ wchar"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_INSTALL_LIBSTDCPP && (!BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS)
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
  
- config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	bool
--	default y if !BR2_arc
+ endif # BR2_PACKAGE_BEECRYPT
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 297c514..dbe4786 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -26,14 +26,15 @@ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_USE_WCHAR # icu
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
++	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+ 	  in another hand ICU is heavier than iconv.
  
- config BR2_ENABLE_LOCALE_PURGE
- 	bool "Purge unwanted locales"
+-comment "icu support needs a toolchain w/ wchar, atomic intrinsics"
+-	depends on !BR2_BINFMT_FLAT || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++comment "icu support needs a toolchain w/ wchar"
++	depends on !BR2_BINFMT_FLAT
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_USE_WCHAR
+ 
+ endif
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index d4521ac..d7bf2fe 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_ICU
+ 	# file, and it cannot easily be changed to generate FLAT
+ 	# format.
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  International Components for Unicode.
+ 
+@@ -25,7 +25,8 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
+ 
+ endif
+ 
+-comment "icu needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
++comment "icu needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_BINFMT_FLAT
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 078be8d..e07779a 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -168,14 +168,14 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
++	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	help
+ 	  Internationalization support
+ 
+-comment "intl support needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
++comment "intl support needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "Image processing"
+ 
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 67f211c..7a34d6f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -241,15 +241,12 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	select BR2_PACKAGE_ICU
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
++	depends on BR2_ARCH_HAS_ATOMICS # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
+ 
+-comment "icu needs a toolchain w/ atomic intrinsics"
+-	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+-
+ config BR2_PACKAGE_QT5BASE_TSLIB
+ 	bool "Enable Tslib support"
+ 	depends on !BR2_PREFER_STATIC_LIB # dlopen
 -- 
 1.9.1
