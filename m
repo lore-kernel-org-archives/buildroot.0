@@ -1,46 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 21:29:44 +0200
-Subject: [Buildroot] [PATCH 05/24 v5] package/thrift: use the new
-	ARCH_HAS_ATOMICS as dependency
+Date: Sun, 17 Aug 2014 21:29:46 +0200
+Subject: [Buildroot] [PATCH 07/24 v5] manual: document dependencies on
+	atomic operations
 In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr>
 References: <cover.1408303753.git.yann.morin.1998@free.fr>
-Message-ID: <77668997941ca1ff6f31428ac154414f177a0019.1408303753.git.yann.morin.1998@free.fr>
+Message-ID: <fa8f747100cacb85a0a9263abd4b26ec34e6c880.1408303753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/thrift/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+From: Anton Kolesov <anton.kolesov@synopsys.com>
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index 23b99e5..7c7272a 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_THRIFT
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_OPENSSL
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_THRIFT
+Add atomic operations to the list of generic dependencies.
+
+Since this is an architecture option, there is no comment string to be
+added.
+
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/adding-packages-directory.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 93e6a3e..fd9460c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -219,6 +219,11 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
  
- 	  http://thrift.apache.org/
- 
--comment "thrift needs a toolchain w/ C++, largefile, wchar, threads, atomic intrinsics"
-+comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++* Atomic instructions (whereby the architecture has instructions to
++  perform some operations atomically, like LOCKCMPXCHG on x86)
++** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
++** Comment string: no comment to be added
++
+ * Kernel headers
+ ** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+    +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
 -- 
 1.9.1
