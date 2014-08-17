@@ -1,49 +1,643 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:13:34 +0200
-Subject: [Buildroot] [git commit] configs/{atngw100,
-	atstk100x}: fix build of AVR32 defconfigs
-Message-ID: <20140817072258.3E9BA9C769@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 09:10:40 +0200
+Subject: [Buildroot] [git commit] libnftnl: add patch to avoid symbol
+	conflict
+Message-ID: <20140817072258.34A879C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be7ac54e4bb4ca6eccc762b91289a80ad14118ad
+commit: http://git.buildroot.net/buildroot/commit/?id=06a603b8d55a5aea51a31c2d3f6f76d0b8218fc6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we marked the AVR32 architecture deprecated, it can no longer be
-selected in a normal configuration. This has caused the AVR32
-defconfigs to fail to build in our daily Jenkins tests. In order to
-make them build again, they must use BR2_DEPRECATED=y. Of course, when
-we remove AVR32 completely, we'll remove those defconfigs as well.
+When ELF binaries and shared libraries are used, the internal
+functions of libnftnl such as xfree() are not visible to the outside
+world (their visibility is 'hidden'). Therefore, the fact that other
+programs (especially nftables) may have symbols with the same name
+does not cause any problem.
+
+However, when doing static linking on a non-ELF platform (such as
+Blackfin, which uses the FLAT binary format), there is no way of
+encoding this visibility. Therefore, the xfree() symbols of libnftnl
+becomes visible to the outside world, causing a conflict with the
+xfree() symbol defined by nftables.
+
+To solve this, this patch renames the libnftnl xfree() function to
+libnftnl_xfree().
+
+This commit fixes a problem seen after building nftables statically on
+Blackfin. This problem was seen after the previous patch fixing the
+autobuilder failure:
+
+  http://autobuild.buildroot.org/results/98b/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/atngw100_defconfig  |    3 +++
- configs/atstk100x_defconfig |    3 +++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+ package/libnftnl/libnftnl-0001-rename-xfree.patch |  596 +++++++++++++++++++++
+ 1 files changed, 596 insertions(+), 0 deletions(-)
 
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index cf727f9..d410f5b 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -1,3 +1,6 @@
-+# AVR32 is deprecated
-+BR2_DEPRECATED=y
+diff --git a/package/libnftnl/libnftnl-0001-rename-xfree.patch b/package/libnftnl/libnftnl-0001-rename-xfree.patch
+new file mode 100644
+index 0000000..ed0acf0
+--- /dev/null
++++ b/package/libnftnl/libnftnl-0001-rename-xfree.patch
+@@ -0,0 +1,596 @@
++Rename xfree() to libnftnl_xfree() to avoid symbol naming conflict
 +
- # Architecture
- BR2_avr32=y
- 
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index 6a77b41..0e17e36 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -1,3 +1,6 @@
-+# AVR32 is deprecated
-+BR2_DEPRECATED=y
++When ELF binaries and shared libraries are used, the internal
++functions of libnftnl such as xfree() are not visible to the outside
++world (their visibility is 'hidden'). Therefore, the fact that other
++programs (especially nftables) may have symbols with the same name
++does not cause any problem.
 +
- # Architecture
- BR2_avr32=y
- 
++However, when doing static linking on a non-ELF platform (such as
++Blackfin, which uses the FLAT binary format), there is no way of
++encoding this visibility. Therefore, the xfree() symbols of libnftnl
++becomes visible to the outside world, causing a conflict with the
++xfree() symbol defined by nftables.
++
++To solve this, this patch renames the libnftnl xfree() function to
++libnftnl_xfree().
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/chain.c
++===================================================================
++--- a/src/chain.c
+++++ b/src/chain.c
++@@ -88,11 +88,11 @@
++ void nft_chain_free(struct nft_chain *c)
++ {
++ 	if (c->table != NULL)
++-		xfree(c->table);
+++		nftnl_xfree(c->table);
++ 	if (c->type != NULL)
++-		xfree(c->type);
+++		nftnl_xfree(c->type);
++ 
++-	xfree(c);
+++	nftnl_xfree(c);
++ }
++ EXPORT_SYMBOL(nft_chain_free);
++ 
++@@ -110,7 +110,7 @@
++ 	switch (attr) {
++ 	case NFT_CHAIN_ATTR_TABLE:
++ 		if (c->table) {
++-			xfree(c->table);
+++			nftnl_xfree(c->table);
++ 			c->table = NULL;
++ 		}
++ 		break;
++@@ -119,7 +119,7 @@
++ 		return;
++ 	case NFT_CHAIN_ATTR_TYPE:
++ 		if (c->type) {
++-			xfree(c->type);
+++			nftnl_xfree(c->type);
++ 			c->type = NULL;
++ 		}
++ 		break;
++@@ -164,7 +164,7 @@
++ 		break;
++ 	case NFT_CHAIN_ATTR_TABLE:
++ 		if (c->table)
++-			xfree(c->table);
+++			nftnl_xfree(c->table);
++ 
++ 		c->table = strdup(data);
++ 		break;
++@@ -194,7 +194,7 @@
++ 		break;
++ 	case NFT_CHAIN_ATTR_TYPE:
++ 		if (c->type)
++-			xfree(c->type);
+++			nftnl_xfree(c->type);
++ 
++ 		c->type = strdup(data);
++ 		break;
++@@ -714,7 +714,7 @@
++ 		return -1;
++ 
++ 	if (c->table)
++-		xfree(c->table);
+++		nftnl_xfree(c->table);
++ 
++ 	c->table = strdup(table);
++ 	c->flags |= (1 << NFT_CHAIN_ATTR_TABLE);
++@@ -743,7 +743,7 @@
++ 			return -1;
++ 
++ 		if (c->type)
++-			xfree(c->type);
+++			nftnl_xfree(c->type);
++ 
++ 		c->type = strdup(type);
++ 		c->flags |= (1 << NFT_CHAIN_ATTR_TYPE);
++@@ -991,7 +991,7 @@
++ 		list_del(&r->head);
++ 		nft_chain_free(r);
++ 	}
++-	xfree(list);
+++	nftnl_xfree(list);
++ }
++ EXPORT_SYMBOL(nft_chain_list_free);
++ 
++@@ -1070,6 +1070,6 @@
++ 
++ void nft_chain_list_iter_destroy(struct nft_chain_list_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_chain_list_iter_destroy);
++Index: b/src/common.c
++===================================================================
++--- a/src/common.c
+++++ b/src/common.c
++@@ -45,7 +45,7 @@
++ 
++ void nft_parse_err_free(struct nft_parse_err *err)
++ {
++-	xfree(err);
+++	nftnl_xfree(err);
++ }
++ EXPORT_SYMBOL(nft_parse_err_free);
++ 
++Index: b/src/expr.c
++===================================================================
++--- a/src/expr.c
+++++ b/src/expr.c
++@@ -52,7 +52,7 @@
++ 	if (expr->ops->free)
++ 		expr->ops->free(expr);
++ 
++-	xfree(expr);
+++	nftnl_xfree(expr);
++ }
++ EXPORT_SYMBOL(nft_rule_expr_free);
++ 
++Index: b/src/expr/data_reg.c
++===================================================================
++--- a/src/expr/data_reg.c
+++++ b/src/expr/data_reg.c
++@@ -130,7 +130,7 @@
++ 				   NFT_XML_OPT, err);
++ 	if (chain != NULL) {
++ 		if (reg->chain)
++-			xfree(reg->chain);
+++			nftnl_xfree(reg->chain);
++ 
++ 		reg->chain = strdup(chain);
++ 	}
++Index: b/src/expr/immediate.c
++===================================================================
++--- a/src/expr/immediate.c
+++++ b/src/expr/immediate.c
++@@ -46,7 +46,7 @@
++ 		break;
++ 	case NFT_EXPR_IMM_CHAIN:
++ 		if (imm->data.chain)
++-			xfree(imm->data.chain);
+++			nftnl_xfree(imm->data.chain);
++ 
++ 		imm->data.chain = strdup(data);
++ 		break;
++Index: b/src/expr/log.c
++===================================================================
++--- a/src/expr/log.c
+++++ b/src/expr/log.c
++@@ -37,7 +37,7 @@
++ 	switch(type) {
++ 	case NFT_EXPR_LOG_PREFIX:
++ 		if (log->prefix)
++-			xfree(log->prefix);
+++			nftnl_xfree(log->prefix);
++ 
++ 		log->prefix = strdup(data);
++ 		break;
++@@ -139,7 +139,7 @@
++ 
++ 	if (tb[NFTA_LOG_PREFIX]) {
++ 		if (log->prefix)
++-			xfree(log->prefix);
+++			nftnl_xfree(log->prefix);
++ 
++ 		log->prefix = strdup(mnl_attr_get_str(tb[NFTA_LOG_PREFIX]));
++ 		e->flags |= (1 << NFT_EXPR_LOG_PREFIX);
++@@ -320,7 +320,7 @@
++ {
++ 	struct nft_expr_log *log = nft_expr_data(e);
++ 
++-	xfree(log->prefix);
+++	nftnl_xfree(log->prefix);
++ }
++ 
++ struct expr_ops expr_ops_log = {
++Index: b/src/expr/match.c
++===================================================================
++--- a/src/expr/match.c
+++++ b/src/expr/match.c
++@@ -50,7 +50,7 @@
++ 		break;
++ 	case NFT_EXPR_MT_INFO:
++ 		if (mt->data)
++-			xfree(mt->data);
+++			nftnl_xfree(mt->data);
++ 
++ 		mt->data = data;
++ 		mt->data_len = data_len;
++@@ -153,7 +153,7 @@
++ 		void *match_data;
++ 
++ 		if (match->data)
++-			xfree(match->data);
+++			nftnl_xfree(match->data);
++ 
++ 		match_data = calloc(1, len);
++ 		if (match_data == NULL)
++@@ -261,7 +261,7 @@
++ {
++ 	struct nft_expr_match *match = nft_expr_data(e);
++ 
++-	xfree(match->data);
+++	nftnl_xfree(match->data);
++ }
++ 
++ struct expr_ops expr_ops_match = {
++Index: b/src/expr/target.c
++===================================================================
++--- a/src/expr/target.c
+++++ b/src/expr/target.c
++@@ -50,7 +50,7 @@
++ 		break;
++ 	case NFT_EXPR_TG_INFO:
++ 		if (tg->data)
++-			xfree(tg->data);
+++			nftnl_xfree(tg->data);
++ 
++ 		tg->data = data;
++ 		tg->data_len = data_len;
++@@ -153,7 +153,7 @@
++ 		void *target_data;
++ 
++ 		if (target->data)
++-			xfree(target->data);
+++			nftnl_xfree(target->data);
++ 
++ 		target_data = calloc(1, len);
++ 		if (target_data == NULL)
++@@ -262,7 +262,7 @@
++ {
++ 	struct nft_expr_target *target = nft_expr_data(e);
++ 
++-	xfree(target->data);
+++	nftnl_xfree(target->data);
++ }
++ 
++ struct expr_ops expr_ops_target = {
++Index: b/src/internal.h
++===================================================================
++--- a/src/internal.h
+++++ b/src/internal.h
++@@ -143,7 +143,7 @@
++ 			      uint32_t format, uint32_t flags);
++ int nft_event_footer_fprintf(FILE *fp, uint32_t format, uint32_t flags);
++ 
++-void xfree(const void *ptr);
+++void nftnl_xfree(const void *ptr);
++ 
++ struct expr_ops;
++ 
++Index: b/src/mxml.c
++===================================================================
++--- a/src/mxml.c
+++++ b/src/mxml.c
++@@ -82,7 +82,7 @@
++ 		goto err_expr;
++ 
++ 	tree = mxmlLoadString(NULL, xml_text, MXML_OPAQUE_CALLBACK);
++-	xfree(xml_text);
+++	nftnl_xfree(xml_text);
++ 
++ 	if (tree == NULL)
++ 		goto err_expr;
++Index: b/src/rule.c
++===================================================================
++--- a/src/rule.c
+++++ b/src/rule.c
++@@ -74,11 +74,11 @@
++ 		nft_rule_expr_free(e);
++ 
++ 	if (r->table != NULL)
++-		xfree(r->table);
+++		nftnl_xfree(r->table);
++ 	if (r->chain != NULL)
++-		xfree(r->chain);
+++		nftnl_xfree(r->chain);
++ 
++-	xfree(r);
+++	nftnl_xfree(r);
++ }
++ EXPORT_SYMBOL(nft_rule_free);
++ 
++@@ -96,13 +96,13 @@
++ 	switch (attr) {
++ 	case NFT_RULE_ATTR_TABLE:
++ 		if (r->table) {
++-			xfree(r->table);
+++			nftnl_xfree(r->table);
++ 			r->table = NULL;
++ 		}
++ 		break;
++ 	case NFT_RULE_ATTR_CHAIN:
++ 		if (r->chain) {
++-			xfree(r->chain);
+++			nftnl_xfree(r->chain);
++ 			r->chain = NULL;
++ 		}
++ 		break;
++@@ -138,13 +138,13 @@
++ 	switch(attr) {
++ 	case NFT_RULE_ATTR_TABLE:
++ 		if (r->table)
++-			xfree(r->table);
+++			nftnl_xfree(r->table);
++ 
++ 		r->table = strdup(data);
++ 		break;
++ 	case NFT_RULE_ATTR_CHAIN:
++ 		if (r->chain)
++-			xfree(r->chain);
+++			nftnl_xfree(r->chain);
++ 
++ 		r->chain = strdup(data);
++ 		break;
++@@ -408,7 +408,7 @@
++ 
++ 	if (tb[NFTA_EXPR_DATA]) {
++ 		if (expr->ops->parse(expr, tb[NFTA_EXPR_DATA]) < 0) {
++-			xfree(expr);
+++			nftnl_xfree(expr);
++ 			return -1;
++ 		}
++ 	}
++@@ -506,7 +506,7 @@
++ 			mnl_attr_get_payload(tb[NFTA_RULE_USERDATA]);
++ 
++ 		if (r->user.data)
++-			xfree(r->user.data);
+++			nftnl_xfree(r->user.data);
++ 
++ 		r->user.len = mnl_attr_get_payload_len(tb[NFTA_RULE_USERDATA]);
++ 
++@@ -1074,7 +1074,7 @@
++ 
++ void nft_rule_expr_iter_destroy(struct nft_rule_expr_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_rule_expr_iter_destroy);
++ 
++@@ -1104,7 +1104,7 @@
++ 		list_del(&r->head);
++ 		nft_rule_free(r);
++ 	}
++-	xfree(list);
+++	nftnl_xfree(list);
++ }
++ EXPORT_SYMBOL(nft_rule_list_free);
++ 
++@@ -1189,6 +1189,6 @@
++ 
++ void nft_rule_list_iter_destroy(struct nft_rule_list_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_rule_list_iter_destroy);
++Index: b/src/ruleset.c
++===================================================================
++--- a/src/ruleset.c
+++++ b/src/ruleset.c
++@@ -48,7 +48,7 @@
++ 		nft_set_list_free(r->set_list);
++ 	if (r->flags & (1 << NFT_RULESET_ATTR_RULELIST))
++ 		nft_rule_list_free(r->rule_list);
++-	xfree(r);
+++	nftnl_xfree(r);
++ }
++ EXPORT_SYMBOL(nft_ruleset_free);
++ 
++Index: b/src/set.c
++===================================================================
++--- a/src/set.c
+++++ b/src/set.c
++@@ -46,15 +46,15 @@
++ 	struct nft_set_elem *elem, *tmp;
++ 
++ 	if (s->table != NULL)
++-		xfree(s->table);
+++		nftnl_xfree(s->table);
++ 	if (s->name != NULL)
++-		xfree(s->name);
+++		nftnl_xfree(s->name);
++ 
++ 	list_for_each_entry_safe(elem, tmp, &s->element_list, head) {
++ 		list_del(&elem->head);
++ 		nft_set_elem_free(elem);
++ 	}
++-	xfree(s);
+++	nftnl_xfree(s);
++ }
++ EXPORT_SYMBOL(nft_set_free);
++ 
++@@ -70,14 +70,14 @@
++ 	case NFT_SET_ATTR_TABLE:
++ 		if (s->flags & (1 << NFT_SET_ATTR_TABLE))
++ 			if (s->table) {
++-				xfree(s->table);
+++				nftnl_xfree(s->table);
++ 				s->table = NULL;
++ 			}
++ 		break;
++ 	case NFT_SET_ATTR_NAME:
++ 		if (s->flags & (1 << NFT_SET_ATTR_NAME))
++ 			if (s->name) {
++-				xfree(s->name);
+++				nftnl_xfree(s->name);
++ 				s->name = NULL;
++ 			}
++ 		break;
++@@ -117,13 +117,13 @@
++ 	switch(attr) {
++ 	case NFT_SET_ATTR_TABLE:
++ 		if (s->table)
++-			xfree(s->table);
+++			nftnl_xfree(s->table);
++ 
++ 		s->table = strdup(data);
++ 		break;
++ 	case NFT_SET_ATTR_NAME:
++ 		if (s->name)
++-			xfree(s->name);
+++			nftnl_xfree(s->name);
++ 
++ 		s->name = strdup(data);
++ 		break;
++@@ -827,7 +827,7 @@
++ 		list_del(&s->head);
++ 		nft_set_free(s);
++ 	}
++-	xfree(list);
+++	nftnl_xfree(list);
++ }
++ EXPORT_SYMBOL(nft_set_list_free);
++ 
++@@ -911,6 +911,6 @@
++ 
++ void nft_set_list_iter_destroy(struct nft_set_list_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_set_list_iter_destroy);
++Index: b/src/set_elem.c
++===================================================================
++--- a/src/set_elem.c
+++++ b/src/set_elem.c
++@@ -44,11 +44,11 @@
++ {
++ 	if (s->flags & (1 << NFT_SET_ELEM_ATTR_CHAIN)) {
++ 		if (s->data.chain) {
++-			xfree(s->data.chain);
+++			nftnl_xfree(s->data.chain);
++ 			s->data.chain = NULL;
++ 		}
++ 	}
++-	xfree(s);
+++	nftnl_xfree(s);
++ }
++ EXPORT_SYMBOL(nft_set_elem_free);
++ 
++@@ -64,7 +64,7 @@
++ 	case NFT_SET_ELEM_ATTR_CHAIN:
++ 		if (s->flags & (1 << NFT_SET_ELEM_ATTR_CHAIN)) {
++ 			if (s->data.chain) {
++-				xfree(s->data.chain);
+++				nftnl_xfree(s->data.chain);
++ 				s->data.chain = NULL;
++ 			}
++ 		}
++@@ -98,7 +98,7 @@
++ 		break;
++ 	case NFT_SET_ELEM_ATTR_CHAIN:	/* NFTA_SET_ELEM_DATA */
++ 		if (s->data.chain)
++-			xfree(s->data.chain);
+++			nftnl_xfree(s->data.chain);
++ 
++ 		s->data.chain = strdup(data);
++ 		break;
++@@ -290,7 +290,7 @@
++ 		}
++         }
++ 	if (ret < 0) {
++-		xfree(e);
+++		nftnl_xfree(e);
++ 		return -1;
++ 	}
++ 
++@@ -708,6 +708,6 @@
++ 
++ void nft_set_elems_iter_destroy(struct nft_set_elems_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_set_elems_iter_destroy);
++Index: b/src/table.c
++===================================================================
++--- a/src/table.c
+++++ b/src/table.c
++@@ -44,9 +44,9 @@
++ void nft_table_free(struct nft_table *t)
++ {
++ 	if (t->flags & (1 << NFT_TABLE_ATTR_NAME))
++-		xfree(t->name);
+++		nftnl_xfree(t->name);
++ 
++-	xfree(t);
+++	nftnl_xfree(t);
++ }
++ EXPORT_SYMBOL(nft_table_free);
++ 
++@@ -64,7 +64,7 @@
++ 	switch (attr) {
++ 	case NFT_TABLE_ATTR_NAME:
++ 		if (t->name) {
++-			xfree(t->name);
+++			nftnl_xfree(t->name);
++ 			t->name = NULL;
++ 		}
++ 		break;
++@@ -95,7 +95,7 @@
++ 	switch (attr) {
++ 	case NFT_TABLE_ATTR_NAME:
++ 		if (t->name)
++-			xfree(t->name);
+++			nftnl_xfree(t->name);
++ 
++ 		t->name = strdup(data);
++ 		break;
++@@ -270,7 +270,7 @@
++ 		return -1;
++ 
++ 	if (t->name)
++-		xfree(t->name);
+++		nftnl_xfree(t->name);
++ 
++ 	t->name = strdup(name);
++ 	t->flags |= (1 << NFT_TABLE_ATTR_NAME);
++@@ -507,7 +507,7 @@
++ 		list_del(&r->head);
++ 		nft_table_free(r);
++ 	}
++-	xfree(list);
+++	nftnl_xfree(list);
++ }
++ EXPORT_SYMBOL(nft_table_list_free);
++ 
++@@ -586,6 +586,6 @@
++ 
++ void nft_table_list_iter_destroy(struct nft_table_list_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ EXPORT_SYMBOL(nft_table_list_iter_destroy);
++Index: b/src/utils.c
++===================================================================
++--- a/src/utils.c
+++++ b/src/utils.c
++@@ -180,7 +180,7 @@
++ 	return -1;
++ }
++ 
++-void xfree(const void *ptr)
+++void nftnl_xfree(const void *ptr)
++ {
++ 	free((void *)ptr);
++ }
++@@ -214,7 +214,7 @@
++ 
++ out:
++ 	if (buf != _buf)
++-		xfree(buf);
+++		nftnl_xfree(buf);
++ 
++ 	return ret;
++ }
