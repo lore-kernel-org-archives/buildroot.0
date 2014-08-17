@@ -1,41 +1,32 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 17 Aug 2014 15:03:41 +0200
-Subject: [Buildroot] [PATCH 24/24 v4] arch: remove no-longer default
-	on	atomics option
-In-Reply-To: <b8d37160ad1e6fafbba18de4733512650e00f6ec.1408279142.git.yann.morin.1998@free.fr>
+Date: Sun, 17 Aug 2014 15:04:55 +0200
+Subject: [Buildroot] [PATCH 01/24 v4] arch: add an option to specify if
+	the	arch has atomic ops
+In-Reply-To: <20140817145732.71eafc75@free-electrons.com>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
- <b8d37160ad1e6fafbba18de4733512650e00f6ec.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <b21be02c-7494-4873-aa25-44b3061aed94@email.android.com>
+ <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
+ <bd3543da-f3d3-4236-be5a-d6c85e8305ce@email.android.com>
+ <20140817145732.71eafc75@free-electrons.com>
+Message-ID: <238c7828-34a6-4ed6-bdd6-e603090e5694@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->Now that all archiotectures explicitly select this options when it makes
-
-architectures
-option
-
->sense, there is no need to have a default value.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Dear Thomas De Schampheleire,
 >
->Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
->---
-> arch/Config.in | 1 -
-> 1 file changed, 1 deletion(-)
+>On Sun, 17 Aug 2014 14:55:06 +0200, Thomas De Schampheleire wrote:
 >
->diff --git a/arch/Config.in b/arch/Config.in
->index 6bcafd4..1126d43 100644
->--- a/arch/Config.in
->+++ b/arch/Config.in
->@@ -253,7 +253,6 @@ config BR2_GCC_TARGET_MODE
-> # If the architecture has atomic operations, select this:
-> config BR2_ARCH_HAS_ATOMICS
-> 	bool
->-	default y if !BR2_arc
-> 
-> # Set up target binary format
-> choice
+>> Is there a specific reason why the option is now
+>>  dubbed ATOMICS iso ATOMIC_INTRINSICS?
+>> 
+>> The latter may be a bit more descriptive, no?
+>
+>But wouldn't make sense. "intrinsics" is a compiler notion, which
+>doesn't have much to do with an architecture. An architecture provides
+>atomic instructions, which in turn allow compilers to implement a
+>certain class of compiler intrinsics to access those atomic operations.
+
+Then what about HAS_ATOMIC_INSTRUCTIONS ?
