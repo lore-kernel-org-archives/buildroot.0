@@ -1,37 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 15:06:50 +0200
-Subject: [Buildroot] [PATCH 01/24 v4] arch: add an option to specify if
- the	arch has atomic ops
-In-Reply-To: <20140817145732.71eafc75@free-electrons.com>
+Date: Sun, 17 Aug 2014 15:15:28 +0200
+Subject: [Buildroot] [PATCH 07/24 v4] manual: document dependencies on
+ atomic operations
+In-Reply-To: <5dc49087-92a9-4ec1-a145-bcc77ecbad46@email.android.com>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
- <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
- <bd3543da-f3d3-4236-be5a-d6c85e8305ce@email.android.com>
- <20140817145732.71eafc75@free-electrons.com>
-Message-ID: <20140817130650.GD5274@free.fr>
+ <4061c3ce3e322eed4f6a91e635133d0e0dd2e2f4.1408279142.git.yann.morin.1998@free.fr>
+ <5dc49087-92a9-4ec1-a145-bcc77ecbad46@email.android.com>
+Message-ID: <20140817131527.GE5274@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Thomas, All,
 
-On 2014-08-17 14:57 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 17 Aug 2014 14:55:06 +0200, Thomas De Schampheleire wrote:
-> 
-> > Is there a specific reason why the option is now
-> >  dubbed ATOMICS iso ATOMIC_INTRINSICS?
+On 2014-08-17 15:01 +0200, Thomas De Schampheleire spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+> >From: Anton Kolesov <anton.kolesov@synopsys.com>
+> >
+> >Add atomic operations to the list of generic dependencies.
+> >
+> >Since this is an architecture option, there is no comment string to be
+> >added.
+> >
+> >Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+> >[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >---
+> > docs/manual/adding-packages-directory.txt | 4 ++++
+> > 1 file changed, 4 insertions(+)
+> >
+> >diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> >index 93e6a3e..40a81d5 100644
+> >--- a/docs/manual/adding-packages-directory.txt
+> >+++ b/docs/manual/adding-packages-directory.txt
+> >@@ -219,6 +219,10 @@ use in the comment.
+> > ** Dependency symbol: +BR2_USE_MMU+
+> > ** Comment string: no comment to be added
 > > 
-> > The latter may be a bit more descriptive, no?
+> >+* Atomic operations
+> >+** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
+> >+** Comment string: no comment to be added
+> >+
 > 
-> But wouldn't make sense. "intrinsics" is a compiler notion, which
-> doesn't have much to do with an architecture. An architecture provides
-> atomic instructions, which in turn allow compilers to implement a
-> certain class of compiler intrinsics to access those atomic operations.
+> Should we provide a brief explanation, reference, or
+>  name of these functions to make it a bit clearer what
+> is meant with 'atomic operations'?
 
-That.
+Well, the atomics are all named differently in different architectures.
 
-Plus, who could have resisted the 'atomics' pun? ;-)
+For example, armv6+ has LDREX and STREX (amon others):
+    http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0008a/ch01s02s01.html
+
+While on x86, I don't think there are corresponding instructions, but
+you can prefix some intructions with the LOCK prefix to achieve a
+similar result.
+
+So, I would not know what to put in here. Also, we do not explain what
+the other options are (like MMU, for example). Why would we do that for
+this specific option, and not others?
 
 Regards,
 Yann E. MORIN.
