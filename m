@@ -1,61 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Aug 2014 21:09:52 +0200
-Subject: [Buildroot] [git commit] manual/getting started: rework 'Getting
-	Buildroot' section
-Message-ID: <20140817191116.1666A9D427@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] website/download: update daily snapshot
+	section
+Message-ID: <20140817191116.0EB5C9D427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afdd5cebe2a4a16930404437b0167232208158ce
+commit: http://git.buildroot.net/buildroot/commit/?id=3dde85015d0e7d3e36e7a3ce03736d62a8d0ebf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch reworks the 'Getting Buildroot' section of the manual as follows:
-- be more specific on the Buildroot release cycle
-- refer to the download page of the website for details on snapshots and
-  git, instead of duplicating the information.
+This patch makes some minor changes to the download page of the website:
+- don't capitalize Daily Snapshots as there is no reason to.
+- remove extra link to daily snapshots, as this link is already available on
+  the line below.
+- add a link to the latest snapshot
+- avoid 'Click here', especially if 'here' is not clickable
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/getting.txt |   26 ++++++++------------------
- 1 files changed, 8 insertions(+), 18 deletions(-)
+ docs/download.html |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
-index d10ac43..3437f93 100644
---- a/docs/manual/getting.txt
-+++ b/docs/manual/getting.txt
-@@ -4,23 +4,13 @@
- [[getting-buildroot]]
- == Getting Buildroot
+diff --git a/docs/download.html b/docs/download.html
+index 74f1325..f8cb7e2 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -30,17 +30,18 @@ This and earlier releases (and their PGP signatures) can always be downloaded fr
  
--Buildroot releases are made approximately every 3 months. Direct Git
--access and daily snapshots are also available, if you want more
--bleeding edge.
-+Buildroot releases are made every 3 months, in February, May, August and
-+November. Release numbers are in the format YYYY.MM, so for example
-+2013.02, 2014.08.
+ <p>
  
--Releases are available at http://buildroot.net/downloads/[].
--
--The latest snapshot is always available at
--http://buildroot.net/downloads/snapshots/buildroot-snapshot.tar.bz2[],
--and previous snapshots are also available at
--http://buildroot.net/downloads/snapshots/[].
--
--To download Buildroot using Git, you can simply follow the rules
--described on the "Accessing Git" page
--(http://buildroot.net/git.html[]) of the Buildroot website
--(http://buildroot.net[]).  For the impatient, here's a quick recipe:
--
-----------------------
-- $ git clone git://git.buildroot.net/buildroot
-----------------------
-+Release tarballs are available at http://buildroot.org/downloads/[].
+-You can also obtain <a href="/downloads/snapshots/">Daily
+-Snapshots</a> of the latest Buildroot source tree if you want to to
+-follow development, but cannot or do not wish to use Git.
++You can also obtain daily snapshots of the latest Buildroot source tree if you
++want to follow development, but cannot or do not wish to use Git.
  
-+If you want to follow development, you can use the daily snapshots or
-+make a clone of the Git repository. Refer to the
-+http://buildroot.org/download[Download page] of the Buildroot website
-+for more details.
+ <ul>
+-	<li> Click here to <a href="downloads/snapshots/">Daily Snapshots</a>.
++	<li>You can download the
++	<a href="downloads/snapshots/buildroot-snapshot.tar.bz2">latest snapshot
++	</a> or view recent <a href="downloads/snapshots/">daily snapshots</a>.
+ 	</li>
+ 
+-	<li> Click here to <a href="http://git.buildroot.net/buildroot">browse the source tree</a>.
++	<li>You can also <a href="http://git.buildroot.net/buildroot">browse the
++	source tree online</a>.
+ 	</li>
+-
+ </ul>
+ 
+ 
