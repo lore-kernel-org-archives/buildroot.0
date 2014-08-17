@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:13:39 +0200
-Subject: [Buildroot] [PATCH 0 of 8 RFCv2 for 2014.08] manual:
- restructuring and improvements
-In-Reply-To: <patchbomb.1407874805@localhost>
-References: <patchbomb.1407874805@localhost>
-Message-ID: <20140817211339.29163014@free-electrons.com>
+Date: Sun, 17 Aug 2014 21:15:02 +0200
+Subject: [Buildroot] [git commit branch/next] qemu: bump to version 2.1.0
+Message-ID: <20140817191511.71E459D461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=ac7e0a5d0dc23d453c753ddaf56007fcd47a0a77
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 12 Aug 2014 22:20:05 +0200, Thomas De Schampheleire wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> Thomas De Schampheleire (8)
->   manual: high-level restructuring
->   manual: remove 'Events' section
->   manual/getting started: rename and move 'Getting involved' section
->   manual/getting started: rework 'Community resources' section
->   manual/getting started: rework 'System requirements' section
->   website/download: update daily snapshot section
->   manual/getting started: rework 'Getting Buildroot' section
->   manual/getting started: rework 'Using Buildroot' section
-
-Even though not much review was made on this patch series, I believe
-those improvements are generally going in the right direction, and I
-know it's painful to rework patch series touching the manual. Also I
-believe working on the manual is a really good thing that I'd like to
-encourage, so I've applied your patch series as is.
-
-People having comments or additional suggestions are invited to submit
-followup patches.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 093ae64..be56c45 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 1.6.0
++QEMU_VERSION = 2.1.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
