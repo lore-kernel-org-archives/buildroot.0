@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 10:16:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-08-16
-In-Reply-To: <20140817063010.1E5C3100D11@stock.ovh.net>
-References: <20140817063010.1E5C3100D11@stock.ovh.net>
-Message-ID: <20140817101620.00dae1a7@free-electrons.com>
+Date: Sun, 17 Aug 2014 10:27:44 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain: add mechanism to install the
+ getent program
+In-Reply-To: <1408199992-26942-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1408199992-26942-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408199992-26942-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140817102744.585db2db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,81 +14,95 @@ To: buildroot@busybox.net
 
 Hello,
 
-Quick analysis of the build failures of the day.
+On Sat, 16 Aug 2014 16:39:51 +0200, Thomas Petazzoni wrote:
+> The ecryptfs-utils scripts require the 'getent' program to be
+> installed to find the home directory of users. However, Buildroot
+> currently never installs this program, and therefore bug #7142 was
+> reported, explaining that ecryptfs-utils is not working properly.
+> 
+> In normal Linux systems, the getent program is provided by glibc, and
+> allows to query not only /etc/passwd, but also other NSS databases
+> such as LDAP and others.
+> 
+> In the context of Buildroot, this gives us several cases:
+> 
+>  1/ Internal toolchain
+> 
+>     a/ glibc/eglibc. In this case, the getent program is already built
+>        and installed by Buildroot in the staging directory, so the
+>        only thing missing is installing it in the target directory.
+> 
+>     b/ uclibc. uClibc provides a simple shell script that emulates the
+>        behavior of getent. It is located in extra/scripts/getent in
+>        the uClibc sources, but is currently never installed.
+> 
+>     c/ musl. There seems to be no getent implementation, and musl does
+>        not support NSS.
+> 
+>  2/ External toolchain
+> 
+>     a/ glibc/eglibc. In several external toolchains that we tested,
+>        there is a pre-built getent binary available in the sysroot,
+>        but Buildroot is not installing it to the target.
+> 
+>     b/ uclibc. The getent wrapper script is typically not part of any
+>        external uClibc toolchain.
+> 
+>     c/ musl. There is no getent implementation.
+> 
+> This patch proposes to solve this problem by introducing a hidden
+> BR2_TOOLCHAIN_INSTALL_GETENT Config.in option, which packages needing
+> 'getent' should select, and that toolchain packages should use to know
+> whether getent should be installed or not.
+> 
+> On the toolchain side of things, the behavior is as follows:
+> 
+>  - For 1/ a/ above, the glibc package is modified to install the
+>    getent program that was built.
+> 
+>  - For 1/ b/ above, the uclibc package is modified to install the
+>    getent wrapper script available as part of the uClibc sources.
+> 
+>  - For 1/ c/ above, the musl package is modified to depend on the new
+>    'getent' package, which simply bundles the 'getent' wrapper script
+>    of uClibc 0.9.33.
+> 
+>  - For 2/ a/ above, the toolchain-external package installs the
+>    'getent' program that is available as part of the external
+>    toolchain sysroot.
+> 
+>  - For 2/ b/ and 2/ c/ above, the toolchain-external package depends
+>    on the new 'getent' package.
+> 
+> This solution allows to install a NSS-capable getent when glibc/eglibc
+> is used, and otherwise to rely on uClibc's wrapper script.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Sun, 17 Aug 2014 08:30:09 +0200 (CEST), Thomas Petazzoni wrote:
+In fact, I think I have a simpler solution to propose, with just a
+getent package, and no need for a BR2_TOOLCHAIN_INSTALL_GETENT stuff.
+The getent package would:
 
->    powerpc |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/a4f546e10142ae9848db192d5c8a7fedd6667de4/
+ * If the toolchain is glibc/eglibc based (regardless of whether it's
+   internal of external), the package would install the getent program
+   from STAGING_DIR to TARGET_DIR.
 
-The usual vfork() issue with static linking. Gustavo is working on
-that, but it's not very simple apparently.
+ * If the toolchain is uClibc or musl based, it would install the
+   built-in getent wrapper script, which has been extracted from uClibc
+   0.9.33.
 
->        arm |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/adf4375e388999b5c26e71efb1a083c4e0de21da/
->        arm |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/582a2328a708ea52040c8b671106d09101d90820/
->    powerpc |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/8348ff77700987fbeb5bd6e5a677479b00ef4004/
+This solution has the same result as the previously proposed solution,
+except for case 1/ b/ (internal uClibc toolchain): with the previous
+solution, the getent program of the current uClibc version being used
+was installed, while with the new solution, a fixed version of the
+getent program will be installed. However, since I don't think the
+getent wrapper script is going to change often in uClibc, I don't think
+this difference really matters.
 
-error: unknown type name 'intmax_t'. Apparently only happens with
-uClibc toolchains. Anyone interested?
+This makes the entire patch must simpler. I'll respin with this idea
+unless some of you disagree.
 
->    powerpc |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/a4c0fcdbe425b30b54ba090f16955b177ee5888c/
-
-gutenprint has been failing regularly for quite some time. Has anyone
-looked into those issues?
-
->       bfin |                   nftables-0.3 | NOK | http://autobuild.buildroot.net/results/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
-
-Fixed by
-http://git.buildroot.net/buildroot/commit/?id=06a603b8d55a5aea51a31c2d3f6f76d0b8218fc6
-+
-http://git.buildroot.net/buildroot/commit/?id=34e3857d9855197bb52a4056ad1f2a95a67d08f8.
-
->        arm |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/
-
-Probably not too difficult to investigate:
-
-/usr/bin/install: cannot create regular file `/scratch/peko/target/etc/upsmon.conf.sample': File exists
-
->        arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/7d355804a9ef1d9061b527625cec26e57b2d2fff/
-
--L/usr/lib -L/usr/lib present in the link command line. Fran?ois, what
-is the status on this one? If it's the one due to host Perl being too
-old on gcc10, then what about sending a patch to mark perl-gd has
-broken (for the 2014.08 release), and then work on building host-perl
-for the next release to fix the issue?
-
->    powerpc |           perl-net-ssleay-1.65 | NOK | http://autobuild.buildroot.net/results/4e3fd2e72e5d3935620ecc48ef9f7787fa54e66d/
->    powerpc |           perl-net-ssleay-1.65 | NOK | http://autobuild.buildroot.net/results/28e9c1ae6f7674f6b663ed69c5db2b8ae474a9e1/
-
-Fixed by http://git.buildroot.net/buildroot/commit/?id=3cb705aa845c96e19f8b32e9994d5d319ce22930.
-
->    powerpc |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/069de94f087f8532afe9ecf6f21cc7743f09b97a/
-
-uClibc bug: setresgid(), setresuid(), setreuid() are defined in both
-libpthread and libc. Similar to the vfork() issue.
-
->        arc |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/6c76b327d4fe34fe8501904f1fc98ac5b5f80703/
-
-checking whether to build with POPT library... no
-configure: error: mandatory POPT library not found
-make: *** [/home/test/autobuild/instance-2/output/build/rpm-5.2.0/.stamp_configured] Error 1
-
-in a configuration with:
-
-BR2_PREFER_STATIC_LIB=y
-
->       bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/024b22f3c3a2b59e5d59dae917c62d1ebbfffa94/
-
-Weird:
-
-bfin-linux-uclibc-g++: /home/test/autobuild/instance-1/output/host/usr/bfin-buildroot-linux-uclibc/sysroot/opt/uClinux/bfin-linux-uclibc/lib/gcc/bfin-linux-uclibc/4.3.5/libstdc++.so: No such file or directory
-
->        arm |                  webkit-1.11.5 | TIM | http://autobuild.buildroot.net/results/8bfba67d71031e3f2c6b3a01eb79f2eaa90a5380/
-
-Ignore.
-
->        arm |               wireshark-1.10.9 | NOK | http://autobuild.buildroot.net/results/f7083c0e8d978e28e9b2c69c091f4705dd578ab4/
-
-Ignore, memory allocation issue on the build server.
+Thanks,
 
 Thomas
 -- 
