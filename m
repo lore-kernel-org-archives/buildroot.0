@@ -1,31 +1,22 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Aug 2014 00:00:29 +0200
-Subject: [Buildroot] [PATCH branch/master] package/xbmc: Bump version to 13.2
-Message-ID: <1408312830-16761-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Aug 2014 00:28:19 +0200
+Subject: [Buildroot] [PATCH branch/next] package/ffmpeg: Bump version to
+	2.3.3
+In-Reply-To: <1408305922-23905-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 17 Aug 2014 22:05:22 +0200")
+References: <1408305922-23905-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <871tseycn0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xbmc/xbmc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index eaa21c9..bdd634e 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XBMC_VERSION = 13.2rc1-Gotham
-+XBMC_VERSION = 13.2-Gotham
- XBMC_SOURCE = $(XBMC_VERSION).tar.gz
- XBMC_SITE = https://github.com/xbmc/xbmc/archive
- XBMC_LICENSE = GPLv2
+Committed to next, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
