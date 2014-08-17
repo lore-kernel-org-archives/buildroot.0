@@ -1,32 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 21:29:52 +0200
-Subject: [Buildroot] [PATCH 13/24 v5] arch/avr32: always has atomic ops
+Date: Sun, 17 Aug 2014 21:29:45 +0200
+Subject: [Buildroot] [PATCH 06/24 v5] toolchain: drop the now-unused old
+	BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr>
 References: <cover.1408303753.git.yann.morin.1998@free.fr>
-Message-ID: <971878f01388e9efe0fc6a8bdf2a353bf8b1cf83.1408303753.git.yann.morin.1998@free.fr>
+Message-ID: <d4436860a9cdb435c7e079d269b26827cf87b48b.1408303753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
----
- arch/Config.in.avr32 | 3 +++
- 1 file changed, 3 insertions(+)
+It's now been replaced with BR2_ARCH_HAS_ATOMICS, annd all packages have
+been changed to use that instead.
 
-diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
-index 8429589..fc1f4f6 100644
---- a/arch/Config.in.avr32
-+++ b/arch/Config.in.avr32
-@@ -6,3 +6,6 @@ config BR2_ENDIAN
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in                | 1 -
+ toolchain/toolchain-common.in | 3 ---
+ 2 files changed, 4 deletions(-)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 5cee0d7..6bcafd4 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -254,7 +254,6 @@ config BR2_GCC_TARGET_MODE
+ config BR2_ARCH_HAS_ATOMICS
+ 	bool
+ 	default y if !BR2_arc
+-	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
  
- config BR2_GCC_TARGET_ARCH
- 	default "ap"
-+
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
+ # Set up target binary format
+ choice
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2fa4f61..82ac26a 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -44,9 +44,6 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
+-config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+-	bool
+-
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
 -- 
 1.9.1
