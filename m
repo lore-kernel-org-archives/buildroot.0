@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:20:38 +0200
-Subject: [Buildroot] [PATCH v2 1/3] postgresql: add replacement pg_config
-In-Reply-To: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
+Date: Sun, 17 Aug 2014 21:21:29 +0200
+Subject: [Buildroot] [PATCH v2 3/3] php: add pdo_pgsql extension
+In-Reply-To: <1407938231-22544-3-git-send-email-bos@je-eigen-domein.nl>
 References: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20140817212038.2b7879ca@free-electrons.com>
+ <1407938231-22544-3-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20140817212129.034c7fc5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,24 @@ To: buildroot@busybox.net
 
 Dear Floris Bos,
 
-On Wed, 13 Aug 2014 15:57:09 +0200, Floris Bos wrote:
-> Normally pg_config is a native application compiled for the
-> target architecture. Since we cannot execute those on the
-> host system, provide a simple shell script as replacement.
+On Wed, 13 Aug 2014 15:57:11 +0200, Floris Bos wrote:
+> Adds support for the PDO PostgreSQL extension to the PHP package.
 > 
 > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 > ---
->  package/postgresql/pg_config     | 19 +++++++++++++++++++
->  package/postgresql/postgresql.mk |  8 ++++++++
->  2 files changed, 27 insertions(+)
->  create mode 100644 package/postgresql/pg_config
+>  package/php/Config.ext | 10 ++++++++++
+>  package/php/php.mk     |  4 ++++
+>  2 files changed, 14 insertions(+)
 
-Applied, thanks.
+Applied to next, with a minor change.
+
+
+> +comment "PostgreSQL needs an (e)glibc toolchain"
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+
+I've changed this to "PostgreSQL driver needs..."
+
+Thanks,
 
 Thomas
 -- 
