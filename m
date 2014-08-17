@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Aug 2014 09:09:11 +0200
-Subject: [Buildroot] [PATCH] package/erlang: build host-erlang with
-	support for openssl
-In-Reply-To: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 15 Aug 2014 17:49:15 +0200")
-References: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87a973zj6w.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Aug 2014 09:05:51 +0200
+Subject: [Buildroot] [git commit branch/next] upmpdcli: Bump to version 0.8.0
+Message-ID: <20140817070955.83E1F9D413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ccebe8949f249426eeafc86bc6e1e40c86c2a2c3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Erlang uses openssl for all things crypto.
- > Since there are host Erlang tools that use crypto (such as rebar), we
- > need to build host-erlang with support for crypto, and thus it shall
- > depends on openssl.
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/upmpdcli/upmpdcli.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Frank Hunleth <fhunleth@troodon-software.com>
- > Cc: Johan Oudinet <johan.oudinet@gmail.com>
-
- > ---
- > Note: I am not sure whether this is the correct solution, to match the
- > host SSL support to the target SSL support. I'll let the erlang experts
- > enhance that patch if need be. ;-)
-
-Sorry, I must have missed the discussion about this. What exactly does
-it fix? Do we need it for 2014.08?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 3942d12..fbd2a4f 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 0.7.1
++UPMPDCLI_VERSION = 0.8.0
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
