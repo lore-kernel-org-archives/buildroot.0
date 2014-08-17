@@ -1,52 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:00:19 +0200
-Subject: [Buildroot] [git commit] package/nut: fix parallel install
-Message-ID: <20140817190117.AD0B59D462@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 21:01:10 +0200
+Subject: [Buildroot] [git commit] dependencies: Reject gcj in
+	BR2_NEEDS_HOST_JAVA check
+Message-ID: <20140817190117.B49239D396@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dce24bba0d2e85eb4bae50e2b061bd3f3bcbd531
+commit: http://git.buildroot.net/buildroot/commit/?id=7fa43f911be83555df8789e4739816e762e1ff26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-    http://autobuild.buildroot.net/results/256/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/
+Xbmc uses the Groovy java package to generate API code, for details see
+http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Groovy itself is broken when used with gcj:
+http://jira.codehaus.org/browse/GROOVY-3701
+
+Xbmc recommends to use another java package instead, like openjdk:
+http://forum.xbmc.org/showthread.php?tid=199742
+
+Until we come up with a host package to provide a java setup and
+in order to make autobuilder happy let??s reject gcj when we check
+for a java installation on the host.
+
+Currently Xbmc is the only package using BR2_NEEDS_HOST_JAVA
+so changing the behaviour of dependencies.sh has no side effects.
+
+Fixes
+http://autobuild.buildroot.net/results/213/213d7454a1dc68cfb8f4c8d9508f52ebf8e58e33/
+http://autobuild.buildroot.net/results/639/639cda872cf36c122cbd6139dd76f6b51ac1864e/
+http://autobuild.buildroot.net/results/c9e/c9eb12c95b2939c64590692a82af8d84bbd90956/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nut/nut-0002-parallel-build.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ support/dependencies/dependencies.sh |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/nut/nut-0002-parallel-build.patch b/package/nut/nut-0002-parallel-build.patch
-new file mode 100644
-index 0000000..f979c19
---- /dev/null
-+++ b/package/nut/nut-0002-parallel-build.patch
-@@ -0,0 +1,24 @@
-+conf: fix parallel install
-+
-+Do not reference the upsmon.conf.sample twice, otherwise install, with
-+a high number of make jobs, may fail, like so:
-+    http://autobuild.buildroot.net/results/256/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/build-end.log
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status:
-+    https://github.com/networkupstools/nut/pull/147
-+
-+diff -durB nut-2.7.2.orig/conf/Makefile.am nut-2.7.2/conf/Makefile.am
-+--- nut-2.7.2.orig/conf/Makefile.am	2014-02-14 09:56:53.000000000 +0100
-++++ nut-2.7.2/conf/Makefile.am	2014-08-17 11:33:46.804439240 +0200
-+@@ -2,7 +2,7 @@
-+ 
-+ INSTALL_0600 = $(INSTALL) -m 0600
-+ 
-+-SECFILES = upsmon.conf.sample upsd.conf.sample upsd.users.sample
-++SECFILES = upsd.conf.sample upsd.users.sample
-+ PUBFILES = nut.conf.sample ups.conf.sample
-+ CGIPUB = hosts.conf.sample upsset.conf.sample upsstats.html.sample	\
-+  upsstats-single.html.sample
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 88e5ad2..a9c5b31 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -189,6 +189,13 @@ fi
+ 
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+ 	check_prog_host "java"
++	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
++	if [ ! -z "$JAVA_GCJ" ] ; then
++		echo
++		echo "$JAVA_GCJ is not sufficient to compile your package selection."
++		echo "Please install an OpenJDK/IcedTea/Oracle Java."
++		exit 1 ;
++	fi
+ fi
+ 
+ if grep -q ^BR2_NEEDS_HOST_JAVAC=y $BR2_CONFIG ; then
