@@ -1,60 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 15:24:30 +0200
-Subject: [Buildroot] [PATCH 24/24 v4] arch: remove no-longer default on
- atomics option
-In-Reply-To: <b21be02c-7494-4873-aa25-44b3061aed94@email.android.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 17 Aug 2014 15:25:24 +0200
+Subject: [Buildroot] [PATCH 07/24 v4] manual: document dependencies on
+	atomic operations
+In-Reply-To: <20140817131527.GE5274@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
- <b8d37160ad1e6fafbba18de4733512650e00f6ec.1408279142.git.yann.morin.1998@free.fr>
- <b21be02c-7494-4873-aa25-44b3061aed94@email.android.com>
-Message-ID: <20140817132430.GF5274@free.fr>
+ <4061c3ce3e322eed4f6a91e635133d0e0dd2e2f4.1408279142.git.yann.morin.1998@free.fr>
+ <5dc49087-92a9-4ec1-a145-bcc77ecbad46@email.android.com>
+ <20140817131527.GE5274@free.fr>
+Message-ID: <38612d6b-068a-4a68-8f97-a595df32e458@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>Thomas, All,
+>
+>On 2014-08-17 15:01 +0200, Thomas De Schampheleire spake thusly:
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>> >From: Anton Kolesov <anton.kolesov@synopsys.com>
+>> >
+>> >Add atomic operations to the list of generic dependencies.
+>> >
+>> >Since this is an architecture option, there is no comment string to be
+>> >added.
+>> >
+>> >Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+>> >[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
+>> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> >---
+>> > docs/manual/adding-packages-directory.txt | 4 ++++
+>> > 1 file changed, 4 insertions(+)
+>> >
+>> >diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+>> >index 93e6a3e..40a81d5 100644
+>> >--- a/docs/manual/adding-packages-directory.txt
+>> >+++ b/docs/manual/adding-packages-directory.txt
+>> >@@ -219,6 +219,10 @@ use in the comment.
+>> > ** Dependency symbol: +BR2_USE_MMU+
+>> > ** Comment string: no comment to be added
+>> > 
+>> >+* Atomic operations
+>> >+** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
+>> >+** Comment string: no comment to be added
+>> >+
+>> 
+>> Should we provide a brief explanation, reference, or
+>>  name of these functions to make it a bit clearer what
+>> is meant with 'atomic operations'?
+>
+>Well, the atomics are all named differently in different architectures.
+>
+>For example, armv6+ has LDREX and STREX (amon others):
+>    http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0008a/ch01s02s01.html
+>
+>While on x86, I don't think there are corresponding instructions, but
+>you can prefix some intructions with the LOCK prefix to achieve a
+>similar result.
+>
+>So, I would not know what to put in here. Also, we do not explain what
+>the other options are (like MMU, for example). Why would we do that for
+>this specific option, and not others?
 
-On 2014-08-17 15:03 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >Now that all archiotectures explicitly select this options when it makes
-> 
-> architectures
-> option
 
-Fixed, thanks.
+Because MMU is a widely known acronym for anyone in the embedded world, but 'atomics' or 'atomic operations' is a much more general term that is less obvious, IMHO.
 
-Regards,
-Yann E. MORIN.
-
-> >sense, there is no need to have a default value.
-> >
-> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
-> >---
-> > arch/Config.in | 1 -
-> > 1 file changed, 1 deletion(-)
-> >
-> >diff --git a/arch/Config.in b/arch/Config.in
-> >index 6bcafd4..1126d43 100644
-> >--- a/arch/Config.in
-> >+++ b/arch/Config.in
-> >@@ -253,7 +253,6 @@ config BR2_GCC_TARGET_MODE
-> > # If the architecture has atomic operations, select this:
-> > config BR2_ARCH_HAS_ATOMICS
-> > 	bool
-> >-	default y if !BR2_arc
-> > 
-> > # Set up target binary format
-> > choice
-> 
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Maybe the description can clarify that we're talking about a dependency on _CPU_ atomic _instructions_?
