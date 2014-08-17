@@ -1,137 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:49:12 +0200
-Subject: [Buildroot] [PATCH 0/24 v4] arch: move atomics to arch,
-	not toolchain (branch yem/atomics)
-Message-ID: <cover.1408279142.git.yann.morin.1998@free.fr>
+Date: Sun, 17 Aug 2014 14:48:53 +0200
+Subject: [Buildroot] [PATCH 01/24 v4] arch: add an option to specify if the
+	arch has atomic ops
+In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
+References: <cover.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The fact that atomic operations are available is not really a
+specificity of the toolchain, but rather of the architecture.
 
-This series is a follow-up to, and includes Anton's series, to introduce
-awareness of atomic operations, so pacjages can be hidden-away on
-architectures that do not provide atomic operations.
+So, add a new option that architectures that have atomic operations
+can select. This in turn selects the current toolchain atomic option,
+until all packages have been converted, at which point the old
+toolchain option can be removed.
 
-We've discussed this with Thomas on IRC and on the list, and although
-this comes late in the cycle, we both consider this to be materials for
-the *current* release.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in                | 6 ++++++
+ arch/Config.in.arc            | 2 +-
+ toolchain/toolchain-common.in | 1 -
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-I tried to cover all bases here, but there are architectures I have
-close-to-zero knowledge of, so please speak up if you disagree on my
-proposal.
-
-The series is split in thre parts:
-
-  - patches 1..7 renames the option, and moves it out of toolchain and
-    to an architecture option, and add the option to the manual;
-
-  - patches 8..11 hides more packages due to their requiring atomics
-
-  - patches 12..24 convert all our architectures to selectively declare
-    their (non-)support for atomic ops, to finally get rid of the
-    generic default value.
-
-
-Changes v3 -> v4:
-  - rename the option into an architecture option  (Yann)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 8c94df28c75ff834ef77df781b753e0453b8c8dd:
-
-  CHANGES: update with recent changes (2014-08-17 09:44:53 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/atomics
-
-for you to fetch changes up to b8d37160ad1e6fafbba18de4733512650e00f6ec:
-
-  arch: remove no-longer default on atomics option (2014-08-17 14:32:07 +0200)
-
-----------------------------------------------------------------
-Anton Kolesov (5):
-      manual: document dependencies on atomic operations
-      cairo: add dependency on atomic operations
-      pulseaudio: add dependency on atomic operations
-      libftdi: add dependency on atomic operations
-      msgpack: add dependency on atomic operations
-
-Yann E. MORIN (19):
-      arch: add an option to specify if the arch has atomic ops
-      package/icu: use the new ARCH_HAS_ATOMICS as dependency
-      package/libtorrent: use the new ARCH_HAS_ATOMICS as dependency
-      package/jack2: use the new ARCH_HAS_ATOMICS as dependency
-      package/thrift: use the new ARCH_HAS_ATOMICS as dependency
-      toolchain: drop the now-unused old BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-      arch/arm: always has atomic ops
-      arch/avr32: always has atomic ops
-      arch/bfin: always has atomic ops
-      arch/m68k: always has atomic ops
-      arch/microblaze: always has atomic ops
-      arch/mips: always has atomic ops
-      arch/nios2: always has atomic ops
-      arch/powerpc: always has atomic ops
-      arch/sh: always has atomic ops
-      arch/sparc: always has atomic ops
-      arch/x86: all x86 but i386 has atomics operations
-      arch/xtensa: always has atomic ops
-      arch: remove no-longer default on atomics option
-
- arch/Config.in                                 |  4 ++++
- arch/Config.in.aarch64                         |  3 +++
- arch/Config.in.arc                             |  2 +-
- arch/Config.in.arm                             |  3 +++
- arch/Config.in.avr32                           |  3 +++
- arch/Config.in.bfin                            |  3 +++
- arch/Config.in.m68k                            |  3 +++
- arch/Config.in.microblaze                      |  3 +++
- arch/Config.in.mips                            |  3 +++
- arch/Config.in.nios2                           |  3 +++
- arch/Config.in.powerpc                         |  3 +++
- arch/Config.in.sh                              |  3 +++
- arch/Config.in.sparc                           |  3 +++
- arch/Config.in.x86                             |  3 +++
- arch/Config.in.xtensa                          |  3 +++
- docs/manual/adding-packages-directory.txt      |  4 ++++
- package/beecrypt/Config.in                     | 12 ++++++------
- package/cairo/Config.in                        |  1 +
- package/cppcms/Config.in                       |  7 ++++---
- package/efl/libevas-generic-loaders/Config.in  |  2 ++
- package/gstreamer/gst-plugins-good/Config.in   |  7 +++++++
- package/gstreamer1/gst1-plugins-good/Config.in |  7 +++++++
- package/icu/Config.in                          |  7 ++++---
- package/jack2/Config.in                        |  7 ++++---
- package/libftdi/Config.in                      |  2 ++
- package/libgtk2/Config.in                      |  2 ++
- package/librsvg/Config.in                      |  2 ++
- package/libsvg-cairo/Config.in                 |  1 +
- package/libtorrent/Config.in                   |  8 ++++----
- package/mpd/Config.in                          |  2 ++
- package/msgpack/Config.in                      |  4 ++--
- package/openocd/Config.in                      |  1 +
- package/pango/Config.in                        |  2 ++
- package/php/Config.ext                         |  8 ++++----
- package/pulseaudio/Config.in                   |  2 ++
- package/python-msgpack/Config.in               |  4 ++--
- package/qt5/qt5base/Config.in                  |  5 +----
- package/rtorrent/Config.in                     |  8 ++++----
- package/thrift/Config.in                       |  8 ++++----
- package/webkit/Config.in                       |  2 ++
- package/weston/Config.in                       |  2 ++
- toolchain/toolchain-common.in                  |  4 ----
- 42 files changed, 122 insertions(+), 44 deletions(-)
-
+diff --git a/arch/Config.in b/arch/Config.in
+index 9cd85a5..5cee0d7 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -250,6 +250,12 @@ config BR2_GCC_TARGET_FLOAT_ABI
+ config BR2_GCC_TARGET_MODE
+ 	string
+ 
++# If the architecture has atomic operations, select this:
++config BR2_ARCH_HAS_ATOMICS
++	bool
++	default y if !BR2_arc
++	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 836cfef..8a7f290 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,7 +1,7 @@
+ # Choise of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+-	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++	select BR2_ARCH_HAS_ATOMICS
+ 
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 6d43700..2fa4f61 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -46,7 +46,6 @@ config BR2_TOOLCHAIN_HAS_SSP
+ 
+ config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+ 	bool
+-	default y if !BR2_arc
+ 
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
