@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Aug 2014 09:12:11 +0200
-Subject: [Buildroot] [PATCH 2/2] libnftnl: add patch to avoid symbol
-	conflict
-In-Reply-To: <1408196148-15128-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 16 Aug 2014 15:35:48 +0200")
-References: <1408196148-15128-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408196148-15128-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871tsfzj1w.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Aug 2014 09:14:03 +0200
+Subject: [Buildroot] [PATCH] configs/{atngw100,
+	atstk100x}: fix build of AVR32 defconfigs
+In-Reply-To: <1408175061-13238-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 16 Aug 2014 09:44:21 +0200")
+References: <1408175061-13238-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wqa7y4ec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > When ELF binaries and shared libraries are used, the internal
- > functions of libnftnl such as xfree() are not visible to the outside
- > world (their visibility is 'hidden'). Therefore, the fact that other
- > programs (especially nftables) may have symbols with the same name
- > does not cause any problem.
-
- > However, when doing static linking on a non-ELF platform (such as
- > Blackfin, which uses the FLAT binary format), there is no way of
- > encoding this visibility. Therefore, the xfree() symbols of libnftnl
- > becomes visible to the outside world, causing a conflict with the
- > xfree() symbol defined by nftables.
-
- > To solve this, this patch renames the libnftnl xfree() function to
- > libnftnl_xfree().
-
- > This commit fixes a problem seen after building nftables statically on
- > Blackfin. This problem was seen after the previous patch fixing the
- > autobuilder failure:
-
- >   http://autobuild.buildroot.org/results/98b/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
+ > Since we marked the AVR32 architecture deprecated, it can no longer be
+ > selected in a normal configuration. This has caused the AVR32
+ > defconfigs to fail to build in our daily Jenkins tests. In order to
+ > make them build again, they must use BR2_DEPRECATED=y. Of course, when
+ > we remove AVR32 completely, we'll remove those defconfigs as well.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
