@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:21:29 +0200
-Subject: [Buildroot] [PATCH v2 3/3] php: add pdo_pgsql extension
-In-Reply-To: <1407938231-22544-3-git-send-email-bos@je-eigen-domein.nl>
-References: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
- <1407938231-22544-3-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20140817212129.034c7fc5@free-electrons.com>
+Date: Sun, 17 Aug 2014 21:23:58 +0200
+Subject: [Buildroot] [git commit] mpd: Fix config option for plugin FAAD2
+Message-ID: <20140817192609.D9D8F9D461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+commit: http://git.buildroot.net/buildroot/commit/?id=67dcfd23a97e24f0716b62a2e1d809488ace8e47
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 13 Aug 2014 15:57:11 +0200, Floris Bos wrote:
-> Adds support for the PDO PostgreSQL extension to the PHP package.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/php/Config.ext | 10 ++++++++++
->  package/php/php.mk     |  4 ++++
->  2 files changed, 14 insertions(+)
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied to next, with a minor change.
-
-
-> +comment "PostgreSQL needs an (e)glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-
-I've changed this to "PostgreSQL driver needs..."
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index e2ee760..cd18754 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -48,7 +48,7 @@ endif
+ ifeq ($(BR2_PACKAGE_MPD_FAAD2),y)
+ MPD_DEPENDENCIES += faad2
+ else
+-MPD_CONF_OPT += --disable-faad2
++MPD_CONF_OPT += --disable-aac
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_FLAC),y)
