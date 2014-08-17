@@ -1,53 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 21:29:51 +0200
-Subject: [Buildroot] [PATCH 12/24 v5] arch/arm: always has atomic ops
+Date: Sun, 17 Aug 2014 21:29:52 +0200
+Subject: [Buildroot] [PATCH 13/24 v5] arch/avr32: always has atomic ops
 In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr>
 References: <cover.1408303753.git.yann.morin.1998@free.fr>
-Message-ID: <ecb54cb0a9647883a9f7256661272780f4384d6e.1408303753.git.yann.morin.1998@free.fr>
+Message-ID: <971878f01388e9efe0fc6a8bdf2a353bf8b1cf83.1408303753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-armv6 and above all have one sort of atomic ops or another. For armv5
-and below, they are emulated, either as a kernel trap, a kernel VDSO,
-or compiler intrinsics.
-
-Aarch64 is just armv8, so make it a single commit. ;-)
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- arch/Config.in.aarch64 | 3 +++
- arch/Config.in.arm     | 3 +++
- 2 files changed, 6 insertions(+)
+ arch/Config.in.avr32 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-index 4c68a37..2e79870 100644
---- a/arch/Config.in.aarch64
-+++ b/arch/Config.in.aarch64
-@@ -3,3 +3,6 @@ config BR2_ARCH
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+index 8429589..fc1f4f6 100644
+--- a/arch/Config.in.avr32
++++ b/arch/Config.in.avr32
+@@ -6,3 +6,6 @@ config BR2_ENDIAN
  
- config BR2_ENDIAN
- 	default "LITTLE"
+ config BR2_GCC_TARGET_ARCH
+ 	default "ap"
 +
 +config BR2_ARCH_HAS_ATOMICS
 +	default y
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 4cc41f1..e404a50 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -340,6 +340,9 @@ config BR2_ENDIAN
- 	default "LITTLE" if BR2_arm
- 	default "BIG"	 if BR2_armeb
- 
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
-+
- config BR2_GCC_TARGET_CPU
- 	default "arm920"	if BR2_arm920
- 	default "arm920t"	if BR2_arm920t
 -- 
 1.9.1
