@@ -1,33 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:02:09 +0200
-Subject: [Buildroot] [git commit branch/next] package/sqlite: Bump version
-	to 3.8.6
-Message-ID: <20140817070955.79AED9D44A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Aug 2014 09:12:02 +0200
+Subject: [Buildroot] [PATCH 1/2] nftables: fix build in static scenarios
+In-Reply-To: <1408196148-15128-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 16 Aug 2014 15:35:47 +0200")
+References: <1408196148-15128-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8761hrzj25.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c3729b1dc1b88379aab43439b4f276c8d5bc33f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > When linking against readline, it forgets to link against ncurses,
+ > which is needed by readline. Fix this by passing LIBS="-lcurses" to
+ > the configure script.
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 1fd76c8..e30b710 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080500
-+SQLITE_VERSION = 3080600
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/98b/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
