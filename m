@@ -1,77 +1,137 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 17 Aug 2014 08:18:51 -0400
-Subject: [Buildroot] [PATCH] package/erlang: build host-erlang with
- support for openssl
-In-Reply-To: <20140817090126.GA5274@free.fr>
-References: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr>
- <87a973zj6w.fsf@dell.be.48ers.dk> <20140817090126.GA5274@free.fr>
-Message-ID: <CA+-urNTBKMEqxC4AAq+EyVEakbDvdeKoyQu+C=h-8cioKR=LsQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Aug 2014 14:49:12 +0200
+Subject: [Buildroot] [PATCH 0/24 v4] arch: move atomics to arch,
+	not toolchain (branch yem/atomics)
+Message-ID: <cover.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Peter, All,
+Hello All!
 
-On Sun, Aug 17, 2014 at 5:01 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Peter, All,
->
-> On 2014-08-17 09:09 +0200, Peter Korsgaard spake thusly:
->> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->>
->>  > Erlang uses openssl for all things crypto.
->>  > Since there are host Erlang tools that use crypto (such as rebar), we
->>  > need to build host-erlang with support for crypto, and thus it shall
->>  > depends on openssl.
->>
->>  > Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
->>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>  > Cc: Frank Hunleth <fhunleth@troodon-software.com>
->>  > Cc: Johan Oudinet <johan.oudinet@gmail.com>
->>
->>  > ---
->>  > Note: I am not sure whether this is the correct solution, to match the
->>  > host SSL support to the target SSL support. I'll let the erlang experts
->>  > enhance that patch if need be. ;-)
->
-> (Sorry, I should have removed this post-comit note in this v2)
->
->> Sorry, I must have missed the discussion about this. What exactly does
->> it fix?
->
-> Some Erlang packages (like ejabberd) use an Erlang script to do part of
-> the configure and build steps, thus we need a host Erlang.
->
-> This script may need to do some crypto stuff (e.g. to compute hashes,
-> or do https). In the Erlang world, all crypto stuff is implemented by
-> using oppenssl as the crypto backend.
->
-> So, we need a host Erlang with crypto support, and thus linked with
-> openssl.
->
->> Do we need it for 2014.08?
->
-> Well, it can well wait for after the release, if you're not at ease with
-> it. Currently, we have no package that require Erlang, not even the host
-> Erlang.
->
-> However, since our host-erlang not being ssl-aware, it means no one is
-> really using it, and thus bumping should not cause a regressiopn for
-> anyone.
+This series is a follow-up to, and includes Anton's series, to introduce
+awareness of atomic operations, so pacjages can be hidden-away on
+architectures that do not provide atomic operations.
 
-FWIW, I use it and a few other people I know use host-erlang.
+We've discussed this with Thomas on IRC and on the list, and although
+this comes late in the cycle, we both consider this to be materials for
+the *current* release.
 
-> No one, but me, has complained so far. ;-)
+I tried to cover all bases here, but there are architectures I have
+close-to-zero knowledge of, so please speak up if you disagree on my
+proposal.
 
-I find it amazing too that I haven't run into the issue or heard from
-anyone else. I have a couple build environments that I thought were
-minimal, but they clearly must have had the openssl dev packages
-installed or I would have seen it.
+The series is split in thre parts:
 
-Anyway, I agree with Yann, that there's no rush on getting the fix in
-for this release. Now that we know how the issue manifests itself,
-it's pretty easy to identify.
+  - patches 1..7 renames the option, and moves it out of toolchain and
+    to an architecture option, and add the option to the manual;
 
-Thanks,
-Frank
+  - patches 8..11 hides more packages due to their requiring atomics
+
+  - patches 12..24 convert all our architectures to selectively declare
+    their (non-)support for atomic ops, to finally get rid of the
+    generic default value.
+
+
+Changes v3 -> v4:
+  - rename the option into an architecture option  (Yann)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 8c94df28c75ff834ef77df781b753e0453b8c8dd:
+
+  CHANGES: update with recent changes (2014-08-17 09:44:53 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/atomics
+
+for you to fetch changes up to b8d37160ad1e6fafbba18de4733512650e00f6ec:
+
+  arch: remove no-longer default on atomics option (2014-08-17 14:32:07 +0200)
+
+----------------------------------------------------------------
+Anton Kolesov (5):
+      manual: document dependencies on atomic operations
+      cairo: add dependency on atomic operations
+      pulseaudio: add dependency on atomic operations
+      libftdi: add dependency on atomic operations
+      msgpack: add dependency on atomic operations
+
+Yann E. MORIN (19):
+      arch: add an option to specify if the arch has atomic ops
+      package/icu: use the new ARCH_HAS_ATOMICS as dependency
+      package/libtorrent: use the new ARCH_HAS_ATOMICS as dependency
+      package/jack2: use the new ARCH_HAS_ATOMICS as dependency
+      package/thrift: use the new ARCH_HAS_ATOMICS as dependency
+      toolchain: drop the now-unused old BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+      arch/arm: always has atomic ops
+      arch/avr32: always has atomic ops
+      arch/bfin: always has atomic ops
+      arch/m68k: always has atomic ops
+      arch/microblaze: always has atomic ops
+      arch/mips: always has atomic ops
+      arch/nios2: always has atomic ops
+      arch/powerpc: always has atomic ops
+      arch/sh: always has atomic ops
+      arch/sparc: always has atomic ops
+      arch/x86: all x86 but i386 has atomics operations
+      arch/xtensa: always has atomic ops
+      arch: remove no-longer default on atomics option
+
+ arch/Config.in                                 |  4 ++++
+ arch/Config.in.aarch64                         |  3 +++
+ arch/Config.in.arc                             |  2 +-
+ arch/Config.in.arm                             |  3 +++
+ arch/Config.in.avr32                           |  3 +++
+ arch/Config.in.bfin                            |  3 +++
+ arch/Config.in.m68k                            |  3 +++
+ arch/Config.in.microblaze                      |  3 +++
+ arch/Config.in.mips                            |  3 +++
+ arch/Config.in.nios2                           |  3 +++
+ arch/Config.in.powerpc                         |  3 +++
+ arch/Config.in.sh                              |  3 +++
+ arch/Config.in.sparc                           |  3 +++
+ arch/Config.in.x86                             |  3 +++
+ arch/Config.in.xtensa                          |  3 +++
+ docs/manual/adding-packages-directory.txt      |  4 ++++
+ package/beecrypt/Config.in                     | 12 ++++++------
+ package/cairo/Config.in                        |  1 +
+ package/cppcms/Config.in                       |  7 ++++---
+ package/efl/libevas-generic-loaders/Config.in  |  2 ++
+ package/gstreamer/gst-plugins-good/Config.in   |  7 +++++++
+ package/gstreamer1/gst1-plugins-good/Config.in |  7 +++++++
+ package/icu/Config.in                          |  7 ++++---
+ package/jack2/Config.in                        |  7 ++++---
+ package/libftdi/Config.in                      |  2 ++
+ package/libgtk2/Config.in                      |  2 ++
+ package/librsvg/Config.in                      |  2 ++
+ package/libsvg-cairo/Config.in                 |  1 +
+ package/libtorrent/Config.in                   |  8 ++++----
+ package/mpd/Config.in                          |  2 ++
+ package/msgpack/Config.in                      |  4 ++--
+ package/openocd/Config.in                      |  1 +
+ package/pango/Config.in                        |  2 ++
+ package/php/Config.ext                         |  8 ++++----
+ package/pulseaudio/Config.in                   |  2 ++
+ package/python-msgpack/Config.in               |  4 ++--
+ package/qt5/qt5base/Config.in                  |  5 +----
+ package/rtorrent/Config.in                     |  8 ++++----
+ package/thrift/Config.in                       |  8 ++++----
+ package/webkit/Config.in                       |  2 ++
+ package/weston/Config.in                       |  2 ++
+ toolchain/toolchain-common.in                  |  4 ----
+ 42 files changed, 122 insertions(+), 44 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
