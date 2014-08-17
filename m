@@ -1,52 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:48:58 +0200
-Subject: [Buildroot] [PATCH 06/24 v4] toolchain: drop the now-unused old
-	BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+Date: Sun, 17 Aug 2014 14:48:59 +0200
+Subject: [Buildroot] [PATCH 07/24 v4] manual: document dependencies on
+	atomic operations
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <9691404924201a04cd36d28fe1c358189498611e.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <4061c3ce3e322eed4f6a91e635133d0e0dd2e2f4.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's now been replaced with BR2_ARCH_HAS_ATOMICS, annd all packages have
-been changed to use that instead.
+From: Anton Kolesov <anton.kolesov@synopsys.com>
 
+Add atomic operations to the list of generic dependencies.
+
+Since this is an architecture option, there is no comment string to be
+added.
+
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in                | 1 -
- toolchain/toolchain-common.in | 3 ---
- 2 files changed, 4 deletions(-)
+ docs/manual/adding-packages-directory.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 5cee0d7..6bcafd4 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -254,7 +254,6 @@ config BR2_GCC_TARGET_MODE
- config BR2_ARCH_HAS_ATOMICS
- 	bool
- 	default y if !BR2_arc
--	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 93e6a3e..40a81d5 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -219,6 +219,10 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
  
- # Set up target binary format
- choice
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 2fa4f61..82ac26a 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -44,9 +44,6 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- config BR2_TOOLCHAIN_HAS_SSP
- 	bool
- 
--config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
--	bool
--
- config BR2_ENABLE_LOCALE_PURGE
- 	bool "Purge unwanted locales"
- 	help
++* Atomic operations
++** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
++** Comment string: no comment to be added
++
+ * Kernel headers
+ ** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+    +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
 -- 
 1.9.1
