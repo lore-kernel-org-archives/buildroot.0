@@ -1,53 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:49:04 +0200
-Subject: [Buildroot] [PATCH 12/24 v4] arch/arm: always has atomic ops
+Date: Sun, 17 Aug 2014 14:49:03 +0200
+Subject: [Buildroot] [PATCH 11/24 v4] msgpack: add dependency on atomic
+	operations
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <2503d78b90256ff7c74113d81e2119378f8d6fad.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <bc4ea5a8c90bfca8bb1d1018749760fce4eb9dbb.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-armv6 and above all have one sort of atomic ops or another. For armv5
-and below, they are emulated, either as a kernel trap, a kernel VDSO,
-or compiler intrinsics.
+From: Anton Kolesov <anton.kolesov@synopsys.com>
 
-Aarch64 is just armv8, so make it a single commit. ;-)
+This fixes:
+http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
 
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: use the new symbol; remove comment strings]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- arch/Config.in.aarch64 | 3 +++
- arch/Config.in.arm     | 3 +++
- 2 files changed, 6 insertions(+)
+ package/msgpack/Config.in        | 4 ++--
+ package/python-msgpack/Config.in | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-index 4c68a37..2e79870 100644
---- a/arch/Config.in.aarch64
-+++ b/arch/Config.in.aarch64
-@@ -3,3 +3,6 @@ config BR2_ARCH
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b380c58..a57a378 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc # atomic builtins
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  MessagePack is an efficient binary serialization format.
  
- config BR2_ENDIAN
- 	default "LITTLE"
-+
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 4cc41f1..e404a50 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -340,6 +340,9 @@ config BR2_ENDIAN
- 	default "LITTLE" if BR2_arm
- 	default "BIG"	 if BR2_armeb
+@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://msgpack.org/
  
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
-+
- config BR2_GCC_TARGET_CPU
- 	default "arm920"	if BR2_arm920
- 	default "arm920t"	if BR2_arm920t
+ comment "msgpack needs a toolchain w/ C++"
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index c4b68a3..ed0b432 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on !BR2_arc # msgpack - atomic builtins
++	depends on BR2_ARCH_HAS_ATOMICS # msgpack
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -13,6 +13,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+ comment "python-msgpack needs a toolchain w/ C++"
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
 -- 
 1.9.1
