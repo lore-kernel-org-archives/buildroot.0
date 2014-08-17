@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:17:18 +0200
-Subject: [Buildroot] [git commit] gcc/arc-4.8-R3: add patch to enable more
-	C++ features with uClibc
-Message-ID: <20140817072258.61D369C769@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 09:16:27 +0200
+Subject: [Buildroot] [git commit] gcc/4.8: add patch to enable more C++
+	features with uClibc
+Message-ID: <20140817072258.5226D9C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bb2a05e8133f2f553b8e0cd6af53dfa8b8208b1
+commit: http://git.buildroot.net/buildroot/commit/?id=f3d19b047aa38244e4eee7e826d68d54bb18101a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit fixes bug #7250, by allowing more libstdc++ features to be
@@ -33,14 +33,34 @@ Cc: Richard <tarka.t.otter@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch  |  273 ++++++++++++++++++++
- 1 files changed, 273 insertions(+), 0 deletions(-)
+ package/gcc/4.8.3/302-c99-snprintf.patch         |   13 -
+ package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch |  273 ++++++++++++++++++++++
+ 2 files changed, 273 insertions(+), 13 deletions(-)
 
-diff --git a/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
+diff --git a/package/gcc/4.8.3/302-c99-snprintf.patch b/package/gcc/4.8.3/302-c99-snprintf.patch
+deleted file mode 100644
+index cd4d2cc..0000000
+--- a/package/gcc/4.8.3/302-c99-snprintf.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
+-===================================================================
+---- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
+-+++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
+-@@ -138,7 +138,7 @@
+-   using ::vsprintf;
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
+- 
+- #undef snprintf
+- #undef vfscanf
+diff --git a/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
 new file mode 100644
-index 0000000..0d02ef0
+index 0000000..792976f
 --- /dev/null
-+++ b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
++++ b/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
 @@ -0,0 +1,273 @@
 +Allow C99-depending features of libstdc++ with uClibc
 +
@@ -89,7 +109,7 @@ index 0000000..0d02ef0
 +===================================================================
 +--- a/libstdc++-v3/include/bits/basic_string.h
 ++++ b/libstdc++-v3/include/bits/basic_string.h
-+@@ -2811,7 +2811,7 @@
++@@ -2809,7 +2809,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -306,7 +326,7 @@ index 0000000..0d02ef0
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cstdio
 ++++ b/libstdc++-v3/include/c_global/cstdio
-+@@ -138,7 +138,7 @@
++@@ -139,7 +139,7 @@
 +   using ::vsprintf;
 + } // namespace
 + 
