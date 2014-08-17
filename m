@@ -1,643 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:10:40 +0200
-Subject: [Buildroot] [git commit] libnftnl: add patch to avoid symbol
-	conflict
-Message-ID: <20140817072258.34A879C769@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 09:18:29 +0200
+Subject: [Buildroot] [git commit] gcc/4.7: fix C++ exceptions and
+	pthread_exit()
+Message-ID: <20140817072258.695359C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=06a603b8d55a5aea51a31c2d3f6f76d0b8218fc6
+commit: http://git.buildroot.net/buildroot/commit/?id=fea35ce67317aa0eee678fb9440814d1346fb2fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When ELF binaries and shared libraries are used, the internal
-functions of libnftnl such as xfree() are not visible to the outside
-world (their visibility is 'hidden'). Therefore, the fact that other
-programs (especially nftables) may have symbols with the same name
-does not cause any problem.
+Following the introduction of the support for the musl C library, the
+support of C++ exceptions or features like pthread_exit() got broken
+even with other libraries such as glibc. This was reported as bug #7028.
 
-However, when doing static linking on a non-ELF platform (such as
-Blackfin, which uses the FLAT binary format), there is no way of
-encoding this visibility. Therefore, the xfree() symbols of libnftnl
-becomes visible to the outside world, causing a conflict with the
-xfree() symbol defined by nftables.
+The problem was caused by the gcc patch needed to add support for
+musl, which modified the libgcc/unwind-dw2-fde-dip.c logic to decide
+whether USE_PT_GNU_EH_FRAME should be enabled or not. It completely
+removed the existing logic, replacing it by a single logic based on
+the definition of TARGET_DL_ITERATE_PHDR. However, this constant gets
+defined by the configure script only for Solaris, or Linux Musl
+platforms. For glibc/uClibc, the configure script does not define it,
+and therefore USE_PT_GNU_EH_FRAME is not defined, causing issues with
+exception handling.
 
-To solve this, this patch renames the libnftnl xfree() function to
-libnftnl_xfree().
+This patch fixes that by restoring all the logic of
+libgcc/unwind-dw2-fde-dip.c, and just adding the musl logic as one
+more case.
 
-This commit fixes a problem seen after building nftables statically on
-Blackfin. This problem was seen after the previous patch fixing the
-autobuilder failure:
+It has been successfully runtime tested using the two code examples
+provided in bug #7208, with uClibc, musl and glibc.
 
-  http://autobuild.buildroot.org/results/98b/98b707ffdeeb1cda94b7c1019ef29cf5fd7db8bf/
-
+Cc: Krzysztof Wrzalik <kwrzalik@gmail.com>
+Cc: David Bachelart <david.bachelart@bbright.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnftnl/libnftnl-0001-rename-xfree.patch |  596 +++++++++++++++++++++
- 1 files changed, 596 insertions(+), 0 deletions(-)
+ package/gcc/4.7.4/900-musl-support.patch |   61 +++++++++++------------------
+ 1 files changed, 23 insertions(+), 38 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl-0001-rename-xfree.patch b/package/libnftnl/libnftnl-0001-rename-xfree.patch
-new file mode 100644
-index 0000000..ed0acf0
---- /dev/null
-+++ b/package/libnftnl/libnftnl-0001-rename-xfree.patch
-@@ -0,0 +1,596 @@
-+Rename xfree() to libnftnl_xfree() to avoid symbol naming conflict
+diff --git a/package/gcc/4.7.4/900-musl-support.patch b/package/gcc/4.7.4/900-musl-support.patch
+index fffb84a..1cb6701 100644
+--- a/package/gcc/4.7.4/900-musl-support.patch
++++ b/package/gcc/4.7.4/900-musl-support.patch
+@@ -13,6 +13,12 @@ https://bitbucket.org/GregorR/musl-cross/src. Compared to the upstream version:
+    causing build failure. Bug reported upstream at
+    https://bitbucket.org/GregorR/musl-gcc-patches/issue/4/musl-gcc-patches-break-the-build-on.
+ 
++ * change the USE_PT_GNU_EH_FRAME logic to keep the existing gcc logic
++   and only add the musl one as an addition, not as a replacement. Not
++   doing this breaks C++ exception handling with glibc, because
++   USE_PT_GNU_EH_FRAME doesn't get defined due to the configure script
++   not testing dl_iterate_phdr() on any system except Solaris.
 +
-+When ELF binaries and shared libraries are used, the internal
-+functions of libnftnl such as xfree() are not visible to the outside
-+world (their visibility is 'hidden'). Therefore, the fact that other
-+programs (especially nftables) may have symbols with the same name
-+does not cause any problem.
-+
-+However, when doing static linking on a non-ELF platform (such as
-+Blackfin, which uses the FLAT binary format), there is no way of
-+encoding this visibility. Therefore, the xfree() symbols of libnftnl
-+becomes visible to the outside world, causing a conflict with the
-+xfree() symbol defined by nftables.
-+
-+To solve this, this patch renames the libnftnl xfree() function to
-+libnftnl_xfree().
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/chain.c
-+===================================================================
-+--- a/src/chain.c
-++++ b/src/chain.c
-+@@ -88,11 +88,11 @@
-+ void nft_chain_free(struct nft_chain *c)
-+ {
-+ 	if (c->table != NULL)
-+-		xfree(c->table);
-++		nftnl_xfree(c->table);
-+ 	if (c->type != NULL)
-+-		xfree(c->type);
-++		nftnl_xfree(c->type);
-+ 
-+-	xfree(c);
-++	nftnl_xfree(c);
-+ }
-+ EXPORT_SYMBOL(nft_chain_free);
-+ 
-+@@ -110,7 +110,7 @@
-+ 	switch (attr) {
-+ 	case NFT_CHAIN_ATTR_TABLE:
-+ 		if (c->table) {
-+-			xfree(c->table);
-++			nftnl_xfree(c->table);
-+ 			c->table = NULL;
-+ 		}
-+ 		break;
-+@@ -119,7 +119,7 @@
-+ 		return;
-+ 	case NFT_CHAIN_ATTR_TYPE:
-+ 		if (c->type) {
-+-			xfree(c->type);
-++			nftnl_xfree(c->type);
-+ 			c->type = NULL;
-+ 		}
-+ 		break;
-+@@ -164,7 +164,7 @@
-+ 		break;
-+ 	case NFT_CHAIN_ATTR_TABLE:
-+ 		if (c->table)
-+-			xfree(c->table);
-++			nftnl_xfree(c->table);
-+ 
-+ 		c->table = strdup(data);
-+ 		break;
-+@@ -194,7 +194,7 @@
-+ 		break;
-+ 	case NFT_CHAIN_ATTR_TYPE:
-+ 		if (c->type)
-+-			xfree(c->type);
-++			nftnl_xfree(c->type);
-+ 
-+ 		c->type = strdup(data);
-+ 		break;
-+@@ -714,7 +714,7 @@
-+ 		return -1;
-+ 
-+ 	if (c->table)
-+-		xfree(c->table);
-++		nftnl_xfree(c->table);
-+ 
-+ 	c->table = strdup(table);
-+ 	c->flags |= (1 << NFT_CHAIN_ATTR_TABLE);
-+@@ -743,7 +743,7 @@
-+ 			return -1;
-+ 
-+ 		if (c->type)
-+-			xfree(c->type);
-++			nftnl_xfree(c->type);
-+ 
-+ 		c->type = strdup(type);
-+ 		c->flags |= (1 << NFT_CHAIN_ATTR_TYPE);
-+@@ -991,7 +991,7 @@
-+ 		list_del(&r->head);
-+ 		nft_chain_free(r);
-+ 	}
-+-	xfree(list);
-++	nftnl_xfree(list);
-+ }
-+ EXPORT_SYMBOL(nft_chain_list_free);
-+ 
-+@@ -1070,6 +1070,6 @@
-+ 
-+ void nft_chain_list_iter_destroy(struct nft_chain_list_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_chain_list_iter_destroy);
-+Index: b/src/common.c
-+===================================================================
-+--- a/src/common.c
-++++ b/src/common.c
-+@@ -45,7 +45,7 @@
-+ 
-+ void nft_parse_err_free(struct nft_parse_err *err)
-+ {
-+-	xfree(err);
-++	nftnl_xfree(err);
-+ }
-+ EXPORT_SYMBOL(nft_parse_err_free);
-+ 
-+Index: b/src/expr.c
-+===================================================================
-+--- a/src/expr.c
-++++ b/src/expr.c
-+@@ -52,7 +52,7 @@
-+ 	if (expr->ops->free)
-+ 		expr->ops->free(expr);
-+ 
-+-	xfree(expr);
-++	nftnl_xfree(expr);
-+ }
-+ EXPORT_SYMBOL(nft_rule_expr_free);
-+ 
-+Index: b/src/expr/data_reg.c
-+===================================================================
-+--- a/src/expr/data_reg.c
-++++ b/src/expr/data_reg.c
-+@@ -130,7 +130,7 @@
-+ 				   NFT_XML_OPT, err);
-+ 	if (chain != NULL) {
-+ 		if (reg->chain)
-+-			xfree(reg->chain);
-++			nftnl_xfree(reg->chain);
-+ 
-+ 		reg->chain = strdup(chain);
-+ 	}
-+Index: b/src/expr/immediate.c
-+===================================================================
-+--- a/src/expr/immediate.c
-++++ b/src/expr/immediate.c
-+@@ -46,7 +46,7 @@
-+ 		break;
-+ 	case NFT_EXPR_IMM_CHAIN:
-+ 		if (imm->data.chain)
-+-			xfree(imm->data.chain);
-++			nftnl_xfree(imm->data.chain);
-+ 
-+ 		imm->data.chain = strdup(data);
-+ 		break;
-+Index: b/src/expr/log.c
-+===================================================================
-+--- a/src/expr/log.c
-++++ b/src/expr/log.c
-+@@ -37,7 +37,7 @@
-+ 	switch(type) {
-+ 	case NFT_EXPR_LOG_PREFIX:
-+ 		if (log->prefix)
-+-			xfree(log->prefix);
-++			nftnl_xfree(log->prefix);
-+ 
-+ 		log->prefix = strdup(data);
-+ 		break;
-+@@ -139,7 +139,7 @@
-+ 
-+ 	if (tb[NFTA_LOG_PREFIX]) {
-+ 		if (log->prefix)
-+-			xfree(log->prefix);
-++			nftnl_xfree(log->prefix);
-+ 
-+ 		log->prefix = strdup(mnl_attr_get_str(tb[NFTA_LOG_PREFIX]));
-+ 		e->flags |= (1 << NFT_EXPR_LOG_PREFIX);
-+@@ -320,7 +320,7 @@
-+ {
-+ 	struct nft_expr_log *log = nft_expr_data(e);
-+ 
-+-	xfree(log->prefix);
-++	nftnl_xfree(log->prefix);
-+ }
-+ 
-+ struct expr_ops expr_ops_log = {
-+Index: b/src/expr/match.c
-+===================================================================
-+--- a/src/expr/match.c
-++++ b/src/expr/match.c
-+@@ -50,7 +50,7 @@
-+ 		break;
-+ 	case NFT_EXPR_MT_INFO:
-+ 		if (mt->data)
-+-			xfree(mt->data);
-++			nftnl_xfree(mt->data);
-+ 
-+ 		mt->data = data;
-+ 		mt->data_len = data_len;
-+@@ -153,7 +153,7 @@
-+ 		void *match_data;
-+ 
-+ 		if (match->data)
-+-			xfree(match->data);
-++			nftnl_xfree(match->data);
-+ 
-+ 		match_data = calloc(1, len);
-+ 		if (match_data == NULL)
-+@@ -261,7 +261,7 @@
-+ {
-+ 	struct nft_expr_match *match = nft_expr_data(e);
-+ 
-+-	xfree(match->data);
-++	nftnl_xfree(match->data);
-+ }
-+ 
-+ struct expr_ops expr_ops_match = {
-+Index: b/src/expr/target.c
-+===================================================================
-+--- a/src/expr/target.c
-++++ b/src/expr/target.c
-+@@ -50,7 +50,7 @@
-+ 		break;
-+ 	case NFT_EXPR_TG_INFO:
-+ 		if (tg->data)
-+-			xfree(tg->data);
-++			nftnl_xfree(tg->data);
-+ 
-+ 		tg->data = data;
-+ 		tg->data_len = data_len;
-+@@ -153,7 +153,7 @@
-+ 		void *target_data;
-+ 
-+ 		if (target->data)
-+-			xfree(target->data);
-++			nftnl_xfree(target->data);
-+ 
-+ 		target_data = calloc(1, len);
-+ 		if (target_data == NULL)
-+@@ -262,7 +262,7 @@
-+ {
-+ 	struct nft_expr_target *target = nft_expr_data(e);
-+ 
-+-	xfree(target->data);
-++	nftnl_xfree(target->data);
-+ }
-+ 
-+ struct expr_ops expr_ops_target = {
-+Index: b/src/internal.h
-+===================================================================
-+--- a/src/internal.h
-++++ b/src/internal.h
-+@@ -143,7 +143,7 @@
-+ 			      uint32_t format, uint32_t flags);
-+ int nft_event_footer_fprintf(FILE *fp, uint32_t format, uint32_t flags);
-+ 
-+-void xfree(const void *ptr);
-++void nftnl_xfree(const void *ptr);
-+ 
-+ struct expr_ops;
-+ 
-+Index: b/src/mxml.c
-+===================================================================
-+--- a/src/mxml.c
-++++ b/src/mxml.c
-+@@ -82,7 +82,7 @@
-+ 		goto err_expr;
-+ 
-+ 	tree = mxmlLoadString(NULL, xml_text, MXML_OPAQUE_CALLBACK);
-+-	xfree(xml_text);
-++	nftnl_xfree(xml_text);
-+ 
-+ 	if (tree == NULL)
-+ 		goto err_expr;
-+Index: b/src/rule.c
-+===================================================================
-+--- a/src/rule.c
-++++ b/src/rule.c
-+@@ -74,11 +74,11 @@
-+ 		nft_rule_expr_free(e);
-+ 
-+ 	if (r->table != NULL)
-+-		xfree(r->table);
-++		nftnl_xfree(r->table);
-+ 	if (r->chain != NULL)
-+-		xfree(r->chain);
-++		nftnl_xfree(r->chain);
-+ 
-+-	xfree(r);
-++	nftnl_xfree(r);
-+ }
-+ EXPORT_SYMBOL(nft_rule_free);
-+ 
-+@@ -96,13 +96,13 @@
-+ 	switch (attr) {
-+ 	case NFT_RULE_ATTR_TABLE:
-+ 		if (r->table) {
-+-			xfree(r->table);
-++			nftnl_xfree(r->table);
-+ 			r->table = NULL;
-+ 		}
-+ 		break;
-+ 	case NFT_RULE_ATTR_CHAIN:
-+ 		if (r->chain) {
-+-			xfree(r->chain);
-++			nftnl_xfree(r->chain);
-+ 			r->chain = NULL;
-+ 		}
-+ 		break;
-+@@ -138,13 +138,13 @@
-+ 	switch(attr) {
-+ 	case NFT_RULE_ATTR_TABLE:
-+ 		if (r->table)
-+-			xfree(r->table);
-++			nftnl_xfree(r->table);
-+ 
-+ 		r->table = strdup(data);
-+ 		break;
-+ 	case NFT_RULE_ATTR_CHAIN:
-+ 		if (r->chain)
-+-			xfree(r->chain);
-++			nftnl_xfree(r->chain);
-+ 
-+ 		r->chain = strdup(data);
-+ 		break;
-+@@ -408,7 +408,7 @@
-+ 
-+ 	if (tb[NFTA_EXPR_DATA]) {
-+ 		if (expr->ops->parse(expr, tb[NFTA_EXPR_DATA]) < 0) {
-+-			xfree(expr);
-++			nftnl_xfree(expr);
-+ 			return -1;
-+ 		}
-+ 	}
-+@@ -506,7 +506,7 @@
-+ 			mnl_attr_get_payload(tb[NFTA_RULE_USERDATA]);
-+ 
-+ 		if (r->user.data)
-+-			xfree(r->user.data);
-++			nftnl_xfree(r->user.data);
-+ 
-+ 		r->user.len = mnl_attr_get_payload_len(tb[NFTA_RULE_USERDATA]);
-+ 
-+@@ -1074,7 +1074,7 @@
-+ 
-+ void nft_rule_expr_iter_destroy(struct nft_rule_expr_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_rule_expr_iter_destroy);
-+ 
-+@@ -1104,7 +1104,7 @@
-+ 		list_del(&r->head);
-+ 		nft_rule_free(r);
-+ 	}
-+-	xfree(list);
-++	nftnl_xfree(list);
-+ }
-+ EXPORT_SYMBOL(nft_rule_list_free);
-+ 
-+@@ -1189,6 +1189,6 @@
-+ 
-+ void nft_rule_list_iter_destroy(struct nft_rule_list_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_rule_list_iter_destroy);
-+Index: b/src/ruleset.c
-+===================================================================
-+--- a/src/ruleset.c
-++++ b/src/ruleset.c
-+@@ -48,7 +48,7 @@
-+ 		nft_set_list_free(r->set_list);
-+ 	if (r->flags & (1 << NFT_RULESET_ATTR_RULELIST))
-+ 		nft_rule_list_free(r->rule_list);
-+-	xfree(r);
-++	nftnl_xfree(r);
-+ }
-+ EXPORT_SYMBOL(nft_ruleset_free);
-+ 
-+Index: b/src/set.c
-+===================================================================
-+--- a/src/set.c
-++++ b/src/set.c
-+@@ -46,15 +46,15 @@
-+ 	struct nft_set_elem *elem, *tmp;
-+ 
-+ 	if (s->table != NULL)
-+-		xfree(s->table);
-++		nftnl_xfree(s->table);
-+ 	if (s->name != NULL)
-+-		xfree(s->name);
-++		nftnl_xfree(s->name);
-+ 
-+ 	list_for_each_entry_safe(elem, tmp, &s->element_list, head) {
-+ 		list_del(&elem->head);
-+ 		nft_set_elem_free(elem);
-+ 	}
-+-	xfree(s);
-++	nftnl_xfree(s);
-+ }
-+ EXPORT_SYMBOL(nft_set_free);
-+ 
-+@@ -70,14 +70,14 @@
-+ 	case NFT_SET_ATTR_TABLE:
-+ 		if (s->flags & (1 << NFT_SET_ATTR_TABLE))
-+ 			if (s->table) {
-+-				xfree(s->table);
-++				nftnl_xfree(s->table);
-+ 				s->table = NULL;
-+ 			}
-+ 		break;
-+ 	case NFT_SET_ATTR_NAME:
-+ 		if (s->flags & (1 << NFT_SET_ATTR_NAME))
-+ 			if (s->name) {
-+-				xfree(s->name);
-++				nftnl_xfree(s->name);
-+ 				s->name = NULL;
-+ 			}
-+ 		break;
-+@@ -117,13 +117,13 @@
-+ 	switch(attr) {
-+ 	case NFT_SET_ATTR_TABLE:
-+ 		if (s->table)
-+-			xfree(s->table);
-++			nftnl_xfree(s->table);
-+ 
-+ 		s->table = strdup(data);
-+ 		break;
-+ 	case NFT_SET_ATTR_NAME:
-+ 		if (s->name)
-+-			xfree(s->name);
-++			nftnl_xfree(s->name);
-+ 
-+ 		s->name = strdup(data);
-+ 		break;
-+@@ -827,7 +827,7 @@
-+ 		list_del(&s->head);
-+ 		nft_set_free(s);
-+ 	}
-+-	xfree(list);
-++	nftnl_xfree(list);
-+ }
-+ EXPORT_SYMBOL(nft_set_list_free);
-+ 
-+@@ -911,6 +911,6 @@
-+ 
-+ void nft_set_list_iter_destroy(struct nft_set_list_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_set_list_iter_destroy);
-+Index: b/src/set_elem.c
-+===================================================================
-+--- a/src/set_elem.c
-++++ b/src/set_elem.c
-+@@ -44,11 +44,11 @@
-+ {
-+ 	if (s->flags & (1 << NFT_SET_ELEM_ATTR_CHAIN)) {
-+ 		if (s->data.chain) {
-+-			xfree(s->data.chain);
-++			nftnl_xfree(s->data.chain);
-+ 			s->data.chain = NULL;
-+ 		}
-+ 	}
-+-	xfree(s);
-++	nftnl_xfree(s);
-+ }
-+ EXPORT_SYMBOL(nft_set_elem_free);
-+ 
-+@@ -64,7 +64,7 @@
-+ 	case NFT_SET_ELEM_ATTR_CHAIN:
-+ 		if (s->flags & (1 << NFT_SET_ELEM_ATTR_CHAIN)) {
-+ 			if (s->data.chain) {
-+-				xfree(s->data.chain);
-++				nftnl_xfree(s->data.chain);
-+ 				s->data.chain = NULL;
-+ 			}
-+ 		}
-+@@ -98,7 +98,7 @@
-+ 		break;
-+ 	case NFT_SET_ELEM_ATTR_CHAIN:	/* NFTA_SET_ELEM_DATA */
-+ 		if (s->data.chain)
-+-			xfree(s->data.chain);
-++			nftnl_xfree(s->data.chain);
-+ 
-+ 		s->data.chain = strdup(data);
-+ 		break;
-+@@ -290,7 +290,7 @@
-+ 		}
-+         }
-+ 	if (ret < 0) {
-+-		xfree(e);
-++		nftnl_xfree(e);
-+ 		return -1;
-+ 	}
-+ 
-+@@ -708,6 +708,6 @@
-+ 
-+ void nft_set_elems_iter_destroy(struct nft_set_elems_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_set_elems_iter_destroy);
-+Index: b/src/table.c
-+===================================================================
-+--- a/src/table.c
-++++ b/src/table.c
-+@@ -44,9 +44,9 @@
-+ void nft_table_free(struct nft_table *t)
-+ {
-+ 	if (t->flags & (1 << NFT_TABLE_ATTR_NAME))
-+-		xfree(t->name);
-++		nftnl_xfree(t->name);
-+ 
-+-	xfree(t);
-++	nftnl_xfree(t);
-+ }
-+ EXPORT_SYMBOL(nft_table_free);
-+ 
-+@@ -64,7 +64,7 @@
-+ 	switch (attr) {
-+ 	case NFT_TABLE_ATTR_NAME:
-+ 		if (t->name) {
-+-			xfree(t->name);
-++			nftnl_xfree(t->name);
-+ 			t->name = NULL;
-+ 		}
-+ 		break;
-+@@ -95,7 +95,7 @@
-+ 	switch (attr) {
-+ 	case NFT_TABLE_ATTR_NAME:
-+ 		if (t->name)
-+-			xfree(t->name);
-++			nftnl_xfree(t->name);
-+ 
-+ 		t->name = strdup(data);
-+ 		break;
-+@@ -270,7 +270,7 @@
-+ 		return -1;
-+ 
-+ 	if (t->name)
-+-		xfree(t->name);
-++		nftnl_xfree(t->name);
-+ 
-+ 	t->name = strdup(name);
-+ 	t->flags |= (1 << NFT_TABLE_ATTR_NAME);
-+@@ -507,7 +507,7 @@
-+ 		list_del(&r->head);
-+ 		nft_table_free(r);
-+ 	}
-+-	xfree(list);
-++	nftnl_xfree(list);
-+ }
-+ EXPORT_SYMBOL(nft_table_list_free);
-+ 
-+@@ -586,6 +586,6 @@
-+ 
-+ void nft_table_list_iter_destroy(struct nft_table_list_iter *iter)
-+ {
-+-	xfree(iter);
-++	nftnl_xfree(iter);
-+ }
-+ EXPORT_SYMBOL(nft_table_list_iter_destroy);
-+Index: b/src/utils.c
-+===================================================================
-+--- a/src/utils.c
-++++ b/src/utils.c
-+@@ -180,7 +180,7 @@
-+ 	return -1;
-+ }
-+ 
-+-void xfree(const void *ptr)
-++void nftnl_xfree(const void *ptr)
-+ {
-+ 	free((void *)ptr);
-+ }
-+@@ -214,7 +214,7 @@
-+ 
-+ out:
-+ 	if (buf != _buf)
-+-		xfree(buf);
-++		nftnl_xfree(buf);
-+ 
-+ 	return ret;
-+ }
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+ 
+@@ -71,7 +77,7 @@ Index: b/gcc/config.gcc
+      *)
+        tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
+        ;;
+-@@ -2092,6 +2095,10 @@
++@@ -2091,6 +2094,10 @@
+  	    powerpc*-*-linux*paired*)
+  		tm_file="${tm_file} rs6000/750cl.h" ;;
+  	esac
+@@ -299,46 +305,25 @@ Index: b/libgcc/unwind-dw2-fde-dip.c
+ ===================================================================
+ --- a/libgcc/unwind-dw2-fde-dip.c
+ +++ b/libgcc/unwind-dw2-fde-dip.c
+-@@ -47,28 +47,13 @@
+- #include "unwind-compat.h"
+- #include "gthr.h"
+- 
+--#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+--    && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ > 2) \
+--	|| (__GLIBC__ == 2 && __GLIBC_MINOR__ == 2 && defined(DT_CONFIG)))
+--# define USE_PT_GNU_EH_FRAME
+--#endif
+--
+--#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+--    && defined(__FreeBSD__) && __FreeBSD__ >= 7
+--# define ElfW __ElfN
+--# define USE_PT_GNU_EH_FRAME
+--#endif
+--
+--#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+--    && defined(__OpenBSD__)
+--# define ElfW(type) Elf_##type
+--# define USE_PT_GNU_EH_FRAME
+--#endif
+--
+--#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+--    && defined(TARGET_DL_ITERATE_PHDR) \
+--    && defined(__sun__) && defined(__svr4__)
+-+#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) && defined(TARGET_DL_ITERATE_PHDR)
++@@ -71,6 +71,13 @@
+  # define USE_PT_GNU_EH_FRAME
+-+# ifdef __OpenBSD__
+-+#  define ElfW(type) Elf_##typ
+-+# elif defined(__FreeBSD__) && __FreeBSD__ >= 7
+-+#  define ElfW __ElfN
+-+# endif
+  #endif
+  
+++/* For musl libc, TARGET_DL_ITERATE_PHDR gets defined by the configure
+++   script. */
+++#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+++    && defined(TARGET_DL_ITERATE_PHDR)
+++# define USE_PT_GNU_EH_FRAME
+++#endif
+++
+  #if defined(USE_PT_GNU_EH_FRAME)
++ 
++ #include <link.h>
+ Index: b/gcc/configure
+ ===================================================================
+ --- a/gcc/configure
+ +++ b/gcc/configure
+-@@ -26787,6 +26787,9 @@
++@@ -26791,6 +26791,9 @@
+  else
+    gcc_cv_libc_provides_ssp=no
+      case "$target" in
+@@ -348,7 +333,7 @@ Index: b/gcc/configure
+         *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+        # glibc 2.4 and later provides __stack_chk_fail and
+        # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -26820,6 +26823,7 @@
++@@ -26824,6 +26827,7 @@
+  	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+  	 # simply assert that glibc does provide this, which is true for all
+  	 # realistically usable GNU/Hurd configurations.
+@@ -356,7 +341,7 @@ Index: b/gcc/configure
+  	 gcc_cv_libc_provides_ssp=yes;;
+         *-*-darwin* | *-*-freebsd*)
+  	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
+-@@ -26902,6 +26906,9 @@
++@@ -26906,6 +26910,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+      ;;
+@@ -370,7 +355,7 @@ Index: b/gcc/configure.ac
+ ===================================================================
+ --- a/gcc/configure.ac
+ +++ b/gcc/configure.ac
+-@@ -4664,6 +4664,9 @@
++@@ -4669,6 +4669,9 @@
+        gcc_cv_libc_provides_ssp,
+        [gcc_cv_libc_provides_ssp=no
+      case "$target" in
+@@ -380,7 +365,7 @@ Index: b/gcc/configure.ac
+         *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
+        [# glibc 2.4 and later provides __stack_chk_fail and
+        # either __stack_chk_guard, or TLS access to stack guard canary.
+-@@ -4697,6 +4700,7 @@
++@@ -4702,6 +4705,7 @@
+  	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
+  	 # simply assert that glibc does provide this, which is true for all
+  	 # realistically usable GNU/Hurd configurations.
+@@ -388,7 +373,7 @@ Index: b/gcc/configure.ac
+  	 gcc_cv_libc_provides_ssp=yes;;
+         *-*-darwin* | *-*-freebsd*)
+  	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
+-@@ -4762,6 +4766,9 @@
++@@ -4767,6 +4771,9 @@
+        gcc_cv_target_dl_iterate_phdr=no
+      fi
+      ;;
