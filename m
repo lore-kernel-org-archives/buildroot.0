@@ -1,37 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 21:30:03 +0200
-Subject: [Buildroot] [PATCH 24/24 v5] arch: remove no-longer default on
-	atomics option
-In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr>
-References: <cover.1408303753.git.yann.morin.1998@free.fr>
-Message-ID: <a2b1d4aad5e0611dce67c2bfed7cb724d0b6843a.1408303753.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Aug 2014 21:22:14 +0200
+Subject: [Buildroot] [PATCH v2 1/3] postgresql: add replacement pg_config
+In-Reply-To: <20140817212038.2b7879ca@free-electrons.com>
+References: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
+ <20140817212038.2b7879ca@free-electrons.com>
+Message-ID: <20140817212214.6744d57f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all architectures explicitly select this option when it makes
-sense, there is no need to have a default value.
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
----
- arch/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+On Sun, 17 Aug 2014 21:20:38 +0200, Thomas Petazzoni wrote:
+> Dear Floris Bos,
+> 
+> On Wed, 13 Aug 2014 15:57:09 +0200, Floris Bos wrote:
+> > Normally pg_config is a native application compiled for the
+> > target architecture. Since we cannot execute those on the
+> > host system, provide a simple shell script as replacement.
+> > 
+> > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> > ---
+> >  package/postgresql/pg_config     | 19 +++++++++++++++++++
+> >  package/postgresql/postgresql.mk |  8 ++++++++
+> >  2 files changed, 27 insertions(+)
+> >  create mode 100644 package/postgresql/pg_config
+> 
+> Applied, thanks.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 6bcafd4..1126d43 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -253,7 +253,6 @@ config BR2_GCC_TARGET_MODE
- # If the architecture has atomic operations, select this:
- config BR2_ARCH_HAS_ATOMICS
- 	bool
--	default y if !BR2_arc
- 
- # Set up target binary format
- choice
+Sorry forgot to mention this: I applied this to the next branch, not
+the master branch.
+
+Thanks,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
