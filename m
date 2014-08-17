@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 09:36:21 +0200
-Subject: [Buildroot] [PATCH] package/lame: Fix compile on 32bit Intel
- with gcc-4.9.x
-In-Reply-To: <1408227494-20770-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1408227494-20770-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140817093621.664fad88@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Aug 2014 09:41:46 +0200
+Subject: [Buildroot] [PATCHv2 5/7] gcc/4.7: fix C++ exceptions and
+	pthread_exit()
+In-Reply-To: <87sikvy44v.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 17 Aug 2014 09:19:44 +0200")
+References: <1408120684-18295-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408120684-18295-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87sikvy44v.fsf@dell.be.48ers.dk>
+Message-ID: <87fvgvy345.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-On Sun, 17 Aug 2014 00:18:14 +0200, Bernd Kuhls wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+ >> Following the introduction of the support for the musl C library, the
+ >> support of C++ exceptions or features like pthread_exit() got broken
+ >> even with other libraries such as glibc. This was reported as bug
 
-> +# http://lists.linuxfromscratch.org/pipermail/blfs-dev/2014-April/027259.html
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56145
-> +ifeq ($(BR2_i386)$(BR2_GCC_VERSION_4_9_X),yy)
-> +define LAME_COMPILE_FIX
-> +	$(SED) '/xmmintrin\.h/d' $(@D)/configure
-> +endef
-> +LAME_PRE_CONFIGURE_HOOKS += LAME_COMPILE_FIX
-> +endif
 
-Unfortunately, this sort of check is not really acceptable, because it
-doesn't work with external toolchains: BR2_GCC_VERSION_* symbols are
-defined only for internal toolchains.
+ > Git commit just ate your '#7028' here as it thought it was a
+ > comment. I've fixed it while committing.
 
-Best regards,
+Argh, it should have been #7208 instead :/ Sorry.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
