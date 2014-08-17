@@ -1,58 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:49:02 +0200
-Subject: [Buildroot] [PATCH 10/24 v4] libftdi: add dependency on atomic
-	operations
+Date: Sun, 17 Aug 2014 14:49:04 +0200
+Subject: [Buildroot] [PATCH 12/24 v4] arch/arm: always has atomic ops
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <7d9129e9179ce51121a915b7bd58ca2c08d6b5ec.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <2503d78b90256ff7c74113d81e2119378f8d6fad.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Anton Kolesov <anton.kolesov@synopsys.com>
+armv6 and above all have one sort of atomic ops or another. For armv5
+and below, they are emulated, either as a kernel trap, a kernel VDSO,
+or compiler intrinsics.
 
-This fixes:
-http://autobuild.buildroot.net/results/6cb25ed954840109c9d0e582e922b0ba9d07e174/
+Aarch64 is just armv8, so make it a single commit. ;-)
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-[yann.morin.1998 at free.fr: use the new symbol; remove comment strings]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/libftdi/Config.in | 2 ++
- package/openocd/Config.in | 1 +
- 2 files changed, 3 insertions(+)
+ arch/Config.in.aarch64 | 3 +++
+ arch/Config.in.arm     | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-index dc81514..76b30b1 100644
---- a/package/libftdi/Config.in
-+++ b/package/libftdi/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBFTDI
- 	bool "libftdi"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
-@@ -19,4 +20,5 @@ config BR2_PACKAGE_LIBTFDI_CPP
- endif # BR2_PACKAGE_LIBFTDI
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+index 4c68a37..2e79870 100644
+--- a/arch/Config.in.aarch64
++++ b/arch/Config.in.aarch64
+@@ -3,3 +3,6 @@ config BR2_ARCH
  
- comment "libftdi needs a toolchain w/ threads"
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index 7f96ef8..9440c65 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -14,6 +14,7 @@ comment "Adapters"
+ config BR2_ENDIAN
+ 	default "LITTLE"
++
++config BR2_ARCH_HAS_ATOMICS
++	default y
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 4cc41f1..e404a50 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -340,6 +340,9 @@ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_arm
+ 	default "BIG"	 if BR2_armeb
  
- config BR2_PACKAGE_OPENOCD_FT2XXX
- 	bool "FT2xxx/FT4xxx Based JTAG Programmer"
-+	depends on BR2_ARCH_HAS_ATOMICS # libftdi
- 	select BR2_PACKAGE_LIBFTDI
- 	help
- 	  Enable building support for FT2232 based devices
++config BR2_ARCH_HAS_ATOMICS
++	default y
++
+ config BR2_GCC_TARGET_CPU
+ 	default "arm920"	if BR2_arm920
+ 	default "arm920t"	if BR2_arm920t
 -- 
 1.9.1
