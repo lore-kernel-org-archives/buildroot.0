@@ -1,49 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 14:55:08 +0200
-Subject: [Buildroot] [PATCH] package/lame: Fix compile on 32bit Intel
- with gcc-4.9.x
-In-Reply-To: <XnsA38C830E65DF6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1408227494-20770-1-git-send-email-bernd.kuhls@t-online.de>
- <20140817093621.664fad88@free-electrons.com>
- <XnsA38C830E65DF6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140817145508.22d9d4ed@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 17 Aug 2014 14:55:06 +0200
+Subject: [Buildroot] [PATCH 01/24 v4] arch: add an option to specify if
+	the	arch has atomic ops
+In-Reply-To: <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
+References: <cover.1408279142.git.yann.morin.1998@free.fr>
+ <7d72fe60f396407b4fbc68ba8f9910cda0fe24a8.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <bd3543da-f3d3-4236-be5a-d6c85e8305ce@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Sun, 17 Aug 2014 12:53:00 +0200, Bernd Kuhls wrote:
-
-> I understand, but removing the gcc version check, which would remove 
-> support for xmmintrin.h in all i386 builds, would remove the mmx support 
-> for lame on many builds, where it is not necessary.
-
-Yes, understood. Maybe instead add some conditional code in lame to
-enable the MMX stuff only with known working gcc versions? I think
-there are some #define you can test to get the gcc version.
-
-> Would something like this, extended to all external toolchains, be 
-> acceptable?
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>The fact that atomic operations are available is not really a
+>specificity of the toolchain, but rather of the architecture.
+>
+>So, add a new option that architectures that have atomic operations
+>can select. This in turn selects the current toolchain atomic option,
+>until all packages have been converted, at which point the old
+>toolchain option can be removed.
+>
+>Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>---
+> arch/Config.in                | 6 ++++++
+> arch/Config.in.arc            | 2 +-
+> toolchain/toolchain-common.in | 1 -
+> 3 files changed, 7 insertions(+), 2 deletions(-)
+>
+>diff --git a/arch/Config.in b/arch/Config.in
+>index 9cd85a5..5cee0d7 100644
+>--- a/arch/Config.in
+>+++ b/arch/Config.in
+>@@ -250,6 +250,12 @@ config BR2_GCC_TARGET_FLOAT_ABI
+> config BR2_GCC_TARGET_MODE
+> 	string
 > 
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -18,6 +18,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->         select BR2_INSTALL_LIBSTDCPP
->         select BR2_HOSTARCH_NEEDS_IA32_LIBS
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-> +       select BR2_GCC_VERSION_4_9_X
->         help
->           Linaro toolchain for the ARM architecture. It uses Linaro
->           GCC 2014.05 (based on gcc 4.9), Linaro GDB 2014.05 (based on
+>+# If the architecture has atomic operations, select this:
+>+config BR2_ARCH_HAS_ATOMICS
+>+	bool
+>+	default y if !BR2_arc
+>+	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>+
 
-That works only for "known" external toolchains: it won't work with
-custom external toolchains.
+Is there a specific reason why the option is now
+ dubbed ATOMICS iso ATOMIC_INTRINSICS?
 
+The latter may be a bit more descriptive, no?
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
