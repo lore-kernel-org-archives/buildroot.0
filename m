@@ -1,76 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:18:09 +0200
-Subject: [Buildroot] [git commit branch/next] postgresql: add replacement
-	pg_config
-Message-ID: <20140817192026.670D89D461@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 21:19:50 +0200
+Subject: [Buildroot] [git commit branch/next] php: add pdo_pgsql extension
+Message-ID: <20140817192026.71DEC9D462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9dbaa77263f545f3af5fce0276b3e34dbc467d5
+commit: http://git.buildroot.net/buildroot/commit/?id=742f8efa08fc0f3fef2b1ea0c8ee283fced6bbab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Normally pg_config is a native application compiled for the
-target architecture. Since we cannot execute those on the
-host system, provide a simple shell script as replacement.
+Adds support for the PDO PostgreSQL extension to the PHP package.
+
+[Thomas: slightly adjust Config.in comment to indicate that's it's the
+"Postgresql driver" that needs (e)glibc and not just "Postgresql".]
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/pg_config     |   19 +++++++++++++++++++
- package/postgresql/postgresql.mk |    8 ++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+ package/php/Config.ext |   10 ++++++++++
+ package/php/php.mk     |    4 ++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
-new file mode 100644
-index 0000000..85c0e63
---- /dev/null
-+++ b/package/postgresql/pg_config
-@@ -0,0 +1,19 @@
-+#!/bin/sh
-+
-+#
-+# Minimal pg_config implementation as replacement for the native pg_config application
-+# Only implements --includedir and --libdir
-+#
-+
-+prefix=/usr
-+
-+case "$1" in
-+  --includedir)
-+	echo "$prefix/include"
-+	;;
-+  --libdir)
-+	echo "$prefix/lib"
-+	;;
-+  *)
-+	echo "Usage: $0 {--includedir|--libdir}"
-+esac
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 6941e55..dd2e678 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -11,6 +11,7 @@ POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 078be8d..cac2892 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -135,6 +135,16 @@ comment "MySQL drivers need a toolchain w/ C++"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP
  
- POSTGRESQL_INSTALL_STAGING = YES
-+POSTGRESQL_CONFIG_SCRIPTS = pg_config
- 
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPT += --disable-thread-safety
-@@ -55,6 +56,13 @@ endef
- 
- POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
- 
-+define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
-+	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
-+		$(STAGING_DIR)/usr/bin/pg_config
-+endef
++config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
++	bool "PostgreSQL"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  PDO driver for PostgreSQL
 +
-+POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
++comment "PostgreSQL driver needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
 +
- define POSTGRESQL_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
- 		$(TARGET_DIR)/etc/init.d/S50postgresql
+ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	bool "SQLite3"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index de7d668..d0418ad 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -162,6 +162,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
+ 	PHP_CONF_OPT += --with-pdo-mysql=$(STAGING_DIR)/usr
+ 	PHP_DEPENDENCIES += mysql
+ endif
++ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
++	PHP_CONF_OPT += --with-pdo-pgsql=$(STAGING_DIR)/usr
++	PHP_DEPENDENCIES += postgresql
++endif
+ endif
+ 
+ ### Use external PCRE if it's available
