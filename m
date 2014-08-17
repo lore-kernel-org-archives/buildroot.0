@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Aug 2014 09:16:27 +0200
-Subject: [Buildroot] [git commit] gcc/4.8: add patch to enable more C++
+Date: Sun, 17 Aug 2014 09:17:08 +0200
+Subject: [Buildroot] [git commit] gcc/4.9: add patch to enable more C++
 	features with uClibc
-Message-ID: <20140817072258.5226D9C769@busybox.osuosl.org>
+Message-ID: <20140817072258.5AA339C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3d19b047aa38244e4eee7e826d68d54bb18101a
+commit: http://git.buildroot.net/buildroot/commit/?id=452404b7c8ff4953d3de8ad94a8294d6c66afc03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit fixes bug #7250, by allowing more libstdc++ features to be
@@ -33,14 +33,14 @@ Cc: Richard <tarka.t.otter@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/4.8.3/302-c99-snprintf.patch         |   13 -
- package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch |  273 ++++++++++++++++++++++
+ package/gcc/4.9.1/302-c99-snprintf.patch         |   13 -
+ package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch |  273 ++++++++++++++++++++++
  2 files changed, 273 insertions(+), 13 deletions(-)
 
-diff --git a/package/gcc/4.8.3/302-c99-snprintf.patch b/package/gcc/4.8.3/302-c99-snprintf.patch
+diff --git a/package/gcc/4.9.1/302-c99-snprintf.patch b/package/gcc/4.9.1/302-c99-snprintf.patch
 deleted file mode 100644
 index cd4d2cc..0000000
---- a/package/gcc/4.8.3/302-c99-snprintf.patch
+--- a/package/gcc/4.9.1/302-c99-snprintf.patch
 +++ /dev/null
 @@ -1,13 +0,0 @@
 -Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
@@ -56,11 +56,11 @@ index cd4d2cc..0000000
 - 
 - #undef snprintf
 - #undef vfscanf
-diff --git a/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
+diff --git a/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
 new file mode 100644
-index 0000000..792976f
+index 0000000..331cdcb
 --- /dev/null
-+++ b/package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
++++ b/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
 @@ -0,0 +1,273 @@
 +Allow C99-depending features of libstdc++ with uClibc
 +
@@ -109,7 +109,7 @@ index 0000000..792976f
 +===================================================================
 +--- a/libstdc++-v3/include/bits/basic_string.h
 ++++ b/libstdc++-v3/include/bits/basic_string.h
-+@@ -2809,7 +2809,7 @@
++@@ -2828,7 +2828,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -209,7 +209,7 @@ index 0000000..792976f
 +===================================================================
 +--- a/libstdc++-v3/include/c_std/cstdio
 ++++ b/libstdc++-v3/include/c_std/cstdio
-+@@ -139,7 +139,7 @@
++@@ -144,7 +144,7 @@
 +   using ::vsprintf;
 + } // namespace std
 + 
@@ -248,7 +248,7 @@ index 0000000..792976f
 +===================================================================
 +--- a/libstdc++-v3/include/ext/vstring.h
 ++++ b/libstdc++-v3/include/ext/vstring.h
-+@@ -2571,7 +2571,7 @@
++@@ -2680,7 +2680,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -313,7 +313,7 @@ index 0000000..792976f
 +===================================================================
 +--- a/libstdc++-v3/src/c++11/debug.cc
 ++++ b/libstdc++-v3/src/c++11/debug.cc
-+@@ -787,7 +787,7 @@
++@@ -788,7 +788,7 @@
 + 				     int __n __attribute__ ((__unused__)), 
 + 				     const char* __fmt, _Tp __s) const throw ()
 +     {
@@ -326,7 +326,7 @@ index 0000000..792976f
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cstdio
 ++++ b/libstdc++-v3/include/c_global/cstdio
-+@@ -139,7 +139,7 @@
++@@ -146,7 +146,7 @@
 +   using ::vsprintf;
 + } // namespace
 + 
