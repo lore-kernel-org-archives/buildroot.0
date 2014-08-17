@@ -1,75 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:18:09 +0200
-Subject: [Buildroot] [git commit] postgresql: add replacement pg_config
-Message-ID: <20140901132446.03D509D5B9@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 21:32:47 +0200
+Subject: [Buildroot] [git commit] odhcploc: new package
+Message-ID: <20140901132446.1F8B59D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9dbaa77263f545f3af5fce0276b3e34dbc467d5
+commit: http://git.buildroot.net/buildroot/commit/?id=039cd77e642f3473e439b241b76280036ce96f36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Normally pg_config is a native application compiled for the
-target architecture. Since we cannot execute those on the
-host system, provide a simple shell script as replacement.
+Adds odhcploc, a network utility to scan for (rogue) DHCP servers.
+
+[Thomas:
+- remove ODHCPLOC_SOURCE line, not needed since the value was the
+  default
+- use 'make install' instead of manually installing the program
+- use TARGET_CONFIGURE_OPTS instead of passing just CC and LD
+- use tab for indentation inside command definitions instead of spaces]
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/pg_config     |   19 +++++++++++++++++++
- package/postgresql/postgresql.mk |    8 ++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+ package/Config.in            |    1 +
+ package/odhcploc/Config.in   |    8 ++++++++
+ package/odhcploc/odhcploc.mk |   20 ++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+diff --git a/package/Config.in b/package/Config.in
+index 4520ba6..7bb8fc0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1031,6 +1031,7 @@ endif
+ 	source "package/noip/Config.in"
+ 	source "package/ntp/Config.in"
+ 	source "package/nuttcp/Config.in"
++	source "package/odhcploc/Config.in"
+ 	source "package/olsr/Config.in"
+ 	source "package/openntpd/Config.in"
+ 	source "package/openobex/Config.in"
+diff --git a/package/odhcploc/Config.in b/package/odhcploc/Config.in
 new file mode 100644
-index 0000000..85c0e63
+index 0000000..74bf363
 --- /dev/null
-+++ b/package/postgresql/pg_config
-@@ -0,0 +1,19 @@
-+#!/bin/sh
++++ b/package/odhcploc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ODHCPLOC
++	bool "odhcploc"
++	help
++	  Open DHCP Locate (ODHCPLoc) is program to locate and
++	  display active DHCP servers on a subnet.
++	  Can be used to scan for rogue DHCP servers.
 +
++	  http://odhcploc.sourceforge.net/
+diff --git a/package/odhcploc/odhcploc.mk b/package/odhcploc/odhcploc.mk
+new file mode 100644
+index 0000000..3995551
+--- /dev/null
++++ b/package/odhcploc/odhcploc.mk
+@@ -0,0 +1,20 @@
++################################################################################
 +#
-+# Minimal pg_config implementation as replacement for the native pg_config application
-+# Only implements --includedir and --libdir
++# odhcploc
 +#
++################################################################################
 +
-+prefix=/usr
++ODHCPLOC_VERSION = 20111021
++ODHCPLOC_SITE = http://downloads.sourceforge.net/project/odhcploc/$(ODHCPLOC_VERSION)
++ODHCPLOC_LICENSE = ISC
++ODHCPLOC_LICENSE_FILES = COPYING
 +
-+case "$1" in
-+  --includedir)
-+	echo "$prefix/include"
-+	;;
-+  --libdir)
-+	echo "$prefix/lib"
-+	;;
-+  *)
-+	echo "Usage: $0 {--includedir|--libdir}"
-+esac
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 6941e55..dd2e678 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -11,6 +11,7 @@ POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
- 
- POSTGRESQL_INSTALL_STAGING = YES
-+POSTGRESQL_CONFIG_SCRIPTS = pg_config
- 
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPT += --disable-thread-safety
-@@ -55,6 +56,13 @@ endef
- 
- POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
- 
-+define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
-+	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
-+		$(STAGING_DIR)/usr/bin/pg_config
++define ODHCPLOC_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 +endef
 +
-+POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
++define ODHCPLOC_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
 +
- define POSTGRESQL_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
- 		$(TARGET_DIR)/etc/init.d/S50postgresql
++$(eval $(generic-package))
