@@ -1,152 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 14:48:54 +0200
-Subject: [Buildroot] [PATCH 02/24 v4] package/icu: use the new
+Date: Sun, 17 Aug 2014 14:48:55 +0200
+Subject: [Buildroot] [PATCH 03/24 v4] package/libtorrent: use the new
 	ARCH_HAS_ATOMICS as dependency
 In-Reply-To: <cover.1408279142.git.yann.morin.1998@free.fr>
 References: <cover.1408279142.git.yann.morin.1998@free.fr>
-Message-ID: <0f0239fc5e2c7193d730d8ff56b963890e919742.1408279142.git.yann.morin.1998@free.fr>
+Message-ID: <82387e77a6d9509330a6fddd39b90ce394835fd6.1408279142.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And propagate to the reverse dependencies of icu.
-Also, fix beecrypt's comment: only the C++ support needs atomics.
+And propagate to the reverse dependencies of libtorrent
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/beecrypt/Config.in    | 12 ++++++------
- package/cppcms/Config.in      |  7 ++++---
- package/icu/Config.in         |  7 ++++---
- package/php/Config.ext        |  8 ++++----
- package/qt5/qt5base/Config.in |  5 +----
- 5 files changed, 19 insertions(+), 20 deletions(-)
+ package/libtorrent/Config.in | 8 ++++----
+ package/rtorrent/Config.in   | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index e0f9181..b9685ef 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -1,5 +1,5 @@
--comment "beecrypt needs a toolchain w/ threads, atomic intrinsics"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+comment "beecrypt needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_BEECRYPT
- 	bool "beecrypt"
-@@ -15,15 +15,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
- 	bool "C++ support"
+diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+index a706d98..aac71fa 100644
+--- a/package/libtorrent/Config.in
++++ b/package/libtorrent/Config.in
+@@ -2,13 +2,13 @@ config BR2_PACKAGE_LIBTORRENT
+ 	bool "libtorrent"
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # icu
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
- 	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_ARCH_HAS_ATOMICS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Enable C++ support. This pulls in the (large) icu package.
- 
--comment "C++ support needs a toolchain w/ wchar, atomic intrinsics"
-+comment "C++ support needs a toolchain w/ wchar"
- 	depends on !BR2_BINFMT_FLAT
--	depends on BR2_INSTALL_LIBSTDCPP && (!BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS)
-+	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
- 
- endif # BR2_PACKAGE_BEECRYPT
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 297c514..dbe4786 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -26,14 +26,15 @@ config BR2_PACKAGE_CPPCMS_ICU
- 	bool "enable icu support"
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_USE_WCHAR # icu
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
-+	depends on BR2_ARCH_HAS_ATOMICS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
--comment "icu support needs a toolchain w/ wchar, atomic intrinsics"
--	depends on !BR2_BINFMT_FLAT || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+comment "icu support needs a toolchain w/ wchar"
-+	depends on !BR2_BINFMT_FLAT
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_USE_WCHAR
- 
- endif
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index d4521ac..d7bf2fe 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_ICU
- 	# file, and it cannot easily be changed to generate FLAT
- 	# format.
- 	depends on !BR2_BINFMT_FLAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 +	depends on BR2_ARCH_HAS_ATOMICS
+ 	select BR2_PACKAGE_LIBSIGC
  	help
- 	  International Components for Unicode.
+ 	  BitTorrent library written in C++ for *nix
  
-@@ -25,7 +25,8 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
+ 	  http://libtorrent.rakshasa.no/
  
- endif
- 
--comment "icu needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
-+comment "icu needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_BINFMT_FLAT
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 078be8d..e07779a 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -168,14 +168,14 @@ config BR2_PACKAGE_PHP_EXT_INTL
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
-+	depends on BR2_ARCH_HAS_ATOMICS # icu
- 	help
- 	  Internationalization support
- 
--comment "intl support needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
-+comment "intl support needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+-comment "libtorrent needs a toolchain w/ C++, threads, atomic intrinsics"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
 -		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++comment "libtorrent needs a toolchain w/ C++, threads"
 +	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
+index 1efc5f1..1798331 100644
+--- a/package/rtorrent/Config.in
++++ b/package/rtorrent/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_RTORRENT
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # libtorrent
++	depends on BR2_ARCH_HAS_ATOMICS # libtorrent
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBSIGC
+ 	select BR2_PACKAGE_LIBTORRENT
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_RTORRENT
  
- comment "Image processing"
+ 	  http://libtorrent.rakshasa.no/
  
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 67f211c..7a34d6f 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -241,15 +241,12 @@ config BR2_PACKAGE_QT5BASE_DBUS
- config BR2_PACKAGE_QT5BASE_ICU
- 	bool "Enable ICU support"
- 	select BR2_PACKAGE_ICU
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
-+	depends on BR2_ARCH_HAS_ATOMICS # icu
- 	depends on !BR2_BINFMT_FLAT # icu
- 	help
- 	  This option enables ICU support in Qt5. This is for example
- 	  needed for Qt5Webkit.
- 
--comment "icu needs a toolchain w/ atomic intrinsics"
--	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
--
- config BR2_PACKAGE_QT5BASE_TSLIB
- 	bool "Enable Tslib support"
- 	depends on !BR2_PREFER_STATIC_LIB # dlopen
+-comment "rtorrent needs a toolchain w/ C++, threads, wchar, atomic intrinsics"
++comment "rtorrent needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS \
+-		&& BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS)
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
 -- 
 1.9.1
