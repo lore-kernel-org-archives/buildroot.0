@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 20:58:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/oprofile: fix configure test
- with gcc 4.9.x
-In-Reply-To: <1408296131-15354-1-git-send-email-romain.naour@openwide.fr>
-References: <1408296131-15354-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140817205817.32995ca7@free-electrons.com>
+Date: Sun, 17 Aug 2014 21:00:36 +0200
+Subject: [Buildroot] [PATCH] package/nut: fix parallel install
+In-Reply-To: <1408269792-5553-1-git-send-email-yann.morin.1998@free.fr>
+References: <1408269792-5553-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140817210036.27975f3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Yann E. MORIN,
 
-On Sun, 17 Aug 2014 19:22:11 +0200, Romain Naour wrote:
-> Backport the upstream patch that fix a configure test breaked with gcc 4.9.x.
-> 
-> This patch must be removed with the next version bump.
-> 
+On Sun, 17 Aug 2014 12:03:12 +0200, Yann E. MORIN wrote:
 > Fixes:
-> http://autobuild.buildroot.net/results/f80/f8083f038d0efb7b5becf7810b6fcaf440fb8294/build-end.log
+>     http://autobuild.buildroot.net/results/256/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  ...e-fix-test-for-synth-check-with-GCC-4.9.0.patch | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/oprofile/oprofile-003-configure-fix-test-for-synth-check-with-GCC-4.9.0.patch
+>  package/nut/nut-0002-parallel-build.patch | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 package/nut/nut-0002-parallel-build.patch
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
