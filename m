@@ -1,59 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Aug 2014 12:53:00 +0200
-Subject: [Buildroot] [PATCH] package/lame: Fix compile on 32bit Intel
-	with gcc-4.9.x
-References: <1408227494-20770-1-git-send-email-bernd.kuhls@t-online.de>
- <20140817093621.664fad88@free-electrons.com>
-Message-ID: <XnsA38C830E65DF6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 17 Aug 2014 08:18:51 -0400
+Subject: [Buildroot] [PATCH] package/erlang: build host-erlang with
+ support for openssl
+In-Reply-To: <20140817090126.GA5274@free.fr>
+References: <1408117755-24948-1-git-send-email-yann.morin.1998@free.fr>
+ <87a973zj6w.fsf@dell.be.48ers.dk> <20140817090126.GA5274@free.fr>
+Message-ID: <CA+-urNTBKMEqxC4AAq+EyVEakbDvdeKoyQu+C=h-8cioKR=LsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20140817093621.664fad88 at free-
-electrons.com:
+Yann, Peter, All,
 
-> Dear Bernd Kuhls,
-> 
-> On Sun, 17 Aug 2014 00:18:14 +0200, Bernd Kuhls wrote:
-> 
->> +# http://lists.linuxfromscratch.org/pipermail/blfs-dev/2014-
-April/027259.html
->> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56145
->> +ifeq ($(BR2_i386)$(BR2_GCC_VERSION_4_9_X),yy)
->> +define LAME_COMPILE_FIX
->> +     $(SED) '/xmmintrin\.h/d' $(@D)/configure
->> +endef
->> +LAME_PRE_CONFIGURE_HOOKS += LAME_COMPILE_FIX
->> +endif
-> 
-> Unfortunately, this sort of check is not really acceptable, because it
-> doesn't work with external toolchains: BR2_GCC_VERSION_* symbols are
-> defined only for internal toolchains.
+On Sun, Aug 17, 2014 at 5:01 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Peter, All,
+>
+> On 2014-08-17 09:09 +0200, Peter Korsgaard spake thusly:
+>> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>
+>>  > Erlang uses openssl for all things crypto.
+>>  > Since there are host Erlang tools that use crypto (such as rebar), we
+>>  > need to build host-erlang with support for crypto, and thus it shall
+>>  > depends on openssl.
+>>
+>>  > Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
+>>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>  > Cc: Frank Hunleth <fhunleth@troodon-software.com>
+>>  > Cc: Johan Oudinet <johan.oudinet@gmail.com>
+>>
+>>  > ---
+>>  > Note: I am not sure whether this is the correct solution, to match the
+>>  > host SSL support to the target SSL support. I'll let the erlang experts
+>>  > enhance that patch if need be. ;-)
+>
+> (Sorry, I should have removed this post-comit note in this v2)
+>
+>> Sorry, I must have missed the discussion about this. What exactly does
+>> it fix?
+>
+> Some Erlang packages (like ejabberd) use an Erlang script to do part of
+> the configure and build steps, thus we need a host Erlang.
+>
+> This script may need to do some crypto stuff (e.g. to compute hashes,
+> or do https). In the Erlang world, all crypto stuff is implemented by
+> using oppenssl as the crypto backend.
+>
+> So, we need a host Erlang with crypto support, and thus linked with
+> openssl.
+>
+>> Do we need it for 2014.08?
+>
+> Well, it can well wait for after the release, if you're not at ease with
+> it. Currently, we have no package that require Erlang, not even the host
+> Erlang.
+>
+> However, since our host-erlang not being ssl-aware, it means no one is
+> really using it, and thus bumping should not cause a regressiopn for
+> anyone.
 
-Hi Thomas,
+FWIW, I use it and a few other people I know use host-erlang.
 
-I understand, but removing the gcc version check, which would remove 
-support for xmmintrin.h in all i386 builds, would remove the mmx support 
-for lame on many builds, where it is not necessary.
+> No one, but me, has complained so far. ;-)
 
-Would something like this, extended to all external toolchains, be 
-acceptable?
+I find it amazing too that I haven't run into the issue or heard from
+anyone else. I have a couple build environments that I thought were
+minimal, but they clearly must have had the openssl dev packages
+installed or I would have seen it.
 
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -18,6 +18,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
-        select BR2_INSTALL_LIBSTDCPP
-        select BR2_HOSTARCH_NEEDS_IA32_LIBS
-        select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+       select BR2_GCC_VERSION_4_9_X
-        help
-          Linaro toolchain for the ARM architecture. It uses Linaro
-          GCC 2014.05 (based on gcc 4.9), Linaro GDB 2014.05 (based on
+Anyway, I agree with Yann, that there's no rush on getting the fix in
+for this release. Now that we know how the issue manifests itself,
+it's pretty easy to identify.
 
-In addition I could add a warning to package/lame/Config.in when gcc-4.9 is 
-activated to inform users that mmx support is broken.
-
-Regards, Bernd
+Thanks,
+Frank
