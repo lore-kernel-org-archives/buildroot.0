@@ -1,56 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Aug 2014 21:09:52 +0200
-Subject: [Buildroot] [git commit] website/download: update daily snapshot
-	section
-Message-ID: <20140817191116.0EB5C9D427@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual/getting started: rename and move
+	'Getting involved' section
+Message-ID: <20140817191115.E5E059D46F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3dde85015d0e7d3e36e7a3ce03736d62a8d0ebf4
+commit: http://git.buildroot.net/buildroot/commit/?id=5712140af4f62de36187530c5c0f745742aacd16
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch makes some minor changes to the download page of the website:
-- don't capitalize Daily Snapshots as there is no reason to.
-- remove extra link to daily snapshots, as this link is already available on
-  the line below.
-- add a link to the latest snapshot
-- avoid 'Click here', especially if 'here' is not clickable
+The Getting Involved section is actually an overview of the ways to interact
+with the Buildroot community, which is useful for developers _and_ users.
+Therefore, this patch moves the section from the Developer Guide to the
+Getting Started section, and renames it to 'Community Resources'.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/download.html |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ docs/manual/get-involved.txt |    2 +-
+ docs/manual/manual.txt       |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/download.html b/docs/download.html
-index 74f1325..f8cb7e2 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -30,17 +30,18 @@ This and earlier releases (and their PGP signatures) can always be downloaded fr
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 929560e..622597d 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
  
- <p>
+-== Getting involved
++== Community resources
  
--You can also obtain <a href="/downloads/snapshots/">Daily
--Snapshots</a> of the latest Buildroot source tree if you want to to
--follow development, but cannot or do not wish to use Git.
-+You can also obtain daily snapshots of the latest Buildroot source tree if you
-+want to follow development, but cannot or do not wish to use Git.
+ Like any open source project, Buildroot has different ways to share
+ information in its community and outside.
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 6730e53..053d443 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -22,6 +22,8 @@ include::introduction.txt[]
  
- <ul>
--	<li> Click here to <a href="downloads/snapshots/">Daily Snapshots</a>.
-+	<li>You can download the
-+	<a href="downloads/snapshots/buildroot-snapshot.tar.bz2">latest snapshot
-+	</a> or view recent <a href="downloads/snapshots/">daily snapshots</a>.
- 	</li>
+ include::starting-up.txt[]
  
--	<li> Click here to <a href="http://git.buildroot.net/buildroot">browse the source tree</a>.
-+	<li>You can also <a href="http://git.buildroot.net/buildroot">browse the
-+	source tree online</a>.
- 	</li>
++include::get-involved.txt[]
++
+ = User guide
+ 
+ include::working-with.txt[]
+@@ -40,8 +42,6 @@ include::beyond-buildroot.txt[]
+ 
+ include::developer-guide.txt[]
+ 
+-include::get-involved.txt[]
 -
- </ul>
+ include::contribute.txt[]
  
- 
+ = Appendix
