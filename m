@@ -1,92 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 16:20:00 +0200
-Subject: [Buildroot] [PATCH 07/24 v4] manual: document dependencies on
- atomic operations
-In-Reply-To: <38612d6b-068a-4a68-8f97-a595df32e458@email.android.com>
-References: <cover.1408279142.git.yann.morin.1998@free.fr>
- <4061c3ce3e322eed4f6a91e635133d0e0dd2e2f4.1408279142.git.yann.morin.1998@free.fr>
- <5dc49087-92a9-4ec1-a145-bcc77ecbad46@email.android.com>
- <20140817131527.GE5274@free.fr>
- <38612d6b-068a-4a68-8f97-a595df32e458@email.android.com>
-Message-ID: <20140817142000.GH5274@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 17 Aug 2014 19:22:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/oprofile: fix configure test with
+	gcc 4.9.x
+Message-ID: <1408296131-15354-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Backport the upstream patch that fix a configure test breaked with gcc 4.9.x.
 
-On 2014-08-17 15:25 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >Thomas, All,
-> >
-> >On 2014-08-17 15:01 +0200, Thomas De Schampheleire spake thusly:
-> >> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >> >From: Anton Kolesov <anton.kolesov@synopsys.com>
-> >> >
-> >> >Add atomic operations to the list of generic dependencies.
-> >> >
-> >> >Since this is an architecture option, there is no comment string to be
-> >> >added.
-> >> >
-> >> >Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-> >> >[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
-> >> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >> >---
-> >> > docs/manual/adding-packages-directory.txt | 4 ++++
-> >> > 1 file changed, 4 insertions(+)
-> >> >
-> >> >diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> >> >index 93e6a3e..40a81d5 100644
-> >> >--- a/docs/manual/adding-packages-directory.txt
-> >> >+++ b/docs/manual/adding-packages-directory.txt
-> >> >@@ -219,6 +219,10 @@ use in the comment.
-> >> > ** Dependency symbol: +BR2_USE_MMU+
-> >> > ** Comment string: no comment to be added
-> >> > 
-> >> >+* Atomic operations
-> >> >+** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
-> >> >+** Comment string: no comment to be added
-> >> >+
-> >> 
-> >> Should we provide a brief explanation, reference, or
-> >>  name of these functions to make it a bit clearer what
-> >> is meant with 'atomic operations'?
-> >
-> >Well, the atomics are all named differently in different architectures.
-> >
-> >For example, armv6+ has LDREX and STREX (amon others):
-> >    http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0008a/ch01s02s01.html
-> >
-> >While on x86, I don't think there are corresponding instructions, but
-> >you can prefix some intructions with the LOCK prefix to achieve a
-> >similar result.
-> >
-> >So, I would not know what to put in here. Also, we do not explain what
-> >the other options are (like MMU, for example). Why would we do that for
-> >this specific option, and not others?
-> 
-> Because MMU is a widely known acronym for anyone in the embedded world,
-> but 'atomics' or 'atomic operations' is a much more general term that
-> is less obvious, IMHO.
+This patch must be removed with the next version bump.
 
-Weird how different people, even from the same field, would consider one
-thing as a fundamentals and not some other thing, or the opposite. :-)
+Fixes:
+http://autobuild.buildroot.net/results/f80/f8083f038d0efb7b5becf7810b6fcaf440fb8294/build-end.log
 
-> Maybe the description can clarify that we're talking about a dependency
-> on _CPU_ atomic _instructions_?
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...e-fix-test-for-synth-check-with-GCC-4.9.0.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/oprofile/oprofile-003-configure-fix-test-for-synth-check-with-GCC-4.9.0.patch
 
-OK, let's strike a deal: I keep the option name as-is (I like it), but I
-add a bit of explanations in the manual. Deal? ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/oprofile/oprofile-003-configure-fix-test-for-synth-check-with-GCC-4.9.0.patch b/package/oprofile/oprofile-003-configure-fix-test-for-synth-check-with-GCC-4.9.0.patch
+new file mode 100644
+index 0000000..24bed98
+--- /dev/null
++++ b/package/oprofile/oprofile-003-configure-fix-test-for-synth-check-with-GCC-4.9.0.patch
+@@ -0,0 +1,45 @@
++From cc08b52f8376867121f22e166636779e2a1a6e48 Mon Sep 17 00:00:00 2001
++From: Aaro Koskinen <aaro.koskinen@iki.fi>
++Date: Mon, 12 May 2014 08:28:46 -0500
++Subject: [PATCH 1/1] configure: fix test-for-synth check with GCC 4.9.0
++
++With GCC 4.9.0 oprofile 0.9.9 build fails on non-PPC platfroms because
++the "test-for-synth" configure check result is incorrect: There is a NULL
++pointer dereference in the test program, so the compiler seems to optimize
++the rest of the code away, and the test will always succeed regardless
++whether powerpc_elf64_vec/bfd_elf64_powerpc_vec are present or not.
++Fix by allocating the referred struct statically.
++
++While at it, also include stdio.h to avoid a compiler warning.
++
++[Romain: backport the patch to 0.9.9]
++
++Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++
++Conflicts:
++	m4/binutils.m4
++---
++ m4/binutils.m4 | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/m4/binutils.m4 b/m4/binutils.m4
++index 25fb15a..3486488 100644
++--- a/m4/binutils.m4
+++++ b/m4/binutils.m4
++@@ -27,8 +27,10 @@ if test "$OS" = "Linux"; then
++ 	AC_MSG_CHECKING([whether bfd_get_synthetic_symtab() exists in BFD library])
++ 	rm -f test-for-synth
++ 	AC_LANG_CONFTEST(
++-		[AC_LANG_PROGRAM([[#include <bfd.h>]],
++-			[[asymbol * synthsyms;	bfd * ibfd = 0; 
+++		[AC_LANG_PROGRAM([[#include <bfd.h>]
+++			[#include <stdio.h>]
+++			[static bfd _ibfd;]],
+++			[[asymbol * synthsyms;	bfd * ibfd = &_ibfd;
++ 			long synth_count = bfd_get_synthetic_symtab(ibfd, 0, 0, 0, 0, &synthsyms);
++ 			extern const bfd_target bfd_elf64_powerpc_vec;
++ 			extern const bfd_target bfd_elf64_powerpcle_vec;
++-- 
++1.9.3
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
