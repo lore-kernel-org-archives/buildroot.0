@@ -1,38 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 11:51:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-08-16
-In-Reply-To: <20140817091313.GB5274@free.fr>
-References: <20140817063010.1E5C3100D11@stock.ovh.net>
- <20140817101620.00dae1a7@free-electrons.com>
- <20140817091313.GB5274@free.fr>
-Message-ID: <20140817095103.GC5274@free.fr>
+Date: Sun, 17 Aug 2014 12:03:12 +0200
+Subject: [Buildroot] [PATCH] package/nut: fix parallel install
+Message-ID: <1408269792-5553-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes:
+    http://autobuild.buildroot.net/results/256/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/
 
-On 2014-08-17 11:13 +0200, Yann E. MORIN spake thusly:
-> On 2014-08-17 10:16 +0200, Thomas Petazzoni spake thusly:
-> > Quick analysis of the build failures of the day.
-> > >        arm |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/
-> > 
-> > Probably not too difficult to investigate:
-> > 
-> > /usr/bin/install: cannot create regular file `/scratch/peko/target/etc/upsmon.conf.sample': File exists
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/nut/nut-0002-parallel-build.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/nut/nut-0002-parallel-build.patch
 
-Parallel build issue, fix found, testing in progress...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/nut/nut-0002-parallel-build.patch b/package/nut/nut-0002-parallel-build.patch
+new file mode 100644
+index 0000000..f979c19
+--- /dev/null
++++ b/package/nut/nut-0002-parallel-build.patch
+@@ -0,0 +1,24 @@
++conf: fix parallel install
++
++Do not reference the upsmon.conf.sample twice, otherwise install, with
++a high number of make jobs, may fail, like so:
++    http://autobuild.buildroot.net/results/256/2567e13cd5bc702bc3a38a1d6fc8e34022cc7db5/build-end.log
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status:
++    https://github.com/networkupstools/nut/pull/147
++
++diff -durB nut-2.7.2.orig/conf/Makefile.am nut-2.7.2/conf/Makefile.am
++--- nut-2.7.2.orig/conf/Makefile.am	2014-02-14 09:56:53.000000000 +0100
+++++ nut-2.7.2/conf/Makefile.am	2014-08-17 11:33:46.804439240 +0200
++@@ -2,7 +2,7 @@
++ 
++ INSTALL_0600 = $(INSTALL) -m 0600
++ 
++-SECFILES = upsmon.conf.sample upsd.conf.sample upsd.users.sample
+++SECFILES = upsd.conf.sample upsd.users.sample
++ PUBFILES = nut.conf.sample ups.conf.sample
++ CGIPUB = hosts.conf.sample upsset.conf.sample upsstats.html.sample	\
++  upsstats-single.html.sample
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
