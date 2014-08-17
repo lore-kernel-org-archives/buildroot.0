@@ -1,36 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Aug 2014 21:30:01 +0200
-Subject: [Buildroot] [PATCH 22/24 v5] arch/x86: all x86 but i386 has atomics
-	operations
+Date: Sun, 17 Aug 2014 21:30:03 +0200
+Subject: [Buildroot] [PATCH 24/24 v5] arch: remove no-longer default on
+	atomics option
 In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr>
 References: <cover.1408303753.git.yann.morin.1998@free.fr>
-Message-ID: <c67387fba080907b8647c3e721ca0f01efd31a2c.1408303753.git.yann.morin.1998@free.fr>
+Message-ID: <a2b1d4aad5e0611dce67c2bfed7cb724d0b6843a.1408303753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that all architectures explicitly select this option when it makes
+sense, there is no need to have a default value.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- arch/Config.in.x86 | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 327aff0..9aa4ea2 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -202,6 +202,9 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE"
+diff --git a/arch/Config.in b/arch/Config.in
+index 6bcafd4..1126d43 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -253,7 +253,6 @@ config BR2_GCC_TARGET_MODE
+ # If the architecture has atomic operations, select this:
+ config BR2_ARCH_HAS_ATOMICS
+ 	bool
+-	default y if !BR2_arc
  
-+config BR2_ARCH_HAS_ATOMICS
-+	default y if !BR2_x86_i386
-+
- config BR2_GCC_TARGET_TUNE
- 	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
+ # Set up target binary format
+ choice
 -- 
 1.9.1
