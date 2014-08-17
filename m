@@ -1,158 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Aug 2014 21:25:32 +0200
-Subject: [Buildroot] [git commit] mpd: Set enable/disable config option for
-	all plugins
-Message-ID: <20140817192609.E98849CE21@busybox.osuosl.org>
+Date: Sun, 17 Aug 2014 21:27:04 +0200
+Subject: [Buildroot] [PATCH 0/4] mpd: Fix config options
+In-Reply-To: <1407757374-7456-1-git-send-email-jkrause@posteo.de>
+References: <1407757374-7456-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20140817212704.477d05b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd05b2798a1310ff94d5f18ad9933c69e3aff3c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mpd/mpd.mk |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+On Mon, 11 Aug 2014 13:42:50 +0200, J?rg Krause wrote:
+> The config options in mpd.mk for plugin FAAD2 and FLAC are wrong and fixed
+> with the first to patches.
+> 
+> In mpd.mk some plugin options are explicitly enabled and some are explicitly 
+> disabled. When building mpd the most plugin options are autoselected if an 
+> appropriate library exist in the build system. This may lead to an undesired 
+> behaviour if a plugin option is not selected in the Config menu by the user, 
+> but mpd will be build with this plugin. The third patch fixes this issue.
+> 
+> In Config.in is an option for BR2_PACKAGE_MPD_MAD, but in mpd.mk this config
+> option is missing. The fourth patch fixes this issue.
+> 
+> J?rg Krause (4):
+>   mpd: Fix config option for plugin FAAD2
+>   mpd: Fix config option for plugin FLAC
+>   mpd: Set enable/disable config option for all plugins
+>   mpd: Add missing config option for plugin MAD
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index cddcfb2..2c2f74f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -21,6 +21,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
- MPD_DEPENDENCIES += alsa-lib
-+MPD_CONF_OPT += --enable-alsa
- else
- MPD_CONF_OPT += --disable-alsa
- endif
-@@ -28,91 +29,111 @@ endif
- ifeq ($(BR2_PACKAGE_MPD_AO),y)
- MPD_DEPENDENCIES += libao
- MPD_CONF_OPT += --enable-ao
-+else
-+MPD_CONF_OPT += --disable-ao
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_AUDIOFILE),y)
- MPD_DEPENDENCIES += audiofile
- MPD_CONF_OPT += --enable-audiofile
-+else
-+MPD_CONF_OPT += --disable-audiofile
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_PULSEAUDIO),y)
- MPD_DEPENDENCIES += pulseaudio
- MPD_CONF_OPT += --enable-pulse
-+else
-+MPD_CONF_OPT += --disable-pulse
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_BZIP2),y)
- MPD_DEPENDENCIES += bzip2
- MPD_CONF_OPT += --enable-bzip2
-+else
-+MPD_CONF_OPT += --disable-bzip2
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_FAAD2),y)
- MPD_DEPENDENCIES += faad2
-+MPD_CONF_OPT += --enable-aac
- else
- MPD_CONF_OPT += --disable-aac
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_FLAC),y)
- MPD_DEPENDENCIES += flac
-+MPD_CONF_OPT += --enable-flac
- else
- MPD_CONF_OPT += --disable-flac
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_CURL),y)
- MPD_DEPENDENCIES += libcurl
-+MPD_CONF_OPT += --enable-curl
- else
- MPD_CONF_OPT += --disable-curl
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_LAME),y)
- MPD_DEPENDENCIES += lame
-+MPD_CONF_OPT += --enable-lame-encoder
- else
- MPD_CONF_OPT += --disable-lame-encoder
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_LIBSAMPLERATE),y)
- MPD_DEPENDENCIES += libsamplerate
-+MPD_CONF_OPT += --enable-lsr
- else
- MPD_CONF_OPT += --disable-lsr
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_LIBSNDFILE),y)
- MPD_DEPENDENCIES += libsndfile
-+MPD_CONF_OPT += --enable-sndfile
- else
- MPD_CONF_OPT += --disable-sndfile
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
- MPD_DEPENDENCIES += opus
-+MPD_CONF_OPT += --enable-opus
- else
- MPD_CONF_OPT += --disable-opus
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
- MPD_DEPENDENCIES += libvorbis
-+MPD_CONF_OPT += --enable-vorbis --enable-vorbis-encoder
- else
- MPD_CONF_OPT += --disable-vorbis --disable-vorbis-encoder
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_MPG123),y)
- MPD_DEPENDENCIES += libid3tag mpg123
-+MPD_CONF_OPT += --enable-mpg123
- else
- MPD_CONF_OPT += --disable-mpg123
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_MUSEPACK),y)
- MPD_DEPENDENCIES += musepack
-+MPD_CONF_OPT += --enable-mpc
- else
- MPD_CONF_OPT += --disable-mpc
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
- MPD_DEPENDENCIES += yajl
-+MPD_CONF_OPT += --enable-soundcloud
- else
- MPD_CONF_OPT += --disable-soundcloud
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_SQLITE),y)
- MPD_DEPENDENCIES += sqlite
-+MPD_CONF_OPT += --enable-sqlite
- else
- MPD_CONF_OPT += --disable-sqlite
- endif
-@@ -129,10 +150,13 @@ endif
- ifeq ($(BR2_PACKAGE_MPD_TWOLAME),y)
- MPD_DEPENDENCIES += twolame
- MPD_CONF_OPT += --enable-twolame-encoder
-+else
-+MPD_CONF_OPT += --disable-twolame-encoder
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_WAVPACK),y)
- MPD_DEPENDENCIES += wavpack
-+MPD_CONF_OPT += --enable-wavpack
- else
- MPD_CONF_OPT += --disable-wavpack
- endif
+Thanks, I've applied the entire series to the master branch.
+Technically speaking, the last patch is not really a fix, but since it
+wouldn't have applied to the next branch due to conflicts, and it was
+fairly simple, I decided to nonetheless apply to the master branch.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
