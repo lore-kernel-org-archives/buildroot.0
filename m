@@ -1,55 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Aug 2014 09:17:33 +0200
-Subject: [Buildroot] [git commit] pkg-autotools: use
-	--disable-dependency-tracking
-Message-ID: <20140901132446.931819D5B9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Aug 2014 21:19:50 +0200
+Subject: [Buildroot] [git commit] php: add pdo_pgsql extension
+Message-ID: <20140901132446.0C6859D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
+commit: http://git.buildroot.net/buildroot/commit/?id=742f8efa08fc0f3fef2b1ea0c8ee283fced6bbab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, automake does "dependency tracking", which allows the
-generated Makefile to contain the necessary dependencies to
-automatically rebuild the appropriate C files when included header
-files are changed. This dependency tracking is nice when doing active
-development on the package, but not really useful when doing a
-one-time build of the package. According to automake's
-documentation[1], disabling the dependency tracking provides a small
-speed-up.
+Adds support for the PDO PostgreSQL extension to the PHP package.
 
-In some very unscientific measurements (i.e repeated only once), we
-have noticed a ~3.6% reduction of the total build time of a Buildroot
-toolchain after applying this patch.
+[Thomas: slightly adjust Config.in comment to indicate that's it's the
+"Postgresql driver" that needs (e)glibc and not just "Postgresql".]
 
-[1] http://www.gnu.org/software/automake/manual/html_node/Dependency-Tracking.html
-
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-autotools.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/php/Config.ext |   10 ++++++++++
+ package/php/php.mk     |    4 ++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index bcc648d..83299cf 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -140,6 +140,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		--disable-dependency-tracking \
- 		$$(DISABLE_NLS) \
- 		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
-@@ -169,6 +170,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		--disable-dependency-tracking \
- 		$$(QUIET) $$($$(PKG)_CONF_OPT) \
- 	)
- endef
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 078be8d..cac2892 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -135,6 +135,16 @@ comment "MySQL drivers need a toolchain w/ C++"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 
++config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
++	bool "PostgreSQL"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  PDO driver for PostgreSQL
++
++comment "PostgreSQL driver needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	bool "SQLite3"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index de7d668..d0418ad 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -162,6 +162,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
+ 	PHP_CONF_OPT += --with-pdo-mysql=$(STAGING_DIR)/usr
+ 	PHP_DEPENDENCIES += mysql
+ endif
++ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
++	PHP_CONF_OPT += --with-pdo-pgsql=$(STAGING_DIR)/usr
++	PHP_DEPENDENCIES += postgresql
++endif
+ endif
+ 
+ ### Use external PCRE if it's available
