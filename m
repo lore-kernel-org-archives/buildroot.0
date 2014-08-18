@@ -1,45 +1,37 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 19 Aug 2014 00:50:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pkg-autotools: don't use
-	config.site when cross-compiling
-Message-ID: <1408402240-3126-1-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 19 Aug 2014 00:50:40 +0200
+Subject: [Buildroot] [PATCH 2/2] Revert "package/localedef: don't use
+	config.site when cross-compiling"
+In-Reply-To: <1408402240-3126-1-git-send-email-romain.naour@openwide.fr>
+References: <1408402240-3126-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1408402240-3126-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On fedora 20 64bits host, the file /usr/share/config.site contains
-a fix for installing libraries into /lib/lib64 on 64bits systems
-that redefine libdir in the generated Makefile
+CONFIG_SITE="no" is now a part of pkg-autotools infrastructure.
 
-For safety, disable loading this file when running the configure
-script for the target and the host.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+This reverts commit 85448febb3c9f21e6e4082fc344b3ef46261c782.
 ---
- package/pkg-autotools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/localedef/localedef.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index bcc648d..cdc31bf 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -126,6 +126,7 @@ define $(2)_CONFIGURE_CMDS
- 	$$(TARGET_CONFIGURE_OPTS) \
- 	$$(TARGET_CONFIGURE_ARGS) \
- 	$$($$(PKG)_CONF_ENV) \
-+	CONFIG_SITE="no" \
- 	./configure \
- 		--target=$$(GNU_TARGET_NAME) \
- 		--host=$$(GNU_TARGET_NAME) \
-@@ -159,6 +160,7 @@ define $(2)_CONFIGURE_CMDS
- 		CFLAGS="$$(HOST_CFLAGS)" \
- 		LDFLAGS="$$(HOST_LDFLAGS)" \
-                 $$($$(PKG)_CONF_ENV) \
-+		CONFIG_SITE="no" \
- 		./configure \
- 		--prefix="$$(HOST_DIR)/usr" \
- 		--sysconfdir="$$(HOST_DIR)/etc" \
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 9a7118a..17ffd14 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -8,10 +8,6 @@ LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
+ LOCALEDEF_SOURCE  = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
+ LOCALEDEF_SITE    = http://www.pengutronix.de/software/ptxdist/temporary-src
+ 
+-# Avoid loading /usr/share/config.site that can redefine libdir when
+-# the host arch is a 64bit system.
+-HOST_LOCALEDEF_CONF_ENV = CONFIG_SITE="no"
+-
+ HOST_LOCALEDEF_CONF_OPT += \
+ 	--prefix=/usr \
+ 	--with-glibc=./eglibc
 -- 
 1.9.3
