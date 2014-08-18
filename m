@@ -1,44 +1,36 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 18 Aug 2014 23:35:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xmlstarlet: fix static linking
-Message-ID: <1408397742-9051-1-git-send-email-romain.naour@openwide.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 19 Aug 2014 02:03:25 +0400
+Subject: [Buildroot] [PATCH 0/2] Make sure WCHAR is enabled if native
+	binutils will be build
+Message-ID: <1408399407-23604-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The static linking with libxml2 and lib(e)xslt (--enable-static-libs)
-need to be enabled when BR2_PREFER_STATIC_LIB is set.
+binutils starting at least from 2.23 when build for target require uClibc
+configured with UCLIBC_HAS_WCHAR otherwise:
+==========
+libtool: link: [...] -o as-new [...]
+read.o: In function `read_symbol_name':
+read.c:(.text+0x3634): undefined reference to `mbstowcs'
+collect2: error: ld returned 1 exit status
+==========
+because "mbstowcs" won't be compiled in.
 
-Fixes:
-http://autobuild.buildroot.net/results/0fd/0fd4a65ab98a4cf3fe893c29628608a71e96ecbc/build-end.log
+That's why we need to make sure WCHAR is enabled in toolchain for all
+packages that require native binutils.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/xmlstarlet/xmlstarlet.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Alexey Brodkin (2):
+  binutils: troubleshoot native binutils building (add WCHAR dependency)
+  packages: add WCHAR dependency for packages that select native
+    binutils
 
-diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-index 16f736e..7a8451f 100644
---- a/package/xmlstarlet/xmlstarlet.mk
-+++ b/package/xmlstarlet/xmlstarlet.mk
-@@ -12,9 +12,15 @@ XMLSTARLET_LICENSE_FILES = COPYING
- XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
--XMLSTARLET_CONF_OPT += --disable-static-libs \
-+XMLSTARLET_CONF_OPT += \
- 	--with-libxml-prefix=${STAGING_DIR}/usr \
- 	--with-libxslt-prefix=${STAGING_DIR}/usr \
- 	--with-libiconv-prefix=${STAGING_DIR}/usr
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+XMLSTARLET_CONF_OPT += --enable-static-libs
-+else
-+XMLSTARLET_CONF_OPT += --disable-static-libs
-+endif
-+
- $(eval $(autotools-package))
+ package/binutils/Config.in  | 1 +
+ package/dropwatch/Config.in | 1 +
+ package/oprofile/Config.in  | 1 +
+ 3 files changed, 3 insertions(+)
+
 -- 
 1.9.3
