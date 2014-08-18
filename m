@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 11:03:36 +0200
-Subject: [Buildroot] [git commit] arch: remove no-longer default on atomics
-	option
-Message-ID: <20140818090640.8448F9D4A4@busybox.osuosl.org>
+Date: Mon, 18 Aug 2014 11:02:51 +0200
+Subject: [Buildroot] [git commit] arch/nios2: always has atomic ops
+Message-ID: <20140818090640.626059D4A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a690fea1ace03643cbe7b6fb41438855a8a88444
+commit: http://git.buildroot.net/buildroot/commit/?id=700080c494c56c2c5e00432bafaa52098988cbfb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now that all architectures explicitly select this option when it makes
-sense, there is no need to have a default value.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ arch/Config.in.nios2 |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 6bcafd4..1126d43 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -253,7 +253,6 @@ config BR2_GCC_TARGET_MODE
- # If the architecture has atomic operations, select this:
- config BR2_ARCH_HAS_ATOMICS
- 	bool
--	default y if !BR2_arc
+diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+index ed63898..7807769 100644
+--- a/arch/Config.in.nios2
++++ b/arch/Config.in.nios2
+@@ -3,3 +3,6 @@ config BR2_ARCH
  
- # Set up target binary format
- choice
+ config BR2_ENDIAN
+ 	default "LITTLE"
++
++config BR2_ARCH_HAS_ATOMICS
++	default y
