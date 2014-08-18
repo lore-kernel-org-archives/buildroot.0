@@ -1,56 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 11:00:17 +0200
-Subject: [Buildroot] [git commit] libftdi: add dependency on atomic
-	operations
-Message-ID: <20140818090640.2F1689D4A4@busybox.osuosl.org>
+Date: Mon, 18 Aug 2014 10:57:20 +0200
+Subject: [Buildroot] [git commit] package/jack2: use the new
+	ARCH_HAS_ATOMICS as dependency
+Message-ID: <20140818090640.06AA49D4A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=669ce8c75eb4c76cef81f279fb6b4f95d1472f51
+commit: http://git.buildroot.net/buildroot/commit/?id=f346af286821070214d94a9cf17f8f846ce7f276
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes:
-http://autobuild.buildroot.net/results/6cb25ed954840109c9d0e582e922b0ba9d07e174/
-
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-[yann.morin.1998 at free.fr: use the new symbol; remove comment strings]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libftdi/Config.in |    2 ++
- package/openocd/Config.in |    1 +
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ package/jack2/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-index dc81514..76b30b1 100644
---- a/package/libftdi/Config.in
-+++ b/package/libftdi/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBFTDI
- 	bool "libftdi"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index 82143c7..afc723c 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 +	depends on BR2_ARCH_HAS_ATOMICS
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
-@@ -19,4 +20,5 @@ config BR2_PACKAGE_LIBTFDI_CPP
- endif # BR2_PACKAGE_LIBFTDI
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+@@ -21,7 +21,8 @@ config BR2_PACKAGE_JACK2
  
- comment "libftdi needs a toolchain w/ threads"
+ 	  http://jackaudio.org/
+ 
+-comment "jack2 needs a toolchain w/ largefile, threads, C++, atomic intrinsics"
++comment "jack2 needs a toolchain w/ largefile, threads, C++"
+ 	depends on BR2_USE_MMU
 +	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index 7f96ef8..9440c65 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -14,6 +14,7 @@ comment "Adapters"
- 
- config BR2_PACKAGE_OPENOCD_FT2XXX
- 	bool "FT2xxx/FT4xxx Based JTAG Programmer"
-+	depends on BR2_ARCH_HAS_ATOMICS # libftdi
- 	select BR2_PACKAGE_LIBFTDI
- 	help
- 	  Enable building support for FT2232 based devices
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++		!BR2_INSTALL_LIBSTDCPP
