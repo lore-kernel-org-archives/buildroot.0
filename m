@@ -1,52 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 10:36:01 +0200
-Subject: [Buildroot] [git commit] ecryptfs-utils: select gettext,
-	needed for command line utilities
-Message-ID: <20140818084325.C62029BBB1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Aug 2014 11:04:20 +0200
+Subject: [Buildroot] [PATCH 0/24 v5] arch: move atomics to arch,
+	not toolchain (branch yem/atomics)
+In-Reply-To: <cover.1408303753.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 17 Aug 2014 21:29:58 +0200")
+References: <cover.1408303753.git.yann.morin.1998@free.fr>
+Message-ID: <877g26w4mj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=effe0beb1d6b3fe403ab30540659ffef6618e080
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The ecryptfs-utils package requires the 'gettext' program, which is
-provided by the gettext package, to get translated strings. This is
-needed regardless of whether the toolchain uses glibc or uClibc.
+ > Hello All!
+ > This series is a follow-up to, and includes Anton's series, to introduce
+ > awareness of atomic operations, so pacjages can be hidden-away on
+ > architectures that do not provide atomic operations.
 
-This issue was reported by 'ausjke' on IRC.
+ > We've discussed this with Thomas on IRC and on the list, and although
+ > this comes late in the cycle, we both consider this to be materials for
+ > the *current* release.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ecryptfs-utils/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ > I tried to cover all bases here, but there are architectures I have
+ > close-to-zero knowledge of, so please speak up if you disagree on my
+ > proposal.
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 076e1d4..7999ea5 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -2,6 +2,10 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	bool "ecryptfs-utils"
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBNSS
-+	# runtime dependency only, some scripts are using the
-+	# 'gettext' program to get translations
-+	select BR2_PACKAGE_GETTEXT
-+	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # keyutils
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
- 	depends on BR2_LARGEFILE # libnss
-@@ -23,8 +27,8 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 
- 	  http://ecryptfs.org
- 
--comment "ecryptfs-utils needs a toolchain w/ largefile, threads"
-+comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar"
- 	depends on !BR2_avr32 && !BR2_microblaze
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ > The series is split in thre parts:
+
+ >   - patches 1..7 renames the option, and moves it out of toolchain and
+ >     to an architecture option, and add the option to the manual;
+
+ >   - patches 8..11 hides more packages due to their requiring atomics
+
+ >   - patches 12..24 convert all our architectures to selectively declare
+ >     their (non-)support for atomic ops, to finally get rid of the
+ >     generic default value.
+
+
+ > Changes v4 -> v5:
+ >   - enhance the manual  (Thomas DS)
+ >   - misc typoes  (Thomas DS)
+
+Committed series, thanks all!
+
+-- 
+Bye, Peter Korsgaard
