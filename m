@@ -1,35 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Aug 2014 11:54:09 +0200
-Subject: [Buildroot] [PATCHv2 2/2] ecryptfs-utils: add runtime dependency on
-	getent
-In-Reply-To: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 18 Aug 2014 13:50:57 +0200
+Subject: [Buildroot] [PATCHv2 1/2] getent: new package
+In-Reply-To: <1408355649-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408355649-28891-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408355649-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LWWdZF12uQBX487i71S8JLSqDuFf3tRtLfPhK=wbJd-Mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #7142.
+Hi Thomas,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ecryptfs-utils/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, Aug 18, 2014 at 11:54 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[..]
+> diff --git a/package/getent/getent.mk b/package/getent/getent.mk
+> new file mode 100644
+> index 0000000..dd08478
+> --- /dev/null
+> +++ b/package/getent/getent.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# getent
+> +#
+> +################################################################################
+> +
+> +# source included in Buildroot
+> +GETENT_SOURCE =
+> +
+> +GETENT_VERSION = buildroot-$(BR2_VERSION)
+> +GETENT_LICENSE = LGPLv2.1+
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 7999ea5..0d912c7 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	# runtime dependency only, some scripts are using the
- 	# 'gettext' program to get translations
- 	select BR2_PACKAGE_GETTEXT
-+	# runtime dependency only
-+	select BR2_PACKAGE_GETENT
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # keyutils
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
--- 
-2.0.0
+How do you conclude this license?
+Isn't this dependent on the case glibc versus uclibc/musl ? Or do each
+of these use the same license?
+Also, shouldn't we specify GETENT_LICENSE_FILES and make sure the
+appropriate license text is present?
+
+Best regards,
+Thomas
