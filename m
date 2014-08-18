@@ -1,27 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 18 Aug 2014 15:22:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 6218] binutils-2.23.2/gas fails with undefined
- reference to `mbstowcs'
-In-Reply-To: <bug-6218-163@https.bugs.busybox.net/>
-References: <bug-6218-163@https.bugs.busybox.net/>
-Message-ID: <20140818152258.425389D4AB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Aug 2014 17:33:52 +0200
+Subject: [Buildroot] [PATCHv2 1/2] getent: new package
+In-Reply-To: <CAAXf6LUpx7wmcLzmueM-1a2NJGJwwSLxkMcfaW1Q69ai_sWdXw@mail.gmail.com>
+References: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408355649-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LWWdZF12uQBX487i71S8JLSqDuFf3tRtLfPhK=wbJd-Mg@mail.gmail.com>
+ <20140818165248.393a57db@free-electrons.com>
+ <CAAXf6LUpx7wmcLzmueM-1a2NJGJwwSLxkMcfaW1Q69ai_sWdXw@mail.gmail.com>
+Message-ID: <20140818173352.1e11793e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6218
+Dear Thomas De Schampheleire,
 
---- Comment #5 from Alexey Brodkin <abrodkin@synopsys.com> 2014-08-18 15:22:57 UTC ---
-This happens on ARC too when building native binutils.
-It's because in uClibc "mbstowcs" is only gets built-in if WCHAR support is
-enabled.
+On Mon, 18 Aug 2014 17:07:08 +0200, Thomas De Schampheleire wrote:
 
-So proper fix would be to add WCHAR support in toolchain as a dependency for
-native binutils.
+> > Which license text file should be used? In neither of the uclibc/musl
+> > or glibc cases we have access to the license text. I can include a
+> > COPYING file in package/getent/, but that's going to be 100x times
+> > larger than the getent script :)
+> 
+> Hmm, not sure what to do here.
+> 
+> If we don't specify anything, the developer wanting to distribute an
+> image will have to manually add a LGPL2.1 license text.
+> 
+> Is there a big problem that the license text would be so much bigger
+> than the script itself? If we'd have multiple packages with source
+> included in buildroot, we could move the licenses to one directory to
+> avoid duplication.
+> 
+> But I have no strong opinion here...
 
+Note that we have a lot of packages that have a value for
+<pkg>_LICENSE, and no value defined for <pkg>_LICENSE_FILES.
+
+According to http://autobuild.buildroot.org/stats/, we have 76 packages
+without <pkg>_LICENSE, and 152 without <pkg>_LICENSE_FILES. Therefore, I
+think that's a more global problem, not limited to just this package.
+At least, I don't think it should be a blocking issue, especially
+considering the fact that this set of patches is meant to fix a bug
+before the release.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
