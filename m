@@ -1,36 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Aug 2014 09:46:28 +0200
-Subject: [Buildroot] [PATCH 1/1] odhcploc: new package
-In-Reply-To: <53F115C2.4060907@je-eigen-domein.nl>
-References: <1407607617-18039-1-git-send-email-bos@je-eigen-domein.nl>
- <20140817213415.5ea4809a@free-electrons.com>
- <53F115C2.4060907@je-eigen-domein.nl>
-Message-ID: <20140818094628.12ec1927@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Aug 2014 10:37:16 +0200
+Subject: [Buildroot] [PATCHv4 0/3] gettext changes to solve bug #7124
+In-Reply-To: <1408196842-16740-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 16 Aug 2014 15:47:19 +0200")
+References: <1408196842-16740-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvguw5vn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 17 Aug 2014 22:51:14 +0200, Floris Bos wrote:
+ > Hello,
+ > Here is a fourth version of the gettext changes, that include fixes
+ > for the additional comments made by Thomas DS on the manual (PATCH
+ > 3/3).
 
-> > +define ODHCPLOC_BUILD_CMDS
-> > +     $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> > Used tab for indentation instead of spaces, and replaced CC=.. LD=.. by
-> > $(TARGET_CONFIGURE_OPTS).
-> 
-> Fine with me.
-> Had copied the CC=.. LD=.. construct from the manual though ( 
-> http://www.buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems 
-> )
-> Perhaps mention $(TARGET_CONFIGURE_OPTS) there as well?
+ > Since they actually fix a runtime issue with ecryptfs-utils, reported
+ > as bug #7124, I'd like them to be considered for 2014.08.
 
-Ah, yes, indeed. Care to send a patch ? :-)
+ > Basically, the core of the issue is that the numerous ecryptfs-utils
+ > shell scripts use the "gettext" program on the target to query
+ > translated strings. However, with glibc toolchains, we do not allow
+ > the selection of the gettext package, because the gettext *functions*
+ > are already part of the C library.
 
-Thomas
+ > However, this totally overlooks the fact that gettext provides more
+ > than a library, it also provides utilities, which in the case of
+ > ecryptfs-utils, are needed on the target.
+
+ > Moreover, the gettext configure script is smart enough to *not*
+ > generate libintl.so when the C library already has the gettext
+ > function. It therefore has the right behavior depending on the C
+ > library: for glibc, only the gettext "utilities" are installed, for
+ > uClibc, both libintl and the gettext utilities are installed.
+
+ > These three patches are just a new version rebased on top of master,
+ > and re-tested.
+
+ > Long term, maybe we should rename BR2_NEEDS_GETTEXT and
+ > BR2_NEEDS_GETTEXT_IF_LOCALE to BR2_NEEDS_LIBINTL and
+ > BR2_NEEDS_LIBINTL_IF_LOCALE, because this is really what those config
+ > knobs mean.
+
+ > Thanks,
+
+ > Thomas
+
+ > Thomas Petazzoni (3):
+ >   gettext: allow building when BR2_NEEDS_GETTEXT is not selected
+ >   ecryptfs-utils: select gettext, needed for command line utilities
+ >   docs/manual: update documentation about gettext handling
+
+Committed series, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
