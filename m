@@ -1,70 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 10:36:31 +0200
-Subject: [Buildroot] [git commit] docs/manual: update documentation about
-	gettext handling
-Message-ID: <20140818084325.CE5509D49D@busybox.osuosl.org>
+Date: Mon, 18 Aug 2014 10:35:56 +0200
+Subject: [Buildroot] [git commit] gettext: allow building when
+	BR2_NEEDS_GETTEXT is not selected
+Message-ID: <20140818084325.BEDE69D49D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2289c34a193174967a87b432b56527cf82e0b3c2
+commit: http://git.buildroot.net/buildroot/commit/?id=2bc3bca6d85bcdaa1abc582eab5e95274896fece
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit updates the Buildroot manual regarding how gettext related
-issues are handled, now that we have cases where the gettext package
-should be selected even with glibc toolchains.
+Until now, we thought that gettext was only needed for the target for
+uClibc toolchains, to provide the gettext functions that are normally
+provided directly by glibc.
+
+However, the gettext runtime actually does more than providing the
+equivalent of those C library functions: it also provides certain
+command line tools, like 'gettext' to get translated strings from the
+shell. This tool is for example used by certain ecryptfs-utils scripts
+to get translated strings. It is therefore necessary to be able to
+build the gettext package even for glibc toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-gettext.txt |   29 ++++++++++++++++++++++-------
- 1 files changed, 22 insertions(+), 7 deletions(-)
+ package/gettext/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
-index d265607..c955b1f 100644
---- a/docs/manual/adding-packages-gettext.txt
-+++ b/docs/manual/adding-packages-gettext.txt
-@@ -8,15 +8,22 @@ library. Dependencies for this library are fairly complicated and
- therefore, deserve some explanation.
- 
- The 'uClibc' C library doesn't implement gettext functionality;
--therefore with this C library, a separate gettext must be compiled. On
--the other hand, the 'glibc' C library does integrate its own gettext,
--and in this case the separate gettext library should not be compiled,
--because it creates various kinds of build failures.
-+therefore with this C library, a separate gettext must be compiled,
-+which is provided by the additional +libintl+ library, part of the
-++gettext+ package.
-+
-+On the other hand, the 'glibc' C library does integrate its own
-+gettext library functions, so it is not necessary to build a separate
-++libintl+ library.
-+
-+However, certain packages need some gettext utilities on the target,
-+such as the +gettext+ program itself, which allows to retrieve
-+translated strings, from the command line.
- 
- Additionally, some packages (such as +libglib2+) do require gettext
--unconditionally, while other packages (those who support
--+--disable-nls+ in general) only require gettext when locale support
--is enabled.
-+functions unconditionally, while other packages (in general, those who
-+support +--disable-nls+) only require gettext functions when locale
-+support is enabled.
- 
- Therefore, Buildroot defines two configuration options:
- 
-@@ -44,3 +51,11 @@ should:
- * use +$(if $(BR2_NEEDS_GETTEXT),gettext)+ in the package
-   +DEPENDENCIES+ variable in the +.mk+ file.
- 
-+Packages that need the +gettext+ utilities on the target (should be
-+rare) should:
-+
-+* use +select BR2_PACKAGE_GETTEXT+ in their +Config.in+ file,
-+  indicating in a comment above that it's a runtime dependency only.
-+
-+* not add any +gettext+ dependency in the +DEPENDENCIES+ variable of
-+  their +.mk+ file.
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index 158b14e..7871a48 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_GETTEXT
+ 	bool "gettext"
+-	depends on BR2_NEEDS_GETTEXT
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  The GNU `gettext' utilities are a set of tools that provide a
