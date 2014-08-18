@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 11:03:28 +0200
-Subject: [Buildroot] [git commit] arch/xtensa: always has atomic ops
-Message-ID: <20140818090640.7E6B19D4A4@busybox.osuosl.org>
+Date: Mon, 18 Aug 2014 10:58:15 +0200
+Subject: [Buildroot] [git commit] manual: document dependencies on atomic
+	operations
+Message-ID: <20140818090640.1A4BB9D4A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a1f8b712d2770bc0582e809d5433c907bf27fc4
+commit: http://git.buildroot.net/buildroot/commit/?id=a30b868de6cc147335ce506833ac0848a517e912
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add atomic operations to the list of generic dependencies.
+
+Since this is an architecture option, there is no comment string to be
+added.
+
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: use the new arch-option; remove comment string]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.xtensa |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-directory.txt |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index 60c03f5..ff71e0b 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -35,3 +35,6 @@ config BR2_XTENSA_OVERLAY_DIR
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 93e6a3e..fd9460c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -219,6 +219,11 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
  
- config BR2_ARCH
- 	default "xtensa"	if BR2_xtensa
++* Atomic instructions (whereby the architecture has instructions to
++  perform some operations atomically, like LOCKCMPXCHG on x86)
++** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
++** Comment string: no comment to be added
 +
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
+ * Kernel headers
+ ** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+    +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
