@@ -1,32 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Aug 2014 11:01:22 +0200
-Subject: [Buildroot] [git commit] arch/avr32: always has atomic ops
-Message-ID: <20140818090640.442CF9D4A4@busybox.osuosl.org>
+Date: Mon, 18 Aug 2014 11:00:34 +0200
+Subject: [Buildroot] [git commit] msgpack: add dependency on atomic
+	operations
+Message-ID: <20140818090640.354239D4A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=116f63f4d77fb592fcf575c99b29170327902527
+commit: http://git.buildroot.net/buildroot/commit/?id=b63ede67eaa026c8229c3b1fde845a2ace86011b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This fixes:
+http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
+
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: use the new symbol; remove comment strings]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.avr32 |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/msgpack/Config.in        |    4 ++--
+ package/python-msgpack/Config.in |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
-index 8429589..fc1f4f6 100644
---- a/arch/Config.in.avr32
-+++ b/arch/Config.in.avr32
-@@ -6,3 +6,6 @@ config BR2_ENDIAN
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b380c58..a57a378 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc # atomic builtins
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+ 	  MessagePack is an efficient binary serialization format.
  
- config BR2_GCC_TARGET_ARCH
- 	default "ap"
-+
-+config BR2_ARCH_HAS_ATOMICS
-+	default y
+@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://msgpack.org/
+ 
+ comment "msgpack needs a toolchain w/ C++"
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index c4b68a3..ed0b432 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on !BR2_arc # msgpack - atomic builtins
++	depends on BR2_ARCH_HAS_ATOMICS # msgpack
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -13,6 +13,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+ comment "python-msgpack needs a toolchain w/ C++"
++	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
