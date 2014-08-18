@@ -1,100 +1,59 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Mon, 18 Aug 2014 23:01:26 +0800
-Subject: [Buildroot] [PATCH v2] bandwidthd: incorporate fixes for
-	autobuilders
-In-Reply-To: <53F20353.8020107@openwide.fr>
-References: <1408062429-25594-1-git-send-email-nroach44@gmail.com>
- <53F20353.8020107@openwide.fr>
-Message-ID: <53F21546.4000406@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 18 Aug 2014 17:07:08 +0200
+Subject: [Buildroot] [PATCHv2 1/2] getent: new package
+In-Reply-To: <20140818165248.393a57db@free-electrons.com>
+References: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408355649-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LWWdZF12uQBX487i71S8JLSqDuFf3tRtLfPhK=wbJd-Mg@mail.gmail.com>
+ <20140818165248.393a57db@free-electrons.com>
+Message-ID: <CAAXf6LUpx7wmcLzmueM-1a2NJGJwwSLxkMcfaW1Q69ai_sWdXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/08/14 21:44, Romain Naour wrote:
-> Hi Nathaniel,
-> 
-> [snip]
-> 
-> There is a new build issue with bandwidthd:
-> 
-> http://autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
-> 
-> 
-> checking for png_read_info in -lpng... no
-> configure: error: Bandwidthd requires but cannot libpng
-> make: *** [/home/test/autobuild/instance-3/output/build/bandwidthd-v2.0.1-auto-r08/.stamp_configured] Error 1
-> 
-> I checked the dependencies with libpng, it's ok.
-> 
-> But in config.log there are some link issue:
-> /home/naourr/git/buildroot/test/bandwidthd/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libpng.a(pngread.o): In function `png_read_destroy':
-> /home/naourr/git/buildroot/test/bandwidthd/build/libpng-1.6.12/pngread.c:942: undefined reference to `inflateEnd'
-> 
-> The configure script doesn't check for zlib, then -lz is missing during libpng test
-> 
-> I added this line to add this check before libpng:
-> AC_CHECK_LIB(z, zlibVersion, , AC_MSG_ERROR(zlib not installed))
-> 
-> The build continue but fail with libpcap:
-> 
-> checking for zlibVersion in -lz... yes
-> checking for png_read_info in -lpng... yes
-> checking for gdImageCreate in -lgd... yes
-> checking for pcap_open_live in -lpcap... no
-> checking for pcap_open_live in -lwpcap... no
-> configure: error: Bandwidthd requires but cannot find libpcap
-> 
-> Again a link issue:
-> /home/naourr/git/buildroot/test/bandwidthd/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libpcap.a(pcap-canusb-linux.o): In function `canusb_activate':
-> /home/naourr/git/buildroot/test/bandwidthd/build/libpcap-1.6.1/./pcap-canusb-linux.c:344: undefined reference to `libusb_init'
-> 
-> I borrowed the libusb test from libpcap to check for libusb-1.0
-> # needed by libpcap
-> AC_CHECK_HEADER(libusb-1.0/libusb.h,
-> [
-> 	AC_CHECK_LIB(usb-1.0, libusb_init,
-> 	[
-> 	LIBS="-lusb-1.0 -lpthread $LIBS"
-> 	ac_lbl_has_libusb=yes
-> 	],
-> 	[AC_MSG_ERROR([Bandwidthd requires but cannot find libusb])]
-> 	ac_lbl_has_libusb=no,
-> 	-lpthread
-> 	)
-> ],
-> ac_lbl_has_libusb=no
-> [AC_MSG_ERROR([Bandwidthd requires but cannot find libusb])]
-> )
-> 
-> And all build fine now :)
-> 
-> Note that -lpthread need to be added here otherwise libusb will fail with pthread functions.
-> 
-> So, the configure.ac script needs to be consolidated to check for zlib, libusb-1.0 and pthread.
-> Currently, I don't have a clean patch to suggest.
-> 
-> I hope this will help you.
-> 
-> Best regards,
-> Romain
-> 
+On Mon, Aug 18, 2014 at 4:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Mon, 18 Aug 2014 13:50:57 +0200, Thomas De Schampheleire wrote:
+>
+>> How do you conclude this license?
+>
+> uclibc: there is no license specific in the script itself, so by
+> default it's the same license as the entire project, i.e LGPLv2.1+
+>
+> glibc: the header comment in nss/getent.c is clear: it's under
+> LGPLv2.1+.
+>
+>> Isn't this dependent on the case glibc versus uclibc/musl ? Or do each
+>> of these use the same license?
+>
+> See above :)
 
-In regards to pthreads, can you add
+OK
 
-LIBS="-lpthread $LIBS"
+>
+>> Also, shouldn't we specify GETENT_LICENSE_FILES and make sure the
+>> appropriate license text is present?
+>
+> Which license text file should be used? In neither of the uclibc/musl
+> or glibc cases we have access to the license text. I can include a
+> COPYING file in package/getent/, but that's going to be 100x times
+> larger than the getent script :)
 
-some where in configure.ac and test if that fixes the issue?
+Hmm, not sure what to do here.
 
-If it does I'll commit it and then patch buildroot accordingly.
+If we don't specify anything, the developer wanting to distribute an
+image will have to manually add a LGPL2.1 license text.
 
-Thanks, Nathaniel
+Is there a big problem that the license text would be so much bigger
+than the script itself? If we'd have multiple packages with source
+included in buildroot, we could move the licenses to one directory to
+avoid duplication.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140818/0246bc9a/attachment.asc>
+But I have no strong opinion here...
+
+Best regards,
+Thomas
