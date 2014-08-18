@@ -1,59 +1,92 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 18 Aug 2014 16:08:12 +0200
-Subject: [Buildroot] [PATCH 0/6] CMake cleanup
-In-Reply-To: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
-References: <1408113551-29932-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LVLzfn2epviETRe_Aaf6S64uak=VLC8vG2zx2Boa0iifA@mail.gmail.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Mon, 18 Aug 2014 22:40:58 +0800
+Subject: [Buildroot] [PATCH v2] bandwidthd: incorporate fixes for
+	autobuilders
+In-Reply-To: <53F20353.8020107@openwide.fr>
+References: <1408062429-25594-1-git-send-email-nroach44@gmail.com>
+ <53F20353.8020107@openwide.fr>
+Message-ID: <53F2107A.5040008@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 18/08/14 21:44, Romain Naour wrote:
+> Hi Nathaniel,
+> 
+> [snip]
+> 
+> There is a new build issue with bandwidthd:
+> 
+> http://autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
+> 
+> 
+> checking for png_read_info in -lpng... no
+> configure: error: Bandwidthd requires but cannot libpng
+> make: *** [/home/test/autobuild/instance-3/output/build/bandwidthd-v2.0.1-auto-r08/.stamp_configured] Error 1
+> 
+> I checked the dependencies with libpng, it's ok.
+> 
+> But in config.log there are some link issue:
+> /home/naourr/git/buildroot/test/bandwidthd/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libpng.a(pngread.o): In function `png_read_destroy':
+> /home/naourr/git/buildroot/test/bandwidthd/build/libpng-1.6.12/pngread.c:942: undefined reference to `inflateEnd'
+> 
+> The configure script doesn't check for zlib, then -lz is missing during libpng test
+> 
+> I added this line to add this check before libpng:
+> AC_CHECK_LIB(z, zlibVersion, , AC_MSG_ERROR(zlib not installed))
+> 
+> The build continue but fail with libpcap:
+> 
+> checking for zlibVersion in -lz... yes
+> checking for png_read_info in -lpng... yes
+> checking for gdImageCreate in -lgd... yes
+> checking for pcap_open_live in -lpcap... no
+> checking for pcap_open_live in -lwpcap... no
+> configure: error: Bandwidthd requires but cannot find libpcap
+> 
+> Again a link issue:
+> /home/naourr/git/buildroot/test/bandwidthd/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libpcap.a(pcap-canusb-linux.o): In function `canusb_activate':
+> /home/naourr/git/buildroot/test/bandwidthd/build/libpcap-1.6.1/./pcap-canusb-linux.c:344: undefined reference to `libusb_init'
+> 
+> I borrowed the libusb test from libpcap to check for libusb-1.0
+> # needed by libpcap
+> AC_CHECK_HEADER(libusb-1.0/libusb.h,
+> [
+> 	AC_CHECK_LIB(usb-1.0, libusb_init,
+> 	[
+> 	LIBS="-lusb-1.0 -lpthread $LIBS"
+> 	ac_lbl_has_libusb=yes
+> 	],
+> 	[AC_MSG_ERROR([Bandwidthd requires but cannot find libusb])]
+> 	ac_lbl_has_libusb=no,
+> 	-lpthread
+> 	)
+> ],
+> ac_lbl_has_libusb=no
+> [AC_MSG_ERROR([Bandwidthd requires but cannot find libusb])]
+> )
+> 
+> And all build fine now :)
+> 
+> Note that -lpthread need to be added here otherwise libusb will fail with pthread functions.
+> 
+> So, the configure.ac script needs to be consolidated to check for zlib, libusb-1.0 and pthread.
+> Currently, I don't have a clean patch to suggest.
+> 
+> I hope this will help you.
+> 
+> Best regards,
+> Romain
+> 
+Hi Romain
 
-On Fri, Aug 15, 2014 at 4:39 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi all,
->
-> Here is a short series cleaning up the {host-,}cmake-package
-> infrastructure, and more specifically how the {C,CXX,LD}FLAGS are
-> handled.
->
-> The patches 1-4/6 are preliminary work for the fix for #7280
-> (patch 5/6).
->
-> The last patch of this series is nothing more than an RFC.
->
-> Cheers,
->
-> Samuel Martin (6):
->   package/pkg-cmake.mk: remove the USE_CCACHE CMake flag for
->     host-package
->   package/pkg-cmake.mk: set the {C,CXX,LD}FLAGS for host packages
->   toolchainfile.cmake.in: set linker flags
->   package/cdrkit: clean {HOST_,}CDRKIT_CONF_OPT
->   toolchainfile.cmake.in: do not force the CMAKE_{C,CXX}_FLAGS to the
->     cache
->   [RFC] package/pkg-cmake.mk: add ccache support for host packages
->
->  package/cdrkit/cdrkit.mk            |  7 -------
->  package/pkg-cmake.mk                | 15 ++++++++++++++-
->  support/misc/toolchainfile.cmake.in |  5 +++--
->  3 files changed, 17 insertions(+), 10 deletions(-)
->
+All: I replied earlier just to Romain, acknowledging the issue, and
+forgot to click reply all instead of normal reply.
 
-I did a general test of this series (except for the last RFC patch) by
-building some cmake (target) packages (flann, gtest, taglib, cdrkit)
-and host-cdrkit. The compilation was successful, I have not done
-runtime checks.
+Romain, could you try building the latest master from
+github.com/nroach44/bandwidthd (id:
+0473a5f2527201d83c5b0ddc581b7c9f21fbdcaf )
 
-For the fifth patch, I have explicitly tested the failure scenario
-described by the bug submitter.
-
-I think we should merge these patches in buildroot-2014.08, as it fixes a bug.
-
-For the sixth RFC patch, I cannot make statements. I do not know
-enough of cmake to comment on it.
-
-Best regards,
-Thomas
+Thanks, Nathaniel
