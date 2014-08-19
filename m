@@ -1,52 +1,48 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Aug 2014 21:41:45 +0200
-Subject: [Buildroot] [PATCH 0 of 3 for 2014.08] Manual improvements part 2
-Message-ID: <patchbomb.1408477305@localhost>
+Date: Tue, 19 Aug 2014 21:41:46 +0200
+Subject: [Buildroot] [PATCH 1 of 3 for 2014.08] manual/getting started:
+ minor improvements to 'Using Buildroot' section
+In-Reply-To: <patchbomb.1408477305@localhost>
+References: <patchbomb.1408477305@localhost>
+Message-ID: <6da37bceeeff97fcb176.1408477306@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a second set of manual improvements I'm sending out for 2014.08.
-Thomas Petazzoni already applied the first part which was actually an RFC,
-and following his comments I will send out subsequent patches as soon as
-they are available.
+This patch renames the section 'Using Buildroot' into 'Buildroot quick
+start' as real details about Buildroot usage will be in the User Guide
+rather than in 'Getting Started'.
 
-As far as structure is concerned, this series covers all I was planning to
-change. Content-wise, I will be making more changes, which will be sent as a
-third series. At least one change I have to make is regarding the
-configuration of busybox/uclibc, which is now easier thanks to the
-kconfig-package infrastructure. After that change, I think the manual is in
-a good enough shape for the release, and any further changes I can make (see
-below) are welcome but not necessary. Do let me know if you think otherwise.
-
-Additional changes I'm planning but may not be ready in time for the
-release:
-- Rework the 'General Buildroot usage' chapter
-- Rework the 'Project-specific customization' chapter.
-- Revive the 'Beyond Buildroot' rework patch that has been sent to the list
-  a long while back. This will certainly not be ready before the release.
-
+Additionally, add a cross-reference to the section about configuring
+Buildroot.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Thomas De Schampheleire (3)
-  manual/getting started: minor improvements to 'Using Buildroot' section
-  manual/user guide: high-level restructuring
-  manual/user guide: move tip on configuration searches
+ docs/manual/using.txt |  5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
- docs/manual/common-usage.txt        |   8 ++++-
- docs/manual/configure.txt           |  46 ++++++++++++++++++++++++--
- docs/manual/customize-store.txt     |   9 +----
- docs/manual/customize-toolchain.txt |  49 -----------------------------
- docs/manual/customize.txt           |  16 ++++-----
- docs/manual/eclipse-integration.txt |   2 +-
- docs/manual/going-further.txt       |   8 ----
- docs/manual/how-buildroot-works.txt |   2 +-
- docs/manual/make-tips.txt           |  12 +------
- docs/manual/manual.txt              |   4 +-
- docs/manual/using.txt               |   5 +-
- docs/manual/working-with.txt        |  16 +--------
- 12 files changed, 67 insertions(+), 110 deletions(-)
+diff -r 44128f28ff7d -r 6da37bceeeff docs/manual/using.txt
+--- a/docs/manual/using.txt	Mon Aug 18 00:35:58 2014 +0200
++++ b/docs/manual/using.txt	Tue Aug 12 22:14:07 2014 +0200
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
+-== Using Buildroot
++== Buildroot quick start
+ 
+ *Important*: you can and should *build everything as a normal user*. There
+ is no need to be root to configure and use Buildroot. By running all
+@@ -47,7 +47,8 @@
+ to get the dependencies of your favorite interface.
+ 
+ For each menu entry in the configuration tool, you can find associated
+-help that describes the purpose of the entry.
++help that describes the purpose of the entry. Refer to xref:configure[]
++for details on some specific configuration aspects.
+ 
+ Once everything is configured, the configuration tool generates a
+ +.config+ file that contains the entire configuration. This file will be
