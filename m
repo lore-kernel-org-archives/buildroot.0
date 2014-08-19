@@ -1,101 +1,67 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Aug 2014 15:48:08 -0300
-Subject: [Buildroot] [PATCH 1/4] package/ncurses: Allow building wide char
-	support
+Date: Tue, 19 Aug 2014 15:48:09 -0300
+Subject: [Buildroot] [PATCH 2/4] package/ncurses: fixup wide support for
+	static targets
 In-Reply-To: <1408474091-25947-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1408474091-25947-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1408474091-25947-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1408474091-25947-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeremy Kerr <jk@ozlabs.org>
+As stated on the list we need to copy static libraries when doing static
+targets so add the logic for that.
 
-Allow ncurses to be configured with wide char support; this causes the
-libraries to be built with the 'w' suffix (eg libncursesw.so,
-libmenuw.so, etc), so we need to create a few symlinks.
+Also exclude the wide option for blackfin flat since there seem to be
+toolchain issues with that combination - since it's a new feature option
+someone interested might look into it later.
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ncurses/Config.in  |  6 ++++++
- package/ncurses/ncurses.mk | 24 ++++++++++++++++++++++--
- 2 files changed, 28 insertions(+), 2 deletions(-)
+ package/ncurses/Config.in  | 2 ++
+ package/ncurses/ncurses.mk | 9 +++++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index e8ab710..b90ec9e 100644
+index b90ec9e..3cc0a37 100644
 --- a/package/ncurses/Config.in
 +++ b/package/ncurses/Config.in
-@@ -10,6 +10,12 @@ config BR2_PACKAGE_NCURSES
- 
- if BR2_PACKAGE_NCURSES
- 
-+config BR2_PACKAGE_NCURSES_WCHAR
-+	bool "enable wide char support"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  Enable wide char & UTF-8 support in ncurses libraries
-+
- config BR2_PACKAGE_NCURSES_TARGET_PANEL
- 	bool "ncurses libpanel in target"
+@@ -13,6 +13,8 @@ if BR2_PACKAGE_NCURSES
+ config BR2_PACKAGE_NCURSES_WCHAR
+ 	bool "enable wide char support"
+ 	depends on BR2_USE_WCHAR
++	# Build broken @ curses.priv.h with bad declarations
++	depends on !(BR2_bfin && BR2_BINFMT_FLAT)
  	help
+ 	  Enable wide char & UTF-8 support in ncurses libraries
+ 
 diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 4bba8f1..bd2aac0 100644
+index bd2aac0..5eb8b98 100644
 --- a/package/ncurses/ncurses.mk
 +++ b/package/ncurses/ncurses.mk
-@@ -12,7 +12,7 @@ HOST_NCURSES_DEPENDENCIES =
- NCURSES_PROGS = clear infocmp tabs tic toe tput tset
- NCURSES_LICENSE = MIT with advertising clause
- NCURSES_LICENSE_FILES = README
--NCURSES_CONFIG_SCRIPTS = ncurses5-config
-+NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+@@ -40,12 +40,21 @@ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPT += --enable-widec
+ NCURSES_LIB_SUFFIX = w
  
- NCURSES_CONF_OPT = \
- 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
-@@ -36,6 +36,24 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	NCURSES_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+NCURSES_CONF_OPT += --enable-widec
-+NCURSES_LIB_SUFFIX = w
-+
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
 +define NCURSES_LINK_LIBS
 +	for lib in $(NCURSES_LIBS-y); do \
-+		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
-+			$(1)/usr/lib/$${lib}.so; \
++		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
++			$(1)/usr/lib/$${lib}.a; \
 +	done
 +endef
-+
-+NCURSES_LINK_TARGET_LIBS =  $(call NCURSES_LINK_LIBS, $(TARGET_DIR))
-+NCURSES_LINK_STAGING_LIBS =  $(call NCURSES_LINK_LIBS, $(STAGING_DIR))
-+
-+NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
-+
-+endif
-+
- NCURSES_LIBS-y = libncurses
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
-@@ -56,7 +74,8 @@ endef
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- define NCURSES_INSTALL_TARGET_LIBS
++else
+ define NCURSES_LINK_LIBS
  	for lib in $(NCURSES_LIBS-y); do \
--		cp -dpf $(NCURSES_DIR)/lib/$${lib}.so* $(TARGET_DIR)/usr/lib/; \
-+		cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
-+			$(TARGET_DIR)/usr/lib/; \
+ 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
+ 			$(1)/usr/lib/$${lib}.so; \
  	done
  endef
- endif
-@@ -74,6 +93,7 @@ endif
- define NCURSES_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	$(NCURSES_INSTALL_TARGET_LIBS)
-+	$(NCURSES_LINK_TARGET_LIBS)
- 	$(NCURSES_INSTALL_TARGET_PROGS)
- 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
++endif
+ 
+ NCURSES_LINK_TARGET_LIBS =  $(call NCURSES_LINK_LIBS, $(TARGET_DIR))
+ NCURSES_LINK_STAGING_LIBS =  $(call NCURSES_LINK_LIBS, $(STAGING_DIR))
 -- 
 1.8.5.5
