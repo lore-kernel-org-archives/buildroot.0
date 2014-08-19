@@ -1,38 +1,27 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Tue, 19 Aug 2014 10:07:43 -0400
-Subject: [Buildroot] Eclipse Luna Support?
-In-Reply-To: <CAM5ihG-rM65u0oCyTiXGdc-R9e-8-SRY3qk-88uSDEemK-b_Qg@mail.gmail.com>
-References: <CALoSW65Y+GiddA8qhsxXKfk+YpOk+aCHmniCNyau3bzK1pavww@mail.gmail.com>
- <CAM5ihG-rM65u0oCyTiXGdc-R9e-8-SRY3qk-88uSDEemK-b_Qg@mail.gmail.com>
-Message-ID: <CALoSW64NQbOp+NtJ5z49VF3aBoWpKvuoUjRpg-qV=fzfJMS-hA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Aug 2014 14:30:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
+In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
+References: <bug-7010-163@https.bugs.busybox.net/>
+Message-ID: <20140819143041.1E20D9D4BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you sir ... I will try it shortly! I appreciate the confirmation.
+https://bugs.busybox.net/show_bug.cgi?id=7010
 
-On Tue, Aug 19, 2014 at 9:45 AM, Jer?nimo Lopes <lopesjeronimo@gmail.com> wrote:
-> Hi,
->
-> I'm using Eclipse Luna with Buildroot plugin, I didn't notice any problems.
->
-> Best regards.
->
->
-> 2014-08-19 9:41 GMT-03:00 Nimai Mahajan <nimaim@gmail.com>:
->>
->> Will enabling the BR2_ECLIPSE_REGISTER option and adding
->> http://buildroot.org/downloads/eclipse/kepler-sr2 as the update site
->> still work for Luna? If not, perhaps the devs can see about adding in
->> support for it. Luna was released June 2014 and provides many
->> bugfixes/updates to the now unsupported Kepler release. Just trying to
->> give a heads up about getting things upgraded for the release of
->> Buildroot 2014.08.
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-19 14:30:39 UTC ---
+JamVM 2.0.0 has been silently released end of July.
+Announcement hidden in a blog post:
+http://draenog.blogspot.be/2014/08/jamvm-200-released.html
+
+This release should include the MIPS support as requested by the bug report. 
+As part of the 2014.11 release cycle, we should update JamVM in buildroot, then
+this bug can be closed.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
