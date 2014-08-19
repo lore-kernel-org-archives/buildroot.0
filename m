@@ -1,40 +1,47 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 19 Aug 2014 19:43:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltris: fix linking with intl
-Message-ID: <1408470236-30101-1-git-send-email-romain.naour@openwide.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 19 Aug 2014 20:07:13 +0200
+Subject: [Buildroot] [PATCH 1/6] perl: add host variant
+Message-ID: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltris doen't build with (e)glibc toolchain since commit 454a41016f2f074b69e2c677f4749c213c653e86
-when gettext package is selected.
-
-With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
-
-Linking with intl is only needed if the toolchain needs gettext and locale is set.
-
-Fixes:
-http://autobuild.buildroot.net/results/821/82128cb9f5cd6ae2595a8302462f1b5719dad9f7/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ltris/ltris.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/perl/perl.mk | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-index 75b6ad0..c9fe5c7 100644
---- a/package/ltris/ltris.mk
-+++ b/package/ltris/ltris.mk
-@@ -21,7 +21,7 @@ else
- LTRIS_CONF_OPT += --disable-audio
- endif
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 01e0166..78b77d8 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -121,7 +121,25 @@ endef
  
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- LTRIS_DEPENDENCIES += gettext
- LTRIS_CONF_ENV += LIBS=-lintl
- endif
+ PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_CORE_H
+ 
++HOST_PERL_CONF_OPT = \
++	-des \
++	-Dprefix="$(HOST_DIR)/usr" \
++	-Dcc="$(HOSTCC)"
++
++define HOST_PERL_CONFIGURE_CMDS
++	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./Configure $(HOST_PERL_CONF_OPT))
++endef
++
++define HOST_PERL_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_PERL_INSTALL_CMDS
++	$(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
+ 
+ define PERL_FINALIZE_TARGET
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
 -- 
-1.9.3
+1.9.1
