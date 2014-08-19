@@ -1,32 +1,30 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 19 Aug 2014 20:07:18 +0200
-Subject: [Buildroot] [PATCH 6/6] metacity: refactor with host-perl
-In-Reply-To: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
-References: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1408471638-4551-6-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 19 Aug 2014 15:48:07 -0300
+Subject: [Buildroot] [PATCH 0/4] Ncurses wide support
+Message-ID: <1408474091-25947-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/metacity/metacity.mk | 2 ++
- 1 file changed, 2 insertions(+)
+This is the compiled series for ncurses wide support.
+Tested a while ago with an allyespackageconfig.
+Closes bug #6950
 
-diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
-index 6ded5d1..91ed1d3 100644
---- a/package/metacity/metacity.mk
-+++ b/package/metacity/metacity.mk
-@@ -12,6 +12,8 @@ METACITY_SITE = http://ftp.gnome.org/pub/gnome/sources/metacity/$(METACITY_VERSI
- METACITY_LICENSE = GPLv2+
- METACITY_LICENSE_FILES = COPYING
- 
-+METACITY_CONF_ENV = INTLTOOL_PERL=$(PERL_RUN)
-+
- METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
- 		--x-libraries=$(STAGING_DIR)/usr/lib \
- 		--disable-glibtest --disable-gconf \
+Gustavo Zacarias (3):
+  package/ncurses: fixup wide support for static targets
+  nano: enable ncursesw support
+  httping: enable ncurses support
+
+Jeremy Kerr (1):
+  package/ncurses: Allow building wide char support
+
+ package/httping/httping.mk |  3 ++-
+ package/nano/nano.mk       |  9 +++++++--
+ package/ncurses/Config.in  |  8 ++++++++
+ package/ncurses/ncurses.mk | 33 +++++++++++++++++++++++++++++++--
+ 4 files changed, 48 insertions(+), 5 deletions(-)
+
 -- 
-1.9.1
+1.8.5.5
