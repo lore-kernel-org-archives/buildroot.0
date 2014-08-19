@@ -1,22 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Aug 2014 17:32:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7328] Git dl of versions in x/y broken
-In-Reply-To: <bug-7328-163@https.bugs.busybox.net/>
-References: <bug-7328-163@https.bugs.busybox.net/>
-Message-ID: <20140819173241.C44C79D4C0@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 19 Aug 2014 19:43:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltris: fix linking with intl
+Message-ID: <1408470236-30101-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7328
+ltris doen't build with (e)glibc toolchain since commit 454a41016f2f074b69e2c677f4749c213c653e86
+when gettext package is selected.
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-08-19 17:32:41 UTC ---
-Patch sent to the list:
-    http://patchwork.ozlabs.org/patch/381411/
+With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
 
+Linking with intl is only needed if the toolchain needs gettext and locale is set.
+
+Fixes:
+http://autobuild.buildroot.net/results/821/82128cb9f5cd6ae2595a8302462f1b5719dad9f7/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/ltris/ltris.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
+index 75b6ad0..c9fe5c7 100644
+--- a/package/ltris/ltris.mk
++++ b/package/ltris/ltris.mk
+@@ -21,7 +21,7 @@ else
+ LTRIS_CONF_OPT += --disable-audio
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ LTRIS_DEPENDENCIES += gettext
+ LTRIS_CONF_ENV += LIBS=-lintl
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.9.3
