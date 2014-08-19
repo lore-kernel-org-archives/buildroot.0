@@ -1,79 +1,150 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 Aug 2014 22:48:39 +0300
-Subject: [Buildroot] [PATCH] gstreamer{,
- 1}: fix unaligned access detection for arc
-In-Reply-To: <1408464415-18240-1-git-send-email-abrodkin@synopsys.com>
-References: <1408464415-18240-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140819194839.GB2405@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 19 Aug 2014 18:16:38 -0300
+Subject: [Buildroot] [PATCHv2] package/gcc: cleanup arch/cpu combinations
+Message-ID: <1408482998-24200-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+Cleanup arch/cpu combination limits, we had super-wide depends and it
+doesn't help readability.
 
-On Tue, Aug 19, 2014 at 08:06:55PM +0400, Alexey Brodkin wrote:
-> Fixes the same issue as reported for microblaze here
-> http://autobuild.buildroot.net/results/f49/f4914bb3999c8a7a0c0a2afdac5de40fb9058372/
-> 
-> Similar to the existing handling for avr32, microblaze and xtensa.
-> Also add it for gstreamer1 for good measure as it was missing there as well.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/gstreamer/gstreamer/gstreamer.mk    | 3 +++
->  package/gstreamer1/gstreamer1/gstreamer1.mk | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-> index 4696876..8e0b042 100644
-> --- a/package/gstreamer/gstreamer/gstreamer.mk
-> +++ b/package/gstreamer/gstreamer/gstreamer.mk
-> @@ -18,6 +18,9 @@ endif
->  ifeq ($(BR2_aarch64),y)
->  GSTREAMER_CONF_ENV = as_cv_unaligned_access=yes
->  endif
-> +ifeq ($(BR2_arc),y)
-> +GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
-> +endif
+Make the bool/depends/select order the same for all entries.
 
-Instead of adding another 'ifeq' stanza, why not add ARC to the existing list 
-of architectures? Something like:
+Drop redundant limitations, for example sparc* if sparc wasn't
+supported in general.
 
-diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-index 4696876d396e..23ad3919f6ee 100644
---- a/package/gstreamer/gstreamer/gstreamer.mk
-+++ b/package/gstreamer/gstreamer/gstreamer.mk
-@@ -12,7 +12,7 @@ GSTREAMER_INSTALL_STAGING = YES
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze),y)
-+ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze)$(BR2_arc),y)
- GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index bf2358234bb3..6546dc9dc8ef 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -14,7 +14,7 @@ GSTREAMER1_LICENSE = LGPLv2+ LGPLv2.1+
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze),y)
-+ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze)$(BR2_arc),y)
- GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
+Power8 requires at least gcc 4.9.
 
-baruch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gcc/Config.in.host | 76 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 60 insertions(+), 16 deletions(-)
 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index b29bacb..79e924e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -19,58 +19,102 @@ choice
+ 	  Select the version of gcc you wish to use.
+ 
+ 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+-		depends on BR2_avr32
+ 		bool "gcc 4.2.2-avr32-2.1.5"
++		# Only supported architecture
++		depends on BR2_avr32
+ 
+ 	config BR2_GCC_VERSION_4_4_X
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
+ 		bool "gcc 4.4.x"
++		# Unsupported architectures
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
++			&& !BR2_avr32 && !BR2_powerpc64le
++		# Unsupported ARM cores
++		depends on !BR2_cortex_a5 && !BR2_cortex_a7 && \
++			!BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_fa526 && \
++			!BR2_pj4
+ 		# ARM EABIhf support appeared in gcc 4.6
+ 		depends on !BR2_ARM_EABIHF
+-		# VFPv4 support appeared in gcc 4.5
++		# ARM VFPv4 support appeared in gcc 4.5
+ 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
++		# Unsupported PPC cores
++		depends on !BR2_powerpc_476 && !BR2_powerpc_476fp \
++			&& !BR2_power8
++		# Unsupported x86 cores
++		depends on !BR2_x86_atom && !BR2_x86_corei7 && !BR2_x86_jaguar
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 
+ 	config BR2_GCC_VERSION_4_5_X
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
+-		select BR2_GCC_NEEDS_MPC
++		bool "gcc 4.5.x"
++		# Unsupported architectures
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
++			&& !BR2_avr32  && !BR2_powerpc64le
++		# Unsupported ARM cores
++		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
++			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
++		# Unsupported PPC cores
++		depends on !BR2_power8
++		# Unsupported SPARC cores
++		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
++			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		# Unsupported X86 cores
++		depends on !BR2_x86_corei7 && !BR2_x86_jaguar
+ 		# ARM EABIhf support appeared in gcc 4.6
+ 		depends on !BR2_ARM_EABIHF
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+-		bool "gcc 4.5.x"
++		select BR2_GCC_NEEDS_MPC
+ 
+ 	config BR2_GCC_VERSION_4_7_X
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
+-		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.7.x"
++		# Unsupported architectures
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
++			&& !BR2_avr32 && !BR2_bfin && !BR2_powerpc64le
++		# Unsupported ARM cores
++		depends on !BR2_cortex_a12 && !BR2_pj4
++		# Unsupported PPC cores
++		depends on !BR2_power8
++		# Unsupported SPARC cores
++		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
++			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		# Unsupported x86 cores
++		depends on !BR2_x86_jaguar
++		select BR2_GCC_NEEDS_MPC
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_powerpc64le && !BR2_sparc
++		bool "gcc 4.8.x"
++		# Unsupported architectures
++		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 \
++			&& !BR2_bfin && !BR2_powerpc64le && !BR2_sparc
++		# Unsupported ARM cores
++		depends on !BR2_cortex_a12
++		# Unsupported PPC cores
++		depends on !BR2_power8
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+-		bool "gcc 4.8.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_ARC
++		bool "gcc 4.8-arc"
++		# Only supported architecture
+ 		depends on BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
+-		bool "gcc 4.8-arc"
+ 
+ 	config BR2_GCC_VERSION_4_9_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
++		bool "gcc 4.9.x"
++		# Unsupported architectures
++		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+-		bool "gcc 4.9.x"
+ 
+ 	config BR2_GCC_VERSION_SNAP
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
+-		select BR2_GCC_NEEDS_MPC
++		bool "gcc snapshot"
++		# Unsupported architectures
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
++		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+-		bool "gcc snapshot"
+ endchoice
+ 
+ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.5.5
