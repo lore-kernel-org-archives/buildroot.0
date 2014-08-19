@@ -1,40 +1,56 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 19 Aug 2014 17:59:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bandwidthd: improve configure
- check for zlib and libusb.
-In-Reply-To: <53F3511B.70104@gmail.com>
-References: <1408394513-5177-1-git-send-email-romain.naour@openwide.fr>
- <53F3511B.70104@gmail.com>
-Message-ID: <53F37462.8060907@openwide.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 19 Aug 2014 20:06:55 +0400
+Subject: [Buildroot] [PATCH] gstreamer{,
+	1}: fix unaligned access detection for arc
+Message-ID: <1408464415-18240-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nathaniel,
+Fixes the same issue as reported for microblaze here
+http://autobuild.buildroot.net/results/f49/f4914bb3999c8a7a0c0a2afdac5de40fb9058372/
 
-> --- snip ---
->> +
->>
->  Thanks Romain, your help has been instrumental in getting this stuff
-> fixed. Because I maintain the fork that buildroot uses in addition to
-> the buildroot package, I can put these fixes in upstream without adding
-> complexity to buildroot.
-> 
-> Could you do one last test using v2.0.1-auto-r09 as the version?
-> Hopefully this solves the dependency issues and it removes the need for
-> --without-x.
-> 
-> Thanks, Nathaniel.
-> 
+Similar to the existing handling for avr32, microblaze and xtensa.
+Also add it for gstreamer1 for good measure as it was missing there as well.
 
-I redo a test with v2.0.1-auto-r09 and all reported issues are fixed.
-It's great to see a maintainer very reactive :)
-I confirm that --without-x is not recognized anymore.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-It's sure that when a new package is added to buildroot, it is compiled with a
-wide configuration possibility. It helps to detect all unhandled cases.
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer/gstreamer/gstreamer.mk    | 3 +++
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 3 +++
+ 2 files changed, 6 insertions(+)
 
-Best regards,
-Romain
+diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
+index 4696876..8e0b042 100644
+--- a/package/gstreamer/gstreamer/gstreamer.mk
++++ b/package/gstreamer/gstreamer/gstreamer.mk
+@@ -18,6 +18,9 @@ endif
+ ifeq ($(BR2_aarch64),y)
+ GSTREAMER_CONF_ENV = as_cv_unaligned_access=yes
+ endif
++ifeq ($(BR2_arc),y)
++GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
++endif
+ 
+ GSTREAMER_CONF_OPT = \
+ 		--disable-examples \
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index bf23582..528351f 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -20,6 +20,9 @@ endif
+ ifeq ($(BR2_aarch64),y)
+ GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
+ endif
++ifeq ($(BR2_arc),y)
++GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
++endif
+ 
+ GSTREAMER1_CONF_OPT = \
+ 	--disable-examples \
+-- 
+1.9.3
