@@ -1,30 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 19 Aug 2014 17:39:06 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-08-18
-In-Reply-To: <20140819063011.EB9D0100E42@stock.ovh.net>
-References: <20140819063011.EB9D0100E42@stock.ovh.net>
-Message-ID: <53F37DAA.10509@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Aug 2014 16:44:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 7328] Git dl of versions in x/y broken
+In-Reply-To: <bug-7328-163@https.bugs.busybox.net/>
+References: <bug-7328-163@https.bugs.busybox.net/>
+Message-ID: <20140819164446.C4C939D4BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/19/2014 07:30 AM, Thomas Petazzoni wrote:
-> Detail of failures
-> ===================
->
->    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/111fd1f00caa1e5aa5e2f64f6316b849a09b1e0e/
+https://bugs.busybox.net/show_bug.cgi?id=7328
 
-Reported upstream:
-   https://bugreports.qt-project.org/browse/QTBUG-39224
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
->    mips64el |                      tmux-1.9a | NOK | http://autobuild.buildroot.net/results/24f5d0c61b5283fe6ce58b11cb37813ce227fdc8/
->         arm |                      tmux-1.9a | NOK | http://autobuild.buildroot.net/results/fc889413969cb66091dbb52f6c0fc852a1ab4479/
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+                 CC|                            |yann.morin.1998 at free.fr
+         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
 
-Reported upstream: (probably not a tmux failure but a libevent failure)
-   https://sourceforge.net/p/tmux/tickets/152/
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-08-19 16:44:46 UTC ---
+Confirmed.
+
+Here is a tentative patch to ifix the issue.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fb4b849..d04fd36 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -318,14 +318,14 @@ $(2)_RAWNAME            =  $$(patsubst host-%,%,$(1))
+ # version control system branch or tag, for example
+remotes/origin/1_10_stable.
+ ifndef $(2)_VERSION
+  ifdef $(3)_VERSION
+-  $(2)_DL_VERSION = $$($(3)_VERSION)
++  $(2)_DL_VERSION := $$($(3)_VERSION)
+   $(2)_VERSION := $$(subst /,_,$$($(3)_VERSION))
+  else
+   $(2)_VERSION = undefined
+   $(2)_DL_VERSION = undefined
+  endif
+ else
+-  $(2)_DL_VERSION = $$($(2)_VERSION)
++  $(2)_DL_VERSION := $$($(2)_VERSION)
+   $(2)_VERSION := $$(subst /,_,$$($(2)_VERSION))
+ endif
 
 -- 
-Vincent
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
