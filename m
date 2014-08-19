@@ -1,46 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Aug 2014 15:30:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 7328] New: Git dl of versions in x/y broken
-Message-ID: <bug-7328-163@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 19 Aug 2014 17:59:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bandwidthd: improve configure
+ check for zlib and libusb.
+In-Reply-To: <53F3511B.70104@gmail.com>
+References: <1408394513-5177-1-git-send-email-romain.naour@openwide.fr>
+ <53F3511B.70104@gmail.com>
+Message-ID: <53F37462.8060907@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7328
+Hi Nathaniel,
 
-           Summary: Git dl of versions in x/y broken
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: vincent.stehle at freescale.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> --- snip ---
+>> +
+>>
+>  Thanks Romain, your help has been instrumental in getting this stuff
+> fixed. Because I maintain the fork that buildroot uses in addition to
+> the buildroot package, I can put these fixes in upstream without adding
+> complexity to buildroot.
+> 
+> Could you do one last test using v2.0.1-auto-r09 as the version?
+> Hopefully this solves the dependency issues and it removes the need for
+> --without-x.
+> 
+> Thanks, Nathaniel.
+> 
 
+I redo a test with v2.0.1-auto-r09 and all reported issues are fixed.
+It's great to see a maintainer very reactive :)
+I confirm that --without-x is not recognized anymore.
 
-Latest buildroot (1) will not download git versions in x/y properly. Instead,
-it will try to download x_y.
-
-This was working fine with an old commit (2).
-
-After bisecting, it seems that commit 54456cc6982598fa45e7c97609e83fabec7c1695
-broke it.
+It's sure that when a new package is added to buildroot, it is compiled with a
+wide configuration possibility. It helps to detect all unhandled cases.
 
 Best regards,
-
-V.
-
-(1) latest commit f67e7ba06f5f00dc9153ad364932092692458704
-(2) old commit 249464674485ed1fa18a2d0dd5500c84198490b9
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Romain
