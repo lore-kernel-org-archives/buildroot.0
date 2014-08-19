@@ -1,25 +1,44 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Aug 2014 14:30:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
-In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
-References: <bug-7010-163@https.bugs.busybox.net/>
-Message-ID: <20140819143041.1E20D9D4BE@busybox.osuosl.org>
+Date: Tue, 19 Aug 2014 15:30:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 7328] New: Git dl of versions in x/y broken
+Message-ID: <bug-7328-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7010
+https://bugs.busybox.net/show_bug.cgi?id=7328
 
---- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-19 14:30:39 UTC ---
-JamVM 2.0.0 has been silently released end of July.
-Announcement hidden in a blog post:
-http://draenog.blogspot.be/2014/08/jamvm-200-released.html
+           Summary: Git dl of versions in x/y broken
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: vincent.stehle at freescale.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-This release should include the MIPS support as requested by the bug report. 
-As part of the 2014.11 release cycle, we should update JamVM in buildroot, then
-this bug can be closed.
+
+Latest buildroot (1) will not download git versions in x/y properly. Instead,
+it will try to download x_y.
+
+This was working fine with an old commit (2).
+
+After bisecting, it seems that commit 54456cc6982598fa45e7c97609e83fabec7c1695
+broke it.
+
+Best regards,
+
+V.
+
+(1) latest commit f67e7ba06f5f00dc9153ad364932092692458704
+(2) old commit 249464674485ed1fa18a2d0dd5500c84198490b9
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
