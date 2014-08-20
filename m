@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Aug 2014 15:06:40 +0200
-Subject: [Buildroot] [PATCH 07/12] gcc/4.8: add patch to warn about unsafe
-	header paths
+Date: Wed, 20 Aug 2014 15:06:41 +0200
+Subject: [Buildroot] [PATCH 08/12] gcc/arc-4.8-R3: add patch to warn about
+	unsafe header paths
 In-Reply-To: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408540005-26934-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1408540005-26934-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,10 @@ To: buildroot@busybox.net
 
 This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
 warns about unsafe include paths (i.e /usr/include,
-/usr/local/include, etc.). The patch was adapted to gcc 4.8.3, and
-modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
-variable to error out instead of just warn when unsafe paths are
-used. Even though erroring out can be chosen by passing
+/usr/local/include, etc.). The patch was adapted to gcc arc-4.8-R3,
+and modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH
+environment variable to error out instead of just warn when unsafe
+paths are used. Even though erroring out can be chosen by passing
 -Werror=poison-system-directories, we are not sure this option in
 CFLAGS will always be passed, so having an environment variable
 guarantees it will always be passed, and also allows to have an
@@ -24,23 +24,24 @@ identical behavior to the external toolchain wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../4.8.3/910-gcc-poison-system-directories.patch  | 207 +++++++++++++++++++++
- 1 file changed, 207 insertions(+)
- create mode 100644 package/gcc/4.8.3/910-gcc-poison-system-directories.patch
+ .../910-gcc-poison-system-directories.patch        | 221 +++++++++++++++++++++
+ 1 file changed, 221 insertions(+)
+ create mode 100644 package/gcc/arc-4.8-R3/910-gcc-poison-system-directories.patch
 
-diff --git a/package/gcc/4.8.3/910-gcc-poison-system-directories.patch b/package/gcc/4.8.3/910-gcc-poison-system-directories.patch
+diff --git a/package/gcc/arc-4.8-R3/910-gcc-poison-system-directories.patch b/package/gcc/arc-4.8-R3/910-gcc-poison-system-directories.patch
 new file mode 100644
-index 0000000..88b2c4e
+index 0000000..67b3799
 --- /dev/null
-+++ b/package/gcc/4.8.3/910-gcc-poison-system-directories.patch
-@@ -0,0 +1,207 @@
++++ b/package/gcc/arc-4.8-R3/910-gcc-poison-system-directories.patch
+@@ -0,0 +1,221 @@
 +From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
 +From: Khem Raj <raj.khem@gmail.com>
 +Date: Fri, 29 Mar 2013 08:59:00 +0400
 +Subject: [PATCH 16/35] gcc: poison-system-directories
 +
-+Adapted to Buildroot and gcc 4.8.3 by Thomas Petazzoni, especially the
-+addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
++Adapted to Buildroot and gcc arc-4.8-R3 by Thomas Petazzoni,
++especially the addition of the BR_COMPILER_PARANOID_UNSAFE_PATH
++environment variable.
 +
 +Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -110,7 +111,7 @@ index 0000000..88b2c4e
 +   --enable-plugin         enable plugin support
 +   --disable-libquadmath-support
 +                           disable libquadmath support for Fortran
-+@@ -27195,6 +27198,19 @@
++@@ -27103,6 +27106,19 @@
 + fi
 + 
 + 
@@ -134,7 +135,7 @@ index 0000000..88b2c4e
 +===================================================================
 +--- a/gcc/configure.ac
 ++++ b/gcc/configure.ac
-+@@ -5101,6 +5101,16 @@
++@@ -5063,6 +5063,16 @@
 +                 [specify that runtime libraries should be
 +                  installed in a compiler-specific directory])])
 + 
@@ -163,7 +164,7 @@ index 0000000..88b2c4e
 + -Wredundant-decls  -Wno-return-local-addr @gol
 + -Wreturn-type  -Wsequence-point  -Wshadow @gol
 + -Wsign-compare  -Wsign-conversion  -Wsizeof-pointer-memaccess @gol
-+@@ -4020,6 +4021,14 @@
++@@ -4025,6 +4026,14 @@
 +  for most targets, it is made up of code and thus requires the stack
 +  to be made executable in order for the program to work properly.
 + 
@@ -182,7 +183,7 @@ index 0000000..88b2c4e
 +===================================================================
 +--- a/gcc/gcc.c
 ++++ b/gcc/gcc.c
-+@@ -741,6 +741,8 @@
++@@ -740,6 +740,8 @@
 +    "%{fuse-ld=*:-fuse-ld=%*}\
 +     %X %{o*} %{e*} %{N} %{n} %{r}\
 +     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
@@ -191,7 +192,7 @@ index 0000000..88b2c4e
 +     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
 +     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
 +     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
-+@@ -3991,6 +3993,12 @@
++@@ -3990,6 +3992,12 @@
 +       gcc_assert (!compare_debug_opt);
 +     }
 + 
@@ -241,5 +242,18 @@ index 0000000..88b2c4e
 + }
 + 
 + /* Use given -I paths for #include "..." but not #include <...>, and
++Index: b/gcc/config/arc/arc.h
++===================================================================
++--- a/gcc/config/arc/arc.h
+++++ b/gcc/config/arc/arc.h
++@@ -205,6 +205,8 @@
++ %{!fsyntax-only:%{!c:%{!M:%{!MM:%{!E:%{!S:\
++     %(linker) %l " LINK_PIE_SPEC "%X %{o*} %{A} %{d} %{e*} %{m} %{N} %{n} %{r}\
++     %{s} %{t} %{u*} %{x} %{z} %{Z} %{!A:%{!nostdlib:%{!nostartfiles:%S}}}\
+++    %{Wno-poison-system-directories:--no-poison-system-directories}\
+++    %{Werror=poison-system-directories:--error-poison-system-directories}\
++     %{static:} %{L*} %(mfwrap) %(link_libgcc) %o\
++     %{fopenmp:%:include(libgomp.spec)%(link_gomp)} %(mflib)\
++     %{fprofile-arcs|fprofile-generate|coverage:-lgcov}\
 -- 
 2.0.0
