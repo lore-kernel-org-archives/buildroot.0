@@ -1,51 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Aug 2014 14:10:13 +0200
-Subject: [Buildroot] About i386 Architecture and Grub2
-In-Reply-To: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>
-References: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>
-Message-ID: <20140820141013.24de59df@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 20 Aug 2014 14:20:55 +0200
+Subject: [Buildroot] [PATCH v2] bandwidthd: Version bump to fix
+ autobuilder errors
+In-Reply-To: <1408536201-19148-1-git-send-email-nroach44@gmail.com>
+References: <1408536201-19148-1-git-send-email-nroach44@gmail.com>
+Message-ID: <53F492A7.6090803@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Nathaniel,
 
-On Wed, 20 Aug 2014 04:37:12 -0700, lee choon gay wrote:
-
-> But the data is not persistent, anything that I save will be gone after reboot.
-> I am looking for method to make the data persistent (no?ram file system).
-> I try to boot up the code without using rootfs.cpio as follow.
-> The code won't boot up.
+Le 20/08/2014 14:03, Nathaniel Roach a ?crit :
+> Thanks to Romain Naour, we've found that certain tests
+> in configure fail if their dependencies aren't tested for
+> beforehand.
 > 
-> set default="0"
-> set timeout="0"
+> libpng has been added as a dependency just to make sure it
+> gets built.
 > 
-> menuentry "any name" {
-> ????????? Linux /boot/bzImage root=/dev/sda2 noinitrd?console=tty1
-> ????????? }
+> In upstream the changes to fix this issue are:
+>  - Test for libusb-1.0 purely to ensure that variables are set
+> 	(it's only needed if libpcap was built with it).
+>  - Test for libz and continue/fail because it's actually needed by libpng
+> 	and it's probably more meaningful to fail on libz rather than
+> 	libpng if libz is the issue.
 > 
-> For your info, I use pendrive for this.
-> And the bzImage and rootfs.cpio is located in partition 1 boot folder.
-
-If you're using a root filesystem in the second partition, then there's
-no point in keeping the rootfs.cpio file in the fist partition.
-
-> File system is located in partition 2.
+> Also, the X.Org tests have been removed from the configure script
+> and therefore we don't need --without-x to be defined anymore.
 > 
-> Hope I can get some?help here.
-> Thank you very much. :)
+> Additional upstream changes:
+>  - Handle the postgres/sqlite flags better (should not effect BR).
+>  - Other general configure.ac cleanups.
+> 
+> Fixes:
+> autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
 
-Yes, but please provide more details, like what happens when you try to
-boot, and how you create your second partition exactly. With the
-informations you provided, there is just no way for us to help you as
-you didn't provide enough details.
+Your Sob line has been dropped.
+
+With that fixed, your can add my
+
+Acked-by: Romain Naour <romain.naour@openwide.fr>
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Romain
+> 
+> ---
+> Changes v1 to v2
+>  - Fixed spelling of Romain's name
+>  - Added link to the build failure
+> ---
+>  package/bandwidthd/Config.in     | 1 +
+>  package/bandwidthd/bandwidthd.mk | 6 ++----
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+> index c1f0ee1..b6c2b23 100644
+> --- a/package/bandwidthd/Config.in
+> +++ b/package/bandwidthd/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_BANDWIDTHD
+>  	bool "bandwidthd"
+>  	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_ZLIB # Just to be sure
+>  	select BR2_PACKAGE_LIBPNG
+>  	select BR2_PACKAGE_LIBPCAP
+>  	select BR2_PACKAGE_GD
+> diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+> index 3e11d6a..59b6143 100644
+> --- a/package/bandwidthd/bandwidthd.mk
+> +++ b/package/bandwidthd/bandwidthd.mk
+> @@ -4,19 +4,17 @@
+>  #
+>  ################################################################################
+>  
+> -BANDWIDTHD_VERSION = v2.0.1-auto-r08
+> +BANDWIDTHD_VERSION = v2.0.1-auto-r10
+>  BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+>  
+>  # Specified as "any version of the GPL that is current as of your
+>  # download" by upstream.
+>  BANDWIDTHD_LICENSE = GPL
+>  
+> -BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
+> +BANDWIDTHD_DEPENDENCIES = gd libpng libpcap zlib
+>  
+>  BANDWIDTHD_AUTORECONF = YES
+>  
+> -BANDWIDTHD_CONF_OPT += --without-x
+> -
+>  ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
+>  BANDWIDTHD_DEPENDENCIES += postgresql
+>  BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
+> 
