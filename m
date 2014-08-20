@@ -1,25 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 Aug 2014 17:07:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 7322] libgomp dependency issue with imagemagick
-In-Reply-To: <bug-7322-163@https.bugs.busybox.net/>
-References: <bug-7322-163@https.bugs.busybox.net/>
-Message-ID: <20140820170727.8F11C9D4D6@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 20 Aug 2014 19:27:18 +0200
+Subject: [Buildroot] [PATCH branch/next] package/mesa3d: Bump version to
+	10.2.6
+Message-ID: <1408555638-22700-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7322
 
---- Comment #5 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2014-08-20 17:07:25 UTC ---
-See:
-http://lists.busybox.net/pipermail/buildroot/2014-August/104725.html
-http://patchwork.ozlabs.org/patch/381736/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas, Gustavo, have you changed your mind following Samuel's comment?
-
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6b99757..aea78c3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.2.5
++MESA3D_VERSION = 10.2.6
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
