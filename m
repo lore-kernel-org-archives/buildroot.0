@@ -1,57 +1,43 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 20 Aug 2014 18:45:07 +0200
-Subject: [Buildroot] [PATCH 5/6] intltool: refactor with host-perl
-In-Reply-To: <20140820142128.62163ff9@free-electrons.com>
-References: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
- <1408471638-4551-5-git-send-email-francois.perrad@gadz.org>
- <20140820142128.62163ff9@free-electrons.com>
-Message-ID: <CAB0FRsskEMr08iL9=Fcmmi=StVdCPk84jQcJC1V044tUi7hY2Q@mail.gmail.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Wed, 20 Aug 2014 18:49:25 +0200
+Subject: [Buildroot] [PATCH] imagemagick: Disable OpenMP
+Message-ID: <1408553365-26770-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-08-20 14:21 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Tue, 19 Aug 2014 20:07:17 +0200, Francois Perrad wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/intltool/intltool.mk | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
->> index 5c2dca8..96333ae 100644
->> --- a/package/intltool/intltool.mk
->> +++ b/package/intltool/intltool.mk
->> @@ -11,5 +11,7 @@ INTLTOOL_LICENSE_FILES = COPYING
->>
->>  HOST_INTLTOOL_DEPENDENCIES = host-gettext host-perl-xml-parser
->>
->> +HOST_INTLTOOL_CONF_ENV = PERL=$(PERL_RUN)
->
-> Doesn't this makes the assumption that host-perl has been built as a
-> dependency of host-intltool? If that's the case, then it's a problem I
-> would really like to avoid bringing host-perl as a dependency of builds
-> that don't have any Perl stuff on the target.
->
+By default (i.e. without adding libgomp.so* to
+BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS), if an external toolchain with libgomp
+support is used, then libgomp is installed to staging/ , but not to target/ .
+Consequently, with such a toolchain, imagemagick's configure detected libgomp as
+supported and enabled its usage for the build stage, but then it failed to run
+on the target because libgomp was missing. This is the bug #7322.
 
-host-intltool depends on host-perl-xml-parser,
-and now, host-perl-xml-parser depends on host-perl.
+Disable OpenMP for imagemagick as a temporary workaround, until a better long
+term solution is agreed on and implemented.
 
-A host-perl-foo-module cannot depend on host-perl OR system-perl.
-All host-perl-foo-module must depend on host-perl.
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
 
-Fran?ois
+---
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+For 2014.08.
+---
+ package/imagemagick/imagemagick.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 386da4f..aac0b5d 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -29,6 +29,7 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=32
+ endif
+ 
+ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
++		--disable-openmp \
+ 		--without-perl \
+ 		--without-wmf \
+ 		--without-openexr \
+-- 
+1.9.1
