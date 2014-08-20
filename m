@@ -1,51 +1,89 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 20 Aug 2014 14:34:45 +0200
-Subject: [Buildroot] [PATCH 2/4] package/ncurses: fixup wide support for
- static targets
-In-Reply-To: <20140820142238.404d0c48@free-electrons.com>
-References: <1408474091-25947-1-git-send-email-gustavo@zacarias.com.ar>
- <1408474091-25947-3-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LXsfoHafOY9cdVfP1waNcaWkrM8xMgyiqswE4LHX56wMA@mail.gmail.com>
- <20140820142238.404d0c48@free-electrons.com>
-Message-ID: <CAAXf6LXekzfe45PXJx8z=UB0wB6g=NnuvK5LCgPuhnP0KDKvBg@mail.gmail.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Wed, 20 Aug 2014 20:39:13 +0800
+Subject: [Buildroot] [PATCH v3] bandwidthd: Version bump to fix autobuilder
+	errors
+Message-ID: <1408538353-4804-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thanks to Romain Naour, we've found that certain tests
+in configure fail if their dependencies aren't tested for
+beforehand.
 
-On Wed, Aug 20, 2014 at 2:22 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Tue, 19 Aug 2014 21:47:55 +0200, Thomas De Schampheleire wrote:
->
->> Here you could also do something like
->> ifeq ($(BR2_PREFER_STATIC_LIB),y)
->> NCURSES_LIB_EXT = .a
->> else
->> NCURSES_LIB_EXT = .so
->> endif
->> define NCURSES_LINK_LIBS
->>        for lib in $(NCURSES_LIBS-y); do \
->>                ln -sf $${lib}$(NCURSES_LIB_SUFFIX)$(NCURSES_LIB_EXT) \
->>                        $(1)/usr/lib/$${lib}$(NCURSES_LIB_EXT); \
->>        done
->> endef
->> to avoid duplicating the hook content.
->
-> Except that for now, the semantic is:
->
->  * BR2_PREFER_STATIC_LIB=y -> install only static libraries
->
->  * BR2_PREFER_STATIC_LIB undefined -> install *both* static and shared
->    libraries.
+libpng has been added as a dependency just to make sure it
+gets built.
 
-Unless I'm missing something that is not what Gustavo's patch does. He
-explicitly added an else clause. So if STATIC_LIB is not defined, only
-links for the .so file will be created.
+In upstream the changes to fix this issue are:
+ - Test for libusb-1.0 purely to ensure that variables are set
+	(it's only needed if libpcap was built with it).
+ - Test for libz and continue/fail because it's actually needed by libpng
+	and it's probably more meaningful to fail on libz rather than
+	libpng if libz is the issue.
 
-Best regards,
-Thomas
+Also, the X.Org tests have been removed from the configure script
+and therefore we don't need --without-x to be defined anymore.
+
+Additional upstream changes:
+ - Handle the postgres/sqlite flags better (should not effect BR).
+ - Other general configure.ac cleanups.
+
+Fixes:
+autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
+
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Acked-by: Romain Naour <romain.naour@openwide.fr>
+---
+Changes v1 to v2
+ - Fixed spelling of Romain's name
+ - Added link to the build failure
+
+Changes v2 to v3
+ - Added back the SOff and Ack lines
+---
+ package/bandwidthd/Config.in     | 1 +
+ package/bandwidthd/bandwidthd.mk | 6 ++----
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index c1f0ee1..b6c2b23 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BANDWIDTHD
+ 	bool "bandwidthd"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_ZLIB # Just to be sure
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_GD
+diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+index 3e11d6a..59b6143 100644
+--- a/package/bandwidthd/bandwidthd.mk
++++ b/package/bandwidthd/bandwidthd.mk
+@@ -4,19 +4,17 @@
+ #
+ ################################################################################
+ 
+-BANDWIDTHD_VERSION = v2.0.1-auto-r08
++BANDWIDTHD_VERSION = v2.0.1-auto-r10
+ BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+ 
+ # Specified as "any version of the GPL that is current as of your
+ # download" by upstream.
+ BANDWIDTHD_LICENSE = GPL
+ 
+-BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
++BANDWIDTHD_DEPENDENCIES = gd libpng libpcap zlib
+ 
+ BANDWIDTHD_AUTORECONF = YES
+ 
+-BANDWIDTHD_CONF_OPT += --without-x
+-
+ ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
+ BANDWIDTHD_DEPENDENCIES += postgresql
+ BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
+-- 
+2.1.0.rc1
