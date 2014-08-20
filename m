@@ -1,41 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Aug 2014 14:24:17 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Aug 2014 09:26:48 -0300
 Subject: [Buildroot] [PATCHv2] package/gcc: cleanup arch/cpu combinations
-In-Reply-To: <1408482998-24200-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <20140820142417.31c93ef2@free-electrons.com>
 References: <1408482998-24200-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140820142417.31c93ef2@free-electrons.com>
+ <20140820142417.31c93ef2@free-electrons.com>
+Message-ID: <53F49408.3050701@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
-
-On Tue, 19 Aug 2014 18:16:38 -0300, Gustavo Zacarias wrote:
-> Cleanup arch/cpu combination limits, we had super-wide depends and it
-> doesn't help readability.
+On 08/20/2014 09:24 AM, Thomas Petazzoni wrote:
+> What do you think of a solution like:
 > 
-> Make the bool/depends/select order the same for all entries.
+>   [Buildroot] [PATCH] toolchain/gcc: Introduce BR2_ARCH_HAS_GCC_x_y_PLUS
 > 
-> Drop redundant limitations, for example sparc* if sparc wasn't
-> supported in general.
-> 
-> Power8 requires at least gcc 4.9.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> which Mischa Jonker posted a while ago (but didn't push strong enough
+> to get it merged) ?
 
-What do you think of a solution like:
-
-  [Buildroot] [PATCH] toolchain/gcc: Introduce BR2_ARCH_HAS_GCC_x_y_PLUS
-
-which Mischa Jonker posted a while ago (but didn't push strong enough
-to get it merged) ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi.
+I thought about that but it really doesn't help in this scenario in a
+complete way, since a given gcc may be broken (like 4.9.x was for ppc
+e500) even though it includes support because of bitrot or bugs, like
+some sparc targets, or blackfin for that matter.
+Regards.
