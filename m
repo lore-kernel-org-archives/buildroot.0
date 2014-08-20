@@ -1,78 +1,32 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Wed, 20 Aug 2014 16:32:24 +0800
-Subject: [Buildroot] [PATCH 1/1] bandwidthd: Version bump to fix autobuilder
-	errors
-Message-ID: <1408523544-31401-1-git-send-email-nroach44@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 20 Aug 2014 12:03:18 +0200
+Subject: [Buildroot] [PATCH 0/6] manual: gendoc infra refactoring
+Message-ID: <1408529004-18632-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to Romain Naor, we've found that certain tests
-in configure fail if their dependencies aren't tested for
-beforehand.
+Hi all,
 
-libpng has been added as a dependency just to make sure it
-gets built.
+This short series about the gendoc infrastructure fixes the bugs
+recently found in it [1], and slightly clean it up.
 
-In upstream the changes to fix this issue are:
- - Test for libusb-1.0 purely to ensure that variables are set
-	(it's only needed if libpcap was built with it).
- - Test for libz and continue/fail because it's actually needed by libpng
-	and it's probably more meaningful to fail on libz rather than
-	libpng if libz is the issue.
+Regards,
 
-Also, the X.Org tests have been removed from the configure script
-and therefore we don't need --without-x to be defined anymore.
+[1] http://lists.busybox.net/pipermail/buildroot/2014-August/104390.html
 
-Additional upstream changes:
- - Handle the postgres/sqlite flags better (should not effect BR).
- - Other general configure.ac cleanups.
+Samuel Martin (6):
+  gendoc infra: cosmetic fixes
+  gendoc infra: move manual build location into $(BUILD_DIR)/manual
+  gendoc infra: avoid a2x warning
+  gendoc infra: disable pdf manual generation
+  gendoc infra: Remove the manual* target from .PHONY
+  gendoc infra: Move the manual-clean target outside of the infra
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
----
- package/bandwidthd/Config.in     | 1 +
- package/bandwidthd/bandwidthd.mk | 6 ++----
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/manual.mk | 101 ++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 86 insertions(+), 15 deletions(-)
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index c1f0ee1..b6c2b23 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BANDWIDTHD
- 	bool "bandwidthd"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_ZLIB # Just to be sure
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_GD
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index 3e11d6a..59b6143 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -4,19 +4,17 @@
- #
- ################################################################################
- 
--BANDWIDTHD_VERSION = v2.0.1-auto-r08
-+BANDWIDTHD_VERSION = v2.0.1-auto-r10
- BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
- 
- # Specified as "any version of the GPL that is current as of your
- # download" by upstream.
- BANDWIDTHD_LICENSE = GPL
- 
--BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
-+BANDWIDTHD_DEPENDENCIES = gd libpng libpcap zlib
- 
- BANDWIDTHD_AUTORECONF = YES
- 
--BANDWIDTHD_CONF_OPT += --without-x
--
- ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
- BANDWIDTHD_DEPENDENCIES += postgresql
- BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
--- 
-2.1.0.rc1
+--
+2.0.4
