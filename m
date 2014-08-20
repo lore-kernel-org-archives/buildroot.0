@@ -1,39 +1,50 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 20 Aug 2014 13:25:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lbreakout2: fix linking with intl
-Message-ID: <1408533921-22392-1-git-send-email-romain.naour@openwide.fr>
+Date: Wed, 20 Aug 2014 13:33:11 +0200
+Subject: [Buildroot] [PATCH 1/1] bandwidthd: Version bump to fix
+ autobuilder errors
+In-Reply-To: <1408523544-31401-1-git-send-email-nroach44@gmail.com>
+References: <1408523544-31401-1-git-send-email-nroach44@gmail.com>
+Message-ID: <53F48777.6010004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lbreakout2 doen't build with (e)glibc toolchain when gettext package is selected.
+Hi Nathaniel,
 
-With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
+Le 20/08/2014 10:32, Nathaniel Roach a ?crit :
+> Thanks to Romain Naor, we've found that certain tests
 
-Linking with intl is only needed if the toolchain needs gettext and locale is set.
+Naour
 
-Fixes:
-http://autobuild.buildroot.net/results/a77/a77dd3e18cc4a5e8300ab33eb532cc03d0156f7f/build-end.log
+> in configure fail if their dependencies aren't tested for
+> beforehand.
+> 
+> libpng has been added as a dependency just to make sure it
+> gets built.
+> 
+> In upstream the changes to fix this issue are:
+>  - Test for libusb-1.0 purely to ensure that variables are set
+> 	(it's only needed if libpcap was built with it).
+>  - Test for libz and continue/fail because it's actually needed by libpng
+> 	and it's probably more meaningful to fail on libz rather than
+> 	libpng if libz is the issue.
+> 
+> Also, the X.Org tests have been removed from the configure script
+> and therefore we don't need --without-x to be defined anymore.
+> 
+> Additional upstream changes:
+>  - Handle the postgres/sqlite flags better (should not effect BR).
+>  - Other general configure.ac cleanups.
+> 
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/lbreakout2/lbreakout2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could you add the autobuilder reference to the commit log:
 
-diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
-index 8f4e27d..6087ca6 100644
---- a/package/lbreakout2/lbreakout2.mk
-+++ b/package/lbreakout2/lbreakout2.mk
-@@ -14,7 +14,7 @@ LBREAKOUT2_DEPENDENCIES = sdl libpng
- LBREAKOUT2_CONF_ENV = \
- 	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
- 
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- LBREAKOUT2_DEPENDENCIES += gettext
- LBREAKOUT2_CONF_ENV += LIBS=-lintl
- endif
--- 
-1.9.3
+http://autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
+
+This helps maintainers to know if the patch must be commited to master or next.
+
+Best regards,
+Romain
