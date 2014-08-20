@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Aug 2014 15:06:39 +0200
-Subject: [Buildroot] [PATCH 06/12] gcc/4.9: add patch to warn about unsafe
+Date: Wed, 20 Aug 2014 15:06:40 +0200
+Subject: [Buildroot] [PATCH 07/12] gcc/4.8: add patch to warn about unsafe
 	header paths
 In-Reply-To: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1408540005-26934-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
 warns about unsafe include paths (i.e /usr/include,
-/usr/local/include, etc.). The patch was adapted to gcc 4.9.1, and
+/usr/local/include, etc.). The patch was adapted to gcc 4.8.3, and
 modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
 variable to error out instead of just warn when unsafe paths are
 used. Even though erroring out can be chosen by passing
@@ -24,22 +24,22 @@ identical behavior to the external toolchain wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../4.9.1/910-gcc-poison-system-directories.patch  | 207 +++++++++++++++++++++
+ .../4.8.3/910-gcc-poison-system-directories.patch  | 207 +++++++++++++++++++++
  1 file changed, 207 insertions(+)
- create mode 100644 package/gcc/4.9.1/910-gcc-poison-system-directories.patch
+ create mode 100644 package/gcc/4.8.3/910-gcc-poison-system-directories.patch
 
-diff --git a/package/gcc/4.9.1/910-gcc-poison-system-directories.patch b/package/gcc/4.9.1/910-gcc-poison-system-directories.patch
+diff --git a/package/gcc/4.8.3/910-gcc-poison-system-directories.patch b/package/gcc/4.8.3/910-gcc-poison-system-directories.patch
 new file mode 100644
-index 0000000..377ddf5
+index 0000000..88b2c4e
 --- /dev/null
-+++ b/package/gcc/4.9.1/910-gcc-poison-system-directories.patch
++++ b/package/gcc/4.8.3/910-gcc-poison-system-directories.patch
 @@ -0,0 +1,207 @@
 +From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
 +From: Khem Raj <raj.khem@gmail.com>
 +Date: Fri, 29 Mar 2013 08:59:00 +0400
 +Subject: [PATCH 16/35] gcc: poison-system-directories
 +
-+Adapted to Buildroot and gcc 4.9.1 by Thomas Petazzoni, especially the
++Adapted to Buildroot and gcc 4.8.3 by Thomas Petazzoni, especially the
 +addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
 +
 +Signed-off-by: Khem Raj <raj.khem@gmail.com>
@@ -61,7 +61,7 @@ index 0000000..377ddf5
 +===================================================================
 +--- a/gcc/common.opt
 ++++ b/gcc/common.opt
-+@@ -603,6 +603,10 @@
++@@ -595,6 +595,10 @@
 + Common Var(pedantic) Warning
 + Issue warnings needed for strict compliance to the standard
 + 
@@ -93,24 +93,24 @@ index 0000000..377ddf5
 +===================================================================
 +--- a/gcc/configure
 ++++ b/gcc/configure
-+@@ -928,6 +928,7 @@
++@@ -917,6 +917,7 @@
++ with_system_zlib
 + enable_maintainer_mode
-+ enable_link_mutex
 + enable_version_specific_runtime_libs
 ++enable_poison_system_directories
 + enable_plugin
-+ enable_host_shared
 + enable_libquadmath_support
-+@@ -1648,6 +1649,8 @@
++ with_linker_hash_style
++@@ -1630,6 +1631,8 @@
 +   --enable-version-specific-runtime-libs
 +                           specify that runtime libraries should be installed
 +                           in a compiler-specific directory
 ++  --enable-poison-system-directories
 ++                          warn for use of native system header directories
 +   --enable-plugin         enable plugin support
-+   --enable-host-shared    build host code as shared libraries
 +   --disable-libquadmath-support
-+@@ -27737,6 +27740,19 @@
++                           disable libquadmath support for Fortran
++@@ -27195,6 +27198,19 @@
 + fi
 + 
 + 
@@ -134,7 +134,7 @@ index 0000000..377ddf5
 +===================================================================
 +--- a/gcc/configure.ac
 ++++ b/gcc/configure.ac
-+@@ -5388,6 +5388,16 @@
++@@ -5101,6 +5101,16 @@
 +                 [specify that runtime libraries should be
 +                  installed in a compiler-specific directory])])
 + 
@@ -155,15 +155,15 @@ index 0000000..377ddf5
 +===================================================================
 +--- a/gcc/doc/invoke.texi
 ++++ b/gcc/doc/invoke.texi
-+@@ -260,6 +260,7 @@
++@@ -258,6 +258,7 @@
 + -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
 + -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
 + -Wpointer-arith  -Wno-pointer-to-int-cast @gol
 ++-Wno-poison-system-directories @gol
 + -Wredundant-decls  -Wno-return-local-addr @gol
 + -Wreturn-type  -Wsequence-point  -Wshadow @gol
-+ -Wsign-compare  -Wsign-conversion -Wfloat-conversion @gol
-+@@ -4208,6 +4209,14 @@
++ -Wsign-compare  -Wsign-conversion  -Wsizeof-pointer-memaccess @gol
++@@ -4020,6 +4021,14 @@
 +  for most targets, it is made up of code and thus requires the stack
 +  to be made executable in order for the program to work properly.
 + 
@@ -182,16 +182,16 @@ index 0000000..377ddf5
 +===================================================================
 +--- a/gcc/gcc.c
 ++++ b/gcc/gcc.c
-+@@ -764,6 +764,8 @@
++@@ -741,6 +741,8 @@
 +    "%{fuse-ld=*:-fuse-ld=%*}\
 +     %X %{o*} %{e*} %{N} %{n} %{r}\
-+     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} " VTABLE_VERIFICATION_SPEC " \
++     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
 ++    %{Wno-poison-system-directories:--no-poison-system-directories}\
 ++    %{Werror=poison-system-directories:--error-poison-system-directories}\
 +     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
 +     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
-+     %{fcilkplus:%:include(libcilkrts.spec)%(link_cilkrts)}\
-+@@ -4028,6 +4030,12 @@
++     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
++@@ -3991,6 +3993,12 @@
 +       gcc_assert (!compare_debug_opt);
 +     }
 + 
