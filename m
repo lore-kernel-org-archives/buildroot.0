@@ -1,81 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Aug 2014 15:06:45 +0200
-Subject: [Buildroot] [PATCH 12/12] Add option for paranoid unsafe path
-	checking
-In-Reply-To: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1408540005-26934-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Aug 2014 15:42:13 +0200
+Subject: [Buildroot] [PATCHv2] package/gcc: cleanup arch/cpu combinations
+In-Reply-To: <53F49408.3050701@zacarias.com.ar>
+References: <1408482998-24200-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140820142417.31c93ef2@free-electrons.com>
+ <53F49408.3050701@zacarias.com.ar>
+Message-ID: <20140820154213.00c239a8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a Config.in option to the "Build options" submenu to
-enable paranoid checking of unsafe paths. This mechanism is added as
-an option so that when we'll enable it in the autobuilders, people
-trying to reproduce the build failures will be able to do so by just
-downloading the configuration file. If instead we were leaving this
-feature as an environment variable, everyone would have to remember to
-pass this environment variable to reproduce build issues. And certain
-build issues triggered by paranoid unsafe patch checking may not be
-visible in the build output, for example when they happen during the
-execution of configure scripts.
+Dear Gustavo Zacarias,
 
-Since this option is fairly advanced, a new submenu inside "Build
-options" is created, for Advanced options.
+On Wed, 20 Aug 2014 09:26:48 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in           | 20 ++++++++++++++++++++
- package/Makefile.in |  4 ++++
- 2 files changed, 24 insertions(+)
+> I thought about that but it really doesn't help in this scenario in a
+> complete way, since a given gcc may be broken (like 4.9.x was for ppc
+> e500) even though it includes support because of bitrot or bugs, like
+> some sparc targets, or blackfin for that matter.
 
-diff --git a/Config.in b/Config.in
-index 14ff55b..3f41b93 100644
---- a/Config.in
-+++ b/Config.in
-@@ -574,6 +574,26 @@ config BR2_GLOBAL_PATCH_DIR
- 	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
- 	  then all *.patch files in the directory will be applied.
- 
-+menu "Advanced"
-+
-+config BR2_COMPILER_PARANOID_UNSAFE_PATH
-+	bool "paranoid check of library/header paths"
-+	help
-+	  By default, when this option is disabled, when the Buildroot
-+	  cross-compiler will encounter an unsafe library or header
-+	  path (such as /usr/include, or /usr/lib), the compiler will
-+	  display a warning.
-+
-+	  By enabling this option, this warning is turned into an
-+	  error, which will completely abort the build when such
-+	  unsafe paths are encountered.
-+
-+	  Note that this mechanism is available for both the internal
-+	  toolchain (through gcc and binutils patches) and external
-+	  toolchain backends (through the external toolchain wrapper).
-+
-+endmenu
-+
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7d9943c..b9ca7b0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -385,6 +385,10 @@ else
- SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
- endif
- 
-+ifeq ($(BR2_COMPILER_PARANOID_UNSAFE_PATH),y)
-+export BR_COMPILER_PARANOID_UNSAFE_PATH=enabled
-+endif
-+
- include package/pkg-download.mk
- include package/pkg-autotools.mk
- include package/pkg-cmake.mk
+Right, but I believe it's two different (but related) matters:
+
+ * On one hand, Mischa's approach is good to specify starting from
+   which gcc version this or that architecture or architecture variant
+   was supported. It allows to encode the "theory".
+
+ * On the other hand, additional 'depends on' can be added
+   exceptionally to prevent certain gcc versions from being selected,
+   when they are supposed to work in theory, but in practice do not
+   work due to bugs (that are likely to be fixed in the next point
+   release).
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
