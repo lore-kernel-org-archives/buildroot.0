@@ -1,43 +1,25 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Wed, 20 Aug 2014 18:49:25 +0200
-Subject: [Buildroot] [PATCH] imagemagick: Disable OpenMP
-Message-ID: <1408553365-26770-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Aug 2014 17:07:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 7322] libgomp dependency issue with imagemagick
+In-Reply-To: <bug-7322-163@https.bugs.busybox.net/>
+References: <bug-7322-163@https.bugs.busybox.net/>
+Message-ID: <20140820170727.8F11C9D4D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default (i.e. without adding libgomp.so* to
-BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS), if an external toolchain with libgomp
-support is used, then libgomp is installed to staging/ , but not to target/ .
-Consequently, with such a toolchain, imagemagick's configure detected libgomp as
-supported and enabled its usage for the build stage, but then it failed to run
-on the target because libgomp was missing. This is the bug #7322.
+https://bugs.busybox.net/show_bug.cgi?id=7322
 
-Disable OpenMP for imagemagick as a temporary workaround, until a better long
-term solution is agreed on and implemented.
+--- Comment #5 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2014-08-20 17:07:25 UTC ---
+See:
+http://lists.busybox.net/pipermail/buildroot/2014-August/104725.html
+http://patchwork.ozlabs.org/patch/381736/
 
-Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+Thomas, Gustavo, have you changed your mind following Samuel's comment?
 
----
-
-For 2014.08.
----
- package/imagemagick/imagemagick.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 386da4f..aac0b5d 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -29,6 +29,7 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=32
- endif
- 
- IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
-+		--disable-openmp \
- 		--without-perl \
- 		--without-wmf \
- 		--without-openexr \
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
