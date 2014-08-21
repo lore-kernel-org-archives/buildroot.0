@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:22:00 +0200
-Subject: [Buildroot] [PATCH v2] gstreamer{,
- 1}: fix unaligned access detection for arc
-In-Reply-To: <1408547087-31816-1-git-send-email-abrodkin@synopsys.com>
-References: <1408547087-31816-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140821152200.21f70c9b@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:22:47 +0200
+Subject: [Buildroot] [git commit] ntp: fix undefined variable in error print
+Message-ID: <20140821132318.009439D4E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=1b86a60d7aca39c38ddee82daec10b054c258d51
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Aug 2014 19:04:47 +0400, Alexey Brodkin wrote:
-> Fixes the same issue as reported for microblaze here
-> http://autobuild.buildroot.net/results/f49/f4914bb3999c8a7a0c0a2afdac5de40fb9058372/
-> 
-> Similar to the existing handling for avr32, microblaze and xtensa.
-> Also add it for gstreamer1 for good measure as it was missing there as well.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+The variable "$SCRIPTNAME" is undefined; replace with "$0".
 
-Applied, thanks!
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/S49ntp |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
+index 6f9ec75..5721f59 100755
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp
+@@ -36,7 +36,7 @@ case "$1" in
+ 	sleep 1
+ 	$0 start
+ 	;;
+-  *) echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
++  *) echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+ 	exit 1
+ 	;;
+ esac
