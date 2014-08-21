@@ -1,108 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Aug 2014 12:12:06 +0200
-Subject: [Buildroot] [PATCH v3] bandwidthd: Version bump to fix
- autobuilder errors
-In-Reply-To: <1408538353-4804-1-git-send-email-nroach44@gmail.com>
-References: <1408538353-4804-1-git-send-email-nroach44@gmail.com>
-Message-ID: <20140821101206.GB3891@free.fr>
+Date: Thu, 21 Aug 2014 12:14:36 +0200
+Subject: [Buildroot] [PATCH] More descriptive help text for
+	usb_modeswitch
+In-Reply-To: <1408557893-25786-1-git-send-email-yba@tkos.co.il>
+References: <1408557893-25786-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20140821101436.GC3891@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathaniel, All,
+Jonathan, All,
 
-On 2014-08-20 20:39 +0800, Nathaniel Roach spake thusly:
-> Thanks to Romain Naour, we've found that certain tests
-> in configure fail if their dependencies aren't tested for
-> beforehand.
+On 2014-08-20 21:04 +0300, Jonathan Ben-Avraham spake thusly:
+> Improve the help text for usb_modeswitch package for the benefit of the clueless.
 > 
-> libpng has been added as a dependency just to make sure it
-> gets built.
-> 
-> In upstream the changes to fix this issue are:
->  - Test for libusb-1.0 purely to ensure that variables are set
-> 	(it's only needed if libpcap was built with it).
->  - Test for libz and continue/fail because it's actually needed by libpng
-> 	and it's probably more meaningful to fail on libz rather than
-> 	libpng if libz is the issue.
-> 
-> Also, the X.Org tests have been removed from the configure script
-> and therefore we don't need --without-x to be defined anymore.
-> 
-> Additional upstream changes:
->  - Handle the postgres/sqlite flags better (should not effect BR).
->  - Other general configure.ac cleanups.
-> 
-> Fixes:
-> autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
-> 
-> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-> Acked-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
 > ---
-> Changes v1 to v2
->  - Fixed spelling of Romain's name
->  - Added link to the build failure
+>  package/usb_modeswitch/Config.in |   13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> Changes v2 to v3
->  - Added back the SOff and Ack lines
-> ---
->  package/bandwidthd/Config.in     | 1 +
->  package/bandwidthd/bandwidthd.mk | 6 ++----
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-> index c1f0ee1..b6c2b23 100644
-> --- a/package/bandwidthd/Config.in
-> +++ b/package/bandwidthd/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_BANDWIDTHD
->  	bool "bandwidthd"
->  	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_ZLIB # Just to be sure
+> diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+> index 5d8a6d2..2f4c2e8 100644
+> --- a/package/usb_modeswitch/Config.in
+> +++ b/package/usb_modeswitch/Config.in
+> @@ -3,8 +3,17 @@ config BR2_PACKAGE_USB_MODESWITCH
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+>  	select BR2_PACKAGE_LIBUSB
+>  	help
+> -	  USB mode switcher.
+> -	  Used to switch mode on multiple-function devices
+> +	  Some USB devices such as modems and Wifi adapters power-up in mass
+> +	  storage mode to provide access to drivers for the device's
 
-The comment should go. If the packages needs zlib, in which case you
-must select it, and there is no need for a comment.
+I would be even more explixit why those drivers are not needed on a
+Linux system:
 
-The only cases we use a comment are:
-  - the dependency is inherited from another package we select,
-  - the depndency is a run-time only dependency.
+    [...] to provide access to (Windows-only) drivers for the device's
+    application mode. [...]
+
+Otherwise, looks good to me:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  	select BR2_PACKAGE_LIBPNG
->  	select BR2_PACKAGE_LIBPCAP
->  	select BR2_PACKAGE_GD
-> diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-> index 3e11d6a..59b6143 100644
-> --- a/package/bandwidthd/bandwidthd.mk
-> +++ b/package/bandwidthd/bandwidthd.mk
-> @@ -4,19 +4,17 @@
->  #
->  ################################################################################
+> +	  application mode. USB_ModeSwitch changes the mode of such devices
+> +	  from the initial mode to the application mode. Specific configuration
+> +	  data for each device model is required.
+> +
+> +	  usb_modeswitch can be used with package usb_modeswitch_data and udev
+> +	  for automatic mode switching when devices are connected.
+> +
+> +	  For more information Internet search for "Virtual CD-ROM switching
+> +	  utility".
 >  
-> -BANDWIDTHD_VERSION = v2.0.1-auto-r08
-> +BANDWIDTHD_VERSION = v2.0.1-auto-r10
->  BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+>  	  http://www.draisberghof.de/usb_modeswitch/
 >  
->  # Specified as "any version of the GPL that is current as of your
->  # download" by upstream.
->  BANDWIDTHD_LICENSE = GPL
->  
-> -BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
-> +BANDWIDTHD_DEPENDENCIES = gd libpng libpcap zlib
->  
->  BANDWIDTHD_AUTORECONF = YES
->  
-> -BANDWIDTHD_CONF_OPT += --without-x
-> -
->  ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
->  BANDWIDTHD_DEPENDENCIES += postgresql
->  BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
 > -- 
-> 2.1.0.rc1
+> 1.7.10.4
 > 
 > _______________________________________________
 > buildroot mailing list
