@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:40:48 +0200
-Subject: [Buildroot] [git commit branch/next] package/mesa3d: Bump version
-	to 10.2.6
-Message-ID: <20140821134101.5B1D89D4E5@busybox.osuosl.org>
+Date: Thu, 21 Aug 2014 15:41:14 +0200
+Subject: [Buildroot] [PATCH 0 of 3 for 2014.08] Manual improvements part
+ 2
+In-Reply-To: <patchbomb.1408477305@localhost>
+References: <patchbomb.1408477305@localhost>
+Message-ID: <20140821154114.77299daf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7301cbdd5723be6b6299cfe0f38078bc947af56
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Thomas De Schampheleire,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 19 Aug 2014 21:41:45 +0200, Thomas De Schampheleire wrote:
+> This is a second set of manual improvements I'm sending out for 2014.08.
+> Thomas Petazzoni already applied the first part which was actually an RFC,
+> and following his comments I will send out subsequent patches as soon as
+> they are available.
+> 
+> As far as structure is concerned, this series covers all I was planning to
+> change. Content-wise, I will be making more changes, which will be sent as a
+> third series. At least one change I have to make is regarding the
+> configuration of busybox/uclibc, which is now easier thanks to the
+> kconfig-package infrastructure. After that change, I think the manual is in
+> a good enough shape for the release, and any further changes I can make (see
+> below) are welcome but not necessary. Do let me know if you think otherwise.
+> 
+> Additional changes I'm planning but may not be ready in time for the
+> release:
+> - Rework the 'General Buildroot usage' chapter
+> - Rework the 'Project-specific customization' chapter.
+> - Revive the 'Beyond Buildroot' rework patch that has been sent to the list
+>   a long while back. This will certainly not be ready before the release.
+> 
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6b99757..aea78c3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESA3D_VERSION = 10.2.5
-+MESA3D_VERSION = 10.2.6
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+Series applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
