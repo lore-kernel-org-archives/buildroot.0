@@ -1,59 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Aug 2014 12:08:27 +0200
-Subject: [Buildroot] [PATCH 2/2] tvheadend: fix undefined variable in
- error print
-In-Reply-To: <1408497647-2258-2-git-send-email-danomimanchego123@gmail.com>
-References: <1408497647-2258-1-git-send-email-danomimanchego123@gmail.com>
- <1408497647-2258-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140821100827.GA3891@free.fr>
+Date: Thu, 21 Aug 2014 12:12:06 +0200
+Subject: [Buildroot] [PATCH v3] bandwidthd: Version bump to fix
+ autobuilder errors
+In-Reply-To: <1408538353-4804-1-git-send-email-nroach44@gmail.com>
+References: <1408538353-4804-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20140821101206.GB3891@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+Nathaniel, All,
 
-On 2014-08-19 21:20 -0400, Danomi Manchego spake thusly:
-> The variable "$SCRIPTNAME" is undefined; replace with "$0".
+On 2014-08-20 20:39 +0800, Nathaniel Roach spake thusly:
+> Thanks to Romain Naour, we've found that certain tests
+> in configure fail if their dependencies aren't tested for
+> beforehand.
 > 
-> Also, fix "Stopping" spelling.
+> libpng has been added as a dependency just to make sure it
+> gets built.
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> In upstream the changes to fix this issue are:
+>  - Test for libusb-1.0 purely to ensure that variables are set
+> 	(it's only needed if libpcap was built with it).
+>  - Test for libz and continue/fail because it's actually needed by libpng
+> 	and it's probably more meaningful to fail on libz rather than
+> 	libpng if libz is the issue.
+> 
+> Also, the X.Org tests have been removed from the configure script
+> and therefore we don't need --without-x to be defined anymore.
+> 
+> Additional upstream changes:
+>  - Handle the postgres/sqlite flags better (should not effect BR).
+>  - Other general configure.ac cleanups.
+> 
+> Fixes:
+> autobuild.buildroot.net/results/37a/37a94e0f2d3faa0aec9c488e987cfff706fc9f3b/build-end.log
+> 
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+> Acked-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> Changes v1 to v2
+>  - Fixed spelling of Romain's name
+>  - Added link to the build failure
+> 
+> Changes v2 to v3
+>  - Added back the SOff and Ack lines
+> ---
+>  package/bandwidthd/Config.in     | 1 +
+>  package/bandwidthd/bandwidthd.mk | 6 ++----
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+> index c1f0ee1..b6c2b23 100644
+> --- a/package/bandwidthd/Config.in
+> +++ b/package/bandwidthd/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_BANDWIDTHD
+>  	bool "bandwidthd"
+>  	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_ZLIB # Just to be sure
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The comment should go. If the packages needs zlib, in which case you
+must select it, and there is no need for a comment.
+
+The only cases we use a comment are:
+  - the dependency is inherited from another package we select,
+  - the depndency is a run-time only dependency.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/tvheadend/S99tvheadend |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
-> index c29e32d..75b66f3 100644
-> --- a/package/tvheadend/S99tvheadend
-> +++ b/package/tvheadend/S99tvheadend
-> @@ -31,7 +31,7 @@ case "$1" in
->          fi
->          ;;
->      stop)
-> -        printf "Stoping TVHeadend daemon: "
-> +        printf "Stopping TVHeadend daemon: "
->          start-stop-daemon -K -q -p ${PIDFILE} -s TERM
->          sleep 2
->          if start-stop-daemon -K -q -p ${PIDFILE} -t; then
-> @@ -46,7 +46,7 @@ case "$1" in
->          "${0}" start
->          ;;
->      *)
-> -        echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-> +        echo "Usage: $0 {start|stop|restart|force-reload}" >&2
->          exit 1
->          ;;
->  esac
+>  	select BR2_PACKAGE_LIBPNG
+>  	select BR2_PACKAGE_LIBPCAP
+>  	select BR2_PACKAGE_GD
+> diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+> index 3e11d6a..59b6143 100644
+> --- a/package/bandwidthd/bandwidthd.mk
+> +++ b/package/bandwidthd/bandwidthd.mk
+> @@ -4,19 +4,17 @@
+>  #
+>  ################################################################################
+>  
+> -BANDWIDTHD_VERSION = v2.0.1-auto-r08
+> +BANDWIDTHD_VERSION = v2.0.1-auto-r10
+>  BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+>  
+>  # Specified as "any version of the GPL that is current as of your
+>  # download" by upstream.
+>  BANDWIDTHD_LICENSE = GPL
+>  
+> -BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
+> +BANDWIDTHD_DEPENDENCIES = gd libpng libpcap zlib
+>  
+>  BANDWIDTHD_AUTORECONF = YES
+>  
+> -BANDWIDTHD_CONF_OPT += --without-x
+> -
+>  ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
+>  BANDWIDTHD_DEPENDENCIES += postgresql
+>  BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
 > -- 
-> 1.7.9.5
+> 2.1.0.rc1
 > 
 > _______________________________________________
 > buildroot mailing list
