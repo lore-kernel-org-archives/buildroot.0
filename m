@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:07:46 +0200
-Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.08 release
-In-Reply-To: <1408545394-4345-1-git-send-email-abrodkin@synopsys.com>
-References: <1408545394-4345-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140821150746.33053245@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:19:47 +0200
+Subject: [Buildroot] [git commit] imagemagick: Disable OpenMP
+Message-ID: <20140821132010.C40DD9D4BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=9579e6aac33aa828aa5a447727440be7b85efb03
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Aug 2014 18:36:34 +0400, Alexey Brodkin wrote:
-> Now when new shiny tools are released by Synopsys we're ready for version
-> update in Buildroot.
-> 
-> Important change in this release is switching to combined "binutils-gdb" repo
-> in accordance to upstream move.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
-> Would be really nice to squeeze this commit into the next RC (of v2014.08)
-> so it will become a part of the upcoming Buildroot release.
-> 
-> Otherwise we'll stuck with previous ARC tools until 2014.11 release.
-> ---
->  package/binutils/Config.in.host | 2 +-
->  package/binutils/binutils.mk    | 2 +-
->  package/gcc/Config.in.host      | 2 +-
->  package/gdb/Config.in.host      | 2 +-
->  package/gdb/gdb.mk              | 2 +-
->  package/uclibc/Config.in        | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+By default (i.e. without adding libgomp.so* to
+BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS), if an external toolchain with libgomp
+support is used, then libgomp is installed to staging/ , but not to target/ .
+Consequently, with such a toolchain, imagemagick's configure detected libgomp as
+supported and enabled its usage for the build stage, but then it failed to run
+on the target because libgomp was missing. This is the bug #7322.
 
-I think this overlooks the fact that there are binutils and gcc patches
-in package/binutils/ and package/gcc/ specifically for the ARC
-architecture versions. Those patches should be updated, or a
-justification be provided as to why they are no longer necessary. And
-in any case, the old, no longer referenced patches, should be removed.
+Disable OpenMP for imagemagick as a temporary workaround, until a better long
+term solution is agreed on and implemented.
 
-Thanks!
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 386da4f..aac0b5d 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -29,6 +29,7 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=32
+ endif
+ 
+ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
++		--disable-openmp \
+ 		--without-perl \
+ 		--without-wmf \
+ 		--without-openexr \
