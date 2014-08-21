@@ -1,44 +1,55 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 21 Aug 2014 22:45:19 +0200
-Subject: [Buildroot] [PATCH v2 4/5] package/cdrkit: clean {HOST_,
-	}CDRKIT_CONF_OPT
+Date: Thu, 21 Aug 2014 22:45:20 +0200
+Subject: [Buildroot] [PATCH v2 5/5] toolchainfile.cmake.in: do not force the
+	CMAKE_{C, CXX}_FLAGS to the cache
 In-Reply-To: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
 References: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1408653920-18954-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1408653920-18954-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extending {C,LD}FLAGS for both host and target cdrkit package is not needed
-because it is already handled by the {host-,}cmake-package infrastructure.
+Fix #7280 [1]
+
+When the FORCE option is passed to the set command, the variable is
+added/updated in the CMake cache every single time CMake processes this
+command.
+
+Because the toolchainfile.cmake prepends architecture/toolchain flags
+to the CMAKE_{C,CXX}_FLAGS, this makes the CFLAGS being updated in the
+generated Makefiles each time one reconfigures its project. So it
+forces the compilation of everything, even when nothing has changed.
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=7280
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(tested the SimpleApp reproduction scenario described in the bug report)
 
 ---
 changes v1 -> v2:
-- no change
+- fix typoes in commit log (ThomasDS)
+- update A/R/T tags
 ---
- package/cdrkit/cdrkit.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ support/misc/toolchainfile.cmake.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index ee98013..3cb64b2 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -18,12 +18,5 @@ endif
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 1dfbdba..4ca3d35 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -12,8 +12,8 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
  
- CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
+ set(CMAKE_SYSTEM_NAME Linux)
  
--## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
--## some extra flags so it finds needed libs and headers.
--CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(STAGING_DIR)/usr/include"
--CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
--HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
--HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
--
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+-set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
+-set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
++set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
++set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+ set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
+ set(CMAKE_INSTALL_SO_NO_EXE 0)
+ 
 -- 
 2.1.0
