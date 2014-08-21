@@ -1,95 +1,116 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Thu, 21 Aug 2014 15:38:36 +0300 (IDT)
-Subject: [Buildroot] [PATCH] More descriptive help text for
- usb_modeswitch
-In-Reply-To: <20140821101436.GC3891@free.fr>
-References: <1408557893-25786-1-git-send-email-yba@tkos.co.il>
- <20140821101436.GC3891@free.fr>
-Message-ID: <alpine.DEB.2.02.1408211537030.6774@tavas.tkos.co.il>
+From: Matt Weber <Matthew.Weber@rockwellcollins.com>
+Date: Thu, 21 Aug 2014 07:54:56 -0500
+Subject: [Buildroot] [PATCH v2 1/1] autobuilder: branch support
+Message-ID: <1408625696-42975-1-git-send-email-Matthew.Weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Adds an option to specify a specific branch for the autobuilder
+to execute against (Defaults to the master branch).
 
-I agree with your comment.
+Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
+---
 
-I will add the explanation about why the drivers are not required on Linux 
-and re-submit.
-
-Thanks,
-
-  - yba
+Changes v1 -> v2
+ - Fixed assignment of br_branch value to variable
+   when reading config from file. (Suggested by Clayton S)
 
 
-On Thu, 21 Aug 2014, Yann E. MORIN wrote:
+scripts/autobuild-run | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-> Date: Thu, 21 Aug 2014 12:14:36 +0200
-> From: Yann E. MORIN <yann.morin.1998@free.fr>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] More descriptive help text for usb_modeswitch
-> 
-> Jonathan, All,
->
-> On 2014-08-20 21:04 +0300, Jonathan Ben-Avraham spake thusly:
->> Improve the help text for usb_modeswitch package for the benefit of the clueless.
->>
->> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
->> ---
->>  package/usb_modeswitch/Config.in |   13 +++++++++++--
->>  1 file changed, 11 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
->> index 5d8a6d2..2f4c2e8 100644
->> --- a/package/usb_modeswitch/Config.in
->> +++ b/package/usb_modeswitch/Config.in
->> @@ -3,8 +3,17 @@ config BR2_PACKAGE_USB_MODESWITCH
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
->>  	select BR2_PACKAGE_LIBUSB
->>  	help
->> -	  USB mode switcher.
->> -	  Used to switch mode on multiple-function devices
->> +	  Some USB devices such as modems and Wifi adapters power-up in mass
->> +	  storage mode to provide access to drivers for the device's
->
-> I would be even more explixit why those drivers are not needed on a
-> Linux system:
->
->    [...] to provide access to (Windows-only) drivers for the device's
->    application mode. [...]
->
-> Otherwise, looks good to me:
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
->
->> +	  application mode. USB_ModeSwitch changes the mode of such devices
->> +	  from the initial mode to the application mode. Specific configuration
->> +	  data for each device model is required.
->> +
->> +	  usb_modeswitch can be used with package usb_modeswitch_data and udev
->> +	  for automatic mode switching when devices are connected.
->> +
->> +	  For more information Internet search for "Virtual CD-ROM switching
->> +	  utility".
->>
->>  	  http://www.draisberghof.de/usb_modeswitch/
->>
->> --
->> 1.7.10.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index dcb8dbd..9ebea30 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -171,6 +171,13 @@ def prepare_build(instance, log):
+         log_write(log, "ERROR: could not pull Buildroot sources")
+         return -1
+ 
++    # Update to a specific branch for regression test
++    abssrcdir = os.path.abspath(srcdir)
++    ret = subprocess.call(["git", "checkout", br_branch], cwd=srcdir, stdout=log, stderr=log)
++    if ret != 0:
++        log_write(log, "ERROR: could not checkout Buildroot branch [%s]" % br_branch)
++        return -1
++
+     # Create an empty output directory. We remove it first, in case a previous build was aborted.
+     outputdir = os.path.join(idir, "output")
+     if os.path.exists(outputdir):
+@@ -431,7 +438,7 @@ def send_results(instance, http_login, http_password, submitter, log, result):
+ # This function implements the main per-instance loop, which prepares
+ # the build, generate a configuration, runs the build, and submits the
+ # results.
+-def run_instance(instance, njobs, http_login, http_password, submitter):
++def run_instance(instance, njobs, http_login, http_password, submitter, br_branch):
+     idir = "instance-%d" % instance
+ 
+     # If it doesn't exist, create the instance directory
+@@ -466,6 +473,7 @@ Format of the configuration file:
+    http-login = <value>
+    http-password = <value>
+    submitter = <value>
++   br_branch = <value>
+ """
+ 
+     parser = argparse.ArgumentParser(description='Run Buildroot autobuilder',
+@@ -479,6 +487,8 @@ Format of the configuration file:
+                         help="Name/machine of submitter")
+     parser.add_argument("--config", '-c', metavar="CONFIG",
+                         help="Path to configuration file")
++    parser.add_argument("--br_branch", '-b', metavar="BR_BRANCH",
++                        help="Name of Buildroot branch to regression")
+     args = parser.parse_args()
+ 
+     ninstances = 1
+@@ -486,6 +496,7 @@ Format of the configuration file:
+     http_login = None
+     http_password = None
+     submitter = "N/A"
++    br_branch = "master"
+ 
+     if args.config:
+         if not os.path.exists(args.config):
+@@ -505,6 +516,8 @@ Format of the configuration file:
+             http_password = parser.get('main', 'http-password')
+         if parser.has_option('main', 'submitter'):
+             submitter = parser.get('main', 'submitter')
++        if parser.has_option('main', 'br_branch'):
++            br_branch = parser.get('main', 'br_branch')
+ 
+     if args.njobs:
+         njobs = int(args.njobs)
+@@ -512,22 +525,25 @@ Format of the configuration file:
+         ninstances = int(args.ninstances)
+     if args.submitter:
+         submitter = args.submitter
++    if args.br_branch:
++        br_branch = args.br_branch
+ 
+-    return (ninstances, njobs, http_login, http_password, submitter)
++    return (ninstances, njobs, http_login, http_password, submitter, br_branch)
+ 
+ if __name__ == '__main__':
+     check_version()
+     check_requirements()
+-    (ninstances, njobs, http_login, http_password, submitter) = config_get()
++    (ninstances, njobs, http_login, http_password, submitter, br_branch) = config_get()
+     if http_login is None or http_password is None:
+         print "WARN: due to the lack of http login/password details, results will not be submitted"
+         print "WARN: tarballs of results will be kept locally only"
++        print "NOTE: Testing branch --> %s" % br_branch
+     def sigterm_handler(signum, frame):
+         os.killpg(os.getpgid(os.getpid()), signal.SIGTERM)
+         sys.exit(1)
+     processes = []
+     for i in range(0, ninstances):
+-        p = Process(target=run_instance, args=(i, njobs, http_login, http_password, submitter))
++        p = Process(target=run_instance, args=(i, njobs, http_login, http_password, submitter, br_branch))
+         p.start()
+         processes.append(p)
+     signal.signal(signal.SIGTERM, sigterm_handler)
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+1.9.1
