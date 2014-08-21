@@ -1,32 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Aug 2014 23:46:17 +0200
-Subject: [Buildroot] [git commit] libtasn1: bump to version 4.1
-Message-ID: <20140901132446.5612F9D5B9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:40:48 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: Bump version to 10.2.6
+Message-ID: <20140901132446.3506D9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bc27623e368eb7a6521497a523ccbc00877d983
+commit: http://git.buildroot.net/buildroot/commit/?id=c7301cbdd5723be6b6299cfe0f38078bc947af56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libtasn1/libtasn1.mk |    2 +-
+ package/mesa3d/mesa3d.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 84297cb..45fff87 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6b99757..aea78c3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTASN1_VERSION = 4.0
-+LIBTASN1_VERSION = 4.1
- LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+-MESA3D_VERSION = 10.2.5
++MESA3D_VERSION = 10.2.6
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
