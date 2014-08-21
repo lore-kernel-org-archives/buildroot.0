@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:26:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xmlstarlet: fix static linking
-In-Reply-To: <1408397742-9051-1-git-send-email-romain.naour@openwide.fr>
-References: <1408397742-9051-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140821152647.099b603f@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:29:02 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch: more descriptive help text
+Message-ID: <20140821132922.814C99D4E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=e1d7f2dc8f8ce470f60421538aa7bbfa9ba6b45c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Aug 2014 23:35:42 +0200, Romain Naour wrote:
-> The static linking with libxml2 and lib(e)xslt (--enable-static-libs)
-> need to be enabled when BR2_PREFER_STATIC_LIB is set.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0fd/0fd4a65ab98a4cf3fe893c29628608a71e96ecbc/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/xmlstarlet/xmlstarlet.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Provides a fuller description of the USB_ModeSwitch functionality for
+the benefit of the otherwise clueless.
 
-Patch applied, but one comment below...
+[Thomas: minor formatting and wording fixes.]
 
-> 
-> diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-> index 16f736e..7a8451f 100644
-> --- a/package/xmlstarlet/xmlstarlet.mk
-> +++ b/package/xmlstarlet/xmlstarlet.mk
-> @@ -12,9 +12,15 @@ XMLSTARLET_LICENSE_FILES = COPYING
->  XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
->  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  
-> -XMLSTARLET_CONF_OPT += --disable-static-libs \
-> +XMLSTARLET_CONF_OPT += \
->  	--with-libxml-prefix=${STAGING_DIR}/usr \
->  	--with-libxslt-prefix=${STAGING_DIR}/usr \
->  	--with-libiconv-prefix=${STAGING_DIR}/usr
->  
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +XMLSTARLET_CONF_OPT += --enable-static-libs
-> +else
-> +XMLSTARLET_CONF_OPT += --disable-static-libs
-> +endif
+Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/usb_modeswitch/Config.in |   15 +++++++++++++--
+ 1 files changed, 13 insertions(+), 2 deletions(-)
 
-Not introduced by your patch, but I don't understand why we have
---disable-static-libs in the else case here. When BR2_PREFER_STATIC_LIB
-is disabled, we should normally build both the shared and static
-variants of all libraries.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+index 5d8a6d2..e4c7168 100644
+--- a/package/usb_modeswitch/Config.in
++++ b/package/usb_modeswitch/Config.in
+@@ -3,8 +3,19 @@ config BR2_PACKAGE_USB_MODESWITCH
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+-	  USB mode switcher.
+-	  Used to switch mode on multiple-function devices
++	  Some models of some USB devices such as modems and Wifi
++	  adapters power-up in mass storage mode to provide access to
++	  drivers for the device's application mode. usb_modeswitch
++	  changes the mode of such devices from the initial power-up
++	  mode to the application mode. Specific configuration data
++	  for each device model is required.
++
++	  usb_modeswitch can be used with the usb_modeswitch_data
++	  package and udev for automatic mode switching when devices
++	  are connected.
++
++	  For more information search the Internet for "Virtual CD-ROM
++	  switching utility".
+ 
+ 	  http://www.draisberghof.de/usb_modeswitch/
+ 
