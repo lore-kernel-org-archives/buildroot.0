@@ -1,97 +1,63 @@
-From: lee choon gay <choongay@yahoo.com>
-Date: Wed, 20 Aug 2014 19:31:49 -0700
-Subject: [Buildroot] About i386 Architecture and Grub2
-In-Reply-To: <20140820141013.24de59df@free-electrons.com>
-References: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>
- <20140820141013.24de59df@free-electrons.com> 
-Message-ID: <1408588309.32587.YahooMailNeo@web141705.mail.bf1.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Aug 2014 08:30:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-20
+Message-ID: <20140821063011.B829A101656@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi. Thanks for replying.
+Build statistics for 2014-08-20
+===============================
 
-I build the code with settings below.
-menuconfig -> Filesystem images -> ext4.
-menuconfig -> Filesystem images -> tar the root filesystem.
-menuconfig -> System configuration -> Init system with Busybox (default).
-menuconfig -> Toolchain -> Buildroot toolchain (default).
-menuconfig -> Toolchain -> C library uClibc (default).
+        success : 115
+       failures : 19 
+       timeouts : 0  
+          TOTAL : 134
 
-Steps to build the partitions.
-1) I use sudo dd if=/dev/zero bs=1M count=1 of=/dev/sdb to wipe out the original partition in my pendrive.
-2) sudo fdisk -l will shows /dev/sdb doesn't contain
- a valid partition table.
-3) To recreate the partition, I use sudo fdisk /dev/sdb.
-4) I enter n for new partition, p for primary, label partition as 1, default minimum for first sector, 5000000 for last sector.
-5) Then enter n again to create second partition, p for primary, label partition as 2, 5000001 for first sector, default maximum for last sector.
-6) Then enter w to write the partition table.
-7) Power cycle the pendrive.
-8) I format the partitions using sudo mkfs.ext4 /dev/sdb1 and sudo mkfs.ext4 /dev/sdb2.
-9) I sudo mount /dev/sdb1 /home/leecgy/temp1 and sudo chmod a+rw /home/leecgy/temp1 to enable writing to partition 1.
-10) Then sudo mount /dev/sdb2 /home/leecgy/temp2 and sudo chmod a+rw /home/leecgy/temp2 to enable writing to partition 2.
-11) I right click and create new folder called boot in partition 1, then right click and copy paste the bzImage into boot folder.
-12) Then right click and create new folder
- called grub in boot folder, then right click and copy paste the grub.cfg into grub folder.
-13) I sudo grub-install --boot-directory=/home/leecgy/temp1/boot /dev/sdb to install grub.
-14) I right click and extract the rootfs.tar, then right click and copy paste the contents inside rootfs into partition 2.
+Classification of failures by reason
+====================================
 
-When trying to boot up, the code dump a lot of?error and stuck. I cannot shift+page up to see the top of the error.
+              lbreakout2-2.6.4 | 3 
+                  ltris-1.0.19 | 2 
+                 gnupg2-2.0.25 | 2 
+                  opencv-2.4.8 | 1 
+                libinput-0.3.0 | 1 
+                libiscsi-1.6.0 | 1 
+                  perl-gd-2.53 | 1 
+                keyutils-1.5.5 | 1 
+                libiqrf-v0.1.2 | 1 
+ti-utils-06dbdb2727354b5f3a... | 1 
+make: *** [core-dependencie... | 1 
+                      qt-4.8.6 | 1 
+               procps-ng-3.3.9 | 1 
+                directfb-1.6.3 | 1 
+                  python-2.7.8 | 1 
 
-Please let me know if you need more info.
+Detail of failures
+===================
 
-Thanks.
-
- 
-
-
-On Wednesday, August 20, 2014 8:10 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-  
-
-
-Hello,
-
-On Wed, 20 Aug 2014 04:37:12 -0700, lee choon gay wrote:
-
-> But
- the data is not persistent, anything that I save will be gone after reboot.
-> I am looking for method to make the data persistent (no?ram file system).
-> I try to boot up the code without using rootfs.cpio as follow.
-> The code won't boot up.
-> 
-> set default="0"
-> set timeout="0"
-> 
-> menuentry "any name" {
-> ????????? Linux /boot/bzImage root=/dev/sda2 noinitrd?console=tty1
-> ????????? }
-> 
-> For your info, I use pendrive for this.
-> And the bzImage and rootfs.cpio is located in partition 1 boot folder.
-
-If you're using a root filesystem in the second partition, then there's
-no point in keeping the rootfs.cpio file in the fist partition.
+    x86_64 |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/d2fc2cb69fff0f278bc4781227d7e420db1cd316/
+   powerpc |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/d93e47a1d333d7314049d17cb70c09eeade13e9a/
+   powerpc |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/f9e7d8903b05ea9e4f546b5d13182ffcc2b1716d/
+       sh4 |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/3ce2a9ee83d6715411e7b3982ef64b181a3b7f1d/
+  mips64el |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/a77dd3e18cc4a5e8300ab33eb532cc03d0156f7f/
+  mips64el |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/2dc135f5b89bbcbe3e3c322faeddc09f221b9fec/
+       arm |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/5c2ecc993e2c4cb329236d3c54c260902292854b/
+  mips64el |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/32065d8fca02befcf2ac6d29f2b33216de7a3689/
+      bfin |                 libiqrf-v0.1.2 | NOK | http://autobuild.buildroot.net/results/c2a0813f71c1a17d9a4c811d8afb33ee8d727bff/
+      bfin |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/aacbe0276d5b75dbb101bec5e0ac11df2211d64d/
+       arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/27d660c8e74b4ef93cc862ecb211ec07b35da925/
+      mips |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/912e99f7fd5369564328df15b9cf9a3e19b79647/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/acf23cc7f9eedc38593a553e134ac0451a5fe8a3/
+       arm |                   opencv-2.4.8 | NOK | http://autobuild.buildroot.net/results/41b03b5f9faf22a695a8a19661f8566e55d983d3/
+       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/0b77b8e89e075cb94f01d449920c7fa10970012e/
+  mips64el |                procps-ng-3.3.9 | NOK | http://autobuild.buildroot.net/results/3e8464e0b00ce22fa02a6337159fca250d86425c/
+       arm |                   python-2.7.8 | NOK | http://autobuild.buildroot.net/results/95366836999effea2bf9de8d1d97fb0265caedf9/
+      sh4a |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/d1beb2af2ba0c8c4215d98e11c61626ab8466665/
+      bfin | ti-utils-06dbdb2727354b5f3a... | NOK | http://autobuild.buildroot.net/results/33cd56e0b1727ce2c1f4351d6c5cea1701d6226c/
 
 
-> File system is located in partition 2.
-> 
-> Hope I can get some?help here.
-> Thank you very much. :)
-
-Yes, but please provide more details, like what happens when you try to
-boot, and how you create your second partition exactly. With the
-informations you provided, there is just no way for us to help you as
-you didn't provide enough details.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140820/50c1ed1b/attachment.html>
+http://autobuild.buildroot.net
