@@ -1,64 +1,42 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 21 Aug 2014 15:54:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xmlstarlet: fix static linking
-In-Reply-To: <20140821152647.099b603f@free-electrons.com>
-References: <1408397742-9051-1-git-send-email-romain.naour@openwide.fr>
- <20140821152647.099b603f@free-electrons.com>
-Message-ID: <53F5FA0E.9030209@openwide.fr>
+Date: Thu, 21 Aug 2014 15:56:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/xscreensaver: fix linking with intl
+Message-ID: <1408629367-7336-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+xscreensaver doesn't build with (e)glibc toolchain when gettext package is
+selected.
 
-Le 21/08/2014 15:26, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Mon, 18 Aug 2014 23:35:42 +0200, Romain Naour wrote:
->> The static linking with libxml2 and lib(e)xslt (--enable-static-libs)
->> need to be enabled when BR2_PREFER_STATIC_LIB is set.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/0fd/0fd4a65ab98a4cf3fe893c29628608a71e96ecbc/build-end.log
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>  package/xmlstarlet/xmlstarlet.mk | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> Patch applied, but one comment below...
-> 
->>
->> diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
->> index 16f736e..7a8451f 100644
->> --- a/package/xmlstarlet/xmlstarlet.mk
->> +++ b/package/xmlstarlet/xmlstarlet.mk
->> @@ -12,9 +12,15 @@ XMLSTARLET_LICENSE_FILES = COPYING
->>  XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
->>  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
->>  
->> -XMLSTARLET_CONF_OPT += --disable-static-libs \
->> +XMLSTARLET_CONF_OPT += \
->>  	--with-libxml-prefix=${STAGING_DIR}/usr \
->>  	--with-libxslt-prefix=${STAGING_DIR}/usr \
->>  	--with-libiconv-prefix=${STAGING_DIR}/usr
->>  
->> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->> +XMLSTARLET_CONF_OPT += --enable-static-libs
->> +else
->> +XMLSTARLET_CONF_OPT += --disable-static-libs
->> +endif
-> 
-> Not introduced by your patch, but I don't understand why we have
-> --disable-static-libs in the else case here. When BR2_PREFER_STATIC_LIB
-> is disabled, we should normally build both the shared and static
-> variants of all libraries.
-> 
+With (e)glibc libintl is provided by the libc whereas with uClibc it's provided
+by gettext.
 
-I don't know either.
-I wanted to keep the same behavior when BR2_PREFER_STATIC_LIB is enabled.
+Linking with intl is only needed if the toolchain needs gettext and locale is
+set.
 
-Best regards,
-Romain
+Fixes:
+http://autobuild.buildroot.net/results/39b/39b6ad07ad59d87afeca6e427c69f580bed35700/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/xscreensaver/xscreensaver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 0e84d27..ac8b09d 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -14,7 +14,7 @@ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+ XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+ 	$(if $(BR2_PACKAGE_GETTEXT),gettext)
+ 
+-XSCREENSAVER_CONF_ENV = $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
++XSCREENSAVER_CONF_ENV = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+ 
+ # otherwise we end up with host include/library dirs passed to the
+ # compiler/linker
+-- 
+1.9.3
