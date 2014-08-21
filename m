@@ -1,29 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:41:45 +0200
-Subject: [Buildroot] [PATCH branch/next] package/mesa3d: Bump version to
- 10.2.6
-In-Reply-To: <1408555638-22700-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1408555638-22700-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140821154145.61f6fa99@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 21 Aug 2014 15:51:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltris: fix linking with intl
+In-Reply-To: <20140821153629.38300748@free-electrons.com>
+References: <1408470236-30101-1-git-send-email-romain.naour@openwide.fr>
+ <20140821153629.38300748@free-electrons.com>
+Message-ID: <53F5F958.2000004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Thomas,
 
-On Wed, 20 Aug 2014 19:27:18 +0200, Bernd Kuhls wrote:
+Le 21/08/2014 15:36, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/mesa3d.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Tue, 19 Aug 2014 19:43:56 +0200, Romain Naour wrote:
+>> ltris doen't build with (e)glibc toolchain since commit 454a41016f2f074b69e2c677f4749c213c653e86
+>> when gettext package is selected.
+>>
+>> With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
+>>
+>> Linking with intl is only needed if the toolchain needs gettext and locale is set.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/821/82128cb9f5cd6ae2595a8302462f1b5719dad9f7/build-end.log
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/ltris/ltris.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Applied, thanks. However, it would be good if your commit logs were
+> wrapped to a more reasonable length.
+> 
+Sorry for that, I'll be more careful.
 
-Applied to next, thanks.
+Also xscreensaver and procps-ng have the same problem, I'll send a patch for them.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
