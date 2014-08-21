@@ -1,54 +1,50 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Thu, 21 Aug 2014 16:39:39 +0300 (IDT)
-Subject: [Buildroot] [PATCH] More descriptive help text for
- usb_modeswitch
-In-Reply-To: <20140821153011.4ee92142@free-electrons.com>
-References: <1408557893-25786-1-git-send-email-yba@tkos.co.il>
- <20140821153011.4ee92142@free-electrons.com>
-Message-ID: <alpine.DEB.2.02.1408211637210.6774@tavas.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:39:32 +0200
+Subject: [Buildroot] [git commit] manual/getting started: minor improvements
+	to 'Using Buildroot' section
+Message-ID: <20140821134002.9EFF29D4E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thanks.
-I'm working on a better text as per Yann's comments.
-Please remind me what the line-length requirement for the help text is 
-(not 80 chars?).
+commit: http://git.buildroot.net/buildroot/commit/?id=3afdf89f690e95bc32d75c5f4efbc4142671ac70
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  - yba
+This patch renames the section 'Using Buildroot' into 'Buildroot quick
+start' as real details about Buildroot usage will be in the User Guide
+rather than in 'Getting Started'.
 
+Additionally, add a cross-reference to the section about configuring
+Buildroot.
 
-On Thu, 21 Aug 2014, Thomas Petazzoni wrote:
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/using.txt |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-> Date: Thu, 21 Aug 2014 15:30:11 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] More descriptive help text for usb_modeswitch
-> 
-> Dear Jonathan Ben-Avraham,
->
-> On Wed, 20 Aug 2014 21:04:53 +0300, Jonathan Ben-Avraham wrote:
->> Improve the help text for usb_modeswitch package for the benefit of the clueless.
->>
->> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
->> ---
->>  package/usb_modeswitch/Config.in |   13 +++++++++++--
->>  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> I've applied your patch, after tweaking the commit title (it should
-> always be "<package>: <something>"), rewrapping the help text to a
-> shorter line length, and slightly adjusting the wording.
->
-> Thanks!
->
-> Thomas
->
-
--- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index ed155c9..975fffc 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
+-== Using Buildroot
++== Buildroot quick start
+ 
+ *Important*: you can and should *build everything as a normal user*. There
+ is no need to be root to configure and use Buildroot. By running all
+@@ -47,7 +47,8 @@ specifically the xref:requirement-optional[optional requirements]
+ to get the dependencies of your favorite interface.
+ 
+ For each menu entry in the configuration tool, you can find associated
+-help that describes the purpose of the entry.
++help that describes the purpose of the entry. Refer to xref:configure[]
++for details on some specific configuration aspects.
+ 
+ Once everything is configured, the configuration tool generates a
+ +.config+ file that contains the entire configuration. This file will be
