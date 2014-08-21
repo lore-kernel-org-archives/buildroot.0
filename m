@@ -1,50 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 21 Aug 2014 15:21:10 +0100
-Subject: [Buildroot] [PATCH 2/2] package/procps-ng: fix linking with intl
-In-Reply-To: <1408629367-7336-2-git-send-email-romain.naour@openwide.fr>
-References: <1408629367-7336-1-git-send-email-romain.naour@openwide.fr>
- <1408629367-7336-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <53F60056.7070504@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 21 Aug 2014 16:45:59 +0200
+Subject: [Buildroot] [PATCH] package/infra: fix downloading versions
+ with a slash
+In-Reply-To: <1408468875-6811-1-git-send-email-yann.morin.1998@free.fr>
+References: <1408468875-6811-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LV5v9FebJY=H2mR71ZiUZCZMp43tg6ooDMmuGp8LWF6FQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/21/2014 02:56 PM, Romain Naour wrote:
-> procps-ng doesn't build with (e)glibc toolchain when gettext package is
-> selected.
+On Tue, Aug 19, 2014 at 7:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Since cset 54456cc (infra: consistently use double dollar signs...), it
+> is no longer possible to download versions with a slash in it, because
+> the _DL_VERSION variable is second-expanded, but the _VERSION variable
+> is immediately-expanded to have '/' substitued with '_'.
 >
-> With (e)glibc libintl is provided by the libc whereas with uClibc it's provided
-> by gettext.
+> So, _DL_VERSION is only expanded at the time it is evaluated, and by
+> that time, we've lost the slashes in _VERSION.
 >
-> Linking with intl is only needed if the toolchain needs gettext and locale is
-> set.
+> Make the _DL_VERSION variables immediately-evaluated.
 >
 > Fixes:
-> http://autobuild.buildroot.net/results/3e8/3e8464e0b00ce22fa02a6337159fca250d86425c/build-end.log
+>     https://bugs.busybox.net/show_bug.cgi?id=7328
 >
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->   package/procps-ng/procps-ng.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-> index 7628c21..8f9caf3 100644
-> --- a/package/procps-ng/procps-ng.mk
-> +++ b/package/procps-ng/procps-ng.mk
-> @@ -12,7 +12,7 @@ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
->
->   PROCPS_NG_DEPENDENCIES = ncurses
->
-> -ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
->   PROCPS_NG_DEPENDENCIES += gettext
->   PROCPS_NG_CONF_OPT += LIBS=-lintl
->   endif
->
+> Reported-by:  Vincent Stehl? <vincent.stehle@freescale.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc:  Vincent Stehl? <vincent.stehle@freescale.com>
 
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(tested by temporary setting DTC_VERSION to 'refs/tags/v1.4.0' as
+proposed in the bug report)
 
--- 
-Vincent
+Best regards,
+Thomas
