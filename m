@@ -1,17 +1,18 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 21 Aug 2014 22:45:18 +0200
-Subject: [Buildroot] [PATCH v2 3/5] toolchainfile.cmake.in: set linker flags
+Date: Thu, 21 Aug 2014 22:45:19 +0200
+Subject: [Buildroot] [PATCH v2 4/5] package/cdrkit: clean {HOST_,
+	}CDRKIT_CONF_OPT
 In-Reply-To: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
 References: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1408653920-18954-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1408653920-18954-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The linker flags are part of the toolchain configuration, so set them for
-the CMake-based packages.
+Extending {C,LD}FLAGS for both host and target cdrkit package is not needed
+because it is already handled by the {host-,}cmake-package infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -19,33 +20,25 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1 -> v2:
 - no change
 ---
- package/pkg-cmake.mk                | 1 +
- support/misc/toolchainfile.cmake.in | 1 +
- 2 files changed, 2 insertions(+)
+ package/cdrkit/cdrkit.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 3655751..2006b76 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -177,6 +177,7 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's:@@STAGING_SUBDIR@@:$(call qstrip,$(STAGING_SUBDIR)):' \
- 		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
- 		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
-+		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
- 		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
- 		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 46ed932..1dfbdba 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -14,6 +14,7 @@ set(CMAKE_SYSTEM_NAME Linux)
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index ee98013..3cb64b2 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -18,12 +18,5 @@ endif
  
- set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
- set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
-+set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
- set(CMAKE_INSTALL_SO_NO_EXE 0)
+ CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
  
- set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
+-## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
+-## some extra flags so it finds needed libs and headers.
+-CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(STAGING_DIR)/usr/include"
+-CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
+-HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
+-HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
+-
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.1.0
