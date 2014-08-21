@@ -1,15 +1,18 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 21 Aug 2014 22:25:48 +0200
-Subject: [Buildroot] [PATCH v2 6/6] gendoc infra: Move the manual-clean
-	target outside of the infra
+Date: Thu, 21 Aug 2014 22:25:47 +0200
+Subject: [Buildroot] [PATCH v2 5/6] gendoc infra: Remove the manual* target
+	from .PHONY
 In-Reply-To: <1408652748-14708-1-git-send-email-s.martin49@gmail.com>
 References: <1408652748-14708-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1408652748-14708-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <1408652748-14708-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+This is not needed because none of these targets are also the name of a
+generated file.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -17,27 +20,20 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1 -> v2:
 - no change
 ---
- docs/manual/manual.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ docs/manual/manual.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 437eccf..74e591f 100644
+index 016246c..437eccf 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -140,10 +140,12 @@ $(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
- 	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
- $(call GENDOC_INNER,$(pkgname),text,text,text,text)
- $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
-+endef
-+
+@@ -143,7 +143,6 @@ $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
  clean: $(pkgname)-clean
-+
  $(pkgname)-clean:
--	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
--endef
-+	$(Q)$(RM) -rf $(BUILD_DIR)/$(pkgname)
+ 	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
+-.PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
+ endef
  
  MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
- $(eval $(call GENDOC))
 -- 
 2.1.0
