@@ -1,31 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:21:18 +0200
-Subject: [Buildroot] [PATCH] imagemagick: Disable OpenMP
-In-Reply-To: <1408553365-26770-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
-References: <1408553365-26770-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
-Message-ID: <20140821152118.73fc9544@free-electrons.com>
+Date: Thu, 21 Aug 2014 15:22:00 +0200
+Subject: [Buildroot] [PATCH v2] gstreamer{,
+ 1}: fix unaligned access detection for arc
+In-Reply-To: <1408547087-31816-1-git-send-email-abrodkin@synopsys.com>
+References: <1408547087-31816-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20140821152200.21f70c9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+Dear Alexey Brodkin,
 
-On Wed, 20 Aug 2014 18:49:25 +0200, Beno?t Th?baudeau wrote:
-> By default (i.e. without adding libgomp.so* to
-> BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS), if an external toolchain with libgomp
-> support is used, then libgomp is installed to staging/ , but not to target/ .
-> Consequently, with such a toolchain, imagemagick's configure detected libgomp as
-> supported and enabled its usage for the build stage, but then it failed to run
-> on the target because libgomp was missing. This is the bug #7322.
+On Wed, 20 Aug 2014 19:04:47 +0400, Alexey Brodkin wrote:
+> Fixes the same issue as reported for microblaze here
+> http://autobuild.buildroot.net/results/f49/f4914bb3999c8a7a0c0a2afdac5de40fb9058372/
 > 
-> Disable OpenMP for imagemagick as a temporary workaround, until a better long
-> term solution is agreed on and implemented.
+> Similar to the existing handling for avr32, microblaze and xtensa.
+> Also add it for gstreamer1 for good measure as it was missing there as well.
 > 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
