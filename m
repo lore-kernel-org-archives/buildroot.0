@@ -1,40 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Aug 2014 15:36:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltris: fix linking with intl
-In-Reply-To: <1408470236-30101-1-git-send-email-romain.naour@openwide.fr>
-References: <1408470236-30101-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140821153629.38300748@free-electrons.com>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Thu, 21 Aug 2014 16:39:39 +0300 (IDT)
+Subject: [Buildroot] [PATCH] More descriptive help text for
+ usb_modeswitch
+In-Reply-To: <20140821153011.4ee92142@free-electrons.com>
+References: <1408557893-25786-1-git-send-email-yba@tkos.co.il>
+ <20140821153011.4ee92142@free-electrons.com>
+Message-ID: <alpine.DEB.2.02.1408211637210.6774@tavas.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hi Thomas,
+Thanks.
+I'm working on a better text as per Yann's comments.
+Please remind me what the line-length requirement for the help text is 
+(not 80 chars?).
 
-On Tue, 19 Aug 2014 19:43:56 +0200, Romain Naour wrote:
-> ltris doen't build with (e)glibc toolchain since commit 454a41016f2f074b69e2c677f4749c213c653e86
-> when gettext package is selected.
-> 
-> With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
-> 
-> Linking with intl is only needed if the toolchain needs gettext and locale is set.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/821/82128cb9f5cd6ae2595a8302462f1b5719dad9f7/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/ltris/ltris.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+  - yba
 
-Applied, thanks. However, it would be good if your commit logs were
-wrapped to a more reasonable length.
 
-Thanks!
+On Thu, 21 Aug 2014, Thomas Petazzoni wrote:
 
-Thomas
+> Date: Thu, 21 Aug 2014 15:30:11 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Jonathan Ben-Avraham <yba@tkos.co.il>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH] More descriptive help text for usb_modeswitch
+> 
+> Dear Jonathan Ben-Avraham,
+>
+> On Wed, 20 Aug 2014 21:04:53 +0300, Jonathan Ben-Avraham wrote:
+>> Improve the help text for usb_modeswitch package for the benefit of the clueless.
+>>
+>> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+>> ---
+>>  package/usb_modeswitch/Config.in |   13 +++++++++++--
+>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> I've applied your patch, after tweaking the commit title (it should
+> always be "<package>: <something>"), rewrapping the help text to a
+> shorter line length, and slightly adjusting the wording.
+>
+> Thanks!
+>
+> Thomas
+>
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
