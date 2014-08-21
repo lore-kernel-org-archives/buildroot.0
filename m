@@ -1,99 +1,97 @@
-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-Date: Wed, 20 Aug 2014 16:02:46 -0500
-Subject: [Buildroot] [PATCH] hostname: fix conflicting installs of
-	/bin/hostname
-Message-ID: <1408568566-30391-1-git-send-email-andrew.ruder@elecsyscorp.com>
+From: lee choon gay <choongay@yahoo.com>
+Date: Wed, 20 Aug 2014 19:31:49 -0700
+Subject: [Buildroot] About i386 Architecture and Grub2
+In-Reply-To: <20140820141013.24de59df@free-electrons.com>
+References: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>
+ <20140820141013.24de59df@free-electrons.com> 
+Message-ID: <1408588309.32587.YahooMailNeo@web141705.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Surprisingly long-standing issue with conflicting /bin/hostname
-installs.  Reported as early as November 2005 by Joseph Dupre.
+Hi. Thanks for replying.
 
-All together at one point or another there are at least 4 possible
-sources of /bin/hostname:
+I build the code with settings below.
+menuconfig -> Filesystem images -> ext4.
+menuconfig -> Filesystem images -> tar the root filesystem.
+menuconfig -> System configuration -> Init system with Busybox (default).
+menuconfig -> Toolchain -> Buildroot toolchain (default).
+menuconfig -> Toolchain -> C library uClibc (default).
 
-        busybox
-        util-linux
-        coreutils
-        net-tools
+Steps to build the partitions.
+1) I use sudo dd if=/dev/zero bs=1M count=1 of=/dev/sdb to wipe out the original partition in my pendrive.
+2) sudo fdisk -l will shows /dev/sdb doesn't contain
+ a valid partition table.
+3) To recreate the partition, I use sudo fdisk /dev/sdb.
+4) I enter n for new partition, p for primary, label partition as 1, default minimum for first sector, 5000000 for last sector.
+5) Then enter n again to create second partition, p for primary, label partition as 2, 5000001 for first sector, default maximum for last sector.
+6) Then enter w to write the partition table.
+7) Power cycle the pendrive.
+8) I format the partitions using sudo mkfs.ext4 /dev/sdb1 and sudo mkfs.ext4 /dev/sdb2.
+9) I sudo mount /dev/sdb1 /home/leecgy/temp1 and sudo chmod a+rw /home/leecgy/temp1 to enable writing to partition 1.
+10) Then sudo mount /dev/sdb2 /home/leecgy/temp2 and sudo chmod a+rw /home/leecgy/temp2 to enable writing to partition 2.
+11) I right click and create new folder called boot in partition 1, then right click and copy paste the bzImage into boot folder.
+12) Then right click and create new folder
+ called grub in boot folder, then right click and copy paste the grub.cfg into grub folder.
+13) I sudo grub-install --boot-directory=/home/leecgy/temp1/boot /dev/sdb to install grub.
+14) I right click and extract the rootfs.tar, then right click and copy paste the contents inside rootfs into partition 2.
 
-Buildroot depends on the -F flag being available in the default
-/etc/inittab.  Out of the 4 listed projects only net-tools and buildroot
-for sure support the -F flag.  I'm a little unclear on util-linux as it
-has been removed entirely (in favor of net-tools) for some time.
+When trying to boot up, the code dump a lot of?error and stuck. I cannot shift+page up to see the top of the error.
 
-As of coreutils 6.9.90 (2007-12-01), coreutils does not install its
-/bin/hostname by default.  The following commit reenabled its build:
+Please let me know if you need more info.
 
-d6e58cb coreutils: fixed missing hostname (Sep 2010)
+Thanks.
 
-This was done to fix a build error in coreutils regarding help2man.  A
-later patch:
-
-30c5105 coreutils: bump to version 8.21
-
-disabled the help2man functionality entirely but left hostname being
-installed.
-
-On a very related note, net-tools now contains an obsolete check to add
-util-linux as a dependency to force it to build first (so that net-tools
-ends up with /bin/hostname).
-
-This patch fixes both of these issues so that hostname always comes from
-one of two places:
-
-    busybox
-    net-tools
-
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Co-authored-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
----
- package/coreutils/coreutils.mk | 5 ++---
- package/net-tools/net-tools.mk | 5 -----
- 2 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index af202b4..458a495 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- COREUTILS_DEPENDENCIES = busybox
- endif
  
--COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
-+COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
- 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
- 	uname join
- 
-@@ -61,8 +61,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		PERL=missing
- 
- COREUTILS_CONF_OPT = --disable-rpath \
--		--disable-dependency-tracking \
--		--enable-install-program=hostname
-+		--disable-dependency-tracking
- 
- define COREUTILS_POST_INSTALL
- 	# some things go in root rather than usr
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 3538655..a2abf5b 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -17,11 +17,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	NET_TOOLS_DEPENDENCIES += busybox
- endif
- 
--# Install after util-linux since net-tools hostname is better
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),y)
--	NET_TOOLS_DEPENDENCIES += util-linux
--endif
--
- define NET_TOOLS_CONFIGURE_CMDS
- 	(cd $(@D); yes "" | ./configure.sh config.in )
- endef
+
+
+On Wednesday, August 20, 2014 8:10 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+  
+
+
+Hello,
+
+On Wed, 20 Aug 2014 04:37:12 -0700, lee choon gay wrote:
+
+> But
+ the data is not persistent, anything that I save will be gone after reboot.
+> I am looking for method to make the data persistent (no?ram file system).
+> I try to boot up the code without using rootfs.cpio as follow.
+> The code won't boot up.
+> 
+> set default="0"
+> set timeout="0"
+> 
+> menuentry "any name" {
+> ????????? Linux /boot/bzImage root=/dev/sda2 noinitrd?console=tty1
+> ????????? }
+> 
+> For your info, I use pendrive for this.
+> And the bzImage and rootfs.cpio is located in partition 1 boot folder.
+
+If you're using a root filesystem in the second partition, then there's
+no point in keeping the rootfs.cpio file in the fist partition.
+
+
+> File system is located in partition 2.
+> 
+> Hope I can get some?help here.
+> Thank you very much. :)
+
+Yes, but please provide more details, like what happens when you try to
+boot, and how you create your second partition exactly. With the
+informations you provided, there is just no way for us to help you as
+you didn't provide enough details.
+
+Best regards,
+
+Thomas
 -- 
-2.0.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140820/50c1ed1b/attachment.html>
