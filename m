@@ -1,66 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Aug 2014 08:30:09 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-21
-Message-ID: <20140822063009.8EC531015D4@stock.ovh.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 22 Aug 2014 09:17:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pkg-autotools: don't use
+ config.site when cross-compiling
+In-Reply-To: <53F669B1.505@openwide.fr>
+References: <1408402240-3126-1-git-send-email-romain.naour@openwide.fr>
+ <CAAXf6LUe-9r7NhjqGNuRrM7SufuixOx8Z8LSnVcKhcrdy+-HSw@mail.gmail.com>
+ <53F66250.50800@openwide.fr> <20140821163213.65ee473e@core2quad.morethan.org>
+ <53F669B1.505@openwide.fr>
+Message-ID: <CAAXf6LXeRtVGfppZXJiY13=10=yyikQxV5++4kcRwKy3e307pQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-08-21
-===============================
+Hi,
 
-        success : 85 
-       failures : 19 
-       timeouts : 1  
-          TOTAL : 105
+On Thu, Aug 21, 2014 at 11:50 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+> Hi Mike,
+>
+> Le 21/08/2014 23:32, Mike Zick a ?crit :
+>> On Thu, 21 Aug 2014 23:19:12 +0200
+>> Romain Naour <romain.naour@openwide.fr> wrote:
+>>
+>>> Hi Thomas,
+>>>
+>>> Le 21/08/2014 22:06, Thomas De Schampheleire a ?crit :
+>>>> Hi Romain,
+>>>>
+>>>> On Tue, Aug 19, 2014 at 12:50 AM, Romain Naour
+>>>> <romain.naour@openwide.fr> wrote:
+>>>>> On fedora 20 64bits host, the file /usr/share/config.site contains
+>>>>> a fix for installing libraries into /lib/lib64 on 64bits systems
+>>>>> that redefine libdir in the generated Makefile
+>>>>>
+>>>>> For safety, disable loading this file when running the configure
+>>>>> script for the target and the host.
+>>>>>
+>>>>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>>>>> ---
+>>>>>  package/pkg-autotools.mk | 2 ++
+>>>>>  1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>>>>> index bcc648d..cdc31bf 100644
+>>>>> --- a/package/pkg-autotools.mk
+>>>>> +++ b/package/pkg-autotools.mk
+>>>>> @@ -126,6 +126,7 @@ define $(2)_CONFIGURE_CMDS
+>>>>>         $$(TARGET_CONFIGURE_OPTS) \
+>>>>>         $$(TARGET_CONFIGURE_ARGS) \
+>>>>>         $$($$(PKG)_CONF_ENV) \
+>>>>> +       CONFIG_SITE="no" \
+>>>>>         ./configure \
+>>>>>                 --target=$$(GNU_TARGET_NAME) \
+>>>>>                 --host=$$(GNU_TARGET_NAME) \
+>>>>> @@ -159,6 +160,7 @@ define $(2)_CONFIGURE_CMDS
+>>>>>                 CFLAGS="$$(HOST_CFLAGS)" \
+>>>>>                 LDFLAGS="$$(HOST_LDFLAGS)" \
+>>>>>                  $$($$(PKG)_CONF_ENV) \
+>>>>> +               CONFIG_SITE="no" \
+>>>>>                 ./configure \
+>>>>>                 --prefix="$$(HOST_DIR)/usr" \
+>>>>>                 --sysconfdir="$$(HOST_DIR)/etc" \
+>>>>
+>>>> The autoconf documentation does not specify 'no' as a magic value,
+>>>> which means that the accidental presence of a file called 'no' would
+>>>> pick up the file.
+>>>> Wouldn't it be safer/cleaner to use CONFIG_SITE=/dev/null?
+>>>> Note that I have not tested if this actually works, just a thought.
+>>>
+>>> I tried with CONFIG_SITE="/dev/null" at first but I had
+>>> configure: loading site script /dev/null
+>>>
+>>> I may use THIS_IS_NOT_YOUR_CONFIG_SITE instead :)
+>>>
+>>
+>> Let me guess, that would result in something like:
+>> configure: site script THIS_IS_NOT_YOUR_CONFIG_SITE not found
+>
+> No, there is no print at all.
+>
+>>
 
-Classification of failures by reason
-====================================
+The logic in the configure script of host-localedef is:
 
-             lttng-tools-2.4.1 | 3 
-                libinput-0.3.0 | 2 
-                libiscsi-1.6.0 | 1 
-             xscreensaver-5.22 | 1 
-             libqrencode-3.4.2 | 1 
-                  opencv-2.4.8 | 1 
-                   czmq-v2.2.0 | 1 
-make: *** [core-dependencie... | 1 
-                  thrift-0.9.1 | 1 
-                  ltris-1.0.19 | 1 
-                      gsl-1.16 | 1 
-                  cppcms-1.0.4 | 1 
-                 gnupg2-2.0.25 | 1 
-                 webkit-1.11.5 | 1 
-                libnspr-4.10.6 | 1 
-              libarchive-3.1.2 | 1 
-            gst-ffmpeg-0.10.13 | 1 
+ac_site_file1=NONE
+ac_site_file2=NONE
+if test -n "$CONFIG_SITE"; then
+  # We do not want a PATH search for config.site.
+  case $CONFIG_SITE in #((
+    -*)  ac_site_file1=./$CONFIG_SITE;;
+    */*) ac_site_file1=$CONFIG_SITE;;
+    *)   ac_site_file1=./$CONFIG_SITE;;
+  esac
+elif test "x$prefix" != xNONE; then
+  ac_site_file1=$prefix/share/config.site
+  ac_site_file2=$prefix/etc/config.site
+else
+  ac_site_file1=$ac_default_prefix/share/config.site
+  ac_site_file2=$ac_default_prefix/etc/config.site
+fi
+for ac_site_file in "$ac_site_file1" "$ac_site_file2"
+do
+  test "x$ac_site_file" = xNONE && continue
+  if test /dev/null != "$ac_site_file" && test -r "$ac_site_file"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: loading site script
+$ac_site_file" >&5
 
-Detail of failures
-===================
+Which means that:
 
-   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/e56b22391ea54b0c401b526453ebed0d9a047395/
-       arm |                    czmq-v2.2.0 | NOK | http://autobuild.buildroot.net/results/e79ae28c1d8c13300cffeca55485930812ac66bb/
-       arm |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/e32efb280e9c8c8816b71b02a8f41b1108f96111/
-       arm |                       gsl-1.16 | NOK | http://autobuild.buildroot.net/results/421493d356c993c6b259e1a6125b35ede8561107/
-microblazeel |             gst-ffmpeg-0.10.13 | TIM | http://autobuild.buildroot.net/results/592ad8a1971803c8efba26a6d4080e4479f2f9bf/
-       arm |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/07149edcc0e4655b5b839f397768469d0537c34c/
-   powerpc |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/caa2eff578c45fdaf83ade2e322e6e5d5668b61e/
-       arm |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/c133b7c706ee31302125df8ca94f4d0f0152c6c6/
-      bfin |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/ba5f58ceed4d540ac099187c370e24f135cf2dc2/
-       arm |                 libnspr-4.10.6 | NOK | http://autobuild.buildroot.net/results/2c46f20ae47f2b206f88f8f40edaa3621e25c203/
-      bfin |              libqrencode-3.4.2 | NOK | http://autobuild.buildroot.net/results/c119577aee413e370d62019f5496523d3325dcb9/
-       arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/8985d0e3ed3ccdebdb139ad99371e103e198c179/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/67eda64d6dbfc2ed2fcbab2261aee2fc70a362b1/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/6b530ec2f673b1149b4aea4e8c572cb505468f98/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/277b08bcd78cd6ff82ff47445bdf80d6934df94f/
-       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/f3c473adb84164241677ae0521a15cb86bdcd30b/
-       arm |                   opencv-2.4.8 | NOK | http://autobuild.buildroot.net/results/7b5255968227f948b22a8cad5c242a34978e3717/
-       sh4 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/3f130a91487146a969afbcb5237b6714e76d8525/
-       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/80c9bcd7812f6156db3e42c23f7a49754983f0e9/
-       arm |              xscreensaver-5.22 | NOK | http://autobuild.buildroot.net/results/427ea14318b79ed2f8f0786e5a33bacfd2733663/
+if CONFIG_SITE=NONE,
+    ac_site_file1=./NONE --> file not readable, exit
+    ac_site_file2=NONE --> NONE, exit
 
+if CONFIG_SITE=no, the same behavior as with NONE (./no and NONE)
 
--- 
-http://autobuild.buildroot.net
+if CONFIG_SITE=/dev/null,
+    ac_site_file1=/dev/null --> /dev/null, exit
+    ac_site_file2=NONE --> NONE, exit
+
+So according to me, /dev/null looks like the cleanest solution.
+However, Romain said that this would also print the message, which is
+not correct in my tests. Maybe it depends on the version of autoconf
+used?
+
+Romain, are you sure there is a message printed when using /dev/null ?
+
+Thanks,
+Thomas
