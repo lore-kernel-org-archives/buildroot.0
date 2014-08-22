@@ -1,30 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 22 Aug 2014 20:20:00 +0200
-Subject: [Buildroot] [PATCH 05/14 v4] package/eudev: split udev/libudev
-References: <cover.1406765723.git.yann.morin.1998@free.fr>
- <e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998@free.fr>
-Message-ID: <XnsA391CED782357berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 22 Aug 2014 21:14:59 +0200
+Subject: [Buildroot] [PATCH] nanocom: Add control signals functionality
+In-Reply-To: <CAOxVtST+VJKOKvypfWZqiD7DR=yuKjkD80tvDA2XooCYFuB+bw@mail.gmail.com>
+References: <CAOxVtST+VJKOKvypfWZqiD7DR=yuKjkD80tvDA2XooCYFuB+bw@mail.gmail.com>
+Message-ID: <a63c63b5-5a93-45db-badb-45797c53f9b1@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Sergey,
 
-for eudev-1.10 one additional command is necessary to build libudev due to
-https://github.com/gentoo/eudev/commit/b1ac60946d1625e14029ea9b7fa3aa4c06e079
-5f:
+Sergey Alyoshin <alyoshin.s@gmail.com> schreef:
+>Hello
+>
+>Could this patch be adopted by Buildroot (in package/nanocom/)?
+>
+>Colin Sauze (nanocom mantainer on sourceforge) did not respond to my
+>message on sourceforge.org on 12 Aug.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998
-@free.fr:
+The general policy is to not add feature patches to
+ Buildroot. You can do it in a private repo, but the
+ chances of this being mainlined in Buildroot are small.
 
-> +define EUDEV_BUILD_CMDS
+Instead, I suggest you persist in requesting the
+ maintainer to comment on the patch. This may take
+ done time and patience in some projects.
 
-$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/shared
-
-> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev
-> +endef
-
-Regards, Bernd
+Best regards,
+Thomas
