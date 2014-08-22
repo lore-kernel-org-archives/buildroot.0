@@ -1,49 +1,74 @@
-From: oscarin <o.abril@gmail.com>
-Date: Fri, 22 Aug 2014 07:13:36 -0700 (PDT)
-Subject: [Buildroot] Problem building libglib2
-In-Reply-To: <201212031142.22665.manningc2@actrix.gen.nz>
-References: <CAE21AQqs92x6=x_ELTWz7MqMLNDrq9VDXK17+P_2sB-7wc=JXw@mail.gmail.com>
- <50B68928.4010500@mind.be> <50B72AAB.2020402@mind.be>
- <201211300652.45293.manningc2@actrix.gen.nz> <20121129190813.5dc97298@skate>
- <201211300731.53056.manningc2@actrix.gen.nz> <50B7C54C.3010103@mind.be>
- <20121130001154.129b9238@skate> <50B87033.7090609@mind.be>
- <201212031142.22665.manningc2@actrix.gen.nz>
-Message-ID: <1408716816913-77917.post@n4.nabble.com>
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Date: Fri, 22 Aug 2014 16:24:15 +0200
+Subject: [Buildroot] [PATCH v2 3/6] gendoc infra: avoid a2x warning
+In-Reply-To: <1408652748-14708-4-git-send-email-s.martin49@gmail.com>
+References: <1408652748-14708-1-git-send-email-s.martin49@gmail.com>
+ <1408652748-14708-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAAXf6LWUJG=DMHtkOaRvdH6TXwsSk+ut-YmgCsTKfCuE9b+KTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Samuel,
 
-I'm having kind of the same problem when building my system. When i tried to
-build "directfb-examples 1.6.0 Building" in "buildroot-2013.08.1" i have
-this messages: 
+On Thu, Aug 21, 2014 at 10:25 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Though the --destination-dir option works as expected, a2x displays the
+> following message when generating the pdf and text manual:
+>
+>   a2x: WARNING: --destination-dir option is only applicable to HTML based outputs
+>
+> To avoid this warning, we now just build the manual in its build location,
+> then move the generated files into $(O)/docs/manual.
 
-/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.1/../../../../arm-none-linux-gnueabi/bin/ld:
-cannot find /lib/libpthread.so.0
-/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.1/../../../../arm-none-linux-gnueabi/bin/ld:
-cannot find /usr/lib/libpthread_nonshared.a
-collect2: ld returned 1 exit status
-make[3]: *** [df_knuckles] Error 1
-make[3]: Leaving directory
-`/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/build/directfb-examples-1.6.0/src/df_knuckles'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/build/directfb-examples-1.6.0/src'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/build/directfb-examples-1.6.0'
-make: ***
-[/home/oscarin/Downloads/felabs/sysdev/buildroot/buildroot-2013.08.1/output/build/directfb-examples-1.6.0/.stamp_built]
-Error 2
+What you are saying is that even though there is a warning, the option
+--destination-dir is taken into account even for non-HTML based
+outputs?
+In that case, is it not more logical to fix the issue in a2x and
+ignore the warning for now?
 
-Would you please help me ?
+Besides this general comment, see below if we pursue this patch anyway...
+
+>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> ---
+> changes v1 -> v2:
+> - remove remaining '-D $$(@D)' arguments in the a2x command line
+> ---
+>  docs/manual/manual.mk | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index 044557d..42d22be 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -70,6 +70,19 @@ ifneq ($$(wildcard $$(MANUAL_$(2)_ASCIIDOC_CONF)),)
+>  MANUAL_$(2)_ASCIIDOC_OPTS += -f $$(MANUAL_$(2)_ASCIIDOC_CONF)
+>  endif
+>
+> +# Handle a2x warning about --destination-dir option only applicable to HTML
+> +# based outputs. So:
+> +# - use the --destination-dir option if possible (html and split-html),
+> +# - otherwise copy the generated manual to the output directory
+> +MANUAL_$(2)_A2X_OPTS =
+
+Why do you do this? The variable will be empty by default.
+
+> +ifneq ($$(filter $(3),html split-html),)
+> +MANUAL_$(2)_A2X_OPTS += --destination-dir="$$(@D)"
+> +else
+> +define MANUAL_$(2)_INSTALL_CMDS
+> +       $$(Q)cp -f $$(BUILD_DIR)/$(1)/$(1).$(4) $$(@D)
+> +endef
+
+Is it really needed to have this dual approach?
+The patch would be simpler if we just use the manual install, even for
+html manuals.
 
 
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Problem-building-libglib2-tp35486p77917.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Best regards,
+Thomas
