@@ -1,40 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Aug 2014 18:30:57 +0200
-Subject: [Buildroot] [PATCH 00/12] toolchain: warn for unsafe
- library/header paths
-In-Reply-To: <20140821233312.03679844@free-electrons.com>
-References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53F656E5.9020802@openwide.fr>
- <20140821233312.03679844@free-electrons.com>
-Message-ID: <20140822163057.GA3998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 22 Aug 2014 20:20:00 +0200
+Subject: [Buildroot] [PATCH 05/14 v4] package/eudev: split udev/libudev
+References: <cover.1406765723.git.yann.morin.1998@free.fr>
+ <e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998@free.fr>
+Message-ID: <XnsA391CED782357berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On 2014-08-21 23:33 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 21 Aug 2014 22:30:29 +0200, Romain Naour wrote:
-> > Also, BR_COMPILER_PARANOID_UNSAFE_PATH needs to be renamed to
-> > BR2_COMPILER_PARANOID_UNSAFE_PATH to follow the naming scheme ?
-> 
-> No: BR2_* variables are Config.in options. Environment variables are
-> BR_*.
+for eudev-1.10 one additional command is necessary to build libudev due to
+https://github.com/gentoo/eudev/commit/b1ac60946d1625e14029ea9b7fa3aa4c06e079
+5f:
 
-Earlier this year in Brussels, we said we were to use BR2_ everywhere :
-    http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998
+@free.fr:
 
-So Romain is right, that the environment variable should be renamed.
+> +define EUDEV_BUILD_CMDS
 
-Regards,
-Yann E. MORIN.
+$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/shared
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev
+> +endef
+
+Regards, Bernd
