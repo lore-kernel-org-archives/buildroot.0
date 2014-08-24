@@ -1,56 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Aug 2014 20:31:12 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/pkg-autotools: don't use
- config.site when cross-compiling
-In-Reply-To: <53FA1527.80803@openwide.fr>
-References: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
- <20140824181422.5dd8c43d@free-electrons.com> <53FA1527.80803@openwide.fr>
-Message-ID: <CAAXf6LXHQFBULTk3YExWOSorRKSmCF9-sFkwK6iEGf-NVeVzng@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 24 Aug 2014 20:31:59 +0200
+Subject: [Buildroot] [PATCH] package/infra: fix downloading versions
+ with a slash
+In-Reply-To: <CAAXf6LV5v9FebJY=H2mR71ZiUZCZMp43tg6ooDMmuGp8LWF6FQ@mail.gmail.com>
+References: <1408468875-6811-1-git-send-email-yann.morin.1998@free.fr>
+ <CAAXf6LV5v9FebJY=H2mR71ZiUZCZMp43tg6ooDMmuGp8LWF6FQ@mail.gmail.com>
+Message-ID: <CAAXf6LWKGZ1n0Unv9rtSx9t=tqFmN_WyjBf4Bx+QbTXbWymBZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Romain,
-
-On Sun, Aug 24, 2014 at 6:39 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Hi Thomas,
->
-> Le 24/08/2014 18:14, Thomas Petazzoni a ?crit :
->> Dear Romain Naour,
+On Thu, Aug 21, 2014 at 4:45 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Tue, Aug 19, 2014 at 7:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Since cset 54456cc (infra: consistently use double dollar signs...), it
+>> is no longer possible to download versions with a slash in it, because
+>> the _DL_VERSION variable is second-expanded, but the _VERSION variable
+>> is immediately-expanded to have '/' substitued with '_'.
 >>
->> On Fri, 22 Aug 2014 11:12:53 +0200, Romain Naour wrote:
->>> On fedora 20 64bits host, the file /usr/share/config.site contains
->>> a fix for installing libraries into /lib/lib64 on 64bits systems
->>> that redefine libdir in the generated Makefile
->>>
->>> For safety and avoid the bug #7262 [1], disable loading this file
->>> when running the configure script for the target and the host.
->>>
->>> Note: configure scripts generated with autoconf < 2.65 will source
->>> the /dev/null and print this line:
->>> "configure: loading site script /dev/null"
->>>
->>> [1]: https://bugs.busybox.net/show_bug.cgi?id=7262
->>>
->>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> So, _DL_VERSION is only expanded at the time it is evaluated, and by
+>> that time, we've lost the slashes in _VERSION.
 >>
->> I am wondering if this change should go in master (for 2014.08) or in
->> the next branch (for 2014.11). That close to the release, doing a
->> change in the core infrastructure seems a bit invasive to me. What if
->> it breaks the build of other packages? Seems unlikely, I admit, but
->> still. What do others think?
+>> Make the _DL_VERSION variables immediately-evaluated.
+>>
+>> Fixes:
+>>     https://bugs.busybox.net/show_bug.cgi?id=7328
+>>
+>> Reported-by:  Vincent Stehl? <vincent.stehle@freescale.com>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc:  Vincent Stehl? <vincent.stehle@freescale.com>
 >
-> I think this patch can go to next since the issue is already fixed in master but
-> just for host-localedef.
->
-> Actually, it seems that only host-localedef was affected by this issue.
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> (tested by temporary setting DTC_VERSION to 'refs/tags/v1.4.0' as
+> proposed in the bug report)
 >
 
-I was going to judge 'master', but then I saw Romain's reply. The
-reported bug is indeed already fixed, and no other problems were
-reported so far, so I agree now with applying these patches to -next.
+This patch should be applied to master, according to me.
 
 Best regards,
- Thomas
+Thomas
