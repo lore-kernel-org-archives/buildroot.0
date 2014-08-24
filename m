@@ -1,54 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Aug 2014 13:22:18 +0200
-Subject: [Buildroot] [PATCH 00/12] toolchain: warn for unsafe
- library/header paths
-In-Reply-To: <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
-References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53F656E5.9020802@openwide.fr>
- <20140821233312.03679844@free-electrons.com>
- <20140822163057.GA3998@free.fr>
- <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
-Message-ID: <20140824112218.GA3778@free.fr>
+Date: Sun, 24 Aug 2014 13:33:47 +0200
+Subject: [Buildroot] [PATCH 05/14 v4] package/eudev: split udev/libudev
+In-Reply-To: <XnsA391CED782357berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <cover.1406765723.git.yann.morin.1998@free.fr>
+ <e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998@free.fr>
+ <XnsA391CED782357berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140824113347.GB3778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Bernd, All,
 
-On 2014-08-22 21:29 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >Thomas, All,
-> >
-> >On 2014-08-21 23:33 +0200, Thomas Petazzoni spake thusly:
-> >> On Thu, 21 Aug 2014 22:30:29 +0200, Romain Naour wrote:
-> >> > Also, BR_COMPILER_PARANOID_UNSAFE_PATH needs to be renamed to
-> >> > BR2_COMPILER_PARANOID_UNSAFE_PATH to follow the naming scheme ?
-> >> 
-> >> No: BR2_* variables are Config.in options. Environment variables are
-> >> BR_*.
-> >
-> >Earlier this year in Brussels, we said we were to use BR2_ everywhere :
-> >    http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
+On 2014-08-22 20:20 +0200, Bernd Kuhls spake thusly:
+> for eudev-1.10 one additional command is necessary to build libudev due to
+> https://github.com/gentoo/eudev/commit/b1ac60946d1625e14029ea9b7fa3aa4c06e079
+> 5f:
 > 
-> Hmm, that is written in the conclusion, but this is very
->  different than what is in the 'proposed rules'.
-> Was it really the final outcome to use BR2 for all types
->  of variable? I thought we wanted to make a
->  distinction between config variables and others...
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+> news:e0bec013e8bb144c5208518c39011b1b47f63d17.1406765723.git.yann.morin.1998
+> @free.fr:
+> 
+> > +define EUDEV_BUILD_CMDS
+> 
+> $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/shared
+> 
+> > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev
+> > +endef
 
-Yes, I was a bit surprised by the conclusion, too.
-From what I remember, I thought we decided for:
-  - user-facing variables: prefix with BR2_
-  - internal variables: prefix with BR_
+Not only that, but it requires linux/btrfs.h which means it needs to
+depend on an _AT_LEAST_X_Y kernel headers version.
 
-IIRC, we already have a few changesets implementing those rules.
-
-For example:
-    35c666e toolchain/wrapper: rename BR_DEBUG_WRAPPER
-
-(I could not find another reverse such change, unfortunetely...)
+I'll tackle this.
 
 Regards,
 Yann E. MORIN.
