@@ -1,57 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 24 Aug 2014 15:06:50 +0200
-Subject: [Buildroot] [PATCH v2 6/6] gendoc infra: Move the manual-clean
- target outside of the infra
-In-Reply-To: <1408652748-14708-7-git-send-email-s.martin49@gmail.com>
-References: <1408652748-14708-1-git-send-email-s.martin49@gmail.com>
- <1408652748-14708-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LU25gRFo5TxPKJs5qTk+tjj0zi6j6p7-uZFeWNXF+4A8g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Aug 2014 18:14:22 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/pkg-autotools: don't use
+ config.site when cross-compiling
+In-Reply-To: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
+References: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140824181422.5dd8c43d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 21, 2014 at 10:25 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> ---
-> changes v1 -> v2:
-> - no change
-> ---
->  docs/manual/manual.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index 437eccf..74e591f 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -140,10 +140,12 @@ $(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
->         --dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
->  $(call GENDOC_INNER,$(pkgname),text,text,text,text)
->  $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
-> +endef
-> +
->  clean: $(pkgname)-clean
-> +
->  $(pkgname)-clean:
-> -       $$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
-> -endef
-> +       $(Q)$(RM) -rf $(BUILD_DIR)/$(pkgname)
->
->  MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
->  $(eval $(call GENDOC))
-> --
+Dear Romain Naour,
 
-This kind of defeats the purpose of having a GENDOC infra: suppose we
-add a new type of document next to 'manual'. In this case, we will
-have to create a new directory docs/XXXX/ and make sure that the
-GENDOC infra moves to another file, say package/pkg-gendoc.mk
-Then, we want XXXX-clean to exist too, which is why it should be within GENDOC.
+On Fri, 22 Aug 2014 11:12:53 +0200, Romain Naour wrote:
+> On fedora 20 64bits host, the file /usr/share/config.site contains
+> a fix for installing libraries into /lib/lib64 on 64bits systems
+> that redefine libdir in the generated Makefile
+> 
+> For safety and avoid the bug #7262 [1], disable loading this file
+> when running the configure script for the target and the host.
+> 
+> Note: configure scripts generated with autoconf < 2.65 will source
+> the /dev/null and print this line:
+> "configure: loading site script /dev/null"
+> 
+> [1]: https://bugs.busybox.net/show_bug.cgi?id=7262
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-If we don't care about such a case, then we could also simply remove
-GENDOC and only keep GENDOC_INNER.
-In that case we don't even need $(pkgname).
+I am wondering if this change should go in master (for 2014.08) or in
+the next branch (for 2014.11). That close to the release, doing a
+change in the core infrastructure seems a bit invasive to me. What if
+it breaks the build of other packages? Seems unlikely, I admit, but
+still. What do others think?
 
-Best regards,
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
