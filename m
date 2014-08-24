@@ -1,101 +1,62 @@
-From: lee choon gay <choongay@yahoo.com>
-Date: Sun, 24 Aug 2014 02:13:17 -0700
-Subject: [Buildroot] About i386 Architecture and Grub2
-In-Reply-To: <20140821150337.3bc770ae@free-electrons.com>
-References: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>	<20140820141013.24de59df@free-electrons.com>	<1408588309.32587.YahooMailNeo@web141705.mail.bf1.yahoo.com>
- <20140821150337.3bc770ae@free-electrons.com>
-Message-ID: <1408871597.42022.YahooMailNeo@web141705.mail.bf1.yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Aug 2014 13:22:18 +0200
+Subject: [Buildroot] [PATCH 00/12] toolchain: warn for unsafe
+ library/header paths
+In-Reply-To: <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
+References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <53F656E5.9020802@openwide.fr>
+ <20140821233312.03679844@free-electrons.com>
+ <20140822163057.GA3998@free.fr>
+ <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
+Message-ID: <20140824112218.GA3778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, friend.
+Thomas?, All,
 
-I took a look at the /boot/grub/grub.cfg from my PC, it also need initrd to boot up.
-I also saw some article from internet saying initrd is a must and the kernel init process is the one that responsible to switch from ram file system to real file system.
-
-Anyway, if I can get a USB to RS232 cable next week I can try to capture the log and see.
-
-Currently I have a workaround to change root to real file system during kernel init.
-Below is the code I use.
-I put the code in /etc/init.d as startup.sh and create S99startup by refering to other scripts in /etc/init.d to call out my startup.sh .
-
-#!/bin/busybox sh
-
-# Wait for sda detected
-sleep 5
-
-# Mount the root filesystem.
-mkdir /mnt/root
-mount -t ext4 /dev/sda1 /mnt/root
-mount -o bind /dev /mnt/root/dev
-mount -o bind /proc /mnt/root/proc
-
-# Boot the real thing.
-chroot /mnt/root /linuxrc
-
-
-Thanks.
-
-
-
-On Thursday, August 21, 2014 9:03 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
- 
-
-
-Dear lee choon gay,
-
-On Wed, 20 Aug 2014 19:31:49 -0700, lee choon gay wrote:
-
-> I build the code with settings below.
-> menuconfig -> Filesystem images -> ext4.
-> menuconfig -> Filesystem images -> tar the root filesystem.
-> menuconfig -> System configuration -> Init system with Busybox (default).
-> menuconfig -> Toolchain -> Buildroot toolchain (default).
-> menuconfig -> Toolchain -> C library uClibc (default).
+On 2014-08-22 21:29 +0200, Thomas De Schampheleire spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+> >Thomas, All,
+> >
+> >On 2014-08-21 23:33 +0200, Thomas Petazzoni spake thusly:
+> >> On Thu, 21 Aug 2014 22:30:29 +0200, Romain Naour wrote:
+> >> > Also, BR_COMPILER_PARANOID_UNSAFE_PATH needs to be renamed to
+> >> > BR2_COMPILER_PARANOID_UNSAFE_PATH to follow the naming scheme ?
+> >> 
+> >> No: BR2_* variables are Config.in options. Environment variables are
+> >> BR_*.
+> >
+> >Earlier this year in Brussels, we said we were to use BR2_ everywhere :
+> >    http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
 > 
-> Steps to build the partitions.
-> 1) I use sudo dd if=/dev/zero bs=1M count=1 of=/dev/sdb to wipe out the original partition in my pendrive.
-> 2) sudo fdisk -l will shows /dev/sdb doesn't contain
->? a valid partition table.
-> 3) To recreate the partition, I use sudo fdisk /dev/sdb.
-> 4) I enter n for new partition, p for primary, label partition as 1, default minimum for first sector, 5000000 for last sector.
-> 5) Then enter n again to create second partition, p for primary, label partition as 2, 5000001 for first sector, default maximum for last sector.
-> 6) Then enter w to write the partition table.
-> 7) Power cycle the pendrive.
-> 8) I format the partitions using sudo mkfs.ext4 /dev/sdb1 and sudo mkfs.ext4 /dev/sdb2.
-> 9) I sudo mount /dev/sdb1 /home/leecgy/temp1 and sudo chmod a+rw /home/leecgy/temp1 to enable writing to partition 1.
-> 10) Then sudo mount /dev/sdb2 /home/leecgy/temp2 and sudo chmod a+rw /home/leecgy/temp2 to enable writing to partition 2.
-> 11) I right click and create new folder called boot in partition 1, then right click and copy paste the bzImage into boot folder.
-> 12) Then right click and create new folder
->? called grub in boot folder, then right click and copy paste the grub.cfg into grub folder.
-> 13) I sudo grub-install --boot-directory=/home/leecgy/temp1/boot /dev/sdb to install grub.
+> Hmm, that is written in the conclusion, but this is very
+>  different than what is in the 'proposed rules'.
+> Was it really the final outcome to use BR2 for all types
+>  of variable? I thought we wanted to make a
+>  distinction between config variables and others...
 
-You may want to follow the instructions available in the help text of
-the Grub 2 option, which have been tested.
+Yes, I was a bit surprised by the conclusion, too.
+From what I remember, I thought we decided for:
+  - user-facing variables: prefix with BR2_
+  - internal variables: prefix with BR_
 
-> 14) I right click and extract the rootfs.tar, then right click and copy paste the contents inside rootfs into partition 2.
+IIRC, we already have a few changesets implementing those rules.
 
-Make sure you extract things as root:
+For example:
+    35c666e toolchain/wrapper: rename BR_DEBUG_WRAPPER
 
-??? sudo tar -C /home/leecgy/temp2 -xf output/images/rootfs.tar
+(I could not find another reverse such change, unfortunetely...)
 
-> When trying to boot up, the code dump a lot of?error and stuck. I cannot shift+page up to see the top of the error.
+Regards,
+Yann E. MORIN.
 
-Please give the errors that you see. For now, we still have no idea
-whether it's a bootloader problem, a kernel problem, or a root
-filesystem problem. Without the boot log, there's not much we can do.
-
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140824/751eb3c8/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
