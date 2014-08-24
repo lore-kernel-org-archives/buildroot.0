@@ -1,39 +1,46 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 24 Aug 2014 18:53:06 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libarchive: fix linking issue with
-	uClibc
-In-Reply-To: <1408899186-28542-1-git-send-email-romain.naour@openwide.fr>
-References: <1408899186-28542-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1408899186-28542-3-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 24 Aug 2014 18:53:04 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libevas-generic-loaders: needs zlib
+Message-ID: <1408899186-28542-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With uClibc the dynamic linking loader functions needs
-to be linked with -ldl
-
 Fixes:
-http://autobuild.buildroot.net/results/6af/6af140618b274536238b062635d493709905c8f6/build-end.log
+http://autobuild.buildroot.net/results/5d4/5d41cec63a15dc5f31460c8cecd6054119ddb1fc/build-end.log
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/libarchive/libarchive.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/efl/libevas-generic-loaders/Config.in                  | 1 +
+ package/efl/libevas-generic-loaders/libevas-generic-loaders.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 8c6951d..ce3355c 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -68,4 +68,8 @@ else
- LIBARCHIVE_CONF_OPT += --without-zlib
- endif
+diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
+index 30fb88b..3f7581f 100644
+--- a/package/efl/libevas-generic-loaders/Config.in
++++ b/package/efl/libevas-generic-loaders/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+ 	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  These are additional "generic" loaders for Evas that are
+ 	  stand-alone executables that evas may run from its generic
+diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+index 152a75b..db0ca32 100644
+--- a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -12,7 +12,7 @@ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+LIBARCHIVE_CONF_ENV += LIBS="-ldl"
-+endif
-+
- $(eval $(autotools-package))
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
+ 
+ # For now, we only support the SVG loader
+ LIBEVAS_GENERIC_LOADERS_CONF_OPT += \
 -- 
 1.9.3
