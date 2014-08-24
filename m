@@ -1,53 +1,39 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 24 Aug 2014 18:39:03 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/pkg-autotools: don't use
- config.site when cross-compiling
-In-Reply-To: <20140824181422.5dd8c43d@free-electrons.com>
-References: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
- <20140824181422.5dd8c43d@free-electrons.com>
-Message-ID: <53FA1527.80803@openwide.fr>
+Date: Sun, 24 Aug 2014 18:53:06 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libarchive: fix linking issue with
+	uClibc
+In-Reply-To: <1408899186-28542-1-git-send-email-romain.naour@openwide.fr>
+References: <1408899186-28542-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1408899186-28542-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+With uClibc the dynamic linking loader functions needs
+to be linked with -ldl
 
-Le 24/08/2014 18:14, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Fri, 22 Aug 2014 11:12:53 +0200, Romain Naour wrote:
->> On fedora 20 64bits host, the file /usr/share/config.site contains
->> a fix for installing libraries into /lib/lib64 on 64bits systems
->> that redefine libdir in the generated Makefile
->>
->> For safety and avoid the bug #7262 [1], disable loading this file
->> when running the configure script for the target and the host.
->>
->> Note: configure scripts generated with autoconf < 2.65 will source
->> the /dev/null and print this line:
->> "configure: loading site script /dev/null"
->>
->> [1]: https://bugs.busybox.net/show_bug.cgi?id=7262
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> I am wondering if this change should go in master (for 2014.08) or in
-> the next branch (for 2014.11). That close to the release, doing a
-> change in the core infrastructure seems a bit invasive to me. What if
-> it breaks the build of other packages? Seems unlikely, I admit, but
-> still. What do others think?
+Fixes:
+http://autobuild.buildroot.net/results/6af/6af140618b274536238b062635d493709905c8f6/build-end.log
 
-I think this patch can go to next since the issue is already fixed in master but
-just for host-localedef.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/libarchive/libarchive.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Actually, it seems that only host-localedef was affected by this issue.
-
-Best regards,
-Romain
-
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 8c6951d..ce3355c 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -68,4 +68,8 @@ else
+ LIBARCHIVE_CONF_OPT += --without-zlib
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++LIBARCHIVE_CONF_ENV += LIBS="-ldl"
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.9.3
