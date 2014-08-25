@@ -1,129 +1,42 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 25 Aug 2014 22:55:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sispmctl: fix static linking
-Message-ID: <1409000151-28959-1-git-send-email-romain.naour@openwide.fr>
+Date: Mon, 25 Aug 2014 23:00:39 +0200
+Subject: [Buildroot] [PATCH 1/2] package/xscreensaver: fix linking with
+ intl
+In-Reply-To: <20140825200144.187d22ad@free-electrons.com>
+References: <1408629367-7336-1-git-send-email-romain.naour@openwide.fr>
+ <20140825200144.187d22ad@free-electrons.com>
+Message-ID: <53FBA3F7.2000501@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The static linking doesn't works with libusb-compat when using libusb-config.
-Also the CFLAGS initialization with libusb-config --cflags is comented out.
+Hi Thomas,
 
-Based on libftdi's patch, add the support for pkg-config to link sispmctl
-correctly.
+Le 25/08/2014 20:01, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Thu, 21 Aug 2014 15:56:06 +0200, Romain Naour wrote:
+> 
+>> diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+>> index 0e84d27..ac8b09d 100644
+>> --- a/package/xscreensaver/xscreensaver.mk
+>> +++ b/package/xscreensaver/xscreensaver.mk
+>> @@ -14,7 +14,7 @@ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+>>  XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+>>  	$(if $(BR2_PACKAGE_GETTEXT),gettext)
+>>  
+>> -XSCREENSAVER_CONF_ENV = $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
+>> +XSCREENSAVER_CONF_ENV = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+> 
+> I am not convinced by this one, because in XSCREENSAVER_DEPENDENCIES,
+> the gettext dependency is still added when BR2_PACKAGE_GETTEXT=y. And
+> also, in the Config.in of this package, there is nothing like select
+> BR2_PACKAGE_GETTEXT if !BR2_NEEDS_GETTEXT_IF_LOCALE.
+> 
 
-This allow to add correct include directory to CFLAGS
-(Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
-Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
+Ok, I'll rework on it :)
 
-Since configure.ac is modified, the configure script needs to be regenerated
-with autoreconf.
-
-Fixes:
-http://autobuild.buildroot.net/results/647/6473088e751d3ab3a5227e9d7876966934e66378/build-end.log
-
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...pmctl-01-configure-add-pkg-config-support.patch | 73 ++++++++++++++++++++++
- package/sispmctl/sispmctl.mk                       |  3 +-
- 2 files changed, 75 insertions(+), 1 deletion(-)
- create mode 100644 package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-
-diff --git a/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-new file mode 100644
-index 0000000..afa7a9c
---- /dev/null
-+++ b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-@@ -0,0 +1,73 @@
-+From 8002a7e6fa965dfd304d098fbc64b0f1a6e3b465 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 24 Aug 2014 22:34:29 +0200
-+Subject: [PATCH 1/1] configure: add pkg-config support
-+
-+The static linking doesn't works with libusb-compat when 
-+using libusb-config. Also the CFLAGS initialization with 
-+libusb-config --cflags is comented out.
-+
-+Based on libftdi's patch, add the support for pkg-config
-+to link sispmctl correctly.
-+
-+This allow to add correct include directory to CFLAGS
-+(Add \$(STAGING_DIR)/usr/include and
-+\$(STAGING_DIR)/usr/include/libusb-1.0)
-+Also add needed libraries during static linking
-+(-lusb -lusb-1.0 and -pthread)
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.in | 36 +++++++++++-------------------------
-+ 1 file changed, 11 insertions(+), 25 deletions(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 08d39ea..65d0c1d 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -23,31 +23,17 @@ AC_SUBST(WEBDIR)
-+ AC_ARG_WITH(bindaddr,[  --with-bindaddr=IP bind listening socket to IP], [BINDADDR="$withval"])
-+ AC_SUBST(BINDADDR)
-+ 
-+-
-+-# Checks for libraries.
-+-dnl check for libusb-config
-+-AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
-+-
-+-if test -e "$HAVELIBUSB"; then
-+-   dnl   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
-+-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
-+-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-+-   LIBS="$LIBS $LIBUSB_LIBS"
-+-else
-+-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation. Version >=0.1.7])
-+-fi
-+-
-+-dnl check for version of libusb
-+-AC_MSG_CHECKING([if libusb version is >= 0.1.9])
-+-libusb_version_needed="1009"
-+-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
-+-
-+-if test $libusb_version -lt $libusb_version_needed; then
-+-   AC_MSG_RESULT(no)
-+-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.9.])
-+-else
-+-   AC_MSG_RESULT(yes)
-+-fi
-++dnl check for libusb
-++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
-++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-++LIBS="$LIBS $LIBUSB_LIBS"
-++
-++dnl Check for recent pkg-config which supports Requires.private
-++case `$PKG_CONFIG --version` in
-++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
-++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
-++esac
-++AC_SUBST(PKGCONFIG_REQUIRES)
-+ 
-+ # Checks for header files.
-+ AC_HEADER_STDC
-+-- 
-+1.9.3
-+
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index 2d2becf..2cde2e2 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
-@@ -10,7 +10,8 @@ SISPMCTL_LICENSE = GPLv2+
- SISPMCTL_LICENSE_FILES = LICENCE
- SISPMCTL_DEPENDENCIES = libusb-compat
- 
--SISPMCTL_CONF_ENV = HAVELIBUSB=$(STAGING_DIR)/usr/bin/libusb-config
-+SISPMCTL_AUTORECONF = YES
-+
- SISPMCTL_CONF_OPT = --enable-webless
- 
- $(eval $(autotools-package))
--- 
-1.9.3
+Best regards,
+Romain
