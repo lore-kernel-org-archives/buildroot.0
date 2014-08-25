@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 19:47:38 +0200
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <CAPiYbR+VwHhH1V0bkhqg0QTLMQVdJKbORq4cTsOSbmFjwvF2UA@mail.gmail.com>
-References: <20140825063011.07B50101AB1@stock.ovh.net>
- <20140825181614.3f5c22a0@free-electrons.com>
- <CAPiYbR+VwHhH1V0bkhqg0QTLMQVdJKbORq4cTsOSbmFjwvF2UA@mail.gmail.com>
-Message-ID: <20140825194738.4758d655@free-electrons.com>
+Date: Mon, 25 Aug 2014 19:49:20 +0200
+Subject: [Buildroot] [git commit branch/next] libsoc: bump to 0.6.3
+Message-ID: <20140825174933.C7E119D537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Phil Eichinger,
+commit: http://git.buildroot.net/buildroot/commit/?id=90d1ae8bed087d2df1a47210d636ad1a86275562
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 25 Aug 2014 18:26:04 +0200, Phil Eichinger wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsoc/libsoc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> >     mipsel |                   sispmctl-3.1 | NOK |
-> > http://autobuild.buildroot.net/results/6473088e751d3ab3a5227e9d7876966934e66378/
-> >
-> > Static linking issue.
-> >
-> > Phil, since you are the original submitter of the sispmctl package, can
-> > you look into this issue?
-> >
-> 
-> Yep, no problem, going to need it on mipsel soon anyway.
-
-Ok, thanks. However, notice that the issue is not mipsel related, but
-related to static linking. I'm pretty sure the same issue can be
-reproduced on other architectures.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
+index 85a22da..612be99 100644
+--- a/package/libsoc/libsoc.mk
++++ b/package/libsoc/libsoc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOC_VERSION = 0.6.2
++LIBSOC_VERSION = 0.6.3
+ LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
+ LIBSOC_LICENSE = LGPLv2.1
+ LIBSOC_LICENSE_FILES = COPYING
