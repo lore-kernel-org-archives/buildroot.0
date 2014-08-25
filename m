@@ -1,28 +1,28 @@
-From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
-Date: Mon, 25 Aug 2014 23:13:37 +0200
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <20140825181614.3f5c22a0@free-electrons.com>
-References: <20140825063011.07B50101AB1@stock.ovh.net>
- <20140825181614.3f5c22a0@free-electrons.com>
-Message-ID: <53FBA701.8010104@posteo.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Aug 2014 22:46:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 7328] Git dl of versions in x/y broken
+In-Reply-To: <bug-7328-163@https.bugs.busybox.net/>
+References: <bug-7328-163@https.bugs.busybox.net/>
+Message-ID: <20140825224617.C073E9C2A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=7328
 
-On 08/25/2014 06:16 PM, Thomas Petazzoni wrote:
->
->>        bfin |                 upmpdcli-0.7.1 | NOK | http://autobuild.buildroot.net/results/8e0db6a753c7d2af2cdb11f025879c9cdb57a25d/
-> libupnpp/log.cxx:31: error: no matching function for call to 'std::basic_ofstream<char, std::char_traits<char> >::open(const std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::_Ios_Openmode)'
->
-> I love C++.
->
-> Joerg, since you are the original submitter of the upmpdcli package,
-> can you look into this issue?
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-I love C++, too :-) Especially C++11, which is not supported by GNU 
-Toolchains for Blackfin.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Patch is send to the mailing list.
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> 2014-08-25 22:46:17 UTC ---
+Fixed by Yann in 1939011ce6f5cf, thanks
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
