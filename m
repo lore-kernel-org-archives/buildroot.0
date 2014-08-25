@@ -1,129 +1,63 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 26 Aug 2014 01:12:33 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/sispmctl: fix static linking
-Message-ID: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 26 Aug 2014 01:13:06 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/xscreensaver: fix linking with
+	intl
+Message-ID: <1409008386-21000-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The static linking doesn't works with libusb-compat when using libusb-config.
-Also the CFLAGS initialization with libusb-config --cflags is comented out.
+xscreensaver doesn't build with (e)glibc toolchain when gettext package is selected.
 
-Based on libftdi's patch, add the support for pkg-config to link sispmctl
-correctly.
+With (e)glibc libintl is provided by the libc whereas with uClibc it's provided by gettext.
 
-This allow to add correct include directory to CFLAGS
-(Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
-Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
-
-Since configure.ac is modified, the configure script needs to be regenerated
-with autoreconf.
+Linking with intl is only needed if the toolchain needs gettext.
 
 Fixes:
-http://autobuild.buildroot.net/results/647/6473088e751d3ab3a5227e9d7876966934e66378/build-end.log
+http://autobuild.buildroot.net/results/39b/39b6ad07ad59d87afeca6e427c69f580bed35700/build-end.log
 
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2:
-   fix the patch log
+V2:
+    Select gettext package only when the toolchain needs gettext (Thomas Petazzoni)
+    (ie: when BR2_NEEDS_GETTEXT is set)
+    Build tested with an glibc based toolchain and without gettext package selected.
+    Build tested with an uClibc based toolchain and with gettext package selected.
+---
+ package/xscreensaver/Config.in       | 1 +
+ package/xscreensaver/xscreensaver.mk | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- ...pmctl-01-configure-add-pkg-config-support.patch | 70 ++++++++++++++++++++++
- package/sispmctl/sispmctl.mk                       |  3 +-
- 2 files changed, 72 insertions(+), 1 deletion(-)
- create mode 100644 package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-
-diff --git a/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-new file mode 100644
-index 0000000..9466080
---- /dev/null
-+++ b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
-@@ -0,0 +1,70 @@
-+From 8002a7e6fa965dfd304d098fbc64b0f1a6e3b465 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 24 Aug 2014 22:34:29 +0200
-+Subject: [PATCH 1/1] configure: add pkg-config support
-+
-+The static linking doesn't works with libusb-compat when using libusb-config.
-+Also the CFLAGS initialization with libusb-config --cflags is comented out.
-+
-+Based on libftdi's patch, add the support for pkg-config to link sispmctl
-+correctly.
-+
-+This allow to add correct include directory to CFLAGS
-+(Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
-+Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.in | 36 +++++++++++-------------------------
-+ 1 file changed, 11 insertions(+), 25 deletions(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 08d39ea..65d0c1d 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -23,31 +23,17 @@ AC_SUBST(WEBDIR)
-+ AC_ARG_WITH(bindaddr,[  --with-bindaddr=IP bind listening socket to IP], [BINDADDR="$withval"])
-+ AC_SUBST(BINDADDR)
-+ 
-+-
-+-# Checks for libraries.
-+-dnl check for libusb-config
-+-AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
-+-
-+-if test -e "$HAVELIBUSB"; then
-+-   dnl   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
-+-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
-+-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-+-   LIBS="$LIBS $LIBUSB_LIBS"
-+-else
-+-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation. Version >=0.1.7])
-+-fi
-+-
-+-dnl check for version of libusb
-+-AC_MSG_CHECKING([if libusb version is >= 0.1.9])
-+-libusb_version_needed="1009"
-+-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
-+-
-+-if test $libusb_version -lt $libusb_version_needed; then
-+-   AC_MSG_RESULT(no)
-+-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.9.])
-+-else
-+-   AC_MSG_RESULT(yes)
-+-fi
-++dnl check for libusb
-++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
-++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-++LIBS="$LIBS $LIBUSB_LIBS"
-++
-++dnl Check for recent pkg-config which supports Requires.private
-++case `$PKG_CONFIG --version` in
-++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
-++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
-++esac
-++AC_SUBST(PKGCONFIG_REQUIRES)
-+ 
-+ # Checks for header files.
-+ AC_HEADER_STDC
-+-- 
-+1.9.3
-+
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index 2d2becf..2cde2e2 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
-@@ -10,7 +10,8 @@ SISPMCTL_LICENSE = GPLv2+
- SISPMCTL_LICENSE_FILES = LICENCE
- SISPMCTL_DEPENDENCIES = libusb-compat
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index e2534a6..11c01ae 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  XScreenSaver is the standard screen saver collection shipped on most
+ 	  Linux and Unix systems running the X11 Window System.
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 0e84d27..dba15bf 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -12,9 +12,10 @@ XSCREENSAVER_LICENSE = MIT-like GPLv2+
+ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
  
--SISPMCTL_CONF_ENV = HAVELIBUSB=$(STAGING_DIR)/usr/bin/libusb-config
-+SISPMCTL_AUTORECONF = YES
-+
- SISPMCTL_CONF_OPT = --enable-webless
+ XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext)
++	$(if $(BR2_NEEDS_GETTEXT),gettext)
  
- $(eval $(autotools-package))
+-XSCREENSAVER_CONF_ENV = $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
++# Linking with intl is only needed when the toolchain needs gettext
++XSCREENSAVER_CONF_ENV = $(if $(BR2_NEEDS_GETTEXT),LIBS=-lintl)
+ 
+ # otherwise we end up with host include/library dirs passed to the
+ # compiler/linker
 -- 
 1.9.3
