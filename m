@@ -1,40 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 23:10:51 +0200
-Subject: [Buildroot] [PATCH] package/infra: fix downloading versions
- with a slash
-In-Reply-To: <1408468875-6811-1-git-send-email-yann.morin.1998@free.fr>
-References: <1408468875-6811-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140825231051.53a3c18c@free-electrons.com>
+From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
+Date: Mon, 25 Aug 2014 23:13:37 +0200
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20140825181614.3f5c22a0@free-electrons.com>
+References: <20140825063011.07B50101AB1@stock.ovh.net>
+ <20140825181614.3f5c22a0@free-electrons.com>
+Message-ID: <53FBA701.8010104@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
 
-On Tue, 19 Aug 2014 19:21:15 +0200, Yann E. MORIN wrote:
-> Since cset 54456cc (infra: consistently use double dollar signs...), it
-> is no longer possible to download versions with a slash in it, because
-> the _DL_VERSION variable is second-expanded, but the _VERSION variable
-> is immediately-expanded to have '/' substitued with '_'.
-> 
-> So, _DL_VERSION is only expanded at the time it is evaluated, and by
-> that time, we've lost the slashes in _VERSION.
-> 
-> Make the _DL_VERSION variables immediately-evaluated.
-> 
-> Fixes:
->     https://bugs.busybox.net/show_bug.cgi?id=7328
-> 
-> Reported-by:  Vincent Stehl? <vincent.stehle@freescale.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc:  Vincent Stehl? <vincent.stehle@freescale.com>
+On 08/25/2014 06:16 PM, Thomas Petazzoni wrote:
+>
+>>        bfin |                 upmpdcli-0.7.1 | NOK | http://autobuild.buildroot.net/results/8e0db6a753c7d2af2cdb11f025879c9cdb57a25d/
+> libupnpp/log.cxx:31: error: no matching function for call to 'std::basic_ofstream<char, std::char_traits<char> >::open(const std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::_Ios_Openmode)'
+>
+> I love C++.
+>
+> Joerg, since you are the original submitter of the upmpdcli package,
+> can you look into this issue?
 
-Applied, thanks!
+I love C++, too :-) Especially C++11, which is not supported by GNU 
+Toolchains for Blackfin.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch is send to the mailing list.
