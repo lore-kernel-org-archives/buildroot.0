@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 19:48:57 +0200
-Subject: [Buildroot] [git commit branch/next] libmbim: bump to 1.10.0
-Message-ID: <20140825174933.B72499D537@busybox.osuosl.org>
+Date: Mon, 25 Aug 2014 19:49:59 +0200
+Subject: [Buildroot] [PATCH 1/3] libmbim: bump to 1.10.0
+In-Reply-To: <1408739082-18284-1-git-send-email-yegorslists@googlemail.com>
+References: <1408739082-18284-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20140825194959.142894b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b34b865d7b05e26169ddabb33fc6d8256db0a77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yegor Yefremov,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libmbim/libmbim.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 22 Aug 2014 22:24:40 +0200, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/libmbim/libmbim.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index d3df3aa..f57f5dc 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMBIM_VERSION = 1.8.0
-+LIBMBIM_VERSION = 1.10.0
- LIBMBIM_SITE    = http://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE  = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+All three patches of this series applied to the next branch, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
