@@ -1,61 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 08:30:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-24
-Message-ID: <20140825063011.07B50101AB1@stock.ovh.net>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Mon, 25 Aug 2014 10:40:23 +0100
+Subject: [Buildroot] [PATCH] gpsd: bump version to 3.11
+Message-ID: <1408959623-26890-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-08-24
-===============================
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...d-01-Fix-build-error-when-ntpshm-is-false.patch | 46 ++++++++++++++++++++++
+ .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    | 16 ++++----
+ package/gpsd/gpsd.mk                               |  7 ++--
+ 3 files changed, 56 insertions(+), 13 deletions(-)
+ create mode 100644 package/gpsd/gpsd-01-Fix-build-error-when-ntpshm-is-false.patch
 
-        success : 116
-       failures : 16 
-       timeouts : 0  
-          TOTAL : 132
-
-Classification of failures by reason
-====================================
-
-               xapp_luit-1.1.1 | 1 
-             util-linux-2.24.2 | 1 
-           uboot-tools-2014.07 | 1 
-                  perl-gd-2.53 | 1 
-                  sispmctl-3.1 | 1 
-                upmpdcli-0.7.1 | 1 
-             xscreensaver-5.22 | 1 
-              libgeotiff-1.3.0 | 1 
-               procps-ng-3.3.9 | 1 
-zmqpp-36413487f05b165dfc82a... | 1 
-             libmatroska-1.3.0 | 1 
-make: *** [core-dependencie... | 1 
-                 webkit-1.11.5 | 1 
-                elfutils-0.155 | 1 
-    xserver_xorg-server-1.16.0 | 1 
-xapp_xfs-1c8459eafc04997751... | 1 
-
-Detail of failures
-===================
-
-       arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/e2449b2a4f2239e832adc2f51f0c7266808b7068/
-      bfin |               libgeotiff-1.3.0 | NOK | http://autobuild.buildroot.net/results/24ab80be6cc20bbdb2f1860a373f1d15e36ac0c6/
-      bfin |              libmatroska-1.3.0 | NOK | http://autobuild.buildroot.net/results/f9689e9606844f24d13fa08c3cb9f6b9bb3adf70/
-       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/13019e563771ab2a6929427798e191546cde1fd9/
-       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/38aeac634b332866ae50b6b59361d7385500ce37/
-       arm |                procps-ng-3.3.9 | NOK | http://autobuild.buildroot.net/results/f1de9bdf857ca0347ecd23c0d39179dadfd9ec97/
-    mipsel |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/6473088e751d3ab3a5227e9d7876966934e66378/
-      bfin |            uboot-tools-2014.07 | NOK | http://autobuild.buildroot.net/results/1530f8247d1652da5779994f298141b1572ce74f/
-      bfin |                 upmpdcli-0.7.1 | NOK | http://autobuild.buildroot.net/results/8e0db6a753c7d2af2cdb11f025879c9cdb57a25d/
-     nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/fd30974bf2f976c600717268ce340f73d48dda34/
-       sh4 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/55205239b74015b7b9e8dce898d89e5246e81846/
-      bfin |                xapp_luit-1.1.1 | NOK | http://autobuild.buildroot.net/results/13a97461e3b6098e59cfcd829e6bcafa51e50bb4/
-      bfin | xapp_xfs-1c8459eafc04997751... | NOK | http://autobuild.buildroot.net/results/7a89f79499e167cc98449a045604d25d4fc88484/
-   powerpc |              xscreensaver-5.22 | NOK | http://autobuild.buildroot.net/results/2c10e5bda7c5426feb95f8e9d7052945274aefa2/
-microblazeel |     xserver_xorg-server-1.16.0 | NOK | http://autobuild.buildroot.net/results/4d37c5594c0916c27c897b0d2545d1c5cc492598/
-      bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/97bcfe2d3765945cd7a7ba30cda21b08bf53ca86/
-
-
+diff --git a/package/gpsd/gpsd-01-Fix-build-error-when-ntpshm-is-false.patch b/package/gpsd/gpsd-01-Fix-build-error-when-ntpshm-is-false.patch
+new file mode 100644
+index 0000000..d69d9e2
+--- /dev/null
++++ b/package/gpsd/gpsd-01-Fix-build-error-when-ntpshm-is-false.patch
+@@ -0,0 +1,46 @@
++From 8e081f1bd5c82b842ee317cd55e70f646ae31f05 Mon Sep 17 00:00:00 2001
++From: Simon Dawson <spdawson@gmail.com>
++Date: Mon, 25 Aug 2014 10:26:11 +0100
++Subject: [PATCH] Fix build error when ntpshm is false
++To: gpsd-dev at nongnu.org
++
++The build fails as follows
++
++libgpsd_core.c: In function 'ntpshm_latch':
++libgpsd_core.c:1660:24: error: 'const struct gps_type_t' has no member named 'time_offset'
++  || device->device_type->time_offset == NULL)
++                        ^
++libgpsd_core.c:1663:33: error: 'const struct gps_type_t' has no member named 'time_offset'
++  fix_time += device->device_type->time_offset(device);
++                                 ^
++scons: *** [libgpsd_core.os] Error 1
++
++The solution is to wrap #ifdef NTPSHM_ENABLE around the ntpshm_latch function
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++---
++ libgpsd_core.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgpsd_core.c b/libgpsd_core.c
++index 6ec08a4..f7e8075 100644
++--- a/libgpsd_core.c
+++++ b/libgpsd_core.c
++@@ -1638,6 +1638,7 @@ void gpsd_zero_satellites( /*@out@*/ struct gps_data_t *out)
++ #endif
++ }
++ 
+++#ifdef NTPSHM_ENABLE
++ void ntpshm_latch(struct gps_device_t *device, struct timedrift_t /*@out@*/*td)
++ /* latch the fact that we've saved a fix */
++ {
++@@ -1668,5 +1669,6 @@ void ntpshm_latch(struct gps_device_t *device, struct timedrift_t /*@out@*/*td)
++     device->last_fixtime.clock = td->clock.tv_sec + td->clock.tv_nsec / 1e9;
++ #endif /* S_SPLINT_S */
++ }
+++#endif /* NTPSHM_ENABLE */
++ 
++ /* end */
++-- 
++1.9.1
++
+diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+index 5cbdf13..8251cfc 100644
+--- a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
++++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+@@ -4,16 +4,14 @@ Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+ diff -Nurp a/SConstruct b/SConstruct
+---- a/SConstruct	2013-11-22 13:10:01.000000000 +0000
+-+++ b/SConstruct	2013-11-23 11:26:57.698486777 +0000
+-@@ -299,11 +299,6 @@ if env["sysroot"]:
+- # system default load path. /lib and /usr/lib should always be on
+- # this; listing them explicitly is a fail-safe against this ldconfig
+- # invocation not doing what we expect.
++--- a/SConstruct	2014-08-23 18:41:09.000000000 +0100
+++++ b/SConstruct	2014-08-25 09:46:53.754364989 +0100
++@@ -300,9 +300,6 @@ if env["sysroot"]:
++ 
++ # Don't hack RPATH unless libdir points somewhere that is not on the
++ # minimum default load path.
+ -if env["shared"]:
+--    sysrpath = Split(_getoutput("ldconfig -v -N -X 2>/dev/null | sed -n -e '/^\//s/://p'"))
+--    if env["libdir"] not in ["/usr/lib", "/lib"] + sysrpath:
+--        announce("Prepending %s to RPATH." % installdir('libdir', False))
++-    if env["libdir"] not in ["/usr/lib", "/lib"]:
+ -        env.Prepend(RPATH=[installdir('libdir')])
+  
+  # Give deheader a way to set compiler flags
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 0f655ba..7dc27e8 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GPSD_VERSION = b4c32aa40cff1b4e1041d5f3004e9d9156cdf96f
+-GPSD_SITE = git://git.savannah.nongnu.org/gpsd.git
++GPSD_VERSION = 3.11
++GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
+ GPSD_INSTALL_STAGING = YES
+@@ -19,7 +19,6 @@ GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+ GPSD_SCONS_OPTS = \
+ 	arch=$(ARCH)\
+ 	prefix=/usr\
+-	chrpath=no\
+ 	sysroot=$(STAGING_DIR)\
+ 	strip=no\
+ 	python=no
+@@ -48,7 +47,7 @@ ifeq ($(BR2_PACKAGE_QT_NETWORK),y)
+ 	GPSD_SCONS_ENV += QMAKE="$(QT_QMAKE)"
+ 	GPSD_DEPENDENCIES += qt host-pkgconf
+ else
+-	GPSD_SCONS_OPTS += libQgpsmm=no
++	GPSD_SCONS_OPTS += qt=no
+ endif
+ 
+ # If libusb is available build it before so the package can use it
 -- 
-http://autobuild.buildroot.net
+1.9.1
