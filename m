@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 19:49:07 +0200
-Subject: [Buildroot] [git commit branch/next] modem-manager: bump to 1.4.0
-Message-ID: <20140825174933.C02519D537@busybox.osuosl.org>
+Date: Mon, 25 Aug 2014 19:48:57 +0200
+Subject: [Buildroot] [git commit branch/next] libmbim: bump to 1.10.0
+Message-ID: <20140825174933.B72499D537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cb05a2869ef2bbddf0bc1d9f6f3fabf01137365
+commit: http://git.buildroot.net/buildroot/commit/?id=3b34b865d7b05e26169ddabb33fc6d8256db0a77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/modem-manager/modem-manager.mk |    2 +-
+ package/libmbim/libmbim.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index cc495f7..691504e 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index d3df3aa..f57f5dc 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.2.0
-+MODEM_MANAGER_VERSION = 1.4.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
+-LIBMBIM_VERSION = 1.8.0
++LIBMBIM_VERSION = 1.10.0
+ LIBMBIM_SITE    = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE  = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
