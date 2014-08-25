@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 19:49:20 +0200
-Subject: [Buildroot] [git commit branch/next] libsoc: bump to 0.6.3
-Message-ID: <20140825174933.C7E119D537@busybox.osuosl.org>
+Date: Mon, 25 Aug 2014 19:49:07 +0200
+Subject: [Buildroot] [git commit branch/next] modem-manager: bump to 1.4.0
+Message-ID: <20140825174933.C02519D537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90d1ae8bed087d2df1a47210d636ad1a86275562
+commit: http://git.buildroot.net/buildroot/commit/?id=1cb05a2869ef2bbddf0bc1d9f6f3fabf01137365
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsoc/libsoc.mk |    2 +-
+ package/modem-manager/modem-manager.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index 85a22da..612be99 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index cc495f7..691504e 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSOC_VERSION = 0.6.2
-+LIBSOC_VERSION = 0.6.3
- LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
+-MODEM_MANAGER_VERSION = 1.2.0
++MODEM_MANAGER_VERSION = 1.4.0
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
