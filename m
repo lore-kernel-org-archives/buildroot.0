@@ -1,27 +1,23 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 25 Aug 2014 13:53:29 +0300
+From: Richard Braun <rbraun@sceen.net>
+Date: Mon, 25 Aug 2014 13:13:43 +0200
 Subject: [Buildroot] HTTP access to git repository outdated
-In-Reply-To: <20140825105119.GA31345@dalaran.sceen.net>
+In-Reply-To: <20140825105329.GE2661@sapphire.tkos.co.il>
 References: <20140825105119.GA31345@dalaran.sceen.net>
-Message-ID: <20140825105329.GE2661@sapphire.tkos.co.il>
+ <20140825105329.GE2661@sapphire.tkos.co.il>
+Message-ID: <20140825111343.GA3542@dalaran.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Richard,
+On Mon, Aug 25, 2014 at 01:53:29PM +0300, Baruch Siach wrote:
+> This is a known problem. Try adding or removing the trailing slash from the 
+> git repository URL.
 
-On Mon, Aug 25, 2014 at 12:51:19PM +0200, Richard Braun wrote:
-> It looks like git update-server-info isn't run automatically since
-> getting the repository through http gives a slightly outdated tree.
-
-This is a known problem. Try adding or removing the trailing slash from the 
-git repository URL.
-
-baruch
+This makes no difference on my machine. Is there any intent to fix it at
+least ? I personally don't mind the issue too much if it doesn't last.
+Others might simply not have a choice.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Richard Braun
