@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Aug 2014 19:52:37 +0200
-Subject: [Buildroot] [PATCH] gpsd: bump version to 3.11
-In-Reply-To: <1408959623-26890-1-git-send-email-spdawson@gmail.com>
-References: <1408959623-26890-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20140825195237.7d05c796@free-electrons.com>
+Date: Mon, 25 Aug 2014 19:55:20 +0200
+Subject: [Buildroot] [git commit] package/procps-ng: fix linking with intl
+Message-ID: <20140825175526.B7A649D537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+commit: http://git.buildroot.net/buildroot/commit/?id=47128a9b822657d6f9d8c4772ccf21a3e21343d4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 25 Aug 2014 10:40:23 +0100, Simon Dawson wrote:
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  ...d-01-Fix-build-error-when-ntpshm-is-false.patch | 46 ++++++++++++++++++++++
->  .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    | 16 ++++----
->  package/gpsd/gpsd.mk                               |  7 ++--
->  3 files changed, 56 insertions(+), 13 deletions(-)
->  create mode 100644 package/gpsd/gpsd-01-Fix-build-error-when-ntpshm-is-false.patch
+procps-ng doesn't build with (e)glibc toolchain when gettext package is
+selected.
 
-Applied to the next branch, thanks!
+With (e)glibc libintl is provided by the libc whereas with uClibc it's provided
+by gettext.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Linking with intl is only needed if the toolchain needs gettext and locale is
+set.
+
+Fixes:
+http://autobuild.buildroot.net/results/3e8/3e8464e0b00ce22fa02a6337159fca250d86425c/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/procps-ng/procps-ng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 7628c21..8f9caf3 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -12,7 +12,7 @@ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ PROCPS_NG_DEPENDENCIES = ncurses
+ 
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ PROCPS_NG_DEPENDENCIES += gettext
+ PROCPS_NG_CONF_OPT += LIBS=-lintl
+ endif
