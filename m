@@ -1,28 +1,129 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Aug 2014 22:46:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 7328] Git dl of versions in x/y broken
-In-Reply-To: <bug-7328-163@https.bugs.busybox.net/>
-References: <bug-7328-163@https.bugs.busybox.net/>
-Message-ID: <20140825224617.C073E9C2A0@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 26 Aug 2014 01:12:33 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/sispmctl: fix static linking
+Message-ID: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7328
+The static linking doesn't works with libusb-compat when using libusb-config.
+Also the CFLAGS initialization with libusb-config --cflags is comented out.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Based on libftdi's patch, add the support for pkg-config to link sispmctl
+correctly.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+This allow to add correct include directory to CFLAGS
+(Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
+Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
 
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> 2014-08-25 22:46:17 UTC ---
-Fixed by Yann in 1939011ce6f5cf, thanks
+Since configure.ac is modified, the configure script needs to be regenerated
+with autoreconf.
 
+Fixes:
+http://autobuild.buildroot.net/results/647/6473088e751d3ab3a5227e9d7876966934e66378/build-end.log
+
+Cc: Phil Eichinger <phil.eichinger@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v2:
+   fix the patch log
+
+ ...pmctl-01-configure-add-pkg-config-support.patch | 70 ++++++++++++++++++++++
+ package/sispmctl/sispmctl.mk                       |  3 +-
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+ create mode 100644 package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
+
+diff --git a/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
+new file mode 100644
+index 0000000..9466080
+--- /dev/null
++++ b/package/sispmctl/sispmctl-01-configure-add-pkg-config-support.patch
+@@ -0,0 +1,70 @@
++From 8002a7e6fa965dfd304d098fbc64b0f1a6e3b465 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 24 Aug 2014 22:34:29 +0200
++Subject: [PATCH 1/1] configure: add pkg-config support
++
++The static linking doesn't works with libusb-compat when using libusb-config.
++Also the CFLAGS initialization with libusb-config --cflags is comented out.
++
++Based on libftdi's patch, add the support for pkg-config to link sispmctl
++correctly.
++
++This allow to add correct include directory to CFLAGS
++(Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
++Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.in | 36 +++++++++++-------------------------
++ 1 file changed, 11 insertions(+), 25 deletions(-)
++
++diff --git a/configure.in b/configure.in
++index 08d39ea..65d0c1d 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -23,31 +23,17 @@ AC_SUBST(WEBDIR)
++ AC_ARG_WITH(bindaddr,[  --with-bindaddr=IP bind listening socket to IP], [BINDADDR="$withval"])
++ AC_SUBST(BINDADDR)
++ 
++-
++-# Checks for libraries.
++-dnl check for libusb-config
++-AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
++-
++-if test -e "$HAVELIBUSB"; then
++-   dnl   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
++-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
++-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
++-   LIBS="$LIBS $LIBUSB_LIBS"
++-else
++-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation. Version >=0.1.7])
++-fi
++-
++-dnl check for version of libusb
++-AC_MSG_CHECKING([if libusb version is >= 0.1.9])
++-libusb_version_needed="1009"
++-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
++-
++-if test $libusb_version -lt $libusb_version_needed; then
++-   AC_MSG_RESULT(no)
++-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.9.])
++-else
++-   AC_MSG_RESULT(yes)
++-fi
+++dnl check for libusb
+++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
+++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+++LIBS="$LIBS $LIBUSB_LIBS"
+++
+++dnl Check for recent pkg-config which supports Requires.private
+++case `$PKG_CONFIG --version` in
+++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
+++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
+++esac
+++AC_SUBST(PKGCONFIG_REQUIRES)
++ 
++ # Checks for header files.
++ AC_HEADER_STDC
++-- 
++1.9.3
++
+diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
+index 2d2becf..2cde2e2 100644
+--- a/package/sispmctl/sispmctl.mk
++++ b/package/sispmctl/sispmctl.mk
+@@ -10,7 +10,8 @@ SISPMCTL_LICENSE = GPLv2+
+ SISPMCTL_LICENSE_FILES = LICENCE
+ SISPMCTL_DEPENDENCIES = libusb-compat
+ 
+-SISPMCTL_CONF_ENV = HAVELIBUSB=$(STAGING_DIR)/usr/bin/libusb-config
++SISPMCTL_AUTORECONF = YES
++
+ SISPMCTL_CONF_OPT = --enable-webless
+ 
+ $(eval $(autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.9.3
