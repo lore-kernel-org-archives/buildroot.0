@@ -1,40 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Aug 2014 23:50:32 +0200
-Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
-In-Reply-To: <1409065267.6466.23.camel@abrodkin-8560l.internal.synopsys.com>
- (Alexey Brodkin's message of "Tue, 26 Aug 2014 15:01:07 +0000")
-References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
- <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
- <20140826165826.398f7a63@free-electrons.com>
- <1409065267.6466.23.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <87d2bmvs2f.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Aug 2014 23:49:18 +0200
+Subject: [Buildroot] [git commit] libev: don't install event.h
+Message-ID: <20140826215057.38F259D552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5de840cc6a9370c0765da4ad55cd116c96ef741c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+It's a 'compatibility layer' with libevent which we:
+1) Don't need
+2) Possibly outdated with respect to libevent2
+3) Causes build failures
 
- >> > I'm wondering if there's still a chance to get this patch applied before
- >> > 2014.08 release?
- >> 
- >> My feeling is that it was submitted too late to get applied to 2014.08.
- >> Generally speaking, we don't merge any version bump after -rc1 has been
- >> tagged, unless those bumps are known to fix important issues.
- >> 
- >> Therefore, I believe this change qualifies for the next branch, and
- >> will therefore be part of the 2014.11 Buildroot release.
+Fixes:
+http://autobuild.buildroot.net/results/451/4510fe02ef3497803ed27bf339dca07b3b073c10/
 
- > Sure, makes perfect sense!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libev/libev.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
- > Unfortunately we were a bit late with our release so yes let's apply it
- > to the next.
-
-I agree. The current patch doesn't apply to next. Care to rebase and
-resend?
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index a6ff3a9..dc42858 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -10,4 +10,11 @@ LIBEV_INSTALL_STAGING = YES
+ LIBEV_LICENSE = BSD-2c or GPLv2+
+ LIBEV_LICENSE_FILES = LICENSE
+ 
++# The 'compatibility' event.h header conflicts with libevent
++# It's completely unnecessary for BR packages so remove it
++define LIBEV_DISABLE_EVENT_H_INSTALL
++	$(SED) 's/ event.h//' $(@D)/Makefile.in
++endef
++LIBEV_POST_PATCH_HOOKS += LIBEV_DISABLE_EVENT_H_INSTALL
++
+ $(eval $(autotools-package))
