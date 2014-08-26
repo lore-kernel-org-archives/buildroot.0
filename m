@@ -1,48 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Aug 2014 11:13:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: Fix missing dependency of
- libogg for plugin opus
-In-Reply-To: <1409041685-9603-1-git-send-email-jkrause@posteo.de>
-References: <1409041685-9603-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20140826111358.122ccde0@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 26 Aug 2014 10:16:56 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-08-23
+In-Reply-To: <20140824063010.7D12B101B14@stock.ovh.net>
+References: <20140824063010.7D12B101B14@stock.ovh.net>
+Message-ID: <53FC5088.8020401@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+On 08/24/2014 07:30 AM, Thomas Petazzoni wrote:
+>    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/2df1be2bed4f834fa740121c947af17697767c62/
 
-On Tue, 26 Aug 2014 10:28:05 +0200, J?rg Krause wrote:
-> The opus decoder plugin depends on libopus and libogg.
-> 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/mpd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index b8a56b7..108b2b1 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -145,6 +145,7 @@ config BR2_PACKAGE_MPD_MUSEPACK
->  config BR2_PACKAGE_MPD_OPUS
->  	bool "opus"
->  	select BR2_PACKAGE_OPUS
-> +	select BR2_PACKAGE_LIBOGG
->  	help
->  	  Enable opus input support.
->  	  Select this if you want to play back OPUS encoded files.
+Reported upstream: https://bugreports.qt-project.org/browse/QTBUG-39224
 
-And where do you ensure libogg gets built before mpd ?
 
-And the commit log should have a reference to the autobuilder failure
-being fixed.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vincent
