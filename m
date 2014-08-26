@@ -1,107 +1,86 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 26 Aug 2014 20:49:07 +0200
-Subject: [Buildroot] [PATCH v3 4/4] gendoc infra: disable pdf manual
-	generation if xsltproc is buggy
-In-Reply-To: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
-References: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1409078947-5093-4-git-send-email-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Aug 2014 22:14:06 +0200
+Subject: [Buildroot] [PATCH 00/12] toolchain: warn for unsafe
+ library/header paths
+In-Reply-To: <20140824112218.GA3778@free.fr>
+References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <53F656E5.9020802@openwide.fr> <20140821233312.03679844@free-electrons.com>
+ <20140822163057.GA3998@free.fr>
+ <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
+ <20140824112218.GA3778@free.fr>
+Message-ID: <53FCEA8E.3030600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The PDF manual generation reaches the default xsltproc's template
-recursion limit when processing the target package list; this makes the
-PDF manual generation fail [1-3].
+ [/me is back from too long holidays, facing 2000 BR mails :-)]
 
-This limit can be raised with the '--maxvars' option. Unfortunately,
-this option is not correctly handled in the latest xsltproc/libxslt
-release (1.1.28), but this bug is already fixed in the libxslt
-repository [4].
+On 08/24/14 13:22, Yann E. MORIN wrote:
+> Thomas?, All,
+> 
+> On 2014-08-22 21:29 +0200, Thomas De Schampheleire spake thusly:
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>>> Thomas, All,
+>>>
+>>> On 2014-08-21 23:33 +0200, Thomas Petazzoni spake thusly:
+>>>> On Thu, 21 Aug 2014 22:30:29 +0200, Romain Naour wrote:
+>>>>> Also, BR_COMPILER_PARANOID_UNSAFE_PATH needs to be renamed to
+>>>>> BR2_COMPILER_PARANOID_UNSAFE_PATH to follow the naming scheme ?
+>>>>
+>>>> No: BR2_* variables are Config.in options. Environment variables are
+>>>> BR_*.
+>>>
+>>> Earlier this year in Brussels, we said we were to use BR2_ everywhere :
+>>>    http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
+>>
+>> Hmm, that is written in the conclusion, but this is very
+>>  different than what is in the 'proposed rules'.
+>> Was it really the final outcome to use BR2 for all types
+>>  of variable? I thought we wanted to make a
+>>  distinction between config variables and others...
+> 
+> Yes, I was a bit surprised by the conclusion, too.
+> From what I remember, I thought we decided for:
+>   - user-facing variables: prefix with BR2_
+>   - internal variables: prefix with BR_
+> 
+> IIRC, we already have a few changesets implementing those rules.
+> 
+> For example:
+>     35c666e toolchain/wrapper: rename BR_DEBUG_WRAPPER
+> 
+> (I could not find another reverse such change, unfortunetely...)
 
-This patch disables the PDF manual generation (makes it fail with a
-meaningful error message) when the xsltproc program found in the PATH
-does not support the --maxvars option.
-So, one can still generate the PDF manual if he/she extends PATH with
-the location of a working xsltproc, by running:
+ Blame the reporter.
 
-  $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual-pdf
+ The conclusion was:
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-August/104390.html
-[2] http://lists.busybox.net/pipermail/buildroot/2014-August/104418.html
-[3] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
-[4] https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+* BR2_ for all Kconfig variables;
+* BR2_ for user-facing environment variables;
+* BR_ for internal environment variables.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
----
-changes v2 -> v3:
-- fix typoes (ThomasDS)
-- rename USE_BUGGY_XSLTPROC -> MANUAL_XSLTPROC_IS_BROKEN (ThomasDS)
-- comments and commit log rewording (ThomasDS)
+ Other such changes:
 
-changes v1 -> v2:
-- simplify the xsltproc check logic
----
- docs/manual/manual.mk | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+4113b3c infra: replace BUILDROOT_CONFIG with BR2_CONFIG
+6768021 infra: replace BUILDROOT_DL_DIR with BR2_DL_DIR.
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 09d8b18..49ddb0e 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -83,6 +83,28 @@ define MANUAL_$(2)_INSTALL_CMDS
- endef
- endif
- 
-+# PDF manual generation is broken because of a bug in xsltproc program provided
-+# by libxslt <=1.1.28, which does not honor an option we need to set.
-+# Fortunately, this bug is already fixed upstream:
-+#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
-+#
-+# So, bail out when trying to build the pdf manual using a buggy version of the
-+# xsltproc program.
-+#
-+# So, to overcome this issue and being able to build the pdf manual, you can
-+# build xsltproc from it source repository, then run:
-+#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
-+MANUAL_XSLTPROC_IS_BROKEN = \
-+	$$(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
-+
-+ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
-+$$(O)/docs/$(1)/$(1).$(4):
-+	$$(error PDF manual generation is disabled because of a bug in \
-+		xsltproc. To be able to generate the PDF manual, you should \
-+		build xsltproc from the libxslt sources >=1.1.29 and pass it \
-+		to make through the command line: \
-+		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
-+else
- $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
-@@ -96,6 +118,7 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 		$$(BUILD_DIR)/$(1)/$(1).txt
- # install the generated manual
- 	$$(MANUAL_$(2)_INSTALL_CMDS)
-+endif
- endef
- 
- ################################################################################
-@@ -111,8 +134,11 @@ $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
-+# dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
-+# from reaching the template recursion limit when processing the (long) target
-+# package table and bailing out.
- $(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
--	--dblatex-opts "-P latex.output.revhistory=0")
-+	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
- $(call GENDOC_INNER,$(pkgname),text,text,text,text)
- $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
- clean: $(pkgname)-clean
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-2.1.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
