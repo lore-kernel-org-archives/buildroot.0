@@ -1,45 +1,27 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Tue, 26 Aug 2014 08:47:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/sispmctl: fix static linking
-In-Reply-To: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
-References: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAPiYbRKyWdOrOge52eSiJTa0DSD3BwcBwyc3yrxryTY073P+Ng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Aug 2014 09:23:07 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/xscreensaver: fix linking
+ with intl
+In-Reply-To: <1409008386-21000-1-git-send-email-romain.naour@openwide.fr>
+References: <1409008386-21000-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140826092307.3122ca58@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 August 2014 01:12, Romain Naour <romain.naour@openwide.fr> wrote:
+Dear Romain Naour,
 
-> The static linking doesn't works with libusb-compat when using
-> libusb-config.
-> Also the CFLAGS initialization with libusb-config --cflags is comented out.
->
-> Based on libftdi's patch, add the support for pkg-config to link sispmctl
-> correctly.
->
-> This allow to add correct include directory to CFLAGS
-> (Add -I$(STAGING_DIR)/usr/include and
-> -I$(STAGING_DIR)/usr/include/libusb-1.0)
-> Also add needed libraries during static linking (-lusb -lusb-1.0 and
-> -pthread)
->
-> Since configure.ac is modified, the configure script needs to be
-> regenerated
-> with autoreconf.
->
-> Fixes:
->
-> http://autobuild.buildroot.net/results/647/6473088e751d3ab3a5227e9d7876966934e66378/build-end.log
->
-> Cc: Phil Eichinger <phil.eichinger@gmail.com>
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->
+On Tue, 26 Aug 2014 01:13:06 +0200, Romain Naour wrote:
 
-Thank you!
+> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 
-Cheers, Phil
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140826/c046e63b/attachment.html>
+Have you verified if it's really BR2_NEEDS_GETTEXT or
+BR2_NEEDS_GETTEXT_IF_LOCALE that should be used?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
