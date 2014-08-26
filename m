@@ -1,67 +1,53 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 26 Aug 2014 09:50:30 +0200
-Subject: [Buildroot] [PATCH v2 2/2] freescale/imx6-sabresd: document how
- to create a bootable SD
-In-Reply-To: <1408019813-17702-2-git-send-email-luca@lucaceresoli.net>
-References: <1408019813-17702-1-git-send-email-luca@lucaceresoli.net>
- <1408019813-17702-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <53FC3C46.3020008@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Aug 2014 10:23:38 +0200
+Subject: [Buildroot] Building RPi toolchain with 2014.05
+In-Reply-To: <lthbud$oba$1@ger.gmane.org>
+References: <lthbud$oba$1@ger.gmane.org>
+Message-ID: <20140826082338.GA3925@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Malte, Al,
 
-I noticed a little annoyance with this version of the script when it
-processes an SD that it had already processed before. This may happen
-for example after the user has activated more target packages, rebuilt
-and wants to recreate SD with the new root filesystem.
+On 2014-08-26 09:11 +0200, Malte Forkel spake thusly:
+> with buildroot 2013.05, I could create a toolchain for Raspberry Pi with
+>     $ make rpi_defconfig
+>     $ make toolchain
+> If I try the same with buildroot 2014.05, i.e.
+>     $ make raspberrypi_defconfig
+>     $ make toolchain
+> the log ends with
+>     >>> toolchain-buildroot undefined Extracting
+>     >>> toolchain-buildroot undefined Patching
+>     >>> toolchain-buildroot undefined Configuring
+>     >>> toolchain-buildroot undefined Building
+>     >>> toolchain-buildroot undefined Installing to target
+>     >>> toolchain undefined Extracting
+>     >>> toolchain undefined Patching
+>     >>> toolchain undefined Configuring
+>     >>> toolchain undefined Building
+>     >>> toolchain undefined Installing to target
+> and the directory output/toolchain is not created.
+> 
+> What am I missing?
 
-See below for a description of what happens.
+I just tested the master branch, and it does build the toolchain
+sucessfully.
 
-Luca Ceresoli wrote:
-> diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/imx6sabresd/create-boot-sd.sh
-> new file mode 100755
-> index 0000000..f82f7b3
-> --- /dev/null
-> +++ b/board/freescale/imx6sabresd/create-boot-sd.sh
-[...]
-> +# Unmount the partitions if mounted
-> +umount ${PART1} || true
-> +umount ${PART2} || true
-> +
-> +# First, clear the card
-> +dd if=/dev/zero of=${DEV} bs=1M count=2
+But the toolchain does not end up in output/toolchain/. It is located in
+output/host/  and can be called with, for example:
+    /path/to/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
 
-This erases the first 2 MB of the SD, which include the partition table,
-the bootloader and the beginning of the FAT partition. It does not
-touch the ext2 partition.
-
-> +
-> +sync
-> +
-> +# Partition the card.
-> +# SD layout for i.MX6 boot:
-> +# - Bootloader at offset 1024
-> +# - FAT partition starting at 1MB offset, containing uImage and *.dtb
-> +# - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
-> +sfdisk ${DEV} <<EOF
-> +32,480,b
-> +512,,L
-> +EOF
-
-Here the host system detects the newly created partitions. Since the
-ext2 has not been touched it contains valid data, and a
-desktop-oriented automounter "might" want to mount it right away (mine
-does of course).
-
-Waiting some time and then umounting it just-in-case is an option, but I
-preferred to just change the 'dd' command above to erase 20 MB, not 2,
-so it also invalidates the ext2 partition.
-
-I'll resubmit with this change.
+Regards,
+Yann E. MORIN.
 
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
