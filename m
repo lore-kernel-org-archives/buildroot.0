@@ -1,32 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Aug 2014 23:46:17 +0200
-Subject: [Buildroot] [git commit branch/next] libtasn1: bump to version 4.1
-Message-ID: <20140826214909.CCA329D552@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2014 23:49:27 +0200
+Subject: [Buildroot] [PATCH] libev: don't install event.h
+In-Reply-To: <1409052977-12935-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 26 Aug 2014 08:36:17 -0300")
+References: <1409052977-12935-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ha0yvs48.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bc27623e368eb7a6521497a523ccbc00877d983
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtasn1/libtasn1.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > It's a 'compatibility layer' with libevent which we:
+ > 1) Don't need
+ > 2) Possibly outdated with respect to libevent2
+ > 3) Causes build failures
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 84297cb..45fff87 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.0
-+LIBTASN1_VERSION = 4.1
- LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/451/4510fe02ef3497803ed27bf339dca07b3b073c10/
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
