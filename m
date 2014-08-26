@@ -1,9 +1,8 @@
 From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Tue, 26 Aug 2014 23:28:07 +0300
-Subject: [Buildroot] [PATCH 2/2] phidgetwebservice: new package
-In-Reply-To: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
-References: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
-Message-ID: <1409084887-30450-2-git-send-email-yba@tkos.co.il>
+Date: Tue, 26 Aug 2014 23:28:06 +0300
+Subject: [Buildroot] [PATCH 1/2] libphidget: new package for controlling
+	Phidgets USB devices
+Message-ID: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +12,78 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
 ---
- package/Config.in                              |    1 +
- package/phidgetwebservice/Config.in            |   15 +++++++++++++++
- package/phidgetwebservice/phidgetwebservice.mk |   14 ++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/phidgetwebservice/Config.in
- create mode 100644 package/phidgetwebservice/phidgetwebservice.mk
+ package/Config.in                |    1 +
+ package/libphidget/Config.in     |   25 +++++++++++++++++++++++++
+ package/libphidget/libphidget.mk |   18 ++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 package/libphidget/Config.in
+ create mode 100644 package/libphidget/libphidget.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1088f5a..f86207c 100644
+index 4520ba6..1088f5a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -677,6 +677,7 @@ menu "Hardware handling"
+@@ -676,6 +676,7 @@ menu "Hardware handling"
+ 	source "package/libsoc/Config.in"
  	source "package/libusb/Config.in"
  	source "package/libusb-compat/Config.in"
- 	source "package/libphidget/Config.in"
-+	source "package/phidgetwebservice/Config.in"
++	source "package/libphidget/Config.in"
  	source "package/libv4l/Config.in"
  	source "package/libxkbcommon/Config.in"
  	source "package/mtdev/Config.in"
-diff --git a/package/phidgetwebservice/Config.in b/package/phidgetwebservice/Config.in
+diff --git a/package/libphidget/Config.in b/package/libphidget/Config.in
 new file mode 100644
-index 0000000..01e7b11
+index 0000000..dcd6854
 --- /dev/null
-+++ b/package/phidgetwebservice/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PHIDGETWEBSERVICE
-+	bool "phidgetwebservice"
-+	depends on BR2_PACKAGE_LIBPHIDGET
++++ b/package/libphidget/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_LIBPHIDGET
++	bool "libphidget"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
 +	help
-+          phidgetwebservice (the Phidget WebService) provides an HTTP
-+	  front-end to the libphidget device control API. This provides
-+	  an alternative to the libphidget C linkage interface for
-+	  controlling locally attached Phidgets USB devices and it also
-+	  allows you to control Phidget USB devices remotely when the host
-+	  running the phidgetwebservice has an exposed network interface.
-+ 
-+	  The phidgetwebservice client program uses the libphidget HTTP
-+	  functions to send commands to the phidgetwebservice.
++	  The libphidget library provides an API for controlling Phidgets
++	  USB devices. The library translates API function calls to libusb
++	  function calls to control attached Phidgets devices that provide
++	  GPIO's, DAC's, accelerometers, servo motors, and other capabilities
++	  either singly or on combo devices.
++
++	  To use libphidget for controlling locally attached devices you
++	  need to set up the userspace USB device tree /dev/bus/usb. See
++	  file udev/99-phidgets.rules.
++
++	  The libphidget library also contains an API for sending commands
++	  to a local or remote phidgetwebservice using HTTP. The
++	  phidgetwebservice then translates HTTP requests to libphidget API
++	  function calls to control locally attached Phidgets devices.
 +
 +	  http://phidgets.com/
-diff --git a/package/phidgetwebservice/phidgetwebservice.mk b/package/phidgetwebservice/phidgetwebservice.mk
++
++comment "libphidget needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+diff --git a/package/libphidget/libphidget.mk b/package/libphidget/libphidget.mk
 new file mode 100644
-index 0000000..64dfca4
+index 0000000..55547d5
 --- /dev/null
-+++ b/package/phidgetwebservice/phidgetwebservice.mk
-@@ -0,0 +1,14 @@
++++ b/package/libphidget/libphidget.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# phidgetwebservice
++# libphidget
 +#
 +################################################################################
 +
-+PHIDGETWEBSERVICE_VERSION = 2.1.8.20140319
-+PHIDGETWEBSERVICE_SOURCE = phidgetwebservice_$(PHIDGETWEBSERVICE_VERSION).tar.gz
-+PHIDGETWEBSERVICE_SITE = http://www.phidgets.com/downloads/libraries/
-+PHIDGETWEBSERVICE_DEPENDENCIES = libphidget
-+PHIDGETWEBSERVICE_LICENSE = LGPLv3
-+PHIDGETWEBSERVICE_LICENSE_FILES = COPYING
++LIBPHIDGET_VERSION = 2.1.8.20140319
++LIBPHIDGET_SOURCE = libphidget_$(LIBPHIDGET_VERSION).tar.gz
++LIBPHIDGET_SITE = http://www.phidgets.com/downloads/libraries/
++LIBPHIDGET_DEPENDENCIES = libusb
++LIBPHIDGET_CONF_OPT = --disable-ldconfig
++LIBPHIDGET_INSTALL_STAGING = YES
++LIBPHIDGET_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
++LIBPHIDGET_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++LIBPHIDGET_LICENSE = LGPLv3
++LIBPHIDGET_LICENSE_FILES = COPYING
 +
 +$(eval $(autotools-package))
 -- 
