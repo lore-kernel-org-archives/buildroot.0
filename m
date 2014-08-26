@@ -1,32 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Aug 2014 18:47:25 -0300
-Subject: [Buildroot] [PATCH 3/3] nmap: bump to version 6.47
-In-Reply-To: <1409089645-23216-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1409089645-23216-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1409089645-23216-3-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Aug 2014 23:46:17 +0200
+Subject: [Buildroot] [git commit branch/next] libtasn1: bump to version 4.1
+Message-ID: <20140826214909.CCA329D552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nmap/nmap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=6bc27623e368eb7a6521497a523ccbc00877d983
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 40e381a..3ba6f1a 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libtasn1/libtasn1.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 84297cb..45fff87 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMAP_VERSION = 6.46
-+NMAP_VERSION = 6.47
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
--- 
-1.8.5.5
+-LIBTASN1_VERSION = 4.0
++LIBTASN1_VERSION = 4.1
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
