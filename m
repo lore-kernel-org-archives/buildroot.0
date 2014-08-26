@@ -1,51 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Aug 2014 10:30:37 +0200
-Subject: [Buildroot] Buildroot 2014.08-rc3 released
-Message-ID: <87ppfnvej6.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 26 Aug 2014 10:40:47 +0200
+Subject: [Buildroot] [PATCH v2 1/3] configs/freescale_imx6qsabresd: rename
+	imx6 to imx6q
+Message-ID: <1409042449-8263-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This defconfig is specific to the SABRESD board equipped with the iMX6Q SoC.
+Rename it for clarity in order to avoid confusion with the upcoming
+defconfig for the iMX6DL version.
 
-Buildroot 2014.08-rc3 is released - Go download it at:
+Suggested by Gary Bisson.
 
-http://buildroot.net/downloads/buildroot-2014.08-rc3.tar.gz
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>
+Cc: Vincent Stehl? <vincent.stehle@freescale.com>
 
-or
+---
 
-http://buildroot.net/downloads/buildroot-2014.08-rc3.tar.bz2
+This patch is new in v3.
+---
+ .../{freescale_imx6sabresd_defconfig => freescale_imx6qsabresd_defconfig} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename configs/{freescale_imx6sabresd_defconfig => freescale_imx6qsabresd_defconfig} (100%)
 
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2014.08-rc2..
-
-    20  Yann E. MORIN
-     7  Romain Naour
-     6  Thomas De Schampheleire
-     5  Anton Kolesov
-     3  Thomas Petazzoni
-     2  Danomi Manchego
-     1  Alexey Brodkin
-     1  Beno?t Th?baudeau
-     1  Gustavo Zacarias
-     1  Jonathan Ben Avraham
-     1  Peter Korsgaard
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08-rc3
-
-Expect the final 2014.08 release by the end of the week.
-
+diff --git a/configs/freescale_imx6sabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+similarity index 100%
+rename from configs/freescale_imx6sabresd_defconfig
+rename to configs/freescale_imx6qsabresd_defconfig
 -- 
-Bye, Peter Korsgaard
+1.9.1
