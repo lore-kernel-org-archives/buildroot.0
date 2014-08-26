@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:33:42 +0200
-Subject: [Buildroot] [git commit] nmap: bump to version 6.47
-Message-ID: <20140901132446.6A4239D5B9@busybox.osuosl.org>
+Date: Tue, 26 Aug 2014 23:46:17 +0200
+Subject: [Buildroot] [git commit] libtasn1: bump to version 4.1
+Message-ID: <20140901132446.5612F9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=800ebf340ca79ee6b90eb510ee459b26e0cad91b
+commit: http://git.buildroot.net/buildroot/commit/?id=6bc27623e368eb7a6521497a523ccbc00877d983
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/nmap.mk |    2 +-
+ package/libtasn1/libtasn1.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 40e381a..3ba6f1a 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 84297cb..45fff87 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMAP_VERSION = 6.46
-+NMAP_VERSION = 6.47
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+-LIBTASN1_VERSION = 4.0
++LIBTASN1_VERSION = 4.1
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
