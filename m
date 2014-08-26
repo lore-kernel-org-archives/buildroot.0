@@ -1,34 +1,43 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Mon, 25 Aug 2014 21:19:39 -0700
-Subject: [Buildroot] [PATCH v2 1/2] configs/freescale_imx6dlsabresd: add
- defconfig for iMX6DL SabreSD
-In-Reply-To: <1408019813-17702-1-git-send-email-luca@lucaceresoli.net>
-References: <1408019813-17702-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CADCpmyN=pUb+fMjDwxQFbPCY-59=s4Ont82UuW1FUu452Ng23w@mail.gmail.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Tue, 26 Aug 2014 09:17:10 +0300
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20140825181614.3f5c22a0@free-electrons.com>
+References: <20140825063011.07B50101AB1@stock.ovh.net>
+ <20140825181614.3f5c22a0@free-electrons.com>
+Message-ID: <CAAHaz6H7iyZueoi0LLc7HMNdsU0gaiVJfcGq5Jp=QwVEzBKw3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Hi Thomas, all,
 
-On Thu, Aug 14, 2014 at 5:36 AM, Luca Ceresoli <luca@lucaceresoli.net>
-wrote:
 
-> This is very similar to freescale_imx6sabresd_defconfig, which supports the
-> i.MX6Q ("Quad", quad core CPU) version of the board, except it supports the
-> i.MX6DL (DualLite, dual core CPU) version.
+2014-08-25 19:16 GMT+03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> >       bfin | zmqpp-36413487f05b165dfc82a... | NOK |
+> http://autobuild.buildroot.net/results/97bcfe2d3765945cd7a7ba30cda21b08bf53ca86/
 >
-> The differences are in the U-boot configuration and the device tree file.
+> Did I say I love C++ ?
 >
+> The same issue appears on other architectures apparently:
+>
+> http://autobuild.buildroot.org/?reason=zmqpp-36413487f05b165dfc82ad307a5a1c36a795e607
+> .
+>
+> Simon, you're the original submitter of the zmqpp package. Could you
+> take a look? Or maybe Alexander since he has also contributed a bump of
+> the zmqpp package?
+>
+>
+I'll try to solve some of those, at least I'll look into it. There seems to
+be several issues there, though.
 
-Looks good to me, however I would then rename the previous
-freescale_imx6sabresd_defconfig to freescale_imx6qsabresd_defconfig in
-order for it to be clear.
-
-Thanks,
-Gary
+--
+Best regards,
+  Alexander Lukichev
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140825/174bc795/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140826/ddf46931/attachment.html>
