@@ -1,46 +1,34 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Tue, 26 Aug 2014 11:26:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: Fix autobuilder failure
-	4924194292a428a295ded2f7aa0b9a3f81ed1b4a
-Message-ID: <1409045188-9522-1-git-send-email-jkrause@posteo.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 26 Aug 2014 08:18:54 -0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140826092929.6787535b@free-electrons.com>
+References: <20140826063010.01540101541@stock.ovh.net>
+ <20140826092929.6787535b@free-electrons.com>
+Message-ID: <53FC6D1E.1060104@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The opus decoder plugin depends on libopus and libogg.
+On 08/26/2014 04:29 AM, Thomas Petazzoni wrote:
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/mpd/Config.in | 1 +
- package/mpd/mpd.mk    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+>>    powerpc |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/4510fe02ef3497803ed27bf339dca07b3b073c10/
+> 
+> src/thrift/async/TEvhttpServer.cpp: In constructor 'apache::thrift::async::TEvhttpServer::RequestContext::RequestContext(evhttp_request*)':
+> src/thrift/async/TEvhttpServer.cpp:102:59: error: 'EVBUFFER_DATA' was not declared in this scope
+> src/thrift/async/TEvhttpServer.cpp:102:117: error: 'EVBUFFER_LENGTH' was not declared in this scope
+> src/thrift/async/TEvhttpServer.cpp: In member function 'void apache::thrift::async::TEvhttpServer::complete(apache::thrift::async::TEvhttpServer::RequestContext*, bool)':
+> src/thrift/async/TEvhttpServer.cpp:142:39: error: 'evbuffer_new' was not declared in this scope
+> src/thrift/async/TEvhttpServer.cpp:150:41: error: 'evbuffer_add' was not declared in this scope
+> src/thrift/async/TEvhttpServer.cpp:159:22: error: 'evbuffer_free' was not declared in this scope
+> make[5]: *** [libthriftnb_la-TEvhttpServer.lo] Error 1
+> 
+> Gustavo, maybe?
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b8a56b7..108b2b1 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -145,6 +145,7 @@ config BR2_PACKAGE_MPD_MUSEPACK
- config BR2_PACKAGE_MPD_OPUS
- 	bool "opus"
- 	select BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_LIBOGG
- 	help
- 	  Enable opus input support.
- 	  Select this if you want to play back OPUS encoded files.
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index df94035..f84c6d0 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -97,7 +97,7 @@ MPD_CONF_OPT += --disable-sndfile
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
--MPD_DEPENDENCIES += opus
-+MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPT += --enable-opus
- else
- MPD_CONF_OPT += --disable-opus
--- 
-2.1.0
+Hi.
+It's a conflict between libev and libevent at work here, they both
+install /usr/include/event.h hence causing issues.
+Isn't that sweet?
+I think i've got a solution, i'll send a patch shortly if it pans out.
+Regards.
