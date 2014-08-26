@@ -1,32 +1,51 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Tue, 26 Aug 2014 10:28:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: Fix missing dependency of
-	libogg for plugin opus
-Message-ID: <1409041685-9603-1-git-send-email-jkrause@posteo.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Aug 2014 10:30:37 +0200
+Subject: [Buildroot] Buildroot 2014.08-rc3 released
+Message-ID: <87ppfnvej6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The opus decoder plugin depends on libopus and libogg.
+Hi,
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/mpd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Buildroot 2014.08-rc3 is released - Go download it at:
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b8a56b7..108b2b1 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -145,6 +145,7 @@ config BR2_PACKAGE_MPD_MUSEPACK
- config BR2_PACKAGE_MPD_OPUS
- 	bool "opus"
- 	select BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_LIBOGG
- 	help
- 	  Enable opus input support.
- 	  Select this if you want to play back OPUS encoded files.
+http://buildroot.net/downloads/buildroot-2014.08-rc3.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2014.08-rc3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2014.08-rc2..
+
+    20  Yann E. MORIN
+     7  Romain Naour
+     6  Thomas De Schampheleire
+     5  Anton Kolesov
+     3  Thomas Petazzoni
+     2  Danomi Manchego
+     1  Alexey Brodkin
+     1  Beno?t Th?baudeau
+     1  Gustavo Zacarias
+     1  Jonathan Ben Avraham
+     1  Peter Korsgaard
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08-rc3
+
+Expect the final 2014.08 release by the end of the week.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
