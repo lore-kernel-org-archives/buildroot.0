@@ -1,86 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Aug 2014 22:14:06 +0200
-Subject: [Buildroot] [PATCH 00/12] toolchain: warn for unsafe
- library/header paths
-In-Reply-To: <20140824112218.GA3778@free.fr>
-References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53F656E5.9020802@openwide.fr> <20140821233312.03679844@free-electrons.com>
- <20140822163057.GA3998@free.fr>
- <c4d57675-8499-4727-bdc1-4d8d772b6096@email.android.com>
- <20140824112218.GA3778@free.fr>
-Message-ID: <53FCEA8E.3030600@mind.be>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Tue, 26 Aug 2014 23:28:07 +0300
+Subject: [Buildroot] [PATCH 2/2] phidgetwebservice: new package
+In-Reply-To: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
+References: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
+Message-ID: <1409084887-30450-2-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [/me is back from too long holidays, facing 2000 BR mails :-)]
 
-On 08/24/14 13:22, Yann E. MORIN wrote:
-> Thomas?, All,
-> 
-> On 2014-08-22 21:29 +0200, Thomas De Schampheleire spake thusly:
->> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->>> Thomas, All,
->>>
->>> On 2014-08-21 23:33 +0200, Thomas Petazzoni spake thusly:
->>>> On Thu, 21 Aug 2014 22:30:29 +0200, Romain Naour wrote:
->>>>> Also, BR_COMPILER_PARANOID_UNSAFE_PATH needs to be renamed to
->>>>> BR2_COMPILER_PARANOID_UNSAFE_PATH to follow the naming scheme ?
->>>>
->>>> No: BR2_* variables are Config.in options. Environment variables are
->>>> BR_*.
->>>
->>> Earlier this year in Brussels, we said we were to use BR2_ everywhere :
->>>    http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
->>
->> Hmm, that is written in the conclusion, but this is very
->>  different than what is in the 'proposed rules'.
->> Was it really the final outcome to use BR2 for all types
->>  of variable? I thought we wanted to make a
->>  distinction between config variables and others...
-> 
-> Yes, I was a bit surprised by the conclusion, too.
-> From what I remember, I thought we decided for:
->   - user-facing variables: prefix with BR2_
->   - internal variables: prefix with BR_
-> 
-> IIRC, we already have a few changesets implementing those rules.
-> 
-> For example:
->     35c666e toolchain/wrapper: rename BR_DEBUG_WRAPPER
-> 
-> (I could not find another reverse such change, unfortunetely...)
+Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+---
+ package/Config.in                              |    1 +
+ package/phidgetwebservice/Config.in            |   15 +++++++++++++++
+ package/phidgetwebservice/phidgetwebservice.mk |   14 ++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/phidgetwebservice/Config.in
+ create mode 100644 package/phidgetwebservice/phidgetwebservice.mk
 
- Blame the reporter.
-
- The conclusion was:
-
-* BR2_ for all Kconfig variables;
-* BR2_ for user-facing environment variables;
-* BR_ for internal environment variables.
-
-
- Other such changes:
-
-4113b3c infra: replace BUILDROOT_CONFIG with BR2_CONFIG
-6768021 infra: replace BUILDROOT_DL_DIR with BR2_DL_DIR.
-
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 1088f5a..f86207c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -677,6 +677,7 @@ menu "Hardware handling"
+ 	source "package/libusb/Config.in"
+ 	source "package/libusb-compat/Config.in"
+ 	source "package/libphidget/Config.in"
++	source "package/phidgetwebservice/Config.in"
+ 	source "package/libv4l/Config.in"
+ 	source "package/libxkbcommon/Config.in"
+ 	source "package/mtdev/Config.in"
+diff --git a/package/phidgetwebservice/Config.in b/package/phidgetwebservice/Config.in
+new file mode 100644
+index 0000000..01e7b11
+--- /dev/null
++++ b/package/phidgetwebservice/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PHIDGETWEBSERVICE
++	bool "phidgetwebservice"
++	depends on BR2_PACKAGE_LIBPHIDGET
++	help
++          phidgetwebservice (the Phidget WebService) provides an HTTP
++	  front-end to the libphidget device control API. This provides
++	  an alternative to the libphidget C linkage interface for
++	  controlling locally attached Phidgets USB devices and it also
++	  allows you to control Phidget USB devices remotely when the host
++	  running the phidgetwebservice has an exposed network interface.
++ 
++	  The phidgetwebservice client program uses the libphidget HTTP
++	  functions to send commands to the phidgetwebservice.
++
++	  http://phidgets.com/
+diff --git a/package/phidgetwebservice/phidgetwebservice.mk b/package/phidgetwebservice/phidgetwebservice.mk
+new file mode 100644
+index 0000000..64dfca4
+--- /dev/null
++++ b/package/phidgetwebservice/phidgetwebservice.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# phidgetwebservice
++#
++################################################################################
++
++PHIDGETWEBSERVICE_VERSION = 2.1.8.20140319
++PHIDGETWEBSERVICE_SOURCE = phidgetwebservice_$(PHIDGETWEBSERVICE_VERSION).tar.gz
++PHIDGETWEBSERVICE_SITE = http://www.phidgets.com/downloads/libraries/
++PHIDGETWEBSERVICE_DEPENDENCIES = libphidget
++PHIDGETWEBSERVICE_LICENSE = LGPLv3
++PHIDGETWEBSERVICE_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
