@@ -1,21 +1,46 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 26 Aug 2014 10:16:56 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-08-23
-In-Reply-To: <20140824063010.7D12B101B14@stock.ovh.net>
-References: <20140824063010.7D12B101B14@stock.ovh.net>
-Message-ID: <53FC5088.8020401@imgtec.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Tue, 26 Aug 2014 11:26:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpd: Fix autobuilder failure
+	4924194292a428a295ded2f7aa0b9a3f81ed1b4a
+Message-ID: <1409045188-9522-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2014 07:30 AM, Thomas Petazzoni wrote:
->    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/2df1be2bed4f834fa740121c947af17697767c62/
+The opus decoder plugin depends on libopus and libogg.
 
-Reported upstream: https://bugreports.qt-project.org/browse/QTBUG-39224
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/mpd/Config.in | 1 +
+ package/mpd/mpd.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index b8a56b7..108b2b1 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -145,6 +145,7 @@ config BR2_PACKAGE_MPD_MUSEPACK
+ config BR2_PACKAGE_MPD_OPUS
+ 	bool "opus"
+ 	select BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_LIBOGG
+ 	help
+ 	  Enable opus input support.
+ 	  Select this if you want to play back OPUS encoded files.
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index df94035..f84c6d0 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -97,7 +97,7 @@ MPD_CONF_OPT += --disable-sndfile
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
+-MPD_DEPENDENCIES += opus
++MPD_DEPENDENCIES += opus libogg
+ MPD_CONF_OPT += --enable-opus
+ else
+ MPD_CONF_OPT += --disable-opus
 -- 
-Vincent
+2.1.0
