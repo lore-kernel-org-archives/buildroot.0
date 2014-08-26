@@ -1,46 +1,32 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 26 Aug 2014 14:49:42 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Aug 2014 16:58:26 +0200
 Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
-In-Reply-To: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
+In-Reply-To: <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
 References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
+ <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <20140826165826.398f7a63@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+Dear Alexey Brodkin,
 
-On Thu, 2014-08-21 at 21:33 +0400, Alexey Brodkin wrote:
-> Now when new shiny tools are released by Synopsys we're ready for version
-> update in Buildroot.
-> 
-> Important change in this release is switching to combined "binutils-gdb" repo
-> in accordance to upstream move.
-> 
-> Following patch now is a part of the most recent relese:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/e6ab8cac627a44a7594aeb907a579d8d2f066ba5
-> 
-> So dropping it.
-> package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
-> 
-> Since arc-2014.08 tools are still based on GCC 4.8 following patch is still
-> relevant so moving to the new folder to matxh ARC gcc bump.
-> package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch ->
-> package/gcc/arc-2014.08/100-libstdcxx-uclibc-c99.patch
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
-> Compared to v1 obsolete patch was removed and another one for gcc moved to
-> another location to match new arc gcc version.
+On Tue, 26 Aug 2014 14:49:42 +0000, Alexey Brodkin wrote:
 
-I'm wondering if there's still a chance to get this patch applied before
-2014.08 release?
+> I'm wondering if there's still a chance to get this patch applied before
+> 2014.08 release?
 
-Regards,
-Alexey
+My feeling is that it was submitted too late to get applied to 2014.08.
+Generally speaking, we don't merge any version bump after -rc1 has been
+tagged, unless those bumps are known to fix important issues.
+
+Therefore, I believe this change qualifies for the next branch, and
+will therefore be part of the 2014.11 Buildroot release.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
