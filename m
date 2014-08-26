@@ -1,25 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Aug 2014 09:13:48 -0300
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <53FC7400.50701@imgtec.com>
-References: <20140826063010.01540101541@stock.ovh.net>
- <20140826092929.6787535b@free-electrons.com>
- <53FC6D1E.1060104@zacarias.com.ar> <53FC6FB7.2000408@imgtec.com>
- <53FC7382.1020401@zacarias.com.ar> <53FC7400.50701@imgtec.com>
-Message-ID: <53FC79FC.2070407@zacarias.com.ar>
+Date: Tue, 26 Aug 2014 11:36:33 -0300
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.1
+Message-ID: <1409063793-9852-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/26/2014 08:48 AM, Vicente Olivert Riera wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libtasn1/libtasn1.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> Do i get a beer or what for fixing multiple packages in one shot from a
->> sucky bug/assumption?
-> 
-> It depends. Are you going to the BR meeting in D?sseldorf? :)
-
-Unfortunately no, long distance = steep plane ticket price.
-I guess i'll get the 'what' ;)
-Regards.
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 84297cb..45fff87 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTASN1_VERSION = 4.0
++LIBTASN1_VERSION = 4.1
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+1.8.5.5
