@@ -1,44 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Aug 2014 23:49:18 +0200
-Subject: [Buildroot] [git commit] libev: don't install event.h
-Message-ID: <20140826215057.38F259D552@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 26 Aug 2014 21:53:20 +0000
+Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
+In-Reply-To: <87d2bmvs2f.fsf@dell.be.48ers.dk>
+References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
+ <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
+ <20140826165826.398f7a63@free-electrons.com>
+ <1409065267.6466.23.camel@abrodkin-8560l.internal.synopsys.com>
+ <87d2bmvs2f.fsf@dell.be.48ers.dk>
+Message-ID: <1409090000.3760.1.camel@abrodkin-8560l>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5de840cc6a9370c0765da4ad55cd116c96ef741c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-It's a 'compatibility layer' with libevent which we:
-1) Don't need
-2) Possibly outdated with respect to libevent2
-3) Causes build failures
+On Tue, 2014-08-26 at 23:50 +0200, Peter Korsgaard wrote:
+> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> 
+> Hi,
+> 
+>  >> > I'm wondering if there's still a chance to get this patch applied before
+>  >> > 2014.08 release?
+>  >> 
+>  >> My feeling is that it was submitted too late to get applied to 2014.08.
+>  >> Generally speaking, we don't merge any version bump after -rc1 has been
+>  >> tagged, unless those bumps are known to fix important issues.
+>  >> 
+>  >> Therefore, I believe this change qualifies for the next branch, and
+>  >> will therefore be part of the 2014.11 Buildroot release.
+> 
+>  > Sure, makes perfect sense!
+> 
+>  > Unfortunately we were a bit late with our release so yes let's apply it
+>  > to the next.
+> 
+> I agree. The current patch doesn't apply to next. Care to rebase and
+> resend?
 
-Fixes:
-http://autobuild.buildroot.net/results/451/4510fe02ef3497803ed27bf339dca07b3b073c10/
+Do I have any options? :)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libev/libev.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+I mean anyway after you guys cut final 2014.08 release "next" branch
+will be merged with current master, right?
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index a6ff3a9..dc42858 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -10,4 +10,11 @@ LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2c or GPLv2+
- LIBEV_LICENSE_FILES = LICENSE
- 
-+# The 'compatibility' event.h header conflicts with libevent
-+# It's completely unnecessary for BR packages so remove it
-+define LIBEV_DISABLE_EVENT_H_INSTALL
-+	$(SED) 's/ event.h//' $(@D)/Makefile.in
-+endef
-+LIBEV_POST_PATCH_HOOKS += LIBEV_DISABLE_EVENT_H_INSTALL
-+
- $(eval $(autotools-package))
+If so I have no other choice other than rebase and resend.
+Correct me if I'm wrong.
+
+-Alexey
