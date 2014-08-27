@@ -1,77 +1,94 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Wed, 27 Aug 2014 15:32:22 +0300 (IDT)
-Subject: [Buildroot] [PATCH 2/2] phidgetwebservice: new package
-In-Reply-To: <20140826204722.GC29733@tarshish>
-References: <1409084887-30450-1-git-send-email-yba@tkos.co.il>
- <1409084887-30450-2-git-send-email-yba@tkos.co.il>
- <20140826204722.GC29733@tarshish>
-Message-ID: <alpine.DEB.2.02.1408271531070.5746@tavas.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Aug 2014 14:38:08 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: add patch to fix (no)stripping on
+	non-ELF platforms
+Message-ID: <1409143088-25294-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-Thanks for the help. I believe that I fixed these issues in v2 of the 
-patch that I submitted an hour ago.
+On Blackfin FLAT, stripping does not exist, but recent U-Boot versions
+nonetheless try to strip and fail if they cannot do so. This commit
+adds a U-Boot patch (submitted upstream) that solves this issue.
 
-  - yba
+Fixes:
 
+  http://autobuild.buildroot.org/results/153/1530f8247d1652da5779994f298141b1572ce74f/
 
-On Tue, 26 Aug 2014, Baruch Siach wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uboot-tools/uboot-tools-02-nostrip.patch | 61 ++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/uboot-tools/uboot-tools-02-nostrip.patch
 
-> Date: Tue, 26 Aug 2014 23:47:22 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH 2/2] phidgetwebservice: new package
-> 
-> Hi Yonatan,
->
-> On Tue, Aug 26, 2014 at 11:28:07PM +0300, Jonathan Ben-Avraham wrote:
->>
->> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
->> ---
->
-> [snip]
->
->> diff --git a/package/phidgetwebservice/Config.in b/package/phidgetwebservice/Config.in
->> new file mode 100644
->> index 0000000..01e7b11
->> --- /dev/null
->> +++ b/package/phidgetwebservice/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_PHIDGETWEBSERVICE
->> +	bool "phidgetwebservice"
->> +	depends on BR2_PACKAGE_LIBPHIDGET
->
-> For non obvious dependencies the general rule is that you 'select' that
-> dependency. See http://buildroot.net/downloads/manual/manual.html under
-> "Choosing depends on or select". Note that you must also copy here the
-> dependencies of selected packages, in this case threads support.
->
->> +	help
->> +          phidgetwebservice (the Phidget WebService) provides an HTTP
->
-> This line should be indented like the rest, tab + two spaces.
->
->> +	  front-end to the libphidget device control API. This provides
->> +	  an alternative to the libphidget C linkage interface for
->> +	  controlling locally attached Phidgets USB devices and it also
->> +	  allows you to control Phidget USB devices remotely when the host
->> +	  running the phidgetwebservice has an exposed network interface.
->> +
->> +	  The phidgetwebservice client program uses the libphidget HTTP
->> +	  functions to send commands to the phidgetwebservice.
->> +
->> +	  http://phidgets.com/
->
-> baruch
->
->
-
+diff --git a/package/uboot-tools/uboot-tools-02-nostrip.patch b/package/uboot-tools/uboot-tools-02-nostrip.patch
+new file mode 100644
+index 0000000..7333f41
+--- /dev/null
++++ b/package/uboot-tools/uboot-tools-02-nostrip.patch
+@@ -0,0 +1,61 @@
++From 17e0d6ddd1dc5d04b8032bde2f2076134b0c6dd7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Wed, 27 Aug 2014 14:21:32 +0200
++Subject: [PATCH] tools/env: change stripping strategy to allow no-stripping
++
++When building the U-Boot tools for non-ELF platforms (such as Blackfin
++FLAT), since commit 79fc0c5f498c3982aa4740c273ab1a9255063d9c
++("tools/env: cross-compile fw_printenv without setting HOSTCC"), the
++build fails because it tries to strip a FLAT binary, which does not
++make sense.
++
++This commit solves this by changing the stripping logic in
++tools/env/Makefile to be similar to the one in tools/Makefile. This
++logic continues to apply strip to the final binary, but does not abort
++the build if it fails, and does the stripping in place on the final
++binary. This allows the logic to work fine if stripping doesn't work,
++as it leaves the final binary untouched.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Cc: Masahiro Yamada <yamada.m@jp.panasonic.com>
++Cc: Sonic Zhang <sonic.zhang@analog.com>
++---
++An improved solution would be to be able to override STRIP completely
++by setting it to /bin/true, but the main Makefile enforces STRIP =
++$(CROSS_COMPILE)strip.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ tools/env/Makefile | 14 ++++++++------
++ 1 file changed, 8 insertions(+), 6 deletions(-)
++
++diff --git a/tools/env/Makefile b/tools/env/Makefile
++index f5368bc..d047aa5 100644
++--- a/tools/env/Makefile
+++++ b/tools/env/Makefile
++@@ -21,14 +21,16 @@ HOST_EXTRACFLAGS += -DMTD_OLD
++ endif
++ 
++ always := fw_printenv
++-hostprogs-y := fw_printenv_unstripped
+++hostprogs-y := fw_printenv
++ 
++-fw_printenv_unstripped-objs := fw_env.o fw_env_main.o \
+++fw_printenv-objs := fw_env.o fw_env_main.o \
++ 	crc32.o ctype.o linux_string.o \
++ 	env_attr.o env_flags.o aes.o
++ 
++-quiet_cmd_strip = STRIP   $@
++-      cmd_strip = $(STRIP) -o $@ $<
+++quiet_cmd_crosstools_strip = STRIP   $^
+++      cmd_crosstools_strip = $(STRIP) $^; touch $@
++ 
++-$(obj)/fw_printenv: $(obj)/fw_printenv_unstripped FORCE
++-	$(call if_changed,strip)
+++$(obj)/.strip: $(obj)/fw_printenv
+++	$(call cmd,crosstools_strip)
+++
+++always += .strip
++-- 
++2.0.0
++
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+2.0.0
