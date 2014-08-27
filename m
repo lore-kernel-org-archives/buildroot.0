@@ -1,113 +1,183 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 27 Aug 2014 21:40:11 +0200
-Subject: [Buildroot] [PATCH 2 of 2 for 2014.08] manual/user
- guide/customization: add section with recommended dir structure
-In-Reply-To: <patchbomb.1409168409@localhost>
-References: <patchbomb.1409168409@localhost>
-Message-ID: <f69e39b1184abd0c487a.1409168411@localhost>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 27 Aug 2014 22:04:22 +0200
+Subject: [Buildroot] [PATCH] package/librtlsdr: fix static linking
+Message-ID: <1409169862-27871-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although the user is free to choose where to put project-specific files, the
-presentation 'Using Buildroot for real projects' [1] first described a
-certain recommendation.
-This patch briefly describes this recommendation in the form of a directory
-structure overview, the details will be added in subsequent patches.
+This patch adds 2 patches to librtlsdr fixing static linking.
 
-Since the section on BR2_EXTERNAL is logically connected to the directory
-structure, this section is moved right after it.
+The first one actually use pkgconfig CMake primitive to detect libusb
+and ensures the cflags contain the libusb header path.
 
-[1] http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
+The second patch disable the shared object build when it
+BUILD_SHARED_LIBS is off.
 
+Fixes:
+  http://autobuild.buildroot.org/results/2d9/2d91d7fa10ac3bd22fb5ce72acd7a0ce177f054f/
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/customize-directory-structure.txt |  58 +++++++++++++++++++
- docs/manual/customize.txt                     |   6 +-
- 2 files changed, 62 insertions(+), 2 deletions(-)
+ ...se-pkg_check_modules-to-fill-libusb-flags.patch |  36 +++++++
+ ...le-rtlsdr_shared-library-target-in-BUILD_.patch | 104 +++++++++++++++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100644 package/librtlsdr/librtlsdr-0001-cmake-use-pkg_check_modules-to-fill-libusb-flags.patch
+ create mode 100644 package/librtlsdr/librtlsdr-0002-cmake-disable-rtlsdr_shared-library-target-in-BUILD_.patch
 
-diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+diff --git a/package/librtlsdr/librtlsdr-0001-cmake-use-pkg_check_modules-to-fill-libusb-flags.patch b/package/librtlsdr/librtlsdr-0001-cmake-use-pkg_check_modules-to-fill-libusb-flags.patch
 new file mode 100644
+index 0000000..ddc5240
 --- /dev/null
-+++ b/docs/manual/customize-directory-structure.txt
-@@ -0,0 +1,58 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/librtlsdr/librtlsdr-0001-cmake-use-pkg_check_modules-to-fill-libusb-flags.patch
+@@ -0,0 +1,36 @@
++From 714ae704b8a0fde5944978451d6e2874ba91a227 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Wed, 27 Aug 2014 21:30:15 +0200
++Subject: [PATCH 1/2] cmake: use pkg_check_modules to fill libusb flags
 +
-+=== Recommended directory structure
++Also make sure libusb headers are correctly added to the CFLAGS.
 +
-+When customizing Buildroot for your project, you will be creating one or
-+more project-specific files that need to be stored somewhere. While most
-+of these files could be placed in _any_ location as their path is to be
-+specified in the Buildroot configuration, the Buildroot developers
-+recommend a specific directory structure which is described in this
-+section.
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ CMakeLists.txt | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+Orthogonal to this directory structure, you can choose _where_ you place
-+this structure itself: either inside the Buildroot tree, or outside of
-+it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 5a4d9fc..c422bcc 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -61,7 +61,7 @@ endif()
++ # Find build dependencies
++ ########################################################################
++ find_package(PkgConfig)
++-find_package(LibUSB)
+++pkg_check_modules(LIBUSB libusb-1.0 REQUIRED)
++ set(THREADS_USE_PTHREADS_WIN32 true)
++ find_package(Threads)
++ 
++@@ -77,6 +77,7 @@ endif()
++ include_directories(
++     ${CMAKE_SOURCE_DIR}/include
++     ${LIBUSB_INCLUDE_DIR}
+++    ${LIBUSB_INCLUDE_DIRS}
++     ${THREADS_PTHREADS_INCLUDE_DIR}
++ )
++ 
++-- 
++2.1.0
 +
-+-----
-++-- board/
-+|   +-- <company>/
-+|       +-- <boardname>/
-+|           +-- linux.config
-+|           +-- busybox.config
-+|           +-- <other configuration files>
-+|           +-- post_build.sh
-+|           +-- post_image.sh
-+|           +-- rootfs_overlay/
-+|           |   +-- etc/
-+|           |   +-- <some file>
-+|           +-- patches/
-+|               +-- foo/
-+|               |   +-- <some patch>
-+|               +-- libbar/
-+|                   +-- <some other patches>
-+|
-++-- configs/
-+|   +-- <boardname>_defconfig
-+|
-++-- package/
-+|   +-- <company>/
-+|       +-- Config.in (if not using BR2_EXTERNAL)
-+|       +-- <company>.mk (if not using BR2_EXTERNAL)
-+|       +-- <boardname>/
-+|           +-- package1/
-+|           |    +-- Config.in
-+|           |    +-- package1.mk
-+|           +-- package2/
-+|               +-- Config.in
-+|               +-- package2.mk
-+|
-++-- Config.in (if using BR2_EXTERNAL)
-++-- external.mk (if using BR2_EXTERNAL)
-+------
+diff --git a/package/librtlsdr/librtlsdr-0002-cmake-disable-rtlsdr_shared-library-target-in-BUILD_.patch b/package/librtlsdr/librtlsdr-0002-cmake-disable-rtlsdr_shared-library-target-in-BUILD_.patch
+new file mode 100644
+index 0000000..2e414e7
+--- /dev/null
++++ b/package/librtlsdr/librtlsdr-0002-cmake-disable-rtlsdr_shared-library-target-in-BUILD_.patch
+@@ -0,0 +1,104 @@
++From b707a645cbd0eb2118be66d90ba5e2ff6a8f663a Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Wed, 27 Aug 2014 21:34:00 +0200
++Subject: [PATCH 2/2] cmake: disable rtlsdr_shared library target in
++ BUILD_SHARED_LIBS is off
 +
-+Details on the files shown above are given further in this chapter.
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ src/CMakeLists.txt | 32 ++++++++++++++++++++------------
++ 1 file changed, 20 insertions(+), 12 deletions(-)
 +
-+Note: if you choose to place this structure outside of the Buildroot
-+tree using +BR2_EXTERNAL+, the <company> and possibly <boardname>
-+components may be superfluous and can be left out.
-diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
---- a/docs/manual/customize.txt
-+++ b/docs/manual/customize.txt
-@@ -26,10 +26,12 @@
- following the recommended strategy, you can even use the same Buildroot
- tree to build multiple distinct projects!
- 
-+include::customize-directory-structure.txt[]
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 77e1dc4..3e99b3b 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -20,6 +20,7 @@
++ ########################################################################
++ # Setup library
++ ########################################################################
+++if(BUILD_SHARED_LIBS)
++ add_library(rtlsdr_shared SHARED
++     librtlsdr.c
++     tuner_e4k.c
++@@ -38,6 +39,11 @@ set_target_properties(rtlsdr_shared PROPERTIES OUTPUT_NAME rtlsdr)
++ set_target_properties(rtlsdr_shared PROPERTIES SOVERSION ${MAJOR_VERSION})
++ set_target_properties(rtlsdr_shared PROPERTIES VERSION ${LIBVER})
++ 
+++target_link_libraries(rtlsdr_static
+++    ${LIBUSB_LIBRARIES}
+++)
+++endif()
+++
++ add_library(rtlsdr_static STATIC
++     librtlsdr.c
++     tuner_e4k.c
++@@ -60,10 +66,6 @@ target_link_libraries(convenience_static
++ )
++ endif()
++ 
++-target_link_libraries(rtlsdr_static
++-    ${LIBUSB_LIBRARIES}
++-)
++-
++ set_property(TARGET rtlsdr_static APPEND PROPERTY COMPILE_DEFINITIONS "rtlsdr_STATIC" )
++ 
++ if(NOT WIN32)
++@@ -71,6 +73,12 @@ if(NOT WIN32)
++ set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
++ endif()
++ 
+++if(BUILD_SHARED_LIBS)
+++    set(rtlsdr_lib rtlsdr_shared)
+++else()
+++    set(rtlsdr_lib rtlsdr_static)
+++endif()
+++
++ ########################################################################
++ # Build utility
++ ########################################################################
++@@ -81,33 +89,33 @@ add_executable(rtl_fm rtl_fm.c)
++ add_executable(rtl_eeprom rtl_eeprom.c)
++ add_executable(rtl_adsb rtl_adsb.c)
++ add_executable(rtl_power rtl_power.c)
++-set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
+++set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
++ 
++-target_link_libraries(rtl_sdr rtlsdr_shared convenience_static
+++target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_tcp rtlsdr_shared convenience_static
+++target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_test rtlsdr_shared convenience_static
+++target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_fm rtlsdr_shared convenience_static
+++target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_eeprom rtlsdr_shared convenience_static
+++target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_adsb rtlsdr_shared convenience_static
+++target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_power rtlsdr_shared convenience_static
+++target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-- 
++2.1.0
 +
-+include::customize-outside-br.txt[]
-+
- include::customize-rootfs.txt[]
- 
- include::customize-store.txt[]
- 
- include::customize-packages.txt[]
--
--include::customize-outside-br.txt[]
+-- 
+2.1.0
