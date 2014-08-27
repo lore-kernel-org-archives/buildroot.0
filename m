@@ -1,30 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2014 21:32:49 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: add patch to fix (no)stripping
-	on non-ELF platforms
-In-Reply-To: <1409143088-25294-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 27 Aug 2014 14:38:08 +0200")
-References: <1409143088-25294-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ioldu3ry.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Aug 2014 21:31:51 +0200
+Subject: [Buildroot] [git commit] xapp_xfs: needs MMU
+Message-ID: <20140827193306.E9BA69D55F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f9a11a8fed00bf99d08822df2fdda4f7d9070f2c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On Blackfin FLAT, stripping does not exist, but recent U-Boot versions
- > nonetheless try to strip and fail if they cannot do so. This commit
- > adds a U-Boot patch (submitted upstream) that solves this issue.
+Fixes:
 
- > Fixes:
+  http://autobuild.buildroot.net/results/7a89f79499e167cc98449a045604d25d4fc88484/
 
- >   http://autobuild.buildroot.org/results/153/1530f8247d1652da5779994f298141b1572ce74f/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xapp_xfs/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
+index e71d89f..8b72445 100644
+--- a/package/x11r7/xapp_xfs/Config.in
++++ b/package/x11r7/xapp_xfs/Config.in
+@@ -3,5 +3,6 @@ config BR2_PACKAGE_XAPP_XFS
+ 	select BR2_PACKAGE_XLIB_LIBFS
+ 	select BR2_PACKAGE_XLIB_LIBXFONT
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  X font server
