@@ -1,51 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 16:49:51 +0200
-Subject: [Buildroot] [git commit] package/mpd: opus plugin needs libogg as
-	well
-Message-ID: <20140827145027.6E3BD9D547@busybox.osuosl.org>
+From: Pradeep Kiruvale <pradeepkiruvale@gmail.com>
+Date: Wed, 27 Aug 2014 17:12:26 +0200
+Subject: [Buildroot] Rootfs for aarch64
+Message-ID: <CAJ2SuL=yhZdq-aQ3Up4mkL29troM9ieq8qxXTVux0NYYapao=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e6b7159d76852a8f3789e751f45aa4e49d5df77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-Fixes http://autobuild.buildroot.net/results/492/4924194292a428a295ded2f7aa0b9a3f81ed1b4a/
+I am very new to aarch64/arm64. I want to port some application from x86 to
+arm64
+so I need to build a environment for porting and testing the software.
+Please let me
+know how can I create a rootfile system and image for the newer version of
+the linux.
 
-The opus decoder plugin depends on libopus and libogg.
+I want to build a full fledged rootfs with all possible libraries and want
+to mount nfs.
 
-[Peter: reworded commit message]
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpd/Config.in |    1 +
- package/mpd/mpd.mk    |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+I did try for a while, do to some configuration issues I am not able to
+boot the image
+which I built on x86. I am using linaro foundation as a simulator.
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b8a56b7..108b2b1 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -145,6 +145,7 @@ config BR2_PACKAGE_MPD_MUSEPACK
- config BR2_PACKAGE_MPD_OPUS
- 	bool "opus"
- 	select BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_LIBOGG
- 	help
- 	  Enable opus input support.
- 	  Select this if you want to play back OPUS encoded files.
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index df94035..f84c6d0 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -97,7 +97,7 @@ MPD_CONF_OPT += --disable-sndfile
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
--MPD_DEPENDENCIES += opus
-+MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPT += --enable-opus
- else
- MPD_CONF_OPT += --disable-opus
+Please help me in resolving the issues.
+
+Thanks in advance.
+
+Regards,
+Pradeep
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140827/e2a0a796/attachment.html>
