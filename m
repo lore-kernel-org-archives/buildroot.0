@@ -1,55 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:31:02 +0200
-Subject: [Buildroot] [git commit] perl-gd: mark as broken
-Message-ID: <20140827193306.D59C39D55F@busybox.osuosl.org>
+Date: Wed, 27 Aug 2014 21:32:39 +0200
+Subject: [Buildroot] [git commit] uboot-tools: add patch to fix
+	(no)stripping on non-ELF platforms
+Message-ID: <20140827193306.F283A9D55F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f46e48c9c55e85b365ae93ef9aabe9e4121652b
+commit: http://git.buildroot.net/buildroot/commit/?id=11323613a819908851fe36155d9f2c634df29f47
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-perl-gd doesn't build on gcc10 due to the host Perl being a bit
-old. This shows a defiency in the perl package infrastructure, which
-is being worked on. However, since it won't be solved before 2014.08,
-our only solution for now is to mark perl-gd as broken, as well as its
-reverse dependency perl-gdgraph.
+On Blackfin FLAT, stripping does not exist, but recent U-Boot versions
+nonetheless try to strip and fail if they cannot do so. This commit
+adds a U-Boot patch (submitted upstream) that solves this issue.
 
-Avoids:
+Fixes:
 
-  http://autobuild.buildroot.org/results/228/228b43e67e683cecfa3851a8a030d06e9fdc6dac/
+  http://autobuild.buildroot.org/results/153/1530f8247d1652da5779994f298141b1572ce74f/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-gd/Config.in      |    2 ++
- package/perl-gdgraph/Config.in |    1 +
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ package/uboot-tools/uboot-tools-02-nostrip.patch |   61 ++++++++++++++++++++++
+ 1 files changed, 61 insertions(+), 0 deletions(-)
 
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-index 7c85cfc..3434507 100644
---- a/package/perl-gd/Config.in
-+++ b/package/perl-gd/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PERL_GD
- 	bool "perl-gd"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	# Does not build on machines having a old host perl
-+	depends on BR2_BROKEN
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
-index e722c06..972a5c5 100644
---- a/package/perl-gdgraph/Config.in
-+++ b/package/perl-gdgraph/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_GDGRAPH
- 	bool "perl-gdgraph"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_BROKEN # perl-gd
- 	select BR2_PACKAGE_PERL_GD
- 	select BR2_PACKAGE_PERL_GDTEXTUTIL
- 	help
+diff --git a/package/uboot-tools/uboot-tools-02-nostrip.patch b/package/uboot-tools/uboot-tools-02-nostrip.patch
+new file mode 100644
+index 0000000..7333f41
+--- /dev/null
++++ b/package/uboot-tools/uboot-tools-02-nostrip.patch
+@@ -0,0 +1,61 @@
++From 17e0d6ddd1dc5d04b8032bde2f2076134b0c6dd7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Wed, 27 Aug 2014 14:21:32 +0200
++Subject: [PATCH] tools/env: change stripping strategy to allow no-stripping
++
++When building the U-Boot tools for non-ELF platforms (such as Blackfin
++FLAT), since commit 79fc0c5f498c3982aa4740c273ab1a9255063d9c
++("tools/env: cross-compile fw_printenv without setting HOSTCC"), the
++build fails because it tries to strip a FLAT binary, which does not
++make sense.
++
++This commit solves this by changing the stripping logic in
++tools/env/Makefile to be similar to the one in tools/Makefile. This
++logic continues to apply strip to the final binary, but does not abort
++the build if it fails, and does the stripping in place on the final
++binary. This allows the logic to work fine if stripping doesn't work,
++as it leaves the final binary untouched.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Cc: Masahiro Yamada <yamada.m@jp.panasonic.com>
++Cc: Sonic Zhang <sonic.zhang@analog.com>
++---
++An improved solution would be to be able to override STRIP completely
++by setting it to /bin/true, but the main Makefile enforces STRIP =
++$(CROSS_COMPILE)strip.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ tools/env/Makefile | 14 ++++++++------
++ 1 file changed, 8 insertions(+), 6 deletions(-)
++
++diff --git a/tools/env/Makefile b/tools/env/Makefile
++index f5368bc..d047aa5 100644
++--- a/tools/env/Makefile
+++++ b/tools/env/Makefile
++@@ -21,14 +21,16 @@ HOST_EXTRACFLAGS += -DMTD_OLD
++ endif
++ 
++ always := fw_printenv
++-hostprogs-y := fw_printenv_unstripped
+++hostprogs-y := fw_printenv
++ 
++-fw_printenv_unstripped-objs := fw_env.o fw_env_main.o \
+++fw_printenv-objs := fw_env.o fw_env_main.o \
++ 	crc32.o ctype.o linux_string.o \
++ 	env_attr.o env_flags.o aes.o
++ 
++-quiet_cmd_strip = STRIP   $@
++-      cmd_strip = $(STRIP) -o $@ $<
+++quiet_cmd_crosstools_strip = STRIP   $^
+++      cmd_crosstools_strip = $(STRIP) $^; touch $@
++ 
++-$(obj)/fw_printenv: $(obj)/fw_printenv_unstripped FORCE
++-	$(call if_changed,strip)
+++$(obj)/.strip: $(obj)/fw_printenv
+++	$(call cmd,crosstools_strip)
+++
+++always += .strip
++-- 
++2.0.0
++
