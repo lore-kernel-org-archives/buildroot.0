@@ -1,53 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Aug 2014 13:51:59 +0200
-Subject: [Buildroot] [PATCH] perl-gd: mark as broken
-Message-ID: <1409140319-9796-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Aug 2014 13:54:22 +0200
+Subject: [Buildroot] [PATCH] webkit: disable on SuperH
+Message-ID: <1409140462-10560-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-perl-gd doesn't build on gcc10 due to the host Perl being a bit
-old. This shows a defiency in the perl package infrastructure, which
-is being worked on. However, since it won't be solved before 2014.08,
-our only solution for now is to mark perl-gd as broken, as well as its
-reverse dependency perl-gdgraph.
+Webkit has been failing on SuperH since a long time, with nobody
+caring to fix the problem. Since anyway our Webkit version is old and
+in the process of being updated, our best option for 2014.08 is to
+simply disallow Webkit on SuperH.
 
-Avoids:
+Fixes:
 
-  http://autobuild.buildroot.org/results/228/228b43e67e683cecfa3851a8a030d06e9fdc6dac/
+  http://autobuild.buildroot.org/results/3a0/3a0c48f65c06f7f19e608d54307c0788a0130589/
+  http://autobuild.buildroot.org/?reason=webkit-1.11.5&arch=sh4a
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-gd/Config.in      | 2 ++
- package/perl-gdgraph/Config.in | 1 +
- 2 files changed, 3 insertions(+)
+ package/webkit/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-index 7c85cfc..3434507 100644
---- a/package/perl-gd/Config.in
-+++ b/package/perl-gd/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PERL_GD
- 	bool "perl-gd"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	# Does not build on machines having a old host perl
-+	depends on BR2_BROKEN
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
-index e722c06..972a5c5 100644
---- a/package/perl-gdgraph/Config.in
-+++ b/package/perl-gdgraph/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_GDGRAPH
- 	bool "perl-gdgraph"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_BROKEN # perl-gd
- 	select BR2_PACKAGE_PERL_GD
- 	select BR2_PACKAGE_PERL_GDTEXTUTIL
- 	help
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index fcb61b6..d1bc1d5 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	default y if (BR2_arm || BR2_armeb) && \
+ 		!(BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+-		BR2_sh || BR2_sparc || BR2_x86_64
++		BR2_sparc || BR2_x86_64
+ 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+ 
+ # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
 -- 
 2.0.0
