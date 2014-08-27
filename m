@@ -1,10 +1,7 @@
-From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
-Date: Wed, 27 Aug 2014 12:02:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-08-26
-In-Reply-To: <20140827063010.1F56610167A@stock.ovh.net>
-References: <20140827063010.1F56610167A@stock.ovh.net>
-Message-ID: <53FDACA0.7080501@posteo.de>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Wed, 27 Aug 2014 13:18:29 +0300
+Subject: [Buildroot] [PATCH 1/2 v2] new package: libphidget
+Message-ID: <1409134710-3694-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +9,79 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 08/27/2014 08:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-08-26
-> ===============================
->
->
->        bfin | libshairplay-139d5ef5556451... | NOK | http://autobuild.buildroot.net/results/7b13728386da6179608a1c7607565bd9bc357d86/
+Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+---
+ package/Config.in                |    1 +
+ package/libphidget/Config.in     |   25 +++++++++++++++++++++++++
+ package/libphidget/libphidget.mk |   16 ++++++++++++++++
+ 3 files changed, 42 insertions(+)
+ create mode 100644 package/libphidget/Config.in
+ create mode 100644 package/libphidget/libphidget.mk
 
-This is a problem with missing or not finding libdl. This is what my 
-libshairplay/config.log shows:
-
-configure:11508: 
-/home/joerg/Freescale/buildroot/output/host/usr/bin/bfin-uclinux-gcc -o 
-conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
--D_FILE_OFFSET_BITS=64  -pipe -Os   -Wl,-elf2flt -static 
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
--elf2flt -static conftest.c -ldl   >&5
-/home/joerg/Freescale/buildroot/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: 
-cannot find -ldl
+diff --git a/package/Config.in b/package/Config.in
+index 4520ba6..1088f5a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -676,6 +676,7 @@ menu "Hardware handling"
+ 	source "package/libsoc/Config.in"
+ 	source "package/libusb/Config.in"
+ 	source "package/libusb-compat/Config.in"
++	source "package/libphidget/Config.in"
+ 	source "package/libv4l/Config.in"
+ 	source "package/libxkbcommon/Config.in"
+ 	source "package/mtdev/Config.in"
+diff --git a/package/libphidget/Config.in b/package/libphidget/Config.in
+new file mode 100644
+index 0000000..dcd6854
+--- /dev/null
++++ b/package/libphidget/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_LIBPHIDGET
++	bool "libphidget"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  The libphidget library provides an API for controlling Phidgets
++	  USB devices. The library translates API function calls to libusb
++	  function calls to control attached Phidgets devices that provide
++	  GPIO's, DAC's, accelerometers, servo motors, and other capabilities
++	  either singly or on combo devices.
++
++	  To use libphidget for controlling locally attached devices you
++	  need to set up the userspace USB device tree /dev/bus/usb. See
++	  file udev/99-phidgets.rules.
++
++	  The libphidget library also contains an API for sending commands
++	  to a local or remote phidgetwebservice using HTTP. The
++	  phidgetwebservice then translates HTTP requests to libphidget API
++	  function calls to control locally attached Phidgets devices.
++
++	  http://phidgets.com/
++
++comment "libphidget needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+diff --git a/package/libphidget/libphidget.mk b/package/libphidget/libphidget.mk
+new file mode 100644
+index 0000000..ee5796e
+--- /dev/null
++++ b/package/libphidget/libphidget.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libphidget
++#
++################################################################################
++
++LIBPHIDGET_VERSION = 2.1.8.20140319
++LIBPHIDGET_SOURCE = libphidget_$(LIBPHIDGET_VERSION).tar.gz
++LIBPHIDGET_SITE = http://www.phidgets.com/downloads/libraries/
++LIBPHIDGET_DEPENDENCIES = libusb
++LIBPHIDGET_CONF_OPT = --disable-ldconfig
++LIBPHIDGET_INSTALL_STAGING = YES
++LIBPHIDGET_LICENSE = LGPLv3
++LIBPHIDGET_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+1.7.10.4
