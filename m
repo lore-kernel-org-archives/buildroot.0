@@ -1,34 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:31:51 +0200
-Subject: [Buildroot] [git commit] xapp_xfs: needs MMU
-Message-ID: <20140827193306.E9BA69D55F@busybox.osuosl.org>
+Date: Wed, 27 Aug 2014 21:31:02 +0200
+Subject: [Buildroot] [git commit] perl-gd: mark as broken
+Message-ID: <20140827193306.D59C39D55F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9a11a8fed00bf99d08822df2fdda4f7d9070f2c
+commit: http://git.buildroot.net/buildroot/commit/?id=0f46e48c9c55e85b365ae93ef9aabe9e4121652b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+perl-gd doesn't build on gcc10 due to the host Perl being a bit
+old. This shows a defiency in the perl package infrastructure, which
+is being worked on. However, since it won't be solved before 2014.08,
+our only solution for now is to mark perl-gd as broken, as well as its
+reverse dependency perl-gdgraph.
 
-  http://autobuild.buildroot.net/results/7a89f79499e167cc98449a045604d25d4fc88484/
+Avoids:
+
+  http://autobuild.buildroot.org/results/228/228b43e67e683cecfa3851a8a030d06e9fdc6dac/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xfs/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/perl-gd/Config.in      |    2 ++
+ package/perl-gdgraph/Config.in |    1 +
+ 2 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
-index e71d89f..8b72445 100644
---- a/package/x11r7/xapp_xfs/Config.in
-+++ b/package/x11r7/xapp_xfs/Config.in
-@@ -3,5 +3,6 @@ config BR2_PACKAGE_XAPP_XFS
- 	select BR2_PACKAGE_XLIB_LIBFS
- 	select BR2_PACKAGE_XLIB_LIBXFONT
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	depends on BR2_USE_MMU # fork()
+diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
+index 7c85cfc..3434507 100644
+--- a/package/perl-gd/Config.in
++++ b/package/perl-gd/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PERL_GD
+ 	bool "perl-gd"
+ 	depends on !BR2_PREFER_STATIC_LIB
++	# Does not build on machines having a old host perl
++	depends on BR2_BROKEN
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_FREETYPE
+diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
+index e722c06..972a5c5 100644
+--- a/package/perl-gdgraph/Config.in
++++ b/package/perl-gdgraph/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PERL_GDGRAPH
+ 	bool "perl-gdgraph"
+ 	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_BROKEN # perl-gd
+ 	select BR2_PACKAGE_PERL_GD
+ 	select BR2_PACKAGE_PERL_GDTEXTUTIL
  	help
- 	  X font server
