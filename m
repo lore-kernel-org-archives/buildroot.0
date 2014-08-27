@@ -1,81 +1,49 @@
-From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Wed, 27 Aug 2014 13:18:30 +0300
-Subject: [Buildroot] [PATCH 2/2 v2] new package: phidgetwebservice
-In-Reply-To: <1409134710-3694-1-git-send-email-yba@tkos.co.il>
-References: <1409134710-3694-1-git-send-email-yba@tkos.co.il>
-Message-ID: <1409134710-3694-2-git-send-email-yba@tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 27 Aug 2014 12:09:16 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-08-26
+In-Reply-To: <53FDACA0.7080501@posteo.de>
+References: <20140827063010.1F56610167A@stock.ovh.net>
+ <53FDACA0.7080501@posteo.de>
+Message-ID: <53FDBC5C.7030603@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 08/27/2014 11:02 AM, J?rg Krause wrote:
+>
+> On 08/27/2014 08:30 AM, Thomas Petazzoni wrote:
+>> Build statistics for 2014-08-26
+>> ===============================
+>>
+>>
+>>        bfin | libshairplay-139d5ef5556451... | NOK |
+>> http://autobuild.buildroot.net/results/7b13728386da6179608a1c7607565bd9bc357d86/
+>>
+>
+> This is a problem with missing or not finding libdl. This is what my
+> libshairplay/config.log shows:
+>
+> configure:11508:
+> /home/joerg/Freescale/buildroot/output/host/usr/bin/bfin-uclinux-gcc -o
+> conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64  -pipe -Os   -Wl,-elf2flt -static
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -elf2flt -static conftest.c -ldl   >&5
+> /home/joerg/Freescale/buildroot/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real:
+> cannot find -ldl
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
----
- package/Config.in                              |    1 +
- package/phidgetwebservice/Config.in            |   19 +++++++++++++++++++
- package/phidgetwebservice/phidgetwebservice.mk |   14 ++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/phidgetwebservice/Config.in
- create mode 100644 package/phidgetwebservice/phidgetwebservice.mk
+Could be something related with this?:
 
-diff --git a/package/Config.in b/package/Config.in
-index 1088f5a..692fd58 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1039,6 +1039,7 @@ endif
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
- 	source "package/p910nd/Config.in"
-+	source "package/phidgetwebservice/Config.in"
- 	source "package/portmap/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/phidgetwebservice/Config.in b/package/phidgetwebservice/Config.in
-new file mode 100644
-index 0000000..daf22c7
---- /dev/null
-+++ b/package/phidgetwebservice/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_PHIDGETWEBSERVICE
-+	bool "phidgetwebservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb, libphidget
-+	select BR2_PACKAGE_LIBPHIDGET
-+	help
-+          phidgetwebservice (the Phidget WebService) provides an HTTP
-+	  front-end to the libphidget device control API. This provides
-+	  an alternative to the libphidget C linkage interface for
-+	  controlling locally attached Phidgets USB devices and it also
-+	  allows you to control Phidget USB devices remotely when the host
-+	  running the phidgetwebservice has an exposed network interface.
-+ 
-+	  The phidgetwebservice client program uses the libphidget HTTP
-+	  functions to send commands to the phidgetwebservice.
-+
-+	  http://phidgets.com/
-+
-+comment "phidgetwebservice needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/phidgetwebservice/phidgetwebservice.mk b/package/phidgetwebservice/phidgetwebservice.mk
-new file mode 100644
-index 0000000..64dfca4
---- /dev/null
-+++ b/package/phidgetwebservice/phidgetwebservice.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# phidgetwebservice
-+#
-+################################################################################
-+
-+PHIDGETWEBSERVICE_VERSION = 2.1.8.20140319
-+PHIDGETWEBSERVICE_SOURCE = phidgetwebservice_$(PHIDGETWEBSERVICE_VERSION).tar.gz
-+PHIDGETWEBSERVICE_SITE = http://www.phidgets.com/downloads/libraries/
-+PHIDGETWEBSERVICE_DEPENDENCIES = libphidget
-+PHIDGETWEBSERVICE_LICENSE = LGPLv3
-+PHIDGETWEBSERVICE_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+(static linking is broken with -ldl)
+
+http://lists.uclibc.org/pipermail/uclibc/2010-September/044300.html
+
 -- 
-1.7.10.4
+Vincent
