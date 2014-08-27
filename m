@@ -1,95 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:32:39 +0200
-Subject: [Buildroot] [git commit] uboot-tools: add patch to fix
-	(no)stripping on non-ELF platforms
-Message-ID: <20140827193306.F283A9D55F@busybox.osuosl.org>
+Date: Wed, 27 Aug 2014 21:31:47 +0200
+Subject: [Buildroot] [git commit] webkit: disable on SuperH
+Message-ID: <20140827193306.E13389D55F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11323613a819908851fe36155d9f2c634df29f47
+commit: http://git.buildroot.net/buildroot/commit/?id=837ff3b752f32624e807877e0ab72d393db73e4b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Blackfin FLAT, stripping does not exist, but recent U-Boot versions
-nonetheless try to strip and fail if they cannot do so. This commit
-adds a U-Boot patch (submitted upstream) that solves this issue.
+Webkit has been failing on SuperH since a long time, with nobody
+caring to fix the problem. Since anyway our Webkit version is old and
+in the process of being updated, our best option for 2014.08 is to
+simply disallow Webkit on SuperH.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/153/1530f8247d1652da5779994f298141b1572ce74f/
+  http://autobuild.buildroot.org/results/3a0/3a0c48f65c06f7f19e608d54307c0788a0130589/
+  http://autobuild.buildroot.org/?reason=webkit-1.11.5&arch=sh4a
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uboot-tools/uboot-tools-02-nostrip.patch |   61 ++++++++++++++++++++++
- 1 files changed, 61 insertions(+), 0 deletions(-)
+ package/webkit/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools-02-nostrip.patch b/package/uboot-tools/uboot-tools-02-nostrip.patch
-new file mode 100644
-index 0000000..7333f41
---- /dev/null
-+++ b/package/uboot-tools/uboot-tools-02-nostrip.patch
-@@ -0,0 +1,61 @@
-+From 17e0d6ddd1dc5d04b8032bde2f2076134b0c6dd7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Wed, 27 Aug 2014 14:21:32 +0200
-+Subject: [PATCH] tools/env: change stripping strategy to allow no-stripping
-+
-+When building the U-Boot tools for non-ELF platforms (such as Blackfin
-+FLAT), since commit 79fc0c5f498c3982aa4740c273ab1a9255063d9c
-+("tools/env: cross-compile fw_printenv without setting HOSTCC"), the
-+build fails because it tries to strip a FLAT binary, which does not
-+make sense.
-+
-+This commit solves this by changing the stripping logic in
-+tools/env/Makefile to be similar to the one in tools/Makefile. This
-+logic continues to apply strip to the final binary, but does not abort
-+the build if it fails, and does the stripping in place on the final
-+binary. This allows the logic to work fine if stripping doesn't work,
-+as it leaves the final binary untouched.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Cc: Masahiro Yamada <yamada.m@jp.panasonic.com>
-+Cc: Sonic Zhang <sonic.zhang@analog.com>
-+---
-+An improved solution would be to be able to override STRIP completely
-+by setting it to /bin/true, but the main Makefile enforces STRIP =
-+$(CROSS_COMPILE)strip.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ tools/env/Makefile | 14 ++++++++------
-+ 1 file changed, 8 insertions(+), 6 deletions(-)
-+
-+diff --git a/tools/env/Makefile b/tools/env/Makefile
-+index f5368bc..d047aa5 100644
-+--- a/tools/env/Makefile
-++++ b/tools/env/Makefile
-+@@ -21,14 +21,16 @@ HOST_EXTRACFLAGS += -DMTD_OLD
-+ endif
-+ 
-+ always := fw_printenv
-+-hostprogs-y := fw_printenv_unstripped
-++hostprogs-y := fw_printenv
-+ 
-+-fw_printenv_unstripped-objs := fw_env.o fw_env_main.o \
-++fw_printenv-objs := fw_env.o fw_env_main.o \
-+ 	crc32.o ctype.o linux_string.o \
-+ 	env_attr.o env_flags.o aes.o
-+ 
-+-quiet_cmd_strip = STRIP   $@
-+-      cmd_strip = $(STRIP) -o $@ $<
-++quiet_cmd_crosstools_strip = STRIP   $^
-++      cmd_crosstools_strip = $(STRIP) $^; touch $@
-+ 
-+-$(obj)/fw_printenv: $(obj)/fw_printenv_unstripped FORCE
-+-	$(call if_changed,strip)
-++$(obj)/.strip: $(obj)/fw_printenv
-++	$(call cmd,crosstools_strip)
-++
-++always += .strip
-+-- 
-+2.0.0
-+
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index fcb61b6..d1bc1d5 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	default y if (BR2_arm || BR2_armeb) && \
+ 		!(BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+-		BR2_sh || BR2_sparc || BR2_x86_64
++		BR2_sparc || BR2_x86_64
+ 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+ 
+ # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
