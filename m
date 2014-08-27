@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2014 21:34:01 +0200
-Subject: [Buildroot] [PATCH 3/3] nmap: bump to version 6.47
-In-Reply-To: <1409089645-23216-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 26 Aug 2014 18:47:25 -0300")
-References: <1409089645-23216-1-git-send-email-gustavo@zacarias.com.ar>
- <1409089645-23216-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761hdu3py.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Aug 2014 21:33:42 +0200
+Subject: [Buildroot] [git commit branch/next] nmap: bump to version 6.47
+Message-ID: <20140827193418.47BC59D55F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=800ebf340ca79ee6b90eb510ee459b26e0cad91b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nmap/nmap.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 40e381a..3ba6f1a 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 6.46
++NMAP_VERSION = 6.47
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
