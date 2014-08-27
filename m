@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Aug 2014 21:31:27 +0200
-Subject: [Buildroot] [PATCH] perl-gd: mark as broken
-In-Reply-To: <1409140319-9796-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 27 Aug 2014 13:51:59 +0200")
-References: <1409140319-9796-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vbpdu3u8.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Aug 2014 21:31:34 +0200
+Subject: [Buildroot] [PATCH] webkit: disable on SuperH
+In-Reply-To: <1409140462-10560-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 27 Aug 2014 13:54:22 +0200")
+References: <1409140462-10560-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87r401u3u1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > perl-gd doesn't build on gcc10 due to the host Perl being a bit
- > old. This shows a defiency in the perl package infrastructure, which
- > is being worked on. However, since it won't be solved before 2014.08,
- > our only solution for now is to mark perl-gd as broken, as well as its
- > reverse dependency perl-gdgraph.
+ > Webkit has been failing on SuperH since a long time, with nobody
+ > caring to fix the problem. Since anyway our Webkit version is old and
+ > in the process of being updated, our best option for 2014.08 is to
+ > simply disallow Webkit on SuperH.
 
- > Avoids:
+ > Fixes:
 
- >   http://autobuild.buildroot.org/results/228/228b43e67e683cecfa3851a8a030d06e9fdc6dac/
+ >   http://autobuild.buildroot.org/results/3a0/3a0c48f65c06f7f19e608d54307c0788a0130589/
+ >   http://autobuild.buildroot.org/?reason=webkit-1.11.5&arch=sh4a
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
