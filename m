@@ -1,122 +1,76 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 27 Aug 2014 23:53:21 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/xscreensaver: fix linking with
-	intl
-Message-ID: <1409176401-13970-1-git-send-email-romain.naour@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Aug 2014 01:09:06 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/uclibc-ng: add support for
+ uClibc-ng
+In-Reply-To: <20140811113124.GA19506@waldemar-brodkorb.de>
+References: <20140811113124.GA19506@waldemar-brodkorb.de>
+Message-ID: <53FE6512.9050600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xscreensaver doesn't build with (e)glibc toolchain when gettext package is
-selected.
+ Hi Waldemar,
 
-With (e)glibc libintl is provided by the libc whereas with uClibc it's provided
-by gettext.
+On 08/11/14 13:31, Waldemar Brodkorb wrote:
+> uClibc-ng is a spin-off of uClibc. uClibc-ng will do
+> a 1.0 release really soon. uClibc lacks releases and
+> the maintainer does not communicate any timeplans for
+> releases. For more information about uClibc-ng see:
+> http://www.uclibc-ng.org
 
-If "LIBS=-lintl" is removed from XSCREENSAVER_CONF_ENV, then the -lintl is
-missing during xscreensaver build if the toolchain needs gettext.
+ What a surprising lack of reaction on this patch! I'd have expected people to
+welcome this very much...
 
-xscreensaver.o: In function `main':
-undefined reference to `libintl_bindtextdomain'
-undefined reference to `libintl_textdomain'
+ However, I'll start with immediately burning it to the ground :-) I think the
+situation of uClibc-ng is very similar to eglibc: it's essentially the same
+package, just a different version of it. So, instead of creating a whole new
+copy, I think it's easier to maintain if it is one more uclibc version in
+package/uclibc/Config.in.
 
-Backport a patch applied in 5.28 that fix linking issue with intl and remove
-"LIBS=-lintl" from XSCREENSAVER_CONF_ENV.
 
-Note:
-gettext package is always selected with xscreensaver when BR2_NEEDS_GETTEXT is
-set due to dependencies on libgtk2 and libglib2.
+> 
+> Differences to uClibc master:
+> http://uclibc-ng.org/wiki/Changes
 
-Fixes:
-http://autobuild.buildroot.net/results/39b/39b6ad07ad59d87afeca6e427c69f580bed35700/build-end.log
+ That page doesn't seem to exist?
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v3:
-    Check if xscreensaver needs gettext if BR2_NEEDS_GETTEXT or
-    BR2_NEEDS_GETTEXT_IF_LOCALE (Thomas Petazzoni)
-    Select gettext only if BR2_NEEDS_GETTEXT_IF_LOCALE is set
-    Add a backported patch to fix the linking issue with intl
-    Remove "LIBS=-lintl" from XSCREENSAVER_CONF_ENV
-v2:
-    Select gettext package only when the toolchain needs gettext (Thomas Petazzoni)
-    (ie: when BR2_NEEDS_GETTEXT is set)
-    Build tested with an glibc based toolchain and without gettext package selected.
-    Build tested with an uClibc based toolchain and with gettext package selected.
----
- package/xscreensaver/Config.in                     |  1 +
- ...nsaver-0003-driver-fix-linking-with-lintl.patch | 35 ++++++++++++++++++++++
- package/xscreensaver/xscreensaver.mk               |  2 --
- 3 files changed, 36 insertions(+), 2 deletions(-)
- create mode 100644 package/xscreensaver/xscreensaver-0003-driver-fix-linking-with-lintl.patch
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index e2534a6..6260040 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  XScreenSaver is the standard screen saver collection shipped on most
- 	  Linux and Unix systems running the X11 Window System.
-diff --git a/package/xscreensaver/xscreensaver-0003-driver-fix-linking-with-lintl.patch b/package/xscreensaver/xscreensaver-0003-driver-fix-linking-with-lintl.patch
-new file mode 100644
-index 0000000..51551c6
---- /dev/null
-+++ b/package/xscreensaver/xscreensaver-0003-driver-fix-linking-with-lintl.patch
-@@ -0,0 +1,35 @@
-+From 2336fa7901733a434c38637bf39f3e282e78e1c1 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 27 Aug 2014 22:44:21 +0200
-+Subject: [PATCH 1/1] driver: fix linking with lintl
-+
-+The libintl is missing during xscreensaver build if
-+glib2 was build with gettext.
-+
-+xscreensaver.o: In function `main':
-+undefined reference to `libintl_bindtextdomain'
-+undefined reference to `libintl_textdomain'
-+
-+Backport a patch applied in 5.28
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ driver/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/driver/Makefile.in b/driver/Makefile.in
-+index af077ca..ce7055c 100644
-+--- a/driver/Makefile.in
-++++ b/driver/Makefile.in
-+@@ -776,7 +776,7 @@ XScreenSaver_Xm_ad.h: XScreenSaver-Xm.ad
-+ # The executables linked in this directory.
-+ #
-+ xscreensaver: $(SAVER_OBJS)
-+-	$(CC) $(LDFLAGS) -o $@ $(SAVER_OBJS) $(SAVER_LIBS)
-++	$(CC) $(LDFLAGS) -o $@ $(SAVER_OBJS) $(SAVER_LIBS) $(INTL_LIBS)
-+ 
-+ xscreensaver-command: $(CMD_OBJS)
-+ 	$(CC) $(LDFLAGS) -o $@ $(CMD_OBJS) $(CMD_LIBS)
-+-- 
-+1.9.3
-+
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 0e84d27..751a0c9 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -14,8 +14,6 @@ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
- XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
- 	$(if $(BR2_PACKAGE_GETTEXT),gettext)
- 
--XSCREENSAVER_CONF_ENV = $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
--
- # otherwise we end up with host include/library dirs passed to the
- # compiler/linker
- XSCREENSAVER_CONF_OPT = \
+> 
+> Notes about needed config changes:
+> http://uclibc-ng.org/wiki/Upgrade
+
+ Neither does this one...
+
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+
+> ---
+>  package/gcc/Config.in.host               |    6 +-
+>  package/uclibc-ng/Config.in              |  198 ++++++++++++
+>  package/uclibc-ng/uClibc-ng-1.0.0.config |  232 ++++++++++++++
+
+ You can probably drop the third version number from the .config, like used to
+be the case for busybox. So uClibc-ng-1.0.config.
+
+ Regards,
+ Arnout
+
+>  package/uclibc-ng/uclibc-ng.mk           |  503 ++++++++++++++++++++++++++++++
+>  toolchain/toolchain-buildroot/Config.in  |   19 +-
+>  5 files changed, 953 insertions(+), 5 deletions(-)
+>  create mode 100644 package/uclibc-ng/Config.in
+>  create mode 100644 package/uclibc-ng/uClibc-ng-1.0.0.config
+>  create mode 100644 package/uclibc-ng/uclibc-ng.mk
+[snip]
+
+
 -- 
-1.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
