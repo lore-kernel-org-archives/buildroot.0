@@ -1,31 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:35:45 +0200
-Subject: [Buildroot] [git commit branch/next] orc: bump version
-Message-ID: <20140827193558.640F89D55F@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 27 Aug 2014 21:40:10 +0200
+Subject: [Buildroot] [PATCH 1 of 2 for 2014.08] manual/user
+ guide/customization: expand introduction text
+In-Reply-To: <patchbomb.1409168409@localhost>
+References: <patchbomb.1409168409@localhost>
+Message-ID: <e21c7854621143b573bf.1409168410@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2278046471c56f72a0244636e12dd2bd8cee33f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+This patch expands the introduction text of chapter 'Project-specific
+customization' by listing the type of customizations that can be performed
+by a project.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/orc/orc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ docs/manual/customize.txt |  25 +++++++++++++++++++++----
+ 1 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 1bc3828..6637cbb 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -3,11 +3,28 @@
  
--ORC_VERSION = 0.4.21
-+ORC_VERSION = 0.4.22
- ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
- ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
- ORC_LICENSE = BSD-2c, BSD-3c
+ == Project-specific customization
+ 
+-The following sections describe the various way in which you can
+-customize Buildroot for a given project.
++Typical actions you may need to perform for a given project are:
+ 
+-For instructions on how to add new packages to Buildroot, refer to
+-xref:adding-packages[]
++- configuring Buildroot (including build options and toolchain,
++  bootloader, kernel, package and filesystem image type selection)
++- configuring other components, like the Linux kernel and BusyBox
++- adding project-specific patches to some packages (using
++  +BR2_GLOBAL_PATCH_DIR+)
++- adding or overwriting files on the target filesystem (using
++  +BR2_ROOTFS_OVERLAY+)
++- modifying or deleting files on the target filesystem (using
++  +BR2_ROOTFS_POST_BUILD_SCRIPT+)
++- running arbitrary commands prior to generating the filesystem image
++  (using +BR2_ROOTFS_POST_BUILD_SCRIPT+)
++- running arbitrary commands after generating the filesystem image
++  (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
++- adding project-specific packages
++
++This chapter describes how to make such project-specific customizations
++in Buildroot and how to store them in a way that you can build the same
++image in a reproducible way, even from a clean buildroot tree. By
++following the recommended strategy, you can even use the same Buildroot
++tree to build multiple distinct projects!
+ 
+ include::customize-rootfs.txt[]
+ 
