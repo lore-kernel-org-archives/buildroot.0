@@ -1,129 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 27 Aug 2014 22:29:34 +0200
-Subject: [Buildroot] [PATCH 2 of 2 for 2014.08] manual/user
- guide/customization: add section with recommended dir structure
-In-Reply-To: <f69e39b1184abd0c487a.1409168411@localhost>
-References: <patchbomb.1409168409@localhost>
- <f69e39b1184abd0c487a.1409168411@localhost>
-Message-ID: <CAHXCMM+VvYFoHR6hs4HGSHKZTTCtB4-MA50zUZYJatmkUMUf6g@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 27 Aug 2014 22:41:30 +0200
+Subject: [Buildroot] [PATCH] package/xbmc: Fix broken variable name
+Message-ID: <1409172090-20497-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+BR2_PACKAGE_XBMC_DBUS is provided by package/xbmc/Config.in
 
-On Wed, Aug 27, 2014 at 9:40 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Although the user is free to choose where to put project-specific files, the
-> presentation 'Using Buildroot for real projects' [1] first described a
-> certain recommendation.
-> This patch briefly describes this recommendation in the form of a directory
-> structure overview, the details will be added in subsequent patches.
->
-> Since the section on BR2_EXTERNAL is logically connected to the directory
-> structure, this section is moved right after it.
->
-> [1] http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
->
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
->  docs/manual/customize-directory-structure.txt |  58 +++++++++++++++++++
->  docs/manual/customize.txt                     |   6 +-
->  2 files changed, 62 insertions(+), 2 deletions(-)
->
-> diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
-> new file mode 100644
-> --- /dev/null
-> +++ b/docs/manual/customize-directory-structure.txt
-> @@ -0,0 +1,58 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Recommended directory structure
-> +
-> +When customizing Buildroot for your project, you will be creating one or
-> +more project-specific files that need to be stored somewhere. While most
-> +of these files could be placed in _any_ location as their path is to be
-> +specified in the Buildroot configuration, the Buildroot developers
-> +recommend a specific directory structure which is described in this
-> +section.
-> +
-> +Orthogonal to this directory structure, you can choose _where_ you place
-> +this structure itself: either inside the Buildroot tree, or outside of
-> +it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
-> +
-> +-----
-> ++-- board/
-> +|   +-- <company>/
-> +|       +-- <boardname>/
-> +|           +-- linux.config
-> +|           +-- busybox.config
-> +|           +-- <other configuration files>
-> +|           +-- post_build.sh
-> +|           +-- post_image.sh
-> +|           +-- rootfs_overlay/
-> +|           |   +-- etc/
-> +|           |   +-- <some file>
-> +|           +-- patches/
-> +|               +-- foo/
-> +|               |   +-- <some patch>
-> +|               +-- libbar/
-> +|                   +-- <some other patches>
-> +|
-> ++-- configs/
-> +|   +-- <boardname>_defconfig
-> +|
-> ++-- package/
-> +|   +-- <company>/
-> +|       +-- Config.in (if not using BR2_EXTERNAL)
-> +|       +-- <company>.mk (if not using BR2_EXTERNAL)
-> +|       +-- <boardname>/
-> +|           +-- package1/
-> +|           |    +-- Config.in
-> +|           |    +-- package1.mk
-> +|           +-- package2/
-> +|               +-- Config.in
-> +|               +-- package2.mk
-> +|
-> ++-- Config.in (if using BR2_EXTERNAL)
-> ++-- external.mk (if using BR2_EXTERNAL)
-> +------
-> +
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/xbmc/xbmc.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This tree is a bit redundant with the one in
-docs/manual/customize-outside-br.txt.
-I think you plan to rework this soon ;)
-But having this here give a good overview how one can organize his/her code.
-
-> +Details on the files shown above are given further in this chapter.
-> +
-> +Note: if you choose to place this structure outside of the Buildroot
-> +tree using +BR2_EXTERNAL+, the <company> and possibly <boardname>
-> +components may be superfluous and can be left out.
-> diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-> --- a/docs/manual/customize.txt
-> +++ b/docs/manual/customize.txt
-> @@ -26,10 +26,12 @@
->  following the recommended strategy, you can even use the same Buildroot
->  tree to build multiple distinct projects!
->
-> +include::customize-directory-structure.txt[]
-> +
-> +include::customize-outside-br.txt[]
-> +
->  include::customize-rootfs.txt[]
->
->  include::customize-store.txt[]
->
->  include::customize-packages.txt[]
-> -
-> -include::customize-outside-br.txt[]
-
-Regards,
-
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index bdd634e..0bb6724 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -64,7 +64,7 @@ XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
+ 	LIBS="-lvcos -lvchostif"
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
++ifeq ($(BR2_PACKAGE_XBMC_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
+ 
 -- 
-Samuel
+1.7.10.4
