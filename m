@@ -1,34 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 27 Aug 2014 21:40:09 +0200
-Subject: [Buildroot] [PATCH 0 of 2 for 2014.08] Manual improvements part 4
-Message-ID: <patchbomb.1409168409@localhost>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 27 Aug 2014 21:44:44 +0200
+Subject: [Buildroot] [PATCH] xapp_luit: needs MMU
+Message-ID: <1409168684-13271-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/13a/13a97461e3b6098e59cfcd829e6bcafa51e50bb4/
 
-This short series starts improving the 'Project-specific customizations'
-chapter in the manual. Subsequent patches are planned (even for 2014.08) but
-since the release is almost there I'm sending out patches as soon as they
-are available, to give enough time for review.
-
-Further changes planned:
-- streamline explanation on BR2_EXTERNAL after the addition of the new
-  section on directory structure.
-- reworking the 'Customizing the generated target filesystem' section to
-  emphasize the recommendations of rootfs-overlay + post-build
-- rework the rest of the chapter as there is some duplicate and inconsistent
-  information.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Thomas De Schampheleire (2)
-  manual/user guide/customization: expand introduction text
-  manual/user guide/customization: add section with recommended dir structure
+ package/x11r7/xapp_luit/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
- docs/manual/customize-directory-structure.txt |  58 +++++++++++++++++++
- docs/manual/customize.txt                     |  31 ++++++++-
- 2 files changed, 83 insertions(+), 6 deletions(-)
+diff --git a/package/x11r7/xapp_luit/Config.in b/package/x11r7/xapp_luit/Config.in
+index aec83a0..3e314de 100644
+--- a/package/x11r7/xapp_luit/Config.in
++++ b/package/x11r7/xapp_luit/Config.in
+@@ -2,5 +2,6 @@ config BR2_PACKAGE_XAPP_LUIT
+ 	bool "luit"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBFONTENC
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Locale and ISO 2022 support for Unicode terminals
+-- 
+1.7.10.4
