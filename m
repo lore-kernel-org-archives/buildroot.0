@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 00:17:38 +0200
-Subject: [Buildroot] [PATCH 2/3] ruby: should not use dl_iterate_phdr() on
-	Blackfin
+Date: Fri, 29 Aug 2014 00:17:39 +0200
+Subject: [Buildroot] [PATCH 3/3] ruby: bump to version 2.1.2
 In-Reply-To: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1409264259-13058-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1409264259-13058-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dl_iterate_phdr() C library function on Blackfin returns a
-non-conventional structure format compared to other architectures,
-which makes Ruby unable to use it. Since it's just an optional feature
-of Ruby apparently used to generate more fancy backtraces, this commit
-simply disables the usage of dl_iterate_phdr() on this architecture.
+This commit bumps Ruby to version 2.1.2. It was quickly runtime tested
+on ARM EBIhf.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/1b0/1b0e2f5f95889eb26846927da45d128247d0ed89/
+In addition to this it changes the site to an http:// location, which
+is the official one advertised on the Ruby web site.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ruby/ruby.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/ruby/ruby.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 66556c3..b84aaf3 100644
+index b84aaf3..297e902 100644
 --- a/package/ruby/ruby.mk
 +++ b/package/ruby/ruby.mk
-@@ -28,6 +28,10 @@ RUBY_CFLAGS += -O2
- endif
- RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_bfin),y)
-+RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
-+endif
-+
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- 	RUBY_DEPENDENCIES += berkeleydb
+-RUBY_VERSION_MAJOR = 1.9
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).3-p545
+-# 1.9.1 directory used for extensions
+-RUBY_VERSION_EXT = 1.9.1
+-RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
++RUBY_VERSION_MAJOR = 2.1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION_EXT = 2.1.0
++RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
 -- 
 2.0.0
