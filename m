@@ -1,10 +1,10 @@
 From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-Date: Thu, 28 Aug 2014 12:29:47 +0200
-Subject: [Buildroot] [PATCH V2 2/4] avrdude: Depend on elfutils instead of
-	libelf to get the libelf library
+Date: Thu, 28 Aug 2014 12:29:48 +0200
+Subject: [Buildroot] [PATCH V2 3/4] kexec-lite: Depends on elfutils instead
+	of libelf to get the libelf library
 In-Reply-To: <1409221789-18567-1-git-send-email-gregory.clement@free-electrons.com>
 References: <1409221789-18567-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <1409221789-18567-3-git-send-email-gregory.clement@free-electrons.com>
+Message-ID: <1409221789-18567-4-git-send-email-gregory.clement@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,42 +17,37 @@ conflicts with two packages providing the same library.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 ---
- package/avrdude/Config.in  | 6 +++++-
- package/avrdude/avrdude.mk | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/kexec-lite/Config.in     | 4 +++-
+ package/kexec-lite/kexec-lite.mk | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-index 8eac014..9a9b3fb 100644
---- a/package/avrdude/Config.in
-+++ b/package/avrdude/Config.in
-@@ -1,10 +1,14 @@
- config BR2_PACKAGE_AVRDUDE
- 	bool "avrdude"
+diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
+index 944ee29..dd9713e 100644
+--- a/package/kexec-lite/Config.in
++++ b/package/kexec-lite/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_KEXEC_LITE
+ 	bool "kexec-lite"
+ 	depends on BR2_powerpc || BR2_powerpc64
+ 	depends on !BR2_PREFER_STATIC_LIB # dtc
 -	select BR2_PACKAGE_LIBELF
-+	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	depends on BR2_LARGEFILE # elfutils
 +	depends on BR2_USE_WCHAR # elfutils
-+	depends on !BR2_avr32 # elfutils
-+	depends on !BR2_bfin # elfutils
++	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_DTC
+ 	select BR2_PACKAGE_DTC_PROGRAMS
  	help
- 	  avrdude is a programmer for Atmel AVR microcontrollers
- 	  this package provides a version with new linuxspi driver
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 7876c1d..03d6490 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -12,7 +12,7 @@ AVRDUDE_SUBDIR = avrdude
- # Sources coming from git, without generated configure and Makefile.in
- # files.
- AVRDUDE_AUTORECONF = YES
--AVRDUDE_DEPENDENCIES = libelf libusb libusb-compat ncurses \
-+AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
- 	host-flex host-bison
- AVRDUDE_LICENSE = GPLv2+
- AVRDUDE_LICENSE_FILES = avrdude/COPYING
+diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
+index 7028c6e..7e3c8d3 100644
+--- a/package/kexec-lite/kexec-lite.mk
++++ b/package/kexec-lite/kexec-lite.mk
+@@ -7,7 +7,7 @@
+ KEXEC_LITE_VERSION = fb8543fea3beb0522b5a63a74ea1a845dbd7b954
+ KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
+ KEXEC_LITE_LICENSE = GPLv2+
+-KEXEC_LITE_DEPENDENCIES = libelf dtc
++KEXEC_LITE_DEPENDENCIES = elfutils dtc
+ 
+ define KEXEC_LITE_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 -- 
 1.9.1
