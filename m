@@ -1,45 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 00:17:39 +0200
-Subject: [Buildroot] [PATCH 3/3] ruby: bump to version 2.1.2
-In-Reply-To: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1409264259-13058-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Aug 2014 19:51:20 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.4.7
+Message-ID: <1409266280-10391-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps Ruby to version 2.1.2. It was quickly runtime tested
-on ARM EBIhf.
-
-In addition to this it changes the site to an http:// location, which
-is the official one advertised on the Ruby web site.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ruby/ruby.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index b84aaf3..297e902 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,11 +4,10 @@
- #
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6c36c61..6dffae8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RUBY_VERSION_MAJOR = 1.9
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3-p545
--# 1.9.1 directory used for extensions
--RUBY_VERSION_EXT = 1.9.1
--RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
-+RUBY_VERSION_MAJOR = 2.1
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION_EXT = 2.1.0
-+RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
 -- 
-2.0.0
+1.8.5.5
