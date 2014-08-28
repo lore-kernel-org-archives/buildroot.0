@@ -1,81 +1,41 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 28 Aug 2014 10:33:54 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/uclibc-ng: add support for
- uClibc-ng
-In-Reply-To: <CAAXf6LX5GY+APsJh-bw8uf4O3u_Qx8=bP4dmjAw4p24tUbrWtg@mail.gmail.com>
-References: <20140811113124.GA19506@waldemar-brodkorb.de>
- <53FE6512.9050600@mind.be>
- <20140828070858.GJ12857@waldemar-brodkorb.de>
- <CAAXf6LX5GY+APsJh-bw8uf4O3u_Qx8=bP4dmjAw4p24tUbrWtg@mail.gmail.com>
-Message-ID: <20140828083354.GM12857@waldemar-brodkorb.de>
+Date: Thu, 28 Aug 2014 10:42:14 +0200
+Subject: [Buildroot] Rootfs for aarch64
+In-Reply-To: <CAJ2SuLmuBCToiP5z56hTKXTB5hdJ0=mH0SkQAS4=hbmbK21g4w@mail.gmail.com>
+References: <CAJ2SuL=yhZdq-aQ3Up4mkL29troM9ieq8qxXTVux0NYYapao=A@mail.gmail.com>
+ <CAFbHwiSOfj7tctecfL7uAj3g2pSCLbg_282JhYE_SPRyja7ooQ@mail.gmail.com>
+ <CAJ2SuLmY8rAq0aYmWpWeOdkbRXo+c50_YnLvtYP=JguLLmadqA@mail.gmail.com>
+ <CAFbHwiQV9=HzA+pAESjiy2QsszZSbG2-itXqY0eh8bo5PppDGg@mail.gmail.com>
+ <CAJ2SuLk6GF2STOTGRAKE2UavHr2m+xyjuLZpU4tZA5GFQpYK4w@mail.gmail.com>
+ <CAJ2SuLmuBCToiP5z56hTKXTB5hdJ0=mH0SkQAS4=hbmbK21g4w@mail.gmail.com>
+Message-ID: <20140828084214.GN12857@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
-Thomas De Schampheleire wrote,
+Hi Pradeep,
+Pradeep Kiruvale wrote,
 
-> Hi Waldemar, Arnout, all,
+> Hi Will,
 > 
-> On Thu, Aug 28, 2014 at 9:08 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> > Hi Arnout,
-> > Arnout Vandecappelle wrote,
-> >
-> >>  Hi Waldemar,
-> >>
-> >> On 08/11/14 13:31, Waldemar Brodkorb wrote:
-> >> > uClibc-ng is a spin-off of uClibc. uClibc-ng will do
-> >> > a 1.0 release really soon. uClibc lacks releases and
-> >> > the maintainer does not communicate any timeplans for
-> >> > releases. For more information about uClibc-ng see:
-> >> > http://www.uclibc-ng.org
-> >>
-> >>  What a surprising lack of reaction on this patch! I'd have expected people to
-> >> welcome this very much...
-> >
-> > I haven't thought of many comments, but no reaction was a little bit
-> > disappointing.
+> I tested this rootfs you pointed. But it does not have the network devices in /
+> dev and many other devices.
 > 
-> Keep in mind that this was during August, the stabilization month for
-> 2014.08. Personally I tend to ignore any patch that adds features and
-> will not make it in the release, and focus on
-> stabilization/documentation alone.
-> Moreover, since it's the holiday period, not everyone was around.
+> So if I say ifconfig it can't get network configurations. Please let me know
+> how can I get full rootfs.
 
-Yeah, I didn't whine about it, just thought to give Arnout some
-feedback ;)
- 
-> As we've discussed the uClibc situation several times before, I'm sure
-> that several core Buildroot developers are interested in the
-> development of uClibc-ng, and I'm sure we'll be adding support for it
-> in Buildroot.
-> >
-> >>  However, I'll start with immediately burning it to the ground :-) I think the
-> >> situation of uClibc-ng is very similar to eglibc: it's essentially the same
-> >> package, just a different version of it. So, instead of creating a whole new
-> >> copy, I think it's easier to maintain if it is one more uclibc version in
-> >> package/uclibc/Config.in.
-> >
-> > Okay, thanks for the feedback.
-> >
-> > In the meantime I started from scratch with the spin-off. See here
-> > for details:
-> > http://blog.waldemar-brodkorb.de/index.php?archives/17-English.html&serendipity[lang_selected]=en&serendipity[user_language]=en
-> 
-> Interesting!
-> 
-> I see there is a devel mailing list created, but nothing was sent
-> there yet (at least according to the archives
-> http://uclibc-ng.org/pipermail/devel/)
-> Isn't this type of change (restarting from scratch) something to send
-> to that list, rather than writing it in a blog?
+I recently started to get my linux system working in
+qemu-system-aarch64. Important is that you use virtio drivers and
+the right startup commands.
+Something like this should work:
+qemu-system-aarch64 -nographic -M virt -cpu cortex-a57 -smp 1 \
+  -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 \
+  -device virtio-blk-device,drive=vda \ 
+  -drive file=qemu-aarch64.img,if=none,id=vda
 
-You are right. Thanks. The creation of the list archive where
-unfortunately broken. (permission problem in
-/var/lib/mailman/archive). I have fixed it and send an e-mail as
-reference.
+I am using Qemu 2.1.
 
-best regards
+good luck
  Waldemar
