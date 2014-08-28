@@ -1,73 +1,56 @@
-From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-Date: Thu, 28 Aug 2014 14:21:34 +0200
-Subject: [Buildroot] [PATCH V3 4/4] libelf: Removes the package
-In-Reply-To: <1409228494-19492-1-git-send-email-gregory.clement@free-electrons.com>
-References: <1409228494-19492-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <1409228494-19492-5-git-send-email-gregory.clement@free-electrons.com>
+From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Date: Thu, 28 Aug 2014 09:52:17 -0300
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20140825181614.3f5c22a0@free-electrons.com>
+References: <20140825063011.07B50101AB1@stock.ovh.net>
+ <20140825181614.3f5c22a0@free-electrons.com>
+Message-ID: <20140828125217.GA3389@arch.cereza>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The elfutils package provides a more recent version of the
-libelf. Some packages such as ltrace need this more recent
-version. Having two packages providing the same library leads to some
-conflicts or dependency problems. For instance at the end we had only
-one libelf.a when the 2 packages were selected.
+(Ccing Frank)
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
----
- Config.in.legacy                                |     9 +
- package/Config.in                               |     1 -
- package/libelf/Config.in                        |     7 -
- package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
- package/libelf/libelf.mk                        |    23 -
- 5 files changed, 9 insertions(+), 12392 deletions(-)
- delete mode 100644 package/libelf/Config.in
- delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
- delete mode 100644 package/libelf/libelf.mk
+On 25 Aug 06:16 PM, Thomas Petazzoni wrote:
+> >      nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/fd30974bf2f976c600717268ce340f73d48dda34/
+> 
+> sys-utils/prlimit.o: In function `main':
+> prlimit.c:(.text.startup+0x440): undefined reference to `prlimit64'
+> prlimit.c:(.text.startup+0x5d0): undefined reference to `prlimit64'
+> collect2: error: ld returned 1 exit status
+> 
+> Ezequiel, an idea?
+> 
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 23962a2..5b1460c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,15 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.08"
- 
-+config BR2_PACKAGE_LIBELF
-+	bool "libelf has been removed"
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_LEGACY
-+	help
-+	  The libelf package provided an old version of the libelf library
-+	  and is deprecated. The libelf library is now provided by the
-+	  elfutils package.
+This is probably the same missing fallocate64 deal. The function is simply not
+available, yet detected (Frank: please correct me if I'm wrong).
+
+By doing something similar to what we do for e2fsprogs:
+
++ifeq ($(BR2_nios2),y)
++UTIL_LINUX_CONF_ENV += ac_cv_func_prlimit=no
++endif
 +
- config BR2_KERNEL_HEADERS_3_8
- 	bool "kernel headers version 3.8.x are no longer supported"
- 	select BR2_KERNEL_HEADERS_3_9
-diff --git a/package/Config.in b/package/Config.in
-index 0e10cdf..da528ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -841,7 +841,6 @@ menu "Other"
- 	source "package/libcofi/Config.in"
- 	source "package/libdaemon/Config.in"
- 	source "package/libee/Config.in"
--	source "package/libelf/Config.in"
- 	source "package/libev/Config.in"
- 	source "package/libevdev/Config.in"
- 	source "package/libevent/Config.in"
-diff --git a/package/libelf/Config.in b/package/libelf/Config.in
-deleted file mode 100644
-index 600ef68..0000000
-diff --git a/package/libelf/libelf-0.8.10-Elf64-fixups.patch b/package/libelf/libelf-0.8.10-Elf64-fixups.patch
-deleted file mode 100644
-index 86a064a..0000000
-diff --git a/package/libelf/libelf.mk b/package/libelf/libelf.mk
-deleted file mode 100644
-index 0c37697..0000000
+
+I can avoid the SYS_prlimit64 usage. However, we then get conflicting types:
+
+  CC       sys-utils/prlimit.o
+  CC       sys-utils/lscpu.o
+sys-utils/prlimit.c:139:12: error: conflicting types for 'prlimit'
+In file included from /home/zeta/buildroot/buildroot-nios2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/sys/resource.h:25:0,
+                 from sys-utils/prlimit.c:28:
+/home/zeta/buildroot/buildroot-nios2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/bits/resource.h:313:12: note: previous declaration of 'prlimit' was here
+
+I wonder if anyone has an idea to disable the prlimit build, and all the
+commands that depend on it.
+
+Notice that we have a similar issue on other packages, but the proposed
+solution's have been too hacky to be accepted:
+
+http://lists.busybox.net/pipermail/buildroot/2014-May/096203.html
 -- 
-1.9.1
+Ezequiel Garc?a, Free Electrons
+Embedded Linux, Kernel and Android Engineering
+http://free-electrons.com
