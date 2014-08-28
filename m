@@ -1,79 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Aug 2014 12:02:14 +0200
-Subject: [Buildroot] [PATCH 2/4] avrdude: Depend on elfutils instead of
- libelf to get the libel library
-In-Reply-To: <1409219230-17443-3-git-send-email-gregory.clement@free-electrons.com>
+From: Gregory CLEMENT <gregory.clement@free-electrons.com>
+Date: Thu, 28 Aug 2014 12:02:37 +0200
+Subject: [Buildroot] [PATCH 0/4] Use only elfutils package to provide
+	the libelf library
+In-Reply-To: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
 References: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
- <1409219230-17443-3-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <20140828100214.GC4042@free.fr>
+Message-ID: <53FEFE3D.2070105@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gregory, All,
-
-On 2014-08-28 11:47 +0200, Gregory CLEMENT spake thusly:
-> The elfutils package provides a more recent version of the libelf, so
-> let's use it. It will allow to remove the libelf package and to avoid
-> conflicts with two packages providing the same library.
+On 28/08/2014 11:47, Gregory CLEMENT wrote:
+> Hi,
 > 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
-
-Slight typo in subject:  "the libel library"  <- libelf
-
-> ---
->  package/avrdude/Config.in  | 2 +-
->  package/avrdude/avrdude.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> The libelf is currently provided by 2 packages libelf and
+> elfutils. The first package provides an old version of the libelf
+> which is no more compatible with a recent version of ltrace. Having
+> both libraries could lead to the link on the wrong one during the
+> build. It is what happened for ltrace.
 > 
-> diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-> index 8eac014..5de8301 100644
-> --- a/package/avrdude/Config.in
-> +++ b/package/avrdude/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_AVRDUDE
->  	bool "avrdude"
-> -	select BR2_PACKAGE_LIBELF
-> +	select BR2_PACKAGE_ELFUTILS
+> To avoid this kind of issue, this patch set switch the dependecy from
+> libelf to elfutils and finally removed the elfutils package.
 
-You need to propagate the dependencies from elfutils too, because
-'select' does not propagate them, see chapter "Choosing depends on or
-select" in the manual:
-    http://buildroot.net/downloads/manual/manual.html#_literal_config_in_literal_file
+I meant "removed the libelf package" of course!
 
-Regards,
-Yann E. MORIN.
-
->  	select BR2_PACKAGE_LIBUSB
->  	select BR2_PACKAGE_LIBUSB_COMPAT
->  	select BR2_PACKAGE_NCURSES
-> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> index 7876c1d..03d6490 100644
-> --- a/package/avrdude/avrdude.mk
-> +++ b/package/avrdude/avrdude.mk
-> @@ -12,7 +12,7 @@ AVRDUDE_SUBDIR = avrdude
->  # Sources coming from git, without generated configure and Makefile.in
->  # files.
->  AVRDUDE_AUTORECONF = YES
-> -AVRDUDE_DEPENDENCIES = libelf libusb libusb-compat ncurses \
-> +AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
->  	host-flex host-bison
->  AVRDUDE_LICENSE = GPLv2+
->  AVRDUDE_LICENSE_FILES = avrdude/COPYING
-> -- 
-> 1.9.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> I built and fully tested ltrace on ARM.
+> I built and just ran avrdude on ARM.
+> I didn't build kexec-lite.
+> 
+> Thanks,
+> 
+> Gregory
+> 
+> Gregory CLEMENT (4):
+>   ltrace: Removes the libelf dependency
+>   avrdude: Depend on elfutils instead of libelf to get the libel library
+>   kexec-lite: Depends on elfutils instead of libelf to get the libelf
+>     library
+>   libelf: Removes the package
+> 
+>  package/Config.in                               |     1 -
+>  package/avrdude/Config.in                       |     2 +-
+>  package/avrdude/avrdude.mk                      |     2 +-
+>  package/kexec-lite/Config.in                    |     2 +-
+>  package/kexec-lite/kexec-lite.mk                |     2 +-
+>  package/libelf/Config.in                        |     7 -
+>  package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
+>  package/libelf/libelf.mk                        |    23 -
+>  package/ltrace/Config.in                        |     1 -
+>  package/ltrace/ltrace.mk                        |     2 +-
+>  10 files changed, 5 insertions(+), 12398 deletions(-)
+>  delete mode 100644 package/libelf/Config.in
+>  delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
+>  delete mode 100644 package/libelf/libelf.mk
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Gregory Clement, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
