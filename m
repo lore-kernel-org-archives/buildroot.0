@@ -1,41 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Aug 2014 09:39:25 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/uclibc-ng: add support for
- uClibc-ng
-In-Reply-To: <53FE6512.9050600@mind.be>
-References: <20140811113124.GA19506@waldemar-brodkorb.de>
- <53FE6512.9050600@mind.be>
-Message-ID: <20140828093925.6bbffb1b@free-electrons.com>
+From: pranita <pranitayeole53@gmail.com>
+Date: Thu, 28 Aug 2014 00:49:41 -0700 (PDT)
+Subject: [Buildroot] make command not working on raspberry pi after
+	build process
+In-Reply-To: <1409210694757-78112.post@n4.nabble.com>
+References: <1409210694757-78112.post@n4.nabble.com>
+Message-ID: <1409212181917-78116.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+I am very new to use this buildroot process, please reply me for this post, I
+want to add things to the previous message,
+I want to use make command on the new build which I did for raspberry pi.
 
-On Thu, 28 Aug 2014 01:09:06 +0200, Arnout Vandecappelle wrote:
 
->  What a surprising lack of reaction on this patch! I'd have expected people to
-> welcome this very much...
 
-Yes, sorry for the lack of reaction. I definitely welcome this very
-much!
 
->  However, I'll start with immediately burning it to the ground :-) I think the
-> situation of uClibc-ng is very similar to eglibc: it's essentially the same
-> package, just a different version of it. So, instead of creating a whole new
-> copy, I think it's easier to maintain if it is one more uclibc version in
-> package/uclibc/Config.in.
-
-I definitely agree. For now, uclibc-ng build system and process is
-essentially the same as the one of uclibc, so I'd prefer to see it
-being handled by package/uclibc/.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/make-command-not-working-on-raspberry-pi-after-build-process-tp78112p78116.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
