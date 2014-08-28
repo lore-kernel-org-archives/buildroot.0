@@ -1,54 +1,55 @@
 From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-Date: Thu, 28 Aug 2014 11:47:06 +0200
-Subject: [Buildroot] [PATCH 0/4] Use only elfutils package to provide the
-	libelf library
-Message-ID: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
+Date: Thu, 28 Aug 2014 11:47:07 +0200
+Subject: [Buildroot] [PATCH 1/4] ltrace: Removes the libelf dependency
+In-Reply-To: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
+References: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
+Message-ID: <1409219230-17443-2-git-send-email-gregory.clement@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
 The libelf is currently provided by 2 packages libelf and
 elfutils. The first package provides an old version of the libelf
-which is no more compatible with a recent version of ltrace. Having
-both libraries could lead to the link on the wrong one during the
-build. It is what happened for ltrace.
+which is no more compatible with a recent version of ltrace. This
+patch removes the dependency on the libelf package and only keep the
+elfuils package which provides the accurate version of libelf for
+ltrace.
 
-To avoid this kind of issue, this patch set switch the dependecy from
-libelf to elfutils and finally removed the elfutils package.
+It will also allow to remove the libelf package and to avoid conflicts
+with two packages providing the same library.
 
-I built and fully tested ltrace on ARM.
-I built and just ran avrdude on ARM.
-I didn't build kexec-lite.
+Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
+---
+ package/ltrace/Config.in | 1 -
+ package/ltrace/ltrace.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-Thanks,
-
-Gregory
-
-Gregory CLEMENT (4):
-  ltrace: Removes the libelf dependency
-  avrdude: Depend on elfutils instead of libelf to get the libel library
-  kexec-lite: Depends on elfutils instead of libelf to get the libelf
-    library
-  libelf: Removes the package
-
- package/Config.in                               |     1 -
- package/avrdude/Config.in                       |     2 +-
- package/avrdude/avrdude.mk                      |     2 +-
- package/kexec-lite/Config.in                    |     2 +-
- package/kexec-lite/kexec-lite.mk                |     2 +-
- package/libelf/Config.in                        |     7 -
- package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
- package/libelf/libelf.mk                        |    23 -
- package/ltrace/Config.in                        |     1 -
- package/ltrace/ltrace.mk                        |     2 +-
- 10 files changed, 5 insertions(+), 12398 deletions(-)
- delete mode 100644 package/libelf/Config.in
- delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
- delete mode 100644 package/libelf/libelf.mk
-
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 8cabfa2..dc759d8 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_LTRACE
+ 	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
+ 	depends on (BR2_i386 || BR2_arm \
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+-	select BR2_PACKAGE_LIBELF
+ 	select BR2_PACKAGE_ELFUTILS
+ 	depends on BR2_LARGEFILE # elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 0a3a90c..48bf7bd 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -6,7 +6,7 @@
+ 
+ LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
+ LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
+-LTRACE_DEPENDENCIES = libelf elfutils
++LTRACE_DEPENDENCIES = elfutils
+ LTRACE_CONF_OPT = --disable-werror
+ LTRACE_LICENSE = GPLv2
+ LTRACE_LICENSE_FILES = COPYING
 -- 
 1.9.1
