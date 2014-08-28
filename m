@@ -1,55 +1,50 @@
 From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-Date: Thu, 28 Aug 2014 11:47:07 +0200
-Subject: [Buildroot] [PATCH 1/4] ltrace: Removes the libelf dependency
+Date: Thu, 28 Aug 2014 11:47:08 +0200
+Subject: [Buildroot] [PATCH 2/4] avrdude: Depend on elfutils instead of
+	libelf to get the libel library
 In-Reply-To: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
 References: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <1409219230-17443-2-git-send-email-gregory.clement@free-electrons.com>
+Message-ID: <1409219230-17443-3-git-send-email-gregory.clement@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libelf is currently provided by 2 packages libelf and
-elfutils. The first package provides an old version of the libelf
-which is no more compatible with a recent version of ltrace. This
-patch removes the dependency on the libelf package and only keep the
-elfuils package which provides the accurate version of libelf for
-ltrace.
-
-It will also allow to remove the libelf package and to avoid conflicts
-with two packages providing the same library.
+The elfutils package provides a more recent version of the libelf, so
+let's use it. It will allow to remove the libelf package and to avoid
+conflicts with two packages providing the same library.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 ---
- package/ltrace/Config.in | 1 -
- package/ltrace/ltrace.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/avrdude/Config.in  | 2 +-
+ package/avrdude/avrdude.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 8cabfa2..dc759d8 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_LTRACE
- 	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
- 	depends on (BR2_i386 || BR2_arm \
- 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
+index 8eac014..5de8301 100644
+--- a/package/avrdude/Config.in
++++ b/package/avrdude/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_AVRDUDE
+ 	bool "avrdude"
 -	select BR2_PACKAGE_LIBELF
- 	select BR2_PACKAGE_ELFUTILS
- 	depends on BR2_LARGEFILE # elfutils
- 	depends on BR2_USE_WCHAR # elfutils
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index 0a3a90c..48bf7bd 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -6,7 +6,7 @@
- 
- LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
- LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
--LTRACE_DEPENDENCIES = libelf elfutils
-+LTRACE_DEPENDENCIES = elfutils
- LTRACE_CONF_OPT = --disable-werror
- LTRACE_LICENSE = GPLv2
- LTRACE_LICENSE_FILES = COPYING
++	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	select BR2_PACKAGE_NCURSES
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 7876c1d..03d6490 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -12,7 +12,7 @@ AVRDUDE_SUBDIR = avrdude
+ # Sources coming from git, without generated configure and Makefile.in
+ # files.
+ AVRDUDE_AUTORECONF = YES
+-AVRDUDE_DEPENDENCIES = libelf libusb libusb-compat ncurses \
++AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ 	host-flex host-bison
+ AVRDUDE_LICENSE = GPLv2+
+ AVRDUDE_LICENSE_FILES = avrdude/COPYING
 -- 
 1.9.1
