@@ -1,52 +1,44 @@
-From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-Date: Thu, 28 Aug 2014 12:29:49 +0200
-Subject: [Buildroot] [PATCH V2 4/4] libelf: Removes the package
-In-Reply-To: <1409221789-18567-1-git-send-email-gregory.clement@free-electrons.com>
-References: <1409221789-18567-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <1409221789-18567-5-git-send-email-gregory.clement@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Aug 2014 13:11:22 +0200
+Subject: [Buildroot] [PATCH 4/4] libelf: Removes the package
+In-Reply-To: <1409219230-17443-5-git-send-email-gregory.clement@free-electrons.com>
+References: <1409219230-17443-1-git-send-email-gregory.clement@free-electrons.com>
+ <1409219230-17443-5-git-send-email-gregory.clement@free-electrons.com>
+Message-ID: <20140828131122.2a0d4533@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The elfutils package provides a more recent version of the
-libelf. Some packages such as ltrace need this more recent
-version. Having two packages providing the same library leads to some
-conflicts or dependency problems. For instance at the end we had only
-one libelf.a when the 2 packages were selected.
+Dear Gregory CLEMENT,
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
----
- package/Config.in                               |     1 -
- package/libelf/Config.in                        |     7 -
- package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
- package/libelf/libelf.mk                        |    23 -
- 4 files changed, 12392 deletions(-)
- delete mode 100644 package/libelf/Config.in
- delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
- delete mode 100644 package/libelf/libelf.mk
+On Thu, 28 Aug 2014 11:47:10 +0200, Gregory CLEMENT wrote:
+> The elfutils package provides a more recent version of the
+> libelf. Some packages such as ltrace need this more recent
+> version. Having two packages providing the same library leads to some
+> conflicts or dependency problems. For instance at the end we had only
+> one libelf.a when the 2 packages were selected.
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
+> ---
+>  package/Config.in                               |     1 -
+>  package/libelf/Config.in                        |     7 -
+>  package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
+>  package/libelf/libelf.mk                        |    23 -
+>  4 files changed, 12392 deletions(-)
+>  delete mode 100644 package/libelf/Config.in
+>  delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
+>  delete mode 100644 package/libelf/libelf.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 0e10cdf..da528ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -841,7 +841,6 @@ menu "Other"
- 	source "package/libcofi/Config.in"
- 	source "package/libdaemon/Config.in"
- 	source "package/libee/Config.in"
--	source "package/libelf/Config.in"
- 	source "package/libev/Config.in"
- 	source "package/libevdev/Config.in"
- 	source "package/libevent/Config.in"
-diff --git a/package/libelf/Config.in b/package/libelf/Config.in
-deleted file mode 100644
-index 600ef68..0000000
-diff --git a/package/libelf/libelf-0.8.10-Elf64-fixups.patch b/package/libelf/libelf-0.8.10-Elf64-fixups.patch
-deleted file mode 100644
-index 86a064a..0000000
-diff --git a/package/libelf/libelf.mk b/package/libelf/libelf.mk
-deleted file mode 100644
-index 0c37697..0000000
+When removing a package, the config option of the package should be
+moved to Config.in.legacy to allow the user to be warned that he is
+using a no longer available package.
+
+Thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
