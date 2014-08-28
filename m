@@ -1,75 +1,108 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 28 Aug 2014 08:56:29 +0200
-Subject: [Buildroot] [PATCH 1 of 2 for 2014.08] manual/user
- guide/customization: expand introduction text
-In-Reply-To: <CAHXCMMJ+YMHPyJnSH=m=GQsa1R2EdP1c2haVQ3GjjSitA-QnyQ@mail.gmail.com>
+Date: Thu, 28 Aug 2014 08:59:12 +0200
+Subject: [Buildroot] [PATCH 2 of 2 for 2014.08] manual/user
+ guide/customization: add section with recommended dir structure
+In-Reply-To: <CAHXCMM+VvYFoHR6hs4HGSHKZTTCtB4-MA50zUZYJatmkUMUf6g@mail.gmail.com>
 References: <patchbomb.1409168409@localhost>
- <e21c7854621143b573bf.1409168410@localhost>
- <CAHXCMMJ+YMHPyJnSH=m=GQsa1R2EdP1c2haVQ3GjjSitA-QnyQ@mail.gmail.com>
-Message-ID: <CAAXf6LUYenwE3H_n5KNAeQWr43ZrsRQmpnQTbsQzN58pjLJUSg@mail.gmail.com>
+ <f69e39b1184abd0c487a.1409168411@localhost>
+ <CAHXCMM+VvYFoHR6hs4HGSHKZTTCtB4-MA50zUZYJatmkUMUf6g@mail.gmail.com>
+Message-ID: <CAAXf6LXnHerNbVeYVbYqr1AuHT03voGY__zzXkxEKGxW=LUMHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 27, 2014 at 10:22 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+On Wed, Aug 27, 2014 at 10:29 PM, Samuel Martin <s.martin49@gmail.com> wrote:
 > Hi Thomas, all,
 >
 > On Wed, Aug 27, 2014 at 9:40 PM, Thomas De Schampheleire
 > <patrickdepinguin@gmail.com> wrote:
->> This patch expands the introduction text of chapter 'Project-specific
->> customization' by listing the type of customizations that can be performed
->> by a project.
+>> Although the user is free to choose where to put project-specific files, the
+>> presentation 'Using Buildroot for real projects' [1] first described a
+>> certain recommendation.
+>> This patch briefly describes this recommendation in the form of a directory
+>> structure overview, the details will be added in subsequent patches.
+>>
+>> Since the section on BR2_EXTERNAL is logically connected to the directory
+>> structure, this section is moved right after it.
+>>
+>> [1] http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
+>>
 >>
 >> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >>
 >> ---
->>  docs/manual/customize.txt |  25 +++++++++++++++++++++----
->>  1 files changed, 21 insertions(+), 4 deletions(-)
+>>  docs/manual/customize-directory-structure.txt |  58 +++++++++++++++++++
+>>  docs/manual/customize.txt                     |   6 +-
+>>  2 files changed, 62 insertions(+), 2 deletions(-)
 >>
->> diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
->> --- a/docs/manual/customize.txt
->> +++ b/docs/manual/customize.txt
->> @@ -3,11 +3,28 @@
->>
->>  == Project-specific customization
->>
->> -The following sections describe the various way in which you can
->> -customize Buildroot for a given project.
->> +Typical actions you may need to perform for a given project are:
->>
->> -For instructions on how to add new packages to Buildroot, refer to
->> -xref:adding-packages[]
->> +- configuring Buildroot (including build options and toolchain,
->> +  bootloader, kernel, package and filesystem image type selection)
->> +- configuring other components, like the Linux kernel and BusyBox
->> +- adding project-specific patches to some packages (using
->> +  +BR2_GLOBAL_PATCH_DIR+)
->> +- adding or overwriting files on the target filesystem (using
->> +  +BR2_ROOTFS_OVERLAY+)
->> +- modifying or deleting files on the target filesystem (using
->> +  +BR2_ROOTFS_POST_BUILD_SCRIPT+)
->> +- running arbitrary commands prior to generating the filesystem image
->> +  (using +BR2_ROOTFS_POST_BUILD_SCRIPT+)
->> +- running arbitrary commands after generating the filesystem image
->> +  (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
->> +- adding project-specific packages
+>> diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+>> new file mode 100644
+>> --- /dev/null
+>> +++ b/docs/manual/customize-directory-structure.txt
+>> @@ -0,0 +1,58 @@
+>> +// -*- mode:doc; -*-
+>> +// vim: set syntax=asciidoc:
 >> +
->> +This chapter describes how to make such project-specific customizations
->> +in Buildroot and how to store them in a way that you can build the same
->> +image in a reproducible way, even from a clean buildroot tree. By
->> +following the recommended strategy, you can even use the same Buildroot
->> +tree to build multiple distinct projects!
->>
+>> +=== Recommended directory structure
+>> +
+>> +When customizing Buildroot for your project, you will be creating one or
+>> +more project-specific files that need to be stored somewhere. While most
+>> +of these files could be placed in _any_ location as their path is to be
+>> +specified in the Buildroot configuration, the Buildroot developers
+>> +recommend a specific directory structure which is described in this
+>> +section.
+>> +
+>> +Orthogonal to this directory structure, you can choose _where_ you place
+>> +this structure itself: either inside the Buildroot tree, or outside of
+>> +it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
+>> +
+>> +-----
+>> ++-- board/
+>> +|   +-- <company>/
+>> +|       +-- <boardname>/
+>> +|           +-- linux.config
+>> +|           +-- busybox.config
+>> +|           +-- <other configuration files>
+>> +|           +-- post_build.sh
+>> +|           +-- post_image.sh
+>> +|           +-- rootfs_overlay/
+>> +|           |   +-- etc/
+>> +|           |   +-- <some file>
+>> +|           +-- patches/
+>> +|               +-- foo/
+>> +|               |   +-- <some patch>
+>> +|               +-- libbar/
+>> +|                   +-- <some other patches>
+>> +|
+>> ++-- configs/
+>> +|   +-- <boardname>_defconfig
+>> +|
+>> ++-- package/
+>> +|   +-- <company>/
+>> +|       +-- Config.in (if not using BR2_EXTERNAL)
+>> +|       +-- <company>.mk (if not using BR2_EXTERNAL)
+>> +|       +-- <boardname>/
+>> +|           +-- package1/
+>> +|           |    +-- Config.in
+>> +|           |    +-- package1.mk
+>> +|           +-- package2/
+>> +|               +-- Config.in
+>> +|               +-- package2.mk
+>> +|
+>> ++-- Config.in (if using BR2_EXTERNAL)
+>> ++-- external.mk (if using BR2_EXTERNAL)
+>> +------
+>> +
 >
-> This is really good, but instead of implying that customization can
-> stay aside of Buildroot tree, I would be clear about this, and maybe
-> add that this location can be used to store
-> non-redistribuable/non-disclosable (I'm not sure about this last
-> adjective ;]) stuff.
+> This tree is a bit redundant with the one in
+> docs/manual/customize-outside-br.txt.
+> I think you plan to rework this soon ;)
+> But having this here give a good overview how one can organize his/her code.
 
-I think I don't fully understand your comment here, could you rephrase?
+Yes indeed, rework of that section is planned and will remove the tree
+there (or at least the part that is already in the above diagram).
 
 Thanks,
 Thomas
