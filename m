@@ -1,76 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 28 Aug 2014 01:09:06 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/uclibc-ng: add support for
- uClibc-ng
-In-Reply-To: <20140811113124.GA19506@waldemar-brodkorb.de>
-References: <20140811113124.GA19506@waldemar-brodkorb.de>
-Message-ID: <53FE6512.9050600@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 28 Aug 2014 07:38:55 +0200
+Subject: [Buildroot] [PATCH] package/xbmc: Fix broken variable name
+References: <1409172090-20497-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140827204942.GA21009@free.fr> <87wq9tsjoc.fsf@dell.be.48ers.dk>
+ <20140827213842.GB21009@free.fr>
+Message-ID: <XnsA3974DCE8DC95berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Waldemar,
+Hi,
 
-On 08/11/14 13:31, Waldemar Brodkorb wrote:
-> uClibc-ng is a spin-off of uClibc. uClibc-ng will do
-> a 1.0 release really soon. uClibc lacks releases and
-> the maintainer does not communicate any timeplans for
-> releases. For more information about uClibc-ng see:
-> http://www.uclibc-ng.org
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:20140827213842.GB21009 at free.fr:
 
- What a surprising lack of reaction on this patch! I'd have expected people to
-welcome this very much...
-
- However, I'll start with immediately burning it to the ground :-) I think the
-situation of uClibc-ng is very similar to eglibc: it's essentially the same
-package, just a different version of it. So, instead of creating a whole new
-copy, I think it's easier to maintain if it is one more uclibc version in
-package/uclibc/Config.in.
-
-
+>> Then we should imho get rid of the XBMC_DBUS option if that option
+>> doesn't do anything.
 > 
-> Differences to uClibc master:
-> http://uclibc-ng.org/wiki/Changes
+> That option does select BR2_PACKAGE_DBUS.
 
- That page doesn't seem to exist?
+should BR2_PACKAGE_DBUS in turn not select BR2_PACKAGE_XBMC_DBUS then?
+Otherwise users might think DBUS is disabled for xbmc while it is enabled due 
+to BR2_PACKAGE_DBUS. Otoh I could try to provide an xbmc/configure option
+--en/disable-dbus upstream.
 
+> But for XBMC, the reasoning was that we would not want such a behaviour,
+> since some dependencies are not trivial (e.g. shairplay, CEC...), so the
+> kconfig options to XBMC are here to facilitate the user's life.
 
-> 
-> Notes about needed config changes:
-> http://uclibc-ng.org/wiki/Upgrade
++1, same should be done for alsa and libva.
 
- Neither does this one...
-
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-
-> ---
->  package/gcc/Config.in.host               |    6 +-
->  package/uclibc-ng/Config.in              |  198 ++++++++++++
->  package/uclibc-ng/uClibc-ng-1.0.0.config |  232 ++++++++++++++
-
- You can probably drop the third version number from the .config, like used to
-be the case for busybox. So uClibc-ng-1.0.config.
-
- Regards,
- Arnout
-
->  package/uclibc-ng/uclibc-ng.mk           |  503 ++++++++++++++++++++++++++++++
->  toolchain/toolchain-buildroot/Config.in  |   19 +-
->  5 files changed, 953 insertions(+), 5 deletions(-)
->  create mode 100644 package/uclibc-ng/Config.in
->  create mode 100644 package/uclibc-ng/uClibc-ng-1.0.0.config
->  create mode 100644 package/uclibc-ng/uclibc-ng.mk
-[snip]
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards, Bernd
