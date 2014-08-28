@@ -1,70 +1,108 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 28 Aug 2014 09:28:06 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/uclibc-ng: add support for
-	uClibc-ng
-In-Reply-To: <20140828070858.GJ12857@waldemar-brodkorb.de>
-References: <20140811113124.GA19506@waldemar-brodkorb.de>
- <53FE6512.9050600@mind.be>
- <20140828070858.GJ12857@waldemar-brodkorb.de>
-Message-ID: <CAAXf6LX5GY+APsJh-bw8uf4O3u_Qx8=bP4dmjAw4p24tUbrWtg@mail.gmail.com>
+From: Pradeep Kiruvale <pradeepkiruvale@gmail.com>
+Date: Thu, 28 Aug 2014 09:38:05 +0200
+Subject: [Buildroot] Rootfs for aarch64
+In-Reply-To: <CAJ2SuLk6GF2STOTGRAKE2UavHr2m+xyjuLZpU4tZA5GFQpYK4w@mail.gmail.com>
+References: <CAJ2SuL=yhZdq-aQ3Up4mkL29troM9ieq8qxXTVux0NYYapao=A@mail.gmail.com>
+ <CAFbHwiSOfj7tctecfL7uAj3g2pSCLbg_282JhYE_SPRyja7ooQ@mail.gmail.com>
+ <CAJ2SuLmY8rAq0aYmWpWeOdkbRXo+c50_YnLvtYP=JguLLmadqA@mail.gmail.com>
+ <CAFbHwiQV9=HzA+pAESjiy2QsszZSbG2-itXqY0eh8bo5PppDGg@mail.gmail.com>
+ <CAJ2SuLk6GF2STOTGRAKE2UavHr2m+xyjuLZpU4tZA5GFQpYK4w@mail.gmail.com>
+Message-ID: <CAJ2SuLmuBCToiP5z56hTKXTB5hdJ0=mH0SkQAS4=hbmbK21g4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar, Arnout, all,
+Hi Will,
 
-On Thu, Aug 28, 2014 at 9:08 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> Hi Arnout,
-> Arnout Vandecappelle wrote,
+I tested this rootfs you pointed. But it does not have the network devices
+in /dev and many other devices.
+
+So if I say ifconfig it can't get network configurations. Please let me
+know how can I get full rootfs.
+
+Regards,
+Pradeep
+
+
+On 27 August 2014 20:16, Pradeep Kiruvale <pradeepkiruvale@gmail.com> wrote:
+
+> Thanks a lot.
 >
->>  Hi Waldemar,
+> Regards,
+> Pradeep
+>
+>
+> On 27 August 2014 17:53, Will Newton <will.newton@gmail.com> wrote:
+>
+>> On Wed, Aug 27, 2014 at 4:44 PM, Pradeep Kiruvale
+>> <pradeepkiruvale@gmail.com> wrote:
+>> > Hi Will,
+>> >
+>> > Thanks for the quick reply. I am just trying with foundation first and
+>> then
+>> > planing to move to qemu.
+>> >
+>> > I tried searching for ubuntu I dint find. Can you please tell me from
+>> where
+>> > I can download ubuntu for aarch64?
 >>
->> On 08/11/14 13:31, Waldemar Brodkorb wrote:
->> > uClibc-ng is a spin-off of uClibc. uClibc-ng will do
->> > a 1.0 release really soon. uClibc lacks releases and
->> > the maintainer does not communicate any timeplans for
->> > releases. For more information about uClibc-ng see:
->> > http://www.uclibc-ng.org
+>> There is a rootfs here:
 >>
->>  What a surprising lack of reaction on this patch! I'd have expected people to
->> welcome this very much...
+>> http://cdimage.ubuntu.com/ubuntu-core/daily/current/
+>>
+>> (It is called arm64 in Debian/Ubuntu)
+>>
+>> > Regards,
+>> > Pradeep
+>> >
+>> >
+>> > On 27 August 2014 17:27, Will Newton <will.newton@gmail.com> wrote:
+>> >>
+>> >> On Wed, Aug 27, 2014 at 4:12 PM, Pradeep Kiruvale
+>> >> <pradeepkiruvale@gmail.com> wrote:
+>> >> > Hi All,
+>> >> >
+>> >> > I am very new to aarch64/arm64. I want to port some application from
+>> x86
+>> >> > to
+>> >> > arm64
+>> >> > so I need to build a environment for porting and testing the
+>> software.
+>> >> > Please let me
+>> >> > know how can I create a rootfile system and image for the newer
+>> version
+>> >> > of
+>> >> > the linux.
+>> >> >
+>> >> > I want to build a full fledged rootfs with all possible libraries and
+>> >> > want
+>> >> > to mount nfs.
+>> >> >
+>> >> > I did try for a while, do to some configuration issues I am not able
+>> to
+>> >> > boot
+>> >> > the image
+>> >> > which I built on x86. I am using linaro foundation as a simulator.
+>> >>
+>> >> In general unless you need to I would use qemu over the foundation
+>> >> model as it is quicker and IMO easier to work with.
+>> >>
+>> >> This blog post gives some detail about using it:
+>> >>
+>> >>
+>> >>
+>> http://www.bennee.com/~alex/blog/2014/05/09/running-linux-in-qemus-aarch64-system-emulation-mode/
+>> >>
+>> >> Also note that Ubuntu (and Fedora) is available for aarch64 so if you
+>> >> want a full development system with package management that may be
+>> >> more suitable.
+>> >
+>> >
+>>
 >
-> I haven't thought of many comments, but no reaction was a little bit
-> disappointing.
-
-Keep in mind that this was during August, the stabilization month for
-2014.08. Personally I tend to ignore any patch that adds features and
-will not make it in the release, and focus on
-stabilization/documentation alone.
-Moreover, since it's the holiday period, not everyone was around.
-
-As we've discussed the uClibc situation several times before, I'm sure
-that several core Buildroot developers are interested in the
-development of uClibc-ng, and I'm sure we'll be adding support for it
-in Buildroot.
-
 >
->>  However, I'll start with immediately burning it to the ground :-) I think the
->> situation of uClibc-ng is very similar to eglibc: it's essentially the same
->> package, just a different version of it. So, instead of creating a whole new
->> copy, I think it's easier to maintain if it is one more uclibc version in
->> package/uclibc/Config.in.
->
-> Okay, thanks for the feedback.
->
-> In the meantime I started from scratch with the spin-off. See here
-> for details:
-> http://blog.waldemar-brodkorb.de/index.php?archives/17-English.html&serendipity[lang_selected]=en&serendipity[user_language]=en
-
-Interesting!
-
-I see there is a devel mailing list created, but nothing was sent
-there yet (at least according to the archives
-http://uclibc-ng.org/pipermail/devel/)
-Isn't this type of change (restarting from scratch) something to send
-to that list, rather than writing it in a blog?
-
-Best regards,
-Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140828/ce47dbcf/attachment.html>
