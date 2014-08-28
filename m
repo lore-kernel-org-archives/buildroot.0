@@ -1,35 +1,65 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 28 Aug 2014 13:16:21 +0100
-Subject: [Buildroot] [PATCH] libgpgme: Take into account that gnupg and
-	gnupg2 are mutual exclusive
-Message-ID: <1409228181-29052-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gregory CLEMENT <gregory.clement@free-electrons.com>
+Date: Thu, 28 Aug 2014 14:21:30 +0200
+Subject: [Buildroot] [PATCH V3 0/4] Use only elfutils package to provide the
+	libelf library
+Message-ID: <1409228494-19492-1-git-send-email-gregory.clement@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoid that libgpgme can select the gnupg package although gnupg2 has
-been already selected. Both packages are mutual exclusive and shouldn't
-be selected at the same time.
+Hi,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libgpgme/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+The libelf is currently provided by 2 packages libelf and
+elfutils. The first package provides an old version of the libelf
+which is no more compatible with a recent version of ltrace. Having
+both libraries could lead to the link on the wrong one during the
+build. It is what happened for ltrace.
 
-diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
-index a303bfa..e176dac 100644
---- a/package/libgpgme/Config.in
-+++ b/package/libgpgme/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBGPGME
- 	bool "libgpgme"
- 	depends on BR2_USE_MMU # libassuan
- 	#gnupg is not needed to build, but at runtime.
--	select BR2_PACKAGE_GNUPG
-+	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_LIBASSUAN
- 	help
+To avoid this kind of issue, this patch set switch the dependency from
+libelf to elfutils and finally removed the libelf package.
+
+I built and fully tested ltrace on ARM.
+I built and just ran avrdude on ARM.
+I didn't build kexec-lite.
+
+Thanks,
+
+Changelog:
+v1 -> v2:
+- Propagated the dependencies from elfutils for kexec-lite and avrdude
+- Fixed the subject of the avrdude patch
+- Use the -D flag to generate the patch: only the mention of the
+  deleted files is kept. This allows to have a very light patch but
+  one will be able to apply the patch only by using git.
+
+v2 -> v3:
+- moved the config option of the libelf package to Config.in.legacy
+
+Gregory CLEMENT (4):
+  ltrace: Removes the libelf dependency
+  avrdude: Depend on elfutils instead of libelf to get the libelf
+    library
+  kexec-lite: Depends on elfutils instead of libelf to get the libelf
+    library
+  libelf: Removes the package
+
+ Config.in.legacy                                |     9 +
+ package/Config.in                               |     1 -
+ package/avrdude/Config.in                       |     6 +-
+ package/avrdude/avrdude.mk                      |     2 +-
+ package/kexec-lite/Config.in                    |     4 +-
+ package/kexec-lite/kexec-lite.mk                |     2 +-
+ package/libelf/Config.in                        |     7 -
+ package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
+ package/libelf/libelf.mk                        |    23 -
+ package/ltrace/Config.in                        |     1 -
+ package/ltrace/ltrace.mk                        |     2 +-
+ 11 files changed, 20 insertions(+), 12398 deletions(-)
+ delete mode 100644 package/libelf/Config.in
+ delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
+ delete mode 100644 package/libelf/libelf.mk
+
 -- 
-1.7.1
+1.9.1
