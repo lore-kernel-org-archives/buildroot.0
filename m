@@ -1,40 +1,75 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Aug 2014 08:54:09 +0200
-Subject: [Buildroot] [PATCH] package/xbmc: Fix broken variable name
-In-Reply-To: <XnsA3974DCE8DC95berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Thu, 28 Aug 2014 07:38:55 +0200")
-References: <1409172090-20497-1-git-send-email-bernd.kuhls@t-online.de>
- <20140827204942.GA21009@free.fr> <87wq9tsjoc.fsf@dell.be.48ers.dk>
- <20140827213842.GB21009@free.fr>
- <XnsA3974DCE8DC95berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87fvghrtny.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 28 Aug 2014 08:56:29 +0200
+Subject: [Buildroot] [PATCH 1 of 2 for 2014.08] manual/user
+ guide/customization: expand introduction text
+In-Reply-To: <CAHXCMMJ+YMHPyJnSH=m=GQsa1R2EdP1c2haVQ3GjjSitA-QnyQ@mail.gmail.com>
+References: <patchbomb.1409168409@localhost>
+ <e21c7854621143b573bf.1409168410@localhost>
+ <CAHXCMMJ+YMHPyJnSH=m=GQsa1R2EdP1c2haVQ3GjjSitA-QnyQ@mail.gmail.com>
+Message-ID: <CAAXf6LUYenwE3H_n5KNAeQWr43ZrsRQmpnQTbsQzN58pjLJUSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+On Wed, Aug 27, 2014 at 10:22 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Thomas, all,
+>
+> On Wed, Aug 27, 2014 at 9:40 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> This patch expands the introduction text of chapter 'Project-specific
+>> customization' by listing the type of customizations that can be performed
+>> by a project.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>>  docs/manual/customize.txt |  25 +++++++++++++++++++++----
+>>  1 files changed, 21 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+>> --- a/docs/manual/customize.txt
+>> +++ b/docs/manual/customize.txt
+>> @@ -3,11 +3,28 @@
+>>
+>>  == Project-specific customization
+>>
+>> -The following sections describe the various way in which you can
+>> -customize Buildroot for a given project.
+>> +Typical actions you may need to perform for a given project are:
+>>
+>> -For instructions on how to add new packages to Buildroot, refer to
+>> -xref:adding-packages[]
+>> +- configuring Buildroot (including build options and toolchain,
+>> +  bootloader, kernel, package and filesystem image type selection)
+>> +- configuring other components, like the Linux kernel and BusyBox
+>> +- adding project-specific patches to some packages (using
+>> +  +BR2_GLOBAL_PATCH_DIR+)
+>> +- adding or overwriting files on the target filesystem (using
+>> +  +BR2_ROOTFS_OVERLAY+)
+>> +- modifying or deleting files on the target filesystem (using
+>> +  +BR2_ROOTFS_POST_BUILD_SCRIPT+)
+>> +- running arbitrary commands prior to generating the filesystem image
+>> +  (using +BR2_ROOTFS_POST_BUILD_SCRIPT+)
+>> +- running arbitrary commands after generating the filesystem image
+>> +  (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
+>> +- adding project-specific packages
+>> +
+>> +This chapter describes how to make such project-specific customizations
+>> +in Buildroot and how to store them in a way that you can build the same
+>> +image in a reproducible way, even from a clean buildroot tree. By
+>> +following the recommended strategy, you can even use the same Buildroot
+>> +tree to build multiple distinct projects!
+>>
+>
+> This is really good, but instead of implying that customization can
+> stay aside of Buildroot tree, I would be clear about this, and maybe
+> add that this location can be used to store
+> non-redistribuable/non-disclosable (I'm not sure about this last
+> adjective ;]) stuff.
 
- > Hi,
- > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
- > news:20140827213842.GB21009 at free.fr:
+I think I don't fully understand your comment here, could you rephrase?
 
- >>> Then we should imho get rid of the XBMC_DBUS option if that option
- >>> doesn't do anything.
- >> 
- >> That option does select BR2_PACKAGE_DBUS.
-
- > should BR2_PACKAGE_DBUS in turn not select BR2_PACKAGE_XBMC_DBUS then?
-
-No. The dbus package shouldn't know about xbmc (and kconfig won't allow
-circular dependencies).
-
- > Otherwise users might think DBUS is disabled for xbmc while it is enabled due 
- > to BR2_PACKAGE_DBUS. Otoh I could try to provide an xbmc/configure option
- > --en/disable-dbus upstream.
-
-Indeed. I think an explicit configure option would make most sense.
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Thomas
