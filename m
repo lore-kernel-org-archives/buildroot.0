@@ -1,56 +1,63 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Thu, 28 Aug 2014 09:52:17 -0300
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <20140825181614.3f5c22a0@free-electrons.com>
-References: <20140825063011.07B50101AB1@stock.ovh.net>
- <20140825181614.3f5c22a0@free-electrons.com>
-Message-ID: <20140828125217.GA3389@arch.cereza>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 28 Aug 2014 16:59:18 +0400
+Subject: [Buildroot] [PATCH v2] gcc: explicitly use C{XX}FLAGS_FOR_TARGET
+	instead of --enable-target-optspace
+Message-ID: <1409230758-14548-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Ccing Frank)
+The gcc.mk file is passing --enable-target-optspace to gcc configure
+script, to ask for space-optimized (-Os) target libraries. However,
+passing this option has the effect of overriding any custom
+CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
 
-On 25 Aug 06:16 PM, Thomas Petazzoni wrote:
-> >      nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/fd30974bf2f976c600717268ce340f73d48dda34/
-> 
-> sys-utils/prlimit.o: In function `main':
-> prlimit.c:(.text.startup+0x440): undefined reference to `prlimit64'
-> prlimit.c:(.text.startup+0x5d0): undefined reference to `prlimit64'
-> collect2: error: ld returned 1 exit status
-> 
-> Ezequiel, an idea?
-> 
+These are some situations when it is required to pass custom flags on buildong
+of libgcc:
+ * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+ * Particular CPU requires specific instructions for HW support
+ * Deep optimizations
 
-This is probably the same missing fallocate64 deal. The function is simply not
-available, yet detected (Frank: please correct me if I'm wrong).
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-By doing something similar to what we do for e2fsprogs:
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+Compared to v1:
+ 1) All changes are implemented in common part so applicable to all stages.
+ 2) Comments doesn't contain separators that confuse Patchwork
+ 3) Use TARGET_C{XX}FLAGS instead of pre-defined -O2 or -Os
+---
+ package/gcc/gcc.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-+ifeq ($(BR2_nios2),y)
-+UTIL_LINUX_CONF_ENV += ac_cv_func_prlimit=no
-+endif
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b344a14..95c15e2 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -111,12 +111,15 @@ HOST_GCC_COMMON_CONF_ENV = \
+ # Workaround until it's fixed in 4.5.4 or later
+ ifeq ($(ARCH),powerpc)
+ ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-HOST_GCC_COMMON_CONF_OPT += --disable-target-optspace
++TARGET_CFLAGS := $(subst -Os,,$(TARGET_CFLAGS))
++TARGET_CXXFLAGS := $(subst -Os,,$(TARGET_CXXFLAGS))
+ endif
+-else
+-HOST_GCC_COMMON_CONF_OPT += --enable-target-optspace
+ endif
+ 
++# Propagate options used for target software building to GCC target libs
++HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(TARGET_CFLAGS)"
++HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(TARGET_CXXFLAGS)"
 +
-
-I can avoid the SYS_prlimit64 usage. However, we then get conflicting types:
-
-  CC       sys-utils/prlimit.o
-  CC       sys-utils/lscpu.o
-sys-utils/prlimit.c:139:12: error: conflicting types for 'prlimit'
-In file included from /home/zeta/buildroot/buildroot-nios2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/sys/resource.h:25:0,
-                 from sys-utils/prlimit.c:28:
-/home/zeta/buildroot/buildroot-nios2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/bits/resource.h:313:12: note: previous declaration of 'prlimit' was here
-
-I wonder if anyone has an idea to disable the prlimit build, and all the
-commands that depend on it.
-
-Notice that we have a similar issue on other packages, but the proposed
-solution's have been too hacky to be accepted:
-
-http://lists.busybox.net/pipermail/buildroot/2014-May/096203.html
+ # gcc 4.6.x quadmath requires wchar
+ ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+ HOST_GCC_COMMON_CONF_OPT += --disable-libquadmath
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+1.9.3
