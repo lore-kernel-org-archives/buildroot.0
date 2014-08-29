@@ -1,103 +1,34 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 29 Aug 2014 11:20:05 +0200
-Subject: [Buildroot] [PATCH v6 branch/next 2/2] apply-patches.sh: don't
-	print anything when "make -s" is used
-In-Reply-To: <1409304005-10318-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1409304005-10318-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1409304005-10318-3-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Aug 2014 08:08:37 -0300
+Subject: [Buildroot] [PATCH] zsh: bump to version 5.0.6
+Message-ID: <1409310517-32635-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The make "-s" option is used to enable the "Silent operation" so if that
-option is used don't print anything as far as there isn't any error.
-
-Add the "-s" option to "apply-patches.sh" to enable silent operation.
-
-Also add the "BR_SILENT" variable the contain "YES" when "make -s" is
-used so others parts can use it to silence the build as well.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Makefile                         |  2 ++
- package/Makefile.in              |  2 +-
- support/scripts/apply-patches.sh | 17 ++++++++++++++---
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ package/zsh/zsh.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 46b2128..dc7f085 100644
---- a/Makefile
-+++ b/Makefile
-@@ -198,6 +198,8 @@ else
-   Q = @
- endif
- 
-+BR_SILENT = $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))), y)
-+
- # we want bash as shell
- SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
- 	 else if [ -x /bin/bash ]; then echo /bin/bash; \
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bf22123..91cb3b8 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -222,7 +222,7 @@ FLEX := $(shell which flex || type -p flex)
- BISON := $(shell which bison || type -p bison)
- SED := $(shell which sed || type -p sed) -i -e
- 
--APPLY_PATCHES = support/scripts/apply-patches.sh
-+APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT), -s)
- 
- HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
- HOST_CFLAGS   ?= -O2
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 37f2d81..b32d592 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -6,6 +6,8 @@
- # (c) 2002 Erik Andersen <andersen@codepoet.org>
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 8bd2fb0..f4daeeb 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,11 +4,10 @@
  #
- # Parameters:
-+# - "-s", optional. Silent operation, don't print anything if there
-+# isn't any error.
- # - the build directory, optional, default value is '.'. The place where are
- # the package sources.
- # - the patch directory, optional, default '../kernel-patches'. The place
-@@ -28,6 +30,13 @@
- # applied. The list of the patches applied is stored in '.applied_patches_list'
- # file in the build directory.
+ ################################################################################
  
-+silent=
-+if [ "$1" = "-s" ] ; then
-+    # add option to be used by the patch tool
-+    silent=-s
-+    shift
-+fi
-+
- # Set directories from arguments, or use defaults.
- builddir=${1-.}
- patchdir=${2-../kernel-patches}
-@@ -77,14 +86,16 @@ function apply_patch {
- 	return 0
- 	;;
-     esac
--    echo ""
--    echo "Applying $patch using ${type}: "
-+    if [ -z "$silent" ] ; then
-+	echo ""
-+	echo "Applying $patch using ${type}: "
-+    fi
-     if [ ! -e "${path}/$patch" ] ; then
- 	echo "Error: missing patch file ${path}/$patch"
- 	exit 1
-     fi
-     echo $patch >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
- 	exit 1
+-ZSH_VERSION = 5.0.5
++ZSH_VERSION = 5.0.6
+ ZSH_SITE = http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+-
+ ZSH_DEPENDENCIES = ncurses
+ 
+ $(eval $(autotools-package))
 -- 
-2.1.0
+1.8.5.5
