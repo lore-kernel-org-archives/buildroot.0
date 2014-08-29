@@ -1,61 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 29 Aug 2014 14:39:07 +0100
-Subject: [Buildroot] [PATCH] libarchive: avoid some tools to build
-	statically on shared builds
-Message-ID: <1409319547-25577-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Aug 2014 17:41:32 +0200
+Subject: [Buildroot] [PATCH] xscreensaver: link to gettext's libintl
+ only when needed
+In-Reply-To: <1409314139-25110-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1409314139-25110-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140829174132.5e77dd3b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some libarchive tools, like bsdtar, builds statically by default
-although libarchive itself is being built dynamically. We can force
-those tools to build the same way as libarchive by using the right
-configure options.
+Dear Vicente Olivert Riera,
 
-Fixes:
-  http://autobuild.buildroot.net/results/b8f/b8f7a29787ea1cc5c98e4cbd5f47f257f9b306f2/
+On Fri, 29 Aug 2014 13:08:59 +0100, Vicente Olivert Riera wrote:
+> Use the BR2_NEEDS_GETTEXT option to link to gettext's libintl only when
+> it's necessary.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/ace/aceb83ff92957accab4e2f64e450b2d2837cb2ba/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/xscreensaver/xscreensaver.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+> index 0e84d27..1d88c03 100644
+> --- a/package/xscreensaver/xscreensaver.mk
+> +++ b/package/xscreensaver/xscreensaver.mk
+> @@ -14,7 +14,7 @@ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+>  XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+>  	$(if $(BR2_PACKAGE_GETTEXT),gettext)
+>  
+> -XSCREENSAVER_CONF_ENV = $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
+> +XSCREENSAVER_CONF_ENV = $(if $(BR2_NEED_GETTEXT_IF_LOCALE),LIBS=-lintl)
+>  
+>  # otherwise we end up with host include/library dirs passed to the
+>  # compiler/linker
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libarchive/libarchive.mk |   24 +++++++++++++++++++++---
- 1 files changed, 21 insertions(+), 3 deletions(-)
+There is already http://patchwork.ozlabs.org/patch/383576/, which seems
+more complete than your patch, no?
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 8c6951d..979e65c 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -9,9 +9,27 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
- LIBARCHIVE_LICENSE_FILES = COPYING
--LIBARCHIVE_CONF_OPT = --without-lzma \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
-+LIBARCHIVE_CONF_OPT = --without-lzma
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBARCHIVE_CONF_OPT += --enable-bsdtar=static
-+else
-+LIBARCHIVE_CONF_OPT += --enable-bsdtar=shared
-+endif
-+else
-+LIBARCHIVE_CONF_OPT += --disable-bsdtar
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),y)
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBARCHIVE_CONF_OPT += --enable-bsdcpio=static
-+else
-+LIBARCHIVE_CONF_OPT += --enable-bsdcpio=shared
-+endif
-+else
-+LIBARCHIVE_CONF_OPT += --disable-bsdcpio
-+endif
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
- LIBARCHIVE_DEPENDENCIES += acl
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
