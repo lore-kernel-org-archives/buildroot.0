@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 09:32:07 +0200
-Subject: [Buildroot] [PATCH] exim: requires thread support
-Message-ID: <1409297527-27633-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Aug 2014 09:51:48 +0200
+Subject: [Buildroot] [PATCH] lftp: add missing host-pkgconf dependency
+Message-ID: <1409298708-16291-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+lftp configure.ac uses PKG_CHECK_MODULES, so it must have host-pkgconf
+in its dependency, otherwise the autoreconf step fails due to the lack
+of pkg.m4.
+
 Fixes:
 
-  http://autobuild.buildroot.net/results/98a1acb58665e6cd2df354fc63afef1d4606c6e0/
+  http://autobuild.buildroot.org/results/b16/b16d964f275d4d8703665236b969cc19f7ef20be/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exim/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lftp/lftp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/exim/Config.in b/package/exim/Config.in
-index bd4ef1f..230ac86 100644
---- a/package/exim/Config.in
-+++ b/package/exim/Config.in
-@@ -1,6 +1,10 @@
-+comment "exim needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_EXIM
- 	bool "exim"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_BERKELEYDB
- 	help
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 431fadb..20ab400 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -9,7 +9,7 @@ LFTP_SITE    = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPLv3+
+ LFTP_LICENSE_FILES = COPYING
+ LFTP_AUTORECONF = YES
+-LFTP_DEPENDENCIES  = readline zlib
++LFTP_DEPENDENCIES  = readline zlib host-pkgconf
+ 
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ LFTP_CONF_OPT += --with-modules
 -- 
 2.0.0
