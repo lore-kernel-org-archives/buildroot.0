@@ -1,47 +1,89 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Aug 2014 09:56:01 +0200
-Subject: [Buildroot] [PATCH 3/3] ruby: bump to version 2.1.2
-In-Reply-To: <20140829091725.1fd32d4d@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 29 Aug 2014 09:17:25 +0200")
-References: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1409264259-13058-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <877g1rsr62.fsf@dell.be.48ers.dk>
- <20140829091725.1fd32d4d@free-electrons.com>
-Message-ID: <87ppfjrapa.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Aug 2014 09:17:38 +0200
+Subject: [Buildroot] [git commit branch/next] packages: no longer pass
+	--disable-dependency-tracking in individual packages
+Message-ID: <20140829075626.DA4959D10D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=aec8d7046ca94bb2928bb3bbf6ad8d525c0098ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Hi,
+Now that --disable-dependency-tracking is passed by the
+autotools-package infrastructure, there's no longer any reason to pass
+it in individual packages.
 
- >> I don't really know much about Ruby. Is 2.1.x compatible with 1.9.x or
- >> is it like Python2/Python3?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/agentpp/agentpp.mk     |    3 +--
+ package/coreutils/coreutils.mk |    1 -
+ package/iperf/iperf.mk         |    1 -
+ package/metacity/metacity.mk   |    1 -
+ package/mysql/mysql.mk         |    1 -
+ 5 files changed, 1 insertions(+), 6 deletions(-)
 
- > I don't really know much about Ruby either. But, about Ruby 2.0,
- > Wikipedia says:
-
- > ""
- > Ruby 2.0 is intended to be fully backward compatible with Ruby 1.9.3.
- > As of the official 2.0.0 release on February 24, 2013, there were only
- > five known (minor) incompatibilities.
- > ""
-
- > And then, about Ruby 2.1, they say:
-
- > ""
- > Ruby 2.1.0 was released on Christmas Day in 2013.[31] The release
- > includes speed-ups, bugfixes, and library updates. Starting with 2.1.0,
- > Ruby is using semantic versioning.
- > ""
-
- > So I believe we can simply bump the ruby package to 2.1, and not bother
- > keeping two separate packages.
-
-Ok, thanks - Committed to next.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
+index 46cdc1d..3656fb1 100644
+--- a/package/agentpp/agentpp.mk
++++ b/package/agentpp/agentpp.mk
+@@ -14,7 +14,6 @@ AGENTPP_DEPENDENCIES = host-pkgconf snmppp
+ AGENTPP_CONF_OPT += \
+ 	--disable-proxy \
+ 	--disable-forwarder \
+-	--disable-rpath \
+-	--disable-dependency-tracking
++	--disable-rpath
+ 
+ $(eval $(autotools-package))
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index af202b4..07a1347 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -61,7 +61,6 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 		PERL=missing
+ 
+ COREUTILS_CONF_OPT = --disable-rpath \
+-		--disable-dependency-tracking \
+ 		--enable-install-program=hostname
+ 
+ define COREUTILS_POST_INSTALL
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index c570d67..1e5606e 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -13,7 +13,6 @@ IPERF_CONF_ENV = \
+ 	ac_cv_sizeof_bool=1
+ 
+ IPERF_CONF_OPT = \
+-	--disable-dependency-tracking \
+ 	--disable-web100
+ 
+ $(eval $(autotools-package))
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 6ded5d1..60c6250 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -15,7 +15,6 @@ METACITY_LICENSE_FILES = COPYING
+ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib \
+ 		--disable-glibtest --disable-gconf \
+-		--disable-dependency-tracking \
+ 		--disable-sm --disable-startup-notification
+ 
+ METACITY_DEPENDENCIES = libgtk2 \
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 0802860..e5124d5 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -51,7 +51,6 @@ HOST_MYSQL_CONF_OPT = \
+ 
+ MYSQL_CONF_OPT += \
+ 	--localstatedir=/var/mysql \
+-	--disable-dependency-tracking \
+ 	--with-atomic-ops=up \
+ 	--with-embedded-server \
+ 	--without-query-cache \
