@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 19:24:43 +0200
-Subject: [Buildroot] [PATCH v2 1/1] autobuilder: branch support
-In-Reply-To: <1408625696-42975-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-References: <1408625696-42975-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-Message-ID: <20140829192443.0fb6c813@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 29 Aug 2014 20:07:11 +0200
+Subject: [Buildroot] Custom kernal patch not being run
+In-Reply-To: <1409258595604-78157.post@n4.nabble.com>
+References: <1409248855849-78152.post@n4.nabble.com>
+ <8b3f2afb-67cb-4547-8956-fc4ed95402e5@email.android.com>
+ <B9E2549378AA7A4EB6855F980A8E5B88F2EC59@MSCENT02.corp.mercury-security.com>
+ <CAAXf6LVmYO+uteXmaZ5X6r1TvpM=5Z-Gez3-gERnCr_2UqzCzQ@mail.gmail.com>
+ <1409258595604-78157.post@n4.nabble.com>
+Message-ID: <CAAXf6LWNgNNArj9eNs2ANESZsmm970cjkce9-+VxdmXNSJ9sjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Hi Charles,
 
-On Thu, 21 Aug 2014 07:54:56 -0500, Matt Weber wrote:
-> Adds an option to specify a specific branch for the autobuilder
-> to execute against (Defaults to the master branch).
-> 
-> Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
-> ---
-> 
-> Changes v1 -> v2
->  - Fixed assignment of br_branch value to variable
->    when reading config from file. (Suggested by Clayton S)
+On Thu, Aug 28, 2014 at 10:43 PM, buildrootcharles
+<charles.s@mercury-security.com> wrote:
+> Thomas, thanks again for the reply. I have tried what you suggested will no
+> luck. The only message I see regarding "patch" for my "make linux-dirclean
+> linux" command is ">>> linux custom Download additional patches". Could this
+> be an issue with the configuration I have related to my custom linux
+> tarball? The options I have selected in the Kernel options are:
+>
+> [*] Linux Kernel
+>     Kernel version (Custom tarball)  --->
+> (file:///home/MSC/linux-3.10.4-July302014.tar.gz) URL of custom ...
+> (/home/MSC/BuildRoot/board/xxxx/linux-custom) Custom kernel patches
+>     Kernel configuration (Using a custom config file)  --->
+> (/home/MSC/customfile.config) Configuration file path
+>
+> No other options selected
+>
 
-What is the intended usage of this? Because customizing the branch
-without being able to customize the Git repository from which we're
-getting the Buildroot sources seems a bit odd. Or is it just to test
-the 'next' branch?
+Which version of Buildroot are you using? Is this a recent release?
 
-Also, there's the issue of the build results being submitted on
-autobuild.buildroot.org: on this site, for now, we don't have any
-concept of "branch" or multiple versions being tested. We simply assume
-that the only thing we're testing is the master branch, and that this
-branch is evolving progressively over time. If the autobuild-run script
-then grows the capability of testing other branches/repositories than
-just the master branch of the official Buildroot repository, it raises
-the question of what happens when those build results are submitted to
-autobuild.buildroot.org.
+Also, please send us your .config so we can try to reproduce.
 
-Thanks!
+The message 'Downloading additional patches' should not appear for
+local patches, i.e. those that are in a directory, but only for http
+or ftp patches.
 
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
