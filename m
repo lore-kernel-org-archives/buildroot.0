@@ -1,64 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 29 Aug 2014 21:42:31 +0200
-Subject: [Buildroot] [PATCH] host-gdb: enable terminal user interface support
-Message-ID: <1409341351-5866-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 29 Aug 2014 21:50:38 +0200
+Subject: [Buildroot] [PATCH 0 of 3 v2 for 2014.08] Manual improvements part 4
+Message-ID: <patchbomb.1409341838@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configuration option to compile host-gdb with
---enbale-tui switch.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+This short series starts improving the 'Project-specific customizations'
+chapter in the manual. Subsequent patches are planned (even for 2014.08) but
+since the release is almost there I'm sending out patches as soon as they
+are available, to give enough time for review.
+
+Further changes planned:
+- reworking the 'Customizing the generated target filesystem' section to
+  emphasize the recommendations of rootfs-overlay + post-build
+- rework the rest of the chapter as there is some duplicate and inconsistent
+  information.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/gdb/Config.in.host | 6 ++++++
- package/gdb/gdb.mk         | 8 +++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Thomas De Schampheleire (3)
+  manual/user guide/customization: expand introduction text
+  manual/user guide/customization: add section with recommended dir structure
+  manual/user guide/customization: rework section on BR2_EXTERNAL
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index cbc1361..8846eaf 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -13,6 +13,12 @@ config BR2_PACKAGE_HOST_GDB
- 
- if BR2_PACKAGE_HOST_GDB
- 
-+config BR2_PACKAGE_HOST_GDB_TUI
-+	bool "GDB TUI support"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  This option enables terminal user interface (TUI) for gdb
-+
- choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 8ab264b..7e87bf9 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -114,7 +114,6 @@ HOST_GDB_CONF_OPT = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--enable-static --disable-shared \
- 	--without-uiout \
--	--disable-tui \
- 	--disable-gdbtk \
- 	--without-x \
- 	--enable-threads \
-@@ -123,6 +122,13 @@ HOST_GDB_CONF_OPT = \
- 	$(GDB_DISABLE_BINUTILS_CONF_OPT) \
- 	--disable-sim
- 
-+ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
-+	HOST_GDB_DEPENDENCIES += host-ncurses
-+	HOST_GDB_CONF_OPT += --enable-tui
-+else
-+	HOST_GDB_CONF_OPT += --disable-tui
-+endif
-+
- ifeq ($(GDB_FROM_GIT),y)
- HOST_GDB_DEPENDENCIES += host-texinfo
- else
--- 
-1.8.3.2
+ docs/manual/customize-directory-structure.txt |  59 ++++++++++++
+ docs/manual/customize-outside-br.txt          |  90 ++++++------------
+ docs/manual/customize.txt                     |  39 ++++++-
+ 3 files changed, 121 insertions(+), 67 deletions(-)
