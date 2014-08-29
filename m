@@ -1,67 +1,40 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 30 Aug 2014 00:06:02 +0200
-Subject: [Buildroot] [PATCH v2] host-gdb: enable terminal user interface
-	support
-Message-ID: <1409349962-6611-1-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Sat, 30 Aug 2014 00:47:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdaemon: add patch to fix build
+	with the musl C library
+Message-ID: <1409352429-14773-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configuration option to compile host-gdb with
---enbale-tui switch.
+examples/testd.c: As the C POSIX library recommends include the <unistd.h>
+instead of <sys/unistd.h>. This removes an error when building libdaemon
+against the musl C library.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
-Changes:
-	v2: as there is no package like HOST_NCURSES, don't select anything (Thomas Petazzoni)
+ .../0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch     | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch
 
- package/gdb/Config.in.host | 5 +++++
- package/gdb/gdb.mk         | 8 +++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index cbc1361..e48dc10 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -13,6 +13,11 @@ config BR2_PACKAGE_HOST_GDB
- 
- if BR2_PACKAGE_HOST_GDB
- 
-+config BR2_PACKAGE_HOST_GDB_TUI
-+	bool "GDB TUI support"
-+	help
-+	  This option enables terminal user interface (TUI) for gdb
-+
- choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 8ab264b..7e87bf9 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -114,7 +114,6 @@ HOST_GDB_CONF_OPT = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--enable-static --disable-shared \
- 	--without-uiout \
--	--disable-tui \
- 	--disable-gdbtk \
- 	--without-x \
- 	--enable-threads \
-@@ -123,6 +122,13 @@ HOST_GDB_CONF_OPT = \
- 	$(GDB_DISABLE_BINUTILS_CONF_OPT) \
- 	--disable-sim
- 
-+ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
-+	HOST_GDB_DEPENDENCIES += host-ncurses
-+	HOST_GDB_CONF_OPT += --enable-tui
-+else
-+	HOST_GDB_CONF_OPT += --disable-tui
-+endif
-+
- ifeq ($(GDB_FROM_GIT),y)
- HOST_GDB_DEPENDENCIES += host-texinfo
- else
+diff --git a/package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch b/package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch
+new file mode 100644
+index 0000000..00516f5
+--- /dev/null
++++ b/package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch
+@@ -0,0 +1,11 @@
++--- libdaemon-0.14.orig/examples/testd.c	2014-08-30 00:27:08.359832977 +0200
+++++ libdaemon-0.14/examples/testd.c	2014-08-30 00:27:25.439832670 +0200
++@@ -23,7 +23,7 @@
++ #include <string.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ #include <sys/select.h>
++ 
++ #include <libdaemon/dfork.h>
 -- 
-1.8.3.2
+2.1.0
