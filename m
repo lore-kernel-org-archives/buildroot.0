@@ -1,33 +1,60 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 29 Aug 2014 10:51:53 +0200
-Subject: [Buildroot] [PATCH] support/script/scancpan: don't generate the
-	trailing slash in <PKG>_SITE variable
-Message-ID: <1409302313-12483-1-git-send-email-francois.perrad@gadz.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 29 Aug 2014 11:20:03 +0200
+Subject: [Buildroot] [PATCH v6 branch/next 0/2] apply-patches.sh: be quiet
+	when "make -s" is used
+Message-ID: <1409304005-10318-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The trailing slash was removed in all packages, so don't generate it.
-See http://git.buildroot.net/buildroot/commit/?id=c7f4b964718bc5a3329bb730f59e24091ecbc7a2
+To reduce further the noise when "make -s" is used, silence the
+"apply-patches.sh" script.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 1 +
- 1 file changed, 1 insertion(+)
+v6:
+ - fix code that detect the use of the "-s" flag to be able to detect:
+   -s --warn-undefined-variables -i
+   the previous version was not able to detect correctly the use of multiple
+   short flags.
+v5:
+ - add review tag on the first patch
+ - use filter function instead of substring function on the second patch
+v4:
+ - remove use of [[...]] construct to easy up accepting this patch set
+v3:
+ - Remove the already merged patch
+ - Use double $$ inside hooks (Yann)
+ - Add patch to use [[ ]] construct
+v2:
+ - move the second patch as first to easy up merging
+ - split the first patch in two (Yann)
+ - add BR_SILENT variable (Yann)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 50d9bab..e738a83 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -636,6 +636,7 @@ while (my ($distname, $dist) = each %dist) {
-         # the scheme is not used, because the job is done by the BR download infrastructure
-         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
-         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
-+        $directories =~ s|/$||;
-         my $dependencies = join q{ }, qw( = perl ),
-                                       map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
+Fabio Porcedda (2):
+  apply-patches.sh: Use the "APPLY_PATCHES" variable to call the script
+  apply-patches.sh: don't print anything when "make -s" is used
+
+ Makefile                              |  2 ++
+ boot/at91bootstrap/at91bootstrap.mk   |  2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk |  2 +-
+ boot/barebox/barebox.mk               |  2 +-
+ boot/uboot/uboot.mk                   |  2 +-
+ linux/linux-ext-rtai.mk               |  4 ++--
+ linux/linux.mk                        |  6 +++---
+ package/Makefile.in                   |  2 ++
+ package/cvs/cvs.mk                    |  2 +-
+ package/gcc/gcc.mk                    |  4 ++--
+ package/input-tools/input-tools.mk    |  2 +-
+ package/mii-diag/mii-diag.mk          |  2 +-
+ package/pkg-autotools.mk              | 12 ++++++------
+ package/pkg-generic.mk                |  6 +++---
+ package/setserial/setserial.mk        |  2 +-
+ package/sysklogd/sysklogd.mk          |  2 +-
+ package/sysvinit/sysvinit.mk          |  2 +-
+ package/thttpd/thttpd.mk              |  2 +-
+ support/scripts/apply-patches.sh      | 17 ++++++++++++++---
+ 19 files changed, 45 insertions(+), 30 deletions(-)
+
 -- 
-1.9.1
+2.1.0
