@@ -1,27 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Aug 2014 09:15:01 +0200
-Subject: [Buildroot] [PATCH 3/3] ruby: bump to version 2.1.2
-In-Reply-To: <1409264259-13058-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 29 Aug 2014 00:17:39 +0200")
-References: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1409264259-13058-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877g1rsr62.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Aug 2014 09:13:14 +0200
+Subject: [Buildroot] [git commit branch/next] squid: bump to version 3.4.7
+Message-ID: <20140829071519.8D7239D587@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=49e36dcf1307b81b7f24c9d7feab71183d86c2e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This commit bumps Ruby to version 2.1.2. It was quickly runtime tested
- > on ARM EBIhf.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > In addition to this it changes the site to an http:// location, which
- > is the official one advertised on the Ruby web site.
-
-I don't really know much about Ruby. Is 2.1.x compatible with 1.9.x or
-is it like Python2/Python3?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6c36c61..6dffae8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
