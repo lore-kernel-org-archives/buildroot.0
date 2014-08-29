@@ -1,61 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 09:15:20 +0200
-Subject: [Buildroot] HDMI output on IGEP-v2
-In-Reply-To: <CAAvU2=9drSkLDzVZaZ5i6btpgwYQf-EGqihmN0DD=bsBODiXfg@mail.gmail.com>
-References: <CAAvU2=9drSkLDzVZaZ5i6btpgwYQf-EGqihmN0DD=bsBODiXfg@mail.gmail.com>
-Message-ID: <20140829091520.49903445@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 Aug 2014 09:16:07 +0200
+Subject: [Buildroot] [PATCH 1/3] ruby: requires shared library
+In-Reply-To: <1409264259-13058-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 29 Aug 2014 00:17:37 +0200")
+References: <1409264259-13058-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1409264259-13058-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738cfsr48.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Oscar Abril,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 28 Aug 2014 23:30:12 +0200, Oscar Abril wrote:
+ > Not matter what you do, the Ruby build system wants to use shared
+ > libraries for the encoding modules. Therefore, this commit disallows
+ > the selection of Ruby in BR2_PREFER_STATIC_LIB situations.
 
-> I have been working with the IGEP-v2 for some days and I'm stuck, i can't
-> make the HDMI output works.
-> 
-> These are my settings:
-> 
-> UBoot:
-> 
-> # cat /proc/cmdline
-> console=ttyO2,115200n8 mpurate=auto vram=12M
-> omapfb.mode=dvi:1024x768MR-16 at 60 omapfb.debug=y omapdss.def_disp=dvi
-> root=/dev/nfs ip=190.160.0.100
-> nfsroot=190.160.0.1:/home/oscarin/Downloads/felabs/sysdev/tinysystem/nfsroot
-> rw
-> 
-> Buildroot config -> attached.
-> Buildroot_Kernel_config -> attached
-> System Initialization -> attached
-> 
-> The system works as it should be, i have python, networking, console,
-> "/class/leds" etc working, but the HDMI is not..
-> 
-> I can't see in /dev/ any fbx (the kernel was compiled with fb options). How
-> could i load it ??
-> 
-> Would you please guide me to make it works ??
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Your question is not really Buildroot related, it's really a kernel
-issue on a specific platform.
+Committed, thanks.
 
-That being said, I would recommend you to first move from the 3.11
-kernel you're using to the 3.16 kernel. I believe between 3.11 and
-3.16, a number of improvements have been made in the Device Tree based
-support for graphics output in OMAP2 based platforms, especially IGEPv2.
-
-And if 3.16 still doesn't work, you'll anyway be running the latest
-stable version of the Linux kernel, which would allow you to report a
-bug to the kernel developers about non-working HDMI.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
