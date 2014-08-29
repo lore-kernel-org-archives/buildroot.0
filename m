@@ -1,40 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Aug 2014 10:00:43 +0200
-Subject: [Buildroot] [git commit] lftp: add missing host-pkgconf dependency
-Message-ID: <20140829080058.B4CFD9D537@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 29 Aug 2014 10:51:53 +0200
+Subject: [Buildroot] [PATCH] support/script/scancpan: don't generate the
+	trailing slash in <PKG>_SITE variable
+Message-ID: <1409302313-12483-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9ad5ddfb1544a61c271354a1070edfec730bda4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The trailing slash was removed in all packages, so don't generate it.
+See http://git.buildroot.net/buildroot/commit/?id=c7f4b964718bc5a3329bb730f59e24091ecbc7a2
 
-lftp configure.ac uses PKG_CHECK_MODULES, so it must have host-pkgconf
-in its dependency, otherwise the autoreconf step fails due to the lack
-of pkg.m4.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/b16/b16d964f275d4d8703665236b969cc19f7ef20be/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lftp/lftp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ support/scripts/scancpan | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 431fadb..ac0f63b 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -9,7 +9,7 @@ LFTP_SITE    = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
- LFTP_LICENSE_FILES = COPYING
- LFTP_AUTORECONF = YES
--LFTP_DEPENDENCIES  = readline zlib
-+LFTP_DEPENDENCIES = readline zlib host-pkgconf
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- LFTP_CONF_OPT += --with-modules
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 50d9bab..e738a83 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -636,6 +636,7 @@ while (my ($distname, $dist) = each %dist) {
+         # the scheme is not used, because the job is done by the BR download infrastructure
+         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
+         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
++        $directories =~ s|/$||;
+         my $dependencies = join q{ }, qw( = perl ),
+                                       map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
+                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
+-- 
+1.9.1
