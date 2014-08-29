@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Aug 2014 19:18:10 +0200
-Subject: [Buildroot] [autobuild PATCH] autobuild-run: do not set
- BR2_JLEVEL and BR2_DL_DIR in the configuration
-In-Reply-To: <1407311907-3878-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1407311907-3878-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140829191810.73bcff76@free-electrons.com>
+Date: Fri, 29 Aug 2014 19:24:43 +0200
+Subject: [Buildroot] [PATCH v2 1/1] autobuilder: branch support
+In-Reply-To: <1408625696-42975-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+References: <1408625696-42975-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+Message-ID: <20140829192443.0fb6c813@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Matt Weber,
 
-On Wed,  6 Aug 2014 09:58:27 +0200, Fabio Porcedda wrote:
-> Instead of setting BR2_JLEVEL and BR2_DL_DIR in the configuration file
-> pass those variable as options on the command line, so that the
-> configuration files can be re-used on other machines with no change.
+On Thu, 21 Aug 2014 07:54:56 -0500, Matt Weber wrote:
+> Adds an option to specify a specific branch for the autobuilder
+> to execute against (Defaults to the master branch).
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
 > ---
->  scripts/autobuild-run | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> Changes v1 -> v2
+>  - Fixed assignment of br_branch value to variable
+>    when reading config from file. (Suggested by Clayton S)
 
-Thanks, I've applied your patch.
+What is the intended usage of this? Because customizing the branch
+without being able to customize the Git repository from which we're
+getting the Buildroot sources seems a bit odd. Or is it just to test
+the 'next' branch?
 
-I'll notify the people running the script so that they update it. It
-will therefore take a bit of time before seeing configuration that
-don't set BR2_JLEVEL and BR2_DL_DIR.
+Also, there's the issue of the build results being submitted on
+autobuild.buildroot.org: on this site, for now, we don't have any
+concept of "branch" or multiple versions being tested. We simply assume
+that the only thing we're testing is the master branch, and that this
+branch is evolving progressively over time. If the autobuild-run script
+then grows the capability of testing other branches/repositories than
+just the master branch of the official Buildroot repository, it raises
+the question of what happens when those build results are submitted to
+autobuild.buildroot.org.
+
+Thanks!
 
 Thomas
 -- 
