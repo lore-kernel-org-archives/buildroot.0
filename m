@@ -1,32 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Aug 2014 21:33:37 +0200
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.03
-Message-ID: <20140901132446.627379D5B9@busybox.osuosl.org>
+Date: Fri, 29 Aug 2014 09:17:38 +0200
+Subject: [Buildroot] [git commit] packages: no longer pass
+	--disable-dependency-tracking in individual packages
+Message-ID: <20140901132446.9CA7F9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e55a68ee16118e62766c1d9955c9571f4d2b0a03
+commit: http://git.buildroot.net/buildroot/commit/?id=aec8d7046ca94bb2928bb3bbf6ad8d525c0098ab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Now that --disable-dependency-tracking is passed by the
+autotools-package infrastructure, there's no longer any reason to pass
+it in individual packages.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/agentpp/agentpp.mk     |    3 +--
+ package/coreutils/coreutils.mk |    1 -
+ package/iperf/iperf.mk         |    1 -
+ package/metacity/metacity.mk   |    1 -
+ package/mysql/mysql.mk         |    1 -
+ 5 files changed, 1 insertions(+), 6 deletions(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 2da0e95..4de1650 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
+index 46cdc1d..3656fb1 100644
+--- a/package/agentpp/agentpp.mk
++++ b/package/agentpp/agentpp.mk
+@@ -14,7 +14,6 @@ AGENTPP_DEPENDENCIES = host-pkgconf snmppp
+ AGENTPP_CONF_OPT += \
+ 	--disable-proxy \
+ 	--disable-forwarder \
+-	--disable-rpath \
+-	--disable-dependency-tracking
++	--disable-rpath
  
--STUNNEL_VERSION = 5.02
-+STUNNEL_VERSION = 5.03
- STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPT = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
+ $(eval $(autotools-package))
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index af202b4..07a1347 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -61,7 +61,6 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 		PERL=missing
+ 
+ COREUTILS_CONF_OPT = --disable-rpath \
+-		--disable-dependency-tracking \
+ 		--enable-install-program=hostname
+ 
+ define COREUTILS_POST_INSTALL
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index c570d67..1e5606e 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -13,7 +13,6 @@ IPERF_CONF_ENV = \
+ 	ac_cv_sizeof_bool=1
+ 
+ IPERF_CONF_OPT = \
+-	--disable-dependency-tracking \
+ 	--disable-web100
+ 
+ $(eval $(autotools-package))
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 6ded5d1..60c6250 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -15,7 +15,6 @@ METACITY_LICENSE_FILES = COPYING
+ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib \
+ 		--disable-glibtest --disable-gconf \
+-		--disable-dependency-tracking \
+ 		--disable-sm --disable-startup-notification
+ 
+ METACITY_DEPENDENCIES = libgtk2 \
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 0802860..e5124d5 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -51,7 +51,6 @@ HOST_MYSQL_CONF_OPT = \
+ 
+ MYSQL_CONF_OPT += \
+ 	--localstatedir=/var/mysql \
+-	--disable-dependency-tracking \
+ 	--with-atomic-ops=up \
+ 	--with-embedded-server \
+ 	--without-query-cache \
