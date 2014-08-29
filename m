@@ -1,29 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Aug 2014 10:00:03 +0200
-Subject: [Buildroot] [PATCH] lftp: add missing host-pkgconf dependency
-In-Reply-To: <1409298708-16291-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 29 Aug 2014 09:51:48 +0200")
-References: <1409298708-16291-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2bjraik.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Aug 2014 09:59:32 +0200
+Subject: [Buildroot] [git commit] exim: requires thread support
+Message-ID: <20140829080058.A95919D588@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c1ef53ed7e3d9a2369eac11161cc8179d3081f71
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > lftp configure.ac uses PKG_CHECK_MODULES, so it must have host-pkgconf
- > in its dependency, otherwise the autoreconf step fails due to the lack
- > of pkg.m4.
+Fixes:
 
- > Fixes:
+  http://autobuild.buildroot.net/results/98a1acb58665e6cd2df354fc63afef1d4606c6e0/
 
- >   http://autobuild.buildroot.org/results/b16/b16d964f275d4d8703665236b969cc19f7ef20be/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/exim/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/exim/Config.in b/package/exim/Config.in
+index bd4ef1f..230ac86 100644
+--- a/package/exim/Config.in
++++ b/package/exim/Config.in
+@@ -1,6 +1,10 @@
++comment "exim needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_EXIM
+ 	bool "exim"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	help
