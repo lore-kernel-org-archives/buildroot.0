@@ -1,55 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Aug 2014 09:17:33 +0200
-Subject: [Buildroot] [git commit branch/next] pkg-autotools: use
-	--disable-dependency-tracking
-Message-ID: <20140829075626.CAAE19D587@busybox.osuosl.org>
+Date: Fri, 29 Aug 2014 09:56:11 +0200
+Subject: [Buildroot] [git commit branch/next] ruby: bump to version 2.1.2
+Message-ID: <20140829075626.E662C9D10D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
+commit: http://git.buildroot.net/buildroot/commit/?id=fa7e146c9c533ce02c52e95da9becdeed5f64900
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-By default, automake does "dependency tracking", which allows the
-generated Makefile to contain the necessary dependencies to
-automatically rebuild the appropriate C files when included header
-files are changed. This dependency tracking is nice when doing active
-development on the package, but not really useful when doing a
-one-time build of the package. According to automake's
-documentation[1], disabling the dependency tracking provides a small
-speed-up.
+This commit bumps Ruby to version 2.1.2. It was quickly runtime tested
+on ARM EBIhf.
 
-In some very unscientific measurements (i.e repeated only once), we
-have noticed a ~3.6% reduction of the total build time of a Buildroot
-toolchain after applying this patch.
-
-[1] http://www.gnu.org/software/automake/manual/html_node/Dependency-Tracking.html
+In addition to this it changes the site to an http:// location, which
+is the official one advertised on the Ruby web site.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-autotools.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/ruby/ruby.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index bcc648d..83299cf 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -140,6 +140,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		--disable-dependency-tracking \
- 		$$(DISABLE_NLS) \
- 		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
-@@ -169,6 +170,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-documentation \
- 		--with-xmlto=no \
- 		--with-fop=no \
-+		--disable-dependency-tracking \
- 		$$(QUIET) $$($$(PKG)_CONF_OPT) \
- 	)
- endef
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 66556c3..247d116 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-RUBY_VERSION_MAJOR = 1.9
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).3-p545
+-# 1.9.1 directory used for extensions
+-RUBY_VERSION_EXT = 1.9.1
+-RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
++RUBY_VERSION_MAJOR = 2.1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION_EXT = 2.1.0
++RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
