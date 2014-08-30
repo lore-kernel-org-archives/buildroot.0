@@ -1,22 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Aug 2014 09:08:20 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libao: bump to version 1.2.0
-In-Reply-To: <1409353283-19123-1-git-send-email-jkrause@posteo.de>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Sat, 30 Aug 2014 01:01:23 +0200")
-References: <1409353283-19123-1-git-send-email-jkrause@posteo.de>
-Message-ID: <87iolapi8r.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Aug 2014 09:02:00 +0200
+Subject: [Buildroot] [git commit branch/next] zsh: bump to version 5.0.6
+Message-ID: <20140830071153.4199C9D546@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=76eee8c6ab3e684f680c8d199f4024ce6b38c53a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zsh/zsh.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 8bd2fb0..f4daeeb 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-ZSH_VERSION = 5.0.5
++ZSH_VERSION = 5.0.6
+ ZSH_SITE = http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+-
+ ZSH_DEPENDENCIES = ncurses
+ 
+ $(eval $(autotools-package))
