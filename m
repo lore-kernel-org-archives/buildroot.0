@@ -1,37 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Aug 2014 09:30:45 +0200
-Subject: [Buildroot] About i386 Architecture and Grub2
-In-Reply-To: <1409380559.92739.YahooMailNeo@web141703.mail.bf1.yahoo.com>
-References: <1408534632.82498.YahooMailNeo@web141703.mail.bf1.yahoo.com>
- <20140820141013.24de59df@free-electrons.com>
- <1408588309.32587.YahooMailNeo@web141705.mail.bf1.yahoo.com>
- <20140821150337.3bc770ae@free-electrons.com>
- <1408871597.42022.YahooMailNeo@web141705.mail.bf1.yahoo.com>
- <1409380559.92739.YahooMailNeo@web141703.mail.bf1.yahoo.com>
-Message-ID: <20140830093045.3026a12b@free-electrons.com>
+Date: Sat, 30 Aug 2014 09:31:29 +0200
+Subject: [Buildroot] [git commit branch/next] host-gdb: enable terminal
+ user interface support
+In-Reply-To: <20140830071153.50ADD9D59A@busybox.osuosl.org>
+References: <20140830071153.50ADD9D59A@busybox.osuosl.org>
+Message-ID: <20140830093129.0a86d2b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear lee choon gay,
+Dear Peter Korsgaard,
 
-On Fri, 29 Aug 2014 23:35:59 -0700, lee choon gay wrote:
+On Sat, 30 Aug 2014 09:03:34 +0200, Peter Korsgaard wrote:
 
-> I use single partition for this, sda1.
-> Seems like the device driver is not ready yet to detect sda1.
-> You have any workaround for this?
+> +config BR2_PACKAGE_HOST_GDB_TUI
+> +	bool "GDB TUI support"
+> +	select BR2_PACKAGE_NCURSES
 
-Indeed.
-
-Please pass "rootwait" in your kernel parameters. It tells the kernel
-to wait until the root device appears: USB devices are detected
-asynchronously, and sometimes the kernel may try to mount the root
-filesystem before the USB devices have been detected.
-
-If that still doesn't work, it means that your kernel configuration is
-wrong and lacks some device drivers.
+It seems like you didn't commit v2, because v2 was fixing this.
 
 Thomas
 -- 
