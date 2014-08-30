@@ -1,76 +1,116 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Aug 2014 23:34:41 +0200
-Subject: [Buildroot] [git commit] package/libiqrf: fix static link
-Message-ID: <20140830214252.6AB289D599@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 23:34:50 +0200
+Subject: [Buildroot] [git commit] package/libwebsockets: fix static link
+Message-ID: <20140830214252.7477B9D59A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9418a8387c5bac59b1e1ee72ae75bfa5fae00094
+commit: http://git.buildroot.net/buildroot/commit/?id=1ddffb0e1a368fbac9c85005202dcc014635d2b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- libiqrf depends on pthread, so add a patch fixing the build-system that way
 - disable shared object build when BR2_PREFER_STATIC_LIB is set
 
 Fixes:
-  http://autobuild.buildroot.net/results/210/2108f37e4a41af0b527c78e646e82f1cafa0353d/
+  http://autobuild.buildroot.net/results/0a9/0a9f0c3c101550e73f7100f2b88a88c1f2bbad95/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-static-library-and-find-required-thread.patch |   45 ++++++++++++++++++++
- 1 files changed, 45 insertions(+), 0 deletions(-)
+ ...le-shared-library-build-when-BUILD_SHARED.patch |   86 ++++++++++++++++++++
+ 1 files changed, 86 insertions(+), 0 deletions(-)
 
-diff --git a/package/libiqrf/libiqrf-0001-cmake-handle-static-library-and-find-required-thread.patch b/package/libiqrf/libiqrf-0001-cmake-handle-static-library-and-find-required-thread.patch
+diff --git a/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
 new file mode 100644
-index 0000000..cfd7d54
+index 0000000..7aa03d4
 --- /dev/null
-+++ b/package/libiqrf/libiqrf-0001-cmake-handle-static-library-and-find-required-thread.patch
-@@ -0,0 +1,45 @@
-+From 46660112b76664473cc98b8ae6c863fd27c27d2d Mon Sep 17 00:00:00 2001
++++ b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+@@ -0,0 +1,86 @@
++From 990835b15e3713e6c34d64b4bed8e55dcca6e6e2 Mon Sep 17 00:00:00 2001
 +From: Samuel Martin <s.martin49@gmail.com>
-+Date: Fri, 29 Aug 2014 23:40:59 +0200
-+Subject: [PATCH 1/1] cmake: handle static library and find required thread
-+ module
++Date: Sat, 30 Aug 2014 00:40:03 +0200
++Subject: [PATCH 2/2] cmake: disable shared library build when
++ BUILD_SHARED_LIBS is off
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +---
-+ CMakeLists.txt     | 2 ++
-+ src/CMakeLists.txt | 4 +++-
-+ 2 files changed, 5 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 19 +++++++++++++------
++ 1 file changed, 13 insertions(+), 6 deletions(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 79f644c..7779a2a 100644
++index 72391b0..8f28680 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -6,7 +6,9 @@ enable_testing()
-+ # use local module (for Findlibusb-1.0.cmake)
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-+ 
-++find_package(Threads REQUIRED)
-+ find_package(libusb-1.0 REQUIRED)
++@@ -320,14 +320,19 @@ source_group("Sources"          FILES ${SOURCES})
++ #
++ # Create the lib.
++ #
+++set(_libs_websockets websockets)
++ add_library(websockets STATIC
++ 			${HDR_PRIVATE}
++ 			${HDR_PUBLIC}
++ 			${SOURCES})
 ++
-+ if (NOT LIBUSB_1_FOUND)
-+ 	message(FATAL_ERROR "libusb-1.0 not installed. (try apt-get install libusb-1.0-0-dev)")
-+ endif (NOT LIBUSB_1_FOUND)
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 149d198..0597ccd 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -18,8 +18,10 @@ set (iqrf_sources
+++if(BUILD_SHARED_LIBS)
+++list(APPEND _libs_websockets websockets_shared)
++ add_library(websockets_shared SHARED
++ 			${HDR_PRIVATE}
++ 			${HDR_PUBLIC}
++ 			${SOURCES})
+++endif()
 + 
-+ include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
++ if (WIN32)
++ 	# On Windows libs have the same file ending (.lib)
++@@ -348,15 +353,17 @@ endif(WIN32)
 + 
-+-add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
-++add_library(iqrf ${iqrf_sources} ${iqrf_headers})
-++
-+ target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
-++target_link_libraries(iqrf ${CMAKE_THREAD_LIBS_INIT})
++ # We want the shared lib to be named "libwebsockets"
++ # not "libwebsocket_shared".
+++if(BUILD_SHARED_LIBS)
++ set_target_properties(websockets_shared
++-		PROPERTIES 
+++		PROPERTIES
++ 		OUTPUT_NAME websockets)
+++endif()
 + 
-+ set_target_properties(iqrf PROPERTIES
-+ 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
++ # Set the so version of the lib.
++ # Equivalent to LDFLAGS=-version-info x:x:x
++ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
++-	foreach(lib websockets websockets_shared)
++-		set_target_properties(${lib} 
+++	foreach(lib ${_libs_websockets})
+++		set_target_properties(${lib}
++ 			PROPERTIES
++ 			SOVERSION ${SOVERSION})
++ 	endforeach()
++@@ -408,7 +415,7 @@ if (NOT WITHOUT_EXTENSIONS)
++ 	endif()
++ 
++ 	# Make sure ZLib is compiled before the libs.
++-	foreach (lib websockets websockets_shared)
+++	foreach (lib ${_libs_websockets})
++ 		add_dependencies(${lib} ZLIB)
++ 	endforeach()
++ 
++@@ -462,7 +469,7 @@ if (UNIX)
++ endif()
++ 
++ # Setup the linking for all libs.
++-foreach (lib websockets websockets_shared)
+++foreach (lib ${_libs_websockets})
++ 	target_link_libraries(${lib} ${LIB_LIST})
++ endforeach()
++ 
++@@ -727,7 +734,7 @@ install(FILES ${HDR_PUBLIC}
++ set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "Header files")
++ 
++ # Install libs.
++-install(TARGETS websockets websockets_shared
+++install(TARGETS ${_libs_websockets}
++ 		LIBRARY DESTINATION lib${LIB_SUFFIX}
++ 		ARCHIVE DESTINATION lib${LIB_SUFFIX}
++ 		COMPONENT libraries)
 +-- 
 +2.1.0
 +
