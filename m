@@ -1,33 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Aug 2014 09:20:01 +0200
-Subject: [Buildroot] [PATCH 0 of 3 v2 for 2014.08] Manual improvements
-	part 4
-In-Reply-To: <patchbomb.1409341838@localhost> (Thomas De Schampheleire's
- message of "Fri, 29 Aug 2014 21:50:38 +0200")
-References: <patchbomb.1409341838@localhost>
-Message-ID: <87a96mphpa.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Aug 2014 09:16:47 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: disable for Blackfin GNU
+	Toolchain
+Message-ID: <20140830072020.512029D573@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f4905d7a3e1945d79084ca860ac88fbfedc01eaa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This short series starts improving the 'Project-specific customizations'
- > chapter in the manual. Subsequent patches are planned (even for 2014.08) but
- > since the release is almost there I'm sending out patches as soon as they
- > are available, to give enough time for review.
+Those toolchains use gcc <= 4.3, which do not support required C++11 features.
 
- > Further changes planned:
- > - reworking the 'Customizing the generated target filesystem' section to
- >   emphasize the recommendations of rootfs-overlay + post-build
- > - rework the rest of the chapter as there is some duplicate and inconsistent
- >   information.
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/upmpdcli/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Committed series, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 3fa638b..e99fddb 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_UPMPDCLI
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+ 	help
+ 	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
+ 	  Player Daemon. It supports UPnP gapless track transitions and
