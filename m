@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 30 Aug 2014 11:52:24 +0200
-Subject: [Buildroot] [PATCH 2/5] package/libwebsockets: fix static link
+Date: Sat, 30 Aug 2014 11:52:25 +0200
+Subject: [Buildroot] [PATCH 3/5] package/polarssl: fix static link
 In-Reply-To: <1409392347-16392-1-git-send-email-s.martin49@gmail.com>
 References: <1409392347-16392-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1409392347-16392-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1409392347-16392-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,105 +13,25 @@ To: buildroot@busybox.net
 - disable shared object build when BR2_PREFER_STATIC_LIB is set
 
 Fixes:
-  http://autobuild.buildroot.net/results/0a9/0a9f0c3c101550e73f7100f2b88a88c1f2bbad95/
+  http://autobuild.buildroot.net/results/754/754947d2a77a4dbe91057d8ce64fc4996e716ece/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...le-shared-library-build-when-BUILD_SHARED.patch | 86 ++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+ package/polarssl/polarssl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-new file mode 100644
-index 0000000..7aa03d4
---- /dev/null
-+++ b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-@@ -0,0 +1,86 @@
-+From 990835b15e3713e6c34d64b4bed8e55dcca6e6e2 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 30 Aug 2014 00:40:03 +0200
-+Subject: [PATCH 2/2] cmake: disable shared library build when
-+ BUILD_SHARED_LIBS is off
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ CMakeLists.txt | 19 +++++++++++++------
-+ 1 file changed, 13 insertions(+), 6 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 72391b0..8f28680 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -320,14 +320,19 @@ source_group("Sources"          FILES ${SOURCES})
-+ #
-+ # Create the lib.
-+ #
-++set(_libs_websockets websockets)
-+ add_library(websockets STATIC
-+ 			${HDR_PRIVATE}
-+ 			${HDR_PUBLIC}
-+ 			${SOURCES})
-++
-++if(BUILD_SHARED_LIBS)
-++list(APPEND _libs_websockets websockets_shared)
-+ add_library(websockets_shared SHARED
-+ 			${HDR_PRIVATE}
-+ 			${HDR_PUBLIC}
-+ 			${SOURCES})
-++endif()
-+ 
-+ if (WIN32)
-+ 	# On Windows libs have the same file ending (.lib)
-+@@ -348,15 +353,17 @@ endif(WIN32)
-+ 
-+ # We want the shared lib to be named "libwebsockets"
-+ # not "libwebsocket_shared".
-++if(BUILD_SHARED_LIBS)
-+ set_target_properties(websockets_shared
-+-		PROPERTIES 
-++		PROPERTIES
-+ 		OUTPUT_NAME websockets)
-++endif()
-+ 
-+ # Set the so version of the lib.
-+ # Equivalent to LDFLAGS=-version-info x:x:x
-+ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-+-	foreach(lib websockets websockets_shared)
-+-		set_target_properties(${lib} 
-++	foreach(lib ${_libs_websockets})
-++		set_target_properties(${lib}
-+ 			PROPERTIES
-+ 			SOVERSION ${SOVERSION})
-+ 	endforeach()
-+@@ -408,7 +415,7 @@ if (NOT WITHOUT_EXTENSIONS)
-+ 	endif()
-+ 
-+ 	# Make sure ZLib is compiled before the libs.
-+-	foreach (lib websockets websockets_shared)
-++	foreach (lib ${_libs_websockets})
-+ 		add_dependencies(${lib} ZLIB)
-+ 	endforeach()
-+ 
-+@@ -462,7 +469,7 @@ if (UNIX)
-+ endif()
-+ 
-+ # Setup the linking for all libs.
-+-foreach (lib websockets websockets_shared)
-++foreach (lib ${_libs_websockets})
-+ 	target_link_libraries(${lib} ${LIB_LIST})
-+ endforeach()
-+ 
-+@@ -727,7 +734,7 @@ install(FILES ${HDR_PUBLIC}
-+ set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "Header files")
-+ 
-+ # Install libs.
-+-install(TARGETS websockets websockets_shared
-++install(TARGETS ${_libs_websockets}
-+ 		LIBRARY DESTINATION lib${LIB_SUFFIX}
-+ 		ARCHIVE DESTINATION lib${LIB_SUFFIX}
-+ 		COMPONENT libraries)
-+-- 
-+2.1.0
-+
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 24f09ed..545a2cd 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -8,7 +8,7 @@ POLARSSL_SITE = https://polarssl.org/code/releases
+ POLARSSL_VERSION = 1.2.11
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+-	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
++	-DUSE_SHARED_POLARSSL_LIBRARY=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
+ 	-DUSE_STATIC_POLARSSL_LIBRARY=ON \
+ 	-DBUILD_TESTS=OFF \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
 -- 
 2.1.0
