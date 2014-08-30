@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Aug 2014 09:02:00 +0200
-Subject: [Buildroot] [git commit] zsh: bump to version 5.0.6
-Message-ID: <20140901132446.B06249D5B9@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 09:08:14 +0200
+Subject: [Buildroot] [git commit] package/libao: bump to version 1.2.0
+Message-ID: <20140901132446.BD5099D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76eee8c6ab3e684f680c8d199f4024ce6b38c53a
+commit: http://git.buildroot.net/buildroot/commit/?id=3c8fa4dbbc919a7da34139bc9ce8edf35d75473a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/libao/libao.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 8bd2fb0..f4daeeb 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,11 +4,10 @@
+diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+index 3f7d166..e966ef2 100644
+--- a/package/libao/libao.mk
++++ b/package/libao/libao.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSH_VERSION = 5.0.5
-+ZSH_VERSION = 5.0.6
- ZSH_SITE = http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
--
- ZSH_DEPENDENCIES = ncurses
- 
- $(eval $(autotools-package))
+-LIBAO_VERSION = 1.1.0
++LIBAO_VERSION = 1.2.0
+ LIBAO_SITE = http://downloads.xiph.org/releases/ao
+ LIBAO_DEPENDENCIES = host-pkgconf
+ LIBAO_INSTALL_STAGING = YES
