@@ -1,78 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Aug 2014 08:47:51 +0200
-Subject: [Buildroot] [git commit] new package: phidgetwebservice
-Message-ID: <20140901132446.8162B9D5C2@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 09:01:32 +0200
+Subject: [Buildroot] [git commit] support/script/scancpan: don't generate
+	the trailing slash in <PKG>_SITE variable
+Message-ID: <20140901132446.AA1FB9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51b1ee249a62a5f875b5729b4ba20a58c0b20f40
+commit: http://git.buildroot.net/buildroot/commit/?id=56e7d0b886de1c6b2abe2da93f2bc19359a9316f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+The trailing slash was removed in all packages, so don't generate it.
+See http://git.buildroot.net/buildroot/commit/?id=c7f4b964718bc5a3329bb730f59e24091ecbc7a2
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                              |    1 +
- package/phidgetwebservice/Config.in            |   19 +++++++++++++++++++
- package/phidgetwebservice/phidgetwebservice.mk |   14 ++++++++++++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
+ support/scripts/scancpan |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2a4d994..883dd66 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1040,6 +1040,7 @@ endif
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
- 	source "package/p910nd/Config.in"
-+	source "package/phidgetwebservice/Config.in"
- 	source "package/portmap/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/phidgetwebservice/Config.in b/package/phidgetwebservice/Config.in
-new file mode 100644
-index 0000000..7bb6f33
---- /dev/null
-+++ b/package/phidgetwebservice/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_PHIDGETWEBSERVICE
-+	bool "phidgetwebservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb, libphidget
-+	select BR2_PACKAGE_LIBPHIDGET
-+	help
-+          phidgetwebservice (the Phidget WebService) provides an HTTP
-+	  front-end to the libphidget device control API. This provides
-+	  an alternative to the libphidget C linkage interface for
-+	  controlling locally attached Phidgets USB devices and it also
-+	  allows you to control Phidget USB devices remotely when the host
-+	  running the phidgetwebservice has an exposed network interface.
-+
-+	  The phidgetwebservice client program uses the libphidget HTTP
-+	  functions to send commands to the phidgetwebservice.
-+
-+	  http://phidgets.com/
-+
-+comment "phidgetwebservice needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/phidgetwebservice/phidgetwebservice.mk b/package/phidgetwebservice/phidgetwebservice.mk
-new file mode 100644
-index 0000000..64dfca4
---- /dev/null
-+++ b/package/phidgetwebservice/phidgetwebservice.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# phidgetwebservice
-+#
-+################################################################################
-+
-+PHIDGETWEBSERVICE_VERSION = 2.1.8.20140319
-+PHIDGETWEBSERVICE_SOURCE = phidgetwebservice_$(PHIDGETWEBSERVICE_VERSION).tar.gz
-+PHIDGETWEBSERVICE_SITE = http://www.phidgets.com/downloads/libraries/
-+PHIDGETWEBSERVICE_DEPENDENCIES = libphidget
-+PHIDGETWEBSERVICE_LICENSE = LGPLv3
-+PHIDGETWEBSERVICE_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 50d9bab..e738a83 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -636,6 +636,7 @@ while (my ($distname, $dist) = each %dist) {
+         # the scheme is not used, because the job is done by the BR download infrastructure
+         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
+         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
++        $directories =~ s|/$||;
+         my $dependencies = join q{ }, qw( = perl ),
+                                       map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
+                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
