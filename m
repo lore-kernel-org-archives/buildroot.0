@@ -1,24 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Aug 2014 09:17:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for Blackfin
-	GNU Toolchain
-In-Reply-To: <1408999005-15853-1-git-send-email-jkrause@posteo.de>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 25 Aug 2014 22:36:45 +0200")
-References: <1408999005-15853-1-git-send-email-jkrause@posteo.de>
-Message-ID: <87egvyphtz.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Aug 2014 09:20:01 +0200
+Subject: [Buildroot] [PATCH 0 of 3 v2 for 2014.08] Manual improvements
+	part 4
+In-Reply-To: <patchbomb.1409341838@localhost> (Thomas De Schampheleire's
+ message of "Fri, 29 Aug 2014 21:50:38 +0200")
+References: <patchbomb.1409341838@localhost>
+Message-ID: <87a96mphpa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Those toolchains use gcc <= 4.3, which do not support required C++11 features.
- > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+ > This short series starts improving the 'Project-specific customizations'
+ > chapter in the manual. Subsequent patches are planned (even for 2014.08) but
+ > since the release is almost there I'm sending out patches as soon as they
+ > are available, to give enough time for review.
 
-Committed, thanks.
+ > Further changes planned:
+ > - reworking the 'Customizing the generated target filesystem' section to
+ >   emphasize the recommendations of rootfs-overlay + post-build
+ > - rework the rest of the chapter as there is some duplicate and inconsistent
+ >   information.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Committed series, thanks!
 
 -- 
 Bye, Peter Korsgaard
