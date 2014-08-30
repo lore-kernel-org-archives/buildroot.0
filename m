@@ -1,44 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Aug 2014 23:59:14 +0200
-Subject: [Buildroot] [PATCH] libgpgme: Take into account that gnupg and
-	gnupg2 are mutual exclusive
-In-Reply-To: <1409228181-29052-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 28 Aug 2014 13:16:21 +0100")
-References: <1409228181-29052-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87fvgdoczx.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Aug 2014 00:03:21 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: fix comment about i965 DRI
+	driver
+In-Reply-To: <1409435789-24181-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 30 Aug 2014 23:56:29 +0200")
+References: <1409435789-24181-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <878um5oct2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Avoid that libgpgme can select the gnupg package although gnupg2 has
- > been already selected. Both packages are mutual exclusive and shouldn't
- > be selected at the same time.
+ > The help entry for the i965 DRI driver states that it supports alll
+ > Intel GPUs. That's not true, as at least the i915 series is not handled
+ > by this driver, but by a separate one.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- >  package/libgpgme/Config.in |    2 +-
- >  1 files changed, 1 insertions(+), 1 deletions(-)
+ > Fix the help text accordingly; remove the useless second part of the
+ > help text (which does not mean much for Buildroot.)
 
- > diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
- > index a303bfa..e176dac 100644
- > --- a/package/libgpgme/Config.in
- > +++ b/package/libgpgme/Config.in
- > @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBGPGME
- >  	bool "libgpgme"
- >  	depends on BR2_USE_MMU # libassuan
- >  	#gnupg is not needed to build, but at runtime.
- > -	select BR2_PACKAGE_GNUPG
- > +	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
-
-I'm not familiar with libgpgme. Does it need to be configured somehow to
-use gpg2 instead of gpg? Would it make sense to automatically configure
-this if BR2_PACKAGE_GNUPG2 is enabled?
 
 -- 
 Bye, Peter Korsgaard
