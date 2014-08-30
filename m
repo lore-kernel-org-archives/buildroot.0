@@ -1,33 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Aug 2014 09:08:14 +0200
-Subject: [Buildroot] [git commit branch/next] package/libao: bump to version
-	1.2.0
-Message-ID: <20140830071153.5CB699D573@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 09:03:34 +0200
+Subject: [Buildroot] [git commit branch/next] host-gdb: enable terminal user
+	interface support
+Message-ID: <20140830071153.50ADD9D59A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c8fa4dbbc919a7da34139bc9ce8edf35d75473a
+commit: http://git.buildroot.net/buildroot/commit/?id=2474fb0bf1a786f3a170631f3dbce8b38092f986
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Add a configuration option to compile host-gdb with the
+--enable-tui switch.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libao/libao.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gdb/Config.in.host |    6 ++++++
+ package/gdb/gdb.mk         |    8 +++++++-
+ 2 files changed, 13 insertions(+), 1 deletions(-)
 
-diff --git a/package/libao/libao.mk b/package/libao/libao.mk
-index 3f7d166..e966ef2 100644
---- a/package/libao/libao.mk
-+++ b/package/libao/libao.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index cbc1361..8846eaf 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -13,6 +13,12 @@ config BR2_PACKAGE_HOST_GDB
  
--LIBAO_VERSION = 1.1.0
-+LIBAO_VERSION = 1.2.0
- LIBAO_SITE = http://downloads.xiph.org/releases/ao
- LIBAO_DEPENDENCIES = host-pkgconf
- LIBAO_INSTALL_STAGING = YES
+ if BR2_PACKAGE_HOST_GDB
+ 
++config BR2_PACKAGE_HOST_GDB_TUI
++	bool "GDB TUI support"
++	select BR2_PACKAGE_NCURSES
++	help
++	  This option enables terminal user interface (TUI) for gdb
++
+ choice
+ 	prompt "GDB debugger Version"
+ 	depends on !BR2_arc
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 8ab264b..7e87bf9 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -114,7 +114,6 @@ HOST_GDB_CONF_OPT = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--enable-static --disable-shared \
+ 	--without-uiout \
+-	--disable-tui \
+ 	--disable-gdbtk \
+ 	--without-x \
+ 	--enable-threads \
+@@ -123,6 +122,13 @@ HOST_GDB_CONF_OPT = \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPT) \
+ 	--disable-sim
+ 
++ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
++	HOST_GDB_DEPENDENCIES += host-ncurses
++	HOST_GDB_CONF_OPT += --enable-tui
++else
++	HOST_GDB_CONF_OPT += --disable-tui
++endif
++
+ ifeq ($(GDB_FROM_GIT),y)
+ HOST_GDB_DEPENDENCIES += host-texinfo
+ else
