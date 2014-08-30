@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Aug 2014 09:13:14 +0200
-Subject: [Buildroot] [git commit] squid: bump to version 3.4.7
-Message-ID: <20140901132446.8AB629D5B9@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 09:02:00 +0200
+Subject: [Buildroot] [git commit] zsh: bump to version 5.0.6
+Message-ID: <20140901132446.B06249D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49e36dcf1307b81b7f24c9d7feab71183d86c2e9
+commit: http://git.buildroot.net/buildroot/commit/?id=76eee8c6ab3e684f680c8d199f4024ce6b38c53a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/zsh/zsh.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 6c36c61..6dffae8 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 8bd2fb0..f4daeeb 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,11 +4,10 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.4
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-ZSH_VERSION = 5.0.5
++ZSH_VERSION = 5.0.6
+ ZSH_SITE = http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+-
+ ZSH_DEPENDENCIES = ncurses
+ 
+ $(eval $(autotools-package))
