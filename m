@@ -1,26 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Aug 2014 11:28:59 +0200
-Subject: [Buildroot] [PATCH 0 of 3 v2 for 2014.08] Manual improvements
-	part 4
-In-Reply-To: <4db9f765-0297-433c-be46-f79b06bbef49@email.android.com> (Thomas
- De Schampheleire's message of "Sat, 30 Aug 2014 09:26:43 +0200")
-References: <patchbomb.1409341838@localhost> <87a96mphpa.fsf@dell.be.48ers.dk>
- <4db9f765-0297-433c-be46-f79b06bbef49@email.android.com>
-Message-ID: <8761hapbqc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Aug 2014 11:29:55 +0200
+Subject: [Buildroot] [git commit branch/next] host-gdb: enable terminal
+	user interface support
+In-Reply-To: <20140830093129.0a86d2b7@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 30 Aug 2014 09:31:29 +0200")
+References: <20140830071153.50ADD9D59A@busybox.osuosl.org>
+ <20140830093129.0a86d2b7@free-electrons.com>
+Message-ID: <871trypbos.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Thanks! It is likely that this will be the last manual
- >  update for 2014.08, as I'm not sure I will get around
- >  doing the other planned changes before the release.
+ > Dear Peter Korsgaard,
+ > On Sat, 30 Aug 2014 09:03:34 +0200, Peter Korsgaard wrote:
 
-That's ok. I plan on releasing 2014.08 tomorrow, so there isn't much
-time left anyway.
+ >> +config BR2_PACKAGE_HOST_GDB_TUI
+ >> +	bool "GDB TUI support"
+ >> +	select BR2_PACKAGE_NCURSES
+
+ > It seems like you didn't commit v2, because v2 was fixing this.
+
+Yeah, seems like I ended up using the wrong pw id. It's fixed now.
 
 -- 
-Bye, Peter Korsgaard
+Bye, Peter Korsgaard 
