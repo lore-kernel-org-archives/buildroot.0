@@ -1,35 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Aug 2014 09:01:32 +0200
-Subject: [Buildroot] [git commit branch/next] support/script/scancpan: don't
-	generate the trailing slash in <PKG>_SITE variable
-Message-ID: <20140830071153.35D629D573@busybox.osuosl.org>
+Date: Sat, 30 Aug 2014 09:08:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/libao: bump to version
+	1.2.0
+Message-ID: <20140830071153.5CB699D573@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56e7d0b886de1c6b2abe2da93f2bc19359a9316f
+commit: http://git.buildroot.net/buildroot/commit/?id=3c8fa4dbbc919a7da34139bc9ce8edf35d75473a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The trailing slash was removed in all packages, so don't generate it.
-See http://git.buildroot.net/buildroot/commit/?id=c7f4b964718bc5a3329bb730f59e24091ecbc7a2
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/scancpan |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libao/libao.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 50d9bab..e738a83 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -636,6 +636,7 @@ while (my ($distname, $dist) = each %dist) {
-         # the scheme is not used, because the job is done by the BR download infrastructure
-         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
-         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
-+        $directories =~ s|/$||;
-         my $dependencies = join q{ }, qw( = perl ),
-                                       map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
+diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+index 3f7d166..e966ef2 100644
+--- a/package/libao/libao.mk
++++ b/package/libao/libao.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBAO_VERSION = 1.1.0
++LIBAO_VERSION = 1.2.0
+ LIBAO_SITE = http://downloads.xiph.org/releases/ao
+ LIBAO_DEPENDENCIES = host-pkgconf
+ LIBAO_INSTALL_STAGING = YES
