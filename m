@@ -1,36 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 31 Aug 2014 22:23:33 +0200
-Subject: [Buildroot] [PATCH v2 for 2014.08] manual/user
-	guide/customization: rework section on rootfs customization
-In-Reply-To: <32d666f0bce6eda21334.1409490870@localhost> (Thomas De
- Schampheleire's message of "Sun, 31 Aug 2014 15:14:30 +0200")
-References: <32d666f0bce6eda21334.1409490870@localhost>
-Message-ID: <87zjekmmre.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Aug 2014 22:26:08 +0200
+Subject: [Buildroot] [PATCH v2 1/9] package/cmake: add host-pkgconf as
+	dependency
+In-Reply-To: <1409514922-9509-2-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 31 Aug 2014 21:55:14 +0200")
+References: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
+ <1409514922-9509-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <87vbp8mmn3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- > This patch reworks the section on root filesystem customization as follows:
- > - use labeled list instead of bulleted list to clarify the different methods
- > - move rootfs overlay and post-build scripts to the top and label them as
- >   recommended.
- > - split post-image to a separate section, as it is not related to the target
- >   filesystem customization
- > - line up post-build and post-image explanations, for example regarding
- >   working directory of the script
- > - general expansion of some of the explanation
- > - general rewording
+ > Since some CMake modules (even upstream ones) use pgk_check_modules
+ > primtives to find {C,LD}FLAGS, then add it to the dependency list.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
- > ---
- > v2: add missing file (noticed by Yann)
-
-Committed, thanks.
+Committed with the commit message fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
