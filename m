@@ -1,18 +1,19 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 31 Aug 2014 22:09:07 +0200
-Subject: [Buildroot] [PATCH v3 5/8] opencv: add hidden symbol
-	BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
+Date: Sun, 31 Aug 2014 22:09:08 +0200
+Subject: [Buildroot] [PATCH v3 6/8] vlc: add opencv support
 In-Reply-To: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
 References: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1409515750-10289-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1409515750-10289-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new hidden symbol aims to automatically select all OpenCV modules
-required when another package use the deprecated OpenCV 'cv.h' headers.
+Add OpenCV support for video filter in vlc.
+
+vlc source code still includes the headers from the deprecated OpenCV
+API.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -25,34 +26,39 @@ changes v2 -> v3:
 changes v1 -> v2:
 - new patch
 ---
- package/opencv/Config.in | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/vlc/Config.in | 1 +
+ package/vlc/vlc.mk    | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 7c2b964..83771d4 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -14,6 +14,21 @@ menuconfig BR2_PACKAGE_OPENCV
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index cdb0d16..ede9269 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS if BR2_PACKAGE_OPENCV
+ 	help
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ad9f485..f46de3f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -124,6 +124,13 @@ else
+ VLC_CONF_OPT += --disable-glx
+ endif
  
- if BR2_PACKAGE_OPENCV
- 
-+config BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
-+	bool
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
-+	help
-+	  Select all required modules needed by the deprecated OpenCV API
-+	  (cv.h, cvaux.h, cxcore.h, etc).
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++VCL_CONF_OPT += --with-opencv
++VLC_DEPENDENCIES += opencv
++else
++VLC_CONF_OPT += --without-opencv
++endif
 +
- comment "OpenCV modules"
- 
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPT += --enable-opus
+ VLC_DEPENDENCIES += libvorbis opus
 -- 
 2.1.0
