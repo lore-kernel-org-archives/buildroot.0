@@ -1,18 +1,17 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 31 Aug 2014 21:55:14 +0200
-Subject: [Buildroot] [PATCH v2 1/9] package/cmake: add host-pkgconf as
-	dependency
+Date: Sun, 31 Aug 2014 21:55:15 +0200
+Subject: [Buildroot] [PATCH v2 2/9] package/yajl: add sequence number in
+	patch names
 In-Reply-To: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
 References: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1409514922-9509-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1409514922-9509-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since some CMake modules (even upstream ones) use pgk_check_modules
-primtives to find {C,LD}FLAGS, then add it to the dependency list.
+Also remove the package version from the patch names.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -20,21 +19,13 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1->v2:
 - new patch
 ---
- package/cmake/cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/yajl/{yajl-2.0.4-math-link.patch => yajl-0001-math-link.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/yajl/{yajl-2.0.4-math-link.patch => yajl-0001-math-link.patch} (100%)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 6987f09..bfeb147 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -10,6 +10,8 @@ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
- 
-+HOST_CMAKE_DEPENDENCIES = host-pkgconf
-+
- define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
+diff --git a/package/yajl/yajl-2.0.4-math-link.patch b/package/yajl/yajl-0001-math-link.patch
+similarity index 100%
+rename from package/yajl/yajl-2.0.4-math-link.patch
+rename to package/yajl/yajl-0001-math-link.patch
 -- 
 2.1.0
