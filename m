@@ -1,71 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Aug 2014 22:26:31 +0200
-Subject: [Buildroot] [git commit] package/yajl: fix static link
-Message-ID: <20140831214441.23F5B9D330@busybox.osuosl.org>
+Date: Sun, 31 Aug 2014 23:27:33 +0200
+Subject: [Buildroot] [git commit] package/musepack: fix static link
+Message-ID: <20140831214441.3D54D9D330@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=022a48280ac5defc47ca0345db38b298da10fe94
+commit: http://git.buildroot.net/buildroot/commit/?id=d77b0a7d88d3e4aaca283e9350788793a695dcab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - disable shared object build when BR2_PREFER_STATIC_LIB is set
+- patch the CMake code for handling static/shared object build using
+  standard CMake flags, instead of the custom ones.
+
+Fixes:
+  http://autobuild.buildroot.org/results/e5e/e5eef14d5ed76db824c47a7e679e68397a023526/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...le-shared-library-build-when-BUILD_SHARED.patch |   44 ++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
+ ...he-standard-CMake-flag-to-drive-the-share.patch |   43 ++++++++++++++++++++
+ 1 files changed, 43 insertions(+), 0 deletions(-)
 
-diff --git a/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch b/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+diff --git a/package/musepack/musepack-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/musepack/musepack-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
 new file mode 100644
-index 0000000..261c486
+index 0000000..4bfeca0
 --- /dev/null
-+++ b/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-@@ -0,0 +1,44 @@
-+From bb4fb7ff71fd6cadd9c1bf8716845a91e5998c0c Mon Sep 17 00:00:00 2001
++++ b/package/musepack/musepack-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+@@ -0,0 +1,43 @@
++From d2f01ba6fa2a065156fad686d1849309c661e527 Mon Sep 17 00:00:00 2001
 +From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 31 Aug 2014 00:39:11 +0200
-+Subject: [PATCH 2/2] cmake: disable shared library build when
-+ BUILD_SHARED_LIBS is off
++Date: Sun, 31 Aug 2014 12:07:31 +0200
++Subject: [PATCH 2/2] cmake: use the standard CMake flag to drive the shared
++ object build
++
++If BUILD_SHARED_LIBS is set and SHARED undefined, then drive SHARED with
++the BUILD_SHARED_LIBS value.
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +---
-+ src/CMakeLists.txt | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ CMakeLists.txt | 15 ++++++++++-----
++ 1 file changed, 10 insertions(+), 5 deletions(-)
 +
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index e36b736..6a24424 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -37,6 +37,7 @@ SET(LIBRARY_OUTPUT_PATH ${libDir})
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index b13f78c..db75510 100755
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -7,11 +7,16 @@ project(libmpc C)
++ set(CMAKE_VERBOSE_MAKEFILE false)
++ TEST_BIG_ENDIAN(MPC_ENDIANNESS)
 + 
-+ ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
++-if(WIN32)
++-  option(SHARED "Use shared libmpcdec" OFF)
++-else(WIN32)
++-  option(SHARED "Use shared libmpcdec" ON)
++-endif(WIN32)
+++# Use the standard CMake flag to drive the shared object build.
+++if(DEFINED BUILD_SHARED_LIBS AND NOT DEFINED SHARED)
+++  set(SHARED ${BUILD_SHARED_LIBS})
+++else()
+++  if(WIN32)
+++    option(SHARED "Use shared libmpcdec" OFF)
+++  else(WIN32)
+++    option(SHARED "Use shared libmpcdec" ON)
+++  endif(WIN32)
+++endif()
 + 
-++IF(BUILD_SHARED_LIBS)
-+ ADD_LIBRARY(yajl SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
++ add_definitions(-DFAST_MATH -DCVD_FASTLOG)
 + 
-+ #### setup shared library version number
-+@@ -51,6 +52,7 @@ IF(APPLE)
-+   SET_TARGET_PROPERTIES(yajl PROPERTIES
-+                         INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-+ ENDIF(APPLE)
-++ENDIF(BUILD_SHARED_LIBS)
-+ 
-+ #### build up an sdk as a post build step
-+ 
-+@@ -78,7 +80,9 @@ INCLUDE_DIRECTORIES(${incDir}/..)
-+ IF(NOT WIN32)
-+   # at build time you may specify the cmake variable LIB_SUFFIX to handle
-+   # 64-bit systems which use 'lib64'
-++  IF(BUILD_SHARED_LIBS)
-+   INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX})
-++  ENDIF(BUILD_SHARED_LIBS)
-+   INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
-+   INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
-+   INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
 +-- 
 +2.1.0
 +
