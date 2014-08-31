@@ -1,7 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 31 Aug 2014 14:06:49 +0200
-Subject: [Buildroot] [PATCH for 2014.08] Manual improvements part 5
-Message-ID: <719dc9b97304bf8fdfbd.1409486809@localhost>
+Date: Sun, 31 Aug 2014 14:07:20 +0200
+Subject: [Buildroot] [PATCH for 2014.08] manual/user guide/customization:
+ rework section on rootfs customization
+Message-ID: <719dc9b97304bf8fdfbd.1409486840@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
