@@ -1,74 +1,129 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 31 Aug 2014 21:55:16 +0200
-Subject: [Buildroot] [PATCH v2 3/9] package/yajl: fix static link
+Date: Sun, 31 Aug 2014 21:55:17 +0200
+Subject: [Buildroot] [PATCH v2 4/9] package/libplist: fix static link
 In-Reply-To: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
 References: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1409514922-9509-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1409514922-9509-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- libplist depends on libm and optionnaly on zlib and libiconv (via
+  libxml2), so add a patch fixing the build-system that way
 - disable shared object build when BR2_PREFER_STATIC_LIB is set
+
+Fixes:
+  http://autobuild.buildroot.net/results/9a3/9a364e3d91634a2da2bc481da1dee0ad0e870941/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1->v2:
-- new patch
+- make the libxml2 CMake module correctly handles/checks for the libxml2
+  optional deps.
 ---
- ...le-shared-library-build-when-BUILD_SHARED.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+ ...1-cmake-let-CMake-drives-the-library-type.patch | 37 +++++++++++++++++
+ ...sure-the-libxml2-module-correctly-set-all.patch | 48 ++++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+ create mode 100644 package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch
+ create mode 100644 package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch
 
-diff --git a/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch b/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+diff --git a/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch b/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch
 new file mode 100644
-index 0000000..261c486
+index 0000000..247f3f0
 --- /dev/null
-+++ b/package/yajl/yajl-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-@@ -0,0 +1,44 @@
-+From bb4fb7ff71fd6cadd9c1bf8716845a91e5998c0c Mon Sep 17 00:00:00 2001
++++ b/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch
+@@ -0,0 +1,37 @@
++From 13150b8e2b49a9c95eaad831ff69429ff9f66aa4 Mon Sep 17 00:00:00 2001
 +From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 31 Aug 2014 00:39:11 +0200
-+Subject: [PATCH 2/2] cmake: disable shared library build when
-+ BUILD_SHARED_LIBS is off
++Date: Sat, 30 Aug 2014 11:20:36 +0200
++Subject: [PATCH 1/2] cmake: let CMake drives the library type
++
++Do not force CMake to build shared object when BUILD_SHARED_LIBS is off.
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +---
-+ src/CMakeLists.txt | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ src/CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
 +diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index e36b736..6a24424 100644
++index a0d6179..78946b1 100644
 +--- a/src/CMakeLists.txt
 ++++ b/src/CMakeLists.txt
-+@@ -37,6 +37,7 @@ SET(LIBRARY_OUTPUT_PATH ${libDir})
++@@ -34,7 +34,7 @@ SET(libcnary_object_files
 + 
-+ ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
++ SET_SOURCE_FILES_PROPERTIES(${libcnary_object_files} PROPERTIES EXTERNAL_OBJECT true GENERATED true)
 + 
-++IF(BUILD_SHARED_LIBS)
-+ ADD_LIBRARY(yajl SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
++-ADD_LIBRARY( plist SHARED ${libplist_SRC} ${libcnary_object_files} )
+++ADD_LIBRARY( plist ${libplist_SRC} ${libcnary_object_files} )
++ TARGET_LINK_LIBRARIES( plist ${LIBXML2_LIBRARIES} )
++ SET_TARGET_PROPERTIES( plist PROPERTIES VERSION ${LIBPLIST_LIBVERSION} )
++ SET_TARGET_PROPERTIES( plist PROPERTIES SOVERSION ${LIBPLIST_SOVERSION} )
++@@ -42,7 +42,7 @@ if(APPLE)
++   SET_TARGET_PROPERTIES( plist PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
++ endif()
 + 
-+ #### setup shared library version number
-+@@ -51,6 +52,7 @@ IF(APPLE)
-+   SET_TARGET_PROPERTIES(yajl PROPERTIES
-+                         INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-+ ENDIF(APPLE)
-++ENDIF(BUILD_SHARED_LIBS)
++-ADD_LIBRARY( plist++ SHARED ${libplist++_SRC} )
+++ADD_LIBRARY( plist++ ${libplist++_SRC} )
++ TARGET_LINK_LIBRARIES( plist++ plist )
++ SET_TARGET_PROPERTIES( plist++ PROPERTIES VERSION ${LIBPLIST_LIBVERSION} )
++ SET_TARGET_PROPERTIES( plist++ PROPERTIES SOVERSION ${LIBPLIST_SOVERSION} )
++-- 
++2.1.0
++
+diff --git a/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch b/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch
+new file mode 100644
+index 0000000..2a807be
+--- /dev/null
++++ b/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch
+@@ -0,0 +1,48 @@
++From 49f7f7566ecd45ce87be07ac46bb27cf2abf9c3c Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 31 Aug 2014 10:08:47 +0200
++Subject: [PATCH] cmake: make sure the libxml2 module correctly set all ldflags
++ in case of static link
++
++libxml2 dependencies against zlib and libiconv are optional.
++
++When executing a statically linked build, the default libxml2 CMake
++module fails to get the libxml2 dependencies (both the required and
++optional ones); so the link phase fails.
++
++However, pkg-config correctly gives these dependencies, even for static
++build. So, extend the libxml2 library list with what the pkg_check_modules
++CMake primitive (which will uses pkg-config) found.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ cmake/modules/FindLibXml2.cmake | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
++index 8d3c77e..19bc930 100644
++--- a/cmake/modules/FindLibXml2.cmake
+++++ b/cmake/modules/FindLibXml2.cmake
++@@ -39,6 +39,19 @@ FIND_LIBRARY(LIBXML2_LIBRARIES NAMES xml2 libxml2
++    ${PC_LIBXML_LIBRARY_DIRS}
++    )
 + 
-+ #### build up an sdk as a post build step
-+ 
-+@@ -78,7 +80,9 @@ INCLUDE_DIRECTORIES(${incDir}/..)
-+ IF(NOT WIN32)
-+   # at build time you may specify the cmake variable LIB_SUFFIX to handle
-+   # 64-bit systems which use 'lib64'
-++  IF(BUILD_SHARED_LIBS)
-+   INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX})
-++  ENDIF(BUILD_SHARED_LIBS)
-+   INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
-+   INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
-+   INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
+++# Make sure we get all ldflags in case of static link
+++IF(NOT BUILD_SHARED_LIBS)
+++    FOREACH(_lib ${PC_LIBXML_STATIC_LIBRARIES})
+++        STRING(TOUPPER ${_lib} _Ulib)
+++        FIND_LIBRARY(_${_Ulib}_LIBRARIES NAMES ${_lib} lib${_lib}
+++            HINTS
+++            ${PC_LIBXML_LIBDIR}
+++            ${PC_LIBXML_LIBRARY_DIRS}
+++            )
+++        LIST(APPEND LIBXML2_LIBRARIES ${_${_Ulib}_LIBRARIES})
+++    ENDFOREACH()
+++ENDIF(NOT BUILD_SHARED_LIBS)
+++
++ FIND_PROGRAM(LIBXML2_XMLLINT_EXECUTABLE xmllint)
++ # for backwards compat. with KDE 4.0.x:
++ SET(XMLLINT_EXECUTABLE "${LIBXML2_XMLLINT_EXECUTABLE}")
 +-- 
 +2.1.0
 +
