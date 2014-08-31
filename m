@@ -1,47 +1,86 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 31 Aug 2014 22:09:02 +0200
-Subject: [Buildroot] [PATCH v3 0/8] OpenCV improvement
-Message-ID: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
+Date: Sun, 31 Aug 2014 22:09:03 +0200
+Subject: [Buildroot] [PATCH v3 1/8] opencv: rework V4L/libv4l support
+In-Reply-To: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
+References: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1409515750-10289-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[series formerly named "scientific packages"]
+Starting with the 2.4.7 release, for V4L support, OpenCV does not
+requires a libv4l dependency for its V4L support.
 
-Hi all,
+So, it now provides 2 distincts knobs for this: WITH_V4L and a new
+one: WITH_LIBV4L.
 
-Here is a couple of improvement in OpenCV package and its reverse
-dependencies.
+This patch takes advantage of this new knob and libv4l support is
+now automatically enabled only if the libv4l package is enabled.
 
-Except the last patch (which fixes an autobuilder failure) , all the
-others patches were originally issued within the "scientific packages"
-series, but now only concerns OpenCV; hence the renaming of the series.
+In OpenCV, the logic behind this is:
+- using libv4l if available,
+- otherwise, use v4l2 or v4l API from the kernel if available.
 
-Cheers,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
+---
+chnages v2 -> v3:
+- rebase
+- remove comments about libv4l use (Yann)
 
-Samuel Martin (8):
-  opencv: rework V4L/libv4l support
-  opencv: add Qt5 support
-  opencv: add python/numpy support
-  opencv: define modules inter-dependencies
-  opencv: add hidden symbol BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
-  vlc: add opencv support
-  gst1-plugins-bad: rework opencv plugin dependencies
-  package/opencv: fix ts module missing dependency to highgui
+changes v1 -> v2:
+- rebase
+- extend commit message
+---
+ package/opencv/Config.in |  8 +-------
+ package/opencv/opencv.mk | 10 +++++++---
+ 2 files changed, 8 insertions(+), 10 deletions(-)
 
- package/gstreamer1/gst1-plugins-bad/Config.in      |  10 +-
- package/opencv/Config.in                           | 146 ++++++++++++++++-----
- ...01-fix-cross-compilation-issue-with-Numpy.patch |  74 +++++++++++
- ...-ts-add-missing-opencv_highgui-dependency.patch |  26 ++++
- package/opencv/opencv.mk                           |  32 ++++-
- package/vlc/Config.in                              |   1 +
- package/vlc/vlc.mk                                 |   7 +
- 7 files changed, 247 insertions(+), 49 deletions(-)
- create mode 100644 package/opencv/opencv-0001-fix-cross-compilation-issue-with-Numpy.patch
- create mode 100644 package/opencv/opencv-0002-modules-ts-add-missing-opencv_highgui-dependency.patch
-
---
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 3f5051e..24f540e 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -205,16 +205,10 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 
+ config BR2_PACKAGE_OPENCV_WITH_V4L
+ 	bool "v4l support"
+-	depends on BR2_LARGEFILE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU # libv4l fork
+-	select BR2_PACKAGE_LIBV4L
+ 	help
+ 	  Enable Video 4 Linux support.
+ 
+-comment "v4l support needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU
++	  If the package libv4l is enabled, its support is automatically enabled.
+ 
+ comment "Install options"
+ 
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 1341d32..2b649ff 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -220,10 +220,14 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+-OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+-OPENCV_DEPENDENCIES += libv4l
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=ON \
++	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
++OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
+ else
+-OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=OFF \
++	-DWITH_LIBV4L=OFF
+ endif
+ 
+ # Installation hooks:
+-- 
 2.1.0
