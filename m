@@ -1,26 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Sep 2014 20:14:19 -0300
-Subject: [Buildroot] [PATCH] lighttpd: add hash file
-Message-ID: <1412118859-1160-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 01 Sep 2014 00:10:53 +0200
+Subject: [Buildroot] [PATCH v2 8/9] package/polarssl: fix static link
+In-Reply-To: <1409514922-9509-9-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 31 Aug 2014 21:55:21 +0200")
+References: <1409514922-9509-1-git-send-email-s.martin49@gmail.com>
+ <1409514922-9509-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <871trwmhsi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/lighttpd/lighttpd.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/lighttpd/lighttpd.hash
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-new file mode 100644
-index 0000000..01d3458
---- /dev/null
-+++ b/package/lighttpd/lighttpd.hash
-@@ -0,0 +1,2 @@
-+# From http://www.lighttpd.net/
-+sha256	113e9b72ccbd1da5deb0774bf93cf0ca15dc82aad2da0f04e5ab27d37d3f30a3	lighttpd-1.4.35.tar.xz
+ > - disable shared object build when BR2_PREFER_STATIC_LIB is set
+ > - patch the CMake code for handling static/shared object build using
+ >   standard CMake flags, instead of the ucstom ones.
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/754/754947d2a77a4dbe91057d8ce64fc4996e716ece/
+
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+ > ---
+ > changes v1->v2:
+ > - add patch handling static/shared object build using standard CMake
+ >   flags, instead of the custom ones.
+
+Committed, thanks.
+
 -- 
-2.0.4
+Bye, Peter Korsgaard
