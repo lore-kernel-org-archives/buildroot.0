@@ -1,117 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 18:31:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package/xbmc: enhance startup script
+Date: Mon,  1 Sep 2014 18:31:41 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xbmc: add option to enable RSXS
+	screensaver
 In-Reply-To: <cover.1409588958.git.yann.morin.1998@free.fr>
 References: <cover.1409588958.git.yann.morin.1998@free.fr>
-Message-ID: <f9702163e9f2ec5c3753961c5ce742841879425a.1409588958.git.yann.morin.1998@free.fr>
+Message-ID: <698b2e4019db6d62c78b18c03e455fc08c65659c.1409588958.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we can run XBMC with full openGL, it needs an X server to be
-running, so it has to wait for it before running.
-
-So, we create a config file (in /etc/default/xbmc) in which we store
-whther to wait for an X server or not. All options to XBMC are now
-hard-coded in our br-xbmc wrapper, not unlike we're doing for the
-systemd unit.
-
-Then, if it has to wait for X, our own br-xbmc wrapper will do the
-waiting. We do it as thus, because we can not do it in the startup
-script.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Note: as I don't know how to do dependencies in systemd, I did not
-change our systemd unit. It can be done by any systemd-savy interested
-party! ;-)
----
- package/xbmc/S50xbmc |  3 +--
- package/xbmc/br-xbmc | 15 +++++++++++++--
- package/xbmc/xbmc.mk | 10 ++++++++++
- 3 files changed, 24 insertions(+), 4 deletions(-)
+ package/xbmc/Config.in | 9 +++++++++
+ package/xbmc/xbmc.mk   | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/xbmc/S50xbmc b/package/xbmc/S50xbmc
-index 312452b..6190b2f 100755
---- a/package/xbmc/S50xbmc
-+++ b/package/xbmc/S50xbmc
-@@ -5,12 +5,11 @@
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index ebe0882..ed0d4ed 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -138,6 +138,15 @@ config BR2_PACKAGE_XBMC_GOOM
+ comment "goom needs an OpenGL backend"
+ 	depends on !BR2_PACKAGE_XBMC_GL
  
- BIN=/usr/bin/br-xbmc
- XBMC=/usr/lib/xbmc/xbmc.bin
--XBMC_ARGS="--standalone -fs -n"
- PIDFILE=/var/run/xbmc.pid
- 
- start() {
- 	echo -n "Starting XBMC: "
--	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC $XBMC_ARGS
-+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC
- 	[ $? == 0 ] && echo "OK" || echo "FAIL"
- }
- stop() {
-diff --git a/package/xbmc/br-xbmc b/package/xbmc/br-xbmc
-index fee5d51..27fa32a 100755
---- a/package/xbmc/br-xbmc
-+++ b/package/xbmc/br-xbmc
-@@ -3,7 +3,18 @@
- # We're called with the real XBMC executable as
- # first argument, followed by any XBMC extra args
- XBMC="${1}"
--shift
++config BR2_PACKAGE_XBMC_RSXS
++	bool "rsxs screensaver"
++	depends on BR2_PACKAGE_XBMC_GL
++	help
++	  Enable goom screensaver
 +
-+# Parse XBMC options
-+[ -f /etc/default/xbmc ] && . /etc/default/xbmc
++comment "rsxs needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XBMC_GL
 +
-+if [ -n "${WAIT_FOR_X}" ]; then
-+    export DISPLAY=:0.0
-+    while ! xset q >/dev/null 2>&1; do
-+        sleep 1
-+    done
-+    # Wait yet a bit more in case it terminates with the last client
-+    sleep 1
-+fi
- 
- # In case someone asked we terminate, just kill
- # the XBMC process
-@@ -21,7 +32,7 @@ while [ ${LOOP} -eq 1 ]; do
-     # for it. But BusyBox' ash's wait builtin does not return the
-     # exit code even if there was only one job (which is correct
-     # for POSIX). So we explicitly wait for the XBMC job
--    "${XBMC}" "${@}" &
-+    "${XBMC}" --standalone -fs -n &
-     wait %1
-     ret=$?
-     case "${ret}" in
+ config BR2_PACKAGE_XBMC_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_PREFER_STATIC_LIB # libcec
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index bdd634e..87b81c4 100644
+index 87b81c4..8bcad00 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -219,6 +219,15 @@ define XBMC_INSTALL_BR_WRAPPER
- endef
- XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
- 
-+# When using full openGL (as opposed to EGL/GLES),
-+# there must be a running X server
-+ifeq ($(BR2_PACKAGE_XBMC_GL),y)
-+define XBMC_WAIT_FOR_X
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/default
-+	printf "WAIT_FOR_X=1\n" >$(TARGET_DIR)/etc/default/xbmc
-+endef
+@@ -88,6 +88,7 @@ ifeq ($(BR2_PACKAGE_XBMC_GL),y)
+ XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
+ 	xlib_libXmu xlib_libXrandr xlib_libXt
+ XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
++ifeq ($(BR2_PACKAGE_XBMC_RSXS),y)
+ # fix rsxs compile
+ # make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
+ XBMC_CONF_ENV += \
+@@ -99,6 +100,9 @@ XBMC_CONF_ENV += \
+ 	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
+ XBMC_CONF_OPT += --enable-rsxs
+ else
++XBMC_CONF_OPT += --disable-rsxs
 +endif
-+
- # When run from a startup script, XBMC has no $HOME where to store its
- # configuration, so ends up storing it in /.xbmc  (yes, at the root of
- # the rootfs). This is a problem for read-only filesystems. But we can't
-@@ -233,6 +242,7 @@ XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_CONFIG_DIR
- define XBMC_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/xbmc/S50xbmc \
- 		$(TARGET_DIR)/etc/init.d/S50xbmc
-+	$(XBMC_WAIT_FOR_X)
- endef
- 
- define XBMC_INSTALL_INIT_SYSTEMD
++else
+ XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
+ ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
+ XBMC_DEPENDENCIES += libegl libgles
 -- 
 1.9.1
