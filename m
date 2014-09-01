@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Sep 2014 13:24:46 -0000
-Subject: [Buildroot] [git commit] package/exim: Bump version to 4.84
-Message-ID: <20140901132445.9438B9D5C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: Bump version to 2.3.2
+Message-ID: <20140901132445.9B85B9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e723b8313f0c283ee5ec7030a6942c57dde100e2
+commit: http://git.buildroot.net/buildroot/commit/?id=2c881c4b1aa5c96dd14e314ec685356f89f45483
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.mk |    2 +-
+ package/ffmpeg/ffmpeg.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 845c5f8..f6016fa 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5c269ac..6fb73ce 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.83
-+EXIM_VERSION = 4.84
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+-FFMPEG_VERSION = 2.3.1
++FFMPEG_VERSION = 2.3.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
