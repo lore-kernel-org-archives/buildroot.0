@@ -1,53 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Sep 2014 13:24:47 -0000
-Subject: [Buildroot] [git commit] erlang: bump to version 17.1
-Message-ID: <20140901132445.C42F69D5B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libidn: bump to version 1.29
+Message-ID: <20140901132445.CB9A69D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7abc724b78519895b95b43175b45eb7d244716ea
+commit: http://git.buildroot.net/buildroot/commit/?id=aa74455e15a77f36e1108b349245f24307695152
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Erlang/OTP 17.1 is a service release on the 17 track with mostly bug
-fixes, but it does contain a number of new features and characteristics
-improvements as well.
-
-Some highlights of the release are:
-  - crypto: Add aes_cfb8 cypher to crypto:block_encrypt and block_decrypt.
-  - diameter: Add result code counters for CEA, DWA, and DPA.
-  - erts: The following built in functions in the erlang and binary modules
-    now bump an appropriate amount of reductions and yield when out of
-    reductions:
-    binary_to_list/1, binary_to_list/3, bitstring_to_list/1,
-    list_to_binary/1,
-    iolist_to_binary/1, list_to_bitstring/1, binary:list_to_bin/1
-  - hipe: Handle Maps instructions get_map_elements, put_map_assoc,
-    put_map_exact in the HiPE native code compiler.
-  - mnesia: The time for inserting locks for a transaction with large
-    number of locks is reduced significantly.
-  - ssh: Option max_sessions added to ssh:daemon/{2,3}.
-  - stdlib: Add maps:get/3 to maps module. The function will return the
-    supplied default value if the key does not exist in the map.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/erlang/erlang.mk |    2 +-
+ package/libidn/libidn.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 1278682..5474952 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 7d20edf..7d327d1 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_VERSION = 17.0
-+ERLANG_VERSION = 17.1
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
+-LIBIDN_VERSION = 1.28
++LIBIDN_VERSION = 1.29
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
