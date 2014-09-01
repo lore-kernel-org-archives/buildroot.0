@@ -1,55 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  1 Sep 2014 09:56:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 7346] New: [2014.08rc3] vim-8ae50e3ef8bf.tar.gz
- can not be downloaded, 404 not found
-Message-ID: <bug-7346-163@https.bugs.busybox.net/>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 1 Sep 2014 12:09:37 +0200
+Subject: [Buildroot] [PATCH] Add support for Flattened Image Trees
+Message-ID: <CAGm1_kutYAhSCBP+bfqUa4azxmq==H9-mkwgBBaY6GK35MTQCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7346
+Here is my first attempt to add basic FIT image support. I'm sending
+this as attachment because of ISP issue. I'll resend the patch inline
+from home later.
 
-           Summary: [2014.08rc3] vim-8ae50e3ef8bf.tar.gz can not be
-                    downloaded, 404 not found
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: joymarquis at hotmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+The main idea is to let the user specify a path to the *.its file and
+the name of the resulting *.itb files name. I have multiple its file
+for various devices, but always use kernel-fit.itb as binary. As
+mkimage invokes dtc compiler, it has some issues with a working dir,
+so I copy *.its file to output/images and then invoke the mkimage.
 
+As for installation, how can I properly embed an if-statement  in
+define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET, so that, if FIT support
+is selected, then only itb file, but not kernel image/DTB will be
+copied to /boot?
 
-Please help to close if this is not the place for Release Candidate bugs.
+ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+        install -m 0644 -D $(LINUX_IMAGE_PATH)
+$(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+        $(LINUX_INSTALL_DTB_TARGET)
+        $(LINUX_INSTALL_ITB_TARGET)
+endef
+endif
 
-Version affected: 2014.08-rc3
+So far only kernel image + DTB embedding is supported. If one would
+like to embed initramfs, special handling in CPIO archive creating
+script must be done.
 
-Brief: vim-8ae50e3ef8bf.tar.gz can not be downloaded, 404 not found
+What do you think about my approach?
 
-Tried: Tried the printed download URL manually, the URL is mostly invalid.
-
-Error log:
-
->>> vim 8ae50e3ef8bf Downloading
-abort: error: Network is unreachable
---2014-08-27 18:41:58--  http://sources.buildroot.net/vim-8ae50e3ef8bf.tar.gz
-Resolving sources.buildroot.net... 176.9.16.109
-Connecting to sources.buildroot.net|176.9.16.109|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-08-27 18:42:00 ERROR 404: Not Found.
-
-make: ***
-[/home/houqing1/top/buildroot/buildroot-2014.08-rc3/output/build/vim-8ae50e3ef8bf/.stamp_d
-ownloaded] Error 1
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+Yegor
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Add-support-for-Flattened-Image-Trees.patch
+Type: application/octet-stream
+Size: 2551 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140901/766d8929/attachment.obj>
