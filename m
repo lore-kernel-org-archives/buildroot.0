@@ -1,41 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 15:38:23 +0200
-Subject: [Buildroot] [PATCH 11/15 v5] [RFC] package/libatasmart: needs
-	libudev, not a udev daemon
+Date: Mon,  1 Sep 2014 15:38:24 +0200
+Subject: [Buildroot] [PATCH 12/15 v5] [RFC] package/libinput: needs libudev,
+	not a udev daemon
 In-Reply-To: <cover.1409578332.git.yann.morin.1998@free.fr>
 References: <cover.1409578332.git.yann.morin.1998@free.fr>
-Message-ID: <b533c63500fa7d78bf88a179967248f4b3322ebd.1409578332.git.yann.morin.1998@free.fr>
+Message-ID: <096cd1c7d32bb9b56c699c2e31042f73151cdde5.1409578332.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do as the comment says: it's only libudev that is required.
+libinput is happy enough with just a libudev, and does
+not require a udev daemon.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libatasmart/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/Config.in   | 6 +++---
+ package/libinput/libinput.mk | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
-index 9db3b09..dcfb8c8 100644
---- a/package/libatasmart/Config.in
-+++ b/package/libatasmart/Config.in
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+index 14e4e70..a958e37 100644
+--- a/package/libinput/Config.in
++++ b/package/libinput/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBATASMART
- 	bool "libatasmart"
--	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ config BR2_PACKAGE_LIBINPUT
+ 	bool "libinput"
+-	depends on BR2_PACKAGE_HAS_UDEV
 +	depends on BR2_PACKAGE_HAS_LIBUDEV
+ 	select BR2_PACKAGE_LIBEVDEV
+ 	select BR2_PACKAGE_MTDEV
  	help
- 	  The libatasmart package is a disk reporting library.
- 	  It only supports a subset of the ATA S.M.A.R.T. functionality.
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBATASMART
- 	  http://0pointer.de/blog/projects/being-smart.html
+@@ -13,5 +13,5 @@ config BR2_PACKAGE_LIBINPUT
  
- comment "libatasmart requires udev to be enabled"
+ 	  http://freedesktop.org/wiki/Software/libinput/
+ 
+-comment "libinput needs udev /dev management"
 -	depends on !BR2_PACKAGE_HAS_UDEV
++comment "libinput needs a libudev provider to be selected"
 +	depends on !BR2_PACKAGE_HAS_LIBUDEV
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index b52101a..3f225cc 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -10,7 +10,7 @@ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
+ LIBINPUT_LICENSE_FILES = COPYING
+ 
+-LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev libudev
+ LIBINPUT_INSTALL_STAGING = YES
+ 
+ # Tests need fork, so just disable them everywhere.
 -- 
 1.9.1
