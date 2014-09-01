@@ -1,72 +1,57 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon,  1 Sep 2014 10:32:45 +0400
-Subject: [Buildroot] [PATCH v3] gcc: explicitly use C{XX}FLAGS_FOR_TARGET
-	instead of --enable-target-optspace
-Message-ID: <1409553165-10253-1-git-send-email-abrodkin@synopsys.com>
+Date: Mon, 1 Sep 2014 07:00:48 +0000
+Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
+In-Reply-To: <878umavrhu.fsf@dell.be.48ers.dk>
+References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
+ <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
+ <20140826165826.398f7a63@free-electrons.com>
+ <1409065267.6466.23.camel@abrodkin-8560l.internal.synopsys.com>
+ <87d2bmvs2f.fsf@dell.be.48ers.dk> <1409090000.3760.1.camel@abrodkin-8560l>
+ <878umavrhu.fsf@dell.be.48ers.dk>
+Message-ID: <1409554847.16864.7.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Hi Peter,
 
-The gcc.mk file is passing --enable-target-optspace to gcc configure
-script, to ask for space-optimized (-Os) target libraries. However,
-passing this option has the effect of overriding any custom
-CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+On Wed, 2014-08-27 at 00:02 +0200, Peter Korsgaard wrote:
+> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> 
+> Hi,
+> 
+>  >> I agree. The current patch doesn't apply to next. Care to rebase and
+>  >> resend?
+> 
+>  > Do I have any options? :)
+> 
+>  > I mean anyway after you guys cut final 2014.08 release "next" branch
+>  > will be merged with current master, right?
+> 
+>  > If so I have no other choice other than rebase and resend.
+>  > Correct me if I'm wrong.
+> 
+> Well, you can let me do the rebase myself, but it will probably go faster if you
+> do it.
 
-These are some situations when it is required to pass custom flags on buildong
-of libgcc:
- * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
-(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
- * Particular CPU requires specific instructions for HW support
- * Deep optimizations
+I've just checked what's the difference between master and next that
+causes problems on patch application.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+And it looks the reason is in "next" there's a commit missing:
+--->---
+gcc/arc-4.8-R3: add patch to enable more C++ features with uClibc
+http://git.buildroot.net/buildroot/commit/package/gcc/arc-4.8-R3?id=4bb2a05e8133f2f553b8e0cd6af53dfa8b8208b1
+https://patchwork.ozlabs.org/patch/379707/
+--->---
 
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
+And since this patch
+(package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch) should be moved to "arc-2014.08" (and my current v2 change does it) I'm not sure if there's a reason to do changes to "next" or just wait before "master" is open to new submissions.
 
-Compared to v2 use GCC_COMMON_xxx variables to escape changes in globally
-visible variables TARGET_C{XX}FLAGS.
+Otherwise we may whether lose history or Thomas' patch.
 
----
- package/gcc/gcc.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Let me know if that's fine for this v2 to be applied later directly on
+"master".
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b344a14..6016c57 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -107,16 +107,22 @@ HOST_GCC_COMMON_CONF_OPT = \
- HOST_GCC_COMMON_CONF_ENV = \
- 	MAKEINFO=missing
- 
-+GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
-+GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
- # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
- # Workaround until it's fixed in 4.5.4 or later
- ifeq ($(ARCH),powerpc)
- ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
--HOST_GCC_COMMON_CONF_OPT += --disable-target-optspace
-+GCC_COMMON_TARGET_CFLAGS := $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
-+GCC_COMMON_TARGET_CXXFLAGS := $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
- endif
--else
--HOST_GCC_COMMON_CONF_OPT += --enable-target-optspace
- endif
- 
-+# Propagate options used for target software building to GCC target libs
-+HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+
- # gcc 4.6.x quadmath requires wchar
- ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
- HOST_GCC_COMMON_CONF_OPT += --disable-libquadmath
--- 
-1.9.3
+-Alexey
