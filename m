@@ -1,31 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Sep 2014 13:24:46 -0000
-Subject: [Buildroot] [git commit] chrony: bump version
-Message-ID: <20140901132445.ACE239D5B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt5base: add postgresql driver support
+Message-ID: <20140901132445.B537F9D5B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21a85fd02a093a13675209bc82fd7e69462ecfc6
+commit: http://git.buildroot.net/buildroot/commit/?id=8c8fd498647e9889c645af472c47a12120091592
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Reviewed-by: Fatih A????c?? <fatih.asici@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/chrony/chrony.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt5/qt5base/Config.in  |   12 ++++++++++++
+ package/qt5/qt5base/qt5base.mk |    9 +++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index afe0fc8..59e5bfc 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 67f211c..12f983f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -62,6 +62,18 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+ 	help
+ 	  Build MySQL plugin
+ 	  If unsure, say n.
++
++config BR2_PACKAGE_QT5BASE_PSQL
++	bool "PostgreSQL Plugin"
++	select BR2_PACKAGE_POSTGRESQL
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  Build PostgreSQL plugin
++	  If unsure, say n.
++
++comment "PostgreSQL needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ choice
+ 	prompt "SQLite 3 support"
+ 	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 712208f..88e86c4 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -66,6 +66,14 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-sql-mysql
+ endif
  
--CHRONY_VERSION = 1.29.1
-+CHRONY_VERSION = 1.30
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPLv2
- CHRONY_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_QT5BASE_PSQL),y)
++QT5BASE_CONFIGURE_OPTS += -plugin-sql-psql
++QT5BASE_CONFIGURE_ENV  += PSQL_LIBS=-L$(STAGING_DIR)/usr/lib
++QT5BASE_DEPENDENCIES   += postgresql
++else
++QT5BASE_CONFIGURE_OPTS += -no-sql-psql
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_QT),-plugin-sql-sqlite)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),-system-sqlite)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),sqlite)
+@@ -170,6 +178,7 @@ define QT5BASE_CONFIGURE_CMDS
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
++		$(QT5BASE_CONFIGURE_ENV) \
+ 		./configure \
+ 		-v \
+ 		-prefix /usr \
