@@ -1,46 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Sep 2014 16:53:13 +0200
-Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
-In-Reply-To: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Thu, 21 Aug 2014 21:33:56 +0400")
-References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <877g1nl7dy.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Sep 2014 16:12:53 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.18.13
+Message-ID: <20140901145335.61CE69D5C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c597c559f3ee31e82e7613bae72c8d50439a2833
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Now when new shiny tools are released by Synopsys we're ready for version
- > update in Buildroot.
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpd/mpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Important change in this release is switching to combined "binutils-gdb" repo
- > in accordance to upstream move.
-
- > Following patch now is a part of the most recent relese:
- > https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/e6ab8cac627a44a7594aeb907a579d8d2f066ba5
-
- > So dropping it.
- > package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
-
- > Since arc-2014.08 tools are still based on GCC 4.8 following patch is still
- > relevant so moving to the new folder to matxh ARC gcc bump.
- > package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch ->
- > package/gcc/arc-2014.08/100-libstdcxx-uclibc-c99.patch
-
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
- > Cc: Anton Kolesov <akolesov@synopsys.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > Compared to v1 obsolete patch was removed and another one for gcc moved to
- > another location to match new arc gcc version.
-
-Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index f84c6d0..e01aca3 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.18
+-MPD_VERSION = $(MPD_VERSION_MAJOR).12
++MPD_VERSION = $(MPD_VERSION_MAJOR).13
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf libglib2
