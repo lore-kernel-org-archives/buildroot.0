@@ -1,60 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 15:38:27 +0200
-Subject: [Buildroot] [PATCH 15/15 v5] [RFC] package/weston: needs libudev,
-	not a udev daemon
-In-Reply-To: <cover.1409578332.git.yann.morin.1998@free.fr>
-References: <cover.1409578332.git.yann.morin.1998@free.fr>
-Message-ID: <3b319ddea8c364db04b3553fa6433c3d843fe5a0.1409578332.git.yann.morin.1998@free.fr>
+Date: Mon,  1 Sep 2014 15:44:31 +0200
+Subject: [Buildroot] [PATCH 0/4] fs/ext2: misc enhancements (branch
+	yem/fs-vol-id)
+Message-ID: <cover.1409579021.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-weston is happy enough with just a libudev, and does
-not require a udev daemon.
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/weston/Config.in | 6 +++---
- package/weston/weston.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This series enhances the fs/ext2 generation.
+Not much to say beside the individual commit logs... ;-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index dc7e235..408f6af 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,7 +1,7 @@
--comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
-+comment "weston needs a toolchain w/ threads, headers >= 3.0"
- 	depends on !BR2_avr32
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 
- config BR2_PACKAGE_WESTON
- 	bool "weston"
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_MTDEV
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	depends on !BR2_avr32 # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 7bb35b9..ac6c0c5 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -11,7 +11,7 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
--	jpeg mtdev udev cairo
-+	jpeg mtdev libudev cairo
- 
- WESTON_CONF_OPT = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit fcd720dfcf702d796fbc625b9abc4c06cb848d84:
+
+  Update for 2014.08 (2014-09-01 13:20:56 +0200)
+
+are available in the git repository at:
+
+  git://ymorin.is-a-geek.org/buildroot yem/fs-vol-id
+
+for you to fetch changes up to aef27eee3aa358ec0d07fd0e2a437a0f16a3b4b2:
+
+  fs/ext2: add support for specifying UUID (2014-09-01 14:28:12 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      fs/ext2: enhance option parsing in our genext2fs wrapper
+      fs/ext2: pass the ext GEN and REV as options
+      fs/ext2: add option to specify a filesystem label
+      fs/ext2: add support for specifying UUID
+
+ fs/ext2/Config.in    |  3 +++
+ fs/ext2/ext2.mk      | 11 ++++++-----
+ fs/ext2/genext2fs.sh | 43 +++++++++++++++++++++++++++++++++++++------
+ 3 files changed, 46 insertions(+), 11 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
