@@ -1,24 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Sep 2014 09:38:43 +0200
-Subject: [Buildroot] [PATCH] libphidget: needs dynamic library support
-In-Reply-To: <1409617011-24433-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 1 Sep 2014 21:16:51 -0300")
-References: <1409617011-24433-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87tx4qjwu4.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Sep 2014 22:11:35 +0200
+Subject: [Buildroot] [git commit] chrony: disable docs build
+Message-ID: <20140902073856.413B69D5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2dbdd7c1df69b6efd0f5eb49a98db1ec04026bba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/932/9322c930a545bb500b5193a84b26895a03a6b7f7/
+Needs makeinfo and we don't care about docs. Fixes:
+http://autobuild.buildroot.net/results/fd0/fd03a86ed670c765d9f0a1ed6cc913079e030fc9/
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/chrony/chrony.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 59e5bfc..4fdb81f 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -27,6 +27,12 @@ ifneq ($(BR2_INET_IPV6),y)
+ CHRONY_CONF_OPT += --disable-ipv6
+ endif
+ 
++# Ditch the doc build, needs makeinfo and we don't need them
++define CHRONY_DISABLE_DOCS
++	$(SED) 's/chronyc chrony.txt/chronyc/' $(@D)/Makefile.in
++endef
++CHRONY_POST_PATCH_HOOKS += CHRONY_DISABLE_DOCS
++
+ define CHRONY_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure $(CHRONY_CONF_OPT)
+ endef
