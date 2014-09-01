@@ -1,172 +1,254 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 15:38:13 +0200
-Subject: [Buildroot] [PATCH 01/15 v5] support/gen-manual-lists.py: rework
-	generating the virtual package list
+Date: Mon,  1 Sep 2014 15:38:18 +0200
+Subject: [Buildroot] [PATCH 06/15 v5] package/eudev: split udev/libudev
 In-Reply-To: <cover.1409578332.git.yann.morin.1998@free.fr>
 References: <cover.1409578332.git.yann.morin.1998@free.fr>
-Message-ID: <bc3b8bdefddf76346ddff5c8d6c27d7f81dbb01e.1409578332.git.yann.morin.1998@free.fr>
+Message-ID: <2e7ea12038b509e90ef023bf8e48732655d66f9d.1409578332.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To get the list of providers of a virtual pacakge, we currently scan
-all the symbols to see if they select the virtual package _HAS symbol.
+Quite a few packages are happy with just libudev, and not a full udev
+daemon running.
 
-Then, for all such selecting symbols, we iterate through the select
-chain, up to the uppermost symbol that has a prompt, to get the actual
-user-selectable symbol that ultimately will select the virtual package.
-This handles blind symbols that are options to a package.
+Split the eudev package so that we can install just libudev if
+/dev management is not handled by eudev.
 
-So far, this is working relatively OK, except we do not account for a
-special type of providers: virtual packages. There is nothing that
-prevents a virtual package to declare itself as a provider for another
-virtual package.
+When only the library is installed, behave as a provider for the libudev
+virtual package. If /dev management is handled by eudev, then also be a
+provider for the udev virtual package.
 
-Additionally, another case that is not handled is actual packages that
-are actually promptless. So far, we expected symbols with no prompt to
-be an option to a package, and we would ultimately (via the backward
-select recursion, above) end up finding a package symbol with a prompt.
+Adjust comments of dependencies accordingly.
 
-But we're soon removing the prompts of eudev and systemd [*], so the
-previously valid heuristic is no longer valid.
+Note:
+    Most of the .mk splitting of the dependencies and the build/install
+    rules are from Bernd. Thanks! :-)
 
-So, we need a brand-new heuristic to build up the list of providers.
-
-Fortunately, instead of _blindly_ looking for selecting symbols, we
-can actually extract the providing packages from the list of 'default'
-values of the _PROVIDES_XXX symbol. This gives us the list of packages,
-but not sub-options.
-
-Then, we can go on hunting for any selecting symbol. Each such symbol
-that is not a known package gets treated like an option, as was done
-up until now.
-
-What this additional complexity brings, is that prompt-less packages
-are automatically found, from the list of 'default' values, and this
-includes real prompt-less packages, as well as virtual packages. These
-are what we were missing previously.
-
-[*] because they are not directly user-selectable, see the corresponding
-following changesets for the rationale.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
- support/scripts/gen-manual-lists.py | 93 +++++++++++++++++++++++++++++++------
- 1 file changed, 78 insertions(+), 15 deletions(-)
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[ Compiled for x86 target with glibc 2.18 and Kernel headers 3.15.x ]
+Tested-by: Cedric Chedaleux <cedric.chedaleux@orange.com>
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index 95c10dc..0f1906d 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -384,28 +384,91 @@ class Buildroot:
-                     return s
-             return None
+---
+Changes v4 -> v5:
+  - building libudev requires two steps  (Bernd)
+
+Changes RFCv2-> v3:
+  - typo s/system/systemd/
+
+Changes RFCv1 -> RFCv2:
+  - be a provider for libudev always, since udev is not such a provider
+    any more  (Thomas)
+---
+ package/eudev/Config.in                            | 32 ++++++++++---
+ ...y-use-pragma-for-ignoring-diagnostics-if-.patch |  8 ++--
+ package/eudev/eudev.mk                             | 53 ++++++++++++++++++++--
+ system/Config.in                                   | 20 ++++++--
+ 4 files changed, 94 insertions(+), 19 deletions(-)
+
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 7aaa540..f6fa5ba 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -1,13 +1,33 @@
+ config BR2_PACKAGE_EUDEV
+ 	bool "eudev"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++	depends on !BR2_avr32 # no __NR_name_to_handle_at
++	depends on BR2_USE_WCHAR
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on !BR2_PACKAGE_SYSTEMD
++	select BR2_PACKAGE_HAS_LIBUDEV
++	help
++	  eudev is a fork of systemd-udev with the goal of obtaining better
++	  compatibility with existing software.
++
++	  This installs only the libudev library.
++
++	  http://www.gentoo.org/proj/en/eudev/
++
++if BR2_PACKAGE_EUDEV
++
++config BR2_PACKAGE_PROVIDES_LIBUDEV
++	default "eudev"
++
++config BR2_PACKAGE_EUDEV_DAEMON
++	bool "udev daemon"
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on !BR2_avr32 # no epoll_create1
+ 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on !BR2_PREFER_STATIC_LIB # kmod
+-	select BR2_PACKAGE_HAS_LIBUDEV
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -21,10 +41,7 @@ config BR2_PACKAGE_EUDEV
  
--        def _get_providers(symbol):
--            providers = list()
-+        # This functions return a list of all symbols that have a prompt,
-+        # and that 'select' the given symbol
-+        def _get_selecting_symbols_with_prompt(symbol):
-+            syms = list()
-             for sym in self.config:
-                 if not sym.is_symbol():
-                     continue
--                if _symbol_is_legacy(sym):
--                    continue
-                 selects = sym.get_selected_symbols()
-                 if not selects:
-                     continue
-+                # Does this symbol selects us?
-                 for s in selects:
--                    if s == symbol:
--                        if sym.prompts:
--                            l = self._get_symbol_label(sym,False)
--                            parent_pkg = _get_parent_package(sym)
--                            if parent_pkg is not None:
--                                l = self._get_symbol_label(parent_pkg, False) \
--                                  + " (w/ " + l + ")"
--                            providers.append(l)
--                        else:
--                            providers.extend(_get_providers(sym))
--            return providers
-+                    if not s == symbol:
-+                        continue
-+                    if sym.prompts:
-+                        syms.append(sym)
-+                    else:
-+                        syms.extend(_get_selecting_symbols_with_prompt(sym))
-+            return syms
-+
-+        # This function returns a list of providers for the specified symbol.
-+        # 'symbol' must be a _HAS_XXX symbol.
-+        # Each element is a string.
-+        # Each element is the name of the providing package, with any
-+        # sub-option of that package.
-+        # E.g.:  "rpi-userland"   "mesa3d (w/ OpenGL ES)"
-+        #
-+        # We consider the provider packages by looking at all the default "foo"
-+        # for the corresponding _PROVIDES_XXX symbol, which gives us all the
-+        # packages.
-+        # Then we look at all the symbols that 'select' the _HAS_XXX symbol.
-+        # If a selecting symbol is also a package symbol, this is a cut.
-+        # Otherwise, we iterate the 'selected by' chain until we find a symbol
-+        # with a prompt, which we consider the enabling sub-option, or we end
-+        # up with the providing-package's symbol.
-+        def _get_providers(symbol):
-+            providers_syms = list()
-+            providers_syms_names = list()
-+            providers_syms_w_opts = list()
-+
-+            # Get all providing packages
-+            _provides_pkg = re.sub(r"^(BR2_PACKAGE)_HAS_(.+)$",
-+                                   r"\1_PROVIDES_\2",
-+                                   symbol.get_name())
-+            _provides_sym = self.config.get_symbol(_provides_pkg)
-+            for (pn, _) in _provides_sym.def_exprs:
-+                ps = self.config._expr_val_str(pn, get_val_instead_of_eval=True)
-+                ps = re.sub(r"-", r"_", ps.strip('"'))
-+                ps = self.config.get_symbol("BR2_PACKAGE_" + ps.upper())
-+                providers_syms.append(ps)
-+                providers_syms_names.append( (ps, pn) )
-+
-+            # Now, try to get sub-options
-+            # Iterate across all symbols, to see if any selects us
-+            for sym in _get_selecting_symbols_with_prompt(symbol):
-+                if _symbol_is_legacy(sym):
-+                    continue
-+                if sym in providers_syms:
-+                    # The symbol is a package that provides us, and we already
-+                    # know of it
-+                    continue
-+                # The symbol is unknown, we suppose it is an option, so find
-+                # the package it comes from
-+                parent_pkg = _get_parent_package(sym)
-+                if parent_pkg is not None:
-+                    providers_syms_w_opts.append( (parent_pkg, sym) )
-+
-+            # Now, build a list of providers with option
-+            seen = list()
-+            providers_str = list()
-+            for (p, o) in providers_syms_w_opts:
-+                if not p in seen:
-+                    seen.append(p)
-+                l = self._get_symbol_label(p, False) + " (w/ " \
-+                  + self._get_symbol_label(o, False) + ")"
-+                providers_str.append(l)
-+
-+            # Finally, complete with the list of providers without option
-+            for (ps, pn) in providers_syms_names:
-+                if ps in seen:
-+                    continue
-+                if not pn in providers_str:
-+                    providers_str.append(pn)
-+
-+            return providers_str
+ 	  http://dev.gentoo.org/~blueness/eudev
  
-         if what == "layout":
-             return ( "100%", "^1,4,4" )
+-if BR2_PACKAGE_EUDEV
+-
+-config BR2_PACKAGE_PROVIDES_LIBUDEV
+-	default "eudev"
++if BR2_PACKAGE_EUDEV_DAEMON
+ 
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "eudev"
+@@ -34,9 +51,9 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
+ 	help
+ 	  Enable persistent rules generator
+ 
+-endif
++endif # BR2_PACKAGE_EUDEV_DAEMON
+ 
+-comment "eudev needs eudev /dev management"
++comment "udev daemon needs eudev /dev management"
+ 	depends on !BR2_avr32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+@@ -48,3 +65,4 @@ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++	depends on !BR2_PACKAGE_SYSTEMD
+diff --git a/package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch b/package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+index 8b70fbf..38dba9b 100644
+--- a/package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch
++++ b/package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+@@ -6,14 +6,16 @@ Subject: [PATCH] libudev: Only use #pragma for ignoring diagnostics if GCC
+ 
+ 
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++[yann.morin.1998 at free.fr: adapt to 1.10]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  src/libudev/macro.h |    5 +++++
+  1 file changed, 5 insertions(+)
+ 
+-diff --git a/src/libudev/macro.h b/src/libudev/macro.h
++diff --git a/src/shared/macro.h b/src/shared/macro.h
+ index ac2a23f..fb55983 100644
+---- a/src/libudev/macro.h
+-+++ b/src/libudev/macro.h
++--- a/src/shared/macro.h
+++++ b/src/shared/macro.h
+ @@ -40,12 +40,17 @@
+  #define _cleanup_(x) __attribute__((cleanup(x)))
+  
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 811d72b..a593f99 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -16,19 +16,28 @@ EUDEV_CONF_ENV += LIBS=-lrt
+ 
+ EUDEV_CONF_OPT =		\
+ 	--disable-manpages	\
+-	--sbindir=/sbin		\
+ 	--with-rootlibdir=/lib	\
+ 	--libexecdir=/lib	\
+ 	--with-firmware-path=/lib/firmware	\
+ 	--disable-introspection			\
+-	--enable-split-usr			\
+-	--enable-libkmod
++	--enable-split-usr
++
++EUDEV_DEPENDENCIES = host-pkgconf
++EUDEV_PROVIDES = libudev
++
++ifeq ($(BR2_PACKAGE_EUDEV_DAEMON),y)
++
++EUDEV_DEPENDENCIES += host-gperf util-linux kmod
++EUDEV_PROVIDES += udev
+ 
+-EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+-EUDEV_PROVIDES = libudev udev
++EUDEV_CONF_OPT += \
++	--sbindir=/sbin \
++	--enable-libkmod
+ 
+ ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
+ EUDEV_CONF_OPT += --enable-rule_generator
++else
++EUDEV_CONF_OPT += --disable-rule_generator
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+@@ -42,4 +51,38 @@ define EUDEV_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
+ 
++else # ! daemon
++
++EUDEV_CONF_OPT += \
++	--disable-keymap \
++	--disable-libkmod \
++	--disable-modules \
++	--disable-selinux \
++	--disable-rule-generator \
++	--disable-gtk-doc \
++	--disable-gudev
++
++# When not installing the daemon, we have to override the build and install
++# commands, to just install the library.
++
++define EUDEV_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/shared
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev
++endef
++
++# Symlink udev.pc to libudev.pc for those packages that conflate the two
++# and 'Requires: udev' when they should just 'Requires: libudev'. Do the
++# symlink, to avoid patching each and all of those packages.
++# Note: nothing to install from src/shared, only from src/libudev
++define EUDEV_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev DESTDIR=$(STAGING_DIR) install
++	ln -sf libudev.pc $(STAGING_DIR)/usr/lib/pkgconfig/udev.pc
++endef
++
++define EUDEV_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev DESTDIR=$(TARGET_DIR) install
++endef
++
++endif # ! daemon
++
+ $(eval $(autotools-package))
+diff --git a/system/Config.in b/system/Config.in
+index d5389d0..b5f5a65 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -126,11 +126,23 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	bool "Dynamic using eudev"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9 # eudev
+ 	depends on !BR2_avr32 # eudev
+-	depends on BR2_LARGEFILE
+-	depends on BR2_USE_WCHAR
+-	depends on !BR2_PREFER_STATIC_LIB
+-	depends on BR2_USE_MMU # eudev
++	depends on BR2_USE_MMU # eudev (fork)
++	depends on BR2_LARGEFILE # eudev-daemon (util-linux)
++	depends on BR2_USE_WCHAR # eudev (util-linux)
++	depends on !BR2_PREFER_STATIC_LIB # eudev
+ 	select BR2_PACKAGE_EUDEV
++	select BR2_PACKAGE_EUDEV_DAEMON
++	help
++	  Userspace device daemon. This is a standalone version,
++	  independent of systemd. It is a fork maintained by Gentoo.
++
++	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
++	  and inotify.
++
++	  You can further configure eudev in:
++	    Target packages --> Libraries --> Hardware handling --> eudev
++
++	  http://dev.gentoo.org/~blueness/eudev
+ 
+ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
+ 	depends on !BR2_avr32 # eudev
 -- 
 1.9.1
