@@ -1,40 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Sep 2014 10:54:18 +0200
-Subject: [Buildroot] [git commit] mtdev2tuio: fix static linking
-Message-ID: <20140901085539.A64459D2FF@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  1 Sep 2014 09:56:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 7346] New: [2014.08rc3] vim-8ae50e3ef8bf.tar.gz
+ can not be downloaded, 404 not found
+Message-ID: <bug-7346-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c86439678bc0db90ef5cbb59ada599a741ffffef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7346
 
-Liblo uses log(3), so we need to link with -lm when linking statically.
+           Summary: [2014.08rc3] vim-8ae50e3ef8bf.tar.gz can not be
+                    downloaded, 404 not found
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: joymarquis at hotmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Fixes http://autobuild.buildroot.net/results/bec/becda4756c577ec158536408aba59797fbed938a/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mtdev2tuio/mtdev2tuio.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Please help to close if this is not the place for Release Candidate bugs.
 
-diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
-index b4aab52..7b00221 100644
---- a/package/mtdev2tuio/mtdev2tuio.mk
-+++ b/package/mtdev2tuio/mtdev2tuio.mk
-@@ -11,11 +11,12 @@ MTDEV2TUIO_LICENSE = GPLv3+
- MTDEV2TUIO_LICENSE_FILES = COPYING
- 
- # mtdev2tuio Makefile misuses $(LD) as gcc, so we need to override LD
--# here.
-+# here. Liblo uses log(3), so we need to link with -lm
- define MTDEV2TUIO_BUILD_CMDS
- 	$(MAKE) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		LD="$(TARGET_CC)" \
-+		LIBS="-lmtdev -llo -lm" \
- 		-C $(@D)
- endef
- 
+Version affected: 2014.08-rc3
+
+Brief: vim-8ae50e3ef8bf.tar.gz can not be downloaded, 404 not found
+
+Tried: Tried the printed download URL manually, the URL is mostly invalid.
+
+Error log:
+
+>>> vim 8ae50e3ef8bf Downloading
+abort: error: Network is unreachable
+--2014-08-27 18:41:58--  http://sources.buildroot.net/vim-8ae50e3ef8bf.tar.gz
+Resolving sources.buildroot.net... 176.9.16.109
+Connecting to sources.buildroot.net|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2014-08-27 18:42:00 ERROR 404: Not Found.
+
+make: ***
+[/home/houqing1/top/buildroot/buildroot-2014.08-rc3/output/build/vim-8ae50e3ef8bf/.stamp_d
+ownloaded] Error 1
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
