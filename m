@@ -1,44 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Sep 2014 13:24:46 -0000
-Subject: [Buildroot] [git commit] nitrogen6x_defconfig: bump u-boot to
-	version 63ae4a5
-Message-ID: <20140901132445.8C2BB9D52F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] chrony: add sysv initscript
+Message-ID: <20140901132445.A3ED69D5C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb34fe9af3b57ed6c11a5d8d3d3a768f4651aa44
+commit: http://git.buildroot.net/buildroot/commit/?id=d016a6a30dd86f5d6a02663fa4729a75e48ae379
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump u-boot to latest version binary provided by Boundary Devices ([1]).
-
-This version is only 6 commits behind the head of the git production
-branch ([2]) recommended by Boundary Devices ([3]).
-
-Tested on nitrogen6q-rev3 board.
-
-[1] http://commondatastorage.googleapis.com/boundarydevices.com/u-boot-production.tar.gz
-[2] https://github.com/boundarydevices/u-boot-imx6/commits/production
-[3] http://boundarydevices.com/i-mx6-frequently-asked-questions-and-answers/#latest-uboot
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nitrogen6x_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/chrony/S49chrony |   26 ++++++++++++++++++++++++++
+ package/chrony/chrony.mk |    4 ++++
+ 2 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 082b1f5..5e5b91e 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/4034391/u-boot-4034391.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/63ae4a5/u-boot-63ae4a5.tar.gz"
+diff --git a/package/chrony/S49chrony b/package/chrony/S49chrony
+new file mode 100755
+index 0000000..66a50d5
+--- /dev/null
++++ b/package/chrony/S49chrony
+@@ -0,0 +1,26 @@
++#!/bin/sh
++#
++# Start chrony
++
++[ -f /etc/chrony.conf ] || exit 0
++
++case "$1" in
++  start)
++	echo "Starting chrony: "
++	chronyd && echo "OK" || echo "FAIL"
++	;;
++  stop)
++	echo -n "Stopping chrony: "
++	killall chronyd && echo "OK" || echo "FAIL"
++	;;
++  restart|reload)
++	"$0" stop
++	sleep 1
++	"$0" start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 09a4a1e..afe0fc8 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -39,4 +39,8 @@ define CHRONY_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+ endef
  
- # kernel
- BR2_LINUX_KERNEL=y
++define CHRONY_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/chrony/S49chrony $(TARGET_DIR)/etc/init.d/S49chrony
++endef
++
+ $(eval $(generic-package))
