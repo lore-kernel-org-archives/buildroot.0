@@ -1,100 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Aug 2014 00:13:58 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: add systemd service file
-In-Reply-To: <20140611223342.6d8f9291@free-electrons.com>
-References: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
- <20140611223342.6d8f9291@free-electrons.com>
-Message-ID: <20140801001358.7ebe331b@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 1 Sep 2014 06:01:16 +0000
+Subject: [Buildroot] [PATCH v2] gcc: explicitly use
+ C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
+In-Reply-To: <20140829190230.36493af3@free-electrons.com>
+References: <1409230758-14548-1-git-send-email-abrodkin@synopsys.com>
+ <20140829190230.36493af3@free-electrons.com>
+Message-ID: <1409551275.16864.2.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric,
+Hi Thomas,
 
-Another ping about this patch :-)
+On Fri, 2014-08-29 at 19:02 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Thu, 28 Aug 2014 16:59:18 +0400, Alexey Brodkin wrote:
+> 
+> > @@ -111,12 +111,15 @@ HOST_GCC_COMMON_CONF_ENV = \
+> >  # Workaround until it's fixed in 4.5.4 or later
+> >  ifeq ($(ARCH),powerpc)
+> >  ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+> > -HOST_GCC_COMMON_CONF_OPT += --disable-target-optspace
+> > +TARGET_CFLAGS := $(subst -Os,,$(TARGET_CFLAGS))
+> > +TARGET_CXXFLAGS := $(subst -Os,,$(TARGET_CXXFLAGS))
+> 
+> No. Remember that the namespace of variables is global in Buildroot. A
+> given package is clearly *not* allowed to change global variables such
+> as TARGET_CFLAGS and TARGET_CXXFLAGS. If you want to remove -Os just
+> for gcc, you should do:
 
-Thanks,
+Hm, I was under impression that variables are visible only within
+"package/name" and according to hierarchy.
 
-Thomas
+Now it's clear they are all global - will keep it in mind then.
 
-On Wed, 11 Jun 2014 22:33:42 +0200, Thomas Petazzoni wrote:
-> Eric,
-> 
-> As our systemd person, could you review this patch, and give your
-> comments and/or Acked-by/Reviewed-by as appropriate?
-> 
-> Thanks,
-> 
-> Thomas
-> 
-> On Tue, 20 May 2014 23:16:51 +0200, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - add '-w' (wait) to pg_ctl start command (to ensure pid
-> >     file generation)
-> > ---
-> >  package/postgresql/postgresql.mk      |  8 ++++++++
-> >  package/postgresql/postgresql.service | 24 ++++++++++++++++++++++++
-> >  2 files changed, 32 insertions(+)
-> >  create mode 100644 package/postgresql/postgresql.service
-> > 
-> > diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> > index b331737..cf4700a 100644
-> > --- a/package/postgresql/postgresql.mk
-> > +++ b/package/postgresql/postgresql.mk
-> > @@ -58,4 +58,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
-> >  		$(TARGET_DIR)/etc/init.d/S50postgresql
-> >  endef
-> >  
-> > +define POSTGRESQL_INSTALL_INIT_SYSTEMD
-> > +        $(INSTALL) -D -m 644 package/postgresql/postgresql.service \
-> > +                $(TARGET_DIR)/etc/systemd/system/postgresql.service
-> > +        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > +        ln -fs ../postgresql.service \
-> > +                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
-> > +endef
-> > +
-> >  $(eval $(autotools-package))
-> > diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-> > new file mode 100644
-> > index 0000000..4a96258
-> > --- /dev/null
-> > +++ b/package/postgresql/postgresql.service
-> > @@ -0,0 +1,24 @@
-> > +[Unit]
-> > +Description=PostgreSQL database server
-> > +After=network.target
-> > +
-> > +[Service]
-> > +Type=forking
-> > +
-> > +# start timeout disabled because initdb may run a little
-> > +# longer (eg. 5 minutes on RaspberryPi)
-> > +TimeoutStartSec=0
-> > +
-> > +User=postgres
-> > +Group=postgres
-> > +
-> > +SyslogIdentifier=postgres
-> > +PIDFile=/var/lib/pgsql/postmaster.pid
-> > +
-> > +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
-> > +ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
-> > +ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
-> > +ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
-> > +
-> > +[Install]
-> > +WantedBy=multi-user.target
-> 
-> 
-> 
+Already smoke-testing v3 and will send it to the list shortly.
 
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
