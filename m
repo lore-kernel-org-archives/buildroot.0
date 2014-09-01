@@ -1,49 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Sep 2014 12:09:37 +0200
-Subject: [Buildroot] [PATCH] Add support for Flattened Image Trees
-Message-ID: <CAGm1_kutYAhSCBP+bfqUa4azxmq==H9-mkwgBBaY6GK35MTQCA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  1 Sep 2014 10:20:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 7346] [2014.08rc3] vim-8ae50e3ef8bf.tar.gz can not
+ be downloaded, 404 not found
+In-Reply-To: <bug-7346-163@https.bugs.busybox.net/>
+References: <bug-7346-163@https.bugs.busybox.net/>
+Message-ID: <20140901102056.12AC49D561@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is my first attempt to add basic FIT image support. I'm sending
-this as attachment because of ISP issue. I'll resend the patch inline
-from home later.
+https://bugs.busybox.net/show_bug.cgi?id=7346
 
-The main idea is to let the user specify a path to the *.its file and
-the name of the resulting *.itb files name. I have multiple its file
-for various devices, but always use kernel-fit.itb as binary. As
-mkimage invokes dtc compiler, it has some issues with a working dir,
-so I copy *.its file to output/images and then invoke the mkimage.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-As for installation, how can I properly embed an if-statement  in
-define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET, so that, if FIT support
-is selected, then only itb file, but not kernel image/DTB will be
-copied to /boot?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
-define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
-        install -m 0644 -D $(LINUX_IMAGE_PATH)
-$(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
-        $(LINUX_INSTALL_DTB_TARGET)
-        $(LINUX_INSTALL_ITB_TARGET)
-endef
-endif
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-01 10:20:55 UTC ---
+This is not a problem with Buildroot.
+First of all, two downloads are attempted: one from the vim mercurial
+repository directly, and since it fails, a fallback to sources.buildroot.net.
 
-So far only kernel image + DTB embedding is supported. If one would
-like to embed initramfs, special handling in CPIO archive creating
-script must be done.
+The latter does not contain the vim package, but this is only a fallback.
 
-What do you think about my approach?
+The real problem is that in your run, the vim server did not respond. This may
+be a temporary issue with the vim server (googlecode), or a connection problem
+due to proxy issues.
 
-Regards,
-Yegor
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Add-support-for-Flattened-Image-Trees.patch
-Type: application/octet-stream
-Size: 2551 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140901/766d8929/attachment.obj>
+I have just tested, and the download works fine here.
+Have you tried this again at another time?
+
+Have you checked your proxy correctly?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
