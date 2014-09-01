@@ -1,17 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Sep 2014 16:52:23 +0200
+Date: Mon, 01 Sep 2014 16:53:13 +0200
 Subject: [Buildroot] [PATCH v2] ARC: bump tools to 2014.08 release
-In-Reply-To: <1409554847.16864.7.camel@abrodkin-8560l.internal.synopsys.com>
- (Alexey Brodkin's message of "Mon, 1 Sep 2014 07:00:48 +0000")
+In-Reply-To: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Thu, 21 Aug 2014 21:33:56 +0400")
 References: <1408642436-2489-1-git-send-email-abrodkin@synopsys.com>
- <1409064582.6466.21.camel@abrodkin-8560l.internal.synopsys.com>
- <20140826165826.398f7a63@free-electrons.com>
- <1409065267.6466.23.camel@abrodkin-8560l.internal.synopsys.com>
- <87d2bmvs2f.fsf@dell.be.48ers.dk>
- <1409090000.3760.1.camel@abrodkin-8560l>
- <878umavrhu.fsf@dell.be.48ers.dk>
- <1409554847.16864.7.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <87bnqzl7fc.fsf@dell.be.48ers.dk>
+Message-ID: <877g1nl7dy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,30 +13,34 @@ To: buildroot@busybox.net
 
 >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Hi,
+ > Now when new shiny tools are released by Synopsys we're ready for version
+ > update in Buildroot.
 
- >> Well, you can let me do the rebase myself, but it will probably go faster if you
- >> do it.
+ > Important change in this release is switching to combined "binutils-gdb" repo
+ > in accordance to upstream move.
 
- > I've just checked what's the difference between master and next that
- > causes problems on patch application.
+ > Following patch now is a part of the most recent relese:
+ > https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/commit/e6ab8cac627a44a7594aeb907a579d8d2f066ba5
 
- > And it looks the reason is in "next" there's a commit missing:
- ---> ---
- > gcc/arc-4.8-R3: add patch to enable more C++ features with uClibc
- > http://git.buildroot.net/buildroot/commit/package/gcc/arc-4.8-R3?id=4bb2a05e8133f2f553b8e0cd6af53dfa8b8208b1
- > https://patchwork.ozlabs.org/patch/379707/
- ---> ---
+ > So dropping it.
+ > package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
 
- > And since this patch
- > (package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch) should be moved to "arc-2014.08" (and my current v2 change does it) I'm not sure if there's a reason to do changes to "next" or just wait before "master" is open to new submissions.
+ > Since arc-2014.08 tools are still based on GCC 4.8 following patch is still
+ > relevant so moving to the new folder to matxh ARC gcc bump.
+ > package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch ->
+ > package/gcc/arc-2014.08/100-libstdcxx-uclibc-c99.patch
 
- > Otherwise we may whether lose history or Thomas' patch.
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
- > Let me know if that's fine for this v2 to be applied later directly on
- > "master".
+ > Cc: Anton Kolesov <akolesov@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Compared to v1 obsolete patch was removed and another one for gcc moved to
+ > another location to match new arc gcc version.
 
-Yes, I will apply v2 now that next has been merged into master. Thanks.
+Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard 
+Venlig hilsen,
+Peter Korsgaard 
