@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Sep 2014 10:37:39 +0200
-Subject: [Buildroot] [git commit] cppcms: needs wchar support even without
-	icu
-Message-ID: <20140901085539.9DB4F9D5B9@busybox.osuosl.org>
+Date: Mon, 1 Sep 2014 10:54:18 +0200
+Subject: [Buildroot] [git commit] mtdev2tuio: fix static linking
+Message-ID: <20140901085539.A64459D2FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8993ebb34823b301ea2bf4f1f57495ec29b906b
+commit: http://git.buildroot.net/buildroot/commit/?id=c86439678bc0db90ef5cbb59ada599a741ffffef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/6f8/6f8e8b68235f6cf0dfef13e3ed11f97a3ab50a06/
+Liblo uses log(3), so we need to link with -lm when linking statically.
+
+Fixes http://autobuild.buildroot.net/results/bec/becda4756c577ec158536408aba59797fbed938a/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cppcms/Config.in |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ package/mtdev2tuio/mtdev2tuio.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index dbe4786..460c875 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -32,13 +32,8 @@ config BR2_PACKAGE_CPPCMS_ICU
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
+diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
+index b4aab52..7b00221 100644
+--- a/package/mtdev2tuio/mtdev2tuio.mk
++++ b/package/mtdev2tuio/mtdev2tuio.mk
+@@ -11,11 +11,12 @@ MTDEV2TUIO_LICENSE = GPLv3+
+ MTDEV2TUIO_LICENSE_FILES = COPYING
  
--comment "icu support needs a toolchain w/ wchar"
--	depends on !BR2_BINFMT_FLAT
--	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_USE_WCHAR
--
- endif
+ # mtdev2tuio Makefile misuses $(LD) as gcc, so we need to override LD
+-# here.
++# here. Liblo uses log(3), so we need to link with -lm
+ define MTDEV2TUIO_BUILD_CMDS
+ 	$(MAKE) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CC)" \
++		LIBS="-lmtdev -llo -lm" \
+ 		-C $(@D)
+ endef
  
--comment "cppcms needs a toolchain w/ C++, NPTL, dynamic library"
-+comment "cppcms needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		BR2_PREFER_STATIC_LIB
-+		!BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
