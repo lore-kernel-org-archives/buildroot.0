@@ -1,37 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  1 Sep 2014 12:11:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 7346] [2014.08rc3] vim-8ae50e3ef8bf.tar.gz can not
- be downloaded, 404 not found
-In-Reply-To: <bug-7346-163@https.bugs.busybox.net/>
-References: <bug-7346-163@https.bugs.busybox.net/>
-Message-ID: <20140901121129.E30059D573@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 1 Sep 2014 13:51:54 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-08-29
+In-Reply-To: <20140830063010.D10AE101874@stock.ovh.net>
+References: <20140830063010.D10AE101874@stock.ovh.net>
+Message-ID: <54046BEA.7000303@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7346
+On 08/30/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-08-29
+> ===============================
 
---- Comment #3 from joymarquis at hotmail.com 2014-09-01 12:11:29 UTC ---
-Hi all,
+>    mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/f6088f98372199bdf4fc02ea4e82818c68e30a54/
+>    mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/940015d84ee574e785ef8aa7d4502f157399524f/
 
-Thanks for all of your quick comments and feedback.
+These failures are caused because the toolchain 
+mips64el-ctng_n64-linux-gnu.tar.xz uses eglibc-2.18 which lacks the 
+definition of SYS_getdents64 for MIPS64 n64.
 
-What Thomas mentioned is exact what I'm encountered: I was trying this build
-within a uncontrolled firewall which does not allow "Mercurial port".
-
-According to Peter's solution: I tried downloading the vim-*** to "dl/" folder
-and "make", the buildroot was finished successfully.
-
-I'll to delete the dl/vim-*** package and try if Peter's solution is working.
-
-Will update once completed.
-
-
-Thanks
-
+Could be possible to upgrade that toolchain using a newer eglibc 
+version, please?
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Vincent
