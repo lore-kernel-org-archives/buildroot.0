@@ -1,57 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 15:38:24 +0200
-Subject: [Buildroot] [PATCH 12/15 v5] [RFC] package/libinput: needs libudev,
+Date: Mon,  1 Sep 2014 15:38:25 +0200
+Subject: [Buildroot] [PATCH 13/15 v5] [RFC] package/libusb: needs libudev,
 	not a udev daemon
 In-Reply-To: <cover.1409578332.git.yann.morin.1998@free.fr>
 References: <cover.1409578332.git.yann.morin.1998@free.fr>
-Message-ID: <096cd1c7d32bb9b56c699c2e31042f73151cdde5.1409578332.git.yann.morin.1998@free.fr>
+Message-ID: <19bd822d5640ecf2d574b6eda1e681ec4b41fbb3.1409578332.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libinput is happy enough with just a libudev, and does
+libusb is happy enough with just a libudev, and does
 not require a udev daemon.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libinput/Config.in   | 6 +++---
- package/libinput/libinput.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libusb/libusb.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index 14e4e70..a958e37 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBINPUT
- 	bool "libinput"
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_LIBEVDEV
- 	select BR2_PACKAGE_MTDEV
- 	help
-@@ -13,5 +13,5 @@ config BR2_PACKAGE_LIBINPUT
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 7e0f877..8a07cd8 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -21,8 +21,9 @@ ifeq ($(BR2_avr32),y)
+ LIBUSB_CONF_OPT += --disable-timerfd
+ endif
  
- 	  http://freedesktop.org/wiki/Software/libinput/
- 
--comment "libinput needs udev /dev management"
--	depends on !BR2_PACKAGE_HAS_UDEV
-+comment "libinput needs a libudev provider to be selected"
-+	depends on !BR2_PACKAGE_HAS_LIBUDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index b52101a..3f225cc 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -10,7 +10,7 @@ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
- LIBINPUT_LICENSE_FILES = COPYING
- 
--LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev libudev
- LIBINPUT_INSTALL_STAGING = YES
- 
- # Tests need fork, so just disable them everywhere.
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-LIBUSB_DEPENDENCIES += udev
++ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
++LIBUSB_CONF_OPT += --enable-udev
++LIBUSB_DEPENDENCIES += libudev
+ else
+ LIBUSB_CONF_OPT += --disable-udev
+ endif
 -- 
 1.9.1
