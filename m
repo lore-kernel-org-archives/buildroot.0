@@ -1,64 +1,19 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 22:41:07 +0200
-Subject: [Buildroot] [PATCH] package/smstools3: fix for recent make
-Message-ID: <1409604067-5820-1-git-send-email-yann.morin.1998@free.fr>
+From: buildroot at uclibc.org <buildroot@uclibc.org>
+Date: Mon, 1 Sep 2014 17:24:18 -0300
+Subject: [Buildroot] Entrega correios.com segue as infomacoes da entrega
+	0008376135
+Message-ID: <WEBWIN10va2coDF5m5t00185c6d@webwin10.tecla.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-smstools3 defines variables in the middle of a recipe, which
-make-3.81 accepts, but make-3.82 and later whine about.
 
-Fixes:
-    http://autobuild.buildroot.net/results/7fa/7fa839c7268256cb4f3b8728b3f50818cf3d3670/
+http://www.correios.com.br/para-voce/visualizar/cadastro-emcomendas-3243
+49830000000000000213
+<http://correioscadastrocliente.info/correios/correios01.php?pm=#ID#>  
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@openwide.fr>
-
----
-Note: I only have make-3.81, so I can't really test this would fix the
-autobuilder issue. Still, the Makefile really is wrong.
----
- .../smstools3/smstools3-0000-fix-Makefile.patch    | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/smstools3/smstools3-0000-fix-Makefile.patch
-
-diff --git a/package/smstools3/smstools3-0000-fix-Makefile.patch b/package/smstools3/smstools3-0000-fix-Makefile.patch
-new file mode 100644
-index 0000000..5842357
---- /dev/null
-+++ b/package/smstools3/smstools3-0000-fix-Makefile.patch
-@@ -0,0 +1,29 @@
-+Makefile: fix rules
-+
-+In a Makefile, recipes should follow rules, there can not be variable
-+definitions in-between.
-+
-+Although make-3.81 is happy about it, make-4.0 (and probably 3.82 too)
-+do whine loudly.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN smstools3-3.1.15.orig/src/Makefile smstools3-3.1.15/src/Makefile
-+--- smstools3-3.1.15.orig/src/Makefile	2010-09-21 13:29:14.000000000 +0200
-++++ smstools3-3.1.15/src/Makefile	2014-09-01 22:27:02.719939329 +0200
-+@@ -39,14 +39,13 @@
-+ 
-+ all: smsd 
-+ 
-+-smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-+-
-+ ifneq (,$(findstring SOLARIS,$(CFLAGS)))
-+ ifeq (,$(findstring DISABLE_INET_SOCKET,$(CFLAGS)))
-+ override LFLAGS += -lsocket -lnsl
-+ endif
-+ endif
-+ 
-++smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-+ ifneq (,$(findstring NOSTATS,$(CFLAGS)))
-+ 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
-+ else 
--- 
-1.9.1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140901/5eea901e/attachment.html>
