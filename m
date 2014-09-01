@@ -1,64 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2014 18:31:41 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xbmc: add option to enable RSXS
-	screensaver
-In-Reply-To: <cover.1409588958.git.yann.morin.1998@free.fr>
-References: <cover.1409588958.git.yann.morin.1998@free.fr>
-Message-ID: <698b2e4019db6d62c78b18c03e455fc08c65659c.1409588958.git.yann.morin.1998@free.fr>
+From: Sylvain LG <forum@sylvainlegourr.com>
+Date: Mon, 1 Sep 2014 19:39:09 +0200
+Subject: [Buildroot] rsync issue during compilation on a VM
+Message-ID: <CAK9TtU39N6G9smB0iZKO83b3LLk1qiw5B2Rps7BJ=dQfXzX16Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xbmc/Config.in | 9 +++++++++
- package/xbmc/xbmc.mk   | 4 ++++
- 2 files changed, 13 insertions(+)
+Hello,
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index ebe0882..ed0d4ed 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -138,6 +138,15 @@ config BR2_PACKAGE_XBMC_GOOM
- comment "goom needs an OpenGL backend"
- 	depends on !BR2_PACKAGE_XBMC_GL
- 
-+config BR2_PACKAGE_XBMC_RSXS
-+	bool "rsxs screensaver"
-+	depends on BR2_PACKAGE_XBMC_GL
-+	help
-+	  Enable goom screensaver
-+
-+comment "rsxs needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XBMC_GL
-+
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 87b81c4..8bcad00 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -88,6 +88,7 @@ ifeq ($(BR2_PACKAGE_XBMC_GL),y)
- XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
- 	xlib_libXmu xlib_libXrandr xlib_libXt
- XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
-+ifeq ($(BR2_PACKAGE_XBMC_RSXS),y)
- # fix rsxs compile
- # make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
- XBMC_CONF_ENV += \
-@@ -99,6 +100,9 @@ XBMC_CONF_ENV += \
- 	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
- XBMC_CONF_OPT += --enable-rsxs
- else
-+XBMC_CONF_OPT += --disable-rsxs
-+endif
-+else
- XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
- ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
- XBMC_DEPENDENCIES += libegl libgles
--- 
-1.9.1
+I try to compile my system with buildroot running on a virtualized Debian
+(VirtualBox).
+Host is MacOs.
+
+I cloned Buildroot on a shared folder: files are not stored directly on the
+VM.
+
+Here comes the error log:
+
+BR2_DEFCONFIG=''
+> KCONFIG_AUTOCONFIG=/home/username/sharedfolder/buildroot/output/build/buildroot-config/auto.conf
+> KCONFIG_AUTOHEADER=/home/username/sharedfolder/buildroot/output/build/buildroot-config/autoconf.h
+> KCONFIG_TRISTATE=/home/username/sharedfolder/buildroot/output/build/buildroot-config/tristate.config
+> BR2_CONFIG=/home/username/sharedfolder/buildroot/.config
+> BR2_EXTERNAL=support/dummy-external
+> /home/username/sharedfolder/buildroot/output/build/buildroot-config/conf
+> --silentoldconfig Config.in
+> make[1]: Leaving directory
+> `/home/username/sharedfolder/buildroot/buildroot-haba'
+> mkdir -p /home/username/sharedfolder/buildroot/output/target
+> rsync -a --ignore-times --exclude .svn --exclude .git --exclude .hg
+> --exclude .bzr --exclude CVS \
+> --chmod=Du+w --exclude .empty --exclude '*~' \
+> /home/username/sharedfolder/buildroot/system/skeleton/
+> /home/username/sharedfolder/buildroot/output/target/
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/run": Operation not
+> permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/dev/log": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/etc/mtab": Operation
+> not permitted (1)
+
+rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/etc/resolv.conf":
+> Operation not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/cache": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/lock": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/log": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/pcmcia": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/run": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/spool": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/tmp": Operation
+> not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/lib/misc":
+> Operation not permitted (1)
+> rsync: failed to set times on
+> "/home/username/sharedfolder/buildroot/output/target/var/lib/pcmcia":
+> Operation not permitted (1)
+> rsync error: some files/attrs were not transferred (see previous errors)
+> (code 23) at main.c(1070) [sender=3.0.9]
+> make: *** [/home/username/sharedfolder/buildroot/output/build/.root] Error
+> 23
+
+
+
+How can I fix this issue?
+
+It seems that rsync option -O / --omit-dir-times can help, but I don't know
+where to set it.
+
+
+Thank you,
+
+Sylvain
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140901/563cccb3/attachment.html>
