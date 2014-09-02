@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Sep 2014 08:31:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 1309] New package: rdiff-backup
-In-Reply-To: <bug-1309-163@https.bugs.busybox.net/>
-References: <bug-1309-163@https.bugs.busybox.net/>
-Message-ID: <20140902083150.BFCDC9D5D0@busybox.osuosl.org>
+Date: Tue,  2 Sep 2014 08:32:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 3655] New package: libav
+In-Reply-To: <bug-3655-163@https.bugs.busybox.net/>
+References: <bug-3655-163@https.bugs.busybox.net/>
+Message-ID: <20140902083215.8EA929D5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1309
+https://bugs.busybox.net/show_bug.cgi?id=3655
 
 Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
@@ -19,7 +19,7 @@ Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |INVALID
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-02 08:31:50 UTC ---
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-02 08:32:15 UTC ---
 This bug will be closed as the policy for new packages is to send them on the
 mailing list. 
 
