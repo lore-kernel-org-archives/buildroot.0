@@ -1,24 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Sep 2014 08:43:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
-In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
-References: <bug-7010-163@https.bugs.busybox.net/>
-Message-ID: <20140902084327.10B499D5D0@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 02 Sep 2014 11:25:44 +0200
+Subject: [Buildroot] [PATCH 0 of 2] RedHat 5 support fixes
+Message-ID: <patchbomb.1409649944@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7010
+This small patch series fixes two issues when using Buildroot on RedHat 5.
+Granted, RedHat 5 is an old distribution, but in some corporate environments
+it is still used. As the fixes are relatively small, I hope they can be
+accepted.
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
+The corresponding problems have been introduced somewhere between 2013.05
+and 2014.05, and are still present on current master.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|2014.08                     |2014.11
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+---
+Thomas De Schampheleire (2)
+  check-kernel-headers: mktemp --tmpdir not available on RedHat 5
+  kmod: add patches to support build on Redhat 5
+
+ package/kmod/kmod-0001-fix-O_CLOEXEC.patch                    |  38 ++++++
+ package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch |  41 +++++++
+ support/scripts/check-kernel-headers.sh                       |   2 +-
+ 3 files changed, 80 insertions(+), 1 deletions(-)
