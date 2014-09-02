@@ -1,30 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Sep 2014 10:04:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 7346] [2014.08rc3] vim-8ae50e3ef8bf.tar.gz can not
- be downloaded, 404 not found
-In-Reply-To: <bug-7346-163@https.bugs.busybox.net/>
-References: <bug-7346-163@https.bugs.busybox.net/>
-Message-ID: <20140902100402.3EC429D5D4@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue,  2 Sep 2014 12:22:16 +0200
+Subject: [Buildroot] [PATCH 1/1] ccrypt/Config.in: indentation cleanup
+Message-ID: <1409653336-22924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7346
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/ccrypt/Config.in |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- Comment #4 from joymarquis at hotmail.com 2014-09-02 10:04:02 UTC ---
-Hi buildroot support,
-
-The problem disappears now according to my last rebuild with the same setting.
-Now I can download and successfully build the system without any tricky.
-
-Thanks all for your quick help.
-
-
-Cheers.
-
+diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
+index 99c4d47..ef5a7ee 100644
+--- a/package/ccrypt/Config.in
++++ b/package/ccrypt/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_CCRYPT
+-        bool "ccrypt"
+-        help
+-          ccrypt is a utility for encrypting and decrypting files and streams.
++	bool "ccrypt"
++	help
++	  ccrypt is a utility for encrypting and decrypting files and streams.
+ 
+-          http://ccrypt.sourceforge.net/
++	  http://ccrypt.sourceforge.net/
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
