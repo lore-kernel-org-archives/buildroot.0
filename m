@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue,  2 Sep 2014 12:22:16 +0200
-Subject: [Buildroot] [PATCH 1/1] ccrypt/Config.in: indentation cleanup
-Message-ID: <1409653336-22924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Tue,  2 Sep 2014 12:22:49 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.9-7
+Message-ID: <1409653369-23009-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/ccrypt/Config.in |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
-index 99c4d47..ef5a7ee 100644
---- a/package/ccrypt/Config.in
-+++ b/package/ccrypt/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_CCRYPT
--        bool "ccrypt"
--        help
--          ccrypt is a utility for encrypting and decrypting files and streams.
-+	bool "ccrypt"
-+	help
-+	  ccrypt is a utility for encrypting and decrypting files and streams.
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index aac0b5d..3e50bf8 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--          http://ccrypt.sourceforge.net/
-+	  http://ccrypt.sourceforge.net/
+-IMAGEMAGICK_VERSION = 6.8.9-6
++IMAGEMAGICK_VERSION = 6.8.9-7
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
 -- 
 1.7.9.5
