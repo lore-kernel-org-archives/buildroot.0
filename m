@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Sep 2014 23:38:18 +0200
-Subject: [Buildroot] [PATCH 1/1] ccrypt/Config.in: indentation cleanup
-In-Reply-To: <1409653336-22924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Tue, 2 Sep 2014 12:22:16 +0200")
-References: <1409653336-22924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87ppfdk8j9.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Sep 2014 23:38:23 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.9-7
+In-Reply-To: <1409653369-23009-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Tue, 2 Sep 2014 12:22:49 +0200")
+References: <1409653369-23009-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87lhq1k8j4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
