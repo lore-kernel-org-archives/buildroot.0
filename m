@@ -1,30 +1,63 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 2 Sep 2014 10:37:56 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-09-01
-In-Reply-To: <20140902063012.275961012A9@stock.ovh.net>
-References: <20140902063012.275961012A9@stock.ovh.net>
-Message-ID: <54058FF4.40607@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 2 Sep 2014 11:39:02 +0200
+Subject: [Buildroot] [PATCH 1 of 2] check-kernel-headers: mktemp
+ --tmpdir not available on RedHat 5
+In-Reply-To: <2c7735c0247a4c83a3c2.1409649945@localhost>
+References: <patchbomb.1409649944@localhost>
+ <2c7735c0247a4c83a3c2.1409649945@localhost>
+Message-ID: <20140902093902.GA4240@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/02/2014 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-09-01
-> ===============================
+Thomas, All,
 
->         arm |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/8825a5ea98155faf8d62b3702bd1b8a0aa2f2448/
->      x86_64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/8047ae39653abcd140ace2c038783de8ca70250b/
->     powerpc |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/ef136b1d623d988e5f807b07498a71d1db9ed3f4/
->      mipsel |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/fa2b71c087339ff7a0837e34f35abf80dbb349b6/
->     aarch64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/b90c71d07d1c170599d787c59d4e6cebc1c04da7/
->         sh4 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/e48f440ac85d519ced37944a1df12c899ead1c32/
->      x86_64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/036fbc931212a1f53d655c8692792b26283e6258/
+On 2014-09-02 11:25 +0200, Thomas De Schampheleire spake thusly:
+> # HG changeset patch
+> # User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+> # Date 1407153076 -7200
+> #      Mon Aug 04 13:51:16 2014 +0200
+> # Node ID 2c7735c0247a4c83a3c2ea1d58e74be613465255
+> # Parent  6af0c3866b64670bb6d62302b64f3164b1f70fb6
+> check-kernel-headers: mktemp --tmpdir not available on RedHat 5
+> 
+> mktemp --tmpdir is not available on older Redhat 5 machines. The alternative
+> that has the same behavior is 'mktemp -t'.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Reported upstream:
-https://savannah.nongnu.org/bugs/index.php?43129
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/scripts/check-kernel-headers.sh |  2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -8,7 +8,7 @@
+>  HDR_V="${HDR_VER#*.}"
+>  HDR_m="${HDR_V%%.*}"
+>  
+> -EXEC="$(mktemp --tmpdir check-headers.XXXXXX)"
+> +EXEC="$(mktemp -t check-headers.XXXXXX)"
+>  
+>  # We do not want to account for the patch-level, since headers are
+>  # not supposed to change for different patchlevels, so we mask it out.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Vincent
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
