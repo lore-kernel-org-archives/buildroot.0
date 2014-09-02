@@ -1,32 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Sep 2014 23:38:06 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.9-7
-Message-ID: <20140902214727.F30B99D5CF@busybox.osuosl.org>
+Date: Tue, 2 Sep 2014 23:37:36 +0200
+Subject: [Buildroot] [git commit] ccrypt/Config.in: indentation cleanup
+Message-ID: <20140902214727.D84A19D5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86b4d751db210149098c016141aa9e57c87fe167
+commit: http://git.buildroot.net/buildroot/commit/?id=122f47a8531f419c7e85c332d65ff12a4020bbda
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ccrypt/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index aac0b5d..3e50bf8 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
+index 99c4d47..ef5a7ee 100644
+--- a/package/ccrypt/Config.in
++++ b/package/ccrypt/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_CCRYPT
+-        bool "ccrypt"
+-        help
+-          ccrypt is a utility for encrypting and decrypting files and streams.
++	bool "ccrypt"
++	help
++	  ccrypt is a utility for encrypting and decrypting files and streams.
  
--IMAGEMAGICK_VERSION = 6.8.9-6
-+IMAGEMAGICK_VERSION = 6.8.9-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+-          http://ccrypt.sourceforge.net/
++	  http://ccrypt.sourceforge.net/
