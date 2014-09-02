@@ -1,42 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Sep 2014 09:11:50 +0200
-Subject: [Buildroot] [PATCH] bfin: disable newer binutils for internal
- toolchain
-In-Reply-To: <20140901195817.GU30210@waldemar-brodkorb.de>
-References: <20140831082454.GA3986@waldemar-brodkorb.de>
- <20140831144132.0b995b4e@free-electrons.com>
- <20140901195817.GU30210@waldemar-brodkorb.de>
-Message-ID: <20140902091150.33c30efa@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Sep 2014 09:38:20 +0200
+Subject: [Buildroot] [PATCH] package/smstools3: fix for recent make
+In-Reply-To: <1409604067-5820-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 1 Sep 2014 22:41:07 +0200")
+References: <1409604067-5820-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87y4u2jwur.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, 1 Sep 2014 21:58:18 +0200, Waldemar Brodkorb wrote:
+ > smstools3 defines variables in the middle of a recipe, which
+ > make-3.81 accepts, but make-3.82 and later whine about.
 
-> > Could you report the bug to upstream binutils? I'd like to be able to
-> > get rid of binutils 2.22 at some point.
-> > 
-> > Thanks a lot!
-> 
-> Done:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ > Fixes:
+ >     http://autobuild.buildroot.net/results/7fa/7fa839c7268256cb4f3b8728b3f50818cf3d3670/
 
-Great. Could you respin a new version of your patch that references
-this bug report in the comment, such as:
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Romain Naour <romain.naour@openwide.fr>
 
-	# bfin disabled due to
-	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
-	config ...
-		depends on !BR2_bfin
+ > ---
+ > Note: I only have make-3.81, so I can't really test this would fix the
+ > autobuilder issue. Still, the Makefile really is wrong.
 
-Thanks!
+Committed, thanks. Don't forget to send the patch upstream.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
