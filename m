@@ -1,120 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 02 Sep 2014 11:25:46 +0200
-Subject: [Buildroot] [PATCH 2 of 2] kmod: add patches to support build on
-	Redhat 5
-In-Reply-To: <patchbomb.1409649944@localhost>
-References: <patchbomb.1409649944@localhost>
-Message-ID: <f2b8b2b5efec1b2340c4.1409649946@localhost>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 2 Sep 2014 10:37:56 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-09-01
+In-Reply-To: <20140902063012.275961012A9@stock.ovh.net>
+References: <20140902063012.275961012A9@stock.ovh.net>
+Message-ID: <54058FF4.40607@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-# HG changeset patch
-# User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-# Date 1407153133 -7200
-#      Mon Aug 04 13:52:13 2014 +0200
-# Node ID f2b8b2b5efec1b2340c423f14f12df11a95ceac7
-# Parent  2c7735c0247a4c83a3c2ea1d58e74be613465255
-kmod: add patches to support build on Redhat 5
+On 09/02/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-09-01
+> ===============================
 
-kmod uses certain features not available on older Redhat 5 machines.
-This commit imports two patches from OpenEmbedded to fix that.
+>         arm |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/8825a5ea98155faf8d62b3702bd1b8a0aa2f2448/
+>      x86_64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/8047ae39653abcd140ace2c038783de8ca70250b/
+>     powerpc |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/ef136b1d623d988e5f807b07498a71d1db9ed3f4/
+>      mipsel |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/fa2b71c087339ff7a0837e34f35abf80dbb349b6/
+>     aarch64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/b90c71d07d1c170599d787c59d4e6cebc1c04da7/
+>         sh4 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/e48f440ac85d519ced37944a1df12c899ead1c32/
+>      x86_64 |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/036fbc931212a1f53d655c8692792b26283e6258/
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reported upstream:
+https://savannah.nongnu.org/bugs/index.php?43129
 
----
- package/kmod/kmod-0001-fix-O_CLOEXEC.patch                    |  38 ++++++
- package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch |  41 +++++++
- 2 files changed, 79 insertions(+), 0 deletions(-)
-
-diff --git a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch b/package/kmod/kmod-0001-fix-O_CLOEXEC.patch
-new file mode 100644
---- /dev/null
-+++ b/package/kmod/kmod-0001-fix-O_CLOEXEC.patch
-@@ -0,0 +1,38 @@
-+From bd43367eee868059770188fd9e9db38520dc6fff Mon Sep 17 00:00:00 2001
-+From: Robert Yang <liezhi.yang@windriver.com>
-+Date: Wed, 22 Jan 2014 01:06:40 -0500
-+Subject: [PATCH] libkmod/libkmod-internal.h: check whether O_CLOEXEC is
-+ defined or not
-+
-+O_CLOEXEC is introduced from Linux 2.6.23, so old kernel doesn't have
-+it, we need check before use.
-+
-+This patch is much more like a workaround, since it may need fcntl() use
-+FD_CLOEXEC to replace.
-+
-+This problem was reported by "Ting Liu <b28495@freescale.com>"
-+Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
-+
-+Upstream-Status: Pending
-+---
-+ libkmod/libkmod-internal.h |    4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-+index 0180124..100b40f 100644
-+--- a/libkmod/libkmod-internal.h
-++++ b/libkmod/libkmod-internal.h
-+@@ -9,6 +9,10 @@
-+ #include "macro.h"
-+ #include "libkmod.h"
-+ 
-++#ifndef O_CLOEXEC
-++#define O_CLOEXEC 0
-++#endif
-++
-+ static _always_inline_ _printf_format_(2, 3) void
-+ 	kmod_log_null(struct kmod_ctx *ctx, const char *format, ...) {}
-+ 
-+-- 
-+1.7.10.4
-+
-diff --git a/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch b/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch
-new file mode 100644
---- /dev/null
-+++ b/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch
-@@ -0,0 +1,41 @@
-+From 0c4dbadc9db3cda1cfca64e44ea08c6e89919ea7 Mon Sep 17 00:00:00 2001
-+From: Ting Liu <b28495@freescale.com>
-+Date: Tue, 10 Sep 2013 13:44:18 +0800
-+Subject: [PATCH] Change to calling bswap_* instead of htobe* and be*toh
-+
-+We can't use htobe* and be*toh functions because they are not
-+available on older versions of glibc, For example, shipped on Centos 5.5.
-+
-+Change to directly calling bswap_* as defined in+byteswap.h.
-+
-+Upstream-Status: Inappropriate
-+
-+Signed-off-by: Ting Liu <b28495@freescale.com>
-+---
-+ libkmod/libkmod-signature.c |    3 ++-
-+ 1 files changed, 2 insertions(+), 1 deletions(-)
-+
-+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-+index 6b80caa..3544a36 100644
-+--- a/libkmod/libkmod-signature.c
-++++ b/libkmod/libkmod-signature.c
-+@@ -19,6 +19,7 @@
-+  */
-+ 
-+ #include <endian.h>
-++#include <byteswap.h>
-+ #include <stdint.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+@@ -121,7 +122,7 @@ bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signat
-+ 			modsig->hash >= PKEY_HASH__LAST ||
-+ 			modsig->id_type >= PKEY_ID_TYPE__LAST)
-+ 		return false;
-+-	sig_len = be32toh(get_unaligned(&modsig->sig_len));
-++	sig_len = bswap_32(get_unaligned(&modsig->sig_len));
-+ 	if (size < (off_t)(modsig->signer_len + modsig->key_id_len + sig_len))
-+ 		return false;
-+ 
-+-- 
-+1.7.5.4
-+
+-- 
+Vincent
