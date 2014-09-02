@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Sep 2014 08:30:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 261] New package: wxWidgets
-In-Reply-To: <bug-261-163@https.bugs.busybox.net/>
-References: <bug-261-163@https.bugs.busybox.net/>
-Message-ID: <20140902083031.B85529D5D0@busybox.osuosl.org>
+Date: Tue,  2 Sep 2014 08:31:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 325] New package: ratpoison
+In-Reply-To: <bug-325-163@https.bugs.busybox.net/>
+References: <bug-325-163@https.bugs.busybox.net/>
+Message-ID: <20140902083121.5A5C29D5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=261
+https://bugs.busybox.net/show_bug.cgi?id=325
 
 Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
@@ -19,8 +19,8 @@ Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |INVALID
 
---- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-02 08:30:30 UTC ---
-This bug will be closed as the policy for new patches is to send them on the
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-02 08:31:20 UTC ---
+This bug will be closed as the policy for new packages is to send them on the
 mailing list. 
 
 If you are still interested in getting this patch integrated, please rebase it
