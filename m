@@ -1,35 +1,109 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Wed,  3 Sep 2014 04:12:32 +0200
-Subject: [Buildroot] [PATCH] Revert "SDL_image: fix runtime libjpeg failure"
-Message-ID: <1409710352-6375-1-git-send-email-maarten@treewalker.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Sep 2014 03:11:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 7352] New: [2014.08-rc3] diffutils-3.3 failed on
+	building
+Message-ID: <bug-7352-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 883f066797ae0e7a017fac8e275f6e58659db760.
+https://bugs.busybox.net/show_bug.cgi?id=7352
 
-Bug in configure script was fixed upstream in SDL_image 1.2.8.
+           Summary: [2014.08-rc3] diffutils-3.3 failed on building
+           Product: buildroot
+           Version: 2014.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: joymarquis at hotmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
----
- package/sdl_image/sdl_image.mk | 3 ---
- 1 file changed, 3 deletions(-)
 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index 05b9a1f..c539526 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -15,9 +15,6 @@ SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
- 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
- 		--disable-sdltest \
- 		--disable-static \
--		--disable-jpg-shared \
--		--disable-png-shared \
--		--disable-tif-shared \
- 		--enable-bmp=$(if $(BR2_PACKAGE_SDL_IMAGE_BMP),yes,no) \
- 		--enable-gif=$(if $(BR2_PACKAGE_SDL_IMAGE_GIF),yes,no) \
- 		--enable-jpg=$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),yes,no) \
+Hi buildroot maintainer,
+
+According to the error log, I found man/Makefile:Line-1301 might need to be
+carefully considered:
+>> cmp.1: $S/cmp.c cmp.x
+
+I then did search for 
+ * grep -r "[^a-zA-Z]S[ \t]*=" *
+ * grep "\-s[^a-zA-Z]" *
+to find some clue, but no luck...
+
+Can you help to check if the "S=-s" is expected here?
+
+
+
+Error log
+=========
+
+make[2]: Entering directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
+GEN      paths.h
+GEN      version.c
+GEN      version.h
+/usr/bin/make  all-am
+make[3]: Entering directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
+CC       version.o
+CC       cmp.o
+CC       analyze.o
+CC       context.o
+CC       diff.o
+CC       dir.o
+CC       ed.o
+CC       ifdef.o
+CC       io.o
+CC       normal.o
+CC       side.o
+CC       util.o
+CC       diff3.o
+CC       sdiff.o
+AR       libver.a
+CCLD     cmp
+CCLD     diff
+CCLD     sdiff
+CCLD     diff3
+make[3]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
+make[2]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
+Making all in tests
+make[2]: Entering directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/tests'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/tests'
+Making all in doc
+make[2]: Entering directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/doc'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/doc'
+Making all in man
+make[2]: Entering directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/man'
+make[2]: *** No rule to make target `-s/cmp.c', needed by `cmp.1'.  Stop.
+make[2]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/man'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3'
+make: ***
+[/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/.stamp_built]
+Error 2
+
+
+Thanks.
+
 -- 
-1.8.4.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
