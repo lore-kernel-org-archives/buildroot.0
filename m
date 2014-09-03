@@ -1,50 +1,45 @@
-From: Andreas Larsson <andreas@gaisler.com>
-Date: Wed, 03 Sep 2014 17:14:37 +0200
-Subject: [Buildroot] Sparc Leon support in Buildroot
-In-Reply-To: <20140903164536.1a28b0d1@free-electrons.com>
-References: <20140701202206.153b2cf6@free-electrons.com>	<53F4800D.2060307@gaisler.com>	<20140820140514.67f9fb23@free-electrons.com>	<54072204.3020402@gaisler.com>
- <20140903164536.1a28b0d1@free-electrons.com>
-Message-ID: <5407305D.3070508@gaisler.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Sep 2014 15:32:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 7358] rpi-userland: linking with bcm_host doesn't
+ give vc_dispmanx_* functions
+In-Reply-To: <bug-7358-163@https.bugs.busybox.net/>
+References: <bug-7358-163@https.bugs.busybox.net/>
+Message-ID: <20140903153205.9BA5B9D5DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-09-03 16:45, Thomas Petazzoni wrote:
-> Dear Andreas Larsson,
->
-> On Wed, 03 Sep 2014 16:13:24 +0200, Andreas Larsson wrote:
->
->>> Great, thanks! Also, currently, we don't have any Sparc toolchain in
->>> our autobuilder testing. Normally, we try to have all architectures we
->>> support tested in our autobuilders. If we were to add the Sparc
->>> architecture to our testing infrastructure, would you be willing to
->>> look at the potential build failures that may result from this testing?
->>> (Look at http://autobuild.buildroot.org to see what the results look
->>> like for other architectures).
->>
->> If that would be set up, it is something I could keep an eye on.
->> However, I do not have the possibility to take responsibility for broken
->> packages.
->
-> Well, it's not really a "responsibility": most of the Buildroot
-> contributors are volunteers so there are no obligations. But if you can
-> give some help from time to time for some SPARC specific issues, that
-> would be nice.
->
-> Have you had some time to look at the toolchain components? As I said
-> earlier, we are currently keeping gcc 4.4.x only for SPARC Leon, so if
-> you could test if gcc 4.8.x and/or 4.9.x work fine for Leon, it would
-> allow us to get rid of the support for gcc 4.4.
+https://bugs.busybox.net/show_bug.cgi?id=7358
 
-gcc 4.8.x and 4.9.x produces a bug that seems to be due to memset 
-optimizations and a surprising memset behavior in sparc Linux. I have 
-submitted a kernel patch to fix this 
-(https://lkml.org/lkml/2014/8/29/333). This (or some other fix to the 
-problem) should go into mainline and stable branches before claiming gcc 
-4.8/4.9 working for leon in my opinion. I'll have to test more if there 
-are other problems with the newer gcc:s as well.
+--- Comment #2 from Maarten ter Huurne <maarten@treewalker.org> 2014-09-03 15:32:05 UTC ---
+Created attachment 5582
+  --> https://bugs.busybox.net/attachment.cgi?id=5582
+SDL2 package work-in-progress for buildroot 2014.05
 
-Cheers,
-Andreas
+I am also working on an SDL2 package for buildroot targeting the Raspberry Pi.
+I haven't migrated it to 2014.08 yet though. My focus is only on the
+framebuffer (fbcon + EGL), not the other video drivers.
+
+The current state is that fbcon works, but not perfectly: SWSURFACE works fine,
+HWSURFACE with double buffering does not seem to flip at the right time:
+overpainting is visible while double buffering should eliminate that. My guess
+is that this is a problem in the kernel fb driver, but I haven't verified that
+yet.
+
+I tried one GL ES application so far and it didn't run. The compilation of the
+GL ES and EGL code in SDL2 did work though.
+
+Please have a look at the patch that makes SDL2 use pkg-config for the EGL
+compile flags instead of using the hardcoded paths to /opt. I think this might
+fix the issue you're running into.
+
+Note that the Raspberry Pi support in SDL2's configure requires "raspberry" as
+the vendor in the system identifier (host triple), I added an override for that
+in "sdl2.mk".
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
