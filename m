@@ -1,52 +1,51 @@
-From: Yingjie Bai <byj.tea@gmail.com>
-Date: Wed, 3 Sep 2014 22:43:32 +0800
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: Improve lib
- subdirectory matching
-In-Reply-To: <CAAXf6LXR35yNWS15y1MYT66M3h_1WC6dipO+wy_C9XV1Vh9CFQ@mail.gmail.com>
-References: <1409750954-3636-1-git-send-email-byj.tea@gmail.com>
- <20140903154119.5f501095@free-electrons.com>
- <CAAXf6LXR35yNWS15y1MYT66M3h_1WC6dipO+wy_C9XV1Vh9CFQ@mail.gmail.com>
-Message-ID: <CAFAt38HDm1vT-npkfSs=V8uCd5q1JSj_GcfCy8XHEwrP_zNKyA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Sep 2014 16:45:36 +0200
+Subject: [Buildroot] Sparc Leon support in Buildroot
+In-Reply-To: <54072204.3020402@gaisler.com>
+References: <20140701202206.153b2cf6@free-electrons.com>
+ <53F4800D.2060307@gaisler.com>
+ <20140820140514.67f9fb23@free-electrons.com>
+ <54072204.3020402@gaisler.com>
+Message-ID: <20140903164536.1a28b0d1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Andreas Larsson,
 
-On Wed, Sep 3, 2014 at 10:20 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Thomas,
->
-> On Wed, Sep 3, 2014 at 3:41 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Bai Yingjie,
->>
->> On Wed,  3 Sep 2014 21:29:14 +0800, Bai Yingjie wrote:
->>> Some external toolchain provides lib32-fp which supports FPU instructions
->>> as well as lib32 in sys-root/usr, but lib32-fp can't be matched and
->>> in consequence causes a compile error.
->>>
->>> The toolchain in this case is OCTEON mips64 toolchain, and the CFLAGS
->>> cause the issue is -march=octeon3.
->>>
->>> This patch improves the matching by accepting lib(32|64)?([^/]*)? as lib
->>> name.
->>>
->>> Signed-off-by: Bai Yingjie <byj.tea@gmail.com>
->>
->> Thanks for this contribution! Is this toolchain available publicly? The
->> problem I have is that if the toolchain is not available, then we have
->> no way to test if future changes to the external toolchain logic will
->> not break the support for this toolchain.
->
-> The mentioned toolchain comes from Cavium Networks. You can find a
-> public version of this toolchain here:
-> http://www.cnusers.org/index.php?option=com_remository&Itemid=32&func=select&id=62
->
-> I don't think that this public toolchain is 100% identical to the one
-> given to their (paying) customers, but I assume that the lib32-fp
-> issue is the same.
+On Wed, 03 Sep 2014 16:13:24 +0200, Andreas Larsson wrote:
 
-I am very happy to get replied, thanks for your explanation.
+> > Great, thanks! Also, currently, we don't have any Sparc toolchain in
+> > our autobuilder testing. Normally, we try to have all architectures we
+> > support tested in our autobuilders. If we were to add the Sparc
+> > architecture to our testing infrastructure, would you be willing to
+> > look at the potential build failures that may result from this testing?
+> > (Look at http://autobuild.buildroot.org to see what the results look
+> > like for other architectures).
+> 
+> If that would be set up, it is something I could keep an eye on. 
+> However, I do not have the possibility to take responsibility for broken 
+> packages.
+
+Well, it's not really a "responsibility": most of the Buildroot
+contributors are volunteers so there are no obligations. But if you can
+give some help from time to time for some SPARC specific issues, that
+would be nice.
+
+Have you had some time to look at the toolchain components? As I said
+earlier, we are currently keeping gcc 4.4.x only for SPARC Leon, so if
+you could test if gcc 4.8.x and/or 4.9.x work fine for Leon, it would
+allow us to get rid of the support for gcc 4.4.
+
+See package/gcc/Config.in.host for the details of the gcc versions that
+we allow for SPARC Leon.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
