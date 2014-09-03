@@ -1,41 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 03 Sep 2014 21:10:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-09-01
-References: <20140902063012.275961012A9@stock.ovh.net>
-Message-ID: <XnsA39DD76F66933berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Wed,  3 Sep 2014 21:48:11 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: Bump version
+In-Reply-To: <1409773691-13668-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1409773691-13668-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1409773691-13668-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140902063012.275961012A9 at stock.ovh.net: 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/tvheadend-003-remove-werror.patch |    2 +-
+ package/tvheadend/tvheadend.mk                      |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->     x86_64 |                     fltk-1.3.2 | NOK |
->     http://autobuild.buildroot.net/results/c35df0b20e9f65154e7cf3dfec01a6
->     35a071eb41/ 
-
-Hi Thomas,
-
-> Linking fluid...
-> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
-gnu/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to 
-`xcb_get_reply_fds'
-> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
-gnu/sysroot/usr/lib64/libxcb-render.so.0: undefined reference to 
-`xcb_str_sizeof'
-> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
-gnu/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to `xcb_send_fd'
-
-I tried several times to reproduce this bug but failed.
-Interestingly the bug only occurs on your build server:
-http://autobuild.buildroot.net/?reason=fltk-1.3.2
-
-Are there any xcb packages installed on your build server?
-
-Regards, Bernd
+diff --git a/package/tvheadend/tvheadend-003-remove-werror.patch b/package/tvheadend/tvheadend-003-remove-werror.patch
+index 039e0e0..624ca3a 100644
+--- a/package/tvheadend/tvheadend-003-remove-werror.patch
++++ b/package/tvheadend/tvheadend-003-remove-werror.patch
+@@ -8,7 +8,7 @@ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvhe
+ @@ -28,7 +28,7 @@
+  #
+  
+- CFLAGS  += -g -O2
++ CFLAGS  += -g -O2 -Wunused-result
+ -CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
+ +CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
+  CFLAGS  += -Wmissing-prototypes
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index bd52ecd..cd346dd 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = f72733ff08be069620e7247e191d4f0899a2638a
++TVHEADEND_VERSION = ca742e00a7717787351e1a432ca9b41f93369d60
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+-- 
+1.7.10.4
