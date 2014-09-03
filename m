@@ -1,41 +1,106 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Sep 2014 09:24:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 7352] [2014.08-rc3] diffutils-3.3 failed on
-	building
-In-Reply-To: <bug-7352-163@https.bugs.busybox.net/>
-References: <bug-7352-163@https.bugs.busybox.net/>
-Message-ID: <20140903092425.52A149D5DF@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 3 Sep 2014 11:36:06 +0200
+Subject: [Buildroot] [PATCH 1/1] dos2unix: new package
+In-Reply-To: <1409735578-25549-1-git-send-email-david.bachelart@bbright.com>
+References: <1409735578-25549-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <CAAXf6LUkOPpkBTRJUNrJ5U+iXYbBgwi8L_Ljo3_qktwE7S52Rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7352
+Hi David,
 
---- Comment #4 from joymarquis at hotmail.com 2014-09-03 09:24:25 UTC ---
-Hi Thomas,
+On Wed, Sep 3, 2014 at 11:12 AM, David Bachelart
+<david.bachelart@bbright.com> wrote:
+>
+> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+> ---
+>  package/Config.in               |    1 +
+>  package/Config.in.host          |    1 +
+>  package/dos2unix/Config.in      |    6 ++++++
+>  package/dos2unix/Config.in.host |    6 ++++++
+>  package/dos2unix/dos2unix.mk    |   40 +++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 54 insertions(+)
+>  create mode 100644 package/dos2unix/Config.in
+>  create mode 100644 package/dos2unix/Config.in.host
+>  create mode 100644 package/dos2unix/dos2unix.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 883dd66..c5e7d33 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1128,6 +1128,7 @@ comment "Utilities"
+>         source "package/at/Config.in"
+>         source "package/ccrypt/Config.in"
+>         source "package/dialog/Config.in"
+> +       source "package/dos2unix/Config.in"
+>         source "package/dtach/Config.in"
+>         source "package/file/Config.in"
+>         source "package/gnupg/Config.in"
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index e05bbfa..2c88c0b 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -1,6 +1,7 @@
+>  menu "Host utilities"
+>
+>         source "package/dfu-util/Config.in.host"
+> +       source "package/dos2unix/Config.in.host"
+>         source "package/dosfstools/Config.in.host"
+>         source "package/e2fsprogs/Config.in.host"
+>         source "package/e2tools/Config.in.host"
+> diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+> new file mode 100644
+> index 0000000..6e196a3
+> --- /dev/null
+> +++ b/package/dos2unix/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_DOS2UNIX
+> +  bool "dos2unix"
+> +  help
+> +    dos2unix converts text file line endings between CRLF and LF
+> +
+> +    http://freshmeat.net/projects/dos2unix
+> diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
+> new file mode 100644
+> index 0000000..946271b
+> --- /dev/null
+> +++ b/package/dos2unix/Config.in.host
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_HOST_DOS2UNIX
+> +  bool "host dos2unix"
+> +  help
+> +    dos2unix converts text file line endings between CRLF and LF
+> +
+> +    http://freshmeat.net/projects/dos2unix
+> diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+> new file mode 100644
+> index 0000000..a976ffe
+> --- /dev/null
+> +++ b/package/dos2unix/dos2unix.mk
+> @@ -0,0 +1,40 @@
+> +################################################################################
+> +#
+> +# dos2unix
+> +#
+> +################################################################################
+> +
+> +DOS2UNIX_VERSION = 6.0.6
+> +DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
+> +
+> +DOS2UNIX_LICENSE = BSD-2c
+> +DOS2UNIX_LICENSE_FILES = COPYING.txt
+> +
+> +define DOS2UNIX_BUILD_CMDS
+> +  (cd $(DOS2UNIX_DIR);  \
+> +  $(TARGET_CONFIGURE_OPTS) \
+> +  $(TARGET_CONFIGURE_ARGS) \
+> +       make)
 
-The problem is root caused with the debug method you mentioned:
- * this is a user environment setting problem instead of buildroot issue.
- * the "S" variable in Makefile is overridden by the command alias "alias
-make='make S=-s'".
+Conventionally, we use 'make -C $(@D)' instead of (cd ....; make)
+Same issue below.
 
-Problem disappeared after manually execute "unalias make" and run make again.
-
-Sorry for taking your time helping to rebuild the source code.
-And really appreciate for your help on this false alarm.
-
-
-Background for how it happen:
-The alias "alias make='make S=-s'" was preset in /etc/bash.bashrc for most of
-our Linux box, I was told by admin that this is required by internal project
-build.
-
-
-Thanks!
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Thomas
