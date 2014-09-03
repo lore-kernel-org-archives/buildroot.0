@@ -1,17 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Sep 2014 03:11:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 7352] New: [2014.08-rc3] diffutils-3.3 failed on
-	building
-Message-ID: <bug-7352-163@https.bugs.busybox.net/>
+Date: Wed,  3 Sep 2014 04:59:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 7358] New: rpi-userland: linking with bcm_host
+ doesn't give vc_dispmanx_* functions
+Message-ID: <bug-7358-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7352
+https://bugs.busybox.net/show_bug.cgi?id=7358
 
-           Summary: [2014.08-rc3] diffutils-3.3 failed on building
+           Summary: rpi-userland: linking with bcm_host doesn't give
+                    vc_dispmanx_* functions
            Product: buildroot
            Version: 2014.08
           Platform: PC
@@ -21,87 +22,26 @@ https://bugs.busybox.net/show_bug.cgi?id=7352
           Priority: P5
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: joymarquis at hotmail.com
+        ReportedBy: ioribranford at gmail.com
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Hi buildroot maintainer,
+Created attachment 5570
+  --> https://bugs.busybox.net/attachment.cgi?id=5570
+Config, make, and patch files for SDL2 package
 
-According to the error log, I found man/Makefile:Line-1301 might need to be
-carefully considered:
->> cmp.1: $S/cmp.c cmp.x
+I updated buildroot to 2014.08, started from raspberrypi_defconfig, and tried
+to build my SDL2 package linking with rpi-userland. It's not in a submittable
+state (many options carried over from SDL1 that still have to be checked for
+applicability) but it worked fine as is with 2014.05. It includes a patch to do
+pkg-config for the userland libs rather than assume /opt/vc.
 
-I then did search for 
- * grep -r "[^a-zA-Z]S[ \t]*=" *
- * grep "\-s[^a-zA-Z]" *
-to find some clue, but no luck...
+While building rpi-userland was successful, building SDL2 failed at link time
+with multiple "undefined reference to vc_dispmanx_*".
 
-Can you help to check if the "S=-s" is expected here?
-
-
-
-Error log
-=========
-
-make[2]: Entering directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
-GEN      paths.h
-GEN      version.c
-GEN      version.h
-/usr/bin/make  all-am
-make[3]: Entering directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
-CC       version.o
-CC       cmp.o
-CC       analyze.o
-CC       context.o
-CC       diff.o
-CC       dir.o
-CC       ed.o
-CC       ifdef.o
-CC       io.o
-CC       normal.o
-CC       side.o
-CC       util.o
-CC       diff3.o
-CC       sdiff.o
-AR       libver.a
-CCLD     cmp
-CCLD     diff
-CCLD     sdiff
-CCLD     diff3
-make[3]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
-make[2]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/src'
-Making all in tests
-make[2]: Entering directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/tests'
-make[2]: Nothing to be done for `all'.
-make[2]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/tests'
-Making all in doc
-make[2]: Entering directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/doc'
-make[2]: Nothing to be done for `all'.
-make[2]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/doc'
-Making all in man
-make[2]: Entering directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/man'
-make[2]: *** No rule to make target `-s/cmp.c', needed by `cmp.1'.  Stop.
-make[2]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/man'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3'
-make: ***
-[/top/buildroot/buildroot-2014.08-rc3/output/build/diffutils-3.3/.stamp_built]
-Error 2
-
-
-Thanks.
+My local fix so far is to add -lvchostif into the SDL2 patch. But I understand
+from the userland CMake files that that is supposed to come with -lbcm_host.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
