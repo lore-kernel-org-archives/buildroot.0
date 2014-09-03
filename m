@@ -1,43 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  3 Sep 2014 21:48:09 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: Add optional dependency
-	xlib_libXxf86vm
-Message-ID: <1409773691-13668-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 03 Sep 2014 23:42:30 +0200
+Subject: [Buildroot] [PATCH] strace: upgrade to 4.9, supports ARC
+In-Reply-To: <C2D7FE5348E1B147BCA15975FBA230753C5CF960@IN01WEMBXA.internal.synopsys.com>
+ (Vineet Gupta's message of "Wed, 3 Sep 2014 13:39:18 +0000")
+References: <1409644247-11683-1-git-send-email-vgupta@synopsys.com>
+ <87ha0pk84o.fsf@dell.be.48ers.dk>
+ <C2D7FE5348E1B147BCA15975FBA230753C5CF960@IN01WEMBXA.internal.synopsys.com>
+Message-ID: <87tx4os7nd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xlib_libXxf86vm is an optional dependency for the DRI drivers,
-quote from mesa3d/configure.ac:
+>>>>> "Vineet" == Vineet Gupta <Vineet.Gupta1@synopsys.com> writes:
 
-    # add xf86vidmode if available
-    PKG_CHECK_MODULES([XF86VIDMODE], [xxf86vm], HAVE_XF86VIDMODE=yes, HAVE_XF86VIDMODE=no)
-    if test "$HAVE_XF86VIDMODE" = yes ; then
-        dri_modules="$dri_modules xxf86vm"
-    fi
+Hi,
 
-Add the package as an optional dependency to have reproducable builds.
+ >> Do you know if this is fixable, or should we just make it depend on
+ >> BR2_LARGEFILE?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/mesa3d.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ > It seems patch-01 (which I didn't remove) would already handle the !LFS case, but
+ > that apparently is not case as u show above.
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index aea78c3..c2f2b9b 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -82,6 +82,9 @@ MESA3D_CONF_OPT += --enable-dri3
- else
- MESA3D_CONF_OPT += --disable-dri3
- endif
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
-+MESA3D_DEPENDENCIES += xlib_libXxf86vm
-+endif
- MESA3D_PROVIDES += libgl
- MESA3D_CONF_OPT += \
- 	--enable-dri \
+ > Can u please check if the 4.8 strace builds OK w/o !LFS. If so that would mean
+ > something in upstream strace renders the patch-01 as useless or needing modification.
+
+Yes, strace 4.8 builds ok without LFS.
+
+So either we extend patch 01 or we drop the patch and make strace depend
+on LFS (which is nice as we get rid of a patch, but less nice as it is
+then more difficult to debug !LFS setups).
+
+Anybody feel strongly for one or the other?
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
