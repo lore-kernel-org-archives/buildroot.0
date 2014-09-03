@@ -1,104 +1,119 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Sep 2014 08:43:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 7352] [2014.08-rc3] diffutils-3.3 failed on
-	building
-In-Reply-To: <bug-7352-163@https.bugs.busybox.net/>
-References: <bug-7352-163@https.bugs.busybox.net/>
-Message-ID: <20140903084351.966889D5D1@busybox.osuosl.org>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Wed,  3 Sep 2014 11:12:57 +0200
+Subject: [Buildroot] [PATCH 1/1] dos2unix: new package
+Message-ID: <1409735578-25549-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7352
 
---- Comment #3 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-03 08:43:51 UTC ---
-I cannot reproduce this issue. Variable S is:
-S=../src
-here, which I checked by editing man/Makefile and adding
-$(warning S=$(S))
-above the line that you showed (where cmp.c is referenced).
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+---
+ package/Config.in               |    1 +
+ package/Config.in.host          |    1 +
+ package/dos2unix/Config.in      |    6 ++++++
+ package/dos2unix/Config.in.host |    6 ++++++
+ package/dos2unix/dos2unix.mk    |   40 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
+ create mode 100644 package/dos2unix/Config.in
+ create mode 100644 package/dos2unix/Config.in.host
+ create mode 100644 package/dos2unix/dos2unix.mk
 
-This S variable is set from man/Makefile itself, as follows: (line 1069)
-
-S = $(top_srcdir)/src
-
-and top_srcdir is above:
-
-top_srcdir = ..
-
-Looking at man/Makefile.in, the definition of S is fixed, while top_srcdir is
-derived from @top_srcdir at . This variable is set from the autoconf value
-ac_top_srcdir, which in turn is derived by the configure script using some
-logic around line 2198.
-
-Can you try:
-make diffutils-dirclean diffutils 
-
-to make sure there is nothing odd going on, and if the problem persists add
-some echo statements in the configure script to see how the value of
-ac_top_srcdir is derived for you.
-
-Please also send the output of the configure command from the build log, for me
-it is:
-
->>> diffutils 3.3 Configuring
-(cd /home/tdescham/repo/contrib/buildroot-bugs/output/build/diffutils-3.3/ &&
-rm -rf config.cache &&
-PATH="/home/tdescham/repo/contrib/buildroot-bugs/output/host/bin:/home/tdescham/repo/contrib/buildroot-bugs/output/host/sbin:/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin:/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/sbin:/home/tdescham/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
-AR="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-ar"
-AS="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-as"
-LD="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-ld"
-NM="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-nm"
-CC="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-gcc"
-GCC="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-gcc"
-CPP="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-cpp"
-CXX="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-g++"
-FC="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-gfortran"
-RANLIB="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-ranlib"
-READELF="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-readelf"
-STRIP="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-strip"
-OBJCOPY="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-objcopy"
-OBJDUMP="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-objdump"
-AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
-CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
-CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld"
-LD_FOR_BUILD="/usr/bin/ld"
-CPPFLAGS_FOR_BUILD="-I/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/include"
-CFLAGS_FOR_BUILD="-O2
--I/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/include"
-CXXFLAGS_FOR_BUILD="-O2
--I/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/include"
-LDFLAGS_FOR_BUILD="-L/home/tdescham/repo/contrib/buildroot-bugs/output/host/lib
--L/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/lib
--Wl,-rpath,/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/lib"
-FCFLAGS_FOR_BUILD=""
-DEFAULT_ASSEMBLER="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-as"
-DEFAULT_LINKER="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/mips-linux-gnu-ld"
-CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe
--march=1004kc -mtune=1004kc -mdspr2 -mmt -O3 -g2" CXXFLAGS="-D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -march=1004kc -mtune=1004kc
--mdspr2 -mmt -O3 -g2" LDFLAGS="" FCFLAGS=""
-PKG_CONFIG="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/bin/pkg-config"
-STAGING_DIR="/home/tdescham/repo/contrib/buildroot-bugs/output/host/usr/mipsel-buildroot-linux-gnu/sysroot"
-ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes
-ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes
-gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes
-ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
-lt_cv_sys_lib_search_path_spec="" ac_cv_c_bigendian=no  ./configure
---target=mipsel-buildroot-linux-gnu --host=mipsel-buildroot-linux-gnu
---build=x86_64-unknown-linux-gnu --prefix=/usr --exec-prefix=/usr
---sysconfdir=/etc --program-prefix="" --disable-gtk-doc --disable-doc
---disable-docs --disable-documentation --with-xmlto=no --with-fop=no
---disable-dependency-tracking   --enable-ipv6 --enable-static --enable-shared  
-)
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-doc,
---disable-docs, --disable-documentation, --with-xmlto, --with-fop,
---enable-ipv6, --enable-static, --enable-shared
-
+diff --git a/package/Config.in b/package/Config.in
+index 883dd66..c5e7d33 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1128,6 +1128,7 @@ comment "Utilities"
+ 	source "package/at/Config.in"
+ 	source "package/ccrypt/Config.in"
+ 	source "package/dialog/Config.in"
++	source "package/dos2unix/Config.in"
+ 	source "package/dtach/Config.in"
+ 	source "package/file/Config.in"
+ 	source "package/gnupg/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index e05bbfa..2c88c0b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
+ 
+ 	source "package/dfu-util/Config.in.host"
++	source "package/dos2unix/Config.in.host"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
+diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+new file mode 100644
+index 0000000..6e196a3
+--- /dev/null
++++ b/package/dos2unix/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_DOS2UNIX
++  bool "dos2unix"
++  help
++    dos2unix converts text file line endings between CRLF and LF
++
++    http://freshmeat.net/projects/dos2unix
+diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
+new file mode 100644
+index 0000000..946271b
+--- /dev/null
++++ b/package/dos2unix/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_DOS2UNIX
++  bool "host dos2unix"
++  help
++    dos2unix converts text file line endings between CRLF and LF
++
++    http://freshmeat.net/projects/dos2unix
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+new file mode 100644
+index 0000000..a976ffe
+--- /dev/null
++++ b/package/dos2unix/dos2unix.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# dos2unix
++#
++################################################################################
++
++DOS2UNIX_VERSION = 6.0.6
++DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
++
++DOS2UNIX_LICENSE = BSD-2c
++DOS2UNIX_LICENSE_FILES = COPYING.txt
++
++define DOS2UNIX_BUILD_CMDS
++  (cd $(DOS2UNIX_DIR);  \
++  $(TARGET_CONFIGURE_OPTS) \
++  $(TARGET_CONFIGURE_ARGS) \
++	make)
++endef
++
++define DOS2UNIX_INSTALL_TARGET_CMDS
++  (cd $(DOS2UNIX_DIR);  \
++  $(TARGET_CONFIGURE_OPTS) \
++  $(TARGET_CONFIGURE_ARGS) \
++	make install DESTDIR=$(TARGET_DIR))
++endef
++
++define HOST_DOS2UNIX_BUILD_CMDS
++  (cd $(HOST_DOS2UNIX_DIR);  \
++  $(HOST_CONFIGURE_OPTS) \
++	make)
++endef
++
++define HOST_DOS2UNIX_INSTALL_CMDS
++  (cd $(HOST_DOS2UNIX_DIR);  \
++  $(HOST_CONFIGURE_OPTS) \
++	make install DESTDIR=$(HOST_DIR))
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
