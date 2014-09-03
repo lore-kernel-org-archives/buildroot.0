@@ -1,37 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Sep 2014 18:57:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 7364] monit doesn't start with glibc 2.19 because
- geteuid() fails
-In-Reply-To: <bug-7364-163@https.bugs.busybox.net/>
-References: <bug-7364-163@https.bugs.busybox.net/>
-Message-ID: <20140903185716.51F619D5D1@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 03 Sep 2014 21:10:42 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-09-01
+References: <20140902063012.275961012A9@stock.ovh.net>
+Message-ID: <XnsA39DD76F66933berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7364
+[posted and mailed]
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140902063012.275961012A9 at stock.ovh.net: 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+>     x86_64 |                     fltk-1.3.2 | NOK |
+>     http://autobuild.buildroot.net/results/c35df0b20e9f65154e7cf3dfec01a6
+>     35a071eb41/ 
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-09-03 18:57:16 UTC ---
-Normally, static linking with glibc is not possible, just because of
-this issue: all that has to deal with names (usernames, groups,
-hostnames...) need dynamic linking, becasue glibc uses libnss, which
-dlopen()s the backend libraries, such as libnss_files.so.
+Hi Thomas,
 
-How did you manage to have a statically-linked monit when using a
-glibc toolchain? Care to share your .config, please?
+> Linking fluid...
+> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
+gnu/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to 
+`xcb_get_reply_fds'
+> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
+gnu/sysroot/usr/lib64/libxcb-render.so.0: undefined reference to 
+`xcb_str_sizeof'
+> /home/test/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-
+gnu/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to `xcb_send_fd'
 
-Regards,
-Yann E. MORIN.
+I tried several times to reproduce this bug but failed.
+Interestingly the bug only occurs on your build server:
+http://autobuild.buildroot.net/?reason=fltk-1.3.2
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Are there any xcb packages installed on your build server?
+
+Regards, Bernd
