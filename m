@@ -1,33 +1,23 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 3 Sep 2014 13:18:59 +0200
-Subject: [Buildroot] [PATCH 1/1] dos2unix: new package
-In-Reply-To: <CAJeZidLQPqtBVRhQZ01PrBeoZyOpekG+deZrmD1sw+5PmpUJ2Q@mail.gmail.com>
-References: <1409735578-25549-1-git-send-email-david.bachelart@bbright.com>
- <CAAXf6LUkOPpkBTRJUNrJ5U+iXYbBgwi8L_Ljo3_qktwE7S52Rg@mail.gmail.com>
- <CAJeZidLQPqtBVRhQZ01PrBeoZyOpekG+deZrmD1sw+5PmpUJ2Q@mail.gmail.com>
-Message-ID: <CAAXf6LUaRoq1Qqrbb+LkVhUg5pqMpSG9rXzx53R=9QCE0p49fw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Sep 2014 13:17:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 7358] rpi-userland: linking with bcm_host doesn't
+ give vc_dispmanx_* functions
+In-Reply-To: <bug-7358-163@https.bugs.busybox.net/>
+References: <bug-7358-163@https.bugs.busybox.net/>
+Message-ID: <20140903131745.2D40A9D561@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+https://bugs.busybox.net/show_bug.cgi?id=7358
 
-On Wed, Sep 3, 2014 at 11:39 AM, David Bachelart
-<david.bachelart@bbright.com> wrote:
-> Hi Baruch and Thomas,
->
-> In fact, I need this tool for the host part to clean files up before
-> installing stuff on the target. I made a host + target package, but maybe it
-> does not make sense.
->
-> Are you interested in the host part only ?
->
+--- Comment #1 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2014-09-03 13:17:44 UTC ---
+I think you need EGL (egl.pc). Forget bcm_host. See commit
+6a29ce0d1648baccb311e78c7c906ca27255e895.
 
-I don't see a reason why the host part would not be acceptable in
-mainline buildroot, so yes please update your patch. (note: my opinion
-only, I'm not the maintainer)
-
-Best regards,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
