@@ -1,26 +1,30 @@
-From: David Bachelart <david.bachelart@bbright.com>
-Date: Wed, 3 Sep 2014 11:39:02 +0200
-Subject: [Buildroot] [PATCH 1/1] dos2unix: new package
-In-Reply-To: <CAAXf6LUkOPpkBTRJUNrJ5U+iXYbBgwi8L_Ljo3_qktwE7S52Rg@mail.gmail.com>
-References: <1409735578-25549-1-git-send-email-david.bachelart@bbright.com>
- <CAAXf6LUkOPpkBTRJUNrJ5U+iXYbBgwi8L_Ljo3_qktwE7S52Rg@mail.gmail.com>
-Message-ID: <CAJeZidLQPqtBVRhQZ01PrBeoZyOpekG+deZrmD1sw+5PmpUJ2Q@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Sep 2014 09:43:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 7352] [2014.08-rc3] diffutils-3.3 failed on
+	building
+In-Reply-To: <bug-7352-163@https.bugs.busybox.net/>
+References: <bug-7352-163@https.bugs.busybox.net/>
+Message-ID: <20140903094347.850AB9D5DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch and Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=7352
 
-In fact, I need this tool for the host part to clean files up before
-installing stuff on the target. I made a host + target package, but maybe
-it does not make sense.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-Are you interested in the host part only ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
-Thanks,
-David
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140903/31544ad9/attachment.html>
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-03 09:43:47 UTC ---
+Thanks for your feedback, I was indeed starting to think in that direction.
+I'm glad this is resolved for you.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
