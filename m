@@ -1,25 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Sep 2014 23:10:20 +0200
-Subject: [Buildroot] [PATCH] Revert "SDL_image: fix runtime libjpeg
-	failure"
-In-Reply-To: <1409710352-6375-1-git-send-email-maarten@treewalker.org>
- (Maarten ter Huurne's message of "Wed, 3 Sep 2014 04:12:32 +0200")
-References: <1409710352-6375-1-git-send-email-maarten@treewalker.org>
-Message-ID: <87r3zrozwj.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  4 Sep 2014 18:15:58 -0300
+Subject: [Buildroot] [PATCH] barebox: bump to version 2014.09.0
+Message-ID: <1409865358-24994-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maarten" == Maarten ter Huurne <maarten@treewalker.org> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/barebox/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > This reverts commit 883f066797ae0e7a017fac8e275f6e58659db760.
- > Bug in configure script was fixed upstream in SDL_image 1.2.8.
-
- > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-
-Committed, thanks.
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 2248547..c7c89a9 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.08.0"
++	bool "2014.09.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2014.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
