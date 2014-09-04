@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Sep 2014 17:10:43 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.12
-Message-ID: <20140904152909.772C89D5CB@busybox.osuosl.org>
+Date: Thu, 4 Sep 2014 17:24:58 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: Add optional dependency
+	xlib_libXxf86vm
+Message-ID: <20140904152909.9FF309D5CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2edfba3cc9a2bcfedcc7ad34f8fd856bca8cbe1
+commit: http://git.buildroot.net/buildroot/commit/?id=1fe492a05ddf4dbe2a9700d76226239ba7b986e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+xlib_libXxf86vm is an optional dependency for the DRI drivers,
+quote from mesa3d/configure.ac:
+
+    # add xf86vidmode if available
+    PKG_CHECK_MODULES([XF86VIDMODE], [xxf86vm], HAVE_XF86VIDMODE=yes, HAVE_XF86VIDMODE=no)
+    if test "$HAVE_XF86VIDMODE" = yes ; then
+        dri_modules="$dri_modules xxf86vm"
+    fi
+
+Add the package as an optional dependency to have reproducable builds.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mesa3d/mesa3d.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index fdd2e4e..810802d 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.42.11
-+E2FSPROGS_VERSION = 1.42.12
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index aea78c3..c2f2b9b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -82,6 +82,9 @@ MESA3D_CONF_OPT += --enable-dri3
+ else
+ MESA3D_CONF_OPT += --disable-dri3
+ endif
++ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
++MESA3D_DEPENDENCIES += xlib_libXxf86vm
++endif
+ MESA3D_PROVIDES += libgl
+ MESA3D_CONF_OPT += \
+ 	--enable-dri \
