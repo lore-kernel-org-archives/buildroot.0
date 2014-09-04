@@ -1,37 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Sep 2014 22:40:14 +0200
-Subject: [Buildroot] [git commit] setserial: don't build setserial.cat
-Message-ID: <20140904204104.365FB9D5F7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Sep 2014 22:42:04 +0200
+Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.6.2
+In-Reply-To: <1409861142-27117-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 4 Sep 2014 17:05:42 -0300")
+References: <1409861142-27117-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mwnqfs3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cad60a22ca19e381fa093bc5690a3a9638914d2c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes http://autobuild.buildroot.net/results/c73/c736933d4110865008f2d1e8b531b6e392c68285/
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Don't use 'make all', as that also builds setserial.cat which needs nroff on
-the build machine (and isn't needed anyway as it doesn't get installed /
-referenced from anywhere).
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/setserial/setserial.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index d4c0396..13174be 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -10,6 +10,8 @@ SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
- SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial
- SETSERIAL_LICENSE = GPLv2
- SETSERIAL_LICENSE_FILES = debian/copyright
-+# make all also builds setserial.cat which needs nroff
-+SETSERIAL_MAKE_OPT = setserial
- 
- define SETSERIAL_APPLY_DEBIAN_PATCHES
- 	# Touching gorhack.h is needed for the Debian patch 18 to work
+-- 
+Bye, Peter Korsgaard
