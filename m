@@ -1,69 +1,33 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 4 Sep 2014 16:24:18 +0100
-Subject: [Buildroot] [PATCH 2/2] setserial: Disable manpages
-In-Reply-To: <87a96fs96p.fsf@dell.be.48ers.dk>
-References: <1409829526-49853-1-git-send-email-Vincent.Riera@imgtec.com>	<1409829526-49853-2-git-send-email-Vincent.Riera@imgtec.com>
- <87a96fs96p.fsf@dell.be.48ers.dk>
-Message-ID: <54088422.8060507@imgtec.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Sep 2014 17:25:02 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: Add optional dependency
+	xlib_libXxf86vm
+In-Reply-To: <1409773691-13668-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Wed, 3 Sep 2014 21:48:09 +0200")
+References: <1409773691-13668-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87wq9jqugh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/2014 04:21 PM, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->   > There is no configure option to disable the manpages, so we use this
->   > patch to disable them. Otherwise this package would fail to build on
->   > systems without the groff package installed because the build system
->   > calls 'nroff' in the Makefile.
->
->   > Fixes:
->   >   http://autobuild.buildroot.net/results/c73/c736933d4110865008f2d1e8b531b6e392c68285/
->
->   > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->   > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
->   > ---
->   >  .../setserial-0003-disable-manpages.patch          |   61 ++++++++++++++++++++
->   >  1 files changed, 61 insertions(+), 0 deletions(-)
->   >  create mode 100644 package/setserial/setserial-0003-disable-manpages.patch
->
->   > diff --git a/package/setserial/setserial-0003-disable-manpages.patch b/package/setserial/setserial-0003-disable-manpages.patch
->   > new file mode 100644
->   > index 0000000..ebd3cb2
->   > --- /dev/null
->   > +++ b/package/setserial/setserial-0003-disable-manpages.patch
->   > @@ -0,0 +1,61 @@
->   > +setserial: Disable manpages
->   > +
->   > +There is no configure option to disable the manpages, so we use this
->   > +patch to disable them. Otherwise this package would fail to build on
->   > +systems without the groff package installed because the build system
->   > +calls 'nroff' in the Makefile.
->
-> Nit: All these lines have a trailing space.
->
->   > +
->   > +Fixes:
->   > +  http://autobuild.buildroot.net/results/c73/c736933d4110865008f2d1e8b531b6e392c68285/
->   > +
->   > +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->   > +--- setserial-2.17/Makefile.in.orig	2014-09-04 11:58:05.685475241 +0100
->   > ++++ setserial-2.17/Makefile.in	2014-09-04 11:59:14.508641155 +0100
->   > +@@ -17,26 +17,20 @@ DEFS = @DEFS@
->   > + INCS = -I.
->   > + TAR = tar
->   > +
->   > +-all: setserial setserial.cat
->   > ++all: setserial
->
-> As far as I can see, nroff is only used for setserial.cat, and
-> setserial.cat is not installed / used anywhere, so just patching this
-> line is enough and the rest of the patch can get dropped.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Don't you prefer to completely get rid of the manual pages?
+ > xlib_libXxf86vm is an optional dependency for the DRI drivers,
+ > quote from mesa3d/configure.ac:
 
+ >     # add xf86vidmode if available
+ >     PKG_CHECK_MODULES([XF86VIDMODE], [xxf86vm], HAVE_XF86VIDMODE=yes, HAVE_XF86VIDMODE=no)
+ >     if test "$HAVE_XF86VIDMODE" = yes ; then
+ >         dri_modules="$dri_modules xxf86vm"
+ >     fi
+
+ > Add the package as an optional dependency to have reproducable builds.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-Vincent
+Bye, Peter Korsgaard
