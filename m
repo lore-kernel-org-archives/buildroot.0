@@ -1,30 +1,74 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Sep 2014 17:05:42 -0300
-Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.6.2
-Message-ID: <1409861142-27117-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Sep 2014 22:09:54 +0200
+Subject: [Buildroot] [PATCH 2/2] package/setserial: Depends on host-groff
+In-Reply-To: <1409860796-22704-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1409860796-22704-1-git-send-email-bernd.kuhls@t-online.de>
+ <1409860796-22704-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140904200954.GA3945@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgcrypt/libgcrypt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Bernd, All,
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 068d464..ed9c959 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.6.1
-+LIBGCRYPT_VERSION = 1.6.2
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+On 2014-09-04 21:59 +0200, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/d5b/d5ba361a5c3829d789fe647fe785ab81efd9bbe1/
+> http://autobuild.buildroot.net/results/4d6/4d61f60ed94a7a1ddb1bc1b11173967e1d65c8d3/
+> http://autobuild.buildroot.net/results/3dc/3dcda657089a8489910c1ca973f900a34370275c/
+> http://autobuild.buildroot.net/results/86e/86efc44200e80f6baee6846354ce77ef0aa7064d/
+> http://autobuild.buildroot.net/results/713/713a68be2b71a8d5982add15c2b71e666a83d316/
+> http://autobuild.buildroot.net/results/c8e/c8e7458911c54020ff999452b9d86a48a03e6693/
+> http://autobuild.buildroot.net/results/dc2/dc214aec1cf90e6c874c9fd7cbe71027ebe13ed6/
+> http://autobuild.buildroot.net/results/3f2/3f2c84d9081c3b4ace3d2d20dfb9ddbb58632889/
+> http://autobuild.buildroot.net/results/a59/a59465462679891b5fa6559804c954c99c7b247b/
+> http://autobuild.buildroot.net/results/c73/c736933d4110865008f2d1e8b531b6e392c68285/
+> http://autobuild.buildroot.net/results/27b/27beeaa1147103d44a172cf3e4ed23623f1794c3/
+> http://autobuild.buildroot.net/results/62b/62bc0a90c747bde8b0631a67d3d35a994c2035c1/
+> http://autobuild.buildroot.net/results/5ef/5ef1c6a65a48b21fba1390eaa421a628755ea079/
+
+These are being fixed by disabling the documentation instead:
+    http://patchwork.ozlabs.org/patch/385808/
+
+Since we do remove the documentation on the target, there is no point in
+even building it to start with.
+
+So: NAK.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/setserial/setserial.mk |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+> index d4c0396..70c0116 100644
+> --- a/package/setserial/setserial.mk
+> +++ b/package/setserial/setserial.mk
+> @@ -10,6 +10,7 @@ SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
+>  SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial
+>  SETSERIAL_LICENSE = GPLv2
+>  SETSERIAL_LICENSE_FILES = debian/copyright
+> +SETSERIAL_DEPENDENCIES = host-groff
+>  
+>  define SETSERIAL_APPLY_DEBIAN_PATCHES
+>  	# Touching gorhack.h is needed for the Debian patch 18 to work
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
