@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Sep 2014 17:50:38 -0300
-Subject: [Buildroot] [PATCH 3/7] wireshark: bump to version 1.12.0
+Date: Thu,  4 Sep 2014 17:50:39 -0300
+Subject: [Buildroot] [PATCH 4/7] radvd: bump to version 2.6
 In-Reply-To: <1409863842-24226-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1409863842-24226-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1409863842-24226-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1409863842-24226-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,88 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...001-fix-wrong-cflags-for-build-assumption.patch | 52 +++++++++++-----------
- package/wireshark/wireshark.mk                     |  3 +-
- 2 files changed, 27 insertions(+), 28 deletions(-)
+ package/radvd/radvd-01-drop-check.patch | 15 +++++++++------
+ package/radvd/radvd.mk                  |  2 +-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/wireshark/wireshark-0001-fix-wrong-cflags-for-build-assumption.patch b/package/wireshark/wireshark-0001-fix-wrong-cflags-for-build-assumption.patch
-index de30c81..14cb957 100644
---- a/package/wireshark/wireshark-0001-fix-wrong-cflags-for-build-assumption.patch
-+++ b/package/wireshark/wireshark-0001-fix-wrong-cflags-for-build-assumption.patch
-@@ -11,30 +11,28 @@ http://autobuild.buildroot.net/results/2b1/2b1a0654b649618422d65edf370b82476ba84
+diff --git a/package/radvd/radvd-01-drop-check.patch b/package/radvd/radvd-01-drop-check.patch
+index 2b5d008..670d5b2 100644
+--- a/package/radvd/radvd-01-drop-check.patch
++++ b/package/radvd/radvd-01-drop-check.patch
+@@ -2,14 +2,17 @@ Drop check requirement, we don't do unit tests.
  
  Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  
--diff -Nura wireshark-1.10.3.orig/acinclude.m4 wireshark-1.10.3/acinclude.m4
----- wireshark-1.10.3.orig/acinclude.m4	2013-12-04 14:06:44.986074426 -0300
--+++ wireshark-1.10.3/acinclude.m4	2013-12-04 14:25:36.496356791 -0300
--@@ -1664,11 +1664,6 @@
--                             # the saved value plus just the new option.
--                             #
--                             CFLAGS="$CFLAGS_saved $GCC_OPTION"
---                            #
---                            # Add it to the flags we use when building
---                            # build tools.
---                            #
---                            CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
--                             if test "$2" != C ; then
--                               #
--                               # Add it to the C++ flags as well.
--@@ -1687,11 +1682,6 @@
--                         # the saved value plus just the new option.
--                         #
--                         CFLAGS="$CFLAGS_saved $GCC_OPTION"
---                        #
---                        # Add it to the flags we use when building
---                        # build tools.
---                        #
---                        CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
--                         if test "$2" != C ; then
--                           #
--                           # Add it to the C++ flags as well.
-+diff -Nura wireshark-1.12.0.orig/acinclude.m4 wireshark-1.12.0/acinclude.m4
-+--- wireshark-1.12.0.orig/acinclude.m4	2014-09-04 15:45:38.365255309 -0300
-++++ wireshark-1.12.0/acinclude.m4	2014-09-04 15:46:23.349810353 -0300
-+@@ -1755,10 +1755,6 @@
-+               # just the new option.
-+               #
-+               CFLAGS="$CFLAGS_saved $GCC_OPTION"
-+-              #
-+-              # Add it to the flags we use when building build tools.
-+-              #
-+-              CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
-+             ],
-+             [
-+               AC_MSG_RESULT(yes)
-+@@ -1771,10 +1767,6 @@
-+           # just the new option.
-+           #
-+           CFLAGS="$CFLAGS_saved $GCC_OPTION"
-+-          #
-+-          # Add it to the flags we use when building build tools.
-+-          #
-+-          CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
-+         fi
-+       ],
-+       [
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index da76e37..0bbf34d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,12 +4,13 @@
+-diff -Nura radvd-2.1.orig/configure.ac radvd-2.1/configure.ac
+---- radvd-2.1.orig/configure.ac	2014-07-22 08:23:12.642260069 -0300
+-+++ radvd-2.1/configure.ac	2014-07-22 08:23:21.270552628 -0300
+-@@ -49,7 +49,6 @@
+- dnl Determine CC and preset CFLAGS
++diff -Nura radvd-2.6.orig/configure.ac radvd-2.6/configure.ac
++--- radvd-2.6.orig/configure.ac	2014-09-04 15:54:41.735038724 -0300
+++++ radvd-2.6/configure.ac	2014-09-04 15:54:53.106431815 -0300
++@@ -50,10 +50,6 @@
+  AC_PROG_CC_C99
+  AC_PROG_RANLIB
+--PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+  
++-if test "$arch" = "linux" ; then
++-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
++-fi
++-
+  dnl Determine of netlink is available
+  AC_MSG_CHECKING(netlink)
++ AC_TRY_COMPILE([
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 6f83aff..4ce14da 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 1.10.9
-+WIRESHARK_VERSION = 1.12.0
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
- WIRESHARK_LICENSE_FILES = COPYING
- WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
-+# For wrong cflags patch
- WIRESHARK_AUTORECONF = YES
- WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
- 			ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+-RADVD_VERSION = 2.5
++RADVD_VERSION = 2.6
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
 -- 
 1.8.5.5
