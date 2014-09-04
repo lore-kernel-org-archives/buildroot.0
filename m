@@ -1,74 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Sep 2014 22:09:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/setserial: Depends on host-groff
-In-Reply-To: <1409860796-22704-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1409860796-22704-1-git-send-email-bernd.kuhls@t-online.de>
- <1409860796-22704-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140904200954.GA3945@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Sep 2014 22:39:33 +0200
+Subject: [Buildroot] [PATCH 2/2] setserial: Disable manpages
+In-Reply-To: <54088422.8060507@imgtec.com> (Vicente Olivert Riera's message of
+ "Thu, 4 Sep 2014 16:24:18 +0100")
+References: <1409829526-49853-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1409829526-49853-2-git-send-email-Vincent.Riera@imgtec.com>
+ <87a96fs96p.fsf@dell.be.48ers.dk> <54088422.8060507@imgtec.com>
+Message-ID: <878ulzqfwa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On 2014-09-04 21:59 +0200, Bernd Kuhls spake thusly:
-> Fixes
-> http://autobuild.buildroot.net/results/d5b/d5ba361a5c3829d789fe647fe785ab81efd9bbe1/
-> http://autobuild.buildroot.net/results/4d6/4d61f60ed94a7a1ddb1bc1b11173967e1d65c8d3/
-> http://autobuild.buildroot.net/results/3dc/3dcda657089a8489910c1ca973f900a34370275c/
-> http://autobuild.buildroot.net/results/86e/86efc44200e80f6baee6846354ce77ef0aa7064d/
-> http://autobuild.buildroot.net/results/713/713a68be2b71a8d5982add15c2b71e666a83d316/
-> http://autobuild.buildroot.net/results/c8e/c8e7458911c54020ff999452b9d86a48a03e6693/
-> http://autobuild.buildroot.net/results/dc2/dc214aec1cf90e6c874c9fd7cbe71027ebe13ed6/
-> http://autobuild.buildroot.net/results/3f2/3f2c84d9081c3b4ace3d2d20dfb9ddbb58632889/
-> http://autobuild.buildroot.net/results/a59/a59465462679891b5fa6559804c954c99c7b247b/
-> http://autobuild.buildroot.net/results/c73/c736933d4110865008f2d1e8b531b6e392c68285/
-> http://autobuild.buildroot.net/results/27b/27beeaa1147103d44a172cf3e4ed23623f1794c3/
-> http://autobuild.buildroot.net/results/62b/62bc0a90c747bde8b0631a67d3d35a994c2035c1/
-> http://autobuild.buildroot.net/results/5ef/5ef1c6a65a48b21fba1390eaa421a628755ea079/
+Hi,
 
-These are being fixed by disabling the documentation instead:
-    http://patchwork.ozlabs.org/patch/385808/
+ >> > +-all: setserial setserial.cat
+ >> > ++all: setserial
+ >> 
+ >> As far as I can see, nroff is only used for setserial.cat, and
+ >> setserial.cat is not installed / used anywhere, so just patching this
+ >> line is enough and the rest of the patch can get dropped.
 
-Since we do remove the documentation on the target, there is no point in
-even building it to start with.
+ > Don't you prefer to completely get rid of the manual pages?
 
-So: NAK.
+Well, yes - But we already do that globally in target-finalize, so we
+don't need to do it explicitly here.
 
-Regards,
-Yann E. MORIN.
+I've committed an even simpler fix - Simply use 'make setserial' instead
+of 'make all' so setserial.cat doesn't get built.
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/setserial/setserial.mk |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-> index d4c0396..70c0116 100644
-> --- a/package/setserial/setserial.mk
-> +++ b/package/setserial/setserial.mk
-> @@ -10,6 +10,7 @@ SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
->  SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial
->  SETSERIAL_LICENSE = GPLv2
->  SETSERIAL_LICENSE_FILES = debian/copyright
-> +SETSERIAL_DEPENDENCIES = host-groff
->  
->  define SETSERIAL_APPLY_DEBIAN_PATCHES
->  	# Touching gorhack.h is needed for the Debian patch 18 to work
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
