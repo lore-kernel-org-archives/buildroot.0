@@ -1,45 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Sep 2014 22:42:24 +0200
-Subject: [Buildroot] [git commit] bfin: disable newer binutils for internal
-	toolchain
-Message-ID: <20140904204304.826C39D5F7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Sep 2014 22:44:25 +0200
+Subject: [Buildroot] [PATCH 1/2] package/groff: New package
+In-Reply-To: <1409860796-22704-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Thu, 4 Sep 2014 21:59:55 +0200")
+References: <1409860796-22704-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87vbp3p13q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=013f9fe67dd808384579f1239d461314e9c098ab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-You get following linking error, when trying to build a
-toolchain for bfin with newer binutils:
-bfin-buildroot-linux-uclibc/bin/ld: fde encoding in _divdi3_s.o(.eh_frame) prevents .eh_frame_hdr table being created.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/Config.in       |    1 +
+ >  package/groff/Config.in |   15 +++++++++++++++
+ >  package/groff/groff.mk  |   19 +++++++++++++++++++
+ >  3 files changed, 35 insertions(+)
+ >  create mode 100644 package/groff/Config.in
+ >  create mode 100644 package/groff/groff.mk
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in.host |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 4622f9e..d354a2d 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1135,6 +1135,7 @@ comment "Utilities"
+ >  	source "package/file/Config.in"
+ >  	source "package/gnupg/Config.in"
+ >  	source "package/gnupg2/Config.in"
+ > +	source "package/groff/Config.in"
+ >  	source "package/inotify-tools/Config.in"
+ >  	source "package/lockfile-progs/Config.in"
+ >  	source "package/logrotate/Config.in"
+ > diff --git a/package/groff/Config.in b/package/groff/Config.in
+ > new file mode 100644
+ > index 0000000..764e829
+ > --- /dev/null
+ > +++ b/package/groff/Config.in
+ > @@ -0,0 +1,15 @@
+ > +config BR2_PACKAGE_GROFF
+ > +	bool "groff"
+ > +	depends on BR2_INSTALL_LIBSTDCPP
+ > +	help
+ > +	  Groff (GNU troff) is a typesetting system that reads plain text mixed
+ > +	  with formatting commands and produces formatted output. Output may be
+ > +	  PostScript or PDF, html, or ASCII/UTF8 for display at the terminal.
+ > +	  Formatting commands may be either low-level typesetting requests
+ > +	  (?primitives?) or macros from a supplied set. Users may also write
+ > +	  their own macros. All three may be combined.
+ > +
+ > +	  http://www.gnu.org/software/groff/
+ > +
+ > +comment "groff needs a toolchain w/ C++"
+ > +	depends on !BR2_INSTALL_LIBSTDCPP
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 826db6d..45f604a 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -16,12 +16,14 @@ choice
- 		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.22"
- 
-+	# bfin disabled for newer binutils due to
-+	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
--		depends on !BR2_avr32
-+		depends on !BR2_avr32 && !BR2_bfin
- 		bool "binutils 2.24"
- 
- endchoice
+Is this just to fix the setserial issue or do you really have a need for
+groff on the target?
+
+-- 
+Bye, Peter Korsgaard
