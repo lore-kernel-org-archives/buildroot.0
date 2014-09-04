@@ -1,30 +1,30 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Thu,  4 Sep 2014 11:27:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 0.10.31
-Message-ID: <1409822825-2791-1-git-send-email-jkrause@posteo.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 4 Sep 2014 12:18:45 +0100
+Subject: [Buildroot] [PATCH 1/2] setserial: Rename patches to add sequence
+	numbers
+Message-ID: <1409829526-49853-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
 ---
- package/nodejs/nodejs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...patch => setserial-0001-build-system-fix.patch} |    0
+ ...> setserial-0002-tiocghayesesp-build-fix.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/setserial/{setserial-2.17-build-system-fix.patch => setserial-0001-build-system-fix.patch} (100%)
+ rename package/setserial/{setserial-2.17-tiocghayesesp-build-fix.patch => setserial-0002-tiocghayesesp-build-fix.patch} (100%)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index ed09b53..8a337ed 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 0.10.30
-+NODEJS_VERSION = 0.10.31
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+diff --git a/package/setserial/setserial-2.17-build-system-fix.patch b/package/setserial/setserial-0001-build-system-fix.patch
+similarity index 100%
+rename from package/setserial/setserial-2.17-build-system-fix.patch
+rename to package/setserial/setserial-0001-build-system-fix.patch
+diff --git a/package/setserial/setserial-2.17-tiocghayesesp-build-fix.patch b/package/setserial/setserial-0002-tiocghayesesp-build-fix.patch
+similarity index 100%
+rename from package/setserial/setserial-2.17-tiocghayesesp-build-fix.patch
+rename to package/setserial/setserial-0002-tiocghayesesp-build-fix.patch
 -- 
-2.1.0
+1.7.1
