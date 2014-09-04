@@ -1,19 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Sep 2014 17:13:22 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.42.12
-In-Reply-To: <1409839562-30091-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 4 Sep 2014 11:06:02 -0300")
-References: <1409839562-30091-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87iol3s9kd.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Sep 2014 17:13:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 0.10.31
+In-Reply-To: <1409822825-2791-1-git-send-email-jkrause@posteo.de>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 4 Sep 2014 11:27:05 +0200")
+References: <1409822825-2791-1-git-send-email-jkrause@posteo.de>
+Message-ID: <87egvrs9jp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
 Committed, thanks.
 
