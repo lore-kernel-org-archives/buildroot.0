@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Sep 2014 17:21:42 +0200
-Subject: [Buildroot] [PATCH 1/2] setserial: Rename patches to add
-	sequence numbers
-In-Reply-To: <1409829526-49853-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 4 Sep 2014 12:18:45 +0100")
-References: <1409829526-49853-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <8761h3s96h.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Sep 2014 17:23:55 +0200
+Subject: [Buildroot] [PATCH] gpsd: fix autobuild failures
+In-Reply-To: <1409766997-4927-1-git-send-email-spdawson@gmail.com> (Simon
+ Dawson's message of "Wed, 3 Sep 2014 18:56:37 +0100")
+References: <1409766997-4927-1-git-send-email-spdawson@gmail.com>
+Message-ID: <871trrs92s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+ > Add a gpsd patch sent upstream. Fixes, for example:
+ >   http://autobuild.buildroot.net/results/c68/c68203cc9cf59db0b645d1b20ee7bed4670bbbf0/
+
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
 Committed, thanks.
 
