@@ -1,24 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 04 Sep 2014 23:09:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/groff: New package
-References: <1409860796-22704-1-git-send-email-bernd.kuhls@t-online.de>
- <87vbp3p13q.fsf@dell.be.48ers.dk>
-Message-ID: <XnsA39EEB9DDC29berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Sep 2014 23:10:20 +0200
+Subject: [Buildroot] [PATCH] Revert "SDL_image: fix runtime libjpeg
+	failure"
+In-Reply-To: <1409710352-6375-1-git-send-email-maarten@treewalker.org>
+ (Maarten ter Huurne's message of "Wed, 3 Sep 2014 04:12:32 +0200")
+References: <1409710352-6375-1-git-send-email-maarten@treewalker.org>
+Message-ID: <87r3zrozwj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Maarten" == Maarten ter Huurne <maarten@treewalker.org> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> wrote in 
-news:87vbp3p13q.fsf at dell.be.48ers.dk:
+ > This reverts commit 883f066797ae0e7a017fac8e275f6e58659db760.
+ > Bug in configure script was fixed upstream in SDL_image 1.2.8.
 
-> Is this just to fix the setserial issue or do you really have a need for
-> groff on the target?
+ > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
 
-no, it was only desired to be used by setserial.
-I marked my patch series as rejected, sorry for the noise ;)
+Committed, thanks.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
