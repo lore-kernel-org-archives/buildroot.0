@@ -1,25 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Sep 2014 11:18:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 7364] monit builds a static application,
- even though BR2_PREFER_STATIC_LIB is not set, and with glibc.
-In-Reply-To: <bug-7364-163@https.bugs.busybox.net/>
-References: <bug-7364-163@https.bugs.busybox.net/>
-Message-ID: <20140905111845.650669D608@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 05 Sep 2014 13:38:16 +0200
+Subject: [Buildroot] [PATCH 1/1] procps-ng: add INSTALL_STAGING=YES
+In-Reply-To: <1409669853-21440-1-git-send-email-kaszak@gmail.com> (Karoly
+ Kasza's message of "Tue, 2 Sep 2014 16:57:33 +0200")
+References: <1409669853-21440-1-git-send-email-kaszak@gmail.com>
+Message-ID: <87a96epaaf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7364
+>>>>> "Karoly" == Karoly Kasza <kaszak@gmail.com> writes:
 
---- Comment #10 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-09-05 11:18:45 UTC ---
-I have a patch I'm currently testing...
+ > Procps-ng libraries needed in the staging directory by
+ > the new package openvmtools.
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
