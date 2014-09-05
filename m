@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 5 Sep 2014 16:13:59 +0100
-Subject: [Buildroot] [PATCH] lftp: bump to version 4.5.5
-Message-ID: <1409930039-28762-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 5 Sep 2014 16:46:05 +0100
+Subject: [Buildroot] [PATCH] tcl: bump version to 8.6.2
+Message-ID: <1409931965-13622-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
- package/lftp/lftp.mk |    2 +-
+ package/tcl/tcl.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index ac0f63b..34e50b3 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index efb2ec8..62a5ede 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LFTP_VERSION = 4.5.2
-+LFTP_VERSION = 4.5.5
- LFTP_SITE    = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
- LFTP_LICENSE_FILES = COPYING
+ TCL_VERSION_MAJOR = 8.6
+-TCL_VERSION = $(TCL_VERSION_MAJOR).1
++TCL_VERSION = $(TCL_VERSION_MAJOR).2
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+ TCL_LICENSE = tcl license
 -- 
 1.7.1
