@@ -1,30 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  5 Sep 2014 10:51:43 -0300
-Subject: [Buildroot] [PATCH] mdadm: bump to version 3.3.2
-Message-ID: <1409925103-10918-1-git-send-email-gustavo@zacarias.com.ar>
+From: William Welch <bvwelch@gmail.com>
+Date: Fri, 5 Sep 2014 10:10:42 -0500
+Subject: [Buildroot] trouble with cross gdb and gdbserver on Microblaze
+	little endian
+Message-ID: <CAPALihOc7ky+aLeYwfKHLC9C+oT2-9pj-0E3-riTxBFAGjy_1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mdadm/mdadm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Greetings,
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index b258881..01fc77a 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MDADM_VERSION = 3.3.1
-+MDADM_VERSION = 3.3.2
- MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
- MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
- MDADM_LICENSE = GPLv2+
--- 
-1.8.5.5
+Buildroot runs great on my Xilinx chip -- XC6SLX45. Thank you all for your
+great efforts with Buildroot!
+
+But, I am having trouble getting the most basic 'hello world' program
+working with cross gdb and gdbserver.
+
+I've tried both BR 2014.05 and 2014.08.  In the host GDB, I am setting
+sysroot to the 'staging' sysroot tree, and the messages from GDB look good,
+and I can set a breakpoint at main, but when I type continue, the
+microblaze system seems to hang.  And I can't interrupt it.
+
+I am using the default buildroot toolchains with default settings except to
+select host gdb and the gdb package.
+
+Suggestions welcome.
+
+Thank you,
+
+William
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140905/3d8b076c/attachment.html>
