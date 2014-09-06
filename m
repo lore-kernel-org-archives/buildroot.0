@@ -1,35 +1,28 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Sep 2014 18:05:29 +0200
-Subject: [Buildroot] [PATCH 1/2] sq: package/libcec: needs libudev,
-	not a udev daemon
-In-Reply-To: <1410019530-2060-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1410019530-2060-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1410019530-2060-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 06 Sep 2014 18:07:54 +0200
+Subject: [Buildroot] [PATCH 0/15 v5] Introduce libudev (branch
+	yem/libudev2)
+References: <cover.1409578332.git.yann.morin.1998@free.fr>
+Message-ID: <XnsA3A0B8714A3DDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libcec/Config.in |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:cover.1409578332.git.yann.morin.1998 at free.fr:
 
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index 8097472..1acf987 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBCEC
- 
- 	  http://libcec.pulse-eight.com
- 
--comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library"
-+comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library, udev"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
-+		!BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB || \
-+		!BR2_PACKAGE_HAS_LIBUDEV
--- 
-1.7.10.4
+> This series introduces the possibility to just build and install libudev,
+> without requiring that the /dev management be handled by eudev or systemd.
+
+Hi,
+
+I posted a small patch series which I would like to see being added to your 
+patch series. Using both series I could successfully compile xbmc so:
+
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Regards, Bernd
