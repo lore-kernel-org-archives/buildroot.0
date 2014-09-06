@@ -1,46 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:12:10 +0200
-Subject: [Buildroot] [git commit] ruby: don't try to use gmp on the host
-Message-ID: <20140906202004.CDA0B9D61B@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:17:18 +0200
+Subject: [Buildroot] [git commit] nodejs: fix build of host-nodejs
+Message-ID: <20140906202005.47DF29D5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=033d865dabcaec3dedfb81d3433a44c4dbe21422
+commit: http://git.buildroot.net/buildroot/commit/?id=78ad429cfbb80095555d7ed6e3663c539045a322
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building host-ruby, if gmp seems to be available (for example
-when host-gmp is built as a dependency of building the toolchain),
-Ruby tries to use it. Unfortunately, it fails to use it because there
-is no static version of host-gmp that is built and installed.
+In commit 89fae0d05daa8645ae3078746065ebed5c3c049f ("nodejs: Add
+dependency on zlib"), Paul added a dependency of host-nodejs on
+host-zlib. When host-zlib is built, the host variant of zlib is
+installed in $(HOST_DIR)/usr/lib. However, even though
+-L$(HOST_DIR)/usr/lib is passed to the LDFLAGS of host-nodejs
+configure script, those LDFLAGS are not re-used at build and install
+time. This is because nodejs does not use the autotools and its
+configure script does not "save" the environment variables such as
+LDFLAGS. This is causing build failures such as:
 
-Since we anyway don't care much about gmp support in host-ruby, simply
-disable it.
+  http://autobuild.buildroot.org/results/802/802134ceb92d82d2d4ef6a81c67ad1c98696663a/
 
-This issue was introduced since the bump to Ruby 2.1.0, and this
-commit fixes:
+due to the fact that the host zlib cannot be found.
 
-  http://autobuild.buildroot.org/results/e19/e197f20bd5ec4aae6d8692d67df4f539a9df33e2/
+This commit fixes that by passing $(HOST_CONFIGURE_OPTS) explicitly at
+both build time and install time of host-nodejs. This approach was
+already used for the target variant of nodejs.
 
+Cc: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/nodejs/nodejs.mk |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 297e902..384cc88 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -14,7 +14,8 @@ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_MAKE = $(MAKE1)
- RUBY_CONF_OPT = --disable-install-doc --disable-rpath
- HOST_RUBY_CONF_OPT = --disable-install-doc \
--	--with-out-ext=curses,openssl,readline
-+	--with-out-ext=curses,openssl,readline \
-+	--without-gmp
- RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
- RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 8a337ed..ba425bb 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -37,11 +37,15 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ endef
  
+ define HOST_NODEJS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) \
++		$(HOST_CONFIGURE_OPTS)
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) install \
++		$(HOST_CONFIGURE_OPTS)
+ endef
+ 
+ ifeq ($(BR2_i386),y)
