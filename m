@@ -1,80 +1,45 @@
-From: Vincent Stehle <vincent.stehle@laposte.net>
-Date: Sat,  6 Sep 2014 23:21:10 +0200
-Subject: [Buildroot] [PATCH] gdb: enable tui support for target package
-Message-ID: <1410038470-6992-1-git-send-email-vincent.stehle@laposte.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 06 Sep 2014 23:21:51 +0200
+Subject: [Buildroot] [PATCH] strace: upgrade to 4.9, supports ARC
+In-Reply-To: <87tx4os7nd.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 03 Sep 2014 23:42:30 +0200")
+References: <1409644247-11683-1-git-send-email-vgupta@synopsys.com>
+ <87ha0pk84o.fsf@dell.be.48ers.dk>
+ <C2D7FE5348E1B147BCA15975FBA230753C5CF960@IN01WEMBXA.internal.synopsys.com>
+ <87tx4os7nd.fsf@dell.be.48ers.dk>
+Message-ID: <878ulwmols.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Stehl? <vincent.stehle@laposte.net>
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Add a configuration option to compile the gdb target package with the
---enable-tui switch.
+>>>>> "Vineet" == Vineet Gupta <Vineet.Gupta1@synopsys.com> writes:
+ > Hi,
 
-This is done pretty much in the same way as in commit 2474fb0bf1a7 ("host-gdb:
-enable terminal user interface support"), but for the gdb package on target.
+ >>> Do you know if this is fixable, or should we just make it depend on
+ >>> BR2_LARGEFILE?
 
-This makes sense only when a full debugger is installed on target,
-not for a gdbserver.
+ >> It seems patch-01 (which I didn't remove) would already handle the !LFS case, but
+ >> that apparently is not case as u show above.
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/gdb/Config.in | 16 ++++++++++++++++
- package/gdb/gdb.mk    |  7 ++++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ >> Can u please check if the 4.8 strace builds OK w/o !LFS. If so that would mean
+ >> something in upstream strace renders the patch-01 as useless or needing modification.
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index bfbc8d8..4ea6caa 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -46,4 +46,20 @@ comment "full gdb on target needs a toolchain w/ wchar"
- 	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
- 	depends on !BR2_USE_WCHAR
- 
-+if BR2_PACKAGE_GDB_DEBUGGER
-+
-+config BR2_PACKAGE_GDB_TUI
-+	bool "GDB TUI support"
-+	default n
-+	help
-+	  This option enables terminal user interface (TUI) for gdb
-+
-+	  "The GDB Text User Interface (TUI) is a terminal interface which uses
-+	  the curses library to show the source file, the assembly output, the
-+	  program registers and GDB commands in separate text windows."
-+
-+	  https://sourceware.org/gdb/current/onlinedocs/gdb/TUI.html
-+
-+endif
-+
- endif
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 85b7883..e20fa48 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -71,7 +71,6 @@ GDB_CONF_ENV = \
- 
- GDB_CONF_OPT = \
- 	--without-uiout \
--	--disable-tui \
- 	--disable-gdbtk \
- 	--without-x \
- 	--disable-sim \
-@@ -81,6 +80,12 @@ GDB_CONF_OPT = \
- 	--without-included-gettext \
- 	--disable-werror
- 
-+ifeq ($(BR2_PACKAGE_GDB_TUI),y)
-+	GDB_CONF_OPT += --enable-tui
-+else
-+	GDB_CONF_OPT += --disable-tui
-+endif
-+
- # This removes some unneeded Python scripts and XML target description
- # files that are not useful for a normal usage of the debugger.
- define GDB_REMOVE_UNNEEDED_FILES
+ > Yes, strace 4.8 builds ok without LFS.
+
+ > So either we extend patch 01 or we drop the patch and make strace depend
+ > on LFS (which is nice as we get rid of a patch, but less nice as it is
+ > then more difficult to debug !LFS setups).
+
+ > Anybody feel strongly for one or the other?
+
+I didn't hear any feedback, so I decided to drop the patch and make
+strace depend on LFS.
+
+Committed, thanks.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
