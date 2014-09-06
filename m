@@ -1,26 +1,31 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 06 Sep 2014 17:12:48 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] nios2 build results for
-	2014-09-05
-References: <20140906063010.F1253101275@stock.ovh.net>
- <CAAEAJfD4eNUAZF9bNV+tWNghFw-pe5qmeAJoZuzMsbASZuAuVg@mail.gmail.com>
-Message-ID: <XnsA3A0AF1AE9B38berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Sat,  6 Sep 2014 18:05:28 +0200
+Subject: [Buildroot] [PATCH 0/2] Introduce libudev -> follow-up patches for
+	v5
+Message-ID: <1410019530-2060-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> 
-wrote in news:CAAEAJfD4eNUAZF9bNV+tWNghFw-
-pe5qmeAJoZuzMsbASZuAuVg at mail.gmail.com:
+Hi Yann,
 
-> Any idea why av_open_input_file and avformat_open_input is not found?
+here you will find two patches which are meant to be squashed to your patch set.
 
-Hi,
+Both patches add code to the comment to explain that the packages need libudev,
+otherwise both libcec and mesa3d are invisible to users until some sort of udev
+support is enabled.
 
-is the current build error still related to this discussion?
-
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74623
+Since mesa3d as a whole depends on libudev the special dependency for EGL can
+be removed, the code still compiles.
 
 Regards, Bernd
+
+
+Bernd Kuhls (2):
+  sq: package/libcec: needs libudev, not a udev daemon
+  sq: package/mesa3d: depends on libudev, not udev
+
+-- 
+1.7.10.4
