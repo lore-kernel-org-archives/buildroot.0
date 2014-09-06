@@ -1,31 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Sep 2014 14:41:55 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: Bump version to 10.2.7
-Message-ID: <1410007315-27756-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  6 Sep 2014 15:50:39 +0200
+Subject: [Buildroot] [PATCH] nfs-utils: create /var/lock/subsys
+Message-ID: <1410011439-15274-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The NFS server needs to create files in /var/lock/subsys/, but this
+directory doesn't exist in our skeleton. This commit makes sure it
+gets created by the S60nfs startup script, which fixes the operation
+of the NFS server (tested with rpcbind).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: Ofer Heifetz <oferh@marvell.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/mesa3d.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nfs-utils/S60nfs | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c2f2b9b..9a63fa2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESA3D_VERSION = 10.2.6
-+MESA3D_VERSION = 10.2.7
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 49dab70..4afee55 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -16,6 +16,7 @@
+ # The /var/lib/nfs directory is actually on a tmpfs filesystem.
+ mkdir -p /var/lib/nfs/sm
+ mkdir -p /var/lib/nfs/sm.bak
++mkdir -p /var/lock/subsys
+ touch /var/lib/nfs/etab
+ touch /var/lib/nfs/rmtab
+ touch /var/lib/nfs/state
 -- 
-1.7.10.4
+2.0.0
