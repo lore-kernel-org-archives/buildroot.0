@@ -1,35 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:40:36 +0200
-Subject: [Buildroot] [git commit] host-lua: compat mode not longer needed by
-	the newest luarocks
-Message-ID: <20140906204324.7FD1F9D3C0@busybox.osuosl.org>
+From: Frank Bergmann <frank@frajasalo.de>
+Date: Sat, 06 Sep 2014 23:16:10 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] nios2 build results for
+ 2014-09-05
+In-Reply-To: <CAAEAJfAeQhe93q7qZFTP=rbZqTfhqQ5FrcXK9ATGzPAoj8sX0w@mail.gmail.com>
+References: <20140906063010.F1253101275@stock.ovh.net>
+ <CAAEAJfD4eNUAZF9bNV+tWNghFw-pe5qmeAJoZuzMsbASZuAuVg@mail.gmail.com>
+ <XnsA3A0AF1AE9B38berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <CAAEAJfAeQhe93q7qZFTP=rbZqTfhqQ5FrcXK9ATGzPAoj8sX0w@mail.gmail.com>
+Message-ID: <540B799A.1000701@frajasalo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4dc5af41b169ec2c897f7480c4f24766bf88c5e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06.09.2014, 22:24 Ezequiel Garcia wrote:
+> On 6 September 2014 12:12, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>> Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> wrote in news:CAAEAJfD4eNUAZF9bNV+tWNghFw-
+>> pe5qmeAJoZuzMsbASZuAuVg at mail.gmail.com:
+>>
+>>> Any idea why av_open_input_file and avformat_open_input is not found?
+>>
+>> Hi,
+>>
+>> is the current build error still related to this discussion?
+>>
+>> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74623
+>
+> Well, it seems that patch you sent attempted to fix this same error.
+> However, applying your patch over here didn't help.
+>
+> Ideas welcome!
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lua/lua.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+I guess mentor fixed a number of issues in the toolchain, but
+unfortunately not our "beloved" _gp bug :-(
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 524f6a2..9afec6c 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -51,10 +51,6 @@ HOST_LUA_DEPENDENCIES =
- HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- HOST_LUA_MYLIBS = -ldl
- 
--ifeq ($(BR2_PACKAGE_LUA_5_2),y)
--HOST_LUA_CFLAGS += -DLUA_COMPAT_ALL
--endif
--
- define LUA_BUILD_CMDS
- 	$(MAKE) \
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
+Not sure what to do now. Wait for next release because the current
+announce itself as "prerelease" or try to setup our own and fix the
+issue ?
+
+But I think the package (and the ones also affected) should be disabled
+for Nios2.
+
+Regards,
+Frank.
