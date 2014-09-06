@@ -1,60 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:17:18 +0200
-Subject: [Buildroot] [git commit] nodejs: fix build of host-nodejs
-Message-ID: <20140906202005.47DF29D5CF@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:19:03 +0200
+Subject: [Buildroot] [git commit] boost: force the target ABI for ARM
+	architecture
+Message-ID: <20140906202005.5001D9D5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=78ad429cfbb80095555d7ed6e3663c539045a322
+commit: http://git.buildroot.net/buildroot/commit/?id=1b3cf6bca5e8e30322061d492b44d51c6091de18
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 89fae0d05daa8645ae3078746065ebed5c3c049f ("nodejs: Add
-dependency on zlib"), Paul added a dependency of host-nodejs on
-host-zlib. When host-zlib is built, the host variant of zlib is
-installed in $(HOST_DIR)/usr/lib. However, even though
--L$(HOST_DIR)/usr/lib is passed to the LDFLAGS of host-nodejs
-configure script, those LDFLAGS are not re-used at build and install
-time. This is because nodejs does not use the autotools and its
-configure script does not "save" the environment variables such as
-LDFLAGS. This is causing build failures such as:
+Just like was done in commit b37641c95be79fcb76cbc7042c4cf21a2c64d0f6
+("boost: Force the target ABI for MIPS architecture") by Vicente for
+the MIPS architecture, this commit also forces the ABI passed to Boost
+build system to "aapcs" for the ARM architecture.
 
-  http://autobuild.buildroot.org/results/802/802134ceb92d82d2d4ef6a81c67ad1c98696663a/
+Since we now have three cases to handle, an intermediate variable
+called BOOST_ABI is introduced.
 
-due to the fact that the host zlib cannot be found.
+Fixes:
 
-This commit fixes that by passing $(HOST_CONFIGURE_OPTS) explicitly at
-both build time and install time of host-nodejs. This approach was
-already used for the target variant of nodejs.
+  http://autobuild.buildroot.org/results/5ae/5aeb3a9f067faf6687051643bf49a0b619cb4c3b/
 
-Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/boost/boost.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 8a337ed..ba425bb 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -37,11 +37,15 @@ define HOST_NODEJS_CONFIGURE_CMDS
- endef
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index ac67e3c..caaeec0 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -80,9 +80,17 @@ endif
+ HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared \
+ 	runtime-link=shared
  
- define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) \
-+		$(HOST_CONFIGURE_OPTS)
- endef
- 
- define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) install \
-+		$(HOST_CONFIGURE_OPTS)
- endef
- 
- ifeq ($(BR2_i386),y)
++ifeq ($(BR2_MIPS_OABI32),y)
++BOOST_ABI = o32
++else ifeq ($(BR2_arm),y)
++BOOST_ABI = aapcs
++else
++BOOST_ABI = sysv
++endif
++
+ BOOST_OPT += toolset=gcc \
+ 	     threading=multi \
+-	     abi=$(if $(BR2_MIPS_OABI32),o32,sysv) \
++	     abi=$(BOOST_ABI) \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 	     link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
+ 	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared)
