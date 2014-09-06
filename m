@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 06 Sep 2014 22:13:10 +0200
-Subject: [Buildroot] [PATCH 1/2] ruby: don't try to use gmp on the host
-In-Reply-To: <1410011967-16277-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 6 Sep 2014 15:59:26 +0200")
-References: <1410011967-16277-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bnqso6cp.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Sep 2014 22:14:31 +0200
+Subject: [Buildroot] [PATCH] libiscsi: bump version to 1.12.0
+In-Reply-To: <1410012040-16794-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 6 Sep 2014 16:00:40 +0200")
+References: <1410012040-16794-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877g1go6ag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > When building host-ruby, if gmp seems to be available (for example
- > when host-gmp is built as a dependency of building the toolchain),
- > Ruby tries to use it. Unfortunately, it fails to use it because there
- > is no static version of host-gmp that is built and installed.
+ > This commit bumps libiscsi to version 1.12.0, which requires a few
+ > changes:
 
- > Since we anyway don't care much about gmp support in host-ruby, simply
- > disable it.
+ >  - A number of patches to get libiscsi to build properly.
+ >  - The removal of the popt dependency, which is no longer needed.
+ >  - The removal of unnecessary spaces for alignment of variable
+ >    definitions in libiscsi.mk.
 
- > This issue was introduced since the bump to Ruby 2.1.0, and this
- > commit fixes:
-
- >   http://autobuild.buildroot.org/results/e19/e197f20bd5ec4aae6d8692d67df4f539a9df33e2/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed both, thanks.
+Committed, thanks. Don't forget to send the patches upstream.
 
 -- 
 Bye, Peter Korsgaard
