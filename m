@@ -1,37 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:08:04 +0200
-Subject: [Buildroot] [git commit] jq: bump to version 1.4
-Message-ID: <20140906202004.3E8619D61A@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:12:37 +0200
+Subject: [Buildroot] [git commit] ruby: add support for gmp as an optional
+	dependency
+Message-ID: <20140906202004.D4D059D61D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea73983591043b0e86b0a169af2eaae6c67789fd
+commit: http://git.buildroot.net/buildroot/commit/?id=9a9d64bb496215a8dfbfe23960141ee7bf86c203
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to version 1.4.  Addtionally, released tarballs no longer
-require flex or bison to build.
+Ruby can now use gmp optionally, so make sure that if the gmp package
+for the target is enabled, it gets built before the ruby package, and
+the appropriate configure options are passed to Ruby.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jq/jq.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/ruby/ruby.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index cc7c99e..6a9dfc8 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 384cc88..8c094b5 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -54,6 +54,12 @@ endif
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ 	RUBY_DEPENDENCIES += zlib
+ endif
++ifeq ($(BR2_PACKAGE_GMP),y)
++	RUBY_DEPENDENCIES += gmp
++	RUBY_CONF_OPT += --with-gmp
++else
++	RUBY_CONF_OPT += --without-gmp
++endif
  
--JQ_VERSION = 1.3
-+JQ_VERSION = 1.4
- JQ_SITE = http://stedolan.github.io/jq/download/source
--JQ_DEPENDENCIES = host-flex host-bison
- JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
- 
+ # Remove rubygems and friends, as they need extensions that aren't
+ # built and a target compiler.
