@@ -1,56 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:19:03 +0200
-Subject: [Buildroot] [git commit] boost: force the target ABI for ARM
-	architecture
-Message-ID: <20140906202005.5001D9D5CF@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:09:14 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 12, 14,
+	16}.x series
+Message-ID: <20140906202004.47B269D5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b3cf6bca5e8e30322061d492b44d51c6091de18
+commit: http://git.buildroot.net/buildroot/commit/?id=ec16e55d614359430440a78a8c1dccd7ebd501d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just like was done in commit b37641c95be79fcb76cbc7042c4cf21a2c64d0f6
-("boost: Force the target ABI for MIPS architecture") by Vicente for
-the MIPS architecture, this commit also forces the ABI passed to Boost
-build system to "aapcs" for the ARM architecture.
-
-Since we now have three cases to handle, an intermediate variable
-called BOOST_ABI is introduced.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/5ae/5aeb3a9f067faf6687051643bf49a0b619cb4c3b/
-
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index ac67e3c..caaeec0 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -80,9 +80,17 @@ endif
- HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared \
- 	runtime-link=shared
- 
-+ifeq ($(BR2_MIPS_OABI32),y)
-+BOOST_ABI = o32
-+else ifeq ($(BR2_arm),y)
-+BOOST_ABI = aapcs
-+else
-+BOOST_ABI = sysv
-+endif
-+
- BOOST_OPT += toolset=gcc \
- 	     threading=multi \
--	     abi=$(if $(BR2_MIPS_OABI32),o32,sysv) \
-+	     abi=$(BOOST_ABI) \
- 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	     link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
- 	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b2554ab..f7df881 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -163,11 +163,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.103"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.53"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.54"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.26"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.27"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.17"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.18"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+-	default "3.16.1"	if BR2_KERNEL_HEADERS_3_16
++	default "3.16.2"	if BR2_KERNEL_HEADERS_3_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
