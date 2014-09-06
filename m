@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:11:51 +0200
-Subject: [Buildroot] [git commit] nfs-utils: create /var/lock/subsys
-Message-ID: <20140906202004.CCD9C9D619@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:08:04 +0200
+Subject: [Buildroot] [git commit] jq: bump to version 1.4
+Message-ID: <20140906202004.3E8619D61A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a61bacdcb4ea99c4b09e83de882747ad210041a
+commit: http://git.buildroot.net/buildroot/commit/?id=ea73983591043b0e86b0a169af2eaae6c67789fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The NFS server needs to create files in /var/lock/subsys/, but this
-directory doesn't exist in our skeleton. This commit makes sure it
-gets created by the S60nfs startup script, which fixes the operation
-of the NFS server (tested with rpcbind).
+Bump to version 1.4.  Addtionally, released tarballs no longer
+require flex or bison to build.
 
-Reported-by: Ofer Heifetz <oferh@marvell.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/S60nfs |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/jq/jq.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 49dab70..4afee55 100755
---- a/package/nfs-utils/S60nfs
-+++ b/package/nfs-utils/S60nfs
-@@ -16,6 +16,7 @@
- # The /var/lib/nfs directory is actually on a tmpfs filesystem.
- mkdir -p /var/lib/nfs/sm
- mkdir -p /var/lib/nfs/sm.bak
-+mkdir -p /var/lock/subsys
- touch /var/lib/nfs/etab
- touch /var/lib/nfs/rmtab
- touch /var/lib/nfs/state
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index cc7c99e..6a9dfc8 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-JQ_VERSION = 1.3
++JQ_VERSION = 1.4
+ JQ_SITE = http://stedolan.github.io/jq/download/source
+-JQ_DEPENDENCIES = host-flex host-bison
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
+ 
