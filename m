@@ -1,40 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Sep 2014 22:09:14 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 12, 14,
-	16}.x series
-Message-ID: <20140906202004.47B269D5CF@busybox.osuosl.org>
+Date: Sat, 6 Sep 2014 22:16:30 +0200
+Subject: [Buildroot] [git commit] libmatroska: properly support static-only
+	build
+Message-ID: <20140906202005.3E3859D5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec16e55d614359430440a78a8c1dccd7ebd501d0
+commit: http://git.buildroot.net/buildroot/commit/?id=3c11ced46aed9ad42c32397b653e2a4cebd22d2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This is similar to commit 9cef35b68f33ac1f332784fdfef61d3904c7db41 on
+libebml, since libmatroska uses the same Makefile logic as libebml. It
+makes sure BR2_PREFER_STATIC_LIB=y succeed by not building the shared
+library in this case.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/12e/12e752330b30adb5078acd72a548cc172fa9ecb8/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/libmatroska/libmatroska.mk |   17 ++++++++++++++---
+ 1 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b2554ab..f7df881 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -163,11 +163,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.103"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.53"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.54"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.26"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.27"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.17"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.18"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
--	default "3.16.1"	if BR2_KERNEL_HEADERS_3_16
-+	default "3.16.2"	if BR2_KERNEL_HEADERS_3_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 868eff2..fe49275 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -12,16 +12,27 @@ LIBMATROSKA_LICENSE = LGPLv2.1+
+ LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
+ LIBMATROSKA_DEPENDENCIES = libebml
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++LIBMATROSKA_MAKE_TARGETS = staticlib
++LIBMATROSKA_MAKE_INSTALL_TARGETS = install_staticlib install_headers
++else
++LIBMATROSKA_MAKE_TARGETS = staticlib sharedlib
++LIBMATROSKA_MAKE_INSTALL_TARGETS = install_staticlib install_sharedlib install_headers
++endif
++
+ define LIBMATROSKA_BUILD_CMDS
+-	$(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)"
++	$(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)" \
++		$(LIBMATROSKA_MAKE_TARGETS)
+ endef
+ 
+ define LIBMATROSKA_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D)/make/linux prefix=$(STAGING_DIR)/usr install
++	$(MAKE) -C $(@D)/make/linux prefix=$(STAGING_DIR)/usr \
++		$(LIBMATROSKA_MAKE_INSTALL_TARGETS)
+ endef
+ 
+ define LIBMATROSKA_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/make/linux prefix=$(TARGET_DIR)/usr install
++	$(MAKE) -C $(@D)/make/linux prefix=$(TARGET_DIR)/usr \
++		$(LIBMATROSKA_MAKE_INSTALL_TARGETS)
+ endef
+ 
+ $(eval $(generic-package))
