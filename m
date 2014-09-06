@@ -1,13 +1,47 @@
-From: buildroot at busybox.net <buildroot@busybox.net>
-Date: Fri, 5 Sep 2014 17:01:28 -0300
-Subject: [Buildroot] =?utf-8?q?Cheque_Devolvido_11_=3DCHQ-010002200000_=28?=
-	=?utf-8?q?74141=29?=
-Message-ID: <e86df08140a2b0bf92a00e5c0ec238cc@_>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Fri,  5 Sep 2014 22:56:16 -0400
+Subject: [Buildroot] [PATCH 1/1] jq: bump to version 1.4
+Message-ID: <1409972176-2275-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140905/6aed0696/attachment.html>
+Bump to version 1.4.  Addtionally, released tarballs no longer
+require flex or bison to build.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+--
+
+From the README:
+
+"If you're not using the latest git version but instead building a
+released tarball (available on the website), then you won't need to
+run `autoreconf` (and shouldn't), and you won't need flex or bison."
+
+Tested on my Ubuntu 12.04 VM, after uninstalling flex, bison, libbison-dev.
+The configure still checks for presence of the tools, but nothing
+is hindered by their absence.
+---
+ package/jq/jq.mk |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index cc7c99e..6a9dfc8 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-JQ_VERSION = 1.3
++JQ_VERSION = 1.4
+ JQ_SITE = http://stedolan.github.io/jq/download/source
+-JQ_DEPENDENCIES = host-flex host-bison
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
+ 
+-- 
+1.7.9.5
