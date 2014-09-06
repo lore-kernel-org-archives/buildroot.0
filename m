@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 06 Sep 2014 22:16:16 +0200
-Subject: [Buildroot] [PATCH] cppcms: really depend on wchar
-In-Reply-To: <1410012273-17374-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 6 Sep 2014 16:04:33 +0200")
-References: <1410012273-17374-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738c4o67j.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Sep 2014 22:17:00 +0200
+Subject: [Buildroot] [PATCH] libmatroska: properly support static-only
+	build
+In-Reply-To: <1410012627-20563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 6 Sep 2014 16:10:27 +0200")
+References: <1410012627-20563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y4twmrlv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > In commit f8993ebb34823b301ea2bf4f1f57495ec29b906b ("cppcms: needs
- > wchar support even without icu"), Peter wanted to move the wchar
- > dependency from the ICU sub-option of cppcms to the main cppcms option
- > itself. However, for some reason it didn't do the entire change, and
- > the commit was lacking:
+ > This is similar to commit 9cef35b68f33ac1f332784fdfef61d3904c7db41 on
+ > libebml, since libmatroska uses the same Makefile logic as libebml. It
+ > makes sure BR2_PREFER_STATIC_LIB=y succeed by not building the shared
+ > library in this case.
 
- >  * Removing the wchar dependency from BR2_PACKAGE_CPPCMS_ICU
+ > Fixes:
 
- >  * Adding the wchar dependency to BR2_PACKAGE_CPPCMS.
+ >   http://autobuild.buildroot.org/results/12e/12e752330b30adb5078acd72a548cc172fa9ecb8/
 
- > It was only handling the two comments.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > This should really fix:
-
- >   http://autobuild.buildroot.net/results/6f8/6f8e8b68235f6cf0dfef13e3ed11f97a3ab50a06/
-
-Argh, wonder how that happened? Anyway - Committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
