@@ -1,7 +1,7 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri,  5 Sep 2014 22:56:16 -0400
-Subject: [Buildroot] [PATCH 1/1] jq: bump to version 1.4
-Message-ID: <1409972176-2275-1-git-send-email-danomimanchego123@gmail.com>
+Date: Fri,  5 Sep 2014 23:03:29 -0400
+Subject: [Buildroot] [PATCH v2] jq: bump to version 1.4
+Message-ID: <1409972610-3141-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ require flex or bison to build.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
---
+---
 
 From the README:
 
@@ -24,8 +24,13 @@ run `autoreconf` (and shouldn't), and you won't need flex or bison."
 Tested on my Ubuntu 12.04 VM, after uninstalling flex, bison, libbison-dev.
 The configure still checks for presence of the tools, but nothing
 is hindered by their absence.
+
+v1->v2
+- fixed divider /--/---/
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/jq/jq.mk |    3 +--
+ package/jq/jq.mk | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/jq/jq.mk b/package/jq/jq.mk
@@ -44,4 +49,4 @@ index cc7c99e..6a9dfc8 100644
  JQ_LICENSE_FILES = COPYING
  
 -- 
-1.7.9.5
+1.9.1
