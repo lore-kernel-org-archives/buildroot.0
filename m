@@ -1,36 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 14:45:33 +0200
-Subject: [Buildroot] [PATCH 2 of 5 v3 for 2014.08] gendoc infra: use
- $(pkgname) instead of explicitly passing 'manual'
-In-Reply-To: <f7050051dd5a40307465.1407957948@localhost>
-References: <patchbomb.1407957946@localhost>
- <f7050051dd5a40307465.1407957948@localhost>
-Message-ID: <20140907124533.GF31418@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 07 Sep 2014 09:56:23 -0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140907100918.6b017a09@free-electrons.com>
+References: <20140907063013.1CB98101499@stock.ovh.net>
+ <20140907100918.6b017a09@free-electrons.com>
+Message-ID: <540C55F7.9040506@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 09/07/2014 05:09 AM, Thomas Petazzoni wrote:
 
-On 2014-08-13 21:25 +0200, Thomas De Schampheleire spake thusly:
-> Note that this means that if we want to use the same GENDOC infrastructure
-> for another document, it will have to reside in a separate directory than
-> the manual.
+>>    powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/a7f95353f5592a9399c542d8d56c3ca040f8a61a/
+> 
+> e_start_main.c:478:42: error: 'PT_GETSIGINFO' undeclared (first use in this function)
+>                                r = ptrace(PT_GETSIGINFO, child, NULL, &sig);
+> 
+> Gustavo, maybe?
 
-I would be very much interested to use this GENDOC infrastructure from
-br2-external too, to generate another manual.
-
-I'll poke at that when time permits (soon, probably.)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hi.
+Outdated uclibc ptrace.h header, sparc is also affected by this however
+since there's no autobuilder for that target it's going unnoticed.
+glibc has the necessary definitions, so a uclibc header update is in order.
+We can exclude ptrace for powerpc & sparc in the meantime.
+Regards.
