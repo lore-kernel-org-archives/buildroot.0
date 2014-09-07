@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Sep 2014 13:54:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/xbmc: add option to enable libva
-Message-ID: <1410090876-18822-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun,  7 Sep 2014 13:54:36 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xbmc: add option to enable alsa
+In-Reply-To: <1410090876-18822-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1410090876-18822-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1410090876-18822-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,40 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    7 +++++++
+ package/xbmc/Config.in |    6 ++++++
  package/xbmc/xbmc.mk   |    2 +-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index ed0d4ed..3eda3b2 100644
+index 3eda3b2..2069dd5 100644
 --- a/package/xbmc/Config.in
 +++ b/package/xbmc/Config.in
-@@ -210,6 +210,13 @@ config BR2_PACKAGE_XBMC_LIBUSB
- 	help
- 	  Enable libusb support.
+@@ -103,6 +103,12 @@ menuconfig BR2_PACKAGE_XBMC
  
-+config BR2_PACKAGE_XBMC_LIBVA
-+	bool "va"
-+	select BR2_PACKAGE_LIBVA
-+	depends on !BR2_PREFER_STATIC_LIB
+ if BR2_PACKAGE_XBMC
+ 
+++config BR2_PACKAGE_XBMC_ALSA_LIB
++	bool "alsa"
++	select BR2_PACKAGE_ALSA_LIB
 +	help
-+	  Enable libva support.
++	  Enable alsa support.
 +
- config BR2_PACKAGE_XBMC_WAVPACK
- 	bool "wavpack"
- 	select BR2_PACKAGE_WAVPACK
+ config BR2_PACKAGE_XBMC_AVAHI
+ 	bool "avahi"
+ 	depends on !BR2_PREFER_STATIC_LIB # avahi
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 42320b8..75fc63b 100644
+index 75fc63b..5d8199c 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -193,7 +193,7 @@ XBMC_DEPENDENCIES += libtheora
+@@ -71,7 +71,7 @@ else
+ XBMC_CONF_OPT += --disable-dbus
  endif
  
- # xbmc needs libva & libva-glx
--ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
-+ifeq ($(BR2_PACKAGE_XBMC_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
- XBMC_DEPENDENCIES += mesa3d libva
- XBMC_CONF_OPT += --enable-vaapi
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++ifeq ($(BR2_PACKAGE_XBMC_ALSA_LIB),y)
+ XBMC_DEPENDENCIES += alsa-lib
+ XBMC_CONF_OPT += --enable-alsa
  else
 -- 
 1.7.10.4
