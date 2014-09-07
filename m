@@ -1,84 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  7 Sep 2014 10:54:45 +0200
-Subject: [Buildroot] [PATCH] jq: add patch to fix y0, y1,
-	j0 and j1 related build issue on uClibc
-Message-ID: <1410080085-30040-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Sep 2014 11:07:36 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix duplicate vfork problems when
+ static linking
+In-Reply-To: <20140901200606.GA14078@waldemar-brodkorb.de>
+References: <20140901200606.GA14078@waldemar-brodkorb.de>
+Message-ID: <20140907110736.7bb9919e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Our default uClibc configuration does not have DO_XSI_MATH=y, so it
-lacks certain math functions. jq generates some wrappers for the libm
-functions, even for functions that are not actually used by jq. By
-simply removing those wrappers, we get jq to build on uClibc that have
-DO_XSI_MATH disabled.
+Dear Waldemar Brodkorb,
 
-Fixes:
+On Mon, 1 Sep 2014 22:06:06 +0200, Waldemar Brodkorb wrote:
+> Reported on uClibc mailinglist by Thomas Petazzoni
+> Should fix:
+> * SuperH
+>  http://autobuild.buildroot.org/results/a81/a810c2f27dee1978808461c05cbdcbf51a214e09/build-end.log
+> * i386
+>  http://autobuild.buildroot.org/results/f83/f83b65bfc6ea7c7406a02e92afda43e4c5db6e7c/build-end.log
+> * x86-64
+>  http://autobuild.buildroot.org/results/64f/64f418f54885e8b5093dc8949c2d1d1ff3c938ea/build-end.log
+> * powerpc
+>  http://autobuild.buildroot.org/results/d5b/d5b7ac84dde0e4e26cd7cc46d79e66c39ed5cd53/build-end.log
+> 
+> Tested with i386 static build of alsa-utils.
+> Patch will be send to uClibc soon, need to finish test-suite run.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  ...nptl-remove-duplicate-vfork-in-libpthread.patch |  691 ++++++++++++++++++++
+>  1 file changed, 691 insertions(+)
+>  create mode 100644 package/uclibc/0.9.33.2/uclibc-0062-nptl-remove-duplicate-vfork-in-libpthread.patch
 
-  http://autobuild.buildroot.org/results/831/831ffb0a37a8007b2a824659e46dbe9e6e710d6f/
+Thanks a lot for working on this!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch   | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch b/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
-new file mode 100644
-index 0000000..dfc2f4c
---- /dev/null
-+++ b/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
-@@ -0,0 +1,49 @@
-+From e87163425a67938afde96f01b19587ac3348b369 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 7 Sep 2014 10:49:57 +0200
-+Subject: [PATCH] libm.h: comment j0, j1, y0 and y1
-+
-+Those functions are currently not used by jq, but having them in
-+libm.h prevents building with the uClibc C library when it doesn't
-+have DO_XSI_MATH option enabled.
-+
-+This issue was spotted by the Buildroot autobuilder system:
-+
-+  http://autobuild.buildroot.org/results/aaf/aaf3c114e0ca3e265ae32c646ba67f01aaf608bd/build-end.log
-+
-+Submitted upstream at https://github.com/stedolan/jq/pull/570.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libm.h | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/libm.h b/libm.h
-+index f8c52be..8e82fb7 100644
-+--- a/libm.h
-++++ b/libm.h
-+@@ -10,8 +10,8 @@ LIBM_DD(cosh)
-+ LIBM_DD(exp2)
-+ LIBM_DD(exp)
-+ LIBM_DD(floor)
-+-LIBM_DD(j0)
-+-LIBM_DD(j1)
-++/* LIBM_DD(j0) */
-++/* LIBM_DD(j1) */
-+ LIBM_DD(log10)
-+ LIBM_DD(log2)
-+ LIBM_DD(log)
-+@@ -21,8 +21,8 @@ LIBM_DD(sqrt)
-+ LIBM_DD(tan)
-+ LIBM_DD(tanh)
-+ LIBM_DD(tgamma)
-+-LIBM_DD(y0)
-+-LIBM_DD(y1)
-++/* LIBM_DD(y0) */
-++/* LIBM_DD(y1) */
-+ /* LIBM_DID(jn) */
-+ /* LIBM_DID(yn) */
-+ /* LIBM_DDD(pow) */
-+-- 
-+2.0.0
-+
+(Built tested on i386, x86-64 and PowerPC. Statically linking alsa-lib
+now works fine. I didn't test SuperH because our internal toolchain
+backend is currently broken for SuperH.)
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
