@@ -1,73 +1,83 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  7 Sep 2014 11:35:17 +0200
-Subject: [Buildroot] [PATCH v2] package/mtd: install libubi.a and libmtd.a
-	to staging
-Message-ID: <1410082517-3435-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Sep 2014 11:57:35 +0200
+Subject: [Buildroot] [PATCH v3 1/4] gendoc infra: cosmetic fixes
+In-Reply-To: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
+References: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140907095735.GD31418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the mtd package only installs the mtd utilities into the
-target directory. However, the mtd-utils also provide two
-static libraries (libmtd.a and libubi.a) that can be used by other
-packages or tools.
+Samuel, All,
 
-Therefore, this commit extends the mtd package by adding the
-installation to the staging directory of those two libraries.
+On 2014-08-26 20:49 +0200, Samuel Martin spake thusly:
+> - wrap lines to 80 characters
+> - fix space/tab mixup
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: rewrite the commit message (Thomas Petazzoni)
-    fix coding style (Thomas Petazzoni)
----
- package/mtd/mtd.mk | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 80928b6..1d92f81 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -10,6 +10,8 @@ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPLv2
- MTD_LICENSE_FILES = COPYING
- 
-+MTD_INSTALL_STAGING = YES
-+
- ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
- MTD_DEPENDENCIES = zlib lzo
- endif
-@@ -36,6 +38,7 @@ endef
- MKFS_JFFS2 = $(HOST_DIR)/usr/sbin/mkfs.jffs2
- SUMTOOL = $(HOST_DIR)/usr/sbin/sumtool
- 
-+MTD_STAGING_y = lib/libmtd.a ubi-utils/libubi.a
- MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK)		+= docfdisk
- MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS)	+= doc_loadbios
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASHCP)		+= flashcp
-@@ -79,16 +82,17 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIBLOCK)	+= ubiblock
- MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
- MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs/mkfs.ubifs
- 
--# only call make if atleast a single tool is enabled
--ifneq ($(MTD_TARGETS_y),)
--
- define MTD_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CROSS=$(TARGET_CROSS) \
- 		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
--		$(addprefix $(@D)/,$(MTD_TARGETS_y))
-+		$(addprefix $(@D)/,$(MTD_TARGETS_y)) \
-+		$(addprefix $(@D)/,$(MTD_STAGING_y))
- endef
- 
--endif
-+define MTD_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/lib/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
-+	$(INSTALL) -D -m 0755 $(@D)/ubi-utils/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
-+endef
- 
- define MTD_INSTALL_TARGET_CMDS
-  for f in $(MTD_TARGETS_y) ; do \
+Regards,
+Yann E. MORIN.
+
+> ---
+> changes v2 -> v3:
+> - update A/R/T tags
+> 
+> changes v1 -> v2:
+> - more tabs/space cleanup (ThomasDS)
+> - fix line mess (ThomasDS)
+> ---
+>  docs/manual/manual.mk | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index 8d401a2..136f725 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -70,8 +70,8 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+>  	$$(Q)mkdir -p $$(@D)/.build
+>  	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
+>  	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
+> -	        -D $$(@D) $$(@D)/.build/$(1).txt \
+> -	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
+> +		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
+> +		-D $$(@D) $$(@D)/.build/$(1).txt
+>  	-$$(Q)rm -rf $$(@D)/.build
+>  endef
+>  
+> @@ -84,9 +84,12 @@ endef
+>  # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+>  ################################################################################
+>  define GENDOC
+> -$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
+> -$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
+> -$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+> +$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
+> +	--xsltproc-opts "--stringparam toc.section.depth 1")
+> +$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
+> +	--xsltproc-opts "--stringparam toc.section.depth 1")
+> +$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
+> +	--dblatex-opts "-P latex.output.revhistory=0")
+>  $(call GENDOC_INNER,$(pkgname),text,text,text,text)
+>  $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
+>  clean: $(pkgname)-clean
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
