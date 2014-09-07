@@ -1,49 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Sep 2014 11:07:36 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix duplicate vfork problems when
- static linking
-In-Reply-To: <20140901200606.GA14078@waldemar-brodkorb.de>
-References: <20140901200606.GA14078@waldemar-brodkorb.de>
-Message-ID: <20140907110736.7bb9919e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Sep 2014 11:14:06 +0200
+Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
+In-Reply-To: <540C076B.30901@tribudubois.net>
+References: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
+ <20140906104208.GA3957@free.fr> <540C076B.30901@tribudubois.net>
+Message-ID: <20140907091406.GA4230@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Jean-Christophe, All,
 
-On Mon, 1 Sep 2014 22:06:06 +0200, Waldemar Brodkorb wrote:
-> Reported on uClibc mailinglist by Thomas Petazzoni
-> Should fix:
-> * SuperH
->  http://autobuild.buildroot.org/results/a81/a810c2f27dee1978808461c05cbdcbf51a214e09/build-end.log
-> * i386
->  http://autobuild.buildroot.org/results/f83/f83b65bfc6ea7c7406a02e92afda43e4c5db6e7c/build-end.log
-> * x86-64
->  http://autobuild.buildroot.org/results/64f/64f418f54885e8b5093dc8949c2d1d1ff3c938ea/build-end.log
-> * powerpc
->  http://autobuild.buildroot.org/results/d5b/d5b7ac84dde0e4e26cd7cc46d79e66c39ed5cd53/build-end.log
+On 2014-09-07 09:21 +0200, Jean-Christophe DUBOIS spake thusly:
+> Le 09/06/2014 12:42 PM, Yann E. MORIN a ?crit :
+[--SNIP--]
+> >>diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+> >>new file mode 100644
+> >>index 0000000..880bf5e
+> >>--- /dev/null
+> >>+++ b/package/bcache-tools/bcache-tools.mk
+> >>@@ -0,0 +1,31 @@
+> >>+################################################################################
+> >>+#
+> >>+# bcache-tools
+> >>+#
+> >>+################################################################################
+> >>+
+> >>+BCACHE_TOOLS_VERSION = v1.0.7
+> >>+BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
+> >>+BCACHE_TOOLS_LICENSE = GPLv2
+> >>+BCACHE_TOOLS_LICENSE_FILES = COPYING
+> >>+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
+> >... so you do not need to depend on it here, just in the Config.in file.
 > 
-> Tested with i386 static build of alsa-utils.
-> Patch will be send to uClibc soon, need to finish test-suite run.
+> Well, I need to make sure that "udev" is build before bcache-tools because
+> it tries to put files in the /lib/udev/ directory of the target file system
+> ans this directory doesn't exist before the udev package is built.
+
+In this case, just add:
+
+    # bcache-tools forgets to create the required directory... :-/
+    define BCACHE_TOOLS_UDEV_DIR
+        mkdir -p $(TARGET_DIR)/lib/udev/
+    endef
+    BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_UDEV_DIR
+
+And you're done. ;-)
+
+[--SNIP--]
+> >>+# The bcache-tools Makefile expects the man8 directory to exist.
+> >>+define BCACHE_TOOLS_INSTALL_MAN8
+> >>+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+> >>+endef
+> >Better to patch it out, since we do not keep the documentation on the
+> >target anyway.
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...nptl-remove-duplicate-vfork-in-libpthread.patch |  691 ++++++++++++++++++++
->  1 file changed, 691 insertions(+)
->  create mode 100644 package/uclibc/0.9.33.2/uclibc-0062-nptl-remove-duplicate-vfork-in-libpthread.patch
+> I thought it was discussed before (with Thomas Petazzoni) and it was decided
+> it was easier to go this way (adding man8  which was removed from buildroot
+> anyway).
 
-Thanks a lot for working on this!
+Oh, OK, then. :-)
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Regards,
+Yann E. MORIN.
 
-(Built tested on i386, x86-64 and PowerPC. Statically linking alsa-lib
-now works fine. I didn't test SuperH because our internal toolchain
-backend is currently broken for SuperH.)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
