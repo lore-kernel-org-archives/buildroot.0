@@ -1,30 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Sep 2014 10:18:32 +0200
-Subject: [Buildroot] [PATCH] boost: Force the target ABI for MIPS
- architecture
-In-Reply-To: <1409757049-63061-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1409757049-63061-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140907101832.33d027cb@free-electrons.com>
+Date: Sun,  7 Sep 2014 10:54:45 +0200
+Subject: [Buildroot] [PATCH] jq: add patch to fix y0, y1,
+	j0 and j1 related build issue on uClibc
+Message-ID: <1410080085-30040-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Our default uClibc configuration does not have DO_XSI_MATH=y, so it
+lacks certain math functions. jq generates some wrappers for the libm
+functions, even for functions that are not actually used by jq. By
+simply removing those wrappers, we get jq to build on uClibc that have
+DO_XSI_MATH disabled.
 
-On Wed, 3 Sep 2014 16:10:49 +0100, Vicente Olivert Riera wrote:
+Fixes:
 
-> +	     abi=$(if $(BR2_MIPS_OABI32),o32,sysv) \
+  http://autobuild.buildroot.org/results/831/831ffb0a37a8007b2a824659e46dbe9e6e710d6f/
 
-Are you sure this is sufficient to handle MIPS in Boost? Reading the
-Boost code, I see that it also supports abi=n64 and abi=n32. Maybe you
-should have a look and see if additional cases of ABIs are needed.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
 
-Thanks!
-
-Thomas
+diff --git a/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch b/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
+new file mode 100644
+index 0000000..dfc2f4c
+--- /dev/null
++++ b/package/jq/jq-0001-libm.h-comment-j0-j1-y0-and-y1.patch
+@@ -0,0 +1,49 @@
++From e87163425a67938afde96f01b19587ac3348b369 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Sep 2014 10:49:57 +0200
++Subject: [PATCH] libm.h: comment j0, j1, y0 and y1
++
++Those functions are currently not used by jq, but having them in
++libm.h prevents building with the uClibc C library when it doesn't
++have DO_XSI_MATH option enabled.
++
++This issue was spotted by the Buildroot autobuilder system:
++
++  http://autobuild.buildroot.org/results/aaf/aaf3c114e0ca3e265ae32c646ba67f01aaf608bd/build-end.log
++
++Submitted upstream at https://github.com/stedolan/jq/pull/570.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ libm.h | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/libm.h b/libm.h
++index f8c52be..8e82fb7 100644
++--- a/libm.h
+++++ b/libm.h
++@@ -10,8 +10,8 @@ LIBM_DD(cosh)
++ LIBM_DD(exp2)
++ LIBM_DD(exp)
++ LIBM_DD(floor)
++-LIBM_DD(j0)
++-LIBM_DD(j1)
+++/* LIBM_DD(j0) */
+++/* LIBM_DD(j1) */
++ LIBM_DD(log10)
++ LIBM_DD(log2)
++ LIBM_DD(log)
++@@ -21,8 +21,8 @@ LIBM_DD(sqrt)
++ LIBM_DD(tan)
++ LIBM_DD(tanh)
++ LIBM_DD(tgamma)
++-LIBM_DD(y0)
++-LIBM_DD(y1)
+++/* LIBM_DD(y0) */
+++/* LIBM_DD(y1) */
++ /* LIBM_DID(jn) */
++ /* LIBM_DID(yn) */
++ /* LIBM_DDD(pow) */
++-- 
++2.0.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
