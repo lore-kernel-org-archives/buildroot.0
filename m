@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Sep 2014 21:56:49 +0200
-Subject: [Buildroot] [git commit] enlightenment: bump to version 0.17.6
-Message-ID: <20140907195715.937499D5B0@busybox.osuosl.org>
+Date: Sun, 7 Sep 2014 21:53:45 +0200
+Subject: [Buildroot] [git commit] xapp_xfs: Bump version to 1.1.4
+Message-ID: <20140907195715.5CD3D9D5F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=637e6d0ab7c80a50c69be9c0b72e25a7d100113f
+commit: http://git.buildroot.net/buildroot/commit/?id=a441f8c4c06cae7736364b4fb11d70a6e632df9d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/enlightenment/enlightenment.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xapp_xfs/xapp_xfs.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 64e3d9e..6e0e448 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+index 343a033..3e70455 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.mk
++++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--ENLIGHTENMENT_VERSION = 0.17.3
-+ENLIGHTENMENT_VERSION = 0.17.6
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
- ENLIGHTENMENT_LICENSE = BSD-2c
- ENLIGHTENMENT_LICENSE_FILES = COPYING
+-XAPP_XFS_VERSION = 1c8459eafc04997751ae3d200d0ec91e43e19b5b
+-XAPP_XFS_SITE = git://anongit.freedesktop.org/xorg/app/xfs
++XAPP_XFS_VERSION = 1.1.4
++XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
++XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFS_LICENSE = MIT
+ XAPP_XFS_LICENSE_FILES = COPYING
+-XAPP_XFS_AUTORECONF = YES
+-# xfont_font-util is only needed due to autoreconf. When switching
+-# back to a tarball release, it can be removed.
+-XAPP_XFS_DEPENDENCIES = xfont_font-util xlib_libFS xlib_libXfont xproto_fontsproto
++XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
+ 
+ $(eval $(autotools-package))
