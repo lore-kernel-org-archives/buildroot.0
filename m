@@ -1,57 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:05 +0200
-Subject: [Buildroot] [PATCH 06/18 v4] docs/manual: copying the manual
-	sources is a common action
+Date: Mon,  8 Sep 2014 01:39:07 +0200
+Subject: [Buildroot] [PATCH 08/18 v4] docs/manual: manual-update-lists is
+	not a generic GENDOC rule
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <c482fe23ff8d3e0214b31233534842639a9189c8.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <ef3b84fe74a261defda72343ca8aaa7deb9430ab.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the creation of $(BUILD_DIR)/manual and the rsyncing of the
-sources into GENDOC.
-
-This is is needed so that GENDOC can be easily used to generate another
-document, without requiring that document to duplicate the copying rules.
+Move the manual-update-lists .PHONY declaration out of GENDOC, since not
+all the documents may have an -update-lists rule.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- docs/manual/manual.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ docs/manual/manual.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 4825a70..bae517b 100644
+index 135ab3d..08addd1 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -1,10 +1,3 @@
--$(BUILD_DIR)/$(pkgname):
--	$(Q)mkdir -p $@
--
--manual-rsync: $(BUILD_DIR)/$(pkgname)
--	$(Q)$(call MESSAGE,"Preparing the manual sources...")
--	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/$(pkgname)
--
+@@ -1,5 +1,6 @@
  # Packages included in BR2_EXTERNAL are not part of buildroot, so they
  # should not be included in the manual.
++.PHONY: manual-update-lists
  manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/$(pkgname)
-@@ -127,6 +120,13 @@ endef
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- ################################################################################
- define GENDOC
-+$$(BUILD_DIR)/$(pkgname):
-+	$$(Q)mkdir -p $$@
-+
-+$(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
-+	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
-+	$$(Q)rsync -a docs/$(pkgname)/ $$^
-+
- $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+ 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
+@@ -140,7 +141,7 @@ $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
+ clean: $(pkgname)-clean
+ $(pkgname)-clean:
+ 	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
+-.PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
++.PHONY: $(pkgname) $(pkgname)-clean
+ endef
+ 
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
 -- 
 1.9.1
