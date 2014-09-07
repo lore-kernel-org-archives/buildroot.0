@@ -1,12 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 22:34:51 +0200
-Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
-In-Reply-To: <540CBFA7.3070603@tribudubois.net>
-References: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
- <20140906104208.GA3957@free.fr> <540C076B.30901@tribudubois.net>
- <20140907091406.GA4230@free.fr> <20140907091826.GA31418@free.fr>
- <540CBFA7.3070603@tribudubois.net>
-Message-ID: <20140907203451.GI31418@free.fr>
+Date: Sun, 7 Sep 2014 22:39:47 +0200
+Subject: [Buildroot] [PATCH v8] bcache-tools: Adding package.
+In-Reply-To: <1410121662-23096-1-git-send-email-jcd@tribudubois.net>
+References: <1410121662-23096-1-git-send-email-jcd@tribudubois.net>
+Message-ID: <20140907203947.GA16635@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,47 +13,77 @@ To: buildroot@busybox.net
 Jean-Christophe, All,
 
 On 2014-09-07 22:27 +0200, Jean-Christophe DUBOIS spake thusly:
-> Le 09/07/2014 11:18 AM, Yann E. MORIN a ?crit :
-> >On 2014-09-07 11:14 +0200, Yann E. MORIN spake thusly:
-[--SNIP--]
-> >>In this case, just add:
-> >>
-> >>     # bcache-tools forgets to create the required directory... :-/
-> >>     define BCACHE_TOOLS_UDEV_DIR
-> >>         mkdir -p $(TARGET_DIR)/lib/udev/
-> >>     endef
-> >>     BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_UDEV_DIR
-> >>
-> >>And you're done. ;-)
-> >Of course, since cafeine hasn't yet fully kicked-in in my body, this
-> >can/should be squashed in the existing PRE_INSTALL hook which creates
-> >the man8 directory.
+> This is the bcache tools, required to setup the linux bcache
+> feature of the Linux kernel.
 > 
-> OK, I'll do it this way.
+> Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
 
-OK, thanks!
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Now just for my information, why is it better to force the creation of a
-> missing directory rather
-> than force as a dependency the build of the package bringing this directory?
+Yet, a small comment below...
 
-Well, the udev package is not required to build bcache-tools. It;s just
-bcache-tools' Makefile that is deficient, and forgets to create the
-directory to start with.
+[--SNIP--]
+> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+> new file mode 100644
+> index 0000000..e537471
+> --- /dev/null
+> +++ b/package/bcache-tools/bcache-tools.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# bcache-tools
+> +#
+> +################################################################################
+> +
+> +BCACHE_TOOLS_VERSION = v1.0.7
+> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
+> +BCACHE_TOOLS_LICENSE = GPLv2
+> +BCACHE_TOOLS_LICENSE_FILES = COPYING
+> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux
+> +
+> +# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
+> +# the bcache-tools Makefile to alter CFLAGS
+> +define BCACHE_TOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +# The bcache-tools Makefile expects the man8 directory to exist.
+> +define BCACHE_TOOLS_INSTALL_MAN8
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+> +endef
+> +
+> +# The bcache-tools Makefile expects the /lib/udev/rules.d directory to exist.
+> +define BCACHE_TOOLS_INSTALL_UDEV
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/lib/udev/rules.d
+> +endef
+> +
+> +BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
+> +BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_UDEV
 
-Also, it is often the case that a decvelopper needs to build just one
-package to test a build failure or a version bump. The more dependencies
-there are to a package, the longer the build will be, the more
-frustrating it becomes to the developper, since udev is not really a
-build dependency.
+Sorry, I was not clear enough in my previous mails (although I did send a
+corrective email to fix this): there is not need to have two hooks, you
+should create the two directories in the same hook.
 
-And, since you anyway already have a hook to create one directory, why
-not use it to create the other one?
+No need to resend, the comitter can do the change, hopefully! ;-)
 
-Thanks for your efforts with this patch! :-)
+Thank you! :-)
 
 Regards,
 Yann E. MORIN.
+
+> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
