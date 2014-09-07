@@ -1,101 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Sep 2014 09:51:49 +0200
-Subject: [Buildroot] [PATCH] package/mtd: install libubi.a and libmtd.a
- to staging
-In-Reply-To: <1410040741-14656-1-git-send-email-romain.naour@openwide.fr>
-References: <1410040741-14656-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140907095149.1ed42536@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 07 Sep 2014 10:01:04 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] nios2 build results for
+	2014-09-05
+References: <20140906063010.F1253101275@stock.ovh.net>
+ <CAAEAJfD4eNUAZF9bNV+tWNghFw-pe5qmeAJoZuzMsbASZuAuVg@mail.gmail.com>
+ <XnsA3A0AF1AE9B38berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <CAAEAJfAeQhe93q7qZFTP=rbZqTfhqQ5FrcXK9ATGzPAoj8sX0w@mail.gmail.com>
+Message-ID: <XnsA3A165E7BFABDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> 
+wrote in 
+news:CAAEAJfAeQhe93q7qZFTP=rbZqTfhqQ5FrcXK9ATGzPAoj8sX0w at mail.gmail.com:
 
-On Sat,  6 Sep 2014 23:59:01 +0200, Romain Naour wrote:
-> Makefile's install rule deploy mtd's binaries but also static libraries
-> (libubi.a libmtd.a).
-> 
-> Since mtd's binaries are manualy installed to target, static
-> libraries are left in the build directory.
-> 
-> Others tools linked with -lubi or -lmtd fail to build.
-> 
-> Unconditionally build these libraries even if no mdt tool are enabled
-> and manually install them to staging by setting MTD_INSTALL_STAGING_CMDS
+> On 6 September 2014 12:12, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>> Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> wrote in news:CAAEAJfD4eNUAZF9bNV+tWNghFw-
+>> pe5qmeAJoZuzMsbASZuAuVg at mail.gmail.com:
+>>
+>>> Any idea why av_open_input_file and avformat_open_input is not found?
+>>
+>> is the current build error still related to this discussion?
+>>
+>> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74623
+> Well, it seems that patch you sent attempted to fix this same error.
+> However, applying your patch over here didn't help.
 
-I find the explanation somewhat convoluted here, what about simply:
+Hi,
 
-Currently, the mtd package only installs the mtd utilities into the
-target directory. However, the mtd-utils also provide two
-static libraries (libmtd.a and libubi.a) that can be used by other
-packages or tools.
+weird, I just tested my patch again and it still fixes the build error here:
 
-Therefore, this commit extends the mtd package by adding the
-installation to the staging directory of those two libraries.
+[...]
+checking for sqlite3_prepare_v2 in -lsqlite3... yes
+checking for av_open_input_file in -lavformat... no
+checking for avformat_open_input in -lavformat... yes
+checking for av_rescale_q in -lavutil ... yes
+[...]
 
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/mtd/mtd.mk | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index 80928b6..a9154a5 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -10,6 +10,8 @@ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
->  MTD_LICENSE = GPLv2
->  MTD_LICENSE_FILES = COPYING
->  
-> +MTD_INSTALL_STAGING = YES
-> +
->  ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
->  MTD_DEPENDENCIES = zlib lzo
->  endif
-> @@ -36,6 +38,8 @@ endef
->  MKFS_JFFS2 = $(HOST_DIR)/usr/sbin/mkfs.jffs2
->  SUMTOOL = $(HOST_DIR)/usr/sbin/sumtool
->  
-> +MTD_STAGING_y					+= lib/libmtd.a
-> +MTD_STAGING_y					+= ubi-utils/libubi.a
+$ file /home/buildroot/br/output/target/usr/sbin/minidlnad
+/home/buildroot/br/output/target/usr/sbin/minidlnad: ELF 32-bit LSB 
+executable, Altera Nios II, version 1 (SYSV), dynamically linked (uses shared 
+libs), for GNU/Linux 3.12.0, not stripped
 
-Maybe the spaces are not necessary, and something like:
-
-MTD_STAGING_y = lib/libmtd.a ubi-utils/libubi.a
-
-would be sufficient.
-
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK)		+= docfdisk
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS)	+= doc_loadbios
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASHCP)		+= flashcp
-> @@ -79,16 +83,17 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIBLOCK)	+= ubiblock
->  MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs/mkfs.ubifs
->  
-> -# only call make if atleast a single tool is enabled
-> -ifneq ($(MTD_TARGETS_y),)
-> -
->  define MTD_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CROSS=$(TARGET_CROSS) \
->  		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
-> -		$(addprefix $(@D)/,$(MTD_TARGETS_y))
-> +		$(addprefix $(@D)/,$(MTD_TARGETS_y)) \
-> +		$(addprefix $(@D)/,$(MTD_STAGING_y))
->  endef
->  
-> -endif
-> +define MTD_INSTALL_STAGING_CMDS
-> +     $(INSTALL) -D -m 0755 $(@D)/lib/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
-> +     $(INSTALL) -D -m 0755 $(@D)/ubi-utils/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
-
-Please indent with one tab, not spaces.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
