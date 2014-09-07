@@ -1,83 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 11:57:35 +0200
-Subject: [Buildroot] [PATCH v3 1/4] gendoc infra: cosmetic fixes
-In-Reply-To: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
-References: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140907095735.GD31418@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Sep 2014 12:06:29 +0200
+Subject: [Buildroot] [PATCH 2/2] xserver_xorg-server: Fix compile error for
+	microblaze
+In-Reply-To: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1410084389-5971-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Fixes
+mipushpxl.c: In function 'miPushPixels':
+mipushpxl.c:110:38: error: 'IMAGE_BYTE_ORDER' undeclared (first use in this function)
+     if (screenInfo.bitmapBitOrder == IMAGE_BYTE_ORDER)
 
-On 2014-08-26 20:49 +0200, Samuel Martin spake thusly:
-> - wrap lines to 80 characters
-> - fix space/tab mixup
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Patch submitted upstream: https://bugs.freedesktop.org/show_bug.cgi?id=83582
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../xserver_xorg-server-0003-microblaze.patch      |   33 ++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> changes v2 -> v3:
-> - update A/R/T tags
-> 
-> changes v1 -> v2:
-> - more tabs/space cleanup (ThomasDS)
-> - fix line mess (ThomasDS)
-> ---
->  docs/manual/manual.mk | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index 8d401a2..136f725 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -70,8 +70,8 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
->  	$$(Q)mkdir -p $$(@D)/.build
->  	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
->  	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
-> -	        -D $$(@D) $$(@D)/.build/$(1).txt \
-> -	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
-> +		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
-> +		-D $$(@D) $$(@D)/.build/$(1).txt
->  	-$$(Q)rm -rf $$(@D)/.build
->  endef
->  
-> @@ -84,9 +84,12 @@ endef
->  # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
->  ################################################################################
->  define GENDOC
-> -$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
-> -$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
-> -$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
-> +$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
-> +	--xsltproc-opts "--stringparam toc.section.depth 1")
-> +$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
-> +	--xsltproc-opts "--stringparam toc.section.depth 1")
-> +$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
-> +	--dblatex-opts "-P latex.output.revhistory=0")
->  $(call GENDOC_INNER,$(pkgname),text,text,text,text)
->  $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
->  clean: $(pkgname)-clean
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch
+new file mode 100644
+index 0000000..b99b669
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch
+@@ -0,0 +1,33 @@
++xserver_xorg-server: Fix compile error for microblaze
++
++Fixes
++mipushpxl.c: In function 'miPushPixels':
++mipushpxl.c:110:38: error: 'IMAGE_BYTE_ORDER' undeclared (first use in this function)
++     if (screenInfo.bitmapBitOrder == IMAGE_BYTE_ORDER)
++
++Patch submitted upstream: https://bugs.freedesktop.org/show_bug.cgi?id=83582
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr xorg-server-1.16.0.glyph/include/servermd.h xorg-server-1.16.0/include/servermd.h
++--- xorg-server-1.16.0.glyph/include/servermd.h	2014-09-07 11:32:34.297332811 +0200
+++++ xorg-server-1.16.0/include/servermd.h	2014-09-07 11:31:33.470099995 +0200
++@@ -176,6 +176,18 @@
++ 
++ #endif                          /* mips */
++ 
+++#if defined(__microblaze__) || defined(microblaze)
+++
+++#ifdef __BIG_ENDIAN__
+++#define IMAGE_BYTE_ORDER	MSBFirst
+++#define BITMAP_BIT_ORDER	MSBFirst
+++#else
+++#define IMAGE_BYTE_ORDER	LSBFirst
+++#define BITMAP_BIT_ORDER	LSBFirst
+++#endif
+++
+++#endif
+++
++ #if defined(__alpha) || defined(__alpha__)
++ #define IMAGE_BYTE_ORDER	LSBFirst        /* Values for the Alpha only */
++ #define BITMAP_BIT_ORDER       LSBFirst
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
