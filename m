@@ -1,118 +1,68 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Sun, 07 Sep 2014 09:21:15 +0200
-Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
-In-Reply-To: <20140906104208.GA3957@free.fr>
-References: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
- <20140906104208.GA3957@free.fr>
-Message-ID: <540C076B.30901@tribudubois.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Sep 2014 09:21:58 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <87lhpwmr7m.fsf@dell.be.48ers.dk>
+References: <20140906063010.93F60101336@stock.ovh.net>
+ <20140906203640.09c6d8be@free-electrons.com>
+ <87lhpwmr7m.fsf@dell.be.48ers.dk>
+Message-ID: <20140907092158.600154db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 09/06/2014 12:42 PM, Yann E. MORIN a ?crit :
-> Jean-Christophe, All,
->
-> Sorry for the delay in reviewing this patch...
->
-> On 2014-08-08 18:11 +0200, Jean-Christophe DUBOIS spake thusly:
-> [--SNIP--]
->> diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
->> new file mode 100644
->> index 0000000..a3f7897
->> --- /dev/null
->> +++ b/package/bcache-tools/Config.in
->> @@ -0,0 +1,22 @@
->> +config BR2_PACKAGE_BCACHE_TOOLS
->> +	bool "bcache tools"
->> +	depends on BR2_PACKAGE_HAS_UDEV
-> udev is a runtime dependency only...
->
->> +	depends on BR2_LARGEFILE # util-linux
->> +	depends on BR2_USE_WCHAR # util-linux
->> +	depends on BR2_USE_MMU # util-linux (libblkid)
->> +	select BR2_PACKAGE_UTIL_LINUX
->> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->> +	help
->> +	  Bcache is a Linux kernel block layer cache. It allows one or
->> +	  more fast disk drives such as flash-based solid state drives (SSDs)
->> +	  to act as a cache for one or more slower hard disk drives.
->> +
->> +	  http://bcache.evilpiepirate.org/
->> +
->> +	  This is the user space bcache tools, required to setup the linux
->> +	  bcache feature of the Linux kernel.
->> +
->> +comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
->> +	depends on BR2_USE_MMU
->> +	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
->> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
->> new file mode 100644
->> index 0000000..880bf5e
->> --- /dev/null
->> +++ b/package/bcache-tools/bcache-tools.mk
->> @@ -0,0 +1,31 @@
->> +################################################################################
->> +#
->> +# bcache-tools
->> +#
->> +################################################################################
->> +
->> +BCACHE_TOOLS_VERSION = v1.0.7
->> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
->> +BCACHE_TOOLS_LICENSE = GPLv2
->> +BCACHE_TOOLS_LICENSE_FILES = COPYING
->> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
-> ... so you do not need to depend on it here, just in the Config.in file.
+Hello,
 
-Well, I need to make sure that "udev" is build before bcache-tools 
-because it tries to put files in the /lib/udev/ directory of the target 
-file system ans this directory doesn't exist before the udev package is 
-built.
->
-> And even if you needed to depend on udev at runtime, that's not eudev
-> you'd have to depend on, but just 'udev' (which is a virtual package
-> provided by either eudev or systemd.)
-OK, I put the dependency on udev instead of eudev.
+On Sat, 06 Sep 2014 22:25:33 +0200, Peter Korsgaard wrote:
 
->
->> +# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
->> +# the bcache-tools Makefile to alter CFLAGS
->> +define BCACHE_TOOLS_BUILD_CMDS
->> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
->> +endef
->> +
->> +# The bcache-tools Makefile expects the man8 directory to exist.
->> +define BCACHE_TOOLS_INSTALL_MAN8
->> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
->> +endef
-> Better to patch it out, since we do not keep the documentation on the
-> target anyway.
+>  > Seems like Nathaniel autobuilder does not have the ncurses development
+>  > libraries installed (also causing build failures in host-mysql, for
+>  > example). What is our policy regarding ncurses? I have it installed in
+>  > my autobuilder because I use it to run "make menuconfig". But it's true
+>  > it's not technically absolutely required to run a Buildroot build.
+> 
+>  > Should we add dependency on host-ncurses where appropriate? Or should
+>  > we make ncurses development files on the build machine a mandatory
+>  > dependency? What if the user uses only xconfig or gconfig?
+> 
+> Given how many people use menuconfig, I think we should just make
+> ncurses a mandatory dependency. Just about anybody doing embedded Linux
+> development needs them anyway to configure
+> barebox/linux/busybox/uclibc/ctng/..
+> 
+> If not, then we would also need to add host-ncurses to our
+> barebox/linux/busybox/uclibc-menuconfig targets.
 
-I thought it was discussed before (with Thomas Petazzoni) and it was 
-decided it was easier to go this way (adding man8  which was removed 
-from buildroot anyway).
+Well not sure we want to go down this road: it would mean we should add
+host-qt as a dependency of the linux-xconfig target for example. We
+could also decide that the *-menuconfig targets need to have curses-dev
+installed on the build machine, but that the package that we build and
+that need host-curses will depend on host-curses.
 
-JC
+But well, menuconfig is indeed widely used, so maybe the easiest
+solution would be to make ncurses-dev a mandatory dependency.
 
->
-> Regards,
-> Yann E. MORIN.
->
->> +BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
->> +
->> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
->> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->> +		DESTDIR=$(TARGET_DIR) install
->> +endef
->> +
->> +$(eval $(generic-package))
->> -- 
->> 1.9.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>  >> arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/a42c4d1abdee3ee28048e68f28781d5914dcd23b/
+> 
+>  > Peter should move to the autobuild-run script.
+> 
+> Yeah, I'll work on it this weekend.
+
+Cool! For now, only migrate your x86/x86-64 machines. Note that instead
+of using your toolchain, it will be randomly chosing from the toolchain
+configurations available at
+http://autobuild.buildroot.org/toolchains/configs/. If you think there
+is some useful configuration that is missing, let me know.
+
+We'll work on moving the PowerPC machine at a later point (that will
+require building a toolchain on it, and then putting it on
+http://autobuild.buildroot.org/toolchains/tarballs/).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
