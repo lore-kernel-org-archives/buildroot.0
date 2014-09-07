@@ -1,68 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Sep 2014 09:21:58 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <87lhpwmr7m.fsf@dell.be.48ers.dk>
-References: <20140906063010.93F60101336@stock.ovh.net>
- <20140906203640.09c6d8be@free-electrons.com>
- <87lhpwmr7m.fsf@dell.be.48ers.dk>
-Message-ID: <20140907092158.600154db@free-electrons.com>
+From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Date: Sun,  7 Sep 2014 09:28:06 +0200
+Subject: [Buildroot] [PATCH v7] bcache-tools: Adding package.
+Message-ID: <1410074886-28617-1-git-send-email-jcd@tribudubois.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This is the bcache tools, required to setup the linux bcache
+feature of the Linux kernel.
 
-On Sat, 06 Sep 2014 22:25:33 +0200, Peter Korsgaard wrote:
+Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+---
+Changes v1 to v2
+ * Remove 'support' word from comment statement in Config.in.
+ * Use github helper to get the project site instead of hardcoded URL.
+Changes v2 to v3
+ * Added bcache-tools description in Config help.
+ * Added bcache-tools URL in Config help.
+ * Added BR2_LARGEFILE BR2_USE_WCHAR and BR2_USE_MMU dependencies in Config.
+ * Added BR2_PACKAGE_UTIL_LINUX selection in Config.
+ * Added new requirements in Config comment.
+ * Use POST_EXTRACT_HOOKS to modify Makefile.
+ * Pass $(TARGET_CONFIGURE_OPTS) in env variables to $(MAKE).
+ * Create man8 dir as part of PRE_INSTALL_TARGET_HOOKS.
+Changes v3 to v4
+ * Move from .zip file to .tar.gz as download file in .mk file.
+ * Use complete git tag as version in .mk file.
+ * Remove explicit extract rule from .mk file (use implicite rule).
+Changes v4 to v5
+ * Remove explicit package name in .mk (rely on default behavior).
+Changes v5 to v6
+ * Switch spaces to tabs in Config.in
+ * Don't patch Makefile for pkg-config in .mk file.
+Changes v6 to v7
+ * change eudev dependency to udev dependency in Makefile.
+---
+ package/Config.in                    |  1 +
+ package/bcache-tools/Config.in       | 22 ++++++++++++++++++++++
+ package/bcache-tools/bcache-tools.mk | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 package/bcache-tools/Config.in
+ create mode 100644 package/bcache-tools/bcache-tools.mk
 
->  > Seems like Nathaniel autobuilder does not have the ncurses development
->  > libraries installed (also causing build failures in host-mysql, for
->  > example). What is our policy regarding ncurses? I have it installed in
->  > my autobuilder because I use it to run "make menuconfig". But it's true
->  > it's not technically absolutely required to run a Buildroot build.
-> 
->  > Should we add dependency on host-ncurses where appropriate? Or should
->  > we make ncurses development files on the build machine a mandatory
->  > dependency? What if the user uses only xconfig or gconfig?
-> 
-> Given how many people use menuconfig, I think we should just make
-> ncurses a mandatory dependency. Just about anybody doing embedded Linux
-> development needs them anyway to configure
-> barebox/linux/busybox/uclibc/ctng/..
-> 
-> If not, then we would also need to add host-ncurses to our
-> barebox/linux/busybox/uclibc-menuconfig targets.
-
-Well not sure we want to go down this road: it would mean we should add
-host-qt as a dependency of the linux-xconfig target for example. We
-could also decide that the *-menuconfig targets need to have curses-dev
-installed on the build machine, but that the package that we build and
-that need host-curses will depend on host-curses.
-
-But well, menuconfig is indeed widely used, so maybe the easiest
-solution would be to make ncurses-dev a mandatory dependency.
-
->  >> arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/a42c4d1abdee3ee28048e68f28781d5914dcd23b/
-> 
->  > Peter should move to the autobuild-run script.
-> 
-> Yeah, I'll work on it this weekend.
-
-Cool! For now, only migrate your x86/x86-64 machines. Note that instead
-of using your toolchain, it will be randomly chosing from the toolchain
-configurations available at
-http://autobuild.buildroot.org/toolchains/configs/. If you think there
-is some useful configuration that is missing, let me know.
-
-We'll work on moving the PowerPC machine at a later point (that will
-require building a toolchain on it, and then putting it on
-http://autobuild.buildroot.org/toolchains/tarballs/).
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 883dd66..ef0a22a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -280,6 +280,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
+ 	source "package/avrdude/Config.in"
++	source "package/bcache-tools/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+new file mode 100644
+index 0000000..a3f7897
+--- /dev/null
++++ b/package/bcache-tools/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_BCACHE_TOOLS
++	bool "bcache tools"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_USE_MMU # util-linux (libblkid)
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	help
++	  Bcache is a Linux kernel block layer cache. It allows one or
++	  more fast disk drives such as flash-based solid state drives (SSDs)
++	  to act as a cache for one or more slower hard disk drives.
++
++	  http://bcache.evilpiepirate.org/
++
++	  This is the user space bcache tools, required to setup the linux
++	  bcache feature of the Linux kernel.
++
++comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+new file mode 100644
+index 0000000..4a26efd
+--- /dev/null
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# bcache-tools
++#
++################################################################################
++
++BCACHE_TOOLS_VERSION = v1.0.7
++BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
++BCACHE_TOOLS_LICENSE = GPLv2
++BCACHE_TOOLS_LICENSE_FILES = COPYING
++BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux udev
++
++# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
++# the bcache-tools Makefile to alter CFLAGS
++define BCACHE_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++# The bcache-tools Makefile expects the man8 directory to exist.
++define BCACHE_TOOLS_INSTALL_MAN8
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
++endef
++
++BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
++
++define BCACHE_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
