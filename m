@@ -1,89 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 22:39:47 +0200
-Subject: [Buildroot] [PATCH v8] bcache-tools: Adding package.
-In-Reply-To: <1410121662-23096-1-git-send-email-jcd@tribudubois.net>
-References: <1410121662-23096-1-git-send-email-jcd@tribudubois.net>
-Message-ID: <20140907203947.GA16635@free.fr>
+Date: Mon,  8 Sep 2014 01:39:13 +0200
+Subject: [Buildroot] [PATCH 0/18 v4] gendoc infra: make it useable for other
+	documents (branch yem/manual)
+Message-ID: <cover.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jean-Christophe, All,
+Hello All!
 
-On 2014-09-07 22:27 +0200, Jean-Christophe DUBOIS spake thusly:
-> This is the bcache tools, required to setup the linux bcache
-> feature of the Linux kernel.
-> 
-> Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+This series builds up on top of Samuel previous series, and further
+enhances the GENDOC infrastructure to be useable to generate other
+documents, and especially documents in br2-external.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The series is articulated as thus:
 
-Yet, a small comment below...
+  - patches 1-4 from Samuel, virtually untouched by me, save for the
+    check for xsltproc, see the changelog in patch 4;
 
-[--SNIP--]
-> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-> new file mode 100644
-> index 0000000..e537471
-> --- /dev/null
-> +++ b/package/bcache-tools/bcache-tools.mk
-> @@ -0,0 +1,37 @@
-> +################################################################################
-> +#
-> +# bcache-tools
-> +#
-> +################################################################################
-> +
-> +BCACHE_TOOLS_VERSION = v1.0.7
-> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
-> +BCACHE_TOOLS_LICENSE = GPLv2
-> +BCACHE_TOOLS_LICENSE_FILES = COPYING
-> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux
-> +
-> +# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
-> +# the bcache-tools Makefile to alter CFLAGS
-> +define BCACHE_TOOLS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +endef
-> +
-> +# The bcache-tools Makefile expects the man8 directory to exist.
-> +define BCACHE_TOOLS_INSTALL_MAN8
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
-> +endef
-> +
-> +# The bcache-tools Makefile expects the /lib/udev/rules.d directory to exist.
-> +define BCACHE_TOOLS_INSTALL_UDEV
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/lib/udev/rules.d
-> +endef
-> +
-> +BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
-> +BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_UDEV
+  - then, patches 5-16 to remove hard-coded reference to 'manual'
+    in either GENDOC or GENDOC_INNER, and to remove hard-coded paths to
+    our manual, and to properly separate GENDOC generic rules from
+    document-specific rules, and make GENDOC look more like the
+    pkg-XXX infrastructures;
 
-Sorry, I was not clear enough in my previous mails (although I did send a
-corrective email to fix this): there is not need to have two hooks, you
-should create the two directories in the same hook.
+  - finally, patches 17-18 allow building document from br2-external.
 
-No need to resend, the comitter can do the change, hopefully! ;-)
+There are a few shortcomings here and there, be sure to read the
+post-commit notes.
 
-Thank you! :-)
+
+Changes v3 -> v4:
+  - only run the xsltproc check once, not for every types of outputs
+  - add patches 5..18
 
 Regards,
 Yann E. MORIN.
 
-> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+The following changes since commit 637e6d0ab7c80a50c69be9c0b72e25a7d100113f:
+
+  enlightenment: bump to version 0.17.6 (2014-09-07 21:56:49 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/manual
+
+for you to fetch changes up to 5f6708f39d6c893dab1e62e5feba65fb6d826b32:
+
+  docs/manual: always look for ressources in destination directory (2014-09-08 01:26:14 +0200)
+
+----------------------------------------------------------------
+Samuel Martin (4):
+      gendoc infra: cosmetic fixes
+      gendoc infra: move manual build location into $(BUILD_DIR)/manual
+      gendoc infra: avoid a2x warning
+      gendoc infra: disable pdf manual generation if xsltproc is buggy
+
+Yann E. MORIN (14):
+      docs/manual: get rid of legacy comment in GENDOC
+      docs/manual: copying the manual sources is a common action
+      docs/manual: simplify generation dependencies
+      docs/manual: manual-update-lists is not a generic GENDOC rule
+      docs/manual: move manual-prepare-sources rule into GENDOC
+      docs/manual: do not hardcode name of the generated document
+      docs/manual: allow a document to declare where its ressources are
+      docs/manual: last pass at removing hard-coded path in GENDOC_INNER
+      docs/manual: properly separate rules specific for out manual
+      docs/manual: rename the generic dependency rules
+      docs/manual: allow documents to define some hooks, as for a package
+      docs/manual: use the new hooks instead of gendoc rules
+      Makefile: move manual inclusion
+      docs/manual: always look for ressources in destination directory
+
+ Makefile              |   4 +-
+ docs/manual/manual.mk | 180 +++++++++++++++++++++++++++++++++++---------------
+ 2 files changed, 130 insertions(+), 54 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
