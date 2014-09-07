@@ -1,58 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:17 +0200
-Subject: [Buildroot] [PATCH 18/18 v4] docs/manual: always look for
-	ressources in destination directory
+Date: Mon,  8 Sep 2014 01:39:16 +0200
+Subject: [Buildroot] [PATCH 17/18 v4] Makefile: move manual inclusion
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <5f6708f39d6c893dab1e62e5feba65fb6d826b32.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <de3533b0392d7094bc050b038999f7d40d27e6bc.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Our manual does not use external filters in asciidoc, so we are happy
-with just looking for ressources from our source tree.
+Move inclusion of the manual before that of br2-external, so that it is
+possible to use the GENDOC infrastructure from br2-external.
 
-However, other documents (like ones in br2-external, may use such
-filters, to generate diagrams, graphs...
-
-Our own manual may even make use of filters to include some of the
-graphs we generate, to store in the documentation.
-
-External filters generate their output files in the output directory, so
-we must also look for ressources in there.
-
-Note: external filters in asccidoc are used thus:
-    ["filter-name"]
-    ----
-    Text to be rendered
-    ----
+We can no longer use $(pkgname) in our manual post-extract hook, because
+it might no longer be the last file sourced, since br2-external can
+include files after us.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
 ---
-Note: this is to work around a deficiency (bug?) in asccidoc. Asciidoc
-actually tells the filter where to put the output files, but forgets to
-look in there when it needs to link to those files...
+Note: I'm not too fond of this, but $(@D) does not work here. Any idea?
 ---
+ Makefile              | 4 ++--
  docs/manual/manual.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index e788f1b..7a11e9e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -388,6 +388,8 @@ include linux/linux.mk
+ include system/system.mk
+ include fs/common.mk
+ 
++include docs/manual/manual.mk
++
+ include $(BR2_EXTERNAL)/external.mk
+ 
+ TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+@@ -931,6 +933,4 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
+-include docs/manual/manual.mk
+-
+ .PHONY: $(noconfig_targets)
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index d0f38ac..49e801d 100644
+index 373c382..d0f38ac 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -92,7 +92,7 @@ $$(O)/docs/$(1)/$(1).$(6): $$($$(call UPPERCASE,$(1))_SOURCES) \
- 	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
- 	$$(Q)mkdir -p $$(@D)
- 	$$(Q)a2x $(8) -f $(4) -d book -L \
--		$$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) \
-+		$$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) -r $$(@D) \
- 		$$($(2)_$(4)_A2X_OPTS) \
- 		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
- 		$$(BUILD_DIR)/$(1)/$(1).txt
+@@ -156,7 +156,7 @@ MANUAL_RESSOURCES = $(TOPDIR)/docs/images
+ # Our manual needs to generate lists
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+-	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
++	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/manual \
+ 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+ endef
 -- 
 1.9.1
