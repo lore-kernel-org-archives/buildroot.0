@@ -1,110 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:03 +0200
-Subject: [Buildroot] [PATCH 04/18 v4] gendoc infra: disable pdf manual
-	generation if xsltproc is buggy
+Date: Mon,  8 Sep 2014 01:39:05 +0200
+Subject: [Buildroot] [PATCH 06/18 v4] docs/manual: copying the manual
+	sources is a common action
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <c45298589ee91fd3ce204b7db1b5ba2eaa3ae0fe.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <c482fe23ff8d3e0214b31233534842639a9189c8.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Move the creation of $(BUILD_DIR)/manual and the rsyncing of the
+sources into GENDOC.
 
-The PDF manual generation reaches the default xsltproc's template
-recursion limit when processing the target package list; this makes the
-PDF manual generation fail [1-3].
+This is is needed so that GENDOC can be easily used to generate another
+document, without requiring that document to duplicate the copying rules.
 
-This limit can be raised with the '--maxvars' option. Unfortunately,
-this option is not correctly handled in the latest xsltproc/libxslt
-release (1.1.28), but this bug is already fixed in the libxslt
-repository [4].
-
-This patch disables the PDF manual generation (makes it fail with a
-meaningful error message) when the xsltproc program found in the PATH
-does not support the --maxvars option.
-So, one can still generate the PDF manual if he/she extends PATH with
-the location of a working xsltproc, by running:
-
-  $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual-pdf
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-August/104390.html
-[2] http://lists.busybox.net/pipermail/buildroot/2014-August/104418.html
-[3] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
-[4] https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: move the assignment block out of GENDOC_INNER, no
- need to retest for each type of each document: it's always the same answer]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- docs/manual/manual.mk | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ docs/manual/manual.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 09d8b18..b5856b9 100644
+index 4825a70..bae517b 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -41,6 +41,20 @@ manual-check-dependencies-lists:
- 		exit 1; \
- 	fi
- 
-+# PDF manual generation is broken because of a bug in xsltproc program provided
-+# by libxslt <=1.1.28, which does not honor an option we need to set.
-+# Fortunately, this bug is already fixed upstream:
-+#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
-+#
-+# So, bail out when trying to build the pdf manual using a buggy version of the
-+# xsltproc program.
-+#
-+# So, to overcome this issue and being able to build the pdf manual, you can
-+# build xsltproc from it source repository, then run:
-+#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
-+MANUAL_XSLTPROC_IS_BROKEN = \
-+	$(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
+@@ -1,10 +1,3 @@
+-$(BUILD_DIR)/$(pkgname):
+-	$(Q)mkdir -p $@
+-
+-manual-rsync: $(BUILD_DIR)/$(pkgname)
+-	$(Q)$(call MESSAGE,"Preparing the manual sources...")
+-	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/$(pkgname)
+-
+ # Packages included in BR2_EXTERNAL are not part of buildroot, so they
+ # should not be included in the manual.
+ manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/$(pkgname)
+@@ -127,6 +120,13 @@ endef
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+ ################################################################################
+ define GENDOC
++$$(BUILD_DIR)/$(pkgname):
++	$$(Q)mkdir -p $$@
 +
- ################################################################################
- # GENDOC_INNER -- generates the make targets needed to build a specific type of
- #                 asciidoc documentation.
-@@ -83,6 +97,14 @@ define MANUAL_$(2)_INSTALL_CMDS
- endef
- endif
- 
-+ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
-+$$(O)/docs/$(1)/$(1).$(4):
-+	$$(error PDF manual generation is disabled because of a bug in \
-+		xsltproc. To be able to generate the PDF manual, you should \
-+		build xsltproc from the libxslt sources >=1.1.29 and pass it \
-+		to make through the command line: \
-+		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
-+else
- $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
-@@ -96,6 +118,7 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 		$$(BUILD_DIR)/$(1)/$(1).txt
- # install the generated manual
- 	$$(MANUAL_$(2)_INSTALL_CMDS)
-+endif
- endef
- 
- ################################################################################
-@@ -111,8 +134,11 @@ $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
++$(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
++	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
++	$$(Q)rsync -a docs/$(pkgname)/ $$^
++
+ $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
  	--xsltproc-opts "--stringparam toc.section.depth 1")
  $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
-+# dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
-+# from reaching the template recursion limit when processing the (long) target
-+# package table and bailing out.
- $(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
--	--dblatex-opts "-P latex.output.revhistory=0")
-+	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
- $(call GENDOC_INNER,$(pkgname),text,text,text,text)
- $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
- clean: $(pkgname)-clean
 -- 
 1.9.1
