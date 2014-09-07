@@ -1,39 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:06 +0200
-Subject: [Buildroot] [PATCH 07/18 v4] docs/manual: simplify generation
-	dependencies
+Date: Mon,  8 Sep 2014 01:39:08 +0200
+Subject: [Buildroot] [PATCH 09/18 v4] docs/manual: move
+	manual-prepare-sources rule into GENDOC
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <b9faea4d154763b88f932b62c7bafb1256c37887.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <41b40bbe7a0561f0649720e9495c0063258d0101.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The document's main file is already part of MANUAL_SOURCES, so no need
-to explicitly depend on it.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- docs/manual/manual.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ docs/manual/manual.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index bae517b..135ab3d 100644
+index 08addd1..0ae2d83 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -98,8 +98,7 @@ $$(O)/docs/$(1)/$(1).$(4):
- 		to make through the command line: \
- 		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
- else
--$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
--			   $$($$(call UPPERCASE,$(1))_SOURCES) \
-+$$(O)/docs/$(1)/$(1).$(4): $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
- 			   manual-check-dependencies-$(3) \
- 			   manual-prepare-sources
+@@ -7,7 +7,7 @@ manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/$(pkgname)
+ 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+ 
+-manual-prepare-sources: manual-rsync manual-update-lists
++manual-prepare-sources: manual-update-lists
+ 
+ # we can't use suitable-host-package here because that's not available in
+ # the context of 'make release'
+@@ -127,6 +127,8 @@ $(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
+ 	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
+ 	$$(Q)rsync -a docs/$(pkgname)/ $$^
+ 
++$(pkgname)-prepare-sources: $(pkgname)-rsync
++
+ $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
+ 	--xsltproc-opts "--stringparam toc.section.depth 1")
+ $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
 -- 
 1.9.1
