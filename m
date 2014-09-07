@@ -1,45 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 07 Sep 2014 07:15:10 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix call to a2x
-In-Reply-To: <1410046878-22428-1-git-send-email-yann.morin.1998@free.fr>
-References: <1410046878-22428-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <757f6e8c-1ec8-4a9d-ab02-48a54c6f3a19@email.android.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 7 Sep 2014 08:12:06 +0200
+Subject: [Buildroot] [UNSURE] Analysis of build failures
+In-Reply-To: <20140906203640.09c6d8be@free-electrons.com>
+References: <20140906063010.93F60101336@stock.ovh.net>
+ <20140906203640.09c6d8be@free-electrons.com>
+Message-ID: <CAB0FRsvqDSWDtZKEvf7=XMgwmBJAEU3xRexjK79xCGErZXN88w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->While investigating an asciidoc issue in another project, I've
->benn told on the asciidoc mailing list that options should come
->before the input file:
->    https://groups.google.com/d/msg/asciidoc/cs8-ihIKYXo/pdt-xjeHr8oJ
+2014-09-06 20:36 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
 >
->So be it. ;-)
+> Fran?ois, Nathaniel, see below.
 >
->Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->---
-> docs/manual/manual.mk | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
+>>       i686 |           perl-net-ssleay-1.65 | NOK | http://autobuild.buildroot.net/results/179d10ed4855cb0e357ff50517abc737c9abdce4/
 >
->diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
->index 8d401a2..9486bc6 100644
->--- a/docs/manual/manual.mk
->+++ b/docs/manual/manual.mk
->@@ -70,8 +70,8 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
-> 	$$(Q)mkdir -p $$(@D)/.build
-> 	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
-> 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
->-	        -D $$(@D) $$(@D)/.build/$(1).txt \
->-	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
->+	        -D $$(@D) --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
->+	        $$(@D)/.build/$(1).txt
-> 	-$$(Q)rm -rf $$(@D)/.build
-> endef
-> 
+> Fran?ois ?
+>
+> /usr/bin/perl "-Iinc" /usr/share/perl/5.20/ExtUtils/xsubpp  -typemap /usr/share/perl/5.20/ExtUtils/typemap -typemap typemap  SSLeay.xs > SSLeay.xsc && mv SSLeay.xsc SSLeay.c
+> make[1]: *** No rule to make target '/home/chroot/media/code/buildroot/autobuilder/instance-1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/perl5/5.18.2/i686-linux/CORE/vutil.h', needed by 'SSLeay.o'.  Stop.
+>
+>>        arm |                 php-yaml-1.1.1 | NOK | http://autobuild.buildroot.net/results/c1454491c21c81a2f01b5f21aeff5c39f0a49155/
 
-I believe this is also fixed in Samuel's pending gendoc patches.
+a quick fix is add another `touch` for vutil.h in perl.mk (see
+http://git.buildroot.net/buildroot/commit/package/perl?id=63d0d8040ab4ba8956a13dafd73e2fa044e29c8b)
 
-Best regards,
-Thomas
+the real fix is building a host-perl (the patch serie is already is
+the patchwork queue)
+
+Fran?ois
+
+>
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
