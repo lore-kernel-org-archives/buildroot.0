@@ -1,65 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:16 +0200
-Subject: [Buildroot] [PATCH 17/18 v4] Makefile: move manual inclusion
+Date: Mon,  8 Sep 2014 01:39:10 +0200
+Subject: [Buildroot] [PATCH 11/18 v4] docs/manual: allow a document to
+	declare where its ressources are
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <de3533b0392d7094bc050b038999f7d40d27e6bc.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <c400cb50a6859399b1d92a510112353ce07de783.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move inclusion of the manual before that of br2-external, so that it is
-possible to use the GENDOC infrastructure from br2-external.
-
-We can no longer use $(pkgname) in our manual post-extract hook, because
-it might no longer be the last file sourced, since br2-external can
-include files after us.
+Avoids hard-coding document's ressources in GENDOC_INNER, so we can
+generate another document with different ressources (if any).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
 ---
-Note: I'm not too fond of this, but $(@D) does not work here. Any idea?
----
- Makefile              | 4 ++--
- docs/manual/manual.mk | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/manual.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index e788f1b..7a11e9e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -388,6 +388,8 @@ include linux/linux.mk
- include system/system.mk
- include fs/common.mk
- 
-+include docs/manual/manual.mk
-+
- include $(BR2_EXTERNAL)/external.mk
- 
- TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
-@@ -931,6 +933,4 @@ release:
- print-version:
- 	@echo $(BR2_VERSION_FULL)
- 
--include docs/manual/manual.mk
--
- .PHONY: $(noconfig_targets)
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 373c382..d0f38ac 100644
+index a37f5e7..befd1ed 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -156,7 +156,7 @@ MANUAL_RESSOURCES = $(TOPDIR)/docs/images
- # Our manual needs to generate lists
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/manual \
- 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+@@ -106,7 +106,8 @@ $$(O)/docs/$(1)/$(1).$(5): $$($$(call UPPERCASE,$(1))_SOURCES) \
+ 			   $(1)-prepare-sources
+ 	$$(Q)$$(call MESSAGE,"Generating $(6) $(1)...")
+ 	$$(Q)mkdir -p $$(@D)
+-	$$(Q)a2x $(7) -f $(3) -d book -L -r $$(TOPDIR)/docs/images \
++	$$(Q)a2x $(7) -f $(3) -d book -L \
++		$$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) \
+ 		$$($(2)_$(3)_A2X_OPTS) \
+ 		--asciidoc-opts="$$($(2)_$(3)_ASCIIDOC_OPTS)" \
+ 		$$(BUILD_DIR)/$(1)/$(1).txt
+@@ -119,6 +120,8 @@ endef
+ # GENDOC -- generates the make targets needed to build asciidoc documentation.
+ #
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++# The variable <DOCUMENT_NAME>_RESSOURCES defines where the document's
++# resources, such as images, are located; must be an absolute path.
+ ################################################################################
+ define GENDOC
+ $$(BUILD_DIR)/$(pkgname):
+@@ -148,4 +151,5 @@ $(pkgname)-clean:
  endef
+ 
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
++MANUAL_RESSOURCES = $(TOPDIR)/docs/images
+ $(eval $(call GENDOC))
 -- 
 1.9.1
