@@ -1,59 +1,124 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 7 Sep 2014 14:17:21 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140907092158.600154db@free-electrons.com>
-References: <20140906063010.93F60101336@stock.ovh.net>
- <20140906203640.09c6d8be@free-electrons.com>
- <87lhpwmr7m.fsf@dell.be.48ers.dk> <20140907092158.600154db@free-electrons.com>
-Message-ID: <CAAXf6LWtNSM5JWfAoz9JEK16qvnEMqPR-BnpV4_kTgBnuXimVg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  7 Sep 2014 14:23:25 +0200
+Subject: [Buildroot] [PATCH] libiscsi: add patch to fix largefile related
+	issues
+Message-ID: <1410092605-5592-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 7, 2014 at 9:21 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 06 Sep 2014 22:25:33 +0200, Peter Korsgaard wrote:
->
->>  > Seems like Nathaniel autobuilder does not have the ncurses development
->>  > libraries installed (also causing build failures in host-mysql, for
->>  > example). What is our policy regarding ncurses? I have it installed in
->>  > my autobuilder because I use it to run "make menuconfig". But it's true
->>  > it's not technically absolutely required to run a Buildroot build.
->>
->>  > Should we add dependency on host-ncurses where appropriate? Or should
->>  > we make ncurses development files on the build machine a mandatory
->>  > dependency? What if the user uses only xconfig or gconfig?
->>
->> Given how many people use menuconfig, I think we should just make
->> ncurses a mandatory dependency. Just about anybody doing embedded Linux
->> development needs them anyway to configure
->> barebox/linux/busybox/uclibc/ctng/..
->>
->> If not, then we would also need to add host-ncurses to our
->> barebox/linux/busybox/uclibc-menuconfig targets.
->
-> Well not sure we want to go down this road: it would mean we should add
-> host-qt as a dependency of the linux-xconfig target for example. We
-> could also decide that the *-menuconfig targets need to have curses-dev
-> installed on the build machine, but that the package that we build and
-> that need host-curses will depend on host-curses.
->
-> But well, menuconfig is indeed widely used, so maybe the easiest
-> solution would be to make ncurses-dev a mandatory dependency.
->
+This commit adds a patch to libiscsi, to fix largefile related issues
+occuring in two situations:
 
-An alternative is to use the suitable-host-package mechanism in such
-cases: if the host does have ncurses (but the same could be done for
-autoconf, automake, flex, bison, and other host packages) then build
-it inside buildroot. If it does, then just use them directly.
-Since the build of host-ncurses does take some time, it may be
-advantageous for the user to install ncurses on the host anyway, to
-avoid long build times, so a notice at the end of the build process to
-suggest that could be useful.
+ * glibc toolchains, due to the way _FILE_OFFSET_BITS=64 is handled,
+   by declaring the *64() functions as aliases to the non-64*() ones.
 
-Best regards,
-Thomas
+ * uClibc toolchains without largefile support.
+
+First problem was visible in:
+
+  http://autobuild.buildroot.org/results/b52/b52782c7ada0db098620bd8eceedd7b84515446b/
+
+Second problem was visible in:
+
+  http://autobuild.buildroot.org/results/23c/23c27fc7c4836dfd2527e52d95d5e72905ece7be/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...005-ld_iscsi-fix-largefile-related-issues.patch | 83 ++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+ create mode 100644 package/libiscsi/libiscsi-0005-ld_iscsi-fix-largefile-related-issues.patch
+
+diff --git a/package/libiscsi/libiscsi-0005-ld_iscsi-fix-largefile-related-issues.patch b/package/libiscsi/libiscsi-0005-ld_iscsi-fix-largefile-related-issues.patch
+new file mode 100644
+index 0000000..05ad8eb
+--- /dev/null
++++ b/package/libiscsi/libiscsi-0005-ld_iscsi-fix-largefile-related-issues.patch
+@@ -0,0 +1,83 @@
++From b77db7fa6cd00e1412fdd186180996f8d622b275 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Sep 2014 12:21:04 +0200
++Subject: [PATCH 5/5] ld_iscsi: fix largefile related issues
++
++This commit fixes two related issues in the ld_iscsi example with
++largefile support.
++
++The first issue appears when building libiscsi against the glibc C
++library, with the flags -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
++-D_FILE_OFFSET_BITS=64:
++
++{standard input}: Assembler messages:
++{standard input}:2774: Error: symbol `__fxstat64' is already defined
++{standard input}:2850: Error: symbol `__lxstat64' is already defined
++{standard input}:2938: Error: symbol `__xstat64' is already defined
++
++This is due to the fact that when _FILE_OFFSET_BITS=64 is passed, the
++*64() functions are defined by the C library as aliases to the
++non-64*() functions, because those ones directly support large files
++(i.e 64 bits).
++
++The second issue appears when building libiscsi against the uClibc C
++library, in a configuration that doesn't have largefile support. In
++this case, the ld_iscsi that tries to use stat64 or some other *64()
++functions cannot build, because such functions are not provided by the
++C library. Of course, ld_iscsi does not need to wrap the *64()
++functions in such a situation, because they do not exist.
++
++This commit fixes those problems by enclosing the *64() related code
++of ld_iscsi in the following compile time conditional:
++
++This ensures that the *64() function handling is here only if
++largefile support is available and enabled (_LARGEFILE_SOURCE64) and
++if non-*64() functions are not already 64 bits capable (in which case
++the 64*() functions are just aliases for the non-64*() ones).
++
++See also
++http://www.gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html
++for more details about the meaning of those macros.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ examples/ld_iscsi.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/examples/ld_iscsi.c b/examples/ld_iscsi.c
++index 0cf2724..02f9d25 100644
++--- a/examples/ld_iscsi.c
+++++ b/examples/ld_iscsi.c
++@@ -543,6 +543,7 @@ int dup2(int oldfd, int newfd)
++ 	return real_dup2(oldfd, newfd);
++ }
++ 
+++#if defined(_LARGEFILE64_SOURCE) && _FILE_OFFSET_BITS != 64
++ 
++ int (*real_fxstat64)(int ver, int fd, struct stat64 *buf);
++ 
++@@ -591,6 +592,7 @@ int __xstat64(int ver, const char *path, struct stat64 *buf)
++ 	return __lxstat64(ver, path, buf);
++ }
++ 
+++#endif
++ 
++ static void __attribute__((constructor)) _init(void)
++ {
++@@ -669,6 +671,7 @@ static void __attribute__((constructor)) _init(void)
++ 		exit(10);
++ 	}
++ 
+++#if defined(_LARGEFILE64_SOURCE) && _FILE_OFFSET_BITS != 64
++ 	real_fxstat64 = dlsym(RTLD_NEXT, "__fxstat64");
++ 	if (real_fxstat64 == NULL) {
++ 		LD_ISCSI_DPRINTF(0,"Failed to dlsym(__fxstat64)");
++@@ -683,4 +686,5 @@ static void __attribute__((constructor)) _init(void)
++ 	if (real_xstat64 == NULL) {
++ 		LD_ISCSI_DPRINTF(0,"Failed to dlsym(__xstat64)");
++ 	}
+++#endif
++ }
++-- 
++2.0.0
++
+-- 
+2.0.0
