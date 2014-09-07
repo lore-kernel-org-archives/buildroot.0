@@ -1,129 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 17:03:57 +0200
-Subject: [Buildroot] [PATCH v3 2/4] gendoc infra: move manual build
- location into $(BUILD_DIR)/manual
-In-Reply-To: <1409078947-5093-2-git-send-email-s.martin49@gmail.com>
-References: <1409078947-5093-1-git-send-email-s.martin49@gmail.com>
- <1409078947-5093-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140907150357.GG31418@free.fr>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Sun, 07 Sep 2014 23:34:55 +0800
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAAXf6LWtNSM5JWfAoz9JEK16qvnEMqPR-BnpV4_kTgBnuXimVg@mail.gmail.com>
+References: <20140906063010.93F60101336@stock.ovh.net>
+ <20140906203640.09c6d8be@free-electrons.com>
+ <87lhpwmr7m.fsf@dell.be.48ers.dk>
+ <20140907092158.600154db@free-electrons.com>
+ <CAAXf6LWtNSM5JWfAoz9JEK16qvnEMqPR-BnpV4_kTgBnuXimVg@mail.gmail.com>
+Message-ID: <540C7B1F.5030902@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,  All,
-
-On 2014-08-26 20:49 +0200, Samuel Martin spake thusly:
-> This patch reworks the manual source preparation by:
-> - moving the build directory under $(BUILD_DIR)/, this keeps consistency
->   with the other Buildroot infrastructures;
-> - adding a couple of targets: 'manual-rsync' and 'manual-prepare-sources',
->   to deal more efficiently with the manual sources and avoid rsync-ing
->   them on every single manual-* target.
+On 07/09/14 20:17, Thomas De Schampheleire wrote:
+> On Sun, Sep 7, 2014 at 9:21 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Sat, 06 Sep 2014 22:25:33 +0200, Peter Korsgaard wrote:
+>>
+>>>  > Seems like Nathaniel autobuilder does not have the ncurses development
+>>>  > libraries installed (also causing build failures in host-mysql, for
+>>>  > example). What is our policy regarding ncurses? I have it installed in
+>>>  > my autobuilder because I use it to run "make menuconfig". But it's true
+>>>  > it's not technically absolutely required to run a Buildroot build.
+>>>
+>>>  > Should we add dependency on host-ncurses where appropriate? Or should
+>>>  > we make ncurses development files on the build machine a mandatory
+>>>  > dependency? What if the user uses only xconfig or gconfig?
+>>>
+>>> Given how many people use menuconfig, I think we should just make
+>>> ncurses a mandatory dependency. Just about anybody doing embedded Linux
+>>> development needs them anyway to configure
+>>> barebox/linux/busybox/uclibc/ctng/..
+>>>
+>>> If not, then we would also need to add host-ncurses to our
+>>> barebox/linux/busybox/uclibc-menuconfig targets.
+>>
+>> Well not sure we want to go down this road: it would mean we should add
+>> host-qt as a dependency of the linux-xconfig target for example. We
+>> could also decide that the *-menuconfig targets need to have curses-dev
+>> installed on the build machine, but that the package that we build and
+>> that need host-curses will depend on host-curses.
+>>
+>> But well, menuconfig is indeed widely used, so maybe the easiest
+>> solution would be to make ncurses-dev a mandatory dependency.
+>>
 > 
-> The 'manual-rsync' target only copies the manual sources under git, while
-> the 'manual-prepare-sources' also takes care of the generated ones. These
-> targets are now run only once,  and the manual build is no longer cleaned
-> after each manual format generation.
+> An alternative is to use the suitable-host-package mechanism in such
+> cases: if the host does have ncurses (but the same could be done for
+> autoconf, automake, flex, bison, and other host packages) then build
+> it inside buildroot. If it does, then just use them directly.
+> Since the build of host-ncurses does take some time, it may be
+> advantageous for the user to install ncurses on the host anyway, to
+> avoid long build times, so a notice at the end of the build process to
+> suggest that could be useful.
 > 
-> Now, the 'manual-clean' target only remove the manual build directory, but
-> keeps the output one $(O)/output/doc/manual unchanged.
-> 
-> Doing so (moving the manual build directory and keeping it between 2
-> manual format generation) ensures that all generated sources are taken
-> in account when generating the manual [1].
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
-> 
-> Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-Woot! I totally love this patch! :-) It will make it so much easier to
-build a manual-like document from br2-external! :-)
-
-But see a comment below...
-
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index 136f725..e86f872 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -1,11 +1,20 @@
-> +$(BUILD_DIR)/$(pkgname):
-> +	$(Q)mkdir -p $@
-> +
-> +manual-rsync: $(BUILD_DIR)/$(pkgname)
-> +	$(Q)$(call MESSAGE,"Preparing the manual sources...")
-> +	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/$(pkgname)
-
-Would it be possible to still have this as part of GENDOC_INNER, so it
-is useable to generate another document?
-
-I think I'll cary this patch series in my branch, and do some additional
-(probably cumulative, so it is not a show-blocker) changes. So:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Thanks again for this work! :-)
-
-Regards,
-Yann E. MORIN.
-
->  # Packages included in BR2_EXTERNAL are not part of buildroot, so they
->  # should not be included in the manual.
-> -manual-update-lists: manual-check-dependencies-lists
-> +manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/$(pkgname)
->  	$(Q)$(call MESSAGE,"Updating the manual lists...")
-> -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-> +	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
->  		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
->  		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
->  
-> +manual-prepare-sources: manual-rsync manual-update-lists
-> +
->  # we can't use suitable-host-package here because that's not available in
->  # the context of 'make release'
->  manual-check-dependencies:
-> @@ -65,14 +74,13 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
->  			   $$($$(call UPPERCASE,$(1))_SOURCES) \
->  			   manual-check-dependencies \
->  			   manual-check-dependencies-$(3) \
-> -			   manual-update-lists
-> +			   manual-prepare-sources
->  	$$(Q)$$(call MESSAGE,"Generating $(5) $(1)...")
-> -	$$(Q)mkdir -p $$(@D)/.build
-> -	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
-> +	$$(Q)mkdir -p $$(@D)
->  	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
->  		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
-> -		-D $$(@D) $$(@D)/.build/$(1).txt
-> -	-$$(Q)rm -rf $$(@D)/.build
-> +		-D $$(@D) \
-> +		$$(BUILD_DIR)/$(1)/$(1).txt
->  endef
->  
->  ################################################################################
-> @@ -94,7 +102,7 @@ $(call GENDOC_INNER,$(pkgname),text,text,text,text)
->  $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
->  clean: $(pkgname)-clean
->  $(pkgname)-clean:
-> -	$$(Q)$$(RM) -rf $$(O)/docs/$(pkgname)
-> +	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
->  .PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
->  endef
->  
-> -- 
-> 2.1.0
-> 
+> Best regards,
+> Thomas
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+Just my two cents:
+
+For anything that requires user interaction like xconfig for menuconfig
+(for buildroot or the kernel for example), use the host's libraries -
+They are likely to have them installed and it will be quicker if I want
+to change a config option. Also, none of the config binaries will be
+copied to the target.
+
+For any package that depends on ncurses to build, build host-ncurses -
+This provides isolation against any changes between distributions and
+ensures that we have control over versions.
+
+Additionally, if the build time dependencies of BR are kept to a
+minimum, it may be beneficial some situations where the user may not
+have control of the building system - I doubt anyone actually uses BR in
+this situation, but it's possible. I can see a situation where the user
+configures BR on their laptop, and pushes the config to a more powerful
+shared system to build it.
+
+Finally, I'm not fond of the suitable-host-package approach Thomas has
+mentioned: while again, I doubt the probability of such a case
+happening, things like distro-specific patches or behavior may change
+builds. (For example, my router firmware segfaults during build on
+Ubuntu but not on Debian)
+
+Thanks, Nathaniel
