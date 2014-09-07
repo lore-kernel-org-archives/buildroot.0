@@ -1,74 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Sep 2014 01:39:14 +0200
-Subject: [Buildroot] [PATCH 15/18 v4] docs/manual: allow documents to define
-	some hooks, as for a package
+Date: Mon,  8 Sep 2014 01:39:15 +0200
+Subject: [Buildroot] [PATCH 16/18 v4] docs/manual: use the new hooks instead
+	of gendoc rules
 In-Reply-To: <cover.1410132603.git.yann.morin.1998@free.fr>
 References: <cover.1410132603.git.yann.morin.1998@free.fr>
-Message-ID: <05dca7f844f35041c1203e36a8adc878d22804f0.1410132603.git.yann.morin.1998@free.fr>
+Message-ID: <48b6de15a74199f75c1e4c904426bd0d6bba3886.1410132603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow documents to define two hooks:
-  - DOC_EXTRA_CHECK_DEPENDENCIES
-    to check for extra dependencies required by this document
-  - DOC_EXTRA_CHECK_DEPENDENCIES_FMT
-    ditto, but for the specific format
-  - DOC_POST_EXTRACT_HOOKS:
-    to run additional actions to fill-in the build directory
-
-(Replace 'DOC' with the uppercase name of the document, and 'FMT' with
-the format.)
-
-This is supposed to replace the current use of overloading the internal
-dependency rules, and makes GENDOC behave yet a bit more like the
-package infrastructure.
+Also reorder a bit the definition of the variables, to more ressemble
+a package. Yet a bit more...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- docs/manual/manual.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ docs/manual/manual.mk | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index cd944fa..119010b 100644
+index 119010b..373c382 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -55,10 +55,9 @@ $(1): $(1)-$(5)
- .PHONY: $(1)-$(5)
- $(1)-$(5): $$(O)/docs/$(1)/$(1).$(6)
- 
--$(1)-check-dependencies: gendoc-check-dependencies
--
- gendoc-check-dependencies-$(5):
- $(1)-check-dependencies-$(5): gendoc-check-dependencies-$(5)
-+	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_EXTRA_CHECK_DEPENDENCIES_$(5)),$$(call $$(hook))$$(sep))
- 
- $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
- ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
-@@ -110,6 +109,10 @@ endef
- # resources, such as images, are located; must be an absolute path.
+@@ -150,25 +150,26 @@ endef
+ # The Buildroot manual
  ################################################################################
- define GENDOC
-+# Single line, because splitting a foreach is not easy...
-+$(pkgname)-check-dependencies: gendoc-check-dependencies
-+	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_EXTRA_CHECK_DEPENDENCIES),$$(call $$(hook))$$(sep))
-+
- $$(BUILD_DIR)/$(pkgname):
- 	$$(Q)mkdir -p $$@
  
-@@ -117,7 +120,9 @@ $(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
- 	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
- 	$$(Q)rsync -a $(pkgdir) $$^
+-# Our manual needs to generate lists
+-manual-prepare-sources: manual-update-lists
++MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
++MANUAL_RESSOURCES = $(TOPDIR)/docs/images
  
-+# Single line, because splitting a foreach is not easy...
- $(pkgname)-prepare-sources: $(pkgname)-rsync
-+	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_EXTRACT_HOOKS),$$(call $$(hook))$$(sep))
+-# Packages included in BR2_EXTERNAL are not part of buildroot, so they
+-# should not be included in the manual.
+-.PHONY: manual-update-lists
+-manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/$(pkgname)
++# Our manual needs to generate lists
++define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+ 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
+ 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
++endef
++MANUAL_POST_EXTRACT_HOOKS += MANUAL_GEN_LISTS
  
- $(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
+-manual-check-dependencies-lists:
++# Our list-generating script requires argparse
++define MANUAL_CHECK_LISTS_DEPS
+ 	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
+ 		echo "You need python with argparse on your host to generate" \
+ 			"the list of packages in the manual"; \
+ 		exit 1; \
+ 	fi
++endef
++MANUAL_EXTRA_CHECK_DEPENDENCIES += MANUAL_CHECK_LISTS_DEPS
+ 
+-MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+-MANUAL_RESSOURCES = $(TOPDIR)/docs/images
+ $(eval $(call GENDOC))
 -- 
 1.9.1
