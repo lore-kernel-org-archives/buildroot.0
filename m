@@ -1,59 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Sep 2014 11:18:26 +0200
-Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
-In-Reply-To: <20140907091406.GA4230@free.fr>
-References: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
- <20140906104208.GA3957@free.fr> <540C076B.30901@tribudubois.net>
- <20140907091406.GA4230@free.fr>
-Message-ID: <20140907091826.GA31418@free.fr>
+Date: Sun, 7 Sep 2014 11:24:21 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix call to a2x
+In-Reply-To: <757f6e8c-1ec8-4a9d-ab02-48a54c6f3a19@email.android.com>
+References: <1410046878-22428-1-git-send-email-yann.morin.1998@free.fr>
+ <757f6e8c-1ec8-4a9d-ab02-48a54c6f3a19@email.android.com>
+Message-ID: <20140907092421.GB31418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jean-Christophe, All,
+Thomas, All,
 
-On 2014-09-07 11:14 +0200, Yann E. MORIN spake thusly:
-> On 2014-09-07 09:21 +0200, Jean-Christophe DUBOIS spake thusly:
-> > Le 09/06/2014 12:42 PM, Yann E. MORIN a ?crit :
-> [--SNIP--]
-> > >>diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-> > >>new file mode 100644
-> > >>index 0000000..880bf5e
-> > >>--- /dev/null
-> > >>+++ b/package/bcache-tools/bcache-tools.mk
-> > >>@@ -0,0 +1,31 @@
-> > >>+################################################################################
-> > >>+#
-> > >>+# bcache-tools
-> > >>+#
-> > >>+################################################################################
-> > >>+
-> > >>+BCACHE_TOOLS_VERSION = v1.0.7
-> > >>+BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
-> > >>+BCACHE_TOOLS_LICENSE = GPLv2
-> > >>+BCACHE_TOOLS_LICENSE_FILES = COPYING
-> > >>+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
-> > >... so you do not need to depend on it here, just in the Config.in file.
+On 2014-09-07 07:15 +0200, Thomas De Schampheleire spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+> >While investigating an asciidoc issue in another project, I've
+> >benn told on the asciidoc mailing list that options should come
+> >before the input file:
+> >    https://groups.google.com/d/msg/asciidoc/cs8-ihIKYXo/pdt-xjeHr8oJ
+> >
+> >So be it. ;-)
+> >
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >---
+> > docs/manual/manual.mk | 4 ++--
+> > 1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> >diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> >index 8d401a2..9486bc6 100644
+> >--- a/docs/manual/manual.mk
+> >+++ b/docs/manual/manual.mk
+> >@@ -70,8 +70,8 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+> > 	$$(Q)mkdir -p $$(@D)/.build
+> > 	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
+> > 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
+> >-	        -D $$(@D) $$(@D)/.build/$(1).txt \
+> >-	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
+> >+	        -D $$(@D) --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
+> >+	        $$(@D)/.build/$(1).txt
+> > 	-$$(Q)rm -rf $$(@D)/.build
+> > endef
 > > 
-> > Well, I need to make sure that "udev" is build before bcache-tools because
-> > it tries to put files in the /lib/udev/ directory of the target file system
-> > ans this directory doesn't exist before the udev package is built.
 > 
-> In this case, just add:
-> 
->     # bcache-tools forgets to create the required directory... :-/
->     define BCACHE_TOOLS_UDEV_DIR
->         mkdir -p $(TARGET_DIR)/lib/udev/
->     endef
->     BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_UDEV_DIR
-> 
-> And you're done. ;-)
+> I believe this is also fixed in Samuel's pending gendoc patches.
 
-Of course, since cafeine hasn't yet fully kicked-in in my body, this
-can/should be squashed in the existing PRE_INSTALL hook which creates
-the man8 directory.
+Indeed.
+
+I have to admit I lost track on which gendoc series is still pending,
+given the amount of work you and Samuel have put into it (Thanks!)
+
+I'll review that series in a moment.
+
+In the meantime, I'll update the status of this patch in Patchwork.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
