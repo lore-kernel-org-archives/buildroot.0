@@ -1,134 +1,67 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Sun,  7 Sep 2014 22:27:42 +0200
-Subject: [Buildroot] [PATCH v8] bcache-tools: Adding package.
-Message-ID: <1410121662-23096-1-git-send-email-jcd@tribudubois.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Sep 2014 22:34:51 +0200
+Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
+In-Reply-To: <540CBFA7.3070603@tribudubois.net>
+References: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
+ <20140906104208.GA3957@free.fr> <540C076B.30901@tribudubois.net>
+ <20140907091406.GA4230@free.fr> <20140907091826.GA31418@free.fr>
+ <540CBFA7.3070603@tribudubois.net>
+Message-ID: <20140907203451.GI31418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the bcache tools, required to setup the linux bcache
-feature of the Linux kernel.
+Jean-Christophe, All,
 
-Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
----
-Changes v1 to v2
- * Remove 'support' word from comment statement in Config.in.
- * Use github helper to get the project site instead of hardcoded URL.
-Changes v2 to v3
- * Added bcache-tools description in Config help.
- * Added bcache-tools URL in Config help.
- * Added BR2_LARGEFILE BR2_USE_WCHAR and BR2_USE_MMU dependencies in Config.
- * Added BR2_PACKAGE_UTIL_LINUX selection in Config.
- * Added new requirements in Config comment.
- * Use POST_EXTRACT_HOOKS to modify Makefile.
- * Pass $(TARGET_CONFIGURE_OPTS) in env variables to $(MAKE).
- * Create man8 dir as part of PRE_INSTALL_TARGET_HOOKS.
-Changes v3 to v4
- * Move from .zip file to .tar.gz as download file in .mk file.
- * Use complete git tag as version in .mk file.
- * Remove explicit extract rule from .mk file (use implicite rule).
-Changes v4 to v5
- * Remove explicit package name in .mk (rely on default behavior).
-Changes v5 to v6
- * Switch spaces to tabs in Config.in
- * Don't patch Makefile for pkg-config in .mk file.
-Changes v6 to v7
- * change eudev dependency to udev dependency in Makefile.
-Changes v7 to v8
- * remove makefile dependency on udev
- * install /lib/udev/rules.d directory in PRE_INSTALL_TARGET_HOOKS
----
- package/Config.in                    |  1 +
- package/bcache-tools/Config.in       | 22 +++++++++++++++++++++
- package/bcache-tools/bcache-tools.mk | 37 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+)
- create mode 100644 package/bcache-tools/Config.in
- create mode 100644 package/bcache-tools/bcache-tools.mk
+On 2014-09-07 22:27 +0200, Jean-Christophe DUBOIS spake thusly:
+> Le 09/07/2014 11:18 AM, Yann E. MORIN a ?crit :
+> >On 2014-09-07 11:14 +0200, Yann E. MORIN spake thusly:
+[--SNIP--]
+> >>In this case, just add:
+> >>
+> >>     # bcache-tools forgets to create the required directory... :-/
+> >>     define BCACHE_TOOLS_UDEV_DIR
+> >>         mkdir -p $(TARGET_DIR)/lib/udev/
+> >>     endef
+> >>     BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_UDEV_DIR
+> >>
+> >>And you're done. ;-)
+> >Of course, since cafeine hasn't yet fully kicked-in in my body, this
+> >can/should be squashed in the existing PRE_INSTALL hook which creates
+> >the man8 directory.
+> 
+> OK, I'll do it this way.
 
-diff --git a/package/Config.in b/package/Config.in
-index 883dd66..ef0a22a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -280,6 +280,7 @@ endmenu
- 	source "package/a10disp/Config.in"
- 	source "package/acpid/Config.in"
- 	source "package/avrdude/Config.in"
-+	source "package/bcache-tools/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
-new file mode 100644
-index 0000000..a3f7897
---- /dev/null
-+++ b/package/bcache-tools/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_BCACHE_TOOLS
-+	bool "bcache tools"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_MMU # util-linux (libblkid)
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	help
-+	  Bcache is a Linux kernel block layer cache. It allows one or
-+	  more fast disk drives such as flash-based solid state drives (SSDs)
-+	  to act as a cache for one or more slower hard disk drives.
-+
-+	  http://bcache.evilpiepirate.org/
-+
-+	  This is the user space bcache tools, required to setup the linux
-+	  bcache feature of the Linux kernel.
-+
-+comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
-diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-new file mode 100644
-index 0000000..e537471
---- /dev/null
-+++ b/package/bcache-tools/bcache-tools.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# bcache-tools
-+#
-+################################################################################
-+
-+BCACHE_TOOLS_VERSION = v1.0.7
-+BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
-+BCACHE_TOOLS_LICENSE = GPLv2
-+BCACHE_TOOLS_LICENSE_FILES = COPYING
-+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux
-+
-+# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
-+# the bcache-tools Makefile to alter CFLAGS
-+define BCACHE_TOOLS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+# The bcache-tools Makefile expects the man8 directory to exist.
-+define BCACHE_TOOLS_INSTALL_MAN8
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
-+endef
-+
-+# The bcache-tools Makefile expects the /lib/udev/rules.d directory to exist.
-+define BCACHE_TOOLS_INSTALL_UDEV
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/lib/udev/rules.d
-+endef
-+
-+BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
-+BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_UDEV
-+
-+define BCACHE_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+OK, thanks!
+
+> Now just for my information, why is it better to force the creation of a
+> missing directory rather
+> than force as a dependency the build of the package bringing this directory?
+
+Well, the udev package is not required to build bcache-tools. It;s just
+bcache-tools' Makefile that is deficient, and forgets to create the
+directory to start with.
+
+Also, it is often the case that a decvelopper needs to build just one
+package to test a build failure or a version bump. The more dependencies
+there are to a package, the longer the build will be, the more
+frustrating it becomes to the developper, since udev is not really a
+build dependency.
+
+And, since you anyway already have a hook to create one directory, why
+not use it to create the other one?
+
+Thanks for your efforts with this patch! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
