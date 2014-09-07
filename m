@@ -1,35 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Sep 2014 15:06:31 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 07 Sep 2014 10:07:48 -0300
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <540C55F7.9040506@zacarias.com.ar>
-References: <20140907063013.1CB98101499@stock.ovh.net>
- <20140907100918.6b017a09@free-electrons.com>
- <540C55F7.9040506@zacarias.com.ar>
-Message-ID: <20140907150631.750117a7@free-electrons.com>
+In-Reply-To: <20140907150631.750117a7@free-electrons.com>
+References: <20140907063013.1CB98101499@stock.ovh.net>	<20140907100918.6b017a09@free-electrons.com>	<540C55F7.9040506@zacarias.com.ar>
+ <20140907150631.750117a7@free-electrons.com>
+Message-ID: <540C58A4.4080205@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 09/07/2014 10:06 AM, Thomas Petazzoni wrote:
 
-On Sun, 07 Sep 2014 09:56:23 -0300, Gustavo Zacarias wrote:
+>> Outdated uclibc ptrace.h header, sparc is also affected by this however
+>> since there's no autobuilder for that target it's going unnoticed.
+>> glibc has the necessary definitions, so a uclibc header update is in order.
+> 
+> We already have
+> package/uclibc/0.9.33.2/uclibc-0020-update-ptrace.h-to-latest-from-glibc.patch
+> but I guess it doesn't handle those definitions.
 
-> Outdated uclibc ptrace.h header, sparc is also affected by this however
-> since there's no autobuilder for that target it's going unnoticed.
-> glibc has the necessary definitions, so a uclibc header update is in order.
+That updated common, but powerpc, sparc, microblaze and some other dead
+architectures have their own (same on *glibc).
 
-We already have
-package/uclibc/0.9.33.2/uclibc-0020-update-ptrace.h-to-latest-from-glibc.patch
-but I guess it doesn't handle those definitions.
+> Like ac_cv_header_sys_ptrace_h=no ?
 
-> We can exclude ptrace for powerpc & sparc in the meantime.
-
-Like ac_cv_header_sys_ptrace_h=no ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Probably, i'm running a test build at the moment and submit a patch shortly.
+Regards.
