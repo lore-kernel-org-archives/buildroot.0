@@ -1,54 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 8 Sep 2014 15:23:35 +0300
-Subject: [Buildroot] [PATCH] qt4 webkit: Disable for MIPS64 n32
-In-Reply-To: <1410178635-53697-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1410178635-53697-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140908122335.GR2522@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Sep 2014 14:29:02 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <540D9F28.1010709@imgtec.com>
+References: <20140907063013.1CB98101499@stock.ovh.net>
+ <20140907100918.6b017a09@free-electrons.com>
+ <540D69A4.4080503@imgtec.com>
+ <20140908103445.6a8858b4@free-electrons.com>
+ <540D6ADB.30300@imgtec.com>
+ <20140908111733.1966e641@free-electrons.com>
+ <540D9F28.1010709@imgtec.com>
+Message-ID: <20140908142902.4adfd667@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+Dear Vicente Olivert Riera,
 
-On Mon, Sep 08, 2014 at 01:17:15PM +0100, Vicente Olivert Riera wrote:
-> qt4 webkit fails to compile for MIPS64 n32. A bug has been reported
-> upstream, so we disable this package until upstream fixes the problem.
-> 
-> Upstream bug:
->   https://bugreports.qt-project.org/browse/QTBUG-39224
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/2ab/2ab5ab179dab9e1a47092b066f97d48c75ab935b/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-> ---
->  package/qt/Config.in |    3 +++
->  1 files changed, 3 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index da159b4..8c0fe54 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -371,6 +371,9 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
->  
->  config BR2_PACKAGE_QT_WEBKIT
->  	bool "WebKit Module"
-> +	# qt-4.8.6 webkit: fails to compile on MIPS64 n32 platforms
-> +	# https://bugreports.qt-project.org/browse/QTBUG-39224
-> +	depends on !BR2_MIPS_NABI32
+On Mon, 8 Sep 2014 13:20:56 +0100, Vicente Olivert Riera wrote:
 
-Please update the dependencies of the comment below accordingly.
+> One could think we should add that dependence to the 
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT symbols instead, but there are 
+> packages depending on that symbol which compile fine on MIPS64 n32, for 
+> instance grantlee.
 
-baruch
+That doesn't make sense. More precisely, it's your commit
+a88dceb951de977ad2d896d697f87d98e9705280 that doesn't make sense.
+You're adding a "depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT" to
+grantlee because grantlee has "select BR2_PACKAGE_QT_SCRIPT".
 
->  	depends on BR2_PACKAGE_QT_SHARED
->  	depends on BR2_PACKAGE_QT_GUI_MODULE
->  	depends on BR2_PACKAGE_QT_NETWORK
+The reason why your commit doesn't make sense appears clearly now: the
+set of architectures that have support for QtScript and QtWebkit is not
+the same. So, if QtScript is restricted to certain architectures,
+please introduce a BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT separate from
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT, and use them appropriately.
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
