@@ -1,33 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Sep 2014 23:17:25 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: SystemInfo: fix s/java/javac/
-	typo
-Message-ID: <1410211045-18241-1-git-send-email-peter@korsgaard.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 8 Sep 2014 21:43:45 +0000
+Subject: [Buildroot] [PATCH] portmap: fix static linking
+Message-ID: <F9C551623D2CBB4C9488801D14F864C68C8AD946@ex-mb3.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise it fails on machines without javac
+Portmap builds and links, however, does not get built correctly when
+BR2_PREFER_STATIC_LIB is selected.  There are no dynamic libraries in
+rootfs.tar, however, portmap gets linked dynamically without regards to
+the PREFER_STATIC_LIB tags.  LDFLAGS was not being passed into the build of
+portmap.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
 ---
- scripts/autobuild-run | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 496f941..accccef 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -115,7 +115,7 @@ class SystemInfo:
-                                stdout=devnull, stderr=devnull) == 1:
-                 self.has_java = True
+diff -Naur a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+--- a/package/portmap/portmap.mk	2014-02-27 14:51:23.000000000 -0600
++++ b/package/portmap/portmap.mk	2014-09-08 16:39:13.715370478 -0500
+@@ -15,8 +15,7 @@
+ endif
  
--        self.has_java = False
-+        self.has_javac = False
-         if subprocess.call(["which", "javac"], stdout=devnull, stderr=devnull) == 0:
-             if subprocess.call("javac -version | grep gcj", shell=True,
-                                stdout=devnull, stderr=devnull) == 1:
--- 
-2.0.0
+ define PORTMAP_BUILD_CMDS
+-	CFLAGS="$(TARGET_CFLAGS)" \
+-	$(MAKE) CC="$(TARGET_CC)" -C $(@D) $(PORTMAP_FLAGS)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(PORTMAP_FLAGS)
+ endef
+ 
