@@ -1,29 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Sep 2014 22:21:59 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: also check for timeout
-In-Reply-To: <1410207471-16986-1-git-send-email-peter@korsgaard.com>
-References: <1410207471-16986-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20140908222159.1df4f88c@free-electrons.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 8 Sep 2014 20:48:21 +0000
+Subject: [Buildroot] [PATCH] parted not building static
+In-Reply-To: <20140908220626.11ab93d7@free-electrons.com>
+References: <F9C551623D2CBB4C9488801D14F864C68C8AD59C@ex-mb3.corp.adtran.com>
+ <20140908220626.11ab93d7@free-electrons.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C68C8AD8A2@ex-mb3.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+> Your Buildroot tree is probably not up-to-date because this has already
 
-On Mon,  8 Sep 2014 22:17:51 +0200, Peter Korsgaard wrote:
-> Timeout is part of coreutils since v8, so older distributions don't have it.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  scripts/autobuild-run | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Not even that.  I'm using the released version of 2014.02 to diff against.
 
-Applied, thanks.
+I didn't do my due diligence on this one.  I figured that was probably not
+something that anyone else would have seen.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I _SHOULD_ have done a sync with today and checked against that.
+
+Sorry about that.  Shouldn't have wasted your time.
+
+Andy
