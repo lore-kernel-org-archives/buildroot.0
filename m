@@ -1,55 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Sep 2014 11:27:03 +0200
-Subject: [Buildroot] [PATCH 1/2] libtirpc: add dependency on atomic
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 8 Sep 2014 09:27:21 +0000
+Subject: [Buildroot] [PATCH 2/2] zeromq: add dependency on atomic
 	operations
-In-Reply-To: <1410168181.4784.16.camel@abrodkin-8560l.internal.synopsys.com>
+In-Reply-To: <20140908092356.39e9c633@free-electrons.com>
 References: <1410157964-8422-1-git-send-email-abrodkin@synopsys.com>
- <1410157964-8422-2-git-send-email-abrodkin@synopsys.com>
- <20140908092306.12308c5a@free-electrons.com>
- <1410168181.4784.16.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20140908112703.2f405e2f@free-electrons.com>
+ <1410157964-8422-3-git-send-email-abrodkin@synopsys.com>
+ <20140908092356.39e9c633@free-electrons.com>
+Message-ID: <1410168440.4784.19.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hi Thomas,
 
-On Mon, 8 Sep 2014 09:23:02 +0000, Alexey Brodkin wrote:
-
-> > I already tried to solve this thing, but it's much more complicated
-> > than just adding a bunch of "depends on".
+On Mon, 2014-09-08 at 09:23 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
 > 
-> So I assume there's no sense for me to try fixing comments, right?
-> I mean if this won't work either or introduce new problems as you meant.
-
-There is definitely some sense in fixing this stuff. I'm not sure yet
-on how to do this. I had some discussion with Thomas DS a week ago or
-so on IRC about this.
-
-> This is especially important for ARC where these ops are optional.
-> The simplest solution could be to enable BR2_ARCH_HAS_ATOMICS for ARC by
-> default, but this will just attempt to escape from real problem.
+> On Mon,  8 Sep 2014 10:32:44 +0400, Alexey Brodkin wrote:
 > 
-> And as I saw from other autobuild results other architectures are
-> affected like Blackfin for example.
+> > diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+> > index e17963e..9f32c51 100644
+> > --- a/package/cppzmq/Config.in
+> > +++ b/package/cppzmq/Config.in
+> > @@ -5,6 +5,7 @@ config BR2_PACKAGE_CPPZMQ
+> >  	depends on BR2_LARGEFILE # util-linux
+> >  	depends on BR2_USE_WCHAR # util-linux
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> > +	depends on BR2_ARCH_HAS_ATOMICS # zeromq
+> >  	select BR2_PACKAGE_ZEROMQ
+> >  	help
+> >  	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+> 
+> Same thing here: you should change the comment to *not* display it if
+> the architecture doesn't have atomic intrinsics.
 
-Yes, sure, we need to fix the problem. It's just not as simple as
-adding more "depends on", unfortunately :-(
+I assume comments from the previous patch apply here as well, right?
+Especially since atomic ops are only used in "libpgm", i.e. if only
+BR2_PACKAGE_ZEROMQ_PGM is enabled.
 
-> If this is that complicated we may try to discuss it in person on
-> Buildroot summit in few weeks.
-
-Ah, you're planning on coming to the Buildroot meeting? If so, could
-you register to http://elinux.org/Buildroot:DeveloperDaysELCE2014, or
-confirm me that you are coming so that I can add your name to the list
-of participants?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
