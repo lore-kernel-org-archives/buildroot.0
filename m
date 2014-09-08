@@ -1,49 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Sep 2014 21:41:09 +0200
-Subject: [Buildroot] [PATCH 2/2] linenoise: install nothing on target
-In-Reply-To: <1410201034-11041-2-git-send-email-francois.perrad@gadz.org>
-References: <1410201034-11041-1-git-send-email-francois.perrad@gadz.org>
- <1410201034-11041-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140908214109.4fb94ee1@free-electrons.com>
+Date: Mon, 8 Sep 2014 21:43:38 +0200
+Subject: [Buildroot] [PATCH] util-linux: bump to version 2.25.1
+In-Reply-To: <1410189652-4146-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1410189652-4146-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140908214338.070c3a2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Gustavo Zacarias,
 
-On Mon,  8 Sep 2014 20:30:34 +0200, Francois Perrad wrote:
-> linenoise is a static library, so it's enough to install on staging.
-> and the linenoise_example executable is not really useful.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Mon,  8 Sep 2014 12:20:52 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/linenoise/linenoise.mk | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
-> index 562b445..34f85ed 100644
-> --- a/package/linenoise/linenoise.mk
-> +++ b/package/linenoise/linenoise.mk
-> @@ -21,10 +21,4 @@ define LINENOISE_INSTALL_STAGING_CMDS
->  	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(STAGING_DIR)/usr/bin/linenoise_example
->  endef
->  
-> -define LINENOISE_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -m 644 -D $(@D)/linenoise.h          $(TARGET_DIR)/usr/include/linenoise.h
-> -	$(INSTALL) -m 644 -D $(@D)/liblinenoise.a       $(TARGET_DIR)/usr/lib/liblinenoise.a
-> -	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(TARGET_DIR)/usr/bin/linenoise_example
-> -endef
-> -
->  $(eval $(generic-package))
+>  .../util-linux-001-sscanf-no-ms-as.patch           | 75 ++++++++++++++++------
+>  .../util-linux-004-support-static-lib-build.patch  | 57 ----------------
+>  package/util-linux/util-linux.mk                   |  7 +-
+>  3 files changed, 61 insertions(+), 78 deletions(-)
+>  delete mode 100644 package/util-linux/util-linux-004-support-static-lib-build.patch
 
-Then maybe add:
+Indeed util-linux-004-support-static-lib-build.patch was merged
+upstream, so:
 
-# Static library only, nothing to install on target
-LINENOISE_INSTALL_TARGET = NO
-
-Thanks!
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
