@@ -1,36 +1,47 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Tue, 9 Sep 2014 19:17:37 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Sep 2014 21:34:35 +0200
 Subject: [Buildroot] [PATCH] openssh: fix static linking
-In-Reply-To: <20140909183735.GY2522@tarshish>
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C68C8AE2F4@ex-mb3.corp.adtran.com>
 References: <F9C551623D2CBB4C9488801D14F864C68C8AE2F4@ex-mb3.corp.adtran.com>
- <20140909183735.GY2522@tarshish>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C68C8AE33F@ex-mb3.corp.adtran.com>
+Message-ID: <20140909213435.565e0234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > -OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
-> > +OPENSSH_CONF_ENV = LD="$(TARGET_CC)"
-> >  OPENSSH_CONF_OPT = --disable-lastlog --disable-utmp \
+Hello,
 
-> > +OPENSSH_CONFIGURE_ENV += LDFLAGS="$(OPENSSH_LDFLAGS_FOR_CONF)"
+On Tue, 9 Sep 2014 18:29:31 +0000, ANDY KENNEDY wrote:
+
+> When BR2_PREFER_STATIC_LIB is set, openssl is a static library, openssh
+> attempts to build dynamically as the LDFLAGS are dropped out of this build.
+> If PREFER_STATIC is set, add back in --static to the LDFLAGS of openssh
+> to make the linker happy.
 > 
-> Shouldn't this be OPENSSH_CONF_ENV? Have you tested this?
-> 
-> baruch
+> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
 
-Yes, and yes.  Hmmm, that's strange.  Kinda makes me wonder why
-that worked at all.  Made that modification and retesting.
+Sorry, but it does not make sense, because:
 
-Like I said in the other thread, this works about once out of
-three times anyway.  So, maybe I didn't do what I thought I did.
+ifeq ($(BR2_PREFER_STATIC_LIB),y)
+SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
+TARGET_CFLAGS += -static
+TARGET_CXXFLAGS += -static
+TARGET_LDFLAGS += -static
+else
+SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
+endif
 
-I assume that the LDFLAGS=$(TARGET_CFLAGS) are needed, and that
-it _could_ break the build on other platforms.  I don't understand
-why that would have worked for this particular platform I'm on.
+So, TARGET_CFLAGS does have -static.
 
-I'll resubmit when I verify the fix.
+Please make sure to test your patches against the latest master. I'm
+sure you're again testing against 2014.02, and there has been quite a
+few changes since then in terms of static library support.
 
-Andy
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
