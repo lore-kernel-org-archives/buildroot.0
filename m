@@ -1,36 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  9 Sep 2014 17:01:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 6944] building toolchain for sh4 fails
-In-Reply-To: <bug-6944-163@https.bugs.busybox.net/>
-References: <bug-6944-163@https.bugs.busybox.net/>
-Message-ID: <20140909170154.924409D64B@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  9 Sep 2014 20:15:42 +0200
+Subject: [Buildroot] [V2 1/2] linenoise: bump version
+Message-ID: <1410286543-12257-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6944
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/linenoise/linenoise.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #11 from mail at waldemar-brodkorb.de 2014-09-09 17:01:53 UTC ---
-Hi,
-
-I don't think removing m4-nofpu is the right thing to create a good kernel.
-As gcc does not include support for -mno-implicit-fp, there is no way around
-using
-a multilib gcc to compile a kernel without floating point instructions.
-
-See here for an interesting thread:
-http://sourceforge.net/p/linuxsh/mailman/linuxsh-dev/thread/3B732B78.28B8BF39 at pocketpenguins.com/
-
-It seems Codesourcery has some gcc patches included to support
--mno-implicit-fp.
-But the gcc people have rejected it. 
-
-best regards
- Waldemar
-
+diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
+index 4cb1427..562b445 100644
+--- a/package/linenoise/linenoise.mk
++++ b/package/linenoise/linenoise.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINENOISE_VERSION = 27a3b4d5205a5fb3e2101128edd6653bd0c92189
++LINENOISE_VERSION = 828b9dacc52d4ad5a15c89be8fb8691d224f9a4f
+ LINENOISE_SITE = $(call github,antirez,linenoise,$(LINENOISE_VERSION))
+ LINENOISE_LICENSE = BSD-2c
+ LINENOISE_INSTALL_STAGING = YES
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.9.1
