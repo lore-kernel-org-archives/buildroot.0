@@ -1,58 +1,54 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon,  8 Sep 2014 22:06:46 -0400
-Subject: [Buildroot] [PATCH 3/3] ffmpeg: add --pkg-config to configure
+Date: Mon,  8 Sep 2014 22:06:44 -0400
+Subject: [Buildroot] [PATCH 1/3] ffmpeg: consolidate duplicated config
 	options
-In-Reply-To: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
-References: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1410228406-2140-3-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ffmpeg does not understand the PKG_CONFIG env variable,
-so it throws a line like this at the end of its configuration:
-
-WARNING: .../output/host/usr/bin/arm-none-linux-gnueabi-pkg-config not found, library detection may fail.
-
-Apparently, some of the indevs and outdevs need a pkg-config.
-This patch adds the --pkg-config to let ffmpeg know where it
-is.
+Commit 62ab07ef769bd6504fe1db144aaac3fd45db9dad added a bunch
+of hard-coded options.  Some of these options are then again
+added (or negated) based on kconfig settings.  This patch removes
+the hard coded swscale and postproc settings, as they are enabled
+or disabled later.  It also moves the --disable-pic lower
+as an else clause to the part that adds --enable-pic.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/ffmpeg/ffmpeg.mk |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/ffmpeg/ffmpeg.mk |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index d50720b..b1d524e 100644
+index 6771309..2c52183 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -65,7 +65,7 @@ FFMPEG_CONF_OPT = \
- 	--disable-symver \
- 	--disable-doc
+@@ -22,15 +22,12 @@ FFMPEG_CONF_OPT = \
+ 	--disable-debug \
+ 	--disable-version3 \
+ 	--enable-logging \
+-	--disable-pic \
+ 	--enable-optimizations \
+ 	--disable-extra-warnings \
+ 	--disable-ffprobe \
+ 	--enable-avdevice \
+ 	--enable-avcodec \
+ 	--enable-avformat \
+-	--enable-swscale \
+-	--enable-postproc \
+ 	--disable-x11grab \
+ 	--enable-network \
+ 	--disable-gray \
+@@ -312,6 +309,8 @@ endif
  
--FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ FFMPEG_CONF_OPT += --enable-pic
++else
++FFMPEG_CONF_OPT += --disable-pic
+ endif
  
- ifeq ($(BR2_ENABLE_DEBUG),y)
- FFMPEG_CONF_OPT += --enable-debug
-@@ -327,13 +327,14 @@ define FFMPEG_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_ARGS) \
- 	$(FFMPEG_CONF_ENV) \
- 	./configure \
--		--enable-cross-compile	\
-+		--enable-cross-compile \
- 		--cross-prefix=$(TARGET_CROSS) \
- 		--sysroot=$(STAGING_DIR) \
- 		--host-cc="$(HOSTCC)" \
- 		--arch=$(BR2_ARCH) \
- 		--target-os="linux" \
- 		--disable-stripping \
-+		--pkg-config="$(PKG_CONFIG_HOST_BINARY)" \
- 		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
- 		$(SHARED_STATIC_LIBS_OPTS) \
- 		$(FFMPEG_CONF_OPT) \
+ FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
 -- 
 1.7.9.5
