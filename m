@@ -1,38 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Sep 2014 22:44:04 +0200
-Subject: [Buildroot] [PATCH] coreutils: get the uptime program to work
-Message-ID: <1410381844-14466-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Sep 2014 22:45:29 +0200
+Subject: [Buildroot] [PATCH 1/2] coreutils: Do not install uptime
+In-Reply-To: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140910224529.24ee19a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-coreutils configure script needs to know whether /proc/uptime is
-available, but this is not possible in a cross-compilation
-context. This leads to an uptime program that fails to work on the
-target, as it has been compiled without /proc/uptime reading support.
+Dear Vicente Olivert Riera,
 
-This commit fixes that by telling coreutils at configure time that
-/proc/uptime will be available on the target (which seems to be a
-reasonable assumption on Linux systems).
+On Wed, 10 Sep 2014 15:30:05 +0100, Vicente Olivert Riera wrote:
+> coreutils' uptime doesn't work and its execution fails with a message
+> like this one:
+> 
+>   uptime: couldn't get boot time: No such file or directory
+> 
+> busybox and procps-ng provide a working alternative.
+> 
+> This is a common old problem as we can see here:
+> 
+>   https://lists.openwrt.org/pipermail/openwrt-devel/2011-March/010006.html
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Markos.Chandras <Markos.Chandras@imgtec.com>
+> ---
+>  package/coreutils/coreutils.mk |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+> index 07a1347..7457b79 100644
+> --- a/package/coreutils/coreutils.mk
+> +++ b/package/coreutils/coreutils.mk
+> @@ -61,7 +61,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+>  		PERL=missing
+>  
+>  COREUTILS_CONF_OPT = --disable-rpath \
+> -		--enable-install-program=hostname
+> +		--enable-install-program=hostname \
+> +		--enable-no-install-program=uptime
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/coreutils/coreutils.mk | 1 +
- 1 file changed, 1 insertion(+)
+I think this is not the proper fix. A more appropriate fix is to
+actually get uptime to work, which is a oneliner. See my patch posted
+at http://patchwork.ozlabs.org/patch/387971/.
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 07a1347..e6af7e2 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -57,6 +57,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		gl_cv_func_working_mkstemp=yes \
- 		gl_cv_func_working_utimes=yes \
- 		gl_getline_needs_run_time_check=no \
-+		gl_cv_have_proc_uptime=yes \
- 		utils_cv_localtime_cache=no \
- 		PERL=missing
- 
+I'll mark your patch as Rejected in patchwork. Of course, if you
+disagree, feel free to turn back your patch to the "New" state with an
+explanation.
+
+Thanks a lot for noticing this issue in the first place!
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
