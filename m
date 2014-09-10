@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Sep 2014 23:04:24 +0200
-Subject: [Buildroot] [PATCH 2/2] procps-ng: Fix installation and take
- precedence over busybox
-In-Reply-To: <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
- <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140910230424.14192582@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Sep 2014 00:10:49 +0200
+Subject: [Buildroot] [PATCH 06/12] gcc/4.9: add patch to warn about
+ unsafe header paths
+In-Reply-To: <20140910222400.5850961c@free-electrons.com>
+References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140910200825.GB23947@free.fr>
+ <20140910222400.5850961c@free-electrons.com>
+Message-ID: <20140910221049.GI23947@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Thomas, All,
 
-On Wed, 10 Sep 2014 15:30:06 +0100, Vicente Olivert Riera wrote:
-> Currently procps-ng binaries are installed under $(TARGET_DIR)/usr/usr
-> instead of $(TARGET_DIR)/usr, which would be the expected. This is
-> caused because the default value of the --exec-prefix configure option
-> is /usr, and Buildroot always adds --prefix=/usr to the configure
-> option. We fix this by setting --exec-prefix to an empty value.
+On 2014-09-10 22:24 +0200, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
 > 
-> At the same time we make sure the procps-ng binaries have precedence
-> over the busybox ones.
+> On Wed, 10 Sep 2014 22:08:25 +0200, Yann E. MORIN wrote:
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Markos.Chandras <Markos.Chandras@imgtec.com>
-> ---
->  package/procps-ng/procps-ng.mk |   10 ++++++++++
->  1 files changed, 10 insertions(+), 0 deletions(-)
+> > > ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+> > > ++  if (temp && strlen(temp) > 0)
+> > > ++    {
+> > > ++      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+> > 
+> > Here you set the --error-poison-system-direcotries for the linker...
+> 
+> No, that's not what's happening here. What's happening here is that if
+> BR_COMPILER_PARANOID_UNSAFE_PATH is set and non-empty, then we add
+> -Werror=poison-system-directories to the gcc options. This makes gcc
+> behave as if -Werror=poison-system-directories was passed on the
+> command line.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Ah, I see now. OK. We tell gcc to treat that warning as an error.
+Of course. :-)
 
-Thomas
+Forget my comment.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
