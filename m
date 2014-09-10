@@ -1,31 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Sep 2014 10:02:59 +0200
-Subject: [Buildroot] [git commit] texinfo: needs ncurses
-Message-ID: <20140910080353.1F17C9D658@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Sep 2014 10:04:00 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-09-09
+In-Reply-To: <20140910063013.732CF1018B1@stock.ovh.net> (Thomas Petazzoni's
+ message of "Wed, 10 Sep 2014 08:30:13 +0200 (CEST)")
+References: <20140910063013.732CF1018B1@stock.ovh.net>
+Message-ID: <87vbovewb3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1898e5b20afe4f2fe7cb562b8e6e692527cdce53
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/be4/be4e19d55b24c00b8b0fd12c9e5d1e9c5d8b0cb3/
+ > Build statistics for 2014-09-09
+ > ===============================
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/texinfo/texinfo.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ >         success : 264
+ >        failures : 45 
+ >        timeouts : 4  
+ >           TOTAL : 313
 
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-index afb3bca..184288b 100644
---- a/package/texinfo/texinfo.mk
-+++ b/package/texinfo/texinfo.mk
-@@ -12,5 +12,6 @@ TEXINFO_VERSION = 4.13a
- TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
- TEXINFO_LICENSE = GPLv3+
- TEXINFO_LICENSE_FILES = COPYING
-+TEXINFO_DEPENDENCIES = ncurses
- 
- $(eval $(host-autotools-package))
+Wee!
+
+I now have autobuild-run running on gcc10, gcc16 and gcc20.
+
+
+ >      nios2 |                    czmq-v2.2.0 | NOK | http://autobuild.buildroot.net/results/64a7eef2155248146e7f3a55e85fe60bc5b67791/
+ >      nios2 |                    czmq-v2.2.0 | NOK | http://autobuild.buildroot.net/results/00e34a2a52294bef2330c459cf921957e88633e3/
+
+Fixed by Thomas.
+
+Thomas, I btw noticed that your notification script is still using the
+old URLs. Perhaps it would be worthwhile to fix that?
+
+
+ >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/be4e19d55b24c00b8b0fd12c9e5d1e9c5d8b0cb3/
+ >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/24d1701d39b9b73ef98e141d514592845baa4b8e/
+ >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/de070cd0eda96bbc96fda8e81cb54c0ae71652a5/
+
+needs host-ncurses, fixed in git.
+
+
+ >       bfin | snowball-hdmiservice-f75c99... | NOK | http://autobuild.buildroot.net/results/1484925122442c4063da6742f6280ccbaa5cbe29/
+
+Needs !static, fixed in git.
+
+-- 
+Bye, Peter Korsgaard
