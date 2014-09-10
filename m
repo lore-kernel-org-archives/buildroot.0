@@ -1,29 +1,46 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 10 Sep 2014 08:57:26 -0400
-Subject: [Buildroot] google-breakpad client include path
-Message-ID: <CA+-urNRQ2K1cTh--oxyth+RypQDCNee0XncwrWGJHHGjEKtmCw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Sep 2014 15:19:10 +0200
+Subject: [Buildroot] [PATCH] arc: Fix warning if atomics are selected
+In-Reply-To: <1410353187-16974-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <1410353187-16974-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <20140910151910.2e29889e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Dear Anton Kolesov,
 
-I'm trying out google-breakpad and was wondering how others were handling
-the include paths in their client applications. If you haven't used it, it
-looks like you need to add some code to your main() so that the signal
-handlers and crash dump logic can be linked into your application.
+On Wed, 10 Sep 2014 16:46:27 +0400, Anton Kolesov wrote:
 
-I'm working off the instructions at
-https://code.google.com/p/google-breakpad/wiki/LinuxStarterGuide. As part
-of the instructions, you need to add the google-breakpad source tree to
-your application's include path. The header files do not get installed to
-staging. It feels wrong to specify an include path to
-output/build/google-breakpad-1320/src, but is this what others are doing?
+> If atomic instructions were selected for ARC, there was a warning, like:
+> "(BR2_ARC_ATOMIC_EXT) selects BR2_ARCH_HAS_ATOMICS which has unmet direct
+> dependencies". This patch removes the reason of this warning by adding a
+> respective configuration entry.
+> 
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+> ---
+>  arch/Config.in.arc | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index 8a7f290..d2ccf09 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -1,3 +1,6 @@
+> +config  BR2_ARCH_HAS_ATOMICS
+> +	bool
+
+No. This option is already defined in arch/Config.in. There's no point
+in redefining it anywhere else.
+
+Can you give me a .config that shows the warning you had?
 
 Thanks,
-Frank
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140910/85ef9127/attachment.html>
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
