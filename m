@@ -1,55 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Sep 2014 22:23:17 +0200
-Subject: [Buildroot] [PATCH 01/12] toolchain-external: instrument
- wrapper to warn about unsafe paths
-In-Reply-To: <20140910221830.5e94360a@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Sep 2014 22:24:00 +0200
+Subject: [Buildroot] [PATCH 06/12] gcc/4.9: add patch to warn about
+ unsafe header paths
+In-Reply-To: <20140910200825.GB23947@free.fr>
 References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408540005-26934-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140910194239.GB4155@free.fr>
- <20140910221830.5e94360a@free-electrons.com>
-Message-ID: <20140910202317.GH23947@free.fr>
+ <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140910200825.GB23947@free.fr>
+Message-ID: <20140910222400.5850961c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Yann E. MORIN,
 
-On 2014-09-10 22:18 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> > > +		/* We handle two cases: first the case where -I/-L and
-> > > +		 * the path are separated by one space and therefore
-> > > +		 * visible as two separate options, and then the case
-> > > +		 * where they are stuck together forming one single
-> > > +		 * option.
-> > > +		 */
-> > > +		if (strlen(argv[i]) == 2) {
-> > 
-> > argv[*] are passed by the user, so better not trust them. What about:
-> > 
-> >     if (argv[i][2]!='\0') {
-> >         ...;
-> >     }
+On Wed, 10 Sep 2014 22:08:25 +0200, Yann E. MORIN wrote:
+
+> > ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+> > ++  if (temp && strlen(temp) > 0)
+> > ++    {
+> > ++      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
 > 
-> This makes an assumption on the length of argv[i], which is even worse,
-> IMO. I don't see why strlen(argv[i]) would be unsafe, actually.
+> Here you set the --error-poison-system-direcotries for the linker...
 
-Well, you know it is at least 3-char long, because it is at least either
-"-I" or "-L" so argv[i][2] is valid.
+No, that's not what's happening here. What's happening here is that if
+BR_COMPILER_PARANOID_UNSAFE_PATH is set and non-empty, then we add
+-Werror=poison-system-directories to the gcc options. This makes gcc
+behave as if -Werror=poison-system-directories was passed on the
+command line.
 
-And it can be an overly-long string passed by the user, so let's be
-prepared to the worse.
+The idea is that it's hard for Buildroot to guarantee that
+-Werror=poison-system-directories in the CFLAGS will *always* be passed
+by all packages to the build of all files. So having an environment
+variable that forces gcc to add this option by itself makes sure all
+files will be compiled with this behavior.
 
-And it is much faster than calling strlen, which is a costly function.
 
-Regards,
-Yann E. MORIN.
+> > ++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+> > ++  if (flag_poison_system_directories)
+> > ++    {
+> > ++       struct cpp_dir *p;
+> > ++
+> > ++       for (p = heads[QUOTE]; p; p = p->next)
+> > ++         {
+> > ++          if ((!strncmp (p->name, "/usr/include", 12))
+> > ++              || (!strncmp (p->name, "/usr/local/include", 18))
+> > ++              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+> > ++            warning (OPT_Wpoison_system_directories,
+> > ++                     "include location \"%s\" is unsafe for "
+> > ++                     "cross-compilation",
+> > ++                     p->name);
+> 
+> But you do not handle include paths.
 
+What? We're precisely handling include paths here.
+
+> We should error out if BR_COMPILER_PARANOID_UNSAFE_PATH is set and
+> non-empty, no?
+
+See above, that's exactly what is happening. By default
+(BR_COMPILER_PARANOID_UNSAFE_PATH is unset or empty), only warnings are
+generated. If BR_COMPILER_PARANOID_UNSAFE_PATH is set and non-empty,
+then it will be an error.
+
+You should probably test this, and you'll notice that the warning()
+function above actually *errors* out if the OPT_W<foo> warning passed
+as first argument has -Werror=<foo> in the command line.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
