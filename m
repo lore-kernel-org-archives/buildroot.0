@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Sep 2014 22:08:25 +0200
-Subject: [Buildroot] [PATCH 06/12] gcc/4.9: add patch to warn about
- unsafe header paths
-In-Reply-To: <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Sep 2014 22:09:16 +0200
+Subject: [Buildroot] [PATCH 11/12] binutils: enable poison system
+ directories option
+In-Reply-To: <1408540005-26934-12-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140910200825.GB23947@free.fr>
+ <1408540005-26934-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140910200916.GC23947@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,74 +15,34 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-08-20 15:06 +0200, Thomas Petazzoni spake thusly:
-> +Index: b/gcc/gcc.c
-> +===================================================================
-> +--- a/gcc/gcc.c
-> ++++ b/gcc/gcc.c
-[--SNIP--]
-> +@@ -4028,6 +4030,12 @@
-> +       gcc_assert (!compare_debug_opt);
-> +     }
-> + 
-> ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-> ++  if (temp && strlen(temp) > 0)
-> ++    {
-> ++      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+> This commit enables the poison system directories option, which is now
+> available thanks to the binutils patches that have been added.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Here you set the --error-poison-system-direcotries for the linker...
+When the previous patches have been fixed:
 
-> ++    }
-> ++
-> +   /* Set up the search paths.  We add directories that we expect to
-> +      contain GNU Toolchain components before directories specified by
-> +      the machine description so that we will find GNU components (like
-> +Index: b/gcc/incpath.c
-> +===================================================================
-> +--- a/gcc/incpath.c
-> ++++ b/gcc/incpath.c
-> +@@ -28,6 +28,7 @@
-> + #include "intl.h"
-> + #include "incpath.h"
-> + #include "cppdefault.h"
-> ++#include "diagnostic-core.h"
-> + 
-> + /* Microsoft Windows does not natively support inodes.
-> +    VMS has non-numeric inodes.  */
-> +@@ -382,6 +383,24 @@
-> + 	}
-> +       fprintf (stderr, _("End of search list.\n"));
-> +     }
-> ++
-> ++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
-> ++  if (flag_poison_system_directories)
-> ++    {
-> ++       struct cpp_dir *p;
-> ++
-> ++       for (p = heads[QUOTE]; p; p = p->next)
-> ++         {
-> ++          if ((!strncmp (p->name, "/usr/include", 12))
-> ++              || (!strncmp (p->name, "/usr/local/include", 18))
-> ++              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
-> ++            warning (OPT_Wpoison_system_directories,
-> ++                     "include location \"%s\" is unsafe for "
-> ++                     "cross-compilation",
-> ++                     p->name);
-
-But you do not handle include paths. We should error out if
-BR_COMPILER_PARANOID_UNSAFE_PATH is set and non-empty, no?
-
-BTW, I commented only one vrsion of each component, and the comments
-apply to the other versions, of course.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ++         }
-> ++    }
-> ++#endif
-> + }
-> + 
-> + /* Use given -I paths for #include "..." but not #include <...>, and
+> ---
+>  package/binutils/binutils.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index 4888eeb..ecbd40d 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -72,6 +72,7 @@ HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
+>  			--target=$(GNU_TARGET_NAME) \
+>  			--disable-shared --enable-static \
+>  			--with-sysroot=$(STAGING_DIR) \
+> +			--enable-poison-system-directories \
+>  			$(BINUTILS_DISABLE_GDB_CONF_OPT) \
+>  			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+>  
 > -- 
 > 2.0.0
 > 
