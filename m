@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Sep 2014 10:42:58 +0200
+Date: Wed, 10 Sep 2014 10:46:00 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
 	2014-09-09
-In-Reply-To: <20140910101455.016ca634@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 10 Sep 2014 10:14:55 +0200")
+In-Reply-To: <20140910101824.1aae716f@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 10 Sep 2014 10:18:24 +0200")
 References: <20140910063013.732CF1018B1@stock.ovh.net>
  <87vbovewb3.fsf@dell.be.48ers.dk>
- <20140910101455.016ca634@free-electrons.com>
-Message-ID: <87r3zjeui5.fsf@dell.be.48ers.dk>
+ <20140910101824.1aae716f@free-electrons.com>
+Message-ID: <87mwa7eud3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,29 +18,48 @@ To: buildroot@busybox.net
 
  > Dear Peter Korsgaard,
  > On Wed, 10 Sep 2014 10:04:00 +0200, Peter Korsgaard wrote:
-
- >> >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/be4e19d55b24c00b8b0fd12c9e5d1e9c5d8b0cb3/
- >> >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/24d1701d39b9b73ef98e141d514592845baa4b8e/
- >> >        arc |             host-texinfo-4.13a | NOK | http://autobuild.buildroot.net/results/de070cd0eda96bbc96fda8e81cb54c0ae71652a5/
+ >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
  >> 
- >> needs host-ncurses, fixed in git.
-
- > So the policy is now that curses is no longer mandatory, and we should
- > depend on host-ncurses when needed?
-
-Wasn't that just what we agreed upon? We require it on the host for the
-menuconfig target, but build host-ncurses for the packages that need it.
-
-
- >> >       bfin | snowball-hdmiservice-f75c99... | NOK | http://autobuild.buildroot.net/results/1484925122442c4063da6742f6280ccbaa5cbe29/
+ >> > Build statistics for 2014-09-09
+ >> > ===============================
  >> 
- >> Needs !static, fixed in git.
+ >> >         success : 264
+ >> >        failures : 45 
+ >> >        timeouts : 4  
+ >> >           TOTAL : 313
+ >> 
+ >> Wee!
+ >> 
+ >> I now have autobuild-run running on gcc10, gcc16 and gcc20.
 
- > Maybe we could also add a depends on BR2_arm, because building
- > snowball-hdmiservice on Blackfin seems a bit odd :)
+ > Great! So the only one left is gcc110, right?
 
-Yes, or simply deprecate the snowball packages. The board isn't
-available any more and imho had quite a small community.
+Yes. I also played with gcc14, but that one is so old that I need to
+apply Thomas' rhel5 patches first.
+
+ > Also, how many instances are you running on each machine?
+
+currently I'm using:
+
+ninstances = 3
+njobs = 4
+
+On all 3 machines, but I might tweak that a bit.
+
+
+ > Thanks for getting this done, it's nice to see we jumped from ~100
+ > builds a few weeks ago to ~300 builds now. I expect the number of
+ > builds per day to reduce a little bit as we fix issues (successful
+ > builds are statistically longer than failed builds!), but still we
+ > should be in the 250-300 builds/day range.
+
+Yeah, sorry it took so long.
+
+
+ > I think it's time for me to throw in a few more configurations in
+ > there :-)
+
+;)
 
 -- 
 Bye, Peter Korsgaard
