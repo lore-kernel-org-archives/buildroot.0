@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Sep 2014 22:45:29 +0200
-Subject: [Buildroot] [PATCH 1/2] coreutils: Do not install uptime
-In-Reply-To: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 10 Sep 2014 23:04:24 +0200
+Subject: [Buildroot] [PATCH 2/2] procps-ng: Fix installation and take
+ precedence over busybox
+In-Reply-To: <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
 References: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140910224529.24ee19a4@free-electrons.com>
+ <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140910230424.14192582@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +14,24 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Wed, 10 Sep 2014 15:30:05 +0100, Vicente Olivert Riera wrote:
-> coreutils' uptime doesn't work and its execution fails with a message
-> like this one:
+On Wed, 10 Sep 2014 15:30:06 +0100, Vicente Olivert Riera wrote:
+> Currently procps-ng binaries are installed under $(TARGET_DIR)/usr/usr
+> instead of $(TARGET_DIR)/usr, which would be the expected. This is
+> caused because the default value of the --exec-prefix configure option
+> is /usr, and Buildroot always adds --prefix=/usr to the configure
+> option. We fix this by setting --exec-prefix to an empty value.
 > 
->   uptime: couldn't get boot time: No such file or directory
-> 
-> busybox and procps-ng provide a working alternative.
-> 
-> This is a common old problem as we can see here:
-> 
->   https://lists.openwrt.org/pipermail/openwrt-devel/2011-March/010006.html
+> At the same time we make sure the procps-ng binaries have precedence
+> over the busybox ones.
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > Reviewed-by: Markos.Chandras <Markos.Chandras@imgtec.com>
 > ---
->  package/coreutils/coreutils.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index 07a1347..7457b79 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -61,7 +61,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
->  		PERL=missing
->  
->  COREUTILS_CONF_OPT = --disable-rpath \
-> -		--enable-install-program=hostname
-> +		--enable-install-program=hostname \
-> +		--enable-no-install-program=uptime
+>  package/procps-ng/procps-ng.mk |   10 ++++++++++
+>  1 files changed, 10 insertions(+), 0 deletions(-)
 
-I think this is not the proper fix. A more appropriate fix is to
-actually get uptime to work, which is a oneliner. See my patch posted
-at http://patchwork.ozlabs.org/patch/387971/.
-
-I'll mark your patch as Rejected in patchwork. Of course, if you
-disagree, feel free to turn back your patch to the "New" state with an
-explanation.
-
-Thanks a lot for noticing this issue in the first place!
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
