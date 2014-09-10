@@ -1,29 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Sep 2014 18:27:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 7424] undefined reference to
-	`__builtin_thread_pointer'
-In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
-References: <bug-7424-163@https.bugs.busybox.net/>
-Message-ID: <20140910182719.A7F0A9D651@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 10 Sep 2014 16:07:29 -0300
+Subject: [Buildroot] [PATCH 1/2] exfat: bump to version 1.1.0
+Message-ID: <1410376050-21735-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7424
+Use gentoo distfiles since the download infra can't handle google docs
+URLs.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-09-10 18:27:19 UTC ---
-See http://buildroot.org/downloads/manual/manual.html#reporting-bugs. If you
-don't provide your Buildroot .config file, there's no way for us to understand
-what configuration you are building, and no way to reproduce your build.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/exfat/exfat.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Also, could you make sure to restart the build from scratch by doing "make
-clean; make". Your report very much looks like a change in the toolchain
-configuration, without doing a full rebuild. See
-http://buildroot.org/downloads/manual/manual.html#full-rebuild.
-
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index 3c0dece..279c6a0 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-EXFAT_VERSION = 1.0.1
+-EXFAT_SITE = http://exfat.googlecode.com/files
++EXFAT_VERSION = 1.1.0
++EXFAT_SITE = http://distfiles.gentoo.org/distfiles
+ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+ EXFAT_DEPENDENCIES = host-scons libfuse
+ EXFAT_LICENSE = GPLv3+
+@@ -13,12 +13,12 @@ EXFAT_LICENSE_FILES = COPYING
+ 
+ define EXFAT_BUILD_CMDS
+ 	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) $(SCONS))
++		$(TARGET_CONFIGURE_OPTS) CCFLAGS="-std=c99" $(SCONS))
+ endef
+ 
+ define EXFAT_INSTALL_TARGET_CMDS
+ 	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) $(SCONS) \
++		$(TARGET_CONFIGURE_OPTS) CCFLAGS="-std=c99" $(SCONS) \
+ 		DESTDIR=$(TARGET_DIR)/usr/sbin install)
+ endef
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.5.5
