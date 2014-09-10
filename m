@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Sep 2014 12:18:00 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-09-09
-In-Reply-To: <54101CB6.6010804@imgtec.com>
-References: <20140910063013.732CF1018B1@stock.ovh.net>
- <54101CB6.6010804@imgtec.com>
-Message-ID: <20140910121800.3b074cec@free-electrons.com>
+Date: Wed, 10 Sep 2014 12:23:14 +0200
+Subject: [Buildroot] Problem with building Divine; wrong Path
+In-Reply-To: <5B70540BA10E7D49BEC1ACD5D4148853540BB0C614@FS-SBS2008.fs-net.local>
+References: <5B70540BA10E7D49BEC1ACD5D4148853540BB0C614@FS-SBS2008.fs-net.local>
+Message-ID: <20140910122314.59055cd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Andreas Zeiler,
 
-On Wed, 10 Sep 2014 10:41:10 +0100, Vicente Olivert Riera wrote:
-> On 09/10/2014 07:30 AM, Thomas Petazzoni wrote:
-> > Build statistics for 2014-09-09
-> > ===============================
-> 
-> >      mipsel |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/f2639fc59b8ba452cf95268b6370c1093bf4aaef/
-> 
-> The problem is explained here:
-> 
-> [PATCH] libdl.c: static link fail for mips
-> http://lists.uclibc.org/pipermail/uclibc/2013-April/047708.html
-> 
-> Upstream uClibc is fixed, but as fas as I know Buildroot's policy is to 
-> not accept more patches to uClibc.
+On Wed, 10 Sep 2014 11:22:03 +0200, Andreas Zeiler wrote:
 
-That's not true. We try to not add *feature* patches. Fixes are
-perfectly fine, and we already have 50+ patches.
+> I merged our Buildroot 2013.02 to the version 2013.05. Everything was
+> ok. As default config we configure with directfb which includes the
+> divine lib. When the divine package gets build, there is a failure.
+> Seems that the lib path for the toolchain gets set wrong. So the
+> libtool says it cannot find the archive/directory. When I'm building
+> without directfb, the build process ends without any failures. Here
+> is a failure output: (I hope this is enough of Output)
 
-> The problem we are having with this is that certain parts of libarchive 
-> build statically although you are doing a dynamic build. We can avoid 
-> those parts to build statically using the patch I sent few days ago:
+Usual questions:
+
+ * Can you reproduce with Buildroot 2014.08 ? We have fixed many many
+   issues since 2013.05.
+
+ * Please send the .config file that allows to reproduce the issue (as
+   well as the different elements needed for us to reproduce the build).
+
+
+> But the File is under ""/home/zeiler/data_zeiler/Workspace/sandbox/buildroot/buildroot-2013.05/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/ lib/libstdc++.la". So somewhere something adds the wrong path.
 > 
-> http://patchwork.ozlabs.org/patch/384234/
+> ?  "local/arm/fs-toolchain-4.7.2-cortexa5-neonvfpv4/lib/gcc/arm-fs-linux-gnueabi/4.7.2/../../../../arm-fs-linux-gnueabi/"
+> This is the path from my toolchain on my hostpc under the directory "/usr/local/......"
+> 
+> This is my $PATH Variable: "/usr/lib/qt-3.3/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin/bin:/home/zeiler/bin:/usr/local/arm/fs-toolchain-4.7.2-cortexa5-neonvfpv4/bin:/opt/freescale/usr/local/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin"
+> 
+> Can someone help me with this?
 
-Peter, could you apply this patch?
+Remove the toolchains from your PATH, i.e
+remove /usr/local/arm/fs-toolchain-4.7.2-cortexa5-neonvfpv4/bin
+and /opt/freescale/usr/local/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin.
+Also, make sure to try to reproduce with ccache support disabled.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
