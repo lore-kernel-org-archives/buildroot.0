@@ -1,37 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Sep 2014 22:19:21 +0200
-Subject: [Buildroot] [PATCH 02/12] binutils/2.24: add patch to warn
- about unsafe library paths
-In-Reply-To: <20140910195204.GA23947@free.fr>
-References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408540005-26934-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140910195204.GA23947@free.fr>
-Message-ID: <20140910221921.489fb1b1@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 10 Sep 2014 20:19:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 7424] undefined reference to
+	`__builtin_thread_pointer'
+In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
+References: <bug-7424-163@https.bugs.busybox.net/>
+Message-ID: <20140910201933.E7B8C9D63F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+https://bugs.busybox.net/show_bug.cgi?id=7424
 
-On Wed, 10 Sep 2014 21:52:04 +0200, Yann E. MORIN wrote:
+--- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-09-10 20:19:33 UTC ---
+We need the ".config" file, not Config.in which is a part of buildroot itself.
 
-> > ++  char *temp;
-> 
-> Well, let's give it a better name, please:  char *BR_paranoid_env;
-
-[...]
-
-> > ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-> > ++  if (temp && strlen(temp) > 0)
-> 
->     if (BR_paranoid_env && BR_paranoid_env[0])
-
-Ok, makes sense.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
