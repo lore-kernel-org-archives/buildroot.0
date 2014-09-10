@@ -1,36 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Sep 2014 09:41:45 +0200
-Subject: [Buildroot] [PATCH] czmq: add patch to fix build issue with
-	recent glibc
-In-Reply-To: <1410298889-16889-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 9 Sep 2014 23:41:29 +0200")
-References: <1410298889-16889-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87zje7exc6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 10 Sep 2014 09:37:31 +0200
+Subject: [Buildroot] [git commit] snowball-hdmiservice: wants to build a .so,
+	needs !BR2_PREFER_STATIC_LIB
+Message-ID: <20140910074206.D260D9D645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=028e97f2133d41c87ced10391f318db55c71c3b1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > glibc 2.20 is now warning when _BSD_SOURCE is used (as it's replaced
- > by _DEFAULT_SOURCE), and czmq has the bad idea of forcing the usage of
- > -Werror, causing build issues with the recent NIOS II toolchain based
- > on glibc 2.20.
+Fixes http://autobuild.buildroot.net/results/47f/47f52078c52bd1270e9d7ca795a4b3b21737b39c/
 
- > This commit adds a patch to czmq to fix that. The patch has been
- > submitted upstream.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/snowball-hdmiservice/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/64a/64a7eef2155248146e7f3a55e85fe60bc5b67791/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
-It would also be good to get rid of the -Werror.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
+index a22797f..f43685f 100644
+--- a/package/snowball-hdmiservice/Config.in
++++ b/package/snowball-hdmiservice/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SNOWBALL_HDMISERVICE
+ 	bool "snowball-hdmiservice"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  HDMI userspace control daemon
+ 
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_SNOWBALL_HDMISERVICE
+ 	  snowball board
+ 
+ 	  http://www.igloocommunity.org
++
++comment "snowball-hdmiservice needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
