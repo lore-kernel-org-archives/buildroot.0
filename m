@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Sep 2014 21:52:04 +0200
-Subject: [Buildroot] [PATCH 02/12] binutils/2.24: add patch to warn
- about unsafe library paths
-In-Reply-To: <1408540005-26934-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Sep 2014 22:08:25 +0200
+Subject: [Buildroot] [PATCH 06/12] gcc/4.9: add patch to warn about
+ unsafe header paths
+In-Reply-To: <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1408540005-26934-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408540005-26934-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140910195204.GA23947@free.fr>
+ <1408540005-26934-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140910200825.GB23947@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,69 +15,74 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-08-20 15:06 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> +Index: b/ld/lexsup.c
+> +Index: b/gcc/gcc.c
 > +===================================================================
-> +--- a/ld/lexsup.c
-> ++++ b/ld/lexsup.c
+> +--- a/gcc/gcc.c
+> ++++ b/gcc/gcc.c
 [--SNIP--]
-> +@@ -519,6 +527,7 @@
-> +   int ingroup = 0;
-> +   char *default_dirlist = NULL;
-> +   char *shortopts;
-> ++  char *temp;
-
-Well, let's give it a better name, please:  char *BR_paranoid_env;
-
-;-)
-
-Regards,
-Yann E. MORIN.
-
-> +   struct option *longopts;
-> +   struct option *really_longopts;
-> +   int last_optind;
-> +@@ -1442,9 +1451,21 @@
-> +               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
-> +           }
-> +           break;
-> ++
-> ++   case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
-> ++     command_line.poison_system_directories = FALSE;
-> ++     break;
-> ++
-> ++   case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
-> ++     command_line.error_poison_system_directories = TRUE;
-> ++     break;
-> + 	}
+> +@@ -4028,6 +4030,12 @@
+> +       gcc_assert (!compare_debug_opt);
 > +     }
 > + 
 > ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
 > ++  if (temp && strlen(temp) > 0)
+> ++    {
+> ++      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
 
-    if (BR_paranoid_env && BR_paranoid_env[0])
+Here you set the --error-poison-system-direcotries for the linker...
+
+> ++    }
+> ++
+> +   /* Set up the search paths.  We add directories that we expect to
+> +      contain GNU Toolchain components before directories specified by
+> +      the machine description so that we will find GNU components (like
+> +Index: b/gcc/incpath.c
+> +===================================================================
+> +--- a/gcc/incpath.c
+> ++++ b/gcc/incpath.c
+> +@@ -28,6 +28,7 @@
+> + #include "intl.h"
+> + #include "incpath.h"
+> + #include "cppdefault.h"
+> ++#include "diagnostic-core.h"
+> + 
+> + /* Microsoft Windows does not natively support inodes.
+> +    VMS has non-numeric inodes.  */
+> +@@ -382,6 +383,24 @@
+> + 	}
+> +       fprintf (stderr, _("End of search list.\n"));
+> +     }
+> ++
+> ++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+> ++  if (flag_poison_system_directories)
+> ++    {
+> ++       struct cpp_dir *p;
+> ++
+> ++       for (p = heads[QUOTE]; p; p = p->next)
+> ++         {
+> ++          if ((!strncmp (p->name, "/usr/include", 12))
+> ++              || (!strncmp (p->name, "/usr/local/include", 18))
+> ++              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+> ++            warning (OPT_Wpoison_system_directories,
+> ++                     "include location \"%s\" is unsafe for "
+> ++                     "cross-compilation",
+> ++                     p->name);
+
+But you do not handle include paths. We should error out if
+BR_COMPILER_PARANOID_UNSAFE_PATH is set and non-empty, no?
+
+BTW, I commented only one vrsion of each component, and the comments
+apply to the other versions, of course.
 
 Regards,
 Yann E. MORIN.
 
-> ++    command_line.error_poison_system_directories = TRUE;
-> ++
-> +   while (ingroup)
-> +     {
-> +       lang_leave_group ();
-> +Index: b/ld/ldlex.h
-> +===================================================================
-> +--- a/ld/ldlex.h
-> ++++ b/ld/ldlex.h
-> +@@ -138,6 +138,8 @@
-> +   OPTION_DEFAULT_SCRIPT,
-> +   OPTION_PRINT_OUTPUT_FORMAT,
-> +   OPTION_IGNORE_UNRESOLVED_SYMBOL,
-> ++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
-> ++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
-> + };
+> ++         }
+> ++    }
+> ++#endif
+> + }
 > + 
-> + /* The initial parser states.  */
+> + /* Use given -I paths for #include "..." but not #include <...>, and
 > -- 
 > 2.0.0
 > 
