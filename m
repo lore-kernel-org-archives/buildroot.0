@@ -1,23 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 11 Sep 2014 22:49:53 +0200
-Subject: [Buildroot] [PATCH] xapp_xdpyinfo: depends on MMU
-In-Reply-To: <1410343169-2722-1-git-send-email-yuvaraj.patil@wipro.com>
- (Yuvaraj Patil's message of "Wed, 10 Sep 2014 15:29:29 +0530")
-References: <1410343169-2722-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <87ha0ddgr2.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Sep 2014 22:52:04 +0200
+Subject: [Buildroot] [PATCH] libarchive: avoid some tools to build
+	statically on shared builds
+In-Reply-To: <1409319547-25577-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 29 Aug 2014 14:39:07 +0100")
+References: <1409319547-25577-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87d2b1dgnf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yuvaraj" == Yuvaraj Patil <yuvaraj.patil@wipro.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > This package needs MMU. Hence added dependency on BR2_USE_MMU
+ > Some libarchive tools, like bsdtar, builds statically by default
+ > although libarchive itself is being built dynamically. We can force
+ > those tools to build the same way as libarchive by using the right
+ > configure options.
+
  > Fixes:
- > http://autobuild.buildroot.net/results/2da/2dada0264409d8fa6befedbc02c0de77c605a5fa//
+ >   http://autobuild.buildroot.net/results/b8f/b8f7a29787ea1cc5c98e4cbd5f47f257f9b306f2/
 
- > Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
