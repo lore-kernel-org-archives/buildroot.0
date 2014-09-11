@@ -1,99 +1,99 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 11 Sep 2014 13:51:18 +0100
-Subject: [Buildroot] [PATCH] uClibc: ldso/libdl: Also include dl-tls.h for
-	for !SHARED.
-Message-ID: <1410439878-32028-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Thu, 11 Sep 2014 15:49:26 +0200
+Subject: [Buildroot] [PATCH 1/1] Adds ipmitool,
+	a command-line interface to IPMI-enabled devices.
+Message-ID: <1410443366-22146-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply an upstream patch:
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-  http://git.uclibc.org/uClibc/commit/ldso/libdl/libdl.c?id=b57e9640db53166c88cdac66b79a046e46b8d728
-
-On MIPS, several relocations that were original only resolved by the
-dynamic linker were reused as static relocations.  Consequently the
-macros TLS_DTPREL_VALUE and TLS_TPREL_VALUE defined in
-libpthread/nptl/sysdeps/mips/dl-tls.h need to be available even for
-!SHARED.
-
-Relevant: http://www.linux-mips.org/wiki/NPTL#History
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/85e/85e66962da9a6b80e1d1b721031b6ef0da45e3d5/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- ...ibdl-Also-include-dl-tls.h-for-for-SHARED.patch |   58 ++++++++++++++++++++
- 1 files changed, 58 insertions(+), 0 deletions(-)
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0062-ldso-libdl-Also-include-dl-tls.h-for-for-SHARED.patch
+v2:
 
-diff --git a/package/uclibc/0.9.33.2/uclibc-0062-ldso-libdl-Also-include-dl-tls.h-for-for-SHARED.patch b/package/uclibc/0.9.33.2/uclibc-0062-ldso-libdl-Also-include-dl-tls.h-for-for-SHARED.patch
+- ipmitool needs MMU (David Bachelart)
+- moved package from "networking applications" to "hardware handling"
+  (used "networking applications" originally, because ipmitool can
+  be used to send commands to the BMC of a remote server,
+  e.g. telling it to reboot the system.
+  However another use of ipmitool is to configure the local BMC
+  and "hardware handling" might be a better match for both.)
+---
+ package/Config.in            |  1 +
+ package/ipmitool/Config.in   | 17 +++++++++++++++++
+ package/ipmitool/ipmitool.mk | 25 +++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 package/ipmitool/Config.in
+ create mode 100644 package/ipmitool/ipmitool.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 883dd66..302a638 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -321,6 +321,7 @@ endif
+ 	source "package/input-tools/Config.in"
+ 	source "package/intel-microcode/Config.in"
+ 	source "package/iostat/Config.in"
++	source "package/ipmitool/Config.in"
+ 	source "package/irda-utils/Config.in"
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
 new file mode 100644
-index 0000000..30ac71a
+index 0000000..300a553
 --- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0062-ldso-libdl-Also-include-dl-tls.h-for-for-SHARED.patch
-@@ -0,0 +1,58 @@
-+uClibc: ldso/libdl: Also include dl-tls.h for for !SHARED.
++++ b/package/ipmitool/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_IPMITOOL
++	bool "ipmitool"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_OPENSSL
++	help
++	  IPMItool provides a simple command-line interface to IPMI-enabled devices.
 +
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++	  http://sourceforge.net/projects/ipmitool/
 +
-+From b57e9640db53166c88cdac66b79a046e46b8d728 Mon Sep 17 00:00:00 2001
-+From: Gregory Fong <gregory.0xf0@gmail.com>
-+Date: Mon, 3 Jun 2013 13:32:55 -0700
-+Subject: [PATCH] ldso/libdl: Also include dl-tls.h for for !SHARED.
++if BR2_PACKAGE_IPMITOOL
 +
-+On MIPS, several relocations that were original only resolved by the
-+dynamic linker were reused as static relocations.  Consequently the
-+macros TLS_DTPREL_VALUE and TLS_TPREL_VALUE defined in
-+libpthread/nptl/sysdeps/mips/dl-tls.h need to be available even for
-+!SHARED.
++config BR2_PACKAGE_IPMITOOL_IPMIEVD
++	bool "ipmievd"
++	help
++	  IPMI event daemon for sending events to syslog
 +
-+Relevant: http://www.linux-mips.org/wiki/NPTL#History
++endif
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+new file mode 100644
+index 0000000..2d96549
+--- /dev/null
++++ b/package/ipmitool/ipmitool.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# ipmitool
++#
++################################################################################
 +
-+Original patch by Vincent Wen <wenvincent@gmail.com>:
-+http://lists.uclibc.org/pipermail/uclibc/2013-April/047707.html
++IPMITOOL_VERSION = 1.8.14
++IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
++IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
++IPMITOOL_LICENSE = BSD-3c
++IPMITOOL_LICENSE_FILES = COPYING
++IPMITOOL_DEPENDENCIES = openssl
 +
-+When build statically linked applications for MIPS platform,
-+sometimes the linker fails with following errors:
-+undefined reference to TLS_DTPREL_VALUE
-+undefined reference to TLS_TPREL_VALUE
-+The include of dl-tls.h is only in code guarded by SHARED,
-+Removing the SHARED compilation option to cover static link too.
++ifeq ($(BR2_PACKAGE_READLINE),y)
++IPMITOOL_DEPENDENCIES += readline
++endif
 +
-+Signed-off-by: Vincent Wen <wenvincent90@gmail.com>
++ifneq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),y)
++define IPMITOOL_REMOVE_IPMIEVD
++	$(RM) -f $(TARGET_DIR)/usr/sbin/ipmievd
++endef
++IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
++endif
 +
-+Signed-off-by: Gregory Fong <gregory.0xf0@gmail.com>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+ ldso/libdl/libdl.c |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/ldso/libdl/libdl.c b/ldso/libdl/libdl.c
-+index 3a78696..ed4e735 100644
-+--- a/ldso/libdl/libdl.c
-++++ b/ldso/libdl/libdl.c
-+@@ -42,6 +42,7 @@
-+ 
-+ #if defined(USE_TLS) && USE_TLS
-+ #include <ldsodefs.h>
-++#include <dl-tls.h>
-+ extern void _dl_add_to_slotinfo(struct link_map  *l);
-+ #endif
-+ 
-+@@ -51,7 +52,6 @@ __UCLIBC_MUTEX_STATIC(_dl_mutex, PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP);
-+ 
-+ #ifdef SHARED
-+ # if defined(USE_TLS) && USE_TLS
-+-# include <dl-tls.h>
-+ extern struct link_map *_dl_update_slotinfo(unsigned long int req_modid);
-+ # endif
-+ 
-+-- 
-+1.7.1
-+
++$(eval $(autotools-package))
 -- 
-1.7.1
+1.8.3.2
