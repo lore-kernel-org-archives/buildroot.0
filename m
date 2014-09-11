@@ -1,75 +1,120 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 12 Sep 2014 00:18:53 +0200
-Subject: [Buildroot] [PATCH 1/1] Adds ipmitool,
- a command-line interface to IPMI-enabled devices.
-In-Reply-To: <20140911235734.2b609e11@free-electrons.com>
-References: <1410443366-22146-1-git-send-email-bos@je-eigen-domein.nl>
- <20140911235734.2b609e11@free-electrons.com>
-Message-ID: <54121FCD.9000004@je-eigen-domein.nl>
+Date: Fri, 12 Sep 2014 01:12:48 +0200
+Subject: [Buildroot] [PATCH v3 1/1] ipmitool: new package
+Message-ID: <1410477168-5512-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Adds ipmitool, a command-line interface to IPMI-enabled devices.
 
-On 09/11/2014 11:57 PM, Thomas Petazzoni wrote:
-> Dear Floris Bos,
->
-> The title of the commit should be:
->
-> 	ipmitool: new package
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Sorry, forgot that line in v2.
+---
+v3:
 
-> On Thu, 11 Sep 2014 15:49:26 +0200, Floris Bos wrote:
->
->> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
->> new file mode 100644
->> index 0000000..300a553
->> --- /dev/null
->> +++ b/package/ipmitool/Config.in
->> @@ -0,0 +1,17 @@
->> +config BR2_PACKAGE_IPMITOOL
->> +	bool "ipmitool"
->> +	depends on BR2_USE_MMU # fork()
->> +	select BR2_PACKAGE_OPENSSL
-> This looks wrong: I was able to build the ipmitool package without
-> openssl. So openssl seems like an optional dependency, not a mandatory
-> one. The fact that David Bachelart was also able to build ipmitool
-> without openssl seems to confirm this.
+- make IPMI v2.0 lanplus interface support (requiring OpenSSL) optional.
 
-Ah, you are right.
-You do can build without OpenSSL if you only want to use ipmitool to 
-talk to the local BMC using the openipmi kernel driver.
-This is typically used to configure it, e.g. to set an 
-IP/netmask/gateway address, so the BMC can be remotely accessed.
+v2:
 
-My own usage does not involve initial configuration of a local BMC, but 
-is about sending commands to the BMC of OTHER servers over the network.
-This does require it.
+- ipmitool needs MMU (David Bachelart)
+- moved package from "networking applications" to "hardware handling"
+  (used "networking applications" originally, because ipmitool can
+  be used to send commands to the BMC of a remote server,
+  e.g. telling it to reboot the system.
+  However another use of ipmitool is to configure the local BMC
+  and "hardware handling" might be a better match for both.)
 
->> +IPMITOOL_DEPENDENCIES = openssl
-> So this should be handled like readline, as an optional dependency.
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ package/Config.in            |  1 +
+ package/ipmitool/Config.in   | 26 ++++++++++++++++++++++++++
+ package/ipmitool/ipmitool.mk | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+)
+ create mode 100644 package/ipmitool/Config.in
+ create mode 100644 package/ipmitool/ipmitool.mk
 
-Ok, then I'll make an option for "lanplus interface support" in the 
-configuration, that adds OpenSSL when selected.
-
->> +
->> +ifeq ($(BR2_PACKAGE_READLINE),y)
->> +IPMITOOL_DEPENDENCIES += readline
->> +endif
->> +
->> +ifneq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),y)
-> Or, better, use positive logic:
->
-> ifeq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),)
-
-Ok
-
-
-
-Yours sincerely,
-
-Floris Bos
+diff --git a/package/Config.in b/package/Config.in
+index 883dd66..302a638 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -321,6 +321,7 @@ endif
+ 	source "package/input-tools/Config.in"
+ 	source "package/intel-microcode/Config.in"
+ 	source "package/iostat/Config.in"
++	source "package/ipmitool/Config.in"
+ 	source "package/irda-utils/Config.in"
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+new file mode 100644
+index 0000000..e9b5374
+--- /dev/null
++++ b/package/ipmitool/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_IPMITOOL
++	bool "ipmitool"
++	depends on BR2_USE_MMU # fork()
++	help
++	  IPMItool provides a simple command-line interface to IPMI-enabled devices.
++
++	  http://sourceforge.net/projects/ipmitool/
++
++if BR2_PACKAGE_IPMITOOL
++
++config BR2_PACKAGE_IPMITOOL_LANPLUS
++	bool "enable lanplus interface"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enables the IPMI v2.0 RMCP+ LAN interface typically used to send IPMI
++	  commands to the BMC of a remote server.
++	  Not needed if you only want to communicate with the local BMC of your
++	  device using the OpenIPMI ipmi_si kernel module, or if using the
++	  legacy IPMI v1.5 RMCP LAN interface.
++
++config BR2_PACKAGE_IPMITOOL_IPMIEVD
++	bool "ipmievd"
++	help
++	  IPMI event daemon for sending events to syslog
++
++endif
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+new file mode 100644
+index 0000000..85be883
+--- /dev/null
++++ b/package/ipmitool/ipmitool.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# ipmitool
++#
++################################################################################
++
++IPMITOOL_VERSION = 1.8.14
++IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
++IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
++IPMITOOL_LICENSE = BSD-3c
++IPMITOOL_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_IPMITOOL_LANPLUS),y)
++IPMITOOL_DEPENDENCIES += openssl
++else
++IPMITOOL_CONF_OPT += --disable-intf-lanplus
++endif
++
++ifeq ($(BR2_PACKAGE_READLINE),y)
++IPMITOOL_DEPENDENCIES += readline
++endif
++
++ifeq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),)
++define IPMITOOL_REMOVE_IPMIEVD
++	$(RM) -f $(TARGET_DIR)/usr/sbin/ipmievd
++endef
++IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
++endif
++
++$(eval $(autotools-package))
+-- 
+1.8.3.2
