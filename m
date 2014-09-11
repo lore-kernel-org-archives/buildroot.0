@@ -1,70 +1,54 @@
-From: David Bachelart <david.bachelart@bbright.com>
-Date: Thu, 11 Sep 2014 09:44:25 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmitool: new package
-Message-ID: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 11 Sep 2014 10:12:21 +0100
+Subject: [Buildroot] [PATCH] coreutils: get the uptime program to work
+In-Reply-To: <1410381844-14466-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1410381844-14466-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54116775.1080204@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear ThomasP,
 
-Signed-off-by: David Bachelart <david.bachelart@bbright.com>
----
- package/Config.in            |    1 +
- package/ipmitool/Config.in   |    8 ++++++++
- package/ipmitool/ipmiutil.mk |   16 ++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/ipmitool/Config.in
- create mode 100644 package/ipmitool/ipmiutil.mk
+On 09/10/2014 09:44 PM, Thomas Petazzoni wrote:
+> coreutils configure script needs to know whether /proc/uptime is
+> available, but this is not possible in a cross-compilation
+> context. This leads to an uptime program that fails to work on the
+> target, as it has been compiled without /proc/uptime reading support.
+>
+> This commit fixes that by telling coreutils at configure time that
+> /proc/uptime will be available on the target (which seems to be a
+> reasonable assumption on Linux systems).
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   package/coreutils/coreutils.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+> index 07a1347..e6af7e2 100644
+> --- a/package/coreutils/coreutils.mk
+> +++ b/package/coreutils/coreutils.mk
+> @@ -57,6 +57,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+>   		gl_cv_func_working_mkstemp=yes \
+>   		gl_cv_func_working_utimes=yes \
+>   		gl_getline_needs_run_time_check=no \
+> +		gl_cv_have_proc_uptime=yes \
+>   		utils_cv_localtime_cache=no \
+>   		PERL=missing
+>
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 883dd66..302a638 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -321,6 +321,7 @@ endif
- 	source "package/input-tools/Config.in"
- 	source "package/intel-microcode/Config.in"
- 	source "package/iostat/Config.in"
-+	source "package/ipmitool/Config.in"
- 	source "package/irda-utils/Config.in"
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-new file mode 100644
-index 0000000..c456a61
---- /dev/null
-+++ b/package/ipmitool/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_IPMITOOL
-+  bool "ipmitool"
-+  help
-+    IPMItool provides a simple command-line interface to IPMI-enabled devices
-+    through an IPMIv1.5 or IPMIv2.0 LAN interface or Linux/Solaris kernel 
-+    driver.
-+
-+    http://ipmitool.sourceforge.net/
-diff --git a/package/ipmitool/ipmiutil.mk b/package/ipmitool/ipmiutil.mk
-new file mode 100644
-index 0000000..2b179b0
---- /dev/null
-+++ b/package/ipmitool/ipmiutil.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# ipmitool
-+#
-+################################################################################
-+
-+IPMITOOL_VERSION = 1.8.14
-+IPMITOOL_SITE = http://sourceforge.net/projects/ipmitool/files/ipmitool/$(IPMITOOL_VERSION)
-+IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
-+
-+IPMITOOL_LICENSE = GPL2+
-+IPMITOOL_LICENSE_FILES = COPYING
-+
-+IPMITOOL_CONF_OPTS = --enable-ipmishell
-+
-+$(eval $(autotools-package))
+Welcome to Buildroot
+(none) login: root
+# uptime
+  00:00am  up   0:00,  1 user,  load average: 0.46, 0.00, 0.10
+
+It works :)
+
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
 -- 
-1.7.10.4
+Vincent
