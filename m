@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Sep 2014 23:53:12 +0200
-Subject: [Buildroot] [PATCH 1/1] sqlite: add option to disable fsync
-In-Reply-To: <1410450212-30718-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1410450212-30718-1-git-send-email-bos@je-eigen-domein.nl>
- <1410450212-30718-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20140911235312.215338f2@free-electrons.com>
+Date: Thu, 11 Sep 2014 23:57:34 +0200
+Subject: [Buildroot] [PATCH 1/1] Adds ipmitool,
+ a command-line interface to IPMI-enabled devices.
+In-Reply-To: <1410443366-22146-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1410443366-22146-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20140911235734.2b609e11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,82 @@ To: buildroot@busybox.net
 
 Dear Floris Bos,
 
-On Thu, 11 Sep 2014 17:43:32 +0200, Floris Bos wrote:
-> For use-cases in which performance is more important than data integrity.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/sqlite/Config.in | 8 ++++++++
->  package/sqlite/sqlite.mk | 4 ++++
->  2 files changed, 12 insertions(+)
+The title of the commit should be:
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+	ipmitool: new package
 
-Only one small nitpick below, which can probably be fixed when Peter
-applies the patch.
+On Thu, 11 Sep 2014 15:49:26 +0200, Floris Bos wrote:
 
-> 
-> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-> index fe6cc08..298f1ca 100644
-> --- a/package/sqlite/Config.in
-> +++ b/package/sqlite/Config.in
-> @@ -53,4 +53,12 @@ config BR2_PACKAGE_SQLITE_SECURE_DELETE
->  	  http://www.sqlite.org/pragma.html#pragma_secure_delete
->  	  for additional information.
->  
-> +config BR2_PACKAGE_SQLITE_NO_SYNC
-> +	bool "Disable fsync"
+> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+> new file mode 100644
+> index 0000000..300a553
+> --- /dev/null
+> +++ b/package/ipmitool/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_IPMITOOL
+> +	bool "ipmitool"
+> +	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_OPENSSL
+
+This looks wrong: I was able to build the ipmitool package without
+openssl. So openssl seems like an optional dependency, not a mandatory
+one. The fact that David Bachelart was also able to build ipmitool
+without openssl seems to confirm this.
+
 > +	help
-> +	  By default SQLite forces all database transactions to storage
-> +	  immediately using fsync() to protect against data loss in case
-> +	  of power failure.
-> +	  This option turns this behavior off resulting in higher performance
-> +	  especially when using slow flash storage.
->  endif
+> +	  IPMItool provides a simple command-line interface to IPMI-enabled devices.
+> +
+> +	  http://sourceforge.net/projects/ipmitool/
+> +
+> +if BR2_PACKAGE_IPMITOOL
+> +
+> +config BR2_PACKAGE_IPMITOOL_IPMIEVD
+> +	bool "ipmievd"
+> +	help
+> +	  IPMI event daemon for sending events to syslog
+> +
+> +endif
+> diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+> new file mode 100644
+> index 0000000..2d96549
+> --- /dev/null
+> +++ b/package/ipmitool/ipmitool.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# ipmitool
+> +#
+> +################################################################################
+> +
+> +IPMITOOL_VERSION = 1.8.14
+> +IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+> +IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
+> +IPMITOOL_LICENSE = BSD-3c
+> +IPMITOOL_LICENSE_FILES = COPYING
+> +IPMITOOL_DEPENDENCIES = openssl
 
-Missing new line before "endif".
+So this should be handled like readline, as an optional dependency.
+
+> +
+> +ifeq ($(BR2_PACKAGE_READLINE),y)
+> +IPMITOOL_DEPENDENCIES += readline
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),y)
+
+Or, better, use positive logic:
+
+ifeq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),)
+
+> +define IPMITOOL_REMOVE_IPMIEVD
+> +	$(RM) -f $(TARGET_DIR)/usr/sbin/ipmievd
+> +endef
+> +IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+Other than that, looks good to me. Care to fix those issues and resend?
 
 Thanks,
 
