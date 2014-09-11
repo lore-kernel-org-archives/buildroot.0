@@ -1,67 +1,79 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 11 Sep 2014 10:13:40 +0100
-Subject: [Buildroot] [PATCH 1/2] coreutils: Do not install uptime
-In-Reply-To: <20140910224529.24ee19a4@free-electrons.com>
-References: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140910224529.24ee19a4@free-electrons.com>
-Message-ID: <541167C4.8010905@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Sep 2014 11:26:14 +0200
+Subject: [Buildroot] [PATCH 1/1] ipmitool: new package
+In-Reply-To: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
+References: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <20140911112614.0996937a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/10/2014 09:45 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Wed, 10 Sep 2014 15:30:05 +0100, Vicente Olivert Riera wrote:
->> coreutils' uptime doesn't work and its execution fails with a message
->> like this one:
->>
->>    uptime: couldn't get boot time: No such file or directory
->>
->> busybox and procps-ng provide a working alternative.
->>
->> This is a common old problem as we can see here:
->>
->>    https://lists.openwrt.org/pipermail/openwrt-devel/2011-March/010006.html
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> Reviewed-by: Markos.Chandras <Markos.Chandras@imgtec.com>
->> ---
->>   package/coreutils/coreutils.mk |    3 ++-
->>   1 files changed, 2 insertions(+), 1 deletions(-)
->>
->> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
->> index 07a1347..7457b79 100644
->> --- a/package/coreutils/coreutils.mk
->> +++ b/package/coreutils/coreutils.mk
->> @@ -61,7 +61,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
->>   		PERL=missing
->>
->>   COREUTILS_CONF_OPT = --disable-rpath \
->> -		--enable-install-program=hostname
->> +		--enable-install-program=hostname \
->> +		--enable-no-install-program=uptime
->
-> I think this is not the proper fix. A more appropriate fix is to
-> actually get uptime to work, which is a oneliner. See my patch posted
-> at http://patchwork.ozlabs.org/patch/387971/.
+Dear David Bachelart,
 
-I have tested it and it works fine.
+On Thu, 11 Sep 2014 09:44:25 +0200, David Bachelart wrote:
 
-> I'll mark your patch as Rejected in patchwork. Of course, if you
-> disagree, feel free to turn back your patch to the "New" state with an
-> explanation.
+> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+> new file mode 100644
+> index 0000000..c456a61
+> --- /dev/null
+> +++ b/package/ipmitool/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_IPMITOOL
+> +  bool "ipmitool"
+> +  help
 
-I don't disagree. I also think it's better to have a working coreutils' 
-uptime instead of disabling it.
+Indentation should be one tab here.
 
-> Thanks a lot for noticing this issue in the first place!
+> +    IPMItool provides a simple command-line interface to IPMI-enabled devices
+> +    through an IPMIv1.5 or IPMIv2.0 LAN interface or Linux/Solaris kernel 
+> +    driver.
+> +
+> +    http://ipmitool.sourceforge.net/
 
-You are welcome.
+And one tab + two spaces for the help text. See
+http://buildroot.org/downloads/manual/manual.html#writing-rules-config-in.
 
-> Thomas
 
+> +IPMITOOL_VERSION = 1.8.14
+> +IPMITOOL_SITE = http://sourceforge.net/projects/ipmitool/files/ipmitool/$(IPMITOOL_VERSION)
+> +IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+> +
+> +IPMITOOL_LICENSE = GPL2+
+
+Did you look into the COPYING file? It's clearly not a GPL license. It
+looks more like a MIT license, but not sure.
+
+> +IPMITOOL_LICENSE_FILES = COPYING
+> +
+> +IPMITOOL_CONF_OPTS = --enable-ipmishell
+> +
+> +$(eval $(autotools-package))
+
+Also, could you quickly check if your package builds fine with the
+following toolchain configurations:
+
+ * http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
+ * http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
+ * http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config 
+ * http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
+
+The first will check a basic uClibc configuration, to ensure your
+package does not depend on features like wide-char, RPC, locales, etc.
+
+The second will check if your package can build on noMMU platforms.
+
+The third will check if your package can build on platforms that don't
+support shared libraries.
+
+The fourth will check if your package can build on platforms built
+without thread support.
+
+Thanks a lot!
+
+Thomas
 -- 
-Vincent
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
