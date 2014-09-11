@@ -1,64 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Sep 2014 22:50:47 +0200
-Subject: [Buildroot] [git commit] libarchive: avoid some tools to build
-	statically on shared builds
-Message-ID: <20140911205338.6BF9C9D668@busybox.osuosl.org>
+Date: Thu, 11 Sep 2014 22:53:08 +0200
+Subject: [Buildroot] [git commit] arch/arc: fix atomics selection
+Message-ID: <20140911205338.738169D669@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9581d0d1177d41cc61501e0f93f6089da3c1d4c1
+commit: http://git.buildroot.net/buildroot/commit/?id=21c8f1e9470d37787b6d7cef10612df56cfdef2a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some libarchive tools, like bsdtar, builds statically by default
-although libarchive itself is being built dynamically. We can force
-those tools to build the same way as libarchive by using the right
-configure options.
+Due to a kconfig limitation, we can't select a no-prompt symbol that
+gets its dependencies by being conditionally re-defined in one or more
+if-blocks, like we currently do for BR2_ARCH_HAS_ATOMICS.
 
-Fixes:
-  http://autobuild.buildroot.net/results/b8f/b8f7a29787ea1cc5c98e4cbd5f47f257f9b306f2/
+As a workaround to this issue, we just redefine that symbol in the arc
+if-block, like we do for all other architectures, except that in the arc
+case, the default value is conditional.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
+Reported-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+[yann.morin.1998 at free.fr: indepently re-done a patch similar to the one
+ Thomas made on his own]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libarchive/libarchive.mk |   24 +++++++++++++++++++++---
- 1 files changed, 21 insertions(+), 3 deletions(-)
+ arch/Config.in.arc |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 8c6951d..979e65c 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -9,9 +9,27 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
- LIBARCHIVE_LICENSE_FILES = COPYING
--LIBARCHIVE_CONF_OPT = --without-lzma \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
-+LIBARCHIVE_CONF_OPT = --without-lzma
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 8a7f290..fcb5d7d 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,7 +1,9 @@
+ # Choise of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+-	select BR2_ARCH_HAS_ATOMICS
 +
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBARCHIVE_CONF_OPT += --enable-bsdtar=static
-+else
-+LIBARCHIVE_CONF_OPT += --enable-bsdtar=shared
-+endif
-+else
-+LIBARCHIVE_CONF_OPT += --disable-bsdtar
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),y)
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBARCHIVE_CONF_OPT += --enable-bsdcpio=static
-+else
-+LIBARCHIVE_CONF_OPT += --enable-bsdcpio=shared
-+endif
-+else
-+LIBARCHIVE_CONF_OPT += --disable-bsdcpio
-+endif
++config BR2_ARCH_HAS_ATOMICS
++	default y if BR2_ARC_ATOMIC_EXT
  
- ifeq ($(BR2_PACKAGE_ACL),y)
- LIBARCHIVE_DEPENDENCIES += acl
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
