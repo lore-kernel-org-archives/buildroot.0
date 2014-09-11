@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Sep 2014 11:26:14 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmitool: new package
-In-Reply-To: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
-References: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20140911112614.0996937a@free-electrons.com>
+Date: Thu, 11 Sep 2014 11:28:26 +0200
+Subject: [Buildroot] [v2 1/1] dos2unix: new package
+In-Reply-To: <1410421438-9694-1-git-send-email-david.bachelart@bbright.com>
+References: <1410421438-9694-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <20140911112826.3c8d0947@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +12,70 @@ To: buildroot@busybox.net
 
 Dear David Bachelart,
 
-On Thu, 11 Sep 2014 09:44:25 +0200, David Bachelart wrote:
+On Thu, 11 Sep 2014 09:43:57 +0200, David Bachelart wrote:
 
-> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+> diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
 > new file mode 100644
-> index 0000000..c456a61
+> index 0000000..946271b
 > --- /dev/null
-> +++ b/package/ipmitool/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_IPMITOOL
-> +  bool "ipmitool"
+> +++ b/package/dos2unix/Config.in.host
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_HOST_DOS2UNIX
+> +  bool "host dos2unix"
 > +  help
 
-Indentation should be one tab here.
+Indentation: one tab.
 
-> +    IPMItool provides a simple command-line interface to IPMI-enabled devices
-> +    through an IPMIv1.5 or IPMIv2.0 LAN interface or Linux/Solaris kernel 
-> +    driver.
+> +    dos2unix converts text file line endings between CRLF and LF
 > +
-> +    http://ipmitool.sourceforge.net/
+> +    http://freshmeat.net/projects/dos2unix
 
-And one tab + two spaces for the help text. See
-http://buildroot.org/downloads/manual/manual.html#writing-rules-config-in.
+Indentation: one tab + two spaces. See the Buildroot manual, "Coding
+style" section for details.
 
-
-> +IPMITOOL_VERSION = 1.8.14
-> +IPMITOOL_SITE = http://sourceforge.net/projects/ipmitool/files/ipmitool/$(IPMITOOL_VERSION)
-> +IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+> diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+> new file mode 100644
+> index 0000000..ad47e61
+> --- /dev/null
+> +++ b/package/dos2unix/dos2unix.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# dos2unix
+> +#
+> +################################################################################
 > +
-> +IPMITOOL_LICENSE = GPL2+
+> +DOS2UNIX_VERSION = 6.0.6
+> +DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
 
-Did you look into the COPYING file? It's clearly not a GPL license. It
-looks more like a MIT license, but not sure.
+There is a 7.0 version. Any reason not to use it?
 
-> +IPMITOOL_LICENSE_FILES = COPYING
 > +
-> +IPMITOOL_CONF_OPTS = --enable-ipmishell
+> +DOS2UNIX_LICENSE = BSD-2c
+> +DOS2UNIX_LICENSE_FILES = COPYING.txt
+
+This looks good;
+
 > +
-> +$(eval $(autotools-package))
+> +define HOST_DOS2UNIX_BUILD_CMDS
+> +  $(HOST_CONFIGURE_OPTS) \
+> +	make -C $(@D)
 
-Also, could you quickly check if your package builds fine with the
-following toolchain configurations:
+Indent with tab, and maybe put on one line since it's not too long. And
+use $(MAKE), not make.
 
- * http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
- * http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
- * http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config 
- * http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
 
-The first will check a basic uClibc configuration, to ensure your
-package does not depend on features like wide-char, RPC, locales, etc.
+> +endef
+> +
+> +define HOST_DOS2UNIX_INSTALL_CMDS
+> +  $(HOST_CONFIGURE_OPTS) \
+> +	make -C $(@D) install DESTDIR=$(HOST_DIR)
 
-The second will check if your package can build on noMMU platforms.
+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+		install DESTDIR=$(HOST_DIR)
 
-The third will check if your package can build on platforms that don't
-support shared libraries.
-
-The fourth will check if your package can build on platforms built
-without thread support.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
