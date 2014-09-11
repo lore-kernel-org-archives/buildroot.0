@@ -1,28 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 11 Sep 2014 22:52:04 +0200
-Subject: [Buildroot] [PATCH] libarchive: avoid some tools to build
-	statically on shared builds
-In-Reply-To: <1409319547-25577-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 29 Aug 2014 14:39:07 +0100")
-References: <1409319547-25577-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87d2b1dgnf.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Sep 2014 22:53:23 +0200
+Subject: [Buildroot] [PATCH] arch/arc: fix atomics selection
+In-Reply-To: <1410468406-10535-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 11 Sep 2014 22:46:46 +0200")
+References: <1410468406-10535-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <878ulpdgl8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Some libarchive tools, like bsdtar, builds statically by default
- > although libarchive itself is being built dynamically. We can force
- > those tools to build the same way as libarchive by using the right
- > configure options.
+ > Due to a kconfig limitation, we can't select a no-prompt symbol that
+ > gets its dependencies by being conditionally re-defined in one or more
+ > if-blocks, like we currently do for BR2_ARCH_HAS_ATOMICS.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/b8f/b8f7a29787ea1cc5c98e4cbd5f47f257f9b306f2/
+ > As a workaround to this issue, we just redefine that symbol in the arc
+ > if-block, like we do for all other architectures, except that in the arc
+ > case, the default value is conditional.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Reported-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+ > [yann.morin.1998 at free.fr: indepently re-done a patch similar to the one
+ >  Thomas made on his own]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
