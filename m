@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Sep 2014 22:57:15 +0200
-Subject: [Buildroot] [PATCH 1/2] powerpc/spe: tweak glibc/eglibc/uclibc
- combinations
-In-Reply-To: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140911225715.70f88987@free-electrons.com>
+Date: Thu, 11 Sep 2014 23:36:03 +0200
+Subject: [Buildroot] [PATCH] erlang: needs thread support
+Message-ID: <1410471363-13293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Fixes:
 
-On Thu, 11 Sep 2014 08:56:31 -0300, Gustavo Zacarias wrote:
-> Since (e)glibc 2.19+ PowerPC SPE changed ABI conventions for sanity.
-> In the good old days hard-float was used, it sounds good on paper until
-> you account for the e500v1/v2 differences, with v1 being a fpu that does
-> only single-precision math.
-> 
-> So the ABI changed to make it soft-float and the libc (or libm) handle
-> that deficiency in software if required, making old precompiled binaries
-> incompatible (of no concern for buildroot since we've got no precompiled
-> binary blobs for SPE in packages).
+  http://autobuild.buildroot.org/results/1f3/1f313aee75328c27e260c55dbf7caa5d3d6a07d3/
+  http://autobuild.buildroot.org/results/2f2/2f213d8cf6f828a68a2f36bb95564b8db043e7a2/
 
-I'm not sure to fully understand: is PowerPC really using *soft-float*
-as in all floating point operations are emulated in software? Or is it
-a difference similar to the difference between hardfp and softfp on ARM
-(both use the FPU and floating point instructions, it's only a
-different ABI, where hardfp passes floating point arguments in floating
-point registers, while softfp passes floating point arguments in
-integer registers).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-
-Thomas
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 2ee8515..06833b9 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -1,6 +1,10 @@
++comment "erlang needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_ERLANG
+ 	bool "erlang"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Erlang is a programming language used to build massively scalable
+ 	  soft real-time systems with requirements on high availability.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
