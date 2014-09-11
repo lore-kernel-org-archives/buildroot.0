@@ -1,34 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Sep 2014 22:49:56 +0200
-Subject: [Buildroot] [git commit] xapp_xdpyinfo: depends on MMU
-Message-ID: <20140911205338.631EC9D640@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Sep 2014 22:57:15 +0200
+Subject: [Buildroot] [PATCH 1/2] powerpc/spe: tweak glibc/eglibc/uclibc
+ combinations
+In-Reply-To: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140911225715.70f88987@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27c706afe2e41d3a130e69d3293aae7acd87c8b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-This package needs MMU. Hence added dependency on BR2_USE_MMU
+On Thu, 11 Sep 2014 08:56:31 -0300, Gustavo Zacarias wrote:
+> Since (e)glibc 2.19+ PowerPC SPE changed ABI conventions for sanity.
+> In the good old days hard-float was used, it sounds good on paper until
+> you account for the e500v1/v2 differences, with v1 being a fpu that does
+> only single-precision math.
+> 
+> So the ABI changed to make it soft-float and the libc (or libm) handle
+> that deficiency in software if required, making old precompiled binaries
+> incompatible (of no concern for buildroot since we've got no precompiled
+> binary blobs for SPE in packages).
 
-Fixes http://autobuild.buildroot.net/results/2da/2dada0264409d8fa6befedbc02c0de77c605a5fa/
+I'm not sure to fully understand: is PowerPC really using *soft-float*
+as in all floating point operations are emulated in software? Or is it
+a difference similar to the difference between hardfp and softfp on ARM
+(both use the FPU and floating point instructions, it's only a
+different ABI, where hardfp passes floating point arguments in floating
+point registers, while softfp passes floating point arguments in
+integer registers).
 
-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xapp_xdpyinfo/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/package/x11r7/xapp_xdpyinfo/Config.in b/package/x11r7/xapp_xdpyinfo/Config.in
-index 6584ae1..8527903 100644
---- a/package/x11r7/xapp_xdpyinfo/Config.in
-+++ b/package/x11r7/xapp_xdpyinfo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XAPP_XDPYINFO
- 	bool "xdpyinfo"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXTST
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
