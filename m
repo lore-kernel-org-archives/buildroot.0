@@ -1,99 +1,127 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 11 Sep 2014 15:49:26 +0200
-Subject: [Buildroot] [PATCH 1/1] Adds ipmitool,
-	a command-line interface to IPMI-enabled devices.
-Message-ID: <1410443366-22146-1-git-send-email-bos@je-eigen-domein.nl>
+Date: Thu, 11 Sep 2014 17:43:31 +0200
+Subject: [Buildroot] [PATCH 1/1] dropbear: add extra build customization
+	options
+Message-ID: <1410450212-30718-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Adds:
+
+- Option to build client (defaults y, for compatibility)
+- Option to disable password authentication,
+  to only allow public key authentication instead
+- Option to disable TCP forwarding.
+  Defaults to y, as most legitimate users are not using it,
+  and the feature is very popular with spammers that scan
+  for devices with weak passwords and use them to relay spam.
+
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-
 ---
-v2:
+ package/dropbear/Config.in   | 21 +++++++++++++++++++++
+ package/dropbear/dropbear.mk | 31 ++++++++++++++++++++++++++++---
+ 2 files changed, 49 insertions(+), 3 deletions(-)
 
-- ipmitool needs MMU (David Bachelart)
-- moved package from "networking applications" to "hardware handling"
-  (used "networking applications" originally, because ipmitool can
-  be used to send commands to the BMC of a remote server,
-  e.g. telling it to reboot the system.
-  However another use of ipmitool is to configure the local BMC
-  and "hardware handling" might be a better match for both.)
----
- package/Config.in            |  1 +
- package/ipmitool/Config.in   | 17 +++++++++++++++++
- package/ipmitool/ipmitool.mk | 25 +++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
- create mode 100644 package/ipmitool/Config.in
- create mode 100644 package/ipmitool/ipmitool.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 883dd66..302a638 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -321,6 +321,7 @@ endif
- 	source "package/input-tools/Config.in"
- 	source "package/intel-microcode/Config.in"
- 	source "package/iostat/Config.in"
-+	source "package/ipmitool/Config.in"
- 	source "package/irda-utils/Config.in"
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-new file mode 100644
-index 0000000..300a553
---- /dev/null
-+++ b/package/ipmitool/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_IPMITOOL
-+	bool "ipmitool"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_OPENSSL
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 68c3b71..dad2ab3 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -8,6 +8,12 @@ config BR2_PACKAGE_DROPBEAR
+ 
+ if BR2_PACKAGE_DROPBEAR
+ 
++config BR2_PACKAGE_DROPBEAR_CLIENT
++	bool "client programs"
++	default y
 +	help
-+	  IPMItool provides a simple command-line interface to IPMI-enabled devices.
++	  Provides dbclient, ssh
 +
-+	  http://sourceforge.net/projects/ipmitool/
-+
-+if BR2_PACKAGE_IPMITOOL
-+
-+config BR2_PACKAGE_IPMITOOL_IPMIEVD
-+	bool "ipmievd"
+ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	bool "disable reverse DNS lookups"
+ 	help
+@@ -15,6 +21,21 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	  on systems without working DNS, as connections otherwise
+ 	  stall until DNS times out.
+ 
++config BR2_PACKAGE_DROPBEAR_DISABLE_PASSWORD_AUTH
++	bool "disable password authentication"
 +	help
-+	  IPMI event daemon for sending events to syslog
++	  Disable password authentication. Typically used when security
++	  requirements demand that only public key authentication is allowed.
 +
++config BR2_PACKAGE_DROPBEAR_DISABLE_TCP_FORWARDING
++	bool "disable TCP forwarding"
++	default y
++	help
++	  Disable TCP forwarding. SSH allows tunneling TCP connections,
++	  if you do not need that, it is better to disable it.
++	  Spammers are known to scan for accounts with weak passwords
++	  and abuse this functionality as easy cross-platform way to relay spam.
++
+ config BR2_PACKAGE_DROPBEAR_SMALL
+ 	bool "optimize for size"
+ 	default y
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index e8fcdf6..4d1492c 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -7,12 +7,18 @@
+ DROPBEAR_VERSION = 2014.65
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
++DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
++DROPBEAR_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+ 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
+-
+-DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+-DROPBEAR_LICENSE_FILES = LICENSE
++else
++DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
++DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
++		PROGRAMS="dropbear dropbearkey dropbearconvert scp"
 +endif
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-new file mode 100644
-index 0000000..2d96549
---- /dev/null
-+++ b/package/ipmitool/ipmitool.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# ipmitool
-+#
-+################################################################################
-+
-+IPMITOOL_VERSION = 1.8.14
-+IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
-+IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
-+IPMITOOL_LICENSE = BSD-3c
-+IPMITOOL_LICENSE_FILES = COPYING
-+IPMITOOL_DEPENDENCIES = openssl
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+IPMITOOL_DEPENDENCIES += readline
-+endif
-+
-+ifneq ($(BR2_PACKAGE_IPMITOOL_IPMIEVD),y)
-+define IPMITOOL_REMOVE_IPMIEVD
-+	$(RM) -f $(TARGET_DIR)/usr/sbin/ipmievd
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ DROPBEAR_MAKE += STATIC=1
+@@ -28,6 +34,17 @@ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
+ endef
+ 
++define DROPBEAR_DISABLE_PASSWORD_AUTH
++	$(SED) 's:\(#define ENABLE_SVR_PASSWORD_AUTH\).*:/*\1 */:' $(@D)/options.h
 +endef
-+IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
++
++define DROPBEAR_DISABLE_TCP_FORWARDING
++	$(SED) 's:\(#define ENABLE_CLI_LOCALTCPFWD\).*:/*\1 */:' $(@D)/options.h
++	$(SED) 's:\(#define ENABLE_CLI_REMOTETCPFWD\).*:/*\1 */:' $(@D)/options.h
++	$(SED) 's:\(#define ENABLE_SVR_LOCALTCPFWD\).*:/*\1 */:' $(@D)/options.h
++	$(SED) 's:\(#define ENABLE_SVR_REMOTETCPFWD\).*:/*\1 */:' $(@D)/options.h
++endef
++
+ define DROPBEAR_BUILD_SMALL
+ 	$(SED) 's:.*\(#define DROPBEAR_SMALL_CODE\).*:\1:' $(@D)/options.h
+ 	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
+@@ -64,6 +81,14 @@ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_TCP_FORWARDING),y)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_TCP_FORWARDING
 +endif
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_PASSWORD_AUTH),y)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_PASSWORD_AUTH
++endif
++
+ ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_SMALL
+ DROPBEAR_CONF_OPT += --disable-zlib
 -- 
 1.8.3.2
