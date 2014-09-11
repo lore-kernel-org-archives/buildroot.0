@@ -1,63 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Sep 2014 22:41:36 +0200
-Subject: [Buildroot] [PATCH] arch/arc: fix atmoics selection
-In-Reply-To: <20140911223436.4eb4ce96@free-electrons.com>
-References: <1410465381-27916-1-git-send-email-yann.morin.1998@free.fr>
- <20140911223436.4eb4ce96@free-electrons.com>
-Message-ID: <20140911204136.GA3874@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 11 Sep 2014 22:43:05 +0200
+Subject: [Buildroot] [PATCH 1/2] exfat: bump to version 1.1.0
+In-Reply-To: <1410376050-21735-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 10 Sep 2014 16:07:29 -0300")
+References: <1410376050-21735-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738bxevmu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2014-09-11 22:34 +0200, Thomas Petazzoni spake thusly:
-> Minor typo in title: atmoics -> atomics.
+ > Use gentoo distfiles since the download infra can't handle google docs
+ > URLs.
 
-Eh...
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/exfat/exfat.mk | 8 ++++----
+ >  1 file changed, 4 insertions(+), 4 deletions(-)
 
-> On Thu, 11 Sep 2014 21:56:21 +0200, Yann E. MORIN wrote:
-> > Due to a kconfig limitation, we can't select a no-prompt symbol that
-> > gets its dependencies by be conditionally re-defined in one or more
-> 
-> "by be" ?
+ > diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+ > index 3c0dece..279c6a0 100644
+ > --- a/package/exfat/exfat.mk
+ > +++ b/package/exfat/exfat.mk
+ > @@ -4,8 +4,8 @@
+ >  #
+ >  ################################################################################
+ 
+ > -EXFAT_VERSION = 1.0.1
+ > -EXFAT_SITE = http://exfat.googlecode.com/files
+ > +EXFAT_VERSION = 1.1.0
+ > +EXFAT_SITE = http://distfiles.gentoo.org/distfiles
+ >  EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+ >  EXFAT_DEPENDENCIES = host-scons libfuse
+ >  EXFAT_LICENSE = GPLv3+
+ > @@ -13,12 +13,12 @@ EXFAT_LICENSE_FILES = COPYING
+ 
+ >  define EXFAT_BUILD_CMDS
+ >  	(cd $(@D); \
+ > -		$(TARGET_CONFIGURE_OPTS) $(SCONS))
+ > +		$(TARGET_CONFIGURE_OPTS) CCFLAGS="-std=c99" $(SCONS))
 
-by being...
+Shouldn't this be CCFLAGS="$(TARGET_CFLAGS) -std=c99"?
 
-> > if-blocks, like we currently do for BR2_ARCH_HAS_ATOMICS.
-> > 
-> > As a workaround to this issue, we just redefine that symbol in the arc
-> > if-block, like we do for all other archtectures, except that in the arc
-> 
-> architectures
+From a quick test it seems like it should:
 
-OK. Will re-spin. Thans!
+>>> exfat 1.1.0 Building
+(cd /home/peko/source/buildroot/output/build/exfat-1.1.0; <snip>
+ CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+ CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os "
+ <snip>
 
-Regards,
-Yann E. MORIN.
+/home/peko/source/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-gcc
+-o fuse/main.o -c -std=c99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -Ilibexfat
+fuse/main.c
 
-> > case, the default value is conditional.
-> > 
-> > Reported-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-> > [yann.morin.1998 at free.fr: indepently re-done a patch similar to the one
-> >  Thomas made on his own]
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+It looks like it only uses CPPFLAGS and CCFLAGS.
+
+Committed with that fixed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
