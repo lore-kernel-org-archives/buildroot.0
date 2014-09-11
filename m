@@ -1,34 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Sep 2014 08:56:32 -0300
-Subject: [Buildroot] [PATCH 2/2] arch/powerpc: default to soft-float for SPE
-	ABI
-In-Reply-To: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1410436592-1990-2-git-send-email-gustavo@zacarias.com.ar>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Thu, 11 Sep 2014 14:14:19 +0200
+Subject: [Buildroot] [PATCH 1/1] ipmitool: new package
+In-Reply-To: <54118D1F.8020609@je-eigen-domein.nl>
+References: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
+ <54118D1F.8020609@je-eigen-domein.nl>
+Message-ID: <CAJeZid+vktX7-RDqAqWZQ4-=1z71cdKcNsWO3zh+_bgMGntQMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It really is the way forward so switch the default.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- arch/Config.in.powerpc | 1 +
- 1 file changed, 1 insertion(+)
+2014-09-11 13:53 GMT+02:00 Floris Bos <bos@je-eigen-domein.nl>:
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 239f5dc..4c21739 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -141,6 +141,7 @@ endchoice
- 
- config BR2_POWERPC_SOFT_FLOAT
- 	bool "Use soft-float"
-+	default y if BR2_powerpc_SPE
- 	select BR2_SOFT_FLOAT
- 	help
- 	  If your target CPU does not have a Floating Point Unit (FPU)
--- 
-1.8.5.5
+> First of all note that I also submitted an ipmitool patch last month:
+> http://patchwork.ozlabs.org/patch/378793/
+> I don't care which one gets merged (anything is better than having to
+> maintain local packages), but you might want to take a look at it.
+
+
+Sorry for that, I usually look in pending patches, but this time, I forgot
+to do it.
+
+Your patch is more mature than mine, so I suggest to forget this one.
+
+Thanks,
+
+David
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140911/cea33571/attachment.html>
