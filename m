@@ -1,47 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Sep 2014 22:53:08 +0200
-Subject: [Buildroot] [git commit] arch/arc: fix atomics selection
-Message-ID: <20140911205338.738169D669@busybox.osuosl.org>
+Date: Thu, 11 Sep 2014 22:49:56 +0200
+Subject: [Buildroot] [git commit] xapp_xdpyinfo: depends on MMU
+Message-ID: <20140911205338.631EC9D640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21c8f1e9470d37787b6d7cef10612df56cfdef2a
+commit: http://git.buildroot.net/buildroot/commit/?id=27c706afe2e41d3a130e69d3293aae7acd87c8b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to a kconfig limitation, we can't select a no-prompt symbol that
-gets its dependencies by being conditionally re-defined in one or more
-if-blocks, like we currently do for BR2_ARCH_HAS_ATOMICS.
+This package needs MMU. Hence added dependency on BR2_USE_MMU
 
-As a workaround to this issue, we just redefine that symbol in the arc
-if-block, like we do for all other architectures, except that in the arc
-case, the default value is conditional.
+Fixes http://autobuild.buildroot.net/results/2da/2dada0264409d8fa6befedbc02c0de77c605a5fa/
 
-Reported-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-[yann.morin.1998 at free.fr: indepently re-done a patch similar to the one
- Thomas made on his own]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.arc |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xapp_xdpyinfo/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index 8a7f290..fcb5d7d 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -1,7 +1,9 @@
- # Choise of atomic instructions presence
- config BR2_ARC_ATOMIC_EXT
- 	bool "Atomic extension (LLOCK/SCOND instructions)"
--	select BR2_ARCH_HAS_ATOMICS
-+
-+config BR2_ARCH_HAS_ATOMICS
-+	default y if BR2_ARC_ATOMIC_EXT
- 
- config BR2_ARCH
- 	default "arc"	if BR2_arcle
+diff --git a/package/x11r7/xapp_xdpyinfo/Config.in b/package/x11r7/xapp_xdpyinfo/Config.in
+index 6584ae1..8527903 100644
+--- a/package/x11r7/xapp_xdpyinfo/Config.in
++++ b/package/x11r7/xapp_xdpyinfo/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XAPP_XDPYINFO
+ 	bool "xdpyinfo"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXTST
