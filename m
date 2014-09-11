@@ -1,92 +1,84 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 11 Sep 2014 13:53:03 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmitool: new package
-In-Reply-To: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
-References: <1410421465-9788-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <54118D1F.8020609@je-eigen-domein.nl>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 11 Sep 2014 08:56:31 -0300
+Subject: [Buildroot] [PATCH 1/2] powerpc/spe: tweak glibc/eglibc/uclibc
+	combinations
+Message-ID: <1410436592-1990-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Since (e)glibc 2.19+ PowerPC SPE changed ABI conventions for sanity.
+In the good old days hard-float was used, it sounds good on paper until
+you account for the e500v1/v2 differences, with v1 being a fpu that does
+only single-precision math.
 
-First of all note that I also submitted an ipmitool patch last month: 
-http://patchwork.ozlabs.org/patch/378793/
-I don't care which one gets merged (anything is better than having to 
-maintain local packages), but you might want to take a look at it.
+So the ABI changed to make it soft-float and the libc (or libm) handle
+that deficiency in software if required, making old precompiled binaries
+incompatible (of no concern for buildroot since we've got no precompiled
+binary blobs for SPE in packages).
 
-On 09/11/2014 09:44 AM, David Bachelart wrote:
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->   package/Config.in            |    1 +
->   package/ipmitool/Config.in   |    8 ++++++++
->   package/ipmitool/ipmiutil.mk |   16 ++++++++++++++++
->   3 files changed, 25 insertions(+)
->   create mode 100644 package/ipmitool/Config.in
->   create mode 100644 package/ipmitool/ipmiutil.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 883dd66..302a638 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -321,6 +321,7 @@ endif
->   	source "package/input-tools/Config.in"
->   	source "package/intel-microcode/Config.in"
->   	source "package/iostat/Config.in"
-> +	source "package/ipmitool/Config.in"
->   	source "package/irda-utils/Config.in"
->   	source "package/iucode-tool/Config.in"
->   	source "package/kbd/Config.in"
-> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-> new file mode 100644
-> index 0000000..c456a61
-> --- /dev/null
-> +++ b/package/ipmitool/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_IPMITOOL
-> +  bool "ipmitool"
-> +  help
-> +    IPMItool provides a simple command-line interface to IPMI-enabled devices
-> +    through an IPMIv1.5 or IPMIv2.0 LAN interface or Linux/Solaris kernel
-> +    driver.
-> +
-> +    http://ipmitool.sourceforge.net/
-> diff --git a/package/ipmitool/ipmiutil.mk b/package/ipmitool/ipmiutil.mk
-> new file mode 100644
-> index 0000000..2b179b0
-> --- /dev/null
-> +++ b/package/ipmitool/ipmiutil.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# ipmitool
-> +#
-> +################################################################################
-> +
-> +IPMITOOL_VERSION = 1.8.14
-> +IPMITOOL_SITE = http://sourceforge.net/projects/ipmitool/files/ipmitool/$(IPMITOOL_VERSION)
-> +IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
-> +
-> +IPMITOOL_LICENSE = GPL2+
-> +IPMITOOL_LICENSE_FILES = COPYING
-> +
-> +IPMITOOL_CONF_OPTS = --enable-ipmishell
+For uClibc the support is for hard-float so disable it for soft since it
+doesn't do the fallback trickery.
 
-Note that ipmitool depends on openssl for crypto functions, and if you 
-really want to have the interactive ipmishell functionality (instead of 
-just calling ipmitool as command line utility) you also needs readline.
+So do what's appropiate for each combination:
 
-License is BSD-3c
+               H-F   S-F
 
-Also note that ipmitool installs both ipmitool and ipmievd by default.
-Most people only use ipmitool though, so have an option to remove 
-ipmievd in my package.
-Might be something you might also consider.
+eglibc 2.18     x
+eglibc 2.19           x
+glibc 2.19            x
+glibc 2.20            x
+uclibc          x
 
+Eventually hard-float should just go away, i'm keeping it for
+compatibility purposes.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/glibc/Config.in                 | 4 ++--
+ toolchain/toolchain-buildroot/Config.in | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 8c033f2..748ff44 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -11,11 +11,11 @@ choice
+ 
+ config BR2_EGLIBC_VERSION_2_18
+ 	bool "2.18-svnr23787"
++	depends on !BR2_POWERPC_SOFT_FLOAT
+ 
+ config BR2_EGLIBC_VERSION_2_19
+ 	bool "2.19-svnr25243"
+-	# Build breakage
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_powerpc_SPE || (BR2_powerpc_SPE && BR2_POWERPC_SOFT_FLOAT)
+ 
+ endchoice
+ 
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 53d86dd..9a711c0 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -33,6 +33,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_sh     || BR2_sparc  || BR2_xtensa   || \
+ 		   BR2_x86_64
++	depends on !BR2_powerpc_SPE || (BR2_powerpc_SPE && !BR2_POWERPC_SOFT_FLOAT)
+ 	help
+ 	  This option selects uClibc as the C library for the
+ 	  cross-compilation toolchain.
+@@ -67,7 +68,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_microblaze
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PREFER_STATIC_LIB
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_powerpc_SPE || (BR2_powerpc_SPE && BR2_POWERPC_SOFT_FLOAT)
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our glibc.mk enables RPC support
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
-Yours sincerely,
-
-Floris Bos
+1.8.5.5
