@@ -1,37 +1,32 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Thu, 11 Sep 2014 04:40:34 +0200
-Subject: [Buildroot] [PATCH] dialog: Override ncurses config script
-In-Reply-To: <1409704002-30172-1-git-send-email-maarten@treewalker.org>
-References: <1409704002-30172-1-git-send-email-maarten@treewalker.org>
-Message-ID: <1410403234-19893-1-git-send-email-maarten@treewalker.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 11 Sep 2014 02:51:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 7424] undefined reference to
+	`__builtin_thread_pointer'
+In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
+References: <bug-7424-163@https.bugs.busybox.net/>
+Message-ID: <20140911025102.26B579D667@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without the override, systemwide ncurses6-config can be found instead
-of ncurses5-config from staging.
+https://bugs.busybox.net/show_bug.cgi?id=7424
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
----
-My previous patch contained a bug: DIALOG_CONF_OPT was overridden
-instead of appended to. This was not fatal on the build I tested it
-with but can break other builds. Below is the corrected patch.
+--- Comment #6 from reddi <reddy.mrp@gmail.com> 2014-09-11 02:51:01 UTC ---
+Created attachment 5660
+  --> https://bugs.busybox.net/attachment.cgi?id=5660
+attached config file
 
- package/dialog/dialog.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index fb00c9c..9af56e7 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -17,4 +17,6 @@ ifneq ($(BR2_ENABLE_LOCALE),y)
- DIALOG_DEPENDENCIES += libiconv
- endif
- 
-+DIALOG_CONF_OPT += NCURSES_CONFIG=$(STAGING_DIR)/usr/bin/ncurses5-config
-+
- $(eval $(autotools-package))
+PLease find the attached config file. please let me know if you need further
+info.
+
+Thanks 
+R
+
 -- 
-1.8.4.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
