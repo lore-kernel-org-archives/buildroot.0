@@ -1,50 +1,30 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Fri, 12 Sep 2014 16:20:13 +0800
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 12 Sep 2014 09:53:40 +0100
 Subject: [Buildroot] Analysis of build failures
 In-Reply-To: <20140912101105.1e932cb8@free-electrons.com>
 References: <20140912063012.AF99B100DEE@stock.ovh.net>
  <20140912101105.1e932cb8@free-electrons.com>
-Message-ID: <5412ACBD.2030009@gmail.com>
+Message-ID: <5412B494.4070607@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/09/14 16:11, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Samuel, Anton, Nathaniel, Vicente, Peter, Bernd, please see below.
-> 
-> On Fri, 12 Sep 2014 08:30:12 +0200 (CEST), Thomas Petazzoni wrote:
-> 
->>     x86_64 |     bandwidthd-v2.0.1-auto-r08 | NOK | http://autobuild.buildroot.net/results/ed2d4261aef005cd7a567bd01dd8e7c8a96aa2be/
-> 
-> Yet another bandwidthd issue in detecting libpng. Weird.
-> 
-> checking for png_read_info in -lpng... no
-> configure: error: Bandwidthd requires but cannot libpng
-> make: *** [/home/test/autobuild/instance-2/output/build/bandwidthd-v2.0.1-auto-r08/.stamp_configured] Error 1
-> make: Leaving directory `/home/test/autobuild/instance-2/buildroot'
-> 
+On 09/12/2014 09:11 AM, Thomas Petazzoni wrote:
+>>        mips |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/04de887fd501e1a1b9f811dacdf17596256097e6/
+>>      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/91c0413e755c365332bc15d1d69ab3d6160ae78c/
+>
+> Vicente, I think you looked into one of the two issues. Can you look at
+> the other one, and send the corresponding patches?
 
-This should be fixed by my patch that's in patchwork
-(http://patchwork.ozlabs.org/patch/381899/)
+One of them (sa_restorer) is very close to be fixed upstream. Maybe 
+today? Hopefully.
 
-The issue is configure can't check for libpng (in some cases) because
-it's test fails when lz is not tested for. (Linking the libpng test
-build fails due to -lz not being in LDFLAGS)
+To fix the other one (si_timerid) we need to patch uClibc, but that 
+patch will add some members to a struct, so that woulb be an ABI 
+breakage. We need to talk first to the person in maintaining uClibc for 
+MIPS and see what he thinks about this.
 
->>        arm |                 php-yaml-1.1.1 | NOK | http://autobuild.buildroot.net/results/a2d9e701494bdb5b1f3cf0e44b872c3665ac1186/
-> 
-> Yet another download issue. Nathaniel, can you have a look at what the file contains?
-> 
-
-Weird, that file doesn't exist anymore. Sounds like it was one I missed
-before, and then got randomly picked to be removed. I don't believe I
-have had any networking interruptions since that initial issue.
-
-> Thanks,
-> 
-> Thomas
-> 
+-- 
+Vincent
