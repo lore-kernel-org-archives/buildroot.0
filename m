@@ -1,56 +1,33 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 12 Sep 2014 11:40:38 +0100
-Subject: [Buildroot] [PATCH] strace: Disable for MIPS when using a uClibc
-	toolchain
-Message-ID: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 12 Sep 2014 13:12:03 +0000
+Subject: [Buildroot] [PATCH 1/2] libtirpc: add dependency on atomic
+	operations
+In-Reply-To: <20140908112703.2f405e2f@free-electrons.com>
+References: <1410157964-8422-1-git-send-email-abrodkin@synopsys.com>
+ <1410157964-8422-2-git-send-email-abrodkin@synopsys.com>
+ <20140908092306.12308c5a@free-electrons.com>
+ <1410168181.4784.16.camel@abrodkin-8560l.internal.synopsys.com>
+ <20140908112703.2f405e2f@free-electrons.com>
+Message-ID: <1410527523.3857.20.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A change introduced in strace-4.9 makes it incompatible with MIPS
-architecture when using a uClibc toolchain. This is the failure:
+Hi Thomas,
 
-signal.c: In function 'printsiginfo':
-signal.c:453:9: error: 'siginfo_t' has no member named 'si_timerid'
-      sip->si_timerid, sip->si_overrun);
-	 ^
-signal.c:453:26: error: 'siginfo_t' has no member named 'si_overrun'
-      sip->si_timerid, sip->si_overrun);
+On Mon, 2014-09-08 at 11:27 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Mon, 8 Sep 2014 09:23:02 +0000, Alexey Brodkin wrote:
 
-uClibc needs to be patched in order to fix this problem. In the meantime
-we disable strace for MIPS when using a uClibc toolchain.
+> Ah, you're planning on coming to the Buildroot meeting? If so, could
+> you register to http://elinux.org/Buildroot:DeveloperDaysELCE2014, or
+> confirm me that you are coming so that I can add your name to the list
+> of participants?
 
-Fixes:
+Do you mind to add another atomic ops discussion as another item to
+"Topics to discuss" during the event?
 
-  http://autobuild.buildroot.net/results/91c/91c0413e755c365332bc15d1d69ab3d6160ae78c/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/strace/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
-
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index ad8d308..bc521e0 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_STRACE
- 	bool "strace"
- 	depends on !BR2_nios2
-+	depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) \
-+	             && BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_LARGEFILE
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
-@@ -11,3 +13,7 @@ config BR2_PACKAGE_STRACE
- 
- comment "strace needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-+
-+comment "strace is not supported on MIPS using a uClibc toolchain"
-+	depends on (BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
-+	           BR2_TOOLCHAIN_USES_UCLIBC
--- 
-1.7.1
+-Alexey
