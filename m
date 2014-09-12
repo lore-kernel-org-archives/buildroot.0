@@ -1,34 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 09:41:41 +0200
-Subject: [Buildroot] [git commit] alsa-lib: use correct Kconfig symbol for
-	mmu
-Message-ID: <20140913074255.CAD609D68A@busybox.osuosl.org>
+Date: Fri, 12 Sep 2014 23:18:20 +0200
+Subject: [Buildroot] [git commit] xfsprogs: depends on MMU
+Message-ID: <20140913074255.A0F2C9D688@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d99dd8c80a5a141eca3daaa469340795a562913
+commit: http://git.buildroot.net/buildroot/commit/?id=5b309e1a09ef0426129bb60b580aaeb356517f21
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is BR2_USE_MMU, not BR2_MMU
+Fixes http://sysmic.org/~jezz/results/17f32103:
 
+xfs_fsr.o: In function `fsrallfs':
+/home/jezz/br-continuous/cfgs/45-bf609-bfin-uclibc-nommu-ext/build/xfsprogs-3.1.11/fsr/xfs_fsr.c:617: undefined reference to `_fork'
+collect2: ld returned 1 exit status
+
+madvise.o: In function `madvise_f':
+/home/jezz/br-continuous/cfgs/45-bf609-bfin-uclibc-nommu-ext/build/xfsprogs-3.1.11/io/madvise.c:111: undefined reference to `_madvise'
+mincore.o: In function `mincore_f':
+/home/jezz/br-continuous/cfgs/45-bf609-bfin-uclibc-nommu-ext/build/xfsprogs-3.1.11/io/mincore.c:77: undefined reference to `_mincore'
+collect2: ld returned 1 exit status
+
+[Peter: don't mention mmu dependency in comment]
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-lib/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/xfsprogs/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index adee5cd..a732c08 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -38,7 +38,7 @@ config BR2_PACKAGE_ALSA_LIB_DEVDIR
- config BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS
- 	string "built PCM plugins"
- 	default "all" if BR2_USE_MMU
--	default "copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" if !BR2_MMU
-+	default "copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" if !BR2_USE_MMU
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index 3a31dd2..6f02c97 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -3,10 +3,12 @@ comment "Note that xfsprogs needs a toolchain with UCLIBC_SV4_DEPRECATED and UCL
+ 	depends on BR2_PACKAGE_XFSPROGS
  
- config BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS
- 	string "built control plugins"
+ comment "xfsprogs needs a toolchain w/ largefile, wchar"
++	depends on BR2_USE_MMU
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+ 
+ config BR2_PACKAGE_XFSPROGS
+ 	bool "xfsprogs"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	select BR2_PACKAGE_UTIL_LINUX
