@@ -1,32 +1,28 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Fri, 12 Sep 2014 09:26:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.18.14
-In-Reply-To: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
-References: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1410506804-10035-2-git-send-email-jkrause@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Sep 2014 09:28:37 +0200
+Subject: [Buildroot] [PATCH v3 1/1] ipmitool: new package
+In-Reply-To: <1410477168-5512-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1410477168-5512-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20140912092837.5165c90a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/mpd/mpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Floris Bos,
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e01aca3..cf766c1 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.18
--MPD_VERSION = $(MPD_VERSION_MAJOR).13
-+MPD_VERSION = $(MPD_VERSION_MAJOR).14
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf libglib2
+On Fri, 12 Sep 2014 01:12:48 +0200, Floris Bos wrote:
+> Adds ipmitool, a command-line interface to IPMI-enabled devices.
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks!
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
