@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Sep 2014 09:28:37 +0200
-Subject: [Buildroot] [PATCH v3 1/1] ipmitool: new package
-In-Reply-To: <1410477168-5512-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1410477168-5512-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20140912092837.5165c90a@free-electrons.com>
+Date: Fri, 12 Sep 2014 09:29:07 +0200
+Subject: [Buildroot] [PATCH] google-breakpad: bump to version r1373
+In-Reply-To: <1410482388-6143-1-git-send-email-fhunleth@troodon-software.com>
+References: <1410482388-6143-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20140912092907.75bd143e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Dear Frank Hunleth,
 
-On Fri, 12 Sep 2014 01:12:48 +0200, Floris Bos wrote:
-> Adds ipmitool, a command-line interface to IPMI-enabled devices.
+On Thu, 11 Sep 2014 20:39:48 -0400, Frank Hunleth wrote:
+> This version adds support for installing important header files to
+> <staging>/usr/include/breakpad. It's no longer necessary to include the
+> whole breakpad source tree when building applications using libbreakpad.a.
 > 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  package/google-breakpad/google-breakpad.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thanks!
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
