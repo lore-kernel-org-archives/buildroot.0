@@ -1,180 +1,34 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Fri, 12 Sep 2014 04:07:29 +0200
-Subject: [Buildroot] [PATCH] musl: Add post-1.1.4 commit to provide
-	max_align_t
-Message-ID: <1410487649-1365-1-git-send-email-maarten@treewalker.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 11 Sep 2014 22:21:07 -0400
+Subject: [Buildroot] [PATCH 1/1] tiff: ensure directory exists before
+	installing to it
+Message-ID: <1410488467-2093-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this, including libstdc++'s <cstddef> fails.
+Also, don't ignore errors during installation.
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/musl/musl-0001-add-max_align_t.patch | 153 +++++++++++++++++++++++++++
- 1 file changed, 153 insertions(+)
- create mode 100644 package/musl/musl-0001-add-max_align_t.patch
+ package/tiff/tiff.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/musl/musl-0001-add-max_align_t.patch b/package/musl/musl-0001-add-max_align_t.patch
-new file mode 100644
-index 0000000..6423337
---- /dev/null
-+++ b/package/musl/musl-0001-add-max_align_t.patch
-@@ -0,0 +1,153 @@
-+From 321f4fa9067185aa6bb47403dfba46e8cfe917d3 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 20 Aug 2014 21:20:14 +0000
-+Subject: add max_align_t definition for C11 and C++11
-+
-+unfortunately this needs to be able to vary by arch, because of a huge
-+mess GCC made: the GCC definition, which became the ABI, depends on
-+quirks in GCC's definition of __alignof__, which does not match the
-+formal alignment of the type.
-+
-+GCC's __alignof__ unexpectedly exposes the an implementation detail,
-+its "preferred alignment" for the type, rather than the formal/ABI
-+alignment of the type, which it only actually uses in structures. on
-+most archs the two values are the same, but on some (at least i386)
-+the preferred alignment is greater than the ABI alignment.
-+
-+I considered using _Alignas(8) unconditionally, but on at least one
-+arch (or1k), the alignment of max_align_t with GCC's definition is
-+only 4 (even the "preferred alignment" for these types is only 4).
-+---
-+diff --git a/arch/arm/bits/alltypes.h.in b/arch/arm/bits/alltypes.h.in
-+index 0d750cc..183c4c4 100644
-+--- a/arch/arm/bits/alltypes.h.in
-++++ b/arch/arm/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/i386/bits/alltypes.h.in b/arch/i386/bits/alltypes.h.in
-+index 502c882..8ba8f6f 100644
-+--- a/arch/i386/bits/alltypes.h.in
-++++ b/arch/i386/bits/alltypes.h.in
-+@@ -27,6 +27,8 @@ TYPEDEF long double float_t;
-+ TYPEDEF long double double_t;
-+ #endif
-+ 
-++TYPEDEF struct { _Alignas(8) long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/microblaze/bits/alltypes.h.in b/arch/microblaze/bits/alltypes.h.in
-+index 4657d14..a03e1b8 100644
-+--- a/arch/microblaze/bits/alltypes.h.in
-++++ b/arch/microblaze/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/mips/bits/alltypes.h.in b/arch/mips/bits/alltypes.h.in
-+index 4657d14..a03e1b8 100644
-+--- a/arch/mips/bits/alltypes.h.in
-++++ b/arch/mips/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/or1k/bits/alltypes.h.in b/arch/or1k/bits/alltypes.h.in
-+index 0d750cc..183c4c4 100644
-+--- a/arch/or1k/bits/alltypes.h.in
-++++ b/arch/or1k/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/powerpc/bits/alltypes.h.in b/arch/powerpc/bits/alltypes.h.in
-+index 378124c..ee7f137 100644
-+--- a/arch/powerpc/bits/alltypes.h.in
-++++ b/arch/powerpc/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/sh/bits/alltypes.h.in b/arch/sh/bits/alltypes.h.in
-+index 378124c..ee7f137 100644
-+--- a/arch/sh/bits/alltypes.h.in
-++++ b/arch/sh/bits/alltypes.h.in
-+@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-+ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/arch/x32/bits/alltypes.h.in b/arch/x32/bits/alltypes.h.in
-+index 8930efa..8e396c9 100644
-+--- a/arch/x32/bits/alltypes.h.in
-++++ b/arch/x32/bits/alltypes.h.in
-+@@ -18,6 +18,8 @@ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ #endif
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long long time_t;
-+ TYPEDEF long long suseconds_t;
-+ 
-+diff --git a/arch/x86_64/bits/alltypes.h.in b/arch/x86_64/bits/alltypes.h.in
-+index 34b7d6a..7b4f3e7 100644
-+--- a/arch/x86_64/bits/alltypes.h.in
-++++ b/arch/x86_64/bits/alltypes.h.in
-+@@ -18,6 +18,8 @@ TYPEDEF float float_t;
-+ TYPEDEF double double_t;
-+ #endif
-+ 
-++TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
-++
-+ TYPEDEF long time_t;
-+ TYPEDEF long suseconds_t;
-+ 
-+diff --git a/include/stddef.h b/include/stddef.h
-+index 0a32919..bd75385 100644
-+--- a/include/stddef.h
-++++ b/include/stddef.h
-+@@ -10,6 +10,9 @@
-+ #define __NEED_ptrdiff_t
-+ #define __NEED_size_t
-+ #define __NEED_wchar_t
-++#if __STDC_VERSION__ >= 201112L || __cplusplus >= 201103L
-++#define __NEED_max_align_t
-++#endif
-+ 
-+ #include <bits/alltypes.h>
-+ 
-+--
-+cgit v0.9.0.3-65-g4555
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 8d2e087..c61894b 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -76,7 +76,8 @@ ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
+ endif
+ 
+ define TIFF_INSTALL_TARGET_CMDS
+-	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
++	mkdir -p $(TARGET_DIR)/usr/lib/
++	cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+ 	for i in $(TIFF_TOOLS_LIST); \
+ 	do \
+ 		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
 -- 
-1.8.4.5
+1.7.9.5
