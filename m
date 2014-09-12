@@ -1,39 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Sep 2014 11:50:03 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356D2009A@de02wembxa.internal.synopsys.com>
-References: <20140912063012.AF99B100DEE@stock.ovh.net>
- <20140912101105.1e932cb8@free-electrons.com>
- <39A54937CC95F24AA2F794E2D2B66B1356D2009A@de02wembxa.internal.synopsys.com>
-Message-ID: <20140912115003.23dbfff3@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 12 Sep 2014 11:40:38 +0100
+Subject: [Buildroot] [PATCH] strace: Disable for MIPS when using a uClibc
+	toolchain
+Message-ID: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anton Kolesov,
+A change introduced in strace-4.9 makes it incompatible with MIPS
+architecture when using a uClibc toolchain. This is the failure:
 
-On Fri, 12 Sep 2014 09:45:26 +0000, Anton Kolesov wrote:
+signal.c: In function 'printsiginfo':
+signal.c:453:9: error: 'siginfo_t' has no member named 'si_timerid'
+      sip->si_timerid, sip->si_overrun);
+	 ^
+signal.c:453:26: error: 'siginfo_t' has no member named 'si_overrun'
+      sip->si_timerid, sip->si_overrun);
 
-> This issue has been reported to our compiler engineers half a year ago. That
-> seems to be a bug in the type definitions in ARC GCC, because GCC expects
-> arguments of type "signed size_t", yet it doesn't even allows to declare a
-> variable of this type. I've just sent a reminder about this issue to the team.
+uClibc needs to be patched in order to fix this problem. In the meantime
+we disable strace for MIPS when using a uClibc toolchain.
 
-Ok.
+Fixes:
 
-> As a workaround we can submit patch that will add -Wno-error=format to this
-> package. Is it ok?
+  http://autobuild.buildroot.net/results/91c/91c0413e755c365332bc15d1d69ab3d6160ae78c/
 
-That would be OK, but a better fix would be to change the package to
-remove -Werror entirely, or at least make it conditional (in which case
-the patch could be proposed upstream).
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/strace/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index ad8d308..bc521e0 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+ 	depends on !BR2_nios2
++	depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) \
++	             && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+@@ -11,3 +13,7 @@ config BR2_PACKAGE_STRACE
+ 
+ comment "strace needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
++
++comment "strace is not supported on MIPS using a uClibc toolchain"
++	depends on (BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
++	           BR2_TOOLCHAIN_USES_UCLIBC
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
