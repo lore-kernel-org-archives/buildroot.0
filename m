@@ -1,30 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 12 Sep 2014 23:31:47 +0200
-Subject: [Buildroot] [PATCH 10/12] sdl: remove dga support in no MMU
-In-Reply-To: <1410537011-29662-11-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Fri, 12 Sep 2014 17:50:09 +0200")
-References: <1410537011-29662-1-git-send-email-jezz@sysmic.org>
- <1410537011-29662-11-git-send-email-jezz@sysmic.org>
-Message-ID: <87wq98a5ks.fsf@dell.be.48ers.dk>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 12 Sep 2014 19:22:36 -0400
+Subject: [Buildroot] [PATCH] lua: fix license path for lua 5.2
+Message-ID: <1410564156-4818-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+The file containing the license for lua 5.1 was removed and the license
+text was added to the readme in 5.2.
 
- > DGA support use fork. This prevent executables to link with libSDL.so.
- > Fixes:
- >   http://sysmic.org/~jezz/results/5e50c243 (package sdl_mixer)
- >   http://sysmic.org/~jezz/results/734afef8 (package sdl_net)
- >   http://sysmic.org/~jezz/results/e2310eb9 (package sdl_image)
- >   http://sysmic.org/~jezz/results/e2cdcc9a (package sdl_sound)
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/lua/lua.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-
-Committed, thanks.
-
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 9afec6c..b95fd30 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -12,7 +12,11 @@ endif
+ LUA_SITE = http://www.lua.org/ftp
+ LUA_INSTALL_STAGING = YES
+ LUA_LICENSE = MIT
++ifeq ($(BR2_PACKAGE_LUA_5_2),y)
++LUA_LICENSE_FILES = doc/readme.html
++else
+ LUA_LICENSE_FILES = COPYRIGHT
++endif
+ 
+ LUA_PROVIDES = luainterpreter
+ 
 -- 
-Bye, Peter Korsgaard
+1.9.1
