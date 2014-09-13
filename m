@@ -1,21 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 13 Sep 2014 09:45:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.18.14
-In-Reply-To: <1410506804-10035-2-git-send-email-jkrause@posteo.de>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Fri, 12 Sep 2014 09:26:41 +0200")
-References: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
- <1410506804-10035-2-git-send-email-jkrause@posteo.de>
-Message-ID: <87d2b09d59.fsf@dell.be.48ers.dk>
+Date: Sat, 13 Sep 2014 09:47:10 +0200
+Subject: [Buildroot] [PATCH] qwt: bump to version 6.1.0
+In-Reply-To: <1410567142-5770-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Fri, 12 Sep 2014 20:12:22 -0400")
+References: <1410567142-5770-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <878ulo9d35.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
 Committed, thanks.
 
