@@ -1,30 +1,31 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 13 Sep 2014 01:00:39 -0400
-Subject: [Buildroot] [PATCH] heirloom-mailx: add license info
-Message-ID: <1410584439-31668-1-git-send-email-danomimanchego123@gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sat, 13 Sep 2014 07:59:53 +0200
+Subject: [Buildroot] [PATCH 03/12] xapp_xinit: depends on MMU
+In-Reply-To: <87ioksbkqd.fsf@dell.be.48ers.dk>
+References: <1410537011-29662-1-git-send-email-jezz@sysmic.org>
+ <1410537011-29662-4-git-send-email-jezz@sysmic.org>
+ <87ioksbkqd.fsf@dell.be.48ers.dk>
+Message-ID: <7881839.ucOfB3xDHT@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/heirloom-mailx/heirloom-mailx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On Friday 12 September 2014 23:19:06 Peter Korsgaard wrote:
+> >>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+[...]
+>  >  	# Runtime dependency: can't start an X server unless there is one
+>  >  	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
+>  > 
+>  > -	# Runtime dependency; mcookie is also in util-linux
+>  > +	#Runtime dependency; mcookie is also in util-linux
+> 
+> I'm not sure why you want to change this. Committed without this line,
+> thanks.
+I don't known either why... It is a mishandling.
 
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 75221d4..0a80a3c 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -7,6 +7,8 @@
- HEIRLOOM_MAILX_VERSION = 12.5
- HEIRLOOM_MAILX_SOURCE  = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE    = http://snapshot.debian.org/archive/debian/20110427T035506Z/pool/main/h/heirloom-mailx
-+HEIRLOOM_MAILX_LICENSE = BSD-4c, Bellcore (base64), IEEE (docs), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
-+HEIRLOOM_MAILX_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HEIRLOOM_MAILX_DEPENDENCIES += openssl
 -- 
-1.9.1
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
