@@ -1,44 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 13 Sep 2014 10:00:37 +0200
-Subject: [Buildroot] [PATCH] lua: fix license path for lua 5.2
-In-Reply-To: <1410564156-4818-1-git-send-email-fhunleth@troodon-software.com>
- (Frank Hunleth's message of "Fri, 12 Sep 2014 19:22:36 -0400")
-References: <1410564156-4818-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <874mwc9cgq.fsf@dell.be.48ers.dk>
+From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
+Date: Sat, 13 Sep 2014 11:49:30 +0200
+Subject: [Buildroot] [PATCH 1/4] package/mpd: bump to version 0.18.13
+In-Reply-To: <87ha0c9d5g.fsf@dell.be.48ers.dk>
+References: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
+ <87ha0c9d5g.fsf@dell.be.48ers.dk>
+Message-ID: <5414132A.4010600@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+On 09/13/2014 09:45 AM, Peter Korsgaard wrote:
+>>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+>   > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+>   > ---
+>   >  package/mpd/mpd.mk | 2 +-
+>   >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>   > diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+>   > index f84c6d0..e01aca3 100644
+>   > --- a/package/mpd/mpd.mk
+>   > +++ b/package/mpd/mpd.mk
+>   > @@ -5,7 +5,7 @@
+>   >  ################################################################################
+>   
+>   >  MPD_VERSION_MAJOR = 0.18
+>   > -MPD_VERSION = $(MPD_VERSION_MAJOR).12
+>   > +MPD_VERSION = $(MPD_VERSION_MAJOR).13
+>
+> I already applied you Sep 1 version?
+>
 
- > The file containing the license for lua 5.1 was removed and the license
- > text was added to the readme in 5.2.
-
- > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
- > ---
- >  package/lua/lua.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/lua/lua.mk b/package/lua/lua.mk
- > index 9afec6c..b95fd30 100644
- > --- a/package/lua/lua.mk
- > +++ b/package/lua/lua.mk
- > @@ -12,7 +12,11 @@ endif
- >  LUA_SITE = http://www.lua.org/ftp
- >  LUA_INSTALL_STAGING = YES
- >  LUA_LICENSE = MIT
- > +ifeq ($(BR2_PACKAGE_LUA_5_2),y)
- > +LUA_LICENSE_FILES = doc/readme.html
- > +else
- >  LUA_LICENSE_FILES = COPYRIGHT
- > +endif
-
-I prefer to swap the logic as newer versions are more likely to be
-similar to 5.2 than 5.1.
-
-Committed with that changed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Sorry, ignore this. It was still in the patch directory.
