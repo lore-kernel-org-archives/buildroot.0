@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 09:46:32 +0200
-Subject: [Buildroot] [git commit] qwt: bump to version 6.1.0
-Message-ID: <20140913075325.9C8929D3E4@busybox.osuosl.org>
+Date: Sat, 13 Sep 2014 09:43:58 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.18.14
+Message-ID: <20140913075325.782679D688@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=edb0f3a4b84712170c66e85bc6dd3d4b957f3e7a
+commit: http://git.buildroot.net/buildroot/commit/?id=c41cfb49bdc0fbf9f46cdda04859f10c3864c534
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qwt/qwt.mk |    2 +-
+ package/mpd/mpd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 776780b..3007bf7 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index e01aca3..cf766c1 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--QWT_VERSION = 6.0.2
-+QWT_VERSION = 6.1.0
- QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
+ MPD_VERSION_MAJOR = 0.18
+-MPD_VERSION = $(MPD_VERSION_MAJOR).13
++MPD_VERSION = $(MPD_VERSION_MAJOR).14
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf libglib2
