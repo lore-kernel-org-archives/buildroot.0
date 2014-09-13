@@ -1,34 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 22:02:01 +0200
-Subject: [Buildroot] [git commit] toolchain/musl: disable for PowerPC SPE
-Message-ID: <20140913200533.F12AE9D68A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Sep 2014 22:15:09 +0200
+Subject: [Buildroot] [PATCH] strace: Disable for MIPS when using a
+	uClibc toolchain
+In-Reply-To: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 12 Sep 2014 11:40:38 +0100")
+References: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <871trf8egi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7d77fc36e18b8ccf609311c306b86bc5564f0e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-It's not supported and the build breaks.
+ > A change introduced in strace-4.9 makes it incompatible with MIPS
+ > architecture when using a uClibc toolchain. This is the failure:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-buildroot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > signal.c: In function 'printsiginfo':
+ > signal.c:453:9: error: 'siginfo_t' has no member named 'si_timerid'
+ sip-> si_timerid, sip->si_overrun);
+ > 	 ^
+ > signal.c:453:26: error: 'siginfo_t' has no member named 'si_overrun'
+ sip-> si_timerid, sip->si_overrun);
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index eef9f9c..53d86dd 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -84,6 +84,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl (experimental)"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblaze || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  This option selects musl as the C library for the
+ > uClibc needs to be patched in order to fix this problem. In the meantime
+ > we disable strace for MIPS when using a uClibc toolchain.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/91c/91c0413e755c365332bc15d1d69ab3d6160ae78c/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
