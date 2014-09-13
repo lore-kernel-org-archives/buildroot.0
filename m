@@ -1,39 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 10:00:50 +0200
-Subject: [Buildroot] [git commit] lua: fix license path for lua 5.2
-Message-ID: <20140913181445.883BD9D688@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 13 Sep 2014 21:43:29 +0300
+Subject: [Buildroot] [PATCH] heirloom-mailx: add license info
+In-Reply-To: <1410584439-31668-1-git-send-email-danomimanchego123@gmail.com>
+References: <1410584439-31668-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20140913184329.GA11424@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ee5be096e3dc63575559f85ee420f0666b1f6ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Danomi,
 
-The file containing the license for lua 5.1 was removed and the license
-text was added to the readme in 5.2.
+On Sat, Sep 13, 2014 at 01:00:39AM -0400, Danomi Manchego wrote:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/heirloom-mailx/heirloom-mailx.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
+> index 75221d4..0a80a3c 100644
+> --- a/package/heirloom-mailx/heirloom-mailx.mk
+> +++ b/package/heirloom-mailx/heirloom-mailx.mk
+> @@ -7,6 +7,8 @@
+>  HEIRLOOM_MAILX_VERSION = 12.5
+>  HEIRLOOM_MAILX_SOURCE  = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
+>  HEIRLOOM_MAILX_SITE    = http://snapshot.debian.org/archive/debian/20110427T035506Z/pool/main/h/heirloom-mailx
+> +HEIRLOOM_MAILX_LICENSE = BSD-4c, Bellcore (base64), IEEE (docs), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
 
-[Peter: swap 5.1/5.2 logic]
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lua/lua.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Do we install these IEEE licensed docs? If not I think we can omit this 
+license. IANAL, though.
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 9afec6c..b88f1e2 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -12,7 +12,11 @@ endif
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- LUA_LICENSE = MIT
-+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
- LUA_LICENSE_FILES = COPYRIGHT
-+else
-+LUA_LICENSE_FILES = doc/readme.html
-+endif
- 
- LUA_PROVIDES = luainterpreter
- 
+baruch
+
+> +HEIRLOOM_MAILX_LICENSE_FILES = COPYING
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  HEIRLOOM_MAILX_DEPENDENCIES += openssl
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
