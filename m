@@ -1,37 +1,98 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Sep 2014 22:43:56 +0200
-Subject: [Buildroot] [PATCH] memstat: Add patch to fix compilation with
- musl libc
-In-Reply-To: <1410487449-32325-1-git-send-email-maarten@treewalker.org>
-References: <1410487449-32325-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20140913224356.174954fc@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Sep 2014 23:01:27 +0200
+Subject: [Buildroot] [PATCH V3 4/4] libelf: Removes the package
+In-Reply-To: <1409228494-19492-5-git-send-email-gregory.clement@free-electrons.com>
+References: <1409228494-19492-1-git-send-email-gregory.clement@free-electrons.com>
+ <1409228494-19492-5-git-send-email-gregory.clement@free-electrons.com>
+Message-ID: <20140913210127.GA5222@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+Gregory, All,
 
-On Fri, 12 Sep 2014 04:04:09 +0200, Maarten ter Huurne wrote:
+On 2014-08-28 14:21 +0200, Gregory CLEMENT spake thusly:
+> The elfutils package provides a more recent version of the
+> libelf. Some packages such as ltrace need this more recent
+> version. Having two packages providing the same library leads to some
+> conflicts or dependency problems. For instance at the end we had only
+> one libelf.a when the 2 packages were selected.
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 
-> diff --git a/package/memstat/memstat-0001-PATH_MAX.patch b/package/memstat/memstat-0001-PATH_MAX.patch
-> new file mode 100644
-> index 0000000..7143f6d
-> --- /dev/null
-> +++ b/package/memstat/memstat-0001-PATH_MAX.patch
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-As usual, missing description + SoB in the patch itself.
+Sorry for the delay for that last review...
 
-Also, when you submit a new version for a patch, please make sure to
-use --subject-prefix="PATCHv2" when generating or sending the patches.
-This will use [PATCHv2] instead of [PATCH] in the e-mail topic, which
-helps us track what version is the latest one.
+Regards,
+Yann E. MORIN.
 
-Thanks,
+> ---
+>  Config.in.legacy                                |     9 +
+>  package/Config.in                               |     1 -
+>  package/libelf/Config.in                        |     7 -
+>  package/libelf/libelf-0.8.10-Elf64-fixups.patch | 12361 ----------------------
+>  package/libelf/libelf.mk                        |    23 -
+>  5 files changed, 9 insertions(+), 12392 deletions(-)
+>  delete mode 100644 package/libelf/Config.in
+>  delete mode 100644 package/libelf/libelf-0.8.10-Elf64-fixups.patch
+>  delete mode 100644 package/libelf/libelf.mk
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 23962a2..5b1460c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -101,6 +101,15 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2014.08"
+>  
+> +config BR2_PACKAGE_LIBELF
+> +	bool "libelf has been removed"
+> +	select BR2_PACKAGE_ELFUTILS
+> +	select BR2_LEGACY
+> +	help
+> +	  The libelf package provided an old version of the libelf library
+> +	  and is deprecated. The libelf library is now provided by the
+> +	  elfutils package.
+> +
+>  config BR2_KERNEL_HEADERS_3_8
+>  	bool "kernel headers version 3.8.x are no longer supported"
+>  	select BR2_KERNEL_HEADERS_3_9
+> diff --git a/package/Config.in b/package/Config.in
+> index 0e10cdf..da528ad 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -841,7 +841,6 @@ menu "Other"
+>  	source "package/libcofi/Config.in"
+>  	source "package/libdaemon/Config.in"
+>  	source "package/libee/Config.in"
+> -	source "package/libelf/Config.in"
+>  	source "package/libev/Config.in"
+>  	source "package/libevdev/Config.in"
+>  	source "package/libevent/Config.in"
+> diff --git a/package/libelf/Config.in b/package/libelf/Config.in
+> deleted file mode 100644
+> index 600ef68..0000000
+> diff --git a/package/libelf/libelf-0.8.10-Elf64-fixups.patch b/package/libelf/libelf-0.8.10-Elf64-fixups.patch
+> deleted file mode 100644
+> index 86a064a..0000000
+> diff --git a/package/libelf/libelf.mk b/package/libelf/libelf.mk
+> deleted file mode 100644
+> index 0c37697..0000000
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
