@@ -1,96 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 09:40:48 +0200
-Subject: [Buildroot] [git commit] libffi and python: need threads support
-Message-ID: <20140913074255.C430F9D68A@busybox.osuosl.org>
+Date: Sat, 13 Sep 2014 09:22:27 +0200
+Subject: [Buildroot] [git commit] directfb: allow SVG support
+Message-ID: <20140913074255.B963E9D688@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77cf5b5a71aa54039f4dbc509a1c7cb40aa04934
+commit: http://git.buildroot.net/buildroot/commit/?id=daf4820c8527c54dfbc44d4982ad04dff9650e04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libffi depends on pthreads.
+DirectFB SVG support rely on Cairo and Cairo depends on DirectFB.
 
-Python depends on libffi (it can provide a builtin libffi, but also depends on
-pthreads). Thus this patch also disable Python support if toolchain is compiled
-w/o treads support.
+Since Cairo DirectFB backend is marked as experimental, this patch choose to
+disable this backend when DirectFB SVG support is enable.
 
-Fixes http://sysmic.org/~jezz/results/204099dd:
+In add, this patch may solve some tricky situations between DirectFB and Cairo
+(see http://sysmic.org/~jezz/results/c2f11fc0) and improve build reproducibility.
 
-../src/closures.c:119:21: fatal error: pthread.h: No such file or directory
-
-[Peter: fix comment dependencies, add python3]
+[Peter: propagate atomics dependency, needs libsvg-cairo, add cairo includes]
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libffi/Config.in  |    4 ++++
- package/python/Config.in  |    5 +++--
- package/python3/Config.in |    5 +++--
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ package/cairo/cairo.mk       |    5 ++++-
+ package/directfb/Config.in   |    6 ++++++
+ package/directfb/directfb.mk |    9 +++++++++
+ 3 files changed, 19 insertions(+), 1 deletions(-)
 
-diff --git a/package/libffi/Config.in b/package/libffi/Config.in
-index 7211f8f..6edf570 100644
---- a/package/libffi/Config.in
-+++ b/package/libffi/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBFFI
- 	bool "libffi"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The libffi library provides a portable, high level
- 	  programming interface to various calling conventions. This
-@@ -7,3 +8,6 @@ config BR2_PACKAGE_LIBFFI
- 	  interface description at run-time.
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index a4c71b6..bcc0c26 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -48,7 +48,10 @@ CAIRO_CONF_OPT = \
  
- 	  http://sourceware.org/libffi/
+ CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
+ 
+-ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++# DirectFB svg support rely on Cairo and Cairo DirectFB support depends on
++# DirectFB. Break circular dependency by disabling DirectFB support in Cairo
++# (which is experimental)
++ifeq ($(BR2_PACKAGE_DIRECTFB)x$(BR2_PACKAGE_DIRECTFB_SVG),yx)
+ 	CAIRO_CONF_OPT += --enable-directfb
+ 	CAIRO_DEPENDENCIES += directfb
+ else
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index e3c93a1..d53f756 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -125,6 +125,12 @@ config BR2_PACKAGE_DIRECTFB_PNG
+ 	default y
+ 	select BR2_PACKAGE_LIBPNG
+ 
++config BR2_PACKAGE_DIRECTFB_SVG
++	bool "enable SVG support"
++	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	default y
++	select BR2_PACKAGE_LIBSVG_CAIRO
 +
-+comment "libffi needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python/Config.in b/package/python/Config.in
-index a0c78c6..8b27630 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -3,15 +3,16 @@ config BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
+ config BR2_PACKAGE_DIRECTFB_DITHER_RGB16
+ 	bool "enable advanced dithering of RGB16 surfaces"
  	help
- 	  The python language interpreter.
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 3ae7f3e..32144ec 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -116,6 +116,15 @@ else
+ DIRECTFB_CONF_OPT += --disable-jpeg
+ endif
  
- 	  http://www.python.org/
- 
--comment "python needs a toolchain w/ wchar"
-+comment "python needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_PYTHON
- 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 3e193c8..375390f 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -4,15 +4,16 @@ config BR2_PACKAGE_PYTHON3
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
- 
- 	  http://www.python.org/
- 
--comment "python3 needs a toolchain w/ wchar"
-+comment "python3 needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_PYTHON3
- 
++ifeq ($(BR2_PACKAGE_DIRECTFB_SVG),y)
++DIRECTFB_CONF_OPT += --enable-svg
++# needs some help to find cairo includes
++DIRECTFB_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/cairo"
++DIRECTFB_DEPENDENCIES += libsvg-cairo
++else
++DIRECTFB_CONF_OPT += --disable-svg
++endif
++
+ ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
+ DIRECTFB_CONF_OPT += --enable-imlib2
+ DIRECTFB_DEPENDENCIES += imlib2
