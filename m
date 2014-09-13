@@ -1,56 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 23:51:59 +0200
-Subject: [Buildroot] [git commit] sqlite: add option to disable fsync
-Message-ID: <20140913215512.0E0A69CF11@busybox.osuosl.org>
+Date: Sat, 13 Sep 2014 23:52:13 +0200
+Subject: [Buildroot] [git commit] dos2unix: new package
+Message-ID: <20140913215512.15E4F9D68B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ede457c5e0e6ee2512a19482c2f6aaf7a0fc118
+commit: http://git.buildroot.net/buildroot/commit/?id=dcd762c0f99c56e3f9a8d894f5096741ead45506
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For use-cases in which performance is more important than data integrity.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/Config.in |    9 +++++++++
- package/sqlite/sqlite.mk |    4 ++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+ package/Config.in.host          |    1 +
+ package/dos2unix/Config.in.host |    6 ++++++
+ package/dos2unix/dos2unix.mk    |   22 ++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index fe6cc08..7ea9eb1 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -53,4 +53,13 @@ config BR2_PACKAGE_SQLITE_SECURE_DELETE
- 	  http://www.sqlite.org/pragma.html#pragma_secure_delete
- 	  for additional information.
+diff --git a/package/Config.in.host b/package/Config.in.host
+index e05bbfa..2c88c0b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
  
-+config BR2_PACKAGE_SQLITE_NO_SYNC
-+	bool "Disable fsync"
+ 	source "package/dfu-util/Config.in.host"
++	source "package/dos2unix/Config.in.host"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
+diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
+new file mode 100644
+index 0000000..a02e005
+--- /dev/null
++++ b/package/dos2unix/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_DOS2UNIX
++	bool "host dos2unix"
 +	help
-+	  By default SQLite forces all database transactions to storage
-+	  immediately using fsync() to protect against data loss in case
-+	  of power failure.
-+	  This option turns this behavior off resulting in higher performance
-+	  especially when using slow flash storage.
++	  dos2unix converts text file line endings between CRLF and LF
 +
- endif
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index e30b710..d960ce8 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -33,6 +33,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
- SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
- endif
- 
-+ifeq ($(BR2_PACKAGE_SQLITE_NO_SYNC),y)
-+SQLITE_CFLAGS += -DSQLITE_NO_SYNC
-+endif
++	  http://freshmeat.net/projects/dos2unix
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+new file mode 100644
+index 0000000..99bb742
+--- /dev/null
++++ b/package/dos2unix/dos2unix.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# dos2unix
++#
++################################################################################
 +
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
- 
- SQLITE_CONF_OPT = \
++DOS2UNIX_VERSION = 7.0
++DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
++
++DOS2UNIX_LICENSE = BSD-2c
++DOS2UNIX_LICENSE_FILES = COPYING.txt
++
++define HOST_DOS2UNIX_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define HOST_DOS2UNIX_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		install DESTDIR=$(HOST_DIR)
++endef
++
++$(eval $(host-generic-package))
