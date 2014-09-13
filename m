@@ -1,39 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Sep 2014 09:57:12 +0200
-Subject: [Buildroot] [PATCH 12/12] libffi and python: need threads
- support
-In-Reply-To: <1410537011-29662-13-git-send-email-jezz@sysmic.org>
-References: <1410537011-29662-1-git-send-email-jezz@sysmic.org>
- <1410537011-29662-13-git-send-email-jezz@sysmic.org>
-Message-ID: <20140913095712.223528dd@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Sep 2014 10:00:37 +0200
+Subject: [Buildroot] [PATCH] lua: fix license path for lua 5.2
+In-Reply-To: <1410564156-4818-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Fri, 12 Sep 2014 19:22:36 -0400")
+References: <1410564156-4818-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <874mwc9cgq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-On Fri, 12 Sep 2014 17:50:11 +0200, J?r?me Pouiller wrote:
-> libffi depends on pthreads.
-> 
-> Python depends on libffi (it can provide a builtin libffi, but also depends on
-> pthreads). Thus this patch also disable Python support if toolchain is compiled
-> w/o treads support.
-> 
-> Fixes http://sysmic.org/~jezz/results/204099dd:
-> 
-> ../src/closures.c:119:21: fatal error: pthread.h: No such file or directory
+ > The file containing the license for lua 5.1 was removed and the license
+ > text was added to the readme in 5.2.
 
-This seems weird. We have a no threads toolchain in our autobuilders
-and it was never detected, even though I'm pretty sure libffi was built
-a number of times. Do you have the configuration that exhibits the
-problem?
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ > ---
+ >  package/lua/lua.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-Thanks,
+ > diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+ > index 9afec6c..b95fd30 100644
+ > --- a/package/lua/lua.mk
+ > +++ b/package/lua/lua.mk
+ > @@ -12,7 +12,11 @@ endif
+ >  LUA_SITE = http://www.lua.org/ftp
+ >  LUA_INSTALL_STAGING = YES
+ >  LUA_LICENSE = MIT
+ > +ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ > +LUA_LICENSE_FILES = doc/readme.html
+ > +else
+ >  LUA_LICENSE_FILES = COPYRIGHT
+ > +endif
 
-Thomas
+I prefer to swap the logic as newer versions are more likely to be
+similar to 5.2 than 5.1.
+
+Committed with that changed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
