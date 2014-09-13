@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 21:53:46 +0200
-Subject: [Buildroot] [git commit] erlang: needs thread support
-Message-ID: <20140913200105.3F7C39CF0B@busybox.osuosl.org>
+Date: Sat, 13 Sep 2014 21:54:35 +0200
+Subject: [Buildroot] [git commit] libsvg-cairo: explicitly disable X support
+Message-ID: <20140913200105.48FE89CF0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=047cb1a46b142e391f5f98c40c77ca9959a4cd6c
+commit: http://git.buildroot.net/buildroot/commit/?id=4c443f0247bde405e57e8b7db078a56a7cf9130a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Our libsvg-cairo package doesn't have any dependency on X, and the
+source code doesn't seem to be using X. However, the configure script
+checks for X headers and libraries. If they are found on the host,
+/usr/lib and /usr/include get added to the library/header paths
+causing weird build failures. This commit should fix this problem by
+explicitly disabling the X support.
 
-  http://autobuild.buildroot.org/results/1f3/1f313aee75328c27e260c55dbf7caa5d3d6a07d3/
-  http://autobuild.buildroot.org/results/2f2/2f213d8cf6f828a68a2f36bb95564b8db043e7a2/
+Should fix:
+
+  http://autobuild.buildroot.org/results/d0f/d0fc233bb97c2ea18344746a5b7c63c8de65330a/
+  http://autobuild.buildroot.org/results/0b3/0b3fb2ee9916aa265df5b6e4f04f6dfa25d1fc84/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/erlang/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libsvg-cairo/libsvg-cairo.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 2ee8515..06833b9 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -1,6 +1,10 @@
-+comment "erlang needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsvg-cairo/libsvg-cairo.mk b/package/libsvg-cairo/libsvg-cairo.mk
+index 93b8f76..fd1dbee 100644
+--- a/package/libsvg-cairo/libsvg-cairo.mk
++++ b/package/libsvg-cairo/libsvg-cairo.mk
+@@ -11,4 +11,6 @@ LIBSVG_CAIRO_INSTALL_STAGING = YES
+ LIBSVG_CAIRO_LICENSE         = LGPLv2.1+
+ LIBSVG_CAIRO_LICENSE_FILES   = COPYING
+ 
++LIBSVG_CAIRO_CONF_OPT = --without-x
 +
- config BR2_PACKAGE_ERLANG
- 	bool "erlang"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Erlang is a programming language used to build massively scalable
- 	  soft real-time systems with requirements on high availability.
+ $(eval $(autotools-package))
