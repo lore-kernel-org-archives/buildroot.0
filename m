@@ -1,75 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 23:52:13 +0200
-Subject: [Buildroot] [git commit] dos2unix: new package
-Message-ID: <20140913215512.15E4F9D68B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Sep 2014 23:56:19 +0200
+Subject: [Buildroot] [PATCH 2/2] procps-ng: Fix installation and take
+	precedence over busybox
+In-Reply-To: <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 10 Sep 2014 15:30:06 +0100")
+References: <1410359406-49326-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1410359406-49326-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <871trf6v7g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dcd762c0f99c56e3f9a8d894f5096741ead45506
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in.host          |    1 +
- package/dos2unix/Config.in.host |    6 ++++++
- package/dos2unix/dos2unix.mk    |   22 ++++++++++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
+ > Currently procps-ng binaries are installed under $(TARGET_DIR)/usr/usr
+ > instead of $(TARGET_DIR)/usr, which would be the expected. This is
+ > caused because the default value of the --exec-prefix configure option
+ > is /usr, and Buildroot always adds --prefix=/usr to the configure
+ > option. We fix this by setting --exec-prefix to an empty value.
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index e05bbfa..2c88c0b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
- 
- 	source "package/dfu-util/Config.in.host"
-+	source "package/dos2unix/Config.in.host"
- 	source "package/dosfstools/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
-new file mode 100644
-index 0000000..a02e005
---- /dev/null
-+++ b/package/dos2unix/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_DOS2UNIX
-+	bool "host dos2unix"
-+	help
-+	  dos2unix converts text file line endings between CRLF and LF
-+
-+	  http://freshmeat.net/projects/dos2unix
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-new file mode 100644
-index 0000000..99bb742
---- /dev/null
-+++ b/package/dos2unix/dos2unix.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# dos2unix
-+#
-+################################################################################
-+
-+DOS2UNIX_VERSION = 7.0
-+DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
-+
-+DOS2UNIX_LICENSE = BSD-2c
-+DOS2UNIX_LICENSE_FILES = COPYING.txt
-+
-+define HOST_DOS2UNIX_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_DOS2UNIX_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		install DESTDIR=$(HOST_DIR)
-+endef
-+
-+$(eval $(host-generic-package))
+ > At the same time we make sure the procps-ng binaries have precedence
+ > over the busybox ones.
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Reviewed-by: Markos.Chandras <Markos.Chandras@imgtec.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
