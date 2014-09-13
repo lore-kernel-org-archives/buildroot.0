@@ -1,83 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 09:22:27 +0200
-Subject: [Buildroot] [git commit] directfb: allow SVG support
-Message-ID: <20140913074255.B963E9D688@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Sep 2014 09:45:47 +0200
+Subject: [Buildroot] [PATCH 1/4] package/mpd: bump to version 0.18.13
+In-Reply-To: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Fri, 12 Sep 2014 09:26:40 +0200")
+References: <1410506804-10035-1-git-send-email-jkrause@posteo.de>
+Message-ID: <87ha0c9d5g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=daf4820c8527c54dfbc44d4982ad04dff9650e04
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
 
-DirectFB SVG support rely on Cairo and Cairo depends on DirectFB.
+ > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+ > ---
+ >  package/mpd/mpd.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Since Cairo DirectFB backend is marked as experimental, this patch choose to
-disable this backend when DirectFB SVG support is enable.
-
-In add, this patch may solve some tricky situations between DirectFB and Cairo
-(see http://sysmic.org/~jezz/results/c2f11fc0) and improve build reproducibility.
-
-[Peter: propagate atomics dependency, needs libsvg-cairo, add cairo includes]
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cairo/cairo.mk       |    5 ++++-
- package/directfb/Config.in   |    6 ++++++
- package/directfb/directfb.mk |    9 +++++++++
- 3 files changed, 19 insertions(+), 1 deletions(-)
-
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index a4c71b6..bcc0c26 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -48,7 +48,10 @@ CAIRO_CONF_OPT = \
+ > diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+ > index f84c6d0..e01aca3 100644
+ > --- a/package/mpd/mpd.mk
+ > +++ b/package/mpd/mpd.mk
+ > @@ -5,7 +5,7 @@
+ >  ################################################################################
  
- CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
- 
--ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+# DirectFB svg support rely on Cairo and Cairo DirectFB support depends on
-+# DirectFB. Break circular dependency by disabling DirectFB support in Cairo
-+# (which is experimental)
-+ifeq ($(BR2_PACKAGE_DIRECTFB)x$(BR2_PACKAGE_DIRECTFB_SVG),yx)
- 	CAIRO_CONF_OPT += --enable-directfb
- 	CAIRO_DEPENDENCIES += directfb
- else
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index e3c93a1..d53f756 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -125,6 +125,12 @@ config BR2_PACKAGE_DIRECTFB_PNG
- 	default y
- 	select BR2_PACKAGE_LIBPNG
- 
-+config BR2_PACKAGE_DIRECTFB_SVG
-+	bool "enable SVG support"
-+	depends on BR2_ARCH_HAS_ATOMICS # cairo
-+	default y
-+	select BR2_PACKAGE_LIBSVG_CAIRO
-+
- config BR2_PACKAGE_DIRECTFB_DITHER_RGB16
- 	bool "enable advanced dithering of RGB16 surfaces"
- 	help
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 3ae7f3e..32144ec 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -116,6 +116,15 @@ else
- DIRECTFB_CONF_OPT += --disable-jpeg
- endif
- 
-+ifeq ($(BR2_PACKAGE_DIRECTFB_SVG),y)
-+DIRECTFB_CONF_OPT += --enable-svg
-+# needs some help to find cairo includes
-+DIRECTFB_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/cairo"
-+DIRECTFB_DEPENDENCIES += libsvg-cairo
-+else
-+DIRECTFB_CONF_OPT += --disable-svg
-+endif
-+
- ifeq ($(BR2_PACKAGE_DIRECTFB_IMLIB2),y)
- DIRECTFB_CONF_OPT += --enable-imlib2
- DIRECTFB_DEPENDENCIES += imlib2
+ >  MPD_VERSION_MAJOR = 0.18
+ > -MPD_VERSION = $(MPD_VERSION_MAJOR).12
+ > +MPD_VERSION = $(MPD_VERSION_MAJOR).13
+
+I already applied you Sep 1 version?
+
+-- 
+Bye, Peter Korsgaard
