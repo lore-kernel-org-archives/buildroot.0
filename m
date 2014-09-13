@@ -1,42 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Sep 2014 21:54:35 +0200
-Subject: [Buildroot] [git commit] libsvg-cairo: explicitly disable X support
-Message-ID: <20140913200105.48FE89CF0B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Sep 2014 22:02:33 +0200
+Subject: [Buildroot] [PATCH] toolchain/musl: disable for PowerPC SPE
+In-Reply-To: <1410380164-17479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 10 Sep 2014 17:16:04 -0300")
+References: <1410380164-17479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761gr8f1i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c443f0247bde405e57e8b7db078a56a7cf9130a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Our libsvg-cairo package doesn't have any dependency on X, and the
-source code doesn't seem to be using X. However, the configure script
-checks for X headers and libraries. If they are found on the host,
-/usr/lib and /usr/include get added to the library/header paths
-causing weird build failures. This commit should fix this problem by
-explicitly disabling the X support.
+ > It's not supported and the build breaks.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Should fix:
+Committed, thanks.
 
-  http://autobuild.buildroot.org/results/d0f/d0fc233bb97c2ea18344746a5b7c63c8de65330a/
-  http://autobuild.buildroot.org/results/0b3/0b3fb2ee9916aa265df5b6e4f04f6dfa25d1fc84/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsvg-cairo/libsvg-cairo.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/libsvg-cairo/libsvg-cairo.mk b/package/libsvg-cairo/libsvg-cairo.mk
-index 93b8f76..fd1dbee 100644
---- a/package/libsvg-cairo/libsvg-cairo.mk
-+++ b/package/libsvg-cairo/libsvg-cairo.mk
-@@ -11,4 +11,6 @@ LIBSVG_CAIRO_INSTALL_STAGING = YES
- LIBSVG_CAIRO_LICENSE         = LGPLv2.1+
- LIBSVG_CAIRO_LICENSE_FILES   = COPYING
- 
-+LIBSVG_CAIRO_CONF_OPT = --without-x
-+
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
