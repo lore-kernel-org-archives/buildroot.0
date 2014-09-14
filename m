@@ -1,33 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Sep 2014 00:27:52 +0200
-Subject: [Buildroot] [git commit] dialog: Override ncurses config script
-Message-ID: <20140914223201.2250F9D65E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 15 Sep 2014 00:38:35 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/pkg-autotools: don't use
+	config.site when cross-compiling
+In-Reply-To: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Fri, 22 Aug 2014 11:12:53 +0200")
+References: <1408698774-13615-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87tx493k0k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47e4c68f51c9cc1b7aab9e16f5b5a5dee36bc3d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-Without the override, systemwide ncurses6-config can be found instead
-of ncurses5-config from staging.
+ > On fedora 20 64bits host, the file /usr/share/config.site contains
+ > a fix for installing libraries into /lib/lib64 on 64bits systems
+ > that redefine libdir in the generated Makefile
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dialog/dialog.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ > For safety and avoid the bug #7262 [1], disable loading this file
+ > when running the configure script for the target and the host.
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index fb00c9c..9af56e7 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -17,4 +17,6 @@ ifneq ($(BR2_ENABLE_LOCALE),y)
- DIALOG_DEPENDENCIES += libiconv
- endif
- 
-+DIALOG_CONF_OPT += NCURSES_CONFIG=$(STAGING_DIR)/usr/bin/ncurses5-config
-+
- $(eval $(autotools-package))
+ > Note: configure scripts generated with autoconf < 2.65 will source
+ > the /dev/null and print this line:
+ > "configure: loading site script /dev/null"
+
+ > [1]: https://bugs.busybox.net/show_bug.cgi?id=7262
+
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
