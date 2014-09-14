@@ -1,78 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Sep 2014 18:34:49 +0200
-Subject: [Buildroot] [PATCH v2 3/5] toolchainfile.cmake.in: set linker
- flags
-In-Reply-To: <1408653920-18954-4-git-send-email-s.martin49@gmail.com>
-References: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
- <1408653920-18954-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140914163449.GB21222@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 14 Sep 2014 19:05:44 +0200
+Subject: [Buildroot] [PATCH] strace: Disable for MIPS when using a
+ uClibc toolchain
+In-Reply-To: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140914170543.GN14691@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hi Vicente,
+Vicente Olivert Riera wrote,
 
-On 2014-08-21 22:45 +0200, Samuel Martin spake thusly:
-> The linker flags are part of the toolchain configuration, so set them for
-> the CMake-based packages.
+> A change introduced in strace-4.9 makes it incompatible with MIPS
+> architecture when using a uClibc toolchain. This is the failure:
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-This patch does not add the FORCE option, like for CFLAGS and CXXFLAGS,
-which make it a bit incoherent. But since we're removing in the
-following patch, that's OK.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> changes v1 -> v2:
-> - no change
-> ---
->  package/pkg-cmake.mk                | 1 +
->  support/misc/toolchainfile.cmake.in | 1 +
->  2 files changed, 2 insertions(+)
+> signal.c: In function 'printsiginfo':
+> signal.c:453:9: error: 'siginfo_t' has no member named 'si_timerid'
+>       sip->si_timerid, sip->si_overrun);
+> 	 ^
+> signal.c:453:26: error: 'siginfo_t' has no member named 'si_overrun'
+>       sip->si_timerid, sip->si_overrun);
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 3655751..2006b76 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -177,6 +177,7 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
->  		-e 's:@@STAGING_SUBDIR@@:$(call qstrip,$(STAGING_SUBDIR)):' \
->  		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
->  		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
-> +		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
->  		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
->  		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
->  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
-> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-> index 46ed932..1dfbdba 100644
-> --- a/support/misc/toolchainfile.cmake.in
-> +++ b/support/misc/toolchainfile.cmake.in
-> @@ -14,6 +14,7 @@ set(CMAKE_SYSTEM_NAME Linux)
->  
->  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
->  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
-> +set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
->  set(CMAKE_INSTALL_SO_NO_EXE 0)
->  
->  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> uClibc needs to be patched in order to fix this problem. In the meantime
+> we disable strace for MIPS when using a uClibc toolchain.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Can you sent a patch to uClibc mailing list fixing this issue?
+System without strace is had to debug.
+
+best regards
+ Waldemar
