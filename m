@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Sep 2014 11:50:01 +0200
-Subject: [Buildroot] [PATCH 3/5] musl: two-stage gcc simplifications
+Date: Sun, 14 Sep 2014 11:50:02 +0200
+Subject: [Buildroot] [PATCH 4/5] glibc: two-stage gcc simplifications
 In-Reply-To: <1410688203-28621-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1410688203-28621-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1410688203-28621-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1410688203-28621-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,63 +11,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 After switching to a two stage gcc solution, there is no longer a need
-to do weird things in the musl build, with certain things being done
-twice (MUSL_CONFIGURE_CALL). Now the MUSL_CONFIGURE_CMDS variable only
-does the configuration, and the MUSL_BUILD_CMDS only does the build,
-as it should be.
+to do weird things in the glibc build. We can greatly simplify
+GLIBC_CONFIGURE_CMDS to only do the configuration, and let the
+existing GLIBC_BUILD_CMDS do the build.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/musl.mk | 24 ++----------------------
- 1 file changed, 2 insertions(+), 22 deletions(-)
+ package/glibc/glibc.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2eccb3d..2b366cf 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -18,15 +18,7 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- MUSL_INSTALL_STAGING = YES
- 
--# We need to run the musl configure script prior to building the
--# gcc-intermediate, so that we can call the install-headers step and
--# get the crt<X>.o built. However, we need to call it again after
--# gcc-intermediate has been built, otherwise the configure script
--# doesn't realize that libgcc has been built, and doesn't link the C
--# library properly with libgcc, which causes build failure down the
--# road. We will have the opportunity to simplify this once we switch
--# to a 2-steps gcc build.
--define MUSL_CONFIGURE_CALL
-+define MUSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS)) $(MUSL_EXTRA_CFLAGS)" \
-@@ -38,25 +30,13 @@ define MUSL_CONFIGURE_CALL
- 			--disable-gcc-wrapper)
- endef
- 
--define MUSL_CONFIGURE_CMDS
--	$(MUSL_CONFIGURE_CALL)
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		DESTDIR=$(STAGING_DIR) install-headers
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		crt/crt1.o crt/crti.o crt/crtn.o
--	cp $(@D)/crt/crt*.o $(STAGING_DIR)/usr/lib
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0f63445..09b57fa 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -92,18 +92,7 @@ define GLIBC_CONFIGURE_CMDS
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+-	# Install headers and start files
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build \
+-		install_root=$(STAGING_DIR) \
+-		install-bootstrap-headers=yes \
+-		install-headers
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build csu/subdir_lib
+-	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
+-	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
+-	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
+ 	$(GLIBC_ADD_MISSING_STUB_H)
 -	$(TARGET_CROSS)gcc -nostdlib \
 -		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
--endef
--
- define MUSL_BUILD_CMDS
--	$(MUSL_CONFIGURE_CALL)
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
- define MUSL_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		DESTDIR=$(STAGING_DIR) install-libs install-tools
-+		DESTDIR=$(STAGING_DIR) install-libs install-tools install-headers
- endef
  
- # prefix is set to an empty value to get the C library installed in
 -- 
 2.0.0
