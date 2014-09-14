@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Sep 2014 23:14:47 +0200
-Subject: [Buildroot] [git commit] libqrencode: link with pthread to avoid
-	build failure
-Message-ID: <20140914211527.F12B89D664@busybox.osuosl.org>
+Date: Sun, 14 Sep 2014 22:26:30 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 12}.x series
+Message-ID: <20140914211527.CCD299D65E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18c7d1468b9eb9cc517693e3fe14037499b03ad8
+commit: http://git.buildroot.net/buildroot/commit/?id=7a66a093de7b24c8d556129dcdce2cc4cdb7b148
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: http://autobuild.buildroot.net/results/1ca0719dd1fe0bbc528ec99b5bc2b42e985bfdca/
-
-[Peter: only if toolchain has threads, pass --disable-thread-safety otherwise]
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqrencode/libqrencode.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
-index d445763..b407195 100644
---- a/package/libqrencode/libqrencode.mk
-+++ b/package/libqrencode/libqrencode.mk
-@@ -11,6 +11,12 @@ LIBQRENCODE_INSTALL_STAGING = YES
- LIBQRENCODE_LICENSE = LGPLv2.1+
- LIBQRENCODE_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBQRENCODE_CONF_ENV += LIBS='-pthread'
-+else
-+LIBQRENCODE_CONF_OPT += --disable-thread-safety
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
- LIBQRENCODE_CONF_OPT += --with-tools=yes
- LIBQRENCODE_DEPENDENCIES += libpng
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f7df881..c0ddf3e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -160,12 +160,12 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.103"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.54"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.27"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.28"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.18"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
