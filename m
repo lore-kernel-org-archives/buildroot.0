@@ -1,42 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Sep 2014 23:14:38 +0200
-Subject: [Buildroot] [PATCH 1/2] libqrencode: link with pthread to avoid
-	build failure
-In-Reply-To: <1410704092-3006-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Sun, 14 Sep 2014 10:14:51 -0400")
-References: <1410704092-3006-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87fvft52gx.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Sep 2014 23:00:38 +0200
+Subject: [Buildroot] [git commit] util-linux: disable python for host
+	variant as well
+Message-ID: <20140914211527.EA0F49D65E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e7ea16932204b3fd01d0d9597a2016e002337274
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes: http://autobuild.buildroot.net/results/1ca0719dd1fe0bbc528ec99b5bc2b42e985bfdca/
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- > ---
- >  package/libqrencode/libqrencode.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+It's bindings, and there's no need/use for them. Fixes:
+http://autobuild.buildroot.net/results/f3d/f3dfe6bd9031645fb068385af4054c0cc7522b2b/
 
- > diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
- > index d445763..085d0ae 100644
- > --- a/package/libqrencode/libqrencode.mk
- > +++ b/package/libqrencode/libqrencode.mk
- > @@ -11,6 +11,8 @@ LIBQRENCODE_INSTALL_STAGING = YES
- >  LIBQRENCODE_LICENSE = LGPLv2.1+
- >  LIBQRENCODE_LICENSE_FILES = COPYING
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 587f57e..7376886 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -27,6 +27,9 @@ UTIL_LINUX_CONF_OPT += \
+ # We don't want the host-busybox dependency to be added automatically
+ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
  
- > +LIBQRENCODE_CONF_OPT = LIBS='-pthread'
- > +
-
-Looking at configure.ac I see that pthread support is optional, so this
-should only be done if BR2_TOOLCHAIN_HAS_THREADS, otherwise we need to
-pass --disable-thread-safety.
-
-Committed with that fixed, thanks. The 2nd patch then doesn't make any
-sense, so I've dropped that one.
-
--- 
-Bye, Peter Korsgaard
++# We also don't want the host-python dependency
++HOST_UTIL_LINUX_CONF_OPT = --without-python
++
+ # If both util-linux and busybox are selected, make certain util-linux
+ # wins the fight over who gets to have their utils actually installed
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
