@@ -1,33 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 14 Sep 2014 17:34:15 -0300
-Subject: [Buildroot] [PATCH] dos2unix: needs host-gettext
-Message-ID: <1410726855-32136-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 14 Sep 2014 17:48:31 -0300
+Subject: [Buildroot] [PATCH] util-linux: disable python for host variant as
+	well
+Message-ID: <1410727711-32581-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For msgfmt, fixes:
-http://autobuild.buildroot.net/results/86a/86a104b4bfffa7426de93d63278b998d6dcce154/
+It's bindings, and there's no need/use for them. Fixes:
+http://autobuild.buildroot.net/results/f3d/f3dfe6bd9031645fb068385af4054c0cc7522b2b/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dos2unix/dos2unix.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/util-linux/util-linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 99bb742..fd531d4 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 587f57e..7376886 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -27,6 +27,9 @@ UTIL_LINUX_CONF_OPT += \
+ # We don't want the host-busybox dependency to be added automatically
+ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
  
- DOS2UNIX_VERSION = 7.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix/
--
-+DOS2UNIX_DEPENDENCIES = host-gettext
- DOS2UNIX_LICENSE = BSD-2c
- DOS2UNIX_LICENSE_FILES = COPYING.txt
- 
++# We also don't want the host-python dependency
++HOST_UTIL_LINUX_CONF_OPT = --without-python
++
+ # If both util-linux and busybox are selected, make certain util-linux
+ # wins the fight over who gets to have their utils actually installed
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
 1.8.5.5
