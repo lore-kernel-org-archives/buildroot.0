@@ -1,35 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 14 Sep 2014 17:48:31 -0300
-Subject: [Buildroot] [PATCH] util-linux: disable python for host variant as
-	well
-Message-ID: <1410727711-32581-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 14 Sep 2014 22:59:27 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix duplicate vfork problems when
+	static linking
+In-Reply-To: <20140901200606.GA14078@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Mon, 1 Sep 2014 22:06:06 +0200")
+References: <20140901200606.GA14078@waldemar-brodkorb.de>
+Message-ID: <87sijt5368.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's bindings, and there's no need/use for them. Fixes:
-http://autobuild.buildroot.net/results/f3d/f3dfe6bd9031645fb068385af4054c0cc7522b2b/
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/util-linux/util-linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Reported on uClibc mailinglist by Thomas Petazzoni
+ > Should fix:
+ > * SuperH
+ >  http://autobuild.buildroot.org/results/a81/a810c2f27dee1978808461c05cbdcbf51a214e09/build-end.log
+ > * i386
+ >  http://autobuild.buildroot.org/results/f83/f83b65bfc6ea7c7406a02e92afda43e4c5db6e7c/build-end.log
+ > * x86-64
+ >  http://autobuild.buildroot.org/results/64f/64f418f54885e8b5093dc8949c2d1d1ff3c938ea/build-end.log
+ > * powerpc
+ >  http://autobuild.buildroot.org/results/d5b/d5b7ac84dde0e4e26cd7cc46d79e66c39ed5cd53/build-end.log
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 587f57e..7376886 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -27,6 +27,9 @@ UTIL_LINUX_CONF_OPT += \
- # We don't want the host-busybox dependency to be added automatically
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
-+# We also don't want the host-python dependency
-+HOST_UTIL_LINUX_CONF_OPT = --without-python
-+
- # If both util-linux and busybox are selected, make certain util-linux
- # wins the fight over who gets to have their utils actually installed
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ > Tested with i386 static build of alsa-utils.
+ > Patch will be send to uClibc soon, need to finish test-suite run.
+
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+Committed, thanks.
+
 -- 
-1.8.5.5
+Bye, Peter Korsgaard
