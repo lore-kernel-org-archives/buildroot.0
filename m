@@ -1,37 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Sep 2014 13:10:35 +0200
-Subject: [Buildroot] Pending "big" patch series
-In-Reply-To: <20140914125321.0d68b842@free-electrons.com>
-References: <20140914125321.0d68b842@free-electrons.com>
-Message-ID: <20140914111035.GA3917@free.fr>
+Date: Sun, 14 Sep 2014 13:21:28 +0200
+Subject: [Buildroot] [PATCH 0/23 v5] gendoc infra: make it useable for
+ other documents (branch yem/manual)
+In-Reply-To: <cover.1410692670.git.yann.morin.1998@free.fr>
+References: <cover.1410692670.git.yann.morin.1998@free.fr>
+Message-ID: <20140914112128.GB3917@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
-On 2014-09-14 12:53 +0200, Thomas Petazzoni spake thusly:
-> Since we're still early in the cycle, it's a good time to look at the
-> big patch series that are pending, and take a decision on them. I've
-> compiled a subjective list of the "big" patch series that are pending,
-> with some comments on each of them. Please add your own comments, and
-> volunteer to review/test the series. Thanks!
+Gee... I forgot to update the series description in the cover letter.
+Sorry... :-(
 
-As said on IRC, I have most of those series tagged for review here.
-I just need to find/dedicate some time to that...
+Here it is:
 
->  * gendoc infra: make it useable for other documents (18 patches)
->    http://lists.busybox.net/pipermail/buildroot/2014-September/105678.html
+On 2014-09-14 13:07 +0200, Yann E. MORIN spake thusly:
+> This series builds up on top of Samuel previous series, and further
+> enhances the GENDOC infrastructure to be useable to generate other
+> documents, and especially documents in br2-external.
 > 
->    I'm personally not highly interested in making the gendoc infra
->    suitable for other documents than the manual, so I'm not very
->    motivated to review this. But maybe other persons are interested,
->    especially Samuel or Thomas DS who have followed the gendoc changes?
+> The series is articulated as thus:
+> 
+>   - patches 1-4 from Samuel, virtually untouched by me, save for the
+>     check for xsltproc, see the changelog in patch 4;
 
-I've sent a new version of this series:
-    http://lists.busybox.net/pipermail/buildroot/2014-September/106077.html
+Unchanged from previous iteration.
+
+>   - then, patches 5-16 to remove hard-coded reference to 'manual'
+>     in either GENDOC or GENDOC_INNER, and to remove hard-coded paths to
+>     our manual, and to properly separate GENDOC generic rules from
+>     document-specific rules, and make GENDOC look more like the
+>     pkg-XXX infrastructures;
+
+Replaced with:
+
+  - patches 5-14: properly separate our manual defintion from the actual
+    infrastructure;
+
+  - patches 15-16: make the gendoc infra behave more like the pkg
+    infras, by using hooks rather than extra rules;
+
+  - patch 17: workaround asciidoc deficiency when calling filters;
+
+  - patches 18-19: move and rename 'gendoc' to 'doc-asciidoc';
+
+  - patches 20-21: further tweak the new infra so it looks more like
+    other infras: only call pkgdir and pkgname from the frontend macro,
+    and use stamp files so we can use $(@D);
+
+  - patch 22: allow using doc-asciidoc from br2-external;
+
+  - patch 23: document this new infra in the manual.
+
+Here is an example of using this new infra from a br2-external tree:
+
+    http://ymorin.is-a-geek.org/download/tmp/br.config/brsh-manual.html
 
 Regards,
 Yann E. MORIN.
