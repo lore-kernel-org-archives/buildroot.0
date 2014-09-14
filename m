@@ -1,37 +1,33 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 14 Sep 2014 10:14:52 -0400
-Subject: [Buildroot] [PATCH 2/2] libqrencode: needs thread support
-In-Reply-To: <1410704092-3006-1-git-send-email-danomimanchego123@gmail.com>
-References: <1410704092-3006-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1410704092-3006-2-git-send-email-danomimanchego123@gmail.com>
+Date: Sun, 14 Sep 2014 10:14:51 -0400
+Subject: [Buildroot] [PATCH 1/2] libqrencode: link with pthread to avoid
+	build failure
+Message-ID: <1410704092-3006-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes: http://autobuild.buildroot.net/results/1ca0719dd1fe0bbc528ec99b5bc2b42e985bfdca/
+
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/libqrencode/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libqrencode/libqrencode.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libqrencode/Config.in b/package/libqrencode/Config.in
-index b866626..2888113 100644
---- a/package/libqrencode/Config.in
-+++ b/package/libqrencode/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBQRENCODE
- 	bool "libqrencode"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libqrencode is a C library for encoding data in a QR Code
- 	  symbol, a kind of 2D symbology that can be scanned by handy
-@@ -18,3 +19,6 @@ config BR2_PACKAGE_LIBQRENCODE_TOOLS
- 	  Build command-line tools
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index d445763..085d0ae 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
+@@ -11,6 +11,8 @@ LIBQRENCODE_INSTALL_STAGING = YES
+ LIBQRENCODE_LICENSE = LGPLv2.1+
+ LIBQRENCODE_LICENSE_FILES = COPYING
  
- endif #BR2_PACKAGE_LIBQRENCODE
++LIBQRENCODE_CONF_OPT = LIBS='-pthread'
 +
-+comment "libqrencode needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
+ LIBQRENCODE_CONF_OPT += --with-tools=yes
+ LIBQRENCODE_DEPENDENCIES += libpng
 -- 
 1.9.1
