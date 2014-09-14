@@ -1,67 +1,103 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Sep 2014 00:11:31 +0200
-Subject: [Buildroot] [PATCH 2/2] pkg-infra: make timing of steps optional
-In-Reply-To: <1410578043-10682-2-git-send-email-danomimanchego123@gmail.com>
-References: <1410578043-10682-1-git-send-email-danomimanchego123@gmail.com>
- <1410578043-10682-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140914221131.GF21222@free.fr>
+Date: Mon, 15 Sep 2014 00:15:33 +0200
+Subject: [Buildroot] [PATCH v3 1/8] opencv: rework V4L/libv4l support
+In-Reply-To: <1409515750-10289-2-git-send-email-s.martin49@gmail.com>
+References: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
+ <1409515750-10289-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140914221533.GG21222@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+Samuel, All,
 
-On 2014-09-12 23:14 -0400, Danomi Manchego spake thusly:
-> Commit 17d4eb1e0261793a9f89e4a2253602c7ab926d2e added a hook to log timing
-> of steps to a build-time.log file, which provides data for the "graph-build"
-> target for examining build time stats.  If one uses buildroot on a daily
-> basis as part of a build system, then its conceivable that there might be
-> long periods of time between "make clean" ops.  So the log file continues
-> to grow.  This patch makes the accumulation of the timing data optional, to
-> avoid having a silent endlessly growing log in the build directory.
-
-Well, it is ever growing, indeed, but its size is not that much, when
-compared to the other generated artifacts:
-
-    $ du -hs output
-    1.7G    .
-    $ ls -lh output/build/build-time.log
-    -rw-rw-r-- 1 ymorin ymorin 33K Sep 14 23:55 output/build/build-time.log
-
-But OK on principle. See a comment below...
-
-[--SNIP--]
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 4b6d818..5f0256e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -48,12 +48,14 @@ endef
->  # Actual steps hooks
+On 2014-08-31 22:09 +0200, Samuel Martin spake thusly:
+> Starting with the 2.4.7 release, for V4L support, OpenCV does not
+> requires a libv4l dependency for its V4L support.
+> 
+> So, it now provides 2 distincts knobs for this: WITH_V4L and a new
+> one: WITH_LIBV4L.
+> 
+> This patch takes advantage of this new knob and libv4l support is
+> now automatically enabled only if the libv4l package is enabled.
+> 
+> In OpenCV, the logic behind this is:
+> - using libv4l if available,
+> - otherwise, use v4l2 or v4l API from the kernel if available.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> chnages v2 -> v3:
+> - rebase
+> - remove comments about libv4l use (Yann)
+> 
+> changes v1 -> v2:
+> - rebase
+> - extend commit message
+> ---
+>  package/opencv/Config.in |  8 +-------
+>  package/opencv/opencv.mk | 10 +++++++---
+>  2 files changed, 8 insertions(+), 10 deletions(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 3f5051e..24f540e 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -205,16 +205,10 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
 >  
->  # Time steps
-> +ifneq ($(BR2_GATHER_BUILD_TIME_STATS),)
+>  config BR2_PACKAGE_OPENCV_WITH_V4L
+>  	bool "v4l support"
+> -	depends on BR2_LARGEFILE
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_USE_MMU # libv4l fork
+> -	select BR2_PACKAGE_LIBV4L
+>  	help
+>  	  Enable Video 4 Linux support.
+>  
+> -comment "v4l support needs a toolchain w/ largefile, threads"
+> -	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_USE_MMU
+> +	  If the package libv4l is enabled, its support is automatically enabled.
+>  
+>  comment "Install options"
+>  
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 1341d32..2b649ff 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -220,10 +220,14 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+> -OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+> -OPENCV_DEPENDENCIES += libv4l
+> +OPENCV_CONF_OPT += \
+> +	-DWITH_V4L=ON \
+> +	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
+> +OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
+>  else
+> -OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+> +OPENCV_CONF_OPT += \
+> +	-DWITH_V4L=OFF \
+> +	-DWITH_LIBV4L=OFF
 
-Please use positive logic:
+Gratuituous reformating. Besides, the previous line fit in 80-chars, so
+there is no real reason to reformat it.
 
-    ifeq ($(BR2_GATHER_BUILD_TIME_STATS),y)
+With that fixed:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  define step_time
->  	printf "%s:%-5.5s:%-20.20s: %s\n"           \
->  	       "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
->  	       >>"$(BUILD_DIR)/build-time.log"
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_time
-> +endif
+>  endif
 >  
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+>  # Installation hooks:
 > -- 
-> 1.9.1
+> 2.1.0
 > 
 > _______________________________________________
 > buildroot mailing list
