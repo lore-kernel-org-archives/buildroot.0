@@ -1,91 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Sep 2014 12:53:21 +0200
-Subject: [Buildroot] Pending "big" patch series
-Message-ID: <20140914125321.0d68b842@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Sep 2014 13:07:53 +0200
+Subject: [Buildroot] [PATCH 0/23 v5] gendoc infra: make it useable for other
+	documents (branch yem/manual)
+Message-ID: <cover.1410692670.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-Since we're still early in the cycle, it's a good time to look at the
-big patch series that are pending, and take a decision on them. I've
-compiled a subjective list of the "big" patch series that are pending,
-with some comments on each of them. Please add your own comments, and
-volunteer to review/test the series. Thanks!
+This series builds up on top of Samuel previous series, and further
+enhances the GENDOC infrastructure to be useable to generate other
+documents, and especially documents in br2-external.
 
- * Moving to a two stage gcc build (5 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-September/106069.html
+The series is articulated as thus:
 
-   Needs some testing from others.
+  - patches 1-4 from Samuel, virtually untouched by me, save for the
+    check for xsltproc, see the changelog in patch 4;
 
- * gendoc infra: make it useable for other documents (18 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-September/105678.html
+  - then, patches 5-16 to remove hard-coded reference to 'manual'
+    in either GENDOC or GENDOC_INNER, and to remove hard-coded paths to
+    our manual, and to properly separate GENDOC generic rules from
+    document-specific rules, and make GENDOC look more like the
+    pkg-XXX infrastructures;
 
-   I'm personally not highly interested in making the gendoc infra
-   suitable for other documents than the manual, so I'm not very
-   motivated to review this. But maybe other persons are interested,
-   especially Samuel or Thomas DS who have followed the gendoc changes?
+  - finally, patches 17-18 allow building document from br2-external.
 
- * fs/ext2: misc enhancements (4 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-September/105325.html
+There are a few shortcomings here and there, be sure to read the
+post-commit notes.
 
-   Needs review, nothing really complicated here.
 
- * Introduce libudev (15 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-September/105309.html
+Changes v4 -> v5:
+  - cleanup the series
+  - make it posible to use $(@D) in hooks
+  - call post-extract hook in the same rule that does the rsync
+  - rename the extra check dependencies hooks, to look more like real hooks
+  - document the doc-asciidoc infra in the manual
 
-   Needs review and testing, but the patch series has gone through
-   several iterations already, it should be almost good to go.
+Changes v3 -> v4:
+  - only run the xsltproc check once, not for every types of outputs
+  - add patches 5..18
 
- * OpenCV improvement (8 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/105208.html
 
-   Needs review.
+Regards,
+Yann E. MORIN.
 
- * New GFX drivers (4 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/105179.html
 
-   Needs review.
+The following changes since commit 52fac6a2f7bba55fb78a7a1354eef7be5bba9f78:
 
- * CMake cleanup (5 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/104794.html
+  libelf: Removes the package (2014-09-14 00:11:20 +0200)
 
-   Needs review.
+are available in the git repository at:
 
- * ncurses wide support (4 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/104715.html
+  git://gitorious.org/buildroot/buildroot.git yem/manual
 
-   Needs testing. We really need to get that one merged early, to get
-   some autobuilder coverage.
+for you to fetch changes up to cace268e0a2d0419476bc7c1952f753857a863a3:
 
- * toolchain: warn for unsafe library/header paths (12 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/104702.html
+  docs/manual: document the asciidoc infra (2014-09-14 11:33:34 +0200)
 
-   I have to respin with a new version.
+----------------------------------------------------------------
+Samuel Martin (4):
+      gendoc infra: cosmetic fixes
+      gendoc infra: move manual build location into $(BUILD_DIR)/manual
+      gendoc infra: avoid a2x warning
+      gendoc infra: disable pdf manual generation if xsltproc is buggy
 
- * perl: add host variant (6 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/104654.html
+Yann E. MORIN (19):
+      docs/manual: get rid of legacy comment in GENDOC
+      docs/manual: copying the manual sources is a common action
+      docs/manual: simplify generation dependencies
+      docs/manual: manual-update-lists is not a generic GENDOC rule
+      docs/manual: move manual-prepare-sources rule into GENDOC
+      docs/manual: do not hardcode name of the generated document
+      docs/manual: allow a document to declare where its ressources are
+      docs/manual: last pass at removing hard-coded path in GENDOC_INNER
+      docs/manual: properly separate rules specific for our manual
+      docs/manual: rename the generic dependency rules
+      docs/manual: allow documents to define some hooks, as for a package
+      docs/manual: use the new hooks instead of gendoc rules
+      docs/manual: always look for ressources in destination directory
+      docs: separate the GENDOC infra from our manual definition
+      docs: rename the GENDOC infrastructure
+      docs/asciidoc: call $(pkgname) and $(pkgdir) in a single place
+      docs/asciidoc: make it possible to use $(@D) in hooks
+      Makefile: enable generating documents from br2-external
+      docs/manual: document the asciidoc infra
 
-   We need to get that merged to solve some problems, but on the other
-   hand, having to build host-perl as soon as a host Perl module is
-   built is annoying.
+ Makefile                                 |   2 +
+ docs/manual/adding-packages-asciidoc.txt | 118 +++++++++++++++++++++++
+ docs/manual/adding-packages.txt          |   2 +
+ docs/manual/manual.mk                    | 104 ++++-----------------
+ package/doc-asciidoc.mk                  | 156 +++++++++++++++++++++++++++++++
+ 5 files changed, 294 insertions(+), 88 deletions(-)
+ create mode 100644 docs/manual/adding-packages-asciidoc.txt
+ create mode 100644 package/doc-asciidoc.mk
 
- * Add libgtk3 and bump webkit to version 2.4.3 (3 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-August/103387.html
-
-   Since the GSoC is over and Hadrien will not continue to work on
-   Buildroot, someone needs to adopt those patches. Eric, maybe?
-
- * packages: rename _OPT into _OPTS (2 patches)
-   http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
-
-   Thomas DS, could you respin this patch series?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
