@@ -1,46 +1,356 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Sep 2014 13:07:56 +0200
-Subject: [Buildroot] [PATCH 22/23 v5] Makefile: enable generating documents
-	from br2-external
+Date: Sun, 14 Sep 2014 13:07:52 +0200
+Subject: [Buildroot] [PATCH 18/23 v5] docs: separate the GENDOC infra from
+	our manual definition
 In-Reply-To: <cover.1410692670.git.yann.morin.1998@free.fr>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
-Message-ID: <5696090514d618d8f3a2a4540436f53f5c3adc5a.1410692671.git.yann.morin.1998@free.fr>
+Message-ID: <308773fe2883c6a3a4e13be8fdabcf3f2ba6c42a.1410692670.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the only way br2-external may generate a document is by
-including that document's recipe from within external.mk.
+Move the GENDOC infra to its own file, so it is even less tied to our
+manual document, so that it is more obvious that GENDOC is an infra like
+our packages infras, and 'manual' is a document like we have packages.
 
-But external.mk is only parsed when the tree is configured.
+Ideally, this new file should better go in docs/ rather than in package/ .
+However, docs/ is already full of our website stuff, so adding it in
+there would just serve to clutter the website.
 
-This is unlike our internal document (the manual) which can be generated
-from within an unconfigured tree.
-
-So, include the documents from br2-external at the same time we include
-our own document:
-  - expect the same layout as we have:      docs/DOC_NAME/doc-name.mk
-  - do not fail if there is no document:    use "-include", not "include"
+So, let's just put alongside the other infrastructures, in package/ .
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ Makefile              |   1 +
+ docs/manual/manual.mk | 148 --------------------------------------------------
+ package/gendoc.mk     | 147 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 148 insertions(+), 148 deletions(-)
+ create mode 100644 package/gendoc.mk
 
 diff --git a/Makefile b/Makefile
-index 8f56f1f..3075d0a 100644
+index e788f1b..28f2097 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -933,5 +933,6 @@ print-version:
- 	@echo $(BR2_VERSION_FULL)
+@@ -272,6 +272,7 @@ unexport DESTDIR
+ unexport RUBYOPT
  
- include docs/manual/manual.mk
-+-include $(BR2_EXTERNAL)/docs/*/*.mk
+ include package/pkg-utils.mk
++include package/gendoc.mk
  
- .PHONY: $(noconfig_targets)
+ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index e649ffe..85999c6 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -1,151 +1,3 @@
+-# we can't use suitable-host-package here because that's not available in
+-# the context of 'make release'
+-gendoc-check-dependencies:
+-	$(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
+-		echo "You need a sufficiently recent asciidoc on your host" \
+-			"to generate the manual"; \
+-		exit 1; \
+-	fi
+-	$(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
+-		echo "You need w3m on your host to generate the manual"; \
+-		exit 1; \
+-	fi
+-
+-gendoc-check-dependencies-pdf:
+-	$(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
+-		echo "You need dblatex on your host to generate the pdf manual"; \
+-		exit 1; \
+-	fi
+-
+-# PDF manual generation is broken because of a bug in xsltproc program provided
+-# by libxslt <=1.1.28, which does not honor an option we need to set.
+-# Fortunately, this bug is already fixed upstream:
+-#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+-#
+-# So, bail out when trying to build the pdf manual using a buggy version of the
+-# xsltproc program.
+-#
+-# So, to overcome this issue and being able to build the pdf manual, you can
+-# build xsltproc from it source repository, then run:
+-#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
+-MANUAL_XSLTPROC_IS_BROKEN = \
+-	$(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
+-
+-################################################################################
+-# GENDOC_INNER -- generates the make targets needed to build a specific type of
+-#                 asciidoc documentation.
+-#
+-#  argument 1 is the name of the document and the top-level asciidoc file must
+-#             have the same name
+-#  argument 2 is the uppercase name of the document
+-#  argument 3 is the directory containing the document
+-#  argument 4 is the type of document to generate (-f argument of a2x)
+-#  argument 5 is the document type as used in the make target
+-#  argument 6 is the output file extension for the document type
+-#  argument 7 is the human text for the document type
+-#  argument 8 (optional) are extra arguments for a2x
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-#
+-# Since this function will be called from within an $(eval ...)
+-# all variable references except the arguments must be $$-quoted.
+-################################################################################
+-define GENDOC_INNER
+-$(1): $(1)-$(5)
+-.PHONY: $(1)-$(5)
+-$(1)-$(5): $$(O)/docs/$(1)/$(1).$(6)
+-
+-gendoc-check-dependencies-$(5):
+-$(1)-check-dependencies-$(5): gendoc-check-dependencies-$(5)
+-	$$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_$(5)_HOOKS),$$(call $$(hook))$$(sep))
+-
+-$(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
+-ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
+-$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
+-endif
+-
+-# Handle a2x warning about --destination-dir option only applicable to HTML
+-# based outputs. So:
+-# - use the --destination-dir option if possible (html and split-html),
+-# - otherwise copy the generated manual to the output directory
+-$(2)_$(4)_A2X_OPTS =
+-ifneq ($$(filter $(5),html split-html),)
+-$(2)_$(4)_A2X_OPTS += --destination-dir="$$(@D)"
+-else
+-define $(2)_$(4)_INSTALL_CMDS
+-	$$(Q)cp -f $$(BUILD_DIR)/$(1)/$(1).$(6) $$(@D)
+-endef
+-endif
+-
+-ifeq ($(6)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
+-$$(O)/docs/$(1)/$(1).$(6):
+-	$$(error PDF manual generation is disabled because of a bug in \
+-		xsltproc. To be able to generate the PDF manual, you should \
+-		build xsltproc from the libxslt sources >=1.1.29 and pass it \
+-		to make through the command line: \
+-		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
+-else
+-$$(O)/docs/$(1)/$(1).$(6): $$($$(call UPPERCASE,$(1))_SOURCES) \
+-			   $(1)-check-dependencies \
+-			   $(1)-check-dependencies-$(5) \
+-			   $(1)-prepare-sources
+-	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
+-	$$(Q)mkdir -p $$(@D)
+-	$$(Q)a2x $(8) -f $(4) -d book -L \
+-		$$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) -r $$(@D) \
+-		$$($(2)_$(4)_A2X_OPTS) \
+-		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
+-		$$(BUILD_DIR)/$(1)/$(1).txt
+-# install the generated manual
+-	$$($(2)_$(4)_INSTALL_CMDS)
+-endif
+-endef
+-
+-################################################################################
+-# GENDOC -- generates the make targets needed to build asciidoc documentation.
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-# The variable <DOCUMENT_NAME>_RESSOURCES defines where the document's
+-# resources, such as images, are located; must be an absolute path.
+-################################################################################
+-define GENDOC
+-# Single line, because splitting a foreach is not easy...
+-$(pkgname)-check-dependencies: gendoc-check-dependencies
+-	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
+-
+-$$(BUILD_DIR)/$(pkgname):
+-	$$(Q)mkdir -p $$@
+-
+-# Single line, because splitting a foreach is not easy...
+-$(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
+-	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
+-	$$(Q)rsync -a $(pkgdir) $$^
+-	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_EXTRACT_HOOKS),$$(call $$(hook))$$(sep))
+-
+-$(pkgname)-prepare-sources: $(pkgname)-rsync
+-
+-$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),xhtml,html,html,HTML,\
+-	--xsltproc-opts "--stringparam toc.section.depth 1")
+-
+-$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),chunked,split-html,chunked,split HTML,\
+-	--xsltproc-opts "--stringparam toc.section.depth 1")
+-
+-# dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
+-# from reaching the template recursion limit when processing the (long) target
+-# package table and bailing out.
+-$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),pdf,pdf,pdf,PDF,\
+-	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
+-
+-$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),text,text,text,text)
+-
+-$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),epub,epub,epub,ePUB)
+-
+-clean: $(pkgname)-clean
+-$(pkgname)-clean:
+-	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
+-.PHONY: $(pkgname) $(pkgname)-clean
+-endef
+-
+ ################################################################################
+ # The Buildroot manual
+ ################################################################################
+diff --git a/package/gendoc.mk b/package/gendoc.mk
+new file mode 100644
+index 0000000..b859860
+--- /dev/null
++++ b/package/gendoc.mk
+@@ -0,0 +1,147 @@
++# we can't use suitable-host-package here because that's not available in
++# the context of 'make release'
++gendoc-check-dependencies:
++	$(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
++		echo "You need a sufficiently recent asciidoc on your host" \
++			"to generate the manual"; \
++		exit 1; \
++	fi
++	$(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
++		echo "You need w3m on your host to generate the manual"; \
++		exit 1; \
++	fi
++
++gendoc-check-dependencies-pdf:
++	$(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
++		echo "You need dblatex on your host to generate the pdf manual"; \
++		exit 1; \
++	fi
++
++# PDF manual generation is broken because of a bug in xsltproc program provided
++# by libxslt <=1.1.28, which does not honor an option we need to set.
++# Fortunately, this bug is already fixed upstream:
++#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
++#
++# So, bail out when trying to build the pdf manual using a buggy version of the
++# xsltproc program.
++#
++# So, to overcome this issue and being able to build the pdf manual, you can
++# build xsltproc from it source repository, then run:
++#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
++MANUAL_XSLTPROC_IS_BROKEN = \
++	$(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
++
++################################################################################
++# GENDOC_INNER -- generates the make targets needed to build a specific type of
++#                 asciidoc documentation.
++#
++#  argument 1 is the name of the document and the top-level asciidoc file must
++#             have the same name
++#  argument 2 is the uppercase name of the document
++#  argument 3 is the directory containing the document
++#  argument 4 is the type of document to generate (-f argument of a2x)
++#  argument 5 is the document type as used in the make target
++#  argument 6 is the output file extension for the document type
++#  argument 7 is the human text for the document type
++#  argument 8 (optional) are extra arguments for a2x
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++#
++# Since this function will be called from within an $(eval ...)
++# all variable references except the arguments must be $$-quoted.
++################################################################################
++define GENDOC_INNER
++$(1): $(1)-$(5)
++.PHONY: $(1)-$(5)
++$(1)-$(5): $$(O)/docs/$(1)/$(1).$(6)
++
++gendoc-check-dependencies-$(5):
++$(1)-check-dependencies-$(5): gendoc-check-dependencies-$(5)
++	$$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_$(5)_HOOKS),$$(call $$(hook))$$(sep))
++
++$(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
++ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
++$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
++endif
++
++# Handle a2x warning about --destination-dir option only applicable to HTML
++# based outputs. So:
++# - use the --destination-dir option if possible (html and split-html),
++# - otherwise copy the generated manual to the output directory
++$(2)_$(4)_A2X_OPTS =
++ifneq ($$(filter $(5),html split-html),)
++$(2)_$(4)_A2X_OPTS += --destination-dir="$$(@D)"
++else
++define $(2)_$(4)_INSTALL_CMDS
++	$$(Q)cp -f $$(BUILD_DIR)/$(1)/$(1).$(6) $$(@D)
++endef
++endif
++
++ifeq ($(6)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
++$$(O)/docs/$(1)/$(1).$(6):
++	$$(error PDF manual generation is disabled because of a bug in \
++		xsltproc. To be able to generate the PDF manual, you should \
++		build xsltproc from the libxslt sources >=1.1.29 and pass it \
++		to make through the command line: \
++		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
++else
++$$(O)/docs/$(1)/$(1).$(6): $$($$(call UPPERCASE,$(1))_SOURCES) \
++			   $(1)-check-dependencies \
++			   $(1)-check-dependencies-$(5) \
++			   $(1)-prepare-sources
++	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
++	$$(Q)mkdir -p $$(@D)
++	$$(Q)a2x $(8) -f $(4) -d book -L \
++		$$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) -r $$(@D) \
++		$$($(2)_$(4)_A2X_OPTS) \
++		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
++		$$(BUILD_DIR)/$(1)/$(1).txt
++# install the generated manual
++	$$($(2)_$(4)_INSTALL_CMDS)
++endif
++endef
++
++################################################################################
++# GENDOC -- generates the make targets needed to build asciidoc documentation.
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++# The variable <DOCUMENT_NAME>_RESSOURCES defines where the document's
++# resources, such as images, are located; must be an absolute path.
++################################################################################
++define GENDOC
++# Single line, because splitting a foreach is not easy...
++$(pkgname)-check-dependencies: gendoc-check-dependencies
++	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
++
++$$(BUILD_DIR)/$(pkgname):
++	$$(Q)mkdir -p $$@
++
++# Single line, because splitting a foreach is not easy...
++$(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
++	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
++	$$(Q)rsync -a $(pkgdir) $$^
++	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_EXTRACT_HOOKS),$$(call $$(hook))$$(sep))
++
++$(pkgname)-prepare-sources: $(pkgname)-rsync
++
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),xhtml,html,html,HTML,\
++	--xsltproc-opts "--stringparam toc.section.depth 1")
++
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),chunked,split-html,chunked,split HTML,\
++	--xsltproc-opts "--stringparam toc.section.depth 1")
++
++# dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
++# from reaching the template recursion limit when processing the (long) target
++# package table and bailing out.
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),pdf,pdf,pdf,PDF,\
++	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
++
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),text,text,text,text)
++
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),epub,epub,epub,ePUB)
++
++clean: $(pkgname)-clean
++$(pkgname)-clean:
++	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
++.PHONY: $(pkgname) $(pkgname)-clean
++endef
 -- 
 1.9.1
