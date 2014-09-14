@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Sep 2014 18:27:35 +0200
-Subject: [Buildroot] [PATCH v2 2/5] package/pkg-cmake.mk: set the {C, CXX,
- LD}FLAGS for host packages
-In-Reply-To: <1408653920-18954-3-git-send-email-s.martin49@gmail.com>
+Date: Sun, 14 Sep 2014 18:34:49 +0200
+Subject: [Buildroot] [PATCH v2 3/5] toolchainfile.cmake.in: set linker
+ flags
+In-Reply-To: <1408653920-18954-4-git-send-email-s.martin49@gmail.com>
 References: <1408653920-18954-1-git-send-email-s.martin49@gmail.com>
- <1408653920-18954-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140914162735.GA21222@free.fr>
+ <1408653920-18954-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140914163449.GB21222@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,16 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-08-21 22:45 +0200, Samuel Martin spake thusly:
+> The linker flags are part of the toolchain configuration, so set them for
+> the CMake-based packages.
+> 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-As I am not a cmake expert, I'd like a bit more explanations in the
-commit log.
+This patch does not add the FORCE option, like for CFLAGS and CXXFLAGS,
+which make it a bit incoherent. But since we're removing in the
+following patch, that's OK.
 
-What puzzles me is that, for the target case, these flags are passed via
-support/misc/toolchainfile.cmake.in, while for the host, we pass them on
-the command line. This is not consistent.
-
-Why don't we also use a host.cmake.in file like we have for the target?
-
-Note that us having support/misc/toolchainfile.cmake.in does not even
-help for building a cmake package outside of Buildroot (but still using
-our toolchain), since the user may forget to define CMAKE_TOOLCHAIN_FILE
-when calling cmake on his own.
-
-Note: I know you have a good answer, but I'm a bit lost as to all those
-special-casing in cmake, which makes reviewing a bit difficult, and a
-bit of comments in the commit log (a pointer to the cmake doc would be
-enough!) would make it easier.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
@@ -43,23 +33,34 @@ Yann E. MORIN.
 > changes v1 -> v2:
 > - no change
 > ---
->  package/pkg-cmake.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/pkg-cmake.mk                | 1 +
+>  support/misc/toolchainfile.cmake.in | 1 +
+>  2 files changed, 2 insertions(+)
 > 
 > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index f5aefae..3655751 100644
+> index 3655751..2006b76 100644
 > --- a/package/pkg-cmake.mk
 > +++ b/package/pkg-cmake.mk
-> @@ -86,6 +86,9 @@ define $(2)_CONFIGURE_CMDS
->  		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
->  		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
->  		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-> +		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
-> +		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
-> +		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
->  		-DBUILD_TESTING=OFF \
->  		$$($$(PKG)_CONF_OPT) \
->  	)
+> @@ -177,6 +177,7 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  		-e 's:@@STAGING_SUBDIR@@:$(call qstrip,$(STAGING_SUBDIR)):' \
+>  		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
+>  		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
+> +		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
+>  		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
+>  		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index 46ed932..1dfbdba 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -14,6 +14,7 @@ set(CMAKE_SYSTEM_NAME Linux)
+>  
+>  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
+>  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+> +set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
+>  set(CMAKE_INSTALL_SO_NO_EXE 0)
+>  
+>  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
 > -- 
 > 2.1.0
 > 
