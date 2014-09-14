@@ -1,107 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Sep 2014 13:07:54 +0200
-Subject: [Buildroot] [PATCH 20/23 v5] docs/asciidoc: call $(pkgname) and
-	$(pkgdir) in a single place
+Date: Sun, 14 Sep 2014 13:07:56 +0200
+Subject: [Buildroot] [PATCH 22/23 v5] Makefile: enable generating documents
+	from br2-external
 In-Reply-To: <cover.1410692670.git.yann.morin.1998@free.fr>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
-Message-ID: <b0636122e2367750eece267d01b569286603652d.1410692671.git.yann.morin.1998@free.fr>
+Message-ID: <5696090514d618d8f3a2a4540436f53f5c3adc5a.1410692671.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for all the package infrastructures, retrieve the package name and
-directory in the front-end macro-variable, rather than everywhere in the
-backend macro.
+Currently, the only way br2-external may generate a document is by
+including that document's recipe from within external.mk.
 
-This allows us to clean up the ASCIIDOC macro, by removing all the calls
-to $(pkgname) and $(pkgdir), and to UPPERCASE (which made the macro a
-bit difficult to read.)
+But external.mk is only parsed when the tree is configured.
+
+This is unlike our internal document (the manual) which can be generated
+from within an unconfigured tree.
+
+So, include the documents from br2-external at the same time we include
+our own document:
+  - expect the same layout as we have:      docs/DOC_NAME/doc-name.mk
+  - do not fail if there is no document:    use "-include", not "include"
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- package/doc-asciidoc.mk | 39 ++++++++++++++++++++++-----------------
- 1 file changed, 22 insertions(+), 17 deletions(-)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index 4366f8a..38c9ced 100644
---- a/package/doc-asciidoc.mk
-+++ b/package/doc-asciidoc.mk
-@@ -104,6 +104,11 @@ endef
- ################################################################################
- # ASCIIDOC -- generates the make targets needed to build asciidoc documentation.
- #
-+# argument 1 is the lowercase name of the document; the document's main file
-+#            must have the same name, with the .txt extension
-+# argument 2 is the uppercase name of the document
-+# argument 3 is the directory containing the document's sources
-+#
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- # The variable <DOCUMENT_NAME>_RESSOURCES defines where the document's
- # resources, such as images, are located; must be an absolute path.
-@@ -111,43 +116,43 @@ endef
- define ASCIIDOC
- # Single line, because splitting a foreach is not easy...
- $(pkgname)-check-dependencies: asciidoc-check-dependencies
--	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
-+	$$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
+diff --git a/Makefile b/Makefile
+index 8f56f1f..3075d0a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -933,5 +933,6 @@ print-version:
+ 	@echo $(BR2_VERSION_FULL)
  
--$$(BUILD_DIR)/$(pkgname):
-+$$(BUILD_DIR)/$(1):
- 	$$(Q)mkdir -p $$@
+ include docs/manual/manual.mk
++-include $(BR2_EXTERNAL)/docs/*/*.mk
  
- # Single line, because splitting a foreach is not easy...
--$(pkgname)-rsync: $$(BUILD_DIR)/$(pkgname)
--	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
--	$$(Q)rsync -a $(pkgdir) $$^
--	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_EXTRACT_HOOKS),$$(call $$(hook))$$(sep))
-+$(1)-rsync: $$(BUILD_DIR)/$(1)
-+	$$(Q)$$(call MESSAGE,"Preparing the $(1) sources...")
-+	$$(Q)rsync -a $(3) $$^
-+	$$(Q)$$(foreach hook,$$($(2)_POST_EXTRACT_HOOKS),$$(call $$(hook))$$(sep))
- 
--$(pkgname)-prepare-sources: $(pkgname)-rsync
-+$(1)-prepare-sources: $(1)-rsync
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),xhtml,html,html,HTML,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),chunked,split-html,chunked,split HTML,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),chunked,split-html,chunked,split HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- 
- # dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
- # from reaching the template recursion limit when processing the (long) target
- # package table and bailing out.
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),pdf,pdf,pdf,PDF,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),pdf,pdf,pdf,PDF,\
- 	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),text,text,text,text)
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),text,text,text,text)
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),epub,epub,epub,ePUB)
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),epub,epub,epub,ePUB)
- 
--clean: $(pkgname)-clean
--$(pkgname)-clean:
--	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(pkgname)
--.PHONY: $(pkgname) $(pkgname)-clean
-+clean: $(1)-clean
-+$(1)-clean:
-+	$$(Q)$$(RM) -rf $$(BUILD_DIR)/$(1)
-+.PHONY: $(1) $(1)-clean
- endef
- 
- ################################################################################
- # asciidoc-document -- the target generator macro for asiciidoc documents
- ################################################################################
- 
--asciidoc-document = $(call ASCIIDOC)
-+asciidoc-document = $(call ASCIIDOC,$(pkgname),$(call UPPERCASE,$(pkgname)),$(pkgdir))
+ .PHONY: $(noconfig_targets)
 -- 
 1.9.1
