@@ -1,34 +1,34 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 14 Sep 2014 19:05:44 +0200
-Subject: [Buildroot] [PATCH] strace: Disable for MIPS when using a
- uClibc toolchain
-In-Reply-To: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1410518438-14544-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140914170543.GN14691@waldemar-brodkorb.de>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Sun, 14 Sep 2014 19:58:51 +0200
+Subject: [Buildroot] [PATCH v7] openvmtools: new package
+In-Reply-To: <87k3576vle.fsf@dell.be.48ers.dk>
+References: <1409674416-33961-1-git-send-email-kaszak@gmail.com>
+ <87k3576vle.fsf@dell.be.48ers.dk>
+Message-ID: <CABbD_XB1Xb4+aJ_TbZYGt-Szt2JThQEdWAdbpOp9fdkaY4brsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
-Vicente Olivert Riera wrote,
+Hi Peter,
 
-> A change introduced in strace-4.9 makes it incompatible with MIPS
-> architecture when using a uClibc toolchain. This is the failure:
-> 
-> signal.c: In function 'printsiginfo':
-> signal.c:453:9: error: 'siginfo_t' has no member named 'si_timerid'
->       sip->si_timerid, sip->si_overrun);
-> 	 ^
-> signal.c:453:26: error: 'siginfo_t' has no member named 'si_overrun'
->       sip->si_timerid, sip->si_overrun);
-> 
-> uClibc needs to be patched in order to fix this problem. In the meantime
-> we disable strace for MIPS when using a uClibc toolchain.
 
-Can you sent a patch to uClibc mailing list fixing this issue?
-System without strace is had to debug.
+> Have you tested this against mainline buildroot? Compilation fails as
+> libglib2 also defines a g_info macro like openvmtools does since 2.40.
+>
+>
+I tested it multiple times, the compile never failed for me because of this
+bug (own toolchain, all 3 libc options tested).
+I even tried it today after reading your mail, I removed the 3rd patch from
+the package directory, and it compiles nicely w/ libglib2-2.40.0 w/ all
+three libc possibilities.
+I guess this only occurs when compiling with options that are disabled in
+our build (maybe X11 support or libICU)?
+Thanks for the heads up, I'll be looking out for that one.
 
-best regards
- Waldemar
+Regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140914/054472c3/attachment.html>
