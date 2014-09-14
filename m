@@ -1,91 +1,76 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sun, 14 Sep 2014 09:00:59 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "libffi and python: need threads
-	support"
-In-Reply-To: <1410678059-12446-1-git-send-email-jezz@sysmic.org>
-References: <1410678059-12446-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1410678059-12446-2-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Sep 2014 11:49:58 +0200
+Subject: [Buildroot] [PATCH 0/5] Moving to a two stage gcc build
+Message-ID: <1410688203-28621-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot now add a patch to libffi to fix support of threads. Thus, this
-patch is no more needed.
+Hello,
 
-This reverts commit 77cf5b5a71aa54039f4dbc509a1c7cb40aa04934.
+Here is a new iteration of the patch series moving from a three stage
+gcc build to a two stage gcc build, which obviously speeds up quite a
+bit the toolchain build process. This time around, I've done a *lot*
+more testing, and I've fixed the Stack Smashing Protection issue that
+lead to reverting the previous solution (back in October 2013).
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/libffi/Config.in  | 4 ----
- package/python/Config.in  | 5 ++---
- package/python3/Config.in | 5 ++---
- 3 files changed, 4 insertions(+), 10 deletions(-)
+You can see the results at:
 
-diff --git a/package/libffi/Config.in b/package/libffi/Config.in
-index 6edf570..7211f8f 100644
---- a/package/libffi/Config.in
-+++ b/package/libffi/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBFFI
- 	bool "libffi"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The libffi library provides a portable, high level
- 	  programming interface to various calling conventions. This
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_LIBFFI
- 	  interface description at run-time.
- 
- 	  http://sourceware.org/libffi/
--
--comment "libffi needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 8b27630..a0c78c6 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -3,16 +3,15 @@ config BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
- 
- 	  http://www.python.org/
- 
--comment "python needs a toolchain w/ wchar, threads"
-+comment "python needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_PYTHON
- 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 375390f..3e193c8 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -4,16 +4,15 @@ config BR2_PACKAGE_PYTHON3
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
- 
- 	  http://www.python.org/
- 
--comment "python3 needs a toolchain w/ wchar, threads"
-+comment "python3 needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_PYTHON3
- 
+  https://docs.google.com/spreadsheets/d/1Qj3t6HJzuVxsqLfXZp3HiFMGrangmRl510BqR_VIOeM/edit?usp=sharing
+
+I've done build testing on all architectures that we support (except
+I've done tested all little endian / big endian variations of the
+different architectures), and I've done runtime testing on all the
+architectures for which we have Qemu support. This testing has been
+done for the three supported C libraries: glibc, uclibc and musl (I
+haven't done eglibc testing, since it's going away, and should be
+identical to glibc).
+
+This testing was done with a variety of compiler versions, C library
+versions (for glibc), and toolchain configuration. Of course, I
+haven't tested *all* possible combinations, but quite a few.
+
+The results show that this patch series does not introduce
+regressions: the configuration that do not build or do not run on
+target also fail in the same way on the master branch:
+
+ - ARC build fails in Busybox, like in master (but the toolchain
+   builds fine)
+
+ - mips64el/uclibc build and mipsel/uclibc build fail to run, like in
+   master.
+
+ - powerpc/musl fails to build, since it doesn't have SPE support,
+   like in master (patches from Gustavo pending).
+
+ - sh4 toolchain is broken, like in master.
+
+I'd like to call people using the internal toolchain backend to please
+test this patch series (both build time and run time), and report any
+issue or send their Tested-by. We're still relatively early in the
+development cycle, it's the good moment to get such changes merged.
+
+Thanks!
+
+Thomas
+
+Thomas Petazzoni (5):
+  toolchain: switch to a two stage gcc build
+  gcc/gcc-intermediate: remove package
+  musl: two-stage gcc simplifications
+  glibc: two-stage gcc simplifications
+  uclibc: two-stage gcc simplifications
+
+ package/gcc/gcc-initial/gcc-initial.mk           | 20 +++++++++-
+ package/gcc/gcc-intermediate/gcc-intermediate.mk | 49 ------------------------
+ package/gcc/gcc.mk                               |  3 +-
+ package/glibc/glibc.mk                           | 15 +-------
+ package/musl/musl.mk                             | 27 +------------
+ package/uclibc/uclibc.mk                         | 25 +-----------
+ 6 files changed, 24 insertions(+), 115 deletions(-)
+ delete mode 100644 package/gcc/gcc-intermediate/gcc-intermediate.mk
+
 -- 
-1.9.1
+2.0.0
