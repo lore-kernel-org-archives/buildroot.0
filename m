@@ -1,63 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 14 Sep 2014 21:52:40 -0500
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140914121904.0c2ebcbd@free-electrons.com>
-References: <20140914063013.2E5D2100F07@stock.ovh.net>
- <20140914121904.0c2ebcbd@free-electrons.com>
-Message-ID: <CANQCQpYvy8dao3T_JLdcfdrAT7Vm6fDeA8=Bvk68a3OB1CU8dw@mail.gmail.com>
+From: Maarten ter Huurne <maarten@treewalker.org>
+Date: Mon, 15 Sep 2014 04:53:38 +0200
+Subject: [Buildroot] [PATCH v2] memstat: Add patch to fix compilation with
+	musl libc
+In-Reply-To: <20140913224356.174954fc@free-electrons.com>
+References: <20140913224356.174954fc@free-electrons.com>
+Message-ID: <1410749618-6304-1-git-send-email-maarten@treewalker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+PATH_MAX was undefined because of a missing #include.
 
-On Sun, Sep 14, 2014 at 5:19 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+---
+ package/memstat/memstat-0001-PATH_MAX.patch | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 package/memstat/memstat-0001-PATH_MAX.patch
 
-<snip>
-
->>         bfin |                  omniorb-4.1.6 | NOK | http://autobuild.buildroot.net/results/fbe6c722b92fe4ddf7ac36a8fe1be3a3891c11fd/
->
-> Weird thread related issue:
->
-> /home/peko/autobuild/instance-0/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/include/pthread.h: In static member function ???static omni_thread* omni_thread::self()???:
-> /home/peko/autobuild/instance-0/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/include/pthread.h:575: error: too many arguments to function ???void*
->
-
-The code is attempting to handle multi-platform posix API support, but
-doesn't have a good failure path to show when it can't detect the OS
-(it uses the toolchain prefix).
-
-Here's what's happening......
-The assert in the posix.cc is becuase of the PthreadDraftVersion being
-set to zero
-src/lib/omnithread/posix.cc:602:#if (PthreadDraftVersion <= 6)
-
-The PthreadDraftVersion  is set to zero because the OSVERSION is 0.
--D__OSVERSION__=0
-
-The OSVERSION is 0 because of the configure failing to set the OS
-based on the toolchain prefix being uclinux.
-
-
-I don't have a hardware to adequately test a bfin build with omniorb
-(with omni, it usually builds... but when you run it you see the
-datatype or threading issues), so for now I'll prepare a patch that
-limits omniorb builds to glibc only.
-
-Based on the few discussions I found on the omni mailing list, uclibc
-support is experimental and the omniorb codebase hasn't been updated
-to support that target.
-
+diff --git a/package/memstat/memstat-0001-PATH_MAX.patch b/package/memstat/memstat-0001-PATH_MAX.patch
+new file mode 100644
+index 0000000..0c3617a
+--- /dev/null
++++ b/package/memstat/memstat-0001-PATH_MAX.patch
+@@ -0,0 +1,14 @@
++Add missing #include for PATH_MAX
++
++Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
++
++--- memstat-0.8.org/memstat.c	2009-06-08 14:38:05.000000000 +0200
+++++ memstat-0.8/memstat.c	2014-09-12 03:55:43.096035374 +0200
++@@ -19,6 +19,7 @@
++ #include <unistd.h>
++ #include <getopt.h>
++ #include <errno.h>
+++#include <limits.h>
++ 
++ /* blacklist devices that just map physical memory */
++ char *blacklist[] = { "/dev/mem",
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber@corp.rockwellcollins.com.
+1.8.4.5
