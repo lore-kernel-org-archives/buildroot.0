@@ -1,51 +1,38 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Mon, 15 Sep 2014 23:16:15 +0200
-Subject: [Buildroot] [PATCH 3/4] arch: do not distinguish revisions of
-	ARM1136JF-S
-In-Reply-To: <1410814919-11523-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Sep 2014 23:16:50 +0200
+Subject: [Buildroot] [PATCH 2/4] arch: remove BR2_arm10t
+In-Reply-To: <20140915211355.GB3878@free.fr>
 References: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1410814919-11523-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CA+sos79OX4szK9uimm1dVW62UtjOnFewhm2eFDF5sF01owQLHA@mail.gmail.com>
+ <1410814919-11523-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140915211355.GB3878@free.fr>
+Message-ID: <20140915231650.5b05c0ab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Yann E. MORIN,
 
-On Mon, Sep 15, 2014 at 11:01 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> In commit 88cf3bb91792c9c04586e14f293d89a6e0c13e1d
-> ("arch/Config.in.arm: Use armv6k for arm1136jf-s rev1"), Beno?t
-> Th?baudeau added separate options for the revision 0 and revision 1 of
-> the ARM1136JF-S processor, so that different -march values could be
-> used (armv6j for revision 0, armv6k for revision 1).
->
-> However, this is preventing the removal of the BR2_GCC_TARGET_ARCH
-> option, which we need to do to give only the CPU type to gcc, and let
-> it decide the architecture variant that matches. This is because this
-> story of revision 0 vs. revision 1 is the only case where -mcpu
-> doesn't fully define the CPU.
->
-> Moreover, a quick test with gcc shows that -march=armv6j
-> -mcpu=arm1136jf-s is accepted, while -march=armv6k -mcpu=arm1136jf-s
-> makes gcc complain: " warning: switch -mcpu=arm1136jf-s conflicts with
-> -march=armv6k switch".
+On Mon, 15 Sep 2014 23:13:55 +0200, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2014-09-15 23:01 +0200, Thomas Petazzoni spake thusly:
+> > The BR2_arm10t option is not correct as it references an ARM family,
+> > while other options indicate a specific ARM core. The ARM cores in
+> > ARM10 family are ARM1020E, ARM1022E and ARM1026EJ-S according to
+> > Wikipedia. However, those are clearly very rare, and Wikipedia also
+> > indicates two Conexant ADSL-related SoC as being part of this family
+> > of ARM cores. Therefore, this commit removes this ARM family.
+> 
+> You forgot the reference to BR2_arm10t we have in nettle.mk
 
-Yes, because -mcpu=arm1136jf-s implies -march=armv6j. But how about
-keeping -march and -mtune, and removing -mcpu, instead of the
-contrary? This would give more flexibility, and full control over the
-CPU optimization.
+Gah, indeed, will fix and resend.
 
-> In addition, gcc 5 will apparently no longer allow to pass all of
-> --with-arch, --with-cpu and --with-tune, so we will anyway have to
-> rely only on one of them.
+Also, in the commit log: s/Wikipedia also/Wikipedia only/.
 
-What combinations will no longer be supported? Only -mcpu with -march
-and -mtune?
-
-[...]
-
-Best regards,
-Beno?t
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
