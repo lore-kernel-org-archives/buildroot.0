@@ -1,73 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 16:55:57 +0200
-Subject: [Buildroot] [PATCH] ARC: gcc - Fix SIZE_TYPE to be "unsigned
- int" instead of long unsigned int"
-In-Reply-To: <1410792116.5875.43.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1410787585-20387-1-git-send-email-abrodkin@synopsys.com>
- <20140915155052.1b3283ae@free-electrons.com>
- <1410790003.5875.33.camel@abrodkin-8560l.internal.synopsys.com>
- <20140915162914.079b3507@free-electrons.com>
- <1410792116.5875.43.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20140915165557.2536d76d@free-electrons.com>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Mon, 15 Sep 2014 16:56:35 +0200
+Subject: [Buildroot] [PATCH] openvmtools: disable -Werror
+Message-ID: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Disable the mandatory flag -Werror in configure.ac.
+This also makes -Wno-deprecated-declarations flag unnecessary.
 
-On Mon, 15 Sep 2014 14:41:57 +0000, Alexey Brodkin wrote:
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+---
+ .../openvmtools/openvmtools-04-no_cflags_werror.patch |   17 +++++++++++++++++
+ package/openvmtools/openvmtools.mk                    |    4 ----
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+ create mode 100644 package/openvmtools/openvmtools-04-no_cflags_werror.patch
 
-> > We have a stupid rule, and stupid rules are meant to be complied
-> > with :-)
-> 
-> Understood - uniformity is good even if the rule itself is not that
-> good :)
-
-Absolutely :)
-
-> Funny enough that initially I had the same comment in the patch itself,
-> but while looking at output of "git format-patch" I found myself a bit
-> frustrated - if I were a reviewer I would say that submitted "full"
-> patch looks ridiculous.
-> 
-> Then I removed comment from commit message. That made me think that you
-> guys won't apply a patch that won't show any useful info in git log. 
-> 
-> So I decided to move a message to the Buildroot commit. This made sense
-> for me because at least when I bump version of a package I look at
-> history of this package and this way try to figure out what's still
-> required and what's not.
-
-Hehe, funny. No problem if there is actually some duplication between
-the git commit log, and the patch description itself.
-
-> Moreover looking at the next folder "package/gcc/4.9.1" I found that
-> half of patches don't have any comment inside, some have URLs to
-> bugs/commits in GCC, some are full-scale patches with verbose
-> description.
-
-Half of the patches are carried over since gcc 4.2 or so, in a pre-2008
-era, at a point where the state of Buildroot was clearly not as good as
-it is today. I think you wouldn't want to look at a pre-2008 Buildroot
-tree :-)
-
-That being said, is your comment an indication that you volunteer to do
-some research about these patches, write proper descriptions, or even
-better help getting them merged upstream? :-)
-
-Joke aside again, it's by having less and less patches with no
-description that at some point all patches in Buildroot will have a
-description. This way nobody will feel your frustration because it will
-just appear to be the "normal thing".
-
-> Now you may understand my frustration.
-
-Yes, of course, I do understand.
-
-Thomas
+diff --git a/package/openvmtools/openvmtools-04-no_cflags_werror.patch b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+new file mode 100644
+index 0000000..96bd355
+--- /dev/null
++++ b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+@@ -0,0 +1,17 @@
++configure.ac: disable -Werror
++
++Disable the mandatory flag -Werror in configure.ac.
++
++Signed-off-by: Karoly Kasza <kaszak@gmail.com>
++
++--- open-vm-tools-9.4.6-1770165.orig/configure.ac	2014-07-02 00:21:14.000000000 +0200
+++++ open-vm-tools-9.4.6-1770165/configure.ac	2014-09-15 16:03:47.565900402 +0200
++@@ -832,7 +832,7 @@
++ 
++ ### General flags / actions
++ CFLAGS="$CFLAGS -Wall"
++-CFLAGS="$CFLAGS -Werror"
+++# CFLAGS="$CFLAGS -Werror"
++ 
++ # -Wno-unknown-pragmas is due to gcc not understanding '#pragma ident' in Xlib.h on OpenSolaris.
++ for TEST_CFLAG in -Wno-pointer-sign -Wno-unused-value -fno-strict-aliasing \
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 6361d6b..9191643 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -13,10 +13,6 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
+ # See http://sourceforge.net/p/open-vm-tools/mailman/message/32550385/
+ OPENVMTOOLS_AUTORECONF = YES
+ OPENVMTOOLS_CONF_OPT = --without-icu --without-x --without-gtk2 --without-gtkmm --without-kernel-modules
+-# -Wno-deprecated-declarations is a workaround for a bug in open-vm-tools
+-# See http://sourceforge.net/p/open-vm-tools/mailman/message/31473171/
+-OPENVMTOOLS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-deprecated-declarations"
+-
+ OPENVMTOOLS_DEPENDENCIES = libglib2
+ 
+ # When libfuse is available, openvmtools can build vmblock-fuse, so
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
