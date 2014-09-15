@@ -1,49 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 22:50:02 +0200
-Subject: [Buildroot] [PATCH 0/8] gdb updates
-Message-ID: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Sep 2014 22:50:03 +0200
+Subject: [Buildroot] [PATCH 1/8] gdb: add version 7.8
+In-Reply-To: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1410814210-10002-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds support for the 7.8 version of gdb. Note that the
+tarball of this version is not available as a .tar.bz2, so we have to
+add a special case and download the .tar.xz for this version.
 
-Here are a bunch of gdb updates:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/Config.in.host | 4 ++++
+ package/gdb/gdb.mk         | 4 ++++
+ 2 files changed, 8 insertions(+)
 
- * Addition of version 7.8, switch to 7.7 as the default one, removal
-   of version 7.6.
-
- * Addition of the missing host-ncurses dependency to host-gdb.
-
- * Addition of TUI support for the target gdb (patch from Vincent
-   Stehl?).
-
- * Addition of Python support for the host and target gdb.
-
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (7):
-  gdb: add version 7.8
-  gdb: switch to 7.7 as the default version
-  gdb: remove version 7.6
-  gdb: needs host-ncurses on the host
-  gdb: reword prompt for host TUI option
-  gdb: add support for Python in host gdb
-  gdb: add support for Python in target gdb
-
-Vincent Stehl? (1):
-  gdb: enable tui support for target package
-
- package/gdb/Config.in         | 23 +++++++++++++++++++++++
- package/gdb/Config.in.host    | 21 ++++++++++++---------
- package/gdb/gdb-python-config | 36 ++++++++++++++++++++++++++++++++++++
- package/gdb/gdb.mk            | 31 +++++++++++++++++++++++++++----
- 4 files changed, 98 insertions(+), 13 deletions(-)
- create mode 100755 package/gdb/gdb-python-config
-
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 10d16b9..f51b5b1 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -39,6 +39,9 @@ choice
+ 	config BR2_GDB_VERSION_7_7
+ 		bool "gdb 7.7.x"
+ 
++	config BR2_GDB_VERSION_7_8
++		bool "gdb 7.8.x"
++
+ endchoice
+ 
+ endif
+@@ -53,3 +56,4 @@ config BR2_GDB_VERSION
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
++	default "7.8"	   if BR2_GDB_VERSION_7_8
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 85b7883..07f6ba3 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -23,6 +23,10 @@ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
+ GDB_SITE = ftp://www.at91.com/pub/buildroot
+ endif
+ 
++ifeq ($(GDB_VERSION),7.8)
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
++endif
++
+ GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
+ GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
 -- 
 2.0.0
