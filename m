@@ -1,56 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 22:50:06 +0200
-Subject: [Buildroot] [PATCH 4/8] gdb: needs host-ncurses on the host
+Date: Mon, 15 Sep 2014 22:50:08 +0200
+Subject: [Buildroot] [PATCH 6/8] gdb: reword prompt for host TUI option
 In-Reply-To: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1410814210-10002-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1410814210-10002-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 2474fb0bf1a786f3a170631f3dbce8b38092f986 ("host-gdb: enable
-terminal user interface support") has added TUI support to host gdb,
-and therefore added a dependency on host-ncurses when TUI support is
-enabled.
-
-However, host-ncurses is not only needed for TUI support, it is needed
-for gdb in all cases as well, so this commit adds a dependency of
-host-gdb to host-ncurses.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/153/153dbdc42103074f7a0895e8871e2eee4eae3325/
+There is no need to name the option "GDB TUI support", since this
+option is already visible "below" GDB in menuconfig/xconfig. Naming it
+"TUI support" is therefore sufficient.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/gdb.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/gdb/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 07f6ba3..41d3689 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -40,8 +40,9 @@ GDB_DEPENDENCIES = ncurses
- endif
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index fe3f90e..5d0e1b4 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_HOST_GDB
+ if BR2_PACKAGE_HOST_GDB
  
- # For the host variant, we really want to build with XML support,
--# which is needed to read XML descriptions of target architectures.
--HOST_GDB_DEPENDENCIES = host-expat
-+# which is needed to read XML descriptions of target architectures. We
-+# also need ncurses.
-+HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+ config BR2_PACKAGE_HOST_GDB_TUI
+-	bool "GDB TUI support"
++	bool "TUI support"
+ 	help
+ 	  This option enables terminal user interface (TUI) for gdb
  
- # Apply the Xtensa specific patches
- XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
-@@ -127,7 +128,6 @@ HOST_GDB_CONF_OPT = \
- 	--disable-sim
- 
- ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
--	HOST_GDB_DEPENDENCIES += host-ncurses
- 	HOST_GDB_CONF_OPT += --enable-tui
- else
- 	HOST_GDB_CONF_OPT += --disable-tui
 -- 
 2.0.0
