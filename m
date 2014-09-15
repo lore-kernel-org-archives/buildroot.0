@@ -1,43 +1,89 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Mon, 15 Sep 2014 04:53:38 +0200
-Subject: [Buildroot] [PATCH v2] memstat: Add patch to fix compilation with
-	musl libc
-In-Reply-To: <20140913224356.174954fc@free-electrons.com>
-References: <20140913224356.174954fc@free-electrons.com>
-Message-ID: <1410749618-6304-1-git-send-email-maarten@treewalker.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Sep 2014 05:15:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 7442] New: rootfs remount does not work as
+ expected with sysvinit
+Message-ID: <bug-7442-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PATH_MAX was undefined because of a missing #include.
+https://bugs.busybox.net/show_bug.cgi?id=7442
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
----
- package/memstat/memstat-0001-PATH_MAX.patch | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 package/memstat/memstat-0001-PATH_MAX.patch
+           Summary: rootfs remount does not work as expected with sysvinit
+           Product: buildroot
+           Version: 2014.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: joymarquis at hotmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/memstat/memstat-0001-PATH_MAX.patch b/package/memstat/memstat-0001-PATH_MAX.patch
-new file mode 100644
-index 0000000..0c3617a
---- /dev/null
-+++ b/package/memstat/memstat-0001-PATH_MAX.patch
-@@ -0,0 +1,14 @@
-+Add missing #include for PATH_MAX
-+
-+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-+
-+--- memstat-0.8.org/memstat.c	2009-06-08 14:38:05.000000000 +0200
-++++ memstat-0.8/memstat.c	2014-09-12 03:55:43.096035374 +0200
-+@@ -19,6 +19,7 @@
-+ #include <unistd.h>
-+ #include <getopt.h>
-+ #include <errno.h>
-++#include <limits.h>
-+ 
-+ /* blacklist devices that just map physical memory */
-+ char *blacklist[] = { "/dev/mem",
+
+Problem
+=======
+The rootfs can not do remount correctly, with the default sysvinit string:
+ * rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+
+
+Possible root cause
+===================
+The rootfs can do remount as expected, by removing the comment string and
+changing the string to:
+ * rwmo::sysinit:/bin/mount -o remount,rw /
+
+
+Program information
+===================
+FYI: The manual execution for commands below are working as expected:
+ * /bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+ * /bin/mount -o remount,rw
+
+mount version (mount -V):
+ * mount from util-linux 2.24.2 (libmount 2.24.0: debug, assert)
+init version (strings /sbin/init | tail):
+ * @(#) init 2.88  26-Mar-2010  miquels at cistron.nl
+
+
+
+Debug method
+============
+The problem is debugged and observed by adding follow lines into /etc/inittab
+tst1::sysinit:/bin/mount > /dev/tst1
+rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+tst2::sysinit:/bin/mount > /dev/tst2
+rwmt::sysinit:/bin/mount -o remount,rw /
+tst3::sysinit:/bin/mount > /dev/tst3
+
+
+Debug log
+=========
+After login, the three files proved the problem:
+==> /dev/tst1 <==
+none on /dev type devtmpfs (rw,relatime,size=516720k,nr_inodes=23632,mode=755)
+/dev/sda1 on / type ext3
+(ro,relatime,errors=continue,user_xattr,barrier=0,data=ordered)
+proc on /proc type proc (rw,relatime)
+
+==> /dev/tst2 <==
+none on /dev type devtmpfs (rw,relatime,size=516720k,nr_inodes=23632,mode=755)
+/dev/sda1 on / type ext3
+(ro,relatime,errors=continue,user_xattr,barrier=0,data=ordered)
+proc on /proc type proc (rw,relatime)
+
+==> /dev/tst3 <==
+none on /dev type devtmpfs (rw,relatime,size=516720k,nr_inodes=23632,mode=755)
+/dev/sda1 on / type ext3
+(rw,relatime,errors=continue,user_xattr,barrier=0,data=ordered)
+proc on /proc type proc (rw,relatime)
+
 -- 
-1.8.4.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
