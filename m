@@ -1,91 +1,66 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 15 Sep 2014 14:26:42 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Revert "libffi and python: need threads
-	support"
-In-Reply-To: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
-References: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1410784002-8659-2-git-send-email-jezz@sysmic.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Sep 2014 15:02:36 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: gstv4l2allocator:
+	O_CLOEXEC needs _GNU_SOURCE
+Message-ID: <20140915130926.5065F9D697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot now add a patch to libffi to fix support of threads. Thus, this
-patch, is no more needed.
+commit: http://git.buildroot.net/buildroot/commit/?id=117e864a53834c5e0bcdb9e764fcd45119f373f7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 77cf5b5a71aa54039f4dbc509a1c7cb40aa04934.
+Fixes http://autobuild.buildroot.net/results/ee9/ee985d94da6a7115b6e62cf407e3c6a90eb3e4bf/
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+On some systems (E.G. uClibc and older Glibc versions), O_CLOEXEC is only
+defined when _GNU_SOURCE is specified, so do so.
+
+Patch submitted upstream: https://bugzilla.gnome.org/show_bug.cgi?id=736670
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libffi/Config.in  | 4 ----
- package/python/Config.in  | 5 ++---
- package/python3/Config.in | 5 ++---
- 3 files changed, 4 insertions(+), 10 deletions(-)
+ ...v4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
 
-diff --git a/package/libffi/Config.in b/package/libffi/Config.in
-index 6edf570..7211f8f 100644
---- a/package/libffi/Config.in
-+++ b/package/libffi/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBFFI
- 	bool "libffi"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The libffi library provides a portable, high level
- 	  programming interface to various calling conventions. This
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_LIBFFI
- 	  interface description at run-time.
- 
- 	  http://sourceware.org/libffi/
--
--comment "libffi needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 8b27630..a0c78c6 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -3,16 +3,15 @@ config BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
- 
- 	  http://www.python.org/
- 
--comment "python needs a toolchain w/ wchar, threads"
-+comment "python needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_PYTHON
- 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 375390f..3e193c8 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -4,16 +4,15 @@ config BR2_PACKAGE_PYTHON3
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
- 
- 	  http://www.python.org/
- 
--comment "python3 needs a toolchain w/ wchar, threads"
-+comment "python3 needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_PYTHON3
- 
--- 
-1.9.1
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch
+new file mode 100644
+index 0000000..cf133e0
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch
+@@ -0,0 +1,34 @@
++From c1ccd15d95f4a649dc192c96005409693eb31d2c Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 15 Sep 2014 14:51:24 +0200
++Subject: [PATCH] gstv4l2allocator: O_CLOEXEC needs _GNU_SOURCE
++
++Similar to 94f3d6fc / bz 709423
++
++On some systems (E.G. uClibc and older Glibc versions), O_CLOEXEC is only
++defined when _GNU_SOURCE is specified, so do so.
++
++Upstream bugzilla: https://bugzilla.gnome.org/show_bug.cgi?id=736670
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ sys/v4l2/gstv4l2allocator.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/sys/v4l2/gstv4l2allocator.c b/sys/v4l2/gstv4l2allocator.c
++index 2bc51c4..a5c9626 100644
++--- a/sys/v4l2/gstv4l2allocator.c
+++++ b/sys/v4l2/gstv4l2allocator.c
++@@ -21,6 +21,10 @@
++ 
++ #include "config.h"
++ 
+++#ifndef _GNU_SOURCE
+++# define _GNU_SOURCE            /* O_CLOEXEC */
+++#endif
+++
++ #include "ext/videodev2.h"
++ #include "gstv4l2allocator.h"
++ #include "v4l2_calls.h"
++-- 
++2.1.0
++
