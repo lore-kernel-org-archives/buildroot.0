@@ -1,67 +1,73 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 15 Sep 2014 18:49:53 +0400
-Subject: [Buildroot] [PATCH v2] ARC: gcc - Fix SIZE_TYPE to be "unsigned
-	int" instead of "long unsigned int"
-Message-ID: <1410792593-422-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Sep 2014 16:55:57 +0200
+Subject: [Buildroot] [PATCH] ARC: gcc - Fix SIZE_TYPE to be "unsigned
+ int" instead of long unsigned int"
+In-Reply-To: <1410792116.5875.43.camel@abrodkin-8560l.internal.synopsys.com>
+References: <1410787585-20387-1-git-send-email-abrodkin@synopsys.com>
+ <20140915155052.1b3283ae@free-electrons.com>
+ <1410790003.5875.33.camel@abrodkin-8560l.internal.synopsys.com>
+ <20140915162914.079b3507@free-electrons.com>
+ <1410792116.5875.43.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <20140915165557.2536d76d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
-type checks.
+Dear Alexey Brodkin,
 
-Fix is taken from current development branch of GCC for ARC and will be a
-part of the next release of ARC tools, so at that point patch should be dropped.
+On Mon, 15 Sep 2014 14:41:57 +0000, Alexey Brodkin wrote:
 
-https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
+> > We have a stupid rule, and stupid rules are meant to be complied
+> > with :-)
+> 
+> Understood - uniformity is good even if the rule itself is not that
+> good :)
 
-Fixes http://autobuild.buildroot.net/results/405/405da9a945511329929b18740b983c51b8dcc43e
+Absolutely :)
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Funny enough that initially I had the same comment in the patch itself,
+> but while looking at output of "git format-patch" I found myself a bit
+> frustrated - if I were a reviewer I would say that submitted "full"
+> patch looks ridiculous.
+> 
+> Then I removed comment from commit message. That made me think that you
+> guys won't apply a patch that won't show any useful info in git log. 
+> 
+> So I decided to move a message to the Buildroot commit. This made sense
+> for me because at least when I bump version of a package I look at
+> history of this package and this way try to figure out what's still
+> required and what's not.
 
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
+Hehe, funny. No problem if there is actually some duplication between
+the git commit log, and the patch description itself.
 
-Compared to v1 comment is added in the patch itself with more info on its
-origin and reasoning.
+> Moreover looking at the next folder "package/gcc/4.9.1" I found that
+> half of patches don't have any comment inside, some have URLs to
+> bugs/commits in GCC, some are full-scale patches with verbose
+> description.
 
----
+Half of the patches are carried over since gcc 4.2 or so, in a pre-2008
+era, at a point where the state of Buildroot was clearly not as good as
+it is today. I think you wouldn't want to look at a pre-2008 Buildroot
+tree :-)
 
- .../arc-2014.08/200-size_type_unsigned_int.patch   | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
+That being said, is your comment an indication that you volunteer to do
+some research about these patches, write proper descriptions, or even
+better help getting them merged upstream? :-)
 
-diff --git a/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
-new file mode 100644
-index 0000000..4636524
---- /dev/null
-+++ b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
-@@ -0,0 +1,22 @@
-+Fixes SIZE_TYPE to be "unsigned int" instead of "long unsigned int".
-+
-+This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
-+type checks.
-+
-+Fix is taken from current development branch of GCC for ARC and will be a
-+part of the next release of ARC tools, so at that point patch should be dropped.
-+
-+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
-+---
-+
-+--- a/gcc/config/arc/arc.h
-++++ b/gcc/config/arc/arc.h
-+@@ -487,7 +487,7 @@ if (GET_MODE_CLASS (MODE) == MODE_INT		\
-+ /* Define this as 1 if `char' should by default be signed; else as 0.  */
-+ #define DEFAULT_SIGNED_CHAR 0
-+ 
-+-#define SIZE_TYPE "long unsigned int"
-++#define SIZE_TYPE "unsigned int"
-+ #define PTRDIFF_TYPE "long int"
-+ #define WCHAR_TYPE "int"
-+ #define WCHAR_TYPE_SIZE 32
+Joke aside again, it's by having less and less patches with no
+description that at some point all patches in Buildroot will have a
+description. This way nobody will feel your frustration because it will
+just appear to be the "normal thing".
+
+> Now you may understand my frustration.
+
+Yes, of course, I do understand.
+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
