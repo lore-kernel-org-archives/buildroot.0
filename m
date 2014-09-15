@@ -1,32 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 13:38:11 +0200
-Subject: [Buildroot] [PATCH v7] openvmtools: new package
-In-Reply-To: <CABbD_XCb4POKdky+D6QPO0+zQSqgr4q0_KDRsHMLkCfzXygB-Q@mail.gmail.com>
-References: <1409674416-33961-1-git-send-email-kaszak@gmail.com>
- <20140915092122.7582b3f9@free-electrons.com>
- <CABbD_XCb4POKdky+D6QPO0+zQSqgr4q0_KDRsHMLkCfzXygB-Q@mail.gmail.com>
-Message-ID: <20140915133811.166295a3@free-electrons.com>
+From: Maarten ter Huurne <maarten@treewalker.org>
+Date: Mon, 15 Sep 2014 13:54:05 +0200
+Subject: [Buildroot] [PATCH] screen: bump to version 4.2.1
+In-Reply-To: <1410748789-4094-1-git-send-email-maarten@treewalker.org>
+References: <1410748789-4094-1-git-send-email-maarten@treewalker.org>
+Message-ID: <5832091.sHdIXmaBbS@hyperion>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear K?roly Kasza,
+Hi,
 
-On Mon, 15 Sep 2014 13:19:06 +0200, K?roly Kasza wrote:
+The Buildroot package of GNU Screen installs the binary as setuid root; both 
+the old (4.0.3) and the new (4.2.1) version do. After having spent some time 
+reading the Screen source code, I wouldn't trust it with root privileges on 
+any system where security is relevant.
 
-> At first sight something happens with the ctng toolchain, while using own
-> toolchain or Sourcery w/ the same packages/options the problem does not
-> occur. I'm looking in the x86_64-ctng_locales-linux-gnu toolchain right now.
+I haven't seen (or looked for) any actual code that could be exploited, just 
+a code base that is really old, under-maintained and quite complex from all 
+the workarounds it contains. So it resembles the OpenSSL situation, although 
+it is not quite that bad.
 
-Note that it does not happen only with a ctng toolchain. See for
-example
-http://autobuild.buildroot.org/results/d1b/d1bf0d43389ff536ec79dd5d6a7cd0b12293233d//,
-where the same problem happens with a BR toolchain.
+It seems multiuser mode is the feature that requires Screen to be setuid 
+root. Which means that without setuid root, Screen works fine but users can 
+only connect to their own sessions.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I would like some guidance on how to proceed here:
+- leave the setuid flag on
+- always clear the setuid flag post-install
+- make it a configuration option
+- ...?
+
+Bye,
+		Maarten
