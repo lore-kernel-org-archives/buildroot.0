@@ -1,79 +1,83 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 15 Sep 2014 22:46:21 +0200
-Subject: [Buildroot] [PATCH] nsd: new package
-Message-ID: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Mon, 15 Sep 2014 22:46:22 +0200
+Subject: [Buildroot] [PATCH] unbound: new package
+In-Reply-To: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1410813982-7774-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides NSD, an authoritative only, high performance,
-simple and open source name server.
+This package provides Unbound, a validating, recursive, and caching DNS
+resolver.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/Config.in       |  1 +
- package/nsd/Config.in   | 15 ++++++++++++++
- package/nsd/S80nsd      | 54 +++++++++++++++++++++++++++++++++++++++++++++++++
- package/nsd/nsd.mk      | 50 +++++++++++++++++++++++++++++++++++++++++++++
- package/nsd/nsd.service | 13 ++++++++++++
- 5 files changed, 133 insertions(+)
- create mode 100644 package/nsd/Config.in
- create mode 100644 package/nsd/S80nsd
- create mode 100644 package/nsd/nsd.mk
- create mode 100644 package/nsd/nsd.service
+ package/Config.in               |  1 +
+ package/unbound/Config.in       | 17 +++++++++++++
+ package/unbound/S80unbound      | 54 +++++++++++++++++++++++++++++++++++++++++
+ package/unbound/unbound.mk      | 43 ++++++++++++++++++++++++++++++++
+ package/unbound/unbound.service | 12 +++++++++
+ 5 files changed, 127 insertions(+)
+ create mode 100644 package/unbound/Config.in
+ create mode 100644 package/unbound/S80unbound
+ create mode 100644 package/unbound/unbound.mk
+ create mode 100644 package/unbound/unbound.service
 
 diff --git a/package/Config.in b/package/Config.in
-index 73ba86a..c655ee0 100644
+index c655ee0..9506b6e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1030,6 +1030,7 @@ endif
- 	source "package/ngrep/Config.in"
- 	source "package/nmap/Config.in"
- 	source "package/noip/Config.in"
-+	source "package/nsd/Config.in"
- 	source "package/ntp/Config.in"
- 	source "package/nuttcp/Config.in"
- 	source "package/odhcploc/Config.in"
-diff --git a/package/nsd/Config.in b/package/nsd/Config.in
+@@ -1084,6 +1084,7 @@ endif
+ 	source "package/tvheadend/Config.in"
+ 	source "package/udpcast/Config.in"
+ 	source "package/ulogd/Config.in"
++	source "package/unbound/Config.in"
+ 	source "package/ushare/Config.in"
+ 	source "package/ussp-push/Config.in"
+ 	source "package/vde2/Config.in"
+diff --git a/package/unbound/Config.in b/package/unbound/Config.in
 new file mode 100644
-index 0000000..de9d213
+index 0000000..57bc09f
 --- /dev/null
-+++ b/package/nsd/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_NSD
-+	bool "nsd"
++++ b/package/unbound/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_UNBOUND
++	bool "unbound"
 +	depends on BR2_USE_MMU # fork()
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB # dlopen()
++	select BR2_PACKAGE_EXPAT
 +	select BR2_PACKAGE_LIBEVENT
 +	select BR2_PACKAGE_OPENSSL
 +	help
-+	  NSD is an authoritative only, high performance, simple and open
-+	  source name server.
++	  Unbound is a validating, recursive, and caching DNS resolver.
 +
-+	  http://www.nlnetlabs.nl/projects/nsd/
++	  http://unbound.net/
 +
-+comment "nsd needs a toolchain w/ threads"
++comment "unbound needs a toolchain w/ threads, dynamic library"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/nsd/S80nsd b/package/nsd/S80nsd
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/unbound/S80unbound b/package/unbound/S80unbound
 new file mode 100644
-index 0000000..22c320d
+index 0000000..655be88
 --- /dev/null
-+++ b/package/nsd/S80nsd
++++ b/package/unbound/S80unbound
 @@ -0,0 +1,54 @@
 +#!/bin/sh
 +#
-+# Starts nsd Name Server Daemon
++# Starts unbound DNS resolver
 +#
 +
 +PATH=/sbin:/bin:/usr/sbin:/usr/bin
 +NAME=nsd
-+DESC="Name Server Daemon"
-+DAEMON=/usr/sbin/nsd
-+DAEMONCTL=/usr/sbin/nsdc
-+DAEMON_ARGS="-c /etc/nsd/nsd.conf"
++DESC="DNS Resolver"
++DAEMON=/usr/sbin/unbound
++DAEMONCTL=/usr/sbin/unbound-control
++DAEMON_ARGS="-c /etc/unbound/unbound.conf"
 +PIDFILE=/var/run/$NAME.pid
 +
 +test -r /etc/default/$NAME && . /etc/default/$NAME
@@ -117,77 +121,69 @@ index 0000000..22c320d
 +esac
 +
 +exit $?
-diff --git a/package/nsd/nsd.mk b/package/nsd/nsd.mk
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
 new file mode 100644
-index 0000000..0b008c2
+index 0000000..7be956f
 --- /dev/null
-+++ b/package/nsd/nsd.mk
-@@ -0,0 +1,50 @@
++++ b/package/unbound/unbound.mk
+@@ -0,0 +1,43 @@
 +################################################################################
 +#
-+# nsd
++# unbound
 +#
 +################################################################################
 +
-+NSD_VERSION = 4.0.3
-+NSD_SITE = http://www.nlnetlabs.nl/downloads/nsd/
-+NSD_LICENSE = BSD-3c
-+NSD_LICENSE_FILES = LICENSE
++UNBOUND_VERSION = 1.4.22
++UNBOUND_SITE = http://unbound.net/downloads/
++UNBOUND_LICENSE = BSD-3c
++UNBOUND_LICENSE_FILES = LICENSE
 +
-+NSD_DEPENDENCIES = libevent openssl
++UNBOUND_DEPENDENCIES = expat libevent openssl
 +
-+NSD_CONF_OPT = \
-+	--prefix=/ \
-+	--datarootdir=/usr/share
++UNBOUND_CONF_OPT = \
++	--prefix=/usr \
++	--sysconfdir=/etc \
++	--disable-rpath \
++	--localstatedir=/var
 +
 +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+NSD_CONF_OPT += --with-pidfile=/run/nsd/nsd.pid
++UNBOUND_CONF_OPT += --with-pidfile=/run/unbound.pid
 +endif
 +
-+define NSD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/nsd/S80nsd \
-+		$(TARGET_DIR)/etc/init.d/S80nsd
++define UNBOUND_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/unbound/S80unbound \
++		$(TARGET_DIR)/etc/init.d/S80unbound
 +endef
 +
-+define NSD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/nsd/nsd.service \
-+		$(TARGET_DIR)/lib/systemd/system/nsd.service
++define UNBOUND_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/unbound/unbound.service \
++		$(TARGET_DIR)/lib/systemd/system/unbound.service
 +
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 +
-+	ln -sf ../../../../lib/systemd/system/nsd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nsd.service
-+
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/tmpfiles.d
-+	echo "d /run/nsd 0755 nsd nsd -" > $(TARGET_DIR)/usr/lib/tmpfiles.d/nsd.conf
++	ln -sf ../../../../lib/systemd/system/unbound.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/unbound.service
 +endef
 +
-+define NSD_USERS
-+	nsd -1 nsd -1 * /var/db/nsd - - Domain Name Server
++define UNBOUND_USERS
++	unbound -1 unbound -1 * - - - DNS Resolver
 +endef
-+
-+define NSD_REMOVE_SAMPLE_CONF
-+	$(RM) $(TARGET_DIR)/etc/nsd/nsd.conf.sample
-+endef
-+
-+NSD_POST_INSTALL_TARGET_HOOKS += NSD_REMOVE_SAMPLE_CONF
 +
 +$(eval $(autotools-package))
-diff --git a/package/nsd/nsd.service b/package/nsd/nsd.service
+diff --git a/package/unbound/unbound.service b/package/unbound/unbound.service
 new file mode 100644
-index 0000000..5089e85
+index 0000000..8e59e5a
 --- /dev/null
-+++ b/package/nsd/nsd.service
-@@ -0,0 +1,13 @@
++++ b/package/unbound/unbound.service
+@@ -0,0 +1,12 @@
 +[Unit]
-+Description=NSD Name Server Daemon
++Description=Unbound DNS Resolver
 +After=network.target
 +
 +[Service]
-+PIDFile=/run/nsd/nsd.pid
-+ExecStart=/usr/sbin/nsd -d -c /etc/nsd/nsd.conf
++PIDFile=/run/unbound.pid
++ExecStart=/usr/sbin/unbound -d
 +ExecReload=/bin/kill -HUP $MAINPID
-+ExecStop=/bin/kill -TERM $MAINPID
 +Restart=always
 +
 +[Install]
