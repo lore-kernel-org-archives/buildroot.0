@@ -1,58 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 22:50:03 +0200
-Subject: [Buildroot] [PATCH 1/8] gdb: add version 7.8
+Date: Mon, 15 Sep 2014 22:50:04 +0200
+Subject: [Buildroot] [PATCH 2/8] gdb: switch to 7.7 as the default version
 In-Reply-To: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1410814210-10002-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1410814210-10002-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds support for the 7.8 version of gdb. Note that the
-tarball of this version is not available as a .tar.bz2, so we have to
-add a special case and download the .tar.xz for this version.
+Now that gdb 7.8 is out, it's time to move to 7.7 as the default
+version instead of 7.6.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/Config.in.host | 4 ++++
- package/gdb/gdb.mk         | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/gdb/Config.in.host | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 10d16b9..f51b5b1 100644
+index f51b5b1..d34aec6 100644
 --- a/package/gdb/Config.in.host
 +++ b/package/gdb/Config.in.host
-@@ -39,6 +39,9 @@ choice
- 	config BR2_GDB_VERSION_7_7
- 		bool "gdb 7.7.x"
+@@ -23,8 +23,7 @@ choice
+ 	depends on !BR2_arc
+ 	depends on !BR2_microblaze
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+-	default BR2_GDB_VERSION_7_7 if BR2_powerpc64le
+-	default BR2_GDB_VERSION_7_6
++	default BR2_GDB_VERSION_7_7
+ 	help
+ 	  Select the version of gdb you wish to use.
  
-+	config BR2_GDB_VERSION_7_8
-+		bool "gdb 7.8.x"
-+
- endchoice
- 
- endif
-@@ -53,3 +56,4 @@ config BR2_GDB_VERSION
+@@ -54,6 +53,6 @@ config BR2_GDB_VERSION
+                                    (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+ 	default "arc-2014.08-gdb" if BR2_arc
  	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
-+	default "7.8"	   if BR2_GDB_VERSION_7_8
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 85b7883..07f6ba3 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -23,6 +23,10 @@ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
- GDB_SITE = ftp://www.at91.com/pub/buildroot
- endif
- 
-+ifeq ($(GDB_VERSION),7.8)
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
-+endif
-+
- GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
- GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+-	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
+-	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
++	default "7.6.2"    if BR2_GDB_VERSION_7_6
++	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.8"	   if BR2_GDB_VERSION_7_8
 -- 
 2.0.0
