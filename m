@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 15:59:34 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CA+-urNSSKAn3=oXPM2553CO6+8XQB=4hKjzNR4mSg61aAY_LgQ@mail.gmail.com>
-References: <20140914063013.2E5D2100F07@stock.ovh.net>
- <20140914121904.0c2ebcbd@free-electrons.com>
- <CA+-urNSSKAn3=oXPM2553CO6+8XQB=4hKjzNR4mSg61aAY_LgQ@mail.gmail.com>
-Message-ID: <20140915155934.7df3f86d@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 15 Sep 2014 14:06:43 +0000
+Subject: [Buildroot] [PATCH] ARC: gcc - Fix SIZE_TYPE to be "unsigned
+ int" instead of long unsigned int"
+In-Reply-To: <20140915155052.1b3283ae@free-electrons.com>
+References: <1410787585-20387-1-git-send-email-abrodkin@synopsys.com>
+ <20140915155052.1b3283ae@free-electrons.com>
+Message-ID: <1410790003.5875.33.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+Hi Thomas,
 
-Please don't reply to me directly, keep the list in Cc. Thanks!
-
-On Mon, 15 Sep 2014 09:49:20 -0400, Frank Hunleth wrote:
-
-> > compiling qwt_plot_glcanvas.cpp
-> > In file included from qwt_plot_glcanvas.cpp:10:0:
-> > qwt_plot_glcanvas.h:15:17: fatal error: qgl.h: No such file or directory
-> > compilation terminated.
-> >
-> > Frank, you updated qwt recently. Could you have a look at this issue?
+On Mon, 2014-09-15 at 15:50 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> > diff --git a/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
+> > new file mode 100644
+> > index 0000000..78d4b10
+> > --- /dev/null
+> > +++ b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
 > 
-> I'll check this out later today or tomorrow. I have an idea on the issue.
+> Patch lacks a description + SoB.
 
-Note that the issue has already been fixed by Peter, see
-http://git.buildroot.net/buildroot/commit/?id=6de4afc3b4353327eb5a2dc57b9f449a4d14a969.
-Of course, you're welcome to check Peter's patch.
+Well first of all IMHO patch name is self-explanatory.
+Than I didn't want to duplicate the same text in commit message and in
+patch itself.
 
-Thanks!
+If you think this is helpful I will happily add the same text and URL in
+the patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Let me know what do you think about it.
+
+-Alexey
