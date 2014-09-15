@@ -1,47 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 14:01:24 +0200
-Subject: [Buildroot] [PATCH] screen: bump to version 4.2.1
-In-Reply-To: <5832091.sHdIXmaBbS@hyperion>
-References: <1410748789-4094-1-git-send-email-maarten@treewalker.org>
- <5832091.sHdIXmaBbS@hyperion>
-Message-ID: <20140915140124.7a66ef8e@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Mon, 15 Sep 2014 14:26:41 +0200
+Subject: [Buildroot] [PATCH v2 1/2] libffi: make thread support optional
+Message-ID: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Mon, 15 Sep 2014 13:54:05 +0200, Maarten ter Huurne wrote:
+Fixes:
 
-> The Buildroot package of GNU Screen installs the binary as setuid root; both 
-> the old (4.0.3) and the new (4.2.1) version do. After having spent some time 
-> reading the Screen source code, I wouldn't trust it with root privileges on 
-> any system where security is relevant.
-> 
-> I haven't seen (or looked for) any actual code that could be exploited, just 
-> a code base that is really old, under-maintained and quite complex from all 
-> the workarounds it contains. So it resembles the OpenSSL situation, although 
-> it is not quite that bad.
-> 
-> It seems multiuser mode is the feature that requires Screen to be setuid 
-> root. Which means that without setuid root, Screen works fine but users can 
-> only connect to their own sessions.
-> 
-> I would like some guidance on how to proceed here:
-> - leave the setuid flag on
-> - always clear the setuid flag post-install
-> - make it a configuration option
-> - ...?
+  http://autobuild.buildroot.org/results/7ee57d01917ea72d1811469e482513dda2ceb1ea/build-end.log
 
-I would go for clearing the setuid flag. Interested users can always
-re-enable it in a post-build script if they really need it.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+v2:
+   - Fix boolean expression in patch
+   - Renumber patch
+   - Add my Signed-off
 
-Thanks for looking into this!
+ ...bffi-006-Make-thread-support-conditionnal.patch | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 package/libffi/libffi-006-Make-thread-support-conditionnal.patch
 
-Thomas
+diff --git a/package/libffi/libffi-006-Make-thread-support-conditionnal.patch b/package/libffi/libffi-006-Make-thread-support-conditionnal.patch
+new file mode 100644
+index 0000000..72e7e5d
+--- /dev/null
++++ b/package/libffi/libffi-006-Make-thread-support-conditionnal.patch
+@@ -0,0 +1,74 @@
++From a7f6342120060564a829704cceb843e53e0b34a9 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 17 Nov 2012 18:44:16 +0100
++Subject: [PATCH 3/3] Make thread support conditionnal
++
++When libffi is linked against a C library that does not have thread
++support, it is not necessary to use a mutex to protect global
++variables, since the application calling libffi cannot be
++multi-threaded.
++
++Therefore, make the libffi thread support conditionnal: when we're
++building against uClibc with no thread support, don't use the
++pthread_mutex.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++---
++ src/closures.c |   12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/src/closures.c b/src/closures.c
++index 1b37827..3d151f6 100644
++--- a/src/closures.c
+++++ b/src/closures.c
++@@ -70,7 +70,10 @@
++ 
++ # elif FFI_MMAP_EXEC_WRIT /* !FFI_EXEC_TRAMPOLINE_TABLE */
++ 
+++#if !defined(__UCLIBC__) || !defined(__HAS_NO_THREADS__)
++ #define USE_LOCKS 1
+++#endif
+++
++ #define USE_DL_PREFIX 1
++ #ifdef __GNUC__
++ #ifndef USE_BUILTIN_FFS
++@@ -116,7 +119,10 @@
++ #include <mntent.h>
++ #endif /* HAVE_MNTENT */
++ #include <sys/param.h>
+++
+++#if !defined(__UCLIBC__) || !defined(__HAS_NO_THREADS__)
++ #include <pthread.h>
+++#endif
++ 
++ /* We don't want sys/mman.h to be included after we redefine mmap and
++    dlmunmap.  */
++@@ -214,8 +220,10 @@ static int dlmunmap(void *, size_t);
++ 
++ #if !(defined(X86_WIN32) || defined(X86_WIN64) || defined(__OS2__)) || defined (__CYGWIN__) || defined(__INTERIX)
++ 
+++#if !defined(__UCLIBC__) || !defined(__HAS_NO_THREADS__)
++ /* A mutex used to synchronize access to *exec* variables in this file.  */
++ static pthread_mutex_t open_temp_exec_file_mutex = PTHREAD_MUTEX_INITIALIZER;
+++#endif
++ 
++ /* A file descriptor of a temporary file from which we'll map
++    executable pages.  */
++@@ -473,9 +481,13 @@ dlmmap (void *start, size_t length, int prot,
++ 
++   if (execsize == 0 || execfd == -1)
++     {
+++#if !defined(__UCLIBC__) || !defined(__HAS_NO_THREADS__)
++       pthread_mutex_lock (&open_temp_exec_file_mutex);
+++#endif
++       ptr = dlmmap_locked (start, length, prot, flags, offset);
+++#if !defined(__UCLIBC__) || !defined(__HAS_NO_THREADS__)
++       pthread_mutex_unlock (&open_temp_exec_file_mutex);
+++#endif
++ 
++       return ptr;
++     }
++-- 
++1.7.9.5
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
