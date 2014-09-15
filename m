@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 23:49:35 +0200
-Subject: [Buildroot] [PATCH 2/3] toolchain-external: remove CodeSourcery ARM
-	2012.03, add 2014.05
+Date: Mon, 15 Sep 2014 23:49:36 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain-external: bump ARM,
+	ARMeb and AArch64 Linaro toolchains to 14.08
 In-Reply-To: <1410817776-30133-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1410817776-30133-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1410817776-30133-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1410817776-30133-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,135 +13,94 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 38 +++++++++++-----------
- toolchain/toolchain-external/toolchain-external.mk |  8 ++---
- 2 files changed, 23 insertions(+), 23 deletions(-)
+ toolchain/toolchain-external/Config.in             | 14 +++++++-------
+ toolchain/toolchain-external/toolchain-external.mk | 12 ++++++------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 640efcc..9006827 100644
+index 9006827..67ad450 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -58,23 +58,21 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
+@@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2014.05"
++	bool "Linaro ARM 2014.08"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -20,8 +20,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2014.05 (based on gcc 4.9), Linaro GDB 2014.05 (based on
+-	  GDB 7.6), eglibc 2.19, Binutils 2014.05 (based on 2.24). It
++	  GCC 2014.08 (based on gcc 4.9), Linaro GDB 2013.10 (based on
++	  GDB 7.6), eglibc 2.19, Binutils 2014.08 (based on 2.24). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+@@ -33,7 +33,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
  	depends on !BR2_PREFER_STATIC_LIB
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
--	bool "Sourcery CodeBench ARM 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
-+	bool "Sourcery CodeBench ARM 2014.05"
- 	depends on BR2_arm
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+-	bool "Linaro armeb 2014.04"
++	bool "Linaro armeb 2014.08"
+ 	depends on BR2_armeb
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_PREFER_STATIC_LIB
--	select BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # based-on gcc-4.8.1
--	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # based-on gcc-4.8.1
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+@@ -46,8 +46,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
  	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18 and gdb 7.6.50, kernel headers 3.11. It has support
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18 and gdb 7.7.50, kernel headers 3.13. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -87,22 +85,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 	  Linaro toolchain for the ARM big endian architecture. It
+-	  uses Linaro GCC 2014.04 (based on gcc 4.8), Linaro GDB
+-	  2014.04 (based on GDB 7.6), eglibc 2.19, Binutils 2014.04
++	  uses Linaro GCC 2014.08 (based on gcc 4.9), Linaro GDB
++	  2013.10 (based on GDB 7.6), eglibc 2.19, Binutils 2014.08
+ 	  (based on 2.24). It generates code that runs on all Cortex-A
+ 	  profile devices, but tuned for the Cortex-A9. The code
+ 	  generated is Thumb 2, with the hard floating point calling
+@@ -815,7 +815,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	  http://wiki.xilinx.com/mb-gnu-tools
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
--	bool "Sourcery CodeBench ARM 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
-+	bool "Sourcery CodeBench ARM 2013.11"
- 	depends on BR2_arm
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 14.05"
++	bool "Linaro AArch64 14.08"
+ 	depends on BR2_aarch64
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
  	depends on !BR2_PREFER_STATIC_LIB
--	select BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # based-on gcc-4.7.3
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # based-on gcc-4.8.1
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # based-on gcc-4.8.1
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
--	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
-+	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-+	  2.18 and gdb 7.6.50, kernel headers 3.11. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -115,21 +114,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
--	bool "Sourcery CodeBench ARM 2012.03"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-+	bool "Sourcery CodeBench ARM 2013.05"
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # based-on gcc-4.7.3
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
--	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -915,9 +915,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 7d5e224..7012e12 100644
+index 7012e12..78c2273 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -252,15 +252,15 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+@@ -276,12 +276,12 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
  endef
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE = arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE = arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.05_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+@@ -357,8 +357,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu/
 -- 
 2.0.0
