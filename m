@@ -1,94 +1,44 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 16 Sep 2014 01:20:48 +0200
-Subject: [Buildroot] [PATCH] unbound: new package
-In-Reply-To: <1410813982-7774-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1410813982-7774-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <54177450.3090909@je-eigen-domein.nl>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Tue, 16 Sep 2014 00:36:48 +0200
+Subject: [Buildroot] [PATCH 3/4] arch: do not distinguish revisions of
+	ARM1136JF-S
+In-Reply-To: <20140915235030.57b47c34@free-electrons.com>
+References: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1410814919-11523-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140915213339.GC3878@free.fr> <20140915233916.55c17894@free-electrons.com>
+ <CA+sos781LFuT-ukvPyKnOgtdYd7uVUHb3FCX8BCSz7sox11T9Q@mail.gmail.com>
+ <20140915235030.57b47c34@free-electrons.com>
+Message-ID: <CA+sos79y=8W5t9+0v8ahSg9F4VxdeJMnbacSS=2qevrDyPzV3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Thomas Petazzoni,
 
-On 09/15/2014 10:46 PM, Eric Le Bihan wrote:
-> This package provides Unbound, a validating, recursive, and caching DNS
-> resolver.
+On Mon, Sep 15, 2014 at 11:50 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Beno?t Th?baudeau,
+>
+> On Mon, 15 Sep 2014 23:44:52 +0200, Beno?t Th?baudeau wrote:
+>
+>> >> As suggested on IRC, move the BR2_arm1136jf_s_r1 to Config.legacy, and
+>> >> have it select BR2_arm1136jf_s, so the user can re-use a defconfig.
+>> >
+>> > Hum, why just BR2_arm1136jf_s_r1 and not BR2_arm1136jf_s_r0 ?
+>>
+>> This issue disappears if -march and -mtune are kept and -mcpu removed
+>> as I suggested.
+>
+> Do you have an example C code that doesn't generate the same assembly
+> code between BR2_arm1136jf_s_r0 and BR2_arm1136jf_s_r1 ? It would be
+> useful for my testing.
 
-Nice addition.
-We're an unbound user as well, but never got around to submitting our 
-local package, and I know unbound has some odd issues.
+The instructions supported by armv6k but not by armv6j are:
+ldrex{h|b|d}, strex{h|b|d}, clrex, nop, sev, wfe, wfi and yield. This
+is especially useful for handwritten assembler implementations (in .S,
+or inline in .c) of some OS functions, typically atomic operations and
+context switches.
 
-
-Some points:
-
-- Unbound (at least when using your package with sysv) currently creates 
-a pid file in /etc/unbound/unbound.pid
-Suggest that to be changed to /var/run/unbound.pid, so it also works on 
-read-only file systems.
-
-- Unbound is currently broken when IPv6 is disabled in the buildroot 
-configuration.
-
-Listens on both 127.0.0.1 and ::1 by default, and errors out on the ::1
-
-==
-unbound[118:0] error: node ::1:53 getaddrinfo: ai_family not supported
-[13] unbound[118:0] fatal error: could not open ports
-FAIL
-==
-
-You do can override the default by specifying "interface: 127.0.0.1" in 
-unbound.conf but then it errors out on:
-
-==
-"error: cannot parse access control: ::0/0 refuse"
-==
-
-Don't no how to override that internal ACL rule.
-Might need to let the package depend on IPv6
-
-
-- Unbound is typically used as local resolving nameserver.
-I was wondering if the startup script shouldn't put "nameserver 
-127.0.0.1" in /etc/resolv.conf
-Possibly with an option to turn that off by a setting in 
-/etc/default/unbound
-
-- Unbound expects /etc/unbound to be owned by user unbound
-Or if you do enable DNSSEC by uncommenting the "auto-trust-anchor-file" 
-line in /etc/unbound/unbound.conf, you get errors that it is unable to 
-create files:
-
-==
-error: could not open autotrust file for writing, /root.key.306-0: 
-Permission denied
-==
-
-- I also wonder if there shouldn't be an option to let the startup 
-script run unbound-anchor prior to starting the unbound daemon.
-This updates the DNSSEC trust anchor files.
-(Enabling DNSSEC validation has some caveats though, in particular it 
-requires the system to have correct date/time settings, so should be 
-left disabled by default)
-
-> +NAME=nsd
-
-nsd -> unbound
-
-> +UNBOUND_DEPENDENCIES = expat libevent openssl
-
-libevent is an optional dependency. (don't have it in my local package)
-
-> +++ b/package/unbound/S80unbound
-
-- Wondering if S80unbound shouldn't be a lower number like S41 for 
-systems that intend to use it as local resolver.
-So that other services like S49ntp can use it to resolve pool.ntp.org.
-
-
-Yours sincerely,
-
-Floris Bos
+Beno?t
