@@ -1,91 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Sep 2014 23:01:58 +0200
-Subject: [Buildroot] [PATCH 3/4] arch: do not distinguish revisions of
-	ARM1136JF-S
-In-Reply-To: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1410814919-11523-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 15 Sep 2014 23:04:43 +0200
+Subject: [Buildroot] [PATCH] dhcp: add systemd service file
+Message-ID: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 88cf3bb91792c9c04586e14f293d89a6e0c13e1d
-("arch/Config.in.arm: Use armv6k for arm1136jf-s rev1"), Beno?t
-Th?baudeau added separate options for the revision 0 and revision 1 of
-the ARM1136JF-S processor, so that different -march values could be
-used (armv6j for revision 0, armv6k for revision 1).
+Add a systemd service file to start dhcpd.
 
-However, this is preventing the removal of the BR2_GCC_TARGET_ARCH
-option, which we need to do to give only the CPU type to gcc, and let
-it decide the architecture variant that matches. This is because this
-story of revision 0 vs. revision 1 is the only case where -mcpu
-doesn't fully define the CPU.
+The network interfaces to listen on can be set via the variable
+INTERFACES in /etc/default/dhcpd.conf. Example:
 
-Moreover, a quick test with gcc shows that -march=armv6j
--mcpu=arm1136jf-s is accepted, while -march=armv6k -mcpu=arm1136jf-s
-makes gcc complain: " warning: switch -mcpu=arm1136jf-s conflicts with
--march=armv6k switch".
+  INTERFACES="eth0 eth1"
 
-In addition, gcc 5 will apparently no longer allow to pass all of
---with-arch, --with-cpu and --with-tune, so we will anyway have to
-rely only on one of them.
+Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
+(needed at dhcpd start-up).
 
-As a consequence, this commit basically reverts
-88cf3bb91792c9c04586e14f293d89a6e0c13e1d and provides only one option
-for ARM1136JF-S. If the two revisions are really different, then they
-should be supported in upstream gcc with different -mcpu values.
-
-Note that the removal of the two options should not break existing
-full .config, since the hidden option BR2_arm1136jf_s becomes again a
-visible option to select the CPU.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- arch/Config.in.arm | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ package/dhcp/dhcp.mk       | 15 +++++++++++++++
+ package/dhcp/dhcpd.service | 13 +++++++++++++
+ 2 files changed, 28 insertions(+)
+ create mode 100644 package/dhcp/dhcpd.service
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 201ff1d..6e3c4e6 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -54,12 +54,8 @@ config BR2_arm926t
- 	bool "arm926t"
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
--config BR2_arm1136jf_s_r0
--	bool "arm1136jf_s rev0"
--	select BR2_ARM_CPU_HAS_VFPV2
--	select BR2_ARM_CPU_HAS_THUMB
--config BR2_arm1136jf_s_r1
--	bool "arm1136jf_s rev1"
-+config BR2_arm1136jf_s
-+	bool "arm1136jf-s"
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- config BR2_arm1176jz_s
-@@ -113,10 +109,6 @@ config BR2_iwmmxt
- 	bool "iwmmxt"
- endchoice
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 9251185..1b914a8 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -74,6 +74,21 @@ define DHCP_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
+ endef
  
--config BR2_arm1136jf_s
--	bool
--	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
--
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
-@@ -364,8 +356,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "armv4t"	if BR2_arm920t
- 	default "armv4t"	if BR2_arm922t
- 	default "armv5te"	if BR2_arm926t
--	default "armv6j"	if BR2_arm1136jf_s_r0
--	default "armv6k"	if BR2_arm1136jf_s_r1
-+	default "armv6j"	if BR2_arm1136jf_s
- 	default "armv6zk"	if BR2_arm1176jz_s
- 	default "armv6zk"	if BR2_arm1176jzf_s
- 	default "armv7-a"	if BR2_cortex_a5
++define DHCP_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/dhcp/dhcpd.service \
++		$(TARGET_DIR)/lib/systemd/system/dhcpd.service
++
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -sf ../../../../lib/systemd/system/dhcpd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpd.service
++
++	echo "d /var/lib/dhcp 0755 - - - -" > \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
++	echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
++endef
++
+ define DHCP_INSTALL_TARGET_CMDS
+ 	$(DHCP_INSTALL_RELAY)
+ 	$(DHCP_INSTALL_SERVER)
+diff --git a/package/dhcp/dhcpd.service b/package/dhcp/dhcpd.service
+new file mode 100644
+index 0000000..7b265cb
+--- /dev/null
++++ b/package/dhcp/dhcpd.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=DHCP server
++After=network.target
++
++[Service]
++Type=forking
++PIDFile=/run/dhcpd.pid
++ExecStart=/usr/sbin/dhcpd -q -pf /run/dhcpd.pid $INTERFACES
++KillSignal=SIGINT
++EnvironmentFile=/etc/default/dhcpd.conf
++
++[Install]
++WantedBy=multi-user.target
 -- 
-2.0.0
+1.9.3
