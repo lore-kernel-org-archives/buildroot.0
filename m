@@ -1,56 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Sep 2014 23:08:53 +0200
-Subject: [Buildroot] [PATCH 1/4] arch: remove BR2_arm920 reference
-In-Reply-To: <1410814919-11523-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1410814919-11523-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140915210853.GA3878@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 15 Sep 2014 23:13:48 +0200
+Subject: [Buildroot] Outcome of the GSoC 2014
+In-Reply-To: <20140915214402.05faf4fd@free-electrons.com>
+References: <20140915214402.05faf4fd@free-electrons.com>
+Message-ID: <20140915211348.GC8072@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi!
 
-On 2014-09-15 23:01 +0200, Thomas Petazzoni spake thusly:
-> The BR2_GCC_TARGET_CPU defines a value for the BR2_arm920 case, but
-> this option does not exist. Therefore, this commit removes one line of
-> dead code.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Mon, Sep 15, 2014 at 09:44:02PM +0200, Thomas Petazzoni wrote:
 
-Obviously:
+> We also have a few patches pending in patchwork from Hadrien, that
+> need adopters:
+>
+>  * libgtk3: new package
+>    http://patchwork.ozlabs.org/patch/375493/
+>
+>    This one is almost ready, there are still a few fixes to be made. I
+>    know Eric Le Bihan has also worked on libgtk3. Maybe Eric you could
+>    take over this effort?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I will adopt this patch.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  arch/Config.in.arm | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index e404a50..5ae2378 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -344,7 +344,6 @@ config BR2_ARCH_HAS_ATOMICS
->  	default y
->  
->  config BR2_GCC_TARGET_CPU
-> -	default "arm920"	if BR2_arm920
->  	default "arm920t"	if BR2_arm920t
->  	default "arm922t"	if BR2_arm922t
->  	default "arm926ej-s"	if BR2_arm926t
-> -- 
-> 2.0.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+ELB
