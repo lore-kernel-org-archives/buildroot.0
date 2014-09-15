@@ -1,66 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Sep 2014 15:02:36 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-good: gstv4l2allocator:
-	O_CLOEXEC needs _GNU_SOURCE
-Message-ID: <20140915130926.5065F9D697@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 15 Sep 2014 17:26:25 +0400
+Subject: [Buildroot] [PATCH] ARC: gcc - Fix SIZE_TYPE to be "unsigned int"
+	instead of long unsigned int"
+Message-ID: <1410787585-20387-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=117e864a53834c5e0bcdb9e764fcd45119f373f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
+type checks.
 
-Fixes http://autobuild.buildroot.net/results/ee9/ee985d94da6a7115b6e62cf407e3c6a90eb3e4bf/
+Fix is taken from current development branch of GCC for ARC and will be a
+part of the next release of ARC tools, so at that point patch should be dropped.
 
-On some systems (E.G. uClibc and older Glibc versions), O_CLOEXEC is only
-defined when _GNU_SOURCE is specified, so do so.
+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
 
-Patch submitted upstream: https://bugzilla.gnome.org/show_bug.cgi?id=736670
+Fixes http://autobuild.buildroot.net/results/405/405da9a945511329929b18740b983c51b8dcc43e
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...v4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+ package/gcc/arc-2014.08/200-size_type_unsigned_int.patch | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch
+diff --git a/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
 new file mode 100644
-index 0000000..cf133e0
+index 0000000..78d4b10
 --- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good-01-gstv4l2allocator-O_CLOEXEC-needs-_GNU_SOURCE.patch
-@@ -0,0 +1,34 @@
-+From c1ccd15d95f4a649dc192c96005409693eb31d2c Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 15 Sep 2014 14:51:24 +0200
-+Subject: [PATCH] gstv4l2allocator: O_CLOEXEC needs _GNU_SOURCE
-+
-+Similar to 94f3d6fc / bz 709423
-+
-+On some systems (E.G. uClibc and older Glibc versions), O_CLOEXEC is only
-+defined when _GNU_SOURCE is specified, so do so.
-+
-+Upstream bugzilla: https://bugzilla.gnome.org/show_bug.cgi?id=736670
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ sys/v4l2/gstv4l2allocator.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/sys/v4l2/gstv4l2allocator.c b/sys/v4l2/gstv4l2allocator.c
-+index 2bc51c4..a5c9626 100644
-+--- a/sys/v4l2/gstv4l2allocator.c
-++++ b/sys/v4l2/gstv4l2allocator.c
-+@@ -21,6 +21,10 @@
++++ b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
+@@ -0,0 +1,11 @@
++--- a/gcc/config/arc/arc.h
+++++ b/gcc/config/arc/arc.h
++@@ -487,7 +487,7 @@ if (GET_MODE_CLASS (MODE) == MODE_INT		\
++ /* Define this as 1 if `char' should by default be signed; else as 0.  */
++ #define DEFAULT_SIGNED_CHAR 0
 + 
-+ #include "config.h"
-+ 
-++#ifndef _GNU_SOURCE
-++# define _GNU_SOURCE            /* O_CLOEXEC */
-++#endif
-++
-+ #include "ext/videodev2.h"
-+ #include "gstv4l2allocator.h"
-+ #include "v4l2_calls.h"
-+-- 
-+2.1.0
-+
++-#define SIZE_TYPE "long unsigned int"
+++#define SIZE_TYPE "unsigned int"
++ #define PTRDIFF_TYPE "long int"
++ #define WCHAR_TYPE "int"
++ #define WCHAR_TYPE_SIZE 32
+-- 
+1.9.3
