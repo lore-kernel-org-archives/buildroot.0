@@ -1,8 +1,8 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 14 Sep 2014 21:01:27 -0400
-Subject: [Buildroot] [PATCH] qt: add gst-plugins-base dependency to
+Date: Sun, 14 Sep 2014 21:17:26 -0400
+Subject: [Buildroot] [PATCH v2] qt: add gst-plugins-base dependency to
 	multimedia module
-Message-ID: <1410742887-30344-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1410743846-30779-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,6 +17,12 @@ in the Qt Phonon module.
 Fixes: http://autobuild.buildroot.net/results/389617c7c36dfe92b85d3a3db12a706ae092c73d/
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+---
+
+Changes v1 -> v2:
+- Moved deps from install-libs area to the config-opts area, to match
+  the other Qt module deps.
 ---
  package/qt/Config.in | 5 +++++
  package/qt/qt.mk     | 1 +
@@ -42,16 +48,16 @@ index da159b4..f824914 100644
  	bool "QtMultimedia Audio backend"
  	depends on BR2_PACKAGE_QT_MULTIMEDIA
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 92a090f..709e532 100644
+index 92a090f..6cff658 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -544,6 +544,7 @@ QT_INSTALL_LIBS    += QtSql
- endif
+@@ -374,6 +374,7 @@ endif
+ 
  ifeq ($(BR2_PACKAGE_QT_MULTIMEDIA),y)
- QT_INSTALL_LIBS    += QtMultimedia
-+QT_DEPENDENCIES    += gstreamer gst-plugins-base
+ QT_CONFIGURE_OPTS += -multimedia
++QT_DEPENDENCIES   += gstreamer gst-plugins-base
+ else
+ QT_CONFIGURE_OPTS += -no-multimedia
  endif
- ifeq ($(BR2_PACKAGE_QT_PHONON),y)
- QT_INSTALL_LIBS    += phonon
 -- 
 1.9.1
