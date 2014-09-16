@@ -1,28 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Sep 2014 22:16:20 +0200
-Subject: [Buildroot] [PATCH 0/3] External toolchain updates
-In-Reply-To: <1410817776-30133-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 15 Sep 2014 23:49:33 +0200")
-References: <1410817776-30133-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87fvfr8gob.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Sep 2014 21:09:33 +0200
+Subject: [Buildroot] [git commit] celt051: Fix file naming
+Message-ID: <20140916201651.9AC8B9D6B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b200030399f24308ce50df6f8f08f3c32a67e379
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > A small round of external toolchain updates: add a new CodeSourcery
- > toolchain for AArch64, update CodeSourcery toolchain for ARM to
- > version 2014.05 (and therefore remove the oldest version 2012.03), and
- > update Linaro toolchains for ARM, ARMeb and AArch64.
+In order to comply with naming policy, fix celt.mk filename.
 
- > Commit logs are pretty terse since there isn't much to say about each
- > update really.
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/celt051/{celt.mk => celt051.mk} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/celt051/celt.mk b/package/celt051/celt051.mk
+similarity index 100%
+rename from package/celt051/celt.mk
+rename to package/celt051/celt051.mk
