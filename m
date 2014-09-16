@@ -1,45 +1,39 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Tue, 16 Sep 2014 17:42:21 +0200
-Subject: [Buildroot] [PATCH] xinetd: Patch configure script to fix rlim_t
-	test
-Message-ID: <1410882141-16213-1-git-send-email-maarten@treewalker.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Sep 2014 17:55:03 +0200
+Subject: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in
+ eclipse integration
+In-Reply-To: <8cbab74434594ef7ab6e81bc2eb88441@DBXPR07MB142.eurprd07.prod.outlook.com>
+References: <8cbab74434594ef7ab6e81bc2eb88441@DBXPR07MB142.eurprd07.prod.outlook.com>
+Message-ID: <20140916175503.7fdd3a7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build with musl libc.
+Dear Oded Hanson,
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
----
- package/xinetd/xinetd-005-configure-rlim_t.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/xinetd/xinetd-005-configure-rlim_t.patch
+On Fri, 5 Sep 2014 18:55:00 +0000, Oded Hanson wrote:
 
-diff --git a/package/xinetd/xinetd-005-configure-rlim_t.patch b/package/xinetd/xinetd-005-configure-rlim_t.patch
-new file mode 100644
-index 0000000..e1cb48a
---- /dev/null
-+++ b/package/xinetd/xinetd-005-configure-rlim_t.patch
-@@ -0,0 +1,18 @@
-+Have the configure script look for rlim_t in <sys/resource.h>
-+
-+That's where POSIX says it should be. Some libcs will include its
-+definition via <sys/types.h> as well, but musl doesn't.
-+
-+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-+
-+--- xinetd-2.3.15.orig/configure	2007-09-20 16:58:27.000000000 +0200
-++++ xinetd-2.3.15/configure	2014-09-16 17:20:22.787665449 +0200
-+@@ -7909,7 +7909,7 @@
-+ cat confdefs.h >>conftest.$ac_ext
-+ cat >>conftest.$ac_ext <<_ACEOF
-+ /* end confdefs.h.  */
-+-#include <sys/types.h>
-++#include <sys/resource.h>
-+ #if STDC_HEADERS
-+ #include <stdlib.h>
-+ #endif
+> I am trying to build a static library in eclipse using the buildroot toolchain and the buildroot eclipse plugin.
+> 
+> I have successfully created shared objects and executables but now
+> when I am trying to create a static library, I see that the eclipse
+> plugin doesn't identify the archiver tool, all though the
+> x86_64-buildroot-linux-gnu-ar tool was generated in my buildroot
+> output directory.
+
+Could you give a few more details about how you're building your static
+library? Are you using an autotools based project, a Makefile based
+project, or a "managed build" project (where Eclipse takes care of the
+build system) ? M?lanie has tested a "managed build" project for a
+static library, and apparently, it worked fine. So maybe you're using
+your own Makefile or autotools based build system?
+
+Thanks!
+
+Thomas
 -- 
-1.8.4.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
