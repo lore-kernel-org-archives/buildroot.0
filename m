@@ -1,41 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 11:23:30 +0200
-Subject: [Buildroot] how to make the Buildroot embedded linux file
- system persistence?
-In-Reply-To: <5417F84B.8050705@yahoo.com>
-References: <5417F84B.8050705@yahoo.com>
-Message-ID: <20140916112330.40118c9d@free-electrons.com>
+From: Oded Hanson <OHanson@xsightsys.com>
+Date: Tue, 16 Sep 2014 09:20:30 +0000
+Subject: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in
+ eclipse integration
+In-Reply-To: <20140906111735.2fec93fc@free-electrons.com>
+References: <8cbab74434594ef7ab6e81bc2eb88441@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140906111735.2fec93fc@free-electrons.com>
+Message-ID: <6b44c087f1a6477e9c1f35e8d1409db6@DBXPR07MB142.eurprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Amir,
+Hello All
 
-On Tue, 16 Sep 2014 13:13:55 +0430, Amir wrote:
+I wanted to know if by any change someone has a solution for this problem?
 
-> I have built an embedded linux using buildroot. after generating 
-> rootfs.tar file system, I have tested the embedded linux and figured out 
-> that every change I made to the linux is not taking place after reboot.
+Thanks
+
+Oded
+
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Saturday, September 06, 2014 4:18 PM
+To: Oded Hanson
+Cc: buildroot at busybox.net; M?lanie Bats
+Subject: Re: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in eclipse integration
+
+Dear Oded Hanson,
+
+On Fri, 5 Sep 2014 18:55:00 +0000, Oded Hanson wrote:
+
+> I am trying to build a static library in eclipse using the buildroot toolchain and the buildroot eclipse plugin.
 > 
-> my question is: how to enable buildroot linux to have a persistence file 
-> system and can save changes?
+> I have successfully created shared objects and executables but now when I am trying to create a static library, I see that the eclipse plugin doesn't identify the archiver tool, all though the x86_64-buildroot-linux-gnu-ar tool was generated in my buildroot output directory.
 > 
-> I have generated: rootfs.tar , rootfs.cpio , bzImage of kernel.
+> Is this a known issue? Anyway for me to resolve it?
 
-Which one are you using? If you've generated a rootfs.cpio, maybe
-you've enabled the initramfs option, which as its name suggest is a
-filesystem in RAM, which explains why your changes disappear after a
-reboot.
+Thanks for your report. I've Cc'ed M?lanie Bats, which is developing the Buildroot plugin for Eclipse. She'll have a look at this issue soon.
 
-Use a filesystem stored on persistent storage, such as a SD card, eMMC,
-NAND flash or USB key.
-
-Best regards,
+Thanks!
 
 Thomas
--- 
+--
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
