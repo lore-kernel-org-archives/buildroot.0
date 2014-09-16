@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 22:07:39 +0200
-Subject: [Buildroot] [PATCH] portmap: fix static linking
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C68C8AD946@ex-mb3.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C68C8AD946@ex-mb3.corp.adtran.com>
-Message-ID: <20140916220739.16ecb50d@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 16 Sep 2014 22:10:10 +0200
+Subject: [Buildroot] [PATCH] memtester: fix rebuild
+In-Reply-To: <5c88a09e632de7ceb60d70831ea1e1ec2604dc34.1410896220.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 16 Sep 2014 22:37:00 +0300")
+References: <5c88a09e632de7ceb60d70831ea1e1ec2604dc34.1410896220.git.baruch@tkos.co.il>
+Message-ID: <87oauf8gyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ANDY KENNEDY,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Mon, 8 Sep 2014 21:43:45 +0000, ANDY KENNEDY wrote:
-> Portmap builds and links, however, does not get built correctly when
-> BR2_PREFER_STATIC_LIB is selected.  There are no dynamic libraries in
-> rootfs.tar, however, portmap gets linked dynamically without regards to
-> the PREFER_STATIC_LIB tags.  LDFLAGS was not being passed into the build of
-> portmap.
-> 
-> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
+ > Do the edit of conf-* files only when 'cc' appears at the beginning of line,
+ > i.e. the files has not been edited. Otherwise, the 'cc' part of the cross
+ > toolchain gets expanded, leading to the following error on 'make
+ > memtester-rebuild':
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ./compile: line 3: /home/baruch/git/buildroot/output/host/usr/bin/i686-pc-linux-gnu-g/home/baruch/git/buildroot/output/host/usr/bin/i686-pc-linux-gnu-gcc: No such file or directory
+ > Makefile:82: recipe for target 'memtester.o' failed
+ > make[1]: *** [memtester.o] Error 127
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
