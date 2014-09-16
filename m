@@ -1,34 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Sep 2014 16:52:30 -0300
-Subject: [Buildroot] [PATCH] sqlcipher: fix static linking
-Message-ID: <1410897150-24431-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Sep 2014 21:56:45 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-bad-plugin-sndfile: Fix comment
+ display
+In-Reply-To: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
+References: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20140916215645.65017ea3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It uses openssl which for buildroot mandates libz, but doesn't link
-against it so it fails. Fixes:
-http://autobuild.buildroot.net/results/514/5145617f7c3cece933c845da3c9836d80d062bb6/
+Dear J?r?me Pouiller,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlcipher/sqlcipher.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 16 Sep 2014 21:48:52 +0200, J?r?me Pouiller wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index bae59bb..7c93620 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -19,7 +19,7 @@ SQLCIPHER_CONF_OPT = \
- 	--localstatedir=/var
- 
- SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
--SQLCIPHER_LDFLAGS += -lcrypto
-+SQLCIPHER_LDFLAGS += -lcrypto -lz
- 
- ifneq ($(BR2_LARGEFILE),y)
- # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
