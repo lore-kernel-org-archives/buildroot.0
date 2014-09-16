@@ -1,22 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Sep 2014 22:11:34 +0200
-Subject: [Buildroot] [PATCH] lttng-babeltrace: Fix comment display
-In-Reply-To: <1410897687-8155-1-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Tue, 16 Sep 2014 22:01:27 +0200")
-References: <1410897687-8155-1-git-send-email-jezz@sysmic.org>
-Message-ID: <87k3538gw9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Sep 2014 22:14:24 +0200
+Subject: [Buildroot] General questions
+In-Reply-To: <CAK9TtU0uPXcqZNEcgxjrs_Gnm=jMECRPDAbKMAjoCTxC-Ycb2g@mail.gmail.com>
+References: <CAK9TtU0uPXcqZNEcgxjrs_Gnm=jMECRPDAbKMAjoCTxC-Ycb2g@mail.gmail.com>
+Message-ID: <20140916221424.3d28aa8c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+Dear Sylvain LG,
 
- > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+On Tue, 9 Sep 2014 11:20:13 +0200, Sylvain LG wrote:
 
-Committed, thanks.
+> I develop some projects with Qt and run them on ARM embedded systems. OS is
+> built by Buildroot.
+> 
+> Since Qt 5.3.1 and QtCreator 3, GDB must support Python scripting.
+> 
+> ?The selected build of GDB does not support Python scripting it cannot be
+> used in Qt Creator?
+> 
+> 
+> I have to recompile gdb with these options:
+> 
+> ./configure --prefix /usr/local/gdb-python2 --with-python
+> 
+> What is the right way to achieve this?
+> 
+> Could someone give me the guideline to contribute to Buildroot?
 
+FWIW, I've sent a patch series at
+http://lists.busybox.net/pipermail/buildroot/2014-September/106205.html
+that provides Python support for both the host gdb and target gdb.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
