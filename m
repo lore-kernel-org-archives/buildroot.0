@@ -1,32 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Sep 2014 23:03:04 +0200
-Subject: [Buildroot] [PATCH 0/8] gdb updates
-In-Reply-To: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 15 Sep 2014 22:50:02 +0200")
-References: <1410814210-10002-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738br8eif.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Sep 2014 23:06:58 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-bad-plugin-sndfile: Fix comment
+	display
+In-Reply-To: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Tue, 16 Sep 2014 21:48:52 +0200")
+References: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87y4tj6zrh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
- > Hello,
- > Here are a bunch of gdb updates:
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
- >  * Addition of version 7.8, switch to 7.7 as the default one, removal
- >    of version 7.6.
-
- >  * Addition of the missing host-ncurses dependency to host-gdb.
-
- >  * Addition of TUI support for the target gdb (patch from Vincent
- >    Stehl?).
-
- >  * Addition of Python support for the host and target gdb.
-
-Committed series, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
