@@ -1,32 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Sep 2014 10:23:32 -0300
-Subject: [Buildroot] [PATCH 2/2] p11-kit: bump to version 0.20.6
-In-Reply-To: <1410873812-5695-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1410873812-5695-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1410873812-5695-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Sep 2014 16:14:23 +0200
+Subject: [Buildroot] [PATCH] celt051: Fix file naming
+In-Reply-To: <1410872158-16648-1-git-send-email-jezz@sysmic.org>
+References: <1410872158-16648-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20140916161423.01992a6c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/p11-kit/p11-kit.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear J?r?me Pouiller,
 
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 9e210bb..5724a1c 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--P11_KIT_VERSION = 0.20.2
-+P11_KIT_VERSION = 0.20.6
- P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
- P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
- P11_KIT_INSTALL_STAGING = YES
+On Tue, 16 Sep 2014 14:55:58 +0200, J?r?me Pouiller wrote:
+> In order to comply with naming policy, fix celt.mk filename.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/celt051/celt.mk    | 30 ------------------------------
+>  package/celt051/celt051.mk | 30 ++++++++++++++++++++++++++++++
+>  2 files changed, 30 insertions(+), 30 deletions(-)
+>  delete mode 100644 package/celt051/celt.mk
+>  create mode 100644 package/celt051/celt051.mk
+
+Thanks, but you should use git format-patch -M to detect renames, that
+will generate much shorter (and readable) patches.
+
+Thanks a lot!
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
