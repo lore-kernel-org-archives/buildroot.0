@@ -1,44 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 21:45:37 +0200
-Subject: [Buildroot] [PATCH v2] ARC: gcc - Fix SIZE_TYPE to be "unsigned
- int" instead of "long unsigned int"
-In-Reply-To: <1410792593-422-1-git-send-email-abrodkin@synopsys.com>
-References: <1410792593-422-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140916214537.11e0da0d@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 16 Sep 2014 21:48:52 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-bad-plugin-sndfile: Fix comment
+	display
+Message-ID: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, 15 Sep 2014 18:49:53 +0400, Alexey Brodkin wrote:
-> This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
-> type checks.
-> 
-> Fix is taken from current development branch of GCC for ARC and will be a
-> part of the next release of ARC tools, so at that point patch should be dropped.
-> 
-> https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
-> 
-> Fixes http://autobuild.buildroot.net/results/405/405da9a945511329929b18740b983c51b8dcc43e
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-though you still forgot to add your SoB in the patch itself. I guess
-Peter can add it when applying.
-
-Thanks,
-
-Thomas
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 816de35..fd37dc7 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -480,6 +480,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
+ 	depends on BR2_LARGEFILE
+ 
+ comment "gst-plugins-bad-plugin-sndfile needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
+ 	bool "dvb"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
