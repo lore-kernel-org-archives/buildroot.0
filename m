@@ -1,66 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 22:07:01 +0200
-Subject: [Buildroot] [PATCH] systemd: bump to version 216
-In-Reply-To: <1410815182-12217-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1410815182-12217-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140916220701.78bdf8bd@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 16 Sep 2014 22:07:38 +0200
+Subject: [Buildroot] [PATCH] mesa3d: Add missing dependencies
+In-Reply-To: <1410883118-57489-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 16 Sep 2014 16:58:38 +0100")
+References: <1410883118-57489-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87sijr8h2t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Mon, 15 Sep 2014 23:06:22 +0200, Eric Le Bihan wrote:
-> Bump systemd to version 216. This new version provides two new tools to
-> manage the journal (systemd-journal-upload and systemd-journal-remote)
-> which resulted in the addition of new users.
-> 
-> Also remove backported patches.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  ...k-for-__BYTE_ORDER-__BIG_ENDIAN-when-chec.patch | 116 ---------------------
->  ...icitly-include-endian.h-wherever-we-want-.patch |  53 ----------
->  package/systemd/systemd.mk                         |   4 +-
->  3 files changed, 3 insertions(+), 170 deletions(-)
->  delete mode 100644 package/systemd/systemd-04-always-check-for-__BYTE_ORDER-__BIG_ENDIAN-when-chec.patch
->  delete mode 100644 package/systemd/systemd-05-endian-explicitly-include-endian.h-wherever-we-want-.patch
+ > Add xcb-dri3, xcb-present and xshmfence to mesa3d's dependencies.
+ > Otherwise it will fail during the configure phase.
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
- (build test on ARM, CodeSourcery toolchain)
+hmm, but we also have optional dri3 support since:
 
-That being said, there are some issues, not introduced by your
-patch. First, I see a failure related to filesystem mounting:
+commit 1fcc621f0344c11ebaf7903545cd99d2f5b8ec9b
+Author: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date:   Thu Jul 17 07:42:54 2014 +0200
 
-===
-[FAILED] Failed to start Remount Root and Kernel File Systems.
-See 'systemctl status systemd-remount-fs.service' for details.
-===
+    package/mesa3d: Fix optional DRI3 support
 
-and then, more importantly, it doesn't seem to be able to start Getty:
+Looking at configure.ac, I think we should just disable dri support if
+no dri drivers are enabled, E.G.:
 
-===
-[  OK  ] Started Network Name Resolution.
-[ TIME ] Timed out waiting for device dev-ttyAMA0.device.
-[DEPEND] Dependency failed for Serial Getty on ttyAMA0.
-[  OK  ] Reached target Login Prompts.
-[  OK  ] Reached target Multi-User System.
-===
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f986d0e..31bbacf 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -75,7 +75,7 @@ endif
+ 
+ ifeq ($(MESA3D_DRI_DRIVERS-y),)
+ MESA3D_CONF_OPT += \
+-       --without-dri-drivers
++       --without-dri-drivers --disable-dri
+ else
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
 
-So I can't log into the system. My configuration was:
+What do the mesa3d experts say?
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_SYSTEMD=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
