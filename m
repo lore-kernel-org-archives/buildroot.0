@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 16:14:23 +0200
-Subject: [Buildroot] [PATCH] celt051: Fix file naming
-In-Reply-To: <1410872158-16648-1-git-send-email-jezz@sysmic.org>
-References: <1410872158-16648-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140916161423.01992a6c@free-electrons.com>
+Date: Tue, 16 Sep 2014 16:46:55 +0200
+Subject: [Buildroot] [PATCH 2/2] Add supporit for Vivante xdriver
+In-Reply-To: <1396368972-8690-3-git-send-email-jezz@sysmic.org>
+References: <533A8F6C.1010606@gmail.com>
+ <1396368972-8690-1-git-send-email-jezz@sysmic.org>
+ <1396368972-8690-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20140916164655.5e2b10a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +14,30 @@ To: buildroot@busybox.net
 
 Dear J?r?me Pouiller,
 
-On Tue, 16 Sep 2014 14:55:58 +0200, J?r?me Pouiller wrote:
-> In order to comply with naming policy, fix celt.mk filename.
-> 
+On Tue,  1 Apr 2014 18:16:12 +0200, J?r?me Pouiller wrote:
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/celt051/celt.mk    | 30 ------------------------------
->  package/celt051/celt051.mk | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 30 insertions(+), 30 deletions(-)
->  delete mode 100644 package/celt051/celt.mk
->  create mode 100644 package/celt051/celt051.mk
+>  package/x11r7/Config.in                            |  1 +
+>  package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 22 ++++++
+>  ...mx-viv-001-Register-autotools-subprojects.patch | 31 +++++++++
+>  ...driver_xf86-video-imx-viv-002-Fix-compile.patch | 80 ++++++++++++++++++++++
+>  .../xdriver_xf86-video-imx-viv.mk                  | 17 +++++
+>  5 files changed, 151 insertions(+)
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv-001-Register-autotools-subprojects.patch
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv-002-Fix-compile.patch
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
 
-Thanks, but you should use git format-patch -M to detect renames, that
-will generate much shorter (and readable) patches.
+I did a review of this patch on April, 20th, making several comments
+and asking for a new version of the patch. Are you still interested in
+getting this merged into Buildroot?
 
-Thanks a lot!
+I believe this would be a useful addition, but this patch has been sent
+5 months ago, and never sent an updated version. Could you let us know
+what is the status of the patch, so that we can update our patch
+tracking system?
+
+Thanks!
 
 Thomas
 -- 
