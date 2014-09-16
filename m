@@ -1,58 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Sep 2014 22:20:41 +0200
-Subject: [Buildroot] [git commit] gdb: add version 7.8
-Message-ID: <20140916210715.D3FD49D6BA@busybox.osuosl.org>
+Date: Tue, 16 Sep 2014 22:22:13 +0200
+Subject: [Buildroot] [git commit] gdb: needs host-ncurses on the host
+Message-ID: <20140916210715.E961D9D6B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=775cffcdc1b999755583cf4e8217a363dbd74c82
+commit: http://git.buildroot.net/buildroot/commit/?id=c5579a0ea19e2290a59b301f5d320d3a1d07dcea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds support for the 7.8 version of gdb. Note that the
-tarball of this version is not available as a .tar.bz2, so we have to
-add a special case and download the .tar.xz for this version.
+Commit 2474fb0bf1a786f3a170631f3dbce8b38092f986 ("host-gdb: enable
+terminal user interface support") has added TUI support to host gdb,
+and therefore added a dependency on host-ncurses when TUI support is
+enabled.
+
+However, host-ncurses is not only needed for TUI support, it is needed
+for gdb in all cases as well, so this commit adds a dependency of
+host-gdb to host-ncurses.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/153/153dbdc42103074f7a0895e8871e2eee4eae3325/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host |    4 ++++
- package/gdb/gdb.mk         |    4 ++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ package/gdb/gdb.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 10d16b9..f51b5b1 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -39,6 +39,9 @@ choice
- 	config BR2_GDB_VERSION_7_7
- 		bool "gdb 7.7.x"
- 
-+	config BR2_GDB_VERSION_7_8
-+		bool "gdb 7.8.x"
-+
- endchoice
- 
- endif
-@@ -53,3 +56,4 @@ config BR2_GDB_VERSION
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
-+	default "7.8"	   if BR2_GDB_VERSION_7_8
 diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 85b7883..07f6ba3 100644
+index 07f6ba3..41d3689 100644
 --- a/package/gdb/gdb.mk
 +++ b/package/gdb/gdb.mk
-@@ -23,6 +23,10 @@ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
- GDB_SITE = ftp://www.at91.com/pub/buildroot
+@@ -40,8 +40,9 @@ GDB_DEPENDENCIES = ncurses
  endif
  
-+ifeq ($(GDB_VERSION),7.8)
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
-+endif
-+
- GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
- GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ # For the host variant, we really want to build with XML support,
+-# which is needed to read XML descriptions of target architectures.
+-HOST_GDB_DEPENDENCIES = host-expat
++# which is needed to read XML descriptions of target architectures. We
++# also need ncurses.
++HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+ 
+ # Apply the Xtensa specific patches
+ XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
+@@ -127,7 +128,6 @@ HOST_GDB_CONF_OPT = \
+ 	--disable-sim
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
+-	HOST_GDB_DEPENDENCIES += host-ncurses
+ 	HOST_GDB_CONF_OPT += --enable-tui
+ else
+ 	HOST_GDB_CONF_OPT += --disable-tui
