@@ -1,56 +1,102 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Tue, 16 Sep 2014 00:37:51 +0200
-Subject: [Buildroot] [PATCH 3/4] arch: do not distinguish revisions of
-	ARM1136JF-S
-In-Reply-To: <20140915220256.GE3878@free.fr>
-References: <1410814919-11523-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1410814919-11523-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140915213339.GC3878@free.fr> <20140915233916.55c17894@free-electrons.com>
- <CA+sos781LFuT-ukvPyKnOgtdYd7uVUHb3FCX8BCSz7sox11T9Q@mail.gmail.com>
- <20140915220256.GE3878@free.fr>
-Message-ID: <CA+sos7_gu8neXC0O+PNDMwg4=KaFXWS=7chswTGmFmyaveboGg@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 15 Sep 2014 20:07:47 -0500
+Subject: [Buildroot] [PATCH 1/1] omniorb: limit to glibc toolchains
+In-Reply-To: <CANQCQpanft746pTHcvDeNSkdXXkpbjS7x5YrAzMyqwN5E8ukJw@mail.gmail.com>
+References: <1410790650-61308-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+ <20140915200619.198ff41f@free-electrons.com>
+ <CANQCQpanft746pTHcvDeNSkdXXkpbjS7x5YrAzMyqwN5E8ukJw@mail.gmail.com>
+Message-ID: <CANQCQpYNfJ0Kk8iNdF_Uncsuse-UBtu_TZtkoNVR7y8J8m-j1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Thomas,
 
-On Tue, Sep 16, 2014 at 12:02 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Beno?t, Thomas, All,
+On Mon, Sep 15, 2014 at 1:30 PM, Matthew Weber <
+matthew.weber@rockwellcollins.com> wrote:
+
+> Thomas,
 >
-> On 2014-09-15 23:44 +0200, Beno?t Th?baudeau spake thusly:
->> On Mon, Sep 15, 2014 at 11:39 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > Dear Yann E. MORIN,
->> >
->> > On Mon, 15 Sep 2014 23:33:39 +0200, Yann E. MORIN wrote:
->> >
->> >> > Note that the removal of the two options should not break existing
->> >> > full .config, since the hidden option BR2_arm1136jf_s becomes again a
->> >> > visible option to select the CPU.
->> >>
->> >> But it would break a defconfig.
->> >
->> > Right. But I believe that when we change the default value of an
->> > option, we also break a defconfig, and we don't include that as part of
->> > the Config.in.legacy handling (but also because it's obviously more
->> > complicated).
->> >
->> >> As suggested on IRC, move the BR2_arm1136jf_s_r1 to Config.legacy, and
->> >> have it select BR2_arm1136jf_s, so the user can re-use a defconfig.
->> >
->> > Hum, why just BR2_arm1136jf_s_r1 and not BR2_arm1136jf_s_r0 ?
+> On Mon, Sep 15, 2014 at 1:06 PM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+>> Dear Matt Weber,
 >>
->> This issue disappears if -march and -mtune are kept and -mcpu removed
->> as I suggested.
+>> On Mon, 15 Sep 2014 09:17:30 -0500, Matt Weber wrote:
+>> > Resolves autobuilder failure where the omniorb package doesn't
+>> > correctly detect the OS because the configure script doesn't have
+>> > an option for uclinux support.  This results in a pthread create
+>> > assertion when it attempts to figure-out the correct C library
+>> > posix calls.
+>> >
+>> >
+>> http://autobuild.buildroot.net/results/fbe6c722b92fe4ddf7ac36a8fe1be3a3891c11fd/
+>> >
+>> > Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
+>>
+>> Wait, wait, wait, no.
+>>
+>> uclinux != uclibc.
+>>
+>> uclinux is the part of the host tuple used only on noMMU platforms that
+>> don't support shared libraries.
+>>
+>> If you use uClibc on ARM, it's not a uClinux system.
+>>
+>> So, clearly, disabling entirely the package for uClibc doesn't make
+>> sense here.
+>>
 >
-> So, maybe we need something like this:
+> Thank you for that clarification, that makes a bit more sense on why this
+> issue didn't come up as often in the autobuilds.  I would assume that
+> updating this path to a needs MMU instead is the correct approach.
 >
->     https://gist.github.com/aeruder/341565b759822b352dd9
 
-Exactly.
+I retested with a "depends on BR2_USE_MMU", which excluded that package
+from the bfin build.
 
-Regards,
-Beno?t
+I had another question.  Over the last couple weeks, I've created a couple
+patches that can be discarded.  How do those get removed from patchworks?
+
+
+
+>
+>
+>
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+>>
+>
+>
+>
+> --
+> Matthew L Weber / Pr Software Engineer
+> Airborne Information Systems / Security Systems and Software
+> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+> www.rockwellcollins.com
+>
+> Note: Any Export License Required Information and License Restricted Third
+> Party Intellectual Property (TPIP) content must be encrypted and sent to
+> matthew.weber at corp.rockwellcollins.com.
+>
+
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted Third
+Party Intellectual Property (TPIP) content must be encrypted and sent to
+matthew.weber at corp.rockwellcollins.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140915/fb661ef4/attachment.html>
