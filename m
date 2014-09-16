@@ -1,94 +1,111 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 16 Sep 2014 14:55:58 +0200
-Subject: [Buildroot] [PATCH] celt051: Fix file naming
-Message-ID: <1410872158-16648-1-git-send-email-jezz@sysmic.org>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 16 Sep 2014 15:58:18 +0300
+Subject: [Buildroot] [PATCH] qt5: bump to 5.3.2
+Message-ID: <1410872298-13415-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to comply with naming policy, fix celt.mk filename.
+Only use ccache prefix in QMAKE_CC and QMAKE_CXX since the build system is
+broken when QMAKE_AR contains a space character.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Remove the upstreamed uClibc patch.
+
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 ---
- package/celt051/celt.mk    | 30 ------------------------------
- package/celt051/celt051.mk | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 30 deletions(-)
- delete mode 100644 package/celt051/celt.mk
- create mode 100644 package/celt051/celt051.mk
+ package/qt5/qt5.mk                                 |  2 +-
+ .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |  6 +++-
+ ...ase-0004-QDnsLookup-Fix-build-with-uClibc.patch | 35 ----------------------
+ package/qt5/qt5base/qt5base.mk                     |  3 +-
+ 4 files changed, 8 insertions(+), 38 deletions(-)
+ delete mode 100644 package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
 
-diff --git a/package/celt051/celt.mk b/package/celt051/celt.mk
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 8dbb355..e9c59db 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,5 +1,5 @@
+ QT5_VERSION_MAJOR = 5.3
+-QT5_VERSION = $(QT5_VERSION_MAJOR).1
++QT5_VERSION = $(QT5_VERSION_MAJOR).2
+ QT5_SITE = http://download.qt-project.org/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
+diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+index 6283bbe..09c1b67 100644
+--- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
++++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+@@ -14,9 +14,13 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ ===================================================================
+ --- /dev/null
+ +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-@@ -0,0 +1,12 @@
++@@ -0,0 +1,16 @@
+ +include(../common/linux_device_pre.conf)
+ +
+++# modifications to g++-unix.conf
+++QMAKE_CC                = $${BR_CCACHE} $${CROSS_COMPILE}gcc
+++QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+++
+ +#modifications to gcc-base.conf
+ +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+ +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+diff --git a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch b/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
 deleted file mode 100644
-index 528dfce..0000000
---- a/package/celt051/celt.mk
+index 90aa2be..0000000
+--- a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--################################################################################
--#
--# celt
--#
--################################################################################
+@@ -1,35 +0,0 @@
+-From af2241c678bcd9af58d38f98f5caec96a498733e Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+-Date: Fri, 23 May 2014 17:02:01 +0300
+-Subject: [PATCH] QDnsLookup: Fix build with uClibc
 -
--# Although version newer than 0.5.1.3 exists, we're
--# stuck with 0.5.1.3 for use by Spice (coming later)
--CELT051_VERSION         = 0.5.1.3
--CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
--CELT051_SITE            = http://downloads.xiph.org/releases/celt
--CELT051_LICENSE         = BSD-2c
--CELT051_LICENSE_FILES   = COPYING
--CELT051_INSTALL_STAGING = YES
--CELT051_DEPENDENCIES    = libogg
+-uClibc doesn't have a nsmap member in __res_state. Since it also doesn't have
+-res_nquery() which is mandatory for QDnsLookup, we can simply disable the code
+-to fix the build.
 -
--# Need to specify --with-ogg, otherwise /usr/lib may be searched for
--# if target is the same kind as host (ie. same arch, same bitness,
--# same endianness, so that /usr/lib contains libraries linkable by
--# our cross-compiler)
--CELT051_CONF_OPT =                  \
--  --enable-fixed-point              \
--  --disable-fixed-point-debug       \
--  --disable-experimental-postfilter \
--  --disable-static-modes            \
--  --disable-assertions              \
--  --disable-oggtest                 \
--  --with-ogg=$(STAGING_DIR)/usr     \
+-Sent-Upstream: https://codereview.qt-project.org/86159
+-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+-Change-Id: Ia872f535519aca3a2de763548c6dd0e3e0ee20d4
+----
+- src/network/kernel/qdnslookup_unix.cpp | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--$(eval $(autotools-package))
-diff --git a/package/celt051/celt051.mk b/package/celt051/celt051.mk
-new file mode 100644
-index 0000000..528dfce
---- /dev/null
-+++ b/package/celt051/celt051.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# celt
-+#
-+################################################################################
-+
-+# Although version newer than 0.5.1.3 exists, we're
-+# stuck with 0.5.1.3 for use by Spice (coming later)
-+CELT051_VERSION         = 0.5.1.3
-+CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
-+CELT051_SITE            = http://downloads.xiph.org/releases/celt
-+CELT051_LICENSE         = BSD-2c
-+CELT051_LICENSE_FILES   = COPYING
-+CELT051_INSTALL_STAGING = YES
-+CELT051_DEPENDENCIES    = libogg
-+
-+# Need to specify --with-ogg, otherwise /usr/lib may be searched for
-+# if target is the same kind as host (ie. same arch, same bitness,
-+# same endianness, so that /usr/lib contains libraries linkable by
-+# our cross-compiler)
-+CELT051_CONF_OPT =                  \
-+  --enable-fixed-point              \
-+  --disable-fixed-point-debug       \
-+  --disable-experimental-postfilter \
-+  --disable-static-modes            \
-+  --disable-assertions              \
-+  --disable-oggtest                 \
-+  --with-ogg=$(STAGING_DIR)/usr     \
-+
-+$(eval $(autotools-package))
+-diff --git a/src/network/kernel/qdnslookup_unix.cpp b/src/network/kernel/qdnslookup_unix.cpp
+-index 26834df..2a482a6 100644
+---- a/src/network/kernel/qdnslookup_unix.cpp
+-+++ b/src/network/kernel/qdnslookup_unix.cpp
+-@@ -160,9 +160,11 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
+-                 Q_CHECK_PTR(ns);
+-                 state._u._ext.nsaddrs[0] = ns;
+-             }
+-+#ifndef __UCLIBC__
+-             // Set nsmap[] to indicate that nsaddrs[0] is an IPv6 address
+-             // See: https://sourceware.org/ml/libc-hacker/2002-05/msg00035.html
+-             state._u._ext.nsmap[0] = MAXNS + 1;
+-+#endif
+-             state._u._ext.nscount6 = 1;
+-             ns->sin6_family = AF_INET6;
+-             ns->sin6_port = htons(53);
+--- 
+-1.9.1
+-
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 88e86c4..57ea1c8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -190,7 +190,8 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-no-rpath \
+ 		-nomake tests \
+ 		-device buildroot \
+-		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
++		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
++		-device-option BR_CCACHE="$(CCACHE)" \
+ 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
 -- 
-2.1.0
+1.9.1
