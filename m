@@ -1,112 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Sep 2014 21:04:02 +0200
-Subject: [Buildroot] [git commit] qt5: bump to 5.3.2
-Message-ID: <20140916201651.7BFBC9D6B9@busybox.osuosl.org>
+Date: Tue, 16 Sep 2014 22:15:20 +0200
+Subject: [Buildroot] [git commit] toolchain-external: bump ARM,
+	ARMeb and AArch64 Linaro toolchains to 14.08
+Message-ID: <20140916201651.CBA929B914@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e91713126fa790ad3088a739ef1029fad07752f9
+commit: http://git.buildroot.net/buildroot/commit/?id=a08dcf77a8e9897ad9e5d5f02964eeef88c6546c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only use ccache prefix in QMAKE_CC and QMAKE_CXX since the build system is
-broken when QMAKE_AR contains a space character.
-
-Remove the upstreamed uClibc patch.
-
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5.mk                                 |    2 +-
- .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |    6 +++-
- ...ase-0004-QDnsLookup-Fix-build-with-uClibc.patch |   35 --------------------
- package/qt5/qt5base/qt5base.mk                     |    3 +-
- 4 files changed, 8 insertions(+), 38 deletions(-)
+ toolchain/toolchain-external/Config.in             |   14 +++++++-------
+ toolchain/toolchain-external/toolchain-external.mk |   12 ++++++------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 8dbb355..e9c59db 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,5 +1,5 @@
- QT5_VERSION_MAJOR = 5.3
--QT5_VERSION = $(QT5_VERSION_MAJOR).1
-+QT5_VERSION = $(QT5_VERSION_MAJOR).2
- QT5_SITE = http://download.qt-project.org/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- include $(sort $(wildcard package/qt5/*/*.mk))
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 9006827..67ad450 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
+ 	depends on BR2_PREFER_STATIC_LIB
  
-diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-index 6283bbe..09c1b67 100644
---- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-+++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-@@ -14,9 +14,13 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- ===================================================================
- --- /dev/null
- +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--@@ -0,0 +1,12 @@
-+@@ -0,0 +1,16 @@
- +include(../common/linux_device_pre.conf)
- +
-++# modifications to g++-unix.conf
-++QMAKE_CC                = $${BR_CCACHE} $${CROSS_COMPILE}gcc
-++QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
-++
- +#modifications to gcc-base.conf
- +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
- +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-diff --git a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch b/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
-deleted file mode 100644
-index 90aa2be..0000000
---- a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From af2241c678bcd9af58d38f98f5caec96a498733e Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
--Date: Fri, 23 May 2014 17:02:01 +0300
--Subject: [PATCH] QDnsLookup: Fix build with uClibc
--
--uClibc doesn't have a nsmap member in __res_state. Since it also doesn't have
--res_nquery() which is mandatory for QDnsLookup, we can simply disable the code
--to fix the build.
--
--Sent-Upstream: https://codereview.qt-project.org/86159
--Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
--Change-Id: Ia872f535519aca3a2de763548c6dd0e3e0ee20d4
-----
-- src/network/kernel/qdnslookup_unix.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/network/kernel/qdnslookup_unix.cpp b/src/network/kernel/qdnslookup_unix.cpp
--index 26834df..2a482a6 100644
----- a/src/network/kernel/qdnslookup_unix.cpp
--+++ b/src/network/kernel/qdnslookup_unix.cpp
--@@ -160,9 +160,11 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
--                 Q_CHECK_PTR(ns);
--                 state._u._ext.nsaddrs[0] = ns;
--             }
--+#ifndef __UCLIBC__
--             // Set nsmap[] to indicate that nsaddrs[0] is an IPv6 address
--             // See: https://sourceware.org/ml/libc-hacker/2002-05/msg00035.html
--             state._u._ext.nsmap[0] = MAXNS + 1;
--+#endif
--             state._u._ext.nscount6 = 1;
--             ns->sin6_family = AF_INET6;
--             ns->sin6_port = htons(53);
---- 
--1.9.1
--
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 88e86c4..57ea1c8 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -190,7 +190,8 @@ define QT5BASE_CONFIGURE_CMDS
- 		-no-rpath \
- 		-nomake tests \
- 		-device buildroot \
--		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-device-option BR_CCACHE="$(CCACHE)" \
- 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
- 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2014.05"
++	bool "Linaro ARM 2014.08"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -20,8 +20,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2014.05 (based on gcc 4.9), Linaro GDB 2014.05 (based on
+-	  GDB 7.6), eglibc 2.19, Binutils 2014.05 (based on 2.24). It
++	  GCC 2014.08 (based on gcc 4.9), Linaro GDB 2013.10 (based on
++	  GDB 7.6), eglibc 2.19, Binutils 2014.08 (based on 2.24). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+@@ -33,7 +33,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+-	bool "Linaro armeb 2014.04"
++	bool "Linaro armeb 2014.08"
+ 	depends on BR2_armeb
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -46,8 +46,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	help
+ 	  Linaro toolchain for the ARM big endian architecture. It
+-	  uses Linaro GCC 2014.04 (based on gcc 4.8), Linaro GDB
+-	  2014.04 (based on GDB 7.6), eglibc 2.19, Binutils 2014.04
++	  uses Linaro GCC 2014.08 (based on gcc 4.9), Linaro GDB
++	  2013.10 (based on GDB 7.6), eglibc 2.19, Binutils 2014.08
+ 	  (based on 2.24). It generates code that runs on all Cortex-A
+ 	  profile devices, but tuned for the Cortex-A9. The code
+ 	  generated is Thumb 2, with the hard floating point calling
+@@ -815,7 +815,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	  http://wiki.xilinx.com/mb-gnu-tools
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 14.05"
++	bool "Linaro AArch64 14.08"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 7012e12..78c2273 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -276,12 +276,12 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
+ endef
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.05_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+@@ -357,8 +357,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.08/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.08_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu/
