@@ -1,30 +1,34 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 16 Sep 2014 21:48:52 +0200
-Subject: [Buildroot] [PATCH] gst-plugins-bad-plugin-sndfile: Fix comment
-	display
-Message-ID: <1410896932-7483-1-git-send-email-jezz@sysmic.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Sep 2014 16:52:30 -0300
+Subject: [Buildroot] [PATCH] sqlcipher: fix static linking
+Message-ID: <1410897150-24431-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+It uses openssl which for buildroot mandates libz, but doesn't link
+against it so it fails. Fixes:
+http://autobuild.buildroot.net/results/514/5145617f7c3cece933c845da3c9836d80d062bb6/
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 816de35..fd37dc7 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -480,6 +480,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
- 	depends on BR2_LARGEFILE
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlcipher/sqlcipher.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index bae59bb..7c93620 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -19,7 +19,7 @@ SQLCIPHER_CONF_OPT = \
+ 	--localstatedir=/var
  
- comment "gst-plugins-bad-plugin-sndfile needs a toolchain w/ largefile"
-+	depends on !BR2_LARGEFILE
+ SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
+-SQLCIPHER_LDFLAGS += -lcrypto
++SQLCIPHER_LDFLAGS += -lcrypto -lz
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
- 	bool "dvb"
+ ifneq ($(BR2_LARGEFILE),y)
+ # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
 -- 
-1.9.1
+1.8.5.5
