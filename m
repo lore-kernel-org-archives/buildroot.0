@@ -1,111 +1,131 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Tue, 16 Sep 2014 15:58:18 +0300
-Subject: [Buildroot] [PATCH] qt5: bump to 5.3.2
-Message-ID: <1410872298-13415-1-git-send-email-fatih.asici@gmail.com>
+From: Maarten ter Huurne <maarten@treewalker.org>
+Date: Tue, 16 Sep 2014 15:17:30 +0200
+Subject: [Buildroot] [PATCH] vsftpd: Add build option to disable utmpx
+	update code
+Message-ID: <1410873450-19158-1-git-send-email-maarten@treewalker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Only use ccache prefix in QMAKE_CC and QMAKE_CXX since the build system is
-broken when QMAKE_AR contains a space character.
+This was modeled after a similar option for Dropbear.
 
-Remove the upstreamed uClibc patch.
+The utmpx code is automatically disabled when compiling with musl,
+to avoid a build error due to WTMPX_FILE being undefined. Note that
+musl has an empty utmpx implementation, so no functionality is lost
+by not calling it.
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
 ---
- package/qt5/qt5.mk                                 |  2 +-
- .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |  6 +++-
- ...ase-0004-QDnsLookup-Fix-build-with-uClibc.patch | 35 ----------------------
- package/qt5/qt5base/qt5base.mk                     |  3 +-
- 4 files changed, 8 insertions(+), 38 deletions(-)
- delete mode 100644 package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
+Note that previously the utmpx code was being built, so this patch
+changes the default behavior. I think this is not a problem because
+most systems would not have a valid utmpx file, but it might be worth
+mentioning in the release notes.
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 8dbb355..e9c59db 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,5 +1,5 @@
- QT5_VERSION_MAJOR = 5.3
--QT5_VERSION = $(QT5_VERSION_MAJOR).1
-+QT5_VERSION = $(QT5_VERSION_MAJOR).2
- QT5_SITE = http://download.qt-project.org/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- include $(sort $(wildcard package/qt5/*/*.mk))
+ package/vsftpd/Config.in                        | 12 ++++++
+ package/vsftpd/vsftpd-0001-utmpx-builddef.patch | 49 +++++++++++++++++++++++++
+ package/vsftpd/vsftpd.mk                        |  8 ++++
+ 3 files changed, 69 insertions(+)
+ create mode 100644 package/vsftpd/vsftpd-0001-utmpx-builddef.patch
+
+diff --git a/package/vsftpd/Config.in b/package/vsftpd/Config.in
+index 0cc8880..464d6f2 100644
+--- a/package/vsftpd/Config.in
++++ b/package/vsftpd/Config.in
+@@ -4,3 +4,15 @@ config BR2_PACKAGE_VSFTPD
+ 	help
+ 	  vsftpd is an ftp daemon written with security in mind.
+ 	  http://vsftpd.beasts.org/
++
++if BR2_PACKAGE_VSFTPD
++
++config BR2_PACKAGE_VSFTPD_UTMPX
++	bool "log vsftpd access to utmpx"
++	# musl 1.1.4 has an empty utmpx implementation and no WTMPX_FILE
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	help
++	  Enable logging of vsftpd access to utmpx.
++	  Note that Buildroot does not generate utmpx by default.
++
++endif
+diff --git a/package/vsftpd/vsftpd-0001-utmpx-builddef.patch b/package/vsftpd/vsftpd-0001-utmpx-builddef.patch
+new file mode 100644
+index 0000000..07bf13c
+--- /dev/null
++++ b/package/vsftpd/vsftpd-0001-utmpx-builddef.patch
+@@ -0,0 +1,49 @@
++Add build option to disable utmpx update code
++
++On some embedded systems the libc may have utmpx support, but the
++feature would be redundant. So add a build switch to disable utmpx
++updating, similar to compiling on systems without utmpx support.
++
++Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
++
++diff -ru vsftpd-3.0.2.orig/builddefs.h vsftpd-3.0.2/builddefs.h
++--- vsftpd-3.0.2.orig/builddefs.h	2012-04-05 05:24:56.000000000 +0200
+++++ vsftpd-3.0.2/builddefs.h	2014-09-16 14:23:36.128003245 +0200
++@@ -4,6 +4,7 @@
++ #undef VSF_BUILD_TCPWRAPPERS
++ #define VSF_BUILD_PAM
++ #undef VSF_BUILD_SSL
+++#define VSF_BUILD_UTMPX
++ 
++ #endif /* VSF_BUILDDEFS_H */
++ 
++diff -ru vsftpd-3.0.2.orig/sysdeputil.c vsftpd-3.0.2/sysdeputil.c
++--- vsftpd-3.0.2.orig/sysdeputil.c	2012-09-16 06:18:04.000000000 +0200
+++++ vsftpd-3.0.2/sysdeputil.c	2014-09-16 14:26:42.686887724 +0200
++@@ -1158,7 +1158,7 @@
++ 
++ #endif /* !VSF_SYSDEP_NEED_OLD_FD_PASSING */
++ 
++-#ifndef VSF_SYSDEP_HAVE_UTMPX
+++#if !defined(VSF_BUILD_UTMPX) || !defined(VSF_SYSDEP_HAVE_UTMPX)
++ 
++ void
++ vsf_insert_uwtmp(const struct mystr* p_user_str,
++@@ -1173,7 +1173,7 @@
++ {
++ }
++ 
++-#else /* !VSF_SYSDEP_HAVE_UTMPX */
+++#else /* !VSF_BUILD_UTMPX || !VSF_SYSDEP_HAVE_UTMPX */
++ 
++ /* IMHO, the pam_unix module REALLY should be doing this in its SM component */
++ /* Statics */
++@@ -1238,7 +1238,7 @@
++   updwtmpx(WTMPX_FILE, &s_utent);
++ }
++ 
++-#endif /* !VSF_SYSDEP_HAVE_UTMPX */
+++#endif /* !VSF_BUILD_UTMPX || !VSF_SYSDEP_HAVE_UTMPX */
++ 
++ void
++ vsf_set_die_if_parent_dies()
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 5801656..31d5cfe 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -10,10 +10,18 @@ VSFTPD_LIBS = -lcrypt
+ VSFTPD_LICENSE = GPLv2
+ VSFTPD_LICENSE_FILES = COPYING
  
-diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-index 6283bbe..09c1b67 100644
---- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-+++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-@@ -14,9 +14,13 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- ===================================================================
- --- /dev/null
- +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
--@@ -0,0 +1,12 @@
-+@@ -0,0 +1,16 @@
- +include(../common/linux_device_pre.conf)
- +
-++# modifications to g++-unix.conf
-++QMAKE_CC                = $${BR_CCACHE} $${CROSS_COMPILE}gcc
-++QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
-++
- +#modifications to gcc-base.conf
- +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
- +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-diff --git a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch b/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
-deleted file mode 100644
-index 90aa2be..0000000
---- a/package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From af2241c678bcd9af58d38f98f5caec96a498733e Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
--Date: Fri, 23 May 2014 17:02:01 +0300
--Subject: [PATCH] QDnsLookup: Fix build with uClibc
--
--uClibc doesn't have a nsmap member in __res_state. Since it also doesn't have
--res_nquery() which is mandatory for QDnsLookup, we can simply disable the code
--to fix the build.
--
--Sent-Upstream: https://codereview.qt-project.org/86159
--Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
--Change-Id: Ia872f535519aca3a2de763548c6dd0e3e0ee20d4
-----
-- src/network/kernel/qdnslookup_unix.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/network/kernel/qdnslookup_unix.cpp b/src/network/kernel/qdnslookup_unix.cpp
--index 26834df..2a482a6 100644
----- a/src/network/kernel/qdnslookup_unix.cpp
--+++ b/src/network/kernel/qdnslookup_unix.cpp
--@@ -160,9 +160,11 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
--                 Q_CHECK_PTR(ns);
--                 state._u._ext.nsaddrs[0] = ns;
--             }
--+#ifndef __UCLIBC__
--             // Set nsmap[] to indicate that nsaddrs[0] is an IPv6 address
--             // See: https://sourceware.org/ml/libc-hacker/2002-05/msg00035.html
--             state._u._ext.nsmap[0] = MAXNS + 1;
--+#endif
--             state._u._ext.nscount6 = 1;
--             ns->sin6_family = AF_INET6;
--             ns->sin6_port = htons(53);
---- 
--1.9.1
--
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 88e86c4..57ea1c8 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -190,7 +190,8 @@ define QT5BASE_CONFIGURE_CMDS
- 		-no-rpath \
- 		-nomake tests \
- 		-device buildroot \
--		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-device-option BR_CCACHE="$(CCACHE)" \
- 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
- 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
++define VSFTPD_DISABLE_UTMPX
++	$(SED) 's/.*VSF_BUILD_UTMPX/#undef VSF_BUILD_UTMPX/' $(@D)/builddefs.h
++endef
++
+ define VSFTPD_ENABLE_SSL
+ 	$(SED) 's/.*VSF_BUILD_SSL/#define VSF_BUILD_SSL/' $(@D)/builddefs.h
+ endef
+ 
++ifneq ($(BR2_PACKAGE_VSFTPD_UTMPX),y)
++VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ VSFTPD_DEPENDENCIES += openssl
+ VSFTPD_LIBS += -lssl -lcrypto
 -- 
-1.9.1
+1.8.4.5
