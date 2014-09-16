@@ -1,207 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Sep 2014 22:22:29 +0200
-Subject: [Buildroot] [PATCH] libiio: Added package
-In-Reply-To: <1409659707-5297-1-git-send-email-paul.cercueil@analog.com>
-References: <1409659707-5297-1-git-send-email-paul.cercueil@analog.com>
-Message-ID: <20140916222229.3e9f7059@free-electrons.com>
+Date: Tue, 16 Sep 2014 22:48:20 +0200
+Subject: [Buildroot] [PATCH] nsd: new package
+In-Reply-To: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140916224820.7cc2d38b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul Cercueil,
+Dear Eric Le Bihan,
 
-Thanks for this contribution.
-
-The preferred title for new packages is:
-
-	<pkgname>: new package
-
-On Tue, 2 Sep 2014 14:08:27 +0200, Paul Cercueil wrote:
-> Libiio is a library to ease the development of software interfacing
-> Linux Industrial I/O (IIO) devices.
+On Mon, 15 Sep 2014 22:46:21 +0200, Eric Le Bihan wrote:
+> This package provides NSD, an authoritative only, high performance,
+> simple and open source name server.
 > 
-> http://wiki.analog.com/resources/tools-software/linux-software/libiio
-> 
-> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-> ---
->  package/Config.in        |  1 +
->  package/libiio/Config.in | 41 +++++++++++++++++++++++++
->  package/libiio/libiio.mk | 79 ++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 121 insertions(+)
->  create mode 100644 package/libiio/Config.in
->  create mode 100644 package/libiio/libiio.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 883dd66..b67d95d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -664,6 +664,7 @@ menu "Hardware handling"
->  	source "package/libfreefare/Config.in"
->  	source "package/libftdi/Config.in"
->  	source "package/libhid/Config.in"
-> +	source "package/libiio/Config.in"
->  	source "package/libinput/Config.in"
->  	source "package/libiqrf/Config.in"
->  	source "package/libllcp/Config.in"
-> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-> new file mode 100644
-> index 0000000..347269c
-> --- /dev/null
-> +++ b/package/libiio/Config.in
-> @@ -0,0 +1,41 @@
-> +config BR2_PACKAGE_LIBIIO
-> +	bool "libiio"
-> +	help
-> +	  Libiio is a library to ease the development of software interfacing
-> +	  Linux Industrial I/O (IIO) devices.
-> +
-> +	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
-> +
-> +if BR2_PACKAGE_LIBIIO
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-One empty new line between if line and the first config option.
+This looks good. Just a few questions below, not really critical.
 
-> +	config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+> +NSD_VERSION = 4.0.3
 
-We typically do not intend config options inside a if ... endif clause.
+There is a new version that has been released 4.1.0. Though I don't
+mind seeing the 4.0.3 being packaged in Buildroot for now, and then
+later if you have the time, a bump to 4.1.0.
 
-> +		bool "Local backend"
-> +		default y
-> +		help
-> +		  Enable the local backend of the library.
+> +NSD_SITE = http://www.nlnetlabs.nl/downloads/nsd/
+> +NSD_LICENSE = BSD-3c
+> +NSD_LICENSE_FILES = LICENSE
 > +
-> +	config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-> +		bool "Network backend"
-> +		select BR2_PACKAGE_LIBXML2
-> +		default y
-> +		help
-> +		  Enable the network backend of the library.
+> +NSD_DEPENDENCIES = libevent openssl
 > +
-> +	config BR2_PACKAGE_LIBIIO_IIOD
-> +		bool "IIO Daemon"
-> +		select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-> +		depends on BR2_TOOLCHAIN_HAS_THREADS
-> +		default y
-> +		help
-> +		  Install the IIO Daemon.
-> +
-> +	comment "IIO Daemon needs a toolchain w/ threads"
-> +		depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +	config BR2_PACKAGE_LIBIIO_TESTS
-> +		bool "Install test programs"
-> +		select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-> +		select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-> +		default n
+> +NSD_CONF_OPT = \
+> +	--prefix=/ \
+> +	--datarootdir=/usr/share
 
-Not needed, that's the default.
+This is fairly unusual, especially the --prefix=/, so having a comment
+above would be useful.
 
-> +		help
-> +		  Install the test programs (iio_info, iio_genxml, iio_readdev).
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +NSD_CONF_OPT += --with-pidfile=/run/nsd/nsd.pid
 > +endif
-> diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-> new file mode 100644
-> index 0000000..7ea9c25
-> --- /dev/null
-> +++ b/package/libiio/libiio.mk
-> @@ -0,0 +1,79 @@
-> +################################################################################
-> +#
-> +# libiio
-> +#
-> +################################################################################
-> +
-> +LIBIIO_VERSION = 2014_R1
-> +LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-> +LIBIIO_INSTALL_STAGING = YES
-> +LIBIIO_LICENSE = LGPLv2
 
-License seems to be LGPLv2.1+, not LGPLv2.
+Ok, so for systemd the pidfile location is defined at compile time, but
+for sysv/busybox init, it's passed through the init script.
 
-> +LIBIIO_LICENSE_FILES = COPYING
-> +
-> +LIBIIO_CONFIGURE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) \
-> +						VERSION_GIT=$(LIBIIO_VERSION)
-
-Indentation is odd here. Also, this variable should be named
-LIBIIO_MAKE_OPTS, because really there's no "configure" step in this
-package.
-
-> +
-> +# Avahi support in libiio requires avahi-client,
-> +# which needs avahi-daemon and dbus
-> +ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
-> +	LIBIIO_DEPENDENCIES += avahi
-> +else
-> +	LIBIIO_CONFIGURE_OPTS += WITH_AVAHI=no
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
-> +	LIBIIO_CONFIGURE_OPTS += WITH_LOCAL_BACKEND=no
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
-> +	LIBIIO_DEPENDENCIES += libxml2
-> +else
-> +	LIBIIO_CONFIGURE_OPTS += WITH_NETWORK_BACKEND=no
-> +endif
-> +
-> +# Libiio can run without threads
-> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +	LIBIIO_CONFIGURE_OPTS += WITH_PTHREAD=no
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-> +define LIBIIO_BUILD_IIOD
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod $(LIBIIO_CONFIGURE_OPTS)
+> +define NSD_REMOVE_SAMPLE_CONF
+> +	$(RM) $(TARGET_DIR)/etc/nsd/nsd.conf.sample
 > +endef
-> +	LIBIIO_POST_BUILD_HOOKS += LIBIIO_BUILD_IIOD
-
-No need to indent this line.
-
 > +
-> +define LIBIIO_INSTALL_IIOD
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod install \
-> +		$(LIBIIO_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)
-> +endef
-> +	LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_IIOD
+> +NSD_POST_INSTALL_TARGET_HOOKS += NSD_REMOVE_SAMPLE_CONF
 
-Ditto.
+Is there a non sample file installed?
 
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
-> +define LIBIIO_BUILD_TESTS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests $(LIBIIO_CONFIGURE_OPTS)
-> +endef
-> +	LIBIIO_POST_BUILD_HOOKS += LIBIIO_BUILD_TESTS
+Also, when build testing, I faced an issue:
 
-Same.
+checking for libevent... configure: error: Cannot find the libevent library.
+You can restart ./configure --with-libevent=no to use a builtin alternative.
+make: *** [/home/thomas/projets/buildroot/output/build/nsd-4.0.3/.stamp_configured] Erreur 1
 
-> +
-> +define LIBIIO_INSTALL_TESTS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests install \
-> +		$(LIBIIO_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)
-> +endef
-> +	LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_TESTS
+Configuration used is:
 
-Same.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.08.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_NSD=y
 
-That being said, I would prefer something like this:
+I see libevent being built. The config.log of nsd contains:
 
-define LIBIIO_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libiio $(LIBIIO_CONFIGURE_OPTS)
-	$(LIBIIO_BUILD_IIOD)
-	$(LIBIIO_BUILD_TESTS)
-endef
+configure:5427: checking for libevent
+configure:5453: error: Cannot find the libevent library.
+You can restart ./configure --with-libevent=no to use a builtin alternative.
 
-and same for the installation.
+The same happens with OpenSSL:
 
-Could you respin a v2 with those changes?
+checking for SSL... configure: error: Cannot find the SSL libraries in /usr/local/ssl /usr/lib/ssl /usr/ssl /usr/pkg /usr/sfw /usr/local /usr
 
-Thanks!
+You probably need to pass --with-{libevent,ssl}=/some/path, but I
+haven't figured out which path (I haven't looked too much, only tested
+$(STAGING_DIR) and $(STAGING_DIR)/usr/lib).
+
+Also, your package makes openssl and libevent mandatory dependencies of
+nsd, which is not the case: you can pass --with-libevent=no and
+--with-ssl=no and you can build without those dependencies. This is
+something we should support to allow building a more lightweight
+version of nsd.
+
+Then, at boot time, I get:
+
+Starting Name Server Daemon: Could not open /etc/nsd/nsd.conf: No such file or directory
+[1410900412] nsd[525]: error: could not read config: /etc/nsd/nsd.conf
+
+We generally like to have a default configuration file installed, so
+that the service works in a minimal way "out of the box".
+
+Could you have a look at those issues?
+
+Thanks a lot!
 
 Thomas
 -- 
