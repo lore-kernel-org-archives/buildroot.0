@@ -1,77 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Sep 2014 21:44:10 +0200
-Subject: [Buildroot] Question about adding toybox.mk.
-In-Reply-To: <5410CCD9.60403@landley.net>
-References: <5410CCD9.60403@landley.net>
-Message-ID: <5418930A.6080009@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Sep 2014 21:45:37 +0200
+Subject: [Buildroot] [PATCH v2] ARC: gcc - Fix SIZE_TYPE to be "unsigned
+ int" instead of "long unsigned int"
+In-Reply-To: <1410792593-422-1-git-send-email-abrodkin@synopsys.com>
+References: <1410792593-422-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20140916214537.11e0da0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/11/14 00:12, Rob Landley wrote:
-> My toybox project (http://landley.net/toybox) is another multicall
-> binary posix command line implementation in the same genre as busybox.
-> (Toybox is public domain instead of GPL and I think the code's a lot
-> better, but I would, wouldn't I?) Point is, it potentially replaces a
-> bunch of other packages.
-> 
-> Various people have added it to buildroot, the first google hit is:
-> 
-> https://gfiber.googlesource.com/buildroot/+/968ebdd190e2aa15357f44e388c9896fbc8f9ca3/package/toybox/toybox.mk
-> 
-> So I was thinking of formally submitting a toybox.mk to you guys
-> upstream, but I've hit a snag:
-> 
-> Busybox is kind of deeply embedded into buildroot, with 227 lines of
-> busybox.mk covering a bunch of config symbols and special cases for
-> selectively hiding and otherwise interacting with lots of other
-> packages, and it's not just that one file:
-> 
->   $ grep -irl busybox buildroot/ | wc -l
->   89
-> 
-> Swapping out busybox for toybox seems about as intrusive as swapping out
-> uClibc for musl. Does anyone have any hints how I should go about it
-> before I start? (Having buildroot's toybox.mk define BLAH_BUSYBOX symbol
-> names, seems... untidy?)
+Dear Alexey Brodkin,
 
- The reason that busybox appears in so many other packages is just to make sure
-that the executables from the full package override the ones from busybox.
-However, in a first step, it's OK to assume that the full package is not
-selected when you configure some feature of toybox. We can later correct it if
-necessary.
-
-
- Regards,
- Arnout
-
+On Mon, 15 Sep 2014 18:49:53 +0400, Alexey Brodkin wrote:
+> This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
+> type checks.
 > 
-> Suggestions?
+> Fix is taken from current development branch of GCC for ARC and will be a
+> part of the next release of ARC tools, so at that point patch should be dropped.
 > 
-> Rob
+> https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
 > 
-> (Yeah, I could wait until toybox's 1.0 release when I've run out of
-> things that busybox does that toybox doesn't which I care about. But
-> other people aren't waiting, so I thought I'd look into it. what's there
-> is _useful_. My aboriginal linux project is slowly replacing busybox
-> with toybox a command at a time, using them side by side in the
-> meantime. The real issue here is buildroot is treating busybox as
-> special when there may actually be 3 or 4 interesting alternate
-> implementations of the same functionality. Has systemd implemented its
-> own "mount" and "umount" commands yet? Wait for it...)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Fixes http://autobuild.buildroot.net/results/405/405da9a945511329929b18740b983c51b8dcc43e
 > 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> 
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+though you still forgot to add your SoB in the patch itself. I guess
+Peter can add it when applying.
+
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
