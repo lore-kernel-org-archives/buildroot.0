@@ -1,36 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Sep 2014 22:32:49 +0200
-Subject: [Buildroot] [git commit] gdb: reword prompt for host TUI option
-Message-ID: <20140916210716.040039D6B9@busybox.osuosl.org>
+Date: Tue, 16 Sep 2014 23:03:26 +0200
+Subject: [Buildroot] [git commit] gst-plugins-bad-plugin-sndfile: Fix
+	comment display
+Message-ID: <20140916210716.1B8789D6B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae054fcaa6e3887cf9e3b5b2441553e63bda0a0f
+commit: http://git.buildroot.net/buildroot/commit/?id=1f54420bdcba23a4f5d9c1fd29121f36d742c543
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no need to name the option "GDB TUI support", since this
-option is already visible "below" GDB in menuconfig/xconfig. Naming it
-"TUI support" is therefore sufficient.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index fe3f90e..5d0e1b4 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_HOST_GDB
- if BR2_PACKAGE_HOST_GDB
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 816de35..fd37dc7 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -480,6 +480,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
+ 	depends on BR2_LARGEFILE
  
- config BR2_PACKAGE_HOST_GDB_TUI
--	bool "GDB TUI support"
-+	bool "TUI support"
- 	help
- 	  This option enables terminal user interface (TUI) for gdb
+ comment "gst-plugins-bad-plugin-sndfile needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
  
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
+ 	bool "dvb"
