@@ -1,62 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Sep 2014 21:59:54 +0200
-Subject: [Buildroot] [PATCH 02/11] polarssl: add hash
-In-Reply-To: <1410963609-18128-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
- <1410963609-18128-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140917195954.GC4056@free.fr>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 17 Sep 2014 22:00:44 +0200
+Subject: [Buildroot] [PATCH 3/6] python-rtslib-fb: new package
+In-Reply-To: <1410953999-16520-4-git-send-email-cvubrugier@fastmail.fm>
+References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
+ <1410953999-16520-4-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <5419E86C.3000100@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Hi Christophe,
 
-On 2014-09-17 11:20 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> rtslib-fb is an object-based Python library for configuring the
+> LIO generic SCSI target, present in 3.x Linux kernel versions.
+>
+> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+> ---
+>   package/Config.in                         |  1 +
+>   package/python-rtslib-fb/Config.in        |  9 +++++++++
+>   package/python-rtslib-fb/python-rtslib.mk | 13 +++++++++++++
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Shouldn't this be:
 
-Verified that the hashes are correct, and also the same as published on
-the website.
+package/python-rtslib-fb/python-rtslib-fb.mk ?
 
 Regards,
-Yann E. MORIN.
+Jerzy
 
-> ---
->  package/polarssl/polarssl.hash | 3 +++
->  1 file changed, 3 insertions(+)
->  create mode 100644 package/polarssl/polarssl.hash
-> 
-> diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+>   3 files changed, 23 insertions(+)
+>   create mode 100644 package/python-rtslib-fb/Config.in
+>   create mode 100644 package/python-rtslib-fb/python-rtslib.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 17930ea..7447036 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -503,6 +503,7 @@ menu "external python modules"
+>   	source "package/python-pysnmp-mibs/Config.in"
+>   	source "package/python-pyusb/Config.in"
+>   	source "package/python-pyzmq/Config.in"
+> +	source "package/python-rtslib-fb/Config.in"
+>   	source "package/python-serial/Config.in"
+>   	source "package/python-setuptools/Config.in"
+>   	source "package/python-simplejson/Config.in"
+> diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
 > new file mode 100644
-> index 0000000..ca437ac
+> index 0000000..b2aebcf
 > --- /dev/null
-> +++ b/package/polarssl/polarssl.hash
-> @@ -0,0 +1,3 @@
-> +# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
-> +sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
-> +sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
-> -- 
-> 1.8.5.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/4a19deca/attachment.asc>
+> +++ b/package/python-rtslib-fb/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_RTSLIB_FB
+> +	bool "python-rtslib-fb"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	help
+> +	  rtslib-fb is an object-based Python library for configuring
+> +	  the LIO generic SCSI target, present in 3.x Linux kernel
+> +	  versions.
+> +
+> +	  https://github.com/agrover/rtslib-fb
+> diff --git a/package/python-rtslib-fb/python-rtslib.mk b/package/python-rtslib-fb/python-rtslib.mk
+> new file mode 100644
+> index 0000000..70b0257
+> --- /dev/null
+> +++ b/package/python-rtslib-fb/python-rtslib.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-rtslib-fb
+> +#
+> +################################################################################
+> +
+> +PYTHON_RTSLIB_FB_VERSION = v2.1.fb49
+> +PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
+> +PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
+> +PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
+> +PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
