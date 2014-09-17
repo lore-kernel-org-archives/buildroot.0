@@ -1,35 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Sep 2014 11:19:59 -0300
-Subject: [Buildroot] [PATCH 01/11] busybox: add hash
-Message-ID: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 11:20:00 -0300
+Subject: [Buildroot] [PATCH 02/11] polarssl: add hash
+In-Reply-To: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1410963609-18128-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And rename 0006-lzop-add-overflow-check.patch to the proper convention.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} | 0
- package/busybox/busybox.hash                                           | 3 +++
- 2 files changed, 3 insertions(+)
- rename package/busybox/{0006-lzop-add-overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} (100%)
- create mode 100644 package/busybox/busybox.hash
+ package/polarssl/polarssl.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/polarssl/polarssl.hash
 
-diff --git a/package/busybox/0006-lzop-add-overflow-check.patch b/package/busybox/busybox-0006-lzop-add-overflow-check.patch
-similarity index 100%
-rename from package/busybox/0006-lzop-add-overflow-check.patch
-rename to package/busybox/busybox-0006-lzop-add-overflow-check.patch
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
 new file mode 100644
-index 0000000..428ce0a
+index 0000000..ca437ac
 --- /dev/null
-+++ b/package/busybox/busybox.hash
++++ b/package/polarssl/polarssl.hash
 @@ -0,0 +1,3 @@
-+# From http://busybox.net/downloads/busybox-1.22.1.tar.bz2.sign
-+md5	337d1a15ab1cb1d4ed423168b1eb7d7e	busybox-1.22.1.tar.bz2
-+sha1	d6e96fefb6f0fb8079f27468b9bf22d8dd96108e	busybox-1.22.1.tar.bz2
++# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
++sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
++sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
 -- 
 1.8.5.5
