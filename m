@@ -1,39 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Sep 2014 10:08:19 -0300
-Subject: [Buildroot] [PATCHv3 4/6] httping: enable ncurses support
+Date: Wed, 17 Sep 2014 10:08:20 -0300
+Subject: [Buildroot] [PATCHv3 5/6] alsa-utils: fixup ncurses config script
 In-Reply-To: <1410959301-28053-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1410959301-28053-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1410959301-28053-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1410959301-28053-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable automatic ncurses support now that we've got wide support.
+Point the build to the proper (which BTW was broken since it pointed to
+the wrong directory) ncurses config by using $(NCURSES_CONFIG_SCRIPTS)
+from the ncurses package directly.
+Also select the proper variant (widec/non-widec) in configure.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/httping/httping.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/alsa-utils/alsa-utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index ca636c0..719b0db 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -15,11 +15,12 @@ HTTPING_LDFLAGS = $(TARGET_LDFLAGS) \
- HTTPING_DEPENDENCIES = host-gettext \
- 	$(if $(BR2_NEEDS_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw)
- HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
- 	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
--	NC=no \
-+	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
- 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
- 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 4536b07..2afd6f9 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -14,11 +14,11 @@ ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
  
+ ALSA_UTILS_CONF_ENV = \
+-	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config
++	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+ 
+ ALSA_UTILS_CONF_OPT = \
+ 	--disable-xmlto \
+-	--with-curses=ncurses
++	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
+ 
+ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPT += --disable-alsamixer --disable-alsatest
 -- 
 1.8.5.5
