@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Sep 2014 21:56:06 +0200
-Subject: [Buildroot] [PATCH 01/11] busybox: add hash
-In-Reply-To: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 21:59:54 +0200
+Subject: [Buildroot] [PATCH 02/11] polarssl: add hash
+In-Reply-To: <1410963609-18128-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140917195606.GB4056@free.fr>
+ <1410963609-18128-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140917195954.GC4056@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +13,31 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2014-09-17 11:19 -0300, Gustavo Zacarias spake thusly:
-> And rename 0006-lzop-add-overflow-check.patch to the proper convention.
-> 
+On 2014-09-17 11:20 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+Verified that the hashes are correct, and also the same as published on
+the website.
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  ...overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} | 0
->  package/busybox/busybox.hash                                           | 3 +++
->  2 files changed, 3 insertions(+)
->  rename package/busybox/{0006-lzop-add-overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} (100%)
->  create mode 100644 package/busybox/busybox.hash
+>  package/polarssl/polarssl.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+>  create mode 100644 package/polarssl/polarssl.hash
 > 
-> diff --git a/package/busybox/0006-lzop-add-overflow-check.patch b/package/busybox/busybox-0006-lzop-add-overflow-check.patch
-> similarity index 100%
-> rename from package/busybox/0006-lzop-add-overflow-check.patch
-> rename to package/busybox/busybox-0006-lzop-add-overflow-check.patch
-> diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+> diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
 > new file mode 100644
-> index 0000000..428ce0a
+> index 0000000..ca437ac
 > --- /dev/null
-> +++ b/package/busybox/busybox.hash
+> +++ b/package/polarssl/polarssl.hash
 > @@ -0,0 +1,3 @@
-> +# From http://busybox.net/downloads/busybox-1.22.1.tar.bz2.sign
-> +md5	337d1a15ab1cb1d4ed423168b1eb7d7e	busybox-1.22.1.tar.bz2
-> +sha1	d6e96fefb6f0fb8079f27468b9bf22d8dd96108e	busybox-1.22.1.tar.bz2
+> +# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
+> +sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
+> +sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
 > -- 
 > 1.8.5.5
 > 
@@ -60,4 +59,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/fc9d8da1/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/4a19deca/attachment.asc>
