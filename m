@@ -1,35 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Sep 2014 15:41:46 -0300
-Subject: [Buildroot] [PATCH 2/3] iprutils: update patches for the new
- version
-In-Reply-To: <1410974363-43368-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1410974363-43368-1-git-send-email-Vincent.Riera@imgtec.com>
- <1410974363-43368-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5419D5EA.6060602@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 17 Sep 2014 20:51:05 +0200
+Subject: [Buildroot] [PATCH] perl: fix build of native modules
+Message-ID: <1410979865-26207-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/17/2014 02:19 PM, Vicente Olivert Riera wrote:
+CORE/vutil.h is required when the host perl version is 5.20
+see http://autobuild.buildroot.net/results/c3d/c3d48c3b3d6c1e616d8e20a2f65d8ba33abe61da/
 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../iprutils/iprutils-0001-Don-t-use-gettext.patch |   32 ++++++++++++++++++++
->  ...low-CFLAGS-to-be-extended-from-the-enviro.patch |   31 +++++++++++++++++++
->  .../iprutils/iprutils-01-dont-use-gettext.patch    |   30 ------------------
->  .../iprutils-02-use-environment-cflags.patch       |   20 ------------
->  4 files changed, 63 insertions(+), 50 deletions(-)
->  create mode 100644 package/iprutils/iprutils-0001-Don-t-use-gettext.patch
->  create mode 100644 package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
->  delete mode 100644 package/iprutils/iprutils-01-dont-use-gettext.patch
->  delete mode 100644 package/iprutils/iprutils-02-use-environment-cflags.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi.
-The patch updates should be part of the first (bump) patch, otherwise
-it's just an extra commit that fixes breakage because the patches don't
-apply/work.
-It's like adding a new package that needs patches and said patches are
-part of a second patch ("these make it work for real").
-Regards.
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 01e0166..65c0a7d 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -117,6 +117,7 @@ endef
+ define PERL_ADD_CORE_H
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/cc_runtime.h
++	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/vutil.h
+ endef
+ 
+ PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_CORE_H
+-- 
+1.9.1
