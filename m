@@ -1,50 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Sep 2014 15:21:24 +0200
-Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
-In-Reply-To: <20140917151925.15b49f86@grp-cvubrugier>
-References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
- <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
- <20140917141204.5dbaa667@free-electrons.com>
- <20140917151925.15b49f86@grp-cvubrugier>
-Message-ID: <20140917152124.62d30631@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 11:19:59 -0300
+Subject: [Buildroot] [PATCH 01/11] busybox: add hash
+Message-ID: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+And rename 0006-lzop-add-overflow-check.patch to the proper convention.
 
-On Wed, 17 Sep 2014 15:19:25 +0200, Christophe Vu-Brugier wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} | 0
+ package/busybox/busybox.hash                                           | 3 +++
+ 2 files changed, 3 insertions(+)
+ rename package/busybox/{0006-lzop-add-overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} (100%)
+ create mode 100644 package/busybox/busybox.hash
 
-> > This should not be handled using a post install target hook, but rather
-> > using the TARGETCLI_FB_INIT_SYSV mechanism. See the Buildroot manual or
-> > other packages for example (dnsmasq for example, or ntp if you want to
-> > see both the SysV and the systemd cases).
-> 
-> OK. By the way, I also intend to add a systemd unit file later.
-
-Great!
-
-> > This should continue to belong to post install hook because it isn't
-> > related to which init system is used. Is the test really necessary in
-> > this case? Maybe you can just to the $(INSTALL), which doesn't fail if
-> > the directory already exists I believe. If not, just use mkdir -p and
-> > that's it. If you really want to be nice, you could also add a comment
-> > above the hook explaining why this directory is needed.
-> 
-> The directory "/etc/target" is needed because it is expected by
-> targetcli. The configuration of the "SCSI target" driver is stored in a
-> JSON file named "/etc/target/saveconfig.json". This configuration is
-> used to create the configfs hierarchy that configures the target driver.
-
-Ok, makes sense. Maybe just add exactly this explanation as a comment
-above the creation of /etc/target ?
-
-Thanks!
-
-Thomas
+diff --git a/package/busybox/0006-lzop-add-overflow-check.patch b/package/busybox/busybox-0006-lzop-add-overflow-check.patch
+similarity index 100%
+rename from package/busybox/0006-lzop-add-overflow-check.patch
+rename to package/busybox/busybox-0006-lzop-add-overflow-check.patch
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+new file mode 100644
+index 0000000..428ce0a
+--- /dev/null
++++ b/package/busybox/busybox.hash
+@@ -0,0 +1,3 @@
++# From http://busybox.net/downloads/busybox-1.22.1.tar.bz2.sign
++md5	337d1a15ab1cb1d4ed423168b1eb7d7e	busybox-1.22.1.tar.bz2
++sha1	d6e96fefb6f0fb8079f27468b9bf22d8dd96108e	busybox-1.22.1.tar.bz2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
