@@ -1,41 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Sep 2014 15:23:18 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.16.3
-In-Reply-To: <1410978198-23567-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1410978198-23567-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1410978198-23567-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 15:41:46 -0300
+Subject: [Buildroot] [PATCH 2/3] iprutils: update patches for the new
+ version
+In-Reply-To: <1410974363-43368-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1410974363-43368-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1410974363-43368-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5419D5EA.6060602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 09/17/2014 02:19 PM, Vicente Olivert Riera wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bdf5fc5..0ad8bce 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.16.2"
-+	bool "3.16.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.16.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.16.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-1.8.5.5
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  .../iprutils/iprutils-0001-Don-t-use-gettext.patch |   32 ++++++++++++++++++++
+>  ...low-CFLAGS-to-be-extended-from-the-enviro.patch |   31 +++++++++++++++++++
+>  .../iprutils/iprutils-01-dont-use-gettext.patch    |   30 ------------------
+>  .../iprutils-02-use-environment-cflags.patch       |   20 ------------
+>  4 files changed, 63 insertions(+), 50 deletions(-)
+>  create mode 100644 package/iprutils/iprutils-0001-Don-t-use-gettext.patch
+>  create mode 100644 package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
+>  delete mode 100644 package/iprutils/iprutils-01-dont-use-gettext.patch
+>  delete mode 100644 package/iprutils/iprutils-02-use-environment-cflags.patch
+
+Hi.
+The patch updates should be part of the first (bump) patch, otherwise
+it's just an extra commit that fixes breakage because the patches don't
+apply/work.
+It's like adding a new package that needs patches and said patches are
+part of a second patch ("these make it work for real").
+Regards.
