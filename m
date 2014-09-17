@@ -1,108 +1,85 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 17 Sep 2014 14:12:44 +0100
-Subject: [Buildroot] [PATCH] mesa3d: Add missing dependencies
-In-Reply-To: <87sijr8h2t.fsf@dell.be.48ers.dk>
-References: <1410883118-57489-1-git-send-email-Vincent.Riera@imgtec.com>
- <87sijr8h2t.fsf@dell.be.48ers.dk>
-Message-ID: <541988CC.1030805@imgtec.com>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Wed, 17 Sep 2014 15:13:02 +0200
+Subject: [Buildroot] [PATCH 3/6] python-rtslib-fb: new package
+In-Reply-To: <20140917140059.0eee9af9@free-electrons.com>
+References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
+ <1410953999-16520-4-git-send-email-cvubrugier@fastmail.fm>
+ <20140917140059.0eee9af9@free-electrons.com>
+Message-ID: <20140917151302.08303544@grp-cvubrugier>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/16/2014 09:07 PM, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->   > Add xcb-dri3, xcb-present and xshmfence to mesa3d's dependencies.
->   > Otherwise it will fail during the configure phase.
->
->   > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->
-> hmm, but we also have optional dri3 support since:
->
-> commit 1fcc621f0344c11ebaf7903545cd99d2f5b8ec9b
-> Author: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Date:   Thu Jul 17 07:42:54 2014 +0200
->
->      package/mesa3d: Fix optional DRI3 support
->
-> Looking at configure.ac, I think we should just disable dri support if
-> no dri drivers are enabled, E.G.:
->
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index f986d0e..31bbacf 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -75,7 +75,7 @@ endif
->
->   ifeq ($(MESA3D_DRI_DRIVERS-y),)
->   MESA3D_CONF_OPT += \
-> -       --without-dri-drivers
-> +       --without-dri-drivers --disable-dri
->   else
->   ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
->   MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
->
-> What do the mesa3d experts say?
->
+Hi Thomas,
 
-Please use this defconfig if you want to reproduce the failure:
+Thank you for the prompt review.
 
------------------------------------------
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-BR2_PACKAGE_QT5BASE_EXAMPLES=y
-BR2_PACKAGE_QT5BASE_SQL=y
-BR2_PACKAGE_QT5BASE_MYSQL=y
-BR2_PACKAGE_QT5BASE_PSQL=y
-BR2_PACKAGE_QT5BASE_TEST=y
-BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-BR2_PACKAGE_QT5BASE_LINUXFB=y
-BR2_PACKAGE_QT5BASE_DIRECTFB=y
-BR2_PACKAGE_QT5BASE_XCB=y
-BR2_PACKAGE_QT5BASE_PRINTSUPPORT=y
-BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-BR2_PACKAGE_QT5BASE_GIF=y
-BR2_PACKAGE_QT5BASE_JPEG=y
-BR2_PACKAGE_QT5BASE_PNG=y
-BR2_PACKAGE_QT5BASE_TSLIB=y
-BR2_PACKAGE_QT5CONNECTIVITY=y
-BR2_PACKAGE_QT5ENGINIO=y
-BR2_PACKAGE_QT5GRAPHICALEFFECTS=y
-BR2_PACKAGE_QT5IMAGEFORMATS=y
-BR2_PACKAGE_QT5MULTIMEDIA=y
-BR2_PACKAGE_QT5QUICK1=y
-BR2_PACKAGE_QT5QUICKCONTROLS=y
-BR2_PACKAGE_QT5SENSORS=y
-BR2_PACKAGE_QT5SERIALPORT=y
-BR2_PACKAGE_QT5SVG=y
-BR2_PACKAGE_QT5WEBKIT=y
-BR2_PACKAGE_QT5WEBKIT_EXAMPLES=y
-BR2_PACKAGE_QT5WEBSOCKETS=y
-BR2_PACKAGE_QT5X11EXTRAS=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
------------------------------------------
+On Wed, 17 Sep 2014 14:00:59 +0200, Thomas Petazzoni wrote :
+> On Wed, 17 Sep 2014 13:39:56 +0200, Christophe Vu-Brugier wrote:
+> 
+> > diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
+> > new file mode 100644
+> > index 0000000..b2aebcf
+> > --- /dev/null
+> > +++ b/package/python-rtslib-fb/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_PYTHON_RTSLIB_FB
+> > +	bool "python-rtslib-fb"
+> > +	depends on BR2_PACKAGE_PYTHON
+> 
+> Is it for this package that you had the Python 3 issue? Could you
+> explain a bit more the 2to3 problems you have seen?
 
-By the way, if you fix mesa3d and keep building the rest of the stuff, 
-you will find a failure of qt5webkit like this one:
+It is for this package (and for configshell-fb and targetcli-fb) that I
+thought I had an issue with `2to3`.
+But I was wrong because it seems that `2to3` is correctly invoked by
+setup.py when it is run under Python 3.
+The installed python files are different from the source python files
+and are modified by `2to3`:
 
-platform/graphics/opengl/Extensions3DOpenGLES.cpp:33:21: fatal error: 
-EGL/egl.h: No such file or directory
+--- build/python-rtslib-fb-v2.1.fb49/rtslib/utils.py
++++ target/usr/lib/python3.4/site-packages/rtslib/utils.py
+@@ -435,14 +435,14 @@
+             raise
+ 
+ def set_attributes(obj, attr_dict, err_func):
+-    for name, value in attr_dict.iteritems():
++    for name, value in attr_dict.items():
 
-It tries to include that file when the 3D_GRAPHICS macro is enabled, and 
-that macro is enabled if Qt has opengl support. I don't know if there 
-are more packages providing that file, but the only one I know is this one:
+So if there is an issue, it is not caused by a broken `2to3`.
 
-BR2_PACKAGE_MESA3D_OPENGL_EGL
 
--- 
-Vincent
+> > +	help
+> > +	  rtslib-fb is an object-based Python library for configuring
+> > +	  the LIO generic SCSI target, present in 3.x Linux kernel
+> > +	  versions.
+> > +
+> > +	  https://github.com/agrover/rtslib-fb
+> > diff --git a/package/python-rtslib-fb/python-rtslib.mk b/package/python-rtslib-fb/python-rtslib.mk
+> > new file mode 100644
+> > index 0000000..70b0257
+> > --- /dev/null
+> > +++ b/package/python-rtslib-fb/python-rtslib.mk
+> > @@ -0,0 +1,13 @@
+> > +################################################################################
+> > +#
+> > +# python-rtslib-fb
+> > +#
+> > +################################################################################
+> > +
+> > +PYTHON_RTSLIB_FB_VERSION = v2.1.fb49
+> > +PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
+> > +PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
+> > +PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
+> > +PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
+> > +
+> > +$(eval $(python-package))
+> 
+> Other than that, the patch looks good to me, and the Python 3 support
+> can always be added later:
+> 
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Thomas
