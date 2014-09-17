@@ -1,64 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Sep 2014 23:09:35 +0200
-Subject: [Buildroot] [git commit] ARC: gcc - Fix SIZE_TYPE to be "unsigned
-	int" instead of "long unsigned int"
-Message-ID: <20140916211020.27BCD9D6B4@busybox.osuosl.org>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 17 Sep 2014 08:14:45 +0300
+Subject: [Buildroot] [PATCH] qt5: bump to 5.3.2
+In-Reply-To: <54185F79.6080604@imgtec.com>
+References: <1410872298-13415-1-git-send-email-fatih.asici@gmail.com>
+ <54185F79.6080604@imgtec.com>
+Message-ID: <201409170814.45232.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tuesday 16 September 2014 19:04:09 Vicente Olivert Riera wrote:
+> Hello Fatih,
 
-This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
-type checks.
+Hello,
 
-Fix is taken from current development branch of GCC for ARC and will be a
-part of the next release of ARC tools, so at that point patch should be dropped.
+> you are fixing a problem which seems not to be related with the version
+> bump. Should you send separate patches?
 
-https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
+It would be better to have seperate patches; but it is not so unrelated since 
+the bug appears because of a change in this new version :)
 
-Fixes http://autobuild.buildroot.net/results/405/405da9a945511329929b18740b983c51b8dcc43e
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../arc-2014.08/200-size_type_unsigned_int.patch   |   24 ++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
-
-diff --git a/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
-new file mode 100644
-index 0000000..a6a0419
---- /dev/null
-+++ b/package/gcc/arc-2014.08/200-size_type_unsigned_int.patch
-@@ -0,0 +1,24 @@
-+Fixes SIZE_TYPE to be "unsigned int" instead of "long unsigned int".
-+
-+This makes size_t to be "unsigned" ssize_t which makes happy compiler on data
-+type checks.
-+
-+Fix is taken from current development branch of GCC for ARC and will be a
-+part of the next release of ARC tools, so at that point patch should be dropped.
-+
-+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/249f040299402647525c3f15b79d319fa7acddd3
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+
-+--- a/gcc/config/arc/arc.h
-++++ b/gcc/config/arc/arc.h
-+@@ -487,7 +487,7 @@ if (GET_MODE_CLASS (MODE) == MODE_INT		\
-+ /* Define this as 1 if `char' should by default be signed; else as 0.  */
-+ #define DEFAULT_SIGNED_CHAR 0
-+ 
-+-#define SIZE_TYPE "long unsigned int"
-++#define SIZE_TYPE "unsigned int"
-+ #define PTRDIFF_TYPE "long int"
-+ #define WCHAR_TYPE "int"
-+ #define WCHAR_TYPE_SIZE 32
+Regards,
+Fatih
