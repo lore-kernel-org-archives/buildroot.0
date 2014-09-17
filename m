@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Sep 2014 14:03:41 +0200
-Subject: [Buildroot] [PATCH 4/6] python-configshell-fb: new package
-In-Reply-To: <1410953999-16520-5-git-send-email-cvubrugier@fastmail.fm>
+Date: Wed, 17 Sep 2014 14:12:04 +0200
+Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
+In-Reply-To: <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
 References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
- <1410953999-16520-5-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20140917140341.34d14957@free-electrons.com>
+ <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <20140917141204.5dbaa667@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,52 @@ To: buildroot@busybox.net
 
 Dear Christophe Vu-Brugier,
 
-On Wed, 17 Sep 2014 13:39:57 +0200, Christophe Vu-Brugier wrote:
+On Wed, 17 Sep 2014 13:39:59 +0200, Christophe Vu-Brugier wrote:
+> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+> ---
+>  package/targetcli-fb/S50target       | 46 ++++++++++++++++++++++++++++++++++++
+>  package/targetcli-fb/targetcli-fb.mk | 11 +++++++++
+>  2 files changed, 57 insertions(+)
+>  create mode 100755 package/targetcli-fb/S50target
 
-> diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
-> new file mode 100644
-> index 0000000..05de585
-> --- /dev/null
-> +++ b/package/python-configshell-fb/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
-> +	bool "python-configshell-fb"
-> +	depends on BR2_PACKAGE_PYTHON
+I think this should be part of the previous patch.
 
-Ok, I just read the README file for this package, and it explains that
-the setup.py script runs 2to3 to convert the package source code to
-Python 3 if needed. Most likely our installation of 2to3 is broken.
+> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+> index 2384569..b83a6b6 100644
+> --- a/package/targetcli-fb/targetcli-fb.mk
+> +++ b/package/targetcli-fb/targetcli-fb.mk
+> @@ -11,4 +11,15 @@ TARGETCLI_FB_LICENSE_FILES = COPYING
+>  TARGETCLI_FB_SETUP_TYPE = setuptools
+>  TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
+>  
+> +define TARGETCLI_FB_INSTALL_INITSCRIPT
+> +        @if [ ! -f $(TARGET_DIR)/etc/init.d/S50target ]; then \
+> +                $(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target; \
+> +        fi
 
-The patch anyway looks good to me, so:
+This should not be handled using a post install target hook, but rather
+using the TARGETCLI_FB_INIT_SYSV mechanism. See the Buildroot manual or
+other packages for example (dnsmasq for example, or ntp if you want to
+see both the SysV and the systemd cases).
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Also, I don't think adding a @ at the beginning is really needed, as we
+usually don't do that I believe. The test could also be summarized as:
+
+	[ -f $(TARGET_DIR)/etc/init.d/S50target ] || \
+		$(INSTALL) ...
+
+> +        @if [ ! -d $(TARGET_DIR)/etc/target ]; then \
+> +                $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/target; \
+> +        fi
+
+This should continue to belong to post install hook because it isn't
+related to which init system is used. Is the test really necessary in
+this case? Maybe you can just to the $(INSTALL), which doesn't fail if
+the directory already exists I believe. If not, just use mkdir -p and
+that's it. If you really want to be nice, you could also add a comment
+above the hook explaining why this directory is needed.
+
+Thanks!
 
 Thomas
 -- 
