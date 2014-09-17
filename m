@@ -1,74 +1,42 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Wed, 17 Sep 2014 15:19:25 +0200
-Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
-In-Reply-To: <20140917141204.5dbaa667@free-electrons.com>
-References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
- <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
- <20140917141204.5dbaa667@free-electrons.com>
-Message-ID: <20140917151925.15b49f86@grp-cvubrugier>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Sep 2014 15:16:11 +0200
+Subject: [Buildroot] [git commit] dbus: security bump to version 1.8.8
+Message-ID: <20140917132008.78CFC9D6C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=c6afb21f4554dda6c61b5849400820edb7de71b8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 17 Sep 2014 14:12:04 +0200, Thomas Petazzoni wrote :
-> On Wed, 17 Sep 2014 13:39:59 +0200, Christophe Vu-Brugier wrote:
-> > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> > ---
-> >  package/targetcli-fb/S50target       | 46 ++++++++++++++++++++++++++++++++++++
-> >  package/targetcli-fb/targetcli-fb.mk | 11 +++++++++
-> >  2 files changed, 57 insertions(+)
-> >  create mode 100755 package/targetcli-fb/S50target
-> 
-> I think this should be part of the previous patch.
+Fixes:
+CVE-2014-3635 - Buffer access with incorrect length value
+CVE-2014-3636 - Allocation of file descriptors or handles
+without limits or throttling
+CVE-2014-3637 - Missing release of file descriptor or handle after
+effective lifetime
+CVE-2014-3638 - Algorithmic complexity
+CVE-2014-3639 - Allocation of file descriptors or handles without
+limits or throttling
 
-OK.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-> > diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-> > index 2384569..b83a6b6 100644
-> > --- a/package/targetcli-fb/targetcli-fb.mk
-> > +++ b/package/targetcli-fb/targetcli-fb.mk
-> > @@ -11,4 +11,15 @@ TARGETCLI_FB_LICENSE_FILES = COPYING
-> >  TARGETCLI_FB_SETUP_TYPE = setuptools
-> >  TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
-> >  
-> > +define TARGETCLI_FB_INSTALL_INITSCRIPT
-> > +        @if [ ! -f $(TARGET_DIR)/etc/init.d/S50target ]; then \
-> > +                $(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target; \
-> > +        fi
-> 
-> This should not be handled using a post install target hook, but rather
-> using the TARGETCLI_FB_INIT_SYSV mechanism. See the Buildroot manual or
-> other packages for example (dnsmasq for example, or ntp if you want to
-> see both the SysV and the systemd cases).
-
-OK. By the way, I also intend to add a systemd unit file later.
-
-
-> Also, I don't think adding a @ at the beginning is really needed, as we
-> usually don't do that I believe. The test could also be summarized as:
-> 
-> 	[ -f $(TARGET_DIR)/etc/init.d/S50target ] || \
-> 		$(INSTALL) ...
-> 
-> > +        @if [ ! -d $(TARGET_DIR)/etc/target ]; then \
-> > +                $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/target; \
-> > +        fi
-> 
-> This should continue to belong to post install hook because it isn't
-> related to which init system is used. Is the test really necessary in
-> this case? Maybe you can just to the $(INSTALL), which doesn't fail if
-> the directory already exists I believe. If not, just use mkdir -p and
-> that's it. If you really want to be nice, you could also add a comment
-> above the hook explaining why this directory is needed.
-
-The directory "/etc/target" is needed because it is expected by
-targetcli. The configuration of the "SCSI target" driver is stored in a
-JSON file named "/etc/target/saveconfig.json". This configuration is
-used to create the configfs hierarchy that configures the target driver.
-
-Thank you!
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 63cec6e..3f29a30 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.8.6
++DBUS_VERSION = 1.8.8
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
