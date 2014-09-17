@@ -1,46 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Sep 2014 21:44:48 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: switch site and add hash
-Message-ID: <20140918195021.328489D6E3@busybox.osuosl.org>
+Date: Thu, 18 Sep 2014 00:07:04 +0200
+Subject: [Buildroot] [git commit] alsa-utils: fixup ncurses config script
+Message-ID: <20140918195020.CCB979D6E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d0d3aae765bda1403e5eed5b1375746b27d283d
+commit: http://git.buildroot.net/buildroot/commit/?id=a8360013249dbdbe831dbe4659c8e5745ef4b6db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some reason the kernel.org download hash doesn't match the
-sourceforge hash so switch to kernel.org for the download.
+Point the build to the proper (which BTW was broken since it pointed to
+the wrong directory) ncurses config by using $(NCURSES_CONFIG_SCRIPTS)
+from the ncurses package directly.
+Also select the proper variant (widec/non-widec) in configure.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/e2fsprogs/e2fsprogs.hash |    2 ++
- package/e2fsprogs/e2fsprogs.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/alsa-utils/alsa-utils.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-new file mode 100644
-index 0000000..89c3fd8
---- /dev/null
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.42.12/sha256sums.asc
-+sha256	8c790e8708dbb7c766c88c8152c2bf2d0628937e9dd6571eef8f59080d0fb58a	e2fsprogs-1.42.12.tar.gz
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 810802d..b115582 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 4536b07..2afd6f9 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -14,11 +14,11 @@ ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
  
- E2FSPROGS_VERSION = 1.42.12
--E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
-+E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
- E2FSPROGS_INSTALL_STAGING = YES
+ ALSA_UTILS_CONF_ENV = \
+-	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config
++	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+ 
+ ALSA_UTILS_CONF_OPT = \
+ 	--disable-xmlto \
+-	--with-curses=ncurses
++	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
+ 
+ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPT += --disable-alsamixer --disable-alsatest
