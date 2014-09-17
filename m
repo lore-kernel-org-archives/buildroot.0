@@ -1,93 +1,94 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Wed, 17 Sep 2014 13:39:59 +0200
-Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
+Date: Wed, 17 Sep 2014 13:39:54 +0200
+Subject: [Buildroot] [PATCH 1/6] python,
+	python3: add patch to prevent distutils from adjusting the shebang
 In-Reply-To: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
 References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1410953999-16520-2-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The copy_scripts() method in distutils copies the scripts listed
+in the setup file and adjusts the first line to refer to the
+current Python interpreter. When cross-compiling, this means that
+the adjusted shebang refers to the host Python interpreter.
+
+As a consequence, we add a patch for python and python3 that
+force copy_scripts() to preserve the shebang when
+cross-compilation is detected.
+
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 ---
- package/targetcli-fb/S50target       | 46 ++++++++++++++++++++++++++++++++++++
- package/targetcli-fb/targetcli-fb.mk | 11 +++++++++
- 2 files changed, 57 insertions(+)
- create mode 100755 package/targetcli-fb/S50target
+ ...017-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
+ ...015-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+ create mode 100644 package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+ create mode 100644 package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
 
-diff --git a/package/targetcli-fb/S50target b/package/targetcli-fb/S50target
-new file mode 100755
-index 0000000..88290e4
+diff --git a/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+new file mode 100644
+index 0000000..da4dc36
 --- /dev/null
-+++ b/package/targetcli-fb/S50target
-@@ -0,0 +1,46 @@
-+#!/bin/sh
-+#
-+# Restore / clear the Linux "SCSI target" driver configuration with `targetctl`
-+#
++++ b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+@@ -0,0 +1,25 @@
++Do not adjust the shebang of Python scripts for cross-compilation
 +
-+start() {
-+	local ret
++The copy_scripts() method in distutils copies the scripts listed in
++the setup file and adjusts the first line to refer to the current
++Python interpreter. When cross-compiling, this means that the adjusted
++shebang refers to the host Python interpreter.
 +
-+	echo -n "Restoring target configuration: "
-+	/usr/bin/targetctl restore >/dev/null 2>&1
-+	ret=$?
-+	echo "done"
++This patch modifies copy_scripts() to preserve the shebang when
++cross-compilation is detected.
 +
-+	return $ret
-+}
++Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 +
-+stop() {
-+	local ret
++Index: b/Lib/distutils/command/build_scripts.py
++===================================================================
++--- a/Lib/distutils/command/build_scripts.py
+++++ b/Lib/distutils/command/build_scripts.py
++@@ -89,7 +89,7 @@
++                     adjust = 1
++                     post_interp = match.group(1) or ''
++ 
++-            if adjust:
+++            if adjust and not '_python_sysroot' in os.environ:
++                 log.info("copying and adjusting %s -> %s", script,
++                          self.build_dir)
++                 if not self.dry_run:
+diff --git a/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
+new file mode 100644
+index 0000000..ed2f193
+--- /dev/null
++++ b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
+@@ -0,0 +1,25 @@
++Do not adjust the shebang of Python scripts for cross-compilation
 +
-+	echo -n "Clearing target configuration: "
-+	/usr/bin/targetctl clear >/dev/null 2>&1
-+	ret=$?
-+	echo "done"
++The copy_scripts() method in distutils copies the scripts listed in
++the setup file and adjusts the first line to refer to the current
++Python interpreter. When cross-compiling, this means that the adjusted
++shebang refers to the host Python interpreter.
 +
-+	return $ret
-+}
++This patch modifies copy_scripts() to preserve the shebang when
++cross-compilation is detected.
 +
-+restart() {
-+	stop
-+	start
-+}
++Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 +
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-index 2384569..b83a6b6 100644
---- a/package/targetcli-fb/targetcli-fb.mk
-+++ b/package/targetcli-fb/targetcli-fb.mk
-@@ -11,4 +11,15 @@ TARGETCLI_FB_LICENSE_FILES = COPYING
- TARGETCLI_FB_SETUP_TYPE = setuptools
- TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
- 
-+define TARGETCLI_FB_INSTALL_INITSCRIPT
-+        @if [ ! -f $(TARGET_DIR)/etc/init.d/S50target ]; then \
-+                $(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target; \
-+        fi
-+        @if [ ! -d $(TARGET_DIR)/etc/target ]; then \
-+                $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/target; \
-+        fi
-+endef
-+
-+TARGETCLI_FB_POST_INSTALL_TARGET_HOOKS += TARGETCLI_FB_INSTALL_INITSCRIPT
-+
- $(eval $(python-package))
++Index: b/Lib/distutils/command/build_scripts.py
++===================================================================
++--- a/Lib/distutils/command/build_scripts.py
+++++ b/Lib/distutils/command/build_scripts.py
++@@ -91,7 +91,7 @@
++                     adjust = True
++                     post_interp = match.group(1) or b''
++ 
++-            if adjust:
+++            if adjust and not '_python_sysroot' in os.environ:
++                 log.info("copying and adjusting %s -> %s", script,
++                          self.build_dir)
++                 updated_files.append(outfile)
 -- 
 2.1.0
