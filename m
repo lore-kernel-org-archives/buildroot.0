@@ -1,42 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Sep 2014 15:16:11 +0200
-Subject: [Buildroot] [git commit] dbus: security bump to version 1.8.8
-Message-ID: <20140917132008.78CFC9D6C1@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 10:20:50 -0300
+Subject: [Buildroot] [PATCH] sysstat: bump to version 11.0.1
+Message-ID: <1410960050-3177-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6afb21f4554dda6c61b5849400820edb7de71b8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2014-3635 - Buffer access with incorrect length value
-CVE-2014-3636 - Allocation of file descriptors or handles
-without limits or throttling
-CVE-2014-3637 - Missing release of file descriptor or handle after
-effective lifetime
-CVE-2014-3638 - Algorithmic complexity
-CVE-2014-3639 - Allocation of file descriptors or handles without
-limits or throttling
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sysstat/sysstat.hash | 2 ++
+ package/sysstat/sysstat.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+ create mode 100644 package/sysstat/sysstat.hash
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 63cec6e..3f29a30 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+new file mode 100644
+index 0000000..8ec534c
+--- /dev/null
++++ b/package/sysstat/sysstat.hash
+@@ -0,0 +1,2 @@
++# From http://sebastien.godard.pagesperso-orange.fr/download.html
++md5	7d19d02294dc1befd48846caf2f3cafe	sysstat-11.0.1.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 8365087..9d413fe 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.8.6
-+DBUS_VERSION = 1.8.8
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
+-SYSSTAT_VERSION = 11.0.0
+-SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
++SYSSTAT_VERSION = 11.0.1
++SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
+ SYSSTAT_DEPENDENCIES = host-gettext
+-- 
+1.8.5.5
