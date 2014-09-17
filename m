@@ -1,75 +1,93 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Wed, 17 Sep 2014 13:39:57 +0200
-Subject: [Buildroot] [PATCH 4/6] python-configshell-fb: new package
+Date: Wed, 17 Sep 2014 13:39:59 +0200
+Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
 In-Reply-To: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
 References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <1410953999-16520-5-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configshell-fb is a Python library that provides a framework for
-building simple but nice CLI-based applications.
-
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 ---
- package/Config.in                                      |  1 +
- package/python-configshell-fb/Config.in                | 11 +++++++++++
- package/python-configshell-fb/python-configshell-fb.mk | 14 ++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/python-configshell-fb/Config.in
- create mode 100644 package/python-configshell-fb/python-configshell-fb.mk
+ package/targetcli-fb/S50target       | 46 ++++++++++++++++++++++++++++++++++++
+ package/targetcli-fb/targetcli-fb.mk | 11 +++++++++
+ 2 files changed, 57 insertions(+)
+ create mode 100755 package/targetcli-fb/S50target
 
-diff --git a/package/Config.in b/package/Config.in
-index 7447036..096d8c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -473,6 +473,7 @@ menu "external python modules"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-configobj/Config.in"
-+	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
-diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
-new file mode 100644
-index 0000000..05de585
+diff --git a/package/targetcli-fb/S50target b/package/targetcli-fb/S50target
+new file mode 100755
+index 0000000..88290e4
 --- /dev/null
-+++ b/package/python-configshell-fb/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
-+	bool "python-configshell-fb"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PYPARSING
-+	select BR2_PACKAGE_PYTHON_READLINE
-+	select BR2_PACKAGE_PYTHON_URWID
-+	help
-+	  configshell-fb is a Python library that provides a framework
-+	  for building simple but nice CLI-based applications.
-+
-+	  https://github.com/agrover/configshell-fb
-diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
-new file mode 100644
-index 0000000..64b27fe
---- /dev/null
-+++ b/package/python-configshell-fb/python-configshell-fb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
++++ b/package/targetcli-fb/S50target
+@@ -0,0 +1,46 @@
++#!/bin/sh
 +#
-+# python-configshell-fb
++# Restore / clear the Linux "SCSI target" driver configuration with `targetctl`
 +#
-+################################################################################
 +
-+PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb14
-+PYTHON_CONFIGSHELL_FB_SITE = $(call github,agrover,configshell-fb,$(PYTHON_CONFIGSHELL_FB_VERSION))
-+PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
-+PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
-+PYTHON_CONFIGSHELL_FB_SETUP_TYPE = setuptools
-+PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-urwid
++start() {
++	local ret
 +
-+$(eval $(python-package))
++	echo -n "Restoring target configuration: "
++	/usr/bin/targetctl restore >/dev/null 2>&1
++	ret=$?
++	echo "done"
++
++	return $ret
++}
++
++stop() {
++	local ret
++
++	echo -n "Clearing target configuration: "
++	/usr/bin/targetctl clear >/dev/null 2>&1
++	ret=$?
++	echo "done"
++
++	return $ret
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
+diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+index 2384569..b83a6b6 100644
+--- a/package/targetcli-fb/targetcli-fb.mk
++++ b/package/targetcli-fb/targetcli-fb.mk
+@@ -11,4 +11,15 @@ TARGETCLI_FB_LICENSE_FILES = COPYING
+ TARGETCLI_FB_SETUP_TYPE = setuptools
+ TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
+ 
++define TARGETCLI_FB_INSTALL_INITSCRIPT
++        @if [ ! -f $(TARGET_DIR)/etc/init.d/S50target ]; then \
++                $(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target; \
++        fi
++        @if [ ! -d $(TARGET_DIR)/etc/target ]; then \
++                $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/target; \
++        fi
++endef
++
++TARGETCLI_FB_POST_INSTALL_TARGET_HOOKS += TARGETCLI_FB_INSTALL_INITSCRIPT
++
+ $(eval $(python-package))
 -- 
 2.1.0
