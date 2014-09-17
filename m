@@ -1,94 +1,78 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Wed, 17 Sep 2014 13:39:54 +0200
-Subject: [Buildroot] [PATCH 1/6] python,
-	python3: add patch to prevent distutils from adjusting the shebang
+Date: Wed, 17 Sep 2014 13:39:58 +0200
+Subject: [Buildroot] [PATCH 5/6] targetcli-fb: new package
 In-Reply-To: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
 References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <1410953999-16520-2-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1410953999-16520-6-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The copy_scripts() method in distutils copies the scripts listed
-in the setup file and adjusts the first line to refer to the
-current Python interpreter. When cross-compiling, this means that
-the adjusted shebang refers to the host Python interpreter.
-
-As a consequence, we add a patch for python and python3 that
-force copy_scripts() to preserve the shebang when
-cross-compilation is detected.
+targetcli-fb is a command-line interface for configuring the LIO
+generic SCSI target, present in 3.x Linux kernel versions.
 
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 ---
- ...017-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
- ...015-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
- 2 files changed, 50 insertions(+)
- create mode 100644 package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
- create mode 100644 package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
+ package/Config.in                    |  1 +
+ package/targetcli-fb/Config.in       | 14 ++++++++++++++
+ package/targetcli-fb/targetcli-fb.mk | 14 ++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/targetcli-fb/Config.in
+ create mode 100644 package/targetcli-fb/targetcli-fb.mk
 
-diff --git a/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+diff --git a/package/Config.in b/package/Config.in
+index 096d8c6..b10225b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -364,6 +364,7 @@ endif
+ 	source "package/sunxi-mali/Config.in"
+ 	source "package/sunxi-mali-prop/Config.in"
+ 	source "package/sysstat/Config.in"
++	source "package/targetcli-fb/Config.in"
+ 	source "package/ti-gfx/Config.in"
+ 	source "package/ti-uim/Config.in"
+ 	source "package/ti-utils/Config.in"
+diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
 new file mode 100644
-index 0000000..da4dc36
+index 0000000..dcc6a54
 --- /dev/null
-+++ b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
-@@ -0,0 +1,25 @@
-+Do not adjust the shebang of Python scripts for cross-compilation
++++ b/package/targetcli-fb/Config.in
+@@ -0,0 +1,14 @@
++comment "targetcli-fb depends on python"
++	depends on !BR2_PACKAGE_PYTHON
 +
-+The copy_scripts() method in distutils copies the scripts listed in
-+the setup file and adjusts the first line to refer to the current
-+Python interpreter. When cross-compiling, this means that the adjusted
-+shebang refers to the host Python interpreter.
++config BR2_PACKAGE_TARGETCLI_FB
++	bool "targetcli-fb"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
++	select BR2_PACKAGE_PYTHON_RTSLIB_FB
++	help
++	  targetcli-fb is a command-line interface for configuring the
++	  LIO generic SCSI target, present in 3.x Linux kernel
++	  versions.
 +
-+This patch modifies copy_scripts() to preserve the shebang when
-+cross-compilation is detected.
-+
-+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-+
-+Index: b/Lib/distutils/command/build_scripts.py
-+===================================================================
-+--- a/Lib/distutils/command/build_scripts.py
-++++ b/Lib/distutils/command/build_scripts.py
-+@@ -89,7 +89,7 @@
-+                     adjust = 1
-+                     post_interp = match.group(1) or ''
-+ 
-+-            if adjust:
-++            if adjust and not '_python_sysroot' in os.environ:
-+                 log.info("copying and adjusting %s -> %s", script,
-+                          self.build_dir)
-+                 if not self.dry_run:
-diff --git a/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
++	  https://github.com/agrover/targetcli-fb
+diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
 new file mode 100644
-index 0000000..ed2f193
+index 0000000..2384569
 --- /dev/null
-+++ b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
-@@ -0,0 +1,25 @@
-+Do not adjust the shebang of Python scripts for cross-compilation
++++ b/package/targetcli-fb/targetcli-fb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# targetcli-fb
++#
++################################################################################
 +
-+The copy_scripts() method in distutils copies the scripts listed in
-+the setup file and adjusts the first line to refer to the current
-+Python interpreter. When cross-compiling, this means that the adjusted
-+shebang refers to the host Python interpreter.
++TARGETCLI_FB_VERSION = v2.1.fb36
++TARGETCLI_FB_SITE = $(call github,agrover,targetcli-fb,$(TARGETCLI_FB_VERSION))
++TARGETCLI_FB_LICENSE = Apache-2.0
++TARGETCLI_FB_LICENSE_FILES = COPYING
++TARGETCLI_FB_SETUP_TYPE = setuptools
++TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
 +
-+This patch modifies copy_scripts() to preserve the shebang when
-+cross-compilation is detected.
-+
-+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-+
-+Index: b/Lib/distutils/command/build_scripts.py
-+===================================================================
-+--- a/Lib/distutils/command/build_scripts.py
-++++ b/Lib/distutils/command/build_scripts.py
-+@@ -91,7 +91,7 @@
-+                     adjust = True
-+                     post_interp = match.group(1) or b''
-+ 
-+-            if adjust:
-++            if adjust and not '_python_sysroot' in os.environ:
-+                 log.info("copying and adjusting %s -> %s", script,
-+                          self.build_dir)
-+                 updated_files.append(outfile)
++$(eval $(python-package))
 -- 
 2.1.0
