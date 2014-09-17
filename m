@@ -1,99 +1,63 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 17 Sep 2014 21:13:30 +0200
-Subject: [Buildroot] [PATCH v2] Add support for Flattened Image Trees
-Message-ID: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Sep 2014 21:56:06 +0200
+Subject: [Buildroot] [PATCH 01/11] busybox: add hash
+In-Reply-To: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140917195606.GB4056@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides an option to specify a FIT source
-file (*.its), that will usually be stored in a board directory,
-and the resulting blob file name (*.itb).
+Gustavo, All,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: moved configuration to fs infra instead of linux
+On 2014-09-17 11:19 -0300, Gustavo Zacarias spake thusly:
+> And rename 0006-lzop-add-overflow-check.patch to the proper convention.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- fs/Config.in     |  1 +
- fs/fit/Config.in | 28 ++++++++++++++++++++++++++++
- fs/fit/fit.mk    | 19 +++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 fs/fit/Config.in
- create mode 100644 fs/fit/fit.mk
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 5853113..8d882d0 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -4,6 +4,7 @@ source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
- source "fs/ext2/Config.in"
-+source "fs/fit/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
-diff --git a/fs/fit/Config.in b/fs/fit/Config.in
-new file mode 100644
-index 0000000..add4d27
---- /dev/null
-+++ b/fs/fit/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_TARGET_ROOTFS_FIT
-+	bool "Flattened Image Tree support"
-+	help
-+	  Compile a flattened image tree source into a flattened
-+	  image tree blob. Select the *.its file to compile in the
-+	  options below.
-+
-+if BR2_TARGET_ROOTFS_FIT
-+
-+config BR2_FIT_PATH
-+	string "Flattened Image Tree source file path"
-+	help
-+	  Path to the image tree tree source files.
-+
-+config BR2_FIT_BLOB_NAME
-+	string "Flattened Image Tree blob file name"
-+	help
-+	  File name for the resulting FIT blob.
-+
-+config BR2_FIT_INSTALL_TARGET
-+	bool "Install Flattened Image Tree blob to /boot in target"
-+	depends on !BR2_TARGET_ROOTFS_INITRAMFS
-+	help
-+	  Select this option to have the FIT image installed to
-+	  /boot in the target root filesystem.
-+
-+endif
-+
-diff --git a/fs/fit/fit.mk b/fs/fit/fit.mk
-new file mode 100644
-index 0000000..84cc91c
---- /dev/null
-+++ b/fs/fit/fit.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# Build the FIT image
-+#
-+################################################################################
-+
-+ifeq ($(BR2_FIT_INSTALL_TARGET),y)
-+define FIT_INSTALL_ITB_TARGET
-+	cp $(BINARIES_DIR)/$(BR2_LINUX_KERNEL_FIT_BLOB_NAME) $(TARGET_DIR)/boot/
-+endef
-+endif
-+
-+define ROOTFS_FIT_CMD
-+	cp $(BR2_FIT_PATH) $(BINARIES_DIR)
-+	mkimage -f $(BINARIES_DIR)/`basename $(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME)
-+	$(FIT_INSTALL_ITB_TARGET)
-+endef
-+
-+$(eval $(call ROOTFS_TARGET,fit))
+> ---
+>  ...overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} | 0
+>  package/busybox/busybox.hash                                           | 3 +++
+>  2 files changed, 3 insertions(+)
+>  rename package/busybox/{0006-lzop-add-overflow-check.patch => busybox-0006-lzop-add-overflow-check.patch} (100%)
+>  create mode 100644 package/busybox/busybox.hash
+> 
+> diff --git a/package/busybox/0006-lzop-add-overflow-check.patch b/package/busybox/busybox-0006-lzop-add-overflow-check.patch
+> similarity index 100%
+> rename from package/busybox/0006-lzop-add-overflow-check.patch
+> rename to package/busybox/busybox-0006-lzop-add-overflow-check.patch
+> diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+> new file mode 100644
+> index 0000000..428ce0a
+> --- /dev/null
+> +++ b/package/busybox/busybox.hash
+> @@ -0,0 +1,3 @@
+> +# From http://busybox.net/downloads/busybox-1.22.1.tar.bz2.sign
+> +md5	337d1a15ab1cb1d4ed423168b1eb7d7e	busybox-1.22.1.tar.bz2
+> +sha1	d6e96fefb6f0fb8079f27468b9bf22d8dd96108e	busybox-1.22.1.tar.bz2
+> -- 
+> 1.8.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/fc9d8da1/attachment.asc>
