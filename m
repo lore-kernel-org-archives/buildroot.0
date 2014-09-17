@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Sep 2014 22:48:32 +0200
-Subject: [Buildroot] [PATCH 10/11] iproute2: add hash
-In-Reply-To: <1410963609-18128-10-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 17 Sep 2014 22:52:06 +0200
+Subject: [Buildroot] [PATCH 11/11] e2fsprogs: switch site and add hash
+In-Reply-To: <1410963609-18128-11-git-send-email-gustavo@zacarias.com.ar>
 References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
- <1410963609-18128-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140917204832.GA25761@free.fr>
+ <1410963609-18128-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140917205206.GB25761@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,46 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2014-09-17 11:20 -0300, Gustavo Zacarias spake thusly:
+> For some reason the kernel.org download hash doesn't match the
+> sourceforge hash so switch to kernel.org for the download.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Verified against the hash published by upstream, and against a download.
+Tested against the hash published by the new upstream, and agaisnt a
+download from the new location.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/iproute2/iproute2.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/iproute2/iproute2.hash
+>  package/e2fsprogs/e2fsprogs.hash | 2 ++
+>  package/e2fsprogs/e2fsprogs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/e2fsprogs/e2fsprogs.hash
 > 
-> diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+> diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
 > new file mode 100644
-> index 0000000..5a8e6ca
+> index 0000000..89c3fd8
 > --- /dev/null
-> +++ b/package/iproute2/iproute2.hash
+> +++ b/package/e2fsprogs/e2fsprogs.hash
 > @@ -0,0 +1,2 @@
-> +# From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
-> +sha256	1f0a8a6c0e872166f75433f5cbf9766f3002b5c2f13501b3bb8c51846a127b79	iproute2-3.16.0.tar.xz
+> +# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.42.12/sha256sums.asc
+> +sha256	8c790e8708dbb7c766c88c8152c2bf2d0628937e9dd6571eef8f59080d0fb58a	e2fsprogs-1.42.12.tar.gz
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index 810802d..b115582 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  E2FSPROGS_VERSION = 1.42.12
+> -E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
+> +E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+>  E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+>  E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+>  E2FSPROGS_INSTALL_STAGING = YES
 > -- 
 > 1.8.5.5
 > 
@@ -51,10 +69,3 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/d9701e51/attachment.asc>
