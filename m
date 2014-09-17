@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Sep 2014 22:52:06 +0200
+Date: Wed, 17 Sep 2014 22:53:03 +0200
 Subject: [Buildroot] [PATCH 11/11] e2fsprogs: switch site and add hash
 In-Reply-To: <1410963609-18128-11-git-send-email-gustavo@zacarias.com.ar>
 References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
  <1410963609-18128-11-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140917205206.GB25761@free.fr>
+Message-ID: <20140917205303.GC25761@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -69,3 +69,10 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140917/1d741b9d/attachment.asc>
