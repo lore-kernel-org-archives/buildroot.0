@@ -1,112 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 17 Sep 2014 22:11:15 +0200
-Subject: [Buildroot] [PATCH v2] Add support for Flattened Image Trees
-In-Reply-To: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
-References: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <3d2b0e86-ff3d-47b7-a9db-68a4e530cb82@email.android.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Sep 2014 22:12:20 +0200
+Subject: [Buildroot] [PATCH 03/11] iptables: add hash
+In-Reply-To: <1410963609-18128-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1410963609-18128-1-git-send-email-gustavo@zacarias.com.ar>
+ <1410963609-18128-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140917201220.GD4056@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor Yefremov <yegorslists@googlemail.com> schreef:
->This patch provides an option to specify a FIT source
->file (*.its), that will usually be stored in a board directory,
->and the resulting blob file name (*.itb).
->
->Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->---
->Changes:
->	v2: moved configuration to fs infra instead of linux
->
-> fs/Config.in     |  1 +
-> fs/fit/Config.in | 28 ++++++++++++++++++++++++++++
-> fs/fit/fit.mk    | 19 +++++++++++++++++++
-> 3 files changed, 48 insertions(+)
-> create mode 100644 fs/fit/Config.in
-> create mode 100644 fs/fit/fit.mk
->
->diff --git a/fs/Config.in b/fs/Config.in
->index 5853113..8d882d0 100644
->--- a/fs/Config.in
->+++ b/fs/Config.in
->@@ -4,6 +4,7 @@ source "fs/cloop/Config.in"
-> source "fs/cpio/Config.in"
-> source "fs/cramfs/Config.in"
-> source "fs/ext2/Config.in"
->+source "fs/fit/Config.in"
-> source "fs/initramfs/Config.in"
-> source "fs/iso9660/Config.in"
-> source "fs/jffs2/Config.in"
->diff --git a/fs/fit/Config.in b/fs/fit/Config.in
->new file mode 100644
->index 0000000..add4d27
->--- /dev/null
->+++ b/fs/fit/Config.in
->@@ -0,0 +1,28 @@
->+config BR2_TARGET_ROOTFS_FIT
->+	bool "Flattened Image Tree support"
->+	help
->+	  Compile a flattened image tree source into a flattened
->+	  image tree blob. Select the *.its file to compile in the
+Gustavo, All,
 
-Minor comment: I would use the word Specify instead of Select here.
+On 2014-09-17 11:20 -0300, Gustavo Zacarias spake thusly:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
->+	  options below.
->+
->+if BR2_TARGET_ROOTFS_FIT
->+
->+config BR2_FIT_PATH
->+	string "Flattened Image Tree source file path"
->+	help
->+	  Path to the image tree tree source files.
->+
->+config BR2_FIT_BLOB_NAME
->+	string "Flattened Image Tree blob file name"
->+	help
->+	  File name for the resulting FIT blob.
->+
->+config BR2_FIT_INSTALL_TARGET
->+	bool "Install Flattened Image Tree blob to /boot in target"
->+	depends on !BR2_TARGET_ROOTFS_INITRAMFS
->+	help
->+	  Select this option to have the FIT image installed to
->+	  /boot in the target root filesystem.
->+
->+endif
->+
->diff --git a/fs/fit/fit.mk b/fs/fit/fit.mk
->new file mode 100644
->index 0000000..84cc91c
->--- /dev/null
->+++ b/fs/fit/fit.mk
->@@ -0,0 +1,19 @@
->+################################################################################
->+#
->+# Build the FIT image
->+#
->+################################################################################
->+
->+ifeq ($(BR2_FIT_INSTALL_TARGET),y)
->+define FIT_INSTALL_ITB_TARGET
->+	cp $(BINARIES_DIR)/$(BR2_LINUX_KERNEL_FIT_BLOB_NAME) $(TARGET_DIR)/boot/
->+endef
->+endif
->+
->+define ROOTFS_FIT_CMD
->+	cp $(BR2_FIT_PATH) $(BINARIES_DIR)
->+	mkimage -f $(BINARIES_DIR)/`basename $(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME)
->+	$(FIT_INSTALL_ITB_TARGET)
->+endef
->+
->+$(eval $(call ROOTFS_TARGET,fit))
+There is also a sha1sum available:
+    ftp://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2.sha1sum
 
-Should we add a check on the presence of the source file to print a nice error message instead of a weird error if it doesn't exist?
+Since md5 is really so 20th century, it'd be good to use a stronger
+hash, especially since upstream provides it.
 
-Also, instead of using basename you could use the make function $(file xxx).
+Regards,
+Yann E. MORIN.
 
-Finally I think you should use $(call qstrip,xxxx) on the string options.
+> ---
+>  package/iptables/iptables.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/iptables/iptables.hash
+> 
+> diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+> new file mode 100644
+> index 0000000..61b9d3d
+> --- /dev/null
+> +++ b/package/iptables/iptables.hash
+> @@ -0,0 +1,2 @@
+> +# From http://www.netfilter.org/projects/iptables/downloads.html#iptables-1.4.21
+> +md5	536d048c8e8eeebcd9757d0863ebb0c0 	iptables-1.4.21.tar.bz2
+> -- 
+> 1.8.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Best regards,
-Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
