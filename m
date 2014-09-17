@@ -1,42 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Sep 2014 10:20:50 -0300
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.0.1
-Message-ID: <1410960050-3177-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Sep 2014 15:21:24 +0200
+Subject: [Buildroot] [PATCH 6/6] targetcli-fb: add sysv initscript
+In-Reply-To: <20140917151925.15b49f86@grp-cvubrugier>
+References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
+ <1410953999-16520-7-git-send-email-cvubrugier@fastmail.fm>
+ <20140917141204.5dbaa667@free-electrons.com>
+ <20140917151925.15b49f86@grp-cvubrugier>
+Message-ID: <20140917152124.62d30631@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 ++
- package/sysstat/sysstat.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 package/sysstat/sysstat.hash
+Dear Christophe Vu-Brugier,
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-new file mode 100644
-index 0000000..8ec534c
---- /dev/null
-+++ b/package/sysstat/sysstat.hash
-@@ -0,0 +1,2 @@
-+# From http://sebastien.godard.pagesperso-orange.fr/download.html
-+md5	7d19d02294dc1befd48846caf2f3cafe	sysstat-11.0.1.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 8365087..9d413fe 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 11.0.0
--SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
-+SYSSTAT_VERSION = 11.0.1
-+SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
- SYSSTAT_DEPENDENCIES = host-gettext
+On Wed, 17 Sep 2014 15:19:25 +0200, Christophe Vu-Brugier wrote:
+
+> > This should not be handled using a post install target hook, but rather
+> > using the TARGETCLI_FB_INIT_SYSV mechanism. See the Buildroot manual or
+> > other packages for example (dnsmasq for example, or ntp if you want to
+> > see both the SysV and the systemd cases).
+> 
+> OK. By the way, I also intend to add a systemd unit file later.
+
+Great!
+
+> > This should continue to belong to post install hook because it isn't
+> > related to which init system is used. Is the test really necessary in
+> > this case? Maybe you can just to the $(INSTALL), which doesn't fail if
+> > the directory already exists I believe. If not, just use mkdir -p and
+> > that's it. If you really want to be nice, you could also add a comment
+> > above the hook explaining why this directory is needed.
+> 
+> The directory "/etc/target" is needed because it is expected by
+> targetcli. The configuration of the "SCSI target" driver is stored in a
+> JSON file named "/etc/target/saveconfig.json". This configuration is
+> used to create the configfs hierarchy that configures the target driver.
+
+Ok, makes sense. Maybe just add exactly this explanation as a comment
+above the creation of /etc/target ?
+
+Thanks!
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
