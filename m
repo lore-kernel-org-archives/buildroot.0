@@ -1,76 +1,54 @@
-From: David Bachelart <david.bachelart@bbright.com>
-Date: Thu, 18 Sep 2014 11:38:35 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmiutil: new package
-Message-ID: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Thu, 18 Sep 2014 12:00:50 +0200
+Subject: [Buildroot] [PATCH v2 0/5] targetcli-fb: new package
+Message-ID: <1411034455-19670-1-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is version 2 of my patch serie that adds targetcli-fb to
+Buildroot. It fixes issues spotted by Thomas and Jerzy.
 
-Signed-off-by: David Bachelart <david.bachelart@bbright.com>
----
- package/Config.in            |    1 +
- package/ipmiutil/Config.in   |   15 +++++++++++++++
- package/ipmiutil/ipmiutil.mk |   15 +++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/ipmiutil/Config.in
- create mode 100644 package/ipmiutil/ipmiutil.mk
+Changes v1 -> v2:
+ - rename python-rtslib.mk to python-rtslib-fb.mk (as suggested by Jerzy)
+ - Merge "targetcli-fb: add sysv initscript" (as suggested by Thomas)
+ - Use TARGETCLI_FB_INSTALL_INIT_SYSV (as suggested by Thomas)
+ - Describe the purpose of creating "/etc/target/" (as suggested by Thomas)
 
-diff --git a/package/Config.in b/package/Config.in
-index 73ba86a..3eafabb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -322,6 +322,7 @@ endif
- 	source "package/intel-microcode/Config.in"
- 	source "package/iostat/Config.in"
- 	source "package/ipmitool/Config.in"
-+	source "package/ipmiutil/Config.in"
- 	source "package/irda-utils/Config.in"
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
-diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-new file mode 100644
-index 0000000..29d6e26
---- /dev/null
-+++ b/package/ipmiutil/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IPMIUTIL
-+	bool "ipmiutil"
-+	depends on BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  The ipmiutil package provides easy-to-use utilities to view the SEL,
-+	  perform an IPMI chassis reset, set up the IPMI LAN and Platform Event Filter
-+	  entries to allow SNMP alerts, Serial-Over-LAN console, event daemon, and
-+	  other IPMI tasks.
-+
-+	  http://ipmiutil.sourceforge.net/
-+
-+comment "ipmiutil needs a toolchain w/ ssp"
-+	depends on !BR2_TOOLCHAIN_HAS_SSP
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-new file mode 100644
-index 0000000..9bf7325
---- /dev/null
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# ipmiutil
-+#
-+################################################################################
-+
-+IPMIUTIL_VERSION = 2.9.4
-+IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files/
-+
-+IPMIUTIL_DEPENDENCIES = openssl zlib
-+
-+IPMIUTIL_LICENSE = BSD-2c
-+IPMIUTIL_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+Christophe Vu-Brugier (5):
+  python, python3: add patch to prevent distutils from adjusting the
+    shebang
+  python-urwid: new package
+  python-rtslib-fb: new package
+  python-configshell-fb: new package
+  targetcli-fb: new package
+
+ package/Config.in                                  |  4 ++
+ package/python-configshell-fb/Config.in            | 11 ++++++
+ .../python-configshell-fb/python-configshell-fb.mk | 14 +++++++
+ package/python-rtslib-fb/Config.in                 |  9 +++++
+ package/python-rtslib-fb/python-rtslib-fb.mk       | 13 ++++++
+ package/python-urwid/Config.in                     |  7 ++++
+ package/python-urwid/python-urwid.mk               | 14 +++++++
+ ...017-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++
+ ...015-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++
+ package/targetcli-fb/Config.in                     | 14 +++++++
+ package/targetcli-fb/S50target                     | 46 ++++++++++++++++++++++
+ package/targetcli-fb/targetcli-fb.mk               | 26 ++++++++++++
+ 12 files changed, 208 insertions(+)
+ create mode 100644 package/python-configshell-fb/Config.in
+ create mode 100644 package/python-configshell-fb/python-configshell-fb.mk
+ create mode 100644 package/python-rtslib-fb/Config.in
+ create mode 100644 package/python-rtslib-fb/python-rtslib-fb.mk
+ create mode 100644 package/python-urwid/Config.in
+ create mode 100644 package/python-urwid/python-urwid.mk
+ create mode 100644 package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+ create mode 100644 package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
+ create mode 100644 package/targetcli-fb/Config.in
+ create mode 100755 package/targetcli-fb/S50target
+ create mode 100644 package/targetcli-fb/targetcli-fb.mk
+
 -- 
-1.7.10.4
+2.1.0
