@@ -1,86 +1,105 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:32 +0200
-Subject: [Buildroot] [PATCH 09 of 13] manual/user guide/customization:
- change recommendation for package paths
+Date: Thu, 18 Sep 2014 21:39:27 +0200
+Subject: [Buildroot] [PATCH 04 of 13] manual/user guide/customization:
+ rework section on storing configuration
 In-Reply-To: <patchbomb.1411069163@localhost>
 References: <patchbomb.1411069163@localhost>
-Message-ID: <b06a1c9429ab6da394d2.1411069172@localhost>
+Message-ID: <955feff731a1dcf0071b.1411069167@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Buildroot manual was recommending following paths for project-specific
-packages:
-    package/<company>/<boardname>/foo/
-    $BR2_EXTERNAL/package/<boardname>/foo/
+This patch promotes the sections on Buildroot configuration and the
+configuration of other components to top-level sections, to match the
+overview in the introduction of the chapter. The introduction of the
+original section is removed as it does not bring additional info anymore.
 
-However, if a company has several boards, it is often the case that some
-packages are common for different boards. Therefore, introducing a
-<boardname> path component is not ideal.
-
-This patch changes the recommendation to:
-    package/<company>/foo/
-    $BR2_EXTERNAL/package/foo/
+Some rewording is done as well.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/customize-directory-structure.txt |  13 ++++++-------
- docs/manual/customize-outside-br.txt          |  12 +++++++-----
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ docs/manual/customize-configuration.txt |  56 +++++++++++-------------
+ 1 files changed, 25 insertions(+), 31 deletions(-)
 
-diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
---- a/docs/manual/customize-directory-structure.txt
-+++ b/docs/manual/customize-directory-structure.txt
-@@ -40,13 +40,12 @@
- |   +-- <company>/
- |       +-- Config.in (if not using BR2_EXTERNAL)
- |       +-- <company>.mk (if not using BR2_EXTERNAL)
--|       +-- <boardname>/
--|           +-- package1/
--|           |    +-- Config.in
--|           |    +-- package1.mk
--|           +-- package2/
--|               +-- Config.in
--|               +-- package2.mk
-+|       +-- package1/
-+|       |    +-- Config.in
-+|       |    +-- package1.mk
-+|       +-- package2/
-+|           +-- Config.in
-+|           +-- package2.mk
- |
- +-- Config.in (if using BR2_EXTERNAL)
- +-- external.mk (if using BR2_EXTERNAL)
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -81,19 +81,21 @@
-    looks like:
- +
- ------
--source "$BR2_EXTERNAL/package/<boardname>/package1/Config.in"
--source "$BR2_EXTERNAL/package/<boardname>/package2/Config.in"
-+source "$BR2_EXTERNAL/package/package1/Config.in"
-+source "$BR2_EXTERNAL/package/package2/Config.in"
- ------
- +
- Then, have a +$(BR2_EXTERNAL)/external.mk+ file that looks like:
- +
- ------
--include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*/*.mk))
-+include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
- ------
- +
--And then in +$(BR2_EXTERNAL)/package/<boardname>/package1+ and
--   +$(BR2_EXTERNAL)/package/<boardname>/package2+ create normal Buildroot
-+And then in +$(BR2_EXTERNAL)/package/package1+ and
-+   +$(BR2_EXTERNAL)/package/package2+ create normal Buildroot
-    package recipes, as explained in xref:adding-packages[].
-+   If you prefer, you can also group the packages in subdirectories
-+   called <boardname> and adapt the above paths accordingly.
+diff --git a/docs/manual/customize-configuration.txt b/docs/manual/customize-configuration.txt
+--- a/docs/manual/customize-configuration.txt
++++ b/docs/manual/customize-configuration.txt
+@@ -1,50 +1,44 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
  
-  * One can store Buildroot defconfigs in the +configs+ subdirectory of
-    +$(BR2_EXTERNAL)+. Buildroot will automatically show them in the
+-[[customize-store-basics]]
+-=== Basics for storing the configuration
++[[customize-store-buildroot-config]]
++=== Storing the Buildroot configuration
+ 
+-When you have a buildroot configuration that you are satisfied with and
+-you want to share it with others, put it under revision control or move
+-on to a different buildroot project, you need to store the configuration
+-so it can be rebuilt later. The configuration that needs to be stored
+-consists of the buildroot configuration, the configuration files for
+-packages that you use (kernel, busybox, uClibc, ...), and your rootfs
+-modifications.
++The Buildroot configuration can be stored using the command
++ +make savedefconfig+.
+ 
+-[[customize-store-buildroot-config]]
+-==== Buildroot configuration
++This strips the Buildroot configuration down by removing configuration
++options that are at their default value. The result is stored in a file
++called +defconfig+. If you want to save it in another place, change the
+++BR2_DEFCONFIG+ option in the Buildroot configuration itself, or call
++make with +make savedefconfig BR2_DEFCONFIG=<path-to-defconfig>+.
+ 
+-For storing the buildroot configuration itself, buildroot offers the
+-following command: +make savedefconfig+.
+-
+-This strips the buildroot configuration down by removing configuration
+-options that are at their default value. The result is stored in a file
+-called +defconfig+.  If you want to save it in another place, change
+-the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
+-BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
+-+configs/<boardname>_defconfig+. The configuration can then be rebuilt by
++The recommended place to store this defconfig is
+++configs/<boardname>_defconfig+. If you follow this recommendation, the
++configuration will be listed in +make help+ and can be set again by
+ running +make <boardname>_defconfig+.
+ 
+ Alternatively, you can copy the file to any other place and rebuild with
+ +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
+ 
++[[customize-store-package-config]]
++=== Storing the configuration of other components
+ 
+-[[customize-store-package-config]]
+-==== Other package configuration
++The configuration files for BusyBox, the Linux kernel, Barebox and
++uClibc should be stored as well if changed. For each of these
++components, a Buildroot configuration option exists to point to an input
++configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+. To store
++their configuration, set these configuration options to a path where you
++want to save the configuration files, and then use the helper targets
++described below to actually store the configuration.
+ 
+-The configuration files for busybox, the linux kernel, barebox and
+-uClibc should be stored as well if changed. For each of these, a
+-buildroot configuration option exists to point to an input
+-configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
+-save their configuration, set those configuration options to a path
+-outside your output directory,
+-e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
+-configuration files to that path.
++As explained in xref:customize-dir-structure[], the recommended path to
++store these configuration files is
+++board/<company>/<boardname>/foo.config+.
+ 
+ Make sure that you create a configuration file 'before' changing
+ the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
+-buildroot will try to access this config file, which doesn't exist
++Buildroot will try to access this config file, which doesn't exist
+ yet, and will fail. You can create the configuration file by running
+ +make linux-menuconfig+ etc.
+ 
