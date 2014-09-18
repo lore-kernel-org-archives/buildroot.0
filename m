@@ -1,47 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Sep 2014 21:47:25 +0200
-Subject: [Buildroot] [PATCH] strace: Apply an upstream patch to fix
-	sa_restorer problems
-In-Reply-To: <1411034805-27839-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 18 Sep 2014 11:06:45 +0100")
-References: <1411034805-27839-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87mw9w678y.fsf@dell.be.48ers.dk>
+Date: Thu, 18 Sep 2014 21:48:39 +0200
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.18
+In-Reply-To: <1411064789-19370-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 18 Sep 2014 15:26:29 -0300")
+References: <1411064789-19370-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87iokk676w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Wrap sa_restorer member definitions in #ifdef SA_RESTORER to be
- > consistent with their use.
- > If an architecture does not provide sa_restorer members but still
- > defines SA_RESTORER macro, the latter has to be explicitly undefined.
+ > Also add hash, calculated on downloaded file after verifying signature.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/gnutls/gnutls.hash | 2 ++
+ >  package/gnutls/gnutls.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/gnutls/gnutls.hash
 
- > This change fixes compilation failures like this one:
- > signal.c: In function 'decode_old_sigaction':
- > signal.c:631:21: error: 'struct old_sigaction' has no member named
- > 'sa_restorer'
- > signal.c: In function 'decode_new_sigaction':
- > signal.c:1224:21: error: 'struct new_sigaction' has no member named
- > 'sa_restorer'
+ > diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+ > new file mode 100644
+ > index 0000000..c68a792
+ > --- /dev/null
+ > +++ b/package/gnutls/gnutls.hash
+ > @@ -0,0 +1,2 @@
+ > +# Hand caculated after checking pgp signature
 
- > * signal.c (struct old_sigaction, struct old_sigaction32,
- > struct new_sigaction, struct new_sigaction32):
- > Wrap sa_restorer member in #ifdef SA_RESTORER.
- > (decode_old_sigaction, decode_new_sigaction):
- > Wrap use of sa32.sa_restorer in #ifdef SA_RESTORER.
+Really? Wow! ;)
 
- > Upstream commit:
- >   https://sourceforge.net/p/strace/code/ci/c3a5c01051ba29a9f421f4d45d96bbc32df2b796/
-
- > Fixes:
- >   http://autobuild.buildroot.net/results/93e/93e54d8aecc5c178cc3465eb9fd5415461325285/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
+s/caculated/calculated/
 
 -- 
 Bye, Peter Korsgaard
