@@ -1,83 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Sep 2014 22:44:43 +0200
-Subject: [Buildroot] [PATCH v3] Add support for Flattened Image Trees
-In-Reply-To: <1411071224-5386-1-git-send-email-yegorslists@googlemail.com>
-References: <1411071224-5386-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140918224443.63a559eb@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Sep 2014 18:09:24 -0300
+Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.10p3
+Message-ID: <1411074564-28932-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Also add hashes, kill some whitespace and correct the license type
+(ICS->ISC).
+Enable $EDITOR to point to the right editor for visudo since it normally
+expects /usr/bin/vi which in busybox-world is /bin/vi (and some people
+might want to use other editors like the operating system sized one).
 
-On Thu, 18 Sep 2014 22:13:44 +0200, Yegor Yefremov wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sudo/sudo-0001-no-netgroup.patch | 29 +++++++++++++++++++++++++++++
+ package/sudo/sudo.hash                   |  3 +++
+ package/sudo/sudo.mk                     | 11 +++++++----
+ 3 files changed, 39 insertions(+), 4 deletions(-)
+ create mode 100644 package/sudo/sudo-0001-no-netgroup.patch
+ create mode 100644 package/sudo/sudo.hash
 
-> +config BR2_FIT_PATH
-> +	string "Flattened Image Tree source file path"
-> +	help
-> +	  Path to the image tree source files.
-
-Which files will typically be listed here? Apparently your code assumes
-those files must all be located in $(BINARIES_DIR), right? If that's
-the case, it should be mentioned here.
-
-Also, I'm worried about ordering: there is no ordering guarantee
-between filesystem image types. So if your FIT filesystem image logic
-depends on another filesystem image to be generated, this might be an
-issue.
-
-Also you say "files" in the description, but your code doesn't seem to
-handle multiple "files". Can you explain?
-
-> +ifeq ($(BR2_FIT_INSTALL_TARGET),y)
-> +define ROOTFS_FIT_CMD
-> +	cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
-> +	$(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_FIT_PATH))) $(BINARIES_DIR)/$(basename $(notdir $(call qstrip,$(BR2_FIT_PATH)))).itb && \
-> +	mkdir -p $(TARGET_DIR)/boot/ && \
-> +	cp $(BINARIES_DIR)/$(basename $(notdir $(call qstrip,$(BR2_FIT_PATH)))).itb $(TARGET_DIR)/boot/
-> +endef
-> +else
-> +define ROOTFS_FIT_CMD
-> +	cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
-> +	$(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_FIT_PATH))) $(BINARIES_DIR)/$(basename $(notdir $(call qstrip,$(BR2_FIT_PATH)))).itb
-> +endef
-> +endif
-
-Avoid duplication:
-
-ROOTFS_FIT_FILE = $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_FIT_PATH)))
-ROOTFS_FIT_ITB_PATH = $(ROOTFS_FIT_FILE).itb
-
-ifeq ($(BR2_FIT_INSTALL_TARGET),y)
-define ROOTFS_FIT_INSTALL_TARGET
-	mkdir -p $(TARGET_DIR)/boot && cp $(ROOTFS_FIT_ITB_PATH) $(TARGET_DIR)/boot
-endef
-else
-define ROOTFS_FIT_INSTALL_TARGET
-	true
-endef
-endif
-
-define ROOTFS_FIT_CMD
-	cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
-	$(HOST_DIR)/usr/bin/mkimage -f $(ROOTFS_FILE_FILE) $(ROOTFS_FIT_ITB_PATH) && \
-	$(ROOTFS_FIT_INSTALL_TARGET)
-endef
-
-But maybe we should change the ROOTFS_TARGET infrastructure to support
-multiple commands. There's also maybe the ROOTFS_xyz_POST_TARGETS
-mechanism that could be used (I haven't looked whether it applies
-properly here).
-
-Can you give an example for the various Config.in options, so that
-others could test this and understand better how it's typically used?
-
-Best regards,
-
-Thomas
+diff --git a/package/sudo/sudo-0001-no-netgroup.patch b/package/sudo/sudo-0001-no-netgroup.patch
+new file mode 100644
+index 0000000..64b870c
+--- /dev/null
++++ b/package/sudo/sudo-0001-no-netgroup.patch
+@@ -0,0 +1,29 @@
++# HG changeset patch
++# User Todd C. Miller <Todd.Miller@courtesan.com>
++# Date 1406550172 21600
++# Node ID 57deb66ef8ffc0f551d460e15a34f7df78f54d2a
++# Parent  f547bf80c436c07ddb1c7385d22db96862ae7e4f
++Fix compilation on systems w/o netgroups.
++
++Status: upstream
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -r f547bf80c436 -r 57deb66ef8ff plugins/sudoers/match.c
++--- a/plugins/sudoers/match.c	Sat Jul 26 06:07:34 2014 -0600
+++++ b/plugins/sudoers/match.c	Mon Jul 28 06:22:52 2014 -0600
++@@ -972,12 +972,12 @@
++ 	rc = true;
++     else if (lhost != shost && innetgr(netgr, shost, user, domain))
++ 	rc = true;
++-#endif /* HAVE_INNETGR */
++ 
++     sudo_debug_printf(SUDO_DEBUG_DEBUG|SUDO_DEBUG_LINENO,
++ 	"netgroup %s matches (%s|%s, %s, %s): %s", netgr, lhost ? lhost : "",
++ 	shost ? shost : "", user ? user : "", domain ? domain : "",
++ 	rc ? "true" : "false");
+++#endif /* HAVE_INNETGR */
++ 
++     debug_return_bool(rc);
++ }
++
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+new file mode 100644
+index 0000000..ba65773
+--- /dev/null
++++ b/package/sudo/sudo.hash
+@@ -0,0 +1,3 @@
++# From announcement http://www.sudo.ws/pipermail/sudo-announce/2014-May/000132.html
++md5	fcd8d0d9f9f0397d076ee901e242ed39	sudo-1.8.10p3.tar.gz
++sha256	6eda135fa68163108f1c24de6975de5ddb09d75730bb62d6390bda7b04345400	sudo-1.8.10p3.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index e0db465..c958bec 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,17 +4,20 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = 1.8.8
+-SUDO_SITE    = http://www.sudo.ws/sudo/dist
+-SUDO_LICENSE = ICS BSD-3c
++SUDO_VERSION = 1.8.10p3
++SUDO_SITE = http://www.sudo.ws/sudo/dist
++SUDO_LICENSE = ISC BSD-3c
+ SUDO_LICENSE_FILES = doc/LICENSE
++# Ships a non-release libtool that isn't patch-friendly
++SUDO_AUTORECONF = YES
+ SUDO_CONF_OPT = \
+ 		--without-lecture \
+ 		--without-sendmail \
+ 		--without-umask \
+ 		--with-logging=syslog \
+ 		--without-interfaces \
+-		--without-pam
++		--without-pam \
++		--with-env-editor
+ 
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
