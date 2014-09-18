@@ -1,79 +1,72 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:30 +0200
-Subject: [Buildroot] [PATCH 07 of 13] manual/user guide/customization: add
- section on users tables
+Date: Thu, 18 Sep 2014 21:39:31 +0200
+Subject: [Buildroot] [PATCH 08 of 13] manual/user guide/customization:
+ rename section 'Customizing packages'
 In-Reply-To: <patchbomb.1411069163@localhost>
 References: <patchbomb.1411069163@localhost>
-Message-ID: <3ca1afbd729efe7bb86a.1411069170@localhost>
+Message-ID: <bafb5924f054ce0362d2.1411069171@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds basic documentation on users tables, a topic which was
-currently not yet covered in the manual.
+This small patch renames the section 'Customizing packages' to 'Adding
+project-specific patches'. Additionally, a minor change is done to the
+introduction of this section.
+To better reflect the contents, the source file is renamed.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/customize-users-tables.txt |  18 ++++++++++++++++++
- docs/manual/customize.txt              |   3 +++
- docs/manual/makeusers-syntax.txt       |   2 +-
- 3 files changed, 22 insertions(+), 1 deletions(-)
+ docs/manual/customize-patches.txt |  11 ++++++-----
+ docs/manual/customize.txt         |   2 +-
+ docs/manual/patch-policy.txt      |   2 +-
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/customize-users-tables.txt b/docs/manual/customize-users-tables.txt
-new file mode 100644
---- /dev/null
-+++ b/docs/manual/customize-users-tables.txt
-@@ -0,0 +1,18 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[customize-users]]
-+=== Adding custom user accounts
-+
-+Sometimes it is needed to add specific users in the target system.
-+To cover this requirement, Buildroot provides support for so-called
-+_users tables_. To use this feature, set config option
-++BR2_ROOTFS_USERS_TABLES+ to a space-separated list of users tables,
-+regular text files following the xref:makeuser-syntax[makeusers syntax].
-+
-+As shown in xref:customize-dir-structure[], the recommended location for
-+such files is +board/<company>/<boardname>/+.
-+
-+It should be noted that if the custom users are related to a specific
-+application, you should set variable +FOO_USERS+ in the package's +.mk+
-+file instead (see xref:generic-package-reference[]).
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-patches.txt
+rename from docs/manual/customize-packages.txt
+rename to docs/manual/customize-patches.txt
+--- a/docs/manual/customize-packages.txt
++++ b/docs/manual/customize-patches.txt
+@@ -1,11 +1,12 @@
+ // -*- mode:doc -*- ;
+ 
+-[[packages-custom]]
+-=== Customizing packages
++[[customize-patches]]
++=== Adding project-specific patches
+ 
+-It is sometimes useful to apply 'extra' patches to packages - over and
+-above those provided in Buildroot. This might be used to support custom
+-features in a project, for example, or when working on a new architecture.
++It is sometimes useful to apply 'extra' patches to packages - on top of
++those provided in Buildroot. This might be used to support custom
++features in a project, for example, or when working on a new
++architecture.
+ 
+ The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
+ a space separated list of one or more directories containing package
 diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
 --- a/docs/manual/customize.txt
 +++ b/docs/manual/customize.txt
-@@ -20,6 +20,7 @@
-      +BR2_ROOTFS_DEVICE_TABLE+)
-   ** adding custom devices nodes (using
-      +BR2_ROOTFS_STATIC_DEVICE_TABLE+)
-+* adding custom user accounts (using +BR2_ROOTFS_USERS_TABLES+)
- * running arbitrary commands after generating the filesystem image
-   (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
- * adding project-specific patches to some packages (using
-@@ -48,6 +49,8 @@
+@@ -53,6 +53,6 @@
  
- include::customize-rootfs.txt[]
- 
-+include::customize-users-tables.txt[]
-+
  include::customize-post-image.txt[]
  
- include::customize-packages.txt[]
-diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
---- a/docs/manual/makeusers-syntax.txt
-+++ b/docs/manual/makeusers-syntax.txt
-@@ -1,7 +1,7 @@
- // -*- mode:doc -*- ;
+-include::customize-packages.txt[]
++include::customize-patches.txt[]
  
- [[makeuser-syntax]]
--== Makeuser syntax documentation
-+== Makeusers syntax documentation
+ include::customize-store.txt[]
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -46,7 +46,7 @@
  
- The syntax to create users is inspired by the makedev syntax, above, but
- is specific to Buildroot.
+ The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
+ used to specify a space separated list of one or more directories
+-containing global package patches. See xref:packages-custom[] for
++containing global package patches. See xref:customize-patches[] for
+ details.
+ 
+ [[patch-apply-order]]
