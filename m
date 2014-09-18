@@ -1,65 +1,54 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 18 Sep 2014 15:19:12 +0400
-Subject: [Buildroot] [PATCH] ARC: gcc - Redefine PTRDIFF_TYPE from "long
-	int" to "int"
-Message-ID: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
+Date: Thu, 18 Sep 2014 15:22:15 +0400
+Subject: [Buildroot] [PATCH] libpfm4: needs NPTL support
+Message-ID: <1411039335-20178-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change of SIZE_TYPE from "long unsigned int" to "unsigned int"
-http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
-introduced regression due to existing PTRDIFF_TYPE.
-
-Now to fix regression convert PTRDIFF_TYPE to simple "int".
-
-Fix is taken from current development branch of GCC for ARC and will be a
-part of the next release of ARC tools, so at that point patch should be dropped.
-
-https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
+Fixes following build failure when tools use Linux threads instead of NPTL:
+--->---
+self_smpl_multi.c: In function 'my_thread':
+self_smpl_multi.c:354:2: error: implicit declaration of function 'pthread_barrier_wait' [-Werror=implicit-function-declaration]
+  pthread_barrier_wait(&barrier);
+  ^
+self_smpl_multi.c: In function 'main':
+self_smpl_multi.c:450:2: error: implicit declaration of function 'pthread_barrier_init' [-Werror=implicit-function-declaration]
+  pthread_barrier_init(&barrier, 0, max_thr+1);
+  ^
+cc1: all warnings being treated as errors
+--->---
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Anton Kolesov <akolesov@synopsys.com>
+
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/arc-2014.08/300-ptrdiff_type_int.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
+ package/libpfm4/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch b/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
-new file mode 100644
-index 0000000..6ee765b
---- /dev/null
-+++ b/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
-@@ -0,0 +1,26 @@
-+Redefine PTRDIFF_TYPE
-+
-+Change of SIZE_TYPE from "long unsigned int" to "unsigned int" introduced
-+regression due to existing PTRDIFF_TYPE.
-+
-+Now to fix regression convert PTRDIFF_TYPE to simple "int".
-+
-+Fix is taken from current development branch of GCC for ARC and will be a
-+part of the next release of ARC tools, so at that point patch should be dropped.
-+
-+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
-+
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+---
-+
-+--- a/gcc/config/arc/arc.h
-++++ b/gcc/config/arc/arc.h
-+@@ -488,7 +488,7 @@ if (GET_MODE_CLASS (MODE) == MODE_INT		\
-+ #define DEFAULT_SIGNED_CHAR 0
-+ 
-+ #define SIZE_TYPE "unsigned int"
-+-#define PTRDIFF_TYPE "long int"
-++#define PTRDIFF_TYPE "int"
-+ #define WCHAR_TYPE "int"
-+ #define WCHAR_TYPE_SIZE 32
-+ 
+diff --git a/package/libpfm4/Config.in b/package/libpfm4/Config.in
+index 86ca8f6..91b56a3 100644
+--- a/package/libpfm4/Config.in
++++ b/package/libpfm4/Config.in
+@@ -2,13 +2,12 @@ config BR2_PACKAGE_LIBPFM4
+ 	bool "libpfm4"
+ 	depends on !BR2_avr32 # no perf_event_open
+ 	depends on !BR2_xtensa && !BR2_bfin # no nptl or linuxthreads (new)
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  A helper library to help encode Performance Events to use with
+ 	  Operating system kernels performance monitoring interfaces.
+ 
+ 	  http://perfmon2.sourceforge.net/
+ 
+-comment "libpfm4 needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_bfin
++comment "libpfm4 needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
 1.9.3
