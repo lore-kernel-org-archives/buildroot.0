@@ -1,47 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 18:21:21 +0200
-Subject: [Buildroot] [PATCH v2] Add support for Flattened Image Trees
-In-Reply-To: <CAGm1_ktxYNG99Vq+=tyhFyQqYuVE2==-psqRPh1Dp7H2aUgMJQ@mail.gmail.com>
-References: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
- <c3bf0f66-d29d-4a77-930d-c33ac938368c@email.android.com>
- <CAGm1_ks=xwD4pm9aFF9AfKsFDeOhLPthkdx6BbLwY71z1e8TXg@mail.gmail.com>
- <CAAXf6LXtSvZQoJc0qibQhdCvS3XEECgMShr1tncrKduhTAsJGQ@mail.gmail.com>
- <CAGm1_ktxYNG99Vq+=tyhFyQqYuVE2==-psqRPh1Dp7H2aUgMJQ@mail.gmail.com>
-Message-ID: <81266ccf-e3d8-470e-9c94-4a63931a4fa2@email.android.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Sep 2014 15:26:29 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.18
+Message-ID: <1411064789-19370-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor Yefremov <yegorslists@googlemail.com> schreef: 
->
->I've figured the stuff out too:
->
->ROOTFS_FIT_DEPENDENCIES = uboot-tools
+Also add hash, calculated on downloaded file after verifying signature.
 
-This should be host-uboot-tools, no?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.hash | 2 ++
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/gnutls/gnutls.hash
 
->
->ifeq ($(BR2_FIT_INSTALL_TARGET),y)
->define ROOTFS_FIT_CMD
->        cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
->        $(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/`basename
->$(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME) && \
->        mkdir -p $(TARGET_DIR)/boot/ && \
->        cp $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME) $(TARGET_DIR)/boot/
->endef
->else
->define ROOTFS_FIT_CMD
->        cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
->        $(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/`basename
->$(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME)
->endef
->endif
->
->$(eval $(call ROOTFS_TARGET,fit))
-
-There's a lot of duplication here that can be avoided...
-
-Best regards,
-Thomas
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+new file mode 100644
+index 0000000..c68a792
+--- /dev/null
++++ b/package/gnutls/gnutls.hash
+@@ -0,0 +1,2 @@
++# Hand caculated after checking pgp signature
++sha256	4762afab5e1b9e829c5f53d2b00cd5e41d43fa6d035efcf239e3fe0459134d45	gnutls-3.2.18.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 5c1559d..0e1076b 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+1.8.5.5
