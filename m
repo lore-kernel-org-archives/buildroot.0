@@ -1,49 +1,64 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:23 +0200
-Subject: [Buildroot] [PATCH 00 of 13] manual: improvements in
- 'Project-specific customization' section
-Message-ID: <patchbomb.1411069163@localhost>
+Date: Thu, 18 Sep 2014 21:39:25 +0200
+Subject: [Buildroot] [PATCH 02 of 13] manual/developer guide: minor rework
+ of 'adding board support' section
+In-Reply-To: <patchbomb.1411069163@localhost>
+References: <patchbomb.1411069163@localhost>
+Message-ID: <1d3af4afbb188f2330fc.1411069165@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-This series makes improvements to the Project-specific customizations
-chapter in the manual.
+Minor rework of the section 'Creating your own board support', as follows:
+- Rename section into 'Adding support for a particular board'
+- Modify introduction
+- Refer to Project-specific customizations chapter
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Thomas De Schampheleire (13)
-  manual: move 'Creating your own board support' from User to Developer guide
-  manual/developer guide: minor rework of 'adding board support' section
-  manual/user guide/customization: move section on storing configuration
-  manual/user guide/customization: rework section on storing configuration
-  manual/user guide/customization: re-order introduction
-  manual/user guide/customization: add section on device/permission tables
-  manual/user guide/customization: add section on users tables
-  manual/user guide/customization: rename section 'Customizing packages'
-  manual/user guide/customization: change recommendation for package paths
-  manual/user guide/customization: add section on project-specific packages
-  manual/user guide/customization: refer to dir structure from rootfs section
-  manual/user guide/customization: rework 'step-by-step instructions'
-  manual/user guide/customization: add section on layered customization
+ docs/manual/adding-board-support.txt |  13 +++++++------
+ docs/manual/customize.txt            |   1 +
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
- docs/manual/adding-board-support.txt               |   38 +++
- docs/manual/customize-configuration.txt            |   62 +++++
- docs/manual/customize-device-permission-tables.txt |   30 ++
- docs/manual/customize-directory-structure.txt      |   64 ++++-
- docs/manual/customize-outside-br.txt               |   12 +-
- docs/manual/customize-packages.txt                 |  139 ++++------
- docs/manual/customize-patches.txt                  |   51 +---
- docs/manual/customize-quick-guide.txt              |  158 ++----------
- docs/manual/customize-rootfs.txt                   |    8 +
- docs/manual/customize-users-tables.txt             |   18 +
- docs/manual/customize.txt                          |   39 ++-
- docs/manual/makeusers-syntax.txt                   |    2 +-
- docs/manual/manual.txt                             |    2 +
- docs/manual/patch-policy.txt                       |    2 +-
- 14 files changed, 349 insertions(+), 276 deletions(-)
+diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+--- a/docs/manual/adding-board-support.txt
++++ b/docs/manual/adding-board-support.txt
+@@ -1,12 +1,13 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
+-[[customize-store-board-support]]
+-== Creating your own board support
++[[adding-board-support]]
++== Adding support for a particular board
+ 
+-Creating your own board support in Buildroot allows users of a
+-particular hardware platform to easily build a system that is known to
+-work.
++Buildroot contains basic configurations for several publicly available
++hardware boards, so that users of such a board can easily build a system
++that is known to work. You are welcome to add support for other boards
++to Buildroot too.
+ 
+ To do so, you need to create a normal Buildroot configuration that
+ builds a basic system for the hardware: toolchain, kernel, bootloader,
+@@ -34,4 +35,4 @@
+ create a directory +board/<manufacturer>+ and a subdirectory
+ +board/<manufacturer>/<boardname>+. You can then store your patches
+ and configurations in these directories, and reference them from the main
+-Buildroot configuration.
++Buildroot configuration. Refer to xref:customize[] for more details.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -1,6 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
++[[customize]]
+ == Project-specific customization
+ 
+ Typical actions you may need to perform for a given project are:
