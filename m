@@ -1,29 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Sep 2014 21:40:28 +0200
-Subject: [Buildroot] [git commit] iptables: add hash
-Message-ID: <20140918195020.F0C129B914@busybox.osuosl.org>
+Date: Thu, 18 Sep 2014 21:44:13 +0200
+Subject: [Buildroot] [git commit] iproute2: add hash
+Message-ID: <20140918195021.2B9E49D6E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95c80cb62de20a5e4daa62af3b428530c0fa60de
+commit: http://git.buildroot.net/buildroot/commit/?id=d19a9f2667c2b5cd574359f2964511a79388e472
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iptables/iptables.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
 new file mode 100644
-index 0000000..a813f74
+index 0000000..5a8e6ca
 --- /dev/null
-+++ b/package/iptables/iptables.hash
-@@ -0,0 +1,3 @@
-+# From ftp://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2.{md5sum,sha1sum}
-+md5	536d048c8e8eeebcd9757d0863ebb0c0 	iptables-1.4.21.tar.bz2
-+sha1	85d4160537546a23a7e42bc26dd7ee62a0ede4c8	iptables-1.4.21.tar.bz2
++++ b/package/iproute2/iproute2.hash
+@@ -0,0 +1,2 @@
++# From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
++sha256	1f0a8a6c0e872166f75433f5cbf9766f3002b5c2f13501b3bb8c51846a127b79	iproute2-3.16.0.tar.xz
