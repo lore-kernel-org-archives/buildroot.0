@@ -1,64 +1,186 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:25 +0200
-Subject: [Buildroot] [PATCH 02 of 13] manual/developer guide: minor rework
- of 'adding board support' section
+Date: Thu, 18 Sep 2014 21:39:26 +0200
+Subject: [Buildroot] [PATCH 03 of 13] manual/user guide/customization: move
+ section on storing configuration
 In-Reply-To: <patchbomb.1411069163@localhost>
 References: <patchbomb.1411069163@localhost>
-Message-ID: <1d3af4afbb188f2330fc.1411069165@localhost>
+Message-ID: <f5e10bf1950364894f64.1411069166@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Minor rework of the section 'Creating your own board support', as follows:
-- Rename section into 'Adding support for a particular board'
-- Modify introduction
-- Refer to Project-specific customizations chapter
+This patch moves the section 'Basics for storing the configuration' to a
+separate file and upwards in the manual section order, to line up with the
+listing of customization actions in the introduction of the chapter. The
+text itself is currently unchanged, this will be handled in the next patch.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/adding-board-support.txt |  13 +++++++------
- docs/manual/customize.txt            |   1 +
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ docs/manual/customize-configuration.txt |  68 +++++++++++++++++++++++++
+ docs/manual/customize-store.txt         |  65 -----------------------
+ docs/manual/customize.txt               |   2 +
+ 3 files changed, 70 insertions(+), 65 deletions(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -1,12 +1,13 @@
+diff --git a/docs/manual/customize-configuration.txt b/docs/manual/customize-configuration.txt
+new file mode 100644
+--- /dev/null
++++ b/docs/manual/customize-configuration.txt
+@@ -0,0 +1,68 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++[[customize-store-basics]]
++=== Basics for storing the configuration
++
++When you have a buildroot configuration that you are satisfied with and
++you want to share it with others, put it under revision control or move
++on to a different buildroot project, you need to store the configuration
++so it can be rebuilt later. The configuration that needs to be stored
++consists of the buildroot configuration, the configuration files for
++packages that you use (kernel, busybox, uClibc, ...), and your rootfs
++modifications.
++
++[[customize-store-buildroot-config]]
++==== Buildroot configuration
++
++For storing the buildroot configuration itself, buildroot offers the
++following command: +make savedefconfig+.
++
++This strips the buildroot configuration down by removing configuration
++options that are at their default value. The result is stored in a file
++called +defconfig+.  If you want to save it in another place, change
++the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
++BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
+++configs/<boardname>_defconfig+. The configuration can then be rebuilt by
++running +make <boardname>_defconfig+.
++
++Alternatively, you can copy the file to any other place and rebuild with
+++make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
++
++
++[[customize-store-package-config]]
++==== Other package configuration
++
++The configuration files for busybox, the linux kernel, barebox and
++uClibc should be stored as well if changed. For each of these, a
++buildroot configuration option exists to point to an input
++configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
++save their configuration, set those configuration options to a path
++outside your output directory,
++e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
++configuration files to that path.
++
++Make sure that you create a configuration file 'before' changing
++the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
++buildroot will try to access this config file, which doesn't exist
++yet, and will fail. You can create the configuration file by running
+++make linux-menuconfig+ etc.
++
++Buildroot provides a few helper targets to make the saving of
++configuration files easier.
++
++* +make linux-update-defconfig+ saves the linux configuration to the
++  path specified by +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  It
++  simplifies the config file by removing default values.  However,
++  this only works with kernels starting from 2.6.33.  For earlier
++  kernels, use +make linux-update-config+.
++* +make busybox-update-config+ saves the busybox configuration to the
++  path specified by +BR2_PACKAGE_BUSYBOX_CONFIG+.
++* +make uclibc-update-config+ saves the uClibc configuration to the
++  path specified by +BR2_UCLIBC_CONFIG+.
++* +make barebox-update-defconfig+ saves the barebox configuration to the
++  path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
++* For at91bootstrap3, no helper exists so you have to copy the config
++  file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
++
++
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -1,71 +1,6 @@
  // -*- mode:doc; -*-
  // vim: set syntax=asciidoc:
  
--[[customize-store-board-support]]
--== Creating your own board support
-+[[adding-board-support]]
-+== Adding support for a particular board
+-[[customize-store-basics]]
+-=== Basics for storing the configuration
+-
+-When you have a buildroot configuration that you are satisfied with and
+-you want to share it with others, put it under revision control or move
+-on to a different buildroot project, you need to store the configuration
+-so it can be rebuilt later. The configuration that needs to be stored
+-consists of the buildroot configuration, the configuration files for
+-packages that you use (kernel, busybox, uClibc, ...), and your rootfs
+-modifications.
+-
+-[[customize-store-buildroot-config]]
+-==== Buildroot configuration
+-
+-For storing the buildroot configuration itself, buildroot offers the
+-following command: +make savedefconfig+.
+-
+-This strips the buildroot configuration down by removing configuration
+-options that are at their default value. The result is stored in a file
+-called +defconfig+.  If you want to save it in another place, change
+-the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
+-BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
+-+configs/<boardname>_defconfig+. The configuration can then be rebuilt by
+-running +make <boardname>_defconfig+.
+-
+-Alternatively, you can copy the file to any other place and rebuild with
+-+make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
+-
+-
+-[[customize-store-package-config]]
+-==== Other package configuration
+-
+-The configuration files for busybox, the linux kernel, barebox and
+-uClibc should be stored as well if changed. For each of these, a
+-buildroot configuration option exists to point to an input
+-configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
+-save their configuration, set those configuration options to a path
+-outside your output directory,
+-e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
+-configuration files to that path.
+-
+-Make sure that you create a configuration file 'before' changing
+-the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
+-buildroot will try to access this config file, which doesn't exist
+-yet, and will fail. You can create the configuration file by running
+-+make linux-menuconfig+ etc.
+-
+-Buildroot provides a few helper targets to make the saving of
+-configuration files easier.
+-
+-* +make linux-update-defconfig+ saves the linux configuration to the
+-  path specified by +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  It
+-  simplifies the config file by removing default values.  However,
+-  this only works with kernels starting from 2.6.33.  For earlier
+-  kernels, use +make linux-update-config+.
+-* +make busybox-update-config+ saves the busybox configuration to the
+-  path specified by +BR2_PACKAGE_BUSYBOX_CONFIG+.
+-* +make uclibc-update-config+ saves the uClibc configuration to the
+-  path specified by +BR2_UCLIBC_CONFIG+.
+-* +make barebox-update-defconfig+ saves the barebox configuration to the
+-  path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
+-* For at91bootstrap3, no helper exists so you have to copy the config
+-  file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+-
+-
+ === Step-by-step instructions for storing configuration
  
--Creating your own board support in Buildroot allows users of a
--particular hardware platform to easily build a system that is known to
--work.
-+Buildroot contains basic configurations for several publicly available
-+hardware boards, so that users of such a board can easily build a system
-+that is known to work. You are welcome to add support for other boards
-+to Buildroot too.
- 
- To do so, you need to create a normal Buildroot configuration that
- builds a basic system for the hardware: toolchain, kernel, bootloader,
-@@ -34,4 +35,4 @@
- create a directory +board/<manufacturer>+ and a subdirectory
- +board/<manufacturer>/<boardname>+. You can then store your patches
- and configurations in these directories, and reference them from the main
--Buildroot configuration.
-+Buildroot configuration. Refer to xref:customize[] for more details.
+ To store the configuration for a specific product, device or
 diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
 --- a/docs/manual/customize.txt
 +++ b/docs/manual/customize.txt
-@@ -1,6 +1,7 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
+@@ -39,6 +39,8 @@
  
-+[[customize]]
- == Project-specific customization
+ include::customize-outside-br.txt[]
  
- Typical actions you may need to perform for a given project are:
++include::customize-configuration.txt[]
++
+ include::customize-rootfs.txt[]
+ 
+ include::customize-post-image.txt[]
