@@ -1,43 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 Sep 2014 10:24:12 +0100
-Subject: [Buildroot] [PATCH 2/3] iprutils: update patches for the new
- version
-In-Reply-To: <5419D5EA.6060602@zacarias.com.ar>
-References: <1410974363-43368-1-git-send-email-Vincent.Riera@imgtec.com>
- <1410974363-43368-2-git-send-email-Vincent.Riera@imgtec.com>
- <5419D5EA.6060602@zacarias.com.ar>
-Message-ID: <541AA4BC.6040608@imgtec.com>
+From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Date: Thu, 18 Sep 2014 11:27:03 +0200
+Subject: [Buildroot] [PATCH 0/3] Add ICAP server support
+Message-ID: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/17/2014 07:41 PM, Gustavo Zacarias wrote:
-> On 09/17/2014 02:19 PM, Vicente Olivert Riera wrote:
->
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   .../iprutils/iprutils-0001-Don-t-use-gettext.patch |   32 ++++++++++++++++++++
->>   ...low-CFLAGS-to-be-extended-from-the-enviro.patch |   31 +++++++++++++++++++
->>   .../iprutils/iprutils-01-dont-use-gettext.patch    |   30 ------------------
->>   .../iprutils-02-use-environment-cflags.patch       |   20 ------------
->>   4 files changed, 63 insertions(+), 50 deletions(-)
->>   create mode 100644 package/iprutils/iprutils-0001-Don-t-use-gettext.patch
->>   create mode 100644 package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
->>   delete mode 100644 package/iprutils/iprutils-01-dont-use-gettext.patch
->>   delete mode 100644 package/iprutils/iprutils-02-use-environment-cflags.patch
->
-> Hi.
-> The patch updates should be part of the first (bump) patch, otherwise
-> it's just an extra commit that fixes breakage because the patches don't
-> apply/work.
-> It's like adding a new package that needs patches and said patches are
-> part of a second patch ("these make it work for real").
-> Regards.
->
+Hi,
 
-Fixed. v2 patches sent.
+This patch series enable ICAP support in squid and add c-icap and c-icap-modules packages.
+
+Regards,
+
+Guillaume
+
+----------------------------------------------------------------
+Guillaume GARDET (3):
+  Enable c-icap server support in squid and define logdir, pidfile and  
+      swapdir
+  New package: c-icap     c-icap is an implementation of an ICAP server.
+    Squid 3.x proxy server     supports it.
+  New package: c-icap-modules     Additionals modules for c-icap server.
+
+ package/Config.in                        |  2 ++
+ package/c-icap-modules/Config.in         |  7 +++++++
+ package/c-icap-modules/c-icap-modules.mk | 27 +++++++++++++++++++++++++++
+ package/c-icap/Config.in                 | 10 ++++++++++
+ package/c-icap/c-icap.mk                 | 24 ++++++++++++++++++++++++
+ package/squid/squid.mk                   | 12 ++++++++++--
+ 6 files changed, 80 insertions(+), 2 deletions(-)
+ create mode 100644 package/c-icap-modules/Config.in
+ create mode 100644 package/c-icap-modules/c-icap-modules.mk
+ create mode 100644 package/c-icap/Config.in
+ create mode 100644 package/c-icap/c-icap.mk
 
 -- 
-Vincent
+1.8.4.5
