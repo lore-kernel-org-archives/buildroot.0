@@ -1,37 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Sep 2014 21:48:39 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.18
-In-Reply-To: <1411064789-19370-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 18 Sep 2014 15:26:29 -0300")
-References: <1411064789-19370-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87iokk676w.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 18 Sep 2014 21:41:21 +0200
+Subject: [Buildroot] [git commit] util-linux: add hash
+Message-ID: <20140918195021.048299D6DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ef9ad565b6fe133f7d28a437058f0d1eda4da8c4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also add hash, calculated on downloaded file after verifying signature.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/gnutls/gnutls.hash | 2 ++
- >  package/gnutls/gnutls.mk   | 2 +-
- >  2 files changed, 3 insertions(+), 1 deletion(-)
- >  create mode 100644 package/gnutls/gnutls.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
- > new file mode 100644
- > index 0000000..c68a792
- > --- /dev/null
- > +++ b/package/gnutls/gnutls.hash
- > @@ -0,0 +1,2 @@
- > +# Hand caculated after checking pgp signature
-
-Really? Wow! ;)
-
-s/caculated/calculated/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+new file mode 100644
+index 0000000..cfa1364
+--- /dev/null
++++ b/package/util-linux/util-linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/utils/util-linux/v2.25/sha256sums.asc
++sha256	4701305ae22790c3a92ce48e50794fa05b7ee01f4227f419a171c100d08986e8	util-linux-2.25.1.tar.xz
