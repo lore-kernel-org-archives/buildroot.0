@@ -1,132 +1,74 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:24 +0200
-Subject: [Buildroot] [PATCH 01 of 13] manual: move 'Creating your own board
- support' from User to Developer guide
+Date: Thu, 18 Sep 2014 21:39:28 +0200
+Subject: [Buildroot] [PATCH 05 of 13] manual/user guide/customization:
+ re-order introduction
 In-Reply-To: <patchbomb.1411069163@localhost>
 References: <patchbomb.1411069163@localhost>
-Message-ID: <2bb6dc67d3355451ba41.1411069164@localhost>
+Message-ID: <92c562e0015f64c55642.1411069168@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Section 'Creating your own board support' is seemingly written in the
-mindset of adding support for public boards. Therefore, it is more suited in
-the Developer guide, rather than in the User guide.
-Adding support for custom non-public boards falls under the
-'Project-specific customizations' category and will be described in that
-section.
+This patch re-orders the enumeration of typical project customization
+actions:
+- move the 'patching packages' section downwards.
+- group the entries on post-build scripts and rootfs-overlays to match the
+  actual section text.
 
-This patch moves the unchanged text into a separate file, included from the
-Developer guide. The next patch will make some minor changes to the text
-itself.
+Since indented enumerations use asterixes, update the top-level entries with
+asterixes too for consistency.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/adding-board-support.txt |  37 ++++++++++++++++++++++++++++
- docs/manual/customize-store.txt      |  36 ---------------------------
- docs/manual/manual.txt               |   2 +
- 3 files changed, 39 insertions(+), 36 deletions(-)
+ docs/manual/customize.txt |  29 +++++++++++++++--------------
+ 1 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-new file mode 100644
---- /dev/null
-+++ b/docs/manual/adding-board-support.txt
-@@ -0,0 +1,37 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[customize-store-board-support]]
-+== Creating your own board support
-+
-+Creating your own board support in Buildroot allows users of a
-+particular hardware platform to easily build a system that is known to
-+work.
-+
-+To do so, you need to create a normal Buildroot configuration that
-+builds a basic system for the hardware: toolchain, kernel, bootloader,
-+filesystem and a simple BusyBox-only userspace. No specific package
-+should be selected: the configuration should be as minimal as
-+possible, and should only build a working basic BusyBox system for the
-+target platform. You can of course use more complicated configurations
-+for your internal projects, but the Buildroot project will only
-+integrate basic board configurations. This is because package
-+selections are highly application-specific.
-+
-+Once you have a known working configuration, run +make
-+savedefconfig+. This will generate a minimal +defconfig+ file at the
-+root of the Buildroot source tree. Move this file into the +configs/+
-+directory, and rename it +<boardname>_defconfig+.
-+
-+It is recommended to use as much as possible upstream versions of the
-+Linux kernel and bootloaders, and to use as much as possible default
-+kernel and bootloader configurations. If they are incorrect for your
-+board, or no default exists, we encourage you to send fixes to the
-+corresponding upstream projects.
-+
-+However, in the mean time, you may want to store kernel or bootloader
-+configuration or patches specific to your target platform. To do so,
-+create a directory +board/<manufacturer>+ and a subdirectory
-++board/<manufacturer>/<boardname>+. You can then store your patches
-+and configurations in these directories, and reference them from the main
-+Buildroot configuration.
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
---- a/docs/manual/customize-store.txt
-+++ b/docs/manual/customize-store.txt
-@@ -66,42 +66,6 @@
-   file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -6,20 +6,21 @@
  
+ Typical actions you may need to perform for a given project are:
  
--[[customize-store-board-support]]
--=== Creating your own board support
--
--Creating your own board support in Buildroot allows users of a
--particular hardware platform to easily build a system that is known to
--work.
--
--To do so, you need to create a normal Buildroot configuration that
--builds a basic system for the hardware: toolchain, kernel, bootloader,
--filesystem and a simple BusyBox-only userspace. No specific package
--should be selected: the configuration should be as minimal as
--possible, and should only build a working basic BusyBox system for the
--target platform. You can of course use more complicated configurations
--for your internal projects, but the Buildroot project will only
--integrate basic board configurations. This is because package
--selections are highly application-specific.
--
--Once you have a known working configuration, run +make
--savedefconfig+. This will generate a minimal +defconfig+ file at the
--root of the Buildroot source tree. Move this file into the +configs/+
--directory, and rename it +<boardname>_defconfig+.
--
--It is recommended to use as much as possible upstream versions of the
--Linux kernel and bootloaders, and to use as much as possible default
--kernel and bootloader configurations. If they are incorrect for your
--board, or no default exists, we encourage you to send fixes to the
--corresponding upstream projects.
--
--However, in the mean time, you may want to store kernel or bootloader
--configuration or patches specific to your target platform. To do so,
--create a directory +board/<manufacturer>+ and a subdirectory
--+board/<manufacturer>/<boardname>+. You can then store your patches
--and configurations in these directories, and reference them from the main
--Buildroot configuration.
--
--
- === Step-by-step instructions for storing configuration
+-- configuring Buildroot (including build options and toolchain,
++* configuring Buildroot (including build options and toolchain,
+   bootloader, kernel, package and filesystem image type selection)
+-- configuring other components, like the Linux kernel and BusyBox
+-- adding project-specific patches to some packages (using
++* configuring other components, like the Linux kernel and BusyBox
++* customizing the generated target filesystem
++  ** adding or overwriting files on the target filesystem (using
++     +BR2_ROOTFS_OVERLAY+)
++  ** modifying or deleting files on the target filesystem (using
++     +BR2_ROOTFS_POST_BUILD_SCRIPT+)
++  ** running arbitrary commands prior to generating the filesystem image
++     (using +BR2_ROOTFS_POST_BUILD_SCRIPT+)
++* running arbitrary commands after generating the filesystem image
++  (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
++* adding project-specific patches to some packages (using
+   +BR2_GLOBAL_PATCH_DIR+)
+-- adding or overwriting files on the target filesystem (using
+-  +BR2_ROOTFS_OVERLAY+)
+-- modifying or deleting files on the target filesystem (using
+-  +BR2_ROOTFS_POST_BUILD_SCRIPT+)
+-- running arbitrary commands prior to generating the filesystem image
+-  (using +BR2_ROOTFS_POST_BUILD_SCRIPT+)
+-- running arbitrary commands after generating the filesystem image
+-  (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
+-- adding project-specific packages
++* adding project-specific packages
  
- To store the configuration for a specific product, device or
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -52,6 +52,8 @@
+ An important note regarding such 'project-specific' customizations:
+ please carefully consider which changes are indeed project-specific and
+@@ -45,6 +46,6 @@
  
- include::writing-rules.txt[]
+ include::customize-post-image.txt[]
  
-+include::adding-board-support.txt[]
++include::customize-packages.txt[]
 +
- include::adding-packages.txt[]
- 
- include::patch-policy.txt[]
+ include::customize-store.txt[]
+-
+-include::customize-packages.txt[]
