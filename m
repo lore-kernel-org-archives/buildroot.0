@@ -1,94 +1,71 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Thu, 18 Sep 2014 12:00:51 +0200
-Subject: [Buildroot] [PATCH v2 1/5] python,
-	python3: add patch to prevent distutils from adjusting the shebang
+Date: Thu, 18 Sep 2014 12:00:52 +0200
+Subject: [Buildroot] [PATCH v2 2/5] python-urwid: new package
 In-Reply-To: <1411034455-19670-1-git-send-email-cvubrugier@fastmail.fm>
 References: <1411034455-19670-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <1411034455-19670-2-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1411034455-19670-3-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The copy_scripts() method in distutils copies the scripts listed
-in the setup file and adjusts the first line to refer to the
-current Python interpreter. When cross-compiling, this means that
-the adjusted shebang refers to the host Python interpreter.
-
-As a consequence, we add a patch for python and python3 that
-force copy_scripts() to preserve the shebang when
-cross-compilation is detected.
+Urwid is a console user interface library for Python.
 
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...017-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
- ...015-distutils-scripts-dont-adjust-shebang.patch | 25 ++++++++++++++++++++++
- 2 files changed, 50 insertions(+)
- create mode 100644 package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
- create mode 100644 package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
+ package/Config.in                    |  1 +
+ package/python-urwid/Config.in       |  7 +++++++
+ package/python-urwid/python-urwid.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-urwid/Config.in
+ create mode 100644 package/python-urwid/python-urwid.mk
 
-diff --git a/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
+diff --git a/package/Config.in b/package/Config.in
+index 73ba86a..17930ea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ menu "external python modules"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
++	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ endmenu
+ endif
+diff --git a/package/python-urwid/Config.in b/package/python-urwid/Config.in
 new file mode 100644
-index 0000000..da4dc36
+index 0000000..92f7d53
 --- /dev/null
-+++ b/package/python/python-017-distutils-scripts-dont-adjust-shebang.patch
-@@ -0,0 +1,25 @@
-+Do not adjust the shebang of Python scripts for cross-compilation
++++ b/package/python-urwid/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_URWID
++	bool "python-urwid"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	help
++	  Urwid is a console user interface library for Python
 +
-+The copy_scripts() method in distutils copies the scripts listed in
-+the setup file and adjusts the first line to refer to the current
-+Python interpreter. When cross-compiling, this means that the adjusted
-+shebang refers to the host Python interpreter.
-+
-+This patch modifies copy_scripts() to preserve the shebang when
-+cross-compilation is detected.
-+
-+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-+
-+Index: b/Lib/distutils/command/build_scripts.py
-+===================================================================
-+--- a/Lib/distutils/command/build_scripts.py
-++++ b/Lib/distutils/command/build_scripts.py
-+@@ -89,7 +89,7 @@
-+                     adjust = 1
-+                     post_interp = match.group(1) or ''
-+ 
-+-            if adjust:
-++            if adjust and not '_python_sysroot' in os.environ:
-+                 log.info("copying and adjusting %s -> %s", script,
-+                          self.build_dir)
-+                 if not self.dry_run:
-diff --git a/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
++	  http://urwid.org/
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
 new file mode 100644
-index 0000000..ed2f193
+index 0000000..4f1be46
 --- /dev/null
-+++ b/package/python3/python3-015-distutils-scripts-dont-adjust-shebang.patch
-@@ -0,0 +1,25 @@
-+Do not adjust the shebang of Python scripts for cross-compilation
++++ b/package/python-urwid/python-urwid.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-urwid
++#
++################################################################################
 +
-+The copy_scripts() method in distutils copies the scripts listed in
-+the setup file and adjusts the first line to refer to the current
-+Python interpreter. When cross-compiling, this means that the adjusted
-+shebang refers to the host Python interpreter.
++PYTHON_URWID_VERSION = 1.2.1
++PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
++PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
++PYTHON_URWID_LICENSE = LGPLv2.1+
++PYTHON_URWID_LICENSE_FILES = COPYING
++PYTHON_URWID_SETUP_TYPE = setuptools
 +
-+This patch modifies copy_scripts() to preserve the shebang when
-+cross-compilation is detected.
-+
-+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-+
-+Index: b/Lib/distutils/command/build_scripts.py
-+===================================================================
-+--- a/Lib/distutils/command/build_scripts.py
-++++ b/Lib/distutils/command/build_scripts.py
-+@@ -91,7 +91,7 @@
-+                     adjust = True
-+                     post_interp = match.group(1) or b''
-+ 
-+-            if adjust:
-++            if adjust and not '_python_sysroot' in os.environ:
-+                 log.info("copying and adjusting %s -> %s", script,
-+                          self.build_dir)
-+                 updated_files.append(outfile)
++$(eval $(python-package))
 -- 
 2.1.0
