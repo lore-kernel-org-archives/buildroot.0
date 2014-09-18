@@ -1,168 +1,65 @@
-From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Thu, 18 Sep 2014 11:44:27 +0200
-Subject: [Buildroot] [PATCH v2] libiio: new package
-Message-ID: <1411033467-7919-1-git-send-email-paul.cercueil@analog.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 18 Sep 2014 15:19:12 +0400
+Subject: [Buildroot] [PATCH] ARC: gcc - Redefine PTRDIFF_TYPE from "long
+	int" to "int"
+Message-ID: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libiio is a library to ease the development of software interfacing
-Linux Industrial I/O (IIO) devices.
+Change of SIZE_TYPE from "long unsigned int" to "unsigned int"
+http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
+introduced regression due to existing PTRDIFF_TYPE.
 
-http://wiki.analog.com/resources/tools-software/linux-software/libiio
+Now to fix regression convert PTRDIFF_TYPE to simple "int".
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+Fix is taken from current development branch of GCC for ARC and will be a
+part of the next release of ARC tools, so at that point patch should be dropped.
+
+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in        |  1 +
- package/libiio/Config.in | 42 ++++++++++++++++++++++++++
- package/libiio/libiio.mk | 76 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 119 insertions(+)
- create mode 100644 package/libiio/Config.in
- create mode 100644 package/libiio/libiio.mk
+ package/gcc/arc-2014.08/300-ptrdiff_type_int.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 73ba86a..487b948 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -665,6 +665,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libhid/Config.in"
-+	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
- 	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+diff --git a/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch b/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
 new file mode 100644
-index 0000000..b1f1e4c
+index 0000000..6ee765b
 --- /dev/null
-+++ b/package/libiio/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_LIBIIO
-+	bool "libiio"
-+	help
-+	  Libiio is a library to ease the development of software interfacing
-+	  Linux Industrial I/O (IIO) devices.
++++ b/package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
+@@ -0,0 +1,26 @@
++Redefine PTRDIFF_TYPE
 +
-+	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
++Change of SIZE_TYPE from "long unsigned int" to "unsigned int" introduced
++regression due to existing PTRDIFF_TYPE.
 +
-+if BR2_PACKAGE_LIBIIO
++Now to fix regression convert PTRDIFF_TYPE to simple "int".
 +
-+config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	bool "Local backend"
-+	default y
-+	help
-+	  Enable the local backend of the library.
++Fix is taken from current development branch of GCC for ARC and will be a
++part of the next release of ARC tools, so at that point patch should be dropped.
 +
-+config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	bool "Network backend"
-+	select BR2_PACKAGE_LIBXML2
-+	default y
-+	help
-+	  Enable the network backend of the library.
++https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
 +
-+config BR2_PACKAGE_LIBIIO_IIOD
-+	bool "IIO Daemon"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	default y
-+	help
-+	  Install the IIO Daemon.
++Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
++---
 +
-+comment "IIO Daemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_LIBIIO_TESTS
-+	bool "Install test programs"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	help
-+	  Install the test programs (iio_info, iio_genxml, iio_readdev).
-+
-+endif
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-new file mode 100644
-index 0000000..2bfe8d9
---- /dev/null
-+++ b/package/libiio/libiio.mk
-@@ -0,0 +1,76 @@
-+################################################################################
-+#
-+# libiio
-+#
-+################################################################################
-+
-+LIBIIO_VERSION = 2014_R1
-+LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-+LIBIIO_INSTALL_STAGING = YES
-+LIBIIO_LICENSE = LGPLv2.1+
-+LIBIIO_LICENSE_FILES = COPYING
-+
-+LIBIIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) VERSION_GIT=$(LIBIIO_VERSION)
-+
-+# Avahi support in libiio requires avahi-client,
-+# which needs avahi-daemon and dbus
-+ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
-+	LIBIIO_DEPENDENCIES += avahi
-+else
-+	LIBIIO_MAKE_OPTS += WITH_AVAHI=no
-+endif
-+
-+ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
-+	LIBIIO_MAKE_OPTS += WITH_LOCAL_BACKEND=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
-+	LIBIIO_DEPENDENCIES += libxml2
-+else
-+	LIBIIO_MAKE_OPTS += WITH_NETWORK_BACKEND=no
-+endif
-+
-+# Libiio can run without threads
-+ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+	LIBIIO_MAKE_OPTS += WITH_PTHREAD=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-+define LIBIIO_BUILD_IIOD
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod $(LIBIIO_MAKE_OPTS)
-+endef
-+define LIBIIO_INSTALL_IIOD
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod install \
-+		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
-+define LIBIIO_BUILD_TESTS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests $(LIBIIO_MAKE_OPTS)
-+endef
-+define LIBIIO_INSTALL_TESTS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests install \
-+		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+endef
-+endif
-+
-+define LIBIIO_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libiio $(LIBIIO_MAKE_OPTS)
-+	$(LIBIIO_BUILD_IIOD)
-+	$(LIBIIO_BUILD_TESTS)
-+endef
-+
-+define LIBIIO_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-sysroot \
-+		$(LIBIIO_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define LIBIIO_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-lib \
-+		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+	$(LIBIIO_INSTALL_IIOD)
-+	$(LIBIIO_INSTALL_TESTS)
-+endef
-+
-+$(eval $(generic-package))
++--- a/gcc/config/arc/arc.h
+++++ b/gcc/config/arc/arc.h
++@@ -488,7 +488,7 @@ if (GET_MODE_CLASS (MODE) == MODE_INT		\
++ #define DEFAULT_SIGNED_CHAR 0
++ 
++ #define SIZE_TYPE "unsigned int"
++-#define PTRDIFF_TYPE "long int"
+++#define PTRDIFF_TYPE "int"
++ #define WCHAR_TYPE "int"
++ #define WCHAR_TYPE_SIZE 32
++ 
 -- 
-2.1.0
+1.9.3
