@@ -1,41 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Sep 2014 22:58:09 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 3.16.3
-Message-ID: <20140917205848.AE2269D6C9@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 18 Sep 2014 06:56:40 +0200
+Subject: [Buildroot] [PATCH v2] Add support for Flattened Image Trees
+In-Reply-To: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
+References: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <c3bf0f66-d29d-4a77-930d-c33ac938368c@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2158aa684c0f652117a031e297c79c6a0ae5343a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yegor Yefremov <yegorslists@googlemail.com> schreef:
+>This patch provides an option to specify a FIT source
+>file (*.its), that will usually be stored in a board directory,
+>and the resulting blob file name (*.itb).
+>
+>Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>---
+>Changes:
+>	v2: moved configuration to fs infra instead of linux
+>
+> fs/Config.in     |  1 +
+> fs/fit/Config.in | 28 ++++++++++++++++++++++++++++
+> fs/fit/fit.mk    | 19 +++++++++++++++++++
+> 3 files changed, 48 insertions(+)
+> create mode 100644 fs/fit/Config.in
+> create mode 100644 fs/fit/fit.mk
+>
+>diff --git a/fs/Config.in b/fs/Config.in
+>index 5853113..8d882d0 100644
+>--- a/fs/Config.in
+>+++ b/fs/Config.in
+>@@ -4,6 +4,7 @@ source "fs/cloop/Config.in"
+> source "fs/cpio/Config.in"
+> source "fs/cramfs/Config.in"
+> source "fs/ext2/Config.in"
+>+source "fs/fit/Config.in"
+> source "fs/initramfs/Config.in"
+> source "fs/iso9660/Config.in"
+> source "fs/jffs2/Config.in"
+>diff --git a/fs/fit/Config.in b/fs/fit/Config.in
+>new file mode 100644
+>index 0000000..add4d27
+>--- /dev/null
+>+++ b/fs/fit/Config.in
+>@@ -0,0 +1,28 @@
+>+config BR2_TARGET_ROOTFS_FIT
+>+	bool "Flattened Image Tree support"
+>+	help
+>+	  Compile a flattened image tree source into a flattened
+>+	  image tree blob. Select the *.its file to compile in the
+>+	  options below.
+>+
+>+if BR2_TARGET_ROOTFS_FIT
+>+
+>+config BR2_FIT_PATH
+>+	string "Flattened Image Tree source file path"
+>+	help
+>+	  Path to the image tree tree source files.
+>+
+>+config BR2_FIT_BLOB_NAME
+>+	string "Flattened Image Tree blob file name"
+>+	help
+>+	  File name for the resulting FIT blob.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Two extra comments after sleeping over it:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bdf5fc5..0ad8bce 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.16.2"
-+	bool "3.16.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.16.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.16.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+- is it really needed to ask for the blob file name? We
+ could simply use the same file name as the source,
+ but with modified extension.
+
+- I think we should add support for multiple fit images
+ at once, which is not hard to do. The user would
+ specify a space separated list of its files.
+
+Best regards,
+Thomas
