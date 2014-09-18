@@ -1,87 +1,76 @@
-From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Date: Thu, 18 Sep 2014 11:27:06 +0200
-Subject: [Buildroot] [PATCH 3/3] New package: c-icap-modules Additionals
-	modules for c-icap server.
-In-Reply-To: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <1411032426-11463-4-git-send-email-guillaume.gardet@oliseo.fr>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Thu, 18 Sep 2014 11:38:35 +0200
+Subject: [Buildroot] [PATCH 1/1] ipmiutil: new package
+Message-ID: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds c-icap-modules, additionnal modules for c-icap.
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in                        |  1 +
- package/c-icap-modules/Config.in         |  7 +++++++
- package/c-icap-modules/c-icap-modules.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/c-icap-modules/Config.in
- create mode 100644 package/c-icap-modules/c-icap-modules.mk
+ package/Config.in            |    1 +
+ package/ipmiutil/Config.in   |   15 +++++++++++++++
+ package/ipmiutil/ipmiutil.mk |   15 +++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 package/ipmiutil/Config.in
+ create mode 100644 package/ipmiutil/ipmiutil.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 24a0a8e..86a50ae 100644
+index 73ba86a..3eafabb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -951,6 +951,7 @@ menu "Networking applications"
- 	source "package/bridge-utils/Config.in"
- 	source "package/bwm-ng/Config.in"
- 	source "package/c-icap/Config.in"
-+	source "package/c-icap-modules/Config.in"
- 	source "package/can-utils/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-diff --git a/package/c-icap-modules/Config.in b/package/c-icap-modules/Config.in
+@@ -322,6 +322,7 @@ endif
+ 	source "package/intel-microcode/Config.in"
+ 	source "package/iostat/Config.in"
+ 	source "package/ipmitool/Config.in"
++	source "package/ipmiutil/Config.in"
+ 	source "package/irda-utils/Config.in"
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
 new file mode 100644
-index 0000000..7946c17
+index 0000000..29d6e26
 --- /dev/null
-+++ b/package/c-icap-modules/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_C_ICAP_MODULES
-+        bool "c-icap-modules"
-+	depends on BR2_PACKAGE_C_ICAP
++++ b/package/ipmiutil/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_IPMIUTIL
++	bool "ipmiutil"
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
 +	help
-+          Additionals modules for c-icap server.
++	  The ipmiutil package provides easy-to-use utilities to view the SEL,
++	  perform an IPMI chassis reset, set up the IPMI LAN and Platform Event Filter
++	  entries to allow SNMP alerts, Serial-Over-LAN console, event daemon, and
++	  other IPMI tasks.
 +
-+          http://c-icap.sourceforge.net/
-\ No newline at end of file
-diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
++	  http://ipmiutil.sourceforge.net/
++
++comment "ipmiutil needs a toolchain w/ ssp"
++	depends on !BR2_TOOLCHAIN_HAS_SSP
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
 new file mode 100644
-index 0000000..683dd4f
+index 0000000..9bf7325
 --- /dev/null
-+++ b/package/c-icap-modules/c-icap-modules.mk
-@@ -0,0 +1,27 @@
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# c-icap-modules
++# ipmiutil
 +#
 +################################################################################
 +
-+C_ICAP_MODULES_VERSION = 0.3.2
-+C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
-+C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
-+C_ICAP_MODULES_INSTALL_STAGING = NO
-+C_ICAP_MODULES_INSTALL_TARGET = YES
-+C_ICAP_MODULES_CONF_OPT = --with-c-icap=$(STAGING_DIR)/usr/ --includedir=$(STAGING_DIR)/usr/include/  \
-+		CPPFLAGS="-I $(STAGING_DIR)/usr/include/ -I $(STAGING_DIR)/usr/include/c_icap/" \
-+		CFLAGS="$(CFLAGS) -I $(STAGING_DIR)/usr/include/ -I $(STAGING_DIR)/usr/include/c_icap/"
-+C_ICAP_MODULES_DEPENDENCIES = c-icap
++IPMIUTIL_VERSION = 2.9.4
++IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files/
 +
-+define C_ICAP_MODULES_REMOVE_BROKEN_INCLUDE_PATH
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/url_check/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/virus_scan/Makefile	
-+endef
++IPMIUTIL_DEPENDENCIES = openssl zlib
 +
-+
-+C_ICAP_MODULES_POST_CONFIGURE_HOOKS = C_ICAP_MODULES_REMOVE_BROKEN_INCLUDE_PATH
++IPMIUTIL_LICENSE = BSD-2c
++IPMIUTIL_LICENSE_FILES = COPYING
 +
 +$(eval $(autotools-package))
-\ No newline at end of file
 -- 
-1.8.4.5
+1.7.10.4
