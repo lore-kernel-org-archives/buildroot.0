@@ -1,86 +1,57 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Thu, 18 Sep 2014 09:39:11 +0200
-Subject: [Buildroot] [PATCH 3/6] python-rtslib-fb: new package
-In-Reply-To: <5419E86C.3000100@trzebnica.net>
-References: <1410953999-16520-1-git-send-email-cvubrugier@fastmail.fm>
- <1410953999-16520-4-git-send-email-cvubrugier@fastmail.fm>
- <5419E86C.3000100@trzebnica.net>
-Message-ID: <20140918093911.6831517a@grp-cvubrugier>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 18 Sep 2014 10:23:28 +0100
+Subject: [Buildroot] [PATCH v2 2/2] iprutils: Fix static build by passing
+	the libraries in the right order
+In-Reply-To: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1411032208-62586-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerzy,
+This mistake was causing failures like this one:
 
-On Wed, 17 Sep 2014 22:00:44 +0200, Jerzy Grzegorek wrote :
-> > rtslib-fb is an object-based Python library for configuring the
-> > LIO generic SCSI target, present in 3.x Linux kernel versions.
-> >
-> > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> > ---
-> >   package/Config.in                         |  1 +
-> >   package/python-rtslib-fb/Config.in        |  9 +++++++++
-> >   package/python-rtslib-fb/python-rtslib.mk | 13 +++++++++++++
-> 
-> Shouldn't this be:
-> 
-> package/python-rtslib-fb/python-rtslib-fb.mk ?
+m_post.c:(.text+0x60): undefined reference to `wattr_on'
 
-Indeed. Thank you for catching this one!
+Patch sent upstream:
+  https://sourceforge.net/p/iprdd/iprutils/merge-requests/1/
 
-Best regards,
+Fixes:
+  http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/
 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...x-static-build-by-passing-the-libraries-i.patch |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
 
-> >   3 files changed, 23 insertions(+)
-> >   create mode 100644 package/python-rtslib-fb/Config.in
-> >   create mode 100644 package/python-rtslib-fb/python-rtslib.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 17930ea..7447036 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -503,6 +503,7 @@ menu "external python modules"
-> >   	source "package/python-pysnmp-mibs/Config.in"
-> >   	source "package/python-pyusb/Config.in"
-> >   	source "package/python-pyzmq/Config.in"
-> > +	source "package/python-rtslib-fb/Config.in"
-> >   	source "package/python-serial/Config.in"
-> >   	source "package/python-setuptools/Config.in"
-> >   	source "package/python-simplejson/Config.in"
-> > diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
-> > new file mode 100644
-> > index 0000000..b2aebcf
-> > --- /dev/null
-> > +++ b/package/python-rtslib-fb/Config.in
-> > @@ -0,0 +1,9 @@
-> > +config BR2_PACKAGE_PYTHON_RTSLIB_FB
-> > +	bool "python-rtslib-fb"
-> > +	depends on BR2_PACKAGE_PYTHON
-> > +	help
-> > +	  rtslib-fb is an object-based Python library for configuring
-> > +	  the LIO generic SCSI target, present in 3.x Linux kernel
-> > +	  versions.
-> > +
-> > +	  https://github.com/agrover/rtslib-fb
-> > diff --git a/package/python-rtslib-fb/python-rtslib.mk b/package/python-rtslib-fb/python-rtslib.mk
-> > new file mode 100644
-> > index 0000000..70b0257
-> > --- /dev/null
-> > +++ b/package/python-rtslib-fb/python-rtslib.mk
-> > @@ -0,0 +1,13 @@
-> > +################################################################################
-> > +#
-> > +# python-rtslib-fb
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_RTSLIB_FB_VERSION = v2.1.fb49
-> > +PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
-> > +PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
-> > +PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
-> > +PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
-> > +
-> > +$(eval $(python-package))
-> 
+diff --git a/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
+new file mode 100644
+index 0000000..e176ab6
+--- /dev/null
++++ b/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
+@@ -0,0 +1,20 @@
++iprutils: Fix static build by passing the libraries in the right order
++
++This mistake was causing failures like this one:
++
++m_post.c:(.text+0x60): undefined reference to `wattr_on'
++
++http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/build-end.log
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++--- iprutils-2.4.2/Makefile.orig	2014-09-17 18:14:52.435367860 +0100
+++++ iprutils-2.4.2/Makefile	2014-09-17 18:15:09.367652526 +0100
++@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTIL
++ all: iprconfig iprupdate iprdump iprinit iprdbg docs 
++ 
++ iprconfig: iprconfig.c iprlib.o iprconfig.h
++-	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu
+++	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses
++ 
++ iprupdate: iprupdate.c iprlib.o
++ 	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprupdate iprlib.o iprupdate.c $(LDFLAGS)
+-- 
+1.7.1
