@@ -1,29 +1,158 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Sep 2014 21:39:09 +0200
-Subject: [Buildroot] [git commit] polarssl: add hash
-Message-ID: <20140918195020.E69A09D6E0@busybox.osuosl.org>
+Date: Thu, 18 Sep 2014 21:46:07 +0200
+Subject: [Buildroot] [git commit] strace: Apply an upstream patch to fix
+	sa_restorer problems
+Message-ID: <20140918195021.4B9559D6E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31df0ffb8b31c8e369ddf7f8a2f9c3788904f4c3
+commit: http://git.buildroot.net/buildroot/commit/?id=6976dda8c7518083ca58d83d12f235b2c602462b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Wrap sa_restorer member definitions in #ifdef SA_RESTORER to be
+consistent with their use.
+If an architecture does not provide sa_restorer members but still
+defines SA_RESTORER macro, the latter has to be explicitly undefined.
+
+This change fixes compilation failures like this one:
+signal.c: In function 'decode_old_sigaction':
+signal.c:631:21: error: 'struct old_sigaction' has no member named
+'sa_restorer'
+signal.c: In function 'decode_new_sigaction':
+signal.c:1224:21: error: 'struct new_sigaction' has no member named
+'sa_restorer'
+
+* signal.c (struct old_sigaction, struct old_sigaction32,
+struct new_sigaction, struct new_sigaction32):
+Wrap sa_restorer member in #ifdef SA_RESTORER.
+(decode_old_sigaction, decode_new_sigaction):
+Wrap use of sa32.sa_restorer in #ifdef SA_RESTORER.
+
+Upstream commit:
+  https://sourceforge.net/p/strace/code/ci/c3a5c01051ba29a9f421f4d45d96bbc32df2b796/
+
+Fixes:
+  http://autobuild.buildroot.net/results/93e/93e54d8aecc5c178cc3465eb9fd5415461325285/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/polarssl/polarssl.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ ...rap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch |  107 ++++++++++++++++++++
+ 1 files changed, 107 insertions(+), 0 deletions(-)
 
-diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+diff --git a/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch b/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch
 new file mode 100644
-index 0000000..ca437ac
+index 0000000..cd2e31b
 --- /dev/null
-+++ b/package/polarssl/polarssl.hash
-@@ -0,0 +1,3 @@
-+# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
-+sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
-+sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
++++ b/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch
+@@ -0,0 +1,107 @@
++Add a patch to fix the sa_restorer problems in strace.
++
++This patch has been applied upstream:
++  https://sourceforge.net/p/strace/code/ci/c3a5c01051ba29a9f421f4d45d96bbc32df2b796/
++
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++
++From c3a5c01051ba29a9f421f4d45d96bbc32df2b796 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <vincent@gentoo.org>
++Date: Thu, 11 Sep 2014 20:05:18 +0100
++Subject: [PATCH] sigaction: wrap sa_restorer in #ifdef SA_RESTORER consistently
++
++Wrap sa_restorer member definitions in #ifdef SA_RESTORER to be
++consistent with their use.
++If an architecture does not provide sa_restorer members but still
++defines SA_RESTORER macro, the latter has to be explicitly undefined.
++
++This change fixes compilation failures like this one:
++signal.c: In function 'decode_old_sigaction':
++signal.c:631:21: error: 'struct old_sigaction' has no member named 'sa_restorer'
++signal.c: In function 'decode_new_sigaction':
++signal.c:1224:21: error: 'struct new_sigaction' has no member named 'sa_restorer'
++
++* signal.c (struct old_sigaction, struct old_sigaction32,
++struct new_sigaction, struct new_sigaction32):
++Wrap sa_restorer member in #ifdef SA_RESTORER.
++(decode_old_sigaction, decode_new_sigaction):
++Wrap use of sa32.sa_restorer in #ifdef SA_RESTORER.
++
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++---
++ signal.c |   18 ++++++++++++++----
++ 1 files changed, 14 insertions(+), 4 deletions(-)
++
++diff --git a/signal.c b/signal.c
++index 74e0fd9..5855d13 100644
++--- a/signal.c
+++++ b/signal.c
++@@ -559,8 +559,10 @@ struct old_sigaction {
++ 	void (*__sa_handler)(int);
++ 	unsigned long sa_mask;
++ 	unsigned long sa_flags;
++-	void (*sa_restorer)(void);
++ #endif /* !MIPS */
+++#ifdef SA_RESTORER
+++	void (*sa_restorer)(void);
+++#endif
++ };
++ 
++ struct old_sigaction32 {
++@@ -568,7 +570,9 @@ struct old_sigaction32 {
++ 	uint32_t __sa_handler;
++ 	uint32_t sa_mask;
++ 	uint32_t sa_flags;
+++#ifdef SA_RESTORER
++ 	uint32_t sa_restorer;
+++#endif
++ };
++ 
++ static void
++@@ -594,7 +598,9 @@ decode_old_sigaction(struct tcb *tcp, long addr)
++ 			memset(&sa, 0, sizeof(sa));
++ 			sa.__sa_handler = (void*)(uintptr_t)sa32.__sa_handler;
++ 			sa.sa_flags = sa32.sa_flags;
+++#ifdef SA_RESTORER
++ 			sa.sa_restorer = (void*)(uintptr_t)sa32.sa_restorer;
+++#endif
++ 			sa.sa_mask = sa32.sa_mask;
++ 		}
++ 	} else
++@@ -1138,10 +1144,10 @@ struct new_sigaction
++ #else
++ 	void (*__sa_handler)(int);
++ 	unsigned long sa_flags;
++-# if !defined(ALPHA) && !defined(HPPA) && !defined(IA64)
++-	void (*sa_restorer)(void);
++-# endif /* !ALPHA && !HPPA && !IA64 */
++ #endif /* !MIPS */
+++#ifdef SA_RESTORER
+++	void (*sa_restorer)(void);
+++#endif
++ 	/* Kernel treats sa_mask as an array of longs. */
++ 	unsigned long sa_mask[NSIG / sizeof(long) ? NSIG / sizeof(long) : 1];
++ };
++@@ -1150,7 +1156,9 @@ struct new_sigaction32
++ {
++ 	uint32_t __sa_handler;
++ 	uint32_t sa_flags;
+++#ifdef SA_RESTORER
++ 	uint32_t sa_restorer;
+++#endif
++ 	uint32_t sa_mask[2 * (NSIG / sizeof(long) ? NSIG / sizeof(long) : 1)];
++ };
++ 
++@@ -1176,7 +1184,9 @@ decode_new_sigaction(struct tcb *tcp, long addr)
++ 			memset(&sa, 0, sizeof(sa));
++ 			sa.__sa_handler = (void*)(unsigned long)sa32.__sa_handler;
++ 			sa.sa_flags     = sa32.sa_flags;
+++#ifdef SA_RESTORER
++ 			sa.sa_restorer  = (void*)(unsigned long)sa32.sa_restorer;
+++#endif
++ 			/* Kernel treats sa_mask as an array of longs.
++ 			 * For 32-bit process, "long" is uint32_t, thus, for example,
++ 			 * 32th bit in sa_mask will end up as bit 0 in sa_mask[1].
++-- 
++1.7.1
++
