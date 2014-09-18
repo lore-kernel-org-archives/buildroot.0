@@ -1,72 +1,86 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 18 Sep 2014 21:39:31 +0200
-Subject: [Buildroot] [PATCH 08 of 13] manual/user guide/customization:
- rename section 'Customizing packages'
+Date: Thu, 18 Sep 2014 21:39:32 +0200
+Subject: [Buildroot] [PATCH 09 of 13] manual/user guide/customization:
+ change recommendation for package paths
 In-Reply-To: <patchbomb.1411069163@localhost>
 References: <patchbomb.1411069163@localhost>
-Message-ID: <bafb5924f054ce0362d2.1411069171@localhost>
+Message-ID: <b06a1c9429ab6da394d2.1411069172@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This small patch renames the section 'Customizing packages' to 'Adding
-project-specific patches'. Additionally, a minor change is done to the
-introduction of this section.
-To better reflect the contents, the source file is renamed.
+The Buildroot manual was recommending following paths for project-specific
+packages:
+    package/<company>/<boardname>/foo/
+    $BR2_EXTERNAL/package/<boardname>/foo/
+
+However, if a company has several boards, it is often the case that some
+packages are common for different boards. Therefore, introducing a
+<boardname> path component is not ideal.
+
+This patch changes the recommendation to:
+    package/<company>/foo/
+    $BR2_EXTERNAL/package/foo/
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/customize-patches.txt |  11 ++++++-----
- docs/manual/customize.txt         |   2 +-
- docs/manual/patch-policy.txt      |   2 +-
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ docs/manual/customize-directory-structure.txt |  13 ++++++-------
+ docs/manual/customize-outside-br.txt          |  12 +++++++-----
+ 2 files changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-patches.txt
-rename from docs/manual/customize-packages.txt
-rename to docs/manual/customize-patches.txt
---- a/docs/manual/customize-packages.txt
-+++ b/docs/manual/customize-patches.txt
-@@ -1,11 +1,12 @@
- // -*- mode:doc -*- ;
+diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+--- a/docs/manual/customize-directory-structure.txt
++++ b/docs/manual/customize-directory-structure.txt
+@@ -40,13 +40,12 @@
+ |   +-- <company>/
+ |       +-- Config.in (if not using BR2_EXTERNAL)
+ |       +-- <company>.mk (if not using BR2_EXTERNAL)
+-|       +-- <boardname>/
+-|           +-- package1/
+-|           |    +-- Config.in
+-|           |    +-- package1.mk
+-|           +-- package2/
+-|               +-- Config.in
+-|               +-- package2.mk
++|       +-- package1/
++|       |    +-- Config.in
++|       |    +-- package1.mk
++|       +-- package2/
++|           +-- Config.in
++|           +-- package2.mk
+ |
+ +-- Config.in (if using BR2_EXTERNAL)
+ +-- external.mk (if using BR2_EXTERNAL)
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -81,19 +81,21 @@
+    looks like:
+ +
+ ------
+-source "$BR2_EXTERNAL/package/<boardname>/package1/Config.in"
+-source "$BR2_EXTERNAL/package/<boardname>/package2/Config.in"
++source "$BR2_EXTERNAL/package/package1/Config.in"
++source "$BR2_EXTERNAL/package/package2/Config.in"
+ ------
+ +
+ Then, have a +$(BR2_EXTERNAL)/external.mk+ file that looks like:
+ +
+ ------
+-include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*/*.mk))
++include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+ ------
+ +
+-And then in +$(BR2_EXTERNAL)/package/<boardname>/package1+ and
+-   +$(BR2_EXTERNAL)/package/<boardname>/package2+ create normal Buildroot
++And then in +$(BR2_EXTERNAL)/package/package1+ and
++   +$(BR2_EXTERNAL)/package/package2+ create normal Buildroot
+    package recipes, as explained in xref:adding-packages[].
++   If you prefer, you can also group the packages in subdirectories
++   called <boardname> and adapt the above paths accordingly.
  
--[[packages-custom]]
--=== Customizing packages
-+[[customize-patches]]
-+=== Adding project-specific patches
- 
--It is sometimes useful to apply 'extra' patches to packages - over and
--above those provided in Buildroot. This might be used to support custom
--features in a project, for example, or when working on a new architecture.
-+It is sometimes useful to apply 'extra' patches to packages - on top of
-+those provided in Buildroot. This might be used to support custom
-+features in a project, for example, or when working on a new
-+architecture.
- 
- The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
- a space separated list of one or more directories containing package
-diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
---- a/docs/manual/customize.txt
-+++ b/docs/manual/customize.txt
-@@ -53,6 +53,6 @@
- 
- include::customize-post-image.txt[]
- 
--include::customize-packages.txt[]
-+include::customize-patches.txt[]
- 
- include::customize-store.txt[]
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -46,7 +46,7 @@
- 
- The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
- used to specify a space separated list of one or more directories
--containing global package patches. See xref:packages-custom[] for
-+containing global package patches. See xref:customize-patches[] for
- details.
- 
- [[patch-apply-order]]
+  * One can store Buildroot defconfigs in the +configs+ subdirectory of
+    +$(BR2_EXTERNAL)+. Buildroot will automatically show them in the
