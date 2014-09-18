@@ -1,157 +1,168 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 Sep 2014 11:06:45 +0100
-Subject: [Buildroot] [PATCH] strace: Apply an upstream patch to fix
-	sa_restorer problems
-Message-ID: <1411034805-27839-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Thu, 18 Sep 2014 11:44:27 +0200
+Subject: [Buildroot] [PATCH v2] libiio: new package
+Message-ID: <1411033467-7919-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wrap sa_restorer member definitions in #ifdef SA_RESTORER to be
-consistent with their use.
-If an architecture does not provide sa_restorer members but still
-defines SA_RESTORER macro, the latter has to be explicitly undefined.
+Libiio is a library to ease the development of software interfacing
+Linux Industrial I/O (IIO) devices.
 
-This change fixes compilation failures like this one:
-signal.c: In function 'decode_old_sigaction':
-signal.c:631:21: error: 'struct old_sigaction' has no member named
-'sa_restorer'
-signal.c: In function 'decode_new_sigaction':
-signal.c:1224:21: error: 'struct new_sigaction' has no member named
-'sa_restorer'
+http://wiki.analog.com/resources/tools-software/linux-software/libiio
 
-* signal.c (struct old_sigaction, struct old_sigaction32,
-struct new_sigaction, struct new_sigaction32):
-Wrap sa_restorer member in #ifdef SA_RESTORER.
-(decode_old_sigaction, decode_new_sigaction):
-Wrap use of sa32.sa_restorer in #ifdef SA_RESTORER.
-
-Upstream commit:
-  https://sourceforge.net/p/strace/code/ci/c3a5c01051ba29a9f421f4d45d96bbc32df2b796/
-
-Fixes:
-  http://autobuild.buildroot.net/results/93e/93e54d8aecc5c178cc3465eb9fd5415461325285/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 ---
- ...rap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch |  107 ++++++++++++++++++++
- 1 files changed, 107 insertions(+), 0 deletions(-)
- create mode 100644 package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch
+ package/Config.in        |  1 +
+ package/libiio/Config.in | 42 ++++++++++++++++++++++++++
+ package/libiio/libiio.mk | 76 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 119 insertions(+)
+ create mode 100644 package/libiio/Config.in
+ create mode 100644 package/libiio/libiio.mk
 
-diff --git a/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch b/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch
+diff --git a/package/Config.in b/package/Config.in
+index 73ba86a..487b948 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -665,6 +665,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libhid/Config.in"
++	source "package/libiio/Config.in"
+ 	source "package/libinput/Config.in"
+ 	source "package/libiqrf/Config.in"
+ 	source "package/libllcp/Config.in"
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
 new file mode 100644
-index 0000000..cd2e31b
+index 0000000..b1f1e4c
 --- /dev/null
-+++ b/package/strace/strace-0001-sigaction-wrap-sa_restorer-in-ifdef-SA_RESTORER-cons.patch
-@@ -0,0 +1,107 @@
-+Add a patch to fix the sa_restorer problems in strace.
++++ b/package/libiio/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_LIBIIO
++	bool "libiio"
++	help
++	  Libiio is a library to ease the development of software interfacing
++	  Linux Industrial I/O (IIO) devices.
 +
-+This patch has been applied upstream:
-+  https://sourceforge.net/p/strace/code/ci/c3a5c01051ba29a9f421f4d45d96bbc32df2b796/
++	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
 +
-+Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++if BR2_PACKAGE_LIBIIO
 +
-+From c3a5c01051ba29a9f421f4d45d96bbc32df2b796 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <vincent@gentoo.org>
-+Date: Thu, 11 Sep 2014 20:05:18 +0100
-+Subject: [PATCH] sigaction: wrap sa_restorer in #ifdef SA_RESTORER consistently
++config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	bool "Local backend"
++	default y
++	help
++	  Enable the local backend of the library.
 +
-+Wrap sa_restorer member definitions in #ifdef SA_RESTORER to be
-+consistent with their use.
-+If an architecture does not provide sa_restorer members but still
-+defines SA_RESTORER macro, the latter has to be explicitly undefined.
++config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
++	bool "Network backend"
++	select BR2_PACKAGE_LIBXML2
++	default y
++	help
++	  Enable the network backend of the library.
 +
-+This change fixes compilation failures like this one:
-+signal.c: In function 'decode_old_sigaction':
-+signal.c:631:21: error: 'struct old_sigaction' has no member named 'sa_restorer'
-+signal.c: In function 'decode_new_sigaction':
-+signal.c:1224:21: error: 'struct new_sigaction' has no member named 'sa_restorer'
++config BR2_PACKAGE_LIBIIO_IIOD
++	bool "IIO Daemon"
++	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	default y
++	help
++	  Install the IIO Daemon.
 +
-+* signal.c (struct old_sigaction, struct old_sigaction32,
-+struct new_sigaction, struct new_sigaction32):
-+Wrap sa_restorer member in #ifdef SA_RESTORER.
-+(decode_old_sigaction, decode_new_sigaction):
-+Wrap use of sa32.sa_restorer in #ifdef SA_RESTORER.
++comment "IIO Daemon needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
-+Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
-+---
-+ signal.c |   18 ++++++++++++++----
-+ 1 files changed, 14 insertions(+), 4 deletions(-)
++config BR2_PACKAGE_LIBIIO_TESTS
++	bool "Install test programs"
++	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
++	help
++	  Install the test programs (iio_info, iio_genxml, iio_readdev).
 +
-+diff --git a/signal.c b/signal.c
-+index 74e0fd9..5855d13 100644
-+--- a/signal.c
-++++ b/signal.c
-+@@ -559,8 +559,10 @@ struct old_sigaction {
-+ 	void (*__sa_handler)(int);
-+ 	unsigned long sa_mask;
-+ 	unsigned long sa_flags;
-+-	void (*sa_restorer)(void);
-+ #endif /* !MIPS */
-++#ifdef SA_RESTORER
-++	void (*sa_restorer)(void);
-++#endif
-+ };
-+ 
-+ struct old_sigaction32 {
-+@@ -568,7 +570,9 @@ struct old_sigaction32 {
-+ 	uint32_t __sa_handler;
-+ 	uint32_t sa_mask;
-+ 	uint32_t sa_flags;
-++#ifdef SA_RESTORER
-+ 	uint32_t sa_restorer;
-++#endif
-+ };
-+ 
-+ static void
-+@@ -594,7 +598,9 @@ decode_old_sigaction(struct tcb *tcp, long addr)
-+ 			memset(&sa, 0, sizeof(sa));
-+ 			sa.__sa_handler = (void*)(uintptr_t)sa32.__sa_handler;
-+ 			sa.sa_flags = sa32.sa_flags;
-++#ifdef SA_RESTORER
-+ 			sa.sa_restorer = (void*)(uintptr_t)sa32.sa_restorer;
-++#endif
-+ 			sa.sa_mask = sa32.sa_mask;
-+ 		}
-+ 	} else
-+@@ -1138,10 +1144,10 @@ struct new_sigaction
-+ #else
-+ 	void (*__sa_handler)(int);
-+ 	unsigned long sa_flags;
-+-# if !defined(ALPHA) && !defined(HPPA) && !defined(IA64)
-+-	void (*sa_restorer)(void);
-+-# endif /* !ALPHA && !HPPA && !IA64 */
-+ #endif /* !MIPS */
-++#ifdef SA_RESTORER
-++	void (*sa_restorer)(void);
-++#endif
-+ 	/* Kernel treats sa_mask as an array of longs. */
-+ 	unsigned long sa_mask[NSIG / sizeof(long) ? NSIG / sizeof(long) : 1];
-+ };
-+@@ -1150,7 +1156,9 @@ struct new_sigaction32
-+ {
-+ 	uint32_t __sa_handler;
-+ 	uint32_t sa_flags;
-++#ifdef SA_RESTORER
-+ 	uint32_t sa_restorer;
-++#endif
-+ 	uint32_t sa_mask[2 * (NSIG / sizeof(long) ? NSIG / sizeof(long) : 1)];
-+ };
-+ 
-+@@ -1176,7 +1184,9 @@ decode_new_sigaction(struct tcb *tcp, long addr)
-+ 			memset(&sa, 0, sizeof(sa));
-+ 			sa.__sa_handler = (void*)(unsigned long)sa32.__sa_handler;
-+ 			sa.sa_flags     = sa32.sa_flags;
-++#ifdef SA_RESTORER
-+ 			sa.sa_restorer  = (void*)(unsigned long)sa32.sa_restorer;
-++#endif
-+ 			/* Kernel treats sa_mask as an array of longs.
-+ 			 * For 32-bit process, "long" is uint32_t, thus, for example,
-+ 			 * 32th bit in sa_mask will end up as bit 0 in sa_mask[1].
-+-- 
-+1.7.1
++endif
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+new file mode 100644
+index 0000000..2bfe8d9
+--- /dev/null
++++ b/package/libiio/libiio.mk
+@@ -0,0 +1,76 @@
++################################################################################
++#
++# libiio
++#
++################################################################################
 +
++LIBIIO_VERSION = 2014_R1
++LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
++LIBIIO_INSTALL_STAGING = YES
++LIBIIO_LICENSE = LGPLv2.1+
++LIBIIO_LICENSE_FILES = COPYING
++
++LIBIIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) VERSION_GIT=$(LIBIIO_VERSION)
++
++# Avahi support in libiio requires avahi-client,
++# which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
++	LIBIIO_DEPENDENCIES += avahi
++else
++	LIBIIO_MAKE_OPTS += WITH_AVAHI=no
++endif
++
++ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
++	LIBIIO_MAKE_OPTS += WITH_LOCAL_BACKEND=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
++	LIBIIO_DEPENDENCIES += libxml2
++else
++	LIBIIO_MAKE_OPTS += WITH_NETWORK_BACKEND=no
++endif
++
++# Libiio can run without threads
++ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++	LIBIIO_MAKE_OPTS += WITH_PTHREAD=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
++define LIBIIO_BUILD_IIOD
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod $(LIBIIO_MAKE_OPTS)
++endef
++define LIBIIO_INSTALL_IIOD
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod install \
++		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
++define LIBIIO_BUILD_TESTS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests $(LIBIIO_MAKE_OPTS)
++endef
++define LIBIIO_INSTALL_TESTS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests install \
++		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++endef
++endif
++
++define LIBIIO_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libiio $(LIBIIO_MAKE_OPTS)
++	$(LIBIIO_BUILD_IIOD)
++	$(LIBIIO_BUILD_TESTS)
++endef
++
++define LIBIIO_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-sysroot \
++		$(LIBIIO_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++endef
++
++define LIBIIO_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-lib \
++		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++	$(LIBIIO_INSTALL_IIOD)
++	$(LIBIIO_INSTALL_TESTS)
++endef
++
++$(eval $(generic-package))
 -- 
-1.7.1
+2.1.0
