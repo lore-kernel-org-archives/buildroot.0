@@ -1,39 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Sep 2014 23:09:02 +0200
-Subject: [Buildroot] [git commit] whois: Fix unmet dependencies
-Message-ID: <20140919211333.596289D6FD@busybox.osuosl.org>
+Date: Fri, 19 Sep 2014 23:12:49 +0200
+Subject: [Buildroot] [git commit] BR2_DEPRECATED: update option label and
+	help
+Message-ID: <20140919211333.5EF9E9D46E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0790de59cdc36fa0efe36df05fe7cbdae3f46dad
+commit: http://git.buildroot.net/buildroot/commit/?id=8515ef02569464d1196812cdc68d8afa500d485f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix :
-   BR2_PACKAGE_WHOIS selects BR2_PACKAGE_GETTEXT which has unmet direct dependencies (BR2_USE_WCHAR)
+We should use positive logic (show things that are otherwise hidden...)
+for the help since it's what it does.
+It also applies to more options than just packages alone, for example
+the AVR32 architecture so add an "options" label to it.
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+[Peter: tweak help text as suggested by Yann]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/whois/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/whois/Config.in b/package/whois/Config.in
-index 40b6590..95e3dc6 100644
---- a/package/whois/Config.in
-+++ b/package/whois/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_WHOIS
- 	bool "whois"
-+	depends on BR2_USE_WCHAR # gettext
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	help
- 	  Improved whois client.
+diff --git a/Config.in b/Config.in
+index 14ff55b..24aa883 100644
+--- a/Config.in
++++ b/Config.in
+@@ -301,9 +301,10 @@ config BR2_CCACHE_INITIAL_SETUP
+ endif
  
- 	  http://www.linux.it/~md/software/
-+
-+comment "whois needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+ config BR2_DEPRECATED
+-	bool "Show packages that are deprecated or obsolete"
++	bool "Show options and packages that are deprecated or obsolete"
+ 	help
+-	  This option hides outdated/obsolete versions of packages.
++	  This option shows outdated/obsolete versions of packages and
++	  options that are otherwise hidden.
+ 
+ if BR2_DEPRECATED
+ 
