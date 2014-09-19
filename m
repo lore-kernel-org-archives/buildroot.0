@@ -1,39 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Sep 2014 10:41:09 -0300
-Subject: [Buildroot] [PATCH] BR2_DEPRECATED: update option label and help
-Message-ID: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 19 Sep 2014 15:48:39 +0200
+Subject: [Buildroot] [PATCH] imx6sabresd: boot to /init in mfgtools mode
+In-Reply-To: <1407833366-21448-1-git-send-email-vincent.stehle@freescale.com>
+References: <1407833366-21448-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <541C3437.6000906@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We should use positive logic (show things that are otherwise hidden...)
-for the help since it's what it does.
-It also applies to more options than just packages alone, for example
-the AVR32 architecture so add an "options" label to it.
+Dear Vincent Stehl?,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Vincent Stehl? wrote:
+> Buildroot supplies a nice /init wrapper script to use when booting from a
+> ramdisk.
+>
+> We add a patch to u-boot to tell the kernel to boot into /init (instead of
+> /linuxrc) on i.MX6, when booting in mfgtools mode. This way we can boot a
+> buildroot system entirely through USB.
+>
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Cc: Gary Bisson <bisson.gary@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+> Cc: Gilles Talis <gilles.talis@gmail.com>
 
-diff --git a/Config.in b/Config.in
-index 14ff55b..b494fab 100644
---- a/Config.in
-+++ b/Config.in
-@@ -301,9 +301,10 @@ config BR2_CCACHE_INITIAL_SETUP
- endif
- 
- config BR2_DEPRECATED
--	bool "Show packages that are deprecated or obsolete"
-+	bool "Show options and packages that are deprecated or obsolete"
- 	help
--	  This option hides outdated/obsolete versions of packages.
-+	  This option shows outdated/obsolete versions of packages and
-+	  options that are hidden otherwise.
- 
- if BR2_DEPRECATED
- 
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+However, as you pointed out, this conflicts with my patches to support
+i.MX6DL. So I've rebased my patches on current master and added yours
+on top, adapted and completed with i.MX6DL support.
+
+I'll send this patchset in a while, with the addition of my Tested-by
+tag.
+
 -- 
-1.8.5.5
+Luca
