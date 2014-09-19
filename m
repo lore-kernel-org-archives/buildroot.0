@@ -1,60 +1,90 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 19 Sep 2014 09:27:15 +0200 (CEST)
-Subject: [Buildroot] [PATCH] cmake : bump to version 3.0.2
-In-Reply-To: <1411110831-27676-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <791659592.25467604.1411111635391.JavaMail.root@openwide.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 19 Sep 2014 10:37:23 +0200
+Subject: [Buildroot] [PATCH v2] Add support for Flattened Image Trees
+In-Reply-To: <216395b4-20a8-400c-be86-87ec3f22ae14@email.android.com>
+References: <1410981210-7788-1-git-send-email-yegorslists@googlemail.com>
+ <c3bf0f66-d29d-4a77-930d-c33ac938368c@email.android.com>
+ <CAGm1_ks=xwD4pm9aFF9AfKsFDeOhLPthkdx6BbLwY71z1e8TXg@mail.gmail.com>
+ <CAAXf6LXtSvZQoJc0qibQhdCvS3XEECgMShr1tncrKduhTAsJGQ@mail.gmail.com>
+ <CAGm1_ktxYNG99Vq+=tyhFyQqYuVE2==-psqRPh1Dp7H2aUgMJQ@mail.gmail.com>
+ <81266ccf-e3d8-470e-9c94-4a63931a4fa2@email.android.com>
+ <CAGm1_kvvNMcCgpZvS+YOxrnsQNHtCxt8Wd_0kprvTMS0zYXJFg@mail.gmail.com>
+ <216395b4-20a8-400c-be86-87ec3f22ae14@email.android.com>
+Message-ID: <CAGm1_kuD=T4XoiEZG=yKDNq_FfoWkXe3k4da0=OVcpC3KbifYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please do not apply
+On Fri, Sep 19, 2014 at 7:23 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Yegor Yefremov <yegorslists@googlemail.com> schreef:
+>>On Thu, Sep 18, 2014 at 6:21 PM, Thomas De Schampheleire
+>><patrickdepinguin@gmail.com> wrote:
+>>> Yegor Yefremov <yegorslists@googlemail.com> schreef:
+>>>>
+>>>>I've figured the stuff out too:
+>>>>
+>>>>ROOTFS_FIT_DEPENDENCIES = uboot-tools
+>>>
+>>> This should be host-uboot-tools, no?
+>>
+>>Fixed
+>>
+>>>>ifeq ($(BR2_FIT_INSTALL_TARGET),y)
+>>>>define ROOTFS_FIT_CMD
+>>>>        cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
+>>>>        $(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/`basename
+>>>>$(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME) && \
+>>>>        mkdir -p $(TARGET_DIR)/boot/ && \
+>>>>        cp $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME) $(TARGET_DIR)/boot/
+>>>>endef
+>>>>else
+>>>>define ROOTFS_FIT_CMD
+>>>>        cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
+>>>>        $(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/`basename
+>>>>$(BR2_FIT_PATH)` $(BINARIES_DIR)/$(BR2_FIT_BLOB_NAME)
+>>>>endef
+>>>>endif
+>>>>
+>>>>$(eval $(call ROOTFS_TARGET,fit))
+>>>
+>>> There's a lot of duplication here that can be avoided...
+>>
+>>How do I define "nop" in a Makefile syntactically? What do you  mean
+>>with "target_cmd ('true') "?
+>
+> I meant what Thomas P proposed in his comments on v3, the shell command true which is basically a nop if used in this way..
 
-I just realized I did not remove a patch that was commited upstream, 
+Something like this?
 
-I will resubmit soon (after proper testing)
+################################################################################
+#
+# Build the FIT image
+#
+################################################################################
 
-Cordialement 
+ROOTFS_FIT_DEPENDENCIES = host-uboot-tools
 
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
+ifeq ($(BR2_FIT_INSTALL_TARGET),y)
+define FIT_INSTALL_ITB_TARGET
+        mkdir -p $(TARGET_DIR)/boot/ && \
+        cp $(BINARIES_DIR)/$(basename $(notdir $(call
+qstrip,$(BR2_FIT_PATH)))).itb $(TARGET_DIR)/boot/
+endef
+else
+define FIT_INSTALL_ITB_TARGET
+        true
+endef
+endif
 
-fight key loggers : write some perl using vim 
+define ROOTFS_FIT_CMD
+        cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
+        $(HOST_DIR)/usr/bin/mkimage -f $(BINARIES_DIR)/$(notdir $(call
+qstrip,$(BR2_FIT_PATH))) $(BINARIES_DIR)/$(basename $(notdir $(call
+qstrip,$(BR2_FIT_PATH)))).itb && \
+        $(FIT_INSTALL_ITB_TARGET)
+endef
 
-
-Open Wide Ingenierie
-
-23, rue Daviel
-75013 Paris - France
-www.openwide.fr
-
-
-
-
-
------ Mail original -----
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> ---
->  package/cmake/cmake.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index bfeb147..e09fddf 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -CMAKE_VERSION_MAJOR = 2.8
-> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.2
-> +CMAKE_VERSION_MAJOR = 3.0
-> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
->  CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->  CMAKE_LICENSE = BSD-3c
->  CMAKE_LICENSE_FILES = Copyright.txt
-> --
-> 2.1.0
-> 
-> 
+$(eval $(call ROOTFS_TARGET,fit))
