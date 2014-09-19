@@ -1,67 +1,43 @@
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Date: Fri, 19 Sep 2014 22:21:57 +0200
-Subject: [Buildroot] [PATCH 04/23 v5] gendoc infra: disable pdf manual
- generation if xsltproc is buggy
-In-Reply-To: <20140919201507.GC4155@free.fr>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <4285f37298bb4361de1ca8f82f42e37c4bc4d7d4.1410692670.git.yann.morin.1998@free.fr>
- <CAAXf6LXSnrnn+O_qOOrQFeJJdqXb=dHQAWg=yuB0yzzgZjCfQA@mail.gmail.com>
- <20140919201507.GC4155@free.fr>
-Message-ID: <CAAXf6LVvwwboxF=0rwC88cJHr_Ao+_ijG5JnyFCgEyvtxTRdzQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 19 Sep 2014 23:11:12 +0200
+Subject: [Buildroot] [PATCH 1/2] lua: add hash
+In-Reply-To: <1411151424-31768-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Fri, 19 Sep 2014 20:30:23 +0200")
+References: <1411151424-31768-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87sijn48pb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 19, 2014 at 10:15 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2014-09-19 22:00 +0200, Thomas De Schampheleire spake thusly:
->> On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > From: Samuel Martin <s.martin49@gmail.com>
->> >
->> > The PDF manual generation reaches the default xsltproc's template
->> > recursion limit when processing the target package list; this makes the
->> > PDF manual generation fail [1-3].
-> [--SNIP--]
->> >  ################################################################################
->> >  # GENDOC_INNER -- generates the make targets needed to build a specific type of
->> >  #                 asciidoc documentation.
->> > @@ -83,6 +97,14 @@ define MANUAL_$(2)_INSTALL_CMDS
->> >  endef
->> >  endif
->> >
->> > +ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
->> > +$$(O)/docs/$(1)/$(1).$(4):
->> > +       $$(error PDF manual generation is disabled because of a bug in \
->> > +               xsltproc. To be able to generate the PDF manual, you should \
->> > +               build xsltproc from the libxslt sources >=1.1.29 and pass it \
->> > +               to make through the command line: \
->> > +               'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
->>
->> I think this should be $(warning) instead of $(error), because if you
->> run 'make manual' with a broken xsltproc, then the manual generation
->> will stop at the pdf manual, even though the following manuals (text
->> and ePUB) could have been built without issue.
->
-> Yup, it always bothered me. But we can just skip it, indeed.
->
-> Another point about this hunk: the indentation of $(error...) is wrong:
-> it is not the commands of the rule. I.e. it is not interpreted by the
-> shell for the $$(O)/docs/$(1)/$(1).$(4) rule, but really by make itself.
->
-> So, we should probably have this instead:
->
->     ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
->     $$(error ........)
->     $$(O)/docs/$(1)/$(1).$(4):
->     else
->     $$(O)/docs/$(1)/$(1).$(4):
->         a2x ....
->     endif
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Yes, but with $(warning) then...
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  package/lua/lua.hash | 6 ++++++
+ >  1 file changed, 6 insertions(+)
+ >  create mode 100644 package/lua/lua.hash
 
-Best regards,
-Thomas
+ > diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+ > new file mode 100644
+ > index 0000000..7bc7933
+ > --- /dev/null
+ > +++ b/package/lua/lua.hash
+ > @@ -0,0 +1,6 @@
+ > +# Hashes from: http://www.lua.org/ftp/
+ > +md5: dc7f94ec6ff15c985d2d6ad0f1b35654           lua-5.2.3.tar.gz
+ > +sha1: 926b7907bc8d274e063d42804666b40a3f3c124c  lua-5.2.3.tar.gz
+ > +
+ > +md5: 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
+ > +sha1: b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
+
+Ehh, have you tested this? (hint, no ':' after type):
+
+make lua-patch
+ERROR: unknown hash 'md5:' for 'lua-5.1.5.tar.gz'
+package/pkg-generic.mk:73: recipe for target '/home/peko/source/buildroot/output/build/lua-5.1.5/.stamp_downloaded' failed
+make: *** [/home/peko/source/buildroot/output/build/lua-5.1.5/.stamp_downloaded] Error 1
+
+-- 
+Bye, Peter Korsgaard
