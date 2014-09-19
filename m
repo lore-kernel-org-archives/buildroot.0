@@ -1,43 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Sep 2014 23:11:12 +0200
-Subject: [Buildroot] [PATCH 1/2] lua: add hash
-In-Reply-To: <1411151424-31768-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Fri, 19 Sep 2014 20:30:23 +0200")
-References: <1411151424-31768-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87sijn48pb.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Sep 2014 23:11:19 +0200
+Subject: [Buildroot] [PATCH v2] whois: Fix unmet dependencies
+In-Reply-To: <1411138378-32002-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Fri, 19 Sep 2014 16:52:58 +0200")
+References: <1411138378-32002-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87oaub48p4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  package/lua/lua.hash | 6 ++++++
- >  1 file changed, 6 insertions(+)
- >  create mode 100644 package/lua/lua.hash
+ > Fix :
+ >    BR2_PACKAGE_WHOIS selects BR2_PACKAGE_GETTEXT which has unmet direct dependencies (BR2_USE_WCHAR)
 
- > diff --git a/package/lua/lua.hash b/package/lua/lua.hash
- > new file mode 100644
- > index 0000000..7bc7933
- > --- /dev/null
- > +++ b/package/lua/lua.hash
- > @@ -0,0 +1,6 @@
- > +# Hashes from: http://www.lua.org/ftp/
- > +md5: dc7f94ec6ff15c985d2d6ad0f1b35654           lua-5.2.3.tar.gz
- > +sha1: 926b7907bc8d274e063d42804666b40a3f3c124c  lua-5.2.3.tar.gz
- > +
- > +md5: 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
- > +sha1: b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Ehh, have you tested this? (hint, no ':' after type):
-
-make lua-patch
-ERROR: unknown hash 'md5:' for 'lua-5.1.5.tar.gz'
-package/pkg-generic.mk:73: recipe for target '/home/peko/source/buildroot/output/build/lua-5.1.5/.stamp_downloaded' failed
-make: *** [/home/peko/source/buildroot/output/build/lua-5.1.5/.stamp_downloaded] Error 1
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
