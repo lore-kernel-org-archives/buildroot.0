@@ -1,50 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 19 Sep 2014 08:40:14 +0200
-Subject: [Buildroot] [PATCH 00 of 13] manual: improvements in
- 'Project-specific customization' section
-In-Reply-To: <20140918220332.21e5d711@free-electrons.com>
-References: <patchbomb.1411069163@localhost>
- <20140918220332.21e5d711@free-electrons.com>
-Message-ID: <CAAXf6LWWBDbB28icv3SbWA0YFwRCj=7ibqW8i6C_Xs3TqZZCQw@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Fri, 19 Sep 2014 09:13:49 +0200
+Subject: [Buildroot] [PATCH] cmake : bump to version 3.0.2
+Message-ID: <1411110831-27676-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+---
+ package/cmake/cmake.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, Sep 18, 2014 at 10:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 18 Sep 2014 21:39:23 +0200, Thomas De Schampheleire wrote:
->
->> This series makes improvements to the Project-specific customizations
->> chapter in the manual.
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> For the entire series:
->
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-
-Thanks a lot for your review.
-
-> I noticed a few possible improvements here and there, but I generally
-> believe that the patch series brings very nice improvements already,
-> and since I know reworking such patch series is particularly boring,
-> I'd prefer to see the patches committed as is, and the other possible
-> improvements be done as followup patches.
-
-If you are talking about additions of new information or some rework
-of the existing one, then I fully agree with your proposed strategy. I
-assume you will provide further feedback about these improvements
-later?
-
-However, if it's typos or incorrect information you refer to, then I
-think we should fix it in the current series.
-
-Thanks,
-Thomas
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index bfeb147..e09fddf 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 2.8
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.2
++CMAKE_VERSION_MAJOR = 3.0
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+-- 
+2.1.0
