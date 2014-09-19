@@ -1,44 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 19 Sep 2014 23:13:20 +0200
-Subject: [Buildroot] [PATCH] BR2_DEPRECATED: update option label and help
-In-Reply-To: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 19 Sep 2014 10:41:09 -0300")
-References: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k34z48lr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 19 Sep 2014 23:09:02 +0200
+Subject: [Buildroot] [git commit] whois: Fix unmet dependencies
+Message-ID: <20140919211333.596289D6FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0790de59cdc36fa0efe36df05fe7cbdae3f46dad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We should use positive logic (show things that are otherwise hidden...)
- > for the help since it's what it does.
- > It also applies to more options than just packages alone, for example
- > the AVR32 architecture so add an "options" label to it.
+Fix :
+   BR2_PACKAGE_WHOIS selects BR2_PACKAGE_GETTEXT which has unmet direct dependencies (BR2_USE_WCHAR)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  Config.in | 5 +++--
- >  1 file changed, 3 insertions(+), 2 deletions(-)
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/whois/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- > diff --git a/Config.in b/Config.in
- > index 14ff55b..b494fab 100644
- > --- a/Config.in
- > +++ b/Config.in
- > @@ -301,9 +301,10 @@ config BR2_CCACHE_INITIAL_SETUP
- >  endif
+diff --git a/package/whois/Config.in b/package/whois/Config.in
+index 40b6590..95e3dc6 100644
+--- a/package/whois/Config.in
++++ b/package/whois/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_WHOIS
+ 	bool "whois"
++	depends on BR2_USE_WCHAR # gettext
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  Improved whois client.
  
- >  config BR2_DEPRECATED
- > -	bool "Show packages that are deprecated or obsolete"
- > +	bool "Show options and packages that are deprecated or obsolete"
- >  	help
- > -	  This option hides outdated/obsolete versions of packages.
- > +	  This option shows outdated/obsolete versions of packages and
- > +	  options that are hidden otherwise.
-
-Committed with Yann's feedback, thanks.
-
--- 
-Bye, Peter Korsgaard
+ 	  http://www.linux.it/~md/software/
++
++comment "whois needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
