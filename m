@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Sep 2014 14:56:26 +0200
-Subject: [Buildroot] [PATCH] whois: Fix unmet dependencies
-In-Reply-To: <1411123327-29657-1-git-send-email-jezz@sysmic.org>
-References: <1411123327-29657-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140919145626.757a8078@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 19 Sep 2014 10:41:09 -0300
+Subject: [Buildroot] [PATCH] BR2_DEPRECATED: update option label and help
+Message-ID: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+We should use positive logic (show things that are otherwise hidden...)
+for the help since it's what it does.
+It also applies to more options than just packages alone, for example
+the AVR32 architecture so add an "options" label to it.
 
-On Fri, 19 Sep 2014 12:42:07 +0200, J?r?me Pouiller wrote:
-> Fix :
->    BR2_PACKAGE_WHOIS selects BR2_PACKAGE_GETTEXT which has unmet direct dependencies (BR2_USE_WCHAR)
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/whois/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Please read
-http://buildroot.org/downloads/manual/manual.html#_literal_config_in_literal_file,
-especially section "16.2.2 Dependencies on target and toolchain
-options".
-
-You need to add a comment when adding a dependency on a toolchain
-feature.
-
-Thomas
+diff --git a/Config.in b/Config.in
+index 14ff55b..b494fab 100644
+--- a/Config.in
++++ b/Config.in
+@@ -301,9 +301,10 @@ config BR2_CCACHE_INITIAL_SETUP
+ endif
+ 
+ config BR2_DEPRECATED
+-	bool "Show packages that are deprecated or obsolete"
++	bool "Show options and packages that are deprecated or obsolete"
+ 	help
+-	  This option hides outdated/obsolete versions of packages.
++	  This option shows outdated/obsolete versions of packages and
++	  options that are hidden otherwise.
+ 
+ if BR2_DEPRECATED
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
