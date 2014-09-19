@@ -1,222 +1,108 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 19 Sep 2014 16:12:51 +0200
-Subject: [Buildroot] [PATCH v4 3/4] freescale/imx6-sabresd: document how to
-	create a bootable SD
+Date: Fri, 19 Sep 2014 16:12:52 +0200
+Subject: [Buildroot] [PATCH v4 4/4] imx6sabresd: boot to /init in mfgtools
+	mode
 In-Reply-To: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
 References: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1411135972-14968-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1411135972-14968-5-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Document how to create a bootable SD card for the two supported SABRESD cards:
-i.MX6Q and i.MX6DL.
+From: Vincent Stehl? <vincent.stehle@freescale.com>
 
-The SD card creation relies on an ad-hoc script.
+Buildroot supplies a nice /init wrapper script to use when booting from a
+ramdisk.
 
+We add a patch to u-boot to tell the kernel to boot into /init (instead of
+/linuxrc) on i.MX6, when booting in mfgtools mode. This way we can boot a
+buildroot system entirely through USB.
+
+Signed-off-by: Vincent Stehl? <vincent.stehle at freescale.com
+[Luca: rebase on top of iMX6DL patches and patch iMX6DL defconfig as well]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Gilles Talis <gilles.talis@gmail.com>
+[Luca: build- and run-tested on i.MX6DL SABRESD]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: Vincent Stehl? <vincent.stehle@freescale.com>
+Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+---
+
+The original version of this patch is here:
+  http://patchwork.ozlabs.org/patch/379269/
+
+This patch was sent added to this patch series in v4, and it has been
+rebased and adapted to work also for i.MX6DL.
 
 ---
 
-Changes since v3:
- - rebased on current master.
+ ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch | 36 ++++++++++++++++++++++
+ configs/freescale_imx6dlsabresd_defconfig          |  1 +
+ configs/freescale_imx6qsabresd_defconfig           |  1 +
+ 3 files changed, 38 insertions(+)
+ create mode 100644 board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
 
-Changes since v2:
- - when initially wiping the SD, also wipe the ext2 partition to prevent it
-   from being automounted just after partitioning on desktop systems;
- - readme.txt: rename freescale_imx6{,q}sabresd_defconfig to take into account
-   the added patch that renames the defconfig.
-
-Changes since v1:
- - properly handle SD/MMC devices that don't need the "p" prefix before
-   the partition number (reported by Vincent Stehl?);
- - mention serial terminal parameters in readme.txt (suggested by Vincent
-   Stehl?).
----
- board/freescale/imx6sabresd/create-boot-sd.sh | 95 +++++++++++++++++++++++++++
- board/freescale/imx6sabresd/readme.txt        | 67 +++++++++++++++++++
- 2 files changed, 162 insertions(+)
- create mode 100755 board/freescale/imx6sabresd/create-boot-sd.sh
- create mode 100644 board/freescale/imx6sabresd/readme.txt
-
-diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/imx6sabresd/create-boot-sd.sh
-new file mode 100755
-index 0000000..9930b1e
---- /dev/null
-+++ b/board/freescale/imx6sabresd/create-boot-sd.sh
-@@ -0,0 +1,95 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+PROGNAME=$(basename $0)
-+
-+usage()
-+{
-+    echo "Create an SD card that boots on an i.MX6DL SABRESD board."
-+    echo "It is supposed to work also for the i.MX6Q SABRESD board, but"
-+    echo "it this is not tested."
-+    echo
-+    echo "Note: all data on the the card will be completely deleted!"
-+    echo "Use with care!"
-+    echo "Superuser permissions may be required to write to the device."
-+    echo
-+    echo "Usage: ${PROGNAME} <sd_block_device>"
-+    echo "Arguments:"
-+    echo "  <sd_block_device>     The device to be written to"
-+    echo
-+    echo "Example: ${PROGNAME} /dev/mmcblk0"
-+    echo
-+}
-+
-+if [ $# -ne 1 ]; then
-+    usage
-+    exit 1
-+fi
-+
-+if [ $(id -u) -ne 0 ]; then
-+    echo "${PROGNAME} must be run as root"
-+    exit 1
-+fi
-+
-+DEV=${1}
-+
-+# The partition name prefix depends on the device name:
-+# - /dev/sde -> /dev/sde1
-+# - /dev/mmcblk0 -> /dev/mmcblk0p1
-+if echo ${DEV}|grep -q mmcblk ; then
-+    PART="p"
-+else
-+    PART=""
-+fi
-+
-+PART1=${DEV}${PART}1
-+PART2=${DEV}${PART}2
-+
-+# Unmount the partitions if mounted
-+umount ${PART1} || true
-+umount ${PART2} || true
-+
-+# First, clear the card
-+dd if=/dev/zero of=${DEV} bs=1M count=20
-+
-+sync
-+
-+# Partition the card.
-+# SD layout for i.MX6 boot:
-+# - Bootloader at offset 1024
-+# - FAT partition starting at 1MB offset, containing uImage and *.dtb
-+# - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
-+sfdisk ${DEV} <<EOF
-+32,480,b
-+512,,L
-+EOF
-+
-+sync
-+
-+# Copy the bootloader@offset 1024
-+dd if=output/images/u-boot.imx of=${DEV} obs=512 seek=2
-+
-+# Prepare a temp dir for mounting partitions
-+TMPDIR=$(mktemp -d)
-+
-+# FAT partition: kernel and DTBs
-+mkfs.vfat ${PART1}
-+mount ${PART1} ${TMPDIR}
-+cp output/images/uImage ${TMPDIR}/
-+cp output/images/*.dtb  ${TMPDIR}/
-+sync
-+umount ${TMPDIR}
-+
-+# ext2 partition: root filesystem
-+mkfs.ext2 ${PART2}
-+mount ${PART2} ${TMPDIR}
-+tar -C ${TMPDIR}/ -xf output/images/rootfs.tar
-+sync
-+umount ${TMPDIR}
-+
-+# Cleanup
-+rmdir ${TMPDIR}
-+sync
-+echo Done
-diff --git a/board/freescale/imx6sabresd/readme.txt b/board/freescale/imx6sabresd/readme.txt
+diff --git a/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
 new file mode 100644
-index 0000000..583ef40
+index 0000000..c01df4e
 --- /dev/null
-+++ b/board/freescale/imx6sabresd/readme.txt
-@@ -0,0 +1,67 @@
-+*******************************************************
-+Freescale i.MX6Q and i.MX6DL SABRESD development boards
-+*******************************************************
++++ b/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+@@ -0,0 +1,36 @@
++From 4a7cd7c5b165317dccf45cfc235da3e14bc339e8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
++Date: Tue, 12 Aug 2014 10:17:31 +0200
++Subject: [PATCH] mx6qsabre_common: boot Linux to /init in mfgtools mode
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+This file documents the Buildroot support for the Freescale SABRE Board for
-+Smart Devices Based on the i.MX 6 Series (SABRESD).
++Buildroot supplies a nice /init wrapper script to use when booting from a
++ramdisk.
 +
-+Read the SABRESD Quick Start Guide for an introduction to the board:
-+http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
++This patch tells u-boot to tell the kernel to boot into /init (instead of
++/linuxrc) on i.MX6, when booting in mfgtools mode. This way we can boot a
++buildroot system entirely through USB.
 +
-+Build
-+=====
++Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
++---
++ include/configs/mx6qsabre_common.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+First, configure Buildroot for your SABRESD board.
-+For i.MX6Q:
++diff --git a/include/configs/mx6qsabre_common.h b/include/configs/mx6qsabre_common.h
++index 69ff0df..ec7b665 100644
++--- a/include/configs/mx6qsabre_common.h
+++++ b/include/configs/mx6qsabre_common.h
++@@ -129,7 +129,7 @@
++ 
++ #define CONFIG_MFG_ENV_SETTINGS \
++ 	"mfgtool_args=setenv bootargs console=" CONFIG_CONSOLE_DEV ",115200 " \
++-		"rdinit=/linuxrc " \
+++		"rdinit=/init " \
++ 		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
++ 		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
++ 		"g_mass_storage.iSerialNumber=\"\" "\
++-- 
++2.0.1
 +
-+  make freescale_imx6qsabresd_defconfig
-+
-+For i.MX6DL:
-+
-+  make freescale_imx6dlsabresd_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in ./output/images/ the following files:
-+  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb
-+  - rootfs.ext2
-+  - rootfs.tar
-+  - u-boot.imx
-+  - uImage
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Run the following script as root on your SD card. This will partition the card
-+and copy the bootloader, kernel, DTBs and root filesystem as needed.
-+
-+*** WARNING! The script will destroy all the card content. Use with care! ***
-+
-+  ./board/freescale/imx6sabresd/create-boot-sd.sh <your-sd-device>
-+
-+Boot the SABRESD board
-+======================
-+
-+To boot your newly created system (refer to the SABRESD Quick Start Guide for
-+guidance):
-+- insert the SD card in the SD3 slot of the board;
-+- locate the BOOT dip switches (SW6), set dips 2 and 7 to ON, all others to OFF;
-+- connect a Micro USB cable to Debug Port and connect using a terminal emulator
-+  at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-+
-+References
-+==========
-+
-+https://community.freescale.com/docs/DOC-95015
-+https://community.freescale.com/docs/DOC-95017
-+https://community.freescale.com/docs/DOC-99218
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 4177e16..62caf79 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -25,3 +25,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 16e4d0b..bc0aa46 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -25,3 +25,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
 -- 
 1.9.1
