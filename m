@@ -1,59 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Sep 2014 22:04:52 +0200
-Subject: [Buildroot] [PATCH] BR2_DEPRECATED: update option label and help
-In-Reply-To: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1411134069-3327-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140919200452.GA4155@free.fr>
+Date: Fri, 19 Sep 2014 22:05:29 +0200
+Subject: [Buildroot] [PATCH v2] whois: Fix unmet dependencies
+In-Reply-To: <1411138378-32002-1-git-send-email-jezz@sysmic.org>
+References: <1411138378-32002-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20140919200529.GB4155@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+J?r?me, All,
 
-On 2014-09-19 10:41 -0300, Gustavo Zacarias spake thusly:
-> We should use positive logic (show things that are otherwise hidden...)
-> for the help since it's what it does.
-> It also applies to more options than just packages alone, for example
-> the AVR32 architecture so add an "options" label to it.
+On 2014-09-19 16:52 +0200, J?r?me Pouiller spake thusly:
+> Fix :
+>    BR2_PACKAGE_WHOIS selects BR2_PACKAGE_GETTEXT which has unmet direct dependencies (BR2_USE_WCHAR)
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Except for a small comment, below...
-
-> ---
->  Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 14ff55b..b494fab 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -301,9 +301,10 @@ config BR2_CCACHE_INITIAL_SETUP
->  endif
->  
->  config BR2_DEPRECATED
-> -	bool "Show packages that are deprecated or obsolete"
-> +	bool "Show options and packages that are deprecated or obsolete"
->  	help
-> -	  This option hides outdated/obsolete versions of packages.
-> +	  This option shows outdated/obsolete versions of packages and
-> +	  options that are hidden otherwise.
-
-In English, adverbs are placed before the past participle, like you did
-your commit log:  ... otherwise hidden.
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/whois/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/whois/Config.in b/package/whois/Config.in
+> index 40b6590..95e3dc6 100644
+> --- a/package/whois/Config.in
+> +++ b/package/whois/Config.in
+> @@ -1,7 +1,11 @@
+>  config BR2_PACKAGE_WHOIS
+>  	bool "whois"
+> +	depends on BR2_USE_WCHAR # gettext
+>  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+>  	help
+>  	  Improved whois client.
 >  
->  if BR2_DEPRECATED
->  
+>  	  http://www.linux.it/~md/software/
+> +
+> +comment "whois needs a toolchain w/ wchar"
+> +	depends on !BR2_USE_WCHAR
 > -- 
-> 1.8.5.5
+> 2.1.0
 > 
 > _______________________________________________
 > buildroot mailing list
