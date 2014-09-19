@@ -1,11 +1,11 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 19 Sep 2014 21:44:59 +0200
-Subject: [Buildroot] [PATCH 05/23 v5] docs/manual: get rid of legacy
-	comment in GENDOC
-In-Reply-To: <ab02dccc595c1612712231c07231fc44e1b1258e.1410692670.git.yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Date: Fri, 19 Sep 2014 22:00:42 +0200
+Subject: [Buildroot] [PATCH 04/23 v5] gendoc infra: disable pdf manual
+ generation if xsltproc is buggy
+In-Reply-To: <4285f37298bb4361de1ca8f82f42e37c4bc4d7d4.1410692670.git.yann.morin.1998@free.fr>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <ab02dccc595c1612712231c07231fc44e1b1258e.1410692670.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LV0v5XoK+GwPdhvd1b=C8JXxUh306uAEUwyeM8_svbmLw@mail.gmail.com>
+ <4285f37298bb4361de1ca8f82f42e37c4bc4d7d4.1410692670.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXSnrnn+O_qOOrQFeJJdqXb=dHQAWg=yuB0yzzgZjCfQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Since dd935d6 (gendoc infra: use $(pkgname) instead of explicitly
-> passing 'manual', the GENDOC infra no longer expect any argument.
+> From: Samuel Martin <s.martin49@gmail.com>
 >
-> Remove the stray comment.
+> The PDF manual generation reaches the default xsltproc's template
+> recursion limit when processing the target package list; this makes the
+> PDF manual generation fail [1-3].
 >
+> This limit can be raised with the '--maxvars' option. Unfortunately,
+> this option is not correctly handled in the latest xsltproc/libxslt
+> release (1.1.28), but this bug is already fixed in the libxslt
+> repository [4].
+>
+> This patch disables the PDF manual generation (makes it fail with a
+> meaningful error message) when the xsltproc program found in the PATH
+> does not support the --maxvars option.
+> So, one can still generate the PDF manual if he/she extends PATH with
+> the location of a working xsltproc, by running:
+>
+>   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual-pdf
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2014-August/104390.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2014-August/104418.html
+> [3] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
+> [4] https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> [yann.morin.1998 at free.fr: move the assignment block out of GENDOC_INNER, no
+>  need to retest for each type of each document: it's always the same answer]
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  docs/manual/manual.mk | 28 +++++++++++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index 09d8b18..b5856b9 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -41,6 +41,20 @@ manual-check-dependencies-lists:
+>                 exit 1; \
+>         fi
+>
+> +# PDF manual generation is broken because of a bug in xsltproc program provided
+> +# by libxslt <=1.1.28, which does not honor an option we need to set.
+> +# Fortunately, this bug is already fixed upstream:
+> +#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+> +#
+> +# So, bail out when trying to build the pdf manual using a buggy version of the
+> +# xsltproc program.
+> +#
+> +# So, to overcome this issue and being able to build the pdf manual, you can
+> +# build xsltproc from it source repository, then run:
+> +#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
+> +MANUAL_XSLTPROC_IS_BROKEN = \
+> +       $(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
+> +
+>  ################################################################################
+>  # GENDOC_INNER -- generates the make targets needed to build a specific type of
+>  #                 asciidoc documentation.
+> @@ -83,6 +97,14 @@ define MANUAL_$(2)_INSTALL_CMDS
+>  endef
+>  endif
+>
+> +ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
+> +$$(O)/docs/$(1)/$(1).$(4):
+> +       $$(error PDF manual generation is disabled because of a bug in \
+> +               xsltproc. To be able to generate the PDF manual, you should \
+> +               build xsltproc from the libxslt sources >=1.1.29 and pass it \
+> +               to make through the command line: \
+> +               'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I think this should be $(warning) instead of $(error), because if you
+run 'make manual' with a broken xsltproc, then the manual generation
+will stop at the pdf manual, even though the following manuals (text
+and ePUB) could have been built without issue.
