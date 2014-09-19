@@ -1,11 +1,10 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 20 Sep 2014 00:40:36 +0200
-Subject: [Buildroot] [PATCH] unbound: new package
-In-Reply-To: <54177450.3090909@je-eigen-domein.nl>
+Date: Sat, 20 Sep 2014 00:49:53 +0200
+Subject: [Buildroot] [PATCH] nsd: new package
+In-Reply-To: <20140916224820.7cc2d38b@free-electrons.com>
 References: <1410813982-7774-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1410813982-7774-2-git-send-email-eric.le.bihan.dev@free.fr>
- <54177450.3090909@je-eigen-domein.nl>
-Message-ID: <20140919224035.GB19421@itchy>
+ <20140916224820.7cc2d38b@free-electrons.com>
+Message-ID: <20140919224952.GC19421@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,99 +12,108 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi!
-On Tue, Sep 16, 2014 at 01:20:48AM +0200, Floris Bos wrote:
-> Hi,
->
-> On 09/15/2014 10:46 PM, Eric Le Bihan wrote:
-> >This package provides Unbound, a validating, recursive, and caching DNS
-> >resolver.
->
-> Nice addition.
-> We're an unbound user as well, but never got around to submitting our local
-> package, and I know unbound has some odd issues.
->
->
-> Some points:
->
-> - Unbound (at least when using your package with sysv) currently creates a
-> pid file in /etc/unbound/unbound.pid
-> Suggest that to be changed to /var/run/unbound.pid, so it also works on
-> read-only file systems.
 
-I did it in the case where systemd is chosen as init system, but not when
-chosing SysV/Busybox. Good catch.
+On Tue, Sep 16, 2014 at 10:48:20PM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Mon, 15 Sep 2014 22:46:21 +0200, Eric Le Bihan wrote:
+> > This package provides NSD, an authoritative only, high performance,
+> > simple and open source name server.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>
+> This looks good. Just a few questions below, not really critical.
+>
+> > +NSD_VERSION = 4.0.3
+>
+> There is a new version that has been released 4.1.0. Though I don't
+> mind seeing the 4.0.3 being packaged in Buildroot for now, and then
+> later if you have the time, a bump to 4.1.0.
 
-> - Unbound is currently broken when IPv6 is disabled in the buildroot
-> configuration.
->
-> Listens on both 127.0.0.1 and ::1 by default, and errors out on the ::1
->
-> ==
-> unbound[118:0] error: node ::1:53 getaddrinfo: ai_family not supported
-> [13] unbound[118:0] fatal error: could not open ports
-> FAIL
-> ==
->
-> You do can override the default by specifying "interface: 127.0.0.1" in
-> unbound.conf but then it errors out on:
->
-> ==
-> "error: cannot parse access control: ::0/0 refuse"
-> ==
->
-> Don't no how to override that internal ACL rule.
-> Might need to let the package depend on IPv6
-
-I'll test this.
+I'll go for 4.1.0!
 
 >
-> - Unbound is typically used as local resolving nameserver.
-> I was wondering if the startup script shouldn't put "nameserver 127.0.0.1"
-> in /etc/resolv.conf
-> Possibly with an option to turn that off by a setting in
-> /etc/default/unbound
+> > +NSD_SITE = http://www.nlnetlabs.nl/downloads/nsd/
+> > +NSD_LICENSE = BSD-3c
+> > +NSD_LICENSE_FILES = LICENSE
+> > +
+> > +NSD_DEPENDENCIES = libevent openssl
+> > +
+> > +NSD_CONF_OPT = \
+> > +	--prefix=/ \
+> > +	--datarootdir=/usr/share
 >
-> - Unbound expects /etc/unbound to be owned by user unbound
-> Or if you do enable DNSSEC by uncommenting the "auto-trust-anchor-file" line
-> in /etc/unbound/unbound.conf, you get errors that it is unable to create
-> files:
->
-> ==
-> error: could not open autotrust file for writing, /root.key.306-0:
-> Permission denied
-> ==
->
-> - I also wonder if there shouldn't be an option to let the startup script
-> run unbound-anchor prior to starting the unbound daemon.
-> This updates the DNSSEC trust anchor files.
-> (Enabling DNSSEC validation has some caveats though, in particular it
-> requires the system to have correct date/time settings, so should be left
-> disabled by default)
+> This is fairly unusual, especially the --prefix=/, so having a comment
+> above would be useful.
 
-I am not (yet) familiar with DNSSEC, nor with the chroot case. Maybe this
-should be left for the user to customize? I'll provide a minimal default
-configuration file, so the service starts without error, anyway.
+If --prefix was set to /usr, the program was looking for stuff in
+/usr/var/db. But this can be removed if using --with-dbfile and --datarootdir.
 
-> >+NAME=nsd
+> > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> > +NSD_CONF_OPT += --with-pidfile=/run/nsd/nsd.pid
+> > +endif
 >
-> nsd -> unbound
+> Ok, so for systemd the pidfile location is defined at compile time, but
+> for sysv/busybox init, it's passed through the init script.
 
-Of course!
+For SysV/Busybox, I'll use --with-pidfile=/var/run/nsd.pid and adapt the
+script.
+
+> > +define NSD_REMOVE_SAMPLE_CONF
+> > +	$(RM) $(TARGET_DIR)/etc/nsd/nsd.conf.sample
+> > +endef
+> > +
+> > +NSD_POST_INSTALL_TARGET_HOOKS += NSD_REMOVE_SAMPLE_CONF
 >
-> >+UNBOUND_DEPENDENCIES = expat libevent openssl
+> Is there a non sample file installed?
+
+No, but I'll provide a minimal default configuration file.
+
+> Also, when build testing, I faced an issue:
 >
-> libevent is an optional dependency. (don't have it in my local package)
-
-I will take this into account.
-
-> >+++ b/package/unbound/S80unbound
+> checking for libevent... configure: error: Cannot find the libevent library.
+> You can restart ./configure --with-libevent=no to use a builtin alternative.
+> make: *** [/home/thomas/projets/buildroot/output/build/nsd-4.0.3/.stamp_configured] Erreur 1
 >
-> - Wondering if S80unbound shouldn't be a lower number like S41 for systems
-> that intend to use it as local resolver.
-> So that other services like S49ntp can use it to resolve pool.ntp.org.
+> Configuration used is:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.08.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_NSD=y
+>
+> I see libevent being built. The config.log of nsd contains:
+>
+> configure:5427: checking for libevent
+> configure:5453: error: Cannot find the libevent library.
+> You can restart ./configure --with-libevent=no to use a builtin alternative.
+>
+> The same happens with OpenSSL:
+>
+> checking for SSL... configure: error: Cannot find the SSL libraries in /usr/local/ssl /usr/lib/ssl /usr/ssl /usr/pkg /usr/sfw /usr/local /usr
+>
+> You probably need to pass --with-{libevent,ssl}=/some/path, but I
+> haven't figured out which path (I haven't looked too much, only tested
+> $(STAGING_DIR) and $(STAGING_DIR)/usr/lib).
 
-If this is a specific user case, I think changing the priority of the service
-should be left to the user.
+And the correct answer is... --with-libevent=$(STAGING_DIR)/usr!
+
+> Also, your package makes openssl and libevent mandatory dependencies of
+> nsd, which is not the case: you can pass --with-libevent=no and
+> --with-ssl=no and you can build without those dependencies. This is
+> something we should support to allow building a more lightweight
+> version of nsd.
+
+I make libevent and openssl optional dependencies.
 
 Thanks for the review!
 
