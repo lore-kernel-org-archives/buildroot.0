@@ -1,39 +1,60 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Fri, 19 Sep 2014 09:13:51 +0200
-Subject: [Buildroot] [PATCH] swig: add symlink to /usr/bin/swig2.0
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 19 Sep 2014 09:27:15 +0200 (CEST)
+Subject: [Buildroot] [PATCH] cmake : bump to version 3.0.2
 In-Reply-To: <1411110831-27676-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1411110831-27676-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <1411110831-27676-3-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <791659592.25467604.1411111635391.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the cmake detection script provided with cmake will first look for a
-binary called swig2.0 then for a binary called swig
+Please do not apply
 
-swig-host only installs a binary called swig and gets overridden by the
-version installed by the host distro. This symlink prevents that from
-happening
----
- package/swig/swig.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+I just realized I did not remove a patch that was commited upstream, 
 
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index 5efc81c..233e97d 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -15,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
- SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
- SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
- 
-+define SWIG_INSTALL_SYMLINK
-+	ln -fs $(HOST_DIR)/usr/bin/swig $(HOST_DIR)/usr/bin/swig$(SWIG_MAJOR)
-+endef
-+
-+HOST_SWIG_POST_INSTALL_HOOKS += SWIG_INSTALL_SYMLINK
-+
- $(eval $(host-autotools-package))
--- 
-2.1.0
+I will resubmit soon (after proper testing)
+
+Cordialement 
+
+J?r?my Rosen 
++33 (0)1 42 68 28 04
+
+fight key loggers : write some perl using vim 
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75013 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> ---
+>  package/cmake/cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index bfeb147..e09fddf 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -CMAKE_VERSION_MAJOR = 2.8
+> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.2
+> +CMAKE_VERSION_MAJOR = 3.0
+> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+>  CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+>  CMAKE_LICENSE = BSD-3c
+>  CMAKE_LICENSE_FILES = Copyright.txt
+> --
+> 2.1.0
+> 
+> 
