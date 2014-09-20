@@ -1,117 +1,66 @@
-From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sat, 20 Sep 2014 09:43:34 +0000
-Subject: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in
- eclipse integration
-References: <8cbab74434594ef7ab6e81bc2eb88441@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140916175503.7fdd3a7d@free-electrons.com>
- <56a77dc5115b45f194ca8744a6962fac@DBXPR07MB142.eurprd07.prod.outlook.com> 
-Message-ID: <29f0b41a7df34e8297bdc9049e5a3add@DBXPR07MB142.eurprd07.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Sep 2014 12:24:06 +0200
+Subject: [Buildroot] Outcome of the GSoC 2014
+In-Reply-To: <20140919222504.GA19421@itchy>
+References: <20140915214402.05faf4fd@free-electrons.com>
+ <20140915211348.GC8072@ned>
+ <20140915231601.7a362d01@free-electrons.com>
+ <20140919222504.GA19421@itchy>
+Message-ID: <20140920102406.GA3949@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BTW. As an interim workaround, I just manually change the linker command to:
+Eric, All,
 
-/home/oded/dev/buildroot-2014.08/output/host/usr/bin/x86_64-buildroot-linux-gnu-ar
-
-And this builds my library. 
-
-Oded
-
------Original Message-----
-From: Oded Hanson 
-Sent: Saturday, September 20, 2014 10:57 AM
-To: 'Thomas Petazzoni'
-Cc: 'buildroot at busybox.net'; 'M?lanie Bats'
-Subject: RE: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in eclipse integration
-
-Hello All
-
-I would like to update you that I retried this on a clean install.
-
-I installed eclipse Kepler 4.3 SR2.
-
-I installed the latest release of buildroot 2014.08 and created a output target and set it to integrate with buildroot.
-
-I installed the plugin from http://buildroot.org/downloads/eclipse/kepler-sr2
-
-I created an empty C static library project and choose the buildroot toolchain (it appears there in the list as expected).
-
-I added a simple C file and tried to build the project. This is what I received in the console:
-
-10:39:38 **** Incremental Build of configuration debug for project TestStaticLib2 **** make all Building file: ../Test.c
-Invoking: Buildroot X86_64 C Compiler (/home/oded/dev/buildroot-2014.08/output)
-/home/oded/dev/buildroot-2014.08/output/host/usr/bin/x86_64-buildroot-linux-gnu-gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Test.d" -MT"Test.d" -o "Test.o" "../Test.c"
-Finished building: ../Test.c
- 
-Building target: TestStaticLib2.a
-Invoking: Buildroot X86_64 C Linker (/home/oded/dev/buildroot-2014.08/output)
-/home/oded/dev/buildroot-2014.08/output/host/usr/bin/x86_64-buildroot-linux-gnu-gcc  -o "TestStaticLib2.a"  ./Test.o   
-/home/oded/dev/buildroot-2014.08/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/crt1.o: In function `_start':
-(.text+0x20): undefined reference to `main'
-collect2: error: ld returned 1 exit status
-make: *** [TestStaticLib2.a] Error 1
-
-10:39:38 Build Finished (took 228ms)
-
-As you can see it tried to create an executable and not a static library and failing because it cannot find the main symbol.
-
-Where I go to project properties. To C/C++ Build. Settings and Build Artifact tab, in the artifact type list I can only see executable and shared library. There is no artifact for static library.
-
-Any ideas ?
-
-Oded
-
------Original Message-----
-From: Oded Hanson
-Sent: Tuesday, September 16, 2014 7:24 PM
-To: Thomas Petazzoni
-Cc: buildroot at busybox.net; M?lanie Bats
-Subject: RE: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in eclipse integration
-
-Hi Thomas
-
-I am not using autotools or a Makefile based project. I am creating a simple project based on the eclipse project wizards:
-
-1. File -> New -> C++ Project
-2.  Static Library -> Empty Project -> Choose Buildroot x86_64 toolchain 3. Finish
-
-Once the project is created, I go to Project properties -> C/C++ Build -> Settings -> Build Artifacts. I see there that there is only a shared object and executable option. No static library.
-
-When I go to the toolchain editor, I can see the list of tools (compiler, linker, etc.) but I don't see the archiver tool.. thus.. obviously that?s why we cannot build the static library.
-
-I will maybe try to uninstall everything and reinstall and see if it helps...
-
-Oded
-
-
-
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-Sent: Tuesday, September 16, 2014 10:55 PM
-To: Oded Hanson
-Cc: buildroot at busybox.net; M?lanie Bats
-Subject: Re: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in eclipse integration
-
-Dear Oded Hanson,
-
-On Fri, 5 Sep 2014 18:55:00 +0000, Oded Hanson wrote:
-
-> I am trying to build a static library in eclipse using the buildroot toolchain and the buildroot eclipse plugin.
+On 2014-09-20 00:25 +0200, Eric Le Bihan spake thusly:
+> On Mon, Sep 15, 2014 at 11:16:01PM +0200, Thomas Petazzoni wrote:
+> > Eric,
+> >
+> > On Mon, 15 Sep 2014 23:13:48 +0200, Eric Le Bihan wrote:
+> >
+> > > > We also have a few patches pending in patchwork from Hadrien, that
+> > > > need adopters:
+> > > >
+> > > >  * libgtk3: new package
+> > > >    http://patchwork.ozlabs.org/patch/375493/
+> > > >
+> > > >    This one is almost ready, there are still a few fixes to be made. I
+> > > >    know Eric Le Bihan has also worked on libgtk3. Maybe Eric you could
+> > > >    take over this effort?
+> > >
+> > > I will adopt this patch.
+> >
+> > Awesome, thanks a lot!
 > 
-> I have successfully created shared objects and executables but now 
-> when I am trying to create a static library, I see that the eclipse 
-> plugin doesn't identify the archiver tool, all though the 
-> x86_64-buildroot-linux-gnu-ar tool was generated in my buildroot 
-> output directory.
+> I have reworked the patch:
+> 
+> - introduction of pkg-config-native in host-pkgconf.
+> - addition of a dependency on host-pkgconf to host-libgtk3.
+> - addition of multiple backend support (X11/Wayland/Broadway) in libgtk3.
+> 
+> When one adopts a patch, how should the credits be edited? Do I keep the
+> original author of the patch in the commit log and add myself in a
+> "Signed-off-by" line with some comments, or vice-versa?
 
-Could you give a few more details about how you're building your static library? Are you using an autotools based project, a Makefile based project, or a "managed build" project (where Eclipse takes care of the build system) ? M?lanie has tested a "managed build" project for a static library, and apparently, it worked fine. So maybe you're using your own Makefile or autotools based build system?
+It depends. Here's how I do when I have that situation:
 
-Thanks!
+  - if there is a substantial amount of the original code kept over, I
+    keep the original author as author. Then I had my SoB line.
 
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+  - if the code from the original submitter is no longer used, because
+    everything was rewritten, then I make myself the author. Then I add
+    my SoB line, and change the original author's SoB into a Cc.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
