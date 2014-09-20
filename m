@@ -1,56 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Sep 2014 22:55:06 +0200
-Subject: [Buildroot] [PATCH 08/15 v2] package/linux-firmware: add new
-	revision for iwlwifi firmware
+Date: Sat, 20 Sep 2014 22:55:07 +0200
+Subject: [Buildroot] [PATCH 09/15 v2] package/linux-firmware: use the new
+	Chelsio cxgb4 firmware
 In-Reply-To: <cover.1411246411.git.yann.morin.1998@free.fr>
 References: <cover.1411246411.git.yann.morin.1998@free.fr>
-Message-ID: <f50ad355cafbedb7b78a9f0cc4e051920df8c81a.1411246412.git.yann.morin.1998@free.fr>
+Message-ID: <2127e852a30c1e0f2fd94276707227623921df75.1411246412.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fix prompt at the same time.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/Config.in | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 2 +-
+ package/linux-firmware/linux-firmware.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 7426f4e..ced990a 100644
+index ced990a..1cc9a05 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -64,7 +64,8 @@ choice
- 	bool "iwlwifi 3160/726x revision to use"
+@@ -167,7 +167,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
+ 	  Firmware files for Broadcom NetXtreme 10Gb ethernet cards (bnx2x)
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
+-	bool "Chelsio T4 "
++	bool "Chelsio T4"
  	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
--	  Use revision 8 for kernel 3.13 onward.
-+	  Use revision 8 for kernel 3.13 to 3.15.
-+	  Use revision 9 for kernel 3.16 onward.
+ 	  Firmware files for Chelsio T4 1Gb and 10Gb ethernet cards (cxgb4)
+ endmenu
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index db5588f..43f3821 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -181,8 +181,8 @@ LINUX_FIRMWARE_FILES += \
+ endif
  
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	prompt "revision 7"
-@@ -74,7 +75,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
- 	prompt "revision 8"
- 	help
--	  Use revision 8 for kernel 3.13 onward.
-+	  Use revision 8 for kernel 3.13 to 3.15.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_9
-+	prompt "revision 9"
-+	help
-+	  Use revision 9 for kernel 3.16 onward.
- 
- endchoice
- 
-@@ -82,6 +88,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV
- 	int
- 	default 7 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	default 8 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
-+	default 9 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_9
- 
- endif # iwlwifi 3160/7260
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4),y)
+-# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.9.23.0.bin
+-LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.9.23.0.bin cxgb4/t4fw.bin
++# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.11.27.0.bin
++LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.11.27.0.bin cxgb4/t4fw.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+ endif
  
 -- 
 1.9.1
