@@ -1,45 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Sep 2014 13:11:30 +0200
-Subject: [Buildroot] Outcome of the GSoC 2014
-In-Reply-To: <20140919222504.GA19421@itchy>
-References: <20140915214402.05faf4fd@free-electrons.com>
- <20140915211348.GC8072@ned>
- <20140915231601.7a362d01@free-electrons.com>
- <20140919222504.GA19421@itchy>
-Message-ID: <20140920131130.1cab6f32@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Sep 2014 14:10:59 +0200
+Subject: [Buildroot] Analysis of build failures
+References: <20140912063012.AF99B100DEE@stock.ovh.net>
+ <20140912101105.1e932cb8@free-electrons.com>
+Message-ID: <XnsA3AE9046C17A4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140912101105.1e932cb8 at free-electrons.com:
 
-On Sat, 20 Sep 2014 00:25:04 +0200, Eric Le Bihan wrote:
-
-> I have reworked the patch:
+>>        arm |                      vlc-2.1.5 | NOK | 
+http://autobuild.buildroot.net/results/7102921b0a8d3a09bf7b3f5f18e56dab6ef364
+02/
 > 
-> - introduction of pkg-config-native in host-pkgconf.
-> - addition of a dependency on host-pkgconf to host-libgtk3.
-> - addition of multiple backend support (X11/Wayland/Broadway) in libgtk3.
+> -L/usr/lib used, bad!
+> 
+> /home/peko/autobuild/instance-0/output/host/opt/ext-
+toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.7.3/../../../../arm-none-
+linux-gnueabi/bin/ld: warning: library search path "/usr/lib" is unsafe for 
+cross-compilation
+> /usr/lib/librt.so: file not recognized: File format not recognized
+> collect2: error: ld returned 1 exit status
+> 
+> Bernd, maybe?
 
-Looks good. Make sure to have a separate patch for pkg-config-native.
+Hi,
 
-> When one adopts a patch, how should the credits be edited? Do I keep the
-> original author of the patch in the commit log and add myself in a
-> "Signed-off-by" line with some comments, or vice-versa?
+I cannot reproduce this error here.
 
-Normally, you keep the original author as the author of the patch, add
-a new SoB line with your name, and do something like:
-
-[Eric: added this, and that, etc.]
-
-To indicate the changes you've made to the original patch.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
