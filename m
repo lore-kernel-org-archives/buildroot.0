@@ -1,66 +1,67 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 20 Sep 2014 22:14:13 +0200
-Subject: [Buildroot] [PATCH 01/10] package/libinput: bump version
-In-Reply-To: <20140920175529.GA18705@free.fr>
-References: <cover.1411232859.git.yann.morin.1998@free.fr>
- <c999e0a0cf43f65190bf74289b299b959557b0d0.1411232859.git.yann.morin.1998@free.fr>
- <541DB8A4.4050008@openwide.fr> <20140920175529.GA18705@free.fr>
-Message-ID: <541DE015.6040006@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Sep 2014 22:55:09 +0200
+Subject: [Buildroot] [PATCH 0/15 v2] linux-firmware: bump + more firmwares
+	(branch yem/lnx-fw)
+Message-ID: <cover.1411246411.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hello All!
 
-Le 20/09/2014 19:55, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2014-09-20 19:25 +0200, Romain Naour spake thusly:
->> Hello Yann,
->>
->> Le 20/09/2014 19:09, Yann E. MORIN a ?crit :
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> ---
->>>  ...put-01-rename-log_msg-to-libinput_log_msg.patch | 54 +++++++++++++---------
->>>  package/libinput/libinput.mk                       |  2 +-
->>>  2 files changed, 32 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch b/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
->>> index c10d8af..2ada150 100644
->>> --- a/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
->>> +++ b/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
->>> @@ -9,6 +9,8 @@ of the log_msg() symbol.
->>>  http://autobuild.buildroot.net/results/c13/c133b7c706ee31302125df8ca94f4d0f0152c6c6/build-end.log
->>>  
->>>  Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->>> +[yann.morin.1998 at free.fr: rebase on-top of 0.6.0]
->>> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>  ---
->>
->> I think this patch can be dropped with this new release.
->> The issue is normally fixed by the commit "Use -no-install instead of -static
->> for local noinst linking"
->>
->> See: https://bugs.freedesktop.org/show_bug.cgi?id=82292
->> (the bug was reported by Vicente)
-> 
-> Yep, I saw that bug. And I pondered removing the patch.
-> 
-> However, I was not able to test a static-only build, so I can't say
-> whether that patch is still valid or not.
-> 
-> Also, that patch merely renames a function.
-> 
-> When/if I have some time around the WE, I'll test whether it is still
-> needed.
-> 
-> So, I decided it would be better to just refresh it for now. If you or
-> Vicente have some time to test the new libinput without that patch, feel
-> free to report! ;-)
-> 
-No problem, I'll try to check that tonight or tomorrow afternoon.
+This series bumps linux-fimware, updates some of the firmware files, and
+adds a bunch of new ones to install.
 
-Best regards,
-Romain
+Nothing really tricky.
+
+Changes v1 -> v2:
+  -  split the Intel SST DSP and TI wl18xx patch in two patches
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit b7fcf3bc5643a75898c76d5610360b6560a695f2:
+
+  sudo: bump to version 1.8.10p3 (2014-09-19 23:21:48 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/lnx-fw
+
+for you to fetch changes up to 7358165cfe8ee1f05f64eec392031c5628b8a4ac:
+
+  package/linux-firmware: add option for Intel SST DSP (Baytrail audio) (2014-09-20 14:59:46 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (15):
+      package/linux-firmware: bump revision
+      package/linux-firmware: split bcm43xx / bcm43xxx
+      package/linux-firmware: use the new bnx2x firmware version
+      package/linux-firmware: install firmware files for rtlwifi rtl8723be
+      package/linux-firmware: add option for Realtek rtl88xx firmware
+      package/linux-firmware: add option for TI wl18xx firmware
+      package/linux-firmware: prepare new firmware and new revision for iwlwifi
+      package/linux-firmware: add new revision for iwlwifi firmware
+      package/linux-firmware: use the new Chelsio cxgb4 firmware
+      package/linux-firmware: add option for Chelsio cxgb4 T5
+      package/linux-firmware: add option for Abilis Systems DVB-T as102
+      package/linux-firmware: install Xceive/Cresta xc4000 and xc5000c
+      package/linux-firmware: add option for ITEtech it9135 firmware
+      package/linux-firmware: add option for iwl7265 firmware
+      package/linux-firmware: add option for Intel SST DSP (Baytrail audio)
+
+ package/linux-firmware/Config.in         | 100 ++++++++++++++++++++++++-------
+ package/linux-firmware/linux-firmware.mk |  93 ++++++++++++++++++++++------
+ 2 files changed, 153 insertions(+), 40 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
