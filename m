@@ -1,81 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Sep 2014 22:55:00 +0200
-Subject: [Buildroot] [PATCH 02/15 v2] package/linux-firmware: split bcm43xx
-	/ bcm43xxx
+Date: Sat, 20 Sep 2014 22:55:01 +0200
+Subject: [Buildroot] [PATCH 03/15 v2] package/linux-firmware: use the new
+	bnx2x firmware version
 In-Reply-To: <cover.1411246411.git.yann.morin.1998@free.fr>
 References: <cover.1411246411.git.yann.morin.1998@free.fr>
-Message-ID: <161dad5ebe964a20034621e02941ef94a77ffc82.1411246411.git.yann.morin.1998@free.fr>
+Message-ID: <2f1c335be0e07e2c87da531d48a86163ad6c0241.1411246411.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linux-firmware has gained a few firmware files for Broadcom WiFi
-chipsets. Installing all of them takes a lot of place, when usually only
-one is really needed.
-
-Split the Broadcom BRCM drivers in two categories: bcm43xx and bcm43xxx,
-when they were previously a single config option, so as to reclaim a bit
-of space.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/Config.in         | 10 +++++++---
- package/linux-firmware/linux-firmware.mk | 17 +++++++++++------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index ba41598..3f94205 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -26,10 +26,14 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
- 	  Firmware files for the Atheros 9271 module
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
--	bool "Broadcom BRCM bcm43xx/43xxx"
-+	bool "Broadcom BRCM bcm43xx"
- 	help
--	  Firmware files for the Broadcom bcm43xx and bcm43xxx,
--	  SoftMAC and FullMAC.
-+	  Firmware files for the Broadcom bcm43xx SoftMAC and FullMAC.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-+	bool "Broadcom BRCM bcm43xxx"
-+	help
-+	  Firmware files for the Broadcom bcm43xxx, SoftMAC and FullMAC.
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160
- 	bool "Intel iwlwifi 3160"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 43edf64..3da757f 100644
+index 3da757f..32ed3b2 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -183,14 +183,19 @@ LINUX_FIRMWARE_FILES += dvb-usb-terratec-h5-drxk.fw
+@@ -154,9 +154,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
+ LINUX_FIRMWARE_FILES += \
+-	bnx2x/bnx2x-e1-7.8.17.0.fw \
+-	bnx2x/bnx2x-e1h-7.8.17.0.fw \
+-	bnx2x/bnx2x-e2-7.8.17.0.fw
++	bnx2x/bnx2x-e1-7.10.51.0.fw \
++	bnx2x/bnx2x-e1h-7.10.51.0.fw \
++	bnx2x/bnx2x-e2-7.10.51.0.fw
+ # No license file; the license is in the file WHENCE
  # which is installed unconditionally
  endif
- 
--# brcm
-+# brcm43xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX),y)
- LINUX_FIRMWARE_FILES += brcm/bcm43xx-0.fw brcm/bcm43xx_hdr-0.fw \
--			brcm/bcm4329-fullmac-4.bin brcm/brcmfmac43236b.bin \
--			brcm/brcmfmac43241b0-sdio.bin brcm/brcmfmac43241b4-sdio.bin \
--			brcm/brcmfmac4329-sdio.bin brcm/brcmfmac4330-sdio.bin \
--			brcm/brcmfmac4334-sdio.bin brcm/brcmfmac4335-sdio.bin \
--			brcm/brcmfmac43362-sdio.bin
-+			brcm/bcm4329-fullmac-4.bin brcm/brcmfmac4329-sdio.bin \
-+			brcm/brcmfmac4330-sdio.bin brcm/brcmfmac4334-sdio.bin \
-+			brcm/brcmfmac4335-sdio.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
-+endif
-+
-+# brcm43xxx
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
-+LINUX_FIRMWARE_FILES += brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
-+			brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
- endif
- 
 -- 
 1.9.1
