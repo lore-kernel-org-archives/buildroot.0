@@ -1,36 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Sep 2014 19:09:50 +0200
-Subject: [Buildroot] [PATCH 04/10] pacakge/freerdp: disable building the
-	manpages
-In-Reply-To: <cover.1411232859.git.yann.morin.1998@free.fr>
-References: <cover.1411232859.git.yann.morin.1998@free.fr>
-Message-ID: <f6425859cf5602332d0ef038f708074e1e2f40ec.1411232859.git.yann.morin.1998@free.fr>
+Date: Sat, 20 Sep 2014 19:09:52 +0200
+Subject: [Buildroot] [PATCH 0/10] wayland: bump and new backend (branch
+	yem/bumps)
+Message-ID: <cover.1411232859.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the manpages requires xsltproc, which might not be available.
-Also, who needs the manpages on the target anyway? ;-)
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/freerdp/freerdp.mk | 2 ++
- 1 file changed, 2 insertions(+)
+This series bumps wayland and weston, and adds the rdp backend to
+weston. As a side effect, it bumps libinput, and bumps, cleans up
+and enhances freerdp.
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 3ae68bf..6df567f 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -11,6 +11,8 @@ FREERDP_DEPENDENCIES = openssl zlib
- FREERDP_LICENSE = Apache-2.0
- FREERDP_LICENSE_FILES = LICENSE
- 
-+FREERDP_CONF_OPT = -DWITH_MANPAGES=OFF
-+
- ifeq ($(BR2_PACKAGE_FREERDP_NEEDS_XLIBS),y)
- FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
- FREERDP_CONF_OPT += -DWITH_X11=ON
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit b7fcf3bc5643a75898c76d5610360b6560a695f2:
+
+  sudo: bump to version 1.8.10p3 (2014-09-19 23:21:48 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to a469e9d1e552f6b3f08eaf5ab4f426365b96ca8c:
+
+  package/weston: add support for the RDP compositor (2014-09-20 19:04:51 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (10):
+      package/libinput: bump version
+      package/freerdp: bump version
+      package/freerdp: do not forcibly depend on X.Org
+      pacakge/freerdp: disable building the manpages
+      package/freerdp: add options to enable/disable server and/or client
+      package/freerdp: also install to staging
+      package/freerdp: install server key and certificate
+      package/wayland: bump to 1.6.0
+      package/weston: bump to 1.6.0
+      package/weston: add support for the RDP compositor
+
+ package/Config.in                                  |  2 +-
+ package/freerdp/Config.in                          | 31 +++++++--
+ package/freerdp/freerdp-0001-ffmpeg.patch          | 78 ----------------------
+ package/freerdp/freerdp.mk                         | 39 ++++++++++-
+ ...put-01-rename-log_msg-to-libinput_log_msg.patch | 54 ++++++++-------
+ package/libinput/libinput.mk                       |  2 +-
+ package/wayland/wayland.mk                         |  2 +-
+ package/weston/Config.in                           | 17 +++++
+ package/weston/weston-0000-safe-foreach.patch      | 36 ----------
+ package/weston/weston.mk                           |  9 ++-
+ 10 files changed, 121 insertions(+), 149 deletions(-)
+ delete mode 100644 package/freerdp/freerdp-0001-ffmpeg.patch
+ delete mode 100644 package/weston/weston-0000-safe-foreach.patch
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
