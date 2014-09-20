@@ -1,78 +1,118 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Sep 2014 19:09:55 +0200
-Subject: [Buildroot] [PATCH 09/10] package/weston: bump to 1.6.0
+Date: Sat, 20 Sep 2014 19:09:47 +0200
+Subject: [Buildroot] [PATCH 01/10] package/libinput: bump version
 In-Reply-To: <cover.1411232859.git.yann.morin.1998@free.fr>
 References: <cover.1411232859.git.yann.morin.1998@free.fr>
-Message-ID: <38597af86b3b318bb3b2542f491eab5ab6442ef3.1411232859.git.yann.morin.1998@free.fr>
+Message-ID: <c999e0a0cf43f65190bf74289b299b959557b0d0.1411232859.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch applied upstream.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/weston-0000-safe-foreach.patch | 36 ---------------------------
- package/weston/weston.mk                      |  2 +-
- 2 files changed, 1 insertion(+), 37 deletions(-)
- delete mode 100644 package/weston/weston-0000-safe-foreach.patch
+ ...put-01-rename-log_msg-to-libinput_log_msg.patch | 54 +++++++++++++---------
+ package/libinput/libinput.mk                       |  2 +-
+ 2 files changed, 32 insertions(+), 24 deletions(-)
 
-diff --git a/package/weston/weston-0000-safe-foreach.patch b/package/weston/weston-0000-safe-foreach.patch
-deleted file mode 100644
-index 7ea7197..0000000
---- a/package/weston/weston-0000-safe-foreach.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--commit a35d028d66cdd83a4a08663231dd2504f1b228f9
--Author: U. Artie Eoff <ullysses.a.eoff@intel.com>
--Date:   Wed May 21 09:20:02 2014 -0700
--
--    comp-wayland: use safe foreach when destroying outputs
--    
--    wl_list_for_each dereference's output to increment the
--    next iteration of the loop.  However, output is free'd
--    inside the loop resulting in a dereference to free'd
--    memory.
--    
--    Use wl_list_for_each_safe instead, which is designed to
--    handle this kind of pattern.
--    
--    Signed-off-by: U. Artie Eoff <ullysses.a.eoff@intel.com>
--    Reviewed-by: Thierry Reding <thierry.reding@gmail.com>
--    Signed-off-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff --git a/src/compositor-wayland.c b/src/compositor-wayland.c
--index a08b71a..76e5396 100644
----- a/src/compositor-wayland.c
--+++ b/src/compositor-wayland.c
--@@ -1997,9 +1997,9 @@ err_free:
-- static void
-- wayland_compositor_destroy(struct wayland_compositor *c)
-- {
---	struct weston_output *output;
--+	struct weston_output *output, *next;
+diff --git a/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch b/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
+index c10d8af..2ada150 100644
+--- a/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
++++ b/package/libinput/libinput-01-rename-log_msg-to-libinput_log_msg.patch
+@@ -9,6 +9,8 @@ of the log_msg() symbol.
+ http://autobuild.buildroot.net/results/c13/c133b7c706ee31302125df8ca94f4d0f0152c6c6/build-end.log
+ 
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++[yann.morin.1998 at free.fr: rebase on-top of 0.6.0]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  src/libinput-private.h | 14 +++++++-------
+  src/libinput.c         |  2 +-
+@@ -18,42 +20,48 @@ diff --git a/src/libinput-private.h b/src/libinput-private.h
+ index f9d2f87..ac1e1c4 100644
+ --- a/src/libinput-private.h
+ +++ b/src/libinput-private.h
+-@@ -81,15 +81,15 @@ typedef void (*libinput_source_dispatch_t)(void *data);
++@@ -116,15 +116,15 @@ typedef void (*libinput_source_dispatch_t)(void *data);
++ typedef void (*libinput_source_dispatch_t)(void *data);
+  
+- struct libinput_source;
+  
+--#define log_debug(...) log_msg(LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+--#define log_info(...) log_msg(LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+--#define log_error(...) log_msg(LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
+--#define log_bug_kernel(...) log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
+--#define log_bug_libinput(...) log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__);
+--#define log_bug_client(...) log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__);
+-+#define log_debug(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+-+#define log_info(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+-+#define log_error(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
+-+#define log_bug_kernel(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
+-+#define log_bug_libinput(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__);
+-+#define log_bug_client(...) libinput_log_msg(LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__);
++-#define log_debug(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
++-#define log_info(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
++-#define log_error(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
++-#define log_bug_kernel(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
++-#define log_bug_libinput(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__);
++-#define log_bug_client(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__);
+++#define log_debug(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+++#define log_info(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+++#define log_error(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
+++#define log_bug_kernel(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
+++#define log_bug_libinput(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__);
+++#define log_bug_client(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__);
+  
+  void
+--log_msg(enum libinput_log_priority priority, const char *format, ...);
+-+libinput_log_msg(enum libinput_log_priority priority, const char *format, ...);
++-log_msg(struct libinput *libinput,
+++libinput_log_msg(struct libinput *libinput,
++ 	enum libinput_log_priority priority,
++ 	const char *format, ...);
++ 
++ void
++-log_msg(struct libinput *libinput,
+++libinput_log_msg(struct libinput *libinput,
++ 	enum libinput_log_priority priority,
++ 	const char *format, ...);
+  
+- int
+- libinput_init(struct libinput *libinput,
+ diff --git a/src/libinput.c b/src/libinput.c
+ index eec9efb..4e3f6fa 100644
+ --- a/src/libinput.c
+ +++ b/src/libinput.c
+ @@ -110,7 +110,7 @@ static struct log_data log_data = {
+- };
++ }
+  
+  void
+--log_msg(enum libinput_log_priority priority, const char *format, ...)
+-+libinput_log_msg(enum libinput_log_priority priority, const char *format, ...)
++-log_msg(struct libinput *libinput,
+++libinput_log_msg(struct libinput *libinput,
++ 	enum libinput_log_priority priority,
++ 	const char *format, ...)
+  {
+- 	va_list args;
 - 
---	wl_list_for_each(output, &c->base.output_list, link)
--+	wl_list_for_each_safe(output, next, &c->base.output_list, link)
-- 		wayland_output_destroy(output);
-- 
-- 	c->base.renderer->destroy(&c->base);
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 7bb35b9..f4702ca 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+ -- 
+ 1.9.3
+ 
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index b52101a..345b3c3 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 1.5.0
-+WESTON_VERSION = 1.6.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-LIBINPUT_VERSION = 0.3.0
++LIBINPUT_VERSION = 0.6.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
 -- 
 1.9.1
