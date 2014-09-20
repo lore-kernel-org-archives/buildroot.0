@@ -1,17 +1,31 @@
 From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sat, 20 Sep 2014 07:57:23 +0000
+Date: Sat, 20 Sep 2014 09:43:34 +0000
 Subject: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in
  eclipse integration
-In-Reply-To: <56a77dc5115b45f194ca8744a6962fac@DBXPR07MB142.eurprd07.prod.outlook.com>
 References: <8cbab74434594ef7ab6e81bc2eb88441@DBXPR07MB142.eurprd07.prod.outlook.com>
  <20140916175503.7fdd3a7d@free-electrons.com>
- <56a77dc5115b45f194ca8744a6962fac@DBXPR07MB142.eurprd07.prod.outlook.com>
-Message-ID: <3239175274c442d698ea60155ecb5bc7@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <56a77dc5115b45f194ca8744a6962fac@DBXPR07MB142.eurprd07.prod.outlook.com> 
+Message-ID: <29f0b41a7df34e8297bdc9049e5a3add@DBXPR07MB142.eurprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+BTW. As an interim workaround, I just manually change the linker command to:
+
+/home/oded/dev/buildroot-2014.08/output/host/usr/bin/x86_64-buildroot-linux-gnu-ar
+
+And this builds my library. 
+
+Oded
+
+-----Original Message-----
+From: Oded Hanson 
+Sent: Saturday, September 20, 2014 10:57 AM
+To: 'Thomas Petazzoni'
+Cc: 'buildroot at busybox.net'; 'M?lanie Bats'
+Subject: RE: [Buildroot] Missing Buildroot x86_64 CC Archiver tool in eclipse integration
 
 Hello All
 
@@ -27,9 +41,7 @@ I created an empty C static library project and choose the buildroot toolchain (
 
 I added a simple C file and tried to build the project. This is what I received in the console:
 
-10:39:38 **** Incremental Build of configuration debug for project TestStaticLib2 ****
-make all 
-Building file: ../Test.c
+10:39:38 **** Incremental Build of configuration debug for project TestStaticLib2 **** make all Building file: ../Test.c
 Invoking: Buildroot X86_64 C Compiler (/home/oded/dev/buildroot-2014.08/output)
 /home/oded/dev/buildroot-2014.08/output/host/usr/bin/x86_64-buildroot-linux-gnu-gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Test.d" -MT"Test.d" -o "Test.o" "../Test.c"
 Finished building: ../Test.c
@@ -53,7 +65,7 @@ Any ideas ?
 Oded
 
 -----Original Message-----
-From: Oded Hanson 
+From: Oded Hanson
 Sent: Tuesday, September 16, 2014 7:24 PM
 To: Thomas Petazzoni
 Cc: buildroot at busybox.net; M?lanie Bats
