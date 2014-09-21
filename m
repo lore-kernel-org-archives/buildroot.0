@@ -1,67 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 19:41:12 +0200
-Subject: [Buildroot] [git commit] manual/developer guide: minor rework of
-	'adding board support' section
-Message-ID: <20140921174201.2DB339D488@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual/user guide/customization: add
+	section on users tables
+Message-ID: <20140921174201.5F23B9D488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ee5dccdc234d133e59d28a67286a4ec2912c058
+commit: http://git.buildroot.net/buildroot/commit/?id=5598d7f80aee23fe79875a1a048f06c3ec614c26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Minor rework of the section 'Creating your own board support', as follows:
-- Rename section into 'Adding support for a particular board'
-- Modify introduction
-- Refer to Project-specific customizations chapter
+This patch adds basic documentation on users tables, a topic which was
+currently not yet covered in the manual.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-board-support.txt |   13 +++++++------
- docs/manual/customize.txt            |    1 +
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ docs/manual/customize-users-tables.txt |   18 ++++++++++++++++++
+ docs/manual/customize.txt              |    3 +++
+ docs/manual/makeusers-syntax.txt       |    2 +-
+ 3 files changed, 22 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index 88fd290..f6d74ae 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -1,12 +1,13 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
- 
--[[customize-store-board-support]]
--== Creating your own board support
-+[[adding-board-support]]
-+== Adding support for a particular board
- 
--Creating your own board support in Buildroot allows users of a
--particular hardware platform to easily build a system that is known to
--work.
-+Buildroot contains basic configurations for several publicly available
-+hardware boards, so that users of such a board can easily build a system
-+that is known to work. You are welcome to add support for other boards
-+to Buildroot too.
- 
- To do so, you need to create a normal Buildroot configuration that
- builds a basic system for the hardware: toolchain, kernel, bootloader,
-@@ -34,4 +35,4 @@ configuration or patches specific to your target platform. To do so,
- create a directory +board/<manufacturer>+ and a subdirectory
- +board/<manufacturer>/<boardname>+. You can then store your patches
- and configurations in these directories, and reference them from the main
--Buildroot configuration.
-+Buildroot configuration. Refer to xref:customize[] for more details.
+diff --git a/docs/manual/customize-users-tables.txt b/docs/manual/customize-users-tables.txt
+new file mode 100644
+index 0000000..e2d32e2
+--- /dev/null
++++ b/docs/manual/customize-users-tables.txt
+@@ -0,0 +1,18 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++[[customize-users]]
++=== Adding custom user accounts
++
++Sometimes it is needed to add specific users in the target system.
++To cover this requirement, Buildroot provides support for so-called
++_users tables_. To use this feature, set config option
+++BR2_ROOTFS_USERS_TABLES+ to a space-separated list of users tables,
++regular text files following the xref:makeuser-syntax[makeusers syntax].
++
++As shown in xref:customize-dir-structure[], the recommended location for
++such files is +board/<company>/<boardname>/+.
++
++It should be noted that if the custom users are related to a specific
++application, you should set variable +FOO_USERS+ in the package's +.mk+
++file instead (see xref:generic-package-reference[]).
 diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-index 4807656..4051ae0 100644
+index ad335b9..0a73988 100644
 --- a/docs/manual/customize.txt
 +++ b/docs/manual/customize.txt
-@@ -1,6 +1,7 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
+@@ -20,6 +20,7 @@ Typical actions you may need to perform for a given project are:
+      +BR2_ROOTFS_DEVICE_TABLE+)
+   ** adding custom devices nodes (using
+      +BR2_ROOTFS_STATIC_DEVICE_TABLE+)
++* adding custom user accounts (using +BR2_ROOTFS_USERS_TABLES+)
+ * running arbitrary commands after generating the filesystem image
+   (using +BR2_ROOTFS_POST_IMAGE_SCRIPT+)
+ * adding project-specific patches to some packages (using
+@@ -48,6 +49,8 @@ include::customize-configuration.txt[]
  
-+[[customize]]
- == Project-specific customization
+ include::customize-rootfs.txt[]
  
- Typical actions you may need to perform for a given project are:
++include::customize-users-tables.txt[]
++
+ include::customize-post-image.txt[]
+ 
+ include::customize-packages.txt[]
+diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+index 9c61604..5b3f347 100644
+--- a/docs/manual/makeusers-syntax.txt
++++ b/docs/manual/makeusers-syntax.txt
+@@ -1,7 +1,7 @@
+ // -*- mode:doc -*- ;
+ 
+ [[makeuser-syntax]]
+-== Makeuser syntax documentation
++== Makeusers syntax documentation
+ 
+ The syntax to create users is inspired by the makedev syntax, above, but
+ is specific to Buildroot.
