@@ -1,33 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:48:12 +0200
-Subject: [Buildroot] [PATCH v2 1/2] iprutils: bump version to 2.4.2 and
- update patches
-In-Reply-To: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140921194812.01424179@free-electrons.com>
+Date: Sun, 21 Sep 2014 19:55:12 +0200
+Subject: [Buildroot] [PATCH 0/15 v2] linux-firmware: bump + more
+ firmwares (branch yem/lnx-fw)
+In-Reply-To: <cover.1411246411.git.yann.morin.1998@free.fr>
+References: <cover.1411246411.git.yann.morin.1998@free.fr>
+Message-ID: <20140921195512.037da855@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Hello Yann,
 
-On Thu, 18 Sep 2014 10:23:27 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../iprutils/iprutils-0001-Don-t-use-gettext.patch |   32 ++++++++++++++++++++
->  ...low-CFLAGS-to-be-extended-from-the-enviro.patch |   31 +++++++++++++++++++
->  .../iprutils/iprutils-01-dont-use-gettext.patch    |   30 ------------------
->  .../iprutils-02-use-environment-cflags.patch       |   20 ------------
->  package/iprutils/iprutils.mk                       |    2 +-
->  5 files changed, 64 insertions(+), 51 deletions(-)
->  create mode 100644 package/iprutils/iprutils-0001-Don-t-use-gettext.patch
->  create mode 100644 package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
->  delete mode 100644 package/iprutils/iprutils-01-dont-use-gettext.patch
->  delete mode 100644 package/iprutils/iprutils-02-use-environment-cflags.patch
+On Sat, 20 Sep 2014 22:55:09 +0200, Yann E. MORIN wrote:
 
-Both patches applied. Thanks to you, and thanks Gustavo for the testing.
+> Yann E. MORIN (15):
+>       package/linux-firmware: bump revision
+
+Applied.
+
+>       package/linux-firmware: split bcm43xx / bcm43xxx
+
+Applied.
+
+>       package/linux-firmware: use the new bnx2x firmware version
+
+Applied.
+
+>       package/linux-firmware: install firmware files for rtlwifi rtl8723be
+
+Applied.
+
+>       package/linux-firmware: add option for Realtek rtl88xx firmware
+
+Applied.
+
+>       package/linux-firmware: add option for TI wl18xx firmware
+
+Applied.
+
+>       package/linux-firmware: prepare new firmware and new revision for iwlwifi
+
+Not applied: does not add the appropriate Config.in.legacy handling.
+
+>       package/linux-firmware: add new revision for iwlwifi firmware
+
+Too much mixed with previous patch to apply.
+
+>       package/linux-firmware: use the new Chelsio cxgb4 firmware
+
+Applied.
+
+>       package/linux-firmware: add option for Chelsio cxgb4 T5
+
+Not applied: does not add the appropriate Config.in.legacy handling.
+
+>       package/linux-firmware: add option for Abilis Systems DVB-T as102
+
+Applied.
+
+>       package/linux-firmware: install Xceive/Cresta xc4000 and xc5000c
+
+Not applied: does not add the appropriate Config.in.legacy handling.
+
+>       package/linux-firmware: add option for ITEtech it9135 firmware
+
+Applied.
+
+>       package/linux-firmware: add option for iwl7265 firmware
+
+Too much mixed with a previous non-applied patch.
+
+>       package/linux-firmware: add option for Intel SST DSP (Baytrail audio)
+
+Applied.
+
+Care to respin the non-applied patches after fixing the
+Config.in.legacy handling?
+
+Thanks!
 
 Thomas
 -- 
