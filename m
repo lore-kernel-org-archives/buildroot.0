@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:37:42 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: do not force
- -I/usr/include in CPPFLAGS
-In-Reply-To: <1411297275-6888-1-git-send-email-yann.morin.1998@free.fr>
-References: <1411297275-6888-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140921193742.2f551f22@free-electrons.com>
+Date: Sun, 21 Sep 2014 19:37:55 +0200
+Subject: [Buildroot] [PATCH] openvmtools: disable -Werror
+In-Reply-To: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
+References: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20140921193755.357d35b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Karoly Kasza,
 
-On Sun, 21 Sep 2014 13:01:15 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.net/results/447/4473d8a99ffec1fde491d172520e86ae1e69fae7/
+On Mon, 15 Sep 2014 16:56:35 +0200, Karoly Kasza wrote:
+> Disable the mandatory flag -Werror in configure.ac.
+> This also makes -Wno-deprecated-declarations flag unnecessary.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 > ---
->  .../openvmtools-04-dont-force-cppflags.patch       | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/openvmtools/openvmtools-04-dont-force-cppflags.patch
+>  .../openvmtools/openvmtools-04-no_cflags_werror.patch |   17 +++++++++++++++++
+>  package/openvmtools/openvmtools.mk                    |    4 ----
+>  2 files changed, 17 insertions(+), 4 deletions(-)
+>  create mode 100644 package/openvmtools/openvmtools-04-no_cflags_werror.patch
 
 Applied, thanks.
 
