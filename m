@@ -1,106 +1,172 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 19:41:12 +0200
 Subject: [Buildroot] [git commit] manual/user guide/customization: rework
-	section on storing configuration
-Message-ID: <20140921174201.3F4549D488@busybox.osuosl.org>
+	'step-by-step instructions'
+Message-ID: <20140921174201.948F09D488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75de9ac6f286a53b10b1a6dd6ddde286fb61d4de
+commit: http://git.buildroot.net/buildroot/commit/?id=680641105df77f6253070fd5736a5badf0dce93d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch promotes the sections on Buildroot configuration and the
-configuration of other components to top-level sections, to match the
-overview in the introduction of the chapter. The introduction of the
-original section is removed as it does not bring additional info anymore.
-
-Some rewording is done as well.
+This patch reworks the section 'Step-by-step instructions for storing
+configuration' as follows:
+- rename into 'Quick guide to storing your project-specific customizations'
+  and hence make it serve as a summary to the chapter
+- change the introduction to make this clear
+- update paths to line-up with section 'recommended directory structure'
+- recommend BR2_GLOBAL_PATCH_DIR, as is done in the section on adding
+  patches.
+- mention how to add packages in a project-specific directory (to be
+  expanded in another patch)
+- minor rewording
+- rename file into customize-quick-guide.txt
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-configuration.txt |   54 ++++++++++++++-----------------
- 1 files changed, 24 insertions(+), 30 deletions(-)
+ docs/manual/customize-quick-guide.txt |   64 +++++++++++++++++++++++++++++++++
+ docs/manual/customize-store.txt       |   51 --------------------------
+ docs/manual/customize.txt             |    2 +-
+ 3 files changed, 65 insertions(+), 52 deletions(-)
 
-diff --git a/docs/manual/customize-configuration.txt b/docs/manual/customize-configuration.txt
-index d118cad..5723302 100644
---- a/docs/manual/customize-configuration.txt
-+++ b/docs/manual/customize-configuration.txt
-@@ -1,50 +1,44 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
- 
--[[customize-store-basics]]
--=== Basics for storing the configuration
--
--When you have a buildroot configuration that you are satisfied with and
--you want to share it with others, put it under revision control or move
--on to a different buildroot project, you need to store the configuration
--so it can be rebuilt later. The configuration that needs to be stored
--consists of the buildroot configuration, the configuration files for
--packages that you use (kernel, busybox, uClibc, ...), and your rootfs
--modifications.
--
- [[customize-store-buildroot-config]]
--==== Buildroot configuration
-+=== Storing the Buildroot configuration
- 
--For storing the buildroot configuration itself, buildroot offers the
--following command: +make savedefconfig+.
-+The Buildroot configuration can be stored using the command
-+ +make savedefconfig+.
- 
--This strips the buildroot configuration down by removing configuration
-+This strips the Buildroot configuration down by removing configuration
- options that are at their default value. The result is stored in a file
--called +defconfig+.  If you want to save it in another place, change
--the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
--BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
--+configs/<boardname>_defconfig+. The configuration can then be rebuilt by
-+called +defconfig+. If you want to save it in another place, change the
-++BR2_DEFCONFIG+ option in the Buildroot configuration itself, or call
-+make with +make savedefconfig BR2_DEFCONFIG=<path-to-defconfig>+.
+diff --git a/docs/manual/customize-quick-guide.txt b/docs/manual/customize-quick-guide.txt
+new file mode 100644
+index 0000000..617cc9a
+--- /dev/null
++++ b/docs/manual/customize-quick-guide.txt
+@@ -0,0 +1,64 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+The recommended place to store this defconfig is
-++configs/<boardname>_defconfig+. If you follow this recommendation, the
-+configuration will be listed in +make help+ and can be set again by
- running +make <boardname>_defconfig+.
- 
- Alternatively, you can copy the file to any other place and rebuild with
- +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
- 
--
- [[customize-store-package-config]]
--==== Other package configuration
-+=== Storing the configuration of other components
++=== Quick guide to storing your project-specific customizations
 +
-+The configuration files for BusyBox, the Linux kernel, Barebox and
-+uClibc should be stored as well if changed. For each of these
-+components, a Buildroot configuration option exists to point to an input
-+configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+. To store
-+their configuration, set these configuration options to a path where you
-+want to save the configuration files, and then use the helper targets
-+described below to actually store the configuration.
++Earlier in this chapter, the different methods for making
++project-specific customizations have been described. This section will
++now summarize all this by providing step-by-step instructions to storing your
++project-specific customizations. Clearly, the steps that are not relevant to
++your project can be skipped.
++
++1. +make menuconfig+ to configure toolchain, packages and kernel.
++1. +make linux-menuconfig+ to update the kernel config, similar for
++   other configuration like busybox, uclibc, ...
++1. +mkdir -p board/<manufacturer>/<boardname>+
++1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
++   (as far as they are relevant):
++   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
++   * +BR2_PACKAGE_BUSYBOX_CONFIG+
++   * +BR2_UCLIBC_CONFIG+
++   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
++   * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
++1. Write the configuration files:
++   * +make linux-update-defconfig+
++   * +make busybox-update-config+
++   * +make uclibc-update-config+
++   * +cp <output>/build/at91bootstrap3-*/.config
++     board/<manufacturer>/<boardname>/at91bootstrap3.config+
++   * +make barebox-update-defconfig+
++1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
++   with additional files you need on your rootfs, e.g.
++   +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
++   Set +BR2_ROOTFS_OVERLAY+
++   to +board/<manufacturer>/<boardname>/rootfs-overlay+.
++1. Create a post-build script
++   +board/<manufacturer>/<boardname>/post_build.sh+.  Set
++   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
++   +board/<manufacturer>/<boardname>/post_build.sh+
++1. If additional setuid permissions have to be set or device nodes have
++   to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
++   and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
++1. If additional user accounts have to be created, create
++   +board/<manufacturer>/<boardname>/users_table.txt+ and add that path
++   to +BR2_ROOTFS_USERS_TABLES+.
++1. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
++   to +board/<manufacturer>/<boardname>/patches/+ and add your patches
++   for each package in a subdirectory named after the package. Each
++   patch should be called +<packagename>-<num>-<description>.patch+.
++1. Specifically for the Linux kernel, there also exists the option
++   +BR2_LINUX_KERNEL_PATCH+ with as main advantage that it can also
++   download patches from a URL. If you do not need this,
++   +BR2_GLOBAL_PATCH_DIR+ is preferred. U-Boot, Barebox, at91bootstrap
++   and at91bootstrap3 also have separate options, but these do not
++   provide any advantage over +BR2_GLOBAL_PATCH_DIR+ and will likely be
++   removed in the future.
++1. If you need to add project-specific packages, create
++   +package/<manufacturer>/+ and place your packages in that
++   directory. Create an overall +<manufacturer>.mk+ file that
++   includes the +.mk+ files of all your packages. Create an overall
++   +Config.in+ file that sources the +Config.in+ files of all your
++   packages. Include this +Config.in+ file from Buildroot's
++   +package/Config.in+ file.
++1. +make savedefconfig+ to save the buildroot configuration.
++1. +cp defconfig configs/<boardname>_defconfig+
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+deleted file mode 100644
+index 7f4a289..0000000
+--- a/docs/manual/customize-store.txt
++++ /dev/null
+@@ -1,51 +0,0 @@
+-// -*- mode:doc; -*-
+-// vim: set syntax=asciidoc:
+-
+-=== Step-by-step instructions for storing configuration
+-
+-To store the configuration for a specific product, device or
+-application, it is advisable to use the same conventions as for the
+-board support: put the buildroot defconfig in the +configs+ directory,
+-and any other files in a subdirectory of the +boards+ directory.  This
+-section gives step-by-step instructions about how to do that. Of course,
+-you can skip the steps that are not relevant for your use case.
+-
+-1. +make menuconfig+ to configure toolchain, packages and kernel.
+-1. +make linux-menuconfig+ to update the kernel config, similar for
+-   other configuration.
+-1. +mkdir -p board/<manufacturer>/<boardname>+
+-1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
+-   (as far as they are relevant):
+-   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+-   * +BR2_PACKAGE_BUSYBOX_CONFIG+
+-   * +BR2_UCLIBC_CONFIG+
+-   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
+-   * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
+-1. Write the configuration files:
+-   * +make linux-update-defconfig+
+-   * +make busybox-update-config+
+-   * +make uclibc-update-config+
+-   * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
+-   * +make barebox-update-defconfig+
+-1. Create +board/<manufacturer>/<boardname>/fs-overlay/+ and fill it
+-   with additional files you need on your rootfs, e.g.
+-   +board/<manufacturer>/<boardname>/fs-overlay/etc/inittab+.
+-   Set +BR2_ROOTFS_OVERLAY+
+-   to +board/<manufacturer>/<boardname>/fs-overlay+.
+-1. Create a post-build script
+-   +board/<manufacturer>/<boardname>/post-build.sh+.  Set
+-   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
+-   +board/<manufacturer>/<boardname>/post-build.sh+
+-1. If additional setuid permissions have to be set or device nodes have
+-   to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
+-   and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
+-1. +make savedefconfig+ to save the buildroot configuration.
+-1. +cp defconfig configs/<boardname>_defconfig+
+-1. To add patches to the linux build, set +BR2_LINUX_KERNEL_PATCH+ to
+-   +board/<manufacturer>/<boardname>/patches/linux/+ and add your
+-   patches in that directory. Each patch should be called
+-   +linux-<num>-<description>.patch+. Similar for U-Boot, barebox,
+-   at91bootstrap and at91bootstrap3.
+-1. If you need modifications to other packages, or if you need to add
+-   packages, do that directly in the +packages/+ directory, following the
+-   instructions in xref:adding-packages[].
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index 98db69d..484413e 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -57,4 +57,4 @@ include::customize-patches.txt[]
  
--The configuration files for busybox, the linux kernel, barebox and
--uClibc should be stored as well if changed. For each of these, a
--buildroot configuration option exists to point to an input
--configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
--save their configuration, set those configuration options to a path
--outside your output directory,
--e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
--configuration files to that path.
-+As explained in xref:customize-dir-structure[], the recommended path to
-+store these configuration files is
-++board/<company>/<boardname>/foo.config+.
+ include::customize-packages.txt[]
  
- Make sure that you create a configuration file 'before' changing
- the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
--buildroot will try to access this config file, which doesn't exist
-+Buildroot will try to access this config file, which doesn't exist
- yet, and will fail. You can create the configuration file by running
- +make linux-menuconfig+ etc.
- 
+-include::customize-store.txt[]
++include::customize-quick-guide.txt[]
