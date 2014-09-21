@@ -1,56 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Sep 2014 20:38:10 +0200
-Subject: [Buildroot] [PATCH 2/5 v3] package/linux-firmware: add new revision
-	for iwlwifi firmware
+Date: Sun, 21 Sep 2014 20:38:11 +0200
+Subject: [Buildroot] [PATCH 3/5 v3] package/linux-firmware: add option for
+	iwl7265 firmware
 In-Reply-To: <cover.1411324588.git.yann.morin.1998@free.fr>
 References: <cover.1411324588.git.yann.morin.1998@free.fr>
-Message-ID: <dbbbdec4a131dda1b7b07ba4ddf3c0fda674d47d.1411324588.git.yann.morin.1998@free.fr>
+Message-ID: <6154da7303402ed62265eff0ad194353af22dea1.1411324588.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+New firmware to support iwlwifi-7265. Only comes in rev-8 or rev-9
+flavours, so hide rev-7 when iwlwifi-7265 is selected.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/Config.in | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 8 ++++++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index dc07a96..99f5956 100644
+index 99f5956..00c7edb 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -73,7 +73,8 @@ choice
- 	bool "iwlwifi 3160/726x revision to use"
- 	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
--	  Use revision 8 for kernel 3.13 onward.
-+	  Use revision 8 for kernel 3.13 to 3.15.
-+	  Use revision 9 for kernel 3.16 onward.
+@@ -64,6 +64,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
+ 	  Firmware files for the Intel Wifi 7260 devices supported by
+ 	  the iwlwifi kernel driver.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
++	bool "Intel iwlwifi 7265"
++	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
++	help
++	  Firmware files for the Intel Wifi 7265 devices supported by
++	  the iwlwifi kernel driver.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
+ 	bool
+ 
+@@ -78,6 +85,7 @@ choice
  
  config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
  	prompt "revision 7"
-@@ -83,7 +84,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
- 	prompt "revision 8"
++	depends on !BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
  	help
--	  Use revision 8 for kernel 3.13 onward.
-+	  Use revision 8 for kernel 3.13 to 3.15.
+ 	  Use revision 7 for kernel 3.10 to 3.12.
+ 
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 46e07d6..4e78c63 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -177,6 +177,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).u
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265),y)
++LINUX_FIRMWARE_FILES += iwlwifi-7265-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
++endif
 +
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_9
-+	prompt "revision 9"
-+	help
-+	  Use revision 9 for kernel 3.16 onward.
- 
- endchoice
- 
-@@ -91,6 +97,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV
- 	int
- 	default 7 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	default 8 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
-+	default 9 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_9
- 
- endif # iwlwifi 3160/7260
- 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
+ LINUX_FIRMWARE_FILES += \
+ 	bnx2x/bnx2x-e1-7.10.51.0.fw \
 -- 
 1.9.1
