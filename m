@@ -1,146 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 21 Sep 2014 20:38:09 +0200
-Subject: [Buildroot] [PATCH 1/5 v3] package/linux-firmware: prepare new
-	firmware and new revision for iwlwifi
-In-Reply-To: <cover.1411324588.git.yann.morin.1998@free.fr>
-References: <cover.1411324588.git.yann.morin.1998@free.fr>
-Message-ID: <6fd85bcfb8a4b2dff13d862f1ccb9ad19da2ef5f.1411324588.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 0/5 v3] linux-firmware: more firmwares (branch
+	yem/lnx-fw)
+Message-ID: <cover.1411324588.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is an upcoming new firmware file for a new chipset supported by
-iwlwifi, as well as a new revision of the iwlwifi firmware.
+Hello All!
 
-The patch only prepares the iwlwifi entries so it is easier to add them.
+This series updates some of the linux-firmware files, and adds a few
+new ones to install.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Nothing really fancy.
 
----
-Chamges v2 -> v3:
+
+Changes v2 -> v3:
   - add old options to Legacy  (Thomas P.)
----
- Config.in.legacy                         | 23 +++++++++++++++++++++++
- package/linux-firmware/Config.in         | 20 ++++++++++++--------
- package/linux-firmware/linux-firmware.mk |  4 ++--
- 3 files changed, 37 insertions(+), 10 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5b1460c..f7bde7f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -99,6 +99,29 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2014.11"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
-+	bool "BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 has been renamed"
-+	help
-+	  The option BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 was
-+	  renamed to BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7. You must
-+	  select it in:
-+	      Target packages -> Hardware handling ->
-+	      Firmware -> linux-firmware -> WiFi firmware ->
-+	      iwlwifi 3160/726x revision to use (revision 7)
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8
-+	bool "BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8 has been renamed"
-+	help
-+	  The option BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8 was
-+	  renamed to BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8. You must
-+	  select it in:
-+	      Target packages -> Hardware handling ->
-+	      Firmware -> linux-firmware -> WiFi firmware ->
-+	      iwlwifi 3160/726x revision to use (revision 8)
-+
-+###############################################################################
- comment "Legacy options removed in 2014.08"
- 
- config BR2_PACKAGE_LIBELF
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 7a1c40f..dc07a96 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -46,6 +46,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160
- 	bool "Intel iwlwifi 3160"
-+	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
- 	help
- 	  Firmware files for the Intel Wifi 3160 devices supported by
- 	  the iwlwifi kernel driver.
-@@ -58,35 +59,38 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
- 	bool "Intel iwlwifi 7260"
-+	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
- 	help
- 	  Firmware files for the Intel Wifi 7260 devices supported by
- 	  the iwlwifi kernel driver.
- 
--if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160 || \
--   BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
-+	bool
-+
-+if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
- 
- choice
--	bool "iwlwifi 3160/7260 revision to use"
-+	bool "iwlwifi 3160/726x revision to use"
- 	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
- 	  Use revision 8 for kernel 3.13 onward.
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	prompt "revision 7"
- 	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
- 	prompt "revision 8"
- 	help
- 	  Use revision 8 for kernel 3.13 onward.
- 
- endchoice
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_REV
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV
- 	int
--	default 7 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
--	default 8 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8
-+	default 7 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
-+	default 8 if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8
- 
- endif # iwlwifi 3160/7260
- 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index a7e1329..46e07d6 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -159,7 +159,7 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
--LINUX_FIRMWARE_FILES += iwlwifi-3160-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_REV).ucode
-+LINUX_FIRMWARE_FILES += iwlwifi-3160-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-@@ -173,7 +173,7 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260),y)
--LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_REV).ucode
-+LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
+Change v1 -> v2:
+  -  split the Intel SST DSP and TI wl18xx patch in two patches
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 64982ce4fa7c5131e90ea18ef761940435d8873a:
+
+  gendoc infra: cosmetic fixes (2014-09-21 20:11:02 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/lnx-fw
+
+for you to fetch changes up to 3cf029249f53fbbd58a50d1275872fa46111034e:
+
+  package/linux-firmware: install Xceive/Cresta xc4000 and xc5000c (2014-09-21 20:34:03 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/linux-firmware: prepare new firmware and new revision for iwlwifi
+      package/linux-firmware: add new revision for iwlwifi firmware
+      package/linux-firmware: add option for iwl7265 firmware
+      package/linux-firmware: add option for Chelsio cxgb4 T5
+      package/linux-firmware: install Xceive/Cresta xc4000 and xc5000c
+
+ Config.in.legacy                         | 39 +++++++++++++++++++++++
+ package/linux-firmware/Config.in         | 53 +++++++++++++++++++++++---------
+ package/linux-firmware/linux-firmware.mk | 27 ++++++++++++----
+ 3 files changed, 99 insertions(+), 20 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
