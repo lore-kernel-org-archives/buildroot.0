@@ -1,30 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Sep 2014 16:46:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 6950] Full unicode support in ncurses
-In-Reply-To: <bug-6950-163@https.bugs.busybox.net/>
-References: <bug-6950-163@https.bugs.busybox.net/>
-Message-ID: <20140921164603.D7D819D6FA@busybox.osuosl.org>
+From: Sascha Arthur <sascha.arthur@gmail.com>
+Date: Sun, 21 Sep 2014 18:46:26 +0200
+Subject: [Buildroot] [PATCH 1/1] Removed X depency for make build-graphs
+Message-ID: <1411317986-793-1-git-send-email-sascha.arthur@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6950
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Sascha Arthur <sascha.arthur@gmail.com>
+---
+ support/scripts/graph-build-time |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-09-21 16:46:02 UTC ---
-The patches from Jeremy and Gustavo have been committed:
-http://git.buildroot.net/buildroot/commit/?id=74efae025371fbb0540f3184c66a1fd0a3c34abd.
-Marking bug as fixed.
-
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 524c30d..4bb90c2 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -49,9 +49,10 @@
+ #   * argparse (by default in Python 2.7, requires python-argparse if
+ #     Python 2.6 is used)
+ 
+-import matplotlib
++import matplotlib as mpl
+ import numpy
+ 
++mpl.use('Agg')
+ import matplotlib.pyplot as plt
+ import matplotlib.font_manager as fm
+ import csv
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
