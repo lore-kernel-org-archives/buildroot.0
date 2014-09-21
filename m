@@ -1,89 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Sep 2014 18:55:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mesa3d: Bump version to 10.3.0
-In-Reply-To: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1411318552-26581-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Sep 2014 19:29:12 +0200
+Subject: [Buildroot] [git commit] openvmtools: disable -Werror
+Message-ID: <20140921172937.E3CD69D69C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- rebased mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=8bec0a1af57165081dc275f813c8c5c74ff12c14
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Disable the mandatory flag -Werror in configure.ac.
+This also makes -Wno-deprecated-declarations flag unnecessary.
+
+Fixes:
+  http://autobuild.buildroot.net/results/440/4400abc17115d0f5eb65c4eb012f11766cbe5a56/
+  http://autobuild.buildroot.net/results/02b/02b24a012dbc76e366c10d3758978eba5e597499/
+
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...atform.h-not-installed-if-EGL-is-disabled.patch |   31 ++++++++------------
- package/mesa3d/mesa3d.mk                           |    4 +--
- 2 files changed, 14 insertions(+), 21 deletions(-)
+ .../openvmtools-04-no_cflags_werror.patch          |   17 +++++++++++++++++
+ package/openvmtools/openvmtools.mk                 |    4 ----
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-index 53ba519..5dc9099 100644
---- a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-+++ b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-@@ -11,16 +11,12 @@ This patch installs this header file unconditionally.
- Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=77240
- 
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
-- src/egl/main/Makefile.am | 3 ---
-- src/mapi/Makefile.am     | 3 +++
-- 2 files changed, 3 insertions(+), 3 deletions(-)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de> (rebased for mesa3d 10.3)
- 
--diff --git a/src/egl/main/Makefile.am b/src/egl/main/Makefile.am
--index 60cb600..1cd5cd2 100644
----- a/src/egl/main/Makefile.am
--+++ b/src/egl/main/Makefile.am
--@@ -126,9 +126,6 @@ pkgconfigdir = $(libdir)/pkgconfig
-+diff -uNr Mesa-10.3.0-rc2.org/src/egl/main/Makefile.am Mesa-10.3.0-rc2/src/egl/main/Makefile.am
-+--- Mesa-10.3.0-rc2.org/src/egl/main/Makefile.am	2014-08-29 00:00:57.000000000 +0200
-++++ Mesa-10.3.0-rc2/src/egl/main/Makefile.am	2014-09-02 21:35:52.548071820 +0200
-+@@ -85,9 +85,6 @@
-  
-  pkgconfig_DATA = egl.pc
-  
-@@ -30,17 +26,14 @@ index 60cb600..1cd5cd2 100644
-  egldir = $(includedir)/EGL
-  egl_HEADERS = \
-  	$(top_srcdir)/include/EGL/eglext.h \
--diff --git a/src/mapi/Makefile.am b/src/mapi/Makefile.am
--index ef53803..2a8c555 100644
----- a/src/mapi/Makefile.am
--+++ b/src/mapi/Makefile.am
--@@ -40,3 +40,6 @@ endif
-- if HAVE_OPENVG
-+diff -uNr Mesa-10.3.0-rc2.org/src/mapi/Makefile.am Mesa-10.3.0-rc2/src/mapi/Makefile.am
-+--- Mesa-10.3.0-rc2.org/src/mapi/Makefile.am	2014-09-01 01:22:12.000000000 +0200
-++++ Mesa-10.3.0-rc2/src/mapi/Makefile.am	2014-09-02 21:36:22.891686861 +0200
-+@@ -211,4 +211,7 @@
-  SUBDIRS += vgapi
-  endif
--+
+diff --git a/package/openvmtools/openvmtools-04-no_cflags_werror.patch b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+new file mode 100644
+index 0000000..96bd355
+--- /dev/null
++++ b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+@@ -0,0 +1,17 @@
++configure.ac: disable -Werror
++
++Disable the mandatory flag -Werror in configure.ac.
++
++Signed-off-by: Karoly Kasza <kaszak@gmail.com>
++
++--- open-vm-tools-9.4.6-1770165.orig/configure.ac	2014-07-02 00:21:14.000000000 +0200
+++++ open-vm-tools-9.4.6-1770165/configure.ac	2014-09-15 16:03:47.565900402 +0200
++@@ -832,7 +832,7 @@
 + 
- +khrdir = $(includedir)/KHR
- +khr_HEADERS = $(top_srcdir)/include/KHR/khrplatform.h
---- 
--1.9.1
++ ### General flags / actions
++ CFLAGS="$CFLAGS -Wall"
++-CFLAGS="$CFLAGS -Werror"
+++# CFLAGS="$CFLAGS -Werror"
++ 
++ # -Wno-unknown-pragmas is due to gcc not understanding '#pragma ident' in Xlib.h on OpenSolaris.
++ for TEST_CFLAG in -Wno-pointer-sign -Wno-unused-value -fno-strict-aliasing \
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 6361d6b..9191643 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -13,10 +13,6 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
+ # See http://sourceforge.net/p/open-vm-tools/mailman/message/32550385/
+ OPENVMTOOLS_AUTORECONF = YES
+ OPENVMTOOLS_CONF_OPT = --without-icu --without-x --without-gtk2 --without-gtkmm --without-kernel-modules
+-# -Wno-deprecated-declarations is a workaround for a bug in open-vm-tools
+-# See http://sourceforge.net/p/open-vm-tools/mailman/message/31473171/
+-OPENVMTOOLS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-deprecated-declarations"
 -
-++
-+ include $(top_srcdir)/install-lib-links.mk
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f986d0e..8fc5075 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ OPENVMTOOLS_DEPENDENCIES = libglib2
  
--MESA3D_VERSION = 10.2.7
-+MESA3D_VERSION = 10.3.0
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
--MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
-+MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/10.3
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
- MESA3D_AUTORECONF = YES
--- 
-1.7.10.4
+ # When libfuse is available, openvmtools can build vmblock-fuse, so
