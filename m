@@ -1,59 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:06:01 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmiutil: new package
-In-Reply-To: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
-References: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20140921220601.79d50cb8@free-electrons.com>
+Date: Sun, 21 Sep 2014 21:28:59 +0200
+Subject: [Buildroot] [git commit] perl: fix build of native modules
+Message-ID: <20140921200726.BAC499D73A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+commit: http://git.buildroot.net/buildroot/commit/?id=39fadc2863d477433df4cad983c7c7216babdcd7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Sep 2014 11:38:35 +0200, David Bachelart wrote:
+CORE/vutil.h is required when the host perl version is 5.20
+see http://autobuild.buildroot.net/results/c3d/c3d48c3b3d6c1e616d8e20a2f65d8ba33abe61da/
 
-> diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-> new file mode 100644
-> index 0000000..29d6e26
-> --- /dev/null
-> +++ b/package/ipmiutil/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_IPMIUTIL
-> +	bool "ipmiutil"
-> +	depends on BR2_TOOLCHAIN_HAS_SSP
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Did you test if it works with an internal toolchain (i.e a toolchain
-built by Buildroot) that has SSP enabled? Apparently, the package
-forcefully links against -lssp. But I'm not sure if a libssp library is
-built when SSP is enabled in the internal toolchain, because we use the
-SSP support from the C library and not from the compiler. A
-verification would be good, or even better, an improvement to ipmiutil
-to make SSP support optional.
-
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_ZLIB
-
-This dependency on zlib seems unnecessary: I didn't see anything in
-ipmiutil that references zlib directly. Did I miss it?
-
-Also, the code contains call to fork(), so your package should depend
-on BR2_USE_MMU. And the code uses threads, so it should depend on
-thread support.
-
-Try to make sure that your package builds fine with the following
-toolchain configurations:
-
- - http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
- - http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
- - http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
- - http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 01e0166..65c0a7d 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -117,6 +117,7 @@ endef
+ define PERL_ADD_CORE_H
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/cc_runtime.h
++	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/vutil.h
+ endef
+ 
+ PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_CORE_H
