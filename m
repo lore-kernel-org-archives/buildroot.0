@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 20:02:51 +0200
-Subject: [Buildroot] [PATCH] screen: bump to version 4.2.1
-In-Reply-To: <1410748789-4094-1-git-send-email-maarten@treewalker.org>
-References: <1410748789-4094-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20140921200251.74eea1d6@free-electrons.com>
+Date: Sun, 21 Sep 2014 20:04:02 +0200
+Subject: [Buildroot] [PATCH] musl: Add post-1.1.4 commit to provide
+ max_align_t
+In-Reply-To: <1410487649-1365-1-git-send-email-maarten@treewalker.org>
+References: <1410487649-1365-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20140921200402.061caf87@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,16 @@ To: buildroot@busybox.net
 
 Dear Maarten ter Huurne,
 
-On Mon, 15 Sep 2014 04:39:49 +0200, Maarten ter Huurne wrote:
-> I re-did the patches: one patch per change, patch configure.in instead
-> of the configure script itself, a few more issues fixed. This should
-> hopefully make the patches acceptable for upstream, or at least make it
-> easier to migrate them on version bumps.
-> 
-> This also fixes compilation with musl libc.
+On Fri, 12 Sep 2014 04:07:29 +0200, Maarten ter Huurne wrote:
+> Without this, including libstdc++'s <cstddef> fails.
 > 
 > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
 > ---
-> Patches have been submitted upstream as well:
-> https://savannah.gnu.org/bugs/?43222 (0002)
-> https://savannah.gnu.org/bugs/?43223 (0001,0003-0005)
-> https://savannah.gnu.org/bugs/?43224 (0006-0009)
-> https://savannah.gnu.org/bugs/?43225 (0010)
+>  package/musl/musl-0001-add-max_align_t.patch | 153 +++++++++++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 package/musl/musl-0001-add-max_align_t.patch
 
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
