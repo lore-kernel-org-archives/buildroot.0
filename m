@@ -1,58 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:47:47 +0200
-Subject: [Buildroot] [git commit] iprutils: Fix static build by passing the
-	libraries in the right order
-Message-ID: <20140921174754.5D0A99D6FF@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 19:48:12 +0200
+Subject: [Buildroot] [PATCH v2 1/2] iprutils: bump version to 2.4.2 and
+ update patches
+In-Reply-To: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1411032208-62586-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140921194812.01424179@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d4ce6ccc4754c57643446052a89cbd153564e1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-This mistake was causing failures like this one:
+On Thu, 18 Sep 2014 10:23:27 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  .../iprutils/iprutils-0001-Don-t-use-gettext.patch |   32 ++++++++++++++++++++
+>  ...low-CFLAGS-to-be-extended-from-the-enviro.patch |   31 +++++++++++++++++++
+>  .../iprutils/iprutils-01-dont-use-gettext.patch    |   30 ------------------
+>  .../iprutils-02-use-environment-cflags.patch       |   20 ------------
+>  package/iprutils/iprutils.mk                       |    2 +-
+>  5 files changed, 64 insertions(+), 51 deletions(-)
+>  create mode 100644 package/iprutils/iprutils-0001-Don-t-use-gettext.patch
+>  create mode 100644 package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
+>  delete mode 100644 package/iprutils/iprutils-01-dont-use-gettext.patch
+>  delete mode 100644 package/iprutils/iprutils-02-use-environment-cflags.patch
 
-m_post.c:(.text+0x60): undefined reference to `wattr_on'
+Both patches applied. Thanks to you, and thanks Gustavo for the testing.
 
-Patch sent upstream:
-  https://sourceforge.net/p/iprdd/iprutils/merge-requests/1/
-
-Fixes:
-  http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...x-static-build-by-passing-the-libraries-i.patch |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
-
-diff --git a/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
-new file mode 100644
-index 0000000..e176ab6
---- /dev/null
-+++ b/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
-@@ -0,0 +1,20 @@
-+iprutils: Fix static build by passing the libraries in the right order
-+
-+This mistake was causing failures like this one:
-+
-+m_post.c:(.text+0x60): undefined reference to `wattr_on'
-+
-+http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/build-end.log
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+--- iprutils-2.4.2/Makefile.orig	2014-09-17 18:14:52.435367860 +0100
-++++ iprutils-2.4.2/Makefile	2014-09-17 18:15:09.367652526 +0100
-+@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTIL
-+ all: iprconfig iprupdate iprdump iprinit iprdbg docs 
-+ 
-+ iprconfig: iprconfig.c iprlib.o iprconfig.h
-+-	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu
-++	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses
-+ 
-+ iprupdate: iprupdate.c iprlib.o
-+ 	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprupdate iprlib.o iprupdate.c $(LDFLAGS)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
