@@ -1,71 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Sep 2014 14:53:33 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: do not force
- -I/usr/include in CPPFLAGS
-In-Reply-To: <1411297275-6888-1-git-send-email-yann.morin.1998@free.fr>
-References: <1411297275-6888-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140921125333.GB4299@free.fr>
+Date: Sun, 21 Sep 2014 14:57:52 +0200
+Subject: [Buildroot] [PATCH] openvmtools: disable -Werror
+In-Reply-To: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
+References: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20140921125751.GC4299@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Karoly, All,
 
-On 2014-09-21 13:01 +0200, Yann E. MORIN spake thusly:
-> Fixes:
->     http://autobuild.buildroot.net/results/447/4473d8a99ffec1fde491d172520e86ae1e69fae7/
+On 2014-09-15 16:56 +0200, Karoly Kasza spake thusly:
+> Disable the mandatory flag -Werror in configure.ac.
+> This also makes -Wno-deprecated-declarations flag unnecessary.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  .../openvmtools-04-dont-force-cppflags.patch       | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/openvmtools/openvmtools-04-dont-force-cppflags.patch
-> 
-> diff --git a/package/openvmtools/openvmtools-04-dont-force-cppflags.patch b/package/openvmtools/openvmtools-04-dont-force-cppflags.patch
-> new file mode 100644
-> index 0000000..8f904b1
-> --- /dev/null
-> +++ b/package/openvmtools/openvmtools-04-dont-force-cppflags.patch
-> @@ -0,0 +1,22 @@
-> +m4: do not force -I/usr/include in CPPFLAGS
-> +
-> +This is so horribly broken for cross-compilation. :-(
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +diff -durN openvmtools-9.4.6-1770165.orig/m4/vmtools.m4 openvmtools-9.4.6-1770165/m4/vmtools.m4
-> +--- openvmtools-9.4.6-1770165.orig/m4/vmtools.m4	2014-07-02 00:21:14.000000000 +0200
-> ++++ openvmtools-9.4.6-1770165/m4/vmtools.m4	2014-09-21 12:39:15.901659888 +0200
-> +@@ -281,10 +281,10 @@
-> +       if test "$os" = freebsd; then
-> +          CUSTOM_$1_CPPFLAGS="-I/usr/local/include"
-> +       else
-> +-         CUSTOM_$1_CPPFLAGS="-I/usr/include"
-> ++         CUSTOM_$1_CPPFLAGS=" "
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 
-I suddenly realise it is not obvious why I left a space in there.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-That's on purpose, otherwise ./configure gets awfully confused, and
-does not even try to find PAM headers and simply bails out before even
-doing anything to detect PAM.
+I guess this is fixing a bunch of autobuild errors; these should have
+been referenced in the commit log, as such:
 
-I can re-spin with a better commit log (and/or a comment in the patch)
-if needed. Or it can be added by the committer. ;-)
+Fixes:
+    http://autobuild.buildroot.net/results/440/4400abc17115d0f5eb65c4eb012f11766cbe5a56/
+    http://autobuild.buildroot.net/results/02b/02b24a012dbc76e366c10d3758978eba5e597499/
+    [...]
+
+(No need to put them all, just a few; the [...] means there are a lot
+more, hence it is important to apply this patch.)
 
 Regards,
 Yann E. MORIN.
 
-> +       fi
-> +       if test -n "$2"; then
-> +-         CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
-> ++         : CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
-> +       fi
-> +    fi
-> + ])
+> ---
+>  .../openvmtools/openvmtools-04-no_cflags_werror.patch |   17 +++++++++++++++++
+>  package/openvmtools/openvmtools.mk                    |    4 ----
+>  2 files changed, 17 insertions(+), 4 deletions(-)
+>  create mode 100644 package/openvmtools/openvmtools-04-no_cflags_werror.patch
+> 
+> diff --git a/package/openvmtools/openvmtools-04-no_cflags_werror.patch b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+> new file mode 100644
+> index 0000000..96bd355
+> --- /dev/null
+> +++ b/package/openvmtools/openvmtools-04-no_cflags_werror.patch
+> @@ -0,0 +1,17 @@
+> +configure.ac: disable -Werror
+> +
+> +Disable the mandatory flag -Werror in configure.ac.
+> +
+> +Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> +
+> +--- open-vm-tools-9.4.6-1770165.orig/configure.ac	2014-07-02 00:21:14.000000000 +0200
+> ++++ open-vm-tools-9.4.6-1770165/configure.ac	2014-09-15 16:03:47.565900402 +0200
+> +@@ -832,7 +832,7 @@
+> + 
+> + ### General flags / actions
+> + CFLAGS="$CFLAGS -Wall"
+> +-CFLAGS="$CFLAGS -Werror"
+> ++# CFLAGS="$CFLAGS -Werror"
+> + 
+> + # -Wno-unknown-pragmas is due to gcc not understanding '#pragma ident' in Xlib.h on OpenSolaris.
+> + for TEST_CFLAG in -Wno-pointer-sign -Wno-unused-value -fno-strict-aliasing \
+> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+> index 6361d6b..9191643 100644
+> --- a/package/openvmtools/openvmtools.mk
+> +++ b/package/openvmtools/openvmtools.mk
+> @@ -13,10 +13,6 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
+>  # See http://sourceforge.net/p/open-vm-tools/mailman/message/32550385/
+>  OPENVMTOOLS_AUTORECONF = YES
+>  OPENVMTOOLS_CONF_OPT = --without-icu --without-x --without-gtk2 --without-gtkmm --without-kernel-modules
+> -# -Wno-deprecated-declarations is a workaround for a bug in open-vm-tools
+> -# See http://sourceforge.net/p/open-vm-tools/mailman/message/31473171/
+> -OPENVMTOOLS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-deprecated-declarations"
+> -
+>  OPENVMTOOLS_DEPENDENCIES = libglib2
+>  
+>  # When libfuse is available, openvmtools can build vmblock-fuse, so
 > -- 
-> 1.9.1
+> 1.7.10.4
 > 
 
 -- 
