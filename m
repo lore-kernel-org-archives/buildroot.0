@@ -1,35 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 20:10:30 +0200
-Subject: [Buildroot] [PATCH] xinetd: Patch configure script to fix
- rlim_t test
-In-Reply-To: <1410882141-16213-1-git-send-email-maarten@treewalker.org>
-References: <1410882141-16213-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20140921201030.0ea3b3de@free-electrons.com>
+Date: Sun, 21 Sep 2014 20:11:02 +0200
+Subject: [Buildroot] [git commit] gendoc infra: cosmetic fixes
+Message-ID: <20140921181109.941CD9D6E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+commit: http://git.buildroot.net/buildroot/commit/?id=64982ce4fa7c5131e90ea18ef761940435d8873a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Sep 2014 17:42:21 +0200, Maarten ter Huurne wrote:
-> Fixes build with musl libc.
-> 
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-> ---
->  package/xinetd/xinetd-005-configure-rlim_t.patch | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/xinetd/xinetd-005-configure-rlim_t.patch
+- wrap lines to 80 characters
+- fix space/tab mixup
 
-I've renamed the patch to use the 004 sequence number, which wasn't
-used.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[yann.morin.1998 at free.fr: tested all but PDF]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/manual.mk |   13 ++++++++-----
+ 1 files changed, 8 insertions(+), 5 deletions(-)
 
-Applied, thanks a lot! Please don't forget to submit upstream if it's
-not already done.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index 8d401a2..136f725 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -70,8 +70,8 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+ 	$$(Q)mkdir -p $$(@D)/.build
+ 	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
+ 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
+-	        -D $$(@D) $$(@D)/.build/$(1).txt \
+-	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
++		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
++		-D $$(@D) $$(@D)/.build/$(1).txt
+ 	-$$(Q)rm -rf $$(@D)/.build
+ endef
+ 
+@@ -84,9 +84,12 @@ endef
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+ ################################################################################
+ define GENDOC
+-$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
+-$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 1")
+-$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
++$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
++	--xsltproc-opts "--stringparam toc.section.depth 1")
++$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
++	--xsltproc-opts "--stringparam toc.section.depth 1")
++$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
++	--dblatex-opts "-P latex.output.revhistory=0")
+ $(call GENDOC_INNER,$(pkgname),text,text,text,text)
+ $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
+ clean: $(pkgname)-clean
