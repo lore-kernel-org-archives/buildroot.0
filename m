@@ -1,66 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 21:15:03 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: add option for
-	iwl7265 firmware
-Message-ID: <20140921191513.250C69D72E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: install
+	Xceive/Cresta xc4000 and xc5000c
+Message-ID: <20140921191513.3B6919D488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44de1a293e47b7d0688a33f7f85d70862eaa8990
+commit: http://git.buildroot.net/buildroot/commit/?id=b581bba9c4dc82f72a9791e1550905c644fca6ce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New firmware to support iwlwifi-7265. Only comes in rev-8 or rev-9
-flavours, so hide rev-7 when iwlwifi-7265 is selected.
+Tweak the prompt, because Xceive is now part of Cresta, so the
+new xc5000c-based devices might be branded under either name.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         |    8 ++++++++
- package/linux-firmware/linux-firmware.mk |    5 +++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+ Config.in.legacy                         |    8 ++++++++
+ package/linux-firmware/Config.in         |    6 +++---
+ package/linux-firmware/linux-firmware.mk |   10 +++++++---
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e233e3c..6e202fe 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.11"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
++	bool "Xceive xc5000 option has been renamed"
++	select BR2_PACKAGE_LINUX_FIRMWARE_XCx000
++	help
++	  The Xceive xc5000 option now also handles older firmwares from
++	  Xceive (the xc4000 series), as well as new firmwares (the xc5000c)
++	  from Cresta, who bought Xceive.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
+ 	bool "Chelsio T4 option has been renamed"
+ 	select BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 99f5956..00c7edb 100644
+index 9d39df8..cd35dcc 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -64,6 +64,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
- 	  Firmware files for the Intel Wifi 7260 devices supported by
- 	  the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
-+	bool "Intel iwlwifi 7265"
-+	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
-+	help
-+	  Firmware files for the Intel Wifi 7265 devices supported by
-+	  the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
- 	bool
- 
-@@ -78,6 +85,7 @@ choice
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	prompt "revision 7"
-+	depends on !BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
+@@ -217,10 +217,10 @@ config BR2_PACKAGE_LINUX_FIRMWARE_H5_DRXK
  	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
+ 	  Firmware file for Terratec H5 DRX-K based DVB tuner driver
+ 
+-config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
+-	bool "Xceive xc5000"
++config BR2_PACKAGE_LINUX_FIRMWARE_XCx000
++	bool "Xceive/Cresta xc4000/xc5000/xc500c"
+ 	help
+-	  Firmware file for xc5000-based DVB tuner driver
++	  Firmware file for xc4000/xc5000/xc5000c based DVB tuner driver
+ 
+ endmenu
  
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 46e07d6..4e78c63 100644
+index bc036be..4303985 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -177,6 +177,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).u
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+@@ -203,9 +203,13 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.11.27.0.bin cxgb4/t5fw.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-7265-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
- LINUX_FIRMWARE_FILES += \
- 	bnx2x/bnx2x-e1-7.10.51.0.fw \
+-ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XC5000),y)
+-LINUX_FIRMWARE_FILES += dvb-fe-xc5000-1.6.114.fw
+-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.xc5000
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
++LINUX_FIRMWARE_FILES += dvb-fe-xc4000-1.4.1.fw \
++			dvb-fe-xc5000-1.6.114.fw \
++			dvb-fe-xc5000c-4.1.30.7.fw
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.xc4000 \
++				    LICENCE.xc5000 \
++				    LICENCE.xc5000c
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AS102),y)
