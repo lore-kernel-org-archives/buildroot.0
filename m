@@ -1,38 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:36:54 +0200
-Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: Fix compile error
- for microblaze & xtensa
-In-Reply-To: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140921223654.19237fdc@free-electrons.com>
+Date: Sun, 21 Sep 2014 22:43:09 +0200
+Subject: [Buildroot] [git commit] bcache-tools: Adding package.
+Message-ID: <20140921204327.AA5A59D739@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=c6273204bcfa4a46f1de5c158accfdc40e15d148
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Sep 2014 12:06:28 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/05f/05f2f1317f366b724c2d6b1bb572bb6778c69896/
-> http://autobuild.buildroot.net/results/655/655c00859ea61378739309539d71b38fab62e229/
-> http://autobuild.buildroot.net/results/4d3/4d37c5594c0916c27c897b0d2545d1c5cc492598/
-> http://autobuild.buildroot.net/results/d1a/d1af06d73ee0fd57ee0ad8b371927b2f9478d44e/
-> http://autobuild.buildroot.net/results/5cc/5cceb96ac29a410316fd7d8f7de0615ba33e3f2c/
-> http://autobuild.buildroot.net/results/143/14308a9d1806574f06ab2a7d222f53119fab1c90/
-> http://autobuild.buildroot.net/results/c6a/c6a5bbee21b5c4ce84c6a95bd764f294d3791720/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../xserver_xorg-server-0002-glyphpadbytes.patch   |  232 ++++++++++++++++++++
->  1 file changed, 232 insertions(+)
->  create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-glyphpadbytes.patch
+This is the bcache tools, required to setup the linux bcache
+feature of the Linux kernel.
 
-Both patches applied, thanks!
+[Thomas: use only one hook to create the missing directories, as
+suggested by Yann.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |    1 +
+ package/bcache-tools/Config.in       |   22 ++++++++++++++++++++++
+ package/bcache-tools/bcache-tools.mk |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index 39a5c6f..2eefc3f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -281,6 +281,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
+ 	source "package/avrdude/Config.in"
++	source "package/bcache-tools/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+new file mode 100644
+index 0000000..a3f7897
+--- /dev/null
++++ b/package/bcache-tools/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_BCACHE_TOOLS
++	bool "bcache tools"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_USE_MMU # util-linux (libblkid)
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	help
++	  Bcache is a Linux kernel block layer cache. It allows one or
++	  more fast disk drives such as flash-based solid state drives (SSDs)
++	  to act as a cache for one or more slower hard disk drives.
++
++	  http://bcache.evilpiepirate.org/
++
++	  This is the user space bcache tools, required to setup the linux
++	  bcache feature of the Linux kernel.
++
++comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+new file mode 100644
+index 0000000..666a02f
+--- /dev/null
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# bcache-tools
++#
++################################################################################
++
++BCACHE_TOOLS_VERSION = v1.0.7
++BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
++BCACHE_TOOLS_LICENSE = GPLv2
++BCACHE_TOOLS_LICENSE_FILES = COPYING
++BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux
++
++# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
++# the bcache-tools Makefile to alter CFLAGS
++define BCACHE_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++# The bcache-tools Makefile expects the man8 directory to exist
++# expects the /lib/udev/rules.d directory to exist.
++define BCACHE_TOOLS_CREATE_MISSING_DIRS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/lib/udev/rules.d
++endef
++
++BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_CREATE_MISSING_DIRS
++
++define BCACHE_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
