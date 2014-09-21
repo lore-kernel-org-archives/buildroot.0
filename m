@@ -1,172 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 19:41:12 +0200
-Subject: [Buildroot] [git commit] manual/user guide/customization: rework
-	'step-by-step instructions'
-Message-ID: <20140921174201.948F09D488@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual/user guide/customization: add
+	section on project-specific packages
+Message-ID: <20140921174201.81CA99D488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=680641105df77f6253070fd5736a5badf0dce93d
+commit: http://git.buildroot.net/buildroot/commit/?id=0c3e82f06850ffd4cda7e2c1a703eccd76f89c4a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch reworks the section 'Step-by-step instructions for storing
-configuration' as follows:
-- rename into 'Quick guide to storing your project-specific customizations'
-  and hence make it serve as a summary to the chapter
-- change the introduction to make this clear
-- update paths to line-up with section 'recommended directory structure'
-- recommend BR2_GLOBAL_PATCH_DIR, as is done in the section on adding
-  patches.
-- mention how to add packages in a project-specific directory (to be
-  expanded in another patch)
-- minor rewording
-- rename file into customize-quick-guide.txt
+This patch adds a new section to chapter 'Project-specific customization' to
+describe how to add project-specific packages from a project-specific
+directory. The principle was already described in the presentation 'Using
+Buildroot for real projects' but was never documented in official Buildroot
+documentation.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-quick-guide.txt |   64 +++++++++++++++++++++++++++++++++
- docs/manual/customize-store.txt       |   51 --------------------------
- docs/manual/customize.txt             |    2 +-
- 3 files changed, 65 insertions(+), 52 deletions(-)
+ docs/manual/customize-packages.txt |   71 ++++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt          |    2 +
+ 2 files changed, 73 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/customize-quick-guide.txt b/docs/manual/customize-quick-guide.txt
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
 new file mode 100644
-index 0000000..617cc9a
+index 0000000..e3ecb4c
 --- /dev/null
-+++ b/docs/manual/customize-quick-guide.txt
-@@ -0,0 +1,64 @@
++++ b/docs/manual/customize-packages.txt
+@@ -0,0 +1,71 @@
 +// -*- mode:doc; -*-
 +// vim: set syntax=asciidoc:
 +
-+=== Quick guide to storing your project-specific customizations
++[[customize-packages]]
++=== Adding project-specific packages
 +
-+Earlier in this chapter, the different methods for making
-+project-specific customizations have been described. This section will
-+now summarize all this by providing step-by-step instructions to storing your
-+project-specific customizations. Clearly, the steps that are not relevant to
-+your project can be skipped.
++In general, any new package should be added directly in the +package+
++directory and submitted to the Buildroot upstream project. How to add
++packages to Buildroot in general is explained in full detail in
++xref:adding-packages[] and will not be repeated here.  However, your
++project may need some proprietary packages that cannot be upstreamed.
++This section will explain how you can keep such project-specific
++packages in a project-specific directory.
 +
-+1. +make menuconfig+ to configure toolchain, packages and kernel.
-+1. +make linux-menuconfig+ to update the kernel config, similar for
-+   other configuration like busybox, uclibc, ...
-+1. +mkdir -p board/<manufacturer>/<boardname>+
-+1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
-+   (as far as they are relevant):
-+   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-+   * +BR2_PACKAGE_BUSYBOX_CONFIG+
-+   * +BR2_UCLIBC_CONFIG+
-+   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-+   * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
-+1. Write the configuration files:
-+   * +make linux-update-defconfig+
-+   * +make busybox-update-config+
-+   * +make uclibc-update-config+
-+   * +cp <output>/build/at91bootstrap3-*/.config
-+     board/<manufacturer>/<boardname>/at91bootstrap3.config+
-+   * +make barebox-update-defconfig+
-+1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-+   with additional files you need on your rootfs, e.g.
-+   +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
-+   Set +BR2_ROOTFS_OVERLAY+
-+   to +board/<manufacturer>/<boardname>/rootfs-overlay+.
-+1. Create a post-build script
-+   +board/<manufacturer>/<boardname>/post_build.sh+.  Set
-+   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
-+   +board/<manufacturer>/<boardname>/post_build.sh+
-+1. If additional setuid permissions have to be set or device nodes have
-+   to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
-+   and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
-+1. If additional user accounts have to be created, create
-+   +board/<manufacturer>/<boardname>/users_table.txt+ and add that path
-+   to +BR2_ROOTFS_USERS_TABLES+.
-+1. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
-+   to +board/<manufacturer>/<boardname>/patches/+ and add your patches
-+   for each package in a subdirectory named after the package. Each
-+   patch should be called +<packagename>-<num>-<description>.patch+.
-+1. Specifically for the Linux kernel, there also exists the option
-+   +BR2_LINUX_KERNEL_PATCH+ with as main advantage that it can also
-+   download patches from a URL. If you do not need this,
-+   +BR2_GLOBAL_PATCH_DIR+ is preferred. U-Boot, Barebox, at91bootstrap
-+   and at91bootstrap3 also have separate options, but these do not
-+   provide any advantage over +BR2_GLOBAL_PATCH_DIR+ and will likely be
-+   removed in the future.
-+1. If you need to add project-specific packages, create
-+   +package/<manufacturer>/+ and place your packages in that
-+   directory. Create an overall +<manufacturer>.mk+ file that
-+   includes the +.mk+ files of all your packages. Create an overall
-+   +Config.in+ file that sources the +Config.in+ files of all your
-+   packages. Include this +Config.in+ file from Buildroot's
-+   +package/Config.in+ file.
-+1. +make savedefconfig+ to save the buildroot configuration.
-+1. +cp defconfig configs/<boardname>_defconfig+
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-deleted file mode 100644
-index 7f4a289..0000000
---- a/docs/manual/customize-store.txt
-+++ /dev/null
-@@ -1,51 +0,0 @@
--// -*- mode:doc; -*-
--// vim: set syntax=asciidoc:
--
--=== Step-by-step instructions for storing configuration
--
--To store the configuration for a specific product, device or
--application, it is advisable to use the same conventions as for the
--board support: put the buildroot defconfig in the +configs+ directory,
--and any other files in a subdirectory of the +boards+ directory.  This
--section gives step-by-step instructions about how to do that. Of course,
--you can skip the steps that are not relevant for your use case.
--
--1. +make menuconfig+ to configure toolchain, packages and kernel.
--1. +make linux-menuconfig+ to update the kernel config, similar for
--   other configuration.
--1. +mkdir -p board/<manufacturer>/<boardname>+
--1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
--   (as far as they are relevant):
--   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
--   * +BR2_PACKAGE_BUSYBOX_CONFIG+
--   * +BR2_UCLIBC_CONFIG+
--   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
--   * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
--1. Write the configuration files:
--   * +make linux-update-defconfig+
--   * +make busybox-update-config+
--   * +make uclibc-update-config+
--   * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
--   * +make barebox-update-defconfig+
--1. Create +board/<manufacturer>/<boardname>/fs-overlay/+ and fill it
--   with additional files you need on your rootfs, e.g.
--   +board/<manufacturer>/<boardname>/fs-overlay/etc/inittab+.
--   Set +BR2_ROOTFS_OVERLAY+
--   to +board/<manufacturer>/<boardname>/fs-overlay+.
--1. Create a post-build script
--   +board/<manufacturer>/<boardname>/post-build.sh+.  Set
--   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
--   +board/<manufacturer>/<boardname>/post-build.sh+
--1. If additional setuid permissions have to be set or device nodes have
--   to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
--   and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
--1. +make savedefconfig+ to save the buildroot configuration.
--1. +cp defconfig configs/<boardname>_defconfig+
--1. To add patches to the linux build, set +BR2_LINUX_KERNEL_PATCH+ to
--   +board/<manufacturer>/<boardname>/patches/linux/+ and add your
--   patches in that directory. Each patch should be called
--   +linux-<num>-<description>.patch+. Similar for U-Boot, barebox,
--   at91bootstrap and at91bootstrap3.
--1. If you need modifications to other packages, or if you need to add
--   packages, do that directly in the +packages/+ directory, following the
--   instructions in xref:adding-packages[].
++As shown in xref:customize-dir-structure[], the recommended location for
++project-specific packages is +package/<company>/+. If you are using the
+++BR2_EXTERNAL+ feature (see xref:outside-br-custom[]) the recommended
++location is +$(BR2_EXTERNAL)/package/+.
++
++However, Buildroot will not be aware of the packages in this location,
++unless we perform some additional steps. As explained in
++xref:adding-packages[], a package in Buildroot basically consists of two
++files: a +.mk+ file (describing how to build the package) and a
+++Config.in+ file (describing the configuration options for this
++package).
++
++Buildroot will automatically include the +.mk+ files in first-level
++subdirectories of the +package+ directory (using the pattern
+++package/\*/*.mk+). If we want Buildroot to include +.mk+ files from
++deeper subdirectories (like +package/<company>/package1/+) then we
++simply have to add a +.mk+ file in a first-level subdirectory that
++includes these additional +.mk+ files. Therefore, create a file
+++package/<company>/<company>.mk+ with following contents (assuming you
++have only one extra directory level below +package/<company>/+):
++
++-----
++include $(sort $(wildcard package/<company>/*/*.mk))
++-----
++
++If you are using +BR2_EXTERNAL+, create a file
+++$(BR2_EXTERNAL)/external.mk+ with following contents (again assuming only
++one extra level):
++
++-----
++include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
++-----
++
++For the +Config.in+ files, create a file +package/<company>/Config.in+
++that includes the +Config.in+ files of all your packages. An exhaustive
++list has to be provided since wildcards are not supported in the source command of kconfig.
++For example:
++
++-----
++source "package/<company>/package1/Config.in"
++source "package/<company>/package2/Config.in"
++-----
++
++Include this new file +package/<company>/Config.in+ from
+++package/Config.in+, preferably in a company-specific menu to make
++merges with future Buildroot versions easier.
++
++If you are using +BR2_EXTERNAL+, create a file
+++$(BR2_EXTERNAL)/Config.in+ with similar contents:
++
++-----
++source "$BR2_EXTERNAL/package/package1/Config.in"
++source "$BR2_EXTERNAL/package/package2/Config.in"
++-----
++
++You do not have to add an include for this +$(BR2_EXTERNAL)/Config.in+
++file as it is included automatically.
 diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-index 98db69d..484413e 100644
+index b389d7f..98db69d 100644
 --- a/docs/manual/customize.txt
 +++ b/docs/manual/customize.txt
-@@ -57,4 +57,4 @@ include::customize-patches.txt[]
+@@ -55,4 +55,6 @@ include::customize-post-image.txt[]
  
- include::customize-packages.txt[]
+ include::customize-patches.txt[]
  
--include::customize-store.txt[]
-+include::customize-quick-guide.txt[]
++include::customize-packages.txt[]
++
+ include::customize-store.txt[]
