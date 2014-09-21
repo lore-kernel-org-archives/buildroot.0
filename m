@@ -1,50 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:51:22 +0200
-Subject: [Buildroot] [PATCH 2/3] ffmpeg: enable or disable debug based
- on BR2_ENABLE_DEBUG
-In-Reply-To: <1410228406-2140-2-git-send-email-danomimanchego123@gmail.com>
-References: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
- <1410228406-2140-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140921225122.4a2c477a@free-electrons.com>
+Date: Sun, 21 Sep 2014 22:54:48 +0200
+Subject: [Buildroot] [git commit] ffmpeg: add --pkg-config to configure
+	options
+Message-ID: <20140921205504.0A7939D739@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+commit: http://git.buildroot.net/buildroot/commit/?id=a9a5a8159937cbc5e472cbd0b144d596b85a3386
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  8 Sep 2014 22:06:45 -0400, Danomi Manchego wrote:
+The ffmpeg does not understand the PKG_CONFIG env variable,
+so it throws a line like this at the end of its configuration:
 
->  FFMPEG_CONF_OPT = \
-> -	--prefix=/usr		\
-> +	--prefix=/usr \
+WARNING: .../output/host/usr/bin/arm-none-linux-gnueabi-pkg-config not found, library detection may fail.
 
-Unrelated change, so I removed this change from the patch.
+Apparently, some of the indevs and outdevs need a pkg-config.
+This patch adds the --pkg-config to let ffmpeg know where it
+is.
 
->  	--enable-avfilter \
-> -	--disable-debug \
->  	--disable-version3 \
->  	--enable-logging \
->  	--enable-optimizations \
-> @@ -68,6 +67,12 @@ FFMPEG_CONF_OPT = \
->  
->  FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +FFMPEG_CONF_OPT += --enable-debug
-> +else
-> +FFMPEG_CONF_OPT += --disable-debug
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
->  FFMPEG_CONF_OPT += --enable-gpl
->  else
+[Thomas: remove unrelated formatting change.]
 
-Other than that, applied, thanks!
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 1481abc..c6f305a 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -64,7 +64,7 @@ FFMPEG_CONF_OPT = \
+ 	--disable-symver \
+ 	--disable-doc
+ 
+-FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ FFMPEG_CONF_OPT += --enable-debug
+@@ -333,6 +333,7 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--arch=$(BR2_ARCH) \
+ 		--target-os="linux" \
+ 		--disable-stripping \
++		--pkg-config="$(PKG_CONFIG_HOST_BINARY)" \
+ 		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(FFMPEG_CONF_OPT) \
