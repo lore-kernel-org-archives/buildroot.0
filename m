@@ -1,66 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:36:29 +0200
-Subject: [Buildroot] [git commit] xserver_xorg-server: Fix compile error for
-	microblaze
-Message-ID: <20140921203635.F17A59B9EA@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 22:36:54 +0200
+Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: Fix compile error
+ for microblaze & xtensa
+In-Reply-To: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1410084389-5971-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140921223654.19237fdc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de31a9f7d7ce09ae65e725baaf07a73c8fcdd064
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Fixes
-mipushpxl.c: In function 'miPushPixels':
-mipushpxl.c:110:38: error: 'IMAGE_BYTE_ORDER' undeclared (first use in this function)
-     if (screenInfo.bitmapBitOrder == IMAGE_BYTE_ORDER)
+On Sun,  7 Sep 2014 12:06:28 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/05f/05f2f1317f366b724c2d6b1bb572bb6778c69896/
+> http://autobuild.buildroot.net/results/655/655c00859ea61378739309539d71b38fab62e229/
+> http://autobuild.buildroot.net/results/4d3/4d37c5594c0916c27c897b0d2545d1c5cc492598/
+> http://autobuild.buildroot.net/results/d1a/d1af06d73ee0fd57ee0ad8b371927b2f9478d44e/
+> http://autobuild.buildroot.net/results/5cc/5cceb96ac29a410316fd7d8f7de0615ba33e3f2c/
+> http://autobuild.buildroot.net/results/143/14308a9d1806574f06ab2a7d222f53119fab1c90/
+> http://autobuild.buildroot.net/results/c6a/c6a5bbee21b5c4ce84c6a95bd764f294d3791720/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../xserver_xorg-server-0002-glyphpadbytes.patch   |  232 ++++++++++++++++++++
+>  1 file changed, 232 insertions(+)
+>  create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-glyphpadbytes.patch
 
-Patch submitted upstream: https://bugs.freedesktop.org/show_bug.cgi?id=83582
+Both patches applied, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../xserver_xorg-server-0003-microblaze.patch      |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch
-new file mode 100644
-index 0000000..b99b669
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0003-microblaze.patch
-@@ -0,0 +1,33 @@
-+xserver_xorg-server: Fix compile error for microblaze
-+
-+Fixes
-+mipushpxl.c: In function 'miPushPixels':
-+mipushpxl.c:110:38: error: 'IMAGE_BYTE_ORDER' undeclared (first use in this function)
-+     if (screenInfo.bitmapBitOrder == IMAGE_BYTE_ORDER)
-+
-+Patch submitted upstream: https://bugs.freedesktop.org/show_bug.cgi?id=83582
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr xorg-server-1.16.0.glyph/include/servermd.h xorg-server-1.16.0/include/servermd.h
-+--- xorg-server-1.16.0.glyph/include/servermd.h	2014-09-07 11:32:34.297332811 +0200
-++++ xorg-server-1.16.0/include/servermd.h	2014-09-07 11:31:33.470099995 +0200
-+@@ -176,6 +176,18 @@
-+ 
-+ #endif                          /* mips */
-+ 
-++#if defined(__microblaze__) || defined(microblaze)
-++
-++#ifdef __BIG_ENDIAN__
-++#define IMAGE_BYTE_ORDER	MSBFirst
-++#define BITMAP_BIT_ORDER	MSBFirst
-++#else
-++#define IMAGE_BYTE_ORDER	LSBFirst
-++#define BITMAP_BIT_ORDER	LSBFirst
-++#endif
-++
-++#endif
-++
-+ #if defined(__alpha) || defined(__alpha__)
-+ #define IMAGE_BYTE_ORDER	LSBFirst        /* Values for the Alpha only */
-+ #define BITMAP_BIT_ORDER       LSBFirst
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
