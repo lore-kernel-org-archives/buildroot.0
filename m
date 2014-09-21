@@ -1,32 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:37:55 +0200
-Subject: [Buildroot] [PATCH] openvmtools: disable -Werror
-In-Reply-To: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
-References: <1410792995-28405-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20140921193755.357d35b1@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 21 Sep 2014 13:08:59 -0400
+Subject: [Buildroot] [PATCH] erlang: bump to version 17.3
+Message-ID: <1411319339-3375-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+Erlang/OTP 17.3 is a service release on the 17 track with mostly bug
+fixes, but it does contain a number of new features and characteristics
+improvements as well.
 
-On Mon, 15 Sep 2014 16:56:35 +0200, Karoly Kasza wrote:
-> Disable the mandatory flag -Werror in configure.ac.
-> This also makes -Wno-deprecated-declarations flag unnecessary.
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->  .../openvmtools/openvmtools-04-no_cflags_werror.patch |   17 +++++++++++++++++
->  package/openvmtools/openvmtools.mk                    |    4 ----
->  2 files changed, 17 insertions(+), 4 deletions(-)
->  create mode 100644 package/openvmtools/openvmtools-04-no_cflags_werror.patch
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/erlang/erlang.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 5474952..6f62933 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_VERSION = 17.1
++ERLANG_VERSION = 17.3
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
