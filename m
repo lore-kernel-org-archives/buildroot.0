@@ -1,62 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 21:21:50 +0200
-Subject: [Buildroot] [git commit] configs/freescale_imx6dlsabresd: add
-	defconfig for iMX6DL SabreSD
-Message-ID: <20140921192326.553E19BEA1@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 21:23:18 +0200
+Subject: [Buildroot] [git commit] imx6sabresd: boot to /init in mfgtools mode
+Message-ID: <20140921192326.705A59BEA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f009496d683a7c001bd636d5cff76e877056fdac
+commit: http://git.buildroot.net/buildroot/commit/?id=8bc74c5258d92d5d0640b526403aa0f3687b6f7f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is very similar to freescale_imx6qsabresd_defconfig, which supports the
-i.MX6Q ("Quad", quad core CPU) version of the board, except it supports the
-i.MX6DL (DualLite, dual core CPU) version.
+Buildroot supplies a nice /init wrapper script to use when booting from a
+ramdisk.
 
-The differences are in the U-boot configuration and the device tree file.
+We add a patch to u-boot to tell the kernel to boot into /init (instead of
+/linuxrc) on i.MX6, when booting in mfgtools mode. This way we can boot a
+buildroot system entirely through USB.
 
+Signed-off-by: Vincent Stehl?? <vincent.stehle at freescale.com
+[Luca: rebase on top of iMX6DL patches and patch iMX6DL defconfig as well]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Gilles Talis <gilles.talis@gmail.com>
+[Luca: build- and run-tested on i.MX6DL SABRESD]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: Vincent Stehl?? <vincent.stehle@freescale.com>
+Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/freescale_imx6dlsabresd_defconfig |   27 +++++++++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch |   36 ++++++++++++++++++++
+ configs/freescale_imx6dlsabresd_defconfig          |    1 +
+ configs/freescale_imx6qsabresd_defconfig           |    1 +
+ 3 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+diff --git a/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
 new file mode 100644
-index 0000000..4177e16
+index 0000000..c01df4e
 --- /dev/null
++++ b/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+@@ -0,0 +1,36 @@
++From 4a7cd7c5b165317dccf45cfc235da3e14bc339e8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
++Date: Tue, 12 Aug 2014 10:17:31 +0200
++Subject: [PATCH] mx6qsabre_common: boot Linux to /init in mfgtools mode
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Buildroot supplies a nice /init wrapper script to use when booting from a
++ramdisk.
++
++This patch tells u-boot to tell the kernel to boot into /init (instead of
++/linuxrc) on i.MX6, when booting in mfgtools mode. This way we can boot a
++buildroot system entirely through USB.
++
++Signed-off-by: Vincent Stehl?? <vincent.stehle@freescale.com>
++---
++ include/configs/mx6qsabre_common.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/configs/mx6qsabre_common.h b/include/configs/mx6qsabre_common.h
++index 69ff0df..ec7b665 100644
++--- a/include/configs/mx6qsabre_common.h
+++++ b/include/configs/mx6qsabre_common.h
++@@ -129,7 +129,7 @@
++ 
++ #define CONFIG_MFG_ENV_SETTINGS \
++ 	"mfgtool_args=setenv bootargs console=" CONFIG_CONSOLE_DEV ",115200 " \
++-		"rdinit=/linuxrc " \
+++		"rdinit=/init " \
++ 		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
++ 		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
++ 		"g_mass_storage.iSerialNumber=\"\" "\
++-- 
++2.0.1
++
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 4177e16..62caf79 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
 +++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -0,0 +1,27 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+@@ -25,3 +25,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 16e4d0b..bc0aa46 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -25,3 +25,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
