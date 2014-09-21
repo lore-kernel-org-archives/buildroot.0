@@ -1,35 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Sep 2014 20:06:36 +0200
-Subject: [Buildroot] [PATCH 0/15 v2] linux-firmware: bump + more
- firmwares (branch yem/lnx-fw)
-In-Reply-To: <20140921195512.037da855@free-electrons.com>
-References: <cover.1411246411.git.yann.morin.1998@free.fr>
- <20140921195512.037da855@free-electrons.com>
-Message-ID: <20140921180636.GD4299@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Sep 2014 20:07:37 +0200
+Subject: [Buildroot] [PATCH] swig: add symlink to /usr/bin/swig2.0
+In-Reply-To: <1411110831-27676-3-git-send-email-jeremy.rosen@openwide.fr>
+References: <1411110831-27676-1-git-send-email-jeremy.rosen@openwide.fr>
+ <1411110831-27676-3-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20140921200737.740f2bc0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear J?r?my Rosen,
 
-On 2014-09-21 19:55 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> Care to respin the non-applied patches after fixing the
-> Config.in.legacy handling?
+On Fri, 19 Sep 2014 09:13:51 +0200, J?r?my Rosen wrote:
+> the cmake detection script provided with cmake will first look for a
+> binary called swig2.0 then for a binary called swig
+> 
+> swig-host only installs a binary called swig and gets overridden by the
+> version installed by the host distro. This symlink prevents that from
+> happening
 
-Doh, stupid me... Yes, of course. Sorry about it...
+I don't understand the explanation: if it looks for a binary called
+swig, then where's the need to create a swig2.0 symbolic link? How a
+binary in $(HOST_DIR)/usr/bin can get overridden by the version
+installed by the host distro?
+
+The SoB line is missing.
+
+> diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+> index 5efc81c..233e97d 100644
+> --- a/package/swig/swig.mk
+> +++ b/package/swig/swig.mk
+> @@ -15,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
+>  SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
+>  SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+>  
+> +define SWIG_INSTALL_SYMLINK
+
+Should be HOST_SWITCH_INSTALL_SYMLINK.
+
+I've marked your patch as "Changes requested" in patchwork.
 
 Thanks!
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
