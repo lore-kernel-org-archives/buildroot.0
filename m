@@ -1,30 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 21:29:14 +0200
-Subject: [Buildroot] [PATCH] perl: fix build of native modules
-In-Reply-To: <1410979865-26207-1-git-send-email-francois.perrad@gadz.org>
-References: <1410979865-26207-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140921212914.0217edab@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 21 Sep 2014 21:32:51 +0200
+Subject: [Buildroot] [PATCH 2/2] qemu-sparc: use default gcc
+In-Reply-To: <20140921193957.77da49d4@free-electrons.com>
+References: <20140919103404.GA24103@waldemar-brodkorb.de>
+ <20140921193957.77da49d4@free-electrons.com>
+Message-ID: <20140921193251.GU14691@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Hi,
+Thomas Petazzoni wrote,
 
-On Wed, 17 Sep 2014 20:51:05 +0200, Francois Perrad wrote:
-> CORE/vutil.h is required when the host perl version is 5.20
-> see http://autobuild.buildroot.net/results/c3d/c3d48c3b3d6c1e616d8e20a2f65d8ba33abe61da/
+> Dear Waldemar Brodkorb,
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/perl.mk | 1 +
->  1 file changed, 1 insertion(+)
+> On Fri, 19 Sep 2014 12:34:04 +0200, Waldemar Brodkorb wrote:
+> > With the kernel patch from:
+> > http://patchwork.ozlabs.org/patch/384285/
+> > There is no problem with latest gcc anymore.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  .../linux/linux-0001-sparc-memset-fix.patch        |   50 ++++++++++++++++++++
+> >  configs/qemu_sparc_ss10_defconfig                  |    2 +
+> >  package/gcc/Config.in.host                         |    7 ++-
+> >  3 files changed, 55 insertions(+), 4 deletions(-)
+> >  create mode 100644 board/qemu/sparc-ss10/linux/linux-0001-sparc-memset-fix.patch
+> 
+> It's a bit annoying that we need a patch to the kernel to make sure
+> that gcc can build a working kernel since it means that people not
+> using the Qemu defconfig for SPARC builds will not get the patch.
+> 
+> Though the problem has been around since a long time, so if people
+> really bothered about working SPARC support in upstream kernel/gcc,
+> they should have complained earlier.
 
-Applied, thanks.
+The patch was accepted by David Miller, so the problem shouldn't
+exist in the next version of the Kernel.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+If buildroot would have a global Linux patch directory, something
+like this could be added meanwhile.
+
+best regards
+ Waldemar
+ 
