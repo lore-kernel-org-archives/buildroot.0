@@ -1,50 +1,35 @@
-From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sun, 21 Sep 2014 18:52:46 +0000
-Subject: [Buildroot] Buildroot Eclipse plugin 4.0.0 released
-In-Reply-To: <20140921115842.4ec46fb1@free-electrons.com>
-References: <20140921115842.4ec46fb1@free-electrons.com>
-Message-ID: <8b65f7318f0b4f989de4d8aac5973407@DBXPR07MB142.eurprd07.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Sep 2014 21:13:35 +0200
+Subject: [Buildroot] [PATCH 02/23 v5] gendoc infra: move manual build
+ location into $(BUILD_DIR)/manual
+In-Reply-To: <6434392afa05cfca43f02e7f2e79671fe175f059.1410692670.git.yann.morin.1998@free.fr>
+References: <cover.1410692670.git.yann.morin.1998@free.fr>
+ <6434392afa05cfca43f02e7f2e79671fe175f059.1410692670.git.yann.morin.1998@free.fr>
+Message-ID: <20140921211335.25ce7865@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Dear Yann E. MORIN,
 
-I have tested the new version and it fixes my issue.
+On Sun, 14 Sep 2014 13:07:36 +0200, Yann E. MORIN wrote:
 
-Thanks so much
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index 136f725..e86f872 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -1,11 +1,20 @@
+> +$(BUILD_DIR)/$(pkgname):
+> +	$(Q)mkdir -p $@
 
-Oded
-
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Sent: Sunday, September 21, 2014 12:59 PM
-To: buildroot at uclibc.org
-Cc: Oded Hanson; Alan Yaniger; M?lanie Bats; Nimai Mahajan; Jer?nimo Lopes; Sagaert Johan
-Subject: Buildroot Eclipse plugin 4.0.0 released
-
-Hello,
-
-We are happy to announce the release of the 4.0.0 version of the Buildroot Eclipse plugin. The important changes are:
-
- * Updated for Eclipse Luna
-
- * Added the definition of the archiver tool, which allows to build
-   static libraries properly through Eclipse managed builds. Reported
-   by Oded Hanson.
-
-The Eclipse update site is at
-http://buildroot.org/downloads/eclipse/luna/.
-
-See https://github.com/mbats/eclipse-buildroot-bundle/wiki for more details.
-
-Do not hesitate to report any bug, issue, or make suggestions about this plugin.
-
-Best regards,
+Shouldn't we do things in $(BUILD_DIR)/docs/$(pkgname) instead? Even
+though it's unlikely, I'm a bit worried about conflicting names between
+real packages and documentations.
 
 Thomas
---
+-- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
