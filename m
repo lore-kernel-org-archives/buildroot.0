@@ -1,137 +1,89 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Sep 2014 18:55:51 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Bump version to 2.4
-Message-ID: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Sep 2014 18:55:52 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d: Bump version to 10.3.0
+In-Reply-To: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1411318552-26581-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.3 is unmaintained:
-http://article.gmane.org/gmane.comp.video.ffmpeg.devel/183038
-
-- removed ffmpeg-0002-bfin.patch, applied upstream
-- added vlc-0004-libav.patch from upstream to fix VLC compilation
+- rebased mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg-0002-bfin.patch |   55 ---------------------------------
- package/ffmpeg/ffmpeg.mk              |    3 +-
- package/vlc/vlc-0004-libav.patch      |   22 +++++++++++++
- 3 files changed, 23 insertions(+), 57 deletions(-)
- delete mode 100644 package/ffmpeg/ffmpeg-0002-bfin.patch
- create mode 100644 package/vlc/vlc-0004-libav.patch
+ ...atform.h-not-installed-if-EGL-is-disabled.patch |   31 ++++++++------------
+ package/mesa3d/mesa3d.mk                           |    4 +--
+ 2 files changed, 14 insertions(+), 21 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg-0002-bfin.patch b/package/ffmpeg/ffmpeg-0002-bfin.patch
-deleted file mode 100644
-index c6c84f2..0000000
---- a/package/ffmpeg/ffmpeg-0002-bfin.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--Fix compile error on bfin.
+diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+index 53ba519..5dc9099 100644
+--- a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
++++ b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+@@ -11,16 +11,12 @@ This patch installs this header file unconditionally.
+ Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=77240
+ 
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- src/egl/main/Makefile.am | 3 ---
+- src/mapi/Makefile.am     | 3 +++
+- 2 files changed, 3 insertions(+), 3 deletions(-)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de> (rebased for mesa3d 10.3)
+ 
+-diff --git a/src/egl/main/Makefile.am b/src/egl/main/Makefile.am
+-index 60cb600..1cd5cd2 100644
+---- a/src/egl/main/Makefile.am
+-+++ b/src/egl/main/Makefile.am
+-@@ -126,9 +126,6 @@ pkgconfigdir = $(libdir)/pkgconfig
++diff -uNr Mesa-10.3.0-rc2.org/src/egl/main/Makefile.am Mesa-10.3.0-rc2/src/egl/main/Makefile.am
++--- Mesa-10.3.0-rc2.org/src/egl/main/Makefile.am	2014-08-29 00:00:57.000000000 +0200
+++++ Mesa-10.3.0-rc2/src/egl/main/Makefile.am	2014-09-02 21:35:52.548071820 +0200
++@@ -85,9 +85,6 @@
+  
+  pkgconfig_DATA = egl.pc
+  
+@@ -30,17 +26,14 @@ index 60cb600..1cd5cd2 100644
+  egldir = $(includedir)/EGL
+  egl_HEADERS = \
+  	$(top_srcdir)/include/EGL/eglext.h \
+-diff --git a/src/mapi/Makefile.am b/src/mapi/Makefile.am
+-index ef53803..2a8c555 100644
+---- a/src/mapi/Makefile.am
+-+++ b/src/mapi/Makefile.am
+-@@ -40,3 +40,6 @@ endif
+- if HAVE_OPENVG
++diff -uNr Mesa-10.3.0-rc2.org/src/mapi/Makefile.am Mesa-10.3.0-rc2/src/mapi/Makefile.am
++--- Mesa-10.3.0-rc2.org/src/mapi/Makefile.am	2014-09-01 01:22:12.000000000 +0200
+++++ Mesa-10.3.0-rc2/src/mapi/Makefile.am	2014-09-02 21:36:22.891686861 +0200
++@@ -211,4 +211,7 @@
+  SUBDIRS += vgapi
+  endif
+-+
++ 
+ +khrdir = $(includedir)/KHR
+ +khr_HEADERS = $(top_srcdir)/include/KHR/khrplatform.h
+--- 
+-1.9.1
 -
--After the removal of all Blackfin architecture optimizations in
--http://git.videolan.org/gitweb.cgi/ffmpeg.git/?a=commit;h=b55d3bbeed375f7b74442c4dd274d116a3e3d2e1
--some includes were left behind leading to a compilation error
--
--http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
--
--CC      libavformat/adtsenc.o
--In file included from ./libavcodec/get_bits.h:35,
--                 from ./libavcodec/ac3_parser.h:27,
--                 from libavformat/ac3dec.c:23:
--./libavcodec/mathops.h:43:29: error: bfin/mathops.h: No such file or directory
--
--Patch sent upstream:
--https://ffmpeg.org/pipermail/ffmpeg-devel/2014-August/160694.html
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr ffmpeg-2.3.1.org/libavcodec/mathops.h ffmpeg-2.3.1/libavcodec/mathops.h
----- ffmpeg-2.3.1.org/libavcodec/mathops.h	2014-07-31 03:18:40.000000000 +0200
--+++ ffmpeg-2.3.1/libavcodec/mathops.h	2014-08-04 20:49:00.340763801 +0200
--@@ -39,8 +39,6 @@
-- #   include "arm/mathops.h"
-- #elif ARCH_AVR32
-- #   include "avr32/mathops.h"
---#elif ARCH_BFIN
---#   include "bfin/mathops.h"
-- #elif ARCH_MIPS
-- #   include "mips/mathops.h"
-- #elif ARCH_PPC
--diff -uNr ffmpeg-2.3.1.org/libavutil/bswap.h ffmpeg-2.3.1/libavutil/bswap.h
----- ffmpeg-2.3.1.org/libavutil/bswap.h	2014-07-31 03:18:47.000000000 +0200
--+++ ffmpeg-2.3.1/libavutil/bswap.h	2014-08-04 20:48:56.028818009 +0200
--@@ -40,8 +40,6 @@
-- #   include "arm/bswap.h"
-- #elif ARCH_AVR32
-- #   include "avr32/bswap.h"
---#elif ARCH_BFIN
---#   include "bfin/bswap.h"
-- #elif ARCH_SH4
-- #   include "sh4/bswap.h"
-- #elif ARCH_X86
--diff -uNr ffmpeg-2.3.1.org/libavutil/timer.h ffmpeg-2.3.1/libavutil/timer.h
----- ffmpeg-2.3.1.org/libavutil/timer.h	2014-07-31 03:18:47.000000000 +0200
--+++ ffmpeg-2.3.1/libavutil/timer.h	2014-08-04 20:48:48.832908474 +0200
--@@ -40,8 +40,6 @@
-- 
-- #if   ARCH_ARM
-- #   include "arm/timer.h"
---#elif ARCH_BFIN
---#   include "bfin/timer.h"
-- #elif ARCH_PPC
-- #   include "ppc/timer.h"
-- #elif ARCH_X86
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 6771309..d6851e1 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
+++
++ include $(top_srcdir)/install-lib-links.mk
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f986d0e..8fc5075 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.3.3
-+FFMPEG_VERSION = 2.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -65,7 +65,6 @@ FFMPEG_CONF_OPT = \
- 	--disable-libtheora \
- 	--disable-libvo-aacenc \
- 	--disable-libvo-amrwbenc \
--	--disable-sram \
- 	--disable-symver \
- 	--disable-doc
- 
-diff --git a/package/vlc/vlc-0004-libav.patch b/package/vlc/vlc-0004-libav.patch
-new file mode 100644
-index 0000000..c4842d7
---- /dev/null
-+++ b/package/vlc/vlc-0004-libav.patch
-@@ -0,0 +1,22 @@
-+VLC works fine with ffmpeg 2.4, ported from upstream
-+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blobdiff;f=configure.ac;h=21a9f89585297ebb98481a29719ef35a20f040db;hp=570da72136f4a5f8142fbab696ece53dd7f84b6a;hb=4ed2079b77b8aeb6d7885cc9828a90290018a7a4;hpb=18fbf7fd17a0f4e9cabcc2e34ac54b210ba08b27
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff --git a/configure.ac b/configure.ac
-+index 570da72..21a9f89 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2285,9 +2285,9 @@ AC_ARG_ENABLE(avcodec,
-+ [  --enable-avcodec        libavcodec codec (default enabled)])
-+ AS_IF([test "${enable_avcodec}" != "no"], [
-+   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
-+-    PKG_CHECK_EXISTS([libavcodec < 56],, [
-+-      AC_MSG_ERROR([libavcodec versions 56 and later are not supported yet.])
-+-    ])
-++    dnl PKG_CHECK_EXISTS([libavcodec < 56],, [
-++    dnl   AC_MSG_ERROR([libavcodec versions 56 and later are not supported yet.])
-++    dnl ])
-+     VLC_SAVE_FLAGS
-+     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
-+     CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
+-MESA3D_VERSION = 10.2.7
++MESA3D_VERSION = 10.3.0
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+-MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
++MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/10.3
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+ MESA3D_AUTORECONF = YES
 -- 
 1.7.10.4
