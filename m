@@ -1,260 +1,135 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 21 Sep 2014 21:36:19 +0200
-Subject: [Buildroot] [PATCH 3/3] qemu-sh4: update to latest kernel
-Message-ID: <20140921193619.GA7507@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Sep 2014 21:41:18 +0200
+Subject: [Buildroot] [PATCH v2] libiio: new package
+In-Reply-To: <1411033467-7919-1-git-send-email-paul.cercueil@analog.com>
+References: <1411033467-7919-1-git-send-email-paul.cercueil@analog.com>
+Message-ID: <20140921214118.69e7d5f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to Linux kernel 3.16.3.
+Dear Paul Cercueil,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- board/qemu/sh4-r2d/linux-3.15.config |   96 ----------------------------------
- board/qemu/sh4-r2d/linux-3.16.config |   96 ++++++++++++++++++++++++++++++++++
- board/qemu/sh4-r2d/readme.txt        |    2 +-
- configs/qemu_sh4_r2d_defconfig       |    8 +--
- 4 files changed, 101 insertions(+), 101 deletions(-)
- delete mode 100644 board/qemu/sh4-r2d/linux-3.15.config
- create mode 100644 board/qemu/sh4-r2d/linux-3.16.config
+On Thu, 18 Sep 2014 11:44:27 +0200, Paul Cercueil wrote:
+> Libiio is a library to ease the development of software interfacing
+> Linux Industrial I/O (IIO) devices.
+> 
+> http://wiki.analog.com/resources/tools-software/linux-software/libiio
+> 
+> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/libiio/Config.in | 42 ++++++++++++++++++++++++++
+>  package/libiio/libiio.mk | 76 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 119 insertions(+)
+>  create mode 100644 package/libiio/Config.in
+>  create mode 100644 package/libiio/libiio.mk
 
-diff --git a/board/qemu/sh4-r2d/linux-3.15.config b/board/qemu/sh4-r2d/linux-3.15.config
-deleted file mode 100644
-index 5fc878c..0000000
---- a/board/qemu/sh4-r2d/linux-3.15.config
-+++ /dev/null
-@@ -1,96 +0,0 @@
--CONFIG_EXPERIMENTAL=y
--CONFIG_SYSVIPC=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_SLAB=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=y
--CONFIG_MODULES=y
--# CONFIG_BLK_DEV_BSG is not set
--CONFIG_CPU_SUBTYPE_SH7751R=y
--CONFIG_MEMORY_START=0x0c000000
--CONFIG_FLATMEM_MANUAL=y
--CONFIG_SH_RTS7751R2D=y
--CONFIG_RTS7751R2D_PLUS=y
--CONFIG_HEARTBEAT=y
--CONFIG_PCI=y
--CONFIG_HOTPLUG_PCI=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--# CONFIG_INET_LRO is not set
--# CONFIG_IPV6 is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_FW_LOADER=m
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_ATA=y
--CONFIG_PATA_PLATFORM=y
--CONFIG_NETDEVICES=y
--CONFIG_8139CP=y
--# CONFIG_WLAN is not set
--CONFIG_INPUT_FF_MEMLESS=m
--# CONFIG_INPUT_MOUSEDEV is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_SH_SCI=y
--CONFIG_SERIAL_SH_SCI_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_SPI=y
--CONFIG_SPI_SH_SCI=y
--CONFIG_MFD_SM501=y
--CONFIG_VIDEO_OUTPUT_CONTROL=m
--CONFIG_FB=y
--CONFIG_FB_SH_MOBILE_LCDC=m
--CONFIG_FB_SH_MOBILE_HDMI=m
--CONFIG_FB_SM501=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--# CONFIG_LOGO_LINUX_MONO is not set
--# CONFIG_LOGO_LINUX_VGA16 is not set
--# CONFIG_LOGO_LINUX_CLUT224 is not set
--# CONFIG_LOGO_SUPERH_MONO is not set
--# CONFIG_LOGO_SUPERH_VGA16 is not set
--CONFIG_SOUND=y
--CONFIG_SND_YMFPCI=m
--CONFIG_SOUND_PRIME=m
--CONFIG_HID_A4TECH=y
--CONFIG_HID_APPLE=y
--CONFIG_HID_BELKIN=y
--CONFIG_HID_CHERRY=y
--CONFIG_HID_CHICONY=y
--CONFIG_HID_CYPRESS=y
--CONFIG_HID_EZKEY=y
--CONFIG_HID_GYRATION=y
--CONFIG_HID_LOGITECH=y
--CONFIG_HID_MICROSOFT=y
--CONFIG_HID_MONTEREY=y
--CONFIG_HID_PANTHERLORD=y
--CONFIG_HID_PETALYNX=y
--CONFIG_HID_SAMSUNG=y
--CONFIG_HID_SONY=y
--CONFIG_HID_SUNPLUS=y
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_LIBUSUAL=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_R9701=y
--CONFIG_EXT2_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_MINIX_FS=y
--CONFIG_NLS_CODEPAGE_932=y
--CONFIG_DEBUG_FS=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRC_T10DIF=y
-diff --git a/board/qemu/sh4-r2d/linux-3.16.config b/board/qemu/sh4-r2d/linux-3.16.config
-new file mode 100644
-index 0000000..5fc878c
---- /dev/null
-+++ b/board/qemu/sh4-r2d/linux-3.16.config
-@@ -0,0 +1,96 @@
-+CONFIG_EXPERIMENTAL=y
-+CONFIG_SYSVIPC=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_OPROFILE=y
-+CONFIG_MODULES=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_CPU_SUBTYPE_SH7751R=y
-+CONFIG_MEMORY_START=0x0c000000
-+CONFIG_FLATMEM_MANUAL=y
-+CONFIG_SH_RTS7751R2D=y
-+CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_HEARTBEAT=y
-+CONFIG_PCI=y
-+CONFIG_HOTPLUG_PCI=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+# CONFIG_INET_LRO is not set
-+# CONFIG_IPV6 is not set
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_FW_LOADER=m
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_PATA_PLATFORM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_8139CP=y
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_FF_MEMLESS=m
-+# CONFIG_INPUT_MOUSEDEV is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_SH_SCI=y
-+CONFIG_SERIAL_SH_SCI_CONSOLE=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_SPI=y
-+CONFIG_SPI_SH_SCI=y
-+CONFIG_MFD_SM501=y
-+CONFIG_VIDEO_OUTPUT_CONTROL=m
-+CONFIG_FB=y
-+CONFIG_FB_SH_MOBILE_LCDC=m
-+CONFIG_FB_SH_MOBILE_HDMI=m
-+CONFIG_FB_SM501=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+# CONFIG_LOGO_LINUX_MONO is not set
-+# CONFIG_LOGO_LINUX_VGA16 is not set
-+# CONFIG_LOGO_LINUX_CLUT224 is not set
-+# CONFIG_LOGO_SUPERH_MONO is not set
-+# CONFIG_LOGO_SUPERH_VGA16 is not set
-+CONFIG_SOUND=y
-+CONFIG_SND_YMFPCI=m
-+CONFIG_SOUND_PRIME=m
-+CONFIG_HID_A4TECH=y
-+CONFIG_HID_APPLE=y
-+CONFIG_HID_BELKIN=y
-+CONFIG_HID_CHERRY=y
-+CONFIG_HID_CHICONY=y
-+CONFIG_HID_CYPRESS=y
-+CONFIG_HID_EZKEY=y
-+CONFIG_HID_GYRATION=y
-+CONFIG_HID_LOGITECH=y
-+CONFIG_HID_MICROSOFT=y
-+CONFIG_HID_MONTEREY=y
-+CONFIG_HID_PANTHERLORD=y
-+CONFIG_HID_PETALYNX=y
-+CONFIG_HID_SAMSUNG=y
-+CONFIG_HID_SONY=y
-+CONFIG_HID_SUNPLUS=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_LIBUSUAL=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_R9701=y
-+CONFIG_EXT2_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_MINIX_FS=y
-+CONFIG_NLS_CODEPAGE_932=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+CONFIG_CRC_T10DIF=y
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index 5d770b4..956fbdd 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
- 
--Tested with QEMU 2.0.0
-+Tested with QEMU 2.1.0
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index f777417..860737b 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -16,13 +16,13 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- 
- # Lock to 3.15 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.15.5"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+BR2_DEFAULT_KERNEL_VERSION="3.16.3"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.15.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.16.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+Thanks. However, I tested your package, and it fails to build:
+
+make[1]: entrant dans le r?pertoire ? /home/thomas/projets/buildroot/output/build/libiio-2014_R1/iiod ?
+install --strip-program=/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-strip -D -s -m 0755 \
+		iiod /home/thomas/projets/buildroot/output/target/usr/sbin/iiod
+install -m 0755 iiod.sh /home/thomas/projets/buildroot/output/target/etc/init.d/iiod.sh
+update-rc.d iiod.sh defaults 99 01
+update-rc.d: /etc/init.d/iiod.sh: file does not exist
+make[1]: *** [install] Erreur 1
+
+First, the Makefile should not be calling update-rc.d, and also the
+init script in /etc/init.d/ should not be named iiod.sh in Buildroot,
+but directly S<number><name>.
+
+Also, is the install command with stripping is not good for Buildroot:
+we want to control whether stripping happens or not.
+
+
+> +# Avahi support in libiio requires avahi-client,
+> +# which needs avahi-daemon and dbus
+> +ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
+> +	LIBIIO_DEPENDENCIES += avahi
+> +else
+> +	LIBIIO_MAKE_OPTS += WITH_AVAHI=no
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
+> +	LIBIIO_MAKE_OPTS += WITH_LOCAL_BACKEND=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
+> +	LIBIIO_DEPENDENCIES += libxml2
+> +else
+> +	LIBIIO_MAKE_OPTS += WITH_NETWORK_BACKEND=no
+> +endif
+> +
+> +# Libiio can run without threads
+> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +	LIBIIO_MAKE_OPTS += WITH_PTHREAD=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
+> +define LIBIIO_BUILD_IIOD
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod $(LIBIIO_MAKE_OPTS)
+> +endef
+> +define LIBIIO_INSTALL_IIOD
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod install \
+> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
+> +define LIBIIO_BUILD_TESTS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests $(LIBIIO_MAKE_OPTS)
+> +endef
+> +define LIBIIO_INSTALL_TESTS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests install \
+> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+> +endef
+> +endif
+
+Now that I think of it, you could also do:
+
+ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
+LIBIIO_MAKE_DIRS += iiod
+endif
+
+ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
+LIBIIO_MAKE_DIRS += tests
+endif
+
+> +define LIBIIO_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libiio $(LIBIIO_MAKE_OPTS)
+> +	$(LIBIIO_BUILD_IIOD)
+> +	$(LIBIIO_BUILD_TESTS)
+
+Replace those last two lines with:
+
+	for d in $(LIBIIO_MAKE_DIRS); do \
+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$$d $(LIBIIO_MAKE_OPTS) || break ; \
+	done
+
+> +define LIBIIO_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-sysroot \
+> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
+> +endef
+> +
+> +define LIBIIO_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-lib \
+> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+> +	$(LIBIIO_INSTALL_IIOD)
+> +	$(LIBIIO_INSTALL_TESTS)
+
+And ditto here.
+
+Note that the Makefile of libiio could make this a little bit nicer by
+having a build and installation scheme that is easy to work with
+several make targets.
+
+Thanks!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
