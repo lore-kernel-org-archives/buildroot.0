@@ -1,30 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:08:59 +0200
-Subject: [Buildroot] [PATCH] portmap: fix static linking
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C68C8AD946@ex-mb3.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C68C8AD946@ex-mb3.corp.adtran.com>
-Message-ID: <20140921220859.1a88304e@free-electrons.com>
+Date: Sun, 21 Sep 2014 22:09:29 +0200
+Subject: [Buildroot] [git commit] qemu-microblazeel: update to latest kernel
+Message-ID: <20140921201016.B9EB89D739@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ANDY KENNEDY,
+commit: http://git.buildroot.net/buildroot/commit/?id=943b95de730120ff1dd4c6925e0ccbd141533300
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 8 Sep 2014 21:43:45 +0000, ANDY KENNEDY wrote:
-> Portmap builds and links, however, does not get built correctly when
-> BR2_PREFER_STATIC_LIB is selected.  There are no dynamic libraries in
-> rootfs.tar, however, portmap gets linked dynamically without regards to
-> the PREFER_STATIC_LIB tags.  LDFLAGS was not being passed into the build of
-> portmap.
-> 
-> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
+Update config to Linux 3.16.3.
 
-Applied, thanks!
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../{linux-3.14.config => linux-3.16.config}       |    0
+ board/qemu/microblazeel-mmu/readme.txt             |    2 +-
+ configs/qemu_microblazeel_mmu_defconfig            |   10 +++++-----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/microblazeel-mmu/linux-3.14.config b/board/qemu/microblazeel-mmu/linux-3.16.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/linux-3.14.config
+rename to board/qemu/microblazeel-mmu/linux-3.16.config
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index d402d13..05a054a 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.1.0
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 14feb83..14b6cd9 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.14 headers to avoid breaking with newer kernels
++# Lock to 3.16 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.14.2"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++BR2_DEFAULT_KERNEL_VERSION="3.16.3"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.14.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.14.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.16.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
