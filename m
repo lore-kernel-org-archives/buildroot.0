@@ -1,286 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 21:20:54 +0200
-Subject: [Buildroot] [git commit] docs: improve look of sponsors page
-Message-ID: <20140921192111.EB5949D488@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 21:18:02 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Bump version to 2.4
+Message-ID: <20140921192111.8F8529D529@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=918766098e9445402e4f736d833d938751348c94
+commit: http://git.buildroot.net/buildroot/commit/?id=0f57fcb91b5c900e3f2d14c5ce4225672d8a40b7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit completely reworks the Sponsors page, to improve its look,
-put the current sponsor in a clearly visible way, and add the logo of
-all sponsors.
+Version 2.3 is unmaintained:
+http://article.gmane.org/gmane.comp.video.ffmpeg.devel/183038
 
-[Thomas: fixed the next meeting date, as noticed by Thomas DS.]
+- removed ffmpeg-0002-bfin.patch, applied upstream
+- added vlc-0004-libav.patch from upstream to fix VLC compilation
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/css/buildroot.css                |   23 +++++
- docs/images/boundary-devices-logo.png |  Bin 0 -> 13305 bytes
- docs/images/calao-logo.png            |  Bin 0 -> 15386 bytes
- docs/images/circuitco-logo.png        |  Bin 0 -> 10750 bytes
- docs/images/fluendo-logo.png          |  Bin 0 -> 9098 bytes
- docs/images/free-electrons-logo.png   |  Bin 0 -> 9968 bytes
- docs/images/google-logo.png           |  Bin 0 -> 12005 bytes
- docs/images/imgtec-logo.png           |  Bin 0 -> 5276 bytes
- docs/images/mind-logo.png             |  Bin 0 -> 10214 bytes
- docs/images/synopsys-logo.png         |  Bin 0 -> 52426 bytes
- docs/sponsors.html                    |  169 ++++++++++++++++++++++++++-------
- 11 files changed, 157 insertions(+), 35 deletions(-)
+ package/ffmpeg/ffmpeg-0002-bfin.patch |   55 ---------------------------------
+ package/ffmpeg/ffmpeg.mk              |    3 +-
+ package/vlc/vlc-0004-libav.patch      |   22 +++++++++++++
+ 3 files changed, 23 insertions(+), 57 deletions(-)
 
-diff --git a/docs/css/buildroot.css b/docs/css/buildroot.css
-index 86a9c77..09db24b 100644
---- a/docs/css/buildroot.css
-+++ b/docs/css/buildroot.css
-@@ -11,3 +11,26 @@ body {
-     float:right;
-     margin: 10px 0 0;
- }
-+
-+div.sponsor-main {
-+    background: #eeeeee;
-+    padding: 2em;
-+}
-+
-+div.sponsor {
-+    background: #eeeeee;
-+    padding: 0.5em;
-+    height: 12em;
-+    display: table !important;
-+}
-+
-+div.sponsor-description {
-+    display: table-cell;
-+    vertical-align: middle;
-+    text-align: center;
-+}
-+
-+div.sponsor-description img {
-+    height: 4em;
-+    margin-bottom: 1em;
-+}
-diff --git a/docs/images/boundary-devices-logo.png b/docs/images/boundary-devices-logo.png
-new file mode 100644
-index 0000000..35d7a93
-Binary files /dev/null and b/docs/images/boundary-devices-logo.png differ
-diff --git a/docs/images/calao-logo.png b/docs/images/calao-logo.png
-new file mode 100644
-index 0000000..c01ecf6
-Binary files /dev/null and b/docs/images/calao-logo.png differ
-diff --git a/docs/images/circuitco-logo.png b/docs/images/circuitco-logo.png
-new file mode 100644
-index 0000000..8b315da
-Binary files /dev/null and b/docs/images/circuitco-logo.png differ
-diff --git a/docs/images/fluendo-logo.png b/docs/images/fluendo-logo.png
-new file mode 100644
-index 0000000..b4d02cb
-Binary files /dev/null and b/docs/images/fluendo-logo.png differ
-diff --git a/docs/images/free-electrons-logo.png b/docs/images/free-electrons-logo.png
-new file mode 100644
-index 0000000..a5c7d8a
-Binary files /dev/null and b/docs/images/free-electrons-logo.png differ
-diff --git a/docs/images/google-logo.png b/docs/images/google-logo.png
-new file mode 100644
-index 0000000..bceab16
-Binary files /dev/null and b/docs/images/google-logo.png differ
-diff --git a/docs/images/imgtec-logo.png b/docs/images/imgtec-logo.png
-new file mode 100644
-index 0000000..f8a0ffa
-Binary files /dev/null and b/docs/images/imgtec-logo.png differ
-diff --git a/docs/images/mind-logo.png b/docs/images/mind-logo.png
-new file mode 100644
-index 0000000..ecc3fa0
-Binary files /dev/null and b/docs/images/mind-logo.png differ
-diff --git a/docs/images/synopsys-logo.png b/docs/images/synopsys-logo.png
-new file mode 100644
-index 0000000..d4fbd89
-Binary files /dev/null and b/docs/images/synopsys-logo.png differ
-diff --git a/docs/sponsors.html b/docs/sponsors.html
-index 321dad7..a1eb0bd 100644
---- a/docs/sponsors.html
-+++ b/docs/sponsors.html
-@@ -2,46 +2,145 @@
- 
- <h2>Sponsors</h2>
- 
--<p>Throughout its history, the Buildroot project has been sponsored by
--various companies, that we would like to thank below:</p>
+diff --git a/package/ffmpeg/ffmpeg-0002-bfin.patch b/package/ffmpeg/ffmpeg-0002-bfin.patch
+deleted file mode 100644
+index c6c84f2..0000000
+--- a/package/ffmpeg/ffmpeg-0002-bfin.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-Fix compile error on bfin.
 -
--<ul>
+-After the removal of all Blackfin architecture optimizations in
+-http://git.videolan.org/gitweb.cgi/ffmpeg.git/?a=commit;h=b55d3bbeed375f7b74442c4dd274d116a3e3d2e1
+-some includes were left behind leading to a compilation error
 -
--  <li><a href="http://www.mind.be">Mind</a>, for sponsoring the dinner
--  of the FOSDEM 2014 Developers meeting in Brussels, Belgium. Mind
--  (www.mind.be) is the Embedded Software division of Essensium, which
--  provides consultancy and services specifically in the field of Linux
--  and Open Source SW for Embedded Systems.</li>
-+<h3>Current sponsors</h3>
- 
--  <li><a href="http://www.google.com">Google</a>, for providing all
--  the logistics for the FOSDEM 2013 and FOSDEM 2014 Developer Days in
--  Brussels, Belgium.</li>
-+<div class="container">
-+  <div class="row-fluid">
-+    <div class="span12 sponsor-main">
-+      <div class="row-fluid">
-+	<div class="span4">
-+	  <a href="http://mind.be">
-+	    <img src="images/mind-logo.png"/>
-+	  </a>
-+	</div>
-+	<div class="span8">
-+	  <p><a href="http://www.mind.be">Mind</a> is the Embedded
-+	  Software division of Essensium, which provides consultancy
-+	  and services specifically in the field of Linux and Open
-+	    Source SW for Embedded Systems.</p>
- 
--  <li><a href="http://www.imgtec.com/">Imagination Technologies</a>,
--  for sponsoring the meeting room and dinner of the ELCE 2013
--  Developer Days in Edinburgh, UK.</li>
-+	  <p>Mind is sponsoring
-+	  the <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2014">Buildroot
-+	  Developers Meeting</a> colocated with the Embedded Linux
-+	  Conference Europe, taking place on October 11-12 2014 in
-+	  D??sseldorf, Germany. Mind is helping with the logistics of
-+	  the meeting room, as well as the Saturday dinner for the
-+	  participants.</p>
-+	</div>
-+      </div>
-+    </div>
-+  </div>
-+</div>
- 
--  <li><a href="http://circuitco.com/">CircuitCo</a>, for sponsoring
--  several development boards for the Google Summer of Code 2013
--  project on Buildroot.</li>
-+<h3>Past sponsors</h3>
- 
--  <li><a href="http://boundarydevices.com/">BoundaryDevices</a>, for
--  sponsoring an i.MX6 development board for the Google Summer of Code
--  2013 project on Buildroot.</li>
+-http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
 -
--  <li><a href="http://www.fluendo.com/">Fluendo</a>, for sponsoring
--  the meeting room for the ELCE 2012 Developer Days in Barcelona
--  Spain.</li>
+-CC      libavformat/adtsenc.o
+-In file included from ./libavcodec/get_bits.h:35,
+-                 from ./libavcodec/ac3_parser.h:27,
+-                 from libavformat/ac3dec.c:23:
+-./libavcodec/mathops.h:43:29: error: bfin/mathops.h: No such file or directory
 -
--  <li><a href="http://www.synopsys.com">Synopsys</a>, for sponsoring
--  the dinner for the ELCE 2012 Developer Days in Barcelona,
--  Spain.</li>
-+<p>Throughout its history, the Buildroot project has been sponsored by
-+  various companies, that we would like to thank below.</p>
+-Patch sent upstream:
+-https://ffmpeg.org/pipermail/ffmpeg-devel/2014-August/160694.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr ffmpeg-2.3.1.org/libavcodec/mathops.h ffmpeg-2.3.1/libavcodec/mathops.h
+---- ffmpeg-2.3.1.org/libavcodec/mathops.h	2014-07-31 03:18:40.000000000 +0200
+-+++ ffmpeg-2.3.1/libavcodec/mathops.h	2014-08-04 20:49:00.340763801 +0200
+-@@ -39,8 +39,6 @@
+- #   include "arm/mathops.h"
+- #elif ARCH_AVR32
+- #   include "avr32/mathops.h"
+--#elif ARCH_BFIN
+--#   include "bfin/mathops.h"
+- #elif ARCH_MIPS
+- #   include "mips/mathops.h"
+- #elif ARCH_PPC
+-diff -uNr ffmpeg-2.3.1.org/libavutil/bswap.h ffmpeg-2.3.1/libavutil/bswap.h
+---- ffmpeg-2.3.1.org/libavutil/bswap.h	2014-07-31 03:18:47.000000000 +0200
+-+++ ffmpeg-2.3.1/libavutil/bswap.h	2014-08-04 20:48:56.028818009 +0200
+-@@ -40,8 +40,6 @@
+- #   include "arm/bswap.h"
+- #elif ARCH_AVR32
+- #   include "avr32/bswap.h"
+--#elif ARCH_BFIN
+--#   include "bfin/bswap.h"
+- #elif ARCH_SH4
+- #   include "sh4/bswap.h"
+- #elif ARCH_X86
+-diff -uNr ffmpeg-2.3.1.org/libavutil/timer.h ffmpeg-2.3.1/libavutil/timer.h
+---- ffmpeg-2.3.1.org/libavutil/timer.h	2014-07-31 03:18:47.000000000 +0200
+-+++ ffmpeg-2.3.1/libavutil/timer.h	2014-08-04 20:48:48.832908474 +0200
+-@@ -40,8 +40,6 @@
+- 
+- #if   ARCH_ARM
+- #   include "arm/timer.h"
+--#elif ARCH_BFIN
+--#   include "bfin/timer.h"
+- #elif ARCH_PPC
+- #   include "ppc/timer.h"
+- #elif ARCH_X86
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 6771309..d6851e1 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--  <li><a href="http://www.calao-systems.com/">Calao Systems</a>
--  and <a href="http://free-electrons.com/">Free Electrons</a> for
--  providing a meeting room and offering lunch for the ELCE 2009
--  Developer Days in Grenoble, France.</li>
-+<div class="container">
-+  <div class="row-fluid">
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.mind.be">
-+	  <img src="images/mind-logo.png" alt="Mind" title="Mind"/>
-+	</a><br/>
-+	<a href="http://www.mind.be">Mind</a> sponsored the dinner of
-+	the FOSDEM 2014 Developers Meeting.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.google.com">
-+	  <img src="images/google-logo.png" alt="Google" title="Google"/>
-+	</a>
-+	<br/>
-+	<a href="http://www.google.com">Google</a> provided the
-+	logistics for the FOSDEM 2013 and FOSDEM 2014 Developer Days in
-+	Brussels, Belgium.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.imgtec.com/">
-+	  <img src="images/imgtec-logo.png" alt="Imagination Technologies" title="Imagination Technologies"/>
-+	</a>
-+	<br/>
-+	<a href="http://www.imgtec.com/">Imagination Technologies</a>
-+	  sponsored the meeting room and dinner of the ELCE 2013
-+	Developer Days in Edinburgh, UK.
-+      </div>
-+    </div>
-+  </div>
+-FFMPEG_VERSION = 2.3.3
++FFMPEG_VERSION = 2.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -65,7 +65,6 @@ FFMPEG_CONF_OPT = \
+ 	--disable-libtheora \
+ 	--disable-libvo-aacenc \
+ 	--disable-libvo-amrwbenc \
+-	--disable-sram \
+ 	--disable-symver \
+ 	--disable-doc
  
--</ul>
-+  <div class="row-fluid" style="margin-top: 1em;">
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://circuitco.com/">
-+	  <img src="images/circuitco-logo.png" alt="CircuitCo" title="CircuitCo"/>
-+	</a>
-+	<br/>
-+	<a href="http://circuitco.com/">CircuitCo</a> sponsored
-+	  several development boards for the Google Summer of Code
-+	  2013 project on Buildroot.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://boundarydevices.com/">
-+	  <img src="images/boundary-devices-logo.png" alt="Boundary Devices" title="Boundary Devices"/>
-+	</a>
-+	<br/>
-+	<a href="http://boundarydevices.com/">BoundaryDevices</a>
-+	sponsored an i.MX6 development board for the Google Summer of
-+	Code 2013 project on Buildroot.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.fluendo.com/">
-+	  <img src="images/fluendo-logo.png" alt="Fluendo" title="Fluendo"/>
-+	</a>
-+	<br/>
-+	<a href="http://www.fluendo.com/">Fluendo</a> sponsored the
-+	meeting room for the ELCE 2012 Developer Days in Barcelona
-+	Spain.
-+      </div>
-+    </div>
-+  </div>
-+  <div class="row-fluid" style="margin-top: 1em;">
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.synopsys.com">
-+	  <img src="images/synopsys-logo.png" alt="Synopsys" title="Synopsys"/>
-+	</a>
-+	<br/>
-+	<a href="http://www.synopsys.com">Synopsys</a> sponsored the
-+	  dinner for the ELCE 2012 Developer Days in Barcelona, Spain.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.calao-systems.com/">
-+	  <img src="images/calao-logo.png"/ alt="Calao Systems" title="Calao Systems">
-+	</a>
-+	<br/>
-+	<a href="http://www.calao-systems.com/">Calao Systems</a>
-+	provided a a meeting room for the ELCE 2009 Developer Days
-+	in Grenoble, France.
-+      </div>
-+    </div>
-+    <div class="span4 sponsor">
-+      <div class="sponsor-description">
-+	<a href="http://www.free-electrons.com">
-+	  <img src="images/free-electrons-logo.png" alt="Free Electrons" title="Free Electrons"/>
-+	</a>
-+	<br/>
-+	<a href="http://www.free-electrons.com">Free Electrons</a>
-+	sponsored the lunch for the ELCE 2009 Developer Days in
-+	Grenoble, France.
-+      </div>
-+    </div>
-+  </div>
-+</div>
- 
- <!--#include file="footer.html" -->
+diff --git a/package/vlc/vlc-0004-libav.patch b/package/vlc/vlc-0004-libav.patch
+new file mode 100644
+index 0000000..c4842d7
+--- /dev/null
++++ b/package/vlc/vlc-0004-libav.patch
+@@ -0,0 +1,22 @@
++VLC works fine with ffmpeg 2.4, ported from upstream
++http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blobdiff;f=configure.ac;h=21a9f89585297ebb98481a29719ef35a20f040db;hp=570da72136f4a5f8142fbab696ece53dd7f84b6a;hb=4ed2079b77b8aeb6d7885cc9828a90290018a7a4;hpb=18fbf7fd17a0f4e9cabcc2e34ac54b210ba08b27
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/configure.ac b/configure.ac
++index 570da72..21a9f89 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2285,9 +2285,9 @@ AC_ARG_ENABLE(avcodec,
++ [  --enable-avcodec        libavcodec codec (default enabled)])
++ AS_IF([test "${enable_avcodec}" != "no"], [
++   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
++-    PKG_CHECK_EXISTS([libavcodec < 56],, [
++-      AC_MSG_ERROR([libavcodec versions 56 and later are not supported yet.])
++-    ])
+++    dnl PKG_CHECK_EXISTS([libavcodec < 56],, [
+++    dnl   AC_MSG_ERROR([libavcodec versions 56 and later are not supported yet.])
+++    dnl ])
++     VLC_SAVE_FLAGS
++     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
++     CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
