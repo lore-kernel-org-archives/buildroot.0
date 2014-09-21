@@ -1,71 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:44:14 +0200
-Subject: [Buildroot] [git commit] python-rtslib-fb: new package
-Message-ID: <20140921174754.280A09D6A8@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 19:43:24 +0200
+Subject: [Buildroot] [git commit] python-urwid: new package
+Message-ID: <20140921174754.10E279D6E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a930816fec26ab3293e3e30c2b68d48c31fa9e25
+commit: http://git.buildroot.net/buildroot/commit/?id=a1b1c2f0246267c89e66626a97369dbb73743fe4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rtslib-fb is an object-based Python library for configuring the
-LIO generic SCSI target, present in 3.x Linux kernel versions.
+Urwid is a console user interface library for Python.
 
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |    1 +
- package/python-rtslib-fb/Config.in           |    9 +++++++++
- package/python-rtslib-fb/python-rtslib-fb.mk |   13 +++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+ package/Config.in                    |    1 +
+ package/python-urwid/Config.in       |    7 +++++++
+ package/python-urwid/python-urwid.mk |   14 ++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 17930ea..7447036 100644
+index 73ba86a..17930ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -503,6 +503,7 @@ menu "external python modules"
- 	source "package/python-pysnmp-mibs/Config.in"
- 	source "package/python-pyusb/Config.in"
- 	source "package/python-pyzmq/Config.in"
-+	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-setuptools/Config.in"
+@@ -508,6 +508,7 @@ menu "external python modules"
  	source "package/python-simplejson/Config.in"
-diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
++	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ endmenu
+ endif
+diff --git a/package/python-urwid/Config.in b/package/python-urwid/Config.in
 new file mode 100644
-index 0000000..b2aebcf
+index 0000000..92f7d53
 --- /dev/null
-+++ b/package/python-rtslib-fb/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_RTSLIB_FB
-+	bool "python-rtslib-fb"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/python-urwid/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_URWID
++	bool "python-urwid"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 +	help
-+	  rtslib-fb is an object-based Python library for configuring
-+	  the LIO generic SCSI target, present in 3.x Linux kernel
-+	  versions.
++	  Urwid is a console user interface library for Python
 +
-+	  https://github.com/agrover/rtslib-fb
-diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
++	  http://urwid.org/
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
 new file mode 100644
-index 0000000..70b0257
+index 0000000..4f1be46
 --- /dev/null
-+++ b/package/python-rtslib-fb/python-rtslib-fb.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-urwid/python-urwid.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-rtslib-fb
++# python-urwid
 +#
 +################################################################################
 +
-+PYTHON_RTSLIB_FB_VERSION = v2.1.fb49
-+PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
-+PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
-+PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
-+PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
++PYTHON_URWID_VERSION = 1.2.1
++PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
++PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
++PYTHON_URWID_LICENSE = LGPLv2.1+
++PYTHON_URWID_LICENSE_FILES = COPYING
++PYTHON_URWID_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
