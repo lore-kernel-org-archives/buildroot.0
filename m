@@ -1,66 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Sep 2014 20:38:11 +0200
-Subject: [Buildroot] [PATCH 3/5 v3] package/linux-firmware: add option for
-	iwl7265 firmware
+Date: Sun, 21 Sep 2014 20:38:12 +0200
+Subject: [Buildroot] [PATCH 4/5 v3] package/linux-firmware: add option for
+	Chelsio cxgb4 T5
 In-Reply-To: <cover.1411324588.git.yann.morin.1998@free.fr>
 References: <cover.1411324588.git.yann.morin.1998@free.fr>
-Message-ID: <6154da7303402ed62265eff0ad194353af22dea1.1411324588.git.yann.morin.1998@free.fr>
+Message-ID: <0e14daf258f75e35490db09c5df795f2f37fa65a.1411324588.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New firmware to support iwlwifi-7265. Only comes in rev-8 or rev-9
-flavours, so hide rev-7 when iwlwifi-7265 is selected.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/linux-firmware/Config.in         | 8 ++++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 13 insertions(+)
 
+---
+Changes v2 -> v3:
+  - add old option to Legacy  (Thomas P.)
+---
+ Config.in.legacy                         | 8 ++++++++
+ package/linux-firmware/Config.in         | 8 +++++++-
+ package/linux-firmware/linux-firmware.mk | 8 +++++++-
+ 3 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f7bde7f..e233e3c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.11"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
++	bool "Chelsio T4 option has been renamed"
++	select BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
++	help
++	  The Chelsio T4 option BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
++	  has been renamed to BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
++	  to better account for the fact that a T5 variant exists.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
+ 	bool "BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 has been renamed"
+ 	help
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 99f5956..00c7edb 100644
+index 00c7edb..9d39df8 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -64,6 +64,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
- 	  Firmware files for the Intel Wifi 7260 devices supported by
- 	  the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
-+	bool "Intel iwlwifi 7265"
-+	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
-+	help
-+	  Firmware files for the Intel Wifi 7265 devices supported by
-+	  the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
- 	bool
- 
-@@ -78,6 +85,7 @@ choice
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7
- 	prompt "revision 7"
-+	depends on !BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265
+@@ -183,10 +183,16 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
  	help
- 	  Use revision 7 for kernel 3.10 to 3.12.
+ 	  Firmware files for Broadcom NetXtreme 10Gb ethernet cards (bnx2x)
  
+-config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
++config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
+ 	bool "Chelsio T4"
+ 	help
+ 	  Firmware files for Chelsio T4 1Gb and 10Gb ethernet cards (cxgb4)
++
++config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
++	bool "Chelsio T5"
++	help
++	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards (cxgb4)
++
+ endmenu
+ 
+ menu "DVB firmware"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 46e07d6..4e78c63 100644
+index 4e78c63..bc036be 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -177,6 +177,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).u
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+@@ -191,12 +191,18 @@ LINUX_FIRMWARE_FILES += \
+ # which is installed unconditionally
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-7265-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+-ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4),y)
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
+ # cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.11.27.0.bin
+ LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.11.27.0.bin cxgb4/t4fw.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
++# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.11.27.0.bin
++LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.11.27.0.bin cxgb4/t5fw.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
- LINUX_FIRMWARE_FILES += \
- 	bnx2x/bnx2x-e1-7.10.51.0.fw \
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XC5000),y)
+ LINUX_FIRMWARE_FILES += dvb-fe-xc5000-1.6.114.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.xc5000
 -- 
 1.9.1
