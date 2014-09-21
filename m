@@ -1,46 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Sep 2014 21:43:36 +0200
-Subject: [Buildroot] [PATCH 02/23 v5] gendoc infra: move manual build
- location into $(BUILD_DIR)/manual
-In-Reply-To: <20140921211335.25ce7865@free-electrons.com>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <6434392afa05cfca43f02e7f2e79671fe175f059.1410692670.git.yann.morin.1998@free.fr>
- <20140921211335.25ce7865@free-electrons.com>
-Message-ID: <20140921194336.GE4299@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Sep 2014 21:45:52 +0200
+Subject: [Buildroot] [PATCH 2/2] qemu-sparc: use default gcc
+In-Reply-To: <20140921193251.GU14691@waldemar-brodkorb.de>
+References: <20140919103404.GA24103@waldemar-brodkorb.de>
+ <20140921193957.77da49d4@free-electrons.com>
+ <20140921193251.GU14691@waldemar-brodkorb.de>
+Message-ID: <20140921214552.2e289242@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Waldemar Brodkorb,
 
-On 2014-09-21 21:13 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 14 Sep 2014 13:07:36 +0200, Yann E. MORIN wrote:
-> > diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> > index 136f725..e86f872 100644
-> > --- a/docs/manual/manual.mk
-> > +++ b/docs/manual/manual.mk
-> > @@ -1,11 +1,20 @@
-> > +$(BUILD_DIR)/$(pkgname):
-> > +	$(Q)mkdir -p $@
+On Sun, 21 Sep 2014 21:32:51 +0200, Waldemar Brodkorb wrote:
+
+> > It's a bit annoying that we need a patch to the kernel to make sure
+> > that gcc can build a working kernel since it means that people not
+> > using the Qemu defconfig for SPARC builds will not get the patch.
+> > 
+> > Though the problem has been around since a long time, so if people
+> > really bothered about working SPARC support in upstream kernel/gcc,
+> > they should have complained earlier.
 > 
-> Shouldn't we do things in $(BUILD_DIR)/docs/$(pkgname) instead? Even
-> though it's unlikely, I'm a bit worried about conflicting names between
-> real packages and documentations.
+> The patch was accepted by David Miller, so the problem shouldn't
+> exist in the next version of the Kernel.
 
-Unlkikely, but I don't mind moving the documents to a sub-dir. I'll do
-the change before I respin.
+Yes, I know, but it leaves earlier kernel versions broken, at least out
+of the box.
 
-Thanks!
+> If buildroot would have a global Linux patch directory, something
+> like this could be added meanwhile.
 
-Regards,
-Yann E. MORIN.
+This clearly something that we do not want to do. See
+https://dev.openwrt.org/browser/trunk/target/linux/generic/patches-3.14,
+and you'll discover why we clearly don't want to do that. My colleague
+Maxime has just spent several painful days to bump the 3.14 OpenWRT
+stack of kernel patches to 3.16, just for the sake of being able to run
+OpenWRT on a 3.16 kernel. It's just ridiculous, and that's not a
+situation where we want Buildroot to be.
 
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
