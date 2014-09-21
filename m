@@ -1,53 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:52:19 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: add option for
-	Abilis Systems DVB-T as102
-Message-ID: <20140921175639.C4E749D4C0@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 19:56:33 +0200
+Subject: [Buildroot] [git commit] sudo: don't use hardening flags on host
+	tools
+Message-ID: <20140921175639.E7E909D4C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=855bfbf98296a68b48984096c818b472ff9bb8a2
+commit: http://git.buildroot.net/buildroot/commit/?id=22b65765556d544678749fc24fcd03d968a9a1c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Don't use hardening (SSP_CFLAGS & PIE_CFLAGS) flags on host tools since
+the host compiler may differ wildly from the tests run on the cross
+compiler and they might not work. Fixes:
+http://autobuild.buildroot.net/results/b10/b1091bd04ab988744548b74fb48c64bf291fed2f/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         |    5 +++++
- package/linux-firmware/linux-firmware.mk |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ ...do-0002-drop-sspcflags-piecflags-for-host.patch |   21 ++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 6c9b04b..0c9f14e 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -163,6 +163,11 @@ endmenu
- 
- menu "DVB firmware"
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_AS102
-+	bool "Abilis Systems as102"
-+	help
-+	  Firmware file for Abilis Systems single DVB-T receiver as102
+diff --git a/package/sudo/sudo-0002-drop-sspcflags-piecflags-for-host.patch b/package/sudo/sudo-0002-drop-sspcflags-piecflags-for-host.patch
+new file mode 100644
+index 0000000..9f09656
+--- /dev/null
++++ b/package/sudo/sudo-0002-drop-sspcflags-piecflags-for-host.patch
+@@ -0,0 +1,21 @@
++Don't use SSP_CFLAGS and PIE_CFLAGS for host tools.
++http://www.sudo.ws/bugs/show_bug.cgi?id=662
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_DIB0700
- 	bool "DiBcom dib0700"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index f42709c..e9bb1fa 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -191,6 +191,11 @@ LINUX_FIRMWARE_FILES += dvb-fe-xc5000-1.6.114.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.xc5000
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AS102),y)
-+LINUX_FIRMWARE_FILES += as102_data1_st.hex as102_data2_st.hex
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Abilis
-+endif
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_DIB0700),y)
- LINUX_FIRMWARE_FILES += dvb-usb-dib0700-1.20.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.dib0700
++diff -Nura sudo-1.8.10p3.orig/compat/Makefile.in sudo-1.8.10p3/compat/Makefile.in
++--- sudo-1.8.10p3.orig/compat/Makefile.in	2014-03-07 18:51:19.000000000 -0300
+++++ sudo-1.8.10p3/compat/Makefile.in	2014-09-20 07:29:30.913108029 -0300
++@@ -96,10 +96,10 @@
++ 	./mksigname > $@
++ 
++ mksiglist: $(srcdir)/mksiglist.c $(srcdir)/mksiglist.h $(incdir)/missing.h $(top_builddir)/config.h
++-	$(CC) $(CPPFLAGS) $(CFLAGS) $(PIE_CFLAGS) $(SSP_CFLAGS) $(DEFS) $(srcdir)/mksiglist.c -o $@
+++	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) $(srcdir)/mksiglist.c -o $@
++ 
++ mksigname: $(srcdir)/mksigname.c $(srcdir)/mksigname.h $(incdir)/missing.h $(top_builddir)/config.h
++-	$(CC) $(CPPFLAGS) $(CFLAGS) $(PIE_CFLAGS) $(SSP_CFLAGS) $(DEFS) $(srcdir)/mksigname.c -o $@
+++	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) $(srcdir)/mksigname.c -o $@
++ 
++ fnm_test: fnm_test.o libreplace.la
++ 	$(LIBTOOL) --mode=link $(CC) -o $@ fnm_test.o libreplace.la $(PIE_LDFLAGS) $(SSP_LDFLAGS)
