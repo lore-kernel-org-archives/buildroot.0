@@ -1,88 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 19:55:12 +0200
-Subject: [Buildroot] [PATCH 0/15 v2] linux-firmware: bump + more
- firmwares (branch yem/lnx-fw)
-In-Reply-To: <cover.1411246411.git.yann.morin.1998@free.fr>
-References: <cover.1411246411.git.yann.morin.1998@free.fr>
-Message-ID: <20140921195512.037da855@free-electrons.com>
+Date: Sun, 21 Sep 2014 19:49:27 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: bump revision
+Message-ID: <20140921175639.7AB829D6E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=7373c242fbe2b92df6c20c04ed38deeed26cb581
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Sep 2014 22:55:09 +0200, Yann E. MORIN wrote:
+Some updated firmwares files.
 
-> Yann E. MORIN (15):
->       package/linux-firmware: bump revision
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied.
-
->       package/linux-firmware: split bcm43xx / bcm43xxx
-
-Applied.
-
->       package/linux-firmware: use the new bnx2x firmware version
-
-Applied.
-
->       package/linux-firmware: install firmware files for rtlwifi rtl8723be
-
-Applied.
-
->       package/linux-firmware: add option for Realtek rtl88xx firmware
-
-Applied.
-
->       package/linux-firmware: add option for TI wl18xx firmware
-
-Applied.
-
->       package/linux-firmware: prepare new firmware and new revision for iwlwifi
-
-Not applied: does not add the appropriate Config.in.legacy handling.
-
->       package/linux-firmware: add new revision for iwlwifi firmware
-
-Too much mixed with previous patch to apply.
-
->       package/linux-firmware: use the new Chelsio cxgb4 firmware
-
-Applied.
-
->       package/linux-firmware: add option for Chelsio cxgb4 T5
-
-Not applied: does not add the appropriate Config.in.legacy handling.
-
->       package/linux-firmware: add option for Abilis Systems DVB-T as102
-
-Applied.
-
->       package/linux-firmware: install Xceive/Cresta xc4000 and xc5000c
-
-Not applied: does not add the appropriate Config.in.legacy handling.
-
->       package/linux-firmware: add option for ITEtech it9135 firmware
-
-Applied.
-
->       package/linux-firmware: add option for iwl7265 firmware
-
-Too much mixed with a previous non-applied patch.
-
->       package/linux-firmware: add option for Intel SST DSP (Baytrail audio)
-
-Applied.
-
-Care to respin the non-applied patches after fixing the
-Config.in.legacy handling?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index aa87c73..43edf64 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 4a050f5524a09c35192273e3a5d741f63e7bf7d6
++LINUX_FIRMWARE_VERSION = f66291398181d24856fd2d19454d246199abd5ea
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
