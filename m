@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:47:44 +0200
-Subject: [Buildroot] [PATCH v3 1/8] opencv: rework V4L/libv4l support
-In-Reply-To: <1409515750-10289-2-git-send-email-s.martin49@gmail.com>
-References: <1409515750-10289-1-git-send-email-s.martin49@gmail.com>
- <1409515750-10289-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140921224744.06f9adf5@free-electrons.com>
+Date: Sun, 21 Sep 2014 22:48:50 +0200
+Subject: [Buildroot] [PATCH 1/3] ffmpeg: consolidate duplicated config
+ options
+In-Reply-To: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
+References: <1410228406-2140-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20140921224850.00cebaae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Danomi Manchego,
 
-On Sun, 31 Aug 2014 22:09:03 +0200, Samuel Martin wrote:
-> Starting with the 2.4.7 release, for V4L support, OpenCV does not
-> requires a libv4l dependency for its V4L support.
+On Mon,  8 Sep 2014 22:06:44 -0400, Danomi Manchego wrote:
+> Commit 62ab07ef769bd6504fe1db144aaac3fd45db9dad added a bunch
+> of hard-coded options.  Some of these options are then again
+> added (or negated) based on kconfig settings.  This patch removes
+> the hard coded swscale and postproc settings, as they are enabled
+> or disabled later.  It also moves the --disable-pic lower
+> as an else clause to the part that adds --enable-pic.
 > 
-> So, it now provides 2 distincts knobs for this: WITH_V4L and a new
-> one: WITH_LIBV4L.
-> 
-> This patch takes advantage of this new knob and libv4l support is
-> now automatically enabled only if the libv4l package is enabled.
-> 
-> In OpenCV, the logic behind this is:
-> - using libv4l if available,
-> - otherwise, use v4l2 or v4l API from the kernel if available.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/ffmpeg/ffmpeg.mk |    5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks, applied, after tweaking the commit as suggested by Yann (do not
-do a gratuitous reformatting).
+Applied, thanks.
 
 Thomas
 -- 
