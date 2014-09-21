@@ -1,56 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 22:48:34 +0200
-Subject: [Buildroot] [git commit] ffmpeg: consolidate duplicated config
-	options
-Message-ID: <20140921205101.1EE199D739@busybox.osuosl.org>
+Date: Sun, 21 Sep 2014 22:50:38 +0200
+Subject: [Buildroot] [git commit] ffmpeg: enable or disable debug based on
+	BR2_ENABLE_DEBUG
+Message-ID: <20140921205101.3B2D19D627@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=255aab75fc596d58c6f5f15870dd498d09978fc6
+commit: http://git.buildroot.net/buildroot/commit/?id=ca57e88552759dc729226888e43df26b61487219
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 62ab07ef769bd6504fe1db144aaac3fd45db9dad added a bunch
-of hard-coded options.  Some of these options are then again
-added (or negated) based on kconfig settings.  This patch removes
-the hard coded swscale and postproc settings, as they are enabled
-or disabled later.  It also moves the --disable-pic lower
-as an else clause to the part that adds --enable-pic.
+Rather than hard-code --disable-debug, selectively enable
+or disable based on BR2_ENABLE_DEBUG.
+
+(Similar to gst1-libav.)
+
+[Thomas: do not make other changes such as reformatting the
+--prefix=/usr line.]
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/ffmpeg/ffmpeg.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index d6851e1..6339cca 100644
+index 6339cca..1481abc 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -22,15 +22,12 @@ FFMPEG_CONF_OPT = \
- 	--disable-debug \
+@@ -19,7 +19,6 @@ endif
+ FFMPEG_CONF_OPT = \
+ 	--prefix=/usr		\
+ 	--enable-avfilter \
+-	--disable-debug \
  	--disable-version3 \
  	--enable-logging \
--	--disable-pic \
  	--enable-optimizations \
- 	--disable-extra-warnings \
- 	--disable-ffprobe \
- 	--enable-avdevice \
- 	--enable-avcodec \
- 	--enable-avformat \
--	--enable-swscale \
--	--enable-postproc \
- 	--disable-x11grab \
- 	--enable-network \
- 	--disable-gray \
-@@ -311,6 +308,8 @@ endif
+@@ -67,6 +66,12 @@ FFMPEG_CONF_OPT = \
  
- ifeq ($(BR2_PREFER_STATIC_LIB),)
- FFMPEG_CONF_OPT += --enable-pic
+ FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++FFMPEG_CONF_OPT += --enable-debug
 +else
-+FFMPEG_CONF_OPT += --disable-pic
- endif
- 
- FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
++FFMPEG_CONF_OPT += --disable-debug
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
+ FFMPEG_CONF_OPT += --enable-gpl
+ else
