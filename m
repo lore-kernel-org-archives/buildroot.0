@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Sep 2014 21:17:23 +0200
-Subject: [Buildroot] [PATCH] package/genpart: make it a target package,
- too
-In-Reply-To: <1411249705-13968-1-git-send-email-yann.morin.1998@free.fr>
-References: <1411249705-13968-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140921211723.17962c32@free-electrons.com>
+Date: Sun, 21 Sep 2014 21:18:18 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Bump version to 2.4
+In-Reply-To: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1411318552-26581-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140921211818.5e35c368@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Bernd Kuhls,
 
-On Sat, 20 Sep 2014 23:48:25 +0200, Yann E. MORIN wrote:
-> genpart comes handy when there is a need to programatically generate
-> partition tables, without the need for a full partitioning program like
-> fdisk et al.
+On Sun, 21 Sep 2014 18:55:51 +0200, Bernd Kuhls wrote:
+> Version 2.3 is unmaintained:
+> http://article.gmane.org/gmane.comp.video.ffmpeg.devel/183038
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> - removed ffmpeg-0002-bfin.patch, applied upstream
+> - added vlc-0004-libav.patch from upstream to fix VLC compilation
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/Config.in          | 1 +
->  package/genpart/Config.in  | 8 ++++++++
->  package/genpart/genpart.mk | 1 +
->  3 files changed, 10 insertions(+)
->  create mode 100644 package/genpart/Config.in
+>  package/ffmpeg/ffmpeg-0002-bfin.patch |   55 ---------------------------------
+>  package/ffmpeg/ffmpeg.mk              |    3 +-
+>  package/vlc/vlc-0004-libav.patch      |   22 +++++++++++++
+>  3 files changed, 23 insertions(+), 57 deletions(-)
+>  delete mode 100644 package/ffmpeg/ffmpeg-0002-bfin.patch
+>  create mode 100644 package/vlc/vlc-0004-libav.patch
 
 Applied, thanks.
 
