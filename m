@@ -1,136 +1,139 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 19:41:12 +0200
-Subject: [Buildroot] [git commit] manual: move 'Creating your own board
-	support' from User to Developer guide
-Message-ID: <20140921174201.0FE969D6E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual/user guide/customization: add
+	section on layered customization
+Message-ID: <20140921174201.9CD949D488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eae23478310d963b48c611a025986af28ed79982
+commit: http://git.buildroot.net/buildroot/commit/?id=9e540c7517b4317399b87bef5da208096184d193
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Section 'Creating your own board support' is seemingly written in the
-mindset of adding support for public boards. Therefore, it is more suited in
-the Developer guide, rather than in the User guide.
-Adding support for custom non-public boards falls under the
-'Project-specific customizations' category and will be described in that
-section.
-
-This patch moves the unchanged text into a separate file, included from the
-Developer guide. The next patch will make some minor changes to the text
-itself.
+Inspired by some text in the 'project-specific patches' section, this patch
+adds a separate section on layering customizations by providing multiple
+post-build scripts, multiple rootfs overlays, etc.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-board-support.txt |   37 ++++++++++++++++++++++++++++++++++
- docs/manual/customize-store.txt      |   36 ---------------------------------
- docs/manual/manual.txt               |    2 +
- 3 files changed, 39 insertions(+), 36 deletions(-)
+ docs/manual/customize-directory-structure.txt |   51 +++++++++++++++++++++++++
+ docs/manual/customize-patches.txt             |   40 +-------------------
+ 2 files changed, 52 insertions(+), 39 deletions(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-new file mode 100644
-index 0000000..88fd290
---- /dev/null
-+++ b/docs/manual/adding-board-support.txt
-@@ -0,0 +1,37 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
+diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+index ce2b0d7..0be3f77 100644
+--- a/docs/manual/customize-directory-structure.txt
++++ b/docs/manual/customize-directory-structure.txt
+@@ -56,3 +56,54 @@ Details on the files shown above are given further in this chapter.
+ Note: if you choose to place this structure outside of the Buildroot
+ tree using +BR2_EXTERNAL+, the <company> and possibly <boardname>
+ components may be superfluous and can be left out.
 +
-+[[customize-store-board-support]]
-+== Creating your own board support
++==== Implementing layered customizations
 +
-+Creating your own board support in Buildroot allows users of a
-+particular hardware platform to easily build a system that is known to
-+work.
++It is quite common for a user to have several related projects that partly
++need the same customizations. Instead of duplicating these
++customizations for each project, it is recommended to use a layered
++customization approach, as explained in this section.
 +
-+To do so, you need to create a normal Buildroot configuration that
-+builds a basic system for the hardware: toolchain, kernel, bootloader,
-+filesystem and a simple BusyBox-only userspace. No specific package
-+should be selected: the configuration should be as minimal as
-+possible, and should only build a working basic BusyBox system for the
-+target platform. You can of course use more complicated configurations
-+for your internal projects, but the Buildroot project will only
-+integrate basic board configurations. This is because package
-+selections are highly application-specific.
++Almost all of the customization methods available in Buildroot, like
++post-build scripts and root filesystem overlays, accept a
++space-separated list of items. The specified items are always treated in
++order, from left to right. By creating more than one such item, one for
++the common customizations and another one for the really
++project-specific customizations, you can avoid unnecessary duplication.
++Each layer is typically embodied by a separate directory inside
+++board/<company>/+. Depending on your projects, you could even introduce
++more than two layers.
 +
-+Once you have a known working configuration, run +make
-+savedefconfig+. This will generate a minimal +defconfig+ file at the
-+root of the Buildroot source tree. Move this file into the +configs/+
-+directory, and rename it +<boardname>_defconfig+.
++An example directory structure for where a user has two customization
++layers 'common' and 'fooboard' is:
 +
-+It is recommended to use as much as possible upstream versions of the
-+Linux kernel and bootloaders, and to use as much as possible default
-+kernel and bootloader configurations. If they are incorrect for your
-+board, or no default exists, we encourage you to send fixes to the
-+corresponding upstream projects.
++-----
+++-- board/
++    +-- <company>/
++        +-- common/
++        |   +-- post_build.sh
++        |   +-- rootfs_overlay/
++        |   |   +-- ...
++        |   +-- patches/
++        |       +-- ...
++        |
++        +-- fooboard/
++            +-- linux.config
++            +-- busybox.config
++            +-- <other configuration files>
++            +-- post_build.sh
++            +-- rootfs_overlay/
++            |   +-- ...
++            +-- patches/
++                +-- ...
++-----
 +
-+However, in the mean time, you may want to store kernel or bootloader
-+configuration or patches specific to your target platform. To do so,
-+create a directory +board/<manufacturer>+ and a subdirectory
-++board/<manufacturer>/<boardname>+. You can then store your patches
-+and configurations in these directories, and reference them from the main
-+Buildroot configuration.
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index d557902..9c87f62 100644
---- a/docs/manual/customize-store.txt
-+++ b/docs/manual/customize-store.txt
-@@ -66,42 +66,6 @@ configuration files easier.
-   file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
++For example, if the user has the +BR2_GLOBAL_PATCH_DIR+ configuration
++option set as:
++
++-----
++BR2_GLOBAL_PATCH_DIR="board/<company>/common/patches board/<company>/fooboard/patches"
++-----
++
++then first the patches from the 'common' layer would be applied,
++followed by the patches from the 'fooboard' layer.
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index 279d079..a052915 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -10,13 +10,7 @@ architecture.
  
+ The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
+ a space separated list of one or more directories containing package
+-patches. By specifying multiple global patch directories, a user could
+-implement a layered approach to patches. This could be useful when a
+-user has multiple boards that share a common processor architecture.
+-It is often the case that a subset of patches for a package need to be
+-shared between the different boards a user has. However, each board
+-may require specific patches for the package that build on top of the
+-common subset of patches.
++patches.
  
--[[customize-store-board-support]]
--=== Creating your own board support
--
--Creating your own board support in Buildroot allows users of a
--particular hardware platform to easily build a system that is known to
--work.
--
--To do so, you need to create a normal Buildroot configuration that
--builds a basic system for the hardware: toolchain, kernel, bootloader,
--filesystem and a simple BusyBox-only userspace. No specific package
--should be selected: the configuration should be as minimal as
--possible, and should only build a working basic BusyBox system for the
--target platform. You can of course use more complicated configurations
--for your internal projects, but the Buildroot project will only
--integrate basic board configurations. This is because package
--selections are highly application-specific.
--
--Once you have a known working configuration, run +make
--savedefconfig+. This will generate a minimal +defconfig+ file at the
--root of the Buildroot source tree. Move this file into the +configs/+
--directory, and rename it +<boardname>_defconfig+.
--
--It is recommended to use as much as possible upstream versions of the
--Linux kernel and bootloaders, and to use as much as possible default
--kernel and bootloader configurations. If they are incorrect for your
--board, or no default exists, we encourage you to send fixes to the
--corresponding upstream projects.
--
--However, in the mean time, you may want to store kernel or bootloader
--configuration or patches specific to your target platform. To do so,
--create a directory +board/<manufacturer>+ and a subdirectory
--+board/<manufacturer>/<boardname>+. You can then store your patches
--and configurations in these directories, and reference them from the main
--Buildroot configuration.
--
--
- === Step-by-step instructions for storing configuration
+ For a specific version +<packageversion>+ of a specific package
+ +<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
+@@ -63,35 +57,3 @@ are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
+ patches that are applied after patches available in +BR2_GLOBAL_PATCH_DIR+,
+ as it is done from a post-patch hook of the Linux package.
  
- To store the configuration for a specific product, device or
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index df34f01..3c531e3 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -52,6 +52,8 @@ include::how-buildroot-works.txt[]
- 
- include::writing-rules.txt[]
- 
-+include::adding-board-support.txt[]
-+
- include::adding-packages.txt[]
- 
- include::patch-policy.txt[]
+-An example directory structure for where a user has multiple
+-directories specified for +BR2_GLOBAL_PATCH_DIR+ may look like this:
+-
+------
+-board/
+-+-- common-fooarch
+-|   +-- patches
+-|       +-- linux
+-|       |   +-- linux-patch1.patch
+-|       |   +-- linux-patch2.patch
+-|       +-- uboot
+-|       +-- foopkg
+-+-- fooarch-board
+-    +-- patches
+-        +-- linux
+-        |   +-- linux-patch3.patch
+-        +-- uboot
+-        +-- foopkg
+------
+-
+-If the user has the +BR2_GLOBAL_PATCH_DIR+ configuration option set as
+-follows:
+-
+------
+-BR2_GLOBAL_PATCH_DIR="board/common-fooarch/patches board/fooarch-board/patches"
+------
+-
+-Then the patches would applied as follows for the Linux kernel:
+-
+-. board/common-fooarch/patches/linux/linux-patch1.patch
+-. board/common-fooarch/patches/linux/linux-patch2.patch
+-. board/fooarch-board/patches/linux/linux-patch3.patch
