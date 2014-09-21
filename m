@@ -1,81 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 21 Sep 2014 19:49:27 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: split bcm43xx /
-	bcm43xxx
-Message-ID: <20140921175639.85F3A9D6E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+	Realtek rtl88xx firmware
+Message-ID: <20140921175639.AB47B9D6E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ec72cce533c63738bebac99fa3b335147454525
+commit: http://git.buildroot.net/buildroot/commit/?id=972fface166a2d3d3a2a6c74133ab768f5ac9374
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-linux-firmware has gained a few firmware files for Broadcom WiFi
-chipsets. Installing all of them takes a lot of place, when usually only
-one is really needed.
-
-Split the Broadcom BRCM drivers in two categories: bcm43xx and bcm43xxx,
-when they were previously a single config option, so as to reclaim a bit
-of space.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         |   10 +++++++---
- package/linux-firmware/linux-firmware.mk |   17 +++++++++++------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ package/linux-firmware/Config.in         |    5 +++++
+ package/linux-firmware/linux-firmware.mk |    7 +++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index ba41598..3f94205 100644
+index b909d2b..f1670e8 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -26,10 +26,14 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
- 	  Firmware files for the Atheros 9271 module
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
--	bool "Broadcom BRCM bcm43xx/43xxx"
-+	bool "Broadcom BRCM bcm43xx"
+@@ -126,6 +126,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
  	help
--	  Firmware files for the Broadcom bcm43xx and bcm43xxx,
--	  SoftMAC and FullMAC.
-+	  Firmware files for the Broadcom bcm43xx SoftMAC and FullMAC.
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-+	bool "Broadcom BRCM bcm43xxx"
-+	help
-+	  Firmware files for the Broadcom bcm43xxx, SoftMAC and FullMAC.
+ 	  Realtek 8712/8723/8723be
  
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160
- 	bool "Intel iwlwifi 3160"
++config BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX
++	bool "Realtek 88xx"
++	help
++	  Realtek rtl8821ae
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
+ 	bool "TI wl127X"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 43edf64..3da757f 100644
+index 9334177..c0641b9 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -183,14 +183,19 @@ LINUX_FIRMWARE_FILES += dvb-usb-terratec-h5-drxk.fw
- # which is installed unconditionally
+@@ -46,6 +46,13 @@ LINUX_FIRMWARE_FILES += rtlwifi/rtl8712u.bin rtlwifi/rtl8723fw.bin	\
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
  endif
  
--# brcm
-+# brcm43xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX),y)
- LINUX_FIRMWARE_FILES += brcm/bcm43xx-0.fw brcm/bcm43xx_hdr-0.fw \
--			brcm/bcm4329-fullmac-4.bin brcm/brcmfmac43236b.bin \
--			brcm/brcmfmac43241b0-sdio.bin brcm/brcmfmac43241b4-sdio.bin \
--			brcm/brcmfmac4329-sdio.bin brcm/brcmfmac4330-sdio.bin \
--			brcm/brcmfmac4334-sdio.bin brcm/brcmfmac4335-sdio.bin \
--			brcm/brcmfmac43362-sdio.bin
-+			brcm/bcm4329-fullmac-4.bin brcm/brcmfmac4329-sdio.bin \
-+			brcm/brcmfmac4330-sdio.bin brcm/brcmfmac4334-sdio.bin \
-+			brcm/brcmfmac4335-sdio.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
++# rtl88xx
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX),y)
++LINUX_FIRMWARE_FILES += rtlwifi/rtl8821aefw.bin \
++			rtlwifi/rtl8821aefw_wowlan.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
 +endif
 +
-+# brcm43xxx
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
-+LINUX_FIRMWARE_FILES += brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
-+			brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
- endif
- 
+ # ar7010
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010),y)
+ LINUX_FIRMWARE_FILES += ar7010.fw ar7010_1_1.fw htc_7010.fw
