@@ -1,81 +1,32 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 22 Sep 2014 21:34:23 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ghostscript-fonts: new package
-In-Reply-To: <1411414463-8230-1-git-send-email-ps.report@gmx.net>
-References: <1411414463-8230-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1411414463-8230-2-git-send-email-ps.report@gmx.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 22 Sep 2014 21:38:21 +0200
+Subject: [Buildroot] [PATCH 12/23 v5] docs/manual: last pass at removing
+ hard-coded path in GENDOC_INNER
+In-Reply-To: <661d747642ce1e9ca884829b0a295faf35933209.1410692670.git.yann.morin.1998@free.fr>
+References: <cover.1410692670.git.yann.morin.1998@free.fr>
+ <661d747642ce1e9ca884829b0a295faf35933209.1410692670.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LUbrYHqCReJLRMRf4jfRGfH=0C=-TwYd2foZjpzzYonCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> GENDOC_INNER still has one hard-coded path to the document's directory:
+> the asciidoc .conf files.
 
----
-Changes v1 -> v2:
-  - updated version on top of master because of changes in
-    package/Config.in
----
- package/Config.in                              |  1 +
- package/ghostscript-fonts/Config.in            |  8 ++++++++
- package/ghostscript-fonts/ghostscript-fonts.mk | 21 +++++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/ghostscript-fonts/Config.in
- create mode 100644 package/ghostscript-fonts/ghostscript-fonts.mk
+In this patch you assume that the asciidoc configuration is
+document-specific, but at least the current contents of
+asciidoc-text.conf are global IMO: they simply make sure that
+hyperlinks are represented in a sane way, and that images are not
+shown (text document only). These are settings that apply to all
+documents.
+It can be useful to provide a mechanism for other documents to pass
+additional configuration files, but at this moment it is not strictly
+needed. I don't know if it makes sense to already provide a variable
+for that, or rather wait for a real use case to add it (KISS
+principle).
 
-diff --git a/package/Config.in b/package/Config.in
-index 2eefc3f..fe7a086 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -256,6 +256,7 @@ comment "X applications"
- 
- comment "X libraries and helper libraries"
- 	source "package/dejavu/Config.in"
-+	source "package/ghostscript-fonts/Config.in"
- 	source "package/liberation/Config.in"
- 	source "package/libsexy/Config.in"
- 	source "package/x11r7/xkeyboard-config/Config.in"
-diff --git a/package/ghostscript-fonts/Config.in b/package/ghostscript-fonts/Config.in
-new file mode 100644
-index 0000000..80bfbd0
---- /dev/null
-+++ b/package/ghostscript-fonts/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GHOSTSCRIPT_FONTS
-+	bool "ghostscript-fonts"
-+	help
-+	  Fonts and font metrics customarily distributed with Ghostscript.
-+	  Currently includes the 35 standard PostScript fonts and a
-+	  grab-bag of others.
-+
-+	  http://sourceforge.net/projects/gs-fonts
-diff --git a/package/ghostscript-fonts/ghostscript-fonts.mk b/package/ghostscript-fonts/ghostscript-fonts.mk
-new file mode 100644
-index 0000000..fa5c4b7
---- /dev/null
-+++ b/package/ghostscript-fonts/ghostscript-fonts.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# ghostscript-fonts
-+#
-+################################################################################
-+
-+GHOSTSCRIPT_FONTS_VERSION = 8.11
-+GHOSTSCRIPT_FONTS_SITE = http://downloads.sourceforge.net/project/gs-fonts/gs-fonts/8.11%20%28base%2035%2C%20GPL%29
-+GHOSTSCRIPT_FONTS_SOURCE = ghostscript-fonts-std-$(GHOSTSCRIPT_FONTS_VERSION).tar.gz
-+GHOSTSCRIPT_FONTS_LICENSE = GPLv2
-+GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYING
-+
-+GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
-+
-+define GHOSTSCRIPT_FONTS_INSTALL_TARGET_CMDS
-+	mkdir -p $(GHOSTSCRIPT_FONTS_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/*.afm $(GHOSTSCRIPT_FONTS_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/*.pfb $(GHOSTSCRIPT_FONTS_TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.8.1.4
+Awaiting the outcome of this consideration, I did not yet review the
+patch in detail.
