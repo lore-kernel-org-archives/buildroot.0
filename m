@@ -1,157 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Sep 2014 14:32:21 -0300
-Subject: [Buildroot] [PATCHv3] package/gcc: cleanup arch/cpu combinations
-Message-ID: <1411407141-14843-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Sep 2014 19:34:47 +0200
+Subject: [Buildroot] [PATCH] dhcp: add systemd service file
+In-Reply-To: <20140922105215.GA26484@rmm-p1267483>
+References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140921204445.GB28325@free.fr>
+ <20140922105215.GA26484@rmm-p1267483>
+Message-ID: <20140922173447.GC4358@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cleanup arch/cpu combination limits, we had super-wide depends and it
-doesn't help readability, version bumps or testing.
+Eric, All,
 
-Make the bool/depends/select order the same for all entries.
+On 2014-09-22 12:52 +0200, Eric Le Bihan spake thusly:
+> On Sun, Sep 21, 2014 at 10:44:45PM +0200, Yann E. MORIN wrote:
+> > On 2014-09-15 23:04 +0200, Eric Le Bihan spake thusly:
+> > > Add a systemd service file to start dhcpd.
+[--SNIP--]
+> > > +	echo "d /var/lib/dhcp 0755 - - - -" > \
+> > > +		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+> > > +	echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
+> > > +		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+> >
+> > I'm not sure to understand those two. Are they needed on the target?
+> >
+> > They suspiciously look like our 'makedev' syntax. Does systemd recognise
+> > this too?
+> 
+> Among the zillion of tools provided by systemd, there is 'systemd-tmpfiles'
+> [1]. This program creates, deletes, and cleans up volatile and temporary
+> files and directories based on configuration files stored in
+> /usr/lib/tmpfiles.d and /etc/tmpfiles.d.
+> 
+> It is true that these files follow a syntax similar to makedev [2]. But unlike
+> 'makedev' which sets the proper access rights for / entries at build time,
+> 'systemd-tmpfiles' creates the files at runtime if they are missing.
+> 
+> In the current default skeleton used by Buildroot, parts of /var are
+> tmpfs-based and thus get cleaned at each reboot. 'systemd-tmpfiles' can
+> recreate them.
+> 
+> For some reasons, when using systemd, dhcpd complains at start-up about
+> /var/lib/dhcp/dhcpd.leases not being accessible. So the Makefile installs a
+> file named /usr/lib/tmpfiles.d/dhcp.conf, which contains "instructions" for
+> creating the missing file with the proper access rights.
 
-Drop redundant limitations, for example sparc* if sparc wasn't
-supported in general.
+Thanks for the thorough explanations!
 
-Power8 requires at least gcc 4.9.
+> I know that a package named 'foo' can add system users via FOO_USERS, thanks
+> to 'mkusers'. Can the same be done with 'makedev'?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/Config.in.host | 84 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 67 insertions(+), 17 deletions(-)
+Yes, it is possible, see:
+    http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems
+and:
+    http://nightly.buildroot.org/#makedev-syntax
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 76223e9..75c589c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -18,58 +18,108 @@ choice
- 	  Select the version of gcc you wish to use.
- 
- 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
--		depends on BR2_avr32
- 		bool "gcc 4.2.2-avr32-2.1.5"
-+		# Only supported architecture
-+		depends on BR2_avr32
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
- 		bool "gcc 4.4.x"
-+		# Broken or unsupported architectures
-+		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
-+			&& !BR2_avr32 && !BR2_powerpc64le
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a5 && !BR2_cortex_a7 && \
-+			!BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_fa526 && \
-+			!BR2_pj4
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
--		# VFPv4 support appeared in gcc 4.5
-+		# ARM VFPv4 support appeared in gcc 4.5
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
-+		# Broken or unsupported PPC cores
-+		depends on !BR2_powerpc_476 && !BR2_powerpc_476fp \
-+			&& !BR2_power8
-+		# Broken or unsupported x86 cores
-+		depends on !BR2_x86_atom && !BR2_x86_corei7 && !BR2_x86_jaguar
- 		# musl patches only for gcc 4.7+
- 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
- 	config BR2_GCC_VERSION_4_5_X
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
--		select BR2_GCC_NEEDS_MPC
-+		bool "gcc 4.5.x"
-+		# Broken or unsupported architectures
-+		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
-+			&& !BR2_avr32  && !BR2_powerpc64le
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
-+			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-+		# Broken or unsupported PPC cores
-+		depends on !BR2_power8
-+		# Broken or unsupported SPARC cores
-+		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
-+			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		# Broken or unsupported X86 cores
-+		depends on !BR2_x86_corei7 && !BR2_x86_jaguar
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		# musl patches only for gcc 4.7+
- 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
--		bool "gcc 4.5.x"
-+		select BR2_GCC_NEEDS_MPC
- 
- 	config BR2_GCC_VERSION_4_7_X
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
--		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
-+		# Broken or unsupported architectures
-+		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
-+			&& !BR2_avr32 && !BR2_bfin && !BR2_powerpc64le
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a12 && !BR2_pj4
-+		# Broken or unsupported PPC cores
-+		depends on !BR2_power8
-+		# Broken or unsupported SPARC cores
-+		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
-+			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		# Broken or unsupported x86 cores
-+		depends on !BR2_x86_jaguar
-+		select BR2_GCC_NEEDS_MPC
- 
- 	config BR2_GCC_VERSION_4_8_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_powerpc64le
-+		bool "gcc 4.8.x"
-+		# Broken or unsupported architectures
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 \
-+			&& !BR2_bfin && !BR2_powerpc64le
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a12
-+		# Broken or unsupported PPC cores
-+		depends on !BR2_power8
-+		# Broken or unsupported SPARC cores
-+		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
-+			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
--		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_4_8_ARC
-+		bool "gcc 4.8-arc"
-+		# Only supported architecture
- 		depends on BR2_arc
- 		select BR2_GCC_NEEDS_MPC
--		bool "gcc 4.8-arc"
- 
- 	config BR2_GCC_VERSION_4_9_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		bool "gcc 4.9.x"
-+		# Broken or unsupported architectures
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin
-+		# Broken or unsupported SPARC cores
-+		depends on !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 \
-+			&& !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
--		bool "gcc 4.9.x"
- 
- 	config BR2_GCC_VERSION_SNAP
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
--		select BR2_GCC_NEEDS_MPC
--		# musl patches only for gcc 4.7+
-+		bool "gcc snapshot"
-+		# Broken or unsupported architectures
-+		depends on !BR2_arc && !BR2_avr32
-+		# musl patches only for release gcc versions
- 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
-+		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
--		bool "gcc snapshot"
- endchoice
- 
- config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+You'd need something like:
+
+    define LIBFOO_PERMISSIONS
+        /var/lib/dhcp d 0755 0 0 - - - - -
+        /var/lib/dhcp/dhcpd.leases f 0600 0 0 - - - - -
+    endef
+
+> This would allow a package
+> to create files with the proper owner and access rights without having to
+> provide additional files.
+
+Problem is /var/lib/dhcp/dhcpd.leases should be on a RW filesystem, and
+the only one Buildroot gurantees to be RW is /tmp (which is a tmpfs).
+
+But /var/lib does not point to a subdir in /tmp so whether we use
+systemd's feature to create missing files, or the makedev above, we'd
+still need to make /var/lib/dhcp a symling to somewhere in /tmp.
+
+Regards,
+Yann E. MORIN.
+
+> Side note: since version 215, systemd provides systemd-sysusers, which creates
+> system users and groups in /etc/passwd and /etc/group based on the
+> configuration files in /usr/lib/sysusers.d/. It is said to be useful for
+> systems where /etc can be "reset" to a default version. I still haven't found
+> a useful use case for it in an embedded system, though.
+> 
+> [1] http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
+> [2] http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
+> 
+> Best regards,
+> ELB
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
