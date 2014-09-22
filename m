@@ -1,42 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Sep 2014 17:08:22 +0200
-Subject: [Buildroot] [PATCH v4 0/4] Improvements to i.MX6 SABRESD boards
- support
-In-Reply-To: <5420351D.9050802@lucaceresoli.net>
-References: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
- <20140921212519.296ade2a@free-electrons.com>
- <542020B1.60500@lucaceresoli.net>
- <5420351D.9050802@lucaceresoli.net>
-Message-ID: <20140922170822.0fd86aa7@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 22 Sep 2014 17:17:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Enable armv6 support for
+	Cortex cores
+Message-ID: <1411399036-11888-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Fixes
+http://autobuild.buildroot.net/results/cda/cdad51f610c339d2ad4c7d09c282cfb4b10770a0/
+http://autobuild.buildroot.net/results/cd5/cd53af973d9722481c3298f484b399c9a2c286cf/
+http://autobuild.buildroot.net/results/a9a/a9a2c49d923fd891945a24c9d0d147b3eea9b037/
+http://autobuild.buildroot.net/results/d2f/d2f51632aea5727df9404e611e8e379567f03b61/
+http://autobuild.buildroot.net/results/a62/a622dd113dcb7b352bcfebe3b3c7ac6ed286d7c7/
+http://autobuild.buildroot.net/results/2ea/2eace18d0d32b4cbb6120b06d2bbe79d2b9857a7/
+http://autobuild.buildroot.net/results/caa/caad4172db90879db51b66625b98aa0805e39c73/
 
-On Mon, 22 Sep 2014 16:41:33 +0200, Luca Ceresoli wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ...or maybe I'll do the other way around: use the kernel headers from
-> Freescale's custom git repo, since the defconfig we currently use
-> (imx_v7_defconfig) is not available in mainline, and the closest one
-> in mainline (imx_v6_v7_defconfig) has several differences, and I'd like
-> to keep things simple and working.
-> 
-> I wonder if there's a good reason to use a mainline kernel instead.
-
-Well, in general, mainline is nicer to look at. But from a practical
-point of view, the Freescale kernel is probably the one they have
-tested with all the multimedia features (OpenGL implementation,
-hardware accelerated video encoding/decoding) and so on. So I'd say
-that a Buildroot defconfig should probably use the Freescale kernel
-preferably, so that most things work out of the box for users. (And it
-*really* hurts me to say we should use vendor kernels instead of
-mainline kernels, as I hate vendor kernels!).
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index c6f305a..e429b35 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -265,7 +265,7 @@ endif
+ ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
+ FFMPEG_CONF_OPT += --disable-armv5te
+ endif
+-ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s),y)
++ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
+ FFMPEG_CONF_OPT += --enable-armv6
+ else
+ FFMPEG_CONF_OPT += --disable-armv6 --disable-armv6t2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
