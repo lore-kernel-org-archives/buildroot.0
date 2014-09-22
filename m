@@ -1,34 +1,34 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 22 Sep 2014 17:20:03 +0200
-Subject: [Buildroot] [PATCH 2/4] qemu-mipsel: update to latest kernel
-Message-ID: <20140922152003.GA13372@waldemar-brodkorb.de>
+Date: Mon, 22 Sep 2014 17:20:46 +0200
+Subject: [Buildroot] [PATCH 3/4] qemu-mips64: update to latest kernel
+Message-ID: <20140922152045.GA13401@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to Linux Kernel 3.16.3.
+Update Linux Kernel to 3.16.3.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- board/qemu/mipsel-malta/linux-3.15.config |   60 -----------------------------
- board/qemu/mipsel-malta/linux-3.16.config |   60 +++++++++++++++++++++++++++++
- board/qemu/mipsel-malta/readme.txt        |    2 +-
- configs/qemu_mipsel_malta_defconfig       |   10 ++---
- 4 files changed, 66 insertions(+), 66 deletions(-)
- delete mode 100644 board/qemu/mipsel-malta/linux-3.15.config
- create mode 100644 board/qemu/mipsel-malta/linux-3.16.config
+ board/qemu/mips64-malta/linux-3.15.config |   59 -----------------------------
+ board/qemu/mips64-malta/linux-3.16.config |   59 +++++++++++++++++++++++++++++
+ board/qemu/mips64-malta/readme.txt        |    2 +-
+ configs/qemu_mips64_malta_defconfig       |   10 ++---
+ 4 files changed, 65 insertions(+), 65 deletions(-)
+ delete mode 100644 board/qemu/mips64-malta/linux-3.15.config
+ create mode 100644 board/qemu/mips64-malta/linux-3.16.config
 
-diff --git a/board/qemu/mipsel-malta/linux-3.15.config b/board/qemu/mipsel-malta/linux-3.15.config
+diff --git a/board/qemu/mips64-malta/linux-3.15.config b/board/qemu/mips64-malta/linux-3.15.config
 deleted file mode 100644
-index b0372ae..0000000
---- a/board/qemu/mipsel-malta/linux-3.15.config
+index c112793..0000000
+--- a/board/qemu/mips64-malta/linux-3.15.config
 +++ /dev/null
-@@ -1,60 +0,0 @@
+@@ -1,59 +0,0 @@
 -CONFIG_MIPS_MALTA=y
--CONFIG_CPU_LITTLE_ENDIAN=y
--CONFIG_CPU_MIPS32_R2=y
+-CONFIG_CPU_MIPS64_R1=y
+-CONFIG_64BIT=y
 -CONFIG_MIPS_MT_SMP=y
 -CONFIG_NR_CPUS=2
 -CONFIG_HZ_100=y
@@ -47,6 +47,9 @@ index b0372ae..0000000
 -CONFIG_MODULE_SRCVERSION_ALL=y
 -# CONFIG_BLK_DEV_BSG is not set
 -CONFIG_PCI=y
+-CONFIG_MIPS32_COMPAT=y
+-CONFIG_MIPS32_O32=y
+-CONFIG_MIPS32_N32=y
 -CONFIG_NET=y
 -CONFIG_PACKET=y
 -CONFIG_UNIX=y
@@ -68,9 +71,6 @@ index b0372ae..0000000
 -CONFIG_NETDEVICES=y
 -CONFIG_PCNET32=y
 -# CONFIG_WLAN is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO_I8042 is not set
 -CONFIG_VT_HW_CONSOLE_BINDING=y
 -CONFIG_SERIAL_8250=y
 -CONFIG_SERIAL_8250_CONSOLE=y
@@ -81,20 +81,19 @@ index b0372ae..0000000
 -# CONFIG_VGA_CONSOLE is not set
 -# CONFIG_USB_SUPPORT is not set
 -CONFIG_EXT4_FS=y
--CONFIG_QUOTA=y
 -CONFIG_PROC_KCORE=y
 -CONFIG_TMPFS=y
 -CONFIG_NFS_FS=y
 -CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mipsel-malta/linux-3.16.config b/board/qemu/mipsel-malta/linux-3.16.config
+diff --git a/board/qemu/mips64-malta/linux-3.16.config b/board/qemu/mips64-malta/linux-3.16.config
 new file mode 100644
-index 0000000..b0372ae
+index 0000000..c112793
 --- /dev/null
-+++ b/board/qemu/mipsel-malta/linux-3.16.config
-@@ -0,0 +1,60 @@
++++ b/board/qemu/mips64-malta/linux-3.16.config
+@@ -0,0 +1,59 @@
 +CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS32_R2=y
++CONFIG_CPU_MIPS64_R1=y
++CONFIG_64BIT=y
 +CONFIG_MIPS_MT_SMP=y
 +CONFIG_NR_CPUS=2
 +CONFIG_HZ_100=y
@@ -113,6 +112,9 @@ index 0000000..b0372ae
 +CONFIG_MODULE_SRCVERSION_ALL=y
 +# CONFIG_BLK_DEV_BSG is not set
 +CONFIG_PCI=y
++CONFIG_MIPS32_COMPAT=y
++CONFIG_MIPS32_O32=y
++CONFIG_MIPS32_N32=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
@@ -134,9 +136,6 @@ index 0000000..b0372ae
 +CONFIG_NETDEVICES=y
 +CONFIG_PCNET32=y
 +# CONFIG_WLAN is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_I8042 is not set
 +CONFIG_VT_HW_CONSOLE_BINDING=y
 +CONFIG_SERIAL_8250=y
 +CONFIG_SERIAL_8250_CONSOLE=y
@@ -147,26 +146,25 @@ index 0000000..b0372ae
 +# CONFIG_VGA_CONSOLE is not set
 +# CONFIG_USB_SUPPORT is not set
 +CONFIG_EXT4_FS=y
-+CONFIG_QUOTA=y
 +CONFIG_PROC_KCORE=y
 +CONFIG_TMPFS=y
 +CONFIG_NFS_FS=y
 +CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-index fce8780..fe7b6a9 100644
---- a/board/qemu/mipsel-malta/readme.txt
-+++ b/board/qemu/mipsel-malta/readme.txt
-@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
- enabled.
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 967ea76..ad6bbae 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
  
 -Tested with QEMU 2.0.0
 +Tested with QEMU 2.1.0
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 0330dbc..1818992 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 5929bc5..c39c2e4 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -184,8 +182,8 @@ index 0330dbc..1818992 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.15.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.16.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.15.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.16.config"
  BR2_LINUX_KERNEL_VMLINUX=y
  
  # Serial port config
