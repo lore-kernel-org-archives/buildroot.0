@@ -1,71 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Sep 2014 23:04:59 +0200
-Subject: [Buildroot] [git commit] avahi: add option to build the libdns_sd
-	(Bonjour) compatibility library
-Message-ID: <20140922210718.BA99F9D74F@busybox.osuosl.org>
+Date: Mon, 22 Sep 2014 23:09:28 +0200
+Subject: [Buildroot] where is libdns_sd.so?
+In-Reply-To: <87vbof2xnf.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 22 Sep 2014 22:44:20 +0200")
+References: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
+ <87vbof2xnf.fsf@dell.be.48ers.dk>
+Message-ID: <87r3z32whj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ab5a23e730a19dece727ffe59ae97b65d0a1ccc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-As requested on the list.
+ > the bonjour compatibility library is not built by default, but needs be
+ > explicitly be enabled at configure time with --enable-compat-libdns_sd.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/Config.in |    8 ++++++++
- package/avahi/avahi.mk  |   14 ++++++++++++++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ > We don't currently have a Buildroot option to enable this, but I'll add
+ > it now.
 
-diff --git a/package/avahi/Config.in b/package/avahi/Config.in
-index 483d976..b52cc78 100644
---- a/package/avahi/Config.in
-+++ b/package/avahi/Config.in
-@@ -35,6 +35,14 @@ config BR2_PACKAGE_AVAHI_DAEMON
- 	  The daemon registers local IP addresses and services using
- 	  mDNS/DNS-SD.
- 
-+config BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
-+	bool "libdns_sd compatibility (Bonjour)"
-+	depends on BR2_PACKAGE_AVAHI_DAEMON
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  Enable the libdns_sd (Bonjour) compatibility library support
-+	  for legacy applications.
-+
- endif
- 
- comment "avahi needs a toolchain w/ threads"
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 08364df..55527dc 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -101,6 +101,10 @@ else
- AVAHI_CONF_OPT += --with-xml=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
-+AVAHI_CONF_OPT += --enable-compat-libdns_sd
-+endif
-+
- ifeq ($(BR2_PACKAGE_DBUS),y)
- AVAHI_DEPENDENCIES += dbus
- else
-@@ -181,4 +185,14 @@ endef
- 
- endif
- 
-+# applications expects to be able to #include <dns_sd.h>
-+define AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
-+	ln -sf avahi-compat-libdns_sd/dns_sd.h \
-+		$(STAGING_DIR)/usr/include/dns_sd.h
-+endef
-+
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
-+AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
-+endif
-+
- $(eval $(autotools-package))
+Added in git:
+
+http://git.buildroot.net/buildroot/commit/?id=1ab5a23e730a19dece727ffe59ae97b65d0a1ccc
+
+-- 
+Bye, Peter Korsgaard
