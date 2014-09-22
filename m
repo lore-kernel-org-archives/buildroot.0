@@ -1,58 +1,39 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 22 Sep 2014 16:41:33 +0200
+Date: Mon, 22 Sep 2014 16:45:28 +0200
 Subject: [Buildroot] [PATCH v4 0/4] Improvements to i.MX6 SABRESD boards
  support
-In-Reply-To: <542020B1.60500@lucaceresoli.net>
+In-Reply-To: <20140922153337.13d28023@free-electrons.com>
 References: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
  <20140921212519.296ade2a@free-electrons.com>
- <542020B1.60500@lucaceresoli.net>
-Message-ID: <5420351D.9050802@lucaceresoli.net>
+ <542024B3.9040107@lucaceresoli.net>
+ <20140922153337.13d28023@free-electrons.com>
+Message-ID: <54203608.5020602@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Thomas,
 
-Luca Ceresoli wrote:
-> Dear Thomas,
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
 >
-> thanks for your suggestions.
+> On Mon, 22 Sep 2014 15:31:31 +0200, Luca Ceresoli wrote:
 >
-> Thomas Petazzoni wrote:
->> Dear Luca Ceresoli,
+>> Now that your patch for USB booting in mfgtools mode has been applied,
+>> you may simplify the booting procedure documented in
+>> https://community.freescale.com/docs/DOC-101842 to remove the tweaks
+>> that are not needed anymore.
 >>
->> On Fri, 19 Sep 2014 16:12:48 +0200, Luca Ceresoli wrote:
->>
->>> Luca Ceresoli (3):
->>>    configs/freescale_imx6qsabresd: rename imx6 to imx6q
->>>    configs/freescale_imx6dlsabresd: add defconfig for iMX6DL SabreSD
->>>    freescale/imx6-sabresd: document how to create a bootable SD
->>>
->>> Vincent Stehl? (1):
->>>    imx6sabresd: boot to /init in mfgtools mode
->>
->> I've applied your four patches. However, I'd like to see additional
->> patches to make the following improvements:
->>
->>   * For the defconfigs, select a specific version of the kernel headers.
->>     Currently, your defconfigs are building a 3.10 kernel, but the
->>     kernel headers used in the toolchain are the latest ones (i.e 3.16
->>     currently), which is not good. This was already wrong in the
->>     existing defconfig, so I applied your patches nonetheless. But it
->>     should be fixed.
+>> Also, the sentence "there are no files for the sabre sd in the boards
+>> folder" is not true anymore.
 >
-> I'm working on this. I switched from Freescale's git repo to vanilla
-> Linux, since the Freescale releases do not provide any later version.
+> Also, why don't we have a package to build the host tool
+> imx-usb-loader? That would even further simply the instructions.
 
-...or maybe I'll do the other way around: use the kernel headers from
-Freescale's custom git repo, since the defconfig we currently use
-(imx_v7_defconfig) is not available in mainline, and the closest one
-in mainline (imx_v6_v7_defconfig) has several differences, and I'd like
-to keep things simple and working.
-
-I wonder if there's a good reason to use a mainline kernel instead.
+Sure it would. It's on my todo list, but I haven't started looking at
+it yet. It may be be in the next patchset unless I hit any build issues.
 
 -- 
 Luca
