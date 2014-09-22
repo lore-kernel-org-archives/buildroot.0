@@ -1,24 +1,22 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Mon, 22 Sep 2014 14:23:51 -0700
-Subject: [Buildroot] strange error
-Message-ID: <CALo-6+iBsDLxAZib5pxREprPWP-Nr02kNf-pug3=nE=KFMVP7Q@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 22 Sep 2014 23:29:38 +0200
+Subject: [Buildroot] [PATCH] slang: bump to 2.3.0
+In-Reply-To: <1411411103-4625-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Mon, 22 Sep 2014 20:38:23 +0200")
+References: <1411411103-4625-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87iokf2vjx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gentlemen:
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-One of my developers is reporting a strange error when building our
-buildroot rootfs and thinks it is related to Ubuntu changes.
+ > Bump version and change download location.
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Has anyone seen this error and can perhaps tell me what is going on??
-
-stdio.h:456:1: error: 'gets' undeclared here (not in a function)
+Committed, thanks.
 
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140922/49fa06de/attachment.html>
+Bye, Peter Korsgaard
