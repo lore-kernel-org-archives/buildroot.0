@@ -1,38 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Sep 2014 23:15:38 +0200
-Subject: [Buildroot] [git commit] slang: bump to 2.3.0
-Message-ID: <20140922213008.45A0C9D74E@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 22 Sep 2014 23:31:30 +0200
+Subject: [Buildroot] strange error
+In-Reply-To: <CALo-6+iBsDLxAZib5pxREprPWP-Nr02kNf-pug3=nE=KFMVP7Q@mail.gmail.com>
+References: <CALo-6+iBsDLxAZib5pxREprPWP-Nr02kNf-pug3=nE=KFMVP7Q@mail.gmail.com>
+Message-ID: <CAHXCMMJRbJ1ZySGsduDqfSzotdPo8Y+JWczg9VN3K8RQ-a5j+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6712213220985896ee10315d8f97857c326b751f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Charles,
 
-Bump version and change download location.
+On Mon, Sep 22, 2014 at 11:23 PM, Charles Krinke
+<charles.krinke@gmail.com> wrote:
+> Gentlemen:
+>
+> One of my developers is reporting a strange error when building our
+> buildroot rootfs and thinks it is related to Ubuntu changes.
+>
+> Has anyone seen this error and can perhaps tell me what is going on??
+>
+> stdio.h:456:1: error: 'gets' undeclared here (not in a function)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/slang/slang.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+It reminds me a (very) old bug, fixed back in July 2012.
+As references, see:
+http://lists.busybox.net/pipermail/buildroot/2012-July/055999.html
+http://lists.busybox.net/pipermail/buildroot/2012-July/056000.html
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 529f4e5..4726ba1 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -4,10 +4,8 @@
- #
- ################################################################################
- 
--SLANG_VERSION_MAJOR = 2.2
--SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
--SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
--SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)
-+SLANG_VERSION = 2.3.0
-+SLANG_SITE = http://www.jedsoft.org/releases/slang/
- SLANG_LICENSE = GPLv2+
- SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
+Hope this help.
+
+Regards,
+
+-- 
+Samuel
