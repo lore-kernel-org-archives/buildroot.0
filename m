@@ -1,80 +1,90 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 21 Sep 2014 22:18:01 -0400
-Subject: [Buildroot] [PATCH v2 2/2] pkg-infra: make timing of steps
-	optional
-In-Reply-To: <20140921221358.GC28325@free.fr>
-References: <1410744672-32698-1-git-send-email-danomimanchego123@gmail.com>
- <1410744672-32698-2-git-send-email-danomimanchego123@gmail.com>
- <20140921221358.GC28325@free.fr>
-Message-ID: <CANxTyt5cSA56xLZLAwyg9kP3SZ0a+5Uyg2OaMgY_HVp3Nu5LrA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Sep 2014 08:30:13 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-09-21
+Message-ID: <20140922063014.B7E4E10156F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Build statistics for 2014-09-21
+===============================
 
-On Sun, Sep 21, 2014 at 6:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Danomi, All,
->
-> On 2014-09-14 21:31 -0400, Danomi Manchego spake thusly:
->> Commit 17d4eb1e0261793a9f89e4a2253602c7ab926d2e added a hook to log timing
->> of steps to a build-time.log file, which provides data for the "graph-build"
->> target for examining build time stats.  If one uses buildroot on a daily
->> basis as part of a build system, then its conceivable that there might be
->> long periods of time between "make clean" ops.  So the log file continues
->> to grow.  This patch makes the accumulation of the timing data optional, to
->> avoid having a silent endlessly growing log in the build directory.
->>
->> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->>
->> ---
->>
->> Changes v1 -> v2:
->> - Switch test to positive logic, per feedback from Yann Morin.
->
-> Thanks.
->
-> However, I'm still not convinced.
->
->   - if the problem is the size of that file: each step adds around 120
->     bytes (~60 for start, same for end); so a 1MiB would hold around
->     8000 steps, and most packages have less than 8 steps, so that is a
->     *complete* build (download, extract, patch, configure, build,
->     install-target, install-staging) of about 1000 packages. 1MiB is
->     very small compared to the size of those 1000 packages, and even
->     when compared to the smallest system (busybox based), that's still
->     one order of magnitude less than the sources of busybox, and you'd
->     get to build it 8000 times in a row...
->
->     Lets assume I made a mistake of one order of magnitude in those
->     calculations, and 1MiB is only 800 steps; well, 10MiB are those
->     8000 steps, is on-par with Buildroot source tree, and it is still
->     very small for today's storage.
->
->   - if the problem is the accuracy of the content of that file:
->     Buildroot never guaranteed (and will probably never guarantee) that
->     a partial build is coherent. Only with a build from scratch do you
->     get a coherent output. That's valid for target/ , staging/ and
->     host/ . It is is also valid for graphs/ .
->
->   - the overhead of the tracing? Well, that's mere milliseconds at
->     worse, for each step. Running:   date +%s.%N; date +%s.%N
->     consistently gives me from 1.6ms to 2.5ms between the two dates.
->     OK, after 8000 steps, that about 20 seconds...
->
-> So, I wonder what problem this patch is trying to solve.
+        success : 195
+       failures : 31 
+       timeouts : 5  
+          TOTAL : 231
 
-We use buildroot as the core or the build systems of our projects.
-While I personally have the habit of periodically doing a build from
-scratch, I have observed that most of my coworkers *never* do a build
-from scratch, for the entire 1-2 year project, unless a defconfig
-change breaks things so completely that it can't be ignored.  It's for
-their sake that I thought it would be good to patch away the file that
-grows forever.
+Classification of failures by reason
+====================================
 
-If there's not appetite for this change, I suppose that I could keep
-it as a local customization.
+                 gnupg2-2.0.26 | 5 
+     openvmtools-9.4.6-1770165 | 3 
+                minidlna-1.1.4 | 2 
+    xserver_xorg-server-1.16.0 | 2 
+                    ola-0.8.33 | 2 
+                elfutils-0.155 | 2 
+               mpdecimal-2.4.0 | 2 
+             bluez5_utils-5.21 | 1 
+                 sudo-1.8.10p3 | 1 
+             lttng-tools-2.4.1 | 1 
+                  zeromq-4.0.4 | 1 
+                   geoip-1.6.0 | 1 
+                gptfdisk-0.8.6 | 1 
+                    ffmpeg-2.4 | 1 
+            wpa_supplicant-2.2 | 1 
+                busybox-1.22.1 | 1 
+           libmemcached-1.0.18 | 1 
+               qt5webkit-5.3.2 | 1 
+                libinput-0.3.0 | 1 
+znc-b396cafdb249544164ed029... | 1 
+                    ruby-2.1.2 | 1 
+                keyutils-1.5.5 | 1 
+                      gd-2.1.0 | 1 
+             subversion-1.7.18 | 1 
+                 webkit-1.11.5 | 1 
 
-Danomi -
+Detail of failures
+===================
+
+      xtensa |              bluez5_utils-5.21 | NOK | http://autobuild.buildroot.net/results/b35682b856b5a51615edc901fec4e6efd5ca9f77/
+         arc |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/12adc08ec2d9234eb43862e159dba5fd844e4dc0/
+         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/6d5c1bcb70aee7d47bc126893e5fe10dcc5204f4/
+         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/7aaa4b82586f35142e9b90b6d893c5ddbc4fdd9b/
+         arm |                     ffmpeg-2.4 | NOK | http://autobuild.buildroot.net/results/cdad51f610c339d2ad4c7d09c282cfb4b10770a0/
+        bfin |                       gd-2.1.0 | NOK | http://autobuild.buildroot.net/results/0e2b28e8561c6f7623185c35eb24bea573b79d11/
+         arc |                    geoip-1.6.0 | TIM | http://autobuild.buildroot.net/results/f1cde8088e05e5758138ae3a696d9501a140f693/
+         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/366f43896113e1e025e2de85678b0ebc0e372efc/
+     powerpc |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/0db794d5688f36e232822d05ab757cfa929f529d/
+         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/0b86c6de3769f1002138b221a06a4adf322b7a4d/
+         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/da91045c88272eff12ef31aab9f2ff5c67ba1bdc/
+        i486 |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/e8a1d9b8d98c059d497bc493a9d2ae0ef5f9d0f5/
+     powerpc |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/ef783e3776f25c28ea0de0c082c93f7ab97db56d/
+      mipsel |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/ced596bd1c73286f7044f5a8e11b6588fc973f11/
+     aarch64 |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/8b60fdf4fdec834dc79f8dfc4fd050f763c83457/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/97b8aca5e9d41ebf73dfb9def0885bafe2f40525/
+         arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/12ae7bd284220b0ebb8029002c08af2cb5e9527f/
+         arm |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/452c77798718d55c2f182dee8debc756d4f6fd28/
+       nios2 |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/f4023faa2540bdd73739c112dccd43049247b70b/
+        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/11d8dbdf00f87baae2ac13156d2c2f0e48616894/
+        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/d222a752c103e479d9607e22a236f8652184aea8/
+      mipsel |                     ola-0.8.33 | NOK | http://autobuild.buildroot.net/results/466995f9534447a4f54327a14c44ef9e16dd1123/
+        i686 |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/4795487e30c6850ac96cb344b3c3b04484e65db1/
+        i686 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/4400abc17115d0f5eb65c4eb012f11766cbe5a56/
+      x86_64 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/47c0a2952e05063984deb5bfa1483551e7e33d47/
+      x86_64 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/4473d8a99ffec1fde491d172520e86ae1e69fae7/
+         arm |                qt5webkit-5.3.2 | TIM | http://autobuild.buildroot.net/results/78999edfced4945b2b453248957ba2d58691d2fb/
+      mipsel |                     ruby-2.1.2 | NOK | http://autobuild.buildroot.net/results/d423c0208917ed2b5d7120581250278b372b5d39/
+    mips64el |              subversion-1.7.18 | TIM | http://autobuild.buildroot.net/results/7e7d0d25b1bee4c945ebcc82c0014e12d990ab4e/
+         arm |                  sudo-1.8.10p3 | NOK | http://autobuild.buildroot.net/results/2ae18bfff5744808fb31a7a548bbf37c71b18487/
+         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/f9293bdeaddafdd51827b9ad3376ba54e1f0fb08/
+        bfin |             wpa_supplicant-2.2 | NOK | http://autobuild.buildroot.net/results/9ffc5c4f88d76f9ccc8a630c7cfdf74946ef19bd/
+     powerpc |     xserver_xorg-server-1.16.0 | NOK | http://autobuild.buildroot.net/results/9d3023d8ab206fb99deea5b34b404cbf53dca801/
+microblazeel |     xserver_xorg-server-1.16.0 | NOK | http://autobuild.buildroot.net/results/a0707458e45eaf5ed50fd52793c698dd5354550e/
+        bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/8a817fcfd9d203237d6c93e11de9594edd2a8a09/
+         arm | znc-b396cafdb249544164ed029... | TIM | http://autobuild.buildroot.net/results/90a9d290bdad29a3ffd44921bfb9e923f4fd8a92/
+
+
+-- 
+http://autobuild.buildroot.net
