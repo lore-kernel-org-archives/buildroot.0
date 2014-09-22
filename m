@@ -1,31 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 22 Sep 2014 22:42:17 +0200
-Subject: [Buildroot] [PATCH 20/23 v5] docs/asciidoc: call $(pkgname) and
- $(pkgdir) in a single place
-In-Reply-To: <b0636122e2367750eece267d01b569286603652d.1410692671.git.yann.morin.1998@free.fr>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <b0636122e2367750eece267d01b569286603652d.1410692671.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMLoU-pqoyLZ-LjDB3xgjaNb5yZcs_nE42hTjrSDgr=sqA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 22 Sep 2014 22:44:20 +0200
+Subject: [Buildroot] where is libdns_sd.so?
+In-Reply-To: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
+ (Sylvain LG's message of "Mon, 22 Sep 2014 20:46:16 +0200")
+References: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
+Message-ID: <87vbof2xnf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Like for all the package infrastructures, retrieve the package name and
-> directory in the front-end macro-variable, rather than everywhere in the
-> backend macro.
->
-> This allows us to clean up the ASCIIDOC macro, by removing all the calls
-> to $(pkgname) and $(pkgdir), and to UPPERCASE (which made the macro a
-> bit difficult to read.)
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>>>>> "Sylvain" == Sylvain LG <forum@sylvainlegourr.com> writes:
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+ > Hello,
+ > I've just compiled my system with target package Avahi:
+
+ > [*] avahi ? ? ? ? ? ? ? ? ? ? ? ? ? ? ??
+ > [*] ? IPv4LL network address configuration daemon?
+ > [*] ? mDNS/DNS-SD daemon?
+
+ > I need?libdns_sd.so to develop a zeroconf application.
+
+ > But no such a lib is compiled altough a find ./output -name *dns_sd* displays:
+
+
+ >     ./build/avahi-0.6.31/avahi-compat-libdns_sd
+ >     ./build/avahi-0.6.31/avahi-compat-libdns_sd/dns_sd.h
+ >     ./build/avahi-0.6.31/avahi-compat-libdns_sd.pc.in
+
+the bonjour compatibility library is not built by default, but needs be
+explicitly be enabled at configure time with --enable-compat-libdns_sd.
+
+We don't currently have a Buildroot option to enable this, but I'll add
+it now.
 
 -- 
-Samuel
+Bye, Peter Korsgaard
