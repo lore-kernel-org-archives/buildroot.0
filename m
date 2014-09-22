@@ -1,36 +1,36 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 22 Sep 2014 20:38:23 +0200
-Subject: [Buildroot] [PATCH] slang: bump to 2.3.0
-Message-ID: <1411411103-4625-1-git-send-email-yegorslists@googlemail.com>
+From: Sylvain LG <forum@sylvainlegourr.com>
+Date: Mon, 22 Sep 2014 20:46:16 +0200
+Subject: [Buildroot] where is libdns_sd.so?
+Message-ID: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version and change download location.
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/slang/slang.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+I've just compiled my system with target package Avahi:
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 529f4e5..4726ba1 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -4,10 +4,8 @@
- #
- ################################################################################
- 
--SLANG_VERSION_MAJOR = 2.2
--SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
--SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
--SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)
-+SLANG_VERSION = 2.3.0
-+SLANG_SITE = http://www.jedsoft.org/releases/slang/
- SLANG_LICENSE = GPLv2+
- SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
--- 
-1.8.3.2
+[*] avahi
+[*]   IPv4LL network address configuration daemon
+[*]   mDNS/DNS-SD daemon
+
+I need libdns_sd.so to develop a zeroconf application.
+
+But no such a lib is compiled altough a *find ./output -name *dns_sd**
+displays:
+
+./build/avahi-0.6.31/avahi-compat-libdns_sd
+> ./build/avahi-0.6.31/avahi-compat-libdns_sd/dns_sd.h
+> ./build/avahi-0.6.31/avahi-compat-libdns_sd.pc.in
+
+
+What should I do?
+
+Regards,
+
+Sylvain
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140922/f40f88f0/attachment.html>
