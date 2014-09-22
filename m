@@ -1,97 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 22 Sep 2014 12:52:32 +0200
-Subject: [Buildroot] [PATCH] dhcp: add systemd service file
-In-Reply-To: <20140921204445.GB28325@free.fr>
-References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140921204445.GB28325@free.fr>
-Message-ID: <20140922105215.GA26484@rmm-p1267483>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Mon, 22 Sep 2014 13:31:08 +0200
+Subject: [Buildroot] [PATCH v2] swig: add symlink to /usr/bin/swig2.0
+In-Reply-To: <1411385468-24878-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1411385468-24878-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <1411385468-24878-2-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+the cmake detection script provided with cmake will first look for a
+binary called swig2.0 then for a binary called swig
 
-On Sun, Sep 21, 2014 at 10:44:45PM +0200, Yann E. MORIN wrote:
-> Eric, All,
->
-> On 2014-09-15 23:04 +0200, Eric Le Bihan spake thusly:
-> > Add a systemd service file to start dhcpd.
-> >
-> > The network interfaces to listen on can be set via the variable
-> > INTERFACES in /etc/default/dhcpd.conf. Example:
-> >
-> >   INTERFACES="eth0 eth1"
-> >
-> > Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
-> > (needed at dhcpd start-up).
-> >
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > ---
-> >  package/dhcp/dhcp.mk       | 15 +++++++++++++++
-> >  package/dhcp/dhcpd.service | 13 +++++++++++++
-> >  2 files changed, 28 insertions(+)
-> >  create mode 100644 package/dhcp/dhcpd.service
-> >
-> > diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> > index 9251185..1b914a8 100644
-> > --- a/package/dhcp/dhcp.mk
-> > +++ b/package/dhcp/dhcp.mk
-> > @@ -74,6 +74,21 @@ define DHCP_INSTALL_INIT_SYSV
-> >  		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
-> >  endef
-> >
-> > +define DHCP_INSTALL_INIT_SYSTEMD
-> > +	$(INSTALL) -D -m 644 package/dhcp/dhcpd.service \
-> > +		$(TARGET_DIR)/lib/systemd/system/dhcpd.service
-> > +
-> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > +
-> > +	ln -sf ../../../../lib/systemd/system/dhcpd.service \
-> > +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpd.service
-> > +
-> > +	echo "d /var/lib/dhcp 0755 - - - -" > \
-> > +		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
-> > +	echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
-> > +		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
->
-> I'm not sure to understand those two. Are they needed on the target?
->
-> They suspiciously look like our 'makedev' syntax. Does systemd recognise
-> this too?
+swig-host only installs a binary called swig and gets overridden by the
+version installed by the host distro. This symlink prevents that from
+happening
 
-Among the zillion of tools provided by systemd, there is 'systemd-tmpfiles'
-[1]. This program creates, deletes, and cleans up volatile and temporary
-files and directories based on configuration files stored in
-/usr/lib/tmpfiles.d and /etc/tmpfiles.d.
 
-It is true that these files follow a syntax similar to makedev [2]. But unlike
-'makedev' which sets the proper access rights for / entries at build time,
-'systemd-tmpfiles' creates the files at runtime if they are missing.
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 
-In the current default skeleton used by Buildroot, parts of /var are
-tmpfs-based and thus get cleaned at each reboot. 'systemd-tmpfiles' can
-recreate them.
+---
 
-For some reasons, when using systemd, dhcpd complains at start-up about
-/var/lib/dhcp/dhcpd.leases not being accessible. So the Makefile installs a
-file named /usr/lib/tmpfiles.d/dhcp.conf, which contains "instructions" for
-creating the missing file with the proper access rights.
+v1 => v2 :
+* fix definition of SWIG
+* add missing SOB
+* rename SWIG_INSTALL_SYMLINK to HOST_SWIG_INSTALL_SYMLINK
 
-I know that a package named 'foo' can add system users via FOO_USERS, thanks
-to 'mkusers'. Can the same be done with 'makedev'? This would allow a package
-to create files with the proper owner and access rights without having to
-provide additional files.
+After discussing with smartin on IRC, adding a symlink seems like
+the best approch
+* adding a -DSWIG_EXECUTABLE needs to be done in all dependent packages
+* changing to swig2.0 breaks compilation (at least xbmc)
+* patching FindSwig.mk is a BR specific patch that probably can't be
+  upstreamed
+---
+ package/swig/swig.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Side note: since version 215, systemd provides systemd-sysusers, which creates
-system users and groups in /etc/passwd and /etc/group based on the
-configuration files in /usr/lib/sysusers.d/. It is said to be useful for
-systems where /etc can be "reset" to a default version. I still haven't found
-a useful use case for it in an embedded system, though.
-
-[1] http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
-[2] http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
-
-Best regards,
-ELB
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index e9ef521..07f0548 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-SWIG_VERSION = 2.0.12
++SWIG_MAJOR = 2.0
++SWIG_VERSION = $(SWIG_MAJOR).12
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ SWIG_DEPENDENCIES = host-bison
+ HOST_SWIG_CONF_OPT = \
+@@ -14,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
+ SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
+ SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+ 
++define HOST_SWIG_INSTALL_SYMLINK
++	ln -fs $(HOST_DIR)/usr/bin/swig $(HOST_DIR)/usr/bin/swig$(SWIG_MAJOR)
++endef
++
++HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_SYMLINK
++
+ $(eval $(host-autotools-package))
+-- 
+2.1.0
