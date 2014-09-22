@@ -1,86 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 22 Sep 2014 16:12:46 +0200
-Subject: [Buildroot] [PATCH v2] swig: add symlink to /usr/bin/swig2.0
-In-Reply-To: <20140922142339.5d50bdfa@free-electrons.com>
-References: <1411385468-24878-1-git-send-email-jeremy.rosen@openwide.fr>
- <1411385468-24878-2-git-send-email-jeremy.rosen@openwide.fr>
- <20140922142339.5d50bdfa@free-electrons.com>
-Message-ID: <CAHXCMMJh9rGvC5udxbTxBe2s1LQpCtnoAZLnGRiTF31gYRuKUg@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 22 Sep 2014 16:41:33 +0200
+Subject: [Buildroot] [PATCH v4 0/4] Improvements to i.MX6 SABRESD boards
+ support
+In-Reply-To: <542020B1.60500@lucaceresoli.net>
+References: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
+ <20140921212519.296ade2a@free-electrons.com>
+ <542020B1.60500@lucaceresoli.net>
+Message-ID: <5420351D.9050802@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi,
 
-On Mon, Sep 22, 2014 at 2:23 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+Luca Ceresoli wrote:
+> Dear Thomas,
 >
-> On Mon, 22 Sep 2014 13:31:08 +0200, J?r?my Rosen wrote:
+> thanks for your suggestions.
 >
->> diff --git a/package/swig/swig.mk b/package/swig/swig.mk
->> index e9ef521..07f0548 100644
->> --- a/package/swig/swig.mk
->> +++ b/package/swig/swig.mk
->> @@ -4,7 +4,8 @@
->>  #
->>  ################################################################################
+> Thomas Petazzoni wrote:
+>> Dear Luca Ceresoli,
 >>
->> -SWIG_VERSION = 2.0.12
->> +SWIG_MAJOR = 2.0
->> +SWIG_VERSION = $(SWIG_MAJOR).12
->>  SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
->>  SWIG_DEPENDENCIES = host-bison
->>  HOST_SWIG_CONF_OPT = \
->> @@ -14,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
->>  SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
->>  SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+>> On Fri, 19 Sep 2014 16:12:48 +0200, Luca Ceresoli wrote:
 >>
->> +define HOST_SWIG_INSTALL_SYMLINK
->> +     ln -fs $(HOST_DIR)/usr/bin/swig $(HOST_DIR)/usr/bin/swig$(SWIG_MAJOR)
->> +endef
->> +
->> +HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_SYMLINK
+>>> Luca Ceresoli (3):
+>>>    configs/freescale_imx6qsabresd: rename imx6 to imx6q
+>>>    configs/freescale_imx6dlsabresd: add defconfig for iMX6DL SabreSD
+>>>    freescale/imx6-sabresd: document how to create a bootable SD
+>>>
+>>> Vincent Stehl? (1):
+>>>    imx6sabresd: boot to /init in mfgtools mode
+>>
+>> I've applied your four patches. However, I'd like to see additional
+>> patches to make the following improvements:
+>>
+>>   * For the defconfigs, select a specific version of the kernel headers.
+>>     Currently, your defconfigs are building a 3.10 kernel, but the
+>>     kernel headers used in the toolchain are the latest ones (i.e 3.16
+>>     currently), which is not good. This was already wrong in the
+>>     existing defconfig, so I applied your patches nonetheless. But it
+>>     should be fixed.
 >
-> Samuel, can you tell us if we can explicitly tell to CMake the path to
-> Swig, knowing that it is detected by CMake using find_program() ?
->
+> I'm working on this. I switched from Freescale's git repo to vanilla
+> Linux, since the Freescale releases do not provide any later version.
 
-Swig package can add a program suffix to the swig program; that's what
-debian does. So, a "swig2.0" program is installed on debian, whereas
-it is just "swig" in Buildroot with no suffix).
-When looking for swig program, CMake (via
-<prefix>/share/cmake-<version>/Modules/FindSWIG.cmake) first looks for
-something named "swig2.0" then "swig".
-We can extend the location list where CMake will search with
-CMAKE_PROGRAM_PATH, but CMake does not search in these location in
-priority, it just scans all directories with the name given first,
-then all with the second and so on.
-So, if the host system has a swig2.0 program, it will always be found
-instead of the swig one from the Buildroot host dir.
+...or maybe I'll do the other way around: use the kernel headers from
+Freescale's custom git repo, since the defconfig we currently use
+(imx_v7_defconfig) is not available in mainline, and the closest one
+in mainline (imx_v6_v7_defconfig) has several differences, and I'd like
+to keep things simple and working.
 
-It is still possible to force the SWIG_EXECUTABLE variable through the
-_CONF_OPTS, but doing this will require patching all cmake-package
-using swig.
-
-We could also adopt the same suffix as debian does, but it may not
-play very well with autotools-package or handwritten
-buils-system/makefiles.
-
-We could also patch the FindSWIG.cmake file to reverse the order of
-the swig program name list; but this implies carrying a patch for
-CMake.
-
-So, IMHO, the safest way of handling this is having both swig2.0 and
-swig programs in the Buildroot host dir. This can easily be done at
-the Buildroot level using a symlink, like this patch does.
-
-
-Hope it's clear enough.
-
-Regards,
+I wonder if there's a good reason to use a mainline kernel instead.
 
 -- 
-Samuel
+Luca
