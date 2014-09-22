@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Sep 2014 19:03:04 +0200
-Subject: [Buildroot] [git commit] qemu-mips64el: update kernel to latest
-Message-ID: <20140922170314.B62E29D74E@busybox.osuosl.org>
+Date: Mon, 22 Sep 2014 19:02:44 +0200
+Subject: [Buildroot] [git commit] qemu-mipsel: update to latest kernel
+Message-ID: <20140922170314.A46979D74E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65e92df4def6e3c51e62f825232406dbba83615f
+commit: http://git.buildroot.net/buildroot/commit/?id=0714d8c74c9b04155f838610938546920e49c244
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update Linux Kernel to 3.16.3.
+Update to Linux Kernel 3.16.3.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  .../{linux-3.15.config => linux-3.16.config}       |    0
- board/qemu/mips64el-malta/readme.txt               |    2 +-
- configs/qemu_mips64el_malta_defconfig              |   10 +++++-----
+ board/qemu/mipsel-malta/readme.txt                 |    2 +-
+ configs/qemu_mipsel_malta_defconfig                |   10 +++++-----
  3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/qemu/mips64el-malta/linux-3.15.config b/board/qemu/mips64el-malta/linux-3.16.config
+diff --git a/board/qemu/mipsel-malta/linux-3.15.config b/board/qemu/mipsel-malta/linux-3.16.config
 similarity index 100%
-rename from board/qemu/mips64el-malta/linux-3.15.config
-rename to board/qemu/mips64el-malta/linux-3.16.config
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-index 3c75bed..83faad8 100644
---- a/board/qemu/mips64el-malta/readme.txt
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
+rename from board/qemu/mipsel-malta/linux-3.15.config
+rename to board/qemu/mipsel-malta/linux-3.16.config
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
+index fce8780..fe7b6a9 100644
+--- a/board/qemu/mipsel-malta/readme.txt
++++ b/board/qemu/mipsel-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
  
 -Tested with QEMU 2.0.0
 +Tested with QEMU 2.1.0
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 6b7a885..6bf2fa4 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index 0330dbc..1818992 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -57,8 +57,8 @@ index 6b7a885..6bf2fa4 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.15.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.16.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.15.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.16.config"
  BR2_LINUX_KERNEL_VMLINUX=y
  
  # Serial port config
