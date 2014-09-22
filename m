@@ -1,61 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Sep 2014 18:46:37 +0200
-Subject: [Buildroot] Buidroot zic command
-In-Reply-To: <CAHXCMML5tqfMj2UM4bFBNaX2j4RxyYFdC6qawVbAPbX7Yx5HYA@mail.gmail.com>
-References: <CAK6UBYnckKz+jEULybXADyGk-C+xL6-mEFNEOXqsvfYfz+YcyQ@mail.gmail.com>
- <CAHXCMML5tqfMj2UM4bFBNaX2j4RxyYFdC6qawVbAPbX7Yx5HYA@mail.gmail.com>
-Message-ID: <20140922164637.GA4358@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Sep 2014 13:54:12 -0300
+Subject: [Buildroot] [PATCH] ethtool: bump to version 3.16
+Message-ID: <1411404852-11961-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Idoia, All,
+Also add hash file.
 
-On 2014-09-22 13:34 +0200, Samuel Martin spake thusly:
-> Please put Buildroot mailling in cc, since some people may wonder the
-> same thing, and others will be able to help.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ethtool/ethtool.hash | 2 ++
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/ethtool/ethtool.hash
 
-Indeed.
-
-You sent Samuel a private mail. You sent me a private mail. Who else di
-you send a private mail, too? This is considered bad practice. You're
-lucky you even get a response at all.
-
-> On Mon, Sep 22, 2014 at 12:25 PM, Idoia Mazkiaran Zelaia
-> <idoia.mazkiaran@gmail.com> wrote:
-> > Hello Samuel,
-> > I would like to know how can we have the zic command in Buildroot rootfs
-> > when the toolchain is external and for instance it is not a libc compiler.
-> >
-> > Because we have already choosen in Buildroot 2014.08 Install time zone info,
-> > but here comes only the zone information in /usr/share/zoneinfo but not the
-> > zic command to create our own zone in execution time.
-> >
-> 
-> The zic program is a host program that is installed in
-> <output>/host/usr/bin/zic.
-> It belongs to the zip package (that is part of the Buildroot 2014.08
-
-s/zip/zic/
-
-> release) which is automatically selected when you select tzdata or
-> tzdump.
-> 
-> There is currently no rule to build and install the zic package for the target.
-
-That's because zic is needed at build time, not at runtime. The prupose
-of zic is to assemble the timezone info, which is what is needed on the
-target.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+new file mode 100644
+index 0000000..cd53325
+--- /dev/null
++++ b/package/ethtool/ethtool.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
++sha256	d6e0dd3fa904c3ad87487c66a4a8fde1ebc4194979ca5755df4b2efb247ca286	ethtool-3.16.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 3d8d3cd..45c4735 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 3.15
++ETHTOOL_VERSION = 3.16
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.5
