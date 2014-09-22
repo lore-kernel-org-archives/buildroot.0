@@ -1,92 +1,47 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 22 Sep 2014 09:38:29 +0200 (CEST)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Sep 2014 10:00:24 +0200
 Subject: [Buildroot] [PATCH] swig: add symlink to /usr/bin/swig2.0
-In-Reply-To: <20140921200737.740f2bc0@free-electrons.com>
-Message-ID: <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
+In-Reply-To: <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
+References: <20140921200737.740f2bc0@free-electrons.com>
+ <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
+Message-ID: <20140922100024.5fed686e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
------ Mail original -----
-> Dear J?r?my Rosen,
+On Mon, 22 Sep 2014 09:38:29 +0200 (CEST), Jeremy Rosen wrote:
+
+> The line in FindSwig.mk (part of the cmake package, not swig package)
 > 
-> On Fri, 19 Sep 2014 09:13:51 +0200, J?r?my Rosen wrote:
-> > the cmake detection script provided with cmake will first look for
-> > a
-> > binary called swig2.0 then for a binary called swig
-> > 
-> > swig-host only installs a binary called swig and gets overridden by
-> > the
-> > version installed by the host distro. This symlink prevents that
-> > from
-> > happening
+> find_program(SWIG_EXECUTABLE NAMES swig2.0 swig)
 > 
-> I don't understand the explanation: if it looks for a binary called
-> swig, then where's the need to create a swig2.0 symbolic link? How a
-> binary in $(HOST_DIR)/usr/bin can get overridden by the version
-> installed by the host distro?
 > 
-
-The line in FindSwig.mk (part of the cmake package, not swig package)
-
-find_program(SWIG_EXECUTABLE NAMES swig2.0 swig)
-
-
-This will look in PATH for
-
-* an executable called "swig2.0"
-* if it is not found, an executable called "swig"
-
-so if there is a "swig2.0" in /usr/bin it will be used instead of the
-one called "swig" in $(HOST_DIR)/usr/bin even if the PATH order says
-otherwise.
-
-currently, host-swig only installs $(HOST_DIR)/usr/bin/swig and the
-debian package on my host only installs /usr/bin/swig2.0 thus the 
-problem.
-
-
-(Note that the separate bump of cmake changes the cmake line above to 
-dealwith swig3.0 that has been updated since, but using 
-$(MAJOR_VERSION) deals with it properly)
-
-
-> The SoB line is missing.
-
-
-OK
-
+> This will look in PATH for
 > 
-> > diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-> > index 5efc81c..233e97d 100644
-> > --- a/package/swig/swig.mk
-> > +++ b/package/swig/swig.mk
-> > @@ -15,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
-> >  SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
-> >  SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
-> >  
-> > +define SWIG_INSTALL_SYMLINK
+> * an executable called "swig2.0"
+> * if it is not found, an executable called "swig"
 > 
-> Should be HOST_SWITCH_INSTALL_SYMLINK.
+> so if there is a "swig2.0" in /usr/bin it will be used instead of the
+> one called "swig" in $(HOST_DIR)/usr/bin even if the PATH order says
+> otherwise.
 > 
+> currently, host-swig only installs $(HOST_DIR)/usr/bin/swig and the
+> debian package on my host only installs /usr/bin/swig2.0 thus the 
+> problem.
 
-OK
+Are you sure we cannot tell CMake explicitly where our swig binary is?
+Like -DSWIG_EXECUTABLE=/path/to/swig.
 
-> I've marked your patch as "Changes requested" in patchwork.
-> 
+Cc'ing Samuel, who should be able to give some hints about this.
 
-Ok, thx, I'll fix all that, rebase and resubmit
+Thanks,
 
-Thx for the review
-
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
