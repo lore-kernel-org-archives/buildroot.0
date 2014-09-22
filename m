@@ -1,47 +1,147 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Sep 2014 10:00:24 +0200
-Subject: [Buildroot] [PATCH] swig: add symlink to /usr/bin/swig2.0
-In-Reply-To: <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
-References: <20140921200737.740f2bc0@free-electrons.com>
- <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
-Message-ID: <20140922100024.5fed686e@free-electrons.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Mon, 22 Sep 2014 09:49:20 +0200
+Subject: [Buildroot] [PATCH v2] libiio: new package
+In-Reply-To: <20140921214118.69e7d5f1@free-electrons.com>
+References: <1411033467-7919-1-git-send-email-paul.cercueil@analog.com>
+ <20140921214118.69e7d5f1@free-electrons.com>
+Message-ID: <541FD480.30905@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 22 Sep 2014 09:38:29 +0200 (CEST), Jeremy Rosen wrote:
+Allright, thank you for your comments. I'll come with something better.
 
-> The line in FindSwig.mk (part of the cmake package, not swig package)
-> 
-> find_program(SWIG_EXECUTABLE NAMES swig2.0 swig)
-> 
-> 
-> This will look in PATH for
-> 
-> * an executable called "swig2.0"
-> * if it is not found, an executable called "swig"
-> 
-> so if there is a "swig2.0" in /usr/bin it will be used instead of the
-> one called "swig" in $(HOST_DIR)/usr/bin even if the PATH order says
-> otherwise.
-> 
-> currently, host-swig only installs $(HOST_DIR)/usr/bin/swig and the
-> debian package on my host only installs /usr/bin/swig2.0 thus the 
-> problem.
+Regards,
+Paul
 
-Are you sure we cannot tell CMake explicitly where our swig binary is?
-Like -DSWIG_EXECUTABLE=/path/to/swig.
+On 21/09/2014 21:41, Thomas Petazzoni wrote:
+> Dear Paul Cercueil,
+>
+> On Thu, 18 Sep 2014 11:44:27 +0200, Paul Cercueil wrote:
+>> Libiio is a library to ease the development of software interfacing
+>> Linux Industrial I/O (IIO) devices.
+>>
+>> http://wiki.analog.com/resources/tools-software/linux-software/libiio
+>>
+>> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+>> ---
+>>   package/Config.in        |  1 +
+>>   package/libiio/Config.in | 42 ++++++++++++++++++++++++++
+>>   package/libiio/libiio.mk | 76 ++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 119 insertions(+)
+>>   create mode 100644 package/libiio/Config.in
+>>   create mode 100644 package/libiio/libiio.mk
+>
+> Thanks. However, I tested your package, and it fails to build:
+>
+> make[1]: entrant dans le r?pertoire ? /home/thomas/projets/buildroot/output/build/libiio-2014_R1/iiod ?
+> install --strip-program=/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-strip -D -s -m 0755 \
+> 		iiod /home/thomas/projets/buildroot/output/target/usr/sbin/iiod
+> install -m 0755 iiod.sh /home/thomas/projets/buildroot/output/target/etc/init.d/iiod.sh
+> update-rc.d iiod.sh defaults 99 01
+> update-rc.d: /etc/init.d/iiod.sh: file does not exist
+> make[1]: *** [install] Erreur 1
+>
+> First, the Makefile should not be calling update-rc.d, and also the
+> init script in /etc/init.d/ should not be named iiod.sh in Buildroot,
+> but directly S<number><name>.
+>
+> Also, is the install command with stripping is not good for Buildroot:
+> we want to control whether stripping happens or not.
+>
+>
+>> +# Avahi support in libiio requires avahi-client,
+>> +# which needs avahi-daemon and dbus
+>> +ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
+>> +	LIBIIO_DEPENDENCIES += avahi
+>> +else
+>> +	LIBIIO_MAKE_OPTS += WITH_AVAHI=no
+>> +endif
+>> +
+>> +ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
+>> +	LIBIIO_MAKE_OPTS += WITH_LOCAL_BACKEND=no
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
+>> +	LIBIIO_DEPENDENCIES += libxml2
+>> +else
+>> +	LIBIIO_MAKE_OPTS += WITH_NETWORK_BACKEND=no
+>> +endif
+>> +
+>> +# Libiio can run without threads
+>> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>> +	LIBIIO_MAKE_OPTS += WITH_PTHREAD=no
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
+>> +define LIBIIO_BUILD_IIOD
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod $(LIBIIO_MAKE_OPTS)
+>> +endef
+>> +define LIBIIO_INSTALL_IIOD
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/iiod install \
+>> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+>> +endef
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
+>> +define LIBIIO_BUILD_TESTS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests $(LIBIIO_MAKE_OPTS)
+>> +endef
+>> +define LIBIIO_INSTALL_TESTS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tests install \
+>> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+>> +endef
+>> +endif
+>
+> Now that I think of it, you could also do:
+>
+> ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
+> LIBIIO_MAKE_DIRS += iiod
+> endif
+>
+> ifeq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
+> LIBIIO_MAKE_DIRS += tests
+> endif
+>
+>> +define LIBIIO_BUILD_CMDS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libiio $(LIBIIO_MAKE_OPTS)
+>> +	$(LIBIIO_BUILD_IIOD)
+>> +	$(LIBIIO_BUILD_TESTS)
+>
+> Replace those last two lines with:
+>
+> 	for d in $(LIBIIO_MAKE_DIRS); do \
+> 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$$d $(LIBIIO_MAKE_OPTS) || break ; \
+> 	done
+>
+>> +define LIBIIO_INSTALL_STAGING_CMDS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-sysroot \
+>> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
+>> +endef
+>> +
+>> +define LIBIIO_INSTALL_TARGET_CMDS
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-lib \
+>> +		$(LIBIIO_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
+>> +	$(LIBIIO_INSTALL_IIOD)
+>> +	$(LIBIIO_INSTALL_TESTS)
+>
+> And ditto here.
+>
+> Note that the Makefile of libiio could make this a little bit nicer by
+> having a build and installation scheme that is easy to work with
+> several make targets.
+>
+> Thanks!
+>
+> Thomas
+>
 
-Cc'ing Samuel, who should be able to give some hints about this.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+Analog Devices GmbH      Wilhelm-Wagenfeld-Str. 6      80807 Muenchen
+Sitz der Gesellschaft: Muenchen; Registergericht: Muenchen HRB 40368;
+Geschaeftsfuehrer:Dr.Carsten Suckrow, William A. Martin, Margaret Seif
