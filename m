@@ -1,22 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Sep 2014 23:15:10 +0200
-Subject: [Buildroot] [PATCH] ethtool: bump to version 3.16
-In-Reply-To: <1411404852-11961-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 22 Sep 2014 13:54:12 -0300")
-References: <1411404852-11961-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mw9r2w81.fsf@dell.be.48ers.dk>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Mon, 22 Sep 2014 14:23:51 -0700
+Subject: [Buildroot] strange error
+Message-ID: <CALo-6+iBsDLxAZib5pxREprPWP-Nr02kNf-pug3=nE=KFMVP7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Gentlemen:
 
- > Also add hash file.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+One of my developers is reporting a strange error when building our
+buildroot rootfs and thinks it is related to Ubuntu changes.
 
-Committed, thanks.
+Has anyone seen this error and can perhaps tell me what is going on??
+
+stdio.h:456:1: error: 'gets' undeclared here (not in a function)
 
 -- 
-Bye, Peter Korsgaard
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140922/49fa06de/attachment.html>
