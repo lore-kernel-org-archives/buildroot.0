@@ -1,21 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 22 Sep 2014 21:26:51 +0200
-Subject: [Buildroot] [PATCH 11/23 v5] docs/manual: allow a document to
- declare where its ressources are
-In-Reply-To: <1f71d24171ef5068ba5ca9c8e8edfe3f10ddc726.1410692670.git.yann.morin.1998@free.fr>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <1f71d24171ef5068ba5ca9c8e8edfe3f10ddc726.1410692670.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVKTm=G0Cs7VsS5=yFGR2DDJYYY2w22re1b_uNus4Y+Hg@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 22 Sep 2014 21:34:22 +0200
+Subject: [Buildroot] [PATCH v2 0/1] ghostscript-fonts: new package
+Message-ID: <1411414463-8230-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Avoids hard-coding document's ressources in GENDOC_INNER, so we can
-> generate another document with different ressources (if any).
+Add ghostscript-fonts still to 'X libraries and helper libraries' where
+DejaVu and Liberation fonts are located.
 
-General comment to be fixed throughout this patch and other patches.
+Suggested new locations are ([1]):
 
-Other than that, this patch looks fine.
+a) add new 'Target packages -> Fonts' menu entry
+b) add new 'Target packages -> Libraries -> Fonts' menu entry
+c) add new 'Target packages -> Graphic libraries/Fonts' submenu entry
+
+Any preferences (or better suggestions...)?
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2014-July/101359.html
+
+Peter Seiderer (1):
+  ghostscript-fonts: new package
+
+ package/Config.in                              |  1 +
+ package/ghostscript-fonts/Config.in            |  8 ++++++++
+ package/ghostscript-fonts/ghostscript-fonts.mk | 21 +++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/ghostscript-fonts/Config.in
+ create mode 100644 package/ghostscript-fonts/ghostscript-fonts.mk
+
+-- 
+1.8.1.4
