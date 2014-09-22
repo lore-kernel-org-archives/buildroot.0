@@ -1,52 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 22 Sep 2014 13:39:03 +0200
-Subject: [Buildroot] Buidroot zic command
-In-Reply-To: <CAHXCMML5tqfMj2UM4bFBNaX2j4RxyYFdC6qawVbAPbX7Yx5HYA@mail.gmail.com>
-References: <CAK6UBYnckKz+jEULybXADyGk-C+xL6-mEFNEOXqsvfYfz+YcyQ@mail.gmail.com>
- <CAHXCMML5tqfMj2UM4bFBNaX2j4RxyYFdC6qawVbAPbX7Yx5HYA@mail.gmail.com>
-Message-ID: <CAHXCMMLMOEGdEnuDr6BBdW2gCT5DbCwius34KT7TCRUW-B3t1A@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 22 Sep 2014 13:42:18 +0200
+Subject: [Buildroot] [PATCH] perl: fix build of native modules
+In-Reply-To: <20140921212914.0217edab@free-electrons.com>
+References: <1410979865-26207-1-git-send-email-francois.perrad@gadz.org>
+ <20140921212914.0217edab@free-electrons.com>
+Message-ID: <CAB0FRst09x641A6wOFCfAsXnjQ-XgeqAH2YzHpWnYVVOuk5HpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ooops! forgot the manual link.
-
-On Mon, Sep 22, 2014 at 1:34 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi,
+2014-09-21 21:29 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
 >
-> Please put Buildroot mailling in cc, since some people may wonder the
-> same thing, and others will be able to help.
->
-> On Mon, Sep 22, 2014 at 12:25 PM, Idoia Mazkiaran Zelaia
-> <idoia.mazkiaran@gmail.com> wrote:
->> Hello Samuel,
->> I would like to know how can we have the zic command in Buildroot rootfs
->> when the toolchain is external and for instance it is not a libc compiler.
+> On Wed, 17 Sep 2014 20:51:05 +0200, Francois Perrad wrote:
+>> CORE/vutil.h is required when the host perl version is 5.20
+>> see http://autobuild.buildroot.net/results/c3d/c3d48c3b3d6c1e616d8e20a2f65d8ba33abe61da/
 >>
->> Because we have already choosen in Buildroot 2014.08 Install time zone info,
->> but here comes only the zone information in /usr/share/zoneinfo but not the
->> zic command to create our own zone in execution time.
->>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/perl/perl.mk | 1 +
+>>  1 file changed, 1 insertion(+)
 >
-> The zic program is a host program that is installed in
-> <output>/host/usr/bin/zic.
-> It belongs to the zip package (that is part of the Buildroot 2014.08
-> release) which is automatically selected when you select tzdata or
-> tzdump.
->
-> There is currently no rule to build and install the zic package for the target.
->
-> If you need it in the target rootfs, you can add the commands to build
-> and install the the package for the target.
-> If you do so, don't forget to post your patch to the mailling-list
-> [1], so the whole Buildroot community will benefit from your changes.
-> ;-)
+> Applied, thanks.
 >
 
-[1] http://buildroot.net/downloads/manual/manual.html#submitting-patches
+Dear Thomas,
 
+could you apply this patch http://patchwork.ozlabs.org/patch/380463/ too.
 
--- 
-Samuel
+Fran?ois
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
