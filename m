@@ -1,53 +1,87 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Sep 2014 17:38:00 -0300
-Subject: [Buildroot] RFC: CVE analysis
-In-Reply-To: <CANQCQpbSu1OUHvivMbQFGC3x6GPSWA3imp2GqGMjeqmYZKBstw@mail.gmail.com>
-References: <CANQCQpbSu1OUHvivMbQFGC3x6GPSWA3imp2GqGMjeqmYZKBstw@mail.gmail.com>
-Message-ID: <542088A8.2080902@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 22 Sep 2014 22:42:02 +0200
+Subject: [Buildroot] [PATCH 18/23 v5] docs: separate the GENDOC infra
+	from our manual definition
+In-Reply-To: <308773fe2883c6a3a4e13be8fdabcf3f2ba6c42a.1410692670.git.yann.morin.1998@free.fr>
+References: <cover.1410692670.git.yann.morin.1998@free.fr>
+ <308773fe2883c6a3a4e13be8fdabcf3f2ba6c42a.1410692670.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKPMg-S1pYckGZ0re-b+S6yVW24V0kU1orCpmuZkUVw9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/22/2014 05:21 PM, Matthew Weber wrote:
+Yann,
 
-> I was curious if anyone has done a script similar to the "make
-> legal-info" that takes a package list and checks it against a CVE
-> database?  We're looking at doing some automated tracking of
-> vulnerabilities with our nightly builds and were at a point of putting
-> something together.
-> 
-> It might also be an interesting feature to expose on the Buildroot
-> website.... maybe listing the current vulnerabilities of the last
-> release and the current tip?
+On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Move the GENDOC infra to its own file, so it is even less tied to our
+> manual document, so that it is more obvious that GENDOC is an infra like
+> our packages infras, and 'manual' is a document like we have packages.
+>
+> Ideally, this new file should better go in docs/ rather than in package/ .
+> However, docs/ is already full of our website stuff, so adding it in
+> there would just serve to clutter the website.
+>
+> So, let's just put alongside the other infrastructures, in package/ .
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  Makefile              |   1 +
+>  docs/manual/manual.mk | 148 --------------------------------------------------
+>  package/gendoc.mk     | 147 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 148 insertions(+), 148 deletions(-)
+>  create mode 100644 package/gendoc.mk
+>
+[...]
+> diff --git a/package/gendoc.mk b/package/gendoc.mk
+> new file mode 100644
+> index 0000000..b859860
+> --- /dev/null
+> +++ b/package/gendoc.mk
+> @@ -0,0 +1,147 @@
+> +# we can't use suitable-host-package here because that's not available in
+> +# the context of 'make release'
+> +gendoc-check-dependencies:
+> +       $(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
+> +               echo "You need a sufficiently recent asciidoc on your host" \
+> +                       "to generate the manual"; \
+> +               exit 1; \
+> +       fi
+> +       $(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
+> +               echo "You need w3m on your host to generate the manual"; \
+> +               exit 1; \
+> +       fi
+> +
+> +gendoc-check-dependencies-pdf:
+> +       $(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
+> +               echo "You need dblatex on your host to generate the pdf manual"; \
+> +               exit 1; \
+> +       fi
+> +
+> +# PDF manual generation is broken because of a bug in xsltproc program provided
+> +# by libxslt <=1.1.28, which does not honor an option we need to set.
+> +# Fortunately, this bug is already fixed upstream:
+> +#   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+> +#
+> +# So, bail out when trying to build the pdf manual using a buggy version of the
+> +# xsltproc program.
+> +#
+> +# So, to overcome this issue and being able to build the pdf manual, you can
+> +# build xsltproc from it source repository, then run:
+> +#   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
+> +MANUAL_XSLTPROC_IS_BROKEN = \
 
-Hi.
-I usually track CVEs and bump/fix when appropiate.
-It's mostly a mix of personal scripts, nothing too fancy that i'd like
-normal people to see in the current state :)
-The problem with actively pursuing security fixes is that it needs some
-regular manpower in patching and testing, and that's without considering
-backports (though the package infra is quite stable lately).
-There are outstanding packages that have some severe vulnerabilities
-like cups where i did a call for volunteers to bump/fix without much
-success, and i can only do so much in my free time, with cups being
-somewhat complicated to test because of varying combinations.
-It's not a task that can really be fully automated either because you
-can get a CVE for say PHP that fixes a vulnerability that only affects
-windows operating systems - there must be some context analysis as well.
-I normally try to maintain some format for my security bumps/fixes but
-that's completely informal, like:
+Maybe  this variable could be renamed as well.
+It is more related to asciidoc/a2x than specific tou Buildroot's manual.
 
-Subject: Security bump PACKAGE to version x.y
-Fixes:
-CVE-yyyy-nnnn - short description
+> +       $(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
+> +
+[...]
 
-But then some other people might catch the bump before myself and there
-goes that.
+Regards,
 
-Something nicer would probably be like the .hash files for packages
-where we could describe the bumps that affect security and the relevant
-CVEs.
-
-Regards.
+-- 
+Samuel
