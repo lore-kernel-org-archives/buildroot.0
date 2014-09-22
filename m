@@ -1,90 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Sep 2014 08:30:13 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-09-21
-Message-ID: <20140922063014.B7E4E10156F@stock.ovh.net>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 22 Sep 2014 09:38:29 +0200 (CEST)
+Subject: [Buildroot] [PATCH] swig: add symlink to /usr/bin/swig2.0
+In-Reply-To: <20140921200737.740f2bc0@free-electrons.com>
+Message-ID: <1125534742.25538251.1411371509741.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-09-21
-===============================
 
-        success : 195
-       failures : 31 
-       timeouts : 5  
-          TOTAL : 231
+----- Mail original -----
+> Dear J?r?my Rosen,
+> 
+> On Fri, 19 Sep 2014 09:13:51 +0200, J?r?my Rosen wrote:
+> > the cmake detection script provided with cmake will first look for
+> > a
+> > binary called swig2.0 then for a binary called swig
+> > 
+> > swig-host only installs a binary called swig and gets overridden by
+> > the
+> > version installed by the host distro. This symlink prevents that
+> > from
+> > happening
+> 
+> I don't understand the explanation: if it looks for a binary called
+> swig, then where's the need to create a swig2.0 symbolic link? How a
+> binary in $(HOST_DIR)/usr/bin can get overridden by the version
+> installed by the host distro?
+> 
 
-Classification of failures by reason
-====================================
+The line in FindSwig.mk (part of the cmake package, not swig package)
 
-                 gnupg2-2.0.26 | 5 
-     openvmtools-9.4.6-1770165 | 3 
-                minidlna-1.1.4 | 2 
-    xserver_xorg-server-1.16.0 | 2 
-                    ola-0.8.33 | 2 
-                elfutils-0.155 | 2 
-               mpdecimal-2.4.0 | 2 
-             bluez5_utils-5.21 | 1 
-                 sudo-1.8.10p3 | 1 
-             lttng-tools-2.4.1 | 1 
-                  zeromq-4.0.4 | 1 
-                   geoip-1.6.0 | 1 
-                gptfdisk-0.8.6 | 1 
-                    ffmpeg-2.4 | 1 
-            wpa_supplicant-2.2 | 1 
-                busybox-1.22.1 | 1 
-           libmemcached-1.0.18 | 1 
-               qt5webkit-5.3.2 | 1 
-                libinput-0.3.0 | 1 
-znc-b396cafdb249544164ed029... | 1 
-                    ruby-2.1.2 | 1 
-                keyutils-1.5.5 | 1 
-                      gd-2.1.0 | 1 
-             subversion-1.7.18 | 1 
-                 webkit-1.11.5 | 1 
-
-Detail of failures
-===================
-
-      xtensa |              bluez5_utils-5.21 | NOK | http://autobuild.buildroot.net/results/b35682b856b5a51615edc901fec4e6efd5ca9f77/
-         arc |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/12adc08ec2d9234eb43862e159dba5fd844e4dc0/
-         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/6d5c1bcb70aee7d47bc126893e5fe10dcc5204f4/
-         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/7aaa4b82586f35142e9b90b6d893c5ddbc4fdd9b/
-         arm |                     ffmpeg-2.4 | NOK | http://autobuild.buildroot.net/results/cdad51f610c339d2ad4c7d09c282cfb4b10770a0/
-        bfin |                       gd-2.1.0 | NOK | http://autobuild.buildroot.net/results/0e2b28e8561c6f7623185c35eb24bea573b79d11/
-         arc |                    geoip-1.6.0 | TIM | http://autobuild.buildroot.net/results/f1cde8088e05e5758138ae3a696d9501a140f693/
-         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/366f43896113e1e025e2de85678b0ebc0e372efc/
-     powerpc |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/0db794d5688f36e232822d05ab757cfa929f529d/
-         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/0b86c6de3769f1002138b221a06a4adf322b7a4d/
-         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/da91045c88272eff12ef31aab9f2ff5c67ba1bdc/
-        i486 |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/e8a1d9b8d98c059d497bc493a9d2ae0ef5f9d0f5/
-     powerpc |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/ef783e3776f25c28ea0de0c082c93f7ab97db56d/
-      mipsel |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/ced596bd1c73286f7044f5a8e11b6588fc973f11/
-     aarch64 |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/8b60fdf4fdec834dc79f8dfc4fd050f763c83457/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/97b8aca5e9d41ebf73dfb9def0885bafe2f40525/
-         arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/12ae7bd284220b0ebb8029002c08af2cb5e9527f/
-         arm |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/452c77798718d55c2f182dee8debc756d4f6fd28/
-       nios2 |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/f4023faa2540bdd73739c112dccd43049247b70b/
-        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/11d8dbdf00f87baae2ac13156d2c2f0e48616894/
-        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/d222a752c103e479d9607e22a236f8652184aea8/
-      mipsel |                     ola-0.8.33 | NOK | http://autobuild.buildroot.net/results/466995f9534447a4f54327a14c44ef9e16dd1123/
-        i686 |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/4795487e30c6850ac96cb344b3c3b04484e65db1/
-        i686 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/4400abc17115d0f5eb65c4eb012f11766cbe5a56/
-      x86_64 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/47c0a2952e05063984deb5bfa1483551e7e33d47/
-      x86_64 |      openvmtools-9.4.6-1770165 | NOK | http://autobuild.buildroot.net/results/4473d8a99ffec1fde491d172520e86ae1e69fae7/
-         arm |                qt5webkit-5.3.2 | TIM | http://autobuild.buildroot.net/results/78999edfced4945b2b453248957ba2d58691d2fb/
-      mipsel |                     ruby-2.1.2 | NOK | http://autobuild.buildroot.net/results/d423c0208917ed2b5d7120581250278b372b5d39/
-    mips64el |              subversion-1.7.18 | TIM | http://autobuild.buildroot.net/results/7e7d0d25b1bee4c945ebcc82c0014e12d990ab4e/
-         arm |                  sudo-1.8.10p3 | NOK | http://autobuild.buildroot.net/results/2ae18bfff5744808fb31a7a548bbf37c71b18487/
-         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/f9293bdeaddafdd51827b9ad3376ba54e1f0fb08/
-        bfin |             wpa_supplicant-2.2 | NOK | http://autobuild.buildroot.net/results/9ffc5c4f88d76f9ccc8a630c7cfdf74946ef19bd/
-     powerpc |     xserver_xorg-server-1.16.0 | NOK | http://autobuild.buildroot.net/results/9d3023d8ab206fb99deea5b34b404cbf53dca801/
-microblazeel |     xserver_xorg-server-1.16.0 | NOK | http://autobuild.buildroot.net/results/a0707458e45eaf5ed50fd52793c698dd5354550e/
-        bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/8a817fcfd9d203237d6c93e11de9594edd2a8a09/
-         arm | znc-b396cafdb249544164ed029... | TIM | http://autobuild.buildroot.net/results/90a9d290bdad29a3ffd44921bfb9e923f4fd8a92/
+find_program(SWIG_EXECUTABLE NAMES swig2.0 swig)
 
 
--- 
-http://autobuild.buildroot.net
+This will look in PATH for
+
+* an executable called "swig2.0"
+* if it is not found, an executable called "swig"
+
+so if there is a "swig2.0" in /usr/bin it will be used instead of the
+one called "swig" in $(HOST_DIR)/usr/bin even if the PATH order says
+otherwise.
+
+currently, host-swig only installs $(HOST_DIR)/usr/bin/swig and the
+debian package on my host only installs /usr/bin/swig2.0 thus the 
+problem.
+
+
+(Note that the separate bump of cmake changes the cmake line above to 
+dealwith swig3.0 that has been updated since, but using 
+$(MAJOR_VERSION) deals with it properly)
+
+
+> The SoB line is missing.
+
+
+OK
+
+> 
+> > diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+> > index 5efc81c..233e97d 100644
+> > --- a/package/swig/swig.mk
+> > +++ b/package/swig/swig.mk
+> > @@ -15,4 +15,10 @@ HOST_SWIG_CONF_OPT = \
+> >  SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
+> >  SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+> >  
+> > +define SWIG_INSTALL_SYMLINK
+> 
+> Should be HOST_SWITCH_INSTALL_SYMLINK.
+> 
+
+OK
+
+> I've marked your patch as "Changes requested" in patchwork.
+> 
+
+Ok, thx, I'll fix all that, rebase and resubmit
+
+Thx for the review
+
+> Thanks!
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
