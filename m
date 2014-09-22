@@ -1,37 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Sep 2014 19:02:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Enable armv6 support
- for Cortex cores
-In-Reply-To: <1411399036-11888-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1411399036-11888-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140922190225.01c57ae0@free-electrons.com>
+Date: Mon, 22 Sep 2014 19:02:34 +0200
+Subject: [Buildroot] [git commit] qemu-mips: update to latest kernel
+Message-ID: <20140922170314.9720E9D74E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=5c156604cbd421ea25c2ca713662a2ccc1b69555
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Sep 2014 17:17:15 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/cda/cdad51f610c339d2ad4c7d09c282cfb4b10770a0/
-> http://autobuild.buildroot.net/results/cd5/cd53af973d9722481c3298f484b399c9a2c286cf/
-> http://autobuild.buildroot.net/results/a9a/a9a2c49d923fd891945a24c9d0d147b3eea9b037/
-> http://autobuild.buildroot.net/results/d2f/d2f51632aea5727df9404e611e8e379567f03b61/
-> http://autobuild.buildroot.net/results/a62/a622dd113dcb7b352bcfebe3b3c7ac6ed286d7c7/
-> http://autobuild.buildroot.net/results/2ea/2eace18d0d32b4cbb6120b06d2bbe79d2b9857a7/
-> http://autobuild.buildroot.net/results/caa/caad4172db90879db51b66625b98aa0805e39c73/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/ffmpeg.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Update to Lnux Kernel 3.16.3.
 
-Both patches applied, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../{linux-3.15.config => linux-3.16.config}       |    0
+ board/qemu/mips-malta/readme.txt                   |    2 +-
+ configs/qemu_mips_malta_defconfig                  |   10 +++++-----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/mips-malta/linux-3.15.config b/board/qemu/mips-malta/linux-3.16.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.15.config
+rename to board/qemu/mips-malta/linux-3.16.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index da20770..cd556f4 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 2.0.0
++Tested with QEMU 2.1.0
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index be647eb..a6d02a6 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.15 headers to avoid breaking with newer kernels
++# Lock to 3.16 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.15.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
++BR2_DEFAULT_KERNEL_VERSION="3.16.3"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.15.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.16.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
