@@ -1,129 +1,56 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 22 Sep 2014 15:00:01 +0200
-Subject: [Buildroot] [PATCH v4] Add support for Flattened Image Trees
-In-Reply-To: <CAGm1_kvyFd6N1pYKmorEkJ0N=z_KQP9hOKE+LRBqDeoPvyQu-w@mail.gmail.com>
-References: <1411071224-5386-1-git-send-email-yegorslists@googlemail.com>
- <20140921064630.GH29713@sapphire.tkos.co.il>
- <CAGm1_kuwFZNeUykifjxp5RMK-TkiBqo14MHaezurL=Q_8vZOrg@mail.gmail.com>
- <CAGm1_kvyFd6N1pYKmorEkJ0N=z_KQP9hOKE+LRBqDeoPvyQu-w@mail.gmail.com>
-Message-ID: <CAGm1_ksnob0232FUz==NQBiCaBob7VP2tpJuUm3kTE0LOnJw3A@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 22 Sep 2014 15:14:25 +0200
+Subject: [Buildroot] [PATCH v4 0/4] Improvements to i.MX6 SABRESD boards
+ support
+In-Reply-To: <20140921212519.296ade2a@free-electrons.com>
+References: <1411135972-14968-1-git-send-email-luca@lucaceresoli.net>
+ <20140921212519.296ade2a@free-electrons.com>
+Message-ID: <542020B1.60500@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 22, 2014 at 2:45 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> This patch provides an option to specify a FIT source
-> file (*.its), that will usually be stored in a board directory,
-> and the resulting blob file name (*.itb).
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
->         v4: add support for multiple *.its files, reduce code duplication
->         v3: fix syntax errors, remove itb name, add uboot-tools dependency
->         v2: moved configuration to fs infra instead of linux
->
->  fs/Config.in     |  1 +
->  fs/fit/Config.in | 31 +++++++++++++++++++++++++++++++
->  fs/fit/fit.mk    | 29 +++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 fs/fit/Config.in
->  create mode 100644 fs/fit/fit.mk
->
-> diff --git a/fs/Config.in b/fs/Config.in
-> index 5853113..8d882d0 100644
-> --- a/fs/Config.in
-> +++ b/fs/Config.in
-> @@ -4,6 +4,7 @@ source "fs/cloop/Config.in"
->  source "fs/cpio/Config.in"
->  source "fs/cramfs/Config.in"
->  source "fs/ext2/Config.in"
-> +source "fs/fit/Config.in"
->  source "fs/initramfs/Config.in"
->  source "fs/iso9660/Config.in"
->  source "fs/jffs2/Config.in"
-> diff --git a/fs/fit/Config.in b/fs/fit/Config.in
-> new file mode 100644
-> index 0000000..f05b2a7
-> --- /dev/null
-> +++ b/fs/fit/Config.in
-> @@ -0,0 +1,31 @@
-> +config BR2_TARGET_ROOTFS_FIT
-> +       bool "Flattened Image Tree support"
-> +       select BR2_PACKAGE_HOST_UBOOT_TOOLS
-> +       help
-> +         Compile a flattened image tree sources into a flattened
-> +         image tree blobs. Specify the *.its files to compile in
-> +         the options below.
-> +
-> +         Please note, that all files referenced in *.its files,
-> +         should be available in output/images folder.
-> +
-> +if BR2_TARGET_ROOTFS_FIT
-> +
-> +config BR2_FIT_PATH
-> +       string "Flattened Image Tree source file paths"
-> +       help
-> +         Paths to the image tree source files. You can
-> +         provide a list of *.its paths to copy and build,
-> +         separated by spaces.
-> +
-> +         Please note, that all *.its files must be named uniquely,
-> +         otherwise the files with the same name will be overwritten.
-> +
-> +config BR2_FIT_INSTALL_TARGET
-> +       bool "Install Flattened Image Tree blobs to /boot in target"
-> +       depends on !BR2_TARGET_ROOTFS_INITRAMFS
-> +       help
-> +         Select this option to have the FIT images installed to
-> +         /boot in the target root filesystem.
-> +
-> +endif
-> diff --git a/fs/fit/fit.mk b/fs/fit/fit.mk
-> new file mode 100644
-> index 0000000..68a9557
-> --- /dev/null
-> +++ b/fs/fit/fit.mk
-> @@ -0,0 +1,29 @@
-> +################################################################################
-> +#
-> +# Build the FIT image
-> +#
-> +################################################################################
-> +
-> +ROOTFS_FIT_DEPENDENCIES = host-uboot-tools
-> +
-> +FIT_SRCS = $(addprefix $(BINARIES_DIR)/,$(notdir $(call
-> qstrip,$(BR2_FIT_PATH))))
-> +FIT_BLOBS = $(addsuffix .itb, $(basename $(FIT_SRCS)))
-> +
-> +ifeq ($(BR2_FIT_INSTALL_TARGET),y)
-> +define FIT_INSTALL_ITB_TARGET
-> +       mkdir -p $(TARGET_DIR)/boot/ && \
-> +       cp $(FIT_BLOBS) $(TARGET_DIR)/boot/
-> +endef
-> +else
-> +define FIT_INSTALL_ITB_TARGET
-> +       true
-> +endef
-> +endif
-> +
-> +define ROOTFS_FIT_CMD
-> +       cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
-> +       $(foreach its,$(FIT_SRCS),$(HOST_DIR)/usr/bin/mkimage -f
-> $(its) $(basename $(its)).itb &&) \
-> +       $(FIT_INSTALL_ITB_TARGET)
-> +endef
-> +
-> +$(eval $(call ROOTFS_TARGET,fit))
-> --
-> 1.9.1
+Dear Thomas,
 
-I'm still working on the problem with sending e-mails with corporate
-account, so the patch was just copypasted into GMail web interface and
-is intended for reviewing only.
+thanks for your suggestions.
 
-Yegor
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Fri, 19 Sep 2014 16:12:48 +0200, Luca Ceresoli wrote:
+>
+>> Luca Ceresoli (3):
+>>    configs/freescale_imx6qsabresd: rename imx6 to imx6q
+>>    configs/freescale_imx6dlsabresd: add defconfig for iMX6DL SabreSD
+>>    freescale/imx6-sabresd: document how to create a bootable SD
+>>
+>> Vincent Stehl? (1):
+>>    imx6sabresd: boot to /init in mfgtools mode
+>
+> I've applied your four patches. However, I'd like to see additional
+> patches to make the following improvements:
+>
+>   * For the defconfigs, select a specific version of the kernel headers.
+>     Currently, your defconfigs are building a 3.10 kernel, but the
+>     kernel headers used in the toolchain are the latest ones (i.e 3.16
+>     currently), which is not good. This was already wrong in the
+>     existing defconfig, so I applied your patches nonetheless. But it
+>     should be fixed.
+
+I'm working on this. I switched from Freescale's git repo to vanilla
+Linux, since the Freescale releases do not provide any later version.
+
+However I'm going to test this before sending a patch, to make sure it
+works.
+
+>
+>   * For the last patch adding a U-Boot patch, I believe we would prefer
+>     to use the global patch dir mechanism now, rather than the U-Boot
+>     specific option for patches.
+
+Yeah, fixed that. Will send together with the kernel version patch.
+
+-- 
+Luca
