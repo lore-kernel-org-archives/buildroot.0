@@ -1,193 +1,394 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 22 Sep 2014 17:21:36 +0200
-Subject: [Buildroot] [PATCH 4/4] qemu-mips64el: update kernel to latest
-Message-ID: <20140922152135.GA13416@waldemar-brodkorb.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 22 Sep 2014 16:59:56 +0100
+Subject: [Buildroot] [PATCH] keyutils: Bump version to 1.5.9,
+	fix patches and static build
+Message-ID: <1411401596-26802-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update Linux Kernel to 3.16.3.
+- Bump version to 1.5.9
+- Remove patches already included in this version
+- Use make parameters instead of environment variables
+- Add an upstream patch to fix building statically
+- Adapt old patches to the new version
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+  http://autobuild.buildroot.net/results/ced/ced596bd1c73286f7044f5a8e11b6588fc973f11/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- board/qemu/mips64el-malta/linux-3.15.config |   60 ---------------------------
- board/qemu/mips64el-malta/linux-3.16.config |   60 +++++++++++++++++++++++++++
- board/qemu/mips64el-malta/readme.txt        |    2 +-
- configs/qemu_mips64el_malta_defconfig       |   10 ++---
- 4 files changed, 66 insertions(+), 66 deletions(-)
- delete mode 100644 board/qemu/mips64el-malta/linux-3.15.config
- create mode 100644 board/qemu/mips64el-malta/linux-3.16.config
+ ...ng-of-the-shared-library-to-be-suppressed.patch |  104 ++++++++++++++++++++
+ .../keyutils-01-memleak-from-realloc.patch         |   51 ----------
+ package/keyutils/keyutils-02-another-memleak.patch |   32 ------
+ ...le.patch => keyutils-02-fix-install-rule.patch} |   13 ++-
+ .../keyutils-04-Makefile-for-buildroot.patch       |   64 ++----------
+ package/keyutils/keyutils.mk                       |   24 +++--
+ 6 files changed, 135 insertions(+), 153 deletions(-)
+ create mode 100644 package/keyutils/keyutils-01-allow-building-of-the-shared-library-to-be-suppressed.patch
+ delete mode 100644 package/keyutils/keyutils-01-memleak-from-realloc.patch
+ delete mode 100644 package/keyutils/keyutils-02-another-memleak.patch
+ rename package/keyutils/{keyutils-05-fix-install-rule.patch => keyutils-02-fix-install-rule.patch} (57%)
 
-diff --git a/board/qemu/mips64el-malta/linux-3.15.config b/board/qemu/mips64el-malta/linux-3.15.config
-deleted file mode 100644
-index e980476..0000000
---- a/board/qemu/mips64el-malta/linux-3.15.config
-+++ /dev/null
-@@ -1,60 +0,0 @@
--CONFIG_MIPS_MALTA=y
--CONFIG_CPU_LITTLE_ENDIAN=y
--CONFIG_CPU_MIPS64_R1=y
--CONFIG_64BIT=y
--CONFIG_MIPS_MT_SMP=y
--CONFIG_NR_CPUS=2
--CONFIG_HZ_100=y
--CONFIG_SYSVIPC=y
--CONFIG_NO_HZ=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_LOG_BUF_SHIFT=15
--CONFIG_NAMESPACES=y
--CONFIG_RELAY=y
--CONFIG_EMBEDDED=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_SLAB=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--CONFIG_MODULE_SRCVERSION_ALL=y
--# CONFIG_BLK_DEV_BSG is not set
--CONFIG_PCI=y
--CONFIG_MIPS32_COMPAT=y
--CONFIG_MIPS32_O32=y
--CONFIG_MIPS32_N32=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
--# CONFIG_WIRELESS is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_IDE=y
--CONFIG_BLK_DEV_IDECD=y
--CONFIG_IDE_GENERIC=y
--CONFIG_BLK_DEV_GENERIC=y
--CONFIG_BLK_DEV_PIIX=y
--CONFIG_NETDEVICES=y
--CONFIG_PCNET32=y
--# CONFIG_WLAN is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_HW_RANDOM is not set
--# CONFIG_HWMON is not set
--CONFIG_FB=y
--CONFIG_FB_CIRRUS=y
--# CONFIG_VGA_CONSOLE is not set
--# CONFIG_USB_SUPPORT is not set
--CONFIG_EXT4_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_NFS_FS=y
--CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mips64el-malta/linux-3.16.config b/board/qemu/mips64el-malta/linux-3.16.config
+diff --git a/package/keyutils/keyutils-01-allow-building-of-the-shared-library-to-be-suppressed.patch b/package/keyutils/keyutils-01-allow-building-of-the-shared-library-to-be-suppressed.patch
 new file mode 100644
-index 0000000..e980476
+index 0000000..88d32b0
 --- /dev/null
-+++ b/board/qemu/mips64el-malta/linux-3.16.config
-@@ -0,0 +1,60 @@
-+CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS64_R1=y
-+CONFIG_64BIT=y
-+CONFIG_MIPS_MT_SMP=y
-+CONFIG_NR_CPUS=2
-+CONFIG_HZ_100=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_LOG_BUF_SHIFT=15
-+CONFIG_NAMESPACES=y
-+CONFIG_RELAY=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_MIPS32_COMPAT=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_IDE=y
-+CONFIG_BLK_DEV_IDECD=y
-+CONFIG_IDE_GENERIC=y
-+CONFIG_BLK_DEV_GENERIC=y
-+CONFIG_BLK_DEV_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_PCNET32=y
-+# CONFIG_WLAN is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_FB=y
-+CONFIG_FB_CIRRUS=y
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_EXT4_FS=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-index 3c75bed..83faad8 100644
---- a/board/qemu/mips64el-malta/readme.txt
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
++++ b/package/keyutils/keyutils-01-allow-building-of-the-shared-library-to-be-suppressed.patch
+@@ -0,0 +1,104 @@
++keyutils: Allow building of the shared library to be suppressed
++
++Upstream patch:
++  https://kernel.googlesource.com/pub/scm/linux/kernel/git/dhowells/keyutils/+/a4deb71ddc05e951c8be8d46615beed9d408a5c8
++
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++
++LIB: Allow building of the shared library to be suppressed
++
++Allow building of the shared library to be suppressed by passing NO_SOLIB=1 to
++the Makefile.
++
++Reported-and-tested-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++Signed-off-by: David Howells <dhowells@redhat.com>
++diff --git a/Makefile b/Makefile
++index c904eaf..5dd2113 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -5,6 +5,7 @@
++ SPECFILE	:= keyutils.spec
++ NO_GLIBC_KEYERR	:= 0
++ NO_ARLIB	:= 0
+++NO_SOLIB	:= 0
++ ETCDIR		:= /etc
++ BINDIR		:= /bin
++ SBINDIR		:= /sbin
++@@ -95,7 +96,7 @@
++ # Normal build rule
++ #
++ ###############################################################################
++-all: $(DEVELLIB) keyctl request-key key.dns_resolver
+++all: keyctl request-key key.dns_resolver
++ 
++ ###############################################################################
++ #
++@@ -104,20 +105,23 @@
++ ###############################################################################
++ #RPATH = -Wl,-rpath,$(LIBDIR)
++ 
++-ifeq ($(NO_ARLIB),0)
++-all: $(ARLIB)
++-$(ARLIB): keyutils.o
++-	$(AR) rcs $@ $<
++-endif
++-
++ VCPPFLAGS	:= -DPKGBUILD="\"$(shell date -u +%F)\""
++ VCPPFLAGS	+= -DPKGVERSION="\"keyutils-$(VERSION)\""
++ VCPPFLAGS	+= -DAPIVERSION="\"libkeyutils-$(APIVERSION)\""
++ 
+++ifeq ($(NO_ARLIB),0)
+++all: $(ARLIB)
+++$(ARLIB): keyutils.o
+++	$(AR) rcs $@ $<
+++
++ keyutils.o: keyutils.c keyutils.h Makefile
++ 	$(CC) $(CPPFLAGS) $(VCPPFLAGS) $(CFLAGS) -UNO_GLIBC_KEYERR -o $@ -c $<
+++LIB_DEPENDENCY	:= libkeyutils.a
+++endif
++ 
++ 
+++ifeq ($(NO_SOLIB),0)
+++all: $(DEVELLIB)
++ $(DEVELLIB): $(SONAME)
++ 	ln -sf $< $@
++ 
++@@ -131,6 +135,8 @@
++ 
++ keyutils.os: keyutils.c keyutils.h Makefile
++ 	$(CC) $(CPPFLAGS) $(VCPPFLAGS) $(CFLAGS) -fPIC -o $@ -c $<
+++LIB_DEPENDENCY	:= $(DEVELLIB)
+++endif
++ 
++ ###############################################################################
++ #
++@@ -140,13 +146,13 @@
++ %.o: %.c keyutils.h Makefile
++ 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
++ 
++-keyctl: keyctl.o $(DEVELLIB)
+++keyctl: keyctl.o $(LIB_DEPENDENCY)
++ 	$(CC) -L. $(CFLAGS) $(LDFLAGS) $(RPATH) -o $@ $< -lkeyutils
++ 
++-request-key: request-key.o $(DEVELLIB)
+++request-key: request-key.o $(LIB_DEPENDENCY)
++ 	$(CC) -L. $(CFLAGS) $(LDFLAGS) $(RPATH) -o $@ $< -lkeyutils
++ 
++-key.dns_resolver: key.dns_resolver.o $(DEVELLIB)
+++key.dns_resolver: key.dns_resolver.o $(LIB_DEPENDENCY)
++ 	$(CC) -L. $(CFLAGS) $(LDFLAGS) $(RPATH) -o $@ $< -lkeyutils -lresolv
++ 
++ ###############################################################################
++@@ -158,10 +164,12 @@
++ ifeq ($(NO_ARLIB),0)
++ 	$(INSTALL) -D -m 0644 $(ARLIB) $(DESTDIR)$(USRLIBDIR)/$(ARLIB)
++ endif
+++ifeq ($(NO_SOLIB),0)
++ 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
++ 	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
++ 	mkdir -p $(DESTDIR)$(USRLIBDIR)
++ 	$(LNS) $(LIBDIR)/$(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
+++endif
++ 	$(INSTALL) -D keyctl $(DESTDIR)$(BINDIR)/keyctl
++ 	$(INSTALL) -D request-key $(DESTDIR)$(SBINDIR)/request-key
++ 	$(INSTALL) -D request-key-debug.sh $(DESTDIR)$(SHAREDIR)/request-key-debug.sh
+diff --git a/package/keyutils/keyutils-01-memleak-from-realloc.patch b/package/keyutils/keyutils-01-memleak-from-realloc.patch
+deleted file mode 100644
+index 0faa9d8..0000000
+--- a/package/keyutils/keyutils-01-memleak-from-realloc.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-Patch vampirised from Debian's packaging of keyutils-1.4
+-
+-Author: Michael Gebetsroither <gebi@grml.org>
+-Description: Fixed memleak from realloc (Closes: #496466).
+-
+-diff -Naurp keyutils.orig/keyutils.c keyutils/keyutils.c
+---- keyutils.orig/keyutils.c	2008-08-09 21:46:52.000000000 +0200
+-+++ keyutils/keyutils.c	2008-08-25 13:38:07.000000000 +0200
+-@@ -165,6 +165,24 @@ long keyctl_assume_authority(key_serial_
+- 	return keyctl(KEYCTL_ASSUME_AUTHORITY, id);
+- }
+- 
+-+
+-+/*****************************************************************************/
+-+/*
+-+ * plain realloc is just crazy
+-+ */
+-+static void* __xrealloc(void* ptr, size_t size)
+-+{
+-+    void* ret;
+-+
+-+    ret = realloc(ptr, size);
+-+    if(!ret) {
+-+        free(ptr);
+-+        return 0;
+-+    }
+-+    return ret;
+-+}
+-+
+-+
+- /*****************************************************************************/
+- /*
+-  * fetch key description into an allocated buffer
+-@@ -194,7 +212,7 @@ int keyctl_describe_alloc(key_serial_t i
+- 			break;
+- 
+- 		buflen = ret;
+--		buf = realloc(buf, buflen);
+-+		buf = __xrealloc(buf, buflen);
+- 		if (!buf)
+- 			return -1;
+- 	}
+-@@ -233,7 +251,7 @@ int keyctl_read_alloc(key_serial_t id, v
+- 			break;
+- 
+- 		buflen = ret;
+--		buf = realloc(buf, buflen + 1);
+-+		buf = __xrealloc(buf, buflen + 1);
+- 		if (!buf)
+- 			return -1;
+- 	}
+diff --git a/package/keyutils/keyutils-02-another-memleak.patch b/package/keyutils/keyutils-02-another-memleak.patch
+deleted file mode 100644
+index f74fd79..0000000
+--- a/package/keyutils/keyutils-02-another-memleak.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Patch vampirised from Debian's packaging of keyutils-1.4
+-
+-Author: Michael Gebetsroither <gebi@grml.org>
+-Description: Fixed another memleak (Closes: #496466).
+-
+-diff -Naurp keyutils.orig/keyutils.c keyutils/keyutils.c
+---- keyutils.orig/keyutils.c	2008-08-09 21:46:52.000000000 +0200
+-+++ keyutils/keyutils.c	2008-08-25 13:38:25.000000000 +0200
+-@@ -187,8 +187,10 @@ int keyctl_describe_alloc(key_serial_t i
+- 
+- 	for (;;) {
+- 		ret = keyctl_describe(id, buf, buflen);
+--		if (ret < 0)
+-+		if (ret < 0) {
+-+            free(buf);
+- 			return -1;
+-+        }
+- 
+- 		if (buflen >= ret)
+- 			break;
+-@@ -226,8 +228,10 @@ int keyctl_read_alloc(key_serial_t id, v
+- 
+- 	for (;;) {
+- 		ret = keyctl_read(id, buf, buflen);
+--		if (ret < 0)
+-+		if (ret < 0) {
+-+            free(buf);
+- 			return -1;
+-+        }
+- 
+- 		if (buflen >= ret)
+- 			break;
+diff --git a/package/keyutils/keyutils-05-fix-install-rule.patch b/package/keyutils/keyutils-02-fix-install-rule.patch
+similarity index 57%
+rename from package/keyutils/keyutils-05-fix-install-rule.patch
+rename to package/keyutils/keyutils-02-fix-install-rule.patch
+index 74e5670..3670d28 100644
+--- a/package/keyutils/keyutils-05-fix-install-rule.patch
++++ b/package/keyutils/keyutils-02-fix-install-rule.patch
+@@ -3,17 +3,18 @@ Makefile: fix install rule
+ Do not link the .so with an absolute path, otherwise it may point to
+ the host library.
  
--Tested with QEMU 2.0.0
-+Tested with QEMU 2.1.0
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 6b7a885..6bf2fa4 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Based on the former patch by Yann E. MORIN.
  
--# Lock to 3.15 headers to avoid breaking with newer kernels
-+# Lock to 3.16 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.15.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+BR2_DEFAULT_KERNEL_VERSION="3.16.3"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
+-diff -durN keyutils-1.5.5.orig/Makefile keyutils-1.5.5/Makefile
+---- keyutils-1.5.5.orig/Makefile	2012-10-22 20:11:57.188548033 +0200
+-+++ keyutils-1.5.5/Makefile	2012-10-22 20:14:40.868236838 +0200
+-@@ -127,7 +127,7 @@
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++
++--- keyutils-1.5.9/Makefile.orig	2014-09-22 16:13:41.593562765 +0100
+++++ keyutils-1.5.9/Makefile	2014-09-22 16:14:05.377963952 +0100
++@@ -168,7 +168,7 @@ ifeq ($(NO_SOLIB),0)
+  	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+  	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+  	mkdir -p $(DESTDIR)$(USRLIBDIR)
+ -	$(LNS) $(LIBDIR)/$(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
+ +	$(LNS) $(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
++ endif
+  	$(INSTALL) -D keyctl $(DESTDIR)$(BINDIR)/keyctl
+  	$(INSTALL) -D request-key $(DESTDIR)$(SBINDIR)/request-key
+- 	$(INSTALL) -D request-key-debug.sh $(DESTDIR)$(SHAREDIR)/request-key-debug.sh
+diff --git a/package/keyutils/keyutils-04-Makefile-for-buildroot.patch b/package/keyutils/keyutils-04-Makefile-for-buildroot.patch
+index e10abd5..1e19f77 100644
+--- a/package/keyutils/keyutils-04-Makefile-for-buildroot.patch
++++ b/package/keyutils/keyutils-04-Makefile-for-buildroot.patch
+@@ -1,58 +1,12 @@
+-diff -durN keyutils-1.5.5.orig/Makefile keyutils-1.5.5/Makefile
+---- keyutils-1.5.5.orig/Makefile	2011-11-30 16:27:43.000000000 +0100
+-+++ keyutils-1.5.5/Makefile	2012-08-14 17:06:07.064412101 +0200
+-@@ -1,7 +1,5 @@
+--CPPFLAGS	:= -I.
+--CFLAGS		:= -g -Wall -Werror
+--INSTALL		:= install
+--DESTDIR		:=
+-+CPPFLAGS	+= -I.
+-+CFLAGS		+= -g -Wall -Werror
+- SPECFILE	:= keyutils.spec
+- NO_GLIBC_KEYERR	:= 0
+- NO_ARLIB	:= 0
+-@@ -14,7 +12,7 @@
+- MAN5		:= /usr/share/man/man5
+- MAN8		:= /usr/share/man/man8
+- INCLUDEDIR	:= /usr/include
+--LNS		:= ln -sf
+-+LNS		:= $(LN) -sf
+- 
+- ###############################################################################
+- #
+-@@ -48,29 +46,6 @@
+- 
+- ###############################################################################
+- #
+--# Guess at the appropriate lib directory and word size
+--#
+--###############################################################################
+--LIBDIR		:= $(shell ldd /usr/bin/make | grep '\(/libc\)' | sed -e 's!.*\(/.*\)/libc[.].*!\1!')
+--USRLIBDIR	:= $(patsubst /lib/%,/usr/lib/%,$(LIBDIR))
+--BUILDFOR	:= $(shell file /usr/bin/make | sed -e 's!.*ELF \(32\|64\)-bit.*!\1!')-bit
+--
+--LNS		:= ln -sf
+--
+--ifeq ($(BUILDFOR),32-bit)
+--CFLAGS		+= -m32
+--LIBDIR		:= /lib
+--USRLIBDIR	:= /usr/lib
+--else
+--ifeq ($(BUILDFOR),64-bit)
+--CFLAGS		+= -m64
+--LIBDIR		:= /lib64
+--USRLIBDIR	:= /usr/lib64
+--endif
+--endif
+--
+--###############################################################################
+--#
+- # This is necessary if glibc doesn't know about the key management error codes
+- #
+- ###############################################################################
+-@@ -110,10 +85,10 @@
+- 
+- 
++Makefile: Don't call "ln" directly
++
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++
++--- keyutils-1.5.9/Makefile.orig	2014-09-22 16:05:14.117007430 +0100
+++++ keyutils-1.5.9/Makefile	2014-09-22 16:06:26.053219336 +0100
++@@ -123,10 +123,10 @@ endif
++ ifeq ($(NO_SOLIB),0)
++ all: $(DEVELLIB)
+  $(DEVELLIB): $(SONAME)
+ -	ln -sf $< $@
+ +	$(LNS) $< $@
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index 7097529..eb24925 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -4,29 +4,35 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.15.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.16.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+-KEYUTILS_VERSION         = 1.5.5
++KEYUTILS_VERSION         = 1.5.9
+ KEYUTILS_SOURCE          = keyutils-$(KEYUTILS_VERSION).tar.bz2
+ KEYUTILS_SITE            = http://people.redhat.com/~dhowells/keyutils
+ KEYUTILS_LICENSE         = GPLv2+ LGPLv2.1+
+ KEYUTILS_LICENSE_FILES   = LICENCE.GPL LICENCE.LGPL
+ KEYUTILS_INSTALL_STAGING = YES
  
- # Serial port config
+-KEYUTILS_MAKE_ENV =     \
+-    INSTALL=$(INSTALL)  \
+-    LIBDIR=/usr/lib     \
+-    USRLIBDIR=/usr/lib  \
+-    LN=$(HOSTLN)        \
++KEYUTILS_MAKE_PARAMS =            \
++    INSTALL=$(INSTALL)            \
++    LIBDIR=/usr/lib               \
++    USRLIBDIR=/usr/lib            \
++    CFLAGS="$(TARGET_CFLAGS)"     \
++    CPPFLAGS="$(TARGET_CPPFLAGS)" \
++    LNS="$(HOSTLN) -sf"
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++KEYUTILS_MAKE_PARAMS += NO_SOLIB=1
++endif
+ 
+ define KEYUTILS_BUILD_CMDS
+-	$(KEYUTILS_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(KEYUTILS_MAKE_PARAMS) -C $(@D)
+ endef
+ 
+ define KEYUTILS_INSTALL_STAGING_CMDS
+-	$(KEYUTILS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++	$(MAKE) $(KEYUTILS_MAKE_PARAMS) -C $(@D) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define KEYUTILS_INSTALL_TARGET_CMDS
+-	$(KEYUTILS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(MAKE) $(KEYUTILS_MAKE_PARAMS) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-1.7.10.4
+1.7.1
