@@ -1,39 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Sep 2014 22:44:20 +0200
-Subject: [Buildroot] where is libdns_sd.so?
-In-Reply-To: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
- (Sylvain LG's message of "Mon, 22 Sep 2014 20:46:16 +0200")
-References: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
-Message-ID: <87vbof2xnf.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 22 Sep 2014 22:48:52 +0200
+Subject: [Buildroot] [PATCH 21/23 v5] docs/asciidoc: make it possible to
+ use $(@D) in hooks
+In-Reply-To: <2dc7586ac17c407aef3adc68f49cbdb663074ed1.1410692671.git.yann.morin.1998@free.fr>
+References: <cover.1410692670.git.yann.morin.1998@free.fr>
+ <2dc7586ac17c407aef3adc68f49cbdb663074ed1.1410692671.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMLTJxwZRH0J1A7Zp=Krfm7u6uENrQJc+GM7mzsUX1gL7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sylvain" == Sylvain LG <forum@sylvainlegourr.com> writes:
+On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, it is not possible to use $(@D) in documents' hooks, because
+> there is no actual target file for the copying rule.
+>
+> So, use the same mechanism as for generic-package.
+>
+> We do not touch the target file, so it is easy to regenerate the manual
+> without calling the -clean rule first.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Hello,
- > I've just compiled my system with target package Avahi:
-
- > [*] avahi ? ? ? ? ? ? ? ? ? ? ? ? ? ? ??
- > [*] ? IPv4LL network address configuration daemon?
- > [*] ? mDNS/DNS-SD daemon?
-
- > I need?libdns_sd.so to develop a zeroconf application.
-
- > But no such a lib is compiled altough a find ./output -name *dns_sd* displays:
-
-
- >     ./build/avahi-0.6.31/avahi-compat-libdns_sd
- >     ./build/avahi-0.6.31/avahi-compat-libdns_sd/dns_sd.h
- >     ./build/avahi-0.6.31/avahi-compat-libdns_sd.pc.in
-
-the bonjour compatibility library is not built by default, but needs be
-explicitly be enabled at configure time with --enable-compat-libdns_sd.
-
-We don't currently have a Buildroot option to enable this, but I'll add
-it now.
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 -- 
-Bye, Peter Korsgaard
+Samuel
