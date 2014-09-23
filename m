@@ -1,42 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 20:23:02 +0200
-Subject: [Buildroot] [git commit] directfb: disable multi application if no
-	MMU
-Message-ID: <20140923194130.273A89D74F@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 23 Sep 2014 21:41:59 +0200
+Subject: [Buildroot] Pending "big" patch series
+In-Reply-To: <20140923200255.1be119c9@free-electrons.com>
+References: <20140914125321.0d68b842@free-electrons.com>
+ <20140923200255.1be119c9@free-electrons.com>
+Message-ID: <118eb205-f24c-4a63-bb39-01e7bbba8139@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80b9dfceafb1d635dbb2c7f948b8b27e190e3e65
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Hello,
+>
+>A quick status on those big patch series.
+>
+>On Sun, 14 Sep 2014 12:53:21 +0200, Thomas Petazzoni wrote:
+>
+>>  * gendoc infra: make it useable for other documents (18 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-September/105678.html
+>> 
+>>    I'm personally not highly interested in making the gendoc infra
+>>    suitable for other documents than the manual, so I'm not very
+>>    motivated to review this. But maybe other persons are interested,
+>>    especially Samuel or Thomas DS who have followed the gendoc changes?
+>
+>I've applied PATCH 1, but I've raised concerns on PATCH 2.
 
-directfb-fusion uses the madvise() system call which is not available
-on no-MMU targets.
+I'm in the process of reviewing this, but due to time constraints the review is split over many days...
 
-It seems it might be possible to simply remove the call to madvise()
-(there is only one call) if not available. However, it's probably not
-worth the effort, and people working on no-MMU targets can submit a
-patch doing that if they are interested.
+>>  * CMake cleanup (5 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/104794.html
+>> 
+>>    Needs review.
+>
+>No change, still needs review.
 
-[Thomas: tweak commit log.]
+Who, besides Samuel himself, has experience with cmake and is willing to review this? It would be a great help to the community, so please step up!
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/directfb/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+>
+>>  * packages: rename _OPT into _OPTS (2 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
+>> 
+>>    Thomas DS, could you respin this patch series?
+>
+>Thomas ?
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index d53f756..3aa51cb 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_DIRECTFB
- config BR2_PACKAGE_DIRECTFB_MULTI
- 	bool "directfb multi application"
- 	select BR2_PACKAGE_LINUX_FUSION
-+	depends on BR2_USE_MMU # madvise()
- 	depends on BR2_LINUX_KERNEL
- 	help
- 	  Enable use of multiple concurrent DirectFB applications
+Yes, this is on my list, right after the ongoing review of Yann's patches...
+
+Best regards,
+Thomas
