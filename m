@@ -1,120 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Sep 2014 20:15:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix compile error on
-	arm4/arm5
-Message-ID: <1411496109-508-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Sep 2014 20:14:15 +0200
+Subject: [Buildroot] [git commit] connman: bump to version 1.25
+Message-ID: <20140923181859.02D999D75C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/d7e/d7ea8db79210228103257b6a28fada38cca142cb/
-http://autobuild.buildroot.net/results/ec7/ec71e4f16ee9106747dff5f15999cbd17903e76f/
-http://autobuild.buildroot.net/results/be7/be72eb182eaccf0064a32c9dfc2ac1c0d6555506/
-http://autobuild.buildroot.net/results/b35/b35b71e3d21394e7ca24f3b112d8a4047cd6c87b/
-http://autobuild.buildroot.net/results/5bb/5bbc8b5cdcd99229a6813970293f98b044fc489d/
-http://autobuild.buildroot.net/results/be5/be54e75c4171d1db0eaaaeb5f5df29751d7db57b/
+commit: http://git.buildroot.net/buildroot/commit/?id=5e1af9ca4cfc46a472cd668d3ca15ca24e142f6f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg-0002-arm4-arm5.patch |   87 ++++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 package/ffmpeg/ffmpeg-0002-arm4-arm5.patch
+ package/connman/connman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch b/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch
-new file mode 100644
-index 0000000..0c41c88
---- /dev/null
-+++ b/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch
-@@ -0,0 +1,87 @@
-+Fix compile error on arm4/arm5 platform
-+
-+Patch submitted upstream:
-+https://ffmpeg.org/pipermail/ffmpeg-devel/2014-September/163335.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+
-+From fe0f39e7263cd95783ad4669f8c3672a8eab4c83 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Tue, 23 Sep 2014 20:06:26 +0200
-+Subject: [PATCH 1/1] Fix compile error on arm4/arm5 platform
-+
-+Since these commits
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=adf8227cf4e7b4fccb2ad88e1e09b6dc00dd00ed
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=db7f1c7c5a1d37e7f4da64a79a97bea1c4b6e9f8
-+
-+compilation on arm4/arm5 fails:
-+
-+libavcodec/libavcodec.so: undefined reference to
-+`ff_startcode_find_candidate_armv6'
-+
-+Because libavcodec/arm/Makefile contains
-+ARMV6-OBJS-$(CONFIG_STARTCODE)         += arm/startcode_armv6.o
-+function ff_startcode_find_candidate_armv6 is not included for older ARM
-+archs. The bug was found during automatic buildroot builds:
-+
-+http://autobuild.buildroot.net/results/ec7/ec71e4f16ee9106747dff5f15999cbd17903e76f//build-end.log
-+Quote from configure summary:
-+ARCH                      arm (armv4t)
-+big-endian                no
-+runtime cpu detection     yes
-+ARMv5TE enabled           no
-+ARMv6 enabled             no
-+ARMv6T2 enabled           no
-+
-+http://autobuild.buildroot.net/results/be7/be72eb182eaccf0064a32c9dfc2ac1c0d6555506/build-end.log
-+ARCH                      arm (armv5te)
-+big-endian                no
-+runtime cpu detection     yes
-+ARMv5TE enabled           yes
-+ARMv6 enabled             no
-+ARMv6T2 enabled           no
-+
-+This patch provides the necessary #if clauses as discussed with Michael:
-+https://ffmpeg.org/pipermail/ffmpeg-devel/2014-September/163329.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libavcodec/arm/h264dsp_init_arm.c |    2 ++
-+ libavcodec/arm/vc1dsp_init_arm.c  |    2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/libavcodec/arm/h264dsp_init_arm.c b/libavcodec/arm/h264dsp_init_arm.c
-+index f7aee1f..88dfd75 100644
-+--- a/libavcodec/arm/h264dsp_init_arm.c
-++++ b/libavcodec/arm/h264dsp_init_arm.c
-+@@ -107,8 +107,10 @@ av_cold void ff_h264dsp_init_arm(H264DSPContext *c, const int bit_depth,
-+ {
-+     int cpu_flags = av_get_cpu_flags();
-+ 
-++#if HAVE_ARMV6
-+     if (have_setend(cpu_flags))
-+         c->startcode_find_candidate = ff_startcode_find_candidate_armv6;
-++#endif
-+     if (have_neon(cpu_flags))
-+         h264dsp_init_neon(c, bit_depth, chroma_format_idc);
-+ }
-+diff --git a/libavcodec/arm/vc1dsp_init_arm.c b/libavcodec/arm/vc1dsp_init_arm.c
-+index 9dae22c..5f2c759 100644
-+--- a/libavcodec/arm/vc1dsp_init_arm.c
-++++ b/libavcodec/arm/vc1dsp_init_arm.c
-+@@ -28,8 +28,10 @@ av_cold void ff_vc1dsp_init_arm(VC1DSPContext *dsp)
-+ {
-+     int cpu_flags = av_get_cpu_flags();
-+ 
-++#if HAVE_ARMV6
-+     if (have_setend(cpu_flags))
-+         dsp->startcode_find_candidate = ff_startcode_find_candidate_armv6;
-++#endif
-+     if (have_neon(cpu_flags))
-+         ff_vc1dsp_init_neon(dsp);
-+ }
-+-- 
-+1.7.10.4
-+
--- 
-1.7.10.4
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 9b5d15f..e9ce1e6 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.23
++CONNMAN_VERSION = 1.25
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
