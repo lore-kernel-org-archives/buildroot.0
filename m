@@ -1,56 +1,78 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 23 Sep 2014 23:57:35 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/gnupg2: configure script use the
-	wrong stdint.h file
-Message-ID: <1411509457-8182-1-git-send-email-romain.naour@openwide.fr>
+From: Joshua Kinard <kumba@gentoo.org>
+Date: Tue, 23 Sep 2014 18:06:05 -0400
+Subject: [Buildroot] RFC: CVE analysis
+In-Reply-To: <542088A8.2080902@zacarias.com.ar>
+References: <CANQCQpbSu1OUHvivMbQFGC3x6GPSWA3imp2GqGMjeqmYZKBstw@mail.gmail.com>
+ <542088A8.2080902@zacarias.com.ar>
+Message-ID: <5421EECD.6050806@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure test "checking absolute name of <stdint.h>..." return
-the absolute path of a stdint.h file from the toolchain sources.
+On 09/22/2014 16:38, Gustavo Zacarias wrote:
+> On 09/22/2014 05:21 PM, Matthew Weber wrote:
+> 
+>> I was curious if anyone has done a script similar to the "make
+>> legal-info" that takes a package list and checks it against a CVE
+>> database?  We're looking at doing some automated tracking of
+>> vulnerabilities with our nightly builds and were at a point of putting
+>> something together.
+>>
+>> It might also be an interesting feature to expose on the Buildroot
+>> website.... maybe listing the current vulnerabilities of the last
+>> release and the current tip?
+> 
+> Hi.
+> I usually track CVEs and bump/fix when appropiate.
+> It's mostly a mix of personal scripts, nothing too fancy that i'd like
+> normal people to see in the current state :)
+> The problem with actively pursuing security fixes is that it needs some
+> regular manpower in patching and testing, and that's without considering
+> backports (though the package infra is quite stable lately).
+> There are outstanding packages that have some severe vulnerabilities
+> like cups where i did a call for volunteers to bump/fix without much
+> success, and i can only do so much in my free time, with cups being
+> somewhat complicated to test because of varying combinations.
+> It's not a task that can really be fully automated either because you
+> can get a CVE for say PHP that fixes a vulnerability that only affects
+> windows operating systems - there must be some context analysis as well.
+> I normally try to maintain some format for my security bumps/fixes but
+> that's completely informal, like:
+> 
+> Subject: Security bump PACKAGE to version x.y
+> Fixes:
+> CVE-yyyy-nnnn - short description
+> 
+> But then some other people might catch the bump before myself and there
+> goes that.
+> 
+> Something nicer would probably be like the .hash files for packages
+> where we could describe the bumps that affect security and the relevant
+> CVEs.
 
-The contents of this file is completely different compared to what
-was expected and does not contain intmax_t definitions.
+I don't know if these two sites have a formal API that's queryable, but you can
+generate RSS feeds based on criteria, so maybe something programmatic can be setup:
 
-Use gl_cv_absolute_stdint_h to indicate the correct file that
-is in staging directory.
+http://www.cvedetails.com/
+http://www.itsecdb.com/oval/
 
-This issue is only trigged by uClibc toolchain although it's present
-with glibc toolchain.
 
-Ref: http://bugs.gnupg.org/gnupg/issue1547
+Also, these deal more with cyber-threat information, but has ties into
+vulnerability research and are both developed by the MITRE corporation (who
+manages the CVE database):
 
-Fixes:
-http://autobuild.buildroot.net/results/92a/92af55396670685f12ed0ebcddfe2d082ed5aeb7/
-http://autobuild.buildroot.net/results/bef/bef61579ba96a6a1b83c8ca259c39cef617aa77d/
-http://autobuild.buildroot.net/results/989/989648cfd3cc5750992fbbc784726dca4be2e920/
-http://autobuild.buildroot.net/results/e8a/e8a1d9b8d98c059d497bc493a9d2ae0ef5f9d0f5/
+https://stix.mitre.org/
+http://taxii.mitre.org/
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: improve commit log
-    add comment in the .mk file
-
- package/gnupg2/gnupg2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 33b5bc0..af475bb 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -19,6 +19,10 @@ GNUPG2_CONF_OPT = \
- 	--with-ksba-prefix=$(STAGING_DIR)/usr \
- 	--with-pth-prefix=$(STAGING_DIR)/usr
- 
-+# Workaround: http://bugs.gnupg.org/gnupg/issue1547
-+# The m4 macro absolute-header.m4 is brocken
-+GNUPG2_CONF_OPT += gl_cv_absolute_stdint_h=$(STAGING_DIR)/usr/include/stdint.h
-+
- ifneq ($(BR2_PACKAGE_GNUPG2_GPGV2),y)
- define GNUPG2_REMOVE_GPGV2
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv2
 -- 
-1.9.3
+Joshua Kinard
+Gentoo/MIPS
+kumba at gentoo.org
+4096R/D25D95E3 2011-03-28
+
+"The past tempts us, the present confuses us, the future frightens us.  And our
+lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
