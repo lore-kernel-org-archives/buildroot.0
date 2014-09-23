@@ -1,68 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 23 Sep 2014 08:49:25 -0500
-Subject: [Buildroot] additional autobuilder
-In-Reply-To: <20140923154818.2cd7d35c@free-electrons.com>
-References: <CANQCQpa55xCW4icNF5oHJgr6TE269v0LFAr=L5ABdg8qtymFJQ@mail.gmail.com>
- <20140923154818.2cd7d35c@free-electrons.com>
-Message-ID: <CANQCQpaiMZ3cGYOzShXyvMchHeTrgGAiAAdx0JUHay42_Ctp3Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Sep 2014 11:41:34 -0300
+Subject: [Buildroot] [PATCH] gnuplot: bump to version 4.6.6
+Message-ID: <1411483294-9742-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Also add hash file.
 
-On Tue, Sep 23, 2014 at 8:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Matthew Weber,
->
-> On Tue, 23 Sep 2014 08:25:27 -0500, Matthew Weber wrote:
->
->> I've got some spare resources on a build machine and would like to run
->> an autobuilder instance.
->
-> Great!
->
->>  Would you be willing to help me get setup
->> with the authentication and test a failure submission (I believe I
->> have my firewall rules in order to make this work)?
->
-> Sure. I'll send you a private e-mail with some credentials.
->
-> However, why are you talking about "failure submission" ? We are
-> interested in the report of all build results, both success and
-> failures.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnuplot/gnuplot.hash | 3 +++
+ package/gnuplot/gnuplot.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/gnuplot/gnuplot.hash
 
-Sorry meant just submissions.
-
->
-> Also, please run the autobuild-run script for a while without
-> submitting the build results to autobuild.buildroot.org (this is done
-> by not passing any login/password to the script), and then analyze the
-> build results, and make sure you don't have too much bogus build
-> failures caused by setup issues on your side (like missing download
-> utilities like git, bzr, cvs, svn and so on).
-
-Sure will do.
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+new file mode 100644
+index 0000000..6898e90
+--- /dev/null
++++ b/package/gnuplot/gnuplot.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/gnuplot/files/gnuplot/4.6.6/
++md5	9c541f553c2491c56fc8b6126ff4ff73	gnuplot-4.6.6.tar.gz
++sha1	53802f565a87a6d5044d0b9c2422b5eb905d1d45	gnuplot-4.6.6.tar.gz
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index d5fe01c..b12c763 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPLOT_VERSION = 4.6.2
++GNUPLOT_VERSION = 4.6.6
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.8.5.5
