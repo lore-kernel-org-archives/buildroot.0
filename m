@@ -1,25 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Sep 2014 21:38:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix compile error on
-	arm4/arm5
-References: <1411496109-508-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <XnsA3B1DC397AAE8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Sep 2014 20:23:02 +0200
+Subject: [Buildroot] [git commit] directfb: disable multi application if no
+	MMU
+Message-ID: <20140923194130.273A89D74F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:1411496109-508-1-git-send-email-bernd.kuhls at t-online.de:
+commit: http://git.buildroot.net/buildroot/commit/?id=80b9dfceafb1d635dbb2c7f948b8b27e190e3e65
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +Patch submitted upstream:
-> +https://ffmpeg.org/pipermail/ffmpeg-devel/2014-September/163335.html
+directfb-fusion uses the madvise() system call which is not available
+on no-MMU targets.
 
-Hi,
+It seems it might be possible to simply remove the call to madvise()
+(there is only one call) if not available. However, it's probably not
+worth the effort, and people working on no-MMU targets can submit a
+patch doing that if they are interested.
 
-patch was accepted upstream:
-http://git.videolan.org/?p=ffmpeg.git;a=commit;h=
-6b733be755529f2472472d9ed1b2eef3b6398828
+[Thomas: tweak commit log.]
 
-Regards, Bernd
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/directfb/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index d53f756..3aa51cb 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_DIRECTFB
+ config BR2_PACKAGE_DIRECTFB_MULTI
+ 	bool "directfb multi application"
+ 	select BR2_PACKAGE_LINUX_FUSION
++	depends on BR2_USE_MMU # madvise()
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+ 	  Enable use of multiple concurrent DirectFB applications
