@@ -1,42 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 22:17:12 +0200
-Subject: [Buildroot] [PATCH] ARC: gcc - Redefine PTRDIFF_TYPE from "long
- int" to "int"
-In-Reply-To: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
-References: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140923221712.7b931f94@free-electrons.com>
+Date: Tue, 23 Sep 2014 22:18:38 +0200
+Subject: [Buildroot] [PATCH] gnuplot: bump to version 4.6.6
+In-Reply-To: <5421D457.2090708@zacarias.com.ar>
+References: <1411483294-9742-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140923215610.0e46e6b7@free-electrons.com>
+ <5421D457.2090708@zacarias.com.ar>
+Message-ID: <20140923221838.63051980@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Gustavo Zacarias,
 
-On Thu, 18 Sep 2014 15:19:12 +0400, Alexey Brodkin wrote:
-> Change of SIZE_TYPE from "long unsigned int" to "unsigned int"
-> http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
-> introduced regression due to existing PTRDIFF_TYPE.
+On Tue, 23 Sep 2014 17:13:11 -0300, Gustavo Zacarias wrote:
+> On 09/23/2014 04:56 PM, Thomas Petazzoni wrote:
 > 
-> Now to fix regression convert PTRDIFF_TYPE to simple "int".
+> > Could you have a look at http://patchwork.ozlabs.org/patch/375696/, and
+> > give some Tested-by/Acked-by if applicable? The patch is gnuplot
+> > related.
 > 
-> Fix is taken from current development branch of GCC for ARC and will be a
-> part of the next release of ARC tools, so at that point patch should be dropped.
-> 
-> https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/gcc/arc-2014.08/300-ptrdiff_type_int.patch | 26 ++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
+> I'll take a look, but the patch is incorrect so it needs some fixing.
+> The offending library there is fontconfig which has optional usage of
+> libpthread, which in turn is also optional for libgd so forcing
+> -lpthread in isn't correct.
 
-I've applied your patch. However, I had to tweak a bit the commit log,
-especially the title which wasn't matching the standard titles
-we use in Buildroot.
+I was pretty sure the patch wasn't correct. But the issue exists, so if
+you have some time to take a look, that'd be great.
 
 Thanks,
 
