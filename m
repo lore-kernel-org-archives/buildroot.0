@@ -1,67 +1,60 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 23 Sep 2014 18:21:08 +0200
-Subject: [Buildroot] [PATCH 0/3] Re-introducing libgtk3
-Message-ID: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Tue, 23 Sep 2014 18:21:09 +0200
+Subject: [Buildroot] [PATCH 1/3] host-pkgconf: install pkg-config-native
+In-Reply-To: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1411489271-26899-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+The package host-pkgconf now provides `pkg-config-native`, which uses the
+host native sysroot. It is useful for packages which compile build-time
+helper tools (such as Gtk+ 3.0).
 
-This small series re-introduces libgtk3.
-
-The following changes have been made to the latest version posted by H.
-Bouteville:
-
- - Introduction of pkg-config-native, provided by host-pkgconf. This variant
-   of pkg-config uses the host sysroot and is needed by the Gtk+ build system
-   to build some tools.
- - Add multiple backend support (X11, Wayland, Broadway).
- - GSettings schemas compilation after installation (needed by gtk3-demo).
- - Introduction of hicolor-icon-theme (needed by gtk3-demo).
-
-The following tests have been performed:
-
- - running gtk3-demo in QEMU x86/ARM in a X11/Fluxbox environment.
- - running gtk3-demo in QEMU x86/ARM in a Wayland/Weston environment.
-
-Note: since wayland has been bumped to 1.6.0, running gtk3-demo in Weston does
-not work anymore. Gtk+ 3.12.2 uses protocol version 3, whereas wayland 1.6.0
-introduces version 4. A runtime check is performed and the program refuses to
-start. This is solved with Gtk+ 3.14.0. Once this series is accepted, I will
-provide a series bumping libgtk3 and friends (libglib2, pango, etc).
-
-Best regards,
-ELB
-
-Eric Le Bihan (2):
-  host-pkgconf: install pkg-config-native
-  hicolor-icon-theme: new package
-
-Hadrien Boutteville (1):
-  libgtk3: new package
-
- package/Config.in                                  |   2 +
- package/hicolor-icon-theme/Config.in               |   4 +
- package/hicolor-icon-theme/hicolor-icon-theme.mk   |  12 ++
- package/libgtk3/Config.in                          |  87 +++++++++++
- package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |  25 +++
- .../libgtk3-0002-fix-introspection-check.patch     |  28 ++++
- .../libgtk3/libgtk3-0003-disable-atk-bridge.patch  |  45 ++++++
- package/libgtk3/libgtk3.mk                         | 174 +++++++++++++++++++++
- package/pkgconf/pkg-config-native.in               |   3 +
- package/pkgconf/pkgconf.mk                         |   8 +
- 10 files changed, 388 insertions(+)
- create mode 100644 package/hicolor-icon-theme/Config.in
- create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.mk
- create mode 100644 package/libgtk3/Config.in
- create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
- create mode 100644 package/libgtk3/libgtk3-0002-fix-introspection-check.patch
- create mode 100644 package/libgtk3/libgtk3-0003-disable-atk-bridge.patch
- create mode 100644 package/libgtk3/libgtk3.mk
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/pkgconf/pkg-config-native.in | 3 +++
+ package/pkgconf/pkgconf.mk           | 8 ++++++++
+ 2 files changed, 11 insertions(+)
  create mode 100644 package/pkgconf/pkg-config-native.in
 
---
+diff --git a/package/pkgconf/pkg-config-native.in b/package/pkgconf/pkg-config-native.in
+new file mode 100644
+index 0000000..7e25cd2
+--- /dev/null
++++ b/package/pkgconf/pkg-config-native.in
+@@ -0,0 +1,3 @@
++#!/bin/sh
++
++PKG_CONFIG_LIBDIR=@HOST_DIR@/usr/lib/pkgconfig:@HOST_DIR@/usr/share/pkgconfig @HOST_DIR@/usr/bin/pkgconf $@
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index c961536..b6e7c12 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -24,6 +24,13 @@ define HOST_PKGCONF_INSTALL_WRAPPER
+ 		$(HOST_DIR)/usr/bin/pkg-config
+ endef
+ 
++define HOST_PKGCONF_INSTALL_NATIVE
++	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config-native.in \
++		$(HOST_DIR)/usr/bin/pkg-config-native
++	$(SED) 's, at HOST_DIR@,$(HOST_DIR),g' \
++		$(HOST_DIR)/usr/bin/pkg-config-native
++endef
++
+ define HOST_PKGCONF_STATIC
+ 	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
+ endef
+@@ -34,6 +41,7 @@ endef
+ 
+ PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
+ HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
++HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_NATIVE
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ 	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
+-- 
 1.9.1
