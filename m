@@ -1,35 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Sep 2014 16:41:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 7448] Having export MACHINE="something" breaks
- glibc build on IMX6 target
-In-Reply-To: <bug-7448-163@https.bugs.busybox.net/>
-References: <bug-7448-163@https.bugs.busybox.net/>
-Message-ID: <20140923164106.AAE3F9D75C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Sep 2014 13:42:56 -0300
+Subject: [Buildroot] [PATCH 3/3] libgtk3: new package
+In-Reply-To: <54219E85.6020906@imgtec.com>
+References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1411489271-26899-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <54219E85.6020906@imgtec.com>
+Message-ID: <5421A310.2020905@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7448
+On 09/23/2014 01:23 PM, Vicente Olivert Riera wrote:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> Since you are planing to add a new package, why not use the latests
+> version of it? 3.14.0
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-09-23 16:41:06 UTC ---
-Can you send your patch to the list, as per:
-
-http://buildroot.net/downloads/manual/manual.html#submitting-patches
-
-Thanks.
-
-Regards,
-Yann E. MORIN.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Probably because it needs a libglib2, atk, cairo and whatnot bump as well.
+And since it was just released in this case in particular i'd go for
+safe so as to get this in sooner rather than later - the bump can be a
+new patchset afterwards.
+Regards.
