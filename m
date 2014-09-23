@@ -1,29 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 11:53:32 +0200
-Subject: [Buildroot] [PATCH] ncurses: Add libcurses symlink to libncurses
-In-Reply-To: <5421407F.2090204@imgtec.com>
-References: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140923113820.1e06567e@free-electrons.com>
- <5421407F.2090204@imgtec.com>
-Message-ID: <20140923115332.23deccaa@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 23 Sep 2014 11:00:39 +0000
+Subject: [Buildroot] [PATCH] ARC: gcc - Redefine PTRDIFF_TYPE from "long
+ int" to "int"
+In-Reply-To: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
+References: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1411470038.8968.0.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Hi Peter,
 
-On Tue, 23 Sep 2014 10:42:23 +0100, Vicente Olivert Riera wrote:
+On Thu, 2014-09-18 at 15:19 +0400, Alexey Brodkin wrote:
+> Change of SIZE_TYPE from "long unsigned int" to "unsigned int"
+> http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
+> introduced regression due to existing PTRDIFF_TYPE.
+> 
+> Now to fix regression convert PTRDIFF_TYPE to simple "int".
+> 
+> Fix is taken from current development branch of GCC for ARC and will be a
+> part of the next release of ARC tools, so at that point patch should be dropped.
+> 
+> https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/846e92167aa4f486259c9ff44bb4e6cce6097fa4
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/gcc/arc-2014.08/300-ptrdiff_type_int.patch | 26 ++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/gcc/arc-2014.08/300-ptrdiff_type_int.patch
+> 
 
-> there is an autobuild report at the bottom of the commit message where 
-> you can see a package which is failing due to that problem.
+Any chance to get this patch applied?
+This is a required fix for regressions introduced by
+http://git.buildroot.net/buildroot/commit/?id=0f236c1fef669192c8f5cc8ef26e93da91438dc2
 
-Indeed, I missed it. Sorry for the silly comment. Patch looks good to
-me.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
