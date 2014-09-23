@@ -1,35 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 21:43:19 +0200
-Subject: [Buildroot] [PATCH 1/8] connman: bump to version 1.25
-In-Reply-To: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
-References: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140923214319.38f154d0@free-electrons.com>
+Date: Tue, 23 Sep 2014 21:43:59 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Fix compile error on
+	arm4/arm5
+Message-ID: <20140923194418.694A99D74F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+commit: http://git.buildroot.net/buildroot/commit/?id=4810601c85bf0dcb3197a69cc3e17680132dec7a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 23 Sep 2014 11:45:40 +0200, J?r?me Pouiller wrote:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/connman/connman.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.net/results/d7e/d7ea8db79210228103257b6a28fada38cca142cb/
+http://autobuild.buildroot.net/results/ec7/ec71e4f16ee9106747dff5f15999cbd17903e76f/
+http://autobuild.buildroot.net/results/be7/be72eb182eaccf0064a32c9dfc2ac1c0d6555506/
+http://autobuild.buildroot.net/results/b35/b35b71e3d21394e7ca24f3b112d8a4047cd6c87b/
+http://autobuild.buildroot.net/results/5bb/5bbc8b5cdcd99229a6813970293f98b044fc489d/
+http://autobuild.buildroot.net/results/be5/be54e75c4171d1db0eaaaeb5f5df29751d7db57b/
 
-Applied patch 1, 2, 3, 5, 6 and 8 of your patch series.
+[Thomas: update patch to indicate that it has been merged upstream,
+and point to the upstream commit.]
 
-Patch 4 you said yourself that it should be withdrawn, so I've marked
-it as Rejected in patchwork.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg-0002-arm4-arm5.patch |   85 ++++++++++++++++++++++++++++
+ 1 files changed, 85 insertions(+), 0 deletions(-)
 
-Patch 7 is a bit more complicated, so I'd like to give it some time for
-reviewers/testers to comment.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch b/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch
+new file mode 100644
+index 0000000..5a0147f
+--- /dev/null
++++ b/package/ffmpeg/ffmpeg-0002-arm4-arm5.patch
+@@ -0,0 +1,85 @@
++Fix compile error on arm4/arm5 platform
++
++Patch merged upstream:
++http://git.videolan.org/?p=ffmpeg.git;a=commit;h=6b733be755529f2472472d9ed1b2eef3b6398828
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++From fe0f39e7263cd95783ad4669f8c3672a8eab4c83 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 23 Sep 2014 20:06:26 +0200
++Subject: [PATCH 1/1] Fix compile error on arm4/arm5 platform
++
++Since these commits
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=adf8227cf4e7b4fccb2ad88e1e09b6dc00dd00ed
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=db7f1c7c5a1d37e7f4da64a79a97bea1c4b6e9f8
++
++compilation on arm4/arm5 fails:
++
++libavcodec/libavcodec.so: undefined reference to
++`ff_startcode_find_candidate_armv6'
++
++Because libavcodec/arm/Makefile contains
++ARMV6-OBJS-$(CONFIG_STARTCODE)         += arm/startcode_armv6.o
++function ff_startcode_find_candidate_armv6 is not included for older ARM
++archs. The bug was found during automatic buildroot builds:
++
++http://autobuild.buildroot.net/results/ec7/ec71e4f16ee9106747dff5f15999cbd17903e76f//build-end.log
++Quote from configure summary:
++ARCH                      arm (armv4t)
++big-endian                no
++runtime cpu detection     yes
++ARMv5TE enabled           no
++ARMv6 enabled             no
++ARMv6T2 enabled           no
++
++http://autobuild.buildroot.net/results/be7/be72eb182eaccf0064a32c9dfc2ac1c0d6555506/build-end.log
++ARCH                      arm (armv5te)
++big-endian                no
++runtime cpu detection     yes
++ARMv5TE enabled           yes
++ARMv6 enabled             no
++ARMv6T2 enabled           no
++
++This patch provides the necessary #if clauses as discussed with Michael:
++https://ffmpeg.org/pipermail/ffmpeg-devel/2014-September/163329.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libavcodec/arm/h264dsp_init_arm.c |    2 ++
++ libavcodec/arm/vc1dsp_init_arm.c  |    2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/libavcodec/arm/h264dsp_init_arm.c b/libavcodec/arm/h264dsp_init_arm.c
++index f7aee1f..88dfd75 100644
++--- a/libavcodec/arm/h264dsp_init_arm.c
+++++ b/libavcodec/arm/h264dsp_init_arm.c
++@@ -107,8 +107,10 @@ av_cold void ff_h264dsp_init_arm(H264DSPContext *c, const int bit_depth,
++ {
++     int cpu_flags = av_get_cpu_flags();
++ 
+++#if HAVE_ARMV6
++     if (have_setend(cpu_flags))
++         c->startcode_find_candidate = ff_startcode_find_candidate_armv6;
+++#endif
++     if (have_neon(cpu_flags))
++         h264dsp_init_neon(c, bit_depth, chroma_format_idc);
++ }
++diff --git a/libavcodec/arm/vc1dsp_init_arm.c b/libavcodec/arm/vc1dsp_init_arm.c
++index 9dae22c..5f2c759 100644
++--- a/libavcodec/arm/vc1dsp_init_arm.c
+++++ b/libavcodec/arm/vc1dsp_init_arm.c
++@@ -28,8 +28,10 @@ av_cold void ff_vc1dsp_init_arm(VC1DSPContext *dsp)
++ {
++     int cpu_flags = av_get_cpu_flags();
++ 
+++#if HAVE_ARMV6
++     if (have_setend(cpu_flags))
++         dsp->startcode_find_candidate = ff_startcode_find_candidate_armv6;
+++#endif
++     if (have_neon(cpu_flags))
++         ff_vc1dsp_init_neon(dsp);
++ }
++-- 
++1.7.10.4
++
