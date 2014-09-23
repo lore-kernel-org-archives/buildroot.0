@@ -1,93 +1,295 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 23 Sep 2014 00:27:59 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gnupg2: configure script looks
- at the wrong stdint.h
-In-Reply-To: <1411243642-17955-1-git-send-email-romain.naour@openwide.fr>
-References: <1411243642-17955-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5420A26F.8010200@openwide.fr>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 23 Sep 2014 07:23:29 +0400
+Subject: [Buildroot] [PATCH] binutils: fix 'call8: call target out of range'
+	xtensa ld bug
+Message-ID: <1411442609-24398-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This fixes the following linux kernel build errors:
 
-Le 20/09/2014 22:07, Romain Naour a ?crit :
-> The configure test "checking absolute name of <stdint.h>..." return
-> the absolute path of a stdint.h file from the toolchain sources.
-> 
-> The contents of this file is completely different and obviously
-> does not contain intmax_t definitions.
-> 
-> Use gl_cv_absolute_stdint_h to indicate the correct file that
-> is in staging directory.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/92a/92af55396670685f12ed0ebcddfe2d082ed5aeb7/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/gnupg2/gnupg2.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-> index 33b5bc0..1e3506a 100644
-> --- a/package/gnupg2/gnupg2.mk
-> +++ b/package/gnupg2/gnupg2.mk
-> @@ -17,7 +17,8 @@ GNUPG2_CONF_OPT = \
->  	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
->  	--with-libassuan-prefix=$(STAGING_DIR)/usr \
->  	--with-ksba-prefix=$(STAGING_DIR)/usr \
-> -	--with-pth-prefix=$(STAGING_DIR)/usr
-> +	--with-pth-prefix=$(STAGING_DIR)/usr \
-> +	gl_cv_absolute_stdint_h=$(STAGING_DIR)/usr/include/stdint.h
->  
->  ifneq ($(BR2_PACKAGE_GNUPG2_GPGV2),y)
->  define GNUPG2_REMOVE_GPGV2
-> 
+  LD      init/built-in.o
+  net/built-in.o: In function `raw_proc_exit':
+  (.init.text+0xe29): dangerous relocation:
+		      call8: call target out of range: udp_proc_register
+  net/built-in.o: In function `udp_table_init':
+  (.init.text+0xf09): dangerous relocation:
+		      call8: call target out of range: udp_proc_register
+  net/built-in.o: In function `inet_init':
+  af_inet.c:(.init.text+0x142e): dangerous relocation:
+				 call8: call target out of range: udp4_proc_exit
+  net/built-in.o: In function `ip_auto_config':
+  ipconfig.c:(.init.text+0x28aa): dangerous relocation:
+				  call8: call target out of range: arp_send
 
-This is a weird bug...
+Backported from: 331ed1307b93d3ff77d248bdf2f7b79a20851457
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...-target-out-of-range-xtensa-ld-relaxation.patch | 79 ++++++++++++++++++++++
+ ...-target-out-of-range-xtensa-ld-relaxation.patch | 79 ++++++++++++++++++++++
+ ...-target-out-of-range-xtensa-ld-relaxation.patch | 79 ++++++++++++++++++++++
+ 3 files changed, 237 insertions(+)
+ create mode 100644 package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+ create mode 100644 package/binutils/2.23.2/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+ create mode 100644 package/binutils/2.24/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
 
-The problem is in the configure script at line 14668:
-
-      gl_cv_absolute_stdint_h=`(eval "$ac_cpp conftest.$ac_ext") 2>&5 |
-sed -n '\#/stdint.h#{s#.*"\(.*/stdint.h\)".*#\1#;s#^/[^/]#//&#;p;q;}'`
-
-Let's try to analyze the problem:
-
-Here is the content of conftest.c:
-cat conftest.c
-#include <stdint.h>
-
-The first part "$(eval $ac_cpp conftest.$ac_ext)" is the same as arm-linux-cpp conftest.c
-
-Here is the stdout:
-# 1 "conftest.c"
-# 1 "<built-in>"
-# 1 "<command-line>"
-# 1 "conftest.c"
-# 150 "conftest.c"
-# 1 "/home/naourr/git/buildroot/test/gnupg/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.8.3/include/stdint.h" 1 3 4
-# 9 "/home/naourr/git/buildroot/test/gnupg/host/opt/ext-toolchain/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.8.3/include/stdint.h" 3 4
-# 1 "/home/naourr/git/buildroot/test/gnupg/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/stdint.h" 1 3 4
-# 26 "/home/naourr/git/buildroot/test/gnupg/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/stdint.h" 3 4
-# 1 "/home/naourr/git/buildroot/test/gnupg/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/features.h" 1 3 4
-# 187 "/home/naourr/git/buildroot/test/gnupg/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/features.h" 3 4
-# 1 "/home/naourr/git/buildroot/test/gnupg/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/bits/uClibc_config.h" 1 3 4
-[...]
-
-Then, the output of arm-linux-cpp is filtered out with the sed command in order to keep the first line containing "stdint.h"
-
-For now, I don't know why 4.8.3/include/stdint.h is listed by arm-linux-cpp and I don't understand entirely the sed command.
-
-I tried to autoreconf the package to rebuild the configure script but without success.
-
-After my investigation on this problem, I found these links:
-http://lists.gnupg.org/pipermail/gnupg-devel/2013-December/028116.html
-http://bugs.gnupg.org/gnupg/issue1547
-
-To be continued...
-
-Best regards,
-Romain Naour
+diff --git a/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch b/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+new file mode 100644
+index 0000000..dba7620
+--- /dev/null
++++ b/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+@@ -0,0 +1,79 @@
++From 7fc39194f8fb48914c995f8ec3826d50086f1ec0 Mon Sep 17 00:00:00 2001
++From: Sterling Augustine <augustine.sterling@gmail.com>
++Date: Tue, 25 Jan 2011 13:59:13 -0800
++Subject: [PATCH] Fix 'call8: call target out of range' xtensa ld relaxation
++ bug
++
++During link-time relaxation distance between cross-section call site and
++its target may grow, producing 'call target out of range' error for
++relaxed calls. Be more conservative when calculating whether or not a
++callx can be converted to a straight call.
++
++2014-09-23  Sterling Augustine  <augustine.sterling@gmail.com>
++
++bfd/
++    * elf32-xtensa.c (is_resolvable_asm_expansion): for cross-section
++    call relaxation use furthermost addresses where call source and
++    destination can be to check whether it's in the range of a direct
++    call.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 41 +++++++++++++++++++++++++++++++++++++----
++ 1 file changed, 37 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 09862e3..e32496a 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -7124,10 +7124,43 @@ is_resolvable_asm_expansion (bfd *abfd,
++ 	  || is_reloc_sym_weak (abfd, irel)))
++     return FALSE;
++ 
++-  self_address = (sec->output_section->vma
++-		  + sec->output_offset + irel->r_offset + 3);
++-  dest_address = (target_sec->output_section->vma
++-		  + target_sec->output_offset + target_offset);
+++  if (target_sec->output_section != sec->output_section)
+++    {
+++      /* If the two sections are sufficiently far away that relaxation
+++	 might take the call out of range, we can't simplify.  For
+++	 example, a positive displacement call into another memory
+++	 could get moved to a lower address due to literal removal,
+++	 but the destination won't move, and so the displacment might
+++	 get larger.
+++
+++	 If the displacement is negative, assume the destination could
+++	 move as far back as the start of the output section.  The
+++	 self_address will be at least as far into the output section
+++	 as it is prior to relaxation.
+++
+++	 If the displacement is postive, assume the destination will be in
+++	 it's pre-relaxed location (because relaxation only makes sections
+++	 smaller).  The self_address could go all the way to the beginning
+++	 of the output section.  */
+++
+++      dest_address = target_sec->output_section->vma;
+++      self_address = sec->output_section->vma;
+++
+++      if (sec->output_section->vma > target_sec->output_section->vma)
+++	self_address += sec->output_offset + irel->r_offset + 3;
+++      else
+++	dest_address += bfd_get_section_limit (abfd, target_sec->output_section);
+++      /* Call targets should be four-byte aligned.  */
+++      dest_address = (dest_address + 3) & ~3;
+++    }
+++  else
+++    {
+++
+++      self_address = (sec->output_section->vma
+++		      + sec->output_offset + irel->r_offset + 3);
+++      dest_address = (target_sec->output_section->vma
+++		      + target_sec->output_offset + target_offset);
+++    }
++       
++   *is_reachable_p = pcrel_reloc_fits (direct_call_opcode, 0,
++ 				      self_address, dest_address);
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.23.2/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch b/package/binutils/2.23.2/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+new file mode 100644
+index 0000000..dba7620
+--- /dev/null
++++ b/package/binutils/2.23.2/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+@@ -0,0 +1,79 @@
++From 7fc39194f8fb48914c995f8ec3826d50086f1ec0 Mon Sep 17 00:00:00 2001
++From: Sterling Augustine <augustine.sterling@gmail.com>
++Date: Tue, 25 Jan 2011 13:59:13 -0800
++Subject: [PATCH] Fix 'call8: call target out of range' xtensa ld relaxation
++ bug
++
++During link-time relaxation distance between cross-section call site and
++its target may grow, producing 'call target out of range' error for
++relaxed calls. Be more conservative when calculating whether or not a
++callx can be converted to a straight call.
++
++2014-09-23  Sterling Augustine  <augustine.sterling@gmail.com>
++
++bfd/
++    * elf32-xtensa.c (is_resolvable_asm_expansion): for cross-section
++    call relaxation use furthermost addresses where call source and
++    destination can be to check whether it's in the range of a direct
++    call.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 41 +++++++++++++++++++++++++++++++++++++----
++ 1 file changed, 37 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 09862e3..e32496a 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -7124,10 +7124,43 @@ is_resolvable_asm_expansion (bfd *abfd,
++ 	  || is_reloc_sym_weak (abfd, irel)))
++     return FALSE;
++ 
++-  self_address = (sec->output_section->vma
++-		  + sec->output_offset + irel->r_offset + 3);
++-  dest_address = (target_sec->output_section->vma
++-		  + target_sec->output_offset + target_offset);
+++  if (target_sec->output_section != sec->output_section)
+++    {
+++      /* If the two sections are sufficiently far away that relaxation
+++	 might take the call out of range, we can't simplify.  For
+++	 example, a positive displacement call into another memory
+++	 could get moved to a lower address due to literal removal,
+++	 but the destination won't move, and so the displacment might
+++	 get larger.
+++
+++	 If the displacement is negative, assume the destination could
+++	 move as far back as the start of the output section.  The
+++	 self_address will be at least as far into the output section
+++	 as it is prior to relaxation.
+++
+++	 If the displacement is postive, assume the destination will be in
+++	 it's pre-relaxed location (because relaxation only makes sections
+++	 smaller).  The self_address could go all the way to the beginning
+++	 of the output section.  */
+++
+++      dest_address = target_sec->output_section->vma;
+++      self_address = sec->output_section->vma;
+++
+++      if (sec->output_section->vma > target_sec->output_section->vma)
+++	self_address += sec->output_offset + irel->r_offset + 3;
+++      else
+++	dest_address += bfd_get_section_limit (abfd, target_sec->output_section);
+++      /* Call targets should be four-byte aligned.  */
+++      dest_address = (dest_address + 3) & ~3;
+++    }
+++  else
+++    {
+++
+++      self_address = (sec->output_section->vma
+++		      + sec->output_offset + irel->r_offset + 3);
+++      dest_address = (target_sec->output_section->vma
+++		      + target_sec->output_offset + target_offset);
+++    }
++       
++   *is_reachable_p = pcrel_reloc_fits (direct_call_opcode, 0,
++ 				      self_address, dest_address);
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.24/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch b/package/binutils/2.24/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+new file mode 100644
+index 0000000..e4c600e
+--- /dev/null
++++ b/package/binutils/2.24/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+@@ -0,0 +1,79 @@
++From 7fc39194f8fb48914c995f8ec3826d50086f1ec0 Mon Sep 17 00:00:00 2001
++From: Sterling Augustine <augustine.sterling@gmail.com>
++Date: Tue, 25 Jan 2011 13:59:13 -0800
++Subject: [PATCH] Fix 'call8: call target out of range' xtensa ld relaxation
++ bug
++
++During link-time relaxation distance between cross-section call site and
++its target may grow, producing 'call target out of range' error for
++relaxed calls. Be more conservative when calculating whether or not a
++callx can be converted to a straight call.
++
++2014-09-23  Sterling Augustine  <augustine.sterling@gmail.com>
++
++bfd/
++    * elf32-xtensa.c (is_resolvable_asm_expansion): for cross-section
++    call relaxation use furthermost addresses where call source and
++    destination can be to check whether it's in the range of a direct
++    call.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 41 +++++++++++++++++++++++++++++++++++++----
++ 1 file changed, 37 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 09862e3..e32496a 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -7124,10 +7124,43 @@ is_resolvable_asm_expansion (bfd *abfd,
++ 	  || is_reloc_sym_weak (abfd, irel)))
++     return FALSE;
++ 
++-  self_address = (sec->output_section->vma
++-		  + sec->output_offset + irel->r_offset + 3);
++-  dest_address = (target_sec->output_section->vma
++-		  + target_sec->output_offset + target_offset);
+++  if (target_sec->output_section != sec->output_section)
+++    {
+++      /* If the two sections are sufficiently far away that relaxation
+++	 might take the call out of range, we can't simplify.  For
+++	 example, a positive displacement call into another memory
+++	 could get moved to a lower address due to literal removal,
+++	 but the destination won't move, and so the displacment might
+++	 get larger.
+++
+++	 If the displacement is negative, assume the destination could
+++	 move as far back as the start of the output section.  The
+++	 self_address will be at least as far into the output section
+++	 as it is prior to relaxation.
+++
+++	 If the displacement is postive, assume the destination will be in
+++	 it's pre-relaxed location (because relaxation only makes sections
+++	 smaller).  The self_address could go all the way to the beginning
+++	 of the output section.  */
+++
+++      dest_address = target_sec->output_section->vma;
+++      self_address = sec->output_section->vma;
+++
+++      if (sec->output_section->vma > target_sec->output_section->vma)
+++	self_address += sec->output_offset + irel->r_offset + 3;
+++      else
+++	dest_address += bfd_get_section_limit (abfd, target_sec->output_section);
+++      /* Call targets should be four-byte aligned.  */
+++      dest_address = (dest_address + 3) & ~3;
+++    }
+++  else
+++    {
+++
+++      self_address = (sec->output_section->vma
+++		      + sec->output_offset + irel->r_offset + 3);
+++      dest_address = (target_sec->output_section->vma
+++		      + target_sec->output_offset + target_offset);
+++    }
++ 
++   *is_reachable_p = pcrel_reloc_fits (direct_call_opcode, 0,
++ 				      self_address, dest_address);
++-- 
++1.8.1.4
++
+-- 
+1.8.1.4
