@@ -1,37 +1,45 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 23 Sep 2014 08:51:33 +0200 (CEST)
-Subject: [Buildroot] [PATCH v2] cmake : bump to version 3.0.2
-In-Reply-To: <20140922190803.5af135e6@free-electrons.com>
-Message-ID: <1533814491.25601259.1411455093234.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Sep 2014 09:37:51 +0200
+Subject: [Buildroot] [PATCH 1/1] tiff: ensure directory exists before
+ installing to it
+In-Reply-To: <CANxTyt7ZamM0EW7QsOOMQefeetFdhrWo-wjDnoD0TRZn7Tru+A@mail.gmail.com>
+References: <1410488467-2093-1-git-send-email-danomimanchego123@gmail.com>
+ <20140922192503.23ee2050@free-electrons.com>
+ <CANxTyt7ZamM0EW7QsOOMQefeetFdhrWo-wjDnoD0TRZn7Tru+A@mail.gmail.com>
+Message-ID: <20140923093751.4addbd77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Patch applied, thanks. However, there was one missing information:
-> the
-> explanation of why the
-> cmake-0001-FindQt4-do-not-prepend-CMake-root-path-when-searchin.patch
-> gets removed. So I had to go check the upstream CMake Git repository
-> to
-> verify that indeed a similar change had been merged. I've edited the
-> commit log to mention this.
-> 
+Dear Danomi Manchego,
 
-my bad, I'm pretty certain I wrote it at some point, I must have lost it in a rebase
+On Mon, 22 Sep 2014 14:19:03 -0400, Danomi Manchego wrote:
 
-sorry about that
+> I do not have a defconfig that demonstrates this.  I tend to encounter
+> these kind of error when I do the following trick to observe what
+> exactly is installed to the target directory:
+> 
+>     make tiff-rebuild TARGET_DIR=$(pwd)/TIFF
+>     tree TIFF
+> 
+> If I hit an error, they I figure that I'm just one mostly empty custom
+> skeleton and convoluted dependency graph away from hitting the error
+> in real life.  So then I submit a patch.
 
-> See
-> http://git.buildroot.net/buildroot/commit/?id=4aef37b683a637c8755a8b197a46aa30674c2074.
-> 
-> Thanks,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+Ok, thanks for the explanation. However, I'm wondering if we want to
+support this. By doing this, you completely circumvent the preparation
+work that is done by Buildroot: when you do make tiff-rebuild, only the
+building and installation steps are re-executed with a different
+TARGET_DIR. So any preparation work done before, such as directories
+created by the global "dirs" target (on which all packages depend) will
+not be done in your new TARGET_DIR.
+
+Peter, Fabio, any opinion on this?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
