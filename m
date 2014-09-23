@@ -1,49 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 09:43:00 +0200
-Subject: [Buildroot] RFC: CVE analysis
-In-Reply-To: <CANQCQpZBHb4kSvP2FRgLEzAE+LmUxaLaE5-C+PCytUUGDzBLnQ@mail.gmail.com>
-References: <CANQCQpbSu1OUHvivMbQFGC3x6GPSWA3imp2GqGMjeqmYZKBstw@mail.gmail.com>
- <542088A8.2080902@zacarias.com.ar>
- <CANQCQpZBHb4kSvP2FRgLEzAE+LmUxaLaE5-C+PCytUUGDzBLnQ@mail.gmail.com>
-Message-ID: <20140923094300.01862ed4@free-electrons.com>
+Date: Tue, 23 Sep 2014 09:44:38 +0200
+Subject: [Buildroot] Building buildroot with python (32bit) on 64bit
+ ubuntu machine
+In-Reply-To: <CAAwwcmSuLGjmmhaWxyKrfyVaVtMsFr9m9v7aWTFfdOrRiUgf5A@mail.gmail.com>
+References: <CACUGKYP70McERSyUD7J2KysYZ7crf6fJ4y46CqSfRPDFNAvoTw@mail.gmail.com>
+ <CAAwwcmSuLGjmmhaWxyKrfyVaVtMsFr9m9v7aWTFfdOrRiUgf5A@mail.gmail.com>
+Message-ID: <20140923094438.4c143368@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Weber,
+Dear Oli Vogt,
 
-On Mon, 22 Sep 2014 16:12:56 -0500, Matthew Weber wrote:
+On Tue, 23 Sep 2014 17:39:54 +1200, Oli Vogt wrote:
 
-> >> I was curious if anyone has done a script similar to the "make
-> >> legal-info" that takes a package list and checks it against a CVE
-> >> database?  We're looking at doing some automated tracking of
-> >> vulnerabilities with our nightly builds and were at a point of putting
-> >> something together.
+> I build for ARM 32-bit and started working on the new module
+> python-smbus-cffi a few weeks ago. After running into problems I could not
+> finish my investigations because of other more urgent work.
+> Here are the notes I made:
+> 
+> On a 64-bit host: the build/install of python-smbus-cffi fails as follows:
 
-Seems really interesting.
+Could you post as RFC the current state of your patch adding
+python-smbus-cffi ? I've done a fair bit of work on the Python stuff,
+so I might be able to look into this and see what's going on.
 
-> Would it be worth using this also to document if a package needs
-> updating but hasn't been updated.  Then this could be queried as part
-> of the build (make cve-info) to generate a summary instead of a
-> Internet CVE database query.  It would require some automation work to
-> generate a patch to the list to append to that file that a new CVE was
-> issued against it though.....  guessing doing that manually isn't
-> realistic.
-
-It's probably worth mentioning
-http://patchwork.ozlabs.org/patch/337267/: it's a Python script that
-checks whether a package has new versions available. It's not written
-with security/CVEs in mind, but you might find it interesting, and
-maybe plug some more security/CVEs oriented checks in there.
-
-That's a script we need to review/test and then commit, as I believe it
-would be very useful to have. The aim is to use it as a replacement of
-support/scripts/pkg-stats, whose output is updated every day at
-http://autobuild.buildroot.org/stats/.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
