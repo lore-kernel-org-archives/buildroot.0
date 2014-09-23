@@ -1,24 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Sep 2014 12:44:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 7448] Having export MACHINE="something" breaks
- glibc build on IMX6 target
-In-Reply-To: <bug-7448-163@https.bugs.busybox.net/>
-References: <bug-7448-163@https.bugs.busybox.net/>
-Message-ID: <20140923124422.C2DB59D75E@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 23 Sep 2014 15:01:25 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-09-22
+References: <20140923063011.5B12A1010A4@stock.ovh.net>
+Message-ID: <XnsA3B198D3EE83DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7448
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140923063011.5B12A1010A4 at stock.ovh.net:
 
---- Comment #1 from Risto Avila <risto.avila@digia.com> 2014-09-23 12:44:22 UTC ---
-Created attachment 5678
-  --> https://bugs.busybox.net/attachment.cgi?id=5678
-Possible fix to unset MACHINE
+>          arm |                   ffmpeg-2.4.1 | NOK | 
+http://autobuild.buildroot.net/results/be54e75c4171d1db0eaaaeb5f5df29751d7db5
+7b/
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Hi,
+
+since I am unsure how to fix this compile error for arm4/arm5 archs I posted 
+my question on the ffmpeg mailinglist:
+
+https://ffmpeg.org/pipermail/ffmpeg-devel/2014-September/163324.html
+
+Regards, Bernd
