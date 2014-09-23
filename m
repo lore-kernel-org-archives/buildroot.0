@@ -1,60 +1,65 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 23 Sep 2014 18:21:09 +0200
-Subject: [Buildroot] [PATCH 1/3] host-pkgconf: install pkg-config-native
+Date: Tue, 23 Sep 2014 18:21:10 +0200
+Subject: [Buildroot] [PATCH 2/3] hicolor-icon-theme: new package
 In-Reply-To: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1411489271-26899-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1411489271-26899-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package host-pkgconf now provides `pkg-config-native`, which uses the
-host native sysroot. It is useful for packages which compile build-time
-helper tools (such as Gtk+ 3.0).
+This new package provides Freedesktop Hicolor icon theme.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/pkgconf/pkg-config-native.in | 3 +++
- package/pkgconf/pkgconf.mk           | 8 ++++++++
- 2 files changed, 11 insertions(+)
- create mode 100644 package/pkgconf/pkg-config-native.in
+ package/Config.in                                |  1 +
+ package/hicolor-icon-theme/Config.in             |  4 ++++
+ package/hicolor-icon-theme/hicolor-icon-theme.mk | 12 ++++++++++++
+ 3 files changed, 17 insertions(+)
+ create mode 100644 package/hicolor-icon-theme/Config.in
+ create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.mk
 
-diff --git a/package/pkgconf/pkg-config-native.in b/package/pkgconf/pkg-config-native.in
+diff --git a/package/Config.in b/package/Config.in
+index 2eefc3f..1fa2398 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -622,6 +622,7 @@ menu "Graphics"
+ 	source "package/gtk2-engines/Config.in"
+ 	source "package/gtk2-themes/Config.in"
+ 	source "package/harfbuzz/Config.in"
++	source "package/hicolor-icon-theme/Config.in"
+ 	source "package/imlib2/Config.in"
+ 	source "package/jasper/Config.in"
+ 	source "package/jpeg/Config.in"
+diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
 new file mode 100644
-index 0000000..7e25cd2
+index 0000000..b1c66f6
 --- /dev/null
-+++ b/package/pkgconf/pkg-config-native.in
-@@ -0,0 +1,3 @@
-+#!/bin/sh
++++ b/package/hicolor-icon-theme/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_HICOLOR_ICON_THEME
++	bool "hicolor icon theme"
++	help
++	  Freedesktop Hicolor icon theme
+diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.mk b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+new file mode 100644
+index 0000000..768aec8
+--- /dev/null
++++ b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# hicolor-icon-theme
++#
++################################################################################
 +
-+PKG_CONFIG_LIBDIR=@HOST_DIR@/usr/lib/pkgconfig:@HOST_DIR@/usr/share/pkgconfig @HOST_DIR@/usr/bin/pkgconf $@
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index c961536..b6e7c12 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -24,6 +24,13 @@ define HOST_PKGCONF_INSTALL_WRAPPER
- 		$(HOST_DIR)/usr/bin/pkg-config
- endef
- 
-+define HOST_PKGCONF_INSTALL_NATIVE
-+	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config-native.in \
-+		$(HOST_DIR)/usr/bin/pkg-config-native
-+	$(SED) 's, at HOST_DIR@,$(HOST_DIR),g' \
-+		$(HOST_DIR)/usr/bin/pkg-config-native
-+endef
++HICOLOR_ICON_THEME_VERSION = 0.13
++HICOLOR_ICON_THEME_SITE = http://icon-theme.freedesktop.org/releases/
++HICOLOR_ICON_THEME_LICENSE = GPLv2
++HICOLOR_ICON_THEME_LICENSE_FILES = COPYING
 +
- define HOST_PKGCONF_STATIC
- 	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
- endef
-@@ -34,6 +41,7 @@ endef
- 
- PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
- HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
-+HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_NATIVE
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- 	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
++$(eval $(autotools-package))
 -- 
 1.9.1
