@@ -1,34 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 23 Sep 2014 17:23:33 +0100
-Subject: [Buildroot] [PATCH 3/3] libgtk3: new package
-In-Reply-To: <1411489271-26899-4-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1411489271-26899-4-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <54219E85.6020906@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Sep 2014 16:41:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 7448] Having export MACHINE="something" breaks
+ glibc build on IMX6 target
+In-Reply-To: <bug-7448-163@https.bugs.busybox.net/>
+References: <bug-7448-163@https.bugs.busybox.net/>
+Message-ID: <20140923164106.AAE3F9D75C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/23/2014 05:21 PM, Eric Le Bihan wrote:
-> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-> new file mode 100644
-> index 0000000..523d8f1
-> --- /dev/null
-> +++ b/package/libgtk3/libgtk3.mk
-> @@ -0,0 +1,174 @@
-> +################################################################################
-> +#
-> +# libgtk3
-> +#
-> +################################################################################
-> +
-> +LIBGTK3_VERSION_MAJOR = 3.12
-> +LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
+https://bugs.busybox.net/show_bug.cgi?id=7448
 
-Since you are planing to add a new package, why not use the latests 
-version of it? 3.14.0
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-09-23 16:41:06 UTC ---
+Can you send your patch to the list, as per:
+
+http://buildroot.net/downloads/manual/manual.html#submitting-patches
+
+Thanks.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Vincent
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
