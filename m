@@ -1,38 +1,29 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 23 Sep 2014 11:45:47 +0200
-Subject: [Buildroot] [PATCH 8/8] directfb: disable multi application if no
-	MMU
-In-Reply-To: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
-References: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1411465547-6847-8-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Sep 2014 11:53:32 +0200
+Subject: [Buildroot] [PATCH] ncurses: Add libcurses symlink to libncurses
+In-Reply-To: <5421407F.2090204@imgtec.com>
+References: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140923113820.1e06567e@free-electrons.com>
+ <5421407F.2090204@imgtec.com>
+Message-ID: <20140923115332.23deccaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-directfb-fusion use madvise which is not available on no-MMU targets.
+Dear Vicente Olivert Riera,
 
-It seems it would be possible to simply remove call to madvise (there is
-only one call) if not available. However, since I am not sure, I prefer
-to completly disable directfb-fusion.
+On Tue, 23 Sep 2014 10:42:23 +0100, Vicente Olivert Riera wrote:
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/directfb/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> there is an autobuild report at the bottom of the commit message where 
+> you can see a package which is failing due to that problem.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index d53f756..3aa51cb 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_DIRECTFB
- config BR2_PACKAGE_DIRECTFB_MULTI
- 	bool "directfb multi application"
- 	select BR2_PACKAGE_LINUX_FUSION
-+	depends on BR2_USE_MMU # madvise()
- 	depends on BR2_LINUX_KERNEL
- 	help
- 	  Enable use of multiple concurrent DirectFB applications
+Indeed, I missed it. Sorry for the silly comment. Patch looks good to
+me.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
