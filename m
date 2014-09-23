@@ -1,48 +1,44 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 23 Sep 2014 11:24:07 +0000
-Subject: [Buildroot] [PATCH v4] gcc: explicitly use
- C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
-In-Reply-To: <20140923131924.2334adec@free-electrons.com>
-References: <1409558133-17642-1-git-send-email-abrodkin@synopsys.com>
- <1410155602.4784.1.camel@abrodkin-8560l.internal.synopsys.com>
- <1410787751.5875.30.camel@abrodkin-8560l.internal.synopsys.com>
- <1411470616.8968.3.camel@abrodkin-8560l.internal.synopsys.com>
- <20140923131924.2334adec@free-electrons.com>
-Message-ID: <1411471446.8968.7.camel@abrodkin-8560l.internal.synopsys.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 23 Sep 2014 13:30:48 +0200
+Subject: [Buildroot] [PATCH 4/8] lttng-modules: bump to version 2.5.0
+In-Reply-To: <1411465547-6847-4-git-send-email-jezz@sysmic.org>
+References: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
+ <1411465547-6847-4-git-send-email-jezz@sysmic.org>
+Message-ID: <74303501.VNHZjKV6jf@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Tue, 2014-09-23 at 13:19 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
+On Tuesday 23 September 2014 11:45:43 J?r?me Pouiller wrote:
+> This version should support kernel up to 3.15.
 > 
-> On Tue, 23 Sep 2014 11:10:16 +0000, Alexey Brodkin wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/lttng-modules/lttng-modules.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > > I'm wondering if this version is fine and we may go ahead an apply it?
-> > > 
-> > > Please treat this as a polite reminder about this pending patch.
-> > 
-> > Any chance for this change to made its way into upstream Buildroot?
+> diff --git a/package/lttng-modules/lttng-modules.mk
+> b/package/lttng-modules/lttng-modules.mk index 346214a..72d2eb7 100644
+> --- a/package/lttng-modules/lttng-modules.mk
+> +++ b/package/lttng-modules/lttng-modules.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ###########################################################################
+> #####
 > 
-> Yes. Please give us some time to test it before applying it. It's
-> touching a fairly sensitive area, so we don't apply such patches
-> lightly.
+> -LTTNG_MODULES_VERSION = 2.4.1
+> +LTTNG_MODULES_VERSION = 2.5.0
+>  LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules
+>  LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+>  LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for
+> lib/bitfield.h and lib/prio_heap/*
+Oops, this patch would not have been in this serie. I have also to bump 
+versions of other lttng packages.
 
-Sure, I completely understand and support your comment.
-I just want to make sure this change is not lost and in one or other
-form is applied.
 
-This change is important for us because allows us to build entire target
-binaries in consistency, otherwise with inconsistent binaries in some
-corner cases there happen error on linkage of libgcc and other software
-like busybox etc.
-
-Personally I did build tests this patch for ARC, ARM and PPC (with GCC
-4.5), essentially run-time test was only done on ARC because this is the
-only HW I had handy.
-
--Alexey
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
