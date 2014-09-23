@@ -1,139 +1,139 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Tue, 23 Sep 2014 22:48:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.8.1
-Message-ID: <1411505326-11833-1-git-send-email-jkrause@posteo.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 23 Sep 2014 23:02:17 +0200
+Subject: [Buildroot] [PATCH 1/1] ympd: new package
+In-Reply-To: <1411502012-13553-1-git-send-email-limpens@gmail.com>
+References: <1411502012-13553-1-git-send-email-limpens@gmail.com>
+Message-ID: <CAHXCMMKg5wKZWwvxVSYyi-0-ZdDSbH0GSmZRG+J3jjn2eivsUQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to version 0.8.1 requires a change of the uclibc patch.
+Hi Eric,
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch | 59 ++++++++++++++---------
- package/upmpdcli/upmpdcli.mk                      |  2 +-
- 2 files changed, 36 insertions(+), 25 deletions(-)
+On Tue, Sep 23, 2014 at 9:53 PM, Eric Limpens <limpens@gmail.com> wrote:
+> Signed-off-by: Eric Limpens <limpens@gmail.com>
+> ---
+>  package/Config.in                                       |  1 +
+>  package/ympd/Config.in                                  |  9 +++++++++
+>  package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch | 12 ++++++++++++
+>  package/ympd/ympd.mk                                    | 10 ++++++++++
+>  4 files changed, 32 insertions(+)
+>  create mode 100644 package/ympd/Config.in
+>  create mode 100644 package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+>  create mode 100644 package/ympd/ympd.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 2eefc3f..1578404 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -35,6 +35,7 @@ menu "Audio and video applications"
+>         source "package/wavpack/Config.in"
+>         source "package/xbmc/Config.in"
+>         source "package/yavta/Config.in"
+> +       source "package/ympd/Config.in"
+>  endmenu
+>
+>  menu "Compressors and decompressors"
+> diff --git a/package/ympd/Config.in b/package/ympd/Config.in
+> new file mode 100644
+> index 0000000..53f128e
+> --- /dev/null
+> +++ b/package/ympd/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_YMPD
+> +       bool "ympd"
+> +       select BR2_PACKAGE_LIBMPDCLIENT #libmpdclient
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       help
+> +         ympd, Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS
+> +
+> +comment "ympd needs a toolchain w/ threads"
+> +       depends on !(BR2_TOOLCHAIN_HAS_THREADS)
+> diff --git a/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+> new file mode 100644
+> index 0000000..55a29ee
+> --- /dev/null
+> +++ b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+> @@ -0,0 +1,12 @@
+> +--- ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt       2014-05-24 15:25:47.000000000 +0200
+> ++++ ympd-a98d760dddff4b0dd595d977c9077f34beff05c5-1/CMakeLists.txt     2014-09-23 20:04:55.491997850 +0200
+> +@@ -29,6 +29,7 @@
+> + )
+> +
+> +-add_executable(mkdata htdocs/mkdata.c)
+> +-get_target_property(MKDATA_EXE mkdata LOCATION)
+> ++#add_executable(mkdata htdocs/mkdata.c)
+> ++#get_target_property(MKDATA_EXE mkdata LOCATION)
+> ++set(MKDATA_EXE "./mkdata")
 
-diff --git a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-index 4935efd..57af172 100644
---- a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-+++ b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-@@ -4,11 +4,18 @@ Add necessary fixes to build with uClibc
-  - exp10 is not available in uClibc
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: J?rg Krause <jkrause@posteo.de>
-+---
-+ libupnpp/device/device.cxx | 1 +
-+ libupnpp/soaphelp.cxx      | 4 ++++
-+ upmpd/upmpd.cxx            | 1 +
-+ upmpd/upmpdutils.cxx       | 7 +++++++
-+ 4 files changed, 13 insertions(+)
- 
--Index: b/libupnpp/device.cxx
--===================================================================
----- a/libupnpp/device.cxx
--+++ b/libupnpp/device.cxx
-+diff --git a/libupnpp/device/device.cxx b/libupnpp/device/device.cxx
-+index 682c151..48c81e4 100644
-+--- a/libupnpp/device/device.cxx
-++++ b/libupnpp/device/device.cxx
- @@ -17,6 +17,7 @@
-  #include "config.h"
-  
-@@ -17,8 +24,8 @@ Index: b/libupnpp/device.cxx
-  #include <sys/time.h>
-  
-  #include <iostream>
--Index: b/libupnpp/soaphelp.cxx
--===================================================================
-+diff --git a/libupnpp/soaphelp.cxx b/libupnpp/soaphelp.cxx
-+index 8f25185..f4358b9 100644
- --- a/libupnpp/soaphelp.cxx
- +++ b/libupnpp/soaphelp.cxx
- @@ -16,6 +16,10 @@
-@@ -32,23 +39,23 @@ Index: b/libupnpp/soaphelp.cxx
-  #include <iostream>
-  using namespace std;
-  
--Index: b/upmpd/upmpd.cxx
--===================================================================
-+diff --git a/upmpd/upmpd.cxx b/upmpd/upmpd.cxx
-+index 3b45cdd..bc506ff 100644
- --- a/upmpd/upmpd.cxx
- +++ b/upmpd/upmpd.cxx
--@@ -20,6 +20,7 @@
-- #include <unistd.h>
-+@@ -22,6 +22,7 @@
-+ #include <signal.h>
-  #include <sys/types.h>
-  #include <pwd.h>
- +#include <errno.h>
-  
-  #include <string>
-  #include <iostream>
--Index: b/upmpd/upmpdutils.cxx
--===================================================================
-+diff --git a/upmpd/upmpdutils.cxx b/upmpd/upmpdutils.cxx
-+index 2830a2e..7cea612 100644
- --- a/upmpd/upmpdutils.cxx
- +++ b/upmpd/upmpdutils.cxx
--@@ -21,11 +21,14 @@
-+@@ -21,6 +21,8 @@
-  // not linking to Qt or glib just to get path-concatenating
-  // functions...
-  
-@@ -57,21 +64,25 @@ Index: b/upmpd/upmpdutils.cxx
-  #include <unistd.h>
-  #include <fcntl.h>
-  #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <sys/file.h>
--+#include <stdlib.h>
-- #include <math.h>
-- #include <pwd.h>
-+@@ -31,6 +33,7 @@
-  #include <regex.h>
--@@ -35,6 +38,11 @@
-+ #include <errno.h>
-+ #include <string.h>
-++#include <stdlib.h>
-+ #ifndef O_STREAMING
-  #define O_STREAMING 0
-  #endif
-- 
-+@@ -283,6 +286,10 @@ int percentodbvalue(int value)
-+ #ifdef __APPLE__
-+ #define exp10 __exp10
-+ #endif
- +#ifdef __UCLIBC__
- +/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
- +#define exp10(x) (exp((x) * log(10)))
- +#endif /* __UCLIBC__ */
--+
-- #include <iostream>
-- #include <sstream>
-- #include <fstream>
-+ 
-+ // Translate VolumeDB to MPD 0-100
-+ int dbvaluetopercent(int dbvalue)
-+-- 
-+2.1.0
-+
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index fbd2a4f..37d8581 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 0.8.0
-+UPMPDCLI_VERSION = 0.8.1
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+This usually won't work.
+The tricky thing is that the tool comes with the project itself, and
+is used during the build process of the project itself.
+
+This kind of programs is usually not necessary on the target, but
+useful to generate source code and/or data for the target.
+
+Building a tool, then trying to using it in the same build is a common
+mistake when the developers do not have cross-development in mind.
+So, this is not an issue specific to CMake (or any orther build-system).
+
+To workaround this, there is a couple of solutions, depending on
+whether you can acheive the same job using standard programs (e.g.:
+zip, dd ... whatever is needed/done) or not:
+1) if the job can be done somehow else using standard programs, then
+you can try doing the job using these standard tools. It may require
+writing a script;
+2) if the (host-)tool is simple enough, so that it can easily be built
+for the host, then you can build it manually (i.e. by by-passing the
+original build-system), before configuring the project for the target
+build, and feed its path in the configure phase of the target build;
+3) otherwise, you can build a the package for the host, so you'll get
+the host tools installed in the Buildroot host directory, and feed its
+path in the configure phase of the target build.
+
+In case you choose option 3), you may want to limit the host-build of
+the project to the needed host-tools. This may require patching the
+build system to support that, and/or patching the build-system to use
+a predefined tool when cross-compiling.
+
+
+> +
+> + add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/assets.c
+> diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
+> new file mode 100644
+> index 0000000..22727a9
+> --- /dev/null
+> +++ b/package/ympd/ympd.mk
+> @@ -0,0 +1,10 @@
+> +YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
+> +YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
+> +
+> +define YMPD_MAKE_HOST_TOOL
+> +        $(CC) -O2 $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
+> +endef
+> +
+
+Instead of adding a set(MKDATA_EXE "....") in the cmake code itself,
+you can override it through the command line:
+
+YMPD_CONF_OPT += -DMKDATA_EXE="$(@D)/mkdata"
+
+(But you'll still need to disable the mkdata add_executable call).
+
+> +YMPD_PRE_BUILD_HOOKS += YMPD_MAKE_HOST_TOOL
+> +
+> +$(eval $(cmake-package))
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-2.1.0
+Samuel
