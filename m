@@ -1,62 +1,54 @@
-From: Sylvain LG <forum@sylvainlegourr.com>
-Date: Tue, 23 Sep 2014 10:12:29 +0200
-Subject: [Buildroot] where is libdns_sd.so?
-In-Reply-To: <loom.20140922T230412-185@post.gmane.org>
-References: <CAK9TtU2BUcZpPVnvGAsYXShYr+ctAR-g2k3KLXgGG_kALPBNMg@mail.gmail.com>
- <87vbof2xnf.fsf@dell.be.48ers.dk>
- <loom.20140922T230412-185@post.gmane.org>
-Message-ID: <CAK9TtU3=Qpf0HZYN0fYARsu_NObRq3z=YFtw_iA8tS6uX0AWjA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 23 Sep 2014 10:33:11 +0100
+Subject: [Buildroot] [PATCH] ncurses: Add libcurses symlink to libncurses
+Message-ID: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you. It works great.
+Some packages use -lcurses when they are linking, so they try to link to
+a library called libcurses. The library provided by our ncurses package
+is called libncurses, so those packages fail to link with a message like
+this one:
 
-2014-09-22 23:05 GMT+02:00 Nimai Mahajan <nimaim@gmail.com>:
+/bin/ld: cannot find -lcurses
 
-> Peter Korsgaard <jacmet@...> writes:
->
-> >
-> > >>>>> "Sylvain" == Sylvain LG <forum <at> sylvainlegourr.com> writes:
-> >
-> >  > Hello,
-> >  > I've just compiled my system with target package Avahi:
-> >
-> >  > [*] avahi
-> >  > [*]   IPv4LL network address configuration daemon
-> >  > [*]   mDNS/DNS-SD daemon
-> >
-> >  > I need libdns_sd.so to develop a zeroconf application.
-> >
-> >  > But no such a lib is compiled altough a find ./output -name
-> *dns_sd* displays:
-> >
-> >  >     ./build/avahi-0.6.31/avahi-compat-libdns_sd
-> >  >     ./build/avahi-0.6.31/avahi-compat-libdns_sd/dns_sd.h
-> >  >     ./build/avahi-0.6.31/avahi-compat-libdns_sd.pc.in
-> >
-> > the bonjour compatibility library is not built by default, but needs
-> be
-> > explicitly be enabled at configure time with --enable-compat-
-> libdns_sd.
-> >
-> > We don't currently have a Buildroot option to enable this, but I'll
-> add
-> > it now.
-> >
->
-> Thanks Peter! Our application will also require this for a fully-
-> complaint zeroconf solution (using a C application) to detect connected
-> clients in real-time.
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140923/0238e0ae/attachment.html>
+Installing a libcurses symlink to libncurses fixes the problem.
+
+Fixes:
+  http://autobuild.buildroot.net/results/466/466995f9534447a4f54327a14c44ef9e16dd1123/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+---
+ package/ncurses/ncurses.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 81a3998..3f57407 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -46,6 +46,8 @@ define NCURSES_LINK_LIBS
+ 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
+ 			$(1)/usr/lib/$${lib}.a; \
+ 	done
++	ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
++		$(1)/usr/lib/libcurses.a
+ endef
+ else
+ define NCURSES_LINK_LIBS
+@@ -55,6 +57,10 @@ define NCURSES_LINK_LIBS
+ 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
+ 			$(1)/usr/lib/$${lib}.so; \
+ 	done
++	ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
++		$(1)/usr/lib/libcurses.a
++	ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
++		$(1)/usr/lib/libcurses.so
+ endef
+ endif
+ 
+-- 
+1.7.1
