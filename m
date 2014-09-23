@@ -1,35 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 23 Sep 2014 10:42:23 +0100
-Subject: [Buildroot] [PATCH] ncurses: Add libcurses symlink to libncurses
-In-Reply-To: <20140923113820.1e06567e@free-electrons.com>
-References: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140923113820.1e06567e@free-electrons.com>
-Message-ID: <5421407F.2090204@imgtec.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 23 Sep 2014 11:45:40 +0200
+Subject: [Buildroot] [PATCH 1/8] connman: bump to version 1.25
+Message-ID: <1411465547-6847-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/23/2014 10:38 AM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Tue, 23 Sep 2014 10:33:11 +0100, Vicente Olivert Riera wrote:
->> Some packages use -lcurses when they are linking, so they try to link to
->> a library called libcurses. The library provided by our ncurses package
->> is called libncurses, so those packages fail to link with a message like
->> this one:
->
-> Can you define "some" in "Some packages" ?
->
-> Thanks!
->
-> Thomas
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/connman/connman.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Thomas,
-
-there is an autobuild report at the bottom of the commit message where 
-you can see a package which is failing due to that problem.
-
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 9b5d15f..e9ce1e6 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.23
++CONNMAN_VERSION = 1.25
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
 -- 
-Vincent
+1.9.1
