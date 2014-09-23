@@ -1,43 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 21:53:54 +0200
-Subject: [Buildroot] [git commit] ipset: bump to version 6.23
-Message-ID: <20140923195402.790E59D74F@busybox.osuosl.org>
+Date: Tue, 23 Sep 2014 21:54:13 +0200
+Subject: [Buildroot] [PATCH] ipset: bump to version 6.23
+In-Reply-To: <1411475582-25829-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1411475582-25829-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140923215413.00c08410@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8eeaee9933ceeca902d80ac8c388fc55eba9d9ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Also add hash file.
+On Tue, 23 Sep 2014 09:33:02 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/ipset/ipset.hash | 2 ++
+>  package/ipset/ipset.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/ipset/ipset.hash
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipset/ipset.hash |    2 ++
- package/ipset/ipset.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-new file mode 100644
-index 0000000..12d61b9
---- /dev/null
-+++ b/package/ipset/ipset.hash
-@@ -0,0 +1,2 @@
-+# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.23.tar.bz2.md5sum.txt
-+md5	38581e52b47c94a67940351af6ea8d8c	ipset-6.23.tar.bz2
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index d31d433..aff1902 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.22
-+IPSET_VERSION = 6.23
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
