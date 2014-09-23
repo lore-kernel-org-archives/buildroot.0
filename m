@@ -1,92 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 22:02:20 +0200
-Subject: [Buildroot] [PATCH 1/1] ympd: new package
-In-Reply-To: <1411502012-13553-1-git-send-email-limpens@gmail.com>
-References: <1411502012-13553-1-git-send-email-limpens@gmail.com>
-Message-ID: <20140923220220.435839a5@free-electrons.com>
+Date: Tue, 23 Sep 2014 21:57:50 +0200
+Subject: [Buildroot] [git commit] util-linux: disable more command for host
+	build
+Message-ID: <20140923200324.ED93B9D750@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Limpens,
+commit: http://git.buildroot.net/buildroot/commit/?id=e55532fa08266be268fa35c32a5ee763329a9396
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution! Below a few comments. Could you take them
-into account and resend an updated version? Thanks!
+Fixes the following compile error (in case neither curses or ncurses
+development files are installed on the build host):
 
-On Tue, 23 Sep 2014 21:53:32 +0200, Eric Limpens wrote:
+text-utils/more.c: In function ???screen???:
+text-utils/more.c:692:4: warning: implicit declaration of function ???my_putstring??? [-Wimplicit-function-declaration]
+text-utils/more.c:692:4: warning: nested extern declaration of ???my_putstring??? [-Wnested-externs]
+text-utils/more.c: In function ???initterm???:
+text-utils/more.c:1798:3: warning: implicit declaration of function ???my_setupterm??? [-Wimplicit-function-declaration]
+text-utils/more.c:1798:3: warning: nested extern declaration of ???my_setupterm??? [-Wnested-externs]
+text-utils/more.c:1806:5: warning: implicit declaration of function ???my_tgetnum??? [-Wimplicit-function-declaration]
+text-utils/more.c:1806:5: warning: nested extern declaration of ???my_tgetnum??? [-Wnested-externs]
+text-utils/more.c:1806:22: error: ???TERM_LINES??? undeclared (first use in this function)
+text-utils/more.c:1806:22: note: each undeclared identifier is reported only once for each function it appears in
+text-utils/more.c:1807:23: error: ???TERM_COLS??? undeclared (first use in this function)
+text-utils/more.c:1816:4: warning: implicit declaration of function ???my_tgetflag??? [-Wimplicit-function-declaration]
+text-utils/more.c:1816:4: warning: nested extern declaration of ???my_tgetflag??? [-Wnested-externs]
+text-utils/more.c:1816:34: error: ???TERM_HARD_COPY??? undeclared (first use in this function)
+text-utils/more.c:1821:20: error: ???TERM_EAT_NEW_LINE??? undeclared (first use in this function)
+text-utils/more.c:1827:23: error: ???TERM_AUTO_RIGHT_MARGIN??? undeclared (first use in this function)
+text-utils/more.c:1828:25: error: ???TERM_CEOL??? undeclared (first use in this function)
+text-utils/more.c:1829:4: warning: implicit declaration of function ???my_tgetstr??? [-Wimplicit-function-declaration]
+text-utils/more.c:1829:4: warning: nested extern declaration of ???my_tgetstr??? [-Wnested-externs]
+text-utils/more.c:1829:25: error: ???TERM_CLEAR_TO_LINE_END??? undeclared (first use in this function)
+text-utils/more.c:1830:23: error: ???TERM_CLEAR??? undeclared (first use in this function)
+text-utils/more.c:1831:24: error: ???TERM_STANDARD_MODE??? undeclared (first use in this function)
+text-utils/more.c:1832:23: error: ???TERM_EXIT_STANDARD_MODE??? undeclared (first use in this function)
+text-utils/more.c:1833:31: error: ???TERM_STD_MODE_GLITCH??? undeclared (first use in this function)
+text-utils/more.c:1842:20: error: ???TERM_UNDERLINE??? undeclared (first use in this function)
+text-utils/more.c:1843:23: error: ???TERM_OVER_STRIKE??? undeclared (first use in this function)
+text-utils/more.c:1845:27: error: ???TERM_UNDERLINE_CHAR??? undeclared (first use in this function)
+text-utils/more.c:1848:21: error: ???TERM_ENTER_UNDERLINE??? undeclared (first use in this function)
+text-utils/more.c:1850:17: error: ???TERM_EXIT_UNDERLINE??? undeclared (first use in this function)
+text-utils/more.c:1862:29: error: ???TERM_PAD_CHAR??? undeclared (first use in this function)
+text-utils/more.c:1864:22: error: ???TERM_HOME??? undeclared (first use in this function)
+text-utils/more.c:1867:21: error: ???TERM_CURSOR_ADDRESS??? undeclared (first use in this function)
+text-utils/more.c:1869:10: warning: implicit declaration of function ???my_tgoto??? [-Wimplicit-function-declaration]
+text-utils/more.c:1869:10: warning: nested extern declaration of ???my_tgoto??? [-Wnested-externs]
+text-utils/more.c:1869:10: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+text-utils/more.c:1876:24: error: ???TERM_CLEAR_TO_SCREEN_END??? undeclared (first use in this function)
+text-utils/more.c:1877:27: error: ???TERM_LINE_DOWN??? undeclared (first use in this function)
+text-utils/more.c: In function ???reset_tty???:
+text-utils/more.c:2142:3: warning: implicit declaration of function ???tputs??? [-Wimplicit-function-declaration]
+text-utils/more.c:2142:3: warning: nested extern declaration of ???tputs??? [-Wnested-externs]
+make[4]: *** [text-utils/more-more.o] Error 1
 
-> diff --git a/package/ympd/Config.in b/package/ympd/Config.in
-> new file mode 100644
-> index 0000000..53f128e
-> --- /dev/null
-> +++ b/package/ympd/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_YMPD
-> +	bool "ympd"
-> +	select BR2_PACKAGE_LIBMPDCLIENT #libmpdclient
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Comment not needed.
-
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  ympd, Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS
-
-Help text should be wrapped to a short length, and maybe made more
-explicit, like:
-
-	  ympd is a standalone MPD Web GUI written in C, using
-	  Websockets and Bootstrap/JS.
-
-> diff --git a/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
-> new file mode 100644
-> index 0000000..55a29ee
-> --- /dev/null
-> +++ b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
-> @@ -0,0 +1,12 @@
-
-All patches must have a Signed-off-by line and a description. See
-http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
-
-> +--- ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt	2014-05-24 15:25:47.000000000 +0200
-> ++++ ympd-a98d760dddff4b0dd595d977c9077f34beff05c5-1/CMakeLists.txt	2014-09-23 20:04:55.491997850 +0200
-> +@@ -29,6 +29,7 @@
-> + )
-> + 
-> +-add_executable(mkdata htdocs/mkdata.c)
-> +-get_target_property(MKDATA_EXE mkdata LOCATION)
-> ++#add_executable(mkdata htdocs/mkdata.c)
-> ++#get_target_property(MKDATA_EXE mkdata LOCATION)
-
-We generally like to have a solution that can potentially be submitted
-upstream.
-
-> ++set(MKDATA_EXE "./mkdata")
-> + 
-> + add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/assets.c
-> diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
-> new file mode 100644
-> index 0000000..22727a9
-> --- /dev/null
-> +++ b/package/ympd/ympd.mk
-> @@ -0,0 +1,10 @@
-
-Missing comment header like all other packages have.
-
-> +YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
-> +YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
-> +
-> +define YMPD_MAKE_HOST_TOOL
-> +        $(CC) -O2 $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
-> +endef
-
-Use $(HOSTCC) $(HOST_CFLAGS) $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 7376886..28c96a7 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -96,7 +96,7 @@ HOST_UTIL_LINUX_CONF_OPT += \
+ 	--enable-libuuid \
+ 	--disable-agetty --disable-cramfs --disable-fallocate \
+ 	--disable-fsck --disable-libblkid --disable-libmount \
+-	--disable-login --disable-mount --disable-partx \
++	--disable-login --disable-mount --disable-more --disable-partx \
+ 	--disable-pivot_root --disable-rename --disable-schedutils \
+ 	--disable-su --disable-switch_root --disable-unshare \
+ 	--disable-uuidd --disable-wall --without-ncurses
