@@ -1,10 +1,12 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 23 Sep 2014 11:05:59 +0000
-Subject: [Buildroot] [PATCH 0/2] Make sure WCHAR is enabled if native
- binutils will be build
-In-Reply-To: <1408399407-23604-1-git-send-email-abrodkin@synopsys.com>
-References: <1408399407-23604-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1411470358.8968.2.camel@abrodkin-8560l.internal.synopsys.com>
+Date: Tue, 23 Sep 2014 11:10:16 +0000
+Subject: [Buildroot] [PATCH v4] gcc: explicitly use
+ C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
+In-Reply-To: <1410787751.5875.30.camel@abrodkin-8560l.internal.synopsys.com>
+References: <1409558133-17642-1-git-send-email-abrodkin@synopsys.com>
+ <1410155602.4784.1.camel@abrodkin-8560l.internal.synopsys.com>
+ <1410787751.5875.30.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <1411470616.8968.3.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +15,41 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Tue, 2014-08-19 at 02:03 +0400, Alexey Brodkin wrote:
-> binutils starting at least from 2.23 when build for target require uClibc
-> configured with UCLIBC_HAS_WCHAR otherwise:
-> ==========
-> libtool: link: [...] -o as-new [...]
-> read.o: In function `read_symbol_name':
-> read.c:(.text+0x3634): undefined reference to `mbstowcs'
-> collect2: error: ld returned 1 exit status
-> ==========
-> because "mbstowcs" won't be compiled in.
+On Mon, 2014-09-15 at 17:29 +0400, Alexey Brodkin wrote:
+> Hi Thomas,
 > 
-> That's why we need to make sure WCHAR is enabled in toolchain for all
-> packages that require native binutils.
+> On Mon, 2014-09-08 at 09:53 +0400, Alexey Brodkin wrote:
+> > Hi Thomas,
+> > 
+> > On Mon, 2014-09-01 at 11:55 +0400, Alexey Brodkin wrote:
+> > > From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+> > > 
+> > > The gcc.mk file is passing --enable-target-optspace to gcc configure
+> > > script, to ask for space-optimized (-Os) target libraries. However,
+> > > passing this option has the effect of overriding any custom
+> > > CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+> > > 
+> > > These are some situations when it is required to pass custom flags on buildong
+> > > of libgcc:
+> > >  * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+> > > (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+> > >  * Particular CPU requires specific instructions for HW support
+> > >  * Deep optimizations
+> > > 
+> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > > 
+> > > Cc: Anton Kolesov <akolesov@synopsys.com>
+> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > > ---
+> > > 
+> > > Compared to v3 use "=" instead of ":=" which is not actually required here.
+> > 
+> > I'm wondering if this version is fine and we may go ahead an apply it?
 > 
-> Alexey Brodkin (2):
->   binutils: troubleshoot native binutils building (add WCHAR dependency)
->   packages: add WCHAR dependency for packages that select native
->     binutils
-> 
->  package/binutils/Config.in  | 1 +
->  package/dropwatch/Config.in | 1 +
->  package/oprofile/Config.in  | 1 +
->  3 files changed, 3 insertions(+)
-> 
+> Please treat this as a polite reminder about this pending patch.
 
-Looks like this series got lost among other patches.
-Do you mind to revisit following patches?
-1) http://patchwork.ozlabs.org/patch/381143/
-2) http://patchwork.ozlabs.org/patch/381144/
+Any chance for this change to made its way into upstream Buildroot?
 
 -Alexey
