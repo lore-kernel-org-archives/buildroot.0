@@ -1,10 +1,10 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 23 Sep 2014 05:19:48 +0000
+Date: Tue, 23 Sep 2014 05:27:27 +0000
 Subject: [Buildroot] [PATCH] ARC: gcc - Redefine PTRDIFF_TYPE from "long
  int" to "int"
 In-Reply-To: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
 References: <1411039152-15365-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1411449587.8035.2.camel@abrodkin-8560l>
+Message-ID: <1411450046.8035.4.camel@abrodkin-8560l>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
