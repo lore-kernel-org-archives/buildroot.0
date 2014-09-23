@@ -1,41 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 22:04:34 +0200
-Subject: [Buildroot] [PATCH] util-linux: disable more command for host
- build
-In-Reply-To: <1411419290-32334-1-git-send-email-ps.report@gmx.net>
-References: <1411419290-32334-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140923220434.07b41701@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Sep 2014 17:13:11 -0300
+Subject: [Buildroot] [PATCH] gnuplot: bump to version 4.6.6
+In-Reply-To: <20140923215610.0e46e6b7@free-electrons.com>
+References: <1411483294-9742-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140923215610.0e46e6b7@free-electrons.com>
+Message-ID: <5421D457.2090708@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+On 09/23/2014 04:56 PM, Thomas Petazzoni wrote:
 
-On Mon, 22 Sep 2014 22:54:50 +0200, Peter Seiderer wrote:
-> Fixes the following compile error (in case neither curses or ncurses
-> development files are installed on the build host):
+> Could you have a look at http://patchwork.ozlabs.org/patch/375696/, and
+> give some Tested-by/Acked-by if applicable? The patch is gnuplot
+> related.
 
-[...]
-
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/util-linux/util-linux.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Thanks, applied.
-
-However, instead of all those --disable-<foo>, can't we simply use
---disable-all-programs? Could you try this? I believe in the
-host-util-linux, we only care about the libraries (libuuid, etc.), and
-not the programs.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I'll take a look, but the patch is incorrect so it needs some fixing.
+The offending library there is fontconfig which has optional usage of
+libpthread, which in turn is also optional for libgd so forcing
+-lpthread in isn't correct.
+Regards.
