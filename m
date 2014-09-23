@@ -1,55 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Sep 2014 21:52:59 +0200
-Subject: [Buildroot] [PATCH] keyutils: Bump version to 1.5.9,
- fix patches and static build
-In-Reply-To: <1411401596-26802-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1411401596-26802-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140923215259.3644f7ab@free-electrons.com>
+From: Eric Limpens <limpens@gmail.com>
+Date: Tue, 23 Sep 2014 21:53:32 +0200
+Subject: [Buildroot] [PATCH 1/1] ympd: new package
+Message-ID: <1411502012-13553-1-git-send-email-limpens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Signed-off-by: Eric Limpens <limpens@gmail.com>
+---
+ package/Config.in                                       |  1 +
+ package/ympd/Config.in                                  |  9 +++++++++
+ package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch | 12 ++++++++++++
+ package/ympd/ympd.mk                                    | 10 ++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/ympd/Config.in
+ create mode 100644 package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+ create mode 100644 package/ympd/ympd.mk
 
-On Mon, 22 Sep 2014 16:59:56 +0100, Vicente Olivert Riera wrote:
-> - Bump version to 1.5.9
-> - Remove patches already included in this version
-> - Use make parameters instead of environment variables
-> - Add an upstream patch to fix building statically
-> - Adapt old patches to the new version
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/ced/ced596bd1c73286f7044f5a8e11b6588fc973f11/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...ng-of-the-shared-library-to-be-suppressed.patch |  104 ++++++++++++++++++++
->  .../keyutils-01-memleak-from-realloc.patch         |   51 ----------
->  package/keyutils/keyutils-02-another-memleak.patch |   32 ------
->  ...le.patch => keyutils-02-fix-install-rule.patch} |   13 ++-
->  .../keyutils-04-Makefile-for-buildroot.patch       |   64 ++----------
->  package/keyutils/keyutils.mk                       |   24 +++--
->  6 files changed, 135 insertions(+), 153 deletions(-)
->  create mode 100644 package/keyutils/keyutils-01-allow-building-of-the-shared-library-to-be-suppressed.patch
->  delete mode 100644 package/keyutils/keyutils-01-memleak-from-realloc.patch
->  delete mode 100644 package/keyutils/keyutils-02-another-memleak.patch
->  rename package/keyutils/{keyutils-05-fix-install-rule.patch => keyutils-02-fix-install-rule.patch} (57%)
-
-This fails to build with:
-
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc -L. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os    -o keyctl keyctl.o -lkeyutils
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc -L. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os    -o request-key request-key.o -lkeyutils
-key.dns_resolver.c:55:22: fatal error: keyutils.h: No such file or directory
- #include <keyutils.h>
-
-While it builds fine before your patch.
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 2eefc3f..1578404 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ menu "Audio and video applications"
+ 	source "package/wavpack/Config.in"
+ 	source "package/xbmc/Config.in"
+ 	source "package/yavta/Config.in"
++	source "package/ympd/Config.in"
+ endmenu
+ 
+ menu "Compressors and decompressors"
+diff --git a/package/ympd/Config.in b/package/ympd/Config.in
+new file mode 100644
+index 0000000..53f128e
+--- /dev/null
++++ b/package/ympd/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_YMPD
++	bool "ympd"
++	select BR2_PACKAGE_LIBMPDCLIENT #libmpdclient
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  ympd, Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS
++
++comment "ympd needs a toolchain w/ threads"
++	depends on !(BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+new file mode 100644
+index 0000000..55a29ee
+--- /dev/null
++++ b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+@@ -0,0 +1,12 @@
++--- ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt	2014-05-24 15:25:47.000000000 +0200
+++++ ympd-a98d760dddff4b0dd595d977c9077f34beff05c5-1/CMakeLists.txt	2014-09-23 20:04:55.491997850 +0200
++@@ -29,6 +29,7 @@
++ )
++ 
++-add_executable(mkdata htdocs/mkdata.c)
++-get_target_property(MKDATA_EXE mkdata LOCATION)
+++#add_executable(mkdata htdocs/mkdata.c)
+++#get_target_property(MKDATA_EXE mkdata LOCATION)
+++set(MKDATA_EXE "./mkdata")
++ 
++ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/assets.c
+diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
+new file mode 100644
+index 0000000..22727a9
+--- /dev/null
++++ b/package/ympd/ympd.mk
+@@ -0,0 +1,10 @@
++YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
++YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
++
++define YMPD_MAKE_HOST_TOOL
++        $(CC) -O2 $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
++endef
++
++YMPD_PRE_BUILD_HOOKS += YMPD_MAKE_HOST_TOOL
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
