@@ -1,58 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 24 Sep 2014 10:15:25 +0200
-Subject: [Buildroot] [git commit] nitrogen6x_defconfig: bump u-boot version
-Message-ID: <20140924081603.3FD2C9D769@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] nitrogen6x_defconfig: bump linux kernel
+Message-ID: <20140924081603.4971E9C041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef9b4fb5c28bca14ce53d495e3af4e83023c1cc4
+commit: http://git.buildroot.net/buildroot/commit/?id=2b8937f238a3593c9267a68e0fdad83841a56657
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To the 2014.07 release. For furture details, see:
-
-http://boundarydevices.com/u-boot-2014-07-release-mx6-boards/
-
-Also update our 6x_upgrade script to the version from that page so the
-entire SPI flash gets erased (otherwise it fails on big u-boot builds) and
-document how to perform the upgrade.
+To the latest commit on the 3.10 branch. Also lock the kernel headers to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-u-boot fixup
 ---
- board/boundarydevices/nitrogen6x/6x_upgrade |  Bin 1744 -> 1465 bytes
- board/boundarydevices/nitrogen6x/readme.txt |    4 ++++
- configs/nitrogen6x_defconfig                |    2 +-
- 3 files changed, 5 insertions(+), 1 deletions(-)
+ configs/nitrogen6x_defconfig |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade b/board/boundarydevices/nitrogen6x/6x_upgrade
-index cd26b61..395f13f 100644
-Binary files a/board/boundarydevices/nitrogen6x/6x_upgrade and b/board/boundarydevices/nitrogen6x/6x_upgrade differ
-diff --git a/board/boundarydevices/nitrogen6x/readme.txt b/board/boundarydevices/nitrogen6x/readme.txt
-index a9ded49..f01d9f0 100644
---- a/board/boundarydevices/nitrogen6x/readme.txt
-+++ b/board/boundarydevices/nitrogen6x/readme.txt
-@@ -7,3 +7,7 @@ To install, simply extract rootfs.ext2 to first partition of a uSD card:
- sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
- 
- Where 'sdX1' is the device node of the uSD partition.
-+
-+To upgrade u-boot, cancel autoboot and type:
-+
-+run upgradeu
 diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 5e5b91e..245d3d8 100644
+index 245d3d8..e56bd60 100644
 --- a/configs/nitrogen6x_defconfig
 +++ b/configs/nitrogen6x_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/63ae4a5/u-boot-63ae4a5.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/f870252/u-boot-f870252.tar.gz"
+@@ -11,6 +11,11 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_2r1=y
  
++# Lock headers to match kernel
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++
+ # bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+@@ -21,7 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
  # kernel
  BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/efd65e6/linux-imx6-efd65e6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/898627a/linux-imx6-898627a.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
