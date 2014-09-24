@@ -1,41 +1,40 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 24 Sep 2014 16:09:12 +0200
-Subject: [Buildroot] [PATCH 1/1] Unexports MACHINE variable. Fixes bug
- 7448
-In-Reply-To: <1411533438-1415-1-git-send-email-risto.avila@digia.com>
-References: <1411533438-1415-1-git-send-email-risto.avila@digia.com>
-Message-ID: <5422D088.9010903@lucaceresoli.net>
+Date: Wed, 24 Sep 2014 16:29:14 +0200
+Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: use up-to-date
+ mainline Linux
+In-Reply-To: <20140924154831.3fe131bb@free-electrons.com>
+References: <1411560193-9697-1-git-send-email-luca@lucaceresoli.net>
+ <1411560193-9697-3-git-send-email-luca@lucaceresoli.net>
+ <5422BB4B.7050703@freescale.com> <20140924154831.3fe131bb@free-electrons.com>
+Message-ID: <5422D53A.3070806@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Avila Risto,
+Dear Thomas,
 
-Avila Risto wrote:
-> Signed-off-by: Risto Avila <risto.avila@digia.com>
-> ---
->   Makefile | 1 +
->   1 file changed, 1 insertion(+)
+Thomas Petazzoni wrote:
+> Dear Vincent Stehl?,
 >
-> diff --git a/Makefile b/Makefile
-> index e788f1b..53f8ad5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -292,6 +292,7 @@ unexport TAR_OPTIONS
->   unexport CONFIG_SITE
->   unexport QMAKESPEC
->   unexport TERMINFO
-> +unexport MACHINE
+> On Wed, 24 Sep 2014 14:38:35 +0200, Vincent Stehl? wrote:
 >
->   GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+>> I am not sure if abandoning the Freescale release kernel is the best
+>> option for i.MX6. Indeed, if you want e.g. proper video
+>> (package/freescale-imx/imx-vpu) and 3D
+>> (package/freescale-imx/gpu-viv-bin-mx6q) support to still work as
+>> expected you need to stay with the 3.10.17.
+>>
+>> Wouldn't you prefer to align the headers instead?
 >
->
+> Yes, I agree. For such platforms, it makes more sense to use the vendor
+> kernel version.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-[Build-tested with nitrogen6x_defconfig]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Didn't you hate those vendor kernels? ;-)
+
+Well, seems there's a common direction here, so I'll resurrect my other
+patches and send them.
 
 -- 
 Luca
