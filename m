@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 24 Sep 2014 21:44:52 +0200
-Subject: [Buildroot] [PATCH 20/23 v5] docs/asciidoc: call $(pkgname) and
- $(pkgdir) in a single place
-In-Reply-To: <b0636122e2367750eece267d01b569286603652d.1410692671.git.yann.morin.1998@free.fr>
+Date: Wed, 24 Sep 2014 21:50:04 +0200
+Subject: [Buildroot] [PATCH 21/23 v5] docs/asciidoc: make it possible to
+ use $(@D) in hooks
+In-Reply-To: <2dc7586ac17c407aef3adc68f49cbdb663074ed1.1410692671.git.yann.morin.1998@free.fr>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <b0636122e2367750eece267d01b569286603652d.1410692671.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LV8EEHmdGytMkdCYX+CiD-UdN1PBuEU5DPkV7N_K5vnXg@mail.gmail.com>
+ <2dc7586ac17c407aef3adc68f49cbdb663074ed1.1410692671.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXn0+yWsgFypYxxdfjRWu5kgwo6TH30bQpT9JW7iZr_=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +13,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Like for all the package infrastructures, retrieve the package name and
-> directory in the front-end macro-variable, rather than everywhere in the
-> backend macro.
+> Currently, it is not possible to use $(@D) in documents' hooks, because
+> there is no actual target file for the copying rule.
 >
-> This allows us to clean up the ASCIIDOC macro, by removing all the calls
-> to $(pkgname) and $(pkgdir), and to UPPERCASE (which made the macro a
-> bit difficult to read.)
+> So, use the same mechanism as for generic-package.
+>
+> We do not touch the target file, so it is easy to regenerate the manual
+> without calling the -clean rule first.
+
+Shouldn't we add this note as a comment in doc/asciidoc.mk, to avoid
+later 'correction' that adds a touch?
+
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > ---
->  package/doc-asciidoc.mk | 39 ++++++++++++++++++++++-----------------
->  1 file changed, 22 insertions(+), 17 deletions(-)
+>  docs/manual/manual.mk   |  2 +-
+>  package/doc-asciidoc.mk | 10 ++++------
+>  2 files changed, 5 insertions(+), 7 deletions(-)
 >
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index b221664..9a86113 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -8,7 +8,7 @@ MANUAL_RESSOURCES = $(TOPDIR)/docs/images
+>  # Our manual needs to generate lists
+>  define MANUAL_GEN_LISTS
+>         $(Q)$(call MESSAGE,"Updating the manual lists...")
+> -       $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
+> +       $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
+>                 BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+>                 python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+>  endef
 > diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> index 4366f8a..38c9ced 100644
+> index 38c9ced..13e4479 100644
 > --- a/package/doc-asciidoc.mk
 > +++ b/package/doc-asciidoc.mk
-> @@ -104,6 +104,11 @@ endef
->  ################################################################################
->  # ASCIIDOC -- generates the make targets needed to build asciidoc documentation.
->  #
-> +# argument 1 is the lowercase name of the document; the document's main file
-> +#            must have the same name, with the .txt extension
-> +# argument 2 is the uppercase name of the document
-> +# argument 3 is the directory containing the document's sources
-> +#
->  # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
->  # The variable <DOCUMENT_NAME>_RESSOURCES defines where the document's
->  # resources, such as images, are located; must be an absolute path.
-> @@ -111,43 +116,43 @@ endef
->  define ASCIIDOC
->  # Single line, because splitting a foreach is not easy...
+> @@ -118,16 +118,14 @@ define ASCIIDOC
 >  $(pkgname)-check-dependencies: asciidoc-check-dependencies
+>         $$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
 
-Any reason why you did not change this occurrence of $(pkgname) ?
-
-Other than that, I like the simplification brought by this patch!
-
-Note that the order strikes me as odd. If you'd have made this change
-somewhere in the beginning of the series, the rest of the patches
-would have been simpler to read too. (no need to change this though,
-just an observation).
-
-Best regards,
-Thomas
+This patch does not allow $(@D) in the CHECK_EXTRA_DEPENDENCIES_HOOKS.
+Is that intentional?
