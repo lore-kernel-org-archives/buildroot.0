@@ -1,31 +1,37 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Wed, 24 Sep 2014 14:38:35 +0200
-Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: use up-to-date
-	mainline Linux
-In-Reply-To: <1411560193-9697-3-git-send-email-luca@lucaceresoli.net>
-References: <1411560193-9697-1-git-send-email-luca@lucaceresoli.net>
- <1411560193-9697-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <5422BB4B.7050703@freescale.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Sep 2014 15:33:33 +0200
+Subject: [Buildroot] [PATCH] librtlsdr: disable shared library target
+In-Reply-To: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
+References: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
+Message-ID: <20140924153333.2f56b768@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/24/2014 02:03 PM, Luca Ceresoli wrote:
-> Move to mainline Linux and upgrade the kernel version to the same version
-> used for the toolchain kernel headers.
+Dear Yuvaraj Patil,
 
-Hi Luca,
+On Wed, 24 Sep 2014 18:01:55 +0530, Yuvaraj Patil wrote:
+> Disable shared library target if BUILD_SHARES_LIBS is OFF.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/d68/d68a23e2a57fd5430d74b8151931f36959d9578d//
+> 
+> Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+> ---
+>  ...01_disable_shared_library_target_in_build.patch |   80 ++++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 package/librtlsdr/librtlsdr_001_disable_shared_library_target_in_build.patch
 
-I am not sure if abandoning the Freescale release kernel is the best
-option for i.MX6. Indeed, if you want e.g. proper video
-(package/freescale-imx/imx-vpu) and 3D
-(package/freescale-imx/gpu-viv-bin-mx6q) support to still work as
-expected you need to stay with the 3.10.17.
+Thanks, but we already have a patch fixing the same issue in our patch
+queue, see http://patchwork.ozlabs.org/patch/384567/. Apparently, the
+patch is causing some issues.
 
-Wouldn't you prefer to align the headers instead?
+Samuel, what is your plan regarding librtlsdr static link issue?
 
-Best regards,
-
-V.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
