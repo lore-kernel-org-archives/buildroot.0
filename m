@@ -1,64 +1,44 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 24 Sep 2014 18:14:27 +0200
-Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: lock down kernel
-	headers to the kernel version
-In-Reply-To: <1411575267-1569-1-git-send-email-luca@lucaceresoli.net>
-References: <1411575267-1569-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1411575267-1569-3-git-send-email-luca@lucaceresoli.net>
+Date: Wed, 24 Sep 2014 18:14:25 +0200
+Subject: [Buildroot] [PATCH 0/2] i.MX6 SABRESD improvements (using a
+	Freescale kernel)
+Message-ID: <1411575267-1569-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current defconfigs for iMX6 SABRESD kernel 3.10.17 from the Freescale
-git repository. This kernel is older than the toolchain kernel headers
-used in Buildroot (currently 3.16.3).
+Hi,
 
-Explicitly lock down the kernel headers to match the version of the kernel
-that is built.
+here are 2 little improvements to the i.MX6 SABRESD board support in Buildroot,
+both suggested by Thomas Petazzoni in [1].
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/freescale_imx6dlsabresd_defconfig | 5 +++++
- configs/freescale_imx6qsabresd_defconfig  | 5 +++++
- 2 files changed, 10 insertions(+)
+This differs from the patchest I sent earlier today [2] in the kernel origin:
+keep using git.freescale.com instead of switching to a mainline kernel, as
+per the discussion in [2].
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index b8c4b22..680031d 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -5,6 +5,11 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
- 
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 40a9384..f2f702e 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -5,6 +5,11 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
- 
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
+Nothing huge, just see the changelog below.
+
+Built and run on an i.MX6DL SABRESD board.
+
+Vincent, it would be nice if you could test it on a Quad-based board.
+
+Luca Ceresoli (2):
+  freescale/imx6-sabresd: use global patch dir for U-Boot patches
+  freescale/imx6-sabresd: lock down kernel headers to the kernel version
+
+ ...01-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch | 0
+ configs/freescale_imx6dlsabresd_defconfig                        | 9 ++++++++-
+ configs/freescale_imx6qsabresd_defconfig                         | 9 ++++++++-
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+ rename board/freescale/imx6sabresd/{ => patches/uboot}/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch (100%)
+
+[1] http://lists.busybox.net/pipermail/buildroot/2014-September/106704.html
+[2] http://lists.busybox.net/pipermail/buildroot/2014-September/106972.html
+
+-- 
+Luca
+
 -- 
 1.9.1
