@@ -1,17 +1,25 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 24 Sep 2014 14:03:12 +0200
-Subject: [Buildroot] [PATCH 1/2] freescale/imx6-sabresd: use global patch dir
+Date: Wed, 24 Sep 2014 14:03:13 +0200
+Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: use up-to-date
+	mainline Linux
 In-Reply-To: <1411560193-9697-1-git-send-email-luca@lucaceresoli.net>
 References: <1411560193-9697-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1411560193-9697-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1411560193-9697-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The best practice is to use the BR2_GLOBAL_PATCH_DIR for patches against
-U-Boot, not BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR.
+The current defconfigs for iMX6 SABRESD a kernel from the Freescale git
+repository and based on 3.10. This kernel is older than the toolchain kernel
+headers used in Buildroot (currently 3.16.3).
+
+Move to mainline Linux and upgrade the kernel version to the same version
+used for the toolchain kernel headers.
+
+Also switch the Linux defconfig from imx_v7 to imx_v6_v7 since the former is
+not in mainline.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Vincent Stehl? <vincent.stehle@freescale.com>
@@ -19,53 +27,43 @@ Cc: Gilles Talis <gilles.talis@gmail.com>
 Cc: Gary Bisson <bisson.gary@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch | 0
- configs/freescale_imx6dlsabresd_defconfig                             | 4 +++-
- configs/freescale_imx6qsabresd_defconfig                              | 4 +++-
- 3 files changed, 6 insertions(+), 2 deletions(-)
- rename board/freescale/imx6sabresd/{ => patches/uboot}/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch (100%)
+ configs/freescale_imx6dlsabresd_defconfig | 6 ++----
+ configs/freescale_imx6qsabresd_defconfig  | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
-similarity index 100%
-rename from board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
-rename to board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
 diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 62caf79..b8c4b22 100644
+index b8c4b22..4baa35a 100644
 --- a/configs/freescale_imx6dlsabresd_defconfig
 +++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -2,6 +2,9 @@
- BR2_arm=y
- BR2_cortex_a9=y
+@@ -10,10 +10,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
  
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
--BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
 diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index bc0aa46..40a9384 100644
+index 40a9384..eebf67b 100644
 --- a/configs/freescale_imx6qsabresd_defconfig
 +++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -2,6 +2,9 @@
- BR2_arm=y
- BR2_cortex_a9=y
+@@ -10,10 +10,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
  
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
--BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
 -- 
 1.9.1
