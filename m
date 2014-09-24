@@ -1,216 +1,25 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 24 Sep 2014 22:07:30 +0200
+Date: Wed, 24 Sep 2014 22:16:51 +0200
 Subject: [Buildroot] [PATCH 23/23 v5] docs/manual: document the asciidoc
 	infra
-In-Reply-To: <cace268e0a2d0419476bc7c1952f753857a863a3.1410692671.git.yann.morin.1998@free.fr>
+In-Reply-To: <CAAXf6LW17bqSDpz_Jksqx5cm-KJ+_PRsgANKE_zotCU1gtmT5A@mail.gmail.com>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
  <cace268e0a2d0419476bc7c1952f753857a863a3.1410692671.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LW17bqSDpz_Jksqx5cm-KJ+_PRsgANKE_zotCU1gtmT5A@mail.gmail.com>
+ <CAAXf6LW17bqSDpz_Jksqx5cm-KJ+_PRsgANKE_zotCU1gtmT5A@mail.gmail.com>
+Message-ID: <c289fd29-db5e-4e66-ad30-e537a63aa30f@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  docs/manual/adding-packages-asciidoc.txt | 118 +++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt          |   2 +
->  2 files changed, 120 insertions(+)
->  create mode 100644 docs/manual/adding-packages-asciidoc.txt
->
-> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-> new file mode 100644
-> index 0000000..b8821ee
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-asciidoc.txt
-> @@ -0,0 +1,118 @@
-> +// -*- mode:doc; -*-
-> +// vim: syntax=asciidoc
-> +
-> +=== Infrastructure for asciidoc documents
-> +
-> +[[asciidoc-documents-tutorial]]
-> +
-> +The Buildroot manual, which you are currently reading, is entirely written
-> +using the http://asciidoc.org/[AsciiDoc] mark-up syntax. The manual is then
-> +rendered to many formats:
-> +
-> +* +HTML+
-> +* +SPLIT_HTML+
-> +* +PDF+
-> +* +EPUB+
-> +* +TEXT+
+Thomas De Schampheleire <patrickdepinguin@gmail.com> schreef:
+>On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Samuel Martin <s.martin49@gmail.com>
+>> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-Any reason why this is capitalized and underscored like they were variables?
-There is nowhere a variable FOO_SPLIT_HTML_BAR, is there?
-
-In fact, as far as I can see, the variables that should use them use
-them as follows:
-
-FOO_EXTRA_CHECK_DEPENDENCIES_split-html_HOOKS
-
-no?
-
-And related to that: the above is not in line with the variable
-$(2)_$(4)_ASCIIDOC_OPTS where $(4) is used instead of $(5).
-
-The above two comments, if needed, are of course to be fixed in earlier patches.
-
-> +
-> +Although Buildroot only contains one document written in AsciiDoc, there
-> +is, as for packages, an infrastructure for rendering documents using the
-> +AsciiDoc syntax.
-> +
-> +Also as for packages, the AsciiDoc infrastructure is available from
-> +xref:outside-br-custom[BR2_EXTERNAL]. This allows documentation for a
-> +BR2_EXTERNAL tree to match the Buildroot documentation, as it will be
-> +rendered to the same formats and use the same layout and theme.
-> +
-> +==== +asciidoc-document+ tutorial
-> +
-> +Whereas packages infrastructures are suffixed with +-package+, the documents
-> +infrastructures are suffixed with +-document+. So, the AsciiDoc infrastructure
-
-'packages infrastructures' and 'documents infrastructures' sound odd
-to me. I would say
-'package infrastructures' and 'document infrastructures'.
-
-> +is named +asciidoc-document+.
-> +
-> +Here is an example to render a simple AsciiDoc document.
-> +
-> +----
-> +01: ################################################################################
-> +02: #
-> +03: # foo-document
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: FOO_SOURCES = $(sort $(widcard $(pkgdir)/*))
-
-wildcard
-
-> +08: $(eval $(call asciidoc-document))
-> +----
-> +
-> +On line 7, the Makefile declares what the sources of the document are.
-> +Currently, it is expected that the document's sources are only local;
-> +Buildroot will not attempt to download anything to render a document.
-> +Thus, you must indicate where the sources are. Usually, the string
-> +above is sufficient for a document with no sub-directory structure.
-> +
-> +Finally, on line 8, we call the +asciidoc-document+ function, which
-> +generates all the Makefile code necessary to render the document.
-> +
-> +==== +asciidoc-document+ reference
-> +
-> +The list of variables that can be set in a +.mk+ file to give metadata
-> +information is (assuming the document name is +foo+) :
-> +
-> +* +FOO_SOURCES+, mandatory, defines the source files for the document.
-> +
-> +* +FOO_RESSOURCES+, optional, may contain a space-separated list of paths
-> +  to so-called ressources (CSS, images...) By default, none.
-
-I would clarify here that they are 'resource directories' not the
-actual images, etc. themselves.
-
-> +
-> +There are also additional hooks (see xref:hooks[] for what a hook is),
-
-I'm not sure about 'for what a hook is'. Maybe:
-... for general information on how to use hooks.
-or
-... for general information on hooks.
-?
-
-> +that a document may set to define extra actions to be done at various
-> +steps:
-> +
-> +* +FOO_POST_EXTRACT_HOOKS+ to run additional commands after the sources
-> +  have been copied by Buildroot. This can be used for, for example,
-> +  generating part of the manual with information extracted from the
-> +  tree. As an example, Buildroot uses that to generate the tables in the
-
-s/that/this hook/
-
-> +  appendices.
-> +
-> +* +FOO_EXTRA_CHECK_DEPENDENCIES_HOOKS+ to run additional tests on required
-> +  components to generate the document. In AsciiDoc, it is possible to
-> +  call filters, that is, programs that will parse an AsciiDoc block and
-
-My feeling says to loose the comma after 'that is' but I'm no native
-English writer.
-
-> +  render it appropriately (e.g. http://ditaa.sourceforge.net/[ditaa] or
-> +  https://pythonhosted.org/aafigure/[aafigure].)
-> +
-> +* +FOO_EXTRA_CHECK_DEPENDENCIES_<FMT>_HOOKS+, to run additional tests for
-> +  the specified format +<FMT>+ (see the list of rendered formats, above.)
-> +
-> +Here is a complete example that uses all variables and all hooks:
-> +
-> +----
-> +01: ################################################################################
-> +02: #
-> +03: # foo-document
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: FOO_SOURCES = $(sort $(widcard $(pkgdir)/*))
-
-wildcard
-
-> +08: FOO_RESSOURCES = $(sort $(wildcard $(pkgdir)/ressources))
-> +09:
-> +10: define FOO_GEN_EXTRA_DOC
-> +11:     /path/to/generate-script --outdir=$(@D)
-> +12: endef
-> +13: FOO_POST_EXTRACT_HOOK += FOO_GEN_EXTRA_DOC
-> +14:
-> +15: define FOO_CHECK_MY_PROG
-> +16:     if ! which my-prog >/dev/null 2>&1; then \
-> +17:         echo "You need my-prog to generate the foo document"; \
-> +18:         exit 1; \
-> +19:     fi
-> +20: endef
-> +21: FOO_EXTRA_CHECK_DEPENDENCIES += FOO_CHECK_MY_PROG
-> +22:
-> +23: define FOO_CHECK_MY_OTHER_PROG
-> +24:     if ! which my-other-prog >/dev/null 2>&1; then \
-> +25:         echo "You need my-other-prog to generate the foo document as PDF"; \
-> +26:         exit 1; \
-> +27:     fi
-> +28: endef
-> +29: FOO_EXTRA_CHECK_DEPENDENCIES_TEXT += FOO_CHECK_MY_OTHER_PROG
-
-Have you checked that this actually works, and that it should not be
-text in lowercase?
-
-> +30:
-> +31: $(eval $(call asciidoc-document))
-> +----
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index 9c97128..feb0d13 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -27,6 +27,8 @@ include::adding-packages-virtual.txt[]
->
->  include::adding-packages-kconfig.txt[]
->
-> +include::adding-packages-asciidoc.txt[]
-> +
->  include::adding-packages-hooks.txt[]
->
->  include::adding-packages-gettext.txt[]
-> --
-> 1.9.1
->
-
-Best regards,
-Thomas
+By the way, for the renamed variables, you could also
+ avoid the rebase hell by exporting the changes to
+ patch files and manually editing those and reimporting them. As long as
+ it's one line changes, that works fine...
