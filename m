@@ -1,70 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Sep 2014 23:00:33 +0200
-Subject: [Buildroot] [PATCH 15/23 v5] docs/manual: allow documents to
- define some hooks, as for a package
-In-Reply-To: <CAAXf6LUqdPr-XNXcsMRCT2jvfSRrPo3Y75FS1px7zaHx-pXM0A@mail.gmail.com>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <23bf1e5cf8d3e8664077e5e85657193f1a363181.1410692670.git.yann.morin.1998@free.fr>
- <CAAXf6LUqdPr-XNXcsMRCT2jvfSRrPo3Y75FS1px7zaHx-pXM0A@mail.gmail.com>
-Message-ID: <20140924210033.GC3750@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Sep 2014 22:56:14 +0200
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.72
+Message-ID: <20140924210111.085D99D497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=fbaf9b13d90518fe349cf0f81c61342d3ffd18a1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-09-24 21:11 +0200, Thomas De Schampheleire spake thusly:
-> On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Allow documents to define two hooks:
-> >   - DOC_EXTRA_CHECK_DEPENDENCIES
-> >     to check for extra dependencies required by this document
-> >   - DOC_EXTRA_CHECK_DEPENDENCIES_FMT
-> >     ditto, but for the specific format
-> 
-> Is this EXTRA_ string necessary?
+Also add hash file.
 
-I pondered that for a while, too. I'm not too fan of it, but I'd still
-like that the user knows we already do some dependency checking.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dnsmasq/dnsmasq.hash |    2 ++
+ package/dnsmasq/dnsmasq.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-But I'll remove it; we should just document that we already do basic
-dependency checking.
-
-> >   - DOC_POST_EXTRACT_HOOKS:
-> >     to run additional actions to fill-in the build directory
-> 
-> I assume you called this POST_EXTRACT to line up with the package
-> infras,
-
-Yup.
-
-> but for gendoc no extraction is done.
-> In fact, an rsync of DOC_SOURCES is done. Doesn't it make more sense
-> to use DOC_POST_RSYNC_HOOKS ?
-> Such a hook also exists in pkg-generic, so it also lines up with the
-> existing infras.
-
-Ditto, I was not sure either way. I'll rename to RSYNC.
-
-[--SNIP--]
-> >  gendoc-check-dependencies-$(5):
-> >  $(1)-check-dependencies-$(5): gendoc-check-dependencies-$(5)
-> > +       $$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_$(5)_HOOKS),$$(call $$(hook))$$(sep))
-> 
-> Here you didn't add the '# Single line' comment. Is that intentional?
-
-I just forgot! ;-)
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+new file mode 100644
+index 0000000..d5e5740
+--- /dev/null
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	7d0bd23f5d74b3a6b26a75d5ffcf9db81d461b47cbe578cb65a83a98008600b1	dnsmasq-2.72.tar.xz
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 6e97c68..e7f5776 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.71
++DNSMASQ_VERSION = 2.72
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
