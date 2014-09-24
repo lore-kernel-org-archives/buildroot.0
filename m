@@ -1,37 +1,139 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Sep 2014 15:33:33 +0200
-Subject: [Buildroot] [PATCH] librtlsdr: disable shared library target
-In-Reply-To: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
-References: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <20140924153333.2f56b768@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 24 Sep 2014 15:34:10 +0200
+Subject: [Buildroot] [PATCH v2] package/mono: new package
+Message-ID: <1411565650-4235-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yuvaraj Patil,
+This patch adds the complete Mono implementation. This patch compiles
+both the native and managed parts.
 
-On Wed, 24 Sep 2014 18:01:55 +0530, Yuvaraj Patil wrote:
-> Disable shared library target if BUILD_SHARES_LIBS is OFF.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d68/d68a23e2a57fd5430d74b8151931f36959d9578d//
-> 
-> Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-> ---
->  ...01_disable_shared_library_target_in_build.patch |   80 ++++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 package/librtlsdr/librtlsdr_001_disable_shared_library_target_in_build.patch
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
 
-Thanks, but we already have a patch fixing the same issue in our patch
-queue, see http://patchwork.ozlabs.org/patch/384567/. Apparently, the
-patch is causing some issues.
+This revision adds the correct architectures as dependencies.
 
-Samuel, what is your plan regarding librtlsdr static link issue?
+ package/Config.in                         |  1 +
+ package/mono/Config.in                    |  9 +++++++++
+ package/mono/mono-managed/mono-managed.mk | 26 ++++++++++++++++++++++++++
+ package/mono/mono-native/mono-native.mk   | 19 +++++++++++++++++++
+ package/mono/mono.mk                      | 18 ++++++++++++++++++
+ 5 files changed, 73 insertions(+)
+ create mode 100644 package/mono/Config.in
+ create mode 100644 package/mono/mono-managed/mono-managed.mk
+ create mode 100644 package/mono/mono-native/mono-native.mk
+ create mode 100644 package/mono/mono.mk
 
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 2eefc3f..8a42846 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -432,6 +432,7 @@ menu "Lua libraries/modules"
+ 	source "package/xavante/Config.in"
+ endmenu
+ endif
++	source "package/mono/Config.in"
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+new file mode 100644
+index 0000000..8468b5c
+--- /dev/null
++++ b/package/mono/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MONO
++	bool "mono"
++	select BR2_STRIP_none
++	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips \
++		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
++	help
++	  An open source, cross-platform, implementation of C# and the CLR that is binary compatible with Microsoft.NET.
++
++	  http://download.mono-project.com/sources/mono/
+diff --git a/package/mono/mono-managed/mono-managed.mk b/package/mono/mono-managed/mono-managed.mk
+new file mode 100644
+index 0000000..94be274
+--- /dev/null
++++ b/package/mono/mono-managed/mono-managed.mk
+@@ -0,0 +1,26 @@
++#############################################################
++#
++# mono-managed
++#
++#############################################################
++
++MONO_MANAGED_VERSION          = $(MONO_VERSION)
++MONO_MANAGED_SITE             = $(MONO_SITE)
++MONO_MANAGED_SOURCE           = $(MONO_SOURCE)
++
++HOST_MONO_MANAGED_CONF_OPT = \
++	$(MONO_CONF_OPT) \
++	--enable-static
++
++define MONO_MANAGED_GETMONOLITE
++     $(MAKE) -C $(@D) get-monolite-latest
++endef
++
++define MONO_MANAGED_INSTALL
++     cp -av $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
++endef
++
++HOST_MONO_MANAGED_POST_CONFIGURE_HOOKS += MONO_MANAGED_GETMONOLITE
++HOST_MONO_MANAGED_POST_INSTALL_HOOKS   += MONO_MANAGED_INSTALL
++
++$(eval $(host-autotools-package))
+diff --git a/package/mono/mono-native/mono-native.mk b/package/mono/mono-native/mono-native.mk
+new file mode 100644
+index 0000000..3d6b3bf
+--- /dev/null
++++ b/package/mono/mono-native/mono-native.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# mono-native
++#
++#############################################################
++
++MONO_NATIVE_VERSION = $(MONO_VERSION)
++MONO_NATIVE_SITE    = $(MONO_SITE)
++MONO_NATIVE_SOURCE  = $(MONO_SOURCE)
++MONO_NATIVE_INSTALL_STAGING = $(MONO_INSTALL_STAGING)
++
++MONO_NATIVE_DEPENDENCIES += host-mono-managed
++
++# Disable managed code (mcs folder) from building
++MONO_NATIVE_CONF_OPT = \
++	$(MONO_CONF_OPT) \
++	--disable-mcs-build
++
++$(eval $(autotools-package))
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+new file mode 100644
+index 0000000..6940ceb
+--- /dev/null
++++ b/package/mono/mono.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# mono
++#
++#############################################################
++
++MONO_VERSION	= 3.8.0
++MONO_SITE	= http://download.mono-project.com/sources/mono/
++MONO_SOURCE	= mono-$(MONO_VERSION).tar.bz2
++MONO_INSTALL_STAGING = YES
++
++MONO_CONF_OPT = --disable-gtk-doc \
++		--with-mcs-docs=no 
++
++ifeq ($(BR2_PACKAGE_MONO),y)
++	include package/mono/*/*.mk
++	TARGETS += mono-native mono-managed
++endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
