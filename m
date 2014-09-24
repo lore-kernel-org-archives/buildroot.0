@@ -1,29 +1,23 @@
-From: Avila Risto <Risto.Avila@digia.com>
-Date: Wed, 24 Sep 2014 04:37:13 +0000
-Subject: [Buildroot] [PATCH 1/1] Unexports MACHINE variable. Fixes bug 7448
-Message-ID: <1411533438-1415-1-git-send-email-risto.avila@digia.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Sep 2014 04:38:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 7448] Having export MACHINE="something" breaks
+ glibc build on IMX6 target
+In-Reply-To: <bug-7448-163@https.bugs.busybox.net/>
+References: <bug-7448-163@https.bugs.busybox.net/>
+Message-ID: <20140924043835.0B98D9D74B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Risto Avila <risto.avila@digia.com>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+https://bugs.busybox.net/show_bug.cgi?id=7448
 
-diff --git a/Makefile b/Makefile
-index e788f1b..53f8ad5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -292,6 +292,7 @@ unexport TAR_OPTIONS
- unexport CONFIG_SITE
- unexport QMAKESPEC
- unexport TERMINFO
-+unexport MACHINE
- 
- GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- 
+--- Comment #3 from Risto Avila <risto.avila@digia.com> 2014-09-24 04:38:34 UTC ---
+Sure I already did sent it yesterday but I wasn't part of the list so it got
+rejected. I joined the list now and resent the patch.
+
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
