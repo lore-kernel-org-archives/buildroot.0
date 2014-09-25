@@ -1,19 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 25 Sep 2014 09:47:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package: normalize separator size to 80
-In-Reply-To: <1411538908-21455-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Wed, 24 Sep 2014 08:08:28 +0200")
-References: <1411538908-21455-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87iokc16rf.fsf@dell.be.48ers.dk>
+Date: Thu, 25 Sep 2014 09:48:58 +0200
+Subject: [Buildroot] [PATCH 1/4] lttng-modules: bump to version 2.5.0
+In-Reply-To: <1411540985-22792-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Wed, 24 Sep 2014 08:43:02 +0200")
+References: <1411540985-22792-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87egv016ol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ > This version should support kernel up to 3.15.
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
 Committed, thanks.
 
