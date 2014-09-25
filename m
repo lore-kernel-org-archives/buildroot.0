@@ -1,98 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Sep 2014 09:46:45 +0200
-Subject: [Buildroot] [git commit] package: normalize separator size to 80
-Message-ID: <20140925075214.CF0409D782@busybox.osuosl.org>
+Date: Thu, 25 Sep 2014 09:47:40 +0200
+Subject: [Buildroot] [git commit] lttng-modules: bump to version 2.5.0
+Message-ID: <20140925075214.D7F0E9C041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f8ae3c45f3143aef5143cd9a8ec63c61ae59ece
+commit: http://git.buildroot.net/buildroot/commit/?id=2c83b0ad31b9f79d2f40428d66726996a689eaa7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+This version should support kernel up to 3.15.
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/espeak/espeak.mk       |    4 ++--
- package/fmc/fmc.mk             |    4 ++--
- package/fmlib/fmlib.mk         |    4 ++--
- package/librtlsdr/librtlsdr.mk |    4 ++--
- package/simicsfs/simicsfs.mk   |    4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ package/lttng-modules/lttng-modules.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
-index 9c32752..9a83d4f 100644
---- a/package/espeak/espeak.mk
-+++ b/package/espeak/espeak.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 346214a..72d2eb7 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
  #
- # espeak
- #
--###############################################################################
-+################################################################################
+ ################################################################################
  
- ESPEAK_VERSION_MAJOR = 1.48
- ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).04
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index f9091c0..49c5fe8 100644
---- a/package/fmc/fmc.mk
-+++ b/package/fmc/fmc.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # fmc
- #
--###############################################################################
-+################################################################################
- 
- FMC_VERSION = fsl-sdk-v1.5-rc3
- FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 8fca0cd..f8698a4 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -1,8 +1,8 @@
--#############################################################
-+################################################################################
- #
- # fmlib
- #
--#############################################################
-+################################################################################
- 
- FMLIB_VERSION = fsl-sdk-v1.5-rc3
- FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
-index 985614a..aa3d0c1 100644
---- a/package/librtlsdr/librtlsdr.mk
-+++ b/package/librtlsdr/librtlsdr.mk
-@@ -1,8 +1,8 @@
--##########################################################################
-+################################################################################
- #
- # librtlsdr
- #
--##########################################################################
-+################################################################################
- 
- LIBRTLSDR_VERSION = v0.5.3
- LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
-diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
-index 99dda84..34061ff 100644
---- a/package/simicsfs/simicsfs.mk
-+++ b/package/simicsfs/simicsfs.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # simicsfs
- #
--###############################################################################
-+################################################################################
- 
- SIMICSFS_VERSION = 1.18
- SIMICSFS_SITE = http://download.simics.net/pub
+-LTTNG_MODULES_VERSION = 2.4.1
++LTTNG_MODULES_VERSION = 2.5.0
+ LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
