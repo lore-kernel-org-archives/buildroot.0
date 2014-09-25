@@ -1,47 +1,50 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 25 Sep 2014 11:04:29 +0200
+Date: Thu, 25 Sep 2014 11:10:18 +0200
 Subject: [Buildroot] [PATCH 1/1] tiff: ensure directory exists before
 	installing to it
-In-Reply-To: <20140923093751.4addbd77@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 23 Sep 2014 09:37:51 +0200")
+In-Reply-To: <1410488467-2093-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Thu, 11 Sep 2014 22:21:07 -0400")
 References: <1410488467-2093-1-git-send-email-danomimanchego123@gmail.com>
- <20140922192503.23ee2050@free-electrons.com>
- <CANxTyt7ZamM0EW7QsOOMQefeetFdhrWo-wjDnoD0TRZn7Tru+A@mail.gmail.com>
- <20140923093751.4addbd77@free-electrons.com>
-Message-ID: <87sijgyste.fsf@dell.be.48ers.dk>
+Message-ID: <87oau4ysjp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-Hi,
+ > Also, don't ignore errors during installation.
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
- >> I do not have a defconfig that demonstrates this.  I tend to encounter
- >> these kind of error when I do the following trick to observe what
- >> exactly is installed to the target directory:
- >> 
- >> make tiff-rebuild TARGET_DIR=$(pwd)/TIFF
- >> tree TIFF
- >> 
- >> If I hit an error, they I figure that I'm just one mostly empty custom
- >> skeleton and convoluted dependency graph away from hitting the error
- >> in real life.  So then I submit a patch.
 
- > Ok, thanks for the explanation. However, I'm wondering if we want to
- > support this. By doing this, you completely circumvent the preparation
- > work that is done by Buildroot: when you do make tiff-rebuild, only the
- > building and installation steps are re-executed with a different
- > TARGET_DIR. So any preparation work done before, such as directories
- > created by the global "dirs" target (on which all packages depend) will
- > not be done in your new TARGET_DIR.
+ > ---
+ >  package/tiff/tiff.mk |    3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
 
- > Peter, Fabio, any opinion on this?
+ > diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+ > index 8d2e087..c61894b 100644
+ > --- a/package/tiff/tiff.mk
+ > +++ b/package/tiff/tiff.mk
+ > @@ -76,7 +76,8 @@ ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
+ >  endif
+ 
+ >  define TIFF_INSTALL_TARGET_CMDS
+ > -	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+ > +	mkdir -p $(TARGET_DIR)/usr/lib/
+ > +	cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
 
-I don't think it is something we should really officially support, but
-the specific patch is ok as such, so I will commit it.
+Hmm, so what happens with a BR2_PREFER_STATIC_LIB=y build?
+
+>>> tiff 4.0.3 Installing to target
+mkdir -p /home/peko/source/buildroot/output/target/usr/lib/
+cp -a /home/peko/source/buildroot/output/build/tiff-4.0.3/libtiff/.libs/libtiff.so* /home/peko/source/buildroot/output/target/usr/lib/
+cp: cannot stat ?/home/peko/source/buildroot/output/build/tiff-4.0.3/libtiff/.libs/libtiff.so*?: No such file or directory
+package/pkg-generic.mk:228: recipe for target '/home/peko/source/buildroot/output/build/tiff-4.0.3/.stamp_target_installed' failed
+make: *** [/home/peko/source/buildroot/output/build/tiff-4.0.3/.stamp_target_installed] Error 1
+
+Not good. Why are we not just using 'make install' and removing whatever
+binaries / extras we don't want like we do for other packages?
 
 -- 
 Bye, Peter Korsgaard
