@@ -1,82 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Sep 2014 19:47:32 +0200
-Subject: [Buildroot] [PATCH 21/23 v5] docs/asciidoc: make it possible to
- use $(@D) in hooks
-In-Reply-To: <CAAXf6LXn0+yWsgFypYxxdfjRWu5kgwo6TH30bQpT9JW7iZr_=Q@mail.gmail.com>
-References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <2dc7586ac17c407aef3adc68f49cbdb663074ed1.1410692671.git.yann.morin.1998@free.fr>
- <CAAXf6LXn0+yWsgFypYxxdfjRWu5kgwo6TH30bQpT9JW7iZr_=Q@mail.gmail.com>
-Message-ID: <20140925174732.GA4184@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 25 Sep 2014 20:00:52 +0200
+Subject: [Buildroot] [PATCH] Fix selection of bootloaders
+	from	$(BR2_EXTERNAL)
+In-Reply-To: <1411667269-8347-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1411667269-8347-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <c006e085-cc6f-436a-88bb-79fa3f4fcd77@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Eric Le Bihan <eric.le.bihan.dev@free.fr> schreef:
+>If a package is based on "generic-package", pkg-generic.mk will compute
+>the name of the Kconfig variable to use for checking if this package has
+>been selected by the user.
+>
+>Unfortunately, this mechanism does not take into account the case where
+>a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
+>
+>So, even if the bootloader has been selected, it will not be added to
+>$(TARGETS) and will not be built.
+>
+>This patch fixes this issue.
+>
+>Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>---
+> package/pkg-generic.mk | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>index d04fd36..064d736 100644
+>--- a/package/pkg-generic.mk
+>+++ b/package/pkg-generic.mk
+>@@ -616,6 +616,8 @@ ifeq ($(1),linux)
+> $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+> else ifneq ($$(filter boot/%,$(pkgdir)),)
+> $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+>+else ifneq ($$(filter $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
+>+$(2)_KCONFIG_VAR = BR2_TARGET_$(2)
 
-On 2014-09-24 21:50 +0200, Thomas De Schampheleire spake thusly:
-> On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Currently, it is not possible to use $(@D) in documents' hooks, because
-> > there is no actual target file for the copying rule.
-> >
-> > So, use the same mechanism as for generic-package.
-> >
-> > We do not touch the target file, so it is easy to regenerate the manual
-> > without calling the -clean rule first.
-> 
-> Shouldn't we add this note as a comment in doc/asciidoc.mk, to avoid
-> later 'correction' that adds a touch?
+filter accepts multiple patterns, so you can edit the existing block.
 
-Right, I'll do.
+Also, the same problem would exist for the other
+ package types in this if-else structure. Granted, it's
+ less likely that a user will add a new kernel type or
+ toolchain type in BR2_EXTERNAL, but isn't it more
+ logical and symmetrical to apply this change for the
+ rest the if-else block too?
 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  docs/manual/manual.mk   |  2 +-
-> >  package/doc-asciidoc.mk | 10 ++++------
-> >  2 files changed, 5 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> > index b221664..9a86113 100644
-> > --- a/docs/manual/manual.mk
-> > +++ b/docs/manual/manual.mk
-> > @@ -8,7 +8,7 @@ MANUAL_RESSOURCES = $(TOPDIR)/docs/images
-> >  # Our manual needs to generate lists
-> >  define MANUAL_GEN_LISTS
-> >         $(Q)$(call MESSAGE,"Updating the manual lists...")
-> > -       $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/$(pkgname) \
-> > +       $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
-> >                 BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
-> >                 python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
-> >  endef
-> > diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> > index 38c9ced..13e4479 100644
-> > --- a/package/doc-asciidoc.mk
-> > +++ b/package/doc-asciidoc.mk
-> > @@ -118,16 +118,14 @@ define ASCIIDOC
-> >  $(pkgname)-check-dependencies: asciidoc-check-dependencies
-> >         $$(Q)$$(foreach hook,$$($(2)_CHECK_EXTRA_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
-> 
-> This patch does not allow $(@D) in the CHECK_EXTRA_DEPENDENCIES_HOOKS.
-> Is that intentional?
-
-Partly.
-
-I could not find a real use-case where a dependency would depend on the
-content of the document.
-
-Also, dependencies are checked even before the rsync takes place, so
-$(@D) does not even exist yet.
-
-So, I did not bother handing a valid $(@D) to CHECK_DEPS.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
