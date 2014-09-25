@@ -1,34 +1,47 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 25 Sep 2014 11:01:44 +0200
-Subject: [Buildroot] [PATCH] ncurses: Add libcurses symlink to libncurses
-In-Reply-To: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 23 Sep 2014 10:33:11 +0100")
-References: <1411464791-8023-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87wq8sysxz.fsf@dell.be.48ers.dk>
+Date: Thu, 25 Sep 2014 11:04:29 +0200
+Subject: [Buildroot] [PATCH 1/1] tiff: ensure directory exists before
+	installing to it
+In-Reply-To: <20140923093751.4addbd77@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 23 Sep 2014 09:37:51 +0200")
+References: <1410488467-2093-1-git-send-email-danomimanchego123@gmail.com>
+ <20140922192503.23ee2050@free-electrons.com>
+ <CANxTyt7ZamM0EW7QsOOMQefeetFdhrWo-wjDnoD0TRZn7Tru+A@mail.gmail.com>
+ <20140923093751.4addbd77@free-electrons.com>
+Message-ID: <87sijgyste.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Some packages use -lcurses when they are linking, so they try to link to
- > a library called libcurses. The library provided by our ncurses package
- > is called libncurses, so those packages fail to link with a message like
- > this one:
+Hi,
 
- > /bin/ld: cannot find -lcurses
+ >> I do not have a defconfig that demonstrates this.  I tend to encounter
+ >> these kind of error when I do the following trick to observe what
+ >> exactly is installed to the target directory:
+ >> 
+ >> make tiff-rebuild TARGET_DIR=$(pwd)/TIFF
+ >> tree TIFF
+ >> 
+ >> If I hit an error, they I figure that I'm just one mostly empty custom
+ >> skeleton and convoluted dependency graph away from hitting the error
+ >> in real life.  So then I submit a patch.
 
- > Installing a libcurses symlink to libncurses fixes the problem.
+ > Ok, thanks for the explanation. However, I'm wondering if we want to
+ > support this. By doing this, you completely circumvent the preparation
+ > work that is done by Buildroot: when you do make tiff-rebuild, only the
+ > building and installation steps are re-executed with a different
+ > TARGET_DIR. So any preparation work done before, such as directories
+ > created by the global "dirs" target (on which all packages depend) will
+ > not be done in your new TARGET_DIR.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/466/466995f9534447a4f54327a14c44ef9e16dd1123/
+ > Peter, Fabio, any opinion on this?
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-
-Committed, thanks.
+I don't think it is something we should really officially support, but
+the specific patch is ok as such, so I will commit it.
 
 -- 
 Bye, Peter Korsgaard
