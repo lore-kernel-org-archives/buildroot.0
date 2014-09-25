@@ -1,29 +1,43 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 25 Sep 2014 17:09:20 +0200
-Subject: [Buildroot] [PATCH 1/1] openvmtools: add hash
-Message-ID: <1411657760-63338-1-git-send-email-kaszak@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 25 Sep 2014 19:47:49 +0200
+Subject: [Buildroot] [PATCH] Fix selection of bootloaders from
+	$(BR2_EXTERNAL)
+Message-ID: <1411667269-8347-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openvmtools: add hash
+If a package is based on "generic-package", pkg-generic.mk will compute
+the name of the Kconfig variable to use for checking if this package has
+been selected by the user.
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Unfortunately, this mechanism does not take into account the case where
+a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
+
+So, even if the bootloader has been selected, it will not be added to
+$(TARGETS) and will not be built.
+
+This patch fixes this issue.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/openvmtools/openvmtools.hash |    3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/openvmtools/openvmtools.hash
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-new file mode 100644
-index 0000000..98b5438
---- /dev/null
-+++ b/package/openvmtools/openvmtools.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/open-vm-tools/files/open-vm-tools/stable-9.4.x/
-+md5	3969daf1535d34e1c5f0c87a779b7642	open-vm-tools-9.4.6-1770165.tar.gz
-+sha1	5d862148167cb0a56219d018e7d8d965118e1dde	open-vm-tools-9.4.6-1770165.tar.gz
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d04fd36..064d736 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -616,6 +616,8 @@ ifeq ($(1),linux)
+ $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+ else ifneq ($$(filter boot/%,$(pkgdir)),)
+ $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
++else ifneq ($$(filter $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
++$(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+ else ifneq ($$(filter toolchain/%,$(pkgdir)),)
+ $(2)_KCONFIG_VAR = BR2_$(2)
+ else
 -- 
-1.7.10.4
+1.9.1
