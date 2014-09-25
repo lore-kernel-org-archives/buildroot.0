@@ -1,39 +1,29 @@
-From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Date: Thu, 25 Sep 2014 19:33:57 +0530
-Subject: [Buildroot] [PATCH] gd: link with pthread to avoid build failure
-Message-ID: <1411653837-2593-1-git-send-email-yuvaraj.patil@wipro.com>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Thu, 25 Sep 2014 17:09:20 +0200
+Subject: [Buildroot] [PATCH 1/1] openvmtools: add hash
+Message-ID: <1411657760-63338-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link this package with pthread option.
+openvmtools: add hash
 
-Fixes:
-http://autobuild.buildroot.net/results/0e2/0e2b28e8561c6f7623185c35eb24bea573b79d11//
-
-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/gd/gd.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+ package/openvmtools/openvmtools.hash |    3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/openvmtools/openvmtools.hash
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 0c03ad4..31d7954 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -47,6 +47,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
- GD_DEPENDENCIES += zlib
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+GD_CONF_ENV += LIBS='-pthread'
-+else
-+GD_CONF_OPT += --disable-thread-safety
-+endif
-+
- GD_TOOLS_$(BR2_PACKAGE_GD_ANNOTATE)	+= annotate
- GD_TOOLS_$(BR2_PACKAGE_GD_BDFTOGD)	+= bdftogd
- GD_TOOLS_$(BR2_PACKAGE_GD_GD2COPYPAL)	+= gd2copypal
+diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
+new file mode 100644
+index 0000000..98b5438
+--- /dev/null
++++ b/package/openvmtools/openvmtools.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/open-vm-tools/files/open-vm-tools/stable-9.4.x/
++md5	3969daf1535d34e1c5f0c87a779b7642	open-vm-tools-9.4.6-1770165.tar.gz
++sha1	5d862148167cb0a56219d018e7d8d965118e1dde	open-vm-tools-9.4.6-1770165.tar.gz
 -- 
-1.7.9.5
+1.7.10.4
