@@ -1,27 +1,39 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Thu, 25 Sep 2014 15:28:21 +0200
-Subject: [Buildroot] [PATCH 0/2] i.MX6 SABRESD improvements (using a
-	Freescale kernel)
-In-Reply-To: <1411575267-1569-1-git-send-email-luca@lucaceresoli.net>
-References: <1411575267-1569-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <54241875.8030909@freescale.com>
+From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Date: Thu, 25 Sep 2014 19:33:57 +0530
+Subject: [Buildroot] [PATCH] gd: link with pthread to avoid build failure
+Message-ID: <1411653837-2593-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/24/2014 06:14 PM, Luca Ceresoli wrote:
-..
-> Vincent, it would be nice if you could test it on a Quad-based board.
+Link this package with pthread option.
 
-Hi Luca,
+Fixes:
+http://autobuild.buildroot.net/results/0e2/0e2b28e8561c6f7623185c35eb24bea573b79d11//
 
-I applied your two patches on top of 7989e05327903. I can build
-freescale_imx6qsabresd_defconfig and run on a Sabre SD Quad with no issue.
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+---
+ package/gd/gd.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-  Tested-by: Vincent Stehl? <vincent.stehle@freescale.com>
-
-Best regards,
-
-V.
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 0c03ad4..31d7954 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -47,6 +47,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GD_DEPENDENCIES += zlib
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++GD_CONF_ENV += LIBS='-pthread'
++else
++GD_CONF_OPT += --disable-thread-safety
++endif
++
+ GD_TOOLS_$(BR2_PACKAGE_GD_ANNOTATE)	+= annotate
+ GD_TOOLS_$(BR2_PACKAGE_GD_BDFTOGD)	+= bdftogd
+ GD_TOOLS_$(BR2_PACKAGE_GD_GD2COPYPAL)	+= gd2copypal
+-- 
+1.7.9.5
