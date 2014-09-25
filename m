@@ -1,42 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Sep 2014 23:58:34 +0200
-Subject: [Buildroot] [git commit] memstat: Add patch to fix compilation with
-	musl libc
-Message-ID: <20140924220143.E3BC39D771@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 25 Sep 2014 08:22:00 +0200
+Subject: [Buildroot] [PATCH 1/2] docs: prepare mmoving the website
+In-Reply-To: <421f71023741fce23ea58ce3dbad2310ba1310f4.1411591300.git.yann.morin.1998@free.fr>
+References: <cover.1411591300.git.yann.morin.1998@free.fr>
+ <421f71023741fce23ea58ce3dbad2310ba1310f4.1411591300.git.yann.morin.1998@free.fr>
+Message-ID: <2a0a14a0-4beb-4d0d-991d-5989919a9fd4@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7989e053279034fc0a6e29cfc5ffe0b32bcae2e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>This commit just creates a symlink so the website is now accessible from
+>both docs/ and docs/website/.
+>
+>This allows us to have the website now officially in docs/website, while
+>still keep backward compatibility with the current scripts that update
+>the website. Once those scripts have been updated, we'll be able to truly
+>move the website to docs/website/ for good.
+>
+>All without any perceived downtime or missed updated on the website! :-)
+>
+>After an idea from Peter.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Peter Korsgaard <jacmet@uclibc.org>
+>---
+> docs/website | 1 +
+> 1 file changed, 1 insertion(+)
+> create mode 120000 docs/website
+>
+>diff --git a/docs/website b/docs/website
+>new file mode 120000
+>index 0000000..945c9b4
+>--- /dev/null
+>+++ b/docs/website
+>@@ -0,0 +1 @@
+>+.
+>\ No newline at end of file
 
-PATH_MAX was undefined because of a missing #include.
+Commit title: moving
 
-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/memstat/memstat-0001-PATH_MAX.patch |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
-
-diff --git a/package/memstat/memstat-0001-PATH_MAX.patch b/package/memstat/memstat-0001-PATH_MAX.patch
-new file mode 100644
-index 0000000..0c3617a
---- /dev/null
-+++ b/package/memstat/memstat-0001-PATH_MAX.patch
-@@ -0,0 +1,14 @@
-+Add missing #include for PATH_MAX
-+
-+Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-+
-+--- memstat-0.8.org/memstat.c	2009-06-08 14:38:05.000000000 +0200
-++++ memstat-0.8/memstat.c	2014-09-12 03:55:43.096035374 +0200
-+@@ -19,6 +19,7 @@
-+ #include <unistd.h>
-+ #include <getopt.h>
-+ #include <errno.h>
-++#include <limits.h>
-+ 
-+ /* blacklist devices that just map physical memory */
-+ char *blacklist[] = { "/dev/mem",
+Other than that: 
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
