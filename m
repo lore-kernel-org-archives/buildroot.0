@@ -1,99 +1,95 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 26 Sep 2014 12:48:13 +0200
-Subject: [Buildroot] [PATCH 23/23 v5] docs/manual: document the asciidoc
-	infra
-In-Reply-To: <20140925222108.GC4184@free.fr>
+Date: Fri, 26 Sep 2014 12:50:34 +0200
+Subject: [Buildroot] [PATCH 17/23 v5] docs/manual: always look for
+ ressources in destination directory
+In-Reply-To: <20140925193116.GB4184@free.fr>
 References: <cover.1410692670.git.yann.morin.1998@free.fr>
- <cace268e0a2d0419476bc7c1952f753857a863a3.1410692671.git.yann.morin.1998@free.fr>
- <CAAXf6LW17bqSDpz_Jksqx5cm-KJ+_PRsgANKE_zotCU1gtmT5A@mail.gmail.com>
- <20140925222108.GC4184@free.fr>
-Message-ID: <CAAXf6LUSFpZ1ya-+FEuccQEu1qeEdHPSEZBpkKr3=eg1Uvrnkw@mail.gmail.com>
+ <f1a0a2c203f426242b9c35172efec6aba4f3dd54.1410692670.git.yann.morin.1998@free.fr>
+ <CAAXf6LXLLkjjky0LN5ZqpafPAnAHBci1Mzp_M4RSt=Dgrwha6w@mail.gmail.com>
+ <20140925193116.GB4184@free.fr>
+Message-ID: <CAAXf6LV8YgHWkg2t=z2sq=pHu+GAa65dAZK7QzTi66P0P3UZRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-On Fri, Sep 26, 2014 at 12:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Thu, Sep 25, 2014 at 9:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Thomas, All,
 >
-> On 2014-09-24 22:07 +0200, Thomas De Schampheleire spake thusly:
+> On 2014-09-24 21:21 +0200, Thomas De Schampheleire spake thusly:
 >> On Sun, Sep 14, 2014 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > +* +HTML+
->> > +* +SPLIT_HTML+
->> > +* +PDF+
->> > +* +EPUB+
->> > +* +TEXT+
+>> > Our manual does not use external filters in asciidoc, so we are happy
+>> > with just looking for ressources from our source tree.
+>> >
+>> > However, other documents (like ones in br2-external) may use such
+>> > filters, to generate diagrams, graphs...
+>> >
+>> > External filters generate their output files in the output directory, so
+>> > we must also look for ressources in there.
+>> >
+>> > Note: external filters in asccidoc are used thus:
+>> >     ["filter-name"]
+>> >     ----
+>> >     Text to be rendered
+>> >     ----
+>> >
+>> > In the future, our own manual may even make use of filters to include
+>> > some of the graphs we generate, to store in the documentation.
+>> >
+>> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> > Cc: Samuel Martin <s.martin49@gmail.com>
+>> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>> >
+>> > ---
+>> > Note: this is to work around a deficiency (bug?) in asccidoc. Asciidoc
+>> > actually tells the filter where to put the output files, but forgets to
+>> > look in there when it needs to link to those files...
+>> > ---
+>> >  docs/manual/manual.mk | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+>> > index f3638a7..e649ffe 100644
+>> > --- a/docs/manual/manual.mk
+>> > +++ b/docs/manual/manual.mk
+>> > @@ -92,7 +92,7 @@ $$(O)/docs/$(1)/$(1).$(6): $$($$(call UPPERCASE,$(1))_SOURCES) \
+>> >         $$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
+>> >         $$(Q)mkdir -p $$(@D)
+>> >         $$(Q)a2x $(8) -f $(4) -d book -L \
+>> > -               $$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) \
+>> > +               $$(foreach r,$$($(2)_RESSOURCES),-r $$(r)) -r $$(@D) \
 >>
->> Any reason why this is capitalized and underscored like they were variables?
->> There is nowhere a variable FOO_SPLIT_HTML_BAR, is there?
->
-> Yup, I'll set it to lowercase: they are the types of documents we
-> generate. That it needs to be in caps in variables is just a naming
-> convention.
->
->> In fact, as far as I can see, the variables that should use them use
->> them as follows:
+>> Alternatively, you could have expanded FOO_RESOURCES from , right?
+>> Something like
 >>
->> FOO_EXTRA_CHECK_DEPENDENCIES_split-html_HOOKS
+>> $(2)_RESOURCES += $$(@D)
 >>
->> no?
+>> and then keeping the foreach line untouched ?
 >
-> Right. This is a bug. For _HOOKS variables in all package infras, we
-> exclusively use uppercase. So should we do here, too.
+> Well, no: we do not already have the uppercase name of the package, so
+> it would be quite ugly to write:
 >
-> However, as you noticed, this is not correctly handled. I'll fix before
-> I repsin the series.
-
-Ok, that's indeed more in line with all the other infras.
-
+>     $(call UPPERCASE,$(pkgname))_RESOURCES += $$(@D)
 >
-> Thomas DS, also known as Lynx Eye! ;-)
+> So, I find it cleaner to write as I did.
 
-hehe :)
+OK
 
 >
->> And related to that: the above is not in line with the variable
->> $(2)_$(4)_ASCIIDOC_OPTS where $(4) is used instead of $(5).
->>
->> The above two comments, if needed, are of course to be fixed in earlier patches.
+> Eventually, I can switch that once ASCIIDOC gets passed the uppercase
+> name of the document in a parameter. But I'm not sure it is worthwhile.
 >
-> Right.
+>> I'd add a short comment line to explain why this is done though...
 >
->> > +* +FOO_EXTRA_CHECK_DEPENDENCIES_HOOKS+ to run additional tests on required
->> > +  components to generate the document. In AsciiDoc, it is possible to
->> > +  call filters, that is, programs that will parse an AsciiDoc block and
->>
->> My feeling says to loose the comma after 'that is' but I'm no native
->> English writer.
->
-> Neither am I. Still, I believe that's the way it is used. For example:
->     https://en.wikipedia.org/wiki/Comma#Between_adjectives
->
-> Title is unrelated to the subject, but the sentence uses a comma after
-> "that is".
->
-> See also:
->     http://www.thefreedictionary.com/that+is
->
-> Quoting from two places:
->     To explain more clearly; in other words: on the first floor, that
->     is, the floor at street level.
->
->     When that introduces a relative clause, the clause is usu.
->     restrictive, that is, essential to the complete meaning of the
->     sentence.
->
+> You mean, a comment in the .mk to explain why we pass -r $$(@D) ?
 
-Ok, I agree, keep the comma.
-
-> Hmm... Sure thing, we learn a great deal of English on the Buildroot
-> mailing list. What was the last argument we had some time ago? hehe! :-)
-
-:)
-
+Yes. The fact that this extra -r is needed is not obvious at all. In
+fact, removing it would work fine for the manual. Only when you use
+the filters as you explain in the commit message is it really
+necessary.
+A comment would therefore avoid someone accidentally removing it
+because he/she thinks it's unneeded.
 
 Best regards,
 Thomas
