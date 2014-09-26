@@ -1,57 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 26 Sep 2014 21:16:17 +0200
-Subject: [Buildroot] [PATCH] opencv: Bump version to 2.4.9.1
-In-Reply-To: <1411736978-35600-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 26 Sep 2014 14:09:38 +0100")
-References: <1411736978-35600-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87h9zuxke6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Sep 2014 21:14:40 +0200
+Subject: [Buildroot] [git commit] opencv: highgui module is needed for ts
+	module
+Message-ID: <20140926191637.532009D797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a3fe0fe73d840af1d9f557ddace43397642d6645
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > And also add a hash file.
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- >  package/opencv/opencv.hash |    3 +++
- >  package/opencv/opencv.mk   |    2 +-
- >  2 files changed, 4 insertions(+), 1 deletions(-)
- >  create mode 100644 package/opencv/opencv.hash
+OpenCV's highgui module needs to be auto-selected when the ts module is
+selected, because it depends on it. Otherwise it would fail with an
+error like this one:
 
- > diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
- > new file mode 100644
- > index 0000000..04cb3c5
- > --- /dev/null
- > +++ b/package/opencv/opencv.hash
- > @@ -0,0 +1,3 @@
- > +# From https://github.com/itseez/opencv/archive/2.4.9.1/
- > +md5	f9d8626711a183a8f39ce9822a40f35f	opencv-2.4.9.1.tar.gz
- > +sha1	adcaf808e4d5d3b394514061d1da3d4352964c7d	opencv-2.4.9.1.tar.gz
- > diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
- > index 8c2de79..f77d14d 100644
- > --- a/package/opencv/opencv.mk
- > +++ b/package/opencv/opencv.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+[ 96%] Building CXX object
+modules/ts/CMakeFiles/opencv_ts.dir/src/gpu_perf.cpp.o
+In file included from
+/home/test/autobuild/instance-1/output/build/opencv-2.4.8/modules/ts/src/gpu_perf.cpp:43:0:
+/home/test/autobuild/instance-1/output/build/opencv-2.4.8/modules/ts/include/opencv2/ts/gpu_perf.hpp:47:39:
+fatal error: opencv2/highgui/highgui.hpp: No such file or directory
+compilation terminated.
+
+Fixes:
+  http://autobuild.buildroot.net/results/31b/31b124ff1ec958a621863bfc80323847a6373135/
+
+Issue reported upstream:
+  http://code.opencv.org/issues/3923
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opencv/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 24f540e..d648e5e 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -101,6 +101,7 @@ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
  
- > -OPENCV_VERSION = 2.4.8
- > +OPENCV_VERSION = 2.4.9.1
- >  OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
- >  OPENCV_INSTALL_STAGING = YES
- >  OPENCV_LICENSE = BSD-3c
-
-Seems like the license file (location) changed:
-
-make opencv-legal-info
-cat: /home/peko/source/buildroot/output/build/opencv-2.4.9.1/doc/license.txt: No such file or directory
-package/opencv/opencv.mk:250: recipe for target 'opencv-legal-info' failed
-make: *** [opencv-legal-info] Error 1
-
-Care to fix that and resend?
-
--- 
-Bye, Peter Korsgaard
+ config BR2_PACKAGE_OPENCV_LIB_TS
+ 	bool "ts (touchscreen)"
++	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	default y
+ 	help
+ 	  Include opencv_ts module into the OpenCV build.
