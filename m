@@ -1,48 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Sep 2014 22:13:59 +0200
-Subject: [Buildroot] [PATCH] ipackage/cdrkit: fix namespace of variables
-Message-ID: <1411762440-17520-1-git-send-email-yann.morin.1998@free.fr>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Fri, 26 Sep 2014 16:42:07 -0400
+Subject: [Buildroot] [PATCH] genimage: bump to version 7
+Message-ID: <1411764127-14058-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not all cdrkit variables are prefixed with CDRKIT_, so they leak.
-
-Most importantly, they look like they belong to another package's
-namespace, cmake, as they start with CMAKE_ (but fortunately, they
-have no impact on cmake, as they are not used by our infras.)
-
-Fix that by removing the intermediate variables, and directly set
-the CDRKIT_CONF_OPT variable.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 ---
- package/cdrkit/cdrkit.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/genimage/genimage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index ee98013..7474fff 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -11,13 +11,11 @@ CDRKIT_LICENSE = GPLv2
- CDRKIT_LICENSE_FILES = COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index a353c62..0c0c1e5 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_ENDIAN),"BIG")
--CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
-+CDRKIT_CONF_OPT += -DBITFIELDS_HTOL=1
- else
--CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
-+CDRKIT_CONF_OPT += -DBITFIELDS_HTOL=0
- endif
- 
--CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
--
- ## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
- ## some extra flags so it finds needed libs and headers.
- CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(STAGING_DIR)/usr/include"
+-GENIMAGE_VERSION        = 6
++GENIMAGE_VERSION        = 7
+ GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download
+ GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
 -- 
-1.9.1
+2.1.1
