@@ -1,58 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 12:16:46 +0200
-Subject: [Buildroot] [PATCH 10/25 v6] docs/manual: allow a document to
-	declare where its resources are
+Date: Sat, 27 Sep 2014 12:16:48 +0200
+Subject: [Buildroot] [PATCH 12/25 v6] docs/manual: properly separate rules
+	specific for our manual
 In-Reply-To: <cover.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <bc3c6441832dd5ec8c40ff76e98914aa33473d24.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <90e4829aaa1c698589a32db151f813a4529425d4.1411812968.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoids hard-coding document's resources in GENDOC_INNER, so we can
-generate another document with different resources (if any).
+Move the rules specific to our own manual, so that they do not interfere
+with the generic rules of GENDOC.
+
+Separate them with a shiny header. ;-)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-Changes v5 -> v6:
-  - s/ressources/resources/g  (Thomas DS, Samuel)
----
- docs/manual/manual.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ docs/manual/manual.mk | 41 +++++++++++++++++++++++------------------
+ 1 file changed, 23 insertions(+), 18 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index b0ae2da..f5af504 100644
+index dfea759..05f6f05 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -106,7 +106,8 @@ $$(O)/docs/$(1)/$(1).$(5): $$($(call UPPERCASE,$(1))_SOURCES) \
- 			   $(1)-prepare-sources
- 	$$(Q)$$(call MESSAGE,"Generating $(6) $(1)...")
- 	$$(Q)mkdir -p $$(@D)
--	$$(Q)a2x $(7) -f $(3) -d book -L -r $$(TOPDIR)/docs/images \
-+	$$(Q)a2x $(7) -f $(3) -d book -L \
-+		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) \
- 		$$($(2)_$(3)_A2X_OPTS) \
- 		--asciidoc-opts="$$($(2)_$(3)_ASCIIDOC_OPTS)" \
- 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
-@@ -119,6 +120,8 @@ endef
- # GENDOC -- generates the make targets needed to build asciidoc documentation.
- #
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
-+# The variable <DOCUMENT_NAME>_RESOURCES defines where the document's
-+# resources, such as images, are located; must be an absolute path.
- ################################################################################
- define GENDOC
- $$(BUILD_DIR)/docs/$(pkgname):
-@@ -148,4 +151,5 @@ $(pkgname)-clean:
+@@ -1,14 +1,3 @@
+-# Packages included in BR2_EXTERNAL are not part of buildroot, so they
+-# should not be included in the manual.
+-.PHONY: manual-update-lists
+-manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
+-	$(Q)$(call MESSAGE,"Updating the manual lists...")
+-	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
+-		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+-		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+-
+-manual-prepare-sources: manual-update-lists
+-
+ # we can't use suitable-host-package here because that's not available in
+ # the context of 'make release'
+ manual-check-dependencies:
+@@ -28,13 +17,6 @@ manual-check-dependencies-pdf:
+ 		exit 1; \
+ 	fi
+ 
+-manual-check-dependencies-lists:
+-	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
+-		echo "You need python with argparse on your host to generate" \
+-			"the list of packages in the manual"; \
+-		exit 1; \
+-	fi
+-
+ # PDF generation is broken because of a bug in xsltproc program provided
+ # by libxslt <=1.1.28, which does not honor an option we need to set.
+ # Fortunately, this bug is already fixed upstream:
+@@ -156,6 +138,29 @@ $(pkgname)-clean:
+ .PHONY: $(pkgname) $(pkgname)-clean
  endef
  
++################################################################################
++# The Buildroot manual
++################################################################################
++
++# Our manual needs to generate lists
++manual-prepare-sources: manual-update-lists
++
++# Packages included in BR2_EXTERNAL are not part of buildroot, so they
++# should not be included in the manual.
++.PHONY: manual-update-lists
++manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
++	$(Q)$(call MESSAGE,"Updating the manual lists...")
++	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
++		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
++		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
++
++manual-check-dependencies-lists:
++	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
++		echo "You need python with argparse on your host to generate" \
++			"the list of packages in the manual"; \
++		exit 1; \
++	fi
++
  MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
-+MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ MANUAL_RESOURCES = $(TOPDIR)/docs/images
  $(eval $(call GENDOC))
 -- 
 1.9.1
