@@ -1,374 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Sep 2014 00:35:57 +0200
-Subject: [Buildroot] [PATCH 13 of 15] packages: rename misc. occurrences
- of _OPT into _OPTS
-In-Reply-To: <a7fb11c4307da80a8ffb.1411846370@localhost>
-References: <patchbomb.1411846357@localhost>
- <a7fb11c4307da80a8ffb.1411846370@localhost>
-Message-ID: <20140927223557.GU4298@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 27 Sep 2014 22:49:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] New: Multiple chosen python modules are not
+ built due to missing header files in include path
+Message-ID: <bug-7478-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
-On 2014-09-27 21:32 +0200, Thomas De Schampheleire spake thusly:
-> To be consistent with the recent change of FOO_MAKE_OPT into FOO_MAKE_OPTS,
-> change remaining occurrences of _OPT into _OPTS.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+           Summary: Multiple chosen python modules are not built due to
+                    missing header files in include path
+           Product: buildroot
+           Version: 2014.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cma at vtxnet.ch
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Visual review, plus:
-    git difftool -y -x 'diff -du -I "_OPTS\?\>"' CSET^..CSET
+Python doesn't build some of the requested modules because the setup.py script
+is unable to locate the respective header files. The affected modules are
+sqlite3, ssl, zlib and bsddb. The build completes successfully and the target
+images are correctly generated, but these modules will not work in python.
 
-Regards,
-Yann E. MORIN.
+Buildroot target is i686. Buildroot version is 2014.11-git-00330-g6712213.
 
-> ---
-> v2: rebase
-> 
->  linux/linux-ext-xenomai.mk                  |   6 +-
->  package/boost/boost.mk                      |  14 +++---
->  package/dhcpcd/dhcpcd.mk                    |   8 +-
->  package/freetype/freetype.mk                |   2 +-
->  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk  |  40 +++++++++---------
->  package/gstreamer1/gst1-libav/gst1-libav.mk |  44 ++++++++++----------
->  6 files changed, 57 insertions(+), 57 deletions(-)
-> 
-> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-> --- a/linux/linux-ext-xenomai.mk
-> +++ b/linux/linux-ext-xenomai.mk
-> @@ -11,9 +11,9 @@
->  # Adeos patch version
->  XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
->  ifeq ($(XENOMAI_ADEOS_PATCH),)
-> -XENOMAI_ADEOS_OPT = --default
-> +XENOMAI_ADEOS_OPTS = --default
->  else
-> -XENOMAI_ADEOS_OPT = --adeos=$(XENOMAI_ADEOS_PATCH)
-> +XENOMAI_ADEOS_OPTS = --adeos=$(XENOMAI_ADEOS_PATCH)
->  endif
->  
->  # Prepare kernel patch
-> @@ -21,7 +21,7 @@
->  	$(XENOMAI_DIR)/scripts/prepare-kernel.sh \
->  		--linux=$(LINUX_DIR) \
->  		--arch=$(KERNEL_ARCH) \
-> -		$(XENOMAI_ADEOS_OPT) \
-> +		$(XENOMAI_ADEOS_OPTS) \
->  		--verbose
->  endef
->  
-> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -77,7 +77,7 @@
->  endif
->  endif
->  
-> -HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared \
-> +HOST_BOOST_OPTS += toolset=gcc threading=multi variant=release link=shared \
->  	runtime-link=shared
->  
->  ifeq ($(BR2_MIPS_OABI32),y)
-> @@ -88,7 +88,7 @@
->  BOOST_ABI = sysv
->  endif
->  
-> -BOOST_OPT += toolset=gcc \
-> +BOOST_OPTS += toolset=gcc \
->  	     threading=multi \
->  	     abi=$(BOOST_ABI) \
->  	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-> @@ -98,7 +98,7 @@
->  ifeq ($(BR2_PACKAGE_BOOST_LOCALE),y)
->  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->  # posix backend needs monetary.h which isn't available on uClibc
-> -BOOST_OPT += boost.locale.posix=off
-> +BOOST_OPTS += boost.locale.posix=off
->  endif
->  
->  BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
-> @@ -123,7 +123,7 @@
->  define BOOST_INSTALL_TARGET_CMDS
->  	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
->  	--user-config=$(@D)/user-config.jam \
-> -	$(BOOST_OPT) \
-> +	$(BOOST_OPTS) \
->  	--prefix=$(TARGET_DIR)/usr \
->  	--layout=$(BOOST_LAYOUT) install )
->  endef
-> @@ -131,14 +131,14 @@
->  define HOST_BOOST_BUILD_CMDS
->  	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
->  	--user-config=$(@D)/user-config.jam \
-> -	$(HOST_BOOST_OPT) \
-> +	$(HOST_BOOST_OPTS) \
->  	--prefix=$(HOST_DIR)/usr )
->  endef
->  
->  define HOST_BOOST_INSTALL_CMDS
->  	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
->  	--user-config=$(@D)/user-config.jam \
-> -	$(HOST_BOOST_OPT) \
-> +	$(HOST_BOOST_OPTS) \
->  	--prefix=$(HOST_DIR)/usr \
->  	--layout=$(BOOST_LAYOUT) install )
->  endef
-> @@ -146,7 +146,7 @@
->  define BOOST_INSTALL_STAGING_CMDS
->  	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
->  	--user-config=$(@D)/user-config.jam \
-> -	$(BOOST_OPT) \
-> +	$(BOOST_OPTS) \
->  	--prefix=$(STAGING_DIR)/usr \
->  	--layout=$(BOOST_LAYOUT) install)
->  endef
-> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> --- a/package/dhcpcd/dhcpcd.mk
-> +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -11,15 +11,15 @@
->  DHCPCD_LICENSE = BSD-2c
->  
->  ifeq ($(BR2_INET_IPV6),)
-> -	DHCPCD_CONFIG_OPT += --disable-ipv6
-> +	DHCPCD_CONFIG_OPTS += --disable-ipv6
->  endif
->  
->  ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> -	DHCPCD_CONFIG_OPT += --enable-static
-> +	DHCPCD_CONFIG_OPTS += --enable-static
->  endif
->  
->  ifeq ($(BR2_USE_MMU),)
-> -	DHCPCD_CONFIG_OPT += --disable-fork
-> +	DHCPCD_CONFIG_OPTS += --disable-fork
->  endif
->  
->  define DHCPCD_CONFIGURE_CMDS
-> @@ -27,7 +27,7 @@
->  	$(TARGET_CONFIGURE_OPTS) ./configure \
->  		--target=$(BR2_GCC_TARGET_ARCH) \
->  		--os=linux \
-> -		$(DHCPCD_CONFIG_OPT) )
-> +		$(DHCPCD_CONFIG_OPTS) )
->  endef
->  
->  define DHCPCD_BUILD_CMDS
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -20,7 +20,7 @@
->  # Regen required because the tarball ships with an experimental ltmain.sh
->  # that can't be patched by our infra.
->  # autogen.sh is because autotools stuff lives in other directories and
-> -# even AUTORECONF with _OPT doesn't do it properly.
-> +# even AUTORECONF with _OPTS doesn't do it properly.
->  # POST_PATCH is because we still need to patch libtool after the regen.
->  define FREETYPE_RUN_AUTOGEN
->  	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> --- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> +++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> @@ -10,69 +10,69 @@
->  GST_FFMPEG_INSTALL_STAGING = YES
->  GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
->  
-> -GST_FFMPEG_CONF_EXTRA_OPT = \
-> +GST_FFMPEG_CONF_EXTRA_OPTS = \
->  		--cross-prefix=$(TARGET_CROSS) \
->  		--target-os=linux
->  
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-zlib
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-zlib
->  GST_FFMPEG_DEPENDENCIES += zlib
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-zlib
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-zlib
->  endif
->  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-bzlib
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-bzlib
->  GST_FFMPEG_DEPENDENCIES += bzip2
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-bzlib
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-bzlib
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-yasm
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-yasm
->  GST_FFMPEG_DEPENDENCIES += host-yasm
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-yasm
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-mmx
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-yasm
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-mmx
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-sse
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-sse
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-sse
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-sse
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-ssse3
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-ssse3
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-ssse3
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-ssse3
->  endif
->  
->  # Explicitly disable everything that doesn't match for ARM
->  # FFMPEG "autodetects" by compiling an extended instruction via AS
->  # This works on compilers that aren't built for generic by default
->  ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-armv5te
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-armv5te
->  endif
->  ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-armv6
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-armv6
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-armv6 --disable-armv6t2
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
->  endif
->  ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-neon
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-neon
->  endif
->  
->  ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-altivec
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-altivec
->  else
-> -GST_FFMPEG_CONF_EXTRA_OPT += --disable-altivec
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --disable-altivec
->  endif
->  
->  ifeq ($(BR2_PREFER_STATIC_LIB),)
-> -GST_FFMPEG_CONF_EXTRA_OPT += --enable-pic
-> +GST_FFMPEG_CONF_EXTRA_OPTS += --enable-pic
->  endif
->  
-> -GST_FFMPEG_CONF_OPTS = --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPT)"
-> +GST_FFMPEG_CONF_OPTS = --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPTS)"
->  
->  $(eval $(autotools-package))
-> diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> --- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-> +++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> @@ -10,74 +10,74 @@
->  
->  GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
->  
-> -GST1_LIBAV_CONF_EXTRA_OPT = \
-> +GST1_LIBAV_CONF_EXTRA_OPTS = \
->  	--cross-prefix=$(TARGET_CROSS) \
->  	--target-os=linux \
->  	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
->  
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-zlib
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-zlib
->  GST1_LIBAV_DEPENDENCIES += zlib
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-zlib
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-zlib
->  endif
->  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-bzlib
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-bzlib
->  GST1_LIBAV_DEPENDENCIES += bzip2
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-bzlib
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-yasm
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
->  GST1_LIBAV_DEPENDENCIES += host-yasm
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-yasm
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-mmx
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-yasm
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mmx
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-sse
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-sse
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-sse
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-sse
->  endif
->  
->  ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-ssse3
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-ssse3
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-ssse3
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-ssse3
->  endif
->  
->  # Explicitly disable everything that doesn't match for ARM
->  # FFMPEG "autodetects" by compiling an extended instruction via AS
->  # This works on compilers that aren't built for generic by default
->  ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-armv5te
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv5te
->  endif
->  ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-armv6
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-armv6
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-armv6 --disable-armv6t2
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
->  endif
->  ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-neon
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-neon
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-neon
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-neon
->  endif
->  ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-vfp
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-vfp
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-vfp
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-vfp
->  endif
->  
->  ifeq ($(BR2_POWERPC_CPU_HASH_ALTIVEC),y)
-> -GST1_LIBAV_CONF_EXTRA_OPT += --enable-altivec
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --enable-altivec
->  else
-> -GST1_LIBAV_CONF_EXTRA_OPT += --disable-altivec
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --disable-altivec
->  endif
->  
->  GST1_LIBAV_CONF_OPTS = \
-> -	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPT)"
-> +	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPTS)"
->  
->  $(eval $(autotools-package))
+Chosen modules in .config:
+BR2_PACKAGE_PYTHON_BZIP2=y
+BR2_PACKAGE_PYTHON_BSDDB=y
+BR2_PACKAGE_PYTHON_CODECSCJK=y
+BR2_PACKAGE_PYTHON_CURSES=y
+BR2_PACKAGE_PYTHON_PYEXPAT=y
+BR2_PACKAGE_PYTHON_READLINE=y
+BR2_PACKAGE_PYTHON_SSL=y
+BR2_PACKAGE_PYTHON_UNICODEDATA=y
+BR2_PACKAGE_PYTHON_UCS2=y
+# BR2_PACKAGE_PYTHON_UCS4 is not set
+BR2_PACKAGE_PYTHON_SQLITE=y
+BR2_PACKAGE_PYTHON_ZLIB=y
+BR2_PACKAGE_PYTHON_HASHLIB=y
+
+BR2_PACKAGE_SQLITE=y
+# BR2_PACKAGE_SQLITE_READLINE is not set
+# BR2_PACKAGE_SQLITE_STAT3 is not set
+# BR2_PACKAGE_SQLITE_ENABLE_FTS3 is not set
+# BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY is not set
+# BR2_PACKAGE_SQLITE_SECURE_DELETE is not set
+# BR2_PACKAGE_SQLITE_NO_SYNC is not set
+
+
+Relevant build log snippet (python-2.7.8-build.log:2878):
+Python build finished, but the necessary bits to build these modules were not
+found:
+_bsddb             _sqlite3           _ssl            
+_tkinter           bsddb185           dbm             
+dl                 gdbm               imageop         
+linuxaudiodev      nis                ossaudiodev     
+sunaudiodev        zlib                     
+To find the necessary bits, look in setup.py in detect_modules() for the
+module's name.
+
+
+After booting the target, importing these modules will result in an
+ImportError:
+# python -c "import sqlite3"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python2.7/sqlite3/__init__.py", line 24, in <module>
+    from dbapi2 import *
+  File "/usr/lib/python2.7/sqlite3/dbapi2.py", line 28, in <module>
+    from _sqlite3 import *
+ImportError: No module named _sqlite3
+
+Note: sqlite3 library is installed on the target and the sqlite3 shell is
+working as excepted.
+
+# python -c "import ssl"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python2.7/ssl.py", line 60, in <module>
+    import _ssl             # if we can't import it, let the error propagate
+ImportError: No module named _ssl
+
+
+As a temporary workaround, copying the sqlite header file in the python include
+directory before building python permits the module compilation (here for
+sqlite): 
+$ cp output/build/sqlite-3080500/sqlite3.h output/build/python-2.7.8/Include/
+For the other modules, I haven't tested.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
