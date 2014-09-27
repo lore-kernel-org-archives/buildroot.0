@@ -1,37 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 14:37:26 +0200
-Subject: [Buildroot] [PATCH] package: libarchive: allow building as host
- package
-In-Reply-To: <20140927122848.GA1752@fox>
-References: <1411773795-7803-1-git-send-email-guido@vanguardiasur.com.ar>
- <20140927085443.GA4298@free.fr> <20140927122848.GA1752@fox>
-Message-ID: <20140927123726.GB4298@free.fr>
+Date: Sat, 27 Sep 2014 14:40:34 +0200
+Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
+	infra
+In-Reply-To: <CAHXCMMKfUp=6=ff_rb5tTN86X-xQZbO_obs3SANhe8_ghsg_hw@mail.gmail.com>
+References: <cover.1411812968.git.yann.morin.1998@free.fr>
+ <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
+ <CAHXCMMKfUp=6=ff_rb5tTN86X-xQZbO_obs3SANhe8_ghsg_hw@mail.gmail.com>
+Message-ID: <20140927124034.GC4298@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guido, All,
+Samuel, All,
 
-On 2014-09-27 09:28 -0300, Guido Mart?nez spake thusly:
-> On Sat, Sep 27, 2014 at 10:54:44AM +0200, Yann E. MORIN wrote:
-> > Guido, All,
-> > 
-> > What is the rationale for building it as a host-package?
-> >
-> > libarchive provides a library, but we have no in-tree host-package that
-> > uses libarchive.
-> I have a custom tool that uses it, and I wasn't aware that host packages
-> were only enabled as needed. It makes a lot sense now that I think about
-> that, so please ignore this patch.
+On 2014-09-27 13:21 +0200, Samuel Martin spake thusly:
+> On Sat, Sep 27, 2014 at 12:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > +01: ################################################################################
+> > +02: #
+> > +03: # foo-document
+> > +04: #
+> > +05: ################################################################################
+> > +06:
+> > +07: FOO_SOURCES = $(sort $(widcard $(pkgdir)/*))
+> 
+> s/widcard/wildcard/
 
-For the records, repeating here what I said on IRC:
+Gah... I fixed the other one Thomas pointed out in the previous review,
+and did not even think of looking if I borked that one too... :-/
 
-I never said we do not want it, just that you have to justify it. We
-tend to be conservative about adding host-packages, and only add
-programs, and libraries those programs need. Adding a host library that
-has no in-tree user should thus be realy justified.
+[--SNIP--]
+> With the aformentioned typo fixed:
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
