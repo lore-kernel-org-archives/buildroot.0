@@ -1,61 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 27 Sep 2014 21:32:46 +0200
-Subject: [Buildroot] [PATCH 09 of 15] packages: rename FOO_GETTEXTIZE_OPT
- into FOO_GETTEXTIZE_OPTS
-In-Reply-To: <patchbomb.1411846357@localhost>
-References: <patchbomb.1411846357@localhost>
-Message-ID: <d01765b5a984f4cb887e.1411846366@localhost>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Sat, 27 Sep 2014 21:41:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.18.16
+Message-ID: <1411846916-9850-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be consistent with the recent change of FOO_MAKE_OPT into FOO_MAKE_OPTS,
-make the same change for FOO_GETTEXTIZE_OPT.
-
-Sed command used:
-   find * -type f | xargs sed -i 's#_GETTEXTIZE_OPT\>#&S#g'
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
-v2: rebase
+ package/mpd/mpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- docs/manual/adding-packages-autotools.txt |  2 +-
- package/pkg-autotools.mk                  |  4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -136,7 +136,7 @@
-   'gettextize'.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
-   values are +YES+ and +NO+. The default is +NO+.
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index cf766c1..15ebc38 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--* +LIBFOO_GETTEXTIZE_OPT+, to specify additional options passed to
-+* +LIBFOO_GETTEXTIZE_OPTS+, to specify additional options passed to
-   the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
-   use that if, for example, the +.po+ files are not located in the
-   standard place (i.e. in +po/+ at the root of the package.) By
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -96,7 +96,7 @@
- endif
- 
- ifeq ($(4),host)
-- $(2)_GETTEXTIZE_OPT ?= $$($(3)_GETTEXTIZE_OPT)
-+ $(2)_GETTEXTIZE_OPTS ?= $$($(3)_GETTEXTIZE_OPTS)
- endif
- 
- ifeq ($(4),host)
-@@ -220,7 +220,7 @@
- #
- define GETTEXTIZE_HOOK
- 	@$$(call MESSAGE,"Gettextizing")
--	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPT)
-+	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPTS)
- endef
- 
- #
+ MPD_VERSION_MAJOR = 0.18
+-MPD_VERSION = $(MPD_VERSION_MAJOR).14
++MPD_VERSION = $(MPD_VERSION_MAJOR).16
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf libglib2
+-- 
+2.1.1
