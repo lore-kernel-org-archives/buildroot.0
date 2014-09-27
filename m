@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 27 Sep 2014 13:21:00 +0200
-Subject: [Buildroot] [PATCH 22/25 v6] doc/asciidoc: always apply
-	Buildroot's AsciiDoc config
-In-Reply-To: <56d23e0edc01ab534df783446c9891e600a61431.1411812968.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Sep 2014 13:21:13 +0200
+Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
+	infra
+In-Reply-To: <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <56d23e0edc01ab534df783446c9891e600a61431.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMJgg7qJQCruYG58ujDMWCtgTCCxMMEJecQQB4e=KhpHOA@mail.gmail.com>
+ <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKfUp=6=ff_rb5tTN86X-xQZbO_obs3SANhe8_ghsg_hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,74 +14,170 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> As suggested by Thomas: the AsciiDoc options we use ensure we get a sane
-> output of the document. We want that configuration to be applied to
-> other documents as well.
->
-> Up until now, it was implicit that the configuration was applied to
-> our manual, becasue we only supported document-specific configuration,
-> and the configuration we had was in our manual dir, so we got to use it.
->
-> But now, we can render other documents, especially ones from
-> br2-external, and we want those to also use the default configuration
-> from Buildroot, but still be able to provide their own customisation.
->
-> So, always add Buildroot's configuration first, if available, before we
-> append the document's configuration.
->
+On Sat, Sep 27, 2014 at 12:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Samuel Martin <s.martin49@gmail.com>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>
 > ---
->  docs/{manual => conf}/asciidoc-text.conf |  0
->  package/doc-asciidoc.mk                  | 12 ++++++++++++
->  2 files changed, 12 insertions(+)
->  rename docs/{manual => conf}/asciidoc-text.conf (100%)
+> Chamges v5 -> v6:
+>   - fix names of hooks
+>   - remove trailing spaces
+> ---
+>  docs/manual/adding-packages-asciidoc.txt | 119 +++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt          |   2 +
+>  2 files changed, 121 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-asciidoc.txt
 >
-> diff --git a/docs/manual/asciidoc-text.conf b/docs/conf/asciidoc-text.conf
-> similarity index 100%
-> rename from docs/manual/asciidoc-text.conf
-> rename to docs/conf/asciidoc-text.conf
-> diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> index f949733..6185982 100644
-> --- a/package/doc-asciidoc.mk
-> +++ b/package/doc-asciidoc.mk
-> @@ -60,10 +60,21 @@ asciidoc-check-dependencies-$(5):
->  $(1)-check-dependencies-$(5): asciidoc-check-dependencies-$(5)
->         $$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_$(call UPPERCASE,$(5))_HOOKS),$$(call $$(hook))$$(sep))
->
-> +# Include output-specific Asciidoc configuration: first, Buildroot's
-> +# configuration, then the document's configuration
-> +ifneq ($$(wildcard $$($(2)_ASCIIDOC_BR_CONF)),)
-> +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_BR_CONF)
-> +endif
->  ifneq ($$(wildcard $$($(2)_ASCIIDOC_CONF)),)
->  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_CONF)
->  endif
->
-> +# Include output-specific Asciidoc configuration: first, Buildroot's
-> +# configuration, then the document's configuration
-> +$(2)_$(4)_ASCIIDOC_BR_CONF = docs/conf/asciidoc-$(4).conf
-> +ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_BR_CONF)),)
-> +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_BR_CONF)
-> +endif
->  $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
->  ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
->  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
-> @@ -136,6 +147,7 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
->
->  $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
->
-> +$(2)_ASCIIDOC_BR_CONF = docs/conf/asciidoc.conf
->  $(2)_ASCIIDOC_CONF = $(3)/asciidoc.conf
+> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+> new file mode 100644
+> index 0000000..8d6b282
+> --- /dev/null
+> +++ b/docs/manual/adding-packages-asciidoc.txt
+> @@ -0,0 +1,119 @@
+> +// -*- mode:doc; -*-
+> +// vim: syntax=asciidoc
+> +
+> +=== Infrastructure for asciidoc documents
+> +
+> +[[asciidoc-documents-tutorial]]
+> +
+> +The Buildroot manual, which you are currently reading, is entirely written
+> +using the http://asciidoc.org/[AsciiDoc] mark-up syntax. The manual is then
+> +rendered to many formats:
+> +
+> +* html
+> +* split-html
+> +* pdf
+> +* epub
+> +* text
+> +
+> +Although Buildroot only contains one document written in AsciiDoc, there
+> +is, as for packages, an infrastructure for rendering documents using the
+> +AsciiDoc syntax.
+> +
+> +Also as for packages, the AsciiDoc infrastructure is available from
+> +xref:outside-br-custom[BR2_EXTERNAL]. This allows documentation for a
+> +BR2_EXTERNAL tree to match the Buildroot documentation, as it will be
+> +rendered to the same formats and use the same layout and theme.
+> +
+> +==== +asciidoc-document+ tutorial
+> +
+> +Whereas package infrastructures are suffixed with +-package+, the document
+> +infrastructures are suffixed with +-document+. So, the AsciiDoc infrastructure
+> +is named +asciidoc-document+.
+> +
+> +Here is an example to render a simple AsciiDoc document.
+> +
+> +----
+> +01: ################################################################################
+> +02: #
+> +03: # foo-document
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: FOO_SOURCES = $(sort $(wildcard $(pkgdir)/*))
+> +08: $(eval $(call asciidoc-document))
+> +----
+> +
+> +On line 7, the Makefile declares what the sources of the document are.
+> +Currently, it is expected that the document's sources are only local;
+> +Buildroot will not attempt to download anything to render a document.
+> +Thus, you must indicate where the sources are. Usually, the string
+> +above is sufficient for a document with no sub-directory structure.
+> +
+> +Finally, on line 8, we call the +asciidoc-document+ function, which
+> +generates all the Makefile code necessary to render the document.
+> +
+> +==== +asciidoc-document+ reference
+> +
+> +The list of variables that can be set in a +.mk+ file to give metadata
+> +information is (assuming the document name is +foo+) :
+> +
+> +* +FOO_SOURCES+, mandatory, defines the source files for the document.
+> +
+> +* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
+> +  to one or more directories containing so-called resources (CSS,
+> +  images...) By default, empty.
+> +
+> +There are also additional hooks (see xref:hooks[] for general information
+> +on hooks), that a document may set to define extra actions to be done at
+> +various steps:
+> +
+> +* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
+> +  have been copied by Buildroot. This can be used for, for example,
+> +  generating part of the manual with information extracted from the
+> +  tree. As an example, Buildroot uses this hook to generate the tables
+> +  in the appendices.
+> +
+> +* +FOO_CHECK_DEPENDENCIES_HOOKS+ to run additional tests on required
+> +  components to generate the document. In AsciiDoc, it is possible to
+> +  call filters, that is, programs that will parse an AsciiDoc block and
+> +  render it appropriately (e.g. http://ditaa.sourceforge.net/[ditaa] or
+> +  https://pythonhosted.org/aafigure/[aafigure].)
+> +
+> +* +FOO_CHECK_DEPENDENCIES_<FMT>_HOOKS+, to run additional tests for
+> +  the specified format +<FMT>+ (see the list of rendered formats, above.)
+> +
+> +Here is a complete example that uses all variables and all hooks:
+> +
+> +----
+> +01: ################################################################################
+> +02: #
+> +03: # foo-document
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: FOO_SOURCES = $(sort $(widcard $(pkgdir)/*))
 
-It's a bit odd to have *_ASCIIDOC{,_BR}_CONF definitions after using
-them, whereas teh output-specific config file is defined just before
-using it.
-Anyway, it has no impact on the behavior of the infra, so:
+s/widcard/wildcard/
 
+> +08: FOO_RESOURCES = $(sort $(wildcard $(pkgdir)/ressources))
+> +09:
+> +10: define FOO_GEN_EXTRA_DOC
+> +11:     /path/to/generate-script --outdir=$(@D)
+> +12: endef
+> +13: FOO_POST_RSYNC_HOOKS += FOO_GEN_EXTRA_DOC
+> +14:
+> +15: define FOO_CHECK_MY_PROG
+> +16:     if ! which my-prog >/dev/null 2>&1; then \
+> +17:         echo "You need my-prog to generate the foo document"; \
+> +18:         exit 1; \
+> +19:     fi
+> +20: endef
+> +21: FOO_CHECK_DEPENDENCIES_HOOKS += FOO_CHECK_MY_PROG
+> +22:
+> +23: define FOO_CHECK_MY_OTHER_PROG
+> +24:     if ! which my-other-prog >/dev/null 2>&1; then \
+> +25:         echo "You need my-other-prog to generate the foo document as PDF"; \
+> +26:         exit 1; \
+> +27:     fi
+> +28: endef
+> +29: FOO_CHECK_DEPENDENCIES_PDF_HOOKS += FOO_CHECK_MY_OTHER_PROG
+> +30:
+> +31: $(eval $(call asciidoc-document))
+> +----
+> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+> index 9c97128..feb0d13 100644
+> --- a/docs/manual/adding-packages.txt
+> +++ b/docs/manual/adding-packages.txt
+> @@ -27,6 +27,8 @@ include::adding-packages-virtual.txt[]
+>
+>  include::adding-packages-kconfig.txt[]
+>
+> +include::adding-packages-asciidoc.txt[]
+> +
+>  include::adding-packages-hooks.txt[]
+>
+>  include::adding-packages-gettext.txt[]
+> --
+> 1.9.1
+>
+
+With the aformentioned typo fixed:
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Regards,
 
 -- 
 Samuel
