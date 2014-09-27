@@ -1,10 +1,9 @@
 From: zooey at hirschkaefer.de <zooey@hirschkaefer.de>
-Date: Sat, 27 Sep 2014 15:12:20 +0200
-Subject: [Buildroot] [RFC 2/3] samba4: add hacky patch that avoids manpage
-	creation
+Date: Sat, 27 Sep 2014 15:12:19 +0200
+Subject: [Buildroot] [RFC 1/3] samba4: allow separate build of libsmbclient
 In-Reply-To: <1411823541-4953-1-git-send-email-zooey@hirschkaefer.de>
 References: <1411823541-4953-1-git-send-email-zooey@hirschkaefer.de>
-Message-ID: <1411823541-4953-3-git-send-email-zooey@hirschkaefer.de>
+Message-ID: <1411823541-4953-2-git-send-email-zooey@hirschkaefer.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +12,121 @@ To: buildroot@busybox.net
 
 From: Oliver Tappe <zooey@hirschkaefer.de>
 
-Otherwise, installation of smbclient fails.
+Introduce new config option BR2_PACKAGE_SAMBA4_CLIENT_LIB and adjust
+samba4.mk accordingly. Additionally, add patch that adds the required
+Makefile targets smbclient and install_smbclient.
 ---
- ...0011-build-avoid-installation-of-manpages.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/samba4/samba4-0011-build-avoid-installation-of-manpages.patch
+ package/samba4/Config.in                           | 10 +++++++
+ ...d-smbclient-and-install_smbclient-targets.patch | 35 ++++++++++++++++++++++
+ package/samba4/samba4.mk                           | 16 ++++++++--
+ 3 files changed, 59 insertions(+), 2 deletions(-)
+ create mode 100644 package/samba4/samba4-0010-build-add-smbclient-and-install_smbclient-targets.patch
 
-diff --git a/package/samba4/samba4-0011-build-avoid-installation-of-manpages.patch b/package/samba4/samba4-0011-build-avoid-installation-of-manpages.patch
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 60e0f55..308debd 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -1,6 +1,16 @@
++config BR2_PACKAGE_SAMBA4_CLIENT_LIB
++	depends on !BR2_PACKAGE_SAMBA
++	bool "samba4 client library"
++	help
++	  libsmbclient is a library toolset that permits applications
++	  to manipulate CIFS/SMB network resources using many of the
++	  standards POSIX functions available for manipulating local
++	  files.
++
+ config BR2_PACKAGE_SAMBA4
+ 	bool "samba4"
+ 	depends on !BR2_PACKAGE_SAMBA
++	depends on !BR2_PACKAGE_SAMBA4_CLIENT_LIB
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # e2fsprogs
+diff --git a/package/samba4/samba4-0010-build-add-smbclient-and-install_smbclient-targets.patch b/package/samba4/samba4-0010-build-add-smbclient-and-install_smbclient-targets.patch
 new file mode 100644
-index 0000000..9a3f012
+index 0000000..1f155c4
 --- /dev/null
-+++ b/package/samba4/samba4-0011-build-avoid-installation-of-manpages.patch
-@@ -0,0 +1,40 @@
-+From d39b348c3b8c210ba460f27ce50bc87f867f5705 Mon Sep 17 00:00:00 2001
++++ b/package/samba4/samba4-0010-build-add-smbclient-and-install_smbclient-targets.patch
+@@ -0,0 +1,35 @@
++From 255c0386275b64477801075b17edb3a647b01fd1 Mon Sep 17 00:00:00 2001
 +From: Oliver Tappe <zooey@hirschkaefer.de>
-+Date: Fri, 26 Sep 2014 19:16:38 +0200
-+Subject: [PATCH] build: avoid installation of manpages
++Date: Fri, 26 Sep 2014 18:37:17 +0200
++Subject: [PATCH] build: add smbclient and install_smbclient targets
 +
-+Somehow, telling waf to install the 'smbclient' target will also
-+try to install manpages which have not been generated when during
-+the build stage of 'smbclient'. Deactivate the installation of
-+man pages as a (grossly hackish) workaround.
++This (together with patches to buildroot's samba4.mk) makes it
++possible to build libsmbclient.so and all of its dependencies
++without needing to build all of samba.
 +---
-+ buildtools/wafsamba/wafsamba.py | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ Makefile | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
-+index aaa0939..a5a476d 100644
-+--- a/buildtools/wafsamba/wafsamba.py
-++++ b/buildtools/wafsamba/wafsamba.py
-+@@ -800,8 +800,8 @@ def MANPAGES(bld, manpages, install):
-+                             group='final',
-+                             rule='${XSLTPROC} --xinclude -o ${TGT} --nonet ${MAN_XSL} ${SRC}'
-+                             )
-+-        if install:
-+-            bld.INSTALL_FILES('${MANDIR}/man%s' % m[-1], m, flat=True)
-++        #if install:
-++        #    bld.INSTALL_FILES('${MANDIR}/man%s' % m[-1], m, flat=True)
-+ Build.BuildContext.MANPAGES = MANPAGES
++diff --git a/Makefile b/Makefile
++index 5f220fa..bcc886c 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -7,9 +7,15 @@ WAF=WAF_MAKE=1 $(WAF_BINARY)
++ all:
++ 	$(WAF) build
 + 
-+ def SAMBAMANPAGES(bld, manpages):
-+@@ -821,7 +821,7 @@ def SAMBAMANPAGES(bld, manpages):
-+                                     ${XSLTPROC} --xinclude --stringparam noreference 0 -o ${TGT}.xml --nonet ${SAMBA_EXPAND_XSL} ${SRC}
-+                                     ${XSLTPROC} --nonet -o ${TGT} ${SAMBA_MAN_XSL} ${TGT}.xml'''
-+                             )
-+-        bld.INSTALL_FILES('${MANDIR}/man%s' % m[-1], m, flat=True)
-++        #bld.INSTALL_FILES('${MANDIR}/man%s' % m[-1], m, flat=True)
-+ Build.BuildContext.SAMBAMANPAGES = SAMBAMANPAGES
+++smbclient:
+++	$(WAF) build --targets=smbclient
+++
++ install:
++ 	$(WAF) install
 + 
-+ #############################################################
+++install_smbclient:
+++	$(WAF) install --targets=smbclient
+++
++ uninstall:
++ 	$(WAF) uninstall
++ 
 +-- 
 +1.8.4.5
 +
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e1ee33f..1826c01 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -69,6 +69,14 @@ else
+ 	SAMBA4_CONF_OPT += --without-regedit
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SAMBA4_CLIENT_LIB),y)
++	SAMBA4_WAF_BUILD_TARGET = smbclient
++	SAMBA4_WAF_INSTALL_TARGET = install_smbclient
++else
++	SAMBA4_WAF_BUILD_TARGET = all
++	SAMBA4_WAF_INSTALL_TARGET = install
++endif
++
+ define SAMBA4_CONFIGURE_CMDS
+ 	cp package/samba4/samba4-cache.txt $(@D)/cache.txt;
+ 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
+@@ -102,13 +110,15 @@ define SAMBA4_CONFIGURE_CMDS
+ endef
+ 
+ define SAMBA4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(SAMBA4_WAF_BUILD_TARGET)
+ endef
+ 
+ define SAMBA4_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(SAMBA4_WAF_INSTALL_TARGET)
+ endef
+ 
++ifneq ($(BR2_PACKAGE_SAMBA4_CLIENT_LIB),y)
++
+ # Samba just installs .py files so the purge causes problems with some tools
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define SAMBA4_BUILD_PYC_FILES
+@@ -133,4 +143,6 @@ endef
+ SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_MOVE_LIBS
+ endif
+ 
++endif	# BR2_PACKAGE_SAMBA4_CLIENT_LIB
++
+ $(eval $(generic-package))
 -- 
 1.8.4.5
