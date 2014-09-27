@@ -1,59 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 12:16:41 +0200
-Subject: [Buildroot] [PATCH 05/25 v6] docs/manual: copying the manual
-	sources is a common action
+Date: Sat, 27 Sep 2014 12:16:42 +0200
+Subject: [Buildroot] [PATCH 06/25 v6] docs/manual: simplify generation
+	dependencies
 In-Reply-To: <cover.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <b5f45a1b5f48efc83ed6bbfbe3de47cd61e991ee.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <09a82e6a6870609e26835d0f017055e0726e14b9.1411812968.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the creation of $(BUILD_DIR)/manual and the rsyncing of the
-sources into GENDOC.
-
-This is is needed so that GENDOC can be easily used to generate another
-document, without requiring that document to duplicate the copying rules.
+The document's main file is already part of MANUAL_SOURCES, so no need
+to explicitly depend on it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/manual.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ docs/manual/manual.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 69113e3..dd6f0ea 100644
+index dd6f0ea..56dff56 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -1,10 +1,3 @@
--$(BUILD_DIR)/docs/$(pkgname):
--	$(Q)mkdir -p $@
--
--manual-rsync: $(BUILD_DIR)/docs/$(pkgname)
--	$(Q)$(call MESSAGE,"Preparing the manual sources...")
--	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/docs/$(pkgname)
--
- # Packages included in BR2_EXTERNAL are not part of buildroot, so they
- # should not be included in the manual.
- manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
-@@ -127,6 +120,13 @@ endef
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- ################################################################################
- define GENDOC
-+$$(BUILD_DIR)/docs/$(pkgname):
-+	$$(Q)mkdir -p $$@
-+
-+$(pkgname)-rsync: $$(BUILD_DIR)/docs/$(pkgname)
-+	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
-+	$$(Q)rsync -a docs/$(pkgname)/ $$^
-+
- $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
+@@ -98,8 +98,7 @@ $$(O)/docs/$(1)/$(1).$(4):
+ 		to make through the command line: \
+ 		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
+ else
+-$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+-			   $$($$(call UPPERCASE,$(1))_SOURCES) \
++$$(O)/docs/$(1)/$(1).$(4): $$($$(call UPPERCASE,$(1))_SOURCES) \
+ 			   manual-check-dependencies \
+ 			   manual-check-dependencies-$(3) \
+ 			   manual-prepare-sources
 -- 
 1.9.1
