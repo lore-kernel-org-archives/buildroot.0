@@ -1,72 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 19:53:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wayland: requires shared library
-In-Reply-To: <1411838282-17247-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1411838282-17247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140927175310.GF4298@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 27 Sep 2014 18:18:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
+In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
+References: <bug-7010-163@https.bugs.busybox.net/>
+Message-ID: <20140927181828.2CC489D79D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+https://bugs.busybox.net/show_bug.cgi?id=7010
 
-On 2014-09-27 19:18 +0200, Bernd Kuhls spake thusly:
-> Fixes
->   CC       src/libwayland_server_la-wayland-server.lo
-> src/wayland-server.c:36:19: error: dlfcn.h: No such file or directory
-> 
-> using this defconfig
-> http://autobuild.buildroot.net/results/dfd/dfd81f1f1f0f315317b2a85d24b286a277ac7c16/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/wayland/Config.in |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/wayland/Config.in b/package/wayland/Config.in
-> index c92f9ea..0f78f15 100644
-> --- a/package/wayland/Config.in
-> +++ b/package/wayland/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_WAYLAND
->  	bool "wayland"
->  	depends on !BR2_avr32 # no epoll_create1, timerfd_create or timerfd_settime
-> +	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_LIBFFI
->  	select BR2_PACKAGE_EXPAT
-> @@ -14,3 +15,4 @@ config BR2_PACKAGE_WAYLAND
->  comment "wayland needs a toolchain w/ threads"
->  	depends on !BR2_avr32
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_PREFER_STATIC_LIB
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-You forgot to propagate this new dependency to packages that select
-wayland: weston and gst1-plugins-bad.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Although weston already indirectly depends on !static (because it
-depends on _HAS_UDEV, and that only get selected by eudev or systemd,
-and they both depend on !static), it would be better to propagate this
-new !static dependency to weston too (in case one of the udev provider
-one day drop its !static dep).
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+--- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-09-27 18:18:27 UTC ---
+Solved with commit
+http://git.buildroot.org/buildroot/commit/?id=425a668dfdb7a861457a6615e0d18ce394bfc52c
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
