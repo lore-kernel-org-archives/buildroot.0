@@ -1,76 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 14:56:38 +0200
-Subject: [Buildroot] [PATCH 22/25 v6] doc/asciidoc: always apply
- Buildroot's AsciiDoc config
-In-Reply-To: <CAHXCMMJgg7qJQCruYG58ujDMWCtgTCCxMMEJecQQB4e=KhpHOA@mail.gmail.com>
-References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <56d23e0edc01ab534df783446c9891e600a61431.1411812968.git.yann.morin.1998@free.fr>
- <CAHXCMMJgg7qJQCruYG58ujDMWCtgTCCxMMEJecQQB4e=KhpHOA@mail.gmail.com>
-Message-ID: <20140927125638.GE4298@free.fr>
+From: zooey at hirschkaefer.de <zooey@hirschkaefer.de>
+Date: Sat, 27 Sep 2014 15:12:18 +0200
+Subject: [Buildroot] [RFC 0/3] samba4: allow build of libsmbclient only
+Message-ID: <1411823541-4953-1-git-send-email-zooey@hirschkaefer.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hi,
 
-On 2014-09-27 13:21 +0200, Samuel Martin spake thusly:
-> On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > +# Include output-specific Asciidoc configuration: first, Buildroot's
-> > +# configuration, then the document's configuration
-> > +ifneq ($$(wildcard $$($(2)_ASCIIDOC_BR_CONF)),)
-> > +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_BR_CONF)
-> > +endif
-> >  ifneq ($$(wildcard $$($(2)_ASCIIDOC_CONF)),)
-> >  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_CONF)
-> >  endif
-> >
-> > +# Include output-specific Asciidoc configuration: first, Buildroot's
-> > +# configuration, then the document's configuration
-> > +$(2)_$(4)_ASCIIDOC_BR_CONF = docs/conf/asciidoc-$(4).conf
-> > +ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_BR_CONF)),)
-> > +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_BR_CONF)
-> > +endif
-> >  $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
-> >  ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
-> >  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
-> > @@ -136,6 +147,7 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
-> >
-> >  $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
-> >
-> > +$(2)_ASCIIDOC_BR_CONF = docs/conf/asciidoc.conf
-> >  $(2)_ASCIIDOC_CONF = $(3)/asciidoc.conf
-> 
-> It's a bit odd to have *_ASCIIDOC{,_BR}_CONF definitions after using
-> them, whereas teh output-specific config file is defined just before
-> using it.
+this set of patches is a first draft of allowing a separate build
+of samba4's libsmbclient. Most of our devices don't need all of the
+other samba servers and tools, so it seems a bit of a waste having
+to build them all.
 
-That's because the definitions of $(2)_ASCIIDOC_CONF and $(2)_ASCIIDOC_BR_CONF
-are common to all of that document, so we define them in ASCIIDOC, not
-_INNER, or they'd be redefined every time _INNER is expanded.
+The first patch contains the naive attempt at implementing the separation.
 
-OTOH, the $(2)_$(4)_ASCIIDOC_CONF and $(2)_$(4)_ASCIIDOC_BR_CONF are
-different for each output type, so they only get defined in _INNER.
+However, it seems that samba4's build system gets confused when not all 
+targets have been built, as it tries to install manpages along with 
+libsmbclient which haven't been generated during the build phase. Patch 2
+works around the problem by deactivating installation of manpages in general,
+but as that is hardly acceptable, I wonder if anyone here has a better idea?
 
-> Anyway, it has no impact on the behavior of the infra, so:
+Patch 3 appies --disable-rpath-private-install in order to work around
+another build problem, which is apparently caused by libsmbclient.inst.so (and
+additional install libraries) to not have been created during the build phase.
+Again, the solution proposed in the patch isn't a good one, as it basically 
+means that samba4's private libraries are not being built with RPATH set, 
+which is bound to cause problems at runtime (they won't be found by the 
+runtime loader). As with patch 2, I'd be grateful for any hints at better
+solutions.
 
-No impact on the behaviour, indeed, but no need to redefine the same
-variable to the same value over-and-over again (well, just 5 times, but
-still.)
+Thanks for any input.
 
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+cheers,
+    Oliver
