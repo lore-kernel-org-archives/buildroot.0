@@ -1,50 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Sep 2014 09:42:28 +0200
-Subject: [Buildroot] [git commit] package/cdrkit: fix namespace of variables
-Message-ID: <20140927075529.9E1359D7A0@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Sep 2014 10:54:44 +0200
+Subject: [Buildroot] [PATCH] package: libarchive: allow building as host
+ package
+In-Reply-To: <1411773795-7803-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1411773795-7803-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20140927085443.GA4298@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=126f258df509c4ff36eb4bc43375e841071bf173
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Guido, All,
 
-Not all cdrkit variables are prefixed with CDRKIT_, so they leak.
+What is the rationale for building it as a host-package?
 
-Most importantly, they look like they belong to another package's
-namespace, cmake, as they start with CMAKE_ (but fortunately, they
-have no impact on cmake, as they are not used by our infras.)
+libarchive provides a library, but we have no in-tree host-package that
+uses libarchive.
 
-Fix that by removing the intermediate variables, and directly set
-the CDRKIT_CONF_OPT variable.
+On 2014-09-26 20:23 -0300, Guido Mart?nez spake thusly:
+> It works correctly without any changes, so just enable it.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cdrkit/cdrkit.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+This should not be part of the commit log. The commit log should just
+explain why you enable host-libarchive, especially because we have no
+in-tree user.
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index ee98013..7474fff 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -11,13 +11,11 @@ CDRKIT_LICENSE = GPLv2
- CDRKIT_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_ENDIAN),"BIG")
--CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
-+CDRKIT_CONF_OPT += -DBITFIELDS_HTOL=1
- else
--CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
-+CDRKIT_CONF_OPT += -DBITFIELDS_HTOL=0
- endif
- 
--CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
--
- ## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
- ## some extra flags so it finds needed libs and headers.
- CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(STAGING_DIR)/usr/include"
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  package/libarchive/libarchive.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+> index 8c6951d..22914c2 100644
+> --- a/package/libarchive/libarchive.mk
+> +++ b/package/libarchive/libarchive.mk
+> @@ -69,3 +69,4 @@ LIBARCHIVE_CONF_OPT += --without-zlib
+>  endif
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
