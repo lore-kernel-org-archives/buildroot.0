@@ -1,77 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 12:16:58 +0200
-Subject: [Buildroot] [PATCH 22/25 v6] doc/asciidoc: always apply Buildroot's
-	AsciiDoc config
+Date: Sat, 27 Sep 2014 12:16:59 +0200
+Subject: [Buildroot] [PATCH 23/25 v6] doc/asciidoc: always use UTC
 In-Reply-To: <cover.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <56d23e0edc01ab534df783446c9891e600a61431.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <de84d86d9a8fe394f9481b0b17eae6667c18ec07.1411812968.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Thomas: the AsciiDoc options we use ensure we get a sane
-output of the document. We want that configuration to be applied to
-other documents as well.
+Currently, the manual is rendered with the timezone of the user running
+the rendering. This timezone can fluctuate, depending on the date, due
+to DST (Daylight Saving Time). Currently, the manual is rendered in
+either CET or CEST (Central European Time, or its DST variant.)
 
-Up until now, it was implicit that the configuration was applied to
-our manual, becasue we only supported document-specific configuration,
-and the configuration we had was in our manual dir, so we got to use it.
+So, a manual rendered during the summer or the winter would refer to a
+non-constant timezone. If the machine and/or user doing the rendering
+also changes, there is no guarantee the timezone would still be CET/CEST.
+This is not a hard issue, since the user can still deduce the time in
+UTC, but is just incoherent.
 
-But now, we can render other documents, especially ones from
-br2-external, and we want those to also use the default configuration
-from Buildroot, but still be able to provide their own customisation.
-
-So, always add Buildroot's configuration first, if available, before we
-append the document's configuration.
+Just force the timezone to be UTC when doing the rendering of the
+manual, so we are not dependent on the machine or user doign the
+rendering.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- docs/{manual => conf}/asciidoc-text.conf |  0
- package/doc-asciidoc.mk                  | 12 ++++++++++++
- 2 files changed, 12 insertions(+)
- rename docs/{manual => conf}/asciidoc-text.conf (100%)
+ package/doc-asciidoc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/manual/asciidoc-text.conf b/docs/conf/asciidoc-text.conf
-similarity index 100%
-rename from docs/manual/asciidoc-text.conf
-rename to docs/conf/asciidoc-text.conf
 diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index f949733..6185982 100644
+index 6185982..04c6299 100644
 --- a/package/doc-asciidoc.mk
 +++ b/package/doc-asciidoc.mk
-@@ -60,10 +60,21 @@ asciidoc-check-dependencies-$(5):
- $(1)-check-dependencies-$(5): asciidoc-check-dependencies-$(5)
- 	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_$(call UPPERCASE,$(5))_HOOKS),$$(call $$(hook))$$(sep))
- 
-+# Include output-specific Asciidoc configuration: first, Buildroot's
-+# configuration, then the document's configuration
-+ifneq ($$(wildcard $$($(2)_ASCIIDOC_BR_CONF)),)
-+$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_BR_CONF)
-+endif
- ifneq ($$(wildcard $$($(2)_ASCIIDOC_CONF)),)
- $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_CONF)
+@@ -93,6 +93,8 @@ define $(2)_$(4)_INSTALL_CMDS
+ endef
  endif
  
-+# Include output-specific Asciidoc configuration: first, Buildroot's
-+# configuration, then the document's configuration
-+$(2)_$(4)_ASCIIDOC_BR_CONF = docs/conf/asciidoc-$(4).conf
-+ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_BR_CONF)),)
-+$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_BR_CONF)
-+endif
- $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
- ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
- $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
-@@ -136,6 +147,7 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
- 
- $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
- 
-+$(2)_ASCIIDOC_BR_CONF = docs/conf/asciidoc.conf
- $(2)_ASCIIDOC_CONF = $(3)/asciidoc.conf
- 
- $(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
++$$(O)/docs/$(1)/$(1).$(6): export TZ=UTC
++
+ ifeq ($(6)-$$(GENDOC_XSLTPROC_IS_BROKEN),pdf-y)
+ $$(O)/docs/$(1)/$(1).$(6):
+ 	$$(warning PDF generation is disabled because of a bug in \
 -- 
 1.9.1
