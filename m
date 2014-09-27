@@ -1,56 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Sep 2014 09:49:56 +0200
-Subject: [Buildroot] [git commit] qemu-arm: Update vexpress config to latest
-	kernel
-Message-ID: <20140927075529.BA47A9D6FB@busybox.osuosl.org>
+Date: Sat, 27 Sep 2014 09:44:29 +0200
+Subject: [Buildroot] [git commit] genimage: bump to version 7
+Message-ID: <20140927075529.B26B69D6FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76b06c28fa732829ccb777a06212fb18676b1d73
+commit: http://git.buildroot.net/buildroot/commit/?id=8d58ae30d13d3913783059764c9427ff6b760ff1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update Kernel to 3.16.3.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/qemu/arm-vexpress/readme.txt  |    2 +-
- configs/qemu_arm_vexpress_defconfig |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/genimage/genimage.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index 50dd563..01304c5 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index a353c62..0c0c1e5 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Tested with QEMU 1.7.0
-+Tested with QEMU 2.1.0
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index e35a44a..d6d7c20 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -13,14 +13,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.13 headers to avoid breaking with newer kernels
-+# Lock to 3.16 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.5"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.16.3"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
+-GENIMAGE_VERSION        = 6
++GENIMAGE_VERSION        = 7
+ GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download
+ GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
