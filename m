@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 14:51:08 +0200
-Subject: [Buildroot] [PATCH 21/25 v6] doc/asciidoc: allow documents to
- pass a global asciidoc configuration
-In-Reply-To: <CAHXCMMJJVd61GXek+tw4JQm87g3TBWL3eP15XmgK6pxaDMMV8g@mail.gmail.com>
+Date: Sat, 27 Sep 2014 14:56:38 +0200
+Subject: [Buildroot] [PATCH 22/25 v6] doc/asciidoc: always apply
+ Buildroot's AsciiDoc config
+In-Reply-To: <CAHXCMMJgg7qJQCruYG58ujDMWCtgTCCxMMEJecQQB4e=KhpHOA@mail.gmail.com>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <bd572581b91449ac1ddc176aed272afc882cb980.1411812968.git.yann.morin.1998@free.fr>
- <CAHXCMMJJVd61GXek+tw4JQm87g3TBWL3eP15XmgK6pxaDMMV8g@mail.gmail.com>
-Message-ID: <20140927125108.GD4298@free.fr>
+ <56d23e0edc01ab534df783446c9891e600a61431.1411812968.git.yann.morin.1998@free.fr>
+ <CAHXCMMJgg7qJQCruYG58ujDMWCtgTCCxMMEJecQQB4e=KhpHOA@mail.gmail.com>
+Message-ID: <20140927125638.GE4298@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,54 @@ To: buildroot@busybox.net
 
 Samuel, All,
 
-On 2014-09-27 13:20 +0200, Samuel Martin spake thusly:
+On 2014-09-27 13:21 +0200, Samuel Martin spake thusly:
 > On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Currently, a document can specify an output-specific configuration, like
-> > the text output, that hides images references, and formats hyperlinks.
+[--SNIP--]
+> > +# Include output-specific Asciidoc configuration: first, Buildroot's
+> > +# configuration, then the document's configuration
+> > +ifneq ($$(wildcard $$($(2)_ASCIIDOC_BR_CONF)),)
+> > +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_BR_CONF)
+> > +endif
+> >  ifneq ($$(wildcard $$($(2)_ASCIIDOC_CONF)),)
+> >  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_CONF)
+> >  endif
 > >
-> > But sometime it is required that a specific configuration is used for
-> > all the output formats, to always apply the same markup rules in all
-> > documents (like using the [specialwords] section.)
+> > +# Include output-specific Asciidoc configuration: first, Buildroot's
+> > +# configuration, then the document's configuration
+> > +$(2)_$(4)_ASCIIDOC_BR_CONF = docs/conf/asciidoc-$(4).conf
+> > +ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_BR_CONF)),)
+> > +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_BR_CONF)
+> > +endif
+> >  $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
+> >  ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
+> >  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
+> > @@ -136,6 +147,7 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
 > >
-> > Also look for a file named 'asciidoc.conf' in the document's directory.
-> > If that file exists, add it to the asciidoc options (before the
-> > output-specific config, so the former takes precedence over the latter.)
+> >  $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
+> >
+> > +$(2)_ASCIIDOC_BR_CONF = docs/conf/asciidoc.conf
+> >  $(2)_ASCIIDOC_CONF = $(3)/asciidoc.conf
 > 
-> It is the other way around, no?
-> (the output-specific config taking precedence over/overriding the
-> sections defined in the global one)
+> It's a bit odd to have *_ASCIIDOC{,_BR}_CONF definitions after using
+> them, whereas teh output-specific config file is defined just before
+> using it.
 
-Yes indeed; the commit log is backward. Fixed.
-Thanks.
+That's because the definitions of $(2)_ASCIIDOC_CONF and $(2)_ASCIIDOC_BR_CONF
+are common to all of that document, so we define them in ASCIIDOC, not
+_INNER, or they'd be redefined every time _INNER is expanded.
+
+OTOH, the $(2)_$(4)_ASCIIDOC_CONF and $(2)_$(4)_ASCIIDOC_BR_CONF are
+different for each output type, so they only get defined in _INNER.
+
+> Anyway, it has no impact on the behavior of the infra, so:
+
+No impact on the behaviour, indeed, but no need to redefine the same
+variable to the same value over-and-over again (well, just 5 times, but
+still.)
+
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
