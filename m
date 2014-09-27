@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 27 Sep 2014 21:32:45 +0200
-Subject: [Buildroot] [PATCH 08 of 15] packages: rename FOO_BUILD_OPT into
-	FOO_BUILD_OPTS
+Date: Sat, 27 Sep 2014 21:32:47 +0200
+Subject: [Buildroot] [PATCH 10 of 15] packages: rename FOO_KCONFIG_OPT into
+ FOO_KCONFIG_OPTS
 In-Reply-To: <patchbomb.1411846357@localhost>
 References: <patchbomb.1411846357@localhost>
-Message-ID: <720fe5e78366f33b4908.1411846365@localhost>
+Message-ID: <171cca88259c1ad05eb0.1411846367@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,194 +12,85 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 To be consistent with the recent change of FOO_MAKE_OPT into FOO_MAKE_OPTS,
-make the same change for FOO_BUILD_OPT.
+make the same change for FOO_KCONFIG_OPT.
 
 Sed command used:
-   find * -type f | xargs sed -i 's#_BUILD_OPT\>#&S#g'
+   find * -type f | xargs sed -i 's#_KCONFIG_OPT\>#&S#g'
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2: rebase
+v2: new patch
 
- docs/manual/adding-packages-luarocks.txt |   6 +++---
- docs/manual/adding-packages-perl.txt     |   2 +-
- docs/manual/adding-packages-python.txt   |   4 ++--
- package/pkg-luarocks.mk                  |   4 ++--
- package/pkg-perl.mk                      |   8 ++++----
- package/pkg-python.mk                    |  14 +++++++-------
- package/python-numpy/python-numpy.mk     |   2 +-
- 7 files changed, 20 insertions(+), 20 deletions(-)
+ docs/manual/adding-packages-kconfig.txt |  2 +-
+ package/busybox/busybox.mk              |  2 +-
+ package/pkg-kconfig.mk                  |  6 +++---
+ package/uclibc/uclibc.mk                |  2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
---- a/docs/manual/adding-packages-luarocks.txt
-+++ b/docs/manual/adding-packages-luarocks.txt
-@@ -20,8 +20,8 @@
- 07: LUAFOO_VERSION = 1.0.2-1
- 08: LUAFOO_DEPENDENCIES = foo
- 09:
--10: LUAFOO_BUILD_OPT += FOO_INCDIR=$(STAGING_DIR)/usr/include
--11: LUAFOO_BUILD_OPT += FOO_LIBDIR=$(STAGING_DIR)/usr/lib
-+10: LUAFOO_BUILD_OPTS += FOO_INCDIR=$(STAGING_DIR)/usr/include
-+11: LUAFOO_BUILD_OPTS += FOO_LIBDIR=$(STAGING_DIR)/usr/lib
- 12: LUAFOO_LICENSE = luaFoo license
- 13: LUAFOO_LICENSE_FILES = COPYING
- 14:
-@@ -86,5 +86,5 @@
- * +LUAFOO_SUBDIR+, which defaults to
-   +luafoo-$(LUAFOO_VERSION_WITHOUT_ROCKSPEC_REVISION)+
+diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+--- a/docs/manual/adding-packages-kconfig.txt
++++ b/docs/manual/adding-packages-kconfig.txt
+@@ -46,7 +46,7 @@
+ * +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
+   support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
  
--* +LUAFOO_BUILD_OPT+ contains additional build options for the
-+* +LUAFOO_BUILD_OPTS+ contains additional build options for the
-   +luarocks build+ call.
-diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
---- a/docs/manual/adding-packages-perl.txt
-+++ b/docs/manual/adding-packages-perl.txt
-@@ -105,7 +105,7 @@
-   configure options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
-   By default, empty.
+-* +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
++* +FOO_KCONFIG_OPTS+: extra options to pass when calling the kconfig
+   editors. This may need to include '$(FOO_MAKE_OPTS)', for example. By
+   default, empty.
  
--* +PERL_FOO_BUILD_OPT+/+HOST_PERL_FOO_BUILD_OPT+, to specify additional
-+* +PERL_FOO_BUILD_OPTS+/+HOST_PERL_FOO_BUILD_OPTS+, to specify additional
-   options to pass to +make pure_all+ or +perl Build build+ in the build step.
-   By default, empty.
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -47,7 +47,7 @@
  
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -122,9 +122,9 @@
-   setuptools target packages) and +HOST_PKG_PYTHON_SETUPTOOLS_ENV+
-   (for setuptools host packages).
+ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+-BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
++BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
  
--* +PYTHON_FOO_BUILD_OPT+, to specify additional options to pass to the
-+* +PYTHON_FOO_BUILD_OPTS+, to specify additional options to pass to the
-   Python +setup.py+ script during the build step. For target distutils
--  packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPT+ options are already
-+  packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPTS+ options are already
-   passed automatically by the infrastructure.
- 
- * +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
+ define BUSYBOX_PERMISSIONS
+ /bin/busybox			 f 4755	0 0 - - - - -
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
 @@ -33,7 +33,7 @@
  
- define inner-luarocks-package
+ # Default values
+ $(2)_KCONFIG_EDITORS ?= menuconfig
+-$(2)_KCONFIG_OPT ?=
++$(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
  
--$(2)_BUILD_OPT		?=
-+$(2)_BUILD_OPTS		?=
- $(2)_SUBDIR		?= $(1)-$$(shell echo "$$($(3)_VERSION)" | sed -e "s/-[0-9]$$$$//")
- $(2)_ROCKSPEC		?= $(1)-$$($(3)_VERSION).rockspec
- $(2)_SOURCE		?= $(1)-$$($(3)_VERSION).src.rock
-@@ -59,7 +59,7 @@
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	cd $$($(2)_SRCDIR) && \
--	 $$(LUAROCKS_RUN) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPT)
-+	 $$(LUAROCKS_RUN) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
- endef
- endif
+ # FOO_KCONFIG_FILE is required
+@@ -51,7 +51,7 @@
+ $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+ 	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPT) oldconfig
++		$$($(2)_KCONFIG_OPTS) oldconfig
+ 	$$(Q)touch $$@
  
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -129,11 +129,11 @@
- # Build package for target
- define $(2)_BUILD_CMDS
- 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
--		perl Build $$($(2)_BUILD_OPT) build; \
-+		perl Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) \
- 			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
--			$$($(2)_BUILD_OPT) pure_all; \
-+			$$($(2)_BUILD_OPTS) pure_all; \
- 	fi
- endef
- else
-@@ -141,9 +141,9 @@
- # Build package for host
- define $(2)_BUILD_CMDS
- 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
--		perl Build $$($(2)_BUILD_OPT) build; \
-+		perl Build $$($(2)_BUILD_OPTS) build; \
- 	else \
--		$$(MAKE1) $$($(2)_BUILD_OPT) pure_all; \
-+		$$(MAKE1) $$($(2)_BUILD_OPTS) pure_all; \
- 	fi
- endef
- endif
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -32,7 +32,7 @@
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
+ # Before running configure, the configuration file should be present and fixed
+@@ -60,7 +60,7 @@
+ # Configuration editors (menuconfig, ...)
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPT) $$(subst $(1)-,,$$@)
++		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
  
--PKG_PYTHON_DISTUTILS_BUILD_OPT = \
-+PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
- 	--executable=/usr/bin/python
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -39,7 +39,7 @@
  
- PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
-@@ -95,7 +95,7 @@
- $(2)_BUILDDIR	= $$($(2)_SRCDIR)
+ UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
  
- $(2)_ENV         ?=
--$(2)_BUILD_OPT   ?=
-+$(2)_BUILD_OPTS   ?=
- $(2)_INSTALL_OPTS ?=
- 
- ifndef $(2)_SETUP_TYPE
-@@ -111,13 +111,13 @@
- ifeq ($(4),target)
- $(2)_BASE_ENV         = $$(PKG_PYTHON_DISTUTILS_ENV)
- $(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_BUILD_OPT   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPT)
-+$(2)_BASE_BUILD_OPTS   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
- $(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
- $(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_DISTUTILS_ENV)
- $(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_BUILD_OPT   =
-+$(2)_BASE_BUILD_OPTS   =
- $(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
- endif
- # Setuptools
-@@ -125,13 +125,13 @@
- ifeq ($(4),target)
- $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
- $(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_BUILD_OPT   =
-+$(2)_BASE_BUILD_OPTS   =
- $(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
- $(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
- else
- $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
- $(2)_BASE_BUILD_TGT   = build
--$(2)_BASE_BUILD_OPT   =
-+$(2)_BASE_BUILD_OPTS   =
- $(2)_BASE_INSTALL_OPTS = $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
- endif
- else
-@@ -228,7 +228,7 @@
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
- 		$$($(2)_PYTHON_INTERPRETER) setup.py \
- 		$$($$(PKG)_BASE_BUILD_TGT) \
--		$$($$(PKG)_BASE_BUILD_OPT) $$($$(PKG)_BUILD_OPT))
-+		$$($$(PKG)_BASE_BUILD_OPTS) $$($$(PKG)_BUILD_OPTS))
- endef
- endif
- 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -16,7 +16,7 @@
- PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
- endif
- 
--PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
-+PYTHON_NUMPY_BUILD_OPTS = --fcompiler=None
- 
- define PYTHON_NUMPY_CONFIGURE_CMDS
- 	-rm -f $(@D)/site.cfg
+-UCLIBC_KCONFIG_OPT = \
++UCLIBC_KCONFIG_OPTS = \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
