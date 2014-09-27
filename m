@@ -1,58 +1,961 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 23:49:10 +0200
-Subject: [Buildroot] [PATCH 12 of 15] pkg-generic: add checks on
- deprecated variables FOO_BAR_OPT
-In-Reply-To: <27f6b6064904e682eccc.1411846369@localhost>
+Date: Sun, 28 Sep 2014 00:04:37 +0200
+Subject: [Buildroot] [PATCH 01 of 15] packages: rename FOO_MAKE_OPT into
+	FOO_MAKE_OPTS
+In-Reply-To: <9add220c5df01fe2e54c.1411846358@localhost>
 References: <patchbomb.1411846357@localhost>
- <27f6b6064904e682eccc.1411846369@localhost>
-Message-ID: <20140927214910.GI4298@free.fr>
+ <9add220c5df01fe2e54c.1411846358@localhost>
+Message-ID: <20140927220437.GJ4298@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
 On 2014-09-27 21:32 +0200, Thomas De Schampheleire spake thusly:
-> This patch introduces a check for the usage of deprecated variable
-> FOO_BAR_OPT, and suggests to use FOO_BAR_OPTS instead.
+> While the autotools infrastructure was using FOO_MAKE_OPT, generic packages
+> were typically using FOO_MAKE_OPTS. This inconsistency becomes a problem
+> when a new infrastructure is introduced that wants to make use of
+> FOO_MAKE_OPT(S), and can live alongside either generic-package or
+> autotools-package. The new infrastructure will have to choose between either
+> OPT or OPTS, and thus rule out transparent usage by respectively generic
+> packages or generic packages. An example of such an infrastructure is
+> kconfig-package, which provides kconfig-related make targets.
+> 
+> The OPTS variant is more logical, as there are typically multiple options.
+> 
+> This patch renames all occurrences of FOO_MAKE_OPT in FOO_MAKE_OPTS.
+> Sed command used:
+>     find * -type f | xargs sed -i 's#_MAKE_OPT\>#&S#g'
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+Casual visual review, plus:
+    git difftool -y -x 'diff -du -I "_MAKE_OPTS\?\>"' CSET^..CSET
+
 Regards,
 Yann E. MORIN.
 
 > ---
-> v2: collapse patches that each add one check
+> v2: rebase
 > 
->  package/pkg-generic.mk |  12 ++++++++++++
->  1 files changed, 12 insertions(+), 0 deletions(-)
+>  boot/at91bootstrap3/at91bootstrap3.mk     |   4 ++--
+>  docs/manual/adding-packages-autotools.txt |   2 +-
+>  docs/manual/adding-packages-cmake.txt     |   2 +-
+>  docs/manual/adding-packages-kconfig.txt   |   2 +-
+>  package/avahi/avahi.mk                    |   2 +-
+>  package/dnsmasq/dnsmasq.mk                |  12 ++++++------
+>  package/e2fsprogs/e2fsprogs.mk            |   2 +-
+>  package/faifa/faifa.mk                    |   2 +-
+>  package/freetype/freetype.mk              |   2 +-
+>  package/gcc/gcc-initial/gcc-initial.mk    |   2 +-
+>  package/httping/httping.mk                |   6 +++---
+>  package/ipsec-tools/ipsec-tools.mk        |   2 +-
+>  package/iputils/iputils.mk                |   6 +++---
+>  package/iw/iw.mk                          |   6 +++---
+>  package/libdnet/libdnet.mk                |   6 +++---
+>  package/libjson/libjson.mk                |  12 ++++++------
+>  package/libseccomp/libseccomp.mk          |   2 +-
+>  package/linux-pam/linux-pam.mk            |   2 +-
+>  package/lm-sensors/lm-sensors.mk          |  12 ++++++------
+>  package/lshw/lshw.mk                      |   6 +++---
+>  package/lvm2/lvm2.mk                      |   2 +-
+>  package/mdadm/mdadm.mk                    |   2 +-
+>  package/mii-diag/mii-diag.mk              |   4 ++--
+>  package/mpfr/mpfr.mk                      |   2 +-
+>  package/openswan/openswan.mk              |  12 ++++++------
+>  package/openvmtools/openvmtools.mk        |   2 +-
+>  package/pkg-autotools.mk                  |   6 +++---
+>  package/pkg-cmake.mk                      |  12 ++++++------
+>  package/pppd/pppd.mk                      |   8 ++++----
+>  package/pv/pv.mk                          |   2 +-
+>  package/quota/quota.mk                    |   2 +-
+>  package/rp-pppoe/rp-pppoe.mk              |   2 +-
+>  package/rubix/rubix.mk                    |   2 +-
+>  package/schifra/schifra.mk                |   4 ++--
+>  package/sdl_ttf/sdl_ttf.mk                |   2 +-
+>  package/setserial/setserial.mk            |   2 +-
+>  package/speex/speex.mk                    |   2 +-
+>  package/sysstat/sysstat.mk                |   2 +-
+>  package/systemd/systemd.mk                |   4 ++--
+>  package/tn5250/tn5250.mk                  |   2 +-
+>  package/util-linux/util-linux.mk          |   2 +-
+>  package/whois/whois.mk                    |   6 +++---
+>  package/xinetd/xinetd.mk                  |   2 +-
+>  package/zmqpp/zmqpp.mk                    |   8 ++++----
+>  package/zxing/zxing.mk                    |   4 ++--
+>  45 files changed, 95 insertions(+), 95 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -717,6 +717,18 @@
->  	$$(eval $$(call virt-provides-single,$$(pkg),$$(call UPPERCASE,$$(pkg)),$(1))$$(sep)))
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -17,7 +17,7 @@
+>  AT91BOOTSTRAP3_CUSTOM_PATCH_DIR = \
+>  	$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR))
+>  
+> -AT91BOOTSTRAP3_MAKE_OPT = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
+> +AT91BOOTSTRAP3_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
+>  
+>  ifneq ($(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR),)
+>  define AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
+> @@ -41,7 +41,7 @@
+>  endef
+>  
+>  define AT91BOOTSTRAP3_BUILD_CMDS
+> -	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPT) -C $(@D) boot
+> +	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) boot
+>  endef
+>  
+>  define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+> diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+> --- a/docs/manual/adding-packages-autotools.txt
+> +++ b/docs/manual/adding-packages-autotools.txt
+> @@ -111,7 +111,7 @@
+>    variables to pass to make in the build step. These are passed before
+>    the +make+ command. By default, empty.
+>  
+> -* +LIBFOO_MAKE_OPT+, to specify additional variables to
+> +* +LIBFOO_MAKE_OPTS+, to specify additional variables to
+>    pass to make in the build step. These are passed after the
+>    +make+ command. By default, empty.
+>  
+> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+> --- a/docs/manual/adding-packages-cmake.txt
+> +++ b/docs/manual/adding-packages-cmake.txt
+> @@ -108,7 +108,7 @@
+>    pass to make in the build step. These are passed before the +make+
+>    command. By default, empty.
+>  
+> -* +LIBFOO_MAKE_OPT+, to specify additional variables to pass to make
+> +* +LIBFOO_MAKE_OPTS+, to specify additional variables to pass to make
+>    in the build step. These are passed after the +make+ command. By
+>    default, empty.
+>  
+> diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+> --- a/docs/manual/adding-packages-kconfig.txt
+> +++ b/docs/manual/adding-packages-kconfig.txt
+> @@ -47,7 +47,7 @@
+>    support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
+>  
+>  * +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
+> -  ediftors. This may need to include '$(FOO_MAKE_OPT)', for example. By
+> +  editors. This may need to include '$(FOO_MAKE_OPTS)', for example. By
+>    default, empty.
+>  
+>  * +FOO_KCONFIG_FIXUP_CMDS+: a list of shell commands needed to fixup the
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -138,7 +138,7 @@
+>  AVAHI_CONF_OPT += --disable-python
 >  endif
 >  
-> +# Ensure unified variable name conventions between all packages
-> +$(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
-> +$(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
-> +
->  TARGETS += $(1)
+> -AVAHI_MAKE_OPT += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+> +AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
 >  
->  ifneq ($$($(2)_PERMISSIONS),)
+>  define AVAHI_USERS
+>  	avahi -1 avahi -1 * - - -
+> diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+> --- a/package/dnsmasq/dnsmasq.mk
+> +++ b/package/dnsmasq/dnsmasq.mk
+> @@ -8,8 +8,8 @@
+>  DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+>  DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+>  DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+> -DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+> -DNSMASQ_MAKE_OPT += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)"
+> +DNSMASQ_MAKE_OPTS = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+> +DNSMASQ_MAKE_OPTS += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)"
+>  DNSMASQ_DEPENDENCIES = host-pkgconf
+>  DNSMASQ_LICENSE = Dual GPLv2/GPLv3
+>  DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
+> @@ -37,7 +37,7 @@
+>  # NLS requires IDN so only enable it (i18n) when IDN is true
+>  ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+>  	DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext
+> -	DNSMASQ_MAKE_OPT += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+> +	DNSMASQ_MAKE_OPTS += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+>  	DNSMASQ_COPTS += -DHAVE_IDN
+>  	DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
+>  endif
+> @@ -58,7 +58,7 @@
+>  
+>  # liblua uses dlopen when dynamically linked
+>  ifneq ($(BR2_PREFER_STATIC_LIB),y)
+> -	DNSMASQ_MAKE_OPT += LIBS+="-ldl"
+> +	DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
+>  endif
+>  
+>  define DNSMASQ_ENABLE_LUA
+> @@ -98,11 +98,11 @@
+>  	$(DNSMASQ_ENABLE_DBUS)
+>  	$(DNSMASQ_ENABLE_LUA)
+>  	$(DNSMASQ_ENABLE_CONNTRACK)
+> -	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPT) all$(DNSMASQ_I18N)
+> +	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+>  endef
+>  
+>  define DNSMASQ_INSTALL_TARGET_CMDS
+> -	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPT) install$(DNSMASQ_I18N)
+> +	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
+>  	mkdir -p $(TARGET_DIR)/var/lib/misc/
+>  endef
+>  
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -31,7 +31,7 @@
+>  
+>  E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+>  
+> -E2FSPROGS_MAKE_OPT = \
+> +E2FSPROGS_MAKE_OPTS = \
+>  	LDCONFIG=true
+>  
+>  define HOST_E2FSPROGS_INSTALL_CMDS
+> diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
+> --- a/package/faifa/faifa.mk
+> +++ b/package/faifa/faifa.mk
+> @@ -11,7 +11,7 @@
+>  FAIFA_LICENSE = BSD-3c
+>  FAIFA_LICENSE_FILES = COPYING
+>  
+> -FAIFA_MAKE_OPT += GIT_REV=$(FAIFA_VERSION)
+> +FAIFA_MAKE_OPTS += GIT_REV=$(FAIFA_VERSION)
+>  
+>  # This package uses autoconf, but not automake, so we need to call
+>  # their special autogen.sh script, and have custom target and staging
+> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+> --- a/package/freetype/freetype.mk
+> +++ b/package/freetype/freetype.mk
+> @@ -8,7 +8,7 @@
+>  FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+>  FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+>  FREETYPE_INSTALL_STAGING = YES
+> -FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+> +FREETYPE_MAKE_OPTS = CCexe="$(HOSTCC)"
+>  FREETYPE_LICENSE = Dual FTL/GPLv2+
+>  FREETYPE_LICENSE_FILES = docs/FTL.TXT docs/GPLv2.TXT
+>  FREETYPE_DEPENDENCIES = host-pkgconf
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -53,7 +53,7 @@
+>  # We need to tell gcc that the C library will be providing the ssp
+>  # support, as it can't guess it since the C library hasn't been built
+>  # yet (we're gcc-initial).
+> -HOST_GCC_INITIAL_MAKE_OPT = $(if $(BR2_TOOLCHAIN_HAS_SSP),gcc_cv_libc_provides_ssp=yes) all-gcc all-target-libgcc
+> +HOST_GCC_INITIAL_MAKE_OPTS = $(if $(BR2_TOOLCHAIN_HAS_SSP),gcc_cv_libc_provides_ssp=yes) all-gcc all-target-libgcc
+>  HOST_GCC_INITIAL_INSTALL_OPT = install-gcc install-target-libgcc
+>  
+>  $(eval $(host-autotools-package))
+> diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+> --- a/package/httping/httping.mk
+> +++ b/package/httping/httping.mk
+> @@ -18,19 +18,19 @@
+>  	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
+>  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+>  	$(if $(BR2_PACKAGE_FFTW),fftw)
+> -HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
+> +HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+>  	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
+>  	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+>  	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+>  	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
+>  
+>  define HTTPING_BUILD_CMDS
+> -	$(HTTPING_MAKE_OPT) LDFLAGS="$(HTTPING_LDFLAGS)" \
+> +	$(HTTPING_MAKE_OPTS) LDFLAGS="$(HTTPING_LDFLAGS)" \
+>  		$(MAKE) DEBUG=no -C $(@D)
+>  endef
+>  
+>  define HTTPING_INSTALL_TARGET_CMDS
+> -	$(HTTPING_MAKE_OPT) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+> +	$(HTTPING_MAKE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+> --- a/package/ipsec-tools/ipsec-tools.mk
+> +++ b/package/ipsec-tools/ipsec-tools.mk
+> @@ -13,7 +13,7 @@
+>  IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex
+>  
+>  # configure hardcodes -Werror, so override CFLAGS on make invocation
+> -IPSEC_TOOLS_MAKE_OPT = CFLAGS='$(TARGET_CFLAGS)'
+> +IPSEC_TOOLS_MAKE_OPTS = CFLAGS='$(TARGET_CFLAGS)'
+>  
+>  # openssl uses zlib, so we need to explicitly link with it when static
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -18,7 +18,7 @@
+>  endif
+>  
+>  # Disabling CAP_SETPCAP (file capabilities)
+> -IPUTILS_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) USE_CAP=no USE_SYSFS=no\
+> +IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_CAP=no USE_SYSFS=no\
+>  	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+>  	arping clockdiff ping rarpd rdisc tftpd tracepath
+>  
+> @@ -26,7 +26,7 @@
+>  # To support md5 for ping6
+>  IPUTILS_DEPENDENCIES += openssl
+>  
+> -IPUTILS_MAKE_OPT += ping6 tracepath6 traceroute6
+> +IPUTILS_MAKE_OPTS += ping6 tracepath6 traceroute6
+>  
+>  define IPUTILS_IPV6_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
+> @@ -36,7 +36,7 @@
+>  endif
+>  
+>  define IPUTILS_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPT)
+> +	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
+>  endef
+>  
+>  define IPUTILS_INSTALL_TARGET_CMDS
+> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+> --- a/package/iw/iw.mk
+> +++ b/package/iw/iw.mk
+> @@ -10,18 +10,18 @@
+>  IW_LICENSE = iw license
+>  IW_LICENSE_FILES = COPYING
+>  IW_DEPENDENCIES = host-pkgconf libnl
+> -IW_MAKE_OPT = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+> +IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+>  IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+>  	GIT_DIR=$(IW_DIR)
+>  
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>  # libnl needs pthread/m, so we need to explicitly with them when static
+>  # these need to added AFTER libnl, so we have to override LIBS completely
+> -IW_MAKE_OPT += LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
+> +IW_MAKE_OPTS += LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
+>  endif
+>  
+>  define IW_BUILD_CMDS
+> -	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPT) -C $(@D)
+> +	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define IW_INSTALL_TARGET_CMDS
+> diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+> --- a/package/libdnet/libdnet.mk
+> +++ b/package/libdnet/libdnet.mk
+> @@ -17,9 +17,9 @@
+>  ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
+>  LIBDNET_DEPENDENCIES = python
+>  LIBDNET_CONF_OPT += --with-python
+> -LIBDNET_MAKE_OPT = PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) PYLIBDIR=$(STAGING_DIR)/usr/lib
+> -LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
+> -LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
+> +LIBDNET_MAKE_OPTS = PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) PYLIBDIR=$(STAGING_DIR)/usr/lib
+> +LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPTS) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
+> +LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+>  endif
+>  
+>  # Needed for autoreconf to work properly
+> diff --git a/package/libjson/libjson.mk b/package/libjson/libjson.mk
+> --- a/package/libjson/libjson.mk
+> +++ b/package/libjson/libjson.mk
+> @@ -14,13 +14,13 @@
+>  LIBJSON_CXXFLAGS = $(TARGET_CFLAGS) -DNDEBUG
+>  
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> -LIBJSON_MAKE_OPT += SHARED=0
+> +LIBJSON_MAKE_OPTS += SHARED=0
+>  else
+> -LIBJSON_MAKE_OPT += SHARED=1
+> +LIBJSON_MAKE_OPTS += SHARED=1
+>  LIBJSON_CXXFLAGS += -fPIC
+>  endif
+>  
+> -LIBJSON_MAKE_OPT += BUILD_TYPE= CXXFLAGS="$(LIBJSON_CXXFLAGS)"
+> +LIBJSON_MAKE_OPTS += BUILD_TYPE= CXXFLAGS="$(LIBJSON_CXXFLAGS)"
+>  
+>  define LIBJSON_EXTRACT_CMDS
+>  	unzip -d $(@D) $(DL_DIR)/$(LIBJSON_SOURCE)
+> @@ -33,17 +33,17 @@
+>  	mkdir -p $(@D)/Objects_$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
+>  		$(@D)/_internal/Source/Dependencies
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -		$(LIBJSON_MAKE_OPT) -C $(@D)
+> +		$(LIBJSON_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define LIBJSON_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -		$(LIBJSON_MAKE_OPT) prefix=$(TARGET_DIR)/usr install -C $(@D)
+> +		$(LIBJSON_MAKE_OPTS) prefix=$(TARGET_DIR)/usr install -C $(@D)
+>  endef
+>  
+>  define LIBJSON_INSTALL_STAGING_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -		$(LIBJSON_MAKE_OPT) prefix=$(STAGING_DIR)/usr install -C $(@D)
+> +		$(LIBJSON_MAKE_OPTS) prefix=$(STAGING_DIR)/usr install -C $(@D)
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+> --- a/package/libseccomp/libseccomp.mk
+> +++ b/package/libseccomp/libseccomp.mk
+> @@ -13,7 +13,7 @@
+>  # Needed for configure to find our system headers:
+>  LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
+>  LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
+> -LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
+> +LIBSECCOMP_MAKE_OPTS            = SUBDIRS_BUILD=src
+>  LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
+>  LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
+>  
+> diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+> --- a/package/linux-pam/linux-pam.mk
+> +++ b/package/linux-pam/linux-pam.mk
+> @@ -23,7 +23,7 @@
+>  
+>  ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+>  	LINUX_PAM_DEPENDENCIES += gettext
+> -	LINUX_PAM_MAKE_OPT += LIBS=-lintl
+> +	LINUX_PAM_MAKE_OPTS += LIBS=-lintl
+>  endif
+>  
+>  # Install default pam config (deny everything)
+> diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+> --- a/package/lm-sensors/lm-sensors.mk
+> +++ b/package/lm-sensors/lm-sensors.mk
+> @@ -20,28 +20,28 @@
+>  LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_PWMCONFIG) += sbin/pwmconfig
+>  LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT) += sbin/sensors-detect
+>  
+> -LM_SENSORS_MAKE_OPT = \
+> +LM_SENSORS_MAKE_OPTS = \
+>  	BUILD_STATIC_LIB=1 \
+>  	MACHINE=$(KERNEL_ARCH) \
+>  	PREFIX=/usr
+>  
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> -LM_SENSORS_MAKE_OPT += BUILD_SHARED_LIB=0
+> +LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0
+>  else
+> -LM_SENSORS_MAKE_OPT += BUILD_SHARED_LIB=1
+> +LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=1
+>  endif
+>  
+>  define LM_SENSORS_BUILD_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPT) -C $(@D)
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define LM_SENSORS_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
+> +	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+>  	rm -f $(addprefix $(STAGING_DIR)/usr/,$(LM_SENSORS_BINS_) $(LM_SENSORS_BINS_y))
+>  endef
+>  
+>  define LM_SENSORS_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPT) DESTDIR=$(TARGET_DIR) install
+> +	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+>  	rm -f $(addprefix $(TARGET_DIR)/usr/,$(LM_SENSORS_BINS_))
+>  endef
+>  
+> diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+> --- a/package/lshw/lshw.mk
+> +++ b/package/lshw/lshw.mk
+> @@ -14,18 +14,18 @@
+>  LSHW_CFLAGS += -DNONLS
+>  endif
+>  
+> -LSHW_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+> +LSHW_MAKE_OPTS = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+>  	RPM_OPT_FLAGS="$(LSHW_CFLAGS)" all
+>  LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+>  LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+>  
+>  define LSHW_BUILD_CMDS
+> -	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPT)
+> +	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPTS)
+>  endef
+>  
+>  define LSHW_INSTALL_TARGET_CMDS
+>  	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
+> -		$(LSHW_MAKE_OPT) install
+> +		$(LSHW_MAKE_OPTS) install
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> --- a/package/lvm2/lvm2.mk
+> +++ b/package/lvm2/lvm2.mk
+> @@ -32,7 +32,7 @@
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
+> -LVM2_MAKE_OPT = device-mapper
+> +LVM2_MAKE_OPTS = device-mapper
+>  LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
+>  LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
+>  endif
+> diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+> --- a/package/mdadm/mdadm.mk
+> +++ b/package/mdadm/mdadm.mk
+> @@ -10,7 +10,7 @@
+>  MDADM_LICENSE = GPLv2+
+>  MDADM_LICENSE_FILES = COPYING
+>  
+> -MDADM_MAKE_OPT = \
+> +MDADM_MAKE_OPTS = \
+>  	CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
+>  
+>  MDADM_INSTALL_TARGET_OPT = \
+> diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+> --- a/package/mii-diag/mii-diag.mk
+> +++ b/package/mii-diag/mii-diag.mk
+> @@ -11,7 +11,7 @@
+>  MII_DIAG_LICENSE = GPL # No version specified
+>  MII_DIAG_LICENSE_FILES = mii-diag.c
+>  
+> -MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
+> +MII_DIAG_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+>  
+>  define MII_DIAG_DEBIAN_PATCHES
+>  	if [ -d $(@D)/debian/patches ]; then \
+> @@ -22,7 +22,7 @@
+>  MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
+>  
+>  define MII_DIAG_BUILD_CMDS
+> -	$(MAKE) $(MII_DIAG_MAKE_OPT) -C $(@D) mii-diag
+> +	$(MAKE) $(MII_DIAG_MAKE_OPTS) -C $(@D) mii-diag
+>  endef
+>  
+>  define MII_DIAG_INSTALL_TARGET_CMDS
+> diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+> --- a/package/mpfr/mpfr.mk
+> +++ b/package/mpfr/mpfr.mk
+> @@ -11,7 +11,7 @@
+>  MPFR_LICENSE_FILES = COPYING.LESSER
+>  MPFR_INSTALL_STAGING = YES
+>  MPFR_DEPENDENCIES = gmp
+> -MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+> +MPFR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
+>  
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+> --- a/package/openswan/openswan.mk
+> +++ b/package/openswan/openswan.mk
+> @@ -10,31 +10,31 @@
+>  OPENSWAN_LICENSE_FILES = COPYING LICENSE
+>  
+>  OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+> -OPENSWAN_MAKE_OPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+> +OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+>  	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
+>  	USE_KLIPS=false USE_MAST=false USE_NM=false
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  	OPENSWAN_DEPENDENCIES += libcurl
+> -	OPENSWAN_MAKE_OPT += USE_LIBCURL=true
+> +	OPENSWAN_MAKE_OPTS += USE_LIBCURL=true
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  	OPENSWAN_DEPENDENCIES += openssl
+> -	OPENSWAN_MAKE_OPT += HAVE_OPENSSL=true
+> +	OPENSWAN_MAKE_OPTS += HAVE_OPENSSL=true
+>  ifeq ($(BR2_PACKAGE_OCF_LINUX),y)
+> -	OPENSWAN_MAKE_OPT += HAVE_OCF=true
+> +	OPENSWAN_MAKE_OPTS += HAVE_OCF=true
+>  endif
+>  endif
+>  
+>  define OPENSWAN_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> -		$(OPENSWAN_MAKE_OPT) programs
+> +		$(OPENSWAN_MAKE_OPTS) programs
+>  endef
+>  
+>  define OPENSWAN_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> -		$(OPENSWAN_MAKE_OPT) DESTDIR=$(TARGET_DIR) install
+> +		$(OPENSWAN_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+> --- a/package/openvmtools/openvmtools.mk
+> +++ b/package/openvmtools/openvmtools.mk
+> @@ -41,7 +41,7 @@
+>  
+>  ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+>  OPENVMTOOLS_CONF_OPT += --with-pam
+> -OPENVMTOOLS_MAKE_OPT += CFLAGS+="-Wno-unused-local-typedefs"
+> +OPENVMTOOLS_MAKE_OPTS += CFLAGS+="-Wno-unused-local-typedefs"
+>  OPENVMTOOLS_DEPENDENCIES += linux-pam
+>  else
+>  OPENVMTOOLS_CONF_OPT += --without-pam
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -106,7 +106,7 @@
+>  $(2)_CONF_ENV			?=
+>  $(2)_CONF_OPT			?=
+>  $(2)_MAKE_ENV			?=
+> -$(2)_MAKE_OPT			?=
+> +$(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_OPT                ?= install
+>  $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
+>  $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
+> @@ -270,11 +270,11 @@
+>  ifndef $(2)_BUILD_CMDS
+>  ifeq ($(4),target)
+>  define $(2)_BUILD_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR)
+>  endef
+>  else
+>  define $(2)_BUILD_CMDS
+> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR)
+>  endef
+>  endif
+>  endif
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -40,7 +40,7 @@
+>  $(2)_CONF_OPT			?=
+>  $(2)_MAKE			?= $$(MAKE)
+>  $(2)_MAKE_ENV			?=
+> -$(2)_MAKE_OPT			?=
+> +$(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_HOST_OPT		?= install
+>  $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
+>  $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR) install
+> @@ -109,11 +109,11 @@
+>  ifndef $(2)_BUILD_CMDS
+>  ifeq ($(4),target)
+>  define $(2)_BUILD_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  else
+>  define $(2)_BUILD_CMDS
+> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  endif
+> @@ -124,7 +124,7 @@
+>  #
+>  ifndef $(2)_INSTALL_CMDS
+>  define $(2)_INSTALL_CMDS
+> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_HOST_OPT) -C $$($$(PKG)_BUILDDIR)
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_HOST_OPT) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
+> @@ -134,7 +134,7 @@
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
+> @@ -144,7 +144,7 @@
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
+> diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+> --- a/package/pppd/pppd.mk
+> +++ b/package/pppd/pppd.mk
+> @@ -19,11 +19,11 @@
+>  
+>  ifeq ($(BR2_PACKAGE_PPPD_FILTER),y)
+>  	PPPD_DEPENDENCIES += libpcap
+> -	PPPD_MAKE_OPT += FILTER=y
+> +	PPPD_MAKE_OPTS += FILTER=y
+>  endif
+>  
+>  ifeq ($(BR2_INET_IPV6),y)
+> -	PPPD_MAKE_OPT += HAVE_INET6=y
+> +	PPPD_MAKE_OPTS += HAVE_INET6=y
+>  endif
+>  
+>  # pppd bundles some but not all of the needed kernel headers. The embedded
+> @@ -43,7 +43,7 @@
+>  
+>  define PPPD_BUILD_CMDS
+>  	$(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
+> -		-C $(@D) $(PPPD_MAKE_OPT)
+> +		-C $(@D) $(PPPD_MAKE_OPTS)
+>  endef
+>  
+>  ifeq ($(BR2_PACKAGE_PPPD_RADIUS),y)
+> @@ -94,7 +94,7 @@
+>  endef
+>  
+>  define PPPD_INSTALL_STAGING_CMDS
+> -	$(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPT) install-devel
+> +	$(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPTS) install-devel
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+> --- a/package/pv/pv.mk
+> +++ b/package/pv/pv.mk
+> @@ -23,7 +23,7 @@
+>  # configuration, as the ld default emulation may not necessarily be
+>  # the correct one. By passing the below values for LD and LDFLAGS, we
+>  # ensure that 'gcc' is used to do these partial linking steps.
+> -PV_MAKE_OPT = \
+> +PV_MAKE_OPTS = \
+>  	LD="$(TARGET_CC)" \
+>  	LDFLAGS="-Wl,-r -nostdlib"
+>  
+> diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+> --- a/package/quota/quota.mk
+> +++ b/package/quota/quota.mk
+> @@ -24,7 +24,7 @@
+>  QUOTA_LDFLAGS += -ltirpc
+>  endif
+>  
+> -QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
+> +QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
+>  QUOTA_CONF_ENV = \
+>  	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
+>  
+> diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+> --- a/package/rp-pppoe/rp-pppoe.mk
+> +++ b/package/rp-pppoe/rp-pppoe.mk
+> @@ -11,7 +11,7 @@
+>  RP_PPPOE_DEPENDENCIES = pppd
+>  RP_PPPOE_SUBDIR = src
+>  RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
+> -RP_PPPOE_MAKE_OPT = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
+> +RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
+>  RP_PPPOE_CONF_OPT = --disable-debugging
+>  RP_PPPOE_CONF_ENV = \
+>  	rpppoe_cv_pack_bitfields=normal \
+> diff --git a/package/rubix/rubix.mk b/package/rubix/rubix.mk
+> --- a/package/rubix/rubix.mk
+> +++ b/package/rubix/rubix.mk
+> @@ -11,7 +11,7 @@
+>  RUBIX_LICENSE = Public Domain
+>  RUBIX_LICENSE_FILES = LICENCE
+>  
+> -RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+> +RUBIX_MAKE_OPTS = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+>  
+>  RUBIX_DEPENDENCIES = xlib_libX11
+>  
+> diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
+> --- a/package/schifra/schifra.mk
+> +++ b/package/schifra/schifra.mk
+> @@ -11,13 +11,13 @@
+>  SCHIFRA_LICENSE = schifra license
+>  SCHIFRA_LICENSE_FILES = schifra_license.txt
+>  
+> -SCHIFRA_MAKE_OPT = COMPILER="$(TARGET_CXX)" \
+> +SCHIFRA_MAKE_OPTS = COMPILER="$(TARGET_CXX)" \
+>  		   OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o"
+>  
+>  # The examples are the only buildable artefacts.
+>  ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
+>  define SCHIFRA_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPT) all
+> +	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPTS) all
+>  endef
+>  
+>  define SCHIFRA_INSTALL_EXAMPLES
+> diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+> --- a/package/sdl_ttf/sdl_ttf.mk
+> +++ b/package/sdl_ttf/sdl_ttf.mk
+> @@ -16,5 +16,5 @@
+>  		--with-freetype-prefix=$(STAGING_DIR)/usr \
+>  		--with-sdl-prefix=$(STAGING_DIR)/usr
+>  
+> -SDL_TTF_MAKE_OPT = INCLUDES="-I$(STAGING_DIR)/usr/include/SDL"  LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+> +SDL_TTF_MAKE_OPTS = INCLUDES="-I$(STAGING_DIR)/usr/include/SDL"  LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+>  $(eval $(autotools-package))
+> diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+> --- a/package/setserial/setserial.mk
+> +++ b/package/setserial/setserial.mk
+> @@ -11,7 +11,7 @@
+>  SETSERIAL_LICENSE = GPLv2
+>  SETSERIAL_LICENSE_FILES = debian/copyright
+>  # make all also builds setserial.cat which needs nroff
+> -SETSERIAL_MAKE_OPT = setserial
+> +SETSERIAL_MAKE_OPTS = setserial
+>  
+>  define SETSERIAL_APPLY_DEBIAN_PATCHES
+>  	# Touching gorhack.h is needed for the Debian patch 18 to work
+> diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+> --- a/package/speex/speex.mk
+> +++ b/package/speex/speex.mk
+> @@ -31,7 +31,7 @@
+>  SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
+>  
+>  define SPEEX_BUILD_CMDS
+> -	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_MAKE_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+> +	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_MAKE_OPTS) -C $(@D)/$($(PKG)_SUBDIR)
+>  endef
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+> --- a/package/sysstat/sysstat.mk
+> +++ b/package/sysstat/sysstat.mk
+> @@ -14,7 +14,7 @@
+>  
+>  ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+>  SYSSTAT_DEPENDENCIES += gettext
+> -SYSSTAT_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -lintl"
+> +SYSSTAT_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -lintl"
+>  endif
+>  
+>  # The isag tool is a post processing script that depends on tcl/tk
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -138,8 +138,8 @@
+>  endif
+>  
+>  # mq_getattr needs -lrt
+> -SYSTEMD_MAKE_OPT += LIBS=-lrt
+> -SYSTEMD_MAKE_OPT += LDFLAGS+=-ldl
+> +SYSTEMD_MAKE_OPTS += LIBS=-lrt
+> +SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
+>  
+>  define SYSTEMD_INSTALL_INIT_HOOK
+>  	ln -fs ../lib/systemd/systemd $(TARGET_DIR)/sbin/init
+> diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
+> --- a/package/tn5250/tn5250.mk
+> +++ b/package/tn5250/tn5250.mk
+> @@ -6,7 +6,7 @@
+>  
+>  TN5250_VERSION = 0.17.4
+>  TN5250_SITE = http://downloads.sourceforge.net/project/tn5250/tn5250/$(TN5250_VERSION)
+> -TN5250_MAKE_OPT = CPPFLAGS=""
+> +TN5250_MAKE_OPTS = CPPFLAGS=""
+>  TN5250_DEPENDENCIES = ncurses
+>  TN5250_LICENSE = LGPLv2.1+
+>  TN5250_LICENSE_FILES = COPYING
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -44,7 +44,7 @@
+>  
+>  ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+>  UTIL_LINUX_DEPENDENCIES += gettext
+> -UTIL_LINUX_MAKE_OPT += LIBS=-lintl
+> +UTIL_LINUX_MAKE_OPTS += LIBS=-lintl
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+> diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+> --- a/package/whois/whois.mk
+> +++ b/package/whois/whois.mk
+> @@ -10,7 +10,7 @@
+>  # take precedence over busybox implementation
+>  WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+>  WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+> -WHOIS_MAKE_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+> +WHOIS_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+>  	LIBS="$(WHOIS_EXTRA_LIBS)"
+>  WHOIS_LICENSE = GPLv2+
+>  WHOIS_LICENSE_FILES = COPYING
+> @@ -32,11 +32,11 @@
+>  endif
+>  
+>  define WHOIS_BUILD_CMDS
+> -	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPT) -C $(@D)
+> +	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define WHOIS_INSTALL_TARGET_CMDS
+> -	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPT) \
+> +	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPTS) \
+>  		BASEDIR="$(TARGET_DIR)" install -C $(@D)
+>  endef
+>  
+> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+> --- a/package/xinetd/xinetd.mk
+> +++ b/package/xinetd/xinetd.mk
+> @@ -28,6 +28,6 @@
+>  	CFLAGS="$(XINETD_CFLAGS)" \
+>  	LIBS="$(XINETD_LIBS)"
+>  
+> -XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+> +XINETD_MAKE_OPTS = AR="$(TARGET_AR)"
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+> --- a/package/zmqpp/zmqpp.mk
+> +++ b/package/zmqpp/zmqpp.mk
+> @@ -11,7 +11,7 @@
+>  ZMQPP_LICENSE = LGPLv3+ with exceptions
+>  ZMQPP_LICENSE_FILES = COPYING COPYING.LESSER
+>  
+> -ZMQPP_MAKE_OPT = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
+> +ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
+>  ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+>  
+>  ifeq ($(BR2_PACKAGE_ZMQPP_CLIENT),y)
+> @@ -21,19 +21,19 @@
+>  define ZMQPP_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>  		LDFLAGS="$(ZMQPP_LDFLAGS)" \
+> -		$(ZMQPP_MAKE_OPT) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
+> +		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
+>  endef
+>  
+>  define ZMQPP_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/include/zmqpp
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -		$(ZMQPP_MAKE_OPT) DESTDIR=$(TARGET_DIR) install -C $(@D)
+> +		$(ZMQPP_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install -C $(@D)
+>  endef
+>  
+>  define ZMQPP_INSTALL_STAGING_CMDS
+>  	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/zmqpp
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -		$(ZMQPP_MAKE_OPT) DESTDIR=$(STAGING_DIR) install -C $(@D)
+> +		$(ZMQPP_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install -C $(@D)
+>  endef
+>  
+>  $(eval $(generic-package))
+> diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+> --- a/package/zxing/zxing.mk
+> +++ b/package/zxing/zxing.mk
+> @@ -17,7 +17,7 @@
+>  else
+>  # There is no locale support in the toolchain and libiconv
+>  # is not available so disable iconv support in zxing
+> -ZING_MAKE_OPT=CXXFLAGS+="-DNO_ICONV"
+> +ZING_MAKE_OPTS=CXXFLAGS+="-DNO_ICONV"
+>  endif
+>  endif
+>  
+> @@ -26,7 +26,7 @@
+>  endef
+>  
+>  define ZXING_BUILD_CMDS
+> -	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS) $(ZING_MAKE_OPT)
+> +	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS) $(ZING_MAKE_OPTS)
+>  endef
+>  
+>  define ZXING_INSTALL_STAGING_CMDS
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
