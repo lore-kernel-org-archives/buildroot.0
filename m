@@ -1,35 +1,72 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 27 Sep 2014 13:20:38 +0200
-Subject: [Buildroot] [PATCH 17/25 v6] docs: separate the GENDOC infra
-	from our manual definition
-In-Reply-To: <3bb98f8ff99048b158b334b5f0ac29a5c694f05f.1411812968.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Sep 2014 13:20:50 +0200
+Subject: [Buildroot] [PATCH 21/25 v6] doc/asciidoc: allow documents to
+ pass a global asciidoc configuration
+In-Reply-To: <bd572581b91449ac1ddc176aed272afc882cb980.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <3bb98f8ff99048b158b334b5f0ac29a5c694f05f.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMJMCQQC=51PYHpgfOsquA--1=mc7PtkpNghad4E6S14BQ@mail.gmail.com>
+ <bd572581b91449ac1ddc176aed272afc882cb980.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJJVd61GXek+tw4JQm87g3TBWL3eP15XmgK6pxaDMMV8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Yann,
+
 On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Move the GENDOC infra to its own file, so it is even less tied to our
-> manual document, so that it is more obvious that GENDOC is an infra like
-> our packages infras, and 'manual' is a document like we have packages.
+> Currently, a document can specify an output-specific configuration, like
+> the text output, that hides images references, and formats hyperlinks.
 >
-> Ideally, this new file should better go in docs/ rather than in package/ .
-> However, docs/ is already full of our website stuff, so adding it in
-> there would just serve to clutter the website.
+> But sometime it is required that a specific configuration is used for
+> all the output formats, to always apply the same markup rules in all
+> documents (like using the [specialwords] section.)
 >
-> So, let's just put alongside the other infrastructures, in package/ .
+> Also look for a file named 'asciidoc.conf' in the document's directory.
+> If that file exists, add it to the asciidoc options (before the
+> output-specific config, so the former takes precedence over the latter.)
+
+It is the other way around, no?
+(the output-specific config taking precedence over/overriding the
+sections defined in the global one)
+
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Samuel Martin <s.martin49@gmail.com>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  package/doc-asciidoc.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
+> index 4dc92a8..f949733 100644
+> --- a/package/doc-asciidoc.mk
+> +++ b/package/doc-asciidoc.mk
+> @@ -60,6 +60,10 @@ asciidoc-check-dependencies-$(5):
+>  $(1)-check-dependencies-$(5): asciidoc-check-dependencies-$(5)
+>         $$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_$(call UPPERCASE,$(5))_HOOKS),$$(call $$(hook))$$(sep))
+>
+> +ifneq ($$(wildcard $$($(2)_ASCIIDOC_CONF)),)
+> +$(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_ASCIIDOC_CONF)
+> +endif
+> +
+>  $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
+>  ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
+>  $(2)_$(4)_ASCIIDOC_OPTS += -f $$($(2)_$(4)_ASCIIDOC_CONF)
+> @@ -132,6 +136,8 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
+>
+>  $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
+>
+> +$(2)_ASCIIDOC_CONF = $(3)/asciidoc.conf
+> +
+>  $(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
+>         --xsltproc-opts "--stringparam toc.section.depth 1")
+>
+> --
+> 1.9.1
+>
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-
+Regards,
 
 -- 
 Samuel
