@@ -1,89 +1,73 @@
-From: Eric Limpens <limpens@gmail.com>
-Date: Sat, 27 Sep 2014 13:34:51 +0200
-Subject: [Buildroot] [PATCH 1/1] ympd: new package (version 2)
-In-Reply-To: <87tx3uxkm9.fsf@dell.be.48ers.dk>
-References: <1411504369-15582-1-git-send-email-limpens@gmail.com>
- <87tx3uxkm9.fsf@dell.be.48ers.dk>
-Message-ID: <CABGWzsQOhLoiCcgRgB7pZJgzNFZjV6YDxgURG5GertBePvFWUg@mail.gmail.com>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Sat, 27 Sep 2014 09:28:48 -0300
+Subject: [Buildroot] [PATCH] package: libarchive: allow building as host
+ package
+In-Reply-To: <20140927085443.GA4298@free.fr>
+References: <1411773795-7803-1-git-send-email-guido@vanguardiasur.com.ar>
+ <20140927085443.GA4298@free.fr>
+Message-ID: <20140927122848.GA1752@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'll add the license and dependency statements and will modify the patch to
-use the more elegant approach suggested by Samuel.
+Hi Yann,
 
-Thanks for your input, Eric.
+On Sat, Sep 27, 2014 at 10:54:44AM +0200, Yann E. MORIN wrote:
+> Guido, All,
+> 
+> What is the rationale for building it as a host-package?
+>
+> libarchive provides a library, but we have no in-tree host-package that
+> uses libarchive.
+I have a custom tool that uses it, and I wasn't aware that host packages
+were only enabled as needed. It makes a lot sense now that I think about
+that, so please ignore this patch.
 
-On Fri, Sep 26, 2014 at 9:11 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Sorry!
 
-> >>>>> "Eric" == Eric Limpens <limpens@gmail.com> writes:
->
->  > Signed-off-by: Eric Limpens <limpens@gmail.com>
->  > ---
->  >  package/Config.in                                       |  1 +
->  >  package/ympd/Config.in                                  | 10 ++++++++++
->  >  package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch | 16
-> ++++++++++++++++
->  >  package/ympd/ympd.mk                                    | 16
-> ++++++++++++++++
->  >  4 files changed, 43 insertions(+)
->  >  create mode 100644 package/ympd/Config.in
->  >  create mode 100644
-> package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
->  >  create mode 100644 package/ympd/ympd.mk
->
->  > +++ b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
->  > @@ -0,0 +1,16 @@
->  > +CMakeLists.txt: make it cross-compile friendly. Upstream is looking
-> into a proper solution.
->  > +
->  > +Signed-Off-by: Eric Limpens <Limpens@Gmail.com>
->  > +
->  > +--- ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt
-> 2014-05-24 15:25:47.000000000 +0200
->  > ++++ ympd-a98d760dddff4b0dd595d977c9077f34beff05c5-1/CMakeLists.txt
-> 2014-09-23 20:04:55.491997850 +0200
->  > +@@ -29,6 +29,7 @@
->  > + )
->  > +
->  > +-add_executable(mkdata htdocs/mkdata.c)
->  > +-get_target_property(MKDATA_EXE mkdata LOCATION)
->  > ++#add_executable(mkdata htdocs/mkdata.c)
->  > ++#get_target_property(MKDATA_EXE mkdata LOCATION)
->  > ++set(MKDATA_EXE "./mkdata")
->
->
-> It seems like you missed Samuels' feedback?
->
->  > +
->  > + add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/assets.c
->  > diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
->  > new file mode 100644
->  > index 0000000..33fd4ec
->  > --- /dev/null
->  > +++ b/package/ympd/ympd.mk
->  > @@ -0,0 +1,16 @@
->  >
-> +################################################################################
->  > +#
->  > +# ympd
->  > +#
->  >
-> +################################################################################
->  > +
->  > +YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
->  > +YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
->
-> What about license?
->
-> You need to add MPD_DEPENDENCIES = libmpdclient to ensure libmpdclient
-> gets built before ympd.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140927/deea39c7/attachment.html>
+> 
+> On 2014-09-26 20:23 -0300, Guido Mart?nez spake thusly:
+> > It works correctly without any changes, so just enable it.
+> 
+> This should not be part of the commit log. The commit log should just
+> explain why you enable host-libarchive, especially because we have no
+> in-tree user.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> > ---
+> >  package/libarchive/libarchive.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+> > index 8c6951d..22914c2 100644
+> > --- a/package/libarchive/libarchive.mk
+> > +++ b/package/libarchive/libarchive.mk
+> > @@ -69,3 +69,4 @@ LIBARCHIVE_CONF_OPT += --without-zlib
+> >  endif
+> >  
+> >  $(eval $(autotools-package))
+> > +$(eval $(host-autotools-package))
+> > -- 
+> > 2.1.0
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+-- 
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
