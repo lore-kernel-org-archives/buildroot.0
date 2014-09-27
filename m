@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Sep 2014 11:45:31 +0200
-Subject: [Buildroot] [PATCH 1/3] package/rpi-firmware: bump revision for a
-	lot of fixes + enhancements
+Date: Sat, 27 Sep 2014 11:45:32 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rpi-userland: bump revision for
+	fixes + enhancements
 In-Reply-To: <cover.1411811051.git.yann.morin.1998@free.fr>
 References: <cover.1411811051.git.yann.morin.1998@free.fr>
-Message-ID: <04d84694f2c39223db16cb56333688a09614abff.1411811051.git.yann.morin.1998@free.fr>
+Message-ID: <8a050765d062c59912acd3403f241c4cd25fd93b.1411811051.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/rpi-firmware/rpi-firmware.mk | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 49b4661..033ff33 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 81ed95c..6c5fe89 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 16ebc76904699b036f709beb65ee5ff70f83190b
-+RPI_FIRMWARE_VERSION = 53162d55fa557e60453c0652aa00fa3daf4ed618
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_USERLAND_VERSION = f9e6f9f3def8dc18dc0092cd695ccf53b8ba3efe
++RPI_USERLAND_VERSION = ffcc4bd7c4875b71376c4240116e251652c9bec0
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 1.9.1
