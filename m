@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Sep 2014 18:26:29 +0200
-Subject: [Buildroot] [PATCH 3/4] package/trace-cmd: does not build on static
-	onl; y, needs dlopen()
+Date: Sun, 28 Sep 2014 18:26:30 +0200
+Subject: [Buildroot] [PATCH 4/4] package/vde2: does not build on static only,
+	needs dlopen()
 In-Reply-To: <cover.1411921550.git.yann.morin.1998@free.fr>
 References: <cover.1411921550.git.yann.morin.1998@free.fr>
-Message-ID: <6e627ac1abcc876371ba820aef879ecd95aa41d5.1411921550.git.yann.morin.1998@free.fr>
+Message-ID: <6d21f6468575ab79a003b9f8542f23251b459123.1411921550.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-    http://autobuild.buildroot.net/results/4d773e0738c1d5adada8c0a4bca312068132fd9b/
+    http://autobuild.buildroot.net/results/f9d/f9d23455a138e2214546922486c03c9d3c35b04a/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/trace-cmd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/vde2/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-index baa4868..8b3bc5f 100644
---- a/package/trace-cmd/Config.in
-+++ b/package/trace-cmd/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_TRACE_CMD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_avr32 # AVR32 does not have TLS support
+diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+index 2bbd822..18ff2e4 100644
+--- a/package/vde2/Config.in
++++ b/package/vde2/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_VDE2
+ 	bool "vde2"
  	depends on BR2_USE_MMU # fork()
 +	depends on !BR2_PREFER_STATIC_LIB # dlopen()
  	help
- 	  Command line reader for ftrace.
+ 	  VDE is an ethernet compliant virtual network that can be
+ 	  spawned over a set of physical computers over the Internet.
+ 	  VDE is part of the virtualsquare project.
  
-@@ -14,6 +15,7 @@ config BR2_PACKAGE_TRACE_CMD
- 
- 	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
- 
--comment "trace-cmd needs a toolchain w/ largefile, threads"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "trace-cmd needs a toolchain w/ largefile, threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_PREFER_STATIC_LIB
+ 	  http://vde.sourceforge.net/
++
++comment "vde2 needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PREFER_STATIC_LIB
 -- 
 1.9.1
