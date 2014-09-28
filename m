@@ -1,31 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Sep 2014 00:02:49 +0200
-Subject: [Buildroot] [PATCH] pkg-utils: the MESSAGE macro already
-	double-quotes the message
-In-Reply-To: <1411079328-30097-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 19 Sep 2014 00:28:48 +0200")
-References: <1411079328-30097-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <874mvrs8s6.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 29 Sep 2014 00:08:36 +0200
+Subject: [Buildroot] [PATCH] pkg-utils: qstrip MESSAGE
+Message-ID: <1411942116-1045-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Currently, the MESSAGE macro double-quotes the message. But a few call
+sites also double-quote the message, resulting in a borked call to echo,
+like:
+    $(call MESSAGE,"user text")
+would expand to:
+    echo "Leading text "user message" trailign text"
 
- > ... so passing a double-quoted message to the macro defeats the quoting
- > altogether.
+Just use qstrip on the user message, so we get protected from either a
+comma in the user text (so make does not interpret it), or a semi-colon
+(so the shell does not interpret it.)
 
- > Remove double-quotation of messages. Change made with:
- >     $ sed -r -i -e 's/(call MESSAGE,)"(.*)"\)/\1\2)/g' \
- >           $(git grep -l -E 'call MESSAGE."')
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks. I think it would be nicer to leave all the call sites alone and
-just use qstrip in the MESSAGE implementation.
-
-That way it doesn't break if we ever call MESSAGE with a string
-containing a ",".
-
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 89ad9e9..44766a0 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -67,7 +67,7 @@ INFLATE.tar  = cat
+ suitable-extractor = $(INFLATE$(suffix $(1)))
+ 
+ # MESSAGE Macro -- display a message in bold type
+-MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
++MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+ TERM_BOLD  := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
+ 
 -- 
-Bye, Peter Korsgaard
+1.9.1
