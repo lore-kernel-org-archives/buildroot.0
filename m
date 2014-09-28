@@ -1,52 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Sep 2014 18:26:26 +0200
-Subject: [Buildroot] [PATCH 0/4] A few autobuilder fixes (branch
-	yem/autobuild)
-Message-ID: <cover.1411921550.git.yann.morin.1998@free.fr>
+Date: Sun, 28 Sep 2014 18:26:27 +0200
+Subject: [Buildroot] [PATCH 1/4] docs/manual: add musl to toolchain
+	dependency options
+In-Reply-To: <cover.1411921550.git.yann.morin.1998@free.fr>
+References: <cover.1411921550.git.yann.morin.1998@free.fr>
+Message-ID: <2ae3131118cfc155a94a2abf49d5bcdf3b5dba99.1411921550.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, we only document (e)glibc and uClibc as C libraries on which
+we can depend. However, we've supported musl for quite some time now.
 
-TRhis series brings in a few fixes for autobuilder failures, mostly
-related to static builds.
+So, also refference it in the manual, when dealing with toolchain
+options a pa ckage may have to depend on.
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 6f5bffc426f7418c555291450d482a0ceede0865:
-
-  qemu-ppc: update kernel to latest for g3beige emulation (2014-09-27 09:53:12 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/autobuild
-
-for you to fetch changes up to 6d21f6468575ab79a003b9f8542f23251b459123:
-
-  package/vde2: does not build on static only, needs dlopen() (2014-09-28 18:24:18 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      docs/manual: add musl to toolchain dependency options
-      package/freerdp: can not build on uClibc
-      package/trace-cmd: does not build on static onl;y, needs dlopen()
-      package/vde2: does not build on static only, needs dlopen()
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  docs/manual/adding-packages-directory.txt | 2 +-
- package/freerdp/Config.in                 | 5 +++++
- package/trace-cmd/Config.in               | 6 ++++--
- package/vde2/Config.in                    | 5 +++++
- 4 files changed, 15 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index fd9460c..2e259ba 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -232,7 +232,7 @@ use in the comment.
+ 
+ * C library
+ ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+-   +BR2_TOOLCHAIN_USES_UCLIBC+
++   +BR2_TOOLCHAIN_USES_UCLIBC+, +BR2_TOOLCHAIN_USES_MUSL+
+ ** Comment string: for the C library, a slightly different comment text
+    is used: +foo needs an (e)glibc toolchain+, or `foo needs an (e)glibc
+    toolchain w/ C++`
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
