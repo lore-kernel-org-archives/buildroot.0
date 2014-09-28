@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Sep 2014 23:17:21 +0200
-Subject: [Buildroot] [git commit] docs/manual: add musl to toolchain
-	dependency options
-Message-ID: <20140928212210.3530C9D6C9@busybox.osuosl.org>
+Date: Sun, 28 Sep 2014 23:19:49 +0200
+Subject: [Buildroot] [git commit] package/freerdp: can not build on uClibc
+Message-ID: <20140928212210.3E1E69D6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0e0bdcd880502007586073743e28da781fe8275
+commit: http://git.buildroot.net/buildroot/commit/?id=937fbdaa8d45f6ed4bb7f440d680d69a65ff390a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we only document (e)glibc and uClibc as C libraries on which
-we can depend. However, we've supported musl for quite some time now.
+FreeRDP uses eventfd_{read,write}, which is not supported in uClibc.
 
-So, also refference it in the manual, when dealing with toolchain
-options a package may have to depend on.
+Fixes:
+    http://autobuild.buildroot.net/results/ad7/ad7ade4c436d21cba930f40c613870fbadec840e/
+    http://autobuild.buildroot.net/results/5a3/5a30aecbb426f76a22e8285931a0a8cd59b5e70b/
+    http://autobuild.buildroot.net/results/6e0/6e0de0538e95ae156f7d2ad6eede46e44be81c8e/
+    [...]
 
-[Peter: order musl before uClibc]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index fd9460c..c145829 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -232,7 +232,7 @@ use in the comment.
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index c5ff769..2a876b2 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -7,8 +7,13 @@ config BR2_PACKAGE_FREERDP
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_PACKAGE_XORG7
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # evenft_{read,write}
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
  
- * C library
- ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
--   +BR2_TOOLCHAIN_USES_UCLIBC+
-+   +BR2_TOOLCHAIN_USES_MUSL+, +BR2_TOOLCHAIN_USES_UCLIBC+
- ** Comment string: for the C library, a slightly different comment text
-    is used: +foo needs an (e)glibc toolchain+, or `foo needs an (e)glibc
-    toolchain w/ C++`
+ 	  http://www.freerdp.com/
++
++comment "freerdp needs an (e)glibc or musl toolchain"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
