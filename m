@@ -1,28 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Sep 2014 12:02:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pcre: add host variant
-Message-ID: <1411898532-15625-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 28 Sep 2014 12:47:08 +0200
+Subject: [Buildroot] Analysis of build failures
+References: <20140914063013.2E5D2100F07@stock.ovh.net>
+ <20140914121904.0c2ebcbd@free-electrons.com>
+Message-ID: <XnsA3B6820FA4BA2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed by leafnode2.
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140914121904.0c2ebcbd at free-electrons.com:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/pcre/pcre.mk |    1 +
- 1 file changed, 1 insertion(+)
+>>          arm |                      vlc-2.1.5 | NOK | 
+http://autobuild.buildroot.net/results/2d2bbd633dc09e7471e8b48be39b74fb1bf633
+6f/
+> main_interface.moc.cpp:14:2: error: #error "This file was generated using 
+the moc from 4.6.3. It"
+>  #error "This file was generated using the moc from 4.6.3. It"
+>   ^
+> main_interface.moc.cpp:15:2: error: #error "cannot be used with the include 
+files from this version of Qt."
+>  #error "cannot be used with the include files from this version of Qt."
+> Qt/VLC issue. Bernd?
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 2077896..297b13a 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -23,3 +23,4 @@ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-1.7.10.4
+Hi,
+
+I can not reproduce this build error, maybe a local moc binary is getting in 
+the way here?
+
+Regards, Bernd
