@@ -1,26 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Sep 2014 23:21:48 +0200
-Subject: [Buildroot] [PATCH 4/4] package/vde2: does not build on static
-	only, needs dlopen()
-In-Reply-To: <6d21f6468575ab79a003b9f8542f23251b459123.1411921550.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 28 Sep 2014 18:26:30 +0200")
-References: <cover.1411921550.git.yann.morin.1998@free.fr>
- <6d21f6468575ab79a003b9f8542f23251b459123.1411921550.git.yann.morin.1998@free.fr>
-Message-ID: <87d2afsaoj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Sep 2014 22:59:56 +0200
+Subject: [Buildroot] [git commit] linux: Add uImage support for MIPS
+	architecture
+Message-ID: <20140928212210.2B1599D76C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8c51c31de78d3b3721dd7c7d11c4f0bce3a43206
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >     http://autobuild.buildroot.net/results/f9d/f9d23455a138e2214546922486c03c9d3c35b04a/
+uImage support for MIPS was added in the kernel on 2013-09-03, so we
+allow to build uImage for MIPS in Buildroot.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Kernel commit:
+  http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=4defe4559e86e26545ab2f542656a4b966dcde53
 
-Committed, thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 0ad8bce..4a3c064 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -168,7 +168,8 @@ choice
+ config BR2_LINUX_KERNEL_UIMAGE
+ 	bool "uImage"
+ 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
+-		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
++		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
++		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
+ 
+ config BR2_LINUX_KERNEL_APPENDED_UIMAGE
