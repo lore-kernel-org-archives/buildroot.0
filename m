@@ -1,78 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Sep 2014 21:33:42 +0200
-Subject: [Buildroot] [git commit] glm: Added package
-Message-ID: <20140928195514.E60389D791@busybox.osuosl.org>
+Date: Sun, 28 Sep 2014 21:53:39 +0200
+Subject: [Buildroot] [git commit] package/libcurl: Remove autoreconf
+Message-ID: <20140928195515.411929D535@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f6a622240fb1ad567dfbe08fad5bfc0a749d5f7
+commit: http://git.buildroot.net/buildroot/commit/?id=48849055b9ca8075bc7093cb08a88e472e1dd14c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenGL Mathematics (GLM) is a header only C++ mathematics library for
-graphics software based on the OpenGL Shading Language (GLSL)
-specification.
+When libcurl-0001-build-link-curl-to-NSS-libraries-when-NSS-support.patch
+was removed the corresponding autoreconf was left behind:
+http://git.buildroot.net/buildroot/commit/?id=9185b64ed5599622cb89ca4ee6ee29440b02ec8a
 
-http://glm.g-truc.net/
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in     |    1 +
- package/glm/Config.in |   10 ++++++++++
- package/glm/glm.mk    |   17 +++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
+ package/libcurl/libcurl.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2eefc3f..2ad72bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -836,6 +836,7 @@ menu "Other"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/glibmm/Config.in"
-+	source "package/glm/Config.in"
- 	source "package/gmp/Config.in"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
-diff --git a/package/glm/Config.in b/package/glm/Config.in
-new file mode 100644
-index 0000000..41b3608
---- /dev/null
-+++ b/package/glm/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GLM
-+	bool "glm"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  OpenGL Mathematics (GLM)
-+
-+	  http://glm.g-truc.net
-+
-+comment "glm needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-new file mode 100644
-index 0000000..ff9423d
---- /dev/null
-+++ b/package/glm/glm.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# glm
-+#
-+################################################################################
-+
-+GLM_VERSION = 0.9.5.4
-+GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
-+GLM_LICENSE = MIT
-+GLM_LICENSE_FILES = copying.txt
-+
-+# GLM is a header-only library, it only makes sense
-+# to have it installed into the staging directory.
-+GLM_INSTALL_STAGING = YES
-+GLM_INSTALL_TARGET = NO
-+
-+$(eval $(cmake-package))
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 610efc1..74584a6 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -14,8 +14,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
+ LIBCURL_LICENSE = ICS
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
+-# For libcurl-0001-build-link-curl-to-NSS-libraries-when-NSS-support.patch
+-LIBCURL_AUTORECONF = YES
+ 
+ # We disable NTLM support because it uses fork(), which doesn't work
+ # on non-MMU platforms. Moreover, this authentication method is
