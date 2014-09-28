@@ -1,45 +1,83 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 28 Sep 2014 20:43:29 +0200
-Subject: [Buildroot] [PATCH 1 of 2] check-kernel-headers: mktemp
-	--tmpdir not available on RedHat 5
-In-Reply-To: <87mw9jwpu2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 28 Sep 2014 20:43:42 +0200
+Subject: [Buildroot] [PATCH 2 of 2] kmod: add patches to support build
+	on Redhat 5
+In-Reply-To: <f2b8b2b5efec1b2340c4.1409649946@localhost> (Thomas De
+ Schampheleire's message of "Tue, 02 Sep 2014 11:25:46 +0200")
 References: <patchbomb.1409649944@localhost>
- <2c7735c0247a4c83a3c2.1409649945@localhost> <87mw9jwpu2.fsf@dell.be.48ers.dk>
-Message-ID: <808f5bf8-8245-43b5-ade0-a31e54105873@email.android.com>
+ <f2b8b2b5efec1b2340c4.1409649946@localhost>
+Message-ID: <87iok7wppd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@uclibc.org> schreef:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
-> > # HG changeset patch
-> > # User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-> > # Date 1407153076 -7200
-> > #      Mon Aug 04 13:51:16 2014 +0200
-> > # Node ID 2c7735c0247a4c83a3c2ea1d58e74be613465255
-> > # Parent  6af0c3866b64670bb6d62302b64f3164b1f70fb6
->
->Is all of this hg noise needed? Your patches didn't used to contain
->this.
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Oi sorry, I have forgotten a switch to turn this off here.
+ > # HG changeset patch
+ > # User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+ > # Date 1407153133 -7200
+ > #      Mon Aug 04 13:52:13 2014 +0200
+ > # Node ID f2b8b2b5efec1b2340c423f14f12df11a95ceac7
+ > # Parent  2c7735c0247a4c83a3c2ea1d58e74be613465255
+ > kmod: add patches to support build on Redhat 5
 
->
-> > check-kernel-headers: mktemp --tmpdir not available on RedHat 5
->
-> > mktemp --tmpdir is not available on older Redhat 5 machines. The alternative
-> > that has the same behavior is 'mktemp -t'.
->
->Redhat Linux 5.0, that was one of the very first Linux distributions I
->ever used - It's been a while ;) 
->
->I guess you mean RHEL 5, so I've adjusted the commit message and
->committed, thanks.
+ > kmod uses certain features not available on older Redhat 5 machines.
+ > This commit imports two patches from OpenEmbedded to fix that.
 
-Thanks, I do indeed mean RHEL5, wasn't aware that there was a difference.
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Best regards,
-Thomas
+ > ---
+ >  package/kmod/kmod-0001-fix-O_CLOEXEC.patch                    |  38 ++++++
+ >  package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch |  41 +++++++
+ >  2 files changed, 79 insertions(+), 0 deletions(-)
+
+
+The first patch looks ok, but:
+
+ > diff --git a/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch b/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch
+ > new file mode 100644
+ > --- /dev/null
+ > +++ b/package/kmod/kmod-0002-use-bswap-instead-of-htobe-betoh.patch
+ > @@ -0,0 +1,41 @@
+ > +From 0c4dbadc9db3cda1cfca64e44ea08c6e89919ea7 Mon Sep 17 00:00:00 2001
+ > +From: Ting Liu <b28495@freescale.com>
+ > +Date: Tue, 10 Sep 2013 13:44:18 +0800
+ > +Subject: [PATCH] Change to calling bswap_* instead of htobe* and be*toh
+ > +
+ > +We can't use htobe* and be*toh functions because they are not
+ > +available on older versions of glibc, For example, shipped on Centos 5.5.
+ > +
+ > +Change to directly calling bswap_* as defined in+byteswap.h.
+ > +
+ > +Upstream-Status: Inappropriate
+ > +
+ > +Signed-off-by: Ting Liu <b28495@freescale.com>
+ > +---
+ > + libkmod/libkmod-signature.c |    3 ++-
+ > + 1 files changed, 2 insertions(+), 1 deletions(-)
+ > +
+ > +diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+ > +index 6b80caa..3544a36 100644
+ > +--- a/libkmod/libkmod-signature.c
+ > ++++ b/libkmod/libkmod-signature.c
+ > +@@ -19,6 +19,7 @@
+ > +  */
+ > + 
+ > + #include <endian.h>
+ > ++#include <byteswap.h>
+ > + #include <stdint.h>
+ > + #include <stdlib.h>
+ > + #include <string.h>
+ > +@@ -121,7 +122,7 @@ bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signat
+ > + 			modsig->hash >= PKEY_HASH__LAST ||
+ > + 			modsig->id_type >= PKEY_ID_TYPE__LAST)
+ > + 		return false;
+ > +-	sig_len = be32toh(get_unaligned(&modsig->sig_len));
+ > ++	sig_len = bswap_32(get_unaligned(&modsig->sig_len));
+
+Ehh, so what happens when we want to build kmod for a big endian target?
+
+-- 
+Bye, Peter Korsgaard
