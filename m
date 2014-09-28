@@ -1,22 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Sep 2014 22:57:23 +0200
-Subject: [Buildroot] [PATCH] openssl: Add patch to fix compilation with
-	musl libc
-In-Reply-To: <1410399603-548-1-git-send-email-maarten@treewalker.org> (Maarten
- ter Huurne's message of "Thu, 11 Sep 2014 03:40:03 +0200")
-References: <1410399603-548-1-git-send-email-maarten@treewalker.org>
-Message-ID: <8738bbtqdo.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Sep 2014 22:59:05 +0200
+Subject: [Buildroot] [PATCH 0/3] raspberry pi: bump versions (branch
+	yem/rpi-bump)
+In-Reply-To: <cover.1411811051.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 27 Sep 2014 11:45:29 +0200")
+References: <cover.1411811051.git.yann.morin.1998@free.fr>
+Message-ID: <87y4t3sbqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maarten" == Maarten ter Huurne <maarten@treewalker.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+ > Hello All!
+ > This series updates all RPi-related components:
+ >   - firmware
+ >   - userland
+ >   - kernel + toolchain headers
 
-Committed, thanks.
+ > Unlike I usually do, there is no detailed changlog for the firmware and
+ > userland packages, because there are so much that changed.
+
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
