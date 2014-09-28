@@ -1,40 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Sep 2014 22:59:56 +0200
-Subject: [Buildroot] [git commit] linux: Add uImage support for MIPS
-	architecture
-Message-ID: <20140928212210.2B1599D76C@busybox.osuosl.org>
+Date: Sun, 28 Sep 2014 23:20:36 +0200
+Subject: [Buildroot] [git commit] package/trace-cmd: does not build on
+	static only, needs dlopen()
+Message-ID: <20140928212210.46F379D6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c51c31de78d3b3721dd7c7d11c4f0bce3a43206
+commit: http://git.buildroot.net/buildroot/commit/?id=8ac41fa467ca28638e594b0f47be19621e015eba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uImage support for MIPS was added in the kernel on 2013-09-03, so we
-allow to build uImage for MIPS in Buildroot.
+Fixes:
+    http://autobuild.buildroot.net/results/4d773e0738c1d5adada8c0a4bca312068132fd9b/
 
-Kernel commit:
-  http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=4defe4559e86e26545ab2f542656a4b966dcde53
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/trace-cmd/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0ad8bce..4a3c064 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -168,7 +168,8 @@ choice
- config BR2_LINUX_KERNEL_UIMAGE
- 	bool "uImage"
- 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
--		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
-+		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
-+		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index baa4868..8b3bc5f 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_avr32 # AVR32 does not have TLS support
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_PREFER_STATIC_LIB # dlopen()
+ 	help
+ 	  Command line reader for ftrace.
  
- config BR2_LINUX_KERNEL_APPENDED_UIMAGE
+@@ -14,6 +15,7 @@ config BR2_PACKAGE_TRACE_CMD
+ 
+ 	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+ 
+-comment "trace-cmd needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++comment "trace-cmd needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_PREFER_STATIC_LIB
