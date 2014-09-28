@@ -1,132 +1,113 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Sep 2014 11:46:30 +0200
-Subject: [Buildroot] [PATCH 1/1] arm: -march for Cortex A7,
- A12 and A15 is armv7ve
-In-Reply-To: <1411866617-4994-1-git-send-email-eddy.petrisor@freescale.com>
-References: <1411866617-4994-1-git-send-email-eddy.petrisor@freescale.com>
-Message-ID: <20140928094630.GB3994@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Sep 2014 12:02:12 +0200
+Subject: [Buildroot] [PATCH 2/2] package/leafnode2: New package
+In-Reply-To: <1411898532-15625-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1411898532-15625-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1411898532-15625-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eddy, All,
 
-On 2014-09-28 04:10 +0300, Eddy Petrisor spake thusly:
-> From: Eddy Petri?or <eddy.petrisor@gmail.com>
-> 
-> For Cortex A7, A12 and A15 setting -march=armv7-a will generate this
-> type of warning by default:
-> 
-> warning: switch -mcpu=cortex-a15 conflicts with -march=armv7-a switch
-> 
-> This is because these cores have an instruction set which is based on
-> the armv7-a set, but adds some extensions on top of them. This new set
-> is called 'armv7ve' and is the default for A7, A12 and A15:
-> 
-> http://gcc.gnu.org/viewcvs?rev=207237&root=gcc&view=rev
-> 
-> With this patch we make sure we don't force the warning anymore.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in                                  |    1 +
+ package/leafnode2/Config.in                        |    9 ++++++
+ .../leafnode2/leafnode2-0001-cross_makefile.patch  |   15 +++++++++
+ package/leafnode2/leafnode2.mk                     |   33 ++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/leafnode2/Config.in
+ create mode 100644 package/leafnode2/leafnode2-0001-cross_makefile.patch
+ create mode 100644 package/leafnode2/leafnode2.mk
 
-We have an on-going discussion about dropping -march altogether, and
-only keep the -mcpu option. But the situation is not quite simple.
-
-See the thread starting there:
-    http://lists.busybox.net/pipermail/buildroot/2014-September/106214.html
-
-and especially the comments on patch 3 of that series:
-    http://lists.busybox.net/pipermail/buildroot/2014-September/106218.html
-
-The status so far is:
-
-  - some combinations of -march, -mcpu, -mtune are not valid, some are
-    just a warning;
-
-  - -mcpu is not always enough to fully specify the actual CPU;
-
-  - gcc-5 will no longer accept some combinations of -march, -mcpu, -mtune
-    (not sure exactly which will still be valid.)
-
-So, we'd like to go one of those routes (first is the preferred one):
-
-  - drop -march and -mtune, only keep -mcpu;
-
-  - conditionally set either  (-mcpu)  or  (-march and -mtune) .
-
-So, there is a status-quo for now on this issue. I guess we'll be
-discussing this at the upcoming Developpers Days in D?sseldorf:
-    http://elinux.org/Buildroot:DeveloperDaysELCE2014
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Eddy Petri?or <eddy.petrisor@gmail.com>
-> ---
->  arch/Config.in.arm                     | 6 +++---
->  toolchain/toolchain-external/Config.in | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 201ff1d..2988ac0 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -369,11 +369,11 @@ config BR2_GCC_TARGET_ARCH
->  	default "armv6zk"	if BR2_arm1176jz_s
->  	default "armv6zk"	if BR2_arm1176jzf_s
->  	default "armv7-a"	if BR2_cortex_a5
-> -	default "armv7-a"	if BR2_cortex_a7
-> +	default "armv7ve"	if BR2_cortex_a7
->  	default "armv7-a"	if BR2_cortex_a8
->  	default "armv7-a"	if BR2_cortex_a9
-> -	default "armv7-a"	if BR2_cortex_a12
-> -	default "armv7-a"	if BR2_cortex_a15
-> +	default "armv7ve"	if BR2_cortex_a12
-> +	default "armv7ve"	if BR2_cortex_a15
->  	default "armv4"		if BR2_fa526
->  	default "armv7-a"	if BR2_pj4
->  	default "armv4"		if BR2_strongarm
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 67ad450..a7b965b 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -9,7 +9,7 @@ comment "(e)glibc toolchains only available with shared lib support"
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->  	bool "Linaro ARM 2014.08"
->  	depends on BR2_arm
-> -	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
-> +	depends on BR2_GCC_TARGET_ARCH = "armv7-a" || BR2_GCC_TARGET_ARCH = "armv7ve"
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on BR2_ARM_EABIHF
->  	depends on !BR2_PREFER_STATIC_LIB
-> @@ -29,13 +29,13 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->  
->  comment "Linaro toolchains available for Cortex-A + EABIhf"
->  	depends on BR2_arm
-> -	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
-> +	depends on (BR2_GCC_TARGET_ARCH != "armv7-a" && BR2_GCC_TARGET_ARCH != "armv7ve") || !BR2_ARM_EABIHF
->  	depends on !BR2_PREFER_STATIC_LIB
->  
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->  	bool "Linaro armeb 2014.08"
->  	depends on BR2_armeb
-> -	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
-> +	depends on BR2_GCC_TARGET_ARCH = "armv7-a" || BR2_GCC_TARGET_ARCH = "armv7ve"
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on BR2_ARM_EABIHF
->  	depends on !BR2_PREFER_STATIC_LIB
-> -- 
-> 1.9.2.459.g68773ac
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index f609cbe..db06310 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1000,6 +1000,7 @@ endif
+ 	source "package/iw/Config.in"
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
++	source "package/leafnode2/Config.in"
+ 	source "package/lftp/Config.in"
+ 	source "package/lighttpd/Config.in"
+ 	source "package/linknx/Config.in"
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+new file mode 100644
+index 0000000..a4adc99
+--- /dev/null
++++ b/package/leafnode2/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LEAFNODE2
++	bool "leafnode2"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_PCRE
++	help
++	  Leafnode-2 is a store-and-forward NNTP (or Usenet) proxy server designed
++	  for small sites with just a few active newsgroups.
++
++	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
+diff --git a/package/leafnode2/leafnode2-0001-cross_makefile.patch b/package/leafnode2/leafnode2-0001-cross_makefile.patch
+new file mode 100644
+index 0000000..1dab211
+--- /dev/null
++++ b/package/leafnode2/leafnode2-0001-cross_makefile.patch
+@@ -0,0 +1,15 @@
++During target package compilation the host version of b_sortnl is needed.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/Makefile.in.orig	2012-11-01 15:23:21.000000000 +0100
+++++ b/Makefile.in	2012-11-13 20:54:42.000000000 +0100
++@@ -1834,7 +1834,7 @@
++ 
++ configparam_data.c: $(srcdir)/config.table b_sortnl$(EXEEXT) genconfigparam_data.awk
++ 	rm -f config.table.sorted
++-	./b_sortnl$(EXEEXT) <$(srcdir)/config.table >config.table.sorted
+++	./b_sortnl_host$(EXEEXT) <$(srcdir)/config.table >config.table.sorted
++ 	$(AWK) -f $(srcdir)/genconfigparam_data.awk <config.table.sorted >$@ \
++ 	|| { rm -f $@ ; false ; }
++ 
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+new file mode 100644
+index 0000000..3089b8d
+--- /dev/null
++++ b/package/leafnode2/leafnode2.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# leafnode2
++#
++################################################################################
++
++LEAFNODE2_VERSION = 2.0.0.alpha20140727b
++LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
++LEAFNODE2_SITE = http://home.pages.de/~mandree/leafnode/beta
++LEAFNODE2_LICENSE = LGPLv2.1+
++LEAFNODE2_LICENSE_FILES = COPYING.LGPL
++LEAFNODE2_DEPENDENCIES = host-pcre pcre
++
++LEAFNODE2_CONF_ENV = \
++	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
++
++LEAFNODE2_CONF_OPT = \
++	--sysconfdir=/etc/leafnode2 \
++	--enable-spooldir=/var/spool/news
++
++# Leafnode2 needs the host version of b_sortnl during compilation. Instead of
++# creating a seperate host package and installing b_sortnl to $(HOST_DIR) this
++# binary is compiled on-the-fly, host-pcre is needed for this
++define LEAFNODE2_BUILD_CMDS
++	cd $(@D); \
++	$(HOST_CONFIGURE_OPTS) $(CC) -o b_sortnl_host \
++		arc4random.c mergesort.c b_sortnl.c critmem_malloc.c \
++		critmem_realloc.c -DHAVE_CONFIG_H -I$(HOST_DIR)/usr/include \
++		-L $(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib -lpcre
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
