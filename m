@@ -1,55 +1,86 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 28 Sep 2014 13:51:25 +0200
-Subject: [Buildroot] [PATCH] librtlsdr: disable shared library target
-In-Reply-To: <20140924153333.2f56b768@free-electrons.com>
-References: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
- <20140924153333.2f56b768@free-electrons.com>
-Message-ID: <CAHXCMMJjZ3BmockfvRQaWJeccOG_+Zth=ewTK7WWQz-A_5HXyQ@mail.gmail.com>
+From: Eric Limpens <limpens@gmail.com>
+Date: Sun, 28 Sep 2014 14:04:02 +0200
+Subject: [Buildroot] [PATCH 1/1] ympd: new package
+Message-ID: <1411905842-3172-1-git-send-email-limpens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yuvaraj, Thomas, all,
+Signed-off-by: Eric Limpens <limpens@gmail.com>
+---
+ package/ympd/Config.in                              | 10 ++++++++++
+ .../ympd/ympd-0001-CMake-cross-compile-mkdata.patch | 15 +++++++++++++++
+ package/ympd/ympd.mk                                | 21 +++++++++++++++++++++
+ 3 files changed, 46 insertions(+)
+ create mode 100644 package/ympd/Config.in
+ create mode 100644 package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+ create mode 100644 package/ympd/ympd.mk
 
-On Wed, Sep 24, 2014 at 3:33 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yuvaraj Patil,
->
-> On Wed, 24 Sep 2014 18:01:55 +0530, Yuvaraj Patil wrote:
->> Disable shared library target if BUILD_SHARES_LIBS is OFF.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/d68/d68a23e2a57fd5430d74b8151931f36959d9578d//
->>
->> Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
->> ---
->>  ...01_disable_shared_library_target_in_build.patch |   80 ++++++++++++++++++++
->>  1 file changed, 80 insertions(+)
->>  create mode 100644 package/librtlsdr/librtlsdr_001_disable_shared_library_target_in_build.patch
->
-> Thanks, but we already have a patch fixing the same issue in our patch
-> queue, see http://patchwork.ozlabs.org/patch/384567/. Apparently, the
-> patch is causing some issues.
->
-> Samuel, what is your plan regarding librtlsdr static link issue?
-
-The patch added with this pathc is similar to the 2nd patch added in
-http://patchwork.ozlabs.org/patch/384567/.
-
-In http://patchwork.ozlabs.org/patch/384567/, the first patch is
-causing some issue.
-After checking the libusb dependencies, this first patch is not needed
-in the context of Buildroot because when BR2_PREFER_STATIC_LIBS=y,
-libusb won't depend on any library.
-
-IMO, this patch can be merged as is, and
-http://patchwork.ozlabs.org/patch/384567/ can be marked as superseded.
-
-
-Regards,
-
-
+diff --git a/package/ympd/Config.in b/package/ympd/Config.in
+new file mode 100644
+index 0000000..dadb897
+--- /dev/null
++++ b/package/ympd/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_YMPD
++	bool "ympd"
++	select BR2_PACKAGE_LIBMPDCLIENT
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  ympd, Standalone MPD Web GUI written in C,
++	  utilizing Websockets and Bootstrap/JS
++
++comment "ympd needs a toolchain w/ threads"
++	depends on !(BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+new file mode 100644
+index 0000000..2ac27d5
+--- /dev/null
++++ b/package/ympd/ympd-0001-CMake-cross-compile-mkdata.patch
+@@ -0,0 +1,15 @@
++CMakeLists.txt: make it cross-compile friendly. Upstream is looking into a proper solution. 
++
++Signed-Off-by: Eric Limpens <Limpens@Gmail.com>
++diff -U2 -r ympd-a98d760dddff4b0dd595d977c9077f34beff05c5~/CMakeLists.txt ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt
++--- ympd-a98d760dddff4b0dd595d977c9077f34beff05c5~/CMakeLists.txt	2014-05-24 15:25:47.000000000 +0200
+++++ ympd-a98d760dddff4b0dd595d977c9077f34beff05c5/CMakeLists.txt	2014-09-27 12:51:48.958358400 +0200
++@@ -29,6 +29,6 @@
++ )
++ 
++-add_executable(mkdata htdocs/mkdata.c)
++-get_target_property(MKDATA_EXE mkdata LOCATION)
+++#add_executable(mkdata htdocs/mkdata.c)
+++#get_target_property(MKDATA_EXE mkdata LOCATION)
++ 
++ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/assets.c
+diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
+new file mode 100644
+index 0000000..fc4be4d
+--- /dev/null
++++ b/package/ympd/ympd.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# ympd
++#
++################################################################################
++
++YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
++YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
++YMPD_LICENSE = GPLv2
++YMPD_LICENSE_FILE = LICENSE
++YMPD_DEPENDENCIES = libmpdclient
++
++define YMPD_MAKE_HOST_TOOL
++        $(HOSTCC) $(HOST_CFLAGS) $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
++endef
++
++YMPD_PRE_BUILD_HOOKS += YMPD_MAKE_HOST_TOOL
++
++YMPD_CONF_OPT += -DMKDATA_EXE=$(@D)/mkdata
++
++$(eval $(cmake-package))
 -- 
-Samuel
+1.9.1
