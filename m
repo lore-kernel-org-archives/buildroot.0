@@ -1,27 +1,46 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Sep 2014 23:00:18 +0200
-Subject: [Buildroot] [PATCH] Add uImage support for MIPS architecture
-In-Reply-To: <1411725461-16398-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 26 Sep 2014 10:57:41 +0100")
-References: <1411725461-16398-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87tx3rsbod.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Sep 2014 23:17:12 +0200
+Subject: [Buildroot] [PATCH 1/4] docs/manual: add musl to toolchain
+	dependency options
+In-Reply-To: <2ae3131118cfc155a94a2abf49d5bcdf3b5dba99.1411921550.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 28 Sep 2014 18:26:27 +0200")
+References: <cover.1411921550.git.yann.morin.1998@free.fr>
+ <2ae3131118cfc155a94a2abf49d5bcdf3b5dba99.1411921550.git.yann.morin.1998@free.fr>
+Message-ID: <87ppefsaw7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > uImage support for MIPS was added in the kernel on 2013-09-03, so we
- > allow to build uImage for MIPS in Buildroot.
+ > Currently, we only document (e)glibc and uClibc as C libraries on which
+ > we can depend. However, we've supported musl for quite some time now.
 
- > Kernel commit:
- >   http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=4defe4559e86e26545ab2f542656a4b966dcde53
+ > So, also refference it in the manual, when dealing with toolchain
+ > options a pa ckage may have to depend on.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  docs/manual/adding-packages-directory.txt | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
+ > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+ > index fd9460c..2e259ba 100644
+ > --- a/docs/manual/adding-packages-directory.txt
+ > +++ b/docs/manual/adding-packages-directory.txt
+ > @@ -232,7 +232,7 @@ use in the comment.
+ 
+ >  * C library
+ >  ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+ > -   +BR2_TOOLCHAIN_USES_UCLIBC+
+ > +   +BR2_TOOLCHAIN_USES_UCLIBC+, +BR2_TOOLCHAIN_USES_MUSL+
+
+Lets keep it sorted (so musl before uclibc).
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
