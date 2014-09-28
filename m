@@ -1,32 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Sep 2014 21:58:26 +0200
-Subject: [Buildroot] [git commit] package/mpd: bump to version 0.18.16
-Message-ID: <20140928200025.B11219D795@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 28 Sep 2014 22:05:55 +0200
+Subject: [Buildroot] [PATCH] dosfstools: Fixed compilation with musl libc
+In-Reply-To: <1410412570-2427-1-git-send-email-maarten@treewalker.org>
+ (Maarten ter Huurne's message of "Thu, 11 Sep 2014 07:16:10 +0200")
+References: <1410412570-2427-1-git-send-email-maarten@treewalker.org>
+Message-ID: <87lhp3tsrg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c3d665fe6a1930dc702e2a5e6fa7db52f0241ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maarten" == Maarten ter Huurne <maarten@treewalker.org> writes:
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpd/mpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > The Makefile of dosfstools passes -D_GNU_SOURCE to get access to
+ > non-standard definitions such as 'loff_t'. But this flag got lost
+ > in the CFLAGS override.
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index cf766c1..15ebc38 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.18
--MPD_VERSION = $(MPD_VERSION_MAJOR).14
-+MPD_VERSION = $(MPD_VERSION_MAJOR).16
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf libglib2
+You forgot to add your signed-off-by, but you've added it to the other
+patches so I took the liberty of adding it here, hopefully that is OK.
+
+Committed with a slightly extended commit message, thanks.
+
+-- 
+Bye, Peter Korsgaard
