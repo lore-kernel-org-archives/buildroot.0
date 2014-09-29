@@ -1,69 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Sep 2014 19:14:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: New package
-In-Reply-To: <1411925137-11284-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1411925137-11284-1-git-send-email-bernd.kuhls@t-online.de>
- <1411925137-11284-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140929191456.1f8900ea@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 29 Sep 2014 17:16:16 +0000
+Subject: [Buildroot] two stage gcc build with uclibc and DODEBUG enabled
+Message-ID: <1412010975.31269.13.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Thomas,
 
-On Sun, 28 Sep 2014 19:25:37 +0200, Bernd Kuhls wrote:
+It looks like two stage gcc build doesn't work well with uClibc if it is
+configured with "DODEBUG=y".
 
-> diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-> new file mode 100644
-> index 0000000..a55d2ec
-> --- /dev/null
-> +++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# dovecot-pigeonhole
-> +#
-> +################################################################################
-> +
-> +DOVECOT_PIGEONHOLE_VERSION = 0.4.3
-> +DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
-> +DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
-> +DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+Probably you don't see problems because most of arches in Buildroot
+still use uClibc 0.9.32.x instead of sources from master branch (and
+there's a reason for it - most probably uClibc won't be built at all if
+one attempts to select "use uClibc daily snapshot").
 
-LGPLv2.1 or LGPLv2.1+ ?
+But at least for ARC we're pretty close to upstream master branch
+(difference is very minor).
 
-> +DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
-> +DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
-> +
-> +DOVECOT_PIGEONHOLE_CONF_OPT = \
-> +	--with-dovecot=$(STAGING_DIR)/usr/lib \
-> +	--with-moduledir=/usr/lib \
-> +	--libexecdir=/usr/bin/dovecot \
+So the thing is this commit
+http://git.uclibc.org/uClibc/commit/Rules.mak?id=8d31a6e50db423b89082b64a3250eec1b94a7456 introduces linkage of "libgcc_eh.a" into libuClibc.
 
-Same question as dovecot: really /usr/bin/dovecot ?
+And that's how building fails for ARC:
+=========
+  LD ld-uClibc-0.9.34-git.so
+arc-buildroot-linux-uclibc-gcc: error: libgcc_eh.a: No such file or
+directory
+make[2]: *** [lib/ld-uClibc.so] Error 1
+make[1]: *** [.../build/uclibc-arc-mainline-dev/.stamp_built] Error 2
+make: *** [_all] Error 2
+=========
 
-> +	--sysconfdir=/etc \
-> +	--localstatedir=/var
-> +
-> +define DOVECOT_PIGEONHOLE_POST_CONFIGURE
-> +	for i in $$(find $(@D) -name "Makefile"); do \
-> +		$(SED) 's%^pkglibdir =.*%pkglibdir = \$$(libdir)%' $$i; \
-> +		$(SED) 's%^pkglibexecdir =.*%pkglibexecdir = \$$(libexecdir)%' $$i; \
-> +		$(SED) 's%^sieve_plugindir =.*%sieve_plugindir = \$$(moduledir)%' $$i; \
-> +	done
-> +endef
-> +
-> +DOVECOT_PIGEONHOLE_POST_CONFIGURE_HOOKS += DOVECOT_PIGEONHOLE_POST_CONFIGURE
+This is obviously because "libgcc_eh.a" is built on gcc's second stage
+(use another build tree for ARM that was successfully built due to
+0.9.32.x uClibc):
+=========
+$ cd br2_output/arm-test-debug/build
+$ find . -name libgcc_eh.a
+./host-gcc-final-4.8.3/build/gcc/libgcc_eh.a
+./host-gcc-final-4.8.3/build/arm-buildroot-linux-uclibcgnueabi/libgcc/libgcc_eh.a
+=========
 
-Like for dovecot.mk, it might be good to have a short comment above
-explaining what's going on here.
+At this point I see 2 probable solutions:
+1. Make sure uClibc is configured without DODEBUG on toolchain building
+with invocation of uClibc's "second stage building" with "DODEBUG" when
+"libgcc_eh.a" is already there.
 
-Best regards,
+2. Modify uClibc, but I'm not sure if this is a good move, looks like
+the commit in question was made on purpose.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Any thoughts on this?
+
+-Alexey
