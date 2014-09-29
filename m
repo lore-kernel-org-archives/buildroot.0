@@ -1,49 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Sep 2014 15:38:13 +0200
-Subject: [Buildroot] [git commit] opencv: Bump version to 2.4.9.1
-Message-ID: <20140929135602.5176B9D7C9@busybox.osuosl.org>
+Date: Mon, 29 Sep 2014 15:55:30 +0200
+Subject: [Buildroot] [git commit] hdparm: bump to version 9.45
+Message-ID: <20140929135602.5AE619D7CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=584952ee4ecd241ca5e3ece1efcfa498fefbb237
+commit: http://git.buildroot.net/buildroot/commit/?id=bf672f9e18850c8b6592bb72b3b602c105cbd41b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And also add a hash file.
+Also add hash file.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv/opencv.hash |    3 +++
- package/opencv/opencv.mk   |    4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/hdparm/hdparm.hash |    3 +++
+ package/hdparm/hdparm.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
 new file mode 100644
-index 0000000..04cb3c5
+index 0000000..12f8e07
 --- /dev/null
-+++ b/package/opencv/opencv.hash
++++ b/package/hdparm/hdparm.hash
 @@ -0,0 +1,3 @@
-+# From https://github.com/itseez/opencv/archive/2.4.9.1/
-+md5	f9d8626711a183a8f39ce9822a40f35f	opencv-2.4.9.1.tar.gz
-+sha1	adcaf808e4d5d3b394514061d1da3d4352964c7d	opencv-2.4.9.1.tar.gz
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 8c2de79..628624a 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -4,11 +4,11 @@
++# From http://sourceforge.net/projects/hdparm/files/hdparm/
++md5	1c75d0751a44928b6c4bc81fb16d7fe8	hdparm-9.45.tar.gz
++sha1	232855a97df0a28ddeeff9325814517668877f6c	hdparm-9.45.tar.gz
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 0ca3c39..2a113d2 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENCV_VERSION = 2.4.8
-+OPENCV_VERSION = 2.4.9.1
- OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
- OPENCV_INSTALL_STAGING = YES
- OPENCV_LICENSE = BSD-3c
--OPENCV_LICENSE_FILES = doc/license.txt
-+OPENCV_LICENSE_FILES = LICENSE
- 
- # OpenCV component options
- OPENCV_CONF_OPT += \
+-HDPARM_VERSION = 9.43
++HDPARM_VERSION = 9.45
+ HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
