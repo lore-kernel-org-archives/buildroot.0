@@ -1,39 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Sep 2014 12:34:30 +0200
-Subject: [Buildroot] [PATCH 2 of 2] kmod: add patches to support build
-	on Redhat 5
-In-Reply-To: <CAAXf6LVzr2B-gF1RQiELS_vM52Boopv4X5H17XkJ99aXCX2Z6A@mail.gmail.com>
- (Thomas De Schampheleire's message of "Mon, 29 Sep 2014 11:31:25
- +0200")
-References: <patchbomb.1409649944@localhost>
- <f2b8b2b5efec1b2340c4.1409649946@localhost>
- <87iok7wppd.fsf@dell.be.48ers.dk>
- <CAAXf6LVzr2B-gF1RQiELS_vM52Boopv4X5H17XkJ99aXCX2Z6A@mail.gmail.com>
-Message-ID: <87vbo6r9zd.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Sep 2014 09:44:41 -0300
+Subject: [Buildroot] [PATCH] hdparm: bump to version 9.45
+Message-ID: <1411994681-19071-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Also add hash file.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hdparm/hdparm.hash | 3 +++
+ package/hdparm/hdparm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/hdparm/hdparm.hash
 
- >> > +-   sig_len = be32toh(get_unaligned(&modsig->sig_len));
- >> > ++   sig_len = bswap_32(get_unaligned(&modsig->sig_len));
- >> 
- >> Ehh, so what happens when we want to build kmod for a big endian target?
-
- > Hmm, indeed, that doesn't seem right.
- > I found another patch that looks better [1], sent to the linux-modules
- > mailing list in September 2013, received some comments and a v2 was
- > promised but never arrived (AFAICS). I will adopt the patch and fix
- > the comments, then resend to buildroot + linux-modules.
-
- > [1] http://www.spinics.net/lists/linux-modules/msg01127.html
-
-Thanks, that patch (+ suggested changes) looks sensible to me.
-
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
+new file mode 100644
+index 0000000..12f8e07
+--- /dev/null
++++ b/package/hdparm/hdparm.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/hdparm/files/hdparm/
++md5	1c75d0751a44928b6c4bc81fb16d7fe8	hdparm-9.45.tar.gz
++sha1	232855a97df0a28ddeeff9325814517668877f6c	hdparm-9.45.tar.gz
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 0ca3c39..2a113d2 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HDPARM_VERSION = 9.43
++HDPARM_VERSION = 9.45
+ HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
