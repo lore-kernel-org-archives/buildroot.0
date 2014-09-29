@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Sep 2014 16:44:40 +0200
-Subject: [Buildroot] [git commit] gstreamer1: bump version
-Message-ID: <20140929153251.9C9E09D7CB@busybox.osuosl.org>
+Date: Mon, 29 Sep 2014 17:32:28 +0200
+Subject: [Buildroot] [git commit] gst1-libav: bump version
+Message-ID: <20140929153251.CE78A9D535@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff494d887471b89fa7a4e0e07c8efbab104825e1
+commit: http://git.buildroot.net/buildroot/commit/?id=248e0f1c4602af534bb3ef66b997d60f79811461
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 And add tarball hash from release announcement.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash |    2 ++
- package/gstreamer1/gstreamer1/gstreamer1.mk   |    2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash |    2 ++
+ package/gstreamer1/gst1-libav/gst1-libav.mk   |    2 +-
  2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
 new file mode 100644
-index 0000000..c5930e6
+index 0000000..957db83
 --- /dev/null
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -0,0 +1,2 @@
 +# From http://lists.freedesktop.org/archives/gstreamer-announce/2014-September/000329.html
-+sha256	11f155784d28b85a12b50d2fc8f91c6b75d9ca325cc76aaffba1a58d4c9549c9	gstreamer-1.4.3.tar.xz
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index f0c2e6e..eaad088 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
++sha256	833229d2b1aad6549ad0297435516508cc3ac47b166d6393ecdffc34c31a01d3	gst-libav-1.4.3.tar.xz
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 7276aeb..1d04c2c 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.4.1
-+GSTREAMER1_VERSION = 1.4.3
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_LIBAV_VERSION = 1.4.1
++GST1_LIBAV_VERSION = 1.4.3
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
+ 
