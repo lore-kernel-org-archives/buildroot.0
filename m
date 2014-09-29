@@ -1,97 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Sep 2014 22:26:29 +0200
-Subject: [Buildroot] [PATCH 09/25 v6] docs/manual: do not hardcode name
- of the generated document
-In-Reply-To: <19a2025b-9e6b-458a-9f8a-9b15c42f01cf@email.android.com>
-References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <06692733754cdc2bf2b340c5e6b0201f5770740d.1411812968.git.yann.morin.1998@free.fr>
- <CAAXf6LVCKLRLj_CLgVkEpjtET=90rK5v+6sE493cOmFxLgY8ew@mail.gmail.com>
- <20140929200105.GB6211@free.fr>
- <19a2025b-9e6b-458a-9f8a-9b15c42f01cf@email.android.com>
-Message-ID: <20140929202629.GC6211@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon, 29 Sep 2014 23:26:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: Add upstream patch to
+	fix build with musl
+Message-ID: <1412025972-29533-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Add a patch from upstream to support building with the musl C library.
 
-On 2014-09-29 22:09 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >On 2014-09-29 21:33 +0200, Thomas De Schampheleire spake thusly:
-> >> On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> >> > +$$(O)/docs/$(1)/$(1).$(5): $$($(call UPPERCASE,$(1))_SOURCES) \
-> >> 
-> >> I didn't mean to also change this uppercase call from $$ to $. The
-> >> 'exception' is until now only made when calling the inner infra from
-> >> the outer one. On this line, we are already in the inner infra so one
-> >> would use $$.
-> >
-> >But that does not matter, does it?
-> >
-> >The expansion of $(call UPPERCASE) is done on a parameter, so we might
-> >as well expand it right at call time, rather than at evaluation time,
-> >no?
-> 
-> Technically you're right. However, in the discussion
->  on the dollars we realized that the matter is
->  sufficiently non-obvious that we better use clear cut
->  rules. That rule says that everything should be $$
->  except for parameters, pkgname/pkgdir and the
->  uppercase call from outer to inner. 
-> 
-> In this case, you understand the issue and judge that
->  a single $ suffices, but tomorrow someone else will
->  change the value and forget to reevaluate the dollars.
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ .../libmpdclient-0001-musl-fixes.patch             | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libmpdclient/libmpdclient-0001-musl-fixes.patch
 
-Agreed, that's fair. I will change.
-
-> >> > +                          $(1)-check-dependencies \
-> >> > +                          $(1)-check-dependencies-$(4) \
-> >> > +                          $(1)-prepare-sources
-> >> > +       $$(Q)$$(call MESSAGE,"Generating $(6) $(1)...")
-> >> 
-> >> What is the purpose of the quotes here, given your recent commit of
-> >> qstrip in MESSAGE ?
-> >
-> >Because I looked at what was done in pkg-generic or some such, and
-> >mimicked. At which point someone noticed on the ML (or IRC) about the
-> >quoting issue, and I did not adapt my code.
-> >
-> >But it does not really matter: we can quote messages, now. Or not.
-> 
-> True. I don't understand though why we wouldn't
->  change all unnecessary quoting in the quest for symmetry and simplicity.
-
-If at all, we should change to always quote messages.
-
-The problem is two-fold:
-
-  - no quoting: we can not have a comma in the message, otherwise make
-    would split on it:  $(call MESSAGE,This, and that, should foo)
-
-  - always quoting: the MESSAGE definition already does the quoting to
-    ensure it does not break on a semi-colon (which you noticed):
-    $(call MESSAGE,"; echo shellshock")
-
-(He, shellshock is all the hype nowadays. Even superseeds heartbleed!)
-
-If MESSAGE would not do the quoting, and rely on the caller to do it,
-we'd be vulnerable to: $(call MESSAGE,; echo shellshock)
-
-So: we want MESSAGE to always quote its arguments (and no, single quotes
-do not cut it either, because a message might have single quotes too),
-while still allowing callers to do the quoting. Or not.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libmpdclient/libmpdclient-0001-musl-fixes.patch b/package/libmpdclient/libmpdclient-0001-musl-fixes.patch
+new file mode 100644
+index 0000000..60df540
+--- /dev/null
++++ b/package/libmpdclient/libmpdclient-0001-musl-fixes.patch
+@@ -0,0 +1,41 @@
++From cc2ffe943dd36a4c95ec34b2f2bf413de15b7974 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
++Date: Fri, 11 Jul 2014 08:56:49 +0200
++Subject: POSIX says fd_set is defined by <sys/select.h>
++
++Haiku requires this.
++
++cf.
++http://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/select.h.html
++
++Also guard sys/select.h by ifndef WIN32 as Mingw32 doesn't provide it.
++We'll avoid a configure check just for this.
++
++diff --git a/src/socket.c b/src/socket.c
++index f76510c..2aa5f7f 100644
++--- a/src/socket.c
+++++ b/src/socket.c
++@@ -43,6 +43,7 @@
++ #else
++ #  include <netinet/in.h>
++ #  include <arpa/inet.h>
+++#  include <sys/select.h>
++ #  include <sys/socket.h>
++ #  include <netdb.h>
++ #  include <sys/un.h>
++diff --git a/src/sync.c b/src/sync.c
++index 43cfe50..0a6c9d3 100644
++--- a/src/sync.c
+++++ b/src/sync.c
++@@ -33,6 +33,9 @@
++ #include <assert.h>
++ #include <stdlib.h>
++ #include <stdio.h>
+++#ifndef WIN32
+++#include <sys/select.h>
+++#endif
++ #include <fcntl.h>
++ #include <unistd.h>
++ 
++-- 
++cgit v0.10-2-gd358
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.1
