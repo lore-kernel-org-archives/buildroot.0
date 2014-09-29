@@ -1,47 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 29 Sep 2014 11:12:09 +0100
-Subject: [Buildroot] [PATCH 2/4] package/freerdp: can not build on uClibc
-In-Reply-To: <87lhp3sara.fsf@dell.be.48ers.dk>
-References: <cover.1411921550.git.yann.morin.1998@free.fr>
- <62743afc9fb2eb079bd1a3ff32ebfbf911fd1e16.1411921550.git.yann.morin.1998@free.fr>
- <87lhp3sara.fsf@dell.be.48ers.dk>
-Message-ID: <54293079.5010507@imgtec.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 29 Sep 2014 12:34:30 +0200
+Subject: [Buildroot] [PATCH 2 of 2] kmod: add patches to support build
+	on Redhat 5
+In-Reply-To: <CAAXf6LVzr2B-gF1RQiELS_vM52Boopv4X5H17XkJ99aXCX2Z6A@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Mon, 29 Sep 2014 11:31:25
+ +0200")
+References: <patchbomb.1409649944@localhost>
+ <f2b8b2b5efec1b2340c4.1409649946@localhost>
+ <87iok7wppd.fsf@dell.be.48ers.dk>
+ <CAAXf6LVzr2B-gF1RQiELS_vM52Boopv4X5H17XkJ99aXCX2Z6A@mail.gmail.com>
+Message-ID: <87vbo6r9zd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/28/2014 10:20 PM, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->   > FreeRDP uses eventfd_{read,write}, which is not supported in uClibc.
->   > Fixes:
->   >     http://autobuild.buildroot.net/results/ad7/ad7ade4c436d21cba930f40c613870fbadec840e/
->   >     http://autobuild.buildroot.net/results/5a3/5a30aecbb426f76a22e8285931a0a8cd59b5e70b/
->   >     http://autobuild.buildroot.net/results/6e0/6e0de0538e95ae156f7d2ad6eede46e44be81c8e/
->   >     [...]
->
->   > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->   > ---
->   > Note: although we depend on !uClibc, we still comment about glibc or
->   > musl, because we currently do not have a documented way for negative
->   > dependencies.
->
-> Committed, thanks.
->
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Dear Peter,
+Hi,
 
-I sent this patch 5 days ago to add support for uClibc for this package 
-by applying an upstream patch:
+ >> > +-   sig_len = be32toh(get_unaligned(&modsig->sig_len));
+ >> > ++   sig_len = bswap_32(get_unaligned(&modsig->sig_len));
+ >> 
+ >> Ehh, so what happens when we want to build kmod for a big endian target?
 
-http://patchwork.ozlabs.org/patch/392966/
+ > Hmm, indeed, that doesn't seem right.
+ > I found another patch that looks better [1], sent to the linux-modules
+ > mailing list in September 2013, received some comments and a v2 was
+ > promised but never arrived (AFAICS). I will adopt the patch and fix
+ > the comments, then resend to buildroot + linux-modules.
 
-Please, take it into consideration. I think it's better to fix the 
-package instead of disabling it.
+ > [1] http://www.spinics.net/lists/linux-modules/msg01127.html
 
-Thanks,
+Thanks, that patch (+ suggested changes) looks sensible to me.
+
 -- 
-Vincent
+Bye, Peter Korsgaard
