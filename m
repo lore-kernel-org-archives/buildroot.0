@@ -1,42 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Sep 2014 17:32:28 +0200
-Subject: [Buildroot] [git commit] gst1-libav: bump version
-Message-ID: <20140929153251.CE78A9D535@busybox.osuosl.org>
+From: Kantanu Kumar Mohapatra <kantanukumar@gmail.com>
+Date: Mon, 29 Sep 2014 21:29:40 +0530
+Subject: [Buildroot] Using u-boot tools
+In-Reply-To: <20140929152136.4d7cee9c@free-electrons.com>
+References: <CAJO1S91Kw0tsM-Azy7s9aVBaFORpB2Gp0-qrST2rDavorQUGjA@mail.gmail.com>
+ <20140929111853.6881f323@free-electrons.com>
+ <CAAXf6LXTaWD=4KrL3oF3Sy4dP+cFbX5fBK3LD7WACtRvuhxmqw@mail.gmail.com>
+ <20140929152136.4d7cee9c@free-electrons.com>
+Message-ID: <CAJO1S935TBt+HHGQ43WH9fzG0s9oOEk0hfsi-OXrr83Td_umQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=248e0f1c4602af534bb3ef66b997d60f79811461
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+?Frankly Speaking, I want to build fw_printenv in uboot-2010.03(for
+buildroot-20104.03), in uboot-2010.03 way. Is it possible??
 
-And add tarball hash from release announcement.
+Thanks,
+Kantanu
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-libav/gst1-libav.hash |    2 ++
- package/gstreamer1/gst1-libav/gst1-libav.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+On Mon, Sep 29, 2014 at 6:51 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-new file mode 100644
-index 0000000..957db83
---- /dev/null
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.freedesktop.org/archives/gstreamer-announce/2014-September/000329.html
-+sha256	833229d2b1aad6549ad0297435516508cc3ac47b166d6393ecdffc34c31a01d3	gst-libav-1.4.3.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 7276aeb..1d04c2c 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_LIBAV_VERSION = 1.4.1
-+GST1_LIBAV_VERSION = 1.4.3
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
- 
+> Dear Thomas De Schampheleire,
+>
+> On Mon, 29 Sep 2014 11:32:52 +0200, Thomas De Schampheleire wrote:
+>
+> > >> I am using customized uboot-tools 2010.03 and want to retain that. In
+> 2014,
+> > >> the tools selection is new, but I want to use the source code for
+> > >> uboot-tools used in 2010.03, as this is having some changes. I want
+> to get
+> > >> the "fw_printenv" compiled with a "-D" flag.
+> > >>
+> > >> Can anyone please help me in this regard?
+> > >
+> > > Well, just add a patch in package/uboot-tools/ to make whatever change
+> > > you want to the U-Boot source code used for your U-Boot tools.
+> >
+> > As this change will not be upstreamable to buildroot, I would rather
+> > recommend to use BR2_GLOBAL_PATCH_DIR, to not pollute the upstream
+> > buildroot sources. See http://nightly.buildroot.org/#customize-patches
+>
+> Absolutely, that's a good point. Thanks for reminding me about this!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140929/2b1d56fc/attachment.html>
