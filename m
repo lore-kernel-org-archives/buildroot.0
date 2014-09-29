@@ -1,84 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 29 Sep 2014 21:58:54 +0200
-Subject: [Buildroot] Using u-boot tools
-In-Reply-To: <CAJO1S93CyRMH62V4+OU+403h0_p=9G247fT2foT5t1G36ZndsQ@mail.gmail.com>
-References: <CAJO1S91Kw0tsM-Azy7s9aVBaFORpB2Gp0-qrST2rDavorQUGjA@mail.gmail.com>
- <20140929111853.6881f323@free-electrons.com>
- <CAAXf6LXTaWD=4KrL3oF3Sy4dP+cFbX5fBK3LD7WACtRvuhxmqw@mail.gmail.com>
- <20140929152136.4d7cee9c@free-electrons.com>
- <CAJO1S935TBt+HHGQ43WH9fzG0s9oOEk0hfsi-OXrr83Td_umQg@mail.gmail.com>
- <20140929183824.5b7bc3e5@free-electrons.com>
- <CAJO1S92HBmxKivtoqZDEjGYt5e6xiQkrHnCPLi1H0O4E9xtixg@mail.gmail.com>
- <CAAXf6LVco1ikU6rfBSyNf_WZZfv4nBP1fhwcajfzoAN07wLZ7A@mail.gmail.com>
- <CAJO1S93CyRMH62V4+OU+403h0_p=9G247fT2foT5t1G36ZndsQ@mail.gmail.com>
-Message-ID: <CAAXf6LXKSX11OfGkaNeO=vRDCcCQVTAd00P-_g2qs_aqe2_R-Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 29 Sep 2014 22:01:05 +0200
+Subject: [Buildroot] [PATCH 09/25 v6] docs/manual: do not hardcode name
+ of the generated document
+In-Reply-To: <CAAXf6LVCKLRLj_CLgVkEpjtET=90rK5v+6sE493cOmFxLgY8ew@mail.gmail.com>
+References: <cover.1411812968.git.yann.morin.1998@free.fr>
+ <06692733754cdc2bf2b340c5e6b0201f5770740d.1411812968.git.yann.morin.1998@free.fr>
+ <CAAXf6LVCKLRLj_CLgVkEpjtET=90rK5v+6sE493cOmFxLgY8ew@mail.gmail.com>
+Message-ID: <20140929200105.GB6211@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kantanu,
+Thomas, All,
 
+On 2014-09-29 21:33 +0200, Thomas De Schampheleire spake thusly:
+> On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIp--]
+> > -                       "to generate the manual"; \
+> > +                       "to generate a document"; \
+> Nit: I would write 'to generate documents' here.
+> > -               echo "You need w3m on your host to generate the manual"; \
+> > +               echo "You need w3m on your host to generate a document"; \
+> Same here.
+> > -               echo "You need dblatex on your host to generate the pdf manual"; \
+> > +               echo "You need dblatex on your host to generate a PDF document"; \
+> This would become 'to generate PDF documents'
 
-On Mon, Sep 29, 2014 at 9:41 PM, Kantanu Kumar Mohapatra
-<kantanukumar@gmail.com> wrote:
->
-> On 30-Sep-2014 12:44 AM, "Thomas De Schampheleire"
-> <patrickdepinguin@gmail.com> wrote:
->>
->> Hi Kantanu,
->>
->> (please don't top post)
->>
->> On Mon, Sep 29, 2014 at 8:43 PM, Kantanu Kumar Mohapatra
->> <kantanukumar@gmail.com> wrote:
->> > Many thanks.
->> >
->> > Yaa I too found it as the place to take the source. The thing is, uboot
->> > tools is under auto-target. That's I am not much familiar with, how to
->> > make
->> > changes to that to take the source?
->> >
->> > I'll be thankful if you could help me to make changes to that makefile.
->>
->> Have a look at the manual chapter regarding adding new packages. It
->> explains the different variables that exist, both for the generic and
->> autotools infrastructures.
->> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages
->>
->> What Thomas Petazzoni suggested is to change the variable
->> UBOOT_TOOLS_VERSION.
->>
->> Best regards,
->> Thomas
->
-> Thanks Thomas. I have tried with changing the tools version, that's not
-> working, as buildroot 10 not having uboot tool separate. fw_printenv comes
-> integrated with uboot-tools-10.03.
->
-> I can see the target fw_printenv, gets compiled like this,
-> $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/$(U_BOOT_BIN)
-> $(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
-> -DUSE_HOSTCC -o $@ \
-> $(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib_generic/crc32.c
->
-> I am using here another -D flag in uboot-tools-10.03. Same thing want to
-> replicated for uboot tools 14 and same source only want to take.
+OK, I don;t mind. Will do.
 
-I don't understand you anymore.
-You want to remain at u-boot-tools 2010.03, when using buildroot
-2014.xx, correct?
-So what you would do is change UBOOT_TOOLS_VERSION = 2010.03 inside
-buildroot 2014.xx.
+> > +$$(O)/docs/$(1)/$(1).$(5): $$($(call UPPERCASE,$(1))_SOURCES) \
+> 
+> I didn't mean to also change this uppercase call from $$ to $. The
+> 'exception' is until now only made when calling the inner infra from
+> the outer one. On this line, we are already in the inner infra so one
+> would use $$.
 
-The 'uboot-tools' package is just using standard uboot sources, but
-only builds the tools in the tools directory.
+But that does not matter, does it?
 
-If this information is not clear enough to you, please try to rephrase
-in more details what you want to achieve. Please also be specific
-about the versions. In your first mail you mentioned
-buildroot-2014.03, but this does not exist.
+The expansion of $(call UPPERCASE) is done on a parameter, so we might
+as well expand it right at call time, rather than at evaluation time,
+no?
 
-Thanks,
-Thomas
+> > +                          $(1)-check-dependencies \
+> > +                          $(1)-check-dependencies-$(4) \
+> > +                          $(1)-prepare-sources
+> > +       $$(Q)$$(call MESSAGE,"Generating $(6) $(1)...")
+> 
+> What is the purpose of the quotes here, given your recent commit of
+> qstrip in MESSAGE ?
+
+Because I looked at what was done in pkg-generic or some such, and
+mimicked. At which point someone noticed on the ML (or IRC) about the
+quoting issue, and I did not adapt my code.
+
+But it does not really matter: we can quote messages, now. Or not.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
