@@ -1,28 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Sep 2014 16:18:48 +0200
-Subject: [Buildroot] two stage gcc build with uclibc and DODEBUG enabled
-In-Reply-To: <20140930103450.60039294@free-electrons.com>
-References: <1412010975.31269.13.camel@abrodkin-8560l.internal.synopsys.com>
- <20140930103450.60039294@free-electrons.com>
-Message-ID: <20140930161848.1267811a@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 30 Sep 2014 10:47:15 -0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-09-29
+In-Reply-To: <20140930063009.EE01D100D47@stock.ovh.net>
+References: <20140930063009.EE01D100D47@stock.ovh.net>
+Message-ID: <CANxTyt72yCKmyxjQQeCiea2Dze1Fx+5T+n11epzsQqnd3x6ANg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Sep 30, 2014 at 2:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>         i686 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/3a8ecfe84b532fbe811ac0b2aeb6dc02630616d0/
 
-On Tue, 30 Sep 2014 10:34:50 +0200, Thomas Petazzoni wrote:
+This appears to be the same failure already encountered by
+http://autobuild.buildroot.net/results/389/389617c7c36dfe92b85d3a3db12a706ae092c73d/
+, fix submitted already:
+http://lists.busybox.net/pipermail/buildroot/2014-September/106161.html
 
-> So, I believe this should rather be reported as bug to the uClibc
-> developers. I can take care of it if you want.
-
-Done:
-http://lists.uclibc.org/pipermail/uclibc/2014-September/048659.html.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Danomi -
