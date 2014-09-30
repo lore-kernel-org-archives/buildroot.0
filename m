@@ -1,37 +1,28 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Tue, 30 Sep 2014 15:28:05 +0200
-Subject: [Buildroot] [PATCH 3/3] ffmpeg: enable libopus support
-In-Reply-To: <1412083685-20812-1-git-send-email-0intro@gmail.com>
-References: <1412083685-20812-1-git-send-email-0intro@gmail.com>
-Message-ID: <1412083685-20812-3-git-send-email-0intro@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Sep 2014 16:18:48 +0200
+Subject: [Buildroot] two stage gcc build with uclibc and DODEBUG enabled
+In-Reply-To: <20140930103450.60039294@free-electrons.com>
+References: <1412010975.31269.13.camel@abrodkin-8560l.internal.synopsys.com>
+ <20140930103450.60039294@free-electrons.com>
+Message-ID: <20140930161848.1267811a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
----
- package/ffmpeg/ffmpeg.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello,
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5818db1..b4b2e56 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -215,6 +215,13 @@ else
- FFMPEG_CONF_OPT += --disable-vaapi
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+FFMPEG_CONF_OPT += --enable-libopus
-+FFMPEG_DEPENDENCIES += opus
-+else
-+FFMPEG_CONF_OPT += --disable-libopus
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVPX),y)
- FFMPEG_CONF_OPT += --enable-libvpx
- FFMPEG_DEPENDENCIES += libvpx
+On Tue, 30 Sep 2014 10:34:50 +0200, Thomas Petazzoni wrote:
+
+> So, I believe this should rather be reported as bug to the uClibc
+> developers. I can take care of it if you want.
+
+Done:
+http://lists.uclibc.org/pipermail/uclibc/2014-September/048659.html.
+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
