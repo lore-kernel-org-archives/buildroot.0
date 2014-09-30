@@ -1,88 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Sep 2014 10:34:50 +0200
-Subject: [Buildroot] two stage gcc build with uclibc and DODEBUG enabled
-In-Reply-To: <1412010975.31269.13.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1412010975.31269.13.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20140930103450.60039294@free-electrons.com>
+Date: Tue, 30 Sep 2014 11:30:24 +0200
+Subject: [Buildroot] Reducing buildroot compile times by reusing
+ toolchain?
+In-Reply-To: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A484C07@AMEHLEX02.ehl.pri>
+References: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A484C07@AMEHLEX02.ehl.pri>
+Message-ID: <20140930113024.74091a8f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hello,
 
-On Mon, 29 Sep 2014 17:16:16 +0000, Alexey Brodkin wrote:
+On Tue, 30 Sep 2014 08:02:34 +0000, Paassen, Hiram van wrote:
 
-> It looks like two stage gcc build doesn't work well with uClibc if it is
-> configured with "DODEBUG=y".
-> 
-> Probably you don't see problems because most of arches in Buildroot
-> still use uClibc 0.9.32.x instead of sources from master branch (and
-> there's a reason for it - most probably uClibc won't be built at all if
-> one attempts to select "use uClibc daily snapshot").
-> 
-> But at least for ARC we're pretty close to upstream master branch
-> (difference is very minor).
-> 
-> So the thing is this commit
-> http://git.uclibc.org/uClibc/commit/Rules.mak?id=8d31a6e50db423b89082b64a3250eec1b94a7456 introduces linkage of "libgcc_eh.a" into libuClibc.
-> 
-> And that's how building fails for ARC:
-> =========
->   LD ld-uClibc-0.9.34-git.so
-> arc-buildroot-linux-uclibc-gcc: error: libgcc_eh.a: No such file or
-> directory
-> make[2]: *** [lib/ld-uClibc.so] Error 1
-> make[1]: *** [.../build/uclibc-arc-mainline-dev/.stamp_built] Error 2
-> make: *** [_all] Error 2
-> =========
+> We are using buildroot to build two images for the same target
+> platform. We noticed that most of the build time is in building the
+> host tools. I'd like to reduce our build time and noticed the option
+> to use an external toolchain. 
 
-Thanks for the report, and the very good initial investigation!
+Absolutely.
 
-Unfortunately, I believe that uClibc is wrong here.
+> Would it be possible to add an option to the external toolchain menu
+> to use a buildroot toolchain as external toolchain? This is probably
+> possible right now but then I have to know exactly what to fill in. I
+> imagine that buildroot would be able to infer all those options from
+> another buildroot installation/out-of-tree-build. I can imagine that
+> such an option would simplify the reuse of the toolchain for our
+> other build.
 
-First, libgcc_eh.a is indeed only built when --enable-shared is passed
-to gcc, which is only possible for the second pass gcc, not for the
-first pass.
+I don't really see how this would work. The main issue here is that
+we need to know the characteristics of the toolchain (C library being
+used, toolchain options, etc.) at the kconfig level (i.e the
+configuration menu). And this is done before Buildroot gets the chance
+to start the build to find out by itself the characteristics of the
+toolchain.
 
-And more importantly, glibc has some very clear comment (see the main
-Makeconfig file) that states:
+However, what Buildroot does is that it verifies that the
+characteristics of the toolchain declared in menuconfig actually match
+the external toolchain being provided. This means that there is
+basically zero chance for you to use an invalid configuration.
 
-# How to link against libgcc.  Some libgcc functions, such as those
-# for "long long" arithmetic or software floating point, can always be
-# built without use of C library headers and do not have any global
-# state so can safely be linked statically into any executable or
-# shared library requiring them; these functions are in libgcc.a.
-# Other functions, relating to exception handling, may require C
-# library headers to build and it may not be safe to have more than
-# one copy of them in a process; these functions are only in
-# libgcc_s.so and libgcc_eh.a.
-#
-# To avoid circular dependencies when bootstrapping, it is desirable
-# to avoid use of libgcc_s and libgcc_eh in building glibc.  Where any
-# glibc functionality (in particular, thread cancellation) requires
-# exception handling, this is implemented through dlopen of libgcc_s
-# to avoid unnecessary dependencies on libgcc_s by programs not using
-# that functionality; executables built with glibc do not use
-# exception handling other than through thread cancellation.
-#
-# Undefined references to functions from libgcc_eh or libgcc_s may
-# arise for code built with -fexceptions.  In the case of statically
-# linked programs installed by glibc, unwinding will never actually
-# occur at runtime and the use of elf/static-stubs.c to resolve these
-# references is safe.  In the case of statically linked test programs
-# and test programs built with -fexceptions, unwinding may occur in
-# some cases and it is preferable to link with libgcc_eh or libgcc_s
-# so that the testing is as similar as possible to how programs will
-# be built with the installed glibc.
+Also:
 
-And then glibc has its own implementation of Unwind_Resume(), which
-according to the commit you pointed at, is the reason why uClibc is now
-linked against libgcc_eh.a.
+ * Beyond Buildroot toolchains, there are also other toolchain
+   providers, such as Sourcery CodeBench or Linaro. Depending on the
+   architecture you're targeting, this may be interesting to explore.
 
-So, I believe this should rather be reported as bug to the uClibc
-developers. I can take care of it if you want.
+ * We also provide pre-built Buildroot toolchains as part of our
+   autobuild infrastructure. If you look at
+   http://autobuild.buildroot.org/toolchains/configs/, all the files
+   starting in "br-" are minimal configurations using pre-built
+   Buildroot toolchains. For example,
+   http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
+   is using a Buildroot uClibc ARM toolchain, targeted at ARM926.
+
+> Secondly, we run "make clean" often since buildroot cannot
+> automatically remove stuff from the target directory however running
+> "make clean" also removes the toolchain. would it be possible to make
+> a "make clean-target" that would delete the target and possible the
+> staging directory and would rebuild everything except the
+> host/toolchain stuff. Or did I miss something and is such a target
+> already possible?
+
+We do not provide this possibility because we cannot implement this in
+a safe way.
+
+Scenario:
+
+ 1. You enable the lftp package, and also the openssl package in
+    menuconfig.
+
+ 2. You start the build. Since lftp optionally depends on openssl,
+    openssl will be built first, and then lftp. lftp is therefore build
+    with openssl support, and relies on the openssl libraries to be
+    installed in the target.
+
+ 3. The build is finished, you now have both lftp and openssl installed
+    in your target filesystem. Everything is fine.
+
+ 4. Now, you remove openssl from menuconfig. Of course, lftp is still
+    enabled.
+
+ 5. You do your new "cleanup target and reinstall everything" thing. It
+    will install the already built lftp in the target. But it will not
+    install openssl, because the package is no longer enabled.
+
+ 6. You know have a broken root filesystem: lftp is linked with the
+    openssl libraries, but those libraries were not installed in the
+    target.
+
+Since Buildroot is very simple and does not track which package
+installs what, and which package should be rebuilt when other packages
+are enabled/disabled, we cannot provide the feature you request in a
+safe way.
+
+We could of course provide it, but then you would see lots and lots of
+weird situations like the one exposed above. And it would be very
+complicated for us to provide support to people falling into those
+situations.
+
+Some final recommendations:
+
+ * Use an external toolchain.
+ * Enable ccache if you do repeated builds with the same toolchain.
+ * Buy a faster machine. And if you use a virtual machine like VMWare
+   or VirtualBox, throw it away, and do your build on a real physical
+   machine.
 
 Best regards,
 
