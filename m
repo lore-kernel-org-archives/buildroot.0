@@ -1,70 +1,60 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Tue, 30 Sep 2014 00:18:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: Add patch to fix build
-	error with musl
-Message-ID: <1412029129-12590-1-git-send-email-jkrause@posteo.de>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 29 Sep 2014 18:08:00 -0700
+Subject: [Buildroot] [PATCH 1/1] Fix nfs server for a read only rootfs
+Message-ID: <1412039280-14763-1-git-send-email-stevecalfee@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build error with musl:
+I like to run from ro root filesystem. This patch puts the nfs temp stuff in a
+subdirectory of tmp. The standard buildroot /var is read only, so the build
+must agree with the runtime startup to use a /tmp/nfs writeable dir.
 
-  - Instead of using the nonstandard pthread_yield call use the standardized
-    sched_yield.
+Also create the desired subsys subdirectory in /var/lock for nfs.
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
 ---
- package/upmpdcli/upmpdcli-0002-musl-fixes.patch | 40 +++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/upmpdcli/upmpdcli-0002-musl-fixes.patch
+ package/nfs-utils/S60nfs       | 3 +++
+ package/nfs-utils/nfs-utils.mk | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/upmpdcli/upmpdcli-0002-musl-fixes.patch b/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
-new file mode 100644
-index 0000000..c744319
---- /dev/null
-+++ b/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
-@@ -0,0 +1,40 @@
-+From bd1a8b6b547e06456cbede686d8c2f3cfdfa47d1 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-+Date: Tue, 30 Sep 2014 00:07:26 +0200
-+Subject: [PATCH 2/2] musl fixes
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Instead of using the nonstandard pthread_yield call use the standardized 
-+sched_yield.
-+
-+Signed-off-by: J?rg Krause <jkrause@posteo.de>
-+---
-+ libupnpp/control/discovery.cxx | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/libupnpp/control/discovery.cxx b/libupnpp/control/discovery.cxx
-+index ac14a82..0a293c7 100644
-+--- a/libupnpp/control/discovery.cxx
-++++ b/libupnpp/control/discovery.cxx
-+@@ -18,6 +18,7 @@
-+ 
-+ #include <stdlib.h>
-+ #include <errno.h>
-++#include <sched.h>
-+ #include <unistd.h>
-+ 
-+ #include <iostream>
-+@@ -297,7 +298,7 @@ UPnPDeviceDirectory::UPnPDeviceDirectory(time_t search_window)
-+         m_reason = "Discover work queue start failed";
-+         return;
-+     }
-+-    pthread_yield();
-++    sched_yield();
-+     LibUPnP *lib = LibUPnP::getLibUPnP();
-+     if (lib == 0) {
-+         m_reason = "Can't get lib";
-+-- 
-+2.1.1
-+
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 49dab70..0497396 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -14,6 +14,8 @@
+     { echo "/etc/exports does not exist" ; exit 0 ; }
+     
+ # The /var/lib/nfs directory is actually on a tmpfs filesystem.
++# to reduce clutter put it in a subdir of /tmp
++mkdir -p /tmp/nfs
+ mkdir -p /var/lib/nfs/sm
+ mkdir -p /var/lib/nfs/sm.bak
+ touch /var/lib/nfs/etab
+@@ -25,6 +27,7 @@ start() {
+ 	# Start daemons.
+ 	echo -n "Starting NFS statd: "
+ 	rpc.statd
++	mkdir -p /var/lock/subsys
+ 	touch /var/lock/subsys/nfslock
+ 	echo "done"
+ 
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 68772ef..3b54051 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -37,6 +37,10 @@ endif
+ define NFS_UTILS_INSTALL_FIXUP
+ 	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
+ 		$(TARGET_DIR)/etc/init.d/S60nfs
++	rm -rf $(TARGET_DIR)/var/lib/nfs
++	mkdir -p $(TARGET_DIR)/tmp/nfs
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/lib
++	ln -s ../../tmp/nfs $(TARGET_DIR)/var/lib/nfs
+ 	rm -f $(NFS_UTILS_TARGETS_)
+ endef
+ 
 -- 
-2.1.1
+1.8.3.2
