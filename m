@@ -1,118 +1,144 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Sep 2014 11:30:24 +0200
-Subject: [Buildroot] Reducing buildroot compile times by reusing
- toolchain?
-In-Reply-To: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A484C07@AMEHLEX02.ehl.pri>
-References: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A484C07@AMEHLEX02.ehl.pri>
-Message-ID: <20140930113024.74091a8f@free-electrons.com>
+From: Kantanu Kumar Mohapatra <kantanukumar@gmail.com>
+Date: Tue, 30 Sep 2014 15:03:30 +0530
+Subject: [Buildroot] Using u-boot tools
+In-Reply-To: <CAAXf6LXKSX11OfGkaNeO=vRDCcCQVTAd00P-_g2qs_aqe2_R-Q@mail.gmail.com>
+References: <CAJO1S91Kw0tsM-Azy7s9aVBaFORpB2Gp0-qrST2rDavorQUGjA@mail.gmail.com>
+ <20140929111853.6881f323@free-electrons.com>
+ <CAAXf6LXTaWD=4KrL3oF3Sy4dP+cFbX5fBK3LD7WACtRvuhxmqw@mail.gmail.com>
+ <20140929152136.4d7cee9c@free-electrons.com>
+ <CAJO1S935TBt+HHGQ43WH9fzG0s9oOEk0hfsi-OXrr83Td_umQg@mail.gmail.com>
+ <20140929183824.5b7bc3e5@free-electrons.com>
+ <CAJO1S92HBmxKivtoqZDEjGYt5e6xiQkrHnCPLi1H0O4E9xtixg@mail.gmail.com>
+ <CAAXf6LVco1ikU6rfBSyNf_WZZfv4nBP1fhwcajfzoAN07wLZ7A@mail.gmail.com>
+ <CAJO1S93CyRMH62V4+OU+403h0_p=9G247fT2foT5t1G36ZndsQ@mail.gmail.com>
+ <CAAXf6LXKSX11OfGkaNeO=vRDCcCQVTAd00P-_g2qs_aqe2_R-Q@mail.gmail.com>
+Message-ID: <CAJO1S93YXn=r9egsr-9V49Xq7+MsGUd4eLxDcX_fvcN_gXoCwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Sep 30, 2014 at 1:28 AM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
 
-On Tue, 30 Sep 2014 08:02:34 +0000, Paassen, Hiram van wrote:
+> Hi Kantanu,
+>
+>
+> On Mon, Sep 29, 2014 at 9:41 PM, Kantanu Kumar Mohapatra
+> <kantanukumar@gmail.com> wrote:
+> >
+> > On 30-Sep-2014 12:44 AM, "Thomas De Schampheleire"
+> > <patrickdepinguin@gmail.com> wrote:
+> >>
+> >> Hi Kantanu,
+> >>
+> >> (please don't top post)
+> >>
+> >> On Mon, Sep 29, 2014 at 8:43 PM, Kantanu Kumar Mohapatra
+> >> <kantanukumar@gmail.com> wrote:
+> >> > Many thanks.
+> >> >
+> >> > Yaa I too found it as the place to take the source. The thing is,
+> uboot
+> >> > tools is under auto-target. That's I am not much familiar with, how to
+> >> > make
+> >> > changes to that to take the source?
+> >> >
+> >> > I'll be thankful if you could help me to make changes to that
+> makefile.
+> >>
+> >> Have a look at the manual chapter regarding adding new packages. It
+> >> explains the different variables that exist, both for the generic and
+> >> autotools infrastructures.
+> >>
+> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages
+> >>
+> >> What Thomas Petazzoni suggested is to change the variable
+> >> UBOOT_TOOLS_VERSION.
+> >>
+> >> Best regards,
+> >> Thomas
+> >
+> > Thanks Thomas. I have tried with changing the tools version, that's not
+> > working, as buildroot 10 not having uboot tool separate. fw_printenv
+> comes
+> > integrated with uboot-tools-10.03.
+> >
+> > I can see the target fw_printenv, gets compiled like this,
+> > $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/$(U_BOOT_BIN)
+> > $(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+> > -DUSE_HOSTCC -o $@ \
+> > $(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib_generic/crc32.c
+> >
+> > I am using here another -D flag in uboot-tools-10.03. Same thing want to
+> > replicated for uboot tools 14 and same source only want to take.
+>
+> I don't understand you anymore.
+> You want to remain at u-boot-tools 2010.03, when using buildroot
+> 2014.xx, correct?
+> So what you would do is change UBOOT_TOOLS_VERSION = 2010.03 inside
+> buildroot 2014.xx.
+>
+> The 'uboot-tools' package is just using standard uboot sources, but
+> only builds the tools in the tools directory.
+>
+> If this information is not clear enough to you, please try to rephrase
+> in more details what you want to achieve. Please also be specific
+> about the versions. In your first mail you mentioned
+> buildroot-2014.03, but this does not exist.
+>
+> Thanks,
+> Thomas
+>
 
-> We are using buildroot to build two images for the same target
-> platform. We noticed that most of the build time is in building the
-> host tools. I'd like to reduce our build time and noticed the option
-> to use an external toolchain. 
 
-Absolutely.
+?Thanks a lot Thomas for your reply. Sorry for the typo, please consider
+the new version as buildroot-2014.02.
 
-> Would it be possible to add an option to the external toolchain menu
-> to use a buildroot toolchain as external toolchain? This is probably
-> possible right now but then I have to know exactly what to fill in. I
-> imagine that buildroot would be able to infer all those options from
-> another buildroot installation/out-of-tree-build. I can imagine that
-> such an option would simplify the reuse of the toolchain for our
-> other build.
+Let me explain all in detail.
 
-I don't really see how this would work. The main issue here is that
-we need to know the characteristics of the toolchain (C library being
-used, toolchain options, etc.) at the kconfig level (i.e the
-configuration menu). And this is done before Buildroot gets the chance
-to start the build to find out by itself the characteristics of the
-toolchain.
+old br2:
+========
+version: 2010.05
+uboot: 2010.03(customized)
+uboot-tools: 2010.03 (used from uboot src)
 
-However, what Buildroot does is that it verifies that the
-characteristics of the toolchain declared in menuconfig actually match
-the external toolchain being provided. This means that there is
-basically zero chance for you to use an invalid configuration.
 
-Also:
+New br2 (which I am upgrading to):
+===========================
+version: 2014.02
+uboot: 2010.03(customized, same should be across tools too)
+uboot-tools: 2014.01 ( should be same as uboot-2010.03)
 
- * Beyond Buildroot toolchains, there are also other toolchain
-   providers, such as Sourcery CodeBench or Linaro. Depending on the
-   architecture you're targeting, this may be interesting to explore.
+In br2-14, I am getting the uboot image(.bin) properly, which I customized
+to get a .rom with my headers added to it, done in boot/uboot/uboot.mk
 
- * We also provide pre-built Buildroot toolchains as part of our
-   autobuild infrastructure. If you look at
-   http://autobuild.buildroot.org/toolchains/configs/, all the files
-   starting in "br-" are minimal configurations using pre-built
-   Buildroot toolchains. For example,
-   http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
-   is using a Buildroot uClibc ARM toolchain, targeted at ARM926.
+Here the problem which I faced is "fw_printenv" executable, which is built
+in tools, for br2-2014.02. fw_printenv is created, when getting the uboot
+image in br2-2010.03 (target/uboot/Makefile.in).
 
-> Secondly, we run "make clean" often since buildroot cannot
-> automatically remove stuff from the target directory however running
-> "make clean" also removes the toolchain. would it be possible to make
-> a "make clean-target" that would delete the target and possible the
-> staging directory and would rebuild everything except the
-> host/toolchain stuff. Or did I miss something and is such a target
-> already possible?
+In br2-2014.02,
+Tools should be taken from the source, which went into
+output/build/uboot-2010.03, But instead it creates another
+uboot-tools-2014.01 inside output/build/ and places source there.
 
-We do not provide this possibility because we cannot implement this in
-a safe way.
+How to build that fw_printenv, in old way like br2-10, seen as below?
 
-Scenario:
+$(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/$(U_BOOT_BIN)
+    mkdir -p $(@D)
+    $(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+        -D_custom_flag \
+        -DUSE_HOSTCC -o $@ \
+        $(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib_generic/crc32.c
 
- 1. You enable the lftp package, and also the openssl package in
-    menuconfig.
+I want to use another "-D_custom_flag" to build "fw_printenv", in br2-14.
+Please suggest me the changes to be done. If I change   UBOOT_TOOLS_VERSION
+= 2010.03, in  uboot-tools.mk, getting compilation error, as it has
+dependency on host-tools.?
 
- 2. You start the build. Since lftp optionally depends on openssl,
-    openssl will be built first, and then lftp. lftp is therefore build
-    with openssl support, and relies on the openssl libraries to be
-    installed in the target.
-
- 3. The build is finished, you now have both lftp and openssl installed
-    in your target filesystem. Everything is fine.
-
- 4. Now, you remove openssl from menuconfig. Of course, lftp is still
-    enabled.
-
- 5. You do your new "cleanup target and reinstall everything" thing. It
-    will install the already built lftp in the target. But it will not
-    install openssl, because the package is no longer enabled.
-
- 6. You know have a broken root filesystem: lftp is linked with the
-    openssl libraries, but those libraries were not installed in the
-    target.
-
-Since Buildroot is very simple and does not track which package
-installs what, and which package should be rebuilt when other packages
-are enabled/disabled, we cannot provide the feature you request in a
-safe way.
-
-We could of course provide it, but then you would see lots and lots of
-weird situations like the one exposed above. And it would be very
-complicated for us to provide support to people falling into those
-situations.
-
-Some final recommendations:
-
- * Use an external toolchain.
- * Enable ccache if you do repeated builds with the same toolchain.
- * Buy a faster machine. And if you use a virtual machine like VMWare
-   or VirtualBox, throw it away, and do your build on a real physical
-   machine.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Kantanu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140930/55425bc3/attachment.html>
