@@ -1,50 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Sep 2014 08:30:09 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-09-29
-Message-ID: <20140930063009.EE01D100D47@stock.ovh.net>
+From: Paassen, Hiram van <Hiram.van.Paassen@mastervolt.com>
+Date: Tue, 30 Sep 2014 08:02:34 +0000
+Subject: [Buildroot] Reducing buildroot compile times by reusing toolchain?
+Message-ID: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A484C07@AMEHLEX02.ehl.pri>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-09-29
-===============================
+Hi,
 
-        success : 75 
-       failures : 10 
-       timeouts : 2  
-          TOTAL : 87 
+We are using buildroot to build two images for the same target platform. We noticed that most of the build time is in building the host tools. I'd like to reduce our build time and noticed the option to use an external toolchain.  However that comes with a lot of options which I did not have the time yet to explore. However that led me to some feature requests for buildroot:
 
-Classification of failures by reason
-====================================
+Would it be possible to add an option to the external toolchain menu to use a buildroot toolchain as external toolchain? This is probably possible right now but then I have to know exactly what to fill in. I imagine that buildroot would be able to infer all those options from another buildroot installation/out-of-tree-build.
+I can imagine that such an option would simplify the reuse of the toolchain for our other build.
 
-               valgrind-3.10.0 | 3 
-                      qt-4.8.6 | 2 
-             lttng-tools-2.5.0 | 1 
-                     vlc-2.1.5 | 1 
-make: *** wait: No child pr... | 1 
-        gst1-plugins-bad-1.4.1 | 1 
-                  libplist-1.6 | 1 
-     0K .......... ........... | 1 
-          libmicrohttpd-0.9.37 | 1 
+Secondly, we run "make clean" often since buildroot cannot automatically remove stuff from the target directory however running "make clean" also removes the toolchain. would it be possible to make a "make clean-target" that would delete the target and possible the staging directory and would rebuild everything except the host/toolchain stuff. Or did I miss something and is such a target already possible?
 
-Detail of failures
-===================
+I can imagine that I can simulate the last feature by making an build using a minimal image and then reusing the toolchain from that build for my actual image. So when i run make clean for my actual image, only the target stuff needs to get rebuild.
 
-    mips64el |      0K .......... ........... | TIM | http://autobuild.buildroot.net/results/95a22dc41dc19a7a64eef769cd857654d9c92853/
-    mips64el |         gst1-plugins-bad-1.4.1 | NOK | http://autobuild.buildroot.net/results/e8a859276db34aff87ef181b0cce98916b0afc90/
-        bfin |           libmicrohttpd-0.9.37 | NOK | http://autobuild.buildroot.net/results/44b6f53b870005c9869eb4f50401d74fdbe4799f/
-         arm |                   libplist-1.6 | NOK | http://autobuild.buildroot.net/results/146ed3b904e41c73b7aff191fb3e1840c2ed86bb/
-         arm |              lttng-tools-2.5.0 | NOK | http://autobuild.buildroot.net/results/4e16956373f2fda2f1f65698145989f4c8b84c2e/
-      x86_64 | make: *** wait: No child pr... | TIM | http://autobuild.buildroot.net/results/5e5c94c72c5542fd74508395943f6b060843306e/
-        i686 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/3a8ecfe84b532fbe811ac0b2aeb6dc02630616d0/
-    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/f3a9c56d62579d9c18a7ec06dd87d9ca2808a0f0/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/8150dd1477da3625cc7022cd44ea6b830e048ebe/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/0a9d270927d301b6b143f09bac1eaadcc7bac9eb/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/e36060cb9594c761aa4a24d7f56296c258ddbba3/
-     powerpc |                      vlc-2.1.5 | NOK | http://autobuild.buildroot.net/results/114e20b5491d3fbe459d23c1a54a2db2fecc3921/
+I would implement  this myself when I have the time but i'm not really comfortable enough in the innards of buildroot to do this yet
 
+Best regards,
 
--- 
-http://autobuild.buildroot.net
+Hiram van Paassen
+
+________________________________
+
+Power Products, LLC Email Notice
+
+This message is intended only for the use of the Addressee and may contain information that is PRIVILEGED and/or CONFIDENTIAL.
+This email is intended only for the personal and confidential use of the recipient(s) named above. If the reader of this email is not an intended recipient, you have received this email in error and any review, dissemination, distribution or copying is strictly prohibited.
+If you have received this email in error, please notify the sender immediately by return mail and permanently delete the copy you received.
+
+Thank you.
