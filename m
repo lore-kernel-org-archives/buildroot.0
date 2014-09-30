@@ -1,34 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Sep 2014 23:46:55 +0200
-Subject: [Buildroot] [PATCH 2/2] valgrind: Add patch to fix ARM host
- detection
-In-Reply-To: <1412107895-10015-3-git-send-email-mike@mikebwilliams.com>
-References: <1412107895-10015-1-git-send-email-mike@mikebwilliams.com>
- <1412107895-10015-3-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20140930234655.59b05aa0@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 30 Sep 2014 20:12:36 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
+Message-ID: <1412118756-1042-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 30 Sep 2014 16:11:35 -0400, Mike Williams wrote:
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
-> ---
->  ...-0003-Add-patch-to-fix-ARM_host-detection.patch | 26 ++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/valgrind/valgrind-0003-Add-patch-to-fix-ARM_host-detection.patch
-
-This patch is not needed. You simply need to adjust the logic at
-http://git.buildroot.net/buildroot/tree/package/valgrind/valgrind.mk#n15
-to also cover Cortex-A5 and other Cortex-A variants.
-
-Thanks,
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index df15877..9dd1eef 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -165,7 +165,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.55"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.28"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.29"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.19"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
