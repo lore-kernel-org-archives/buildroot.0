@@ -1,51 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Oct 2014 19:36:24 +0200
-Subject: [Buildroot] [PATCH v2] freerdp: Add support for uClibc
-In-Reply-To: <1412153961-16071-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1412153961-16071-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141001193624.1f984191@free-electrons.com>
+Date: Wed, 1 Oct 2014 19:36:59 +0200
+Subject: [Buildroot] [git commit] freescale/imx6-sabresd: use global patch
+	dir for U-Boot patches
+Message-ID: <20141001173721.A944F9D7EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=cb8ceb7857727a24e53b52b111d4119d1ecfc5c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 1 Oct 2014 09:59:21 +0100, Vicente Olivert Riera wrote:
-> The stable-1.1 branch of freerdp fails to build when using a uClibc
-> toolchain because it's using functions which are not implemented in
-> uClibc, like eventfd_read, eventfd_write and futimes. That is causing
-> build failures like these ones:
-> 
-> ../../libwinpr/synch/libwinpr-synch.so.0.1.0: undefined reference to
-> `eventfd_read'
-> ../../libwinpr/synch/libwinpr-synch.so.0.1.0: undefined reference to
-> `eventfd_write'
-> 
-> ../../common/libfreerdp-client.so.1.1.0: undefined reference to
-> `futimes'
-> 
-> Backport upstream patch, with non-applicable parts (new files from
-> master, but not in the stable-1.1 branch) trimmed down.
-> 
-> Upstream patch:
->   https://github.com/FreeRDP/FreeRDP/commit/5f9c36da5d5cd3c5dce49f7b32fe011cb293f9ec/
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/a66/a66e1ab18cd12904a64afcbf54116ceef889e966/build-end.log
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/freerdp/Config.in                          |    5 -
->  .../freerdp-0001-add-support-for-uclibc.patch      |   93 ++++++++++++++++++++
->  2 files changed, 93 insertions(+), 5 deletions(-)
->  create mode 100644 package/freerdp/freerdp-0001-add-support-for-uclibc.patch
+The best practice is to use the BR2_GLOBAL_PATCH_DIR for patches against
+U-Boot, not BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR.
 
-Applied, thanks.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Vincent Stehl?? <vincent.stehle@freescale.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch |    0
+ configs/freescale_imx6dlsabresd_defconfig          |    4 +++-
+ configs/freescale_imx6qsabresd_defconfig           |    4 +++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+similarity index 100%
+rename from board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+rename to board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 62caf79..b8c4b22 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -2,6 +2,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ 
++# patches
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
++
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index bc0aa46..40a9384 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -2,6 +2,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ 
++# patches
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
++
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
