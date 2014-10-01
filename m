@@ -1,46 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Oct 2014 19:20:20 +0200
-Subject: [Buildroot] [PATCH] librtlsdr: disable shared library target
-In-Reply-To: <CAHXCMMJjZ3BmockfvRQaWJeccOG_+Zth=ewTK7WWQz-A_5HXyQ@mail.gmail.com>
-References: <1411561915-3225-1-git-send-email-yuvaraj.patil@wipro.com>
- <20140924153333.2f56b768@free-electrons.com>
- <CAHXCMMJjZ3BmockfvRQaWJeccOG_+Zth=ewTK7WWQz-A_5HXyQ@mail.gmail.com>
-Message-ID: <20141001192020.71ec3c36@free-electrons.com>
+Date: Wed, 1 Oct 2014 19:21:24 +0200
+Subject: [Buildroot] [git commit] valgrind: allow building on more ARM
+	systems
+Message-ID: <20141001172130.E65899D7EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=29c3c7ebe4a3f2f3f23a86bc83666d1aed5759ae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 28 Sep 2014 13:51:25 +0200, Samuel Martin wrote:
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/valgrind/Config.in   |    7 ++++---
+ package/valgrind/valgrind.mk |    2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> > Thanks, but we already have a patch fixing the same issue in our patch
-> > queue, see http://patchwork.ozlabs.org/patch/384567/. Apparently, the
-> > patch is causing some issues.
-> >
-> > Samuel, what is your plan regarding librtlsdr static link issue?
-> 
-> The patch added with this pathc is similar to the 2nd patch added in
-> http://patchwork.ozlabs.org/patch/384567/.
-> 
-> In http://patchwork.ozlabs.org/patch/384567/, the first patch is
-> causing some issue.
-> After checking the libusb dependencies, this first patch is not needed
-> in the context of Buildroot because when BR2_PREFER_STATIC_LIBS=y,
-> libusb won't depend on any library.
-> 
-> IMO, this patch can be merged as is, and
-> http://patchwork.ozlabs.org/patch/384567/ can be marked as superseded.
-
-Thanks for the explanation. Next time, could you add your
-formal Reviewed-by, Acked-by or Tested-by?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index fd5649b..253555b 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_VALGRIND
+ 	bool "valgrind"
+-	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
+-		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
+-		   BR2_mipsel || BR2_mips64 || BR2_mips64el
++	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a5 || \
++		   BR2_cortex_a7 || BR2_cortex_a8 || BR2_cortex_a9 || \
++		   BR2_cortex_a12 || BR2_cortex_a15 || BR2_powerpc || \
++		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
+ 
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 24d0290..8bea031 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -17,7 +17,7 @@ VALGRIND_AUTORECONF = YES
+ # not. Therefore, we adjust the host tuple to specify we're on
+ # ARMv7. The valgrind package is guaranteed, through Config.in, to
+ # only be selected on Cortex A8 and Cortex A9 platforms.
+-ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
++ifeq ($(BR2_cortex_a5)$(BR2_cortex_a7)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a12)$(BR2_cortex_a15),y)
+ VALGRIND_CONF_OPT += \
+ 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+ endif
