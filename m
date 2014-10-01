@@ -1,45 +1,117 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  1 Oct 2014 13:32:26 -0500
-Subject: [Buildroot] [PATCH 1/1] protobuf: add powerpc architecture support
-Message-ID: <1412188346-16127-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  1 Oct 2014 20:36:57 +0200
+Subject: [Buildroot] [PATCH 1/3] perl: bump to version 5.20.1
+Message-ID: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
+ package/perl/perl-uClibc-IPv6.patch | 10 +++++-----
+ package/perl/perl.mk                | 11 +++++++----
+ support/scripts/scancpan            |  2 +-
+ 3 files changed, 13 insertions(+), 10 deletions(-)
 
-We have been using this package on a powerpc e500mc platform since
-the 2014.02 release without issue.  I've confirmed enabling powerpc
-works and I'm curious if additional depends are needed for the case
-where it had been proven not to work?
-
- package/protobuf/Config.in |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 6015b13..0d7472b 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
--	# PowerPC doesn't actually work.
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	help
-@@ -15,5 +14,5 @@ config BR2_PACKAGE_PROTOBUF
+diff --git a/package/perl/perl-uClibc-IPv6.patch b/package/perl/perl-uClibc-IPv6.patch
+index 8ace75e..b29d373 100644
+--- a/package/perl/perl-uClibc-IPv6.patch
++++ b/package/perl/perl-uClibc-IPv6.patch
+@@ -6,7 +6,7 @@ Index: b/cpan/Socket/Socket.xs
+ ===================================================================
+ --- a/cpan/Socket/Socket.xs
+ +++ b/cpan/Socket/Socket.xs
+-@@ -896,7 +896,7 @@
++@@ -920,7 +920,7 @@
+  	CODE:
+  #ifdef HAS_INETNTOP
+  	STRLEN addrlen;
+@@ -15,7 +15,7 @@ Index: b/cpan/Socket/Socket.xs
+  	struct in6_addr addr;
+  	char str[INET6_ADDRSTRLEN];
+  #else
+-@@ -916,7 +916,7 @@
++@@ -940,7 +940,7 @@
+  		croak("Bad address length for Socket::inet_ntop on AF_INET;"
+  		      " got %"UVuf", should be 4", (UV)addrlen);
+  	    break;
+@@ -24,7 +24,7 @@ Index: b/cpan/Socket/Socket.xs
+  	  case AF_INET6:
+  	    if(addrlen != 16)
+  		croak("Bad address length for Socket::inet_ntop on AF_INET6;"
+-@@ -925,7 +925,7 @@
++@@ -949,7 +949,7 @@
+  #endif
+  	  default:
+  		croak("Bad address family for %s, got %d, should be"
+@@ -33,7 +33,7 @@ Index: b/cpan/Socket/Socket.xs
+  		      " either AF_INET or AF_INET6",
+  #else
+  		      " AF_INET",
+-@@ -955,7 +955,7 @@
++@@ -979,7 +979,7 @@
+  #ifdef HAS_INETPTON
+  	int ok;
+  	int addrlen = 0;
+@@ -42,7 +42,7 @@ Index: b/cpan/Socket/Socket.xs
+  	struct in6_addr ip_address;
+  #else
+  	struct in_addr ip_address;
+-@@ -965,14 +965,14 @@
++@@ -989,14 +989,14 @@
+  	  case AF_INET:
+  	    addrlen = 4;
+  	    break;
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 65c0a7d..c355dc0 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -4,16 +4,16 @@
+ #
+ ################################################################################
  
- comment "protobuf needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-PERL_VERSION_MAJOR = 18
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_VERSION_MAJOR = 20
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 0.8.5
+-PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_CROSS_VERSION = 0.9.2
++PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE    = http://raw.github.com/arsv/perl-cross/releases
+ PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
+@@ -116,7 +116,10 @@ endef
+ #
+ define PERL_ADD_CORE_H
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
++	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-gentoo.h
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/cc_runtime.h
++	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/fakethr.h
++	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/perlsfio.h
+ 	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/vutil.h
+ endef
+ 
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index e738a83..f5612e3 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -471,7 +471,7 @@ unshift @INC, sub {
+ } # END OF FATPACK CODE
+ 
+ 
+-use 5.018;      # same major version as target perl
++use 5.020;      # same major version as target perl
+ use strict;
+ use warnings;
+ use Fatal qw(open close);
 -- 
-1.7.9.5
+1.9.1
