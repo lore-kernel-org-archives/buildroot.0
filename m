@@ -1,83 +1,72 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  1 Oct 2014 17:03:46 +0200
-Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
+Date: Wed,  1 Oct 2014 17:03:44 +0200
+Subject: [Buildroot] [PATCH v2 1/3] freescale/imx6-sabresd: use global patch
+	dir for U-Boot patches
 In-Reply-To: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
 References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1412175826-9010-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/Config.in.host                   |  1 +
- package/imx-usb-loader/Config.in.host    | 14 ++++++++++++++
- package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/imx-usb-loader/Config.in.host
- create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
+The best practice is to use the BR2_GLOBAL_PATCH_DIR for patches against
+U-Boot, not BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR.
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 2c88c0b..dce209f 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -8,6 +8,7 @@ menu "Host utilities"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
-+	source "package/imx-usb-loader/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/mtd/Config.in.host"
- 	source "package/mtools/Config.in.host"
-diff --git a/package/imx-usb-loader/Config.in.host b/package/imx-usb-loader/Config.in.host
-new file mode 100644
-index 0000000..2540ea9
---- /dev/null
-+++ b/package/imx-usb-loader/Config.in.host
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_HOST_IMX_USB_LOADER
-+	bool "host imx-usb-loader"
-+	depends on BR2_arm || BR2_armeb
-+	select BR2_PACKAGE_LIBUSB # libusb >= 1.0 is required
-+	help
-+	  This utility allows to download and execute code on Freescale
-+	  i.MX5/i.MX6 and Vybrid SoCs through the Serial Download Protocol
-+	  (SDP). Depending on the board, there is usually some kind of recovery
-+	  button to bring the SoC into serial download boot mode, check
-+	  documentation of your hardware.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Vincent Stehl? <vincent.stehle@freescale.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch | 0
+ configs/freescale_imx6dlsabresd_defconfig                             | 4 +++-
+ configs/freescale_imx6qsabresd_defconfig                              | 4 +++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+ rename board/freescale/imx6sabresd/{ => patches/uboot}/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch (100%)
+
+diff --git a/board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+similarity index 100%
+rename from board/freescale/imx6sabresd/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+rename to board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 62caf79..b8c4b22 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -2,6 +2,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ 
++# patches
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
 +
-+	  The utility support USB and UART as serial link.
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index bc0aa46..40a9384 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -2,6 +2,9 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ 
++# patches
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
 +
-+	  https://github.com/boundarydevices/imx_usb_loader
-diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
-new file mode 100644
-index 0000000..48ef35c
---- /dev/null
-+++ b/package/imx-usb-loader/imx-usb-loader.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# imx-uxb-loader
-+#
-+################################################################################
-+
-+IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
-+IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
-+IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
-+IMX_USB_LOADER_LICENSE_FILES = COPYING
-+IMX_USB_LOADER_DEPENDENCIES = host-libusb
-+
-+define HOST_IMX_USB_LOADER_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define HOST_IMX_USB_LOADER_INSTALL_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/imx_usb $(HOST_DIR)/usr/bin
-+    $(INSTALL) -D -m 0755 $(@D)/imx_uart $(HOST_DIR)/usr/bin
-+endef
-+
-+$(eval $(host-generic-package))
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+@@ -25,4 +28,3 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/freescale/imx6sabresd"
 -- 
 1.9.1
