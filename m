@@ -1,41 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Oct 2014 18:10:43 +0200
-Subject: [Buildroot] [PATCH 1/6] python3: add distutils fix for PEP 3147
-	issue
-In-Reply-To: <20141001171404.78e112ee@grp-cvubrugier>
-References: <1412113141-17650-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1412113141-17650-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141001171404.78e112ee@grp-cvubrugier>
-Message-ID: <20141001181043.617b1aaa@free-electrons.com>
+Date: Wed, 1 Oct 2014 18:14:51 +0200
+Subject: [Buildroot] [PATCH] valgrind: allow building on more ARM systems
+In-Reply-To: <1412176549-15127-1-git-send-email-mike@mikebwilliams.com>
+References: <1412176549-15127-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <20141001181451.6f47e127@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+Dear Mike Williams,
 
-On Wed, 1 Oct 2014 17:14:04 +0200, Christophe Vu-Brugier wrote:
+On Wed,  1 Oct 2014 11:15:49 -0400, Mike Williams wrote:
+> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+> ---
+>  package/valgrind/Config.in   | 7 ++++---
+>  package/valgrind/valgrind.mk | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-> > +For the Python standard library, our Python 3 package already contains
-> > +a patch named python3-004-old-stdlib-cache.patch, which allows to
-> > +disable the PEP 3147 installation.
-> > +
-> > +But that lives the distutils/setuptools package an unsolved
->               ^
->             leaves?
-> 
-> Otherwise, looks good to me.
-> 
-> Reviewed-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-
-Thanks for the review. Unless there are other comments, I'll leave to
-the person who will commit the patch to make the change to the commit
-log, since it's just a typo.
-
-Thanks a lot!
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
