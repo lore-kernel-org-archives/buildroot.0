@@ -1,41 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 1 Oct 2014 13:18:01 +0100
-Subject: [Buildroot] [PATCH 2/2] opencv: Let opencv's build system handle
-	the ts module dependencies
-In-Reply-To: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1412165881-64965-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 1 Oct 2014 13:18:00 +0100
+Subject: [Buildroot] [PATCH 1/2] opencv: Bump version to 2.4.10
+Message-ID: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the former version of opencv we added a patch to fix a dependencies
-problem in the ts module. That issue was reported upstream and is now
-merged in the 2.4.10 version:
-
-  https://github.com/Itseez/opencv/commit/7018f9495920f974258502b9b8b26af16d7ee427
-
-So now we can revert our former patch and let opencv's build system
-handle the ts module dependencies as we already do in the other modules.
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/opencv/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/opencv/opencv.hash |    6 +++---
+ package/opencv/opencv.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index d648e5e..24f540e 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -101,7 +101,6 @@ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
+diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+index 04cb3c5..fc3b750 100644
+--- a/package/opencv/opencv.hash
++++ b/package/opencv/opencv.hash
+@@ -1,3 +1,3 @@
+-# From https://github.com/itseez/opencv/archive/2.4.9.1/
+-md5	f9d8626711a183a8f39ce9822a40f35f	opencv-2.4.9.1.tar.gz
+-sha1	adcaf808e4d5d3b394514061d1da3d4352964c7d	opencv-2.4.9.1.tar.gz
++# From https://github.com/itseez/opencv/archive/2.4.10/
++md5	3346a59310d788d3845f4fd6043a108a	opencv-2.4.10.tar.gz
++sha1	a0c2d5944364fc4f26b6160b33c03082b1fa08c1	opencv-2.4.10.tar.gz
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 628624a..5d3993b 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_OPENCV_LIB_TS
- 	bool "ts (touchscreen)"
--	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	default y
- 	help
- 	  Include opencv_ts module into the OpenCV build.
+-OPENCV_VERSION = 2.4.9.1
++OPENCV_VERSION = 2.4.10
+ OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+ OPENCV_INSTALL_STAGING = YES
+ OPENCV_LICENSE = BSD-3c
 -- 
 1.7.1
