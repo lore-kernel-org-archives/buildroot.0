@@ -1,64 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 1 Oct 2014 13:44:10 +0100
-Subject: [Buildroot] [PATCH v2] opencv: Replace absolute path of static
-	library with -l$library_name
-Message-ID: <1412167450-26406-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Mike Zick <minimod@morethan.org>
+Date: Wed, 1 Oct 2014 07:51:16 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-09-30
+In-Reply-To: <20141001063012.7DD7A100CC7@stock.ovh.net>
+References: <20141001063012.7DD7A100CC7@stock.ovh.net>
+Message-ID: <20141001075116.7913ff52@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some opencv modules are forced to build statically (for instance the
-"ts" module) because they have a line like this one in their
-CMakeLists.txt file:
+Some noise from one of your read-mostly M.L. members again (me).
 
-  set(OPENCV_MODULE_TYPE STATIC)
+> On Wed,  1 Oct 2014 08:30:12 +0200 (CEST)
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>
+> Build statistics for 2014-09-30
+> ===============================
+> 
+>         success : 121
+>        failures : 15 
+>        timeouts : 2  
+>           TOTAL : 138
+> 
 
-That makes a static library get installed and also listed in the "Libs:"
-line of the pkgconfig file (opencv.pc) along with all the shared
-libraries. That can cause link failures in other packages which link to
-opencv, for instance the gst1-plugins-bad package. Here is an example of
-the link failure:
+Looking good for so early in the cycle.
 
-  CXXLD    libgstopencv.la
+Now the noise:
 
-*** Warning: Linking the shared library libgstopencv.la against the
-*** static library /usr/lib/libopencv_ts.a is not portable!
-mips-linux-gnu-g++: error: /usr/lib/libopencv_ts.a: No such file or
-directory
-make[4]: *** [libgstopencv.la] Error 1
+I have noticed that recently some of the fix contributors
+have been including a "few line" quote of a typical error
+message in addition to the "fix(es): url" comment.
 
-The solution is to not list the static library in the "Libs:" line of
-the pkgconfig file and add '-lopencv_ts' instead.
+As a read-mostly member, I find that new (habit? practice?)
+very helpful when reading the daily M.L. fix messages.
 
-This issue has been reported upstream:
-  http://code.opencv.org/issues/3931
+Q:
+Should there be a discussion on making this additional
+information a BR "recommended practice" ?
 
-Fixes:
-  http://autobuild.buildroot.net/results/e8a/e8a859276db34aff87ef181b0cce98916b0afc90/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/opencv/opencv.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
-
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 628624a..949dbfd 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -247,4 +247,12 @@ endef
- OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_DATA
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV_LIB_TS),y)
-+define OPENCV_FIX_PC_FILE_LIBS
-+	$(SED) '/^Libs:/s/$${exec_prefix}\/lib\/libopencv_ts.a/-lopencv_ts/' \
-+	       $(STAGING_DIR)/usr/lib/pkgconfig/opencv.pc
-+endef
-+OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_FIX_PC_FILE_LIBS
-+endif
-+
- $(eval $(cmake-package))
--- 
-1.7.1
+Mike
