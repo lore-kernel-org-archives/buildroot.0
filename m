@@ -1,93 +1,85 @@
-From: Daniel Sangue <daniel.sangue@sangue.ch>
-Date: Wed,  1 Oct 2014 16:18:21 +0200
-Subject: [Buildroot] [PATCH 1/1] libFTDI major version update 1. This
-	version can coexists beside the 0.x version (libftdi.so,
-	libftdi1.so).
-Message-ID: <1412173101-52605-1-git-send-email-daniel.sangue@sangue.ch>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Wed, 1 Oct 2014 16:18:07 +0200
+Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
+In-Reply-To: <1280276802.26043432.1412172512257.JavaMail.root@openwide.fr>
+References: <1723661717.26039623.1412168336757.JavaMail.root@openwide.fr>
+ <1280276802.26043432.1412172512257.JavaMail.root@openwide.fr>
+Message-ID: <CAM+bi4up=zDCRhJ-+LnVMWpALVoeaK4=V_pM=1ted1vkkRMhqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Sangue <daniel.sangue@sangue.ch>
----
- package/Config.in            |  1 +
- package/libftdi1/Config.in   | 24 ++++++++++++++++++++++++
- package/libftdi1/libftdi1.mk | 22 ++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 100644 package/libftdi1/Config.in
- create mode 100644 package/libftdi1/libftdi1.mk
+Hi, Jeremy
 
-diff --git a/package/Config.in b/package/Config.in
-index 2ad72bc..a6e78b2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -670,6 +670,7 @@ menu "Hardware handling"
- 	source "package/libcec/Config.in"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
-+	source "package/libftdi1/Config.in"
- 	source "package/libhid/Config.in"
- 	source "package/libinput/Config.in"
- 	source "package/libiqrf/Config.in"
-diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
-new file mode 100644
-index 0000000..d896fc0
---- /dev/null
-+++ b/package/libftdi1/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_LIBFTDI1
-+	bool "libftdi1"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_LIBCONFUSE
-+	help
-+	  Userspace access to FTDI USB interface chips (version 1.x)
-+
-+	  http://www.intra2net.com/en/developer/libftdi/index.php
-+
-+if BR2_PACKAGE_LIBFTDI1
-+
-+config BR2_PACKAGE_LIBTFDI1_CPP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	bool "C++ bindings"
-+	help
-+	  C++ bindings for libftdi
-+
-+endif # BR2_PACKAGE_LIBFTDI1
-+
-+comment "libftdi1 needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-new file mode 100644
-index 0000000..abe0dc7
---- /dev/null
-+++ b/package/libftdi1/libftdi1.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# libftdi1
-+#
-+################################################################################
-+
-+LIBFTDI1_VERSION = 1.1
-+LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
-+LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download/
-+LIBFTDI1_INSTALL_STAGING = YES
-+LIBFDTI1_CONF_OPT = --without-examples
-+LIBFTDI1_DEPENDENCIES = libusb-compat libusb libconfuse
-+
-+# configure detect it automaticaly so we need to force it
-+ifeq ($(BR2_PACKAGE_LIBTFDI1_CPP),y)
-+LIBFDTI_CONF_OPT += --enable-libftdipp
-+else
-+LIBFDTI_CONF_OPT += --disable-libftdipp
-+endif
-+
-+$(eval $(cmake-package))
-+
+Well, maybe I went all crazy splitting everything for each project,
+but there's some reason behind it.
+
+My main project is destined to run in a very specific hardware, with
+external devices that pass information to the system. A real example
+is a GPS device.
+
+On the other hand, I have a x86 machine which I use as a demo-machine
+with no external hardware attached (no GPS, for example). This
+requires that the information that is typically received from these
+external devices must be emulated by some piece of software.
+
+So, in my case, of course dl/ directoy is common, Config.in and
+external.mk are shared. I believe local.mk can also be shared,
+although in my current layout it is not. It seems possible that some
+patches could be different, but I guess they could also be shared.
+
+I need, however, to have different overlays, such as, for example, a
+'gpsd' emulator can run instead of the real gpsd. I manage this with a
+different inittab file and different configuration files that I place
+on each project's overlay. Alongside this trivial differences, I must
+load into the demo-machine some big files (a couple of GB) that
+emulate the data that, in the real machine, is received from external
+sources. These files would not even fit on the storage of the real
+machine.
+
+Well, all in all, I think only the overlays may need to be different,
+so there's that.
+
+Regards
+
+
+2014-10-01 16:08 GMT+02:00 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+>
+>
+> Looking into it a bit deeper, I have a couple of questions for you..
+>
+> in your current layout
+>
+> * BR2_EXTERNAL is shared, so Config.in is shared and external.mk
+> is shared
+> * each project has its own overlay
+> * each project has its own local.mk
+> * each project has its own patch subdirectory...
+> * dl is shared
+>
+> so I need to understand your use-case a little more.
+> As I said my use case is "same project, but different hardware" so
+> my favorite layout would be
+>
+> * shared BR2_EXTERNAL
+> * shared overlay
+> * shared patches
+> * different config files
+> * don't care about local.mk, might as well make it different
+>
+> This layout makes more sense to me (shared overlay and shared patches)
+> but I want to make sure it fits your use-case before I do the change
+>
+> It makes little sense to me to have completely different projects
+> which are just sharing dl/ since dl is not saved in git and it's
+> more handy to have completely separate git repo in this case...
+>
+>
+> If you can tell me a little more, I'll see how I adapt this...
+
+
+
 -- 
-1.9.1
+?lvaro G?mez Machado
