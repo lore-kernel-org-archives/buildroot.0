@@ -1,41 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 01 Oct 2014 16:42:04 -0300
-Subject: [Buildroot] wpa_supplicant using epoll
-In-Reply-To: <CABGWzsRbmekc0+vDqd37Cg1hT-At_pUkrgPN95oA5dsGR407qQ@mail.gmail.com>
-References: <CABGWzsRbmekc0+vDqd37Cg1hT-At_pUkrgPN95oA5dsGR407qQ@mail.gmail.com>
-Message-ID: <542C590C.20808@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 1 Oct 2014 21:50:14 +0200
+Subject: [Buildroot] [PATCH 1/2] opencv: Bump version to 2.4.10
+In-Reply-To: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <CAHXCMMLnbUxeci92KbPwVKaBEBVu2UFnxFUk+Us-__i=WHCgSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/2014 04:27 PM, Eric Limpens wrote:
+On Wed, Oct 1, 2014 at 2:18 PM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/opencv/opencv.hash |    6 +++---
+>  package/opencv/opencv.mk   |    2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+> index 04cb3c5..fc3b750 100644
+> --- a/package/opencv/opencv.hash
+> +++ b/package/opencv/opencv.hash
+> @@ -1,3 +1,3 @@
+> -# From https://github.com/itseez/opencv/archive/2.4.9.1/
+> -md5    f9d8626711a183a8f39ce9822a40f35f        opencv-2.4.9.1.tar.gz
+> -sha1   adcaf808e4d5d3b394514061d1da3d4352964c7d        opencv-2.4.9.1.tar.gz
+> +# From https://github.com/itseez/opencv/archive/2.4.10/
+> +md5    3346a59310d788d3845f4fd6043a108a        opencv-2.4.10.tar.gz
+> +sha1   a0c2d5944364fc4f26b6160b33c03082b1fa08c1        opencv-2.4.10.tar.gz
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 628624a..5d3993b 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENCV_VERSION = 2.4.9.1
+> +OPENCV_VERSION = 2.4.10
+>  OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+>  OPENCV_INSTALL_STAGING = YES
+>  OPENCV_LICENSE = BSD-3c
+> --
+> 1.7.1
 
-> Hi Gustavo, all,
-> 
-> In commit ad92b26df746ef1d9a78e75c6ac8e8557211cf0b epoll has been
-> enabled for wpa_supplicant. 
-> 
-> While debugging issues between connman and wpa_supplicant it looks like
-> wpa_supplicant is not able to receive dbus messages. I see the same
-> symptoms
-> as: https://lists.archlinux.org/pipermail/arch-commits/2014-July/245614.html
-> 
-> My  issues where solved by removing CONFIG_ELOOP_EPOLL from the
-> wpa_supplicant.mk <http://wpa_supplicant.mk>. 
-> 
-> Shouldn't we use the default 'select' method instead of epoll? 
-> 
-> Eric.
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Hi Eric.
-I normally don't use wpa_supplicant with dbus, just with wpa_cli in
-daemon/agent mode so i haven't seen this problem.
-It seems to be a known issue as you posted so just send a patch
-disabling it.
-Upstream git doesn't seem to have any fixes related to this (no epoll
-changes at all), though there are a couple of dbus changes that might be
-related. But since it's just a small performance feature i don't think
-it's worth to deal with this in BR.
-Regards.
+
+-- 
+Samuel
