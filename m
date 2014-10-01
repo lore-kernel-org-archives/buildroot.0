@@ -1,64 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Oct 2014 19:37:10 +0200
-Subject: [Buildroot] [git commit] freescale/imx6-sabresd: lock down kernel
-	headers to the kernel version
-Message-ID: <20141001173721.AFD379D7EF@busybox.osuosl.org>
+Date: Wed, 1 Oct 2014 19:37:37 +0200
+Subject: [Buildroot] [PATCH v2 0/3] i.MX6 SABRESD improvements (using a
+ Freescale kernel)
+In-Reply-To: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
+References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20141001193737.341e50b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a17274b077843fdbe9c1e75b5771f042b9f87f5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Luca Ceresoli,
 
-The current defconfigs for iMX6 SABRESD kernel 3.10.17 from the Freescale
-git repository. This kernel is older than the toolchain kernel headers
-used in Buildroot (currently 3.16.3).
+On Wed,  1 Oct 2014 17:03:43 +0200, Luca Ceresoli wrote:
 
-Explicitly lock down the kernel headers to match the version of the kernel
-that is built.
+> Luca Ceresoli (3):
+>   freescale/imx6-sabresd: use global patch dir for U-Boot patches
+>   freescale/imx6-sabresd: lock down kernel headers to the kernel version
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Vincent Stehl?? <vincent.stehle@freescale.com>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/freescale_imx6dlsabresd_defconfig |    5 +++++
- configs/freescale_imx6qsabresd_defconfig  |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+Both applied.
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index b8c4b22..680031d 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -5,6 +5,11 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
- 
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 40a9384..f2f702e 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -5,6 +5,11 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
- 
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
+>   imx-usb-loader: new package
+
+There are still comments on this one.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
