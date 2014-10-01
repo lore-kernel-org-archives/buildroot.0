@@ -1,64 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 1 Oct 2014 22:05:48 +0200
-Subject: [Buildroot] [PATCH 2/2] opencv: Let opencv's build system
- handle the ts module dependencies
-In-Reply-To: <1412165881-64965-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412165881-64965-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <CAHXCMML4wgCRFUkYnuhBAEc833FLo4wK4FUg9j7AsA=JpDT8Ag@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 1 Oct 2014 22:26:07 +0200
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: use select instead of
+ epoll
+In-Reply-To: <1412193302-5794-1-git-send-email-limpens@gmail.com>
+References: <1412193302-5794-1-git-send-email-limpens@gmail.com>
+Message-ID: <20141001202607.GC4245@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincente, all,
+Eric, All,
 
-On Wed, Oct 1, 2014 at 2:18 PM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> In the former version of opencv we added a patch to fix a dependencies
-> problem in the ts module. That issue was reported upstream and is now
-> merged in the 2.4.10 version:
->
->   https://github.com/Itseez/opencv/commit/7018f9495920f974258502b9b8b26af16d7ee427
->
-> So now we can revert our former patch and let opencv's build system
-> handle the ts module dependencies as we already do in the other modules.
->
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/opencv/Config.in |    1 -
->  1 files changed, 0 insertions(+), 1 deletions(-)
->
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index d648e5e..24f540e 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -101,7 +101,6 @@ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
->
->  config BR2_PACKAGE_OPENCV_LIB_TS
->         bool "ts (touchscreen)"
-> -       select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->         default y
->         help
->           Include opencv_ts module into the OpenCV build.
+On 2014-10-01 21:55 +0200, Eric Limpens spake thusly:
+> As discussed with Gustavo on the mailing-list, remove EPOLL flag.
+> wpa_supplicant isn't able to answer DBUS message as events are
+> never delivered.
+> 
+> Signed-off-by: Eric Limpens <limpens@gmail.com>
 
-Thought I understand that you want to keep this knob similar to the
-others, it is in contradiction with some pending patch [1] which fix
-the inter OpenCV modules dependencies.
+I also followed the discussion on IRC, so:
 
-Whatever this patch got merged or not, the patch [1] will need to be
-updated after the bump to OpenCV-2.4.10 is merged.
-So, I have no strong opinion about this patch:
-- applying it won't break the autobuilders;
-- whereas not applying it only does not improve that much the
-situation wrt the issue that [1] attemps to fix.
-
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
+Yann E. MORIN.
 
-
-[1] http://patchwork.ozlabs.org/patch/384577/
+> ---
+>  package/wpa_supplicant/wpa_supplicant.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 0ca2ce5..f825d86 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -20,7 +20,6 @@ WPA_SUPPLICANT_CONFIG_EDITS =
+>  WPA_SUPPLICANT_CONFIG_SET =
+>  
+>  WPA_SUPPLICANT_CONFIG_ENABLE = \
+> -	CONFIG_ELOOP_EPOLL	\
+>  	CONFIG_IEEE80211AC	\
+>  	CONFIG_IEEE80211N	\
+>  	CONFIG_IEEE80211R	\
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
