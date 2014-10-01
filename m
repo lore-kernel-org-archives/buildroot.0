@@ -1,48 +1,42 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Wed,  1 Oct 2014 11:15:49 -0400
-Subject: [Buildroot] [PATCH] valgrind: allow building on more ARM systems
-Message-ID: <1412176549-15127-1-git-send-email-mike@mikebwilliams.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Oct 2014 18:10:43 +0200
+Subject: [Buildroot] [PATCH 1/6] python3: add distutils fix for PEP 3147
+	issue
+In-Reply-To: <20141001171404.78e112ee@grp-cvubrugier>
+References: <1412113141-17650-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1412113141-17650-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141001171404.78e112ee@grp-cvubrugier>
+Message-ID: <20141001181043.617b1aaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
----
- package/valgrind/Config.in   | 7 ++++---
- package/valgrind/valgrind.mk | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Dear Christophe Vu-Brugier,
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index fd5649b..253555b 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_VALGRIND
- 	bool "valgrind"
--	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
--		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
--		   BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a5 || \
-+		   BR2_cortex_a7 || BR2_cortex_a8 || BR2_cortex_a9 || \
-+		   BR2_cortex_a12 || BR2_cortex_a15 || BR2_powerpc || \
-+		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 24d0290..8bea031 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -17,7 +17,7 @@ VALGRIND_AUTORECONF = YES
- # not. Therefore, we adjust the host tuple to specify we're on
- # ARMv7. The valgrind package is guaranteed, through Config.in, to
- # only be selected on Cortex A8 and Cortex A9 platforms.
--ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
-+ifeq ($(BR2_cortex_a5)$(BR2_cortex_a7)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a12)$(BR2_cortex_a15),y)
- VALGRIND_CONF_OPT += \
- 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
- endif
+On Wed, 1 Oct 2014 17:14:04 +0200, Christophe Vu-Brugier wrote:
+
+> > +For the Python standard library, our Python 3 package already contains
+> > +a patch named python3-004-old-stdlib-cache.patch, which allows to
+> > +disable the PEP 3147 installation.
+> > +
+> > +But that lives the distutils/setuptools package an unsolved
+>               ^
+>             leaves?
+> 
+> Otherwise, looks good to me.
+> 
+> Reviewed-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+
+Thanks for the review. Unless there are other comments, I'll leave to
+the person who will commit the patch to make the change to the commit
+log, since it's just a typo.
+
+Thanks a lot!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
