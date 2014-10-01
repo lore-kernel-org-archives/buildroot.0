@@ -1,64 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 Oct 2014 14:51:51 +0200
-Subject: [Buildroot] [git commit] rsyslog: libuuid is an optional dependency,
-	not a required one
-Message-ID: <20141001131244.A0FDF9D7EA@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  1 Oct 2014 10:23:53 -0300
+Subject: [Buildroot] [PATCHv2] rsyslog: security bump to version 7.6.6
+Message-ID: <1412169833-20581-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d89a2610cfc0274073f5d89efdc95598de757621
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2014-3634 - potential abort when a message with PRI > 191 was
+processed if the "pri-text" property was used in active templates, this
+could be abused to a remote denial of service from permitted senders.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/rsyslog/Config.in  |    4 ----
- package/rsyslog/rsyslog.mk |    9 ++++++++-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/rsyslog/rsyslog-0001-revert-strdup.patch | 27 ++++++++++++++++++++++++
+ package/rsyslog/rsyslog.hash                     |  4 ++--
+ package/rsyslog/rsyslog.mk                       |  5 +++--
+ 3 files changed, 32 insertions(+), 4 deletions(-)
+ create mode 100644 package/rsyslog/rsyslog-0001-revert-strdup.patch
 
-diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
-index 4ce1918..69425f1 100644
---- a/package/rsyslog/Config.in
-+++ b/package/rsyslog/Config.in
-@@ -4,12 +4,8 @@ config BR2_PACKAGE_RSYSLOG
- 	select BR2_PACKAGE_LIBESTR
- 	select BR2_PACKAGE_LIBLOGGING
- 	select BR2_PACKAGE_JSON_C
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_USE_WCHAR # util-linux
- 	help
- 	  Rsyslog is a powerful and flexible syslog implementation
- 
+diff --git a/package/rsyslog/rsyslog-0001-revert-strdup.patch b/package/rsyslog/rsyslog-0001-revert-strdup.patch
+new file mode 100644
+index 0000000..5e82018
+--- /dev/null
++++ b/package/rsyslog/rsyslog-0001-revert-strdup.patch
+@@ -0,0 +1,27 @@
++Revert upstream 0403361ac57082dc47840d1f31832f1a0e319078
++It breaks the build when it's defined.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura rsyslog-7.6.6.orig/grammar/lexer.c rsyslog-7.6.6/grammar/lexer.c
++--- rsyslog-7.6.6.orig/grammar/lexer.c	2014-10-01 10:12:34.960082719 -0300
+++++ rsyslog-7.6.6/grammar/lexer.c	2014-10-01 10:13:24.512769964 -0300
++@@ -1459,7 +1459,6 @@
++ #line 32 "lexer.l"
++ #include "config.h"
++ #include "parserif.h"
++-extern char *strdup(char*); /* somehow we do not get this from string.h... */
++ /*%option noyywrap nodefault case-insensitive */
++ /* avoid compiler warning: `yyunput' defined but not used */
++ #define YY_NO_INPUT 1
++diff -Nura rsyslog-7.6.6.orig/grammar/lexer.l rsyslog-7.6.6/grammar/lexer.l
++--- rsyslog-7.6.6.orig/grammar/lexer.l	2014-10-01 10:12:34.960082719 -0300
+++++ rsyslog-7.6.6/grammar/lexer.l	2014-10-01 10:13:41.935363172 -0300
++@@ -31,7 +31,6 @@
++ %{
++ #include "config.h"
++ #include "parserif.h"
++-extern char *strdup(char*); /* somehow we do not get this from string.h... */
++ %}
++ 
++ %option noyywrap nodefault case-insensitive yylineno
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index b47932a..afc75cc 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,2 @@
+-# From http://www.rsyslog.com/downloads/download-other/
+-sha256	45bca1c1ffca6b8260363617897c09baeaf350e8b92c51361d2770375cdf4b34	rsyslog-7.6.5.tar.gz
++# From http://www.rsyslog.com/downloads/download-v7-stable/
++sha256	c77ae0db6204c5bd670fa96c354ee5fe1c62c876bd84ec06ed429138c78885bb	rsyslog-7.6.6.tar.gz
 diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index ae152d0..2ba4a9a 100644
+index 2ba4a9a..17fd13b 100644
 --- a/package/rsyslog/rsyslog.mk
 +++ b/package/rsyslog/rsyslog.mk
-@@ -8,7 +8,7 @@ RSYSLOG_VERSION = 7.6.5
+@@ -4,14 +4,15 @@
+ #
+ ################################################################################
+ 
+-RSYSLOG_VERSION = 7.6.5
++RSYSLOG_VERSION = 7.6.6
  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
  RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
  RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
--RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c util-linux host-pkgconf
-+RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
+ RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
  
  RSYSLOG_CONF_OPT = --disable-testbench \
- 		   --enable-cached-man-pages
-@@ -30,6 +30,13 @@ else
- 	RSYSLOG_CONF_OPT += --enable-libgcrypt=no
- endif
+-		   --enable-cached-man-pages
++		   --enable-cached-man-pages \
++		   --disable-generate-man-pages
  
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+	RSYSLOG_DEPENDENCIES += util-linux
-+	RSYSLOG_CONF_OPT += --enable-uuid
-+else
-+	RSYSLOG_CONF_OPT += --disable-uuid
-+endif
-+
- define RSYSLOG_INSTALL_INIT_SYSV
- 	[ -f $(TARGET_DIR)/etc/init.d/S01rsyslog ] || \
- 		$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslog \
+ # Build after BusyBox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+2.0.4
