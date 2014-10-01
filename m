@@ -1,43 +1,97 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Oct 2014 10:27:17 -0300
-Subject: [Buildroot] [PATCH] pcre: bump to version 8.36
-Message-ID: <1412170037-20744-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 1 Oct 2014 14:42:41 +0100
+Subject: [Buildroot] [PATCHv2] rsyslog: security bump to version 7.6.6
+In-Reply-To: <1412169833-20581-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1412169833-20581-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <542C04D1.9080801@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pcre/pcre.hash | 3 +++
- package/pcre/pcre.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/pcre/pcre.hash
+On 10/01/2014 02:23 PM, Gustavo Zacarias wrote:
+> Fixes CVE-2014-3634 - potential abort when a message with PRI > 191 was
+> processed if the "pri-text" property was used in active templates, this
+> could be abused to a remote denial of service from permitted senders.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   package/rsyslog/rsyslog-0001-revert-strdup.patch | 27 ++++++++++++++++++++++++
+>   package/rsyslog/rsyslog.hash                     |  4 ++--
+>   package/rsyslog/rsyslog.mk                       |  5 +++--
+>   3 files changed, 32 insertions(+), 4 deletions(-)
+>   create mode 100644 package/rsyslog/rsyslog-0001-revert-strdup.patch
+>
+> diff --git a/package/rsyslog/rsyslog-0001-revert-strdup.patch b/package/rsyslog/rsyslog-0001-revert-strdup.patch
+> new file mode 100644
+> index 0000000..5e82018
+> --- /dev/null
+> +++ b/package/rsyslog/rsyslog-0001-revert-strdup.patch
+> @@ -0,0 +1,27 @@
+> +Revert upstream 0403361ac57082dc47840d1f31832f1a0e319078
+> +It breaks the build when it's defined.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +
+> +diff -Nura rsyslog-7.6.6.orig/grammar/lexer.c rsyslog-7.6.6/grammar/lexer.c
+> +--- rsyslog-7.6.6.orig/grammar/lexer.c	2014-10-01 10:12:34.960082719 -0300
+> ++++ rsyslog-7.6.6/grammar/lexer.c	2014-10-01 10:13:24.512769964 -0300
+> +@@ -1459,7 +1459,6 @@
+> + #line 32 "lexer.l"
+> + #include "config.h"
+> + #include "parserif.h"
+> +-extern char *strdup(char*); /* somehow we do not get this from string.h... */
+> + /*%option noyywrap nodefault case-insensitive */
+> + /* avoid compiler warning: `yyunput' defined but not used */
+> + #define YY_NO_INPUT 1
+> +diff -Nura rsyslog-7.6.6.orig/grammar/lexer.l rsyslog-7.6.6/grammar/lexer.l
+> +--- rsyslog-7.6.6.orig/grammar/lexer.l	2014-10-01 10:12:34.960082719 -0300
+> ++++ rsyslog-7.6.6/grammar/lexer.l	2014-10-01 10:13:41.935363172 -0300
+> +@@ -31,7 +31,6 @@
+> + %{
+> + #include "config.h"
+> + #include "parserif.h"
+> +-extern char *strdup(char*); /* somehow we do not get this from string.h... */
+> + %}
+> +
+> + %option noyywrap nodefault case-insensitive yylineno
+> diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+> index b47932a..afc75cc 100644
+> --- a/package/rsyslog/rsyslog.hash
+> +++ b/package/rsyslog/rsyslog.hash
+> @@ -1,2 +1,2 @@
+> -# From http://www.rsyslog.com/downloads/download-other/
+> -sha256	45bca1c1ffca6b8260363617897c09baeaf350e8b92c51361d2770375cdf4b34	rsyslog-7.6.5.tar.gz
+> +# From http://www.rsyslog.com/downloads/download-v7-stable/
+> +sha256	c77ae0db6204c5bd670fa96c354ee5fe1c62c876bd84ec06ed429138c78885bb	rsyslog-7.6.6.tar.gz
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index 2ba4a9a..17fd13b 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -4,14 +4,15 @@
+>   #
+>   ################################################################################
+>
+> -RSYSLOG_VERSION = 7.6.5
+> +RSYSLOG_VERSION = 7.6.6
+>   RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+>   RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
+>   RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+>   RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
+>
+>   RSYSLOG_CONF_OPT = --disable-testbench \
+> -		   --enable-cached-man-pages
+> +		   --enable-cached-man-pages \
+> +		   --disable-generate-man-pages
+>
+>   # Build after BusyBox
+>   ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-new file mode 100644
-index 0000000..56c5a17
---- /dev/null
-+++ b/package/pcre/pcre.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/pcre/files/pcre/8.36/
-+md5	ff7b4bb14e355f04885cf18ff4125c98	pcre-8.36.tar.gz
-+sha1	fb537757756818133d8157ec878bc11f5a93ef4d	pcre-8.36.tar.gz
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 2077896..ca495bd 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE_VERSION = 8.35
-+PCRE_VERSION = 8.36
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
- PCRE_LICENSE = BSD-3c
- PCRE_LICENSE_FILES = LICENCE
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
 -- 
-2.0.4
+Vincent
