@@ -1,43 +1,38 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 1 Oct 2014 16:08:32 +0200 (CEST)
-Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
-In-Reply-To: <1723661717.26039623.1412168336757.JavaMail.root@openwide.fr>
-Message-ID: <1280276802.26043432.1412172512257.JavaMail.root@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 01 Oct 2014 11:13:23 -0300
+Subject: [Buildroot] [PATCH v4] package/nginx: new package
+In-Reply-To: <1412027000-15481-1-git-send-email-s.martin49@gmail.com>
+References: <1412027000-15481-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <542C0C03.1040204@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 09/29/2014 06:43 PM, Samuel Martin wrote:
 
 
-Looking into it a bit deeper, I have a couple of questions for you..
+Hi Samuel.
+Nice job on keeping up with this one!
+A couple of minor fixes:
 
-in your current layout 
+> +config BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE
+> +	bool "ngx_http_spdy_module"
+> +	help
+> +	  Enable ngx_http_spdy_module
 
-* BR2_EXTERNAL is shared, so Config.in is shared and external.mk 
-is shared
-* each project has its own overlay
-* each project has its own local.mk
-* each project has its own patch subdirectory...
-* dl is shared
+Needs a:
+select BR2_PACKAGE_NGINX_HTTP_GZIP_MODULE
 
-so I need to understand your use-case a little more. 
-As I said my use case is "same project, but different hardware" so
-my favorite layout would be
+I guess we'll be seeing others like this as well, just tested a couple
+obvious ones.
+It's very likely as well that this option is useless without SSL support
+since SPDY is like a souped-up TLS (even though it builds).
 
-* shared BR2_EXTERNAL
-* shared overlay
-* shared patches
-* different config files
-* don't care about local.mk, might as well make it different
+Also you're directing logfiles to /var/log/nginx but the directory is
+never created by the systemd unit/initscript file. This leads to a
+non-working default configuration.
 
-This layout makes more sense to me (shared overlay and shared patches)
-but I want to make sure it fits your use-case before I do the change
-
-It makes little sense to me to have completely different projects
-which are just sharing dl/ since dl is not saved in git and it's
-more handy to have completely separate git repo in this case...
-
-
-If you can tell me a little more, I'll see how I adapt this...
+Other than that it looks pretty good.
+Regards.
