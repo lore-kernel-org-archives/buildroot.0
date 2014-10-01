@@ -1,71 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Oct 2014 18:23:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-09-30
-In-Reply-To: <20141001075116.7913ff52@core2quad.morethan.org>
-References: <20141001063012.7DD7A100CC7@stock.ovh.net>
- <20141001075116.7913ff52@core2quad.morethan.org>
-Message-ID: <20141001182322.53f6fd68@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 01 Oct 2014 18:30:54 +0200
+Subject: [Buildroot] [PATCH] valgrind: allow building on more ARM systems
+In-Reply-To: <1412176549-15127-1-git-send-email-mike@mikebwilliams.com>
+References: <1412176549-15127-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <413cd7b6-4ed2-415b-8a6d-36f7148a6505@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 1 Oct 2014 07:51:16 -0500, Mike Zick wrote:
-
-> > Build statistics for 2014-09-30
-> > ===============================
-> > 
-> >         success : 121
-> >        failures : 15 
-> >        timeouts : 2  
-> >           TOTAL : 138
-> > 
+Mike Williams <mike@mikebwilliams.com> schreef:
+>Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+>---
+> package/valgrind/Config.in   | 7 ++++---
+> package/valgrind/valgrind.mk | 2 +-
+> 2 files changed, 5 insertions(+), 4 deletions(-)
+>
+>diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+>index fd5649b..253555b 100644
+>--- a/package/valgrind/Config.in
+>+++ b/package/valgrind/Config.in
+>@@ -1,8 +1,9 @@
+> config BR2_PACKAGE_VALGRIND
+> 	bool "valgrind"
+>-	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
+>-		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
+>-		   BR2_mipsel || BR2_mips64 || BR2_mips64el
+>+	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a5 || \
+>+		   BR2_cortex_a7 || BR2_cortex_a8 || BR2_cortex_a9 || \
+>+		   BR2_cortex_a12 || BR2_cortex_a15 || BR2_powerpc || \
+>+		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> 	help
+> 	  Tool for debugging and profiling Linux programs.
 > 
-> Looking good for so early in the cycle.
+>diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+>index 24d0290..8bea031 100644
+>--- a/package/valgrind/valgrind.mk
+>+++ b/package/valgrind/valgrind.mk
+>@@ -17,7 +17,7 @@ VALGRIND_AUTORECONF = YES
+> # not. Therefore, we adjust the host tuple to specify we're on
+> # ARMv7. The valgrind package is guaranteed, through Config.in, to
+> # only be selected on Cortex A8 and Cortex A9 platforms.
+>-ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
+>+ifeq ($(BR2_cortex_a5)$(BR2_cortex_a7)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a12)$(BR2_cortex_a15),y)
+> VALGRIND_CONF_OPT += \
+> 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+> endif
 
-Yes, even though 138 is a bit limited in terms of build numbers for one
-day. I believe there were some issues with the Buildroot Git server
-lately, maybe this has slowed down the autobuilders a bit. We used to
-have in the order of 200-220 builds per day. Hum, looking more, seems
-like all the autobuilders from Peter are no longer submitting build
-results.
-
-Peter?
-
-> Now the noise:
-> 
-> I have noticed that recently some of the fix contributors
-> have been including a "few line" quote of a typical error
-> message in addition to the "fix(es): url" comment.
-> 
-> As a read-mostly member, I find that new (habit? practice?)
-> very helpful when reading the daily M.L. fix messages.
-> 
-> Q:
-> Should there be a discussion on making this additional
-> information a BR "recommended practice" ?
-
-I personally don't have a strong opinion. Since the autobuilder URLs
-are stable, and supposed to be kept around forever, I don't mind seeing
-only the autobuilder URL. But if the submitter decides to include a
-portion of the error message, then fine as well. We could imagine that
-doing this would give a better change of people googling for the error
-message, to stumble across the relevant Buildroot patch rather than
-just the autobuilder results.
-
-Not sure I want to make this a mandatory thing, though. We already have
-a lot of requirements, and doing autobuilder fixes is already not that
-fun, so if we raise the barrier too much, this might discourage
-contributors.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+In fact, mips64+n32 abi is not supported, so I think
+ this should be reflected too. I guess the same applies
+ to the the le variant...
