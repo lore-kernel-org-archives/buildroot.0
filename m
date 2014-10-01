@@ -1,44 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Oct 2014 09:36:23 -0300
-Subject: [Buildroot] [PATCH] rsyslog: security bump to verison 7.6.6
-Message-ID: <1412166983-11140-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 1 Oct 2014 13:44:10 +0100
+Subject: [Buildroot] [PATCH v2] opencv: Replace absolute path of static
+	library with -l$library_name
+Message-ID: <1412167450-26406-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-3634 - potential abort when a message with PRI > 191 was
-processed if the "pri-text" property was used in active templates, this
-could be abused to a remote denial of service from permitted senders.
+Some opencv modules are forced to build statically (for instance the
+"ts" module) because they have a line like this one in their
+CMakeLists.txt file:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  set(OPENCV_MODULE_TYPE STATIC)
+
+That makes a static library get installed and also listed in the "Libs:"
+line of the pkgconfig file (opencv.pc) along with all the shared
+libraries. That can cause link failures in other packages which link to
+opencv, for instance the gst1-plugins-bad package. Here is an example of
+the link failure:
+
+  CXXLD    libgstopencv.la
+
+*** Warning: Linking the shared library libgstopencv.la against the
+*** static library /usr/lib/libopencv_ts.a is not portable!
+mips-linux-gnu-g++: error: /usr/lib/libopencv_ts.a: No such file or
+directory
+make[4]: *** [libgstopencv.la] Error 1
+
+The solution is to not list the static library in the "Libs:" line of
+the pkgconfig file and add '-lopencv_ts' instead.
+
+This issue has been reported upstream:
+  http://code.opencv.org/issues/3931
+
+Fixes:
+  http://autobuild.buildroot.net/results/e8a/e8a859276db34aff87ef181b0cce98916b0afc90/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/rsyslog/rsyslog.hash | 4 ++--
- package/rsyslog/rsyslog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/opencv/opencv.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index b47932a..afc75cc 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,2 +1,2 @@
--# From http://www.rsyslog.com/downloads/download-other/
--sha256	45bca1c1ffca6b8260363617897c09baeaf350e8b92c51361d2770375cdf4b34	rsyslog-7.6.5.tar.gz
-+# From http://www.rsyslog.com/downloads/download-v7-stable/
-+sha256	c77ae0db6204c5bd670fa96c354ee5fe1c62c876bd84ec06ed429138c78885bb	rsyslog-7.6.6.tar.gz
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index ae152d0..a40593c 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 628624a..949dbfd 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -247,4 +247,12 @@ endef
+ OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_DATA
+ endif
  
--RSYSLOG_VERSION = 7.6.5
-+RSYSLOG_VERSION = 7.6.6
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
++ifeq ($(BR2_PACKAGE_OPENCV_LIB_TS),y)
++define OPENCV_FIX_PC_FILE_LIBS
++	$(SED) '/^Libs:/s/$${exec_prefix}\/lib\/libopencv_ts.a/-lopencv_ts/' \
++	       $(STAGING_DIR)/usr/lib/pkgconfig/opencv.pc
++endef
++OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_FIX_PC_FILE_LIBS
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.0.4
+1.7.1
