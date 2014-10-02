@@ -1,69 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Oct 2014 21:52:31 +0200
-Subject: [Buildroot] [git commit] package/libmpdclient: Add upstream patch
-	to fix build with musl
-Message-ID: <20141002195450.1699E9D48F@busybox.osuosl.org>
+Date: Thu, 2 Oct 2014 21:43:36 +0200
+Subject: [Buildroot] [git commit] package/pure-ftpd: New package
+Message-ID: <20141002195449.C6B3F9D48F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71caed48f2b6419a228747b5d9ea63c1dbe0b454
+commit: http://git.buildroot.net/buildroot/commit/?id=212820b65fd02bc1ef13498a9becdbd8e59eb35a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch from upstream to support building with the musl C library.
-
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libmpdclient-0001-musl-fixes.patch             |   41 ++++++++++++++++++++
- 1 files changed, 41 insertions(+), 0 deletions(-)
+ package/Config.in                            |    1 +
+ package/pure-ftpd/Config.in                  |   12 +++++++++
+ package/pure-ftpd/pure-ftpd-0001-cross.patch |   25 ++++++++++++++++++
+ package/pure-ftpd/pure-ftpd.mk               |   35 ++++++++++++++++++++++++++
+ 4 files changed, 73 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmpdclient/libmpdclient-0001-musl-fixes.patch b/package/libmpdclient/libmpdclient-0001-musl-fixes.patch
+diff --git a/package/Config.in b/package/Config.in
+index 2ad72bc..1021d4c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1055,6 +1055,7 @@ endif
+ 	source "package/proxychains-ng/Config.in"
+ 	source "package/ptpd/Config.in"
+ 	source "package/ptpd2/Config.in"
++	source "package/pure-ftpd/Config.in"
+ 	source "package/quagga/Config.in"
+ 	source "package/radvd/Config.in"
+ 	source "package/rp-pppoe/Config.in"
+diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
 new file mode 100644
-index 0000000..60df540
+index 0000000..c1b2529
 --- /dev/null
-+++ b/package/libmpdclient/libmpdclient-0001-musl-fixes.patch
-@@ -0,0 +1,41 @@
-+From cc2ffe943dd36a4c95ec34b2f2bf413de15b7974 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
-+Date: Fri, 11 Jul 2014 08:56:49 +0200
-+Subject: POSIX says fd_set is defined by <sys/select.h>
++++ b/package/pure-ftpd/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PURE_FTPD
++	bool "pure-ftpd"
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	depends on BR2_USE_MMU # fork()
++	help
++	  Pure-FTPd is a free (BSD), secure, production-quality and standard-
++	  conformant FTP server. It doesn't provide useless bells and whistles,
++	  but focuses on efficiency and ease of use. It provides simple answers
++	  to common needs, plus unique useful features for personal users as
++	  well as hosting providers.
 +
-+Haiku requires this.
++	  http://www.pureftpd.org
+diff --git a/package/pure-ftpd/pure-ftpd-0001-cross.patch b/package/pure-ftpd/pure-ftpd-0001-cross.patch
+new file mode 100644
+index 0000000..f8b1d81
+--- /dev/null
++++ b/package/pure-ftpd/pure-ftpd-0001-cross.patch
+@@ -0,0 +1,25 @@
++Do not include host paths when cross-compiling.
 +
-+cf.
-+http://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/select.h.html
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+Also guard sys/select.h by ifndef WIN32 as Mingw32 doesn't provide it.
-+We'll avoid a configure check just for this.
-+
-+diff --git a/src/socket.c b/src/socket.c
-+index f76510c..2aa5f7f 100644
-+--- a/src/socket.c
-++++ b/src/socket.c
-+@@ -43,6 +43,7 @@
-+ #else
-+ #  include <netinet/in.h>
-+ #  include <arpa/inet.h>
-++#  include <sys/select.h>
-+ #  include <sys/socket.h>
-+ #  include <netdb.h>
-+ #  include <sys/un.h>
-+diff --git a/src/sync.c b/src/sync.c
-+index 43cfe50..0a6c9d3 100644
-+--- a/src/sync.c
-++++ b/src/sync.c
-+@@ -33,6 +33,9 @@
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <stdio.h>
-++#ifndef WIN32
-++#include <sys/select.h>
-++#endif
-+ #include <fcntl.h>
-+ #include <unistd.h>
++diff -uNr pure-ftpd-1.0.36.org/configure pure-ftpd-1.0.36/configure
++--- pure-ftpd-1.0.36.org/configure	2012-03-16 06:29:23.000000000 +0100
+++++ pure-ftpd-1.0.36/configure	2014-09-28 19:55:56.650529713 +0200
++@@ -6319,17 +6319,6 @@
 + 
-+-- 
-+cgit v0.10-2-gd358
++ 
++ 
++-if test -d /usr/local/include; then
++-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
++-fi
++-
++-if test -d /usr/kerberos/include; then
++-  CPPFLAGS="$CPPFLAGS -I/usr/kerberos/include"
++-fi
++-
++-if test -d /usr/local/lib; then
++-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
++-fi
++ 
++ if uname | fgrep SunOS > /dev/null 2> /dev/null ; then
++   CPPFLAGS="$CPPFLAGS -D_XPG4_2=1"
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+new file mode 100644
+index 0000000..cf43220
+--- /dev/null
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# pure-ftpd
++#
++################################################################################
++
++PURE_FTPD_VERSION = 1.0.36
++PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
++PURE_FTPD_LICENSE = ISC
++PURE_FTPD_LICENSE_FILES = COPYING
++PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++
++PURE_FTPD_CONF_OPT = \
++	--with-altlog \
++	--with-puredb \
++	--with-rfc2640
++
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++PURE_FTPD_CONF_OPT += --with-capabilities
++PURE_FTPD_DEPENDENCIES += libcap
++else
++PURE_FTPD_CONF_OPT += --without-capabilities
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PURE_FTPD_CONF_OPT += --with-tls
++PURE_FTPD_DEPENDENCIES += openssl
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++PURE_FTPD_CONF_ENV += LIBS='-lssl -lcrypto -lz'
++endif
++else
++PURE_FTPD_CONF_OPT += --without-tls
++endif
++
++$(eval $(autotools-package))
