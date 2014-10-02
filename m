@@ -1,44 +1,65 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Oct 2014 19:39:57 -0300
-Subject: [Buildroot] [PATCH 2/2] ruby: bump to version 2.1.3
-In-Reply-To: <1412203197-1167-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1412203197-1167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412203197-1167-2-git-send-email-gustavo@zacarias.com.ar>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  1 Oct 2014 20:52:37 -0500
+Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.0
+Message-ID: <1412214757-3948-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+* Adds powerpc architecture support
+* Changes to the new github upstream site
+* Updates the license filename
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/ruby/ruby.hash | 2 ++
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/ruby/ruby.hash
+ package/protobuf/Config.in   |    7 +++----
+ package/protobuf/protobuf.mk |    6 +++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-new file mode 100644
-index 0000000..3d17e8c
---- /dev/null
-+++ b/package/ruby/ruby.hash
-@@ -0,0 +1,2 @@
-+# From https://www.ruby-lang.org/en/downloads/
-+md5	74a37b9ad90e4ea63c0eed32b9d5b18f	ruby-2.1.3.tar.gz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index bf34189..40025b0 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 6015b13..e45ed14 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -3,17 +3,16 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
+-	# PowerPC doesn't actually work.
+-	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
++	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	help
+ 	  Protocol buffers are Google's language-neutral, platform-neutral,
+ 	  extensible mechanism for serializing structured data.
+ 
+-	  http://code.google.com/p/protobuf/
++	  https://github.com/google/protobuf/
+ 
+ comment "protobuf needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
++	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index f5e11df..761b315 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -4,10 +4,10 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.1
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 2.1.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-PROTOBUF_VERSION = 2.5.0
+-PROTOBUF_SITE = http://protobuf.googlecode.com/files
++PROTOBUF_VERSION = 2.6.0
++PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)/
+ PROTOBUF_LICENSE = BSD-3c
+-PROTOBUF_LICENSE_FILES = COPYING.txt
++PROTOBUF_LICENSE_FILES = LICENSE
+ 
+ # N.B. Need to use host protoc during cross compilation.
+ PROTOBUF_DEPENDENCIES = host-protobuf
 -- 
-2.0.4
+1.7.9.5
