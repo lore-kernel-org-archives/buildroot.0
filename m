@@ -1,23 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Oct 2014 20:15:54 +0200
-Subject: [Buildroot] [PATCH] package/linux-firmware: add option for
-	ath6k chips
-In-Reply-To: <1412266983-24209-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 2 Oct 2014 13:23:03 -0300")
-References: <1412266983-24209-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878ukymj6t.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Oct 2014 20:58:15 +0200
+Subject: [Buildroot] [PATCH 1/2] opencv: Bump version to 2.4.10
+In-Reply-To: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 1 Oct 2014 13:18:00 +0100")
+References: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <874mvmmh88.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Add support for ath6k(l) driver firmware files (AR6002, AR6003 and
- > AR6004).
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
