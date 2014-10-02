@@ -1,62 +1,29 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 02 Oct 2014 11:17:15 +0200
-Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
-In-Reply-To: <542D1130.1050508@lucaceresoli.net>
-References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
- <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
- <20141001181626.64e6ef08@free-electrons.com>
- <542D1130.1050508@lucaceresoli.net>
-Message-ID: <542D181B.3090505@lucaceresoli.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 2 Oct 2014 11:45:40 +0200
+Subject: [Buildroot] [PATCH 20/25 v6] docs/asciidoc: make it possible to
+	use $(@D) in hooks
+In-Reply-To: <8291d284f786c9c6964f895f5757ce49158c68bd.1411812968.git.yann.morin.1998@free.fr>
+References: <cover.1411812968.git.yann.morin.1998@free.fr>
+ <8291d284f786c9c6964f895f5757ce49158c68bd.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LV-zT=_pR=85GugM3nKNCeJrEXiAupv5kOV1quN=a12Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Luca Ceresoli wrote:
-> Dear Thomas,
+On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, it is not possible to use $(@D) in documents' hooks, because
+> there is no actual target file for the copying rule.
 >
-> Thomas Petazzoni wrote:
->> Dear Luca Ceresoli,
->>
->> On Wed,  1 Oct 2014 17:03:46 +0200, Luca Ceresoli wrote:
-...
->>> --- /dev/null
->>> +++ b/package/imx-usb-loader/imx-usb-loader.mk
->>> @@ -0,0 +1,22 @@
->>> +################################################################################
->>>
->>> +#
->>> +# imx-uxb-loader
->>> +#
->>> +################################################################################
->>>
->>> +
->>> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
->>> +IMX_USB_LOADER_SITE = $(call
->>> github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
->>> +IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
->>
->> LGPL with no version specified?
->>
+> So, use the same mechanism as for generic-package.
 >
-> Yes. The only indication in getopt.[hc] is:
+> We do not touch the target file, so it is easy to regenerate the manual
+> without calling the -clean rule first.
 >
->    License: LGPL
->
-> and nothing else. This means LGPL (ant version), it is the list of
-> licenses documented on the BR manual.
->
-> BTW, the LGPL license is declared in BR for pppd and tslib as well.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Looking at it a bit closer, getopt.* is not used to build on Linux,
-only for Windows.
-
-So I guess I could drop the LGPL part:
-
-   IMX_USB_LOADER_LICENSE = LGPLv2.1+
-
--- 
-Luca
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
