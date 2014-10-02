@@ -1,40 +1,39 @@
-From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
-Date: Thu, 02 Oct 2014 14:25:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: Fix build with uclibc
- on SH4
-In-Reply-To: <20141001231851.325e4460@free-electrons.com>
-References: <1412197256-618-1-git-send-email-jkrause@posteo.de>
- <20141001231851.325e4460@free-electrons.com>
-Message-ID: <542D4431.3070600@posteo.de>
+From: Mike Zick <minimod@morethan.org>
+Date: Thu, 2 Oct 2014 07:45:33 -0500
+Subject: [Buildroot] [PATCH 1/1] libFTDI major version update 1. This
+ version can coexists beside the 0.x version (libftdi.so, libftdi1.so).
+In-Reply-To: <2.c5a9d6940ebdbeb712d0@polarstar>
+References: <2.c5a9d6940ebdbeb712d0@polarstar>
+Message-ID: <20141002074533.1ece2b48@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+On Thu, 02 Oct 2014 09:52:10 +0200
+daniel.sangue at sangue.ch wrote:
 
-On 10/01/2014 11:18 PM, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
->
-> On Wed,  1 Oct 2014 23:00:56 +0200, J?rg Krause wrote:
->> Add missing header file <cstdio> to the uclibc patch to fix build with target SH4.
->>
->> Fixes:
->>    http://autobuild.buildroot.net/results/e5be8fe46a30f0b417fe5fc19a27c480d885791e/
->>    http://autobuild.buildroot.net/results/a3453afddff4fc03681f7fbdff3ccab9706eb189/
->>
->> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> Do you know why the issue is SH4 specific? Is it because our SH4
-> toolchains are very old compared to the other Buildroot toolchains (due
-> to the SH4 support being broken in the internal toolchain backend) ?
+> Give me some time because i havent a working smtp-server connection
+> at work. And i can not do an incremental patch - because i have
+> deleted the copy of the repo where the patch was based on. I only can
+> create a new patch and take your proposed git message for it. Is this
+> ok for you or what should i do now?
+> 
 
-I don't know. The SH4 toolchain is not so old, it's gcc 4.7.3. I guess 
-it has something to do with the ability or strictness of the compiler to 
-dissolve header dependencies. But I'm not a toolchain expert...
+As a long time M.L. reader, (not a reviewer) I feel safe in answering
+this one.  ;)
 
-We will use the tool "include-what-you-use" from google to fix missing 
-header issues for upmpdcli.
+The comments made where scattered throughout your submission, so I
+don't think that your having to re-generate a new one will make
+very much difference.
 
-Best regards
-J?rg
+That is not what you would want to do to fix a single line "Oops"
+of course, but in this case, it should be ok.
+
+Just be sure to include the [PATCH V2 ... etc in the new title
+and a comment about V1 -> V2 changes made.
+
+Mike
+> 
+> Greets Dani
