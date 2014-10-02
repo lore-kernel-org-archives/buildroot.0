@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Oct 2014 21:14:08 +0200
-Subject: [Buildroot] [PATCH 23/25 v6] doc/asciidoc: always use UTC
-In-Reply-To: <CAAXf6LU2KNsD4N9_XnTiwbKT8VRDdBZMk1Knkvm-V87q_s3HDQ@mail.gmail.com>
+Date: Thu, 2 Oct 2014 21:20:28 +0200
+Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
+	infra
+In-Reply-To: <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <de84d86d9a8fe394f9481b0b17eae6667c18ec07.1411812968.git.yann.morin.1998@free.fr>
- <CAAXf6LU2KNsD4N9_XnTiwbKT8VRDdBZMk1Knkvm-V87q_s3HDQ@mail.gmail.com>
-Message-ID: <20141002191408.GA19775@free.fr>
+ <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
+ <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
+Message-ID: <20141002192028.GB19775@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +15,48 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-10-02 12:21 +0200, Thomas De Schampheleire spake thusly:
-> On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On 2014-10-02 12:27 +0200, Thomas De Schampheleire spake thusly:
 [--SNIP--]
-> > Just force the timezone to be UTC when doing the rendering of the
-> > manual, so we are not dependent on the machine or user doign the
+> > +Finally, on line 8, we call the +asciidoc-document+ function, which
+> > +generates all the Makefile code necessary to render the document.
 > 
-> doing
+> 'Finally' is a bit an exaggeration here, as there was only one
+> described line above it :)
 
-Fixed.
+I just mimicked what was done in the other package infras, to get as
+consistent as possible. I'll rephrase.
 
-> > rendering.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Samuel Martin <s.martin49@gmail.com>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > ---
-> >  package/doc-asciidoc.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> > index 6185982..04c6299 100644
-> > --- a/package/doc-asciidoc.mk
-> > +++ b/package/doc-asciidoc.mk
-> > @@ -93,6 +93,8 @@ define $(2)_$(4)_INSTALL_CMDS
-> >  endef
-> >  endif
-> >
-> > +$$(O)/docs/$(1)/$(1).$(6): export TZ=UTC
+> > +* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
+> > +  to one or more directories containing so-called resources (CSS,
+> > +  images...) By default, empty.
+> 
+> Shouldn't there be a dot after the closing parentheses, to finish the sentence?
+
+I was under the impression that a closing parenthses at the end of a
+sentence would goble the punctuation mark.
+
+So I checked a few on-line ressources.
+
+It seems that (once not making it a rule), I was mislaid.
+
+> > +There are also additional hooks (see xref:hooks[] for general information
+> > +on hooks), that a document may set to define extra actions to be done at
+> > +various steps:
 > > +
-> >  ifeq ($(6)-$$(GENDOC_XSLTPROC_IS_BROKEN),pdf-y)
-> >  $$(O)/docs/$(1)/$(1).$(6):
-> >         $$(warning PDF generation is disabled because of a bug in \
-> > --
-> > 1.9.1
-> >
+> > +* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
+> > +  have been copied by Buildroot. This can be used for, for example,
+> > +  generating part of the manual with information extracted from the
 > 
-> Although I don't mind such a change, I fail to understand the use case
-> here. Is this only regarding the printed date at the beginning of the
-> manual?
+> I would write:
+> This can for example be used for ...
 
-Yes, that's about that. What bothers me is potential for inconsistency.
-Also, for something that is world-readable, I usually prefer to read
-dates that are not tainted by any local, user-specific timezone. UTC is
-a the reference time, so I believe it is better lookign to see UTC than
-any other timezone.
-
-Indeed, it's just a trivial (as in: not important) change.
+OK.
 
 Thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
