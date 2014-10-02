@@ -1,68 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  2 Oct 2014 08:30:09 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-10-01
-Message-ID: <20141002063010.44B71100DB2@stock.ovh.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  2 Oct 2014 09:49:27 +0300
+Subject: [Buildroot] [PATCH] bandwidthd: fix static build
+Message-ID: <7d38491011008b60f8ad91ec0261af046d453685.1412232567.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-10-01
-===============================
+Build against libpng requires -lz when built statically. Patch configure.ac to
+get the needed information from pkg-config.
 
-        success : 126
-       failures : 22 
-       timeouts : 2  
-          TOTAL : 150
+This patch can not be directly upstreamed as it conflicts with upstream
+changes, but a proper fix would be based on the same idea.
 
-Classification of failures by reason
-====================================
+Fixes:
+http://autobuild.buildroot.net/results/e49/e496cc4315c06de61379222d3e842d4cd05b2f71/
 
-                 gnupg2-2.0.26 | 5 
-                 webkit-1.11.5 | 3 
-               valgrind-3.10.0 | 3 
-                  zeromq-4.0.4 | 2 
-checking if /home/test/auto... | 1 
-        gst1-plugins-bad-1.4.3 | 1 
-                  sispmctl-3.1 | 1 
-               alsa-lib-1.0.28 | 1 
-                 cdrkit-1.1.11 | 1 
-               iptables-1.4.21 | 1 
-           xapp_bdftopcf-1.0.4 | 1 
-                 pixman-0.32.6 | 1 
-              librtlsdr-v0.5.3 | 1 
-                  prboom-2.5.0 | 1 
-                   geoip-1.6.0 | 1 
+Cc: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ac-fix-libpng-check-when-built-statically.patch | 29 ++++++++++++++++++++++
+ package/bandwidthd/bandwidthd.mk                   |  2 +-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 package/bandwidthd/0001-configure.ac-fix-libpng-check-when-built-statically.patch
 
-Detail of failures
-===================
-
-      x86_64 |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/b777cb1002caa6ccaeacb496231af06e61de98af/
-        i486 |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/bd7ddbf9b1b6192a26b3e48d53515ce675b4002d/
-         arm | checking if /home/test/auto... | TIM | http://autobuild.buildroot.net/results/a4f8fe4c700a07a0d76e108a05cbb457ca7d4afa/
-         arc |                    geoip-1.6.0 | TIM | http://autobuild.buildroot.net/results/feabea43bf113143e6149e76cdbff307a6fb226f/
-     powerpc |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/40fff3bc304e1a83524f28be8f6afc2e217281ad/
-         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/c06f72212a81ef2aa4af6115d09daf18a20d9652/
-        i486 |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/6708384ddd5946fc213c8caf6a2dde6ea17ab4f9/
-     powerpc |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/2c55616c8f4d4c7a1c69cc882fd6c88d1876e637/
-         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/ccd482b9d5b1ef497a2e4a06d5c890ec8ed56c5a/
-      x86_64 |         gst1-plugins-bad-1.4.3 | NOK | http://autobuild.buildroot.net/results/2adc9777bdca9c20945cabe2a7aaa7fa1b9d778e/
-        bfin |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/8c345e65ea602d17c35c632cfe4ac89a928de1df/
-        bfin |               librtlsdr-v0.5.3 | NOK | http://autobuild.buildroot.net/results/7bb4bc3ef78555a7e3ee501e942a942c0340ac5c/
-       nios2 |                  pixman-0.32.6 | NOK | http://autobuild.buildroot.net/results/3a746d9c185faef9b2eaa4407b19acc28be4e72f/
-        bfin |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/779eb8f995d335a3430437ee8208615c41f43ed6/
-     powerpc |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/e67ec59cba977b39ce93d9298979d0ba9b7af50b/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/c80df50df22d27a93f0c400b7347fbc72d353a48/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/3a26174f685983a861e4d84c926b0f271c1fca9f/
-     powerpc |                valgrind-3.10.0 | NOK | http://autobuild.buildroot.net/results/a1117482b191506202fea95ce75636b4ceb665d7/
-         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/b6b3018d09b932f8dc87626a12c7033d246d9a48/
-         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/eeff309d6d02953dc7ada5fd4b5f0c74737a0076/
-         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/2260e5f81ac5be76ae7fdfe21ddbc57923531773/
-microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/c8165ac99206fdcd429635361dd0c61c67c663de/
-        bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/68d6ed348858416904aaa4f4b2969da5542c35ff/
-        bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/fefc752e9c9f4eae6ea50eb1bfeee93808110e1d/
-
-
+diff --git a/package/bandwidthd/0001-configure.ac-fix-libpng-check-when-built-statically.patch b/package/bandwidthd/0001-configure.ac-fix-libpng-check-when-built-statically.patch
+new file mode 100644
+index 000000000000..f444ba70d513
+--- /dev/null
++++ b/package/bandwidthd/0001-configure.ac-fix-libpng-check-when-built-statically.patch
+@@ -0,0 +1,29 @@
++From 97998f008f5d900619194d80051dee1be68e4ace Mon Sep 17 00:00:00 2001
++Message-Id: <97998f008f5d900619194d80051dee1be68e4ace.1412231990.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 2 Oct 2014 09:12:28 +0300
++Subject: [PATCH] configure.ac: fix libpng check when built statically
++
++Find libpng library dependencies using pkg-config.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 3a2d0ba97bdf..9c2fa83cc93c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -30,6 +30,8 @@ AC_CHECK_LIB(m, pow)
++ AC_CHECK_LIB(iconv, libiconv_open)
++ 
++ # Required Libraries
+++PKG_CHECK_MODULES([libpng], libpng)
+++LIBS="$LIBS $libpng_LIBS"
++ AC_CHECK_LIB(png, png_read_info, ,[AC_MSG_ERROR([Bandwidthd requires but cannot libpng])])
++ AC_CHECK_LIB(gd, gdImageCreate, ,[AC_MSG_ERROR([Bandwidthd requires but cannot find libgd])])
++ AC_CHECK_LIB(pcap, pcap_open_live, ,
++-- 
++2.1.0
++
+diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+index 3e11d6abb1e5..0b03b0b70278 100644
+--- a/package/bandwidthd/bandwidthd.mk
++++ b/package/bandwidthd/bandwidthd.mk
+@@ -11,7 +11,7 @@ BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+ # download" by upstream.
+ BANDWIDTHD_LICENSE = GPL
+ 
+-BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
++BANDWIDTHD_DEPENDENCIES = gd libpng libpcap host-pkgconf
+ 
+ BANDWIDTHD_AUTORECONF = YES
+ 
 -- 
-http://autobuild.buildroot.net
+2.1.0
