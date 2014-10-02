@@ -1,67 +1,140 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Oct 2014 21:20:28 +0200
-Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
-	infra
-In-Reply-To: <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
-References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
- <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
-Message-ID: <20141002192028.GB19775@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 2 Oct 2014 21:29:02 +0200
+Subject: [Buildroot] Pending "big" patch series
+In-Reply-To: <20140923200255.1be119c9@free-electrons.com>
+References: <20140914125321.0d68b842@free-electrons.com>
+ <20140923200255.1be119c9@free-electrons.com>
+Message-ID: <CAAXf6LXO2BWxZT920Qvxj0OTWfg28pU2VuOB8oM8QaLZjUaP2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
-On 2014-10-02 12:27 +0200, Thomas De Schampheleire spake thusly:
-[--SNIP--]
-> > +Finally, on line 8, we call the +asciidoc-document+ function, which
-> > +generates all the Makefile code necessary to render the document.
-> 
-> 'Finally' is a bit an exaggeration here, as there was only one
-> described line above it :)
+New status update on the open patches:
 
-I just mimicked what was done in the other package infras, to get as
-consistent as possible. I'll rephrase.
+On Tue, Sep 23, 2014 at 8:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+>>  * gendoc infra: make it useable for other documents (18 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-September/105678.html
+>>
+>>    I'm personally not highly interested in making the gendoc infra
+>>    suitable for other documents than the manual, so I'm not very
+>>    motivated to review this. But maybe other persons are interested,
+>>    especially Samuel or Thomas DS who have followed the gendoc changes?
+>
+> I've applied PATCH 1, but I've raised concerns on PATCH 2.
 
-> > +* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
-> > +  to one or more directories containing so-called resources (CSS,
-> > +  images...) By default, empty.
-> 
-> Shouldn't there be a dot after the closing parentheses, to finish the sentence?
+Series has largely been reviewed by Samuel and myself. There will be
+at least v7, but I think the series will be ready for integration at
+that version, since almost all patches have been Reviewed-by or
+Acked-by.
 
-I was under the impression that a closing parenthses at the end of a
-sentence would goble the punctuation mark.
+>
+>>  * fs/ext2: misc enhancements (4 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-September/105325.html
+>>
+>>    Needs review, nothing really complicated here.
+>
+> Still needs review/testing.
 
-So I checked a few on-line ressources.
+No change I think, still needs review/testing.
 
-It seems that (once not making it a rule), I was mislaid.
+>
+>>  * Introduce libudev (15 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-September/105309.html
+>>
+>>    Needs review and testing, but the patch series has gone through
+>>    several iterations already, it should be almost good to go.
+>
+> Ditto.
 
-> > +There are also additional hooks (see xref:hooks[] for general information
-> > +on hooks), that a document may set to define extra actions to be done at
-> > +various steps:
-> > +
-> > +* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
-> > +  have been copied by Buildroot. This can be used for, for example,
-> > +  generating part of the manual with information extracted from the
-> 
-> I would write:
-> This can for example be used for ...
+Same.
 
-OK.
+>
+>>  * OpenCV improvement (8 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/105208.html
+>>
+>>    Needs review.
+>
+> I've applied the first patch. But the second patch has some major
+> comments from Yann that are unsolved. Samuel, can you resend a new
+> version?
 
-Thanks! :-)
+Samuel?
 
-Regards,
-Yann E. MORIN.
+>
+>>  * New GFX drivers (4 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/105179.html
+>>
+>>    Needs review.
+>
+> New version sent by Yann at
+> http://lists.busybox.net/pipermail/buildroot/2014-September/106746.html.
+> Still needs review and testing.
+
+Same.
+
+>
+>>  * CMake cleanup (5 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/104794.html
+>>
+>>    Needs review.
+>
+> No change, still needs review.
+
+Applied now.
+
+>>  * toolchain: warn for unsafe library/header paths (12 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/104702.html
+>>
+>>    I have to respin with a new version.
+>
+> No change, it's on my TODO-list.
+
+Same.
+
+>
+>>  * perl: add host variant (6 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/104654.html
+>>
+>>    We need to get that merged to solve some problems, but on the other
+>>    hand, having to build host-perl as soon as a host Perl module is
+>>    built is annoying.
+>
+> No change.
+
+Same.
+
+>
+>>  * Add libgtk3 and bump webkit to version 2.4.3 (3 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-August/103387.html
+>>
+>>    Since the GSoC is over and Hadrien will not continue to work on
+>>    Buildroot, someone needs to adopt those patches. Eric, maybe?
+>
+> Eric has taken over the libgtk3 patch and has sent a new version.
+> Nobody has volunteered for webkit so far.
+
+Same situation, AFAICS.
+
+>
+>>  * packages: rename _OPT into _OPTS (2 patches)
+>>    http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
+>>
+>>    Thomas DS, could you respin this patch series?
+>
+
+Updated version sent, reviewed by Yann.
+When the Peter or ThomasP are ready to merge this, there may be a
+final rebase necessary or an additional patch to fix the newly
+introduced issues, if any. Since the sed expressions are written in
+the commit messages, that won't be a big problem.
+http://lists.busybox.net/pipermail/buildroot/2014-September/107164.html
 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
