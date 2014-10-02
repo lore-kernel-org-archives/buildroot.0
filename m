@@ -1,83 +1,114 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 2 Oct 2014 09:41:27 +0100
-Subject: [Buildroot] [PATCH 2/2] opencv: Let opencv's build system
- handle the ts module dependencies
-In-Reply-To: <CAHXCMML4wgCRFUkYnuhBAEc833FLo4wK4FUg9j7AsA=JpDT8Ag@mail.gmail.com>
-References: <1412165881-64965-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412165881-64965-2-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMML4wgCRFUkYnuhBAEc833FLo4wK4FUg9j7AsA=JpDT8Ag@mail.gmail.com>
-Message-ID: <542D0FB7.3060209@imgtec.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 02 Oct 2014 10:47:44 +0200
+Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
+In-Reply-To: <20141001181626.64e6ef08@free-electrons.com>
+References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
+ <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
+ <20141001181626.64e6ef08@free-electrons.com>
+Message-ID: <542D1130.1050508@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Thomas,
 
-On 10/01/2014 09:05 PM, Samuel Martin wrote:
-> Hi Vincente, all,
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
 >
-> On Wed, Oct 1, 2014 at 2:18 PM, Vicente Olivert Riera
-> <Vincent.Riera@imgtec.com> wrote:
->> In the former version of opencv we added a patch to fix a dependencies
->> problem in the ts module. That issue was reported upstream and is now
->> merged in the 2.4.10 version:
->>
->>    https://github.com/Itseez/opencv/commit/7018f9495920f974258502b9b8b26af16d7ee427
->>
->> So now we can revert our former patch and let opencv's build system
->> handle the ts module dependencies as we already do in the other modules.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   package/opencv/Config.in |    1 -
->>   1 files changed, 0 insertions(+), 1 deletions(-)
->>
->> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
->> index d648e5e..24f540e 100644
->> --- a/package/opencv/Config.in
->> +++ b/package/opencv/Config.in
->> @@ -101,7 +101,6 @@ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
->>
->>   config BR2_PACKAGE_OPENCV_LIB_TS
->>          bool "ts (touchscreen)"
->> -       select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->>          default y
->>          help
->>            Include opencv_ts module into the OpenCV build.
+> On Wed,  1 Oct 2014 17:03:46 +0200, Luca Ceresoli wrote:
 >
-> Thought I understand that you want to keep this knob similar to the
-> others, it is in contradiction with some pending patch [1] which fix
-> the inter OpenCV modules dependencies.
+>> diff --git a/package/imx-usb-loader/Config.in.host b/package/imx-usb-loader/Config.in.host
+>> new file mode 100644
+>> index 0000000..2540ea9
+>> --- /dev/null
+>> +++ b/package/imx-usb-loader/Config.in.host
+>> @@ -0,0 +1,14 @@
+>> +config BR2_PACKAGE_HOST_IMX_USB_LOADER
+>> +	bool "host imx-usb-loader"
+>> +	depends on BR2_arm || BR2_armeb
+>> +	select BR2_PACKAGE_LIBUSB # libusb >= 1.0 is required
 >
-> Whatever this patch got merged or not, the patch [1] will need to be
-> updated after the bump to OpenCV-2.4.10 is merged.
-> So, I have no strong opinion about this patch:
-> - applying it won't break the autobuilders;
-> - whereas not applying it only does not improve that much the
-> situation wrt the issue that [1] attemps to fix.
->
->
-> Regards,
->
->
-> [1] http://patchwork.ozlabs.org/patch/384577/
+> Huh, no! BR2_PACKAGE_LIBUSB is the *target* libusb. If you depend on
+> host-libusb, you don't need to add any select here.
 
-I like that patch!!! In fact, I was thinking on doing that, but you 
-already done it. Great.
+Ops! Will fix!
 
-Yeah, my purpose with the second patch is to leave thinks as they were 
-before and consistent with the other opencv modules. I added a highghi 
-dependency for the ts module, then reported that issue upstream. 
-Upstream fixed the problem, and now I want to bump the version and 
-revert the former fix. That's it.
+>
+>> diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+>> new file mode 100644
+>> index 0000000..48ef35c
+>> --- /dev/null
+>> +++ b/package/imx-usb-loader/imx-usb-loader.mk
+>> @@ -0,0 +1,22 @@
+>> +################################################################################
+>> +#
+>> +# imx-uxb-loader
+>> +#
+>> +################################################################################
+>> +
+>> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
+>> +IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
+>> +IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
+>
+> LGPL with no version specified?
+>
 
-I don't mind if the second patch gets applied or not. But I would really 
-like to see your patch applied (or a similar patch to take into account 
-the opencv modules dependencies in Buildroot).
+Yes. The only indication in getopt.[hc] is:
 
-Thanks for your job!
+   License: LGPL
 
+and nothing else. This means LGPL (ant version), it is the list of
+licenses documented on the BR manual.
+
+BTW, the LGPL license is declared in BR for pppd and tslib as well.
+
+>> +IMX_USB_LOADER_LICENSE_FILES = COPYING
+>> +IMX_USB_LOADER_DEPENDENCIES = host-libusb
+>> +
+>> +define HOST_IMX_USB_LOADER_BUILD_CMDS
+>> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+>> +endef
+>> +
+>> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
+>> +    $(INSTALL) -D -m 0755 $(@D)/imx_usb $(HOST_DIR)/usr/bin
+>> +    $(INSTALL) -D -m 0755 $(@D)/imx_uart $(HOST_DIR)/usr/bin
+>
+> Full path as the last argument.
+
+Will fix.
+
+>
+> Also: what about having this package enabled by default in the sabresd
+> defconfigs, if it makes sense to have this host tool enabled for those
+> configurations?
+
+My plan is slightly more ambitious indeed. What I have in mind is to:
+  1. enable imx-usb-loader for both SABRESD boards;
+  2. prepare the configuration files that imx_usb_loader needs to boot
+     the device;
+  3. document how to boot using imx_usb_loader + the config files.
+
+Step 1 is trivial.
+
+For step 2 I'll have generate two files: imx_usb.conf (the top-level
+config file for imx_usb) and mx6_usb_work.conf (different for the two
+SoC variants). The former can be taken as is from the imx_usb_loader
+sources, the latter must be edited as described in Vincent's tutorial
+[1], at section "Prepare your payload and configuration".
+
+I think the best way is to use a post-image script to create these
+files in output/images, except they are not images. Does this sound
+fine?
+
+If step 2 is well done, the actions to boot the device would be as
+simple as:
+
+   ./output/host/usr/bin/imx_usb -c output/images
+
+Then step 3 would be trivial as well.
+
+[1] https://community.freescale.com/docs/DOC-101842
 -- 
-Vincent
+Luca
