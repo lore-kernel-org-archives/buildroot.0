@@ -1,78 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Oct 2014 22:02:02 +0200
-Subject: [Buildroot] [git commit] rsyslog: security bump to version 7.6.7
-Message-ID: <20141002200404.DC7E59D7A2@busybox.osuosl.org>
+Date: Thu, 2 Oct 2014 22:03:13 +0200
+Subject: [Buildroot] [git commit] atk: bump to version 2.14
+Message-ID: <20141002200404.E641C9D32C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27180f3d892597a359a2c916e89a1480bd7b178c
+commit: http://git.buildroot.net/buildroot/commit/?id=625d0bb4003ec25e6022754a4fb4fb3177a03365
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The previous security fix was incomplete, so now we've got:
-CVE-2014-3683 Remote syslog PRI vulnerability.
+Also add hash file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog-0001-revert-strdup.patch |   27 ----------------------
- package/rsyslog/rsyslog.hash                     |    2 +-
- package/rsyslog/rsyslog.mk                       |    2 +-
- 3 files changed, 2 insertions(+), 29 deletions(-)
+ package/atk/atk.hash |    2 ++
+ package/atk/atk.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog-0001-revert-strdup.patch b/package/rsyslog/rsyslog-0001-revert-strdup.patch
-deleted file mode 100644
-index 5e82018..0000000
---- a/package/rsyslog/rsyslog-0001-revert-strdup.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Revert upstream 0403361ac57082dc47840d1f31832f1a0e319078
--It breaks the build when it's defined.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura rsyslog-7.6.6.orig/grammar/lexer.c rsyslog-7.6.6/grammar/lexer.c
----- rsyslog-7.6.6.orig/grammar/lexer.c	2014-10-01 10:12:34.960082719 -0300
--+++ rsyslog-7.6.6/grammar/lexer.c	2014-10-01 10:13:24.512769964 -0300
--@@ -1459,7 +1459,6 @@
-- #line 32 "lexer.l"
-- #include "config.h"
-- #include "parserif.h"
---extern char *strdup(char*); /* somehow we do not get this from string.h... */
-- /*%option noyywrap nodefault case-insensitive */
-- /* avoid compiler warning: `yyunput' defined but not used */
-- #define YY_NO_INPUT 1
--diff -Nura rsyslog-7.6.6.orig/grammar/lexer.l rsyslog-7.6.6/grammar/lexer.l
----- rsyslog-7.6.6.orig/grammar/lexer.l	2014-10-01 10:12:34.960082719 -0300
--+++ rsyslog-7.6.6/grammar/lexer.l	2014-10-01 10:13:41.935363172 -0300
--@@ -31,7 +31,6 @@
-- %{
-- #include "config.h"
-- #include "parserif.h"
---extern char *strdup(char*); /* somehow we do not get this from string.h... */
-- %}
-- 
-- %option noyywrap nodefault case-insensitive yylineno
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index afc75cc..ed51326 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,2 +1,2 @@
- # From http://www.rsyslog.com/downloads/download-v7-stable/
--sha256	c77ae0db6204c5bd670fa96c354ee5fe1c62c876bd84ec06ed429138c78885bb	rsyslog-7.6.6.tar.gz
-+sha256	fc29d2d9cbf3396091dd0bab2eb6f847aed4a44ef73138a97ddf9447446125ee	rsyslog-7.6.7.tar.gz
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 17fd13b..1a7d890 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
+new file mode 100644
+index 0000000..fe35585
+--- /dev/null
++++ b/package/atk/atk.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.14/atk-2.14.0.sha256sum
++sha256	2875cc0b32bfb173c066c22a337f79793e0c99d2cc5e81c4dac0d5a523b8fbad	atk-2.14.0.tar.xz
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 46a097d..4971cda 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYSLOG_VERSION = 7.6.6
-+RSYSLOG_VERSION = 7.6.7
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+-ATK_VERSION_MAJOR = 2.12
++ATK_VERSION_MAJOR = 2.14
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
