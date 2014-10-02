@@ -1,96 +1,144 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 2 Oct 2014 12:27:53 +0200
-Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
-	infra
-In-Reply-To: <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
-References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
+From: David du Colombier <0intro@gmail.com>
+Date: Thu, 2 Oct 2014 12:49:38 +0200
+Subject: [Buildroot] [PATCH 4/5] x264: new package
+In-Reply-To: <20141001194415.3519dc04@free-electrons.com>
+References: <1412154841-708-1-git-send-email-0intro@gmail.com>
+ <20141001194415.3519dc04@free-electrons.com>
+Message-ID: <CANUoZoHoE6VXE8=-4qdTr6tUkgh+0ErpspHS3k5z1qb7hCakPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Thanks for the review, Thomas.
 
-On Sat, Sep 27, 2014 at 12:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> One question: we received only PATCH 4/5 and PATCH 5/5 from your
+> series. Is this normal? Maybe it's just a small mistake on your side
+> when generating the patches.
+
+Yes, there are only two patches.
+
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 2ad72bc..33616e1 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -33,6 +33,7 @@ menu "Audio and video applications"
+>>       source "package/vlc/Config.in"
+>>       source "package/vorbis-tools/Config.in"
+>>       source "package/wavpack/Config.in"
+>> +     source "package/x264/Config.in"
 >
-> ---
-> Chamges v5 -> v6:
->   - fix names of hooks
->   - remove trailing spaces
-> ---
+> I'd x264 is mostly a library, so I'd prefer to see it in the libraries.
 
-Found some other comments below:
+Done.
 
->  docs/manual/adding-packages-asciidoc.txt | 119 +++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt          |   2 +
->  2 files changed, 121 insertions(+)
->  create mode 100644 docs/manual/adding-packages-asciidoc.txt
+>> diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+>> new file mode 100644
+>> index 0000000..dff2313
+>> --- /dev/null
+>> +++ b/package/x264/x264.mk
+>> @@ -0,0 +1,42 @@
+>> +###############################################################
+>> +#
+>> +# x264
+>> +#
+>> +###############################################################
+>> +
+>> +X264_VERSION = 20140930-2245-stable
+>> +X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
+>> +X264_SITE= ftp://ftp.videolan.org/pub/videolan/x264/snapshots
+>> +X264_LICENSE = GPL
 >
-> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-[..]
-> +
-> +==== +asciidoc-document+ tutorial
-> +
-> +Whereas package infrastructures are suffixed with +-package+, the document
-> +infrastructures are suffixed with +-document+. So, the AsciiDoc infrastructure
-> +is named +asciidoc-document+.
-> +
-> +Here is an example to render a simple AsciiDoc document.
-> +
-> +----
-> +01: ################################################################################
-> +02: #
-> +03: # foo-document
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: FOO_SOURCES = $(sort $(wildcard $(pkgdir)/*))
-> +08: $(eval $(call asciidoc-document))
-> +----
-> +
-> +On line 7, the Makefile declares what the sources of the document are.
-> +Currently, it is expected that the document's sources are only local;
-> +Buildroot will not attempt to download anything to render a document.
-> +Thus, you must indicate where the sources are. Usually, the string
-> +above is sufficient for a document with no sub-directory structure.
-> +
-> +Finally, on line 8, we call the +asciidoc-document+ function, which
-> +generates all the Makefile code necessary to render the document.
+> The license is actually GPLv2+.
 
-'Finally' is a bit an exaggeration here, as there was only one
-described line above it :)
+Done.
 
-> +
-> +==== +asciidoc-document+ reference
-> +
-> +The list of variables that can be set in a +.mk+ file to give metadata
-> +information is (assuming the document name is +foo+) :
-> +
-> +* +FOO_SOURCES+, mandatory, defines the source files for the document.
-> +
-> +* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
-> +  to one or more directories containing so-called resources (CSS,
-> +  images...) By default, empty.
+>> +X264_LICENSE_FILES = COPYING
+>> +X264_INSTALL_STAGING = YES
+>> +X264_INSTALL_TARGET = YES
+>
+> Line not needed.
 
-Shouldn't there be a dot after the closing parentheses, to finish the sentence?
+Done.
 
-> +
-> +There are also additional hooks (see xref:hooks[] for general information
-> +on hooks), that a document may set to define extra actions to be done at
-> +various steps:
-> +
-> +* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
-> +  have been copied by Buildroot. This can be used for, for example,
-> +  generating part of the manual with information extracted from the
+>> +X264_DEPENDENCIES = host-pkgconf
+>> +
+>
+> Might be worth adding a comment right before X264_CONFIGURE_CMDS to
+> indicate that the configure script is not generated by autoconf.
 
-I would write:
-This can for example be used for ...
+Done.
 
-Best regards,
-Thomas
+>> +define X264_CONFIGURE_CMDS
+>> +     (cd $(@D);./configure \
+>> +             --prefix=/usr \
+>> +             --host="$(GNU_TARGET_NAME)" \
+>> +             --cross-prefix="$(TARGET_CROSS)" \
+>> +             --enable-static \
+>> +             --enable-strip \
+>> +             --enable-pic \
+>> +             --enable-shared \
+>
+> --enable-shared will not work for static only builds. Maybe you should
+> try something such as:
+>
+> X264_CONF_OPTS = --enable-static
+>
+> ifeq ($(BR2_PREFER_STATIC_LIB),)
+> X264_CONF_OPTS = --enable-pic --enable-shared
+> endif
+>
+> and then use $(X264_CONF_OPTS) when calling the configure script.
+
+Done. I've let --enable-static as is to always build the static library.
+
+>> +             --disable-ffms \
+>> +             --disable-cli \
+>> +     )
+>> +endef
+>> +
+>> +define X264_BUILD_CMDS
+>> +     $(MAKE) CC="$(TARGET_CC)" -C $(@D)
+>
+> Could you try:
+>
+>         $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+>
+>  ?
+
+I've chosen to put TARGET_CONFIGURE_OPTS before ./configure instead,
+so it will not override the variables defined in config.mak.
+
+> CC="$(TARGET_CC)" as well as many other useful variables are passed in
+> $(TARGET_CONFIGURE_OPTS). It's also a good habit to pass
+> $(TARGET_MAKE_ENV) in the environment.
+>
+>> +endef
+>> +
+>> +define X264_INSTALL_STAGING_CMDS
+>> +     $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
+>
+> Also pass $(TARGET_MAKE_ENV).
+
+Done.
+
+>> +endef
+>> +
+>> +define X264_INSTALL_TARGET_CMDS
+>> +     $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+>
+> Ditto.
+
+Done.
+
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>
+> Could you respin after fixing those minor issues?
+
+I'll send the updated patch.
+
+-- 
+David du Colombier
