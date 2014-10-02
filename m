@@ -1,77 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 Oct 2014 13:23:03 -0300
-Subject: [Buildroot] [PATCH] package/linux-firmware: add option for ath6k
-	chips
-Message-ID: <1412266983-24209-1-git-send-email-gustavo@zacarias.com.ar>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Thu, 2 Oct 2014 14:55:33 -0300
+Subject: [Buildroot] [PATCH] Add dummy definition of O_CLOEXEC
+In-Reply-To: <CAAXf6LX90woPh+2tm6yCa8EGgGrvYx8D8v+q0tJS1DY5=dM+Rw@mail.gmail.com>
+References: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAKi4VAKVL7oxZ6dvHbixeihtiOD2GDkHLknht_jSg3-+hWWGBQ@mail.gmail.com>
+ <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com>
+ <CAKi4VAKpGe7q0Q3HhVCr+0-iGgBBMC5TGcSOckHBed56zs5TNg@mail.gmail.com>
+ <CAAXf6LX90woPh+2tm6yCa8EGgGrvYx8D8v+q0tJS1DY5=dM+Rw@mail.gmail.com>
+Message-ID: <CAKi4VAK=FcaCGDbzVwKvYWtLEqF-0uu0WEmbjQHtP5VmoKABdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for ath6k(l) driver firmware files (AR6002, AR6003 and
-AR6004).
+On Thu, Oct 2, 2014 at 10:29 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Thu, Oct 2, 2014 at 2:07 PM, Lucas De Marchi
+> <lucas.de.marchi@gmail.com> wrote:
+>> On Thu, Oct 2, 2014 at 2:31 AM, Thomas De Schampheleire
+>> <patrickdepinguin@gmail.com> wrote:
+>>> Lucas De Marchi <lucas.de.marchi@gmail.com> schreef:
+>>>>On Tue, Sep 30, 2014 at 4:41 AM, Thomas De Schampheleire
+>>>><patrickdepinguin@gmail.com> wrote:
+>>>>> From: Robert Yang <liezhi.yang@windriver.com>
+>>>>>
+>>>>> O_CLOEXEC is introduced from Linux 2.6.23, so old kernel doesn't have
+>>>>> it, we need check before use.
+>>>>
+>>>>Humn... Do we really want to support kernels older than 2.6.23?
+>>>>
+>>>>Adding a workaround like this IMO will just hide bugs because we rely
+>>>>on O_CLOEXEC semantics. Doing nothing is not really what we want.
+>>>>Maybe if ancient downstream distros want the workaround they can
+>>>>define O_CLOEXEC by themselves during build... passing it in CFLAGS
+>>>>should work
+>>>>
+>>>
+>>> This is the same type of distro for which the
+>>>  implementation of be32toh was needed: RHEL5.
+>>
+>> Similar, but not the same. For the implementation of be32toh we depend
+>> on *libc* having it. As I said in the original email, I was surprised
+>> a libc could possibly miss it, but I was ok with adding a fallback
+>> implementation (maybe we should even go one step further and do what
+>> systemd does to check our use cases with sparse).
+>>
+>>
+>>> Ancient, yes, but still supported and used in corporate
+>>>  environments, also to build modern systems, for
+>>>  example using Buildroot or Openembedded.
+>>
+>> That's my worry. If you are building modern systems and you don't have
+>> O_CLOEXEC (and assuming you are not trying to put 2.6.22 in your
+>> embedded system), I'd say you are using the wrong headers, from host
+>> instead of target.
+>
+> In Buildroot, we're not leaking host kernel headers into the target.
+> The kernel headers used for target compilation are those coming with
+> the toolchain, which are recent kernel headers supporting O_CLOEXEC.
+>
+> The problem I'm encountering (and people on OpenEmbedded apparently
+> have too) is when building host-kmod, that is the kmod tools that run
+> on the host system (depmod -->  kmod). These are (in buildroot at
+> least) built using the toolchain on the host system, and thus with the
+> kernel headers from the host system.
+> On RHEL5 systems these are old kernel headers from pre-O_CLOEXEC times.
+>
+>>
+>>> The patch comes from openembedded and is about
+>>>  to be integrated in Buildroot too, but it's far more
+>>>  advantageous to have such changes integrated
+>>>  upstream.
+>>
+>>
+>> They shouldn't be defining O_CLOEXEC to 0 in the first place. I don't
+>> want to support leaking file descriptors to child process. You are
+>> silently giving different behavior to your target depending on the
+>> machine it was built with :-o.
+>
+> As explained above, this is not what is happening. The O_CLOEXEC dummy
+> definition to 0 is only relevant when building host tools (depmod) on
+> old systems like RHEL5. These host tools are effectively run on the
+> same host where they are built. When building for the target, or when
+> building on modern host systems, the dummy does not set in and there
+> is anyway no impact.
+>
+> Hope this clarifies,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-firmware/Config.in         | 15 +++++++++++++++
- package/linux-firmware/linux-firmware.mk | 18 ++++++++++++++++++
- 2 files changed, 33 insertions(+)
+Yep, this clarifies, thanks.
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index cd35dcc..8b71dd3 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -19,6 +19,21 @@ endmenu # Audio
- 
- menu "WiFi firmware"
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6002
-+	bool "Atheros 6002"
-+	help
-+	  Firmware files for the Atheros AR6002 chip
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6003
-+	bool "Atheros 6003"
-+	help
-+	  Firmware files for the Atheros AR6003 chip
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6004
-+	bool "Atheros 6004"
-+	help
-+	  Firmware files for the Atheros AR6004 chip
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010
- 	bool "Atheros 7010"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 4303985..b435199 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -59,6 +59,24 @@ LINUX_FIRMWARE_FILES += rtlwifi/rtl8821aefw.bin \
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
- 
-+# ar6002
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6002),y)
-+LINUX_FIRMWARE_FILES += ath6k/AR6002
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+endif
-+
-+# ar6003
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6003),y)
-+LINUX_FIRMWARE_FILES += ath6k/AR6003
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+endif
-+
-+# ar6004
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6004),y)
-+LINUX_FIRMWARE_FILES += ath6k/AR6004
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+endif
-+
- # ar7010
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010),y)
- LINUX_FIRMWARE_FILES += ar7010.fw ar7010_1_1.fw htc_7010.fw
+However it only makes sense for this specific scenario, i.e. you don't
+care for depmod leaking fds on the host... It's not something
+acceptable to do on upstream, sorry.
+
 -- 
-2.0.4
+Lucas De Marchi
