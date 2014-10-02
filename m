@@ -1,75 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Oct 2014 11:52:00 +0200
-Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
-In-Reply-To: <542D1130.1050508@lucaceresoli.net>
-References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
- <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
- <20141001181626.64e6ef08@free-electrons.com>
- <542D1130.1050508@lucaceresoli.net>
-Message-ID: <20141002115200.2b6486d4@free-electrons.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Thu, 2 Oct 2014 11:53:56 +0200
+Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
+In-Reply-To: <108278058.26045793.1412174271135.JavaMail.root@openwide.fr>
+References: <CAM+bi4up=zDCRhJ-+LnVMWpALVoeaK4=V_pM=1ted1vkkRMhqQ@mail.gmail.com>
+ <108278058.26045793.1412174271135.JavaMail.root@openwide.fr>
+Message-ID: <CAM+bi4smyLzhBoDcU2+DT_6edX+Dxr440sNTK1+EFBzCQo8LyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Hi!
 
-On Thu, 02 Oct 2014 10:47:44 +0200, Luca Ceresoli wrote:
+I've been thinking about the need for different overlays.
+Even though that's how I firstly organized my setup, I am now thinking
+it may not be the best course of action.
 
-> Yes. The only indication in getopt.[hc] is:
-> 
->    License: LGPL
-> 
-> and nothing else. This means LGPL (ant version), it is the list of
-> licenses documented on the BR manual.
-> 
-> BTW, the LGPL license is declared in BR for pppd and tslib as well.
+I've realized that in my setup, the two not-equal overlays are, in
+fact, equal except for a couple directories and /etc/inittab.
+I believe that it may be a better solution to just create a package
+that installs these big demo files I need on the demo machine,
+and simply select that package on the demo defconfig, instead of
+having two almost equal overlays.
 
-Ok.
+I would still have to solve the differences in /etc/inittab, but maybe
+this file can be selected via a post build script.
 
-> > Also: what about having this package enabled by default in the sabresd
-> > defconfigs, if it makes sense to have this host tool enabled for those
-> > configurations?
-> 
-> My plan is slightly more ambitious indeed. What I have in mind is to:
->   1. enable imx-usb-loader for both SABRESD boards;
->   2. prepare the configuration files that imx_usb_loader needs to boot
->      the device;
->   3. document how to boot using imx_usb_loader + the config files.
+What do you think?
 
-Sounds like a good plan.
 
-> 
-> Step 1 is trivial.
-> 
-> For step 2 I'll have generate two files: imx_usb.conf (the top-level
-> config file for imx_usb) and mx6_usb_work.conf (different for the two
-> SoC variants). The former can be taken as is from the imx_usb_loader
-> sources, the latter must be edited as described in Vincent's tutorial
-> [1], at section "Prepare your payload and configuration".
-> 
-> I think the best way is to use a post-image script to create these
-> files in output/images, except they are not images. Does this sound
-> fine?
+2014-10-01 16:37 GMT+02:00 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+>
+> ----- Mail original -----
+>> Hi, Jeremy
+>>
+>> Well, maybe I went all crazy splitting everything for each project,
+>> but there's some reason behind it.
+>
+> that's what I expected and why I asked :)
+>
+>>
+>> My main project is destined to run in a very specific hardware, with
+>> external devices that pass information to the system. A real example
+>> is a GPS device.
+>>
+>> On the other hand, I have a x86 machine which I use as a demo-machine
+>> with no external hardware attached (no GPS, for example). This
+>> requires that the information that is typically received from these
+>> external devices must be emulated by some piece of software.
+>>
+>> So, in my case, of course dl/ directoy is common, Config.in and
+>> external.mk are shared. I believe local.mk can also be shared,
+>> although in my current layout it is not.
+>
+> there is no point in not sharing it, since external.mk fullfills the
+> same purpose and is already shared
+>
+>>It seems possible that some
+>> patches could be different, but I guess they could also be shared.
+>>
+>> I need, however, to have different overlays, such as, for example, a
+>> 'gpsd' emulator can run instead of the real gpsd. I manage this with
+>> a
+>> different inittab file and different configuration files that I place
+>> on each project's overlay. Alongside this trivial differences, I must
+>> load into the demo-machine some big files (a couple of GB) that
+>> emulate the data that, in the real machine, is received from external
+>> sources. These files would not even fit on the storage of the real
+>> machine.
+>>
+>> Well, all in all, I think only the overlays may need to be different,
+>> so there's that.
+>>
+>
+>
+> hmm.. ok, that complicates things a bit... I'll look into the BR internal
+> to see if it's possible to have two overlays (one automatically set by
+> BR2_EXTERNAL and one set via the configuration menu) and if the project is
+> ready to accept that...
+>
+> the only think we can't easily double would be Config.in beacause that file
+> needs to exist prior to menuconfig. The only way to do it would be to specify
+> it in the make command line (the internal one we generate, not the toplevel
+> one) and again see if buildroot is interested... I'll see what I can do
+>
+> I also added an "anonymous" project for the common use-case where you
+> only need one subproject, and i'm working on a README...
+>
+>
+>> Regards
+>>
+>>
+>> 2014-10-01 16:08 GMT+02:00 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+>> >
+>> >
+>> > Looking into it a bit deeper, I have a couple of questions for
+>> > you..
+>> >
+>> > in your current layout
+>> >
+>> > * BR2_EXTERNAL is shared, so Config.in is shared and external.mk
+>> > is shared
+>> > * each project has its own overlay
+>> > * each project has its own local.mk
+>> > * each project has its own patch subdirectory...
+>> > * dl is shared
+>> >
+>> > so I need to understand your use-case a little more.
+>> > As I said my use case is "same project, but different hardware" so
+>> > my favorite layout would be
+>> >
+>> > * shared BR2_EXTERNAL
+>> > * shared overlay
+>> > * shared patches
+>> > * different config files
+>> > * don't care about local.mk, might as well make it different
+>> >
+>> > This layout makes more sense to me (shared overlay and shared
+>> > patches)
+>> > but I want to make sure it fits your use-case before I do the
+>> > change
+>> >
+>> > It makes little sense to me to have completely different projects
+>> > which are just sharing dl/ since dl is not saved in git and it's
+>> > more handy to have completely separate git repo in this case...
+>> >
+>> >
+>> > If you can tell me a little more, I'll see how I adapt this...
+>>
+>>
+>>
+>> --
+>> ?lvaro G?mez Machado
+>>
 
-Yes, it sounds fine. From my point of view output/images is not
-necessarily strictly limited to binary images. It can also contain
-other files that are useful to run/flash the system on the target.
 
-Though do you really need to generate those files? They look like
-pretty much static configuration files, that could be put in
-board/freescale/<foo>/, no?
 
-> If step 2 is well done, the actions to boot the device would be as
-> simple as:
-> 
->    ./output/host/usr/bin/imx_usb -c output/images
-
-Cool!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+?lvaro G?mez Machado
