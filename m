@@ -1,89 +1,42 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu,  2 Oct 2014 15:58:30 -0400
-Subject: [Buildroot] [PATCH 1/1] cppunit: Added package
-Message-ID: <1412279910-12645-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu,  2 Oct 2014 22:00:51 +0200
+Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.14
+Message-ID: <1412280051-23858-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CppUnit is the C++ port of the famous JUnit framework for unit testing.
-Test output is in XML or text format for automatic testing and GUI
-based for supervised tests.
+Also add hash file.
 
-http://www.freedesktop.org/wiki/Software/cppunit/
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/Config.in          |  1 +
- package/cppunit/Config.in  | 12 ++++++++++++
- package/cppunit/cppunit.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 package/cppunit/Config.in
- create mode 100644 package/cppunit/cppunit.mk
+ package/atk/atk.hash |    2 ++
+ package/atk/atk.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/atk/atk.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 2ad72bc..5cde341 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -831,6 +831,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-+	source "package/cppunit/Config.in"
- 	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
-diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
 new file mode 100644
-index 0000000..91700b8
+index 0000000..fe35585
 --- /dev/null
-+++ b/package/cppunit/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_CPPUNIT
-+	bool "cppunit"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
-+	  Test output is in XML or text format for automatic testing and GUI
-+	  based for supervised tests.
-+
-+	  http://www.freedesktop.org/wiki/Software/cppunit/
-+
-+comment "cppunit needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
-new file mode 100644
-index 0000000..47d27be
---- /dev/null
-+++ b/package/cppunit/cppunit.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# cppunit
-+#
-+################################################################################
-+
-+CPPUNIT_VERSION = cppunit-1.13.2
-+CPPUNIT_SITE = git://anongit.freedesktop.org/git/libreoffice/cppunit/
-+CPPUNIT_INSTALL_STAGING = YES
-+CPPUNIT_LICENSE = GPLv2
-+CPPUNIT_LICENSE_FILES = COPYING
-+
-+define CPPUNIT_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+CPPUNIT_PRE_CONFIGURE_HOOKS += CPPUNIT_RUN_AUTOGEN
-+
-+define CPPUNIT_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		./configure \
-+		--host=$(GNU_TARGET_NAME) \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
-+
-+$(eval $(autotools-package))
++++ b/package/atk/atk.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.14/atk-2.14.0.sha256sum
++sha256	2875cc0b32bfb173c066c22a337f79793e0c99d2cc5e81c4dac0d5a523b8fbad	atk-2.14.0.tar.xz
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 46a097d..4971cda 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATK_VERSION_MAJOR = 2.12
++ATK_VERSION_MAJOR = 2.14
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
 -- 
-1.8.3.4
+1.7.9.5
