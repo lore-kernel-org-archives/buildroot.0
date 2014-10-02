@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Oct 2014 12:17:30 +0200
-Subject: [Buildroot] [git commit] lttng-babeltrace: fix license information
-Message-ID: <20141002101758.1F91D9D319@busybox.osuosl.org>
+Date: Thu, 2 Oct 2014 12:18:10 +0200
+Subject: [Buildroot] [PATCH 1/3] ffmpeg: fix license file
+In-Reply-To: <1412244663-23868-1-git-send-email-luca@lucaceresoli.net>
+References: <1412244663-23868-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20141002121810.32013567@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05b77215857906f958731afe8bc3395df9aeb742
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Luca Ceresoli,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-babeltrace/lttng-babeltrace.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu,  2 Oct 2014 12:11:01 +0200, Luca Ceresoli wrote:
+> Somewhere between 1.2.7 and 2.3.1 (version bump in bf76f4319131a107)
+> the LICENSE file has been renamed to LICENSE.md, so `make legal-info`
+> is currently broken. Update to the current file name.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  package/ffmpeg/ffmpeg.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 838f5f6..8183510 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -7,7 +7,7 @@
- LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace
- LTTNG_BABELTRACE_VERSION = 1.2.2
- LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
--LTTNG_BABELTRACE_LICENSE = MIT; LGPL2.1 for include/babeltrace/list.h; GPLv2+ for test code
-+LTTNG_BABELTRACE_LICENSE = MIT; LGPLv2.1 for include/babeltrace/list.h; GPLv2 for test code
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
- 
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+All three patches applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
