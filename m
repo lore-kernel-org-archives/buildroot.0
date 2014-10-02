@@ -1,26 +1,74 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Oct 2014 21:05:35 +0200
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: use select instead of
-	epoll
-In-Reply-To: <1412193302-5794-1-git-send-email-limpens@gmail.com> (Eric
- Limpens's message of "Wed, 1 Oct 2014 21:55:02 +0200")
-References: <1412193302-5794-1-git-send-email-limpens@gmail.com>
-Message-ID: <877g0il2bk.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 2 Oct 2014 21:04:26 +0200
+Subject: [Buildroot] [git commit] qemu-x86_64: update kernel
+Message-ID: <20141002190557.E3A249D7DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Limpens <limpens@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6aabd7cc446f138966cca71bc964efdb9e52ac6d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As discussed with Gustavo on the mailing-list, remove EPOLL flag.
- > wpa_supplicant isn't able to answer DBUS message as events are
- > never delivered.
+Update to Linux Kernel 3.16.3.
+Enable Ext4 by default.
 
- > Signed-off-by: Eric Limpens <limpens@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../{linux-3.13.config => linux-3.16.config}       |    2 +-
+ board/qemu/x86_64/readme.txt                       |    2 +-
+ configs/qemu_x86_64_defconfig                      |   10 +++++-----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/qemu/x86_64/linux-3.13.config b/board/qemu/x86_64/linux-3.16.config
+similarity index 99%
+rename from board/qemu/x86_64/linux-3.13.config
+rename to board/qemu/x86_64/linux-3.16.config
+index d738e4d..920a0a6 100644
+--- a/board/qemu/x86_64/linux-3.13.config
++++ b/board/qemu/x86_64/linux-3.16.config
+@@ -47,7 +47,7 @@ CONFIG_SND_HDA_INTEL=y
+ # CONFIG_USB_SUPPORT is not set
+ # CONFIG_X86_PLATFORM_DEVICES is not set
+ # CONFIG_DMIID is not set
+-CONFIG_EXT2_FS=y
++CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
+ # CONFIG_MISC_FILESYSTEMS is not set
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index f350d36..4fbbc0d 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.1.0
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 827d362..b01666c 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -9,14 +9,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.16 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.16.3"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.16.config"
