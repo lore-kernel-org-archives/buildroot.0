@@ -1,32 +1,77 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu,  2 Oct 2014 21:55:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xenomai: enable or disable debug
-	based on BR2_ENABLE_DEBUG
-Message-ID: <1412279752-5622-2-git-send-email-romain.naour@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  2 Oct 2014 16:59:00 -0300
+Subject: [Buildroot] [PATCH] rsyslog: security bump to version 7.6.7
+Message-ID: <1412279940-22839-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/xenomai/xenomai.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The previous security fix was incomplete, so now we've got:
+CVE-2014-3683 Remote syslog PRI vulnerability.
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index f360c2a..4bc0871 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -19,7 +19,8 @@ XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-user
- XENOMAI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-user
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/rsyslog/rsyslog-0001-revert-strdup.patch | 27 ------------------------
+ package/rsyslog/rsyslog.hash                     |  2 +-
+ package/rsyslog/rsyslog.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 29 deletions(-)
+ delete mode 100644 package/rsyslog/rsyslog-0001-revert-strdup.patch
+
+diff --git a/package/rsyslog/rsyslog-0001-revert-strdup.patch b/package/rsyslog/rsyslog-0001-revert-strdup.patch
+deleted file mode 100644
+index 5e82018..0000000
+--- a/package/rsyslog/rsyslog-0001-revert-strdup.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Revert upstream 0403361ac57082dc47840d1f31832f1a0e319078
+-It breaks the build when it's defined.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura rsyslog-7.6.6.orig/grammar/lexer.c rsyslog-7.6.6/grammar/lexer.c
+---- rsyslog-7.6.6.orig/grammar/lexer.c	2014-10-01 10:12:34.960082719 -0300
+-+++ rsyslog-7.6.6/grammar/lexer.c	2014-10-01 10:13:24.512769964 -0300
+-@@ -1459,7 +1459,6 @@
+- #line 32 "lexer.l"
+- #include "config.h"
+- #include "parserif.h"
+--extern char *strdup(char*); /* somehow we do not get this from string.h... */
+- /*%option noyywrap nodefault case-insensitive */
+- /* avoid compiler warning: `yyunput' defined but not used */
+- #define YY_NO_INPUT 1
+-diff -Nura rsyslog-7.6.6.orig/grammar/lexer.l rsyslog-7.6.6/grammar/lexer.l
+---- rsyslog-7.6.6.orig/grammar/lexer.l	2014-10-01 10:12:34.960082719 -0300
+-+++ rsyslog-7.6.6/grammar/lexer.l	2014-10-01 10:13:41.935363172 -0300
+-@@ -31,7 +31,6 @@
+- %{
+- #include "config.h"
+- #include "parserif.h"
+--extern char *strdup(char*); /* somehow we do not get this from string.h... */
+- %}
+- 
+- %option noyywrap nodefault case-insensitive yylineno
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index afc75cc..ed51326 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,2 @@
+ # From http://www.rsyslog.com/downloads/download-v7-stable/
+-sha256	c77ae0db6204c5bd670fa96c354ee5fe1c62c876bd84ec06ed429138c78885bb	rsyslog-7.6.6.tar.gz
++sha256	fc29d2d9cbf3396091dd0bab2eb6f847aed4a44ef73138a97ddf9447446125ee	rsyslog-7.6.7.tar.gz
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 17fd13b..1a7d890 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/ --disable-doc-install
-+XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/ --disable-doc-install \
-+	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
- 
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
+-RSYSLOG_VERSION = 7.6.6
++RSYSLOG_VERSION = 7.6.7
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
 -- 
-1.9.3
+2.0.4
