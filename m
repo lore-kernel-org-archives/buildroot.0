@@ -1,42 +1,24 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu,  2 Oct 2014 22:00:51 +0200
-Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.14
-Message-ID: <1412280051-23858-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 02 Oct 2014 22:02:49 +0200
+Subject: [Buildroot] [PATCH] rsyslog: security bump to version 7.6.7
+In-Reply-To: <1412279940-22839-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 2 Oct 2014 16:59:00 -0300")
+References: <1412279940-22839-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87tx3mjl3q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/atk/atk.hash |    2 ++
- package/atk/atk.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/atk/atk.hash
+ > The previous security fix was incomplete, so now we've got:
+ > CVE-2014-3683 Remote syslog PRI vulnerability.
 
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-new file mode 100644
-index 0000000..fe35585
---- /dev/null
-+++ b/package/atk/atk.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/atk/2.14/atk-2.14.0.sha256sum
-+sha256	2875cc0b32bfb173c066c22a337f79793e0c99d2cc5e81c4dac0d5a523b8fbad	atk-2.14.0.tar.xz
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 46a097d..4971cda 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATK_VERSION_MAJOR = 2.12
-+ATK_VERSION_MAJOR = 2.14
- ATK_VERSION = $(ATK_VERSION_MAJOR).0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
