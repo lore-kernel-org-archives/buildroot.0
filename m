@@ -1,87 +1,68 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 02 Oct 2014 13:43:34 +0200
-Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
-In-Reply-To: <542D1736.70603@freescale.com>
-References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
- <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
- <542D1736.70603@freescale.com>
-Message-ID: <542D3A66.6020607@lucaceresoli.net>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Thu, 2 Oct 2014 09:07:06 -0300
+Subject: [Buildroot] [PATCH] Add dummy definition of O_CLOEXEC
+In-Reply-To: <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com>
+References: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAKi4VAKVL7oxZ6dvHbixeihtiOD2GDkHLknht_jSg3-+hWWGBQ@mail.gmail.com>
+ <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com>
+Message-ID: <CAKi4VAKpGe7q0Q3HhVCr+0-iGgBBMC5TGcSOckHBed56zs5TNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+On Thu, Oct 2, 2014 at 2:31 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Lucas De Marchi <lucas.de.marchi@gmail.com> schreef:
+>>On Tue, Sep 30, 2014 at 4:41 AM, Thomas De Schampheleire
+>><patrickdepinguin@gmail.com> wrote:
+>>> From: Robert Yang <liezhi.yang@windriver.com>
+>>>
+>>> O_CLOEXEC is introduced from Linux 2.6.23, so old kernel doesn't have
+>>> it, we need check before use.
+>>
+>>Humn... Do we really want to support kernels older than 2.6.23?
+>>
+>>Adding a workaround like this IMO will just hide bugs because we rely
+>>on O_CLOEXEC semantics. Doing nothing is not really what we want.
+>>Maybe if ancient downstream distros want the workaround they can
+>>define O_CLOEXEC by themselves during build... passing it in CFLAGS
+>>should work
+>>
+>
+> This is the same type of distro for which the
+>  implementation of be32toh was needed: RHEL5.
 
-Vincent Stehl? wrote:
-> On 10/01/2014 05:03 PM, Luca Ceresoli wrote:
-> (snip)
->
-> Hi Luca,
->
-> Thank you for this imx_usb_loader "recipe".
->
-> I have just some small remarks for the configuration files (below), but
-> apart from that I could build the loader ok with 'make
-> host-imx-usb-loader', and boot through USB just fine. So thanks!
+Similar, but not the same. For the implementation of be32toh we depend
+on *libc* having it. As I said in the original email, I was surprised
+a libc could possibly miss it, but I was ok with adding a fallback
+implementation (maybe we should even go one step further and do what
+systemd does to check our use cases with sparse).
 
-Thanks for keeping my patches tested!
 
->
-> (..)
->> diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
->> new file mode 100644
->> index 0000000..48ef35c
->> --- /dev/null
->> +++ b/package/imx-usb-loader/imx-usb-loader.mk
->> @@ -0,0 +1,22 @@
->> +################################################################################
->> +#
->> +# imx-uxb-loader
->> +#
->> +################################################################################
->> +
->> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
->> +IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
->> +IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
->> +IMX_USB_LOADER_LICENSE_FILES = COPYING
->> +IMX_USB_LOADER_DEPENDENCIES = host-libusb
->> +
->> +define HOST_IMX_USB_LOADER_BUILD_CMDS
->> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
->> +endef
->> +
->> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
->> +    $(INSTALL) -D -m 0755 $(@D)/imx_usb $(HOST_DIR)/usr/bin
->> +    $(INSTALL) -D -m 0755 $(@D)/imx_uart $(HOST_DIR)/usr/bin
->
-> Wouldn't you want to install the supplied configurations files, too?
-> Like in:
->
->    $(INSTALL) -D -m 0644 $(@D)/imx_usb.conf $(HOST_DIR)/etc/imx_usb.conf
->    $(INSTALL) -D -m 0644 $(@D)/mx6_usb_work.conf
-> $(HOST_DIR)/etc/mx6_usb_work.conf
->
-> I feel they could be used as examples or, at least, starting points.
->
-> Maybe you want to patch a bit imx_usb, to change the default
-> configuration files path? It defaults to '/etc/imx-loader.d/' but I
-> think we could have something better in the buildroot case, like
-> "$(HOST_DIR)/etc".
+> Ancient, yes, but still supported and used in corporate
+>  environments, also to build modern systems, for
+>  example using Buildroot or Openembedded.
 
-This means I would need to patch the imx_usb.c source code, and do it in
-a way that is not relocatable.
+That's my worry. If you are building modern systems and you don't have
+O_CLOEXEC (and assuming you are not trying to put 2.6.22 in your
+embedded system), I'd say you are using the wrong headers, from host
+instead of target.
 
-Actually I have another plan [1]: creating a ready-to-use config file
-and document how to use it, without touching how imx_usb works now.
-Unless I'm missing something from your e-mail, I find my way cleaner
-and more complete.
+> The patch comes from openembedded and is about
+>  to be integrated in Buildroot too, but it's far more
+>  advantageous to have such changes integrated
+>  upstream.
 
-Users who want to use this tool in a different way can still find the
-original files in output/build/imx-usb-loader-*/ of course.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-October/107492.html
+They shouldn't be defining O_CLOEXEC to 0 in the first place. I don't
+want to support leaking file descriptors to child process. You are
+silently giving different behavior to your target depending on the
+machine it was built with :-o.
+
+CC'ing buildroot mailing list. Peter, do you do this for other packages as well?
+
 
 -- 
-Luca
+Lucas De Marchi
