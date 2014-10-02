@@ -1,63 +1,96 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 2 Oct 2014 12:21:05 +0200
-Subject: [Buildroot] [PATCH 23/25 v6] doc/asciidoc: always use UTC
-In-Reply-To: <de84d86d9a8fe394f9481b0b17eae6667c18ec07.1411812968.git.yann.morin.1998@free.fr>
+Date: Thu, 2 Oct 2014 12:27:53 +0200
+Subject: [Buildroot] [PATCH 25/25 v6] docs/manual: document the asciidoc
+	infra
+In-Reply-To: <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
 References: <cover.1411812968.git.yann.morin.1998@free.fr>
- <de84d86d9a8fe394f9481b0b17eae6667c18ec07.1411812968.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LU2KNsD4N9_XnTiwbKT8VRDdBZMk1Knkvm-V87q_s3HDQ@mail.gmail.com>
+ <b0043d14369f4ce8fe60762c8b48c85a72a55894.1411812968.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXX5NkLrUUTjOV1YKOBpo07ZAug43FbMKte7VSdeu=z3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 27, 2014 at 12:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Currently, the manual is rendered with the timezone of the user running
-> the rendering. This timezone can fluctuate, depending on the date, due
-> to DST (Daylight Saving Time). Currently, the manual is rendered in
-> either CET or CEST (Central European Time, or its DST variant.)
->
-> So, a manual rendered during the summer or the winter would refer to a
-> non-constant timezone. If the machine and/or user doing the rendering
-> also changes, there is no guarantee the timezone would still be CET/CEST.
-> This is not a hard issue, since the user can still deduce the time in
-> UTC, but is just incoherent.
->
-> Just force the timezone to be UTC when doing the rendering of the
-> manual, so we are not dependent on the machine or user doign the
+Hi Yann,
 
-doing
-
-> rendering.
->
+On Sat, Sep 27, 2014 at 12:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Samuel Martin <s.martin49@gmail.com>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>
 > ---
->  package/doc-asciidoc.mk | 2 ++
->  1 file changed, 2 insertions(+)
+> Chamges v5 -> v6:
+>   - fix names of hooks
+>   - remove trailing spaces
+> ---
+
+Found some other comments below:
+
+>  docs/manual/adding-packages-asciidoc.txt | 119 +++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt          |   2 +
+>  2 files changed, 121 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-asciidoc.txt
 >
-> diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> index 6185982..04c6299 100644
-> --- a/package/doc-asciidoc.mk
-> +++ b/package/doc-asciidoc.mk
-> @@ -93,6 +93,8 @@ define $(2)_$(4)_INSTALL_CMDS
->  endef
->  endif
->
-> +$$(O)/docs/$(1)/$(1).$(6): export TZ=UTC
+> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+[..]
 > +
->  ifeq ($(6)-$$(GENDOC_XSLTPROC_IS_BROKEN),pdf-y)
->  $$(O)/docs/$(1)/$(1).$(6):
->         $$(warning PDF generation is disabled because of a bug in \
-> --
-> 1.9.1
->
+> +==== +asciidoc-document+ tutorial
+> +
+> +Whereas package infrastructures are suffixed with +-package+, the document
+> +infrastructures are suffixed with +-document+. So, the AsciiDoc infrastructure
+> +is named +asciidoc-document+.
+> +
+> +Here is an example to render a simple AsciiDoc document.
+> +
+> +----
+> +01: ################################################################################
+> +02: #
+> +03: # foo-document
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: FOO_SOURCES = $(sort $(wildcard $(pkgdir)/*))
+> +08: $(eval $(call asciidoc-document))
+> +----
+> +
+> +On line 7, the Makefile declares what the sources of the document are.
+> +Currently, it is expected that the document's sources are only local;
+> +Buildroot will not attempt to download anything to render a document.
+> +Thus, you must indicate where the sources are. Usually, the string
+> +above is sufficient for a document with no sub-directory structure.
+> +
+> +Finally, on line 8, we call the +asciidoc-document+ function, which
+> +generates all the Makefile code necessary to render the document.
 
-Although I don't mind such a change, I fail to understand the use case
-here. Is this only regarding the printed date at the beginning of the
-manual?
+'Finally' is a bit an exaggeration here, as there was only one
+described line above it :)
 
-With the typo in the commit msg fixed:
+> +
+> +==== +asciidoc-document+ reference
+> +
+> +The list of variables that can be set in a +.mk+ file to give metadata
+> +information is (assuming the document name is +foo+) :
+> +
+> +* +FOO_SOURCES+, mandatory, defines the source files for the document.
+> +
+> +* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
+> +  to one or more directories containing so-called resources (CSS,
+> +  images...) By default, empty.
 
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Shouldn't there be a dot after the closing parentheses, to finish the sentence?
+
+> +
+> +There are also additional hooks (see xref:hooks[] for general information
+> +on hooks), that a document may set to define extra actions to be done at
+> +various steps:
+> +
+> +* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
+> +  have been copied by Buildroot. This can be used for, for example,
+> +  generating part of the manual with information extracted from the
+
+I would write:
+This can for example be used for ...
+
+Best regards,
+Thomas
