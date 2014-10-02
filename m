@@ -1,72 +1,62 @@
-From: =?windows-1252?Q?Vincent_Stehl=E9?= <vincent.stehle@freescale.com>
-Date: Thu, 2 Oct 2014 11:13:26 +0200
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 02 Oct 2014 11:17:15 +0200
 Subject: [Buildroot] [PATCH v2 3/3] imx-usb-loader: new package
-In-Reply-To: <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <542D1130.1050508@lucaceresoli.net>
 References: <1412175826-9010-1-git-send-email-luca@lucaceresoli.net>
  <1412175826-9010-4-git-send-email-luca@lucaceresoli.net>
-Message-ID: <542D1736.70603@freescale.com>
+ <20141001181626.64e6ef08@free-electrons.com>
+ <542D1130.1050508@lucaceresoli.net>
+Message-ID: <542D181B.3090505@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/2014 05:03 PM, Luca Ceresoli wrote:
-(snip)
+Hi,
 
-Hi Luca,
+Luca Ceresoli wrote:
+> Dear Thomas,
+>
+> Thomas Petazzoni wrote:
+>> Dear Luca Ceresoli,
+>>
+>> On Wed,  1 Oct 2014 17:03:46 +0200, Luca Ceresoli wrote:
+...
+>>> --- /dev/null
+>>> +++ b/package/imx-usb-loader/imx-usb-loader.mk
+>>> @@ -0,0 +1,22 @@
+>>> +################################################################################
+>>>
+>>> +#
+>>> +# imx-uxb-loader
+>>> +#
+>>> +################################################################################
+>>>
+>>> +
+>>> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
+>>> +IMX_USB_LOADER_SITE = $(call
+>>> github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
+>>> +IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
+>>
+>> LGPL with no version specified?
+>>
+>
+> Yes. The only indication in getopt.[hc] is:
+>
+>    License: LGPL
+>
+> and nothing else. This means LGPL (ant version), it is the list of
+> licenses documented on the BR manual.
+>
+> BTW, the LGPL license is declared in BR for pppd and tslib as well.
 
-Thank you for this imx_usb_loader "recipe".
+Looking at it a bit closer, getopt.* is not used to build on Linux,
+only for Windows.
 
-I have just some small remarks for the configuration files (below), but
-apart from that I could build the loader ok with 'make
-host-imx-usb-loader', and boot through USB just fine. So thanks!
+So I guess I could drop the LGPL part:
 
-(..)
-> diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
-> new file mode 100644
-> index 0000000..48ef35c
-> --- /dev/null
-> +++ b/package/imx-usb-loader/imx-usb-loader.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# imx-uxb-loader
-> +#
-> +################################################################################
-> +
-> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
-> +IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
-> +IMX_USB_LOADER_LICENSE = LGPLv2.1+, LGPL (getopt.*)
-> +IMX_USB_LOADER_LICENSE_FILES = COPYING
-> +IMX_USB_LOADER_DEPENDENCIES = host-libusb
-> +
-> +define HOST_IMX_USB_LOADER_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
-> +    $(INSTALL) -D -m 0755 $(@D)/imx_usb $(HOST_DIR)/usr/bin
-> +    $(INSTALL) -D -m 0755 $(@D)/imx_uart $(HOST_DIR)/usr/bin
+   IMX_USB_LOADER_LICENSE = LGPLv2.1+
 
-Wouldn't you want to install the supplied configurations files, too?
-Like in:
-
-  $(INSTALL) -D -m 0644 $(@D)/imx_usb.conf $(HOST_DIR)/etc/imx_usb.conf
-  $(INSTALL) -D -m 0644 $(@D)/mx6_usb_work.conf
-$(HOST_DIR)/etc/mx6_usb_work.conf
-
-I feel they could be used as examples or, at least, starting points.
-
-Maybe you want to patch a bit imx_usb, to change the default
-configuration files path? It defaults to '/etc/imx-loader.d/' but I
-think we could have something better in the buildroot case, like
-"$(HOST_DIR)/etc".
-
-> +endef
-> +
-> +$(eval $(host-generic-package))
-
-Best regards,
-
-V.
+-- 
+Luca
