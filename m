@@ -1,33 +1,31 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 3 Oct 2014 10:03:01 +0200 (CEST)
-Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
-In-Reply-To: <825058379.26083702.1412244610243.JavaMail.root@openwide.fr>
-Message-ID: <248328749.26117708.1412323381026.JavaMail.root@openwide.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  3 Oct 2014 10:40:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: Bump version to 2.4.58
+Message-ID: <1412325621-13633-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, I have made quite a few changes, some of them are really interesting
 
-* I have added a big README.md (which needs proofrreading) that covers
-  all sorts of interesting things, both on the project and how to 
-  customize buildroot in general
-* I have removed your Makefile.Project* files, I standardize on a 
-  single project being "standard" and multiple projects being
-  "advanced" (but it's properly documented)
-* I have changed defaults to "change as much as possible with 
-  variants. This should not break your use-case since
-  * all is set via BR settings, so it can be overridden
-  * if it is already set, it won't be overwritten by the
-     infrastructure
-* I have documented how to have per-project configuration options via
-  variables
-* I have documented how to use variants to have the toolchain be a 
-  separated project. This has been discussed here recently and is 
-  rather easy to do with the submodule infrastructure
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Feel free to test/break/send me feedback. This is starting to loo really
-great.
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index cb9d3a9..a1b0e3e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.56
++LIBDRM_VERSION = 2.4.58
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+1.7.10.4
