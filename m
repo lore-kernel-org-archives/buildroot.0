@@ -1,50 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Oct 2014 22:10:42 +0200
-Subject: [Buildroot] [git commit] package/xbmc: add option to enable alsa
-Message-ID: <20141003201056.5E3B49D80A@busybox.osuosl.org>
+Date: Fri, 3 Oct 2014 22:11:10 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/xbmc: add option to enable
+ alsa
+In-Reply-To: <1412330791-7545-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1412330791-7545-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141003221110.39ee85b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20dd35779c17736d2c10ad8a38a62eb0a6fdb417
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xbmc/Config.in |    6 ++++++
- package/xbmc/xbmc.mk   |    2 +-
- 2 files changed, 7 insertions(+), 1 deletions(-)
+On Fri,  3 Oct 2014 12:06:31 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Fix typo
+> 
+>  package/xbmc/Config.in |    6 ++++++
+>  package/xbmc/xbmc.mk   |    2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 54f8855..a7337d5 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -103,6 +103,12 @@ menuconfig BR2_PACKAGE_XBMC
- 
- if BR2_PACKAGE_XBMC
- 
-+config BR2_PACKAGE_XBMC_ALSA_LIB
-+	bool "alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Enable alsa support.
-+
- config BR2_PACKAGE_XBMC_AVAHI
- 	bool "avahi"
- 	depends on !BR2_PREFER_STATIC_LIB # avahi
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 87c9d72..c3eeee9 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -71,7 +71,7 @@ else
- XBMC_CONF_OPT += --disable-dbus
- endif
- 
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+ifeq ($(BR2_PACKAGE_XBMC_ALSA_LIB),y)
- XBMC_DEPENDENCIES += alsa-lib
- XBMC_CONF_OPT += --enable-alsa
- else
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
