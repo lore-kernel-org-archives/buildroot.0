@@ -1,89 +1,63 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri,  3 Oct 2014 14:43:25 +0200
-Subject: [Buildroot] [PATCH 04/11] gpu-viv-bin-mx6q: fix compiling issues
-	with EGL_API_FB
+Date: Fri,  3 Oct 2014 14:43:22 +0200
+Subject: [Buildroot] [PATCH 01/11] mesa3d: Fix package requirements
 In-Reply-To: <1412340212-3089-1-git-send-email-jezz@sysmic.org>
 References: <1412340212-3089-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1412340212-3089-5-git-send-email-jezz@sysmic.org>
+Message-ID: <1412340212-3089-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To compile with Vivante header and use framebuffer, it is necessary to
-pass option -DEGL_API_FB. This option is declared in pkg-config file of
-Vivante library. But many packages (especialy qt5 components) does not
-consider these flags.
-
-So instead of patching every packages that use EGL, it is more
-convenient to patch Vivante headers.
-
-This commit add #define EGL_API_FB on top of eglvivante.h when
-necessary.
+mesa3d requirement (as specified by configure script) are:
+    x11 xext xdamage xfixes x11-xcb xcb-glx >= 1.8.1 xcb-dri2 >= 1.8
+    xcb-dri3 xcb-present xcb-sync xshmfence >= 1.1
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
- package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ package/mesa3d/Config.in | 3 +++
+ package/mesa3d/mesa3d.mk | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-index c984247..d1d09a0 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-@@ -7,4 +7,4 @@ Name: egl
- Description: Freescale gpu-viv-bin-mx6q implementation of EGL
- Version: 1.0
- Libs: -L${libdir} -lGAL -lEGL
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-index 7cfb5e7..74ce792 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-@@ -7,4 +7,4 @@ Name: glesv2
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
- Version: 2.0
- Libs: -L${libdir} -lGAL -lEGL -lGLESv2
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index 93cc74f..2076ad4 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -58,14 +58,16 @@ endef
- 
- define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
- 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
-+	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
-+		$(SED) '/#define EGLAPIENTRY/ a \
-+			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-+			#define EGL_API_FB \n\
-+			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
-+	fi
- 	for lib in egl glesv2 vg; do \
- 		$(INSTALL) -m 0644 -D \
- 			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
- 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
--			$(SED) "s/-DEGL_API_FB=1//" \
--				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		fi; \
- 	done
- endef
- 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-index fb14005..677a7ee 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-@@ -7,4 +7,4 @@ Name: vg
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
- Version: 1.1
- Libs: -L${libdir} -lGAL -lEGL -lOpenVG
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 74ebbed..673fbe2 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -2,12 +2,15 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	bool "mesa3d"
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_XPROTO_DRI3PROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ec76872..203a055 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -28,11 +28,14 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+ 	xproto_dri2proto \
++	xproto_dri3proto \
++	xproto_presentproto \
+ 	xproto_glproto \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xlib_libXdamage \
+ 	xlib_libXfixes \
++	xlib_libxshmfence \
+ 	libxcb
+ MESA3D_CONF_OPT += --enable-glx
+ # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
 -- 
 2.1.0
