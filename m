@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 3 Oct 2014 21:30:19 +0200
-Subject: [Buildroot] [PATCH 09/25 v7] docs/manual: do not hardcode name
- of the generated document
-In-Reply-To: <2de04679865aba8d9ec62795295534b42200868b.1412355549.git.yann.morin.1998@free.fr>
+Date: Fri, 3 Oct 2014 21:35:31 +0200
+Subject: [Buildroot] [PATCH 22/25 v7] doc/asciidoc: always apply
+	Buildroot's AsciiDoc config
+In-Reply-To: <b51e19fba14d9312dd95efc9a1e87e30902a4192.1412355549.git.yann.morin.1998@free.fr>
 References: <cover.1412355549.git.yann.morin.1998@free.fr>
- <2de04679865aba8d9ec62795295534b42200868b.1412355549.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVhgscrBeOMYf3+yRdW_J4RNhxihffaEe9Kkb3pR+MNRw@mail.gmail.com>
+ <b51e19fba14d9312dd95efc9a1e87e30902a4192.1412355549.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LX_J7jFrQdaqBc21LtoeUbopD2m69kQeHNT92_TGorM=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Fri, Oct 3, 2014 at 7:01 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Currently, GENDOC_INNER hard-codes some variables to have the name of the
-> document in them:
->     MANUAL_$(2)_ASCIIDOC_CONF
->     MANUAL_$(2)_ASCIIDOC_OPTS
->     MANUAL_$(2)_A2X_OPTS
->     MANUAL_$(2)_INSTALL_CMDS
->     ...
+> As suggested by Thomas: the AsciiDoc options we use ensure we get a sane
+> output of the document. We want that configuration to be applied to
+> other documents as well.
 >
-> Also, it defines some dependency on the generation rule, onto:
->     manual-check-dependencies
->     manual-check-dependencies-$(3)
->     manual-prepare-sources
+> Up until now, it was implicit that the configuration was applied to
+> our manual, becasue we only supported document-specific configuration,
+> and the configuration we had was in our manual dir, so we got to use it.
 >
-> This is problematic, as it is not possible to have another document
-> generated with the GENDOC infra, or it would trigger the rules, and use
-> the variables for our own document, 'manual'.
+> But now, we can render other documents, especially ones from
+> br2-external, and we want those to also use the default configuration
+> from Buildroot, but still be able to provide their own customisation.
 >
-> Add a new argument to GENDOC_INNER to be the uppercase name of the
-> document, much like it is done for the PKG_*_INNER functions. Replace
-> any reference to 'manual' with the currently passed named of the current
-> document, $(1).
->
-> The remaining references to 'manual' are on purpose, as they really
-> pertain to our manual.
+> So, always add Buildroot's configuration first, if available, before we
+> append the document's configuration.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Samuel Martin <s.martin49@gmail.com>
