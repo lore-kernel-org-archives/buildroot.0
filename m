@@ -1,42 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Oct 2014 15:03:38 +0200
-Subject: [Buildroot] [PATCH 3/3] support/script/scancpan: add option test
-In-Reply-To: <CAB0FRst6dN48SqBR8UTn3WzOrZi1oMrtgijgqDO74E=X7xLh-Q@mail.gmail.com>
-References: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
- <1412188619-3981-3-git-send-email-francois.perrad@gadz.org>
- <20141001213402.553f2999@free-electrons.com>
- <CAB0FRst6dN48SqBR8UTn3WzOrZi1oMrtgijgqDO74E=X7xLh-Q@mail.gmail.com>
-Message-ID: <20141003150338.36800f3f@free-electrons.com>
+From: Kantanu Kumar Mohapatra <kantanukumar@gmail.com>
+Date: Fri, 3 Oct 2014 18:41:22 +0530
+Subject: [Buildroot] Debugging fw_printenv
+Message-ID: <CAJO1S91H5X_-OHEvD84i1WK-1VrN0MAu-wrcGdP-Vp15Hn8VBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+Hello,
 
-On Fri, 3 Oct 2014 14:57:21 +0200, Fran?ois Perrad wrote:
+Can anyone please assist me?
 
-> find below an improved message for this patch
-> 
-> """
-> Between Perl modules, there are 3 kinds of dependency:
->  - configure/build time dependency which becomes host dependency
->  - runtime dependency which becomes target dependency
->  - test time dependency which is useless in a cross-compiling context like BR
-> 
-> Before this patch, test time dependencies are handled like runtime dependencies.
-> 
-> After this patch, test time dependencies are ignored by default.
-> The new option -test allows to add them anyway.
-> """
+How to debug the fw_printenv utility?
 
-Looks, much, much better. I understand now.
+Where the logs will be displayed? (logs are directed to strerr), I am using
+syslog to display the logs.
 
-Thanks for the better commit message!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Kantanu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141003/06c5b1f1/attachment.html>
