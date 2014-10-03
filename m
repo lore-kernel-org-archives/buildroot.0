@@ -1,33 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 03 Oct 2014 16:28:40 +0200
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Fri, 03 Oct 2014 16:33:02 +0200
 Subject: [Buildroot] [PATCH 01/11] mesa3d: Fix package requirements
+In-Reply-To: <3045501.26YYGqRTnd@sagittea>
 References: <1412340212-3089-1-git-send-email-jezz@sysmic.org>
- <1412340212-3089-2-git-send-email-jezz@sysmic.org>
  <XnsA3BB97440D8C9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
  <3045501.26YYGqRTnd@sagittea>
-Message-ID: <XnsA3BBA79E6C155berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <1923213.bFy6dBPsRI@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me Pouiller <jezz@sysmic.org> wrote in
-news:3045501.26YYGqRTnd at sagittea: 
-
-> I encountered problems with dri3 dependencies during my tests. By
-> checking code more closely, my problems happens only if no DRI was
-> selected. I will fix that. 
+On Friday 03 October 2014 16:14:04 J?r?me Pouiller wrote:
+> On Friday 03 October 2014 14:52:12 Bernd Kuhls wrote:
+> > =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz-
+> > kPcTzGkeZgAdnm+yROfE0A at public.gmane.org> wrote in
+> > news:1412340212-3089-2-git-
+> > 
+> > send-email-jezz at sysmic.org:
+> > > +     select BR2_PACKAGE_XPROTO_DRI3PROTO if BR2_PACKAGE_XORG7
+> > 
+> > Hi,
+> > 
+> > nack, dri3 is an optional dependency.
+> > 
+> > Also having dri3 support in mesa3d breaks xbmc on intel systems:
+> > https://github.com/OpenELEC/OpenELEC.tv/commit/b574ad91fe9c7b9fcf627df0d5e
+> > 3c 7 7e262a1f85
 > 
+> I encountered problems with dri3 dependencies during my tests. By checking
+> code more closely, my problems happens only if no DRI was selected. I will
+> fix that.
+Arf, this was fixed by d0edceb ("mesa3d: fix build without dri drivers"), but 
+this breaks xdriver_xf86-video-imx DRI support.
 
-Hi,
 
-did you test with latest buildroot git master?
-It includes this patch which should fix the problem:
-
-http://git.buildroot.net/buildroot/commit/package/mesa3d/mesa3d.mk?
-id=d0edceb9d4e9ba6536af5b6687e8523f1c5ea5d1
-
-If it does not fix the problem please post the error message.
-
-Regards, Bernd
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
