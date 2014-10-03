@@ -1,115 +1,292 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri,  3 Oct 2014 15:43:54 +0200
-Subject: [Buildroot] [PATCH v5] Add support for Flattened Image Trees
-Message-ID: <1412343834-2532-1-git-send-email-yegorslists@googlemail.com>
+From: Mark <miscuentasvarias@gmail.com>
+Date: Fri, 3 Oct 2014 15:49:27 +0200
+Subject: [Buildroot] [buildroot][gstreamer] Problems with gst-fsl-plugins
+	for iMX6
+Message-ID: <01f401cfdf10$da45c4f0$8ed14ed0$@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces a new file system image type FIT. User
-can specify one or more *.its files, that will be compiled and
-copied into images or installed into /boot directory.
+Hi! After building buildroot with gstreamer 0.10 and gst-fsl-plugins, I
+can't no use aiurdemux nor beep plugins. If I run "gst-inspect aiurdemux"  I
+get:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v5: change patch description
-        v4: add support for multiple *.its files, reduce code duplication
-        v3: fix syntax errors, remove itb name, add uboot-tools dependency
-        v2: moved configuration to fs infra instead of linux
+ 
 
- fs/Config.in     |  1 +
- fs/fit/Config.in | 31 +++++++++++++++++++++++++++++++
- fs/fit/fit.mk    | 29 +++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 fs/fit/Config.in
- create mode 100644 fs/fit/fit.mk
+# gst-inspect aiurdemux
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 5853113..8d882d0 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -4,6 +4,7 @@ source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
- source "fs/ext2/Config.in"
-+source "fs/fit/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
-diff --git a/fs/fit/Config.in b/fs/fit/Config.in
-new file mode 100644
-index 0000000..f05b2a7
---- /dev/null
-+++ b/fs/fit/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_TARGET_ROOTFS_FIT
-+	bool "Flattened Image Tree support"
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-+	help
-+	  Compile a flattened image tree sources into a flattened
-+	  image tree blobs. Specify the *.its files to compile in
-+	  the options below.
-+
-+	  Please note, that all files referenced in *.its files,
-+	  should be available in output/images folder.
-+
-+if BR2_TARGET_ROOTFS_FIT
-+
-+config BR2_FIT_PATH
-+	string "Flattened Image Tree source file paths"
-+	help
-+	  Paths to the image tree source files. You can
-+	  provide a list of *.its paths to copy and build,
-+	  separated by spaces.
-+
-+	  Please note, that all *.its files must be named uniquely,
-+	  otherwise the files with the same name will be overwritten.
-+
-+config BR2_FIT_INSTALL_TARGET
-+	bool "Install Flattened Image Tree blobs to /boot in target"
-+	depends on !BR2_TARGET_ROOTFS_INITRAMFS
-+	help
-+	  Select this option to have the FIT images installed to
-+	  /boot in the target root filesystem.
-+
-+endif
-diff --git a/fs/fit/fit.mk b/fs/fit/fit.mk
-new file mode 100644
-index 0000000..68a9557
---- /dev/null
-+++ b/fs/fit/fit.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# Build the FIT image
-+#
-+################################################################################
-+
-+ROOTFS_FIT_DEPENDENCIES = host-uboot-tools
-+
-+FIT_SRCS = $(addprefix $(BINARIES_DIR)/,$(notdir $(call qstrip,$(BR2_FIT_PATH))))
-+FIT_BLOBS = $(addsuffix .itb, $(basename $(FIT_SRCS)))
-+
-+ifeq ($(BR2_FIT_INSTALL_TARGET),y)
-+define FIT_INSTALL_ITB_TARGET
-+	mkdir -p $(TARGET_DIR)/boot/ && \
-+	cp $(FIT_BLOBS) $(TARGET_DIR)/boot/
-+endef
-+else
-+define FIT_INSTALL_ITB_TARGET
-+	true
-+endef
-+endif
-+
-+define ROOTFS_FIT_CMD
-+	cp $(BR2_FIT_PATH) $(BINARIES_DIR) && \
-+	$(foreach its,$(FIT_SRCS),$(HOST_DIR)/usr/bin/mkimage -f $(its) $(basename $(its)).itb &&) \
-+	$(FIT_INSTALL_ITB_TARGET)
-+endef
-+
-+$(eval $(call ROOTFS_TARGET,fit))
--- 
-1.8.3.2
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **: gst_pad_template_new:
+assertio
+
+n 'caps != NULL' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **: gst_pad_template_new:
+assertio
+
+n 'caps != NULL' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **: gst_pad_template_new:
+assertio
+
+n 'caps != NULL' failed
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **: gst_pad_template_new:
+assertio
+
+n 'caps != NULL' failed
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **: gst_pad_template_new:
+assertio
+
+n 'caps != NULL' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-CRITICAL **:
+gst_element_class_add_pad_temp
+
+late: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_audio_pp.so': lib_peq_arm11_elinux.so.1: cannot
+open
+
+shared object file: No such file or directory
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_amrdec.so': lib_nb_amr_dec_arm9_elinux.so.2:
+cannot o
+
+pen shared object file: No such file or directory
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so':
+lib_MPEG4ASP_dec_arm11_elinux.so.1:
+
+cannot open shared object file: No such file or directory
+
+ 
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_h264dec.so': lib_H264_dec_arm11_elinux.so.2:
+cannot o
+
+pen shared object file: No such file or directory
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_mp3enc.so': lib_mp3_enc_arm12_elinux.so.2: cannot
+ope
+
+n shared object file: No such file or directory
+
+ 
+
+(gst-plugin-scanner:1514): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib
+
+/gstreamer-0.10/libmfw_gst_mpeg2dec.so': lib_mpeg2_dec_arm11_elinux.so.2:
+cannot
+
+open shared object file: No such file or directory
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **:
+gst_element_class_add_pad_templa
+
+te: assertion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **: gst_pad_new_from_template:
+asser
+
+tion 'GST_IS_PAD_TEMPLATE (templ)' failed
+
+ 
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **:
+gst_pad_set_activate_function: a
+
+ssertion 'GST_IS_PAD (pad)' failed
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **:
+gst_pad_set_activatepull_functio
+
+n: assertion 'GST_IS_PAD (pad)' failed
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **:
+gst_pad_set_activatepush_functio
+
+n: assertion 'GST_IS_PAD (pad)' failed
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **: gst_pad_set_chain_function:
+asse
+
+rtion 'GST_IS_PAD (pad)' failed
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **: gst_pad_set_event_function:
+asse
+
+rtion 'GST_IS_PAD (pad)' failed
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **: gst_element_add_pad:
+assertion '
+
+GST_IS_PAD (pad)' failed
+
+ 
+
+ 
+
+(gst-inspect-0.10:1513): GStreamer-CRITICAL **:
+gst_pad_set_setcaps_function: as
+
+sertion 'GST_IS_PAD (pad)' failed
+
+ 
+
+ 
+
+- cannot open shared object problem:
+
+ 
+
+In /usr/lib/imx-mm/audio-codec, /usr/lib/imx-mm/video-codec and
+/usr/lib/imx-mm/parser, I have those missing libraries but only the .so
+versions, not .so.1 or so.2.
+
+ 
+
+I can solve this by copying the .so versions to so.1 and so.2 but I think
+this is not the best solution.
+
+ 
+
+- GStreamer-CRITICAL problem:
+
+ 
+
+How can solve this critical problem? gst-plugins-good works fin, but
+gst-fsl-plugins doesn't and I need them to play videos using the vpu.
+
+ 
+
+I have a yocto and timesys distribution that work fine, but just copying the
+plugins doesn't work. Any advice?
+
+ 
+
+I've tried many buildroot versions, using eglibc, glibc, . without success.
+
+ 
+
+Thanks in advance!
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141003/56f64cd0/attachment.html>
