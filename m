@@ -1,114 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Oct 2014 19:01:53 +0200
-Subject: [Buildroot] [PATCH 19/25 v7] docs/asciidoc: call $(pkgname) and
-	$(pkgdir) in a single place
+Date: Fri,  3 Oct 2014 19:01:54 +0200
+Subject: [Buildroot] [PATCH 20/25 v7] docs/asciidoc: make it possible to use
+	$(@D) in hooks
 In-Reply-To: <cover.1412355549.git.yann.morin.1998@free.fr>
 References: <cover.1412355549.git.yann.morin.1998@free.fr>
-Message-ID: <56f2b9108861895ebf1ed959e0f48b35e62c32a8.1412355549.git.yann.morin.1998@free.fr>
+Message-ID: <812d9c7db594dacbde4109dc4250dee47eaeac7a.1412355549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for all the package infrastructures, retrieve the package name and
-directory in the front-end macro-variable, rather than everywhere in the
-backend macro.
+Currently, it is not possible to use $(@D) in documents' hooks, because
+there is no actual target file for the copying rule.
 
-This allows us to clean up the ASCIIDOC macro, by removing all the calls
-to $(pkgname) and $(pkgdir), and to UPPERCASE (which made the macro a
-bit difficult to read.)
+So, use the same mechanism as for generic-package.
+
+We do not touch the target file, so it is easy to regenerate the manual
+without calling the -clean rule first.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
 ---
-Chamges v5 -> v6:
-  - convert forgotten occurence of $(pkgname)  (Thomas DS)
----
- package/doc-asciidoc.mk | 41 +++++++++++++++++++++++------------------
- 1 file changed, 23 insertions(+), 18 deletions(-)
+ docs/manual/manual.mk   |  2 +-
+ package/doc-asciidoc.mk | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index a3011c6..d5db2c2 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -12,7 +12,7 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ # should not be included in the manual.
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+-	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
++	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
+ 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+ endef
 diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index fb9a62e..6b5b2b7 100644
+index 6b5b2b7..9a18270 100644
 --- a/package/doc-asciidoc.mk
 +++ b/package/doc-asciidoc.mk
-@@ -107,50 +107,55 @@ endef
- ################################################################################
- # ASCIIDOC -- generates the make targets needed to build asciidoc documentation.
- #
-+# argument 1 is the lowercase name of the document; the document's main file
-+#            must have the same name, with the .txt extension
-+# argument 2 is the uppercase name of the document
-+# argument 3 is the directory containing the document's sources
-+#
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- # The variable <DOCUMENT_NAME>_RESOURCES defines where the document's
- # resources, such as images, are located; must be an absolute path.
- ################################################################################
- define ASCIIDOC
+@@ -121,16 +121,16 @@ define ASCIIDOC
+ $(1)-check-dependencies: asciidoc-check-dependencies
+ 	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
+ 
+-$$(BUILD_DIR)/docs/$(1):
+-	$$(Q)mkdir -p $$@
+-
  # Single line, because splitting a foreach is not easy...
--$(pkgname)-check-dependencies: asciidoc-check-dependencies
--	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
-+$(1)-check-dependencies: asciidoc-check-dependencies
-+	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
+-$(1)-rsync: $$(BUILD_DIR)/docs/$(1)
++# Do not touch the stamp file, so we get to rsync again every time we build
++# the document.
++$$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
+ 	$$(Q)$$(call MESSAGE,"Preparing the $(1) sources...")
+-	$$(Q)rsync -a $(3) $$^
++	$$(Q)mkdir -p $$(@D)
++	$$(Q)rsync -a $(3) $$(@D)
+ 	$$(Q)$$(foreach hook,$$($(2)_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
  
--$$(BUILD_DIR)/docs/$(pkgname):
-+$$(BUILD_DIR)/docs/$(1):
- 	$$(Q)mkdir -p $$@
+-$(1)-prepare-sources: $(1)-rsync
++$(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
  
- # Single line, because splitting a foreach is not easy...
--$(pkgname)-rsync: $$(BUILD_DIR)/docs/$(pkgname)
--	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
--	$$(Q)rsync -a $(pkgdir) $$^
--	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
-+$(1)-rsync: $$(BUILD_DIR)/docs/$(1)
-+	$$(Q)$$(call MESSAGE,"Preparing the $(1) sources...")
-+	$$(Q)rsync -a $(3) $$^
-+	$$(Q)$$(foreach hook,$$($(2)_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
- 
--$(pkgname)-prepare-sources: $(pkgname)-rsync
-+$(1)-prepare-sources: $(1)-rsync
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),xhtml,html,html,HTML,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
+ $(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
  	--xsltproc-opts "--stringparam toc.section.depth 1")
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),chunked,split-html,chunked,split HTML,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),chunked,split-html,chunked,split HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
- 
- # dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
- # from reaching the template recursion limit when processing the (long) target
- # package table and bailing out.
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),pdf,pdf,pdf,PDF,\
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),pdf,pdf,pdf,PDF,\
- 	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),text,text,text,text)
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),text,text,text,text)
- 
--$(call ASCIIDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),$(pkgdir),epub,epub,epub,ePUB)
-+$(call ASCIIDOC_INNER,$(1),$(2),$(3),epub,epub,epub,ePUB)
- 
--clean: $(pkgname)-clean
--$(pkgname)-clean:
--	$$(Q)$$(RM) -rf $$(BUILD_DIR)/docs/$(pkgname)
--.PHONY: $(pkgname) $(pkgname)-clean
-+clean: $(1)-clean
-+$(1)-clean:
-+	$$(Q)$$(RM) -rf $$(BUILD_DIR)/docs/$(1)
-+.PHONY: $(1) $(1)-clean
- endef
- 
- ################################################################################
- # asciidoc-document -- the target generator macro for asciidoc documents
- ################################################################################
- 
--asciidoc-document = $(call ASCIIDOC)
-+asciidoc-document = $(call ASCIIDOC,$(pkgname),$(call UPPERCASE,$(pkgname)),$(pkgdir))
 -- 
 1.9.1
