@@ -1,30 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 03 Oct 2014 11:33:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: New package
-References: <1411925137-11284-1-git-send-email-bernd.kuhls@t-online.de>
- <20140929191314.36b87a70@free-electrons.com>
-Message-ID: <XnsA3BB7588C35A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Fri,  3 Oct 2014 11:50:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg/ffmpeg.mk: Remove tabs
+Message-ID: <1412329846-4805-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20140929191314.36b87a70 at free-electrons.com:
 
-> Did you check that it's LGPLv2.1 vs. LGPLv2.1+ ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
-how to do that?
-Are the websites where I can upload license files for checking?
-
-I compared http://www.gnu.org/licenses/lgpl-2.1.txt and 
-http://www.dovecot.org/doc/COPYING.LGPL, they are 100% identical.
-
-http://www.dovecot.org/doc/COPYING says:
-"Everything else is LGPLv2.1 (see COPYING.LGPL) unless otherwise mentioned
-at the beginning of the file."
-
-Regards, Bernd
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5b7fa20..4466339 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -17,7 +17,7 @@ FFMPEG_LICENSE_FILES += COPYING.GPLv2
+ endif
+ 
+ FFMPEG_CONF_OPT = \
+-	--prefix=/usr		\
++	--prefix=/usr \
+ 	--enable-avfilter \
+ 	--disable-version3 \
+ 	--enable-logging \
+@@ -340,7 +340,7 @@ define FFMPEG_CONFIGURE_CMDS
+ 	$(TARGET_CONFIGURE_ARGS) \
+ 	$(FFMPEG_CONF_ENV) \
+ 	./configure \
+-		--enable-cross-compile	\
++		--enable-cross-compile \
+ 		--cross-prefix=$(TARGET_CROSS) \
+ 		--sysroot=$(STAGING_DIR) \
+ 		--host-cc="$(HOSTCC)" \
+-- 
+1.7.10.4
