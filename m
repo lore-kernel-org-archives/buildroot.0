@@ -1,51 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Oct 2014 12:06:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/xbmc: add option to enable alsa
-Message-ID: <1412330791-7545-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 3 Oct 2014 12:27:56 +0200
+Subject: [Buildroot] [PATCH] Add dummy definition of O_CLOEXEC
+In-Reply-To: <CAKi4VAK=FcaCGDbzVwKvYWtLEqF-0uu0WEmbjQHtP5VmoKABdQ@mail.gmail.com>
+References: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAKi4VAKVL7oxZ6dvHbixeihtiOD2GDkHLknht_jSg3-+hWWGBQ@mail.gmail.com>
+ <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com>
+ <CAKi4VAKpGe7q0Q3HhVCr+0-iGgBBMC5TGcSOckHBed56zs5TNg@mail.gmail.com>
+ <CAAXf6LX90woPh+2tm6yCa8EGgGrvYx8D8v+q0tJS1DY5=dM+Rw@mail.gmail.com>
+ <CAKi4VAK=FcaCGDbzVwKvYWtLEqF-0uu0WEmbjQHtP5VmoKABdQ@mail.gmail.com>
+Message-ID: <CAAXf6LVjWD+08NPqtwJWFVhTz4KE8nnEQNRU+cyNzQz4HQYBKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Lucas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Fix typo
+On Thu, Oct 2, 2014 at 7:55 PM, Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:
 
- package/xbmc/Config.in |    6 ++++++
- package/xbmc/xbmc.mk   |    2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+>>> They shouldn't be defining O_CLOEXEC to 0 in the first place. I don't
+>>> want to support leaking file descriptors to child process. You are
+>>> silently giving different behavior to your target depending on the
+>>> machine it was built with :-o.
+>>
+>> As explained above, this is not what is happening. The O_CLOEXEC dummy
+>> definition to 0 is only relevant when building host tools (depmod) on
+>> old systems like RHEL5. These host tools are effectively run on the
+>> same host where they are built. When building for the target, or when
+>> building on modern host systems, the dummy does not set in and there
+>> is anyway no impact.
+>>
+>> Hope this clarifies,
+>
+> Yep, this clarifies, thanks.
+>
+> However it only makes sense for this specific scenario, i.e. you don't
+> care for depmod leaking fds on the host... It's not something
+> acceptable to do on upstream, sorry.
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 54f8855..a7337d5 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -103,6 +103,12 @@ menuconfig BR2_PACKAGE_XBMC
- 
- if BR2_PACKAGE_XBMC
- 
-+config BR2_PACKAGE_XBMC_ALSA_LIB
-+	bool "alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Enable alsa support.
-+
- config BR2_PACKAGE_XBMC_AVAHI
- 	bool "avahi"
- 	depends on !BR2_PREFER_STATIC_LIB # avahi
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 75fc63b..5d8199c 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -71,7 +71,7 @@ else
- XBMC_CONF_OPT += --disable-dbus
- endif
- 
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+ifeq ($(BR2_PACKAGE_XBMC_ALSA_LIB),y)
- XBMC_DEPENDENCIES += alsa-lib
- XBMC_CONF_OPT += --enable-alsa
- else
--- 
-1.7.10.4
+I'm trying to understand the reason you object to this patch.
+
+We both agree that the dummy implementation of O_CLOEXEC will only
+take effect when building kmod using kernel headers < 2.6.23, correct?
+
+In such a case, there are three paths:
+
+1. Don't make any change (the current situation). In this case, kmod
+cannot be compiled due to the missing O_CLOEXEC definition and thus
+cannot be used@all.
+
+2. Add a dummy definition (as proposed by the patch) to allow
+compilation of kmod. In this case, the O_CLOEXEC flag will not take
+effect, indeed with the leaking file descriptors into child processes,
+but only in this exceptional case where kmod is built for older
+kernels.
+
+3. Use explicit fcntl(..., FD_CLOEXEC...) calls after the open's.
+However, this is not easily done without impact on the standard case
+with modern headers. I assume you will like this even less.
+
+To me, case 2 seems a valid solution to an otherwise unusable kmod on
+systems with old kernels / kernel headers. The impact of the leaked
+file descriptors is to be accepted in this case.
+
+However, if you still feel this is not upstreamable, then I will back
+off and hope that Peter will accept the patch in Buildroot :)
+
+Thanks,
+Thomas
