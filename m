@@ -1,10 +1,10 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri,  3 Oct 2014 14:43:27 +0200
-Subject: [Buildroot] [PATCH 06/11] gpu-viv-bin-mx6q: make fb/x11 choice
-	explicit
+Date: Fri,  3 Oct 2014 14:43:30 +0200
+Subject: [Buildroot] [PATCH 09/11] libdrm: fix support for xserver with
+	Vivante drivers
 In-Reply-To: <1412340212-3089-1-git-send-email-jezz@sysmic.org>
 References: <1412340212-3089-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1412340212-3089-7-git-send-email-jezz@sysmic.org>
+Message-ID: <1412340212-3089-10-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 24 ++++++++++++++++++++--
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  2 +-
- 2 files changed, 23 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm-0001-update-arm.patch | 37 +++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/libdrm/libdrm-0001-update-arm.patch
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-index 4e83dd3..904b011 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-@@ -7,8 +7,6 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENVG
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	depends on BR2_arm # Only relevant for i.MX6
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-@@ -25,6 +23,28 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 
- if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 
-+choice
-+	prompt "Output option"
-+	help
-+	  There are two versions of this library: one for
-+	  direct framebuffer access, one for X11 rendering.
-+	  Choose here which version to install.
+diff --git a/package/libdrm/libdrm-0001-update-arm.patch b/package/libdrm/libdrm-0001-update-arm.patch
+new file mode 100644
+index 0000000..583dfb2
+--- /dev/null
++++ b/package/libdrm/libdrm-0001-update-arm.patch
+@@ -0,0 +1,37 @@
++(come from yocto)
 +
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_LIBDRM
-+	bool "X11"
++Add ARM support into xf86arm.h.  This provides support for Xorg interface.
++Without this the vivante samples will hang during close requiring a reboot
 +
-+comment "X11 backend needs Xorg package"
-+	depends on !BR2_PACKAGE_XORG7
++Upstream-Status: Pending
 +
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-+	bool "Framebuffer"
++Signed-off-by: Lauren Post <lauren.post@freescale.com>
++Signed-off-by: Evan Kotara <evan.kotara@freescale.com>
 +
-+endchoice
-+
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	default "gpu-viv-bin-mx6q"
- 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index c04ba29..5a58cd8 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -26,7 +26,7 @@ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
- GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
- 
- # DirectFB is not supported (wrong version)
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
- GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
- GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
- else
++diff --git a/xf86drm.h b/xf86drm.h
++--- a/xf86drm.h
+++++ b/xf86drm.h
++@@ -461,6 +461,23 @@ do {	register unsigned int __old __asm("
++ 		: "cr0", "memory");			\
++ 	} while (0)
++ 
+++#elif defined(__arm__)
+++       #undef DRM_DEV_MODE
+++       #define DRM_DEV_MODE     (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
+++
+++       #define DRM_CAS(lock,old,new,__ret)             \
+++       do {                                            \
+++               __asm__ __volatile__ (                  \
+++                       "1: ldrex %0, [%1]\n"           \
+++                       "   teq %0, %2\n"               \
+++                       "   ite eq\n"                   \
+++                       "   strexeq %0, %3, [%1]\n"     \
+++                       "   movne   %0, #1\n"           \
+++               : "=&r" (__ret)                         \
+++               : "r" (lock), "r" (old), "r" (new)      \
+++               : "cc","memory");                       \
+++       } while (0)
+++
++ #endif /* architecture */
++ #endif /* __GNUC__ >= 2 */
++ 
 -- 
 2.1.0
