@@ -1,25 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Oct 2014 14:21:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: Bump version to 2.4.58
-In-Reply-To: <1412325621-13633-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1412325621-13633-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141004142143.430063ba@free-electrons.com>
+Date: Sat, 4 Oct 2014 14:26:12 +0200
+Subject: [Buildroot] [PATCH 1/3] perl: bump to version 5.20.1
+In-Reply-To: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
+References: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20141004142612.7d164eee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Francois Perrad,
 
-On Fri,  3 Oct 2014 10:40:21 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed,  1 Oct 2014 20:36:57 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/libdrm/libdrm.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/perl/perl-uClibc-IPv6.patch | 10 +++++-----
+>  package/perl/perl.mk                | 11 +++++++----
+>  support/scripts/scancpan            |  2 +-
+>  3 files changed, 13 insertions(+), 10 deletions(-)
 
-Applied, thanks.
+Don't know if it's related to the version bump, but perl now fails to
+build on PowerPC:
+
+  http://autobuild.buildroot.org/results/8ad/8ade6c432ffa725a324f9e7cfb18f6453687b129/build-end.log
+
+Could you have a look?
+
+Thanks,
 
 Thomas
 -- 
