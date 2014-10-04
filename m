@@ -1,49 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Oct 2014 23:59:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/leafnode: Add user 'news',
-	add note about inetd to help text
-Message-ID: <1412459957-14121-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Oct 2014 00:15:25 +0200
+Subject: [Buildroot] [PATCH 12 of 15] pkg-generic: add checks on
+ deprecated variables FOO_BAR_OPT
+In-Reply-To: <20141004191415.4db579ee@free-electrons.com>
+References: <patchbomb.1411846357@localhost>
+ <27f6b6064904e682eccc.1411846369@localhost>
+ <20141004191415.4db579ee@free-electrons.com>
+Message-ID: <20141004221525.GA22416@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suggested by Thomas:
-http://lists.busybox.net/pipermail/buildroot/2014-October/107727.html
+Thomas?, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/leafnode2/Config.in    |    4 ++++
- package/leafnode2/leafnode2.mk |    4 ++++
- 2 files changed, 8 insertions(+)
+On 2014-10-04 19:14 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 27 Sep 2014 21:32:49 +0200, Thomas De Schampheleire wrote:
+> 
+> > +# Ensure unified variable name conventions between all packages
+> > +$(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+> > +$(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+> 
+> I think the legacy variable checking should go to the respective
+> package infrastructure they belong to: AUTORECONF_OPT and
+> GETTEXTIZE_OPT should go to pkg-autotools.mk, KCONFIG_OPT to
+> pkg-kconfig.mk, etc.
+> 
+> The pkg-generic.mk infrastructure doesn't know anything about those
+> variables, so there's no reason to have those checks at this level.
 
-diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
-index 30a02c8..b92002d 100644
---- a/package/leafnode2/Config.in
-+++ b/package/leafnode2/Config.in
-@@ -6,5 +6,9 @@ config BR2_PACKAGE_LEAFNODE2
- 	  Leafnode-2 is a store-and-forward NNTP (or Usenet) proxy
- 	  server designed for small sites with just a few active
- 	  newsgroups.
-+	  Leafnode-2 needs inetd, check chapter 14
-+	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/leafnode-readme.txt
-+	  for example add this line to inetd.conf
-+	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
- 
- 	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 3e6bd0b..3bc1c68 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -32,4 +32,8 @@ endef
- 
- LEAFNODE2_PRE_BUILD_HOOKS += LEAFNODE2_BUILD_SORTNL_TOOL
- 
-+define LEAFNODE2_USERS
-+	news -1 news -1 * - - - Leafnode2 daemon
-+endef
-+
- $(eval $(autotools-package))
+I agree on principle.
+
+However, having all of them right here avoids duplication. For example:
+  - $(2)_BUILD_OPT was valid for lua, perl and python packages,
+  - $(2)_CONF_OPT was valid for autotools, cmake and perl packages,
+  - ...
+
+Would you find appropriate that the checks be duplicated in all of the
+impacted infras?
+
+Note: I don't mind either way, just inquiring.
+
+> Care to cook a followup patch fixing that?
+
+I can have a spin at it tomorrow, unless Thomas DS is not completely fed
+up with this series! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
