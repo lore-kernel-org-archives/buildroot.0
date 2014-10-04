@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Oct 2014 14:26:12 +0200
-Subject: [Buildroot] [PATCH 1/3] perl: bump to version 5.20.1
-In-Reply-To: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
-References: <1412188619-3981-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20141004142612.7d164eee@free-electrons.com>
+Date: Sat, 4 Oct 2014 14:27:55 +0200
+Subject: [Buildroot] [PATCH v2] protobuf: bump version to 2.6.0
+In-Reply-To: <1412282436-9176-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1412282436-9176-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20141004142755.1f402a23@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Matt Weber,
 
-On Wed,  1 Oct 2014 20:36:57 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Thu,  2 Oct 2014 15:40:36 -0500, Matt Weber wrote:
+> * Adds powerpc architecture support
+> * Changes to the new github upstream site
+> * Updates the license filename
+> 
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/perl/perl-uClibc-IPv6.patch | 10 +++++-----
->  package/perl/perl.mk                | 11 +++++++----
->  support/scripts/scancpan            |  2 +-
->  3 files changed, 13 insertions(+), 10 deletions(-)
+> 
+> Changes v1 -> v2
+>  - Updated to not change license file. Had looked
+>    a tip not tag for 2.6.0 so it actually didn't
+>    changed in the latest release.(Suggested by Peter K.)
 
-Don't know if it's related to the version bump, but perl now fails to
-build on PowerPC:
+This bump seems to have broken some packages that depend on protobuf:
 
-  http://autobuild.buildroot.org/results/8ad/8ade6c432ffa725a324f9e7cfb18f6453687b129/build-end.log
+ * host-protobuf-c-v1.0.0-rc1
+   http://autobuild.buildroot.org/results/647/64707ecd9acfbf519d5f22dd6bd5b39c3b544073/build-end.log
+
+ * python-protobuf-2.6.0
+   http://autobuild.buildroot.org/results/b3b/b3b36c72b233a624ebae9eaac592b7c6fbd394be/build-end.log
 
 Could you have a look?
 
