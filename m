@@ -1,45 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Oct 2014 14:20:37 +0200
-Subject: [Buildroot] [git commit] autossh: bump to version 1.4d
-Message-ID: <20141004122129.7A67D9D821@busybox.osuosl.org>
+Date: Sat, 4 Oct 2014 14:21:23 +0200
+Subject: [Buildroot] [git commit] package/libdrm: Bump version to 2.4.58
+Message-ID: <20141004122129.9BF5E9D5A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02dcdfdf2ab7c80febc6ef012c916b16d69e4945
+commit: http://git.buildroot.net/buildroot/commit/?id=1df7c56a7aae5db0f55a82c95b6a8a9a82d4f120
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/autossh/autossh.hash |    4 ++++
- package/autossh/autossh.mk   |    2 +-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+ package/libdrm/libdrm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/autossh/autossh.hash b/package/autossh/autossh.hash
-new file mode 100644
-index 0000000..e1e3b2c
---- /dev/null
-+++ b/package/autossh/autossh.hash
-@@ -0,0 +1,4 @@
-+# From http://www.harding.motd.ca/autossh/autossh-1.4d.cksums
-+md5	89c09b50aa2d57814f808d727e937d0f	autossh-1.4d.tgz
-+sha1	27da23c357f8d263aba6ecf3e8792a3552d90e50	autossh-1.4d.tgz
-+sha256	00008fe458bde4c94e98bfa96e1e6e18c4107a1f9fc8a538556b82e91ddedc16	autossh-1.4d.tgz
-diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
-index 75d7892..51f9faf 100644
---- a/package/autossh/autossh.mk
-+++ b/package/autossh/autossh.mk
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index cb9d3a9..a1b0e3e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUTOSSH_VERSION = 1.4c
-+AUTOSSH_VERSION = 1.4d
- AUTOSSH_SITE = http://www.harding.motd.ca/autossh
- AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
- AUTOSSH_LICENSE = Modified BSD
+-LIBDRM_VERSION = 2.4.56
++LIBDRM_VERSION = 2.4.58
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
