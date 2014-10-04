@@ -1,77 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Oct 2014 23:51:08 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/dovecot-pigeonhole: New package
-In-Reply-To: <1412459468-14072-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1412459468-14072-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412459468-14072-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  4 Oct 2014 23:59:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/leafnode: Add user 'news',
+	add note about inetd to help text
+Message-ID: <1412459957-14121-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Suggested by Thomas:
+http://lists.busybox.net/pipermail/buildroot/2014-October/107727.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: DOVECOT_PIGEONHOLE_CONF_OPT -> DOVECOT_PIGEONHOLE_CONF_OPTS
-v2: - package moved to new Dovecot dependency submenu
-    - removed cruft from CONV_OPT not needed for buildroot (Thomas)
+ package/leafnode2/Config.in    |    4 ++++
+ package/leafnode2/leafnode2.mk |    4 ++++
+ 2 files changed, 8 insertions(+)
 
- package/dovecot-pigeonhole/Config.in             |    8 ++++++++
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk |   16 ++++++++++++++++
- package/dovecot/Config.in                        |    2 ++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/dovecot-pigeonhole/Config.in
- create mode 100644 package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-
-diff --git a/package/dovecot-pigeonhole/Config.in b/package/dovecot-pigeonhole/Config.in
-new file mode 100644
-index 0000000..83f5287
---- /dev/null
-+++ b/package/dovecot-pigeonhole/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_DOVECOT_PIGEONHOLE
-+	bool "dovecot-pigeonhole"
-+	help
-+	  Pigeonhole is the name of the project that adds support for the Sieve
-+	  language (RFC 5228) and the ManageSieve protocol (RFC 5804) to the
-+	  Dovecot Secure IMAP Server.
-+
-+	  http://pigeonhole.dovecot.org
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-new file mode 100644
-index 0000000..7304c4a
---- /dev/null
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# dovecot-pigeonhole
-+#
-+################################################################################
-+
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.3
-+DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
-+DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
-+DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
-+DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
-+DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
-+
-+DOVECOT_PIGEONHOLE_CONF_OPTS = --with-dovecot=$(STAGING_DIR)/usr/lib
-+
-+$(eval $(autotools-package))
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index c692402..9c0ecc8 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -49,6 +49,8 @@ config BR2_PACKAGE_DOVECOT_ZLIB
- 	help
- 	  Enable zlib support.
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index 30a02c8..b92002d 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -6,5 +6,9 @@ config BR2_PACKAGE_LEAFNODE2
+ 	  Leafnode-2 is a store-and-forward NNTP (or Usenet) proxy
+ 	  server designed for small sites with just a few active
+ 	  newsgroups.
++	  Leafnode-2 needs inetd, check chapter 14
++	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/leafnode-readme.txt
++	  for example add this line to inetd.conf
++	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
  
-+source package/dovecot-pigeonhole/Config.in
-+
- endif # BR2_PACKAGE_DOVECOT
+ 	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 3e6bd0b..3bc1c68 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -32,4 +32,8 @@ endef
  
- comment "dovecot needs a toolchain w/ ipv6"
+ LEAFNODE2_PRE_BUILD_HOOKS += LEAFNODE2_BUILD_SORTNL_TOOL
+ 
++define LEAFNODE2_USERS
++	news -1 news -1 * - - - Leafnode2 daemon
++endef
++
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
