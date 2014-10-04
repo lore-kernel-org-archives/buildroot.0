@@ -1,64 +1,68 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 4 Oct 2014 19:07:08 +0200
-Subject: [Buildroot] [PATCH 05 of 15] packages: rename
- FOO_INSTALL_HOST_OPT into FOO_INSTALL_HOST_OPTS
-In-Reply-To: <20141004185259.034d99a6@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Oct 2014 19:07:49 +0200
+Subject: [Buildroot] [PATCH 00 of 15] packages: rename FOO_BAR_OPT into
+ FOO_BAR_OPTS
+In-Reply-To: <patchbomb.1411846357@localhost>
 References: <patchbomb.1411846357@localhost>
- <ba7545d68ae2f0383285.1411846362@localhost>
- <20140927221506.GO4298@free.fr> <20141004185259.034d99a6@free-electrons.com>
-Message-ID: <CAHXCMMKLxTcwBR2EOn+rD-Vo3fyRhLP4dX+uiZxhNOVVtq-spg@mail.gmail.com>
+Message-ID: <20141004190749.2a9c9e31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Dear Thomas De Schampheleire,
 
-On Sat, Oct 4, 2014 at 6:52 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yann E. MORIN,
->
-> On Sun, 28 Sep 2014 00:15:06 +0200, Yann E. MORIN wrote:
->
->> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
->> > --- a/package/pkg-cmake.mk
->> > +++ b/package/pkg-cmake.mk
->> > @@ -41,7 +41,7 @@
->> >  $(2)_MAKE                  ?= $$(MAKE)
->> >  $(2)_MAKE_ENV                      ?=
->> >  $(2)_MAKE_OPTS                     ?=
->> > -$(2)_INSTALL_HOST_OPT              ?= install
->> > +$(2)_INSTALL_HOST_OPTS             ?= install
->>
->> The other infras do not use a 'HOST_' in the middle of host-variant
->> variables; 'HOST_' is only present at the beginning.
->>
->> For example, we have HOST_LIBFOO_INSTALL_CMDS that contrasts to
->> LIBFOO_INSTALL_{TARGET,STAGING,IMAGES}_CMDS.
->>
->> So, I find there is a bit of discrepancy in this variable naming. Plus,
->> it is not documented in the manual.
->>
->> Samuel, is there a reason for the naming of this variable?
+On Sat, 27 Sep 2014 21:32:37 +0200, Thomas De Schampheleire wrote:
 
-Oops, sorry guys I missed this one :-s
+> Thomas De Schampheleire (15)
+>   packages: rename FOO_MAKE_OPT into FOO_MAKE_OPTS
+>   packages: rename FOO_INSTALL_OPT into FOO_INSTALL_OPTS
+>   packages: rename FOO_INSTALL_TARGET_OPT into FOO_INSTALL_TARGET_OPTS
+>   packages: rename FOO_INSTALL_STAGING_OPT into FOO_INSTALL_STAGING_OPTS
+>   packages: rename FOO_INSTALL_HOST_OPT into FOO_INSTALL_HOST_OPTS
+>   packages: rename FOO_AUTORECONF_OPT into FOO_AUTORECONF_OPTS
+>   packages: rename FOO_CONF_OPT into FOO_CONF_OPTS
+>   packages: rename FOO_BUILD_OPT into FOO_BUILD_OPTS
+>   packages: rename FOO_GETTEXTIZE_OPT into FOO_GETTEXTIZE_OPTS
+>   packages: rename FOO_KCONFIG_OPT into FOO_KCONFIG_OPTS
+>   pkg-generic: introduce helper function to check for a deprecated variable
+>   pkg-generic: add checks on deprecated variables FOO_BAR_OPT
+>   packages: rename misc. occurrences of _OPT into _OPTS
 
->
-> I fully agree with Yann comments here. Samuel, could you answer Yann's
-> question?
+I've applied those 13 first patches. I only have a comment about
+"pkg-generic: introduce helper function to check for a deprecated
+variable" and "pkg-generic: add checks on deprecated variables
+FOO_BAR_OPT", which I'll make on the relevant patches. My comments can
+be handled as followup patches now that those patches have been merged.
 
-I agree, it is not consistent with the other infras.
-Afaics, it's here since the original introduction of the cmake infra;
-we missed this at that time :-/
+>   .mk files: remove alignment of line continuation characters
+>   .mk files: remove alignment of assignments
 
->
-> Is anyone willing to cook a patch to fix this?
+On those ones, I must say I'm not sure. Do we really have a coding
+style for line continuation characters? In some cases, I found the
+original code (i.e before your patch) to actually be nicer than after
+your change.
 
-I can do it.
-Fortunately no host-cmake package needs/uses install opts ;-)
+For the alignment of assignments, I generally agree, but:
 
-Regards,
+ 1/ I believe there should be exceptions to the rules. Especially
+ inside the package infrastructure themselves, aligning = signs is
+ sometimes good for readability
 
+ 2/ Your regex doesn't handle cases such as:
+
+FOO         ?=
+BAR         ?= $(SOMETHING)
+
+    The second assignment gets changed, but not the first one.
+
+So on those last two patches, I'd like to have more community feedback.
+
+Thanks,
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
