@@ -1,887 +1,1102 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Oct 2014 18:11:20 +0200
-Subject: [Buildroot] [RFC 2/3] Rename XBMC to Kodi - part II - rename
-	variables
+Date: Sat,  4 Oct 2014 18:11:21 +0200
+Subject: [Buildroot] [RFC 3/3] package/kodi: Bump version to 14.0a4-Helix
 In-Reply-To: <1412439081-2975-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1412439081-2975-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412439081-2975-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1412439081-2975-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add xbmc-related options to Config.in.legacy
+- delete kodi-0002-mathutil.patch, committed upstream
+- add kodi/xbmc specific patches for ffmpeg from OpenELEC
+- add dependency to ffmpeg, xbmc does not deliver its own ffmpeg anymore
+- remove dependency to lame, audio encoders have been seperated from kodi
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                           |  119 +++++++++++++++
- package/kodi/Config.in                     |  100 ++++++-------
- package/kodi/S50kodi                       |   16 +-
- package/kodi/br-kodi                       |   16 +-
- package/kodi/kodi.mk                       |  222 ++++++++++++++--------------
- package/kodi/kodi.service                  |    2 +-
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk |    2 +-
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    2 +-
- 8 files changed, 299 insertions(+), 180 deletions(-)
+ package/ffmpeg/ffmpeg-0003-kodi.patch |  773 +++++++++++++++++++++++++++++++++
+ package/kodi/Config.in                |    3 +
+ package/kodi/kodi-0002-mathutil.patch |  213 ---------
+ package/kodi/kodi.mk                  |   25 +-
+ 4 files changed, 780 insertions(+), 234 deletions(-)
+ create mode 100644 package/ffmpeg/ffmpeg-0003-kodi.patch
+ delete mode 100644 package/kodi/kodi-0002-mathutil.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6e202fe..ba68fa7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,125 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.11"
- 
-+config BR2_PACKAGE_XBMC
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
+diff --git a/package/ffmpeg/ffmpeg-0003-kodi.patch b/package/ffmpeg/ffmpeg-0003-kodi.patch
+new file mode 100644
+index 0000000..d299f32
+--- /dev/null
++++ b/package/ffmpeg/ffmpeg-0003-kodi.patch
+@@ -0,0 +1,773 @@
++xbmc/kodi-specific patches from OpenELEC
++https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/multimedia/ffmpeg/patches/ffmpeg-0000-xbmc.patch
 +
-+config BR2_PACKAGE_XBMC_ALSA_LIB
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_ALSA_LIB
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+config BR2_PACKAGE_XBMC_AVAHI
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_AVAHI
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
 +
-+config BR2_PACKAGE_XBMC_DBUS
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_DBUS
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++From f68c860bdc70e440f047ca60c8f9497a0e5a2122 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 11 Sep 2011 19:04:51 +0200
++Subject: [PATCH 01/15] Support raw dvdsub palette as stored on normal dvd's
 +
-+config BR2_PACKAGE_XBMC_LIBBLURAY
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBBLURAY
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++This is how the palette is stored on dvd's. Currently
++only xbmc passes the palette information to libavcodec
++this way.
++---
++ libavcodec/dvdsubdec.c | 24 ++++++++++++++++++++++++
++ 1 file changed, 24 insertions(+)
 +
-+config BR2_PACKAGE_XBMC_GOOM
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_GOOM
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
++index 39b0e25..a19086d 100644
++--- a/libavcodec/dvdsubdec.c
+++++ b/libavcodec/dvdsubdec.c
++@@ -61,6 +61,24 @@ static void yuv_a_to_rgba(const uint8_t *ycbcr, const uint8_t *alpha, uint32_t *
++     }
++ }
++ 
+++static void ayvu_to_argb(const uint8_t *ayvu, uint32_t *argb, int num_values)
+++{
+++    uint8_t *cm = ff_crop_tab + MAX_NEG_CROP;
+++    uint8_t r, g, b;
+++    int i, y, cb, cr, a;
+++    int r_add, g_add, b_add;
+++
+++    for (i = num_values; i > 0; i--) {
+++        a = *ayvu++;
+++        y = *ayvu++;
+++        cr = *ayvu++;
+++        cb = *ayvu++;
+++        YUV_TO_RGB1_CCIR(cb, cr);
+++        YUV_TO_RGB2_CCIR(r, g, b, y);
+++        *argb++ = (a << 24) | (r << 16) | (g << 8) | b;
+++    }
+++}
+++
++ static int decode_run_2bit(GetBitContext *gb, int *color)
++ {
++     unsigned int v, t;
++@@ -628,6 +646,12 @@ static av_cold int dvdsub_init(AVCodecContext *avctx)
++ 
++     if (ctx->palette_str)
++         parse_palette(ctx, ctx->palette_str);
+++
+++    if (!ctx->has_palette && avctx->extradata_size == 64) {
+++        ayvu_to_argb((uint8_t*)avctx->extradata, ctx->palette, 16);
+++        ctx->has_palette = 1;
+++    }
+++
++     if (ctx->has_palette) {
++         int i;
++         av_log(avctx, AV_LOG_DEBUG, "palette:");
++-- 
++1.9.3
 +
-+config BR2_PACKAGE_XBMC_RSXS
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_RSXS
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
 +
-+config BR2_PACKAGE_XBMC_LIBCEC
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBCEC
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++From d53ff2a91f95b2b6ef3974921228e90a4a765af6 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sat, 22 Oct 2011 18:33:45 +0200
++Subject: [PATCH 02/15] Check return value of avio_seek and avoid modifying
++ state if it fails
 +
-+config BR2_PACKAGE_XBMC_LIBMICROHTTPD
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBMICROHTTPD
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++The code still modifies state if the timestamp is not found. Not
++sure exactly how to avoid that.
++---
++ libavformat/matroskadec.c | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
 +
-+config BR2_PACKAGE_XBMC_LIBNFS
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBNFS
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++diff --git a/libavformat/matroskadec.c b/libavformat/matroskadec.c
++index ec43526..66d5e8e 100644
++--- a/libavformat/matroskadec.c
+++++ b/libavformat/matroskadec.c
++@@ -2992,8 +2992,8 @@ static int matroska_read_seek(AVFormatContext *s, int stream_index,
++     timestamp = FFMAX(timestamp, st->index_entries[0].timestamp);
++ 
++     if ((index = av_index_search_timestamp(st, timestamp, flags)) < 0) {
++-        avio_seek(s->pb, st->index_entries[st->nb_index_entries - 1].pos,
++-                  SEEK_SET);
+++        if (avio_seek(s->pb, st->index_entries[st->nb_index_entries-1].pos, SEEK_SET) < 0)
+++            return -1;
++         matroska->current_id = 0;
++         while ((index = av_index_search_timestamp(st, timestamp, flags)) < 0) {
++             matroska_clear_queue(matroska);
++@@ -3002,16 +3002,11 @@ static int matroska_read_seek(AVFormatContext *s, int stream_index,
++         }
++     }
++ 
++-    matroska_clear_queue(matroska);
++     if (index < 0 || (matroska->cues_parsing_deferred < 0 && index == st->nb_index_entries - 1))
++         goto err;
++ 
++     index_min = index;
++     for (i = 0; i < matroska->tracks.nb_elem; i++) {
++-        tracks[i].audio.pkt_cnt        = 0;
++-        tracks[i].audio.sub_packet_cnt = 0;
++-        tracks[i].audio.buf_timecode   = AV_NOPTS_VALUE;
++-        tracks[i].end_timecode         = 0;
++         if (tracks[i].type == MATROSKA_TRACK_TYPE_SUBTITLE &&
++             tracks[i].stream->discard != AVDISCARD_ALL) {
++             index_sub = av_index_search_timestamp(
++@@ -3025,8 +3020,18 @@ static int matroska_read_seek(AVFormatContext *s, int stream_index,
++         }
++     }
++ 
++-    avio_seek(s->pb, st->index_entries[index_min].pos, SEEK_SET);
++-    matroska->current_id       = 0;
+++    if (avio_seek(s->pb, st->index_entries[index_min].pos, SEEK_SET) < 0)
+++        return -1;
+++
+++    matroska_clear_queue(matroska);
+++    for (i=0; i < matroska->tracks.nb_elem; i++) {
+++        tracks[i].audio.pkt_cnt = 0;
+++        tracks[i].audio.sub_packet_cnt = 0;
+++        tracks[i].audio.buf_timecode = AV_NOPTS_VALUE;
+++        tracks[i].end_timecode = 0;
+++    }
+++    matroska->current_id = 0;
+++
++     if (flags & AVSEEK_FLAG_ANY) {
++         st->skip_to_keyframe = 0;
++         matroska->skip_to_timecode = timestamp;
++-- 
++1.9.3
 +
-+config BR2_PACKAGE_XBMC_RTMPDUMP
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_RTMPDUMP
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
 +
-+config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBSHAIRPLAY
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++From d8c6b50095900bbc4f40dfb3c2d321a35361820a Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Mon, 12 Sep 2011 21:37:17 +0200
++Subject: [PATCH 03/15] asf hacks
 +
-+config BR2_PACKAGE_XBMC_LIBSMBCLIENT
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBSMBCLIENT
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++---
++ libavformat/asfdec.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
 +
-+config BR2_PACKAGE_XBMC_LIBTHEORA
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBTHEORA
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++diff --git a/libavformat/asfdec.c b/libavformat/asfdec.c
++index 978b956..30f099d 100644
++--- a/libavformat/asfdec.c
+++++ b/libavformat/asfdec.c
++@@ -1546,9 +1546,20 @@ static int asf_read_seek(AVFormatContext *s, int stream_index,
++     AVStream *st    = s->streams[stream_index];
++     int ret = 0;
++ 
+++    if (pts == 0) {
+++      // this is a hack since av_gen_search searches the entire file in this case
+++      av_log(s, AV_LOG_DEBUG, "SEEKTO: %"PRId64"\n", s->data_offset);
+++      if (avio_seek(s->pb, s->data_offset, SEEK_SET) < 0)
+++          return -1;
+++      return 0;
+++    }
+++
++     if (s->packet_size <= 0)
++         return -1;
++ 
+++    if (st->codec->codec_type != AVMEDIA_TYPE_VIDEO)
+++        return -1;
+++
++     /* Try using the protocol's read_seek if available */
++     if (s->pb) {
++         int ret = avio_seek_time(s->pb, stream_index, pts, flags);
++-- 
++1.9.3
 +
-+config BR2_PACKAGE_XBMC_LIBUSB
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBUSB
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
 +
-+config BR2_PACKAGE_XBMC_LIBVA
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_LIBVA
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++From bb32180f7e9fe2ff89888c26731dc043844b49e2 Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Mon, 28 Jun 2010 01:55:31 -0400
++Subject: [PATCH 04/15] if av_read_packet returns AVERROR_IO, we are done.
++ ffmpeg's codecs might or might not handle returning any completed demuxed
++ packets correctly
 +
-+config BR2_PACKAGE_XBMC_WAVPACK
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_WAVPACK
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
++---
++ libavformat/utils.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
- 	bool "Xceive xc5000 option has been renamed"
- 	select BR2_PACKAGE_LINUX_FIRMWARE_XCx000
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index e095d60..9fa0bb0 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -1460,6 +1460,8 @@ static int read_frame_internal(AVFormatContext *s, AVPacket *pkt)
++         if (ret < 0) {
++             if (ret == AVERROR(EAGAIN))
++                 return ret;
+++            if (ret == AVERROR(EIO))
+++                return ret;
++             /* flush the parsers */
++             for (i = 0; i < s->nb_streams; i++) {
++                 st = s->streams[i];
++-- 
++1.9.3
++
++
++From aae4de70cac340ed7e1b8db34125216c1e13cb00 Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Mon, 28 Jun 2010 02:10:50 -0400
++Subject: [PATCH 05/15] added: Ticket #7187, TV Teletext support for DVB EBU
++ Teletext streams
++
++---
++ libavcodec/avcodec.h | 4 ++++
++ libavformat/mpegts.c | 2 ++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/libavcodec/avcodec.h b/libavcodec/avcodec.h
++index 93ba4d0..f3de33a 100644
++--- a/libavcodec/avcodec.h
+++++ b/libavcodec/avcodec.h
++@@ -523,6 +523,10 @@ enum AVCodecID {
++     AV_CODEC_ID_PJS        = MKBETAG('P','h','J','S'),
++     AV_CODEC_ID_ASS        = MKBETAG('A','S','S',' '),  ///< ASS as defined in Matroska
++ 
+++    /* data codecs */
+++    AV_CODEC_ID_VBI_DATA= 0x17500,
+++    AV_CODEC_ID_VBI_TELETEXT,
+++
++     /* other specific kind of codecs (generally used for attachments) */
++     AV_CODEC_ID_FIRST_UNKNOWN = 0x18000,           ///< A dummy ID pointing at the start of various fake codecs.
++     AV_CODEC_ID_TTF = 0x18000,
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 7114088..e55193b 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -708,6 +708,8 @@ static const StreamType DESC_types[] = {
++     { 0x7b, AVMEDIA_TYPE_AUDIO,    AV_CODEC_ID_DTS          },
++     { 0x56, AVMEDIA_TYPE_SUBTITLE, AV_CODEC_ID_DVB_TELETEXT },
++     { 0x59, AVMEDIA_TYPE_SUBTITLE, AV_CODEC_ID_DVB_SUBTITLE }, /* subtitling descriptor */
+++    { 0x45, AVMEDIA_TYPE_DATA,         AV_CODEC_ID_VBI_DATA }, /* VBI Data descriptor */
+++    { 0x46, AVMEDIA_TYPE_DATA,     AV_CODEC_ID_VBI_TELETEXT }, /* VBI Teletext descriptor */
++     { 0 },
++ };
++ 
++-- 
++1.9.3
++
++
++From e71d4c1755bd4e23fe9b65fb6128a8b41cecfdb1 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 18 Sep 2011 19:16:34 +0200
++Subject: [PATCH 06/15] Don't accept mpegts PMT that isn't current
++
++---
++ libavformat/mpegts.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index e55193b..9ec6220 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -552,6 +552,7 @@ typedef struct SectionHeader {
++     uint8_t tid;
++     uint16_t id;
++     uint8_t version;
+++    uint8_t current;
++     uint8_t sec_num;
++     uint8_t last_sec_num;
++ } SectionHeader;
++@@ -623,6 +624,7 @@ static int parse_section_header(SectionHeader *h,
++     val = get8(pp, p_end);
++     if (val < 0)
++         return val;
+++    h->current = val & 0x1;
++     h->version = (val >> 1) & 0x1f;
++     val = get8(pp, p_end);
++     if (val < 0)
++@@ -1891,6 +1893,8 @@ static void pat_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         return;
++     if (ts->skip_changes)
++         return;
+++    if (!h->current)
+++        return;
++ 
++     ts->stream->ts_id = h->id;
++ 
++-- 
++1.9.3
++
++
++From 473091d11f4e3a0c1820054368a76074a0e239cb Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 18 Sep 2011 19:17:23 +0200
++Subject: [PATCH 07/15] Don't reparse PMT unless it's version has changed
++
++---
++ libavformat/mpegts.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 9ec6220..ab03372 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -87,6 +87,7 @@ struct MpegTSFilter {
++     int es_id;
++     int last_cc; /* last cc code (-1 if first packet) */
++     int64_t last_pcr;
+++    int last_version; /* last version of data on this pid */
++     enum MpegTSFilterType type;
++     union {
++         MpegTSPESFilter pes_filter;
++@@ -432,6 +433,7 @@ static MpegTSFilter *mpegts_open_filter(MpegTSContext *ts, unsigned int pid,
++     filter->es_id   = -1;
++     filter->last_cc = -1;
++     filter->last_pcr= -1;
+++    filter->last_version = -1;
++ 
++     return filter;
++ }
++@@ -1895,6 +1897,10 @@ static void pat_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         return;
++     if (!h->current)
++         return;
+++    if (h->version == filter->last_version)
+++        return;
+++    filter->last_version = h->version;
+++    av_dlog(ts->stream, "version=%d\n", filter->last_version);
++ 
++     ts->stream->ts_id = h->id;
++ 
++-- 
++1.9.3
++
++
++From aa357f84bcdb105910478aee74d5b675d65114bd Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Fri, 9 Jul 2010 16:43:31 -0400
++Subject: [PATCH 08/15] Read PID timestamps as well as PCR timestamps to find
++ location in mpegts stream
++
++---
++ libavformat/mpegts.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
++ 1 file changed, 46 insertions(+), 2 deletions(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index ab03372..9962ccf 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -2375,6 +2375,44 @@ static void seek_back(AVFormatContext *s, AVIOContext *pb, int64_t pos) {
++         av_log(s, pb->seekable ? AV_LOG_ERROR : AV_LOG_INFO, "Unable to seek back to the start\n");
++ }
++ 
+++static int parse_timestamp(int64_t *ts, const uint8_t *buf)
+++{
+++    int afc, flags;
+++    const uint8_t *p;
+++
+++    if(!(buf[1] & 0x40)) /* must be a start packet */
+++        return -1;
+++
+++    afc = (buf[3] >> 4) & 3;
+++    p = buf + 4;
+++    if (afc == 0 || afc == 2) /* invalid or only adaption field */
+++        return -1;
+++    if (afc == 3)
+++        p += p[0] + 1;
+++    if (p >= buf + TS_PACKET_SIZE)
+++        return -1;
+++
+++    if (p[0] != 0x00 || p[1] != 0x00 || p[2] != 0x01)  /* packet_start_code_prefix */
+++        return -1;
+++
+++    flags = p[3] | 0x100; /* stream type */
+++    if (!((flags >= 0x1c0 && flags <= 0x1df) ||
+++          (flags >= 0x1e0 && flags <= 0x1ef) ||
+++          (flags == 0x1bd) || (flags == 0x1fd)))
+++        return -1;
+++
+++    flags = p[7];
+++    if ((flags & 0xc0) == 0x80) {
+++        *ts = ff_parse_pes_pts(p+9);
+++        return 0;
+++    } else if ((flags & 0xc0) == 0xc0) {
+++        *ts = ff_parse_pes_pts(p+9+5);
+++        return 0;
+++    }
+++    return -1;
+++}
+++
+++
++ static int mpegts_read_header(AVFormatContext *s)
++ {
++     MpegTSContext *ts = s->priv_data;
++@@ -2574,6 +2612,7 @@ static av_unused int64_t mpegts_get_pcr(AVFormatContext *s, int stream_index,
++     uint8_t buf[TS_PACKET_SIZE];
++     int pcr_l, pcr_pid =
++         ((PESContext *)s->streams[stream_index]->priv_data)->pcr_pid;
+++    int pid = ((PESContext*)s->streams[stream_index]->priv_data)->pid;
++     int pos47 = ts->pos47_full % ts->raw_packet_size;
++     pos =
++         ((*ppos + ts->raw_packet_size - 1 - pos47) / ts->raw_packet_size) *
++@@ -2595,6 +2634,11 @@ static av_unused int64_t mpegts_get_pcr(AVFormatContext *s, int stream_index,
++             *ppos = pos;
++             return timestamp;
++         }
+++        if ((pid < 0 || (AV_RB16(buf + 1) & 0x1fff) == pid) &&
+++            parse_timestamp(&timestamp, buf) == 0) {
+++            *ppos = pos;
+++            return timestamp;
+++        }
++         pos += ts->raw_packet_size;
++     }
++ 
++@@ -2694,7 +2738,7 @@ AVInputFormat ff_mpegts_demuxer = {
++     .read_header    = mpegts_read_header,
++     .read_packet    = mpegts_read_packet,
++     .read_close     = mpegts_read_close,
++-    .read_timestamp = mpegts_get_dts,
+++    .read_timestamp = mpegts_get_pcr,
++     .flags          = AVFMT_SHOW_IDS | AVFMT_TS_DISCONT,
++     .priv_class     = &mpegts_class,
++ };
++@@ -2706,7 +2750,7 @@ AVInputFormat ff_mpegtsraw_demuxer = {
++     .read_header    = mpegts_read_header,
++     .read_packet    = mpegts_raw_read_packet,
++     .read_close     = mpegts_read_close,
++-    .read_timestamp = mpegts_get_dts,
+++    .read_timestamp = mpegts_get_pcr,
++     .flags          = AVFMT_SHOW_IDS | AVFMT_TS_DISCONT,
++     .priv_class     = &mpegtsraw_class,
++ };
++-- 
++1.9.3
++
++
++From 8deda04d599f1e248cba4d175257dea469feb719 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sat, 22 Oct 2011 19:01:38 +0200
++Subject: [PATCH 09/15] Get stream durations using read_timestamp
++
++---
++ libavformat/utils.c | 39 +++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 39 insertions(+)
++
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index 9fa0bb0..cbeaa9c 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -2480,6 +2480,41 @@ static void estimate_timings_from_bit_rate(AVFormatContext *ic)
++ #define DURATION_MAX_READ_SIZE 250000LL
++ #define DURATION_MAX_RETRY 4
++ 
+++static void av_estimate_timings_from_pts2(AVFormatContext *ic, int64_t old_offset)
+++{
+++    AVStream *st;
+++    int i, step= 1024;
+++    int64_t ts, pos;
+++
+++    for(i=0;i<ic->nb_streams;i++) {
+++        st = ic->streams[i];
+++
+++        pos = 0;
+++        ts = ic->iformat->read_timestamp(ic, i, &pos, DURATION_MAX_READ_SIZE);
+++        if (ts == AV_NOPTS_VALUE)
+++            continue;
+++        if (st->start_time > ts || st->start_time == AV_NOPTS_VALUE)
+++            st->start_time = ts;
+++
+++        pos = avio_size(ic->pb) - 1;
+++        do {
+++            pos -= step;
+++            ts = ic->iformat->read_timestamp(ic, i, &pos, pos + step);
+++            step += step;
+++        } while (ts == AV_NOPTS_VALUE && pos >= step && step < DURATION_MAX_READ_SIZE);
+++
+++        if (ts == AV_NOPTS_VALUE)
+++            continue;
+++
+++        if (st->duration < ts - st->start_time || st->duration == AV_NOPTS_VALUE)
+++            st->duration = ts - st->start_time;
+++    }
+++
+++    fill_all_stream_timings(ic);
+++
+++    avio_seek(ic->pb, old_offset, SEEK_SET);
+++}
+++
++ /* only usable for MPEG-PS streams */
++ static void estimate_timings_from_pts(AVFormatContext *ic, int64_t old_offset)
++ {
++@@ -2630,6 +2665,10 @@ static void estimate_timings(AVFormatContext *ic, int64_t old_offset)
++          * the components */
++         fill_all_stream_timings(ic);
++         ic->duration_estimation_method = AVFMT_DURATION_FROM_STREAM;
+++    } else if (ic->iformat->read_timestamp && 
+++        file_size && ic->pb->seekable) {
+++        /* get accurate estimate from the PTSes */
+++        av_estimate_timings_from_pts2(ic, old_offset);
++     } else {
++         /* less precise: use bitrate info */
++         estimate_timings_from_bit_rate(ic);
++-- 
++1.9.3
++
++
++From 77caa1aab9b838a0085e2f4133d0e27eb6588f4b Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Wed, 8 Dec 2010 14:03:43 +0000
++Subject: [PATCH 10/15] changed: allow 4 second skew between streams in mov
++ before attempting to seek
++
++---
++ libavformat/mov.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libavformat/mov.c b/libavformat/mov.c
++index 9b4832f..41be8b7 100644
++--- a/libavformat/mov.c
+++++ b/libavformat/mov.c
++@@ -3673,8 +3673,8 @@ static AVIndexEntry *mov_find_next_sample(AVFormatContext *s, AVStream **st)
++             if (!sample || (!s->pb->seekable && current_sample->pos < sample->pos) ||
++                 (s->pb->seekable &&
++                  ((msc->pb != s->pb && dts < best_dts) || (msc->pb == s->pb &&
++-                 ((FFABS(best_dts - dts) <= AV_TIME_BASE && current_sample->pos < sample->pos) ||
++-                  (FFABS(best_dts - dts) > AV_TIME_BASE && dts < best_dts)))))) {
+++                 ((FFABS(best_dts - dts) <= 4*AV_TIME_BASE && current_sample->pos < sample->pos) ||
+++                  (FFABS(best_dts - dts) > 4*AV_TIME_BASE && dts < best_dts)))))) {
++                 sample = current_sample;
++                 best_dts = dts;
++                 *st = avst;
++-- 
++1.9.3
++
++
++From c3d69fb6f71a674310fefb17aebab01a6744881c Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Fri, 26 Nov 2010 20:56:48 +0000
++Subject: [PATCH 11/15] fixed: memleak in mpegts demuxer on some malformed (??)
++ mpegts files with too large pes packets
++
++at-visions sample file brokenStream.mpg
++---
++ libavformat/mpegts.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 9962ccf..66ea11c 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -811,6 +811,10 @@ static void reset_pes_packet_state(PESContext *pes)
++ 
++ static void new_pes_packet(PESContext *pes, AVPacket *pkt)
++ {
+++    if(pkt->data) {
+++      av_log(pes->stream, AV_LOG_ERROR, "ignoring previously allocated packet on stream %d\n", pkt->stream_index);
+++      av_free_packet(pkt);
+++    }
++     av_init_packet(pkt);
++ 
++     pkt->buf  = pes->buffer;
++@@ -2565,6 +2569,8 @@ static int mpegts_read_packet(AVFormatContext *s, AVPacket *pkt)
++ 
++     pkt->size = -1;
++     ts->pkt = pkt;
+++    ts->pkt->data = NULL;
+++
++     ret = handle_packets(ts, 0);
++     if (ret < 0) {
++         av_free_packet(ts->pkt);
++-- 
++1.9.3
++
++
++From e621e2b83b43a5fade298251094458451eecad41 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Mon, 28 Jun 2010 21:26:54 +0000
++Subject: [PATCH 12/15] Speed up mpegts av_find_stream_info
++
++---
++ libavformat/mpegts.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 66ea11c..5811d26 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -969,7 +969,7 @@ static int mpegts_push_data(MpegTSFilter *filter,
++                         goto skip;
++ 
++                     /* stream not present in PMT */
++-                    if (!pes->st) {
+++                    if (ts->auto_guess && !pes->st) {
++                         if (ts->skip_changes)
++                             goto skip;
++ 
++-- 
++1.9.3
++
++
++From 07a31ecbe3493cbc1d1a5b6dee7784257a70ca17 Mon Sep 17 00:00:00 2001
++From: marc <mhocking@ubuntu-desktop.(none)>
++Date: Mon, 18 Feb 2013 17:18:18 +0000
++Subject: [PATCH 13/15] dxva-h264 Fix dxva playback of streams that don't start
++ with an I-Frame.
++
++---
++ libavcodec/dxva2_h264.c | 8 ++++++++
++ libavcodec/h264.c       | 1 +
++ libavcodec/h264.h       | 2 ++
++ libavcodec/h264_slice.c | 1 +
++ 4 files changed, 12 insertions(+)
++
++diff --git a/libavcodec/dxva2_h264.c b/libavcodec/dxva2_h264.c
++index 1174188..263a272 100644
++--- a/libavcodec/dxva2_h264.c
+++++ b/libavcodec/dxva2_h264.c
++@@ -448,6 +448,14 @@ static int dxva2_h264_end_frame(AVCodecContext *avctx)
++ 
++     if (ctx_pic->slice_count <= 0 || ctx_pic->bitstream_size <= 0)
++         return -1;
+++
+++    // Wait for an I-frame before start decoding. Workaround for ATI UVD and UVD+ GPUs
+++    if (!h->got_first_iframe) {
+++        if (!(ctx_pic->pp.wBitFields & (1 << 15)))
+++            return -1;
+++        h->got_first_iframe = 1;
+++    }
+++
++     ret = ff_dxva2_common_end_frame(avctx, &h->cur_pic_ptr->f,
++                                     &ctx_pic->pp, sizeof(ctx_pic->pp),
++                                     &ctx_pic->qm, sizeof(ctx_pic->qm),
++diff --git a/libavcodec/h264.c b/libavcodec/h264.c
++index 1d91987..8b7b026 100644
++--- a/libavcodec/h264.c
+++++ b/libavcodec/h264.c
++@@ -1085,6 +1085,7 @@ void ff_h264_flush_change(H264Context *h)
++     h->list_count = 0;
++     h->current_slice = 0;
++     h->mmco_reset = 1;
+++    h->got_first_iframe = 0;
++ }
++ 
++ /* forget old pics after a seek */
++diff --git a/libavcodec/h264.h b/libavcodec/h264.h
++index 228558b..5e92043 100644
++--- a/libavcodec/h264.h
+++++ b/libavcodec/h264.h
++@@ -740,6 +740,8 @@ typedef struct H264Context {
++     int luma_weight_flag[2];    ///< 7.4.3.2 luma_weight_lX_flag
++     int chroma_weight_flag[2];  ///< 7.4.3.2 chroma_weight_lX_flag
++ 
+++    int got_first_iframe;
+++
++     // Timestamp stuff
++     int sei_buffering_period_present;   ///< Buffering period SEI flag
++     int initial_cpb_removal_delay[32];  ///< Initial timestamps for CPBs
++diff --git a/libavcodec/h264_slice.c b/libavcodec/h264_slice.c
++index ded26f8..e20f2c8 100644
++--- a/libavcodec/h264_slice.c
+++++ b/libavcodec/h264_slice.c
++@@ -1166,6 +1166,7 @@ static int h264_slice_header_init(H264Context *h, int reinit)
++         ff_h264_free_tables(h, 0);
++     h->first_field           = 0;
++     h->prev_interlaced_frame = 1;
+++    h->got_first_iframe = 0;
++ 
++     init_scan_tables(h);
++     ret = ff_h264_alloc_tables(h);
++-- 
++1.9.3
++
++
++From 67247a541dc1dfb547d35eb326ecf26b6c10b4d3 Mon Sep 17 00:00:00 2001
++From: elupus <elupus@xbmc.org>
++Date: Tue, 1 Nov 2011 20:18:35 +0100
++Subject: [PATCH 14/15] add public version of ff_read_frame_flush
++
++We need this since we sometimes seek on the
++input stream behind ffmpeg's back. After this
++all data need to be flushed completely.
++---
++ libavformat/avformat.h | 5 +++++
++ libavformat/utils.c    | 5 +++++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/libavformat/avformat.h b/libavformat/avformat.h
++index a9abfbd..ff19215 100644
++--- a/libavformat/avformat.h
+++++ b/libavformat/avformat.h
++@@ -2074,6 +2074,11 @@ int av_read_packet(AVFormatContext *s, AVPacket *pkt);
++ int av_read_frame(AVFormatContext *s, AVPacket *pkt);
++ 
++ /**
+++ * Clear out any buffered data in context
+++ */
+++void av_read_frame_flush(AVFormatContext *s);
+++
+++/**
++  * Seek to the keyframe at timestamp.
++  * 'timestamp' in 'stream_index'.
++  *
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index cbeaa9c..185706f 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -1748,6 +1748,11 @@ void ff_read_frame_flush(AVFormatContext *s)
++     }
++ }
++ 
+++void av_read_frame_flush(AVFormatContext *s)
+++{
+++  ff_read_frame_flush(s);
+++}
+++
++ void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
++ {
++     int i;
++-- 
++1.9.3
++
++
++From d028c907004e8a3c0f5161ce595331e4cc57c86c Mon Sep 17 00:00:00 2001
++From: Memphiz <memphis@machzwo.de>
++Date: Mon, 12 May 2014 18:27:01 +0200
++Subject: [PATCH 15/15] fix --disable-ffplay should disable any needs to check
++ or add compile/link flags otherwise SDL gets spewed all over pkg-config files
++ and generally causes a mess
++
++---
++ configure | 32 +++++++++++++++++---------------
++ 1 file changed, 17 insertions(+), 15 deletions(-)
++
++diff --git a/configure b/configure
++index 4ed43a0..4520e8c 100755
++--- a/configure
+++++ b/configure
++@@ -4827,22 +4827,24 @@ if enabled libdc1394; then
++     die "ERROR: No version of libdc1394 found "
++ fi
++ 
++-SDL_CONFIG="${cross_prefix}sdl-config"
++-if check_pkg_config sdl SDL_events.h SDL_PollEvent; then
++-    check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
++-    check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) < 0x010300" $sdl_cflags &&
++-    enable sdl
++-else
++-  if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
++-    sdl_cflags=$("${SDL_CONFIG}" --cflags)
++-    sdl_libs=$("${SDL_CONFIG}" --libs)
++-    check_func_headers SDL_version.h SDL_Linked_Version $sdl_cflags $sdl_libs &&
++-    check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
++-    check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) < 0x010300" $sdl_cflags &&
++-    enable sdl
++-  fi
+++if enabled ffplay; then
+++    SDL_CONFIG="${cross_prefix}sdl-config"
+++    if check_pkg_config sdl SDL_events.h SDL_PollEvent; then
+++        check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
+++        check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) < 0x010300" $sdl_cflags &&
+++        enable sdl
+++    else
+++      if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
+++        sdl_cflags=$("${SDL_CONFIG}" --cflags)
+++        sdl_libs=$("${SDL_CONFIG}" --libs)
+++        check_func_headers SDL_version.h SDL_Linked_Version $sdl_cflags $sdl_libs &&
+++        check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
+++        check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) < 0x010300" $sdl_cflags &&
+++        enable sdl
+++      fi
+++    fi
+++    enabled sdl && add_cflags $sdl_cflags && add_extralibs $sdl_libs
++ fi
++-enabled sdl && add_cflags $sdl_cflags && add_extralibs $sdl_libs
++ 
++ texi2html --help 2> /dev/null | grep -q 'init-file' && enable texi2html || disable texi2html
++ makeinfo --version > /dev/null 2>&1 && enable makeinfo  || disable makeinfo
++-- 
++1.9.3
++
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a7337d5..b3b6fc2 100644
+index b3b6fc2..f9c31f3 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -1,35 +1,35 @@
--config BR2_PACKAGE_XBMC_ARCH_SUPPORTS
-+config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_arm || BR2_i386 || BR2_x86_64
- 
--comment "xbmc needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
--	depends on BR2_PACKAGE_XBMC_ARCH_SUPPORTS
-+comment "kodi needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
-+	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
- 
--config BR2_PACKAGE_XBMC_EGL_GLES
-+config BR2_PACKAGE_KODI_EGL_GLES
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
--	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
-+	depends on !BR2_PACKAGE_KODI_GL # prefer GL if available
- 
--config BR2_PACKAGE_XBMC_GL
-+config BR2_PACKAGE_KODI_GL
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_arm # xbmc needs egl/gles on arm
-+	depends on !BR2_arm # kodi needs egl/gles on arm
- 
--comment "xbmc needs an OpenGL or an openGL ES and EGL backend"
-+comment "kodi needs an OpenGL or an openGL ES and EGL backend"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_PACKAGE_XBMC_GL && !BR2_PACKAGE_XBMC_EGL_GLES
-+	depends on !BR2_PACKAGE_KODI_GL && !BR2_PACKAGE_KODI_EGL_GLES
- 
--comment "xbmc requires an OpenGL ES and EGL backend"
-+comment "kodi requires an OpenGL ES and EGL backend"
- 	depends on BR2_arm
--	depends on !BR2_PACKAGE_XBMC_EGL_GLES
-+	depends on !BR2_PACKAGE_KODI_EGL_GLES
- 
--menuconfig BR2_PACKAGE_XBMC
--	bool "xbmc"
-+menuconfig BR2_PACKAGE_KODI
-+	bool "kodi"
- 	select BR2_NEEDS_HOST_JAVA
- 	select BR2_PACKAGE_BOOST
+@@ -35,6 +35,9 @@ menuconfig BR2_PACKAGE_KODI
  	select BR2_PACKAGE_BOOST_THREAD
-@@ -44,8 +44,8 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBCDIO
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBFRIBIDI
--	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XBMC_GL
--	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_KODI_GL
-+	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBID3TAG
- 	select BR2_PACKAGE_LIBMAD
-@@ -75,56 +75,56 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_PYTHON_UNICODEDATA
- 	select BR2_PACKAGE_PYTHON_ZLIB
- 	select BR2_PACKAGE_READLINE
--	select BR2_PACKAGE_SDL if BR2_PACKAGE_XBMC_GL
--	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_XBMC_GL
--	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_SDL if BR2_PACKAGE_KODI_GL
-+	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_KODI_GL
-+	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_KODI_GL
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_TAGLIB
- 	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_TINYXML
--	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
--	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_XBMC_GL
--	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
-+	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
-+	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_KODI_GL
-+	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_INET_IPV6
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
-+	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
- 	depends on BR2_USE_MMU # python
- 	depends on BR2_USE_WCHAR
--	depends on BR2_PACKAGE_XBMC_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	help
--	  XBMC is an award-winning free and open source (GPL) software
-+	  KODI is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
- 
--	  http://xbmc.org
-+	  http://kodi.tv
- 
--if BR2_PACKAGE_XBMC
-+if BR2_PACKAGE_KODI
- 
--config BR2_PACKAGE_XBMC_ALSA_LIB
-+config BR2_PACKAGE_KODI_ALSA_LIB
- 	bool "alsa"
- 	select BR2_PACKAGE_ALSA_LIB
- 	help
- 	  Enable alsa support.
- 
--config BR2_PACKAGE_XBMC_AVAHI
-+config BR2_PACKAGE_KODI_AVAHI
- 	bool "avahi"
- 	depends on !BR2_PREFER_STATIC_LIB # avahi
- 	select BR2_PACKAGE_AVAHI
- 	select BR2_PACKAGE_AVAHI_DAEMON
- 	help
- 	  Enable Avahi support.
--	  Select this if you want XBMC to support Bonjour protocol.
-+	  Select this if you want KODI to support Bonjour protocol.
- 
--config BR2_PACKAGE_XBMC_DBUS
-+config BR2_PACKAGE_KODI_DBUS
- 	bool "dbus"
- 	select BR2_PACKAGE_DBUS
- 	help
- 	  Enable D-Bus support
- 
--config BR2_PACKAGE_XBMC_LIBBLURAY
-+config BR2_PACKAGE_KODI_LIBBLURAY
- 	bool "blu-ray"
- 	select BR2_PACKAGE_LIBBLURAY
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -135,43 +135,43 @@ config BR2_PACKAGE_XBMC_LIBBLURAY
- comment "libbluray support needs a toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB
- 
--config BR2_PACKAGE_XBMC_GOOM
-+config BR2_PACKAGE_KODI_GOOM
- 	bool "goom screensaver"
--	depends on BR2_PACKAGE_XBMC_GL
-+	depends on BR2_PACKAGE_KODI_GL
- 	help
- 	  Enable goom screensaver
- 
- comment "goom needs an OpenGL backend"
--	depends on !BR2_PACKAGE_XBMC_GL
-+	depends on !BR2_PACKAGE_KODI_GL
- 
--config BR2_PACKAGE_XBMC_RSXS
-+config BR2_PACKAGE_KODI_RSXS
- 	bool "rsxs screensaver"
--	depends on BR2_PACKAGE_XBMC_GL
-+	depends on BR2_PACKAGE_KODI_GL
- 	help
- 	  Enable goom screensaver
- 
- comment "rsxs needs an OpenGL backend"
--	depends on !BR2_PACKAGE_XBMC_GL
-+	depends on !BR2_PACKAGE_KODI_GL
- 
--config BR2_PACKAGE_XBMC_LIBCEC
-+config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
--	  Select this if you want XBMC to support HDMI CEC.
-+	  Select this if you want KODI to support HDMI CEC.
- 
- comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
- 
--config BR2_PACKAGE_XBMC_LIBMICROHTTPD
-+config BR2_PACKAGE_KODI_LIBMICROHTTPD
- 	bool "web server"
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	help
- 	  Enable webserver feature
- 
--config BR2_PACKAGE_XBMC_LIBNFS
-+config BR2_PACKAGE_KODI_LIBNFS
- 	bool "nfs"
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_LIBNFS
-@@ -181,42 +181,42 @@ config BR2_PACKAGE_XBMC_LIBNFS
- comment "nfs support needs a toolchain w/ RPC support"
- 	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 
--config BR2_PACKAGE_XBMC_RTMPDUMP
-+config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
- 	help
- 	  Enable RTMP input support.
- 	  Select this if you want to play back rtmp stream.
- 
--config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
-+config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
- 
--config BR2_PACKAGE_XBMC_LIBSMBCLIENT
-+config BR2_PACKAGE_KODI_LIBSMBCLIENT
- 	bool "samba"
- 	select BR2_PACKAGE_SAMBA
- 	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
- 	help
- 	  Enable Samba support
- 
--config BR2_PACKAGE_XBMC_LIBTHEORA
-+config BR2_PACKAGE_KODI_LIBTHEORA
- 	bool "theora"
- 	select BR2_PACKAGE_LIBTHEORA
- 	help
- 	  Enable Theora input support.
- 	  Select this if you want to play back OGG/OGV files (Video).
- 
--config BR2_PACKAGE_XBMC_LIBUSB
-+config BR2_PACKAGE_KODI_LIBUSB
- 	bool "usb"
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  Enable libusb support.
- 
--config BR2_PACKAGE_XBMC_LIBVA
-+config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
- 	select BR2_PACKAGE_LIBVA
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -226,16 +226,16 @@ config BR2_PACKAGE_XBMC_LIBVA
- comment "libva support needs toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB
- 
--config BR2_PACKAGE_XBMC_WAVPACK
-+config BR2_PACKAGE_KODI_WAVPACK
- 	bool "wavpack"
- 	select BR2_PACKAGE_WAVPACK
- 	help
- 	  Enable WAV input support.
- 	  Select this if you want to play back WV files.
- 
--comment "XBMC addons"
-+comment "KODI addons"
- 
- source "package/xbmc-addon-xvdr/Config.in"
- source "package/xbmc-pvr-addons/Config.in"
- 
--endif # BR2_PACKAGE_XBMC
-+endif # BR2_PACKAGE_KODI
-diff --git a/package/kodi/S50kodi b/package/kodi/S50kodi
-index 312452b..f9abbb5 100755
---- a/package/kodi/S50kodi
-+++ b/package/kodi/S50kodi
-@@ -1,20 +1,20 @@
- #!/bin/sh
- #
--# Starts XBMC.
-+# Starts Kodi
- #
- 
--BIN=/usr/bin/br-xbmc
--XBMC=/usr/lib/xbmc/xbmc.bin
--XBMC_ARGS="--standalone -fs -n"
--PIDFILE=/var/run/xbmc.pid
-+BIN=/usr/bin/br-kodi
-+KODI=/usr/lib/xbmc/xbmc.bin
-+KODI_ARGS="--standalone -fs -n"
-+PIDFILE=/var/run/kodi.pid
- 
- start() {
--	echo -n "Starting XBMC: "
--	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC $XBMC_ARGS
-+	echo -n "Starting Kodi: "
-+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $KODI $KODI_ARGS
- 	[ $? == 0 ] && echo "OK" || echo "FAIL"
- }
- stop() {
--	echo -n "Stopping XBMC: "
-+	echo -n "Stopping Kodi: "
- 	start-stop-daemon -K -q -p $PIDFILE
- 	[ $? == 0 ] && echo "OK" || echo "FAIL"
- }
-diff --git a/package/kodi/br-kodi b/package/kodi/br-kodi
-index fee5d51..83d4d4e 100755
---- a/package/kodi/br-kodi
-+++ b/package/kodi/br-kodi
-@@ -1,15 +1,15 @@
- #!/bin/sh
- 
--# We're called with the real XBMC executable as
--# first argument, followed by any XBMC extra args
--XBMC="${1}"
-+# We're called with the real Kodi executable as
-+# first argument, followed by any Kodi extra args
-+KODI="${1}"
- shift
- 
- # In case someone asked we terminate, just kill
--# the XBMC process
-+# the Kodi process
- trap_kill() {
-     LOOP=0
--    killall "${XBMC##*/}"
-+    killall "${KODI##*/}"
- }
- trap trap_kill INT QUIT TERM
- 
-@@ -17,11 +17,11 @@ LOOP=1
- while [ ${LOOP} -eq 1 ]; do
-     # Hack: BusyBox ash does not catch signals while a non-builtin
-     # is running, and only catches the signal when the non-builtin
--    # command ends. So, we just background the XBMC binary, and wait
-+    # command ends. So, we just background the Kodi binary, and wait
-     # for it. But BusyBox' ash's wait builtin does not return the
-     # exit code even if there was only one job (which is correct
--    # for POSIX). So we explicitly wait for the XBMC job
--    "${XBMC}" "${@}" &
-+    # for POSIX). So we explicitly wait for the Kodi job
-+    "${KODI}" "${@}" &
-     wait %1
-     ret=$?
-     case "${ret}" in
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_GPL
++	select BR2_PACKAGE_FFMPEG_POSTPROC # postproc depends on GPL
+ 	select BR2_PACKAGE_FLAC
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
+diff --git a/package/kodi/kodi-0002-mathutil.patch b/package/kodi/kodi-0002-mathutil.patch
+deleted file mode 100644
+index 33f91eb..0000000
+--- a/package/kodi/kodi-0002-mathutil.patch
++++ /dev/null
+@@ -1,213 +0,0 @@
+-Taken from upstream PR: https://github.com/xbmc/xbmc/pull/3760
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-
+-From 7388e8be7cd5e78100532ebf0dba15dccb7b03f8 Mon Sep 17 00:00:00 2001
+-From: Ben Avison <bavison@riscosopen.org>
+-Date: Tue, 3 Dec 2013 15:51:39 +0000
+-Subject: [PATCH] Faster and simpler portable implementation of
+- MathUtils::round_int().
+-
+-Much as I like a bit of inline assembler, I have also removed the ARM versions
+-of MathUtils::truncate_int() and MathUtils::round_int(). The former was just
+-how any sane compiler should have assembled a cast from double to signed int
+-anyway. The latter was a much too complicated way to achieve the desired
+-effect, and was switched out in most ARM builds anyway in favour of the old
+-portable implementation that used floor().
+-
+-Verified that MathUtils::test() still passes, and that GCC is now able to
+-inline MathUtils::round_int(), where it didn't previously.
+-
+-I tested on a Raspberry Pi with the default theme, displaying the front page
+-with the RSS ticker enabled. This saturates the CPU, so I'm measuring the
+-improvement using the debug window's FPS figure. This patch improves this from
+-~50.8 FPS to ~52.6 FPS.
+----
+- xbmc/utils/MathUtils.h | 129 +++++++++++++++++++++++--------------------------
+- 1 file changed, 61 insertions(+), 68 deletions(-)
+-
+-diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
+-index 96af9f4..0dae77d 100644
+---- a/xbmc/utils/MathUtils.h
+-+++ b/xbmc/utils/MathUtils.h
+-@@ -34,17 +34,13 @@
+- 
+- #if defined(__ppc__) || \
+-     defined(__powerpc__) || \
+--   (defined(TARGET_DARWIN_IOS) && defined(__llvm__)) || \
+--   (defined(TARGET_ANDROID) && defined(__arm__)) || \
+--    defined(TARGET_RASPBERRY_PI)
+-+    defined(__arm__)
+-   #define DISABLE_MATHUTILS_ASM_ROUND_INT
+- #endif
+- 
+- #if defined(__ppc__) || \
+-     defined(__powerpc__) || \
+--   (defined(TARGET_DARWIN) && defined(__llvm__)) || \
+--   (defined(TARGET_ANDROID) && defined(__arm__)) || \
+--    defined(TARGET_RASPBERRY_PI)
+-+    defined(__arm__)
+-   #define DISABLE_MATHUTILS_ASM_TRUNCATE_INT
+- #endif
+- 
+-@@ -73,60 +69,63 @@
+-   {
+-     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
+-     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+--    const float round_to_nearest = 0.5f;
+--    int i;
+- 
+- #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
+--    i = floor(x + round_to_nearest);
+--
+--#elif defined(__arm__)
+--    // From 'ARM-v7-M Architecture Reference Manual' page A7-569:
+--    //  "The floating-point to integer operation (vcvt) [normally] uses the Round towards Zero rounding mode"
+--    // Because of this...we must use some less-than-straightforward logic to perform this operation without
+--    //  changing the rounding mode flags
+--
+--    /* The assembly below implements the following logic:
+--     if (x < 0)
+--       inc = -0.5f
+--     else
+--       inc = 0.5f
+--     int_val = trunc(x+inc);
+--     err = x - int_val;
+--     if (err == 0.5f)
+--       int_val++;
+--     return int_val;
+--    */
+-+    /* This implementation warrants some further explanation.
+-+     *
+-+     * First, a couple of notes on rounding:
+-+     * 1) C casts from float/double to integer round towards zero.
+-+     * 2) Float/double additions are rounded according to the normal rules,
+-+     *    in other words: on some architectures, it's fixed at compile-time,
+-+     *    and on others it can be set using fesetround()). The following
+-+     *    analysis assumes round-to-nearest with ties rounding to even. This
+-+     *    is a fairly sensible choice, and is the default with ARM VFP.
+-+     *
+-+     * What this function wants is round-to-nearest with ties rounding to
+-+     * +infinity. This isn't an IEEE rounding mode, even if we could guarantee
+-+     * that all architectures supported fesetround(), which they don't. Instead,
+-+     * this adds an offset of 2147483648.5 (= 0x80000000.8p0), then casts to
+-+     * an unsigned int (crucially, all possible inputs are now in a range where
+-+     * round to zero acts the same as round to -infinity) and then subtracts
+-+     * 0x80000000 in the integer domain. The 0.5 component of the offset
+-+     * converts what is effectively a round down into a round to nearest, with
+-+     * ties rounding up, as desired.
+-+     *
+-+     * There is a catch, that because there is a double rounding, there is a
+-+     * small region where the input falls just *below* a tie, where the addition
+-+     * of the offset causes a round *up* to an exact integer, due to the finite
+-+     * level of precision available in floating point. You need to be aware of
+-+     * this when calling this function, although@present it is not believed
+-+     * that XBMC ever attempts to round numbers in this window.
+-+     *
+-+     * It is worth proving the size of the affected window. Recall that double
+-+     * precision employs a mantissa of 52 bits.
+-+     * 1) For all inputs -0.5 <= x <= INT_MAX
+-+     *    Once the offset is applied, the most significant binary digit in the
+-+     *    floating-point representation is +2^31.
+-+     *    At this magnitude, the smallest step representable in double precision
+-+     *    is 2^31 / 2^52 = 0.000000476837158203125
+-+     *    So the size of the range which is rounded up due to the addition is
+-+     *    half the size of this step, or 0.0000002384185791015625
+-+     *
+-+     * 2) For all inputs INT_MIN/2 < x < -0.5
+-+     *    Once the offset is applied, the most significant binary digit in the
+-+     *    floating-point representation is +2^30.
+-+     *    At this magnitude, the smallest step representable in double precision
+-+     *    is 2^30 / 2^52 = 0.0000002384185791015625
+-+     *    So the size of the range which is rounded up due to the addition is
+-+     *    half the size of this step, or 0.00000011920928955078125
+-+     *
+-+     * 3) For all inputs INT_MIN <= x <= INT_MIN/2
+-+     *    The representation once the offset is applied has equal or greater
+-+     *    precision than the input, so the addition does not cause rounding.
+-+     */
+-+    return ((unsigned int) (x + 0x80000000.8p0)) - 0x80000000;
+- 
+--    __asm__ __volatile__ (
+--#if defined(__ARM_PCS_VFP)
+--      "fconstd d1,#%G[rnd_val]     \n\t" // Copy round_to_nearest into a working register (d1 = 0.5)
+- #else
+--      "vmov.F64 d1,%[rnd_val]      \n\t"
+--#endif
+--      "fcmpezd %P[value]           \n\t" // Check value against zero (value == 0?)
+--      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
+--      "it mi                       \n\t"
+--      "vnegmi.F64 d1, d1           \n\t" // if N-flag is set, negate round_to_nearest (if (value < 0) d1 = -1 * d1)
+--      "vadd.F64 d1,%P[value],d1    \n\t" // Add round_to_nearest to value, store result in working register (d1 += value)
+--      "vcvt.S32.F64 s3,d1          \n\t" // Truncate(round towards zero) (s3 = (int)d1)
+--      "vmov %[result],s3           \n\t" // Store the integer result in a general-purpose register (result = s3)
+--      "vcvt.F64.S32 d1,s3          \n\t" // Convert back to floating-point (d1 = (double)s3)
+--      "vsub.F64 d1,%P[value],d1    \n\t" // Calculate the error (d1 = value - d1)
+--#if defined(__ARM_PCS_VFP)
+--      "fconstd d2,#%G[rnd_val]     \n\t" // d2 = 0.5;
+--#else
+--      "vmov.F64 d2,%[rnd_val]      \n\t"
+--#endif
+--      "fcmped d1, d2               \n\t" // (d1 == 0.5?)
+--      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
+--      "it eq                       \n\t"
+--      "addeq %[result],#1          \n\t" // (if (d1 == d2) result++;)
+--      : [result] "=r"(i)                                  // Outputs
+--      : [rnd_val] "Dv" (round_to_nearest), [value] "w"(x) // Inputs
+--      : "d1", "d2", "s3"                                  // Clobbers
+--    );
+--
+--#elif defined(__SSE2__)
+-+    const float round_to_nearest = 0.5f;
+-+    int i;
+-+#if defined(__SSE2__)
+-     const float round_dn_to_nearest = 0.4999999f;
+-     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
+- 
+-@@ -150,8 +149,8 @@
+-     );
+- 
+- #endif
+--
+-     return i;
+-+#endif
+-   }
+- 
+-   /*! \brief Truncate to nearest integer.
+-@@ -165,20 +164,13 @@
+-   {
+-     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
+-     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
+--    int i;
+- 
+- #if defined(DISABLE_MATHUTILS_ASM_TRUNCATE_INT)
+--    return i = (int)x;
+--
+--#elif defined(__arm__)
+--    __asm__ __volatile__ (
+--      "vcvt.S32.F64 %[result],%P[value]   \n\t" // Truncate(round towards zero) and store the result
+--      : [result] "=w"(i)                        // Outputs
+--      : [value] "w"(x)                          // Inputs
+--    );
+--    return i;
+-+    return x;
+- 
+--#elif defined(TARGET_WINDOWS)
+-+#else
+-+    int i;
+-+#if defined(TARGET_WINDOWS)
+-     const float round_towards_m_i = -0.5f;
+-     __asm
+-     {
+-@@ -204,6 +196,7 @@
+-     if (x < 0)
+-       i = -i;
+-     return (i);
+-+#endif
+-   }
+- 
+-   inline int64_t abs(int64_t a)
+--- 
+-1.9.1
+-
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index c3eeee9..505789b 100644
+index 505789b..ea41e7f 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -1,35 +1,35 @@
- ################################################################################
- #
--# xbmc
-+# kodi
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XBMC_VERSION = 13.2-Gotham
--XBMC_SOURCE = $(XBMC_VERSION).tar.gz
--XBMC_SITE = https://github.com/xbmc/xbmc/archive
--XBMC_LICENSE = GPLv2
--XBMC_LICENSE_FILES = LICENSE.GPL
--# XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
-+KODI_VERSION = 13.2-Gotham
-+KODI_SOURCE = $(KODI_VERSION).tar.gz
-+KODI_SITE = https://github.com/xbmc/xbmc/archive
-+KODI_LICENSE = GPLv2
-+KODI_LICENSE_FILES = LICENSE.GPL
-+# Kodi needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+-KODI_VERSION = 13.2-Gotham
++KODI_VERSION = 14.0a4-Helix
+ KODI_SOURCE = $(KODI_VERSION).tar.gz
+ KODI_SITE = https://github.com/xbmc/xbmc/archive
+ KODI_LICENSE = GPLv2
+@@ -13,22 +13,13 @@ KODI_LICENSE_FILES = LICENSE.GPL
  # called TexturePacker. It is responsible to take all the images used in the
  # GUI and pack them in a blob.
  # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
--XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
-+KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
-+KODI_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+-KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+-KODI_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
++KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo \
++	host-nasm host-sdl_image host-swig
++KODI_DEPENDENCIES += boost bzip2 expat ffmpeg flac fontconfig freetype jasper jpeg \
  	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
  	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
--# xbmc at i386 depends on nasm
--XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
-+# kodi at i386 depends on nasm
-+KODI_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
- 
- # ffmpeg depends on yasm on MMX archs
--# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
-+# kodi configure passes $(BR2_ARCH) to ffmpeg configure which adds
- # yasm as dependency for x86_64, even if BR2_x86_generic=y
- ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
--XBMC_DEPENDENCIES += host-yasm
-+KODI_DEPENDENCIES += host-yasm
- endif
- 
--XBMC_CONF_ENV = \
-+KODI_CONF_ENV = \
+-# kodi@i386 depends on nasm
+-KODI_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+-
+-# ffmpeg depends on yasm on MMX archs
+-# kodi configure passes $(BR2_ARCH) to ffmpeg configure which adds
+-# yasm as dependency for x86_64, even if BR2_x86_generic=y
+-ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
+-KODI_DEPENDENCIES += host-yasm
+-endif
+-
+ KODI_CONF_ENV = \
  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
- 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
-@@ -39,7 +39,7 @@ XBMC_CONF_ENV = \
- 	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+@@ -40,7 +31,6 @@ KODI_CONF_ENV = \
  	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
--XBMC_CONF_OPT +=  \
-+KODI_CONF_OPT +=  \
- 	--with-arch=$(BR2_ARCH) \
+ KODI_CONF_OPT +=  \
+-	--with-arch=$(BR2_ARCH) \
  	--disable-crystalhd \
  	--disable-debug \
-@@ -57,199 +57,199 @@ XBMC_CONF_OPT +=  \
- 	--enable-optimizations
- 
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--XBMC_DEPENDENCIES += rpi-userland
--XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
--XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-+KODI_DEPENDENCIES += rpi-userland
-+KODI_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
-+KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
- 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
- 	LIBS="-lvcos -lvchostif"
+ 	--disable-dvdcss \
+@@ -78,13 +68,6 @@ else
+ KODI_CONF_OPT += --disable-alsa
  endif
  
--ifeq ($(BR2_PACKAGE_XBMC_DBUS),y)
--XBMC_DEPENDENCIES += dbus
--XBMC_CONF_OPT += --enable-dbus
-+ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
-+KODI_DEPENDENCIES += dbus
-+KODI_CONF_OPT += --enable-dbus
- else
--XBMC_CONF_OPT += --disable-dbus
-+KODI_CONF_OPT += --disable-dbus
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_ALSA_LIB),y)
-+ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
- XBMC_DEPENDENCIES += alsa-lib
- XBMC_CONF_OPT += --enable-alsa
- else
--XBMC_CONF_OPT += --disable-alsa
-+KODI_CONF_OPT += --disable-alsa
- endif
- 
- ifeq ($(BR2_PACKAGE_LAME),y)
--XBMC_DEPENDENCIES += lame
--XBMC_CONF_OPT += --enable-libmp3lame
-+KODI_DEPENDENCIES += lame
-+KODI_CONF_OPT += --enable-libmp3lame
- else
--XBMC_CONF_OPT += --disable-libmp3lame
-+KODI_CONF_OPT += --disable-libmp3lame
- endif
- 
--# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
-+# quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
+-ifeq ($(BR2_PACKAGE_LAME),y)
+-KODI_DEPENDENCIES += lame
+-KODI_CONF_OPT += --enable-libmp3lame
+-else
+-KODI_CONF_OPT += --disable-libmp3lame
+-endif
+-
+ # quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
  # we choose the opposite because opengl offers more features, like libva support
--ifeq ($(BR2_PACKAGE_XBMC_GL),y)
--XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
-+ifeq ($(BR2_PACKAGE_KODI_GL),y)
-+KODI_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
- 	xlib_libXmu xlib_libXrandr xlib_libXt
--XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
--ifeq ($(BR2_PACKAGE_XBMC_RSXS),y)
-+KODI_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
-+ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
- # fix rsxs compile
- # make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
--XBMC_CONF_ENV += \
-+KODI_CONF_ENV += \
- 	jm_cv_func_gettimeofday_clobber=no \
- 	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
- 	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
- 	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
- 	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
- 	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
--XBMC_CONF_OPT += --enable-rsxs
-+KODI_CONF_OPT += --enable-rsxs
- else
--XBMC_CONF_OPT += --disable-rsxs
-+KODI_CONF_OPT += --disable-rsxs
- endif
- else
--XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
--ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
--XBMC_DEPENDENCIES += libegl libgles
--XBMC_CONF_OPT += --enable-gles
-+KODI_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
-+ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
-+KODI_DEPENDENCIES += libegl libgles
-+KODI_CONF_OPT += --enable-gles
- else
--XBMC_CONF_OPT += --disable-gles
-+KODI_CONF_OPT += --disable-gles
- endif
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
--XBMC_CONF_OPT += --enable-goom
-+ifeq ($(BR2_PACKAGE_KODI_GOOM),y)
-+KODI_CONF_OPT += --enable-goom
- else
--XBMC_CONF_OPT += --disable-goom
-+KODI_CONF_OPT += --disable-goom
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
--XBMC_DEPENDENCIES += libusb-compat
--XBMC_CONF_OPT += --enable-libusb
-+ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
-+KODI_DEPENDENCIES += libusb-compat
-+KODI_CONF_OPT += --enable-libusb
- else
--XBMC_CONF_OPT += --disable-libusb
-+KODI_CONF_OPT += --disable-libusb
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBMICROHTTPD),y)
--XBMC_DEPENDENCIES += libmicrohttpd
--XBMC_CONF_OPT += --enable-webserver
-+ifeq ($(BR2_PACKAGE_KODI_LIBMICROHTTPD),y)
-+KODI_DEPENDENCIES += libmicrohttpd
-+KODI_CONF_OPT += --enable-webserver
- else
--XBMC_CONF_OPT += --disable-webserver
-+KODI_CONF_OPT += --disable-webserver
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBSMBCLIENT),y)
--XBMC_DEPENDENCIES += samba
--XBMC_CONF_OPT += --enable-samba
-+ifeq ($(BR2_PACKAGE_KODI_LIBSMBCLIENT),y)
-+KODI_DEPENDENCIES += samba
-+KODI_CONF_OPT += --enable-samba
- else
--XBMC_CONF_OPT += --disable-samba
-+KODI_CONF_OPT += --disable-samba
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBNFS),y)
--XBMC_DEPENDENCIES += libnfs
--XBMC_CONF_OPT += --enable-nfs
-+ifeq ($(BR2_PACKAGE_KODI_LIBNFS),y)
-+KODI_DEPENDENCIES += libnfs
-+KODI_CONF_OPT += --enable-nfs
- else
--XBMC_CONF_OPT += --disable-nfs
-+KODI_CONF_OPT += --disable-nfs
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_RTMPDUMP),y)
--XBMC_DEPENDENCIES += rtmpdump
--XBMC_CONF_OPT += --enable-rtmp
-+ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
-+KODI_DEPENDENCIES += rtmpdump
-+KODI_CONF_OPT += --enable-rtmp
- else
--XBMC_CONF_OPT += --disable-rtmp
-+KODI_CONF_OPT += --disable-rtmp
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBBLURAY),y)
--XBMC_DEPENDENCIES += libbluray
--XBMC_CONF_OPT += --enable-libbluray
-+ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
-+KODI_DEPENDENCIES += libbluray
-+KODI_CONF_OPT += --enable-libbluray
- else
--XBMC_CONF_OPT += --disable-libbluray
-+KODI_CONF_OPT += --disable-libbluray
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBSHAIRPLAY),y)
--XBMC_DEPENDENCIES += libshairplay
--XBMC_CONF_OPT += --enable-airplay
-+ifeq ($(BR2_PACKAGE_KODI_LIBSHAIRPLAY),y)
-+KODI_DEPENDENCIES += libshairplay
-+KODI_CONF_OPT += --enable-airplay
- else
--XBMC_CONF_OPT += --disable-airplay
-+KODI_CONF_OPT += --disable-airplay
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_AVAHI),y)
--XBMC_DEPENDENCIES += avahi
--XBMC_CONF_OPT += --enable-avahi
-+ifeq ($(BR2_PACKAGE_KODI_AVAHI),y)
-+KODI_DEPENDENCIES += avahi
-+KODI_CONF_OPT += --enable-avahi
- else
--XBMC_CONF_OPT += --disable-avahi
-+KODI_CONF_OPT += --disable-avahi
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
--XBMC_DEPENDENCIES += libcec
--XBMC_CONF_OPT += --enable-libcec
-+ifeq ($(BR2_PACKAGE_KODI_LIBCEC),y)
-+KODI_DEPENDENCIES += libcec
-+KODI_CONF_OPT += --enable-libcec
- else
--XBMC_CONF_OPT += --disable-libcec
-+KODI_CONF_OPT += --disable-libcec
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_WAVPACK),y)
--XBMC_DEPENDENCIES += wavpack
-+ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
-+KODI_DEPENDENCIES += wavpack
- endif
- 
--ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
--XBMC_DEPENDENCIES += libtheora
-+ifeq ($(BR2_PACKAGE_KODI_LIBTHEORA),y)
-+KODI_DEPENDENCIES += libtheora
- endif
- 
--# xbmc needs libva & libva-glx
--ifeq ($(BR2_PACKAGE_XBMC_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
--XBMC_DEPENDENCIES += mesa3d libva
--XBMC_CONF_OPT += --enable-vaapi
-+# kodi needs libva & libva-glx
-+ifeq ($(BR2_PACKAGE_KODI_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
-+KODI_DEPENDENCIES += mesa3d libva
-+KODI_CONF_OPT += --enable-vaapi
- else
--XBMC_CONF_OPT += --disable-vaapi
-+KODI_CONF_OPT += --disable-vaapi
- endif
- 
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
--define XBMC_BOOTSTRAP
-+define KODI_BOOTSTRAP
- 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
- endef
--XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
-+KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
- 
--define XBMC_CLEAN_UNUSED_ADDONS
-+define KODI_CLEAN_UNUSED_ADDONS
- 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
- 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.milkdrop
- 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.projectm
- 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.itunes
- endef
--XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_UNUSED_ADDONS
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
- 
--define XBMC_CLEAN_CONFLUENCE_SKIN
-+define KODI_CLEAN_CONFLUENCE_SKIN
- 	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.png -delete
- 	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.jpg -delete
- endef
--XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_CONFLUENCE_SKIN
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_CONFLUENCE_SKIN
- 
--define XBMC_INSTALL_BR_WRAPPER
--	$(INSTALL) -D -m 0755 package/xbmc/br-xbmc \
--		$(TARGET_DIR)/usr/bin/br-xbmc
-+define KODI_INSTALL_BR_WRAPPER
-+	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
-+		$(TARGET_DIR)/usr/bin/br-kodi
- endef
--XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_BR_WRAPPER
- 
--# When run from a startup script, XBMC has no $HOME where to store its
-+# When run from a startup script, Kodi has no $HOME where to store its
- # configuration, so ends up storing it in /.xbmc  (yes, at the root of
- # the rootfs). This is a problem for read-only filesystems. But we can't
- # easily change that, so create /.xbmc as a symlink where we want the
- # config to eventually be.
--define XBMC_INSTALL_CONFIG_DIR
--	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/xbmc
--	ln -sf /var/xbmc $(TARGET_DIR)/.xbmc
-+define KODI_INSTALL_CONFIG_DIR
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/kodi
-+	ln -sf /var/kodi $(TARGET_DIR)/.xbmc
- endef
--XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_CONFIG_DIR
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_CONFIG_DIR
- 
--define XBMC_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/xbmc/S50xbmc \
--		$(TARGET_DIR)/etc/init.d/S50xbmc
-+define KODI_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/kodi/S50kodi \
-+		$(TARGET_DIR)/etc/init.d/S50kodi
- endef
- 
--define XBMC_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/xbmc/xbmc.service \
--		$(TARGET_DIR)/etc/systemd/system/xbmc.service
-+define KODI_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/kodi/kodi.service \
-+		$(TARGET_DIR)/etc/systemd/system/kodi.service
- 
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 
--	ln -fs ../xbmc.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/xbmc.service
-+	ln -fs ../kodi.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/kodi.service
- endef
- 
- $(eval $(autotools-package))
-diff --git a/package/kodi/kodi.service b/package/kodi/kodi.service
-index 3fe5895..acd3b8e 100644
---- a/package/kodi/kodi.service
-+++ b/package/kodi/kodi.service
-@@ -1,5 +1,5 @@
- [Unit]
--Description = XBMC media center
-+Description = Kodi Entertainment Center
- After = network.target
- 
- [Service]
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-index a4d9624..16f3a0d 100644
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-@@ -21,6 +21,6 @@ XBMC_ADDON_XVDR_AUTORECONF = YES
- # This really is a runtime dependency, but we need XBMC to be installed
- # first, since we'll install files in XBMC's directories _after_ XBMC has
- # installed his own files
--XBMC_ADDON_XVDR_DEPENDENCIES = xbmc
-+XBMC_ADDON_XVDR_DEPENDENCIES = kodi
- 
- $(eval $(autotools-package))
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index c93636f..2fcbfc9 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -18,7 +18,7 @@ XBMC_PVR_ADDONS_DEPENDENCIES = boost zlib
- # This really is a runtime dependency, but we need XBMC to be installed
- # first, since we'll install files in XBMC's directories _after_ XBMC has
- # installed its own files
--XBMC_PVR_ADDONS_DEPENDENCIES += xbmc
-+XBMC_PVR_ADDONS_DEPENDENCIES += kodi
- 
- XBMC_PVR_ADDONS_CONF_OPT = \
- 	--enable-release \
+ ifeq ($(BR2_PACKAGE_KODI_GL),y)
 -- 
 1.7.10.4
