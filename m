@@ -1,50 +1,30 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Oct 2014 19:32:12 +0200
-Subject: [Buildroot] [PATCH v2] package/pkg-cmake.mk: rename
-	_INSTALL_HOST_OPTS -> _INSTALL_OPTS
-Message-ID: <1412443932-13585-1-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Oct 2014 19:16:40 +0200
+Subject: [Buildroot] [git commit] package/pcre: add host variant
+Message-ID: <20141004173528.422619D824@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This pacth renames, consistently with the other package infrastructures,
-the _INSTALL_OPTS variable for host CMake-based package.
+commit: http://git.buildroot.net/buildroot/commit/?id=6f37778ab87e40a6be43434a6c38bbd4d1b8961a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As mentioned in [1], no host-cmake-package uses this variable so far; so
-it is a safe rename.
+Needed by leafnode2.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-October/107712.html
-
-Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-cmake.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pcre/pcre.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 85d8828..92574e2 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -41,7 +41,7 @@ $(2)_CONF_OPTS			?=
- $(2)_MAKE			?= $$(MAKE)
- $(2)_MAKE_ENV			?=
- $(2)_MAKE_OPTS			?=
--$(2)_INSTALL_HOST_OPTS		?= install
-+$(2)_INSTALL_OPTS		?= install
- $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
- $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index f4f85c2..4ff7abd 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -23,3 +23,4 @@ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
+ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
  
-@@ -126,7 +126,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_HOST_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
- 
--- 
-2.1.2
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
