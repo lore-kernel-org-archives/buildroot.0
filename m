@@ -1,516 +1,931 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Oct 2014 18:54:16 +0200
-Subject: [Buildroot] [git commit] packages: rename FOO_CONF_OPT into
-	FOO_CONF_OPTS
-Message-ID: <20141004170454.0FE0E9D584@busybox.osuosl.org>
+Date: Sat, 4 Oct 2014 18:49:36 +0200
+Subject: [Buildroot] [git commit] packages: rename FOO_INSTALL_STAGING_OPT
+	into FOO_INSTALL_STAGING_OPTS
+Message-ID: <20141004170453.911CF9D584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aaffd209fae91a733fe0becb72268f87bf4ea369
+commit: http://git.buildroot.net/buildroot/commit/?id=d6c32da8816fb7c520ccf6d5780eca96d0556183
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 To be consistent with the recent change of FOO_MAKE_OPT into FOO_MAKE_OPTS,
-make the same change for FOO_CONF_OPT.
+make the same change for FOO_INSTALL_STAGING_OPT.
 
 Sed command used:
-   find * -type f | xargs sed -i 's#_CONF_OPT\>#&S#g'
+   find * -type f | xargs sed -i 's#_INSTALL_STAGING_OPT\>#&S#g'
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk  |    2 +-
- boot/grub/grub.mk                                  |    2 +-
- boot/grub2/grub2.mk                                |    2 +-
- boot/gummiboot/gummiboot.mk                        |    2 +-
- docs/manual/adding-packages-autotools.txt          |    4 +-
- docs/manual/adding-packages-cmake.txt              |    4 +-
- docs/manual/adding-packages-perl.txt               |    2 +-
- docs/manual/writing-rules.txt                      |    8 +-
+ docs/manual/adding-packages-autotools.txt          |    2 +-
+ docs/manual/adding-packages-cmake.txt              |    2 +-
+ docs/manual/adding-packages-python.txt             |    6 +++---
  package/acl/acl.mk                                 |    2 +-
- package/agentpp/agentpp.mk                         |    2 +-
- package/alsa-lib/alsa-lib.mk                       |   30 +-
- package/alsa-utils/alsa-utils.mk                   |    4 +-
- package/apitrace/apitrace.mk                       |    2 +-
- package/apr-util/apr-util.mk                       |    2 +-
- package/at/at.mk                                   |    2 +-
- package/atftp/atftp.mk                             |   10 +-
  package/atk/atk.mk                                 |    2 +-
  package/attr/attr.mk                               |    2 +-
- package/audiofile/audiofile.mk                     |    6 +-
- package/aumix/aumix.mk                             |    2 +-
- package/avahi/avahi.mk                             |   20 +-
- package/bandwidthd/bandwidthd.mk                   |   10 +-
- package/bash/bash.mk                               |    4 +-
- package/bcusdk/bcusdk.mk                           |    2 +-
- package/beecrypt/beecrypt.mk                       |    4 +-
- package/bind/bind.mk                               |   22 +-
- package/binutils/binutils.mk                       |   10 +-
- package/blackbox/blackbox.mk                       |    2 +-
- package/bluez5_utils/bluez5_utils.mk               |   26 +-
- package/bluez_utils/bluez_utils.mk                 |   16 +-
- package/bmon/bmon.mk                               |    4 +-
- package/bootutils/bootutils.mk                     |    2 +-
- package/bridge-utils/bridge-utils.mk               |    2 +-
- package/bwm-ng/bwm-ng.mk                           |    4 +-
- package/cairo/cairo.mk                             |   58 ++--
- package/ccache/ccache.mk                           |    2 +-
- package/cdrkit/cdrkit.mk                           |    4 +-
- package/cegui06/cegui06.mk                         |    2 +-
- package/celt051/celt051.mk                         |    2 +-
- package/chrony/chrony.mk                           |   10 +-
- package/cifs-utils/cifs-utils.mk                   |    2 +-
- package/civetweb/civetweb.mk                       |   10 +-
- package/clapack/clapack.mk                         |    4 +-
- package/classpath/classpath.mk                     |   24 +-
- package/cloog/cloog.mk                             |    2 +-
- package/collectd/collectd.mk                       |   12 +-
- package/connman/connman.mk                         |    6 +-
- package/coreutils/coreutils.mk                     |    2 +-
- package/cppcms/cppcms.mk                           |    4 +-
- package/cppdb/cppdb.mk                             |    2 +-
- package/ctorrent/ctorrent.mk                       |    4 +-
- package/cups/cups.mk                               |   14 +-
- package/cvs/cvs.mk                                 |    2 +-
- package/cwiid/cwiid.mk                             |    6 +-
- package/dbus-cpp/dbus-cpp.mk                       |   12 +-
- package/dbus-glib/dbus-glib.mk                     |    4 +-
- package/dbus-python/dbus-python.mk                 |    2 +-
- package/dbus/dbus.mk                               |   16 +-
- package/dhcp/dhcp.mk                               |    6 +-
- package/dialog/dialog.mk                           |    4 +-
- package/dillo/dillo.mk                             |   16 +-
- package/directfb/directfb.mk                       |   54 ++--
- package/distcc/distcc.mk                           |    2 +-
- package/dmalloc/dmalloc.mk                         |   10 +-
- package/dropbear/dropbear.mk                       |    6 +-
+ package/cups/cups.mk                               |    2 +-
  package/e2fsprogs/e2fsprogs.mk                     |    2 +-
- package/ecryptfs-utils/ecryptfs-utils.mk           |    6 +-
- package/ed/ed.mk                                   |    2 +-
- package/efl/libecore/libecore.mk                   |   36 +-
- package/efl/libedbus/libedbus.mk                   |   12 +-
- package/efl/libedje/libedje.mk                     |    6 +-
- package/efl/libeet/libeet.mk                       |    4 +-
- package/efl/libelementary/libelementary.mk         |    6 +-
- package/efl/libethumb/libethumb.mk                 |    2 +-
- .../libevas-generic-loaders.mk                     |    6 +-
- package/efl/libevas/libevas.mk                     |   90 +++---
- package/elf2flt/elf2flt.mk                         |    2 +-
- package/elfutils/elfutils.mk                       |   18 +-
- package/enlightenment/enlightenment.mk             |    2 +-
- package/enscript/enscript.mk                       |    4 +-
- package/erlang/erlang.mk                           |   16 +-
- package/eudev/eudev.mk                             |    8 +-
- package/evemu/evemu.mk                             |    6 +-
- package/expect/expect.mk                           |    2 +-
- package/fbdump/fbdump.mk                           |    4 +-
- package/fetchmail/fetchmail.mk                     |    2 +-
- package/ffmpeg/ffmpeg.mk                           |  156 ++++----
- package/flac/flac.mk                               |   10 +-
- package/flann/flann.mk                             |    2 +-
- package/flickcurl/flickcurl.mk                     |    2 +-
- package/flite/flite.mk                             |    4 +-
- package/fltk/fltk.mk                               |    8 +-
- package/fluxbox/fluxbox.mk                         |    6 +-
- package/fontconfig/fontconfig.mk                   |    4 +-
- package/foomatic-filters/foomatic-filters.mk       |    6 +-
- package/freerdp/freerdp.mk                         |   28 +-
- package/freetype/freetype.mk                       |   14 +-
- package/gamin/gamin.mk                             |    4 +-
- package/gcc/gcc-final/gcc-final.mk                 |   16 +-
- package/gcc/gcc-initial/gcc-initial.mk             |    4 +-
- package/gcc/gcc.mk                                 |   52 ++--
- package/gd/gd.mk                                   |   16 +-
- package/gdb/gdb.mk                                 |   26 +-
- package/gdk-pixbuf/gdk-pixbuf.mk                   |   12 +-
- package/gettext/gettext.mk                         |    6 +-
- package/giblib/giblib.mk                           |    2 +-
- package/git/git.mk                                 |   24 +-
- package/glib-networking/glib-networking.mk         |    4 +-
- package/gmpc/gmpc.mk                               |    2 +-
- package/gnupg/gnupg.mk                             |   12 +-
- package/gnupg2/gnupg2.mk                           |   10 +-
- package/gnuplot/gnuplot.mk                         |   10 +-
- package/gnutls/gnutls.mk                           |   14 +-
- package/google-breakpad/google-breakpad.mk         |    2 +-
- package/gpm/gpm.mk                                 |    2 +-
- package/grep/grep.mk                               |    4 +-
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |    2 +-
- .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    4 +-
- .../gstreamer/gst-plugins-bad/gst-plugins-bad.mk   |  366 +++++++++---------
- .../gstreamer/gst-plugins-base/gst-plugins-base.mk |   98 +++---
- .../gstreamer/gst-plugins-good/gst-plugins-good.mk |  234 ++++++------
- .../gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk |   46 ++--
- package/gstreamer/gstreamer/gstreamer.mk           |    2 +-
- package/gstreamer1/gst-omx/gst-omx.mk              |    4 +-
- package/gstreamer1/gst1-libav/gst1-libav.mk        |    2 +-
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  392 ++++++++++----------
- .../gst1-plugins-base/gst1-plugins-base.mk         |  102 +++---
- .../gst1-plugins-good/gst1-plugins-good.mk         |  246 ++++++------
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |   42 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk        |    2 +-
- package/gtest/gtest.mk                             |    2 +-
- package/gtk2-engines/gtk2-engines.mk               |    2 +-
- package/gutenprint/gutenprint.mk                   |    4 +-
- package/gvfs/gvfs.mk                               |   22 +-
- package/harfbuzz/harfbuzz.mk                       |   18 +-
- package/haserl/haserl.mk                           |    4 +-
- package/heimdal/heimdal.mk                         |    2 +-
- package/hiawatha/hiawatha.mk                       |    6 +-
- package/hplip/hplip.mk                             |    6 +-
- package/htop/htop.mk                               |    2 +-
- package/icu/icu.mk                                 |    4 +-
- package/ifplugd/ifplugd.mk                         |    2 +-
- package/igh-ethercat/igh-ethercat.mk               |   12 +-
- package/imagemagick/imagemagick.mk                 |   42 +-
- package/imlib2/imlib2.mk                           |   26 +-
- package/iperf/iperf.mk                             |    2 +-
- package/ipmitool/ipmitool.mk                       |    2 +-
- package/ipsec-tools/ipsec-tools.mk                 |   30 +-
- package/ipset/ipset.mk                             |    2 +-
- package/iptables/iptables.mk                       |    2 +-
- package/jamvm/jamvm.mk                             |    2 +-
- package/joe/joe.mk                                 |    4 +-
- package/jpeg-turbo/jpeg-turbo.mk                   |    6 +-
- package/json-c/json-c.mk                           |    2 +-
- package/kbd/kbd.mk                                 |    2 +-
- package/kexec/kexec.mk                             |    4 +-
- package/kismet/kismet.mk                           |    2 +-
- package/kmod/kmod.mk                               |   14 +-
- package/knock/knock.mk                             |    2 +-
- package/lame/lame.mk                               |    4 +-
- package/lbreakout2/lbreakout2.mk                   |    8 +-
- package/lcdproc/lcdproc.mk                         |    4 +-
- package/lcms2/lcms2.mk                             |   14 +-
- package/lesstif/lesstif.mk                         |    2 +-
- package/lftp/lftp.mk                               |   10 +-
- package/libao/libao.mk                             |    6 +-
- package/libarchive/libarchive.mk                   |   32 +-
- package/libargtable2/libargtable2.mk               |    2 +-
- package/libass/libass.mk                           |   12 +-
- package/libassuan/libassuan.mk                     |    2 +-
- package/libbluray/libbluray.mk                     |    4 +-
- package/libcap-ng/libcap-ng.mk                     |    2 +-
- package/libcdio/libcdio.mk                         |    6 +-
- package/libcec/libcec.mk                           |    4 +-
- package/libcgicc/libcgicc.mk                       |    2 +-
- package/libcgroup/libcgroup.mk                     |    6 +-
- package/libconfig/libconfig.mk                     |    4 +-
- package/libconfuse/libconfuse.mk                   |    2 +-
- package/libcurl/libcurl.mk                         |   14 +-
- package/libdaemon/libdaemon.mk                     |    2 +-
- package/libdnet/libdnet.mk                         |    4 +-
- package/libdrm/libdrm.mk                           |   36 +-
- package/libdvdnav/libdvdnav.mk                     |    2 +-
- package/libeXosip2/libeXosip2.mk                   |    6 +-
- package/libedit/libedit.mk                         |    2 +-
- package/libexif/libexif.mk                         |    2 +-
- package/libftdi/libftdi.mk                         |    6 +-
- package/libfuse/libfuse.mk                         |    2 +-
- package/libgail/libgail.mk                         |    2 +-
- package/libgcrypt/libgcrypt.mk                     |    2 +-
- package/libglib2/libglib2.mk                       |   12 +-
- package/libgpgme/libgpgme.mk                       |    2 +-
- package/libgtk2/libgtk2.mk                         |   22 +-
- package/libhid/libhid.mk                           |    2 +-
- package/libidn/libidn.mk                           |    2 +-
- package/libinput/libinput.mk                       |    2 +-
- package/libksba/libksba.mk                         |    2 +-
- package/liblockfile/liblockfile.mk                 |    2 +-
- package/liblog4c-localtime/liblog4c-localtime.mk   |    2 +-
- package/liblogging/liblogging.mk                   |    6 +-
- package/libmad/libmad.mk                           |    2 +-
- package/libmbim/libmbim.mk                         |    2 +-
- package/libmemcached/libmemcached.mk               |    2 +-
- package/libmicrohttpd/libmicrohttpd.mk             |    8 +-
- package/libmpeg2/libmpeg2.mk                       |    6 +-
- package/libndp/libndp.mk                           |    2 +-
- package/libnfc/libnfc.mk                           |    6 +-
- package/libnftnl/libnftnl.mk                       |    8 +-
- package/libnl/libnl.mk                             |    4 +-
- package/libnspr/libnspr.mk                         |   10 +-
- package/liboauth/liboauth.mk                       |    2 +-
- package/liboping/liboping.mk                       |    2 +-
- package/libosip2/libosip2.mk                       |    2 +-
- package/libpcap/libpcap.mk                         |   14 +-
- package/libphidget/libphidget.mk                   |    2 +-
- package/libplayer/libplayer.mk                     |   12 +-
- package/libpng/libpng.mk                           |    2 +-
- package/libpthsem/libpthsem.mk                     |    4 +-
- package/libqmi/libqmi.mk                           |    2 +-
- package/libqrencode/libqrencode.mk                 |    6 +-
- package/libraw/libraw.mk                           |    2 +-
- package/libroxml/libroxml.mk                       |    2 +-
- package/librsvg/librsvg.mk                         |    2 +-
- package/librtlsdr/librtlsdr.mk                     |    4 +-
- package/libsamplerate/libsamplerate.mk             |    2 +-
- package/libsecret/libsecret.mk                     |    6 +-
- package/libsoc/libsoc.mk                           |    2 +-
- package/libsoup/libsoup.mk                         |    8 +-
- package/libsoxr/libsoxr.mk                         |    8 +-
- package/libssh2/libssh2.mk                         |   10 +-
- package/libstrophe/libstrophe.mk                   |    2 +-
- package/libsvg-cairo/libsvg-cairo.mk               |    2 +-
- package/libsvg/libsvg.mk                           |    4 +-
- package/libtheora/libtheora.mk                     |    2 +-
- package/libtirpc/libtirpc.mk                       |    2 +-
- package/libtorrent/libtorrent.mk                   |    2 +-
- package/libubox/libubox.mk                         |    4 +-
- package/libuci/libuci.mk                           |    4 +-
- package/libungif/libungif.mk                       |    2 +-
- package/libusb/libusb.mk                           |    6 +-
- package/libv4l/libv4l.mk                           |    8 +-
- package/libva-intel-driver/libva-intel-driver.mk   |    8 +-
- package/libva/libva.mk                             |   18 +-
- package/libvncserver/libvncserver.mk               |   16 +-
- package/libvorbis/libvorbis.mk                     |    2 +-
- package/libvpx/libvpx.mk                           |    4 +-
- package/libwebsockets/libwebsockets.mk             |    4 +-
- package/libxml2/libxml2.mk                         |   12 +-
- package/libxmlrpc/libxmlrpc.mk                     |    2 +-
- package/libxslt/libxslt.mk                         |    6 +-
- package/lighttpd/lighttpd.mk                       |   26 +-
- package/linknx/linknx.mk                           |   10 +-
- package/links/links.mk                             |   10 +-
- package/linphone/linphone.mk                       |    6 +-
- package/linux-pam/linux-pam.mk                     |    2 +-
- package/linux-zigbee/linux-zigbee.mk               |    8 +-
- package/localedef/localedef.mk                     |    2 +-
- package/log4cxx/log4cxx.mk                         |    2 +-
- package/lrzsz/lrzsz.mk                             |    2 +-
- package/ltrace/ltrace.mk                           |    6 +-
- package/ltris/ltris.mk                             |    4 +-
- package/lttng-tools/lttng-tools.mk                 |    6 +-
- package/lua-ev/lua-ev.mk                           |    2 +-
- package/luaposix/luaposix.mk                       |    2 +-
- package/luarocks/luarocks.mk                       |    6 +-
- package/lvm2/lvm2.mk                               |    8 +-
- package/lxc/lxc.mk                                 |    2 +-
- package/lzma/lzma.mk                               |    2 +-
- package/m4/m4.mk                                   |    2 +-
- package/madplay/madplay.mk                         |    2 +-
- .../matchbox/matchbox-common/matchbox-common.mk    |    2 +-
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    6 +-
- .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    2 +-
- .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
- package/matchbox/matchbox-lib/matchbox-lib.mk      |   18 +-
- package/matchbox/matchbox-panel/matchbox-panel.mk  |    6 +-
- .../matchbox-startup-monitor.mk                    |    2 +-
- package/matchbox/matchbox-wm/matchbox-wm.mk        |    8 +-
- package/mcrypt/mcrypt.mk                           |    2 +-
- package/media-ctl/media-ctl.mk                     |    2 +-
- package/mediastreamer/mediastreamer.mk             |   42 +-
- package/memcached/memcached.mk                     |    2 +-
- package/mesa3d/mesa3d.mk                           |   32 +-
- package/metacity/metacity.mk                       |    2 +-
- package/minidlna/minidlna.mk                       |    2 +-
- package/modem-manager/modem-manager.mk             |    8 +-
- package/monit/monit.mk                             |   10 +-
- package/mpd/mpd.mk                                 |   90 +++---
- package/mpdecimal/mpdecimal.mk                     |    2 +-
- package/mpg123/mpg123.mk                           |   14 +-
- package/msmtp/msmtp.mk                             |    8 +-
- package/mtools/mtools.mk                           |    2 +-
- package/mtr/mtr.mk                                 |    2 +-
- package/mutt/mutt.mk                               |   18 +-
- package/mysql/mysql.mk                             |   12 +-
- package/nano/nano.mk                               |    4 +-
- package/nbd/nbd.mk                                 |    2 +-
- package/ncurses/ncurses.mk                         |    8 +-
- package/ndisc6/ndisc6.mk                           |    2 +-
- package/ne10/ne10.mk                               |    4 +-
- package/neard/neard.mk                             |    4 +-
- package/neon/neon.mk                               |   20 +-
- package/netatalk/netatalk.mk                       |   12 +-
- package/netperf/netperf.mk                         |    2 +-
- package/netsnmp/netsnmp.mk                         |   16 +-
- package/nettle/nettle.mk                           |    8 +-
- package/network-manager/network-manager.mk         |   20 +-
- package/newt/newt.mk                               |    2 +-
- package/nfs-utils/nfs-utils.mk                     |    6 +-
- package/ngrep/ngrep.mk                             |    2 +-
- package/nmap/nmap.mk                               |    8 +-
- package/nss-mdns/nss-mdns.mk                       |    2 +-
- package/ntfs-3g/ntfs-3g.mk                         |    8 +-
- package/ntp/ntp.mk                                 |   10 +-
- package/nut/nut.mk                                 |   34 +-
- package/ofono/ofono.mk                             |   10 +-
- package/ola/ola.mk                                 |   74 ++--
- package/omniorb/omniorb.mk                         |    8 +-
- package/opencv/opencv.mk                           |   72 ++--
- package/openntpd/openntpd.mk                       |    2 +-
- package/openobex/openobex.mk                       |   10 +-
- package/openocd/openocd.mk                         |   10 +-
- package/openpowerlink/openpowerlink.mk             |   38 +-
- package/openssh/openssh.mk                         |    6 +-
- package/openvmtools/openvmtools.mk                 |   14 +-
- package/openvpn/openvpn.mk                         |   10 +-
- package/opkg/opkg.mk                               |    6 +-
- package/oprofile/oprofile.mk                       |    2 +-
- package/opus-tools/opus-tools.mk                   |    8 +-
- package/opus/opus.mk                               |    4 +-
- package/ortp/ortp.mk                               |    2 +-
- package/p11-kit/p11-kit.mk                         |    2 +-
- package/pango/pango.mk                             |    6 +-
- package/parted/parted.mk                           |   12 +-
- package/pcmanfm/pcmanfm.mk                         |    2 +-
- package/pcre/pcre.mk                               |   12 +-
- package/pcsc-lite/pcsc-lite.mk                     |   10 +-
- package/perl-gd/perl-gd.mk                         |    2 +-
- package/perl-xml-libxml/perl-xml-libxml.mk         |    2 +-
- package/perl-xml-parser/perl-xml-parser.mk         |    2 +-
- package/perl/perl.mk                               |   12 +-
- package/php-geoip/php-geoip.mk                     |    2 +-
- package/php-gnupg/php-gnupg.mk                     |    2 +-
- package/php-imagick/php-imagick.mk                 |    2 +-
- package/php-memcached/php-memcached.mk             |    2 +-
- package/php-ssh2/php-ssh2.mk                       |    2 +-
- package/php-yaml/php-yaml.mk                       |    2 +-
- package/php-zmq/php-zmq.mk                         |    2 +-
- package/php/php.mk                                 |   64 ++--
- package/pinentry/pinentry.mk                       |   24 +-
- package/pixman/pixman.mk                           |    4 +-
- package/pkg-autotools.mk                           |    6 +-
- package/pkg-cmake.mk                               |    6 +-
- package/pkg-perl.mk                                |    8 +-
- package/poco/poco.mk                               |    6 +-
- package/polarssl/polarssl.mk                       |    2 +-
- package/polkit/polkit.mk                           |    2 +-
- package/poppler/poppler.mk                         |   30 +-
- package/popt/popt.mk                               |    2 +-
- package/portaudio/portaudio.mk                     |    2 +-
- package/postgresql/postgresql.mk                   |   12 +-
- package/powerpc-utils/powerpc-utils.mk             |    2 +-
- package/prboom/prboom.mk                           |    2 +-
- package/procps-ng/procps-ng.mk                     |    4 +-
- package/proftpd/proftpd.mk                         |    4 +-
- package/protobuf-c/protobuf-c.mk                   |    2 +-
- package/protobuf/protobuf.mk                       |    2 +-
- package/psmisc/psmisc.mk                           |    2 +-
- package/ptpd2/ptpd2.mk                             |    4 +-
- package/pulseaudio/pulseaudio.mk                   |   18 +-
- package/pure-ftpd/pure-ftpd.mk                     |   10 +-
- package/python/python.mk                           |   26 +-
- package/python3/python3.mk                         |   24 +-
- package/quagga/quagga.mk                           |   28 +-
- package/rdesktop/rdesktop.mk                       |    4 +-
- package/rp-pppoe/rp-pppoe.mk                       |    2 +-
- package/rpcbind/rpcbind.mk                         |    2 +-
- package/rpi-userland/rpi-userland.mk               |    2 +-
- package/rpm/rpm.mk                                 |   14 +-
- package/rrdtool/rrdtool.mk                         |    2 +-
- package/rsync/rsync.mk                             |    4 +-
- package/rsyslog/rsyslog.mk                         |   10 +-
- package/rtai/rtai.mk                               |    2 +-
- package/ruby/ruby.mk                               |    8 +-
- package/samba/samba.mk                             |    8 +-
- package/samba4/samba4.mk                           |   32 +-
- package/sane-backends/sane-backends.mk             |    8 +-
- package/sconeserver/sconeserver.mk                 |   56 ++--
- package/sdl/sdl.mk                                 |   22 +-
- package/sdl_gfx/sdl_gfx.mk                         |    6 +-
- package/sdl_image/sdl_image.mk                     |    4 +-
- package/sdl_mixer/sdl_mixer.mk                     |   10 +-
- package/sdl_net/sdl_net.mk                         |    2 +-
- package/sdl_sound/sdl_sound.mk                     |    6 +-
- package/sdl_ttf/sdl_ttf.mk                         |    2 +-
- package/sed/sed.mk                                 |    2 +-
- package/shared-mime-info/shared-mime-info.mk       |    4 +-
- package/sispmctl/sispmctl.mk                       |    2 +-
- package/slang/slang.mk                             |   16 +-
- package/smcroute/smcroute.mk                       |    2 +-
- package/snmppp/snmppp.mk                           |    6 +-
- package/socat/socat.mk                             |    4 +-
- package/socketcand/socketcand.mk                   |    2 +-
- package/sox/sox.mk                                 |   30 +-
- package/spawn-fcgi/spawn-fcgi.mk                   |    2 +-
- package/speex/speex.mk                             |    6 +-
- package/spice/spice.mk                             |   16 +-
- package/sqlcipher/sqlcipher.mk                     |    6 +-
- package/sqlite/sqlite.mk                           |   12 +-
- package/squid/squid.mk                             |    4 +-
- .../startup-notification/startup-notification.mk   |    2 +-
- package/stress/stress.mk                           |    2 +-
- package/strongswan/strongswan.mk                   |    4 +-
- package/stunnel/stunnel.mk                         |    2 +-
- package/subversion/subversion.mk                   |    2 +-
- package/sudo/sudo.mk                               |    2 +-
- package/swig/swig.mk                               |    2 +-
- package/sylpheed/sylpheed.mk                       |    6 +-
- package/synergy/synergy.mk                         |    2 +-
- package/sysstat/sysstat.mk                         |    2 +-
- package/systemd/systemd.mk                         |   36 +-
- package/taglib/taglib.mk                           |    4 +-
- package/tcl/tcl.mk                                 |    4 +-
- package/tcpdump/tcpdump.mk                         |    2 +-
- package/tcpreplay/tcpreplay.mk                     |    2 +-
- package/tftpd/tftpd.mk                             |    4 +-
- package/thrift/thrift.mk                           |   12 +-
- package/tiff/tiff.mk                               |   26 +-
- package/tn5250/tn5250.mk                           |    4 +-
- package/torsmo/torsmo.mk                           |    2 +-
- package/transmission/transmission.mk               |   22 +-
- package/udisks/udisks.mk                           |    4 +-
- package/ulogd/ulogd.mk                             |    8 +-
- package/urg/urg.mk                                 |    4 +-
- package/usbutils/usbutils.mk                       |    2 +-
- package/util-linux/util-linux.mk                   |   10 +-
- package/valgrind/valgrind.mk                       |    4 +-
- package/vde2/vde2.mk                               |    2 +-
- package/vim/vim.mk                                 |    2 +-
- package/vlc/vlc.mk                                 |  140 ++++----
- package/vo-aacenc/vo-aacenc.mk                     |    8 +-
- package/vorbis-tools/vorbis-tools.mk               |    2 +-
- package/vtun/vtun.mk                               |    2 +-
- package/wayland/wayland.mk                         |    2 +-
- package/webkit/webkit.mk                           |   12 +-
- package/webp/webp.mk                               |    2 +-
- .../webrtc-audio-processing.mk                     |    2 +-
- package/weston/weston.mk                           |   16 +-
- package/wget/wget.mk                               |    6 +-
- package/wireshark/wireshark.mk                     |    2 +-
- package/wvstreams/wvstreams.mk                     |   16 +-
- package/x11r7/libxcb/libxcb.mk                     |    4 +-
- package/x11r7/xapp_xdm/xapp_xdm.mk                 |    2 +-
- package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    8 +-
- package/x11r7/xapp_xrandr/xapp_xrandr.mk           |    2 +-
- .../xdriver_xf86-video-intel.mk                    |   14 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- package/x11r7/xlib_libFS/xlib_libFS.mk             |    2 +-
- package/x11r7/xlib_libSM/xlib_libSM.mk             |    2 +-
- package/x11r7/xlib_libX11/xlib_libX11.mk           |    4 +-
- .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    2 +-
- package/x11r7/xlib_libXaw/xlib_libXaw.mk           |    2 +-
- package/x11r7/xlib_libXext/xlib_libXext.mk         |    2 +-
- package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    4 +-
- package/x11r7/xlib_libXi/xlib_libXi.mk             |    2 +-
- package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |    2 +-
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |    2 +-
- package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    2 +-
- package/x11r7/xlib_libXres/xlib_libXres.mk         |    2 +-
- package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
- package/x11r7/xlib_libXv/xlib_libXv.mk             |    2 +-
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk         |    2 +-
- package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    2 +-
- package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    2 +-
- package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    2 +-
- .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    4 +-
- package/x11r7/xproto_xextproto/xproto_xextproto.mk |    4 +-
- .../xserver_xorg-server/xserver_xorg-server.mk     |   72 ++--
- package/x11vnc/x11vnc.mk                           |   20 +-
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk         |    6 +-
- package/xbmc/xbmc.mk                               |   72 ++--
+ package/expat/expat.mk                             |    2 +-
+ package/glibc/glibc.mk                             |    2 +-
+ package/libdnet/libdnet.mk                         |    2 +-
+ package/libglib2/libglib2.mk                       |    2 +-
+ package/libseccomp/libseccomp.mk                   |    2 +-
+ package/lite/lite.mk                               |    2 +-
+ package/lvm2/lvm2.mk                               |    2 +-
+ package/mxml/mxml.mk                               |    2 +-
+ package/netsnmp/netsnmp.mk                         |    2 +-
+ package/php/php.mk                                 |    2 +-
+ package/pkg-autotools.mk                           |    4 ++--
+ package/pkg-cmake.mk                               |    4 ++--
+ package/pkg-python.mk                              |   12 ++++++------
+ package/tslib/tslib.mk                             |    2 +-
+ package/util-linux/util-linux.mk                   |    2 +-
+ package/webkit/webkit.mk                           |    2 +-
+ .../xfont_font-adobe-100dpi.mk                     |    2 +-
+ .../xfont_font-adobe-75dpi.mk                      |    2 +-
+ .../xfont_font-adobe-utopia-100dpi.mk              |    2 +-
+ .../xfont_font-adobe-utopia-75dpi.mk               |    2 +-
+ .../xfont_font-adobe-utopia-type1.mk               |    2 +-
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk |    2 +-
+ .../xfont_font-arabic-misc.mk                      |    2 +-
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    2 +-
+ .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |    2 +-
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    2 +-
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    2 +-
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    2 +-
+ .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |    2 +-
+ .../xfont_font-bitstream-100dpi.mk                 |    2 +-
+ .../xfont_font-bitstream-75dpi.mk                  |    2 +-
+ .../xfont_font-bitstream-type1.mk                  |    2 +-
+ .../xfont_font-cronyx-cyrillic.mk                  |    2 +-
+ .../xfont_font-cursor-misc.mk                      |    2 +-
+ .../xfont_font-daewoo-misc.mk                      |    2 +-
+ .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |    2 +-
+ .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |    2 +-
+ .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |    2 +-
+ .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |    2 +-
+ .../xfont_font-micro-misc/xfont_font-micro-misc.mk |    2 +-
+ .../xfont_font-misc-cyrillic.mk                    |    2 +-
+ .../xfont_font-misc-ethiopic.mk                    |    2 +-
+ .../xfont_font-misc-meltho.mk                      |    2 +-
+ .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    2 +-
+ .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |    2 +-
+ .../xfont_font-schumacher-misc.mk                  |    2 +-
+ .../xfont_font-screen-cyrillic.mk                  |    2 +-
+ .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    2 +-
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    2 +-
+ .../xfont_font-winitzki-cyrillic.mk                |    2 +-
+ .../xfont_font-xfree86-type1.mk                    |    2 +-
  package/xenomai/xenomai.mk                         |    2 +-
- package/xerces/xerces.mk                           |    6 +-
- package/xfsprogs/xfsprogs.mk                       |    2 +-
- package/xmlstarlet/xmlstarlet.mk                   |    6 +-
- package/xscreensaver/xscreensaver.mk               |    2 +-
- package/ympd/ympd.mk                               |    2 +-
- package/zeromq/zeromq.mk                           |    4 +-
- package/znc/znc.mk                                 |   18 +-
- 489 files changed, 2869 insertions(+), 2869 deletions(-)
+ 60 files changed, 69 insertions(+), 69 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index 3a286e0..d04e023 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -147,7 +147,7 @@ cases, typical packages will therefore only use a few of them.
+   not. Valid values are +YES+ and +NO+. By
+   default, the value is +YES+
+ 
+-* +LIBFOO_INSTALL_STAGING_OPT+ contains the make options
++* +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options
+   used to install the package to the staging directory. By default, the
+   value is +DESTDIR=$(STAGING_DIR) install+, which is
+   correct for most autotools packages. It is still possible to override
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index 4d8dbf3..b8f3096 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -112,7 +112,7 @@ typical packages will therefore only use a few of them.
+   in the build step. These are passed after the +make+ command. By
+   default, empty.
+ 
+-* +LIBFOO_INSTALL_STAGING_OPT+ contains the make options used to
++* +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options used to
+   install the package to the staging directory. By default, the value
+   is +DESTDIR=$(STAGING_DIR) install+, which is correct for most
+   CMake packages. It is still possible to override it.
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index 4a5f397..bca0f6a 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -127,16 +127,16 @@ therefore only use a few of them, or none.
+   packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPT+ options are already
+   passed automatically by the infrastructure.
+ 
+-* +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPT+,
++* +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
+   +HOST_PYTHON_FOO_INSTALL_OPTS+ to specify additional options to pass
+   to the Python +setup.py+ script during the target installation step,
+   the staging installation step or the host installation,
+   respectively. Note that the infrastructure is automatically passing
+   some options, defined in +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS+
+-  or +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPT+ (for target distutils
++  or +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS+ (for target distutils
+   packages), +HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS+ (for host
+   distutils packages), +PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS+ or
+-  +PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPT+ (for target setuptools
++  +PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS+ (for target setuptools
+   packages) and +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
+   setuptools packages).
+ 
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 6b511c2..93e388a 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -16,7 +16,7 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
+-ACL_INSTALL_STAGING_OPT = 			\
++ACL_INSTALL_STAGING_OPTS = 			\
+ 	prefix=$(STAGING_DIR)/usr 		\
+ 	exec_prefix=$(STAGING_DIR)/usr 		\
+ 	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 4971cda..961db4c 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -11,7 +11,7 @@ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+ ATK_LICENSE = LGPLv2+
+ ATK_LICENSE_FILES = COPYING
+ ATK_INSTALL_STAGING = YES
+-ATK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ 
+ ATK_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes \
+ 		glib_cv_stack_grows=no glib_cv_uscore=no \
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 02a41d8..6344d6a 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -15,7 +15,7 @@ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
+-ATTR_INSTALL_STAGING_OPT = 			\
++ATTR_INSTALL_STAGING_OPTS = 			\
+ 	prefix=$(STAGING_DIR)/usr 		\
+ 	exec_prefix=$(STAGING_DIR)/usr 		\
+ 	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index ace2a33..6aa3b18 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -10,7 +10,7 @@ CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
+ CUPS_LICENSE = GPLv2 LGPLv2
+ CUPS_LICENSE_FILES = LICENSE.txt
+ CUPS_INSTALL_STAGING = YES
+-CUPS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
++CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
+ CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
+ CUPS_CONF_OPT = --without-perl \
+ 		--without-java \
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 468767f..576042d 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -9,7 +9,7 @@ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2F
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+ E2FSPROGS_INSTALL_STAGING = YES
+-E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-libs
++E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+ 
+ E2FSPROGS_CONF_OPT = \
+ 	$(if $(BR2_PREFER_STATIC_LIB),,--enable-elf-shlibs) \
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index e8456d8..cbbba8f 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -7,7 +7,7 @@
+ EXPAT_VERSION = 2.1.0
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_INSTALL_STAGING = YES
+-EXPAT_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) installlib
++EXPAT_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) installlib
+ EXPAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) installlib
+ EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 09b57fa..65f4ed3 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -30,7 +30,7 @@ GLIBC_SUBDIR = build
+ 
+ GLIBC_INSTALL_STAGING = YES
+ 
+-GLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
++GLIBC_INSTALL_STAGING_OPTS = install_root=$(STAGING_DIR) install
+ 
+ # Thumb build is broken, build in ARM mode
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 6e522ca..56043a6 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -19,7 +19,7 @@ LIBDNET_DEPENDENCIES = python
+ LIBDNET_CONF_OPT += --with-python
+ LIBDNET_MAKE_OPTS = PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) PYLIBDIR=$(STAGING_DIR)/usr/lib
+ LIBDNET_INSTALL_TARGET_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
+-LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++LIBDNET_INSTALL_STAGING_OPTS = $(LIBDNET_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endif
+ 
+ # Needed for autoreconf to work properly
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 396678d..23c44e9 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -13,7 +13,7 @@ LIBGLIB2_LICENSE_FILES = COPYING
+ 
+ LIBGLIB2_AUTORECONF = YES
+ LIBGLIB2_INSTALL_STAGING = YES
+-LIBGLIB2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ 
+ LIBGLIB2_CONF_ENV = \
+ 		ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 33b01ac..d696e01 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -14,7 +14,7 @@ LIBSECCOMP_INSTALL_STAGING = YES
+ LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
+ LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
+ LIBSECCOMP_MAKE_OPTS            = SUBDIRS_BUILD=src
+-LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
++LIBSECCOMP_INSTALL_STAGING_OPTS = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
+ LIBSECCOMP_INSTALL_TARGET_OPTS  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
+ 
+ # Not a real autotools package, but works quite OK nonetheless
+diff --git a/package/lite/lite.mk b/package/lite/lite.mk
+index ca971c1..9a1c917 100644
+--- a/package/lite/lite.mk
++++ b/package/lite/lite.mk
+@@ -8,7 +8,7 @@ LITE_VERSION = 0.8.10
+ LITE_SOURCE = LiTE-$(LITE_VERSION).tar.gz
+ LITE_SITE = http://www.directfb.org/downloads/Libs
+ LITE_INSTALL_STAGING = YES
+-LITE_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++LITE_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ LITE_CONF_ENV = DFB_CFLAGS=-I$(STAGING_DIR)/usr/include/directfb
+ LITE_DEPENDENCIES = directfb
+ LITE_LICENSE = LGPLv2.1+
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 3994213..3e2b7f8 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -33,7 +33,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
+ LVM2_MAKE_OPTS = device-mapper
+-LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
++LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install_device-mapper
+ LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install_device-mapper
+ endif
+ 
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 7d34ec0..4cd9959 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -10,7 +10,7 @@ MXML_LICENSE = LGPLv2+ with exceptions
+ MXML_LICENSE_FILES = COPYING
+ MXML_INSTALL_STAGING = YES
+ 
+-MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
++MXML_INSTALL_STAGING_OPTS = DSTROOT=$(STAGING_DIR) install
+ MXML_INSTALL_TARGET_OPTS = DSTROOT=$(TARGET_DIR) install
+ 
+ $(eval $(autotools-package))
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 7b5dbf3..28196ef 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -24,7 +24,7 @@ NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp \
+ 		--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+ 		--with-out-transports="Unix" \
+ 		--disable-manuals
+-NETSNMP_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
++NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_MAKE = $(MAKE1)
+ NETSNMP_CONFIG_SCRIPTS = net-snmp-config
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ceca6b8..f4d30ba 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -8,7 +8,7 @@ PHP_VERSION = 5.5.17
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
++PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ PHP_DEPENDENCIES = host-pkgconf
+ PHP_LICENSE = PHP
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index d8fdcdf..42ba138 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -108,7 +108,7 @@ $(2)_CONF_OPT			?=
+ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPTS			?=
+ $(2)_INSTALL_OPTS                ?= install
+-$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
++$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR)  install
+ 
+ 
+@@ -309,7 +309,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_SRCDIR)
+ 	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2f0469c..8e6a573 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -42,7 +42,7 @@ $(2)_MAKE			?= $$(MAKE)
+ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPTS			?=
+ $(2)_INSTALL_HOST_OPT		?= install
+-$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
++$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+ 
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+@@ -136,7 +136,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 0dd56d9..af17f7f 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -38,7 +38,7 @@ PKG_PYTHON_DISTUTILS_BUILD_OPT = \
+ PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+ 	--prefix=$(TARGET_DIR)/usr
+ 
+-PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPT = \
++PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+ 	--prefix=$(STAGING_DIR)/usr
+ 
+ # Host distutils-based packages
+@@ -62,7 +62,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+ 	--single-version-externally-managed \
+ 	--root=/
+ 
+-PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPT = \
++PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ 	--prefix=$(STAGING_DIR)/usr \
+ 	--executable=/usr/bin/python \
+ 	--single-version-externally-managed \
+@@ -113,7 +113,7 @@ $(2)_BASE_ENV         = $$(PKG_PYTHON_DISTUTILS_ENV)
+ $(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPT)
+ $(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
+-$(2)_BASE_INSTALL_STAGING_OPT = $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPT)
++$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
+ else
+ $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_DISTUTILS_ENV)
+ $(2)_BASE_BUILD_TGT   = build
+@@ -127,7 +127,7 @@ $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+ $(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   =
+ $(2)_BASE_INSTALL_TARGET_OPTS  = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+-$(2)_BASE_INSTALL_STAGING_OPT = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPT)
++$(2)_BASE_INSTALL_STAGING_OPTS = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+ else
+ $(2)_BASE_ENV         = $$(HOST_PKG_PYTHON_SETUPTOOLS_ENV)
+ $(2)_BASE_BUILD_TGT   = build
+@@ -268,8 +268,8 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+ 		$$($(2)_PYTHON_INTERPRETER) setup.py install \
+-		$$($$(PKG)_BASE_INSTALL_STAGING_OPT) \
+-		$$($$(PKG)_INSTALL_STAGING_OPT))
++		$$($$(PKG)_BASE_INSTALL_STAGING_OPTS) \
++		$$($$(PKG)_INSTALL_STAGING_OPTS))
+ endef
+ endif
+ 
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 9524965..51aaf23 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -11,6 +11,6 @@ TSLIB_LICENSE_FILES = COPYING
+ 
+ TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+-TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ 
+ $(eval $(autotools-package))
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 1a2315a..4f822d7 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -139,6 +139,6 @@ $(eval $(host-autotools-package))
+ 
+ # MKINSTALLDIRS comes from tweaked m4/nls.m4, but autoreconf uses staging
+ # one, so it disappears
+-UTIL_LINUX_INSTALL_STAGING_OPT += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
++UTIL_LINUX_INSTALL_STAGING_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+ UTIL_LINUX_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+ HOST_UTIL_LINUX_INSTALL_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 0dc2dea..f07c927 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -20,7 +20,7 @@ WEBKIT_AUTORECONF = YES
+ WEBKIT_AUTORECONF_OPT = -I $(@D)/Source/autotools
+ 
+ # parallel make install deadlocks with make 3.81
+-WEBKIT_INSTALL_STAGING_OPT = -j1 DESTDIR=$(STAGING_DIR) install
++WEBKIT_INSTALL_STAGING_OPTS = -j1 DESTDIR=$(STAGING_DIR) install
+ WEBKIT_INSTALL_TARGET_OPTS = -j1 DESTDIR=$(TARGET_DIR) install
+ 
+ # Does not build and it's disabled by default
+diff --git a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
+index 92fcdcf..85a6884 100644
+--- a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
++++ b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ADOBE_100DPI_SITE = http://xorg.freedesktop.org/releases/individual/f
+ XFONT_FONT_ADOBE_100DPI_LICENSE = MIT
+ XFONT_FONT_ADOBE_100DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ADOBE_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ADOBE_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ADOBE_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ADOBE_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk b/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
+index 18408ed..bb0a184 100644
+--- a/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
++++ b/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ADOBE_75DPI_SITE = http://xorg.freedesktop.org/releases/individual/fo
+ XFONT_FONT_ADOBE_75DPI_LICENSE = MIT
+ XFONT_FONT_ADOBE_75DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ADOBE_75DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ADOBE_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ADOBE_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ADOBE_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk b/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
+index 0bb7245..390ca67 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
++++ b/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ADOBE_UTOPIA_100DPI_SITE = http://xorg.freedesktop.org/releases/indiv
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_LICENSE = Adobe License (no modification allowed)
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ADOBE_UTOPIA_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ADOBE_UTOPIA_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
+index f0fa700..7ecd46e 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
++++ b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ADOBE_UTOPIA_75DPI_SITE = http://xorg.freedesktop.org/releases/indivi
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_LICENSE = Adobe License (no modification allowed)
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ADOBE_UTOPIA_75DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ADOBE_UTOPIA_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk b/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
+index bd78dd3..6c780e2 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
++++ b/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ADOBE_UTOPIA_TYPE1_SITE = http://xorg.freedesktop.org/releases/indivi
+ XFONT_FONT_ADOBE_UTOPIA_TYPE1_LICENSE = Adobe License (no modification allowed)
+ XFONT_FONT_ADOBE_UTOPIA_TYPE1_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ADOBE_UTOPIA_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ADOBE_UTOPIA_TYPE1_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ADOBE_UTOPIA_TYPE1_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ADOBE_UTOPIA_TYPE1_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.mk b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
+index a1b0760..e2ac236 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.mk
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ALIAS_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_ALIAS_LICENSE = MIT
+ XFONT_FONT_ALIAS_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ALIAS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ALIAS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ALIAS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ALIAS_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk b/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
+index ca29c23..fa1269b 100644
+--- a/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
++++ b/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ARABIC_MISC_SITE = http://xorg.freedesktop.org/releases/individual/fo
+ XFONT_FONT_ARABIC_MISC_LICENSE = MIT
+ XFONT_FONT_ARABIC_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ARABIC_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ARABIC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ARABIC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ARABIC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+index eb5bcf5..fb16658 100644
+--- a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
++++ b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_100DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_100DPI_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_100DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk b/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
+index 0fe1c5f..c8ade59 100644
+--- a/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
++++ b/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_75DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_75DPI_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_75DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_75DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
+index f21fae8..a1b61db 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_SITE = http://xorg.freedesktop.org/release
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
+index 515bc20..00a6bd6 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_SITE = http://xorg.freedesktop.org/releases
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk b/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
+index 295a9d0..f393dd3 100644
+--- a/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
++++ b/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_TTF_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_TTF_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_TTF_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_TTF_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_TTF_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_TTF_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_TTF_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bh-type1/xfont_font-bh-type1.mk b/package/x11r7/xfont_font-bh-type1/xfont_font-bh-type1.mk
+index 3402b6a..bf418d5 100644
+--- a/package/x11r7/xfont_font-bh-type1/xfont_font-bh-type1.mk
++++ b/package/x11r7/xfont_font-bh-type1/xfont_font-bh-type1.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BH_TYPE1_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_TYPE1_LICENSE = Bigelow & Holmes License (no modification)
+ XFONT_FONT_BH_TYPE1_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BH_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BH_TYPE1_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BH_TYPE1_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BH_TYPE1_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk b/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
+index ae9ed66..5ddca73 100644
+--- a/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
++++ b/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BITSTREAM_100DPI_SITE = http://xorg.freedesktop.org/releases/individu
+ XFONT_FONT_BITSTREAM_100DPI_LICENSE = MIT
+ XFONT_FONT_BITSTREAM_100DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BITSTREAM_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BITSTREAM_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BITSTREAM_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BITSTREAM_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk b/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
+index 8b7c3ad..d7fea27 100644
+--- a/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
++++ b/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BITSTREAM_75DPI_SITE = http://xorg.freedesktop.org/releases/individua
+ XFONT_FONT_BITSTREAM_75DPI_LICENSE = MIT
+ XFONT_FONT_BITSTREAM_75DPI_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BITSTREAM_75DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BITSTREAM_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BITSTREAM_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BITSTREAM_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-bitstream-type1/xfont_font-bitstream-type1.mk b/package/x11r7/xfont_font-bitstream-type1/xfont_font-bitstream-type1.mk
+index 00a255d..813e3cb 100644
+--- a/package/x11r7/xfont_font-bitstream-type1/xfont_font-bitstream-type1.mk
++++ b/package/x11r7/xfont_font-bitstream-type1/xfont_font-bitstream-type1.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_BITSTREAM_TYPE1_SITE = http://xorg.freedesktop.org/releases/individua
+ XFONT_FONT_BITSTREAM_TYPE1_LICENSE = MIT
+ XFONT_FONT_BITSTREAM_TYPE1_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_BITSTREAM_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_BITSTREAM_TYPE1_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_BITSTREAM_TYPE1_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_BITSTREAM_TYPE1_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk b/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
+index 796899b..6dc9015 100644
+--- a/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
++++ b/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_CRONYX_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individua
+ XFONT_FONT_CRONYX_CYRILLIC_LICENSE = MIT
+ XFONT_FONT_CRONYX_CYRILLIC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_CRONYX_CYRILLIC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_CRONYX_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_CRONYX_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_CRONYX_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk b/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
+index 04ac435..59d6a84 100644
+--- a/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
++++ b/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_CURSOR_MISC_SITE = http://xorg.freedesktop.org/releases/individual/fo
+ XFONT_FONT_CURSOR_MISC_LICENSE = unencumbered
+ XFONT_FONT_CURSOR_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_CURSOR_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_CURSOR_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_CURSOR_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_CURSOR_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
+index 17b8a7a..59a84c7 100644
+--- a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
++++ b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
+@@ -9,7 +9,7 @@ XFONT_FONT_DAEWOO_MISC_SOURCE = font-daewoo-misc-$(XFONT_FONT_DAEWOO_MISC_VERSIO
+ XFONT_FONT_DAEWOO_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_DAEWOO_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_DAEWOO_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_DAEWOO_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_DAEWOO_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_DAEWOO_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk b/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
+index de7cd90..b26296d 100644
+--- a/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
++++ b/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_DEC_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_DEC_MISC_LICENSE = MIT
+ XFONT_FONT_DEC_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_DEC_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_DEC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_DEC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_DEC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-ibm-type1/xfont_font-ibm-type1.mk b/package/x11r7/xfont_font-ibm-type1/xfont_font-ibm-type1.mk
+index dd35923..6cec198 100644
+--- a/package/x11r7/xfont_font-ibm-type1/xfont_font-ibm-type1.mk
++++ b/package/x11r7/xfont_font-ibm-type1/xfont_font-ibm-type1.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_IBM_TYPE1_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_IBM_TYPE1_LICENSE = IBM/MIT X Consortium Courier Typefont agreement (no modification)
+ XFONT_FONT_IBM_TYPE1_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_IBM_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_IBM_TYPE1_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_IBM_TYPE1_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_IBM_TYPE1_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk b/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
+index 79ad023..4ac4b9b 100644
+--- a/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
++++ b/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_ISAS_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_ISAS_MISC_LICENSE = MIT
+ XFONT_FONT_ISAS_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_ISAS_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_ISAS_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_ISAS_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_ISAS_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk b/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
+index 802176a..5f8b001 100644
+--- a/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
++++ b/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
+@@ -9,7 +9,7 @@ XFONT_FONT_JIS_MISC_SOURCE = font-jis-misc-$(XFONT_FONT_JIS_MISC_VERSION).tar.bz
+ XFONT_FONT_JIS_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_JIS_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_JIS_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_JIS_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_JIS_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_JIS_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk b/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
+index 0e5b43a..11b4199 100644
+--- a/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
++++ b/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MICRO_MISC_SITE = http://xorg.freedesktop.org/releases/individual/fon
+ XFONT_FONT_MICRO_MISC_LICENSE = Public Domain
+ XFONT_FONT_MICRO_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MICRO_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MICRO_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MICRO_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MICRO_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk b/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
+index 88fc398..16fd46b 100644
+--- a/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
++++ b/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MISC_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individual/
+ XFONT_FONT_MISC_CYRILLIC_LICENSE = MIT / Public Domain
+ XFONT_FONT_MISC_CYRILLIC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MISC_CYRILLIC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MISC_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MISC_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MISC_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
+index 91c920e..7d0825e 100644
+--- a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
++++ b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MISC_ETHIOPIC_SITE = http://xorg.freedesktop.org/releases/individual/
+ XFONT_FONT_MISC_ETHIOPIC_LICENSE = MIT
+ XFONT_FONT_MISC_ETHIOPIC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MISC_ETHIOPIC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MISC_ETHIOPIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MISC_ETHIOPIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MISC_ETHIOPIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-misc-meltho/xfont_font-misc-meltho.mk b/package/x11r7/xfont_font-misc-meltho/xfont_font-misc-meltho.mk
+index b3c8862..5667869 100644
+--- a/package/x11r7/xfont_font-misc-meltho/xfont_font-misc-meltho.mk
++++ b/package/x11r7/xfont_font-misc-meltho/xfont_font-misc-meltho.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MISC_MELTHO_SITE = http://xorg.freedesktop.org/releases/individual/fo
+ XFONT_FONT_MISC_MELTHO_LICENSE = Meltho License
+ XFONT_FONT_MISC_MELTHO_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MISC_MELTHO_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MISC_MELTHO_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MISC_MELTHO_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MISC_MELTHO_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
+index c894457..700837c 100644
+--- a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
++++ b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MISC_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_MISC_MISC_LICENSE = Public Domain
+ XFONT_FONT_MISC_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MISC_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MISC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MISC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MISC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk b/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
+index e12ec0f..53fc192 100644
+--- a/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
++++ b/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_MUTT_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_MUTT_MISC_LICENSE = MIT
+ XFONT_FONT_MUTT_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_MUTT_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_MUTT_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_MUTT_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_MUTT_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
+index 45800da..0fa4d39 100644
+--- a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
++++ b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_SCHUMACHER_MISC_SITE = http://xorg.freedesktop.org/releases/individua
+ XFONT_FONT_SCHUMACHER_MISC_LICENSE = MIT
+ XFONT_FONT_SCHUMACHER_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_SCHUMACHER_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_SCHUMACHER_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_SCHUMACHER_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_SCHUMACHER_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
+index e46b476..8158ce5 100644
+--- a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
++++ b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_SCREEN_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individua
+ XFONT_FONT_SCREEN_CYRILLIC_LICENSE = MIT
+ XFONT_FONT_SCREEN_CYRILLIC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_SCREEN_CYRILLIC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_SCREEN_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_SCREEN_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_SCREEN_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
+index 1e78258..035255f 100644
+--- a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
++++ b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_SONY_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_SONY_MISC_LICENSE = MIT
+ XFONT_FONT_SONY_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_SONY_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_SONY_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_SONY_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_SONY_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+index 1921882..395cb87 100644
+--- a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
++++ b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_SUN_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_SUN_MISC_LICENSE = MIT
+ XFONT_FONT_SUN_MISC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_SUN_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_SUN_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_SUN_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_SUN_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
+index 61d6c1c..665fb90 100644
+--- a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
++++ b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_WINITZKI_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individ
+ XFONT_FONT_WINITZKI_CYRILLIC_LICENSE = Public Domain
+ XFONT_FONT_WINITZKI_CYRILLIC_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_WINITZKI_CYRILLIC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_WINITZKI_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_WINITZKI_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_WINITZKI_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
+index d9bb2b1..e1a2ef6 100644
+--- a/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
++++ b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
+@@ -10,7 +10,7 @@ XFONT_FONT_XFREE86_TYPE1_SITE = http://xorg.freedesktop.org/releases/individual/
+ XFONT_FONT_XFREE86_TYPE1_LICENSE = MIT
+ XFONT_FONT_XFREE86_TYPE1_LICENSE_FILES = COPYING
+ 
+-XFONT_FONT_XFREE86_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
++XFONT_FONT_XFREE86_TYPE1_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ XFONT_FONT_XFREE86_TYPE1_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
+ XFONT_FONT_XFREE86_TYPE1_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
+ 
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 6864e7d..d4f990d 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -17,7 +17,7 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYIN
+ 
+ XENOMAI_INSTALL_STAGING = YES
+ XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+-XENOMAI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-user
++XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+ 
+ XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/ --disable-doc-install \
+ 	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
