@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Oct 2014 14:19:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg/ffmpeg.mk: Remove tabs
-In-Reply-To: <1412329846-4805-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1412329846-4805-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141004141954.0c961474@free-electrons.com>
+Date: Sat, 4 Oct 2014 14:20:51 +0200
+Subject: [Buildroot] [PATCH] autossh: bump to version 1.4d
+In-Reply-To: <1412293314-3595-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1412293314-3595-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141004142051.0dd26f7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Gustavo Zacarias,
 
-On Fri,  3 Oct 2014 11:50:46 +0200, Bernd Kuhls wrote:
+On Thu,  2 Oct 2014 20:41:54 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/ffmpeg/ffmpeg.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/autossh/autossh.hash | 4 ++++
+>  package/autossh/autossh.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>  create mode 100644 package/autossh/autossh.hash
 
 Applied, thanks.
 
