@@ -1,50 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Oct 2014 18:43:58 +0200
-Subject: [Buildroot] [RFC 3/3] package/kodi: Bump version to 14.0a4-Helix
-In-Reply-To: <1412439081-2975-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1412439081-2975-1-git-send-email-bernd.kuhls@t-online.de>
- <1412439081-2975-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141004164357.GC3990@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Oct 2014 18:46:40 +0200
+Subject: [Buildroot] [PATCH v2] protobuf: bump version to 2.6.0
+In-Reply-To: <CANQCQpb1_RamJ2HHBS_pyzVD-tBW-505=75Lwda3AKuRMs+55A@mail.gmail.com>
+References: <1412282436-9176-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20141004142755.1f402a23@free-electrons.com>
+ <CANQCQpb1_RamJ2HHBS_pyzVD-tBW-505=75Lwda3AKuRMs+55A@mail.gmail.com>
+Message-ID: <20141004184640.2907d9c7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Dear Matthew Weber,
 
-On 2014-10-04 18:11 +0200, Bernd Kuhls spake thusly:
-> - add kodi/xbmc specific patches for ffmpeg from OpenELEC
+On Sat, 4 Oct 2014 10:37:13 -0500, Matthew Weber wrote:
 
-NAK, those patches are against ffmpeg, not Kodi. They should be provided
-in a separate changeset.
+> >  * host-protobuf-c-v1.0.0-rc1
+> >    http://autobuild.buildroot.org/results/647/64707ecd9acfbf519d5f22dd6bd5b39c3b544073/build-end.log
+> 
+> Known issue https://github.com/protobuf-c/protobuf-c/issues/163.
+> I'll bump protobuf-c to v1.0.2 and retest.
 
-Also, there are quite a few patches bundled in that single biggish patch.
-I'd prefer if they were provided as multiple patches, instead. It is
-easier to review.
+Sounds good.
 
-Also, the commit log for that biggish patch says:
-    ffmpeg: update XBMC upstream patches
+> >  * python-protobuf-2.6.0
+> >    http://autobuild.buildroot.org/results/b3b/b3b36c72b233a624ebae9eaac592b7c6fbd394be/build-end.log
+> 
+> This one is a failure on dependencies that the setup.py is trying to
+> download.  What's the general feeling with setuptools doing downloads
+> on it's own?  I assume we need to add those python packages to
+> buildroot and correct the missing dependencies?
 
-Does that mean those patches come from upstream XBMC/Kodi? If so, I'd
-prefer a pointer to upstream XBMC/Kodi, rather than a pointer to a patch
-bundle from a third party project.
+Absolutely.
 
-> - add dependency to ffmpeg, xbmc does not deliver its own ffmpeg anymore
+> Initially it looks like the package dependency list would be:
+>     google_apputils
+>     pytz
+>     python_gflags
+> I'm not to familiar with how setuptools checks for dependencies
+> existing before defaulting to retrieving a pypi archive.  Does it
+> check the sysroot path we point it at to make the decision?
 
-Woot! Yeah! *That* is good news! :-)
+I don't really know. I guess it checks in PYTHONPATH.
 
-> - remove dependency to lame, audio encoders have been seperated from kodi
+Best regards,
 
-In what way? Does it now rely on ffmpeg instead?
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
