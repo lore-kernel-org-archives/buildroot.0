@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 13:38:41 +0200
-Subject: [Buildroot] [git commit] package-infra: comment why all checks are
-	done in pkg-generic
-Message-ID: <20141005113901.5396B9D66E@busybox.osuosl.org>
+Date: Sun, 5 Oct 2014 13:39:31 +0200
+Subject: [Buildroot] [PATCH 2 of 2] check-deprecated-variable: move call
+ to respective infra where appropriate
+In-Reply-To: <17b8f7627130f84d5e80.1412495912@localhost>
+References: <98b4f7f5e2ea63e41fa1.1412495911@localhost>
+ <17b8f7627130f84d5e80.1412495912@localhost>
+Message-ID: <20141005133931.74d85bdf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5401ccaf6d06f3140df45f70cd9746de7f870125
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas De Schampheleire,
 
-[Thomas: fix duplicate -> duplicating.]
+On Sun, 05 Oct 2014 09:58:32 +0200, Thomas De Schampheleire wrote:
+> Move the checks for AUTORECONF_OPT, GETTEXTIZE_OPT to pkg-autotools.mk,
+> and for KCONFIG_OPT to pkg-kconfig.mk.
+> 
+> The other checks are used by several infras and are therefore better placed
+> in pkg-generic.mk.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-generic.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+As per the discussion with Yann, I've rejected this patch.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ec8afdd..f09f83e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -702,7 +702,11 @@ $$(foreach pkg,$$($(2)_PROVIDES),\
- 	$$(eval $$(call virt-provides-single,$$(pkg),$$(call UPPERCASE,$$(pkg)),$(1))$$(sep)))
- endif
- 
--# Ensure unified variable name conventions between all packages
-+# Ensure unified variable name conventions between all packages Some
-+# of the variables are used by more than one infrastructure; so,
-+# rather than duplicating the checks in each infrastructure, we check
-+# all variables here in pkg-generic, even though pkg-generic should
-+# have no knowledge of infra-specific variables.
- $(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
