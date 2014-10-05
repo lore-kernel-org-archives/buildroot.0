@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Oct 2014 19:38:58 +0200
-Subject: [Buildroot] [PATCH v2 10/16] package/php: Add support for mcrypt
-	module
+Date: Sun,  5 Oct 2014 19:39:03 +0200
+Subject: [Buildroot] [PATCH v2 15/16] Apache: New package
 In-Reply-To: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412530744-20649-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1412530744-20649-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +13,174 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.ext |    5 +++++
- package/php/php.mk     |    5 +++++
- 2 files changed, 10 insertions(+)
+ package/Config.in                              |    1 +
+ package/apache/Config.in                       |   19 +++++++
+ package/apache/apache-0001-cross-compile.patch |   63 ++++++++++++++++++++++++
+ package/apache/apache.mk                       |   48 ++++++++++++++++++
+ 4 files changed, 131 insertions(+)
+ create mode 100644 package/apache/Config.in
+ create mode 100644 package/apache/apache-0001-cross-compile.patch
+ create mode 100644 package/apache/apache.mk
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index f745cc9..4649375 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -56,6 +56,11 @@ config BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  HASH message digest framework
- 
-+config BR2_PACKAGE_PHP_EXT_MCRYPT
-+	bool "mcrypt"
+diff --git a/package/Config.in b/package/Config.in
+index 318b743..3b22d25 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -945,6 +945,7 @@ endmenu
+ menu "Networking applications"
+ 	source "package/aiccu/Config.in"
+ 	source "package/aircrack-ng/Config.in"
++	source "package/apache/Config.in"
+ 	source "package/argus/Config.in"
+ 	source "package/arptables/Config.in"
+ 	source "package/atftp/Config.in"
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+new file mode 100644
+index 0000000..172346c
+--- /dev/null
++++ b/package/apache/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_APACHE
++	bool "apache"
++	select BR2_PACKAGE_APR_UTIL
++	select BR2_PACKAGE_PCRE
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # apr
 +	help
-+	  mcrypt support
++	  The Apache HTTP Server Project is an effort to develop and maintain an
++	  open-source HTTP server for modern operating systems including UNIX
++	  and Windows NT. The goal of this project is to provide a secure,
++	  efficient and extensible server that provides HTTP services in sync
++	  with the current HTTP standards.
 +
- config BR2_PACKAGE_PHP_EXT_OPENSSL
- 	bool "openssl"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 648dc55..0cf4058 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -78,6 +78,11 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
- 
-+ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
-+	PHP_CONF_OPTS += --with-mcrypt=$(STAGING_DIR)/usr
-+	PHP_DEPENDENCIES += libmcrypt
++	  http://httpd.apache.org
++
++comment "apache needs a toolchain w/ dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/apache/apache-0001-cross-compile.patch b/package/apache/apache-0001-cross-compile.patch
+new file mode 100644
+index 0000000..790b7a0
+--- /dev/null
++++ b/package/apache/apache-0001-cross-compile.patch
+@@ -0,0 +1,63 @@
++Fix cross-compilation
++
++Fetched httpd-2.4.x-cross_compile.diff from upstream bugtracker:
++https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
++
++which is a bundle of upstream revisions:
++    http://svn.apache.org/viewvc?view=revision&revision=1327907
++    http://svn.apache.org/viewvc?view=revision&revision=1328390
++    http://svn.apache.org/viewvc?view=revision&revision=1328714
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: server/Makefile.in
++===================================================================
++--- a/server/Makefile.in	(revision 1328714)
+++++ b/server/Makefile.in	(working copy)
++@@ -22,9 +22,14 @@
++ include $(top_builddir)/build/rules.mk
++ include $(top_srcdir)/build/library.mk
++ 
+++ifdef CC_FOR_BUILD
+++gen_test_char: gen_test_char.c
+++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
+++else
++ gen_test_char_OBJECTS = gen_test_char.lo
++ gen_test_char: $(gen_test_char_OBJECTS)
++ 	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
+++endif
++ 
++ test_char.h: gen_test_char
++ 	./gen_test_char > test_char.h
++Index: configure.in
++===================================================================
++--- a/configure.in	(revision 1328714)
+++++ b/configure.in	(working copy)
++@@ -193,6 +193,14 @@
++ dnl Try to get c99 support for variadic macros
++ ifdef([AC_PROG_CC_C99], [AC_PROG_CC_C99])
++ 
+++dnl In case of cross compilation we set CC_FOR_BUILD to cc unless
+++dnl we got already CC_FOR_BUILD from environment.
+++if test "x${build_alias}" != "x${host_alias}"; then
+++  if test "x${CC_FOR_BUILD}" = "x"; then
+++    CC_FOR_BUILD=cc
+++  fi
+++fi
+++
++ if test "x${cache_file}" = "x/dev/null"; then
++   # Likewise, ensure that CC and CPP are passed through to the pcre
++   # configure script iff caching is disabled (the autoconf 2.5x default).
++Index: acinclude.m4
++===================================================================
++--- a/acinclude.m4	(revision 1328714)
+++++ ab/cinclude.m4	(working copy)
++@@ -53,6 +53,8 @@
++   APACHE_SUBST(CPPFLAGS)
++   APACHE_SUBST(CFLAGS)
++   APACHE_SUBST(CXXFLAGS)
+++  APACHE_SUBST(CC_FOR_BUILD)
+++  APACHE_SUBST(CFLAGS_FOR_BUILD)
++   APACHE_SUBST(LTFLAGS)
++   APACHE_SUBST(LDFLAGS)
++   APACHE_SUBST(LT_LDFLAGS)
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+new file mode 100644
+index 0000000..d801aff
+--- /dev/null
++++ b/package/apache/apache.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# apache
++#
++################################################################################
++
++APACHE_VERSION = 2.4.10
++APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
++APACHE_SITE = http://archive.apache.org/dist/httpd
++APACHE_LICENSE = Apache-2.0
++APACHE_LICENSE_FILES = LICENSE
++# Needed for mod_php
++APACHE_INSTALL_STAGING = YES
++# We have a patch touching configure.in and Makefile.in,
++# so we need to autoreconf:
++APACHE_AUTORECONF = YES
++APACHE_DEPENDENCIES = apr apr-util pcre
++
++APACHE_CONF_ENV= \
++	CC_FOR_BUILD="$(HOSTCC)" \
++	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
++	ap_cv_void_ptr_lt_long=no \
++	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
++
++APACHE_CONF_OPTS = \
++	--sysconfdir=/etc/apache2 \
++	--with-apr=$(STAGING_DIR)/usr \
++	--with-apr-util=$(STAGING_DIR)/usr \
++	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
++	--enable-http \
++	--enable-dbd \
++	--enable-proxy \
++	--enable-mime-magic \
++	--without-suexec-bin \
++	--enable-mods-shared=all \
++	--with-mpm=worker
++
++ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
++APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
 +endif
 +
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
- 	PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
- 	PHP_DEPENDENCIES += openssl
++define APACHE_FIX_STAGING_APACHE_CONFIG
++	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
++	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
++endef
++APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
