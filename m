@@ -1,46 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 23:40:10 +0200
-Subject: [Buildroot] [PATCH 1/1] uclibc/ffmpeg: Fix fminf-related build
- error
-In-Reply-To: <1411479699-16331-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1411479699-16331-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141005234010.17ab13c5@free-electrons.com>
+Date: Sun, 5 Oct 2014 23:46:37 +0200
+Subject: [Buildroot] [PATCH] vsftpd: Add build option to disable utmpx
+ update code
+In-Reply-To: <1410873450-19158-1-git-send-email-maarten@treewalker.org>
+References: <1410873450-19158-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20141005234637.715fa4fb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Maarten ter Huurne,
 
-On Tue, 23 Sep 2014 15:41:39 +0200, Bernd Kuhls wrote:
-> The build error I saw while bumping ffmpeg to 2.3.1 was caused by uClibc, not
-> ffmpeg:
-> http://news.gmane.org/find-root.php?message_id=20140804213955.42443190%40debian
+On Tue, 16 Sep 2014 15:17:30 +0200, Maarten ter Huurne wrote:
+> This was modeled after a similar option for Dropbear.
 > 
-> ffmpeg-0001-fminf.patch can be removed in favour of uclibc-0063-fminf.patch.
+> The utmpx code is automatically disabled when compiling with musl,
+> to avoid a build error due to WTMPX_FILE being undefined.
+
+I find this explanation unclear: when you say "is", I assume it's
+*before* this patch is applied, but my understanding is that you mean
+*once* the patch is applied, correct?
+
+> Note that
+> musl has an empty utmpx implementation, so no functionality is lost
+> by not calling it.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
 > ---
->  package/ffmpeg/ffmpeg-0001-fminf.patch          |   47 ---------
->  package/uclibc/0.9.33.2/uclibc-0063-fminf.patch |  127 +++++++++++++++++++++++
->  2 files changed, 127 insertions(+), 47 deletions(-)
->  delete mode 100644 package/ffmpeg/ffmpeg-0001-fminf.patch
->  create mode 100644 package/uclibc/0.9.33.2/uclibc-0063-fminf.patch
+> Note that previously the utmpx code was being built, so this patch
+> changes the default behavior. I think this is not a problem because
+> most systems would not have a valid utmpx file, but it might be worth
+> mentioning in the release notes.
 
-Even though this looks like the right fix, it is a bit annoying,
-because it means that ffmpeg will no longer build with a large number
-of external uClibc toolchains (built with Buildroot versions older than
-the one that would have this commit included, built with Crosstool-NG,
-made available by third-parties, etc.).
+Then instead of adding yet another new option, what about simply
+disabling the utmpx support in vsftpd.mk when the C library is musl,
+and keep it enabled otherwise?
 
-Do you think we could have a solution that combines keeping the ffmpeg
-fminf() patch, and adding the uClibc patch? Having the uClibc patch is
-good because it fixes a real issue in uClibc. Keeping the ffmpeg
-fminf() patch ensures that our ffmpeg package builds with other uClibc
-toolchains than just the latest Buildroot uClibc toolchain.
+> 
+>  package/vsftpd/Config.in                        | 12 ++++++
+>  package/vsftpd/vsftpd-0001-utmpx-builddef.patch | 49 +++++++++++++++++++++++++
+>  package/vsftpd/vsftpd.mk                        |  8 ++++
+>  3 files changed, 69 insertions(+)
+>  create mode 100644 package/vsftpd/vsftpd-0001-utmpx-builddef.patch
 
-What do you think?
+Have you submitted vsftpd-0001-utmpx-builddef.patch upstream? It's kind
+of a feature patch, so something we _generally_ don't like to take in
+Buildroot.
 
 Thanks,
 
