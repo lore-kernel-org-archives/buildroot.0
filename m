@@ -1,94 +1,167 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 23:47:27 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmiutil: new package
-In-Reply-To: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
-References: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20141005234727.1ed88b20@free-electrons.com>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sun,  5 Oct 2014 14:47:08 -0700
+Subject: [Buildroot] [PATCH] gst1-plugins-imx: add package
+Message-ID: <1412545628-12153-1-git-send-email-bisson.gary@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+Open-source GStreamer 1.0 plugins for i.MX platforms.
+More info at https://github.com/Freescale/gstreamer-imx
 
-Any news about this patch? I made some comments on September, 21st, but
-unless I missed you haven't resent a new version. Do you intend to do
-so in the near future?
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+---
 
-Thanks a lot for your contribution,
+This patch has been tested using an i.MX6Q SabreLite (nitrogen6x config) along
+with the usual Tears of Steel movie in 1080p:
+http://media.xiph.org/mango/tears_of_steel_1080p.webm
 
-Thomas
+Below are the commands used to test the different sinks:
 
-On Thu, 18 Sep 2014 11:38:35 +0200, David Bachelart wrote:
-> 
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/Config.in            |    1 +
->  package/ipmiutil/Config.in   |   15 +++++++++++++++
->  package/ipmiutil/ipmiutil.mk |   15 +++++++++++++++
->  3 files changed, 31 insertions(+)
->  create mode 100644 package/ipmiutil/Config.in
->  create mode 100644 package/ipmiutil/ipmiutil.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 73ba86a..3eafabb 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -322,6 +322,7 @@ endif
->  	source "package/intel-microcode/Config.in"
->  	source "package/iostat/Config.in"
->  	source "package/ipmitool/Config.in"
-> +	source "package/ipmiutil/Config.in"
->  	source "package/irda-utils/Config.in"
->  	source "package/iucode-tool/Config.in"
->  	source "package/kbd/Config.in"
-> diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-> new file mode 100644
-> index 0000000..29d6e26
-> --- /dev/null
-> +++ b/package/ipmiutil/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_IPMIUTIL
-> +	bool "ipmiutil"
-> +	depends on BR2_TOOLCHAIN_HAS_SSP
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  The ipmiutil package provides easy-to-use utilities to view the SEL,
-> +	  perform an IPMI chassis reset, set up the IPMI LAN and Platform Event Filter
-> +	  entries to allow SNMP alerts, Serial-Over-LAN console, event daemon, and
-> +	  other IPMI tasks.
-> +
-> +	  http://ipmiutil.sourceforge.net/
-> +
-> +comment "ipmiutil needs a toolchain w/ ssp"
-> +	depends on !BR2_TOOLCHAIN_HAS_SSP
-> diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-> new file mode 100644
-> index 0000000..9bf7325
-> --- /dev/null
-> +++ b/package/ipmiutil/ipmiutil.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# ipmiutil
-> +#
-> +################################################################################
-> +
-> +IPMIUTIL_VERSION = 2.9.4
-> +IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files/
-> +
-> +IPMIUTIL_DEPENDENCIES = openssl zlib
-> +
-> +IPMIUTIL_LICENSE = BSD-2c
-> +IPMIUTIL_LICENSE_FILES = COPYING
-> +
-> +$(eval $(autotools-package))
+$ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+$ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+matroskademux ! imxvpudec ! imxipusink
+$ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+matroskademux ! imxvpudec ! imxeglvivsink
 
+The toolchain used was the Sourcery CodeBench 2014.05. The video above also
+requires the following extra configuration in order to demux the content:
+BR2_PACKAGE_GST1_PLUGINS_GOOD=y
+BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA=y 
 
+I'm not fond of all the dependencies of this  package but I couldn't seem to
+find a way to do it differently. A try has been made to select the Vivante
+package automatically but it requires doing a select of
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q which doesn't work. Let me know
+if you'd like another mechanism to be able to select this plugin.
 
+Thanks,
+Gary
+
+ package/gstreamer1/Config.in                       |  1 +
+ package/gstreamer1/gst1-plugins-imx/Config.in      | 35 +++++++++++++
+ .../gst1-plugins-imx/gst1-plugins-imx.mk           | 57 ++++++++++++++++++++++
+ 3 files changed, 93 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-imx/Config.in
+ create mode 100644 package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
+
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index fe0ad48..d43e4a6 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -6,6 +6,7 @@ source "package/gstreamer1/gst1-plugins-base/Config.in"
+ source "package/gstreamer1/gst1-plugins-good/Config.in"
+ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+ source "package/gstreamer1/gst1-plugins-ugly/Config.in"
++source "package/gstreamer1/gst1-plugins-imx/Config.in"
+ source "package/gstreamer1/gst1-libav/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst1-plugins-imx/Config.in b/package/gstreamer1/gst1-plugins-imx/Config.in
+new file mode 100644
+index 0000000..7c8a467
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-imx/Config.in
+@@ -0,0 +1,35 @@
++comment "gst1-plugins-imx needs an imx-specific Linux kernel to be built"
++	depends on BR2_arm && !BR2_LINUX_KERNEL
++
++comment "gst1-plugins-imx needs an (e)glibc toolchain"
++	depends on BR2_arm
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
++comment "gst1-plugins-imx requires Freescale VPU wrapper libraries"
++	depends on BR2_arm
++	depends on !BR2_PACKAGE_LIBFSLVPUWRAP
++
++comment "gst1-plugins-imx requires Freescale GPU libraries for i.MX6"
++	depends on BR2_arm
++	depends on BR2_PACKAGE_LIBFSLVPUWRAP
++	depends on !BR2_PACKAGE_GPU_VIV_BIN_MX6Q
++
++config BR2_PACKAGE_GST1_PLUGINS_IMX
++	bool "gst1-plugins-imx"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q
++	depends on BR2_PACKAGE_LIBFSLVPUWRAP
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
++	  i.MX platform, with emphasis on video en/decoding using the i.MX
++	  VPU engine.
++
++	  Currently, this software has been tested only with the i.MX6 SoC
++	  family.
++
++	  The software as a whole is currently in beta stage.
++
++	  More info at https://github.com/Freescale/gstreamer-imx
+diff --git a/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk b/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
+new file mode 100644
+index 0000000..64a1b5b
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# gst1-plugins-imx
++#
++################################################################################
++
++GST1_PLUGINS_IMX_VERSION = 0.9.9
++GST1_PLUGINS_IMX_SITE = https://github.com/Freescale/gstreamer-imx.git
++GST1_PLUGINS_IMX_SITE_METHOD = git
++
++GST1_PLUGINS_IMX_LICENSE = LGPLv2+
++GST1_PLUGINS_IMX_LICENSE_FILES = LICENSE
++
++GST1_PLUGINS_IMX_INSTALL_STAGING = YES
++
++GST1_PLUGINS_IMX_DEPENDENCIES += host-pkgconf host-python \
++	gpu-viv-bin-mx6q gstreamer1 gst1-plugins-base libfslvpuwrap
++
++# needs access to imx-specific kernel headers
++GST1_PLUGINS_IMX_DEPENDENCIES += linux
++GST1_PLUGINS_IMX_CONF_OPTS += --prefix="/usr" \
++	--kernel-headers="$(LINUX_DIR)/include"
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++GST1_PLUGINS_IMX_DEPENDENCIES += xlib_libX11
++GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=x11
++else
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++GST1_PLUGINS_IMX_DEPENDENCIES += wayland
++GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=wayland
++else
++GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=fb
++endif
++endif
++
++define GST1_PLUGINS_IMX_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS)	\
++		$(HOST_DIR)/usr/bin/python2 ./waf configure \
++		$(GST1_PLUGINS_IMX_CONF_OPTS) \
++	)
++endef
++
++define GST1_PLUGINS_IMX_BUILD_CMDS
++	(cd $(@D); \
++		$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS) \
++	)
++endef
++
++define GST1_PLUGINS_IMX_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
++		install \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
