@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 20:43:38 +0200
-Subject: [Buildroot] [PATCH v2] libbsd: Add missing arch
-In-Reply-To: <1412533881-14025-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1412533881-14025-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141005204338.28e5d9d7@free-electrons.com>
+Date: Sun, 5 Oct 2014 20:45:25 +0200
+Subject: [Buildroot] [PATCH v3] netcat-openbsd: new package
+In-Reply-To: <1412534038-14154-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1412534038-14154-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141005204525.5acc1c2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,61 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sun,  5 Oct 2014 20:31:21 +0200, Maxime Hadjinlian wrote:
-> Match the list of architecture to the comments above.
+On Sun,  5 Oct 2014 20:33:58 +0200, Maxime Hadjinlian wrote:
+> The OpenBSD implementations of netcat.
+> The main difference from netcat is the support for IPv6, proxies, and
+> Unix sockets.
 > 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-The commit title should maybe become "libbsd: enable on the ARM
-architecture".
+Is the IPv6 support properly optional? Did you try building this tool
+with basic toolchain configurations such as:
 
-> ---
-> v1 -> v2:
->     - Remove m68k as it is currently marked broken in BR
-> ---
->  package/libbsd/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-> index e22226a..b1ca6d1 100644
-> --- a/package/libbsd/Config.in
-> +++ b/package/libbsd/Config.in
-> @@ -1,8 +1,8 @@
->  config BR2_PACKAGE_LIBBSD
->  	bool "libbsd"
->  	# libbsd requires a.out.h, which is only available for those
-> -	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
-> -	depends on ( BR2_i386 || BR2_x86_64 )
-> +	# architectures: arm, x86 (and alpha, but we don't care.)
-> +	depends on ( BR2_i386 || BR2_x86_64 || BR2_arm)
+ http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
+ http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
 
-I would keep the m68k in the comment for now, maybe something like:
-"arm, x86 (and alpha, not supported in Buildroot, and m68k, currently
-not enabled, so cannot be tested)".
+> diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+> new file mode 100644
+> index 0000000..3c44d6a
+> --- /dev/null
+> +++ b/package/netcat-openbsd/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_NETCAT_OPENBSD
+> +	bool "netcat-openbsd"
+> +	select BR2_PACKAGE_LIBBSD
 
-Also, alphabetic ordering of architectures please.
+You need to propagate the dependencies of libbsd.
 
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	help
-> @@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBBSD
->  	  http://libbsd.freedesktop.org/
->  
->  comment "libbsd needs an (e)glibc toolchain w/ threads"
-> -	depends on ( BR2_i386 || BR2_x86_64 )
-> +	depends on ( BR2_i386 || BR2_x86_64 || BR2_arm)
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+> diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+> new file mode 100644
+> index 0000000..471ebe7
+> --- /dev/null
+> +++ b/package/netcat-openbsd/netcat-openbsd.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# netcat-openbsd
+> +#
+> +################################################################################
+> +
+> +NETCAT_OPENBSD_VERSION = debian/1.105-7
+> +NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
+> +NETCAT_OPENBSD_LICENSE = BSD-3c
+> +NETCAT_OPENBSD_LICENSE_FILE = debian/copyright
+> +NETCAT_OPENBSD_DEPENDENCIES = libbsd
+> +
+> +define NETCAT_OPENBSD_APPLY_DEBIAN_PATCHES
+> +    if [ -d $(@D)/debian/patches ]; then \
+> +        support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches *.dpatch; \
+> +    fi
+> +endef
+> +
+> +NETCAT_OPENBSD_POST_PATCH_HOOKS += NETCAT_OPENBSD_APPLY_DEBIAN_PATCHES
+> +
+> +define NETCAT_OPENBSD_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
 
-Since you will need to inherit the arch dependency in netcat-openbsd,
-I'd suggest you use the following construction:
-
-config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-	bool
-	default y if BR2_arm || BR2_i386 || BR2_x86_64
-
-config BR2_PACKAGE_LIBBSD
-	bool "libbsd"
-	...
-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-
-comment "libbsd needs ..."
-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-
-And then you can reuse BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS in
-netcat-openbsd as well.
+$(TARGET_MAKE_ENV) please.
 
 Thanks,
 
