@@ -1,48 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 14:08:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libplist: fix python support
-In-Reply-To: <1412502007-9902-2-git-send-email-s.martin49@gmail.com>
-References: <1412502007-9902-1-git-send-email-s.martin49@gmail.com>
- <1412502007-9902-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20141005140830.706f1b6d@free-electrons.com>
+Date: Sun, 5 Oct 2014 14:08:44 +0200
+Subject: [Buildroot] [git commit] package/libdvdnav: fix typo:
+	BR2_PREEFER_STATIC_LIB
+Message-ID: <20141005120852.6A0C0B07BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=a8f986c449a3e08aff7fff531d7b26a1907a9d09
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Oct 2014 11:40:07 +0200, Samuel Martin wrote:
-> This patch:
-> - fixes the python3 support detection in the libplist CMake code;
-> - correctly sets the dependencies and configure options in libplist.mk.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/efb/efba806b9a40a5e9c6bca7e591747ca2102fa1d5/
-> 
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  ...support-python2-and-python3-when-defining.patch | 27 ++++++++++++++++++++++
->  package/libplist/libplist.mk                       | 13 +++++++++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/libplist/libplist-0003-cmake-swig-support-python2-and-python3-when-defining.patch
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdvdnav/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Patch applied, thanks. Of course, if libplist can be bumped, it would
-be good.
-
-Another note: in this case, the Python binding requires an additional
-dependency (host-swig), so I'm wondering if we shouldn't have an
-explicit option to enable/disable the libplist Python binding. Right
-now, as soon as you have Python and libplist enabled, you're going to
-build the Python binding, which requires building host-swig, even if
-you don't care at all about libplist Python binding.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
+index fed3b16..40a375a 100644
+--- a/package/libdvdnav/Config.in
++++ b/package/libdvdnav/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_LIBDVDNAV
+ 	  http://www.mplayerhq.hu
+ 
+ comment "libdvdnav needs a toolchain w/ dynamic library, largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREEFER_STATIC_LIB
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
