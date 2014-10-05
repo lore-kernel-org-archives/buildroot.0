@@ -1,7 +1,7 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  5 Oct 2014 19:17:37 +0200
-Subject: [Buildroot] [PATCH] netcat-openbsd: new package
-Message-ID: <1412529457-5978-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun,  5 Oct 2014 19:28:12 +0200
+Subject: [Buildroot] [PATCH v2] netcat-openbsd: new package
+Message-ID: <1412530092-6509-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,6 +9,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v1 -> v2:
+    - Add missing license
 ---
  package/Config.in                                  |   1 +
  .../0001-port-to-linux-with-libsd.patch            | 475 +++++++++++++++++++++
@@ -23,8 +26,8 @@ Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
  ...0010-serialized-handling-multiple-clients.patch |  75 ++++
  .../0011-misc-failures-and-features.patch          | 457 ++++++++++++++++++++
  package/netcat-openbsd/Config.in                   |  15 +
- package/netcat-openbsd/netcat-openbsd.mk           |  22 +
- 14 files changed, 1970 insertions(+)
+ package/netcat-openbsd/netcat-openbsd.mk           |  21 +
+ 14 files changed, 1969 insertions(+)
  create mode 100644 package/netcat-openbsd/0001-port-to-linux-with-libsd.patch
  create mode 100644 package/netcat-openbsd/0002-connect-timeout.patch
  create mode 100644 package/netcat-openbsd/0003-get-sev-by-name.patch
@@ -2072,10 +2075,10 @@ index 0000000..5b16103
 +          https://packages.debian.org/sid/netcat-openbsd
 diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
 new file mode 100644
-index 0000000..0c1ebd7
+index 0000000..be97ed7
 --- /dev/null
 +++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
 +# netcat-openbsd
@@ -2085,8 +2088,7 @@ index 0000000..0c1ebd7
 +NETCAT_OPENBSD_VERSION = 1.105
 +NETCAT_OPENBSD_SOURCE = netcat-openbsd_$(NETCAT_OPENBSD_VERSION).orig.tar.gz
 +NETCAT_OPENBSD_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/n/netcat-openbsd/
-+NETCAT_OPENBSD_LICENSE =
-+NETCAT_OPENBSD_LICENSE_FILES =
++NETCAT_OPENBSD_LICENSE = BSD-3c
 +NETCAT_OPENBSD_DEPENDENCIES = libbsd
 +
 +define NETCAT_OPENBSD_BUILD_CMDS
