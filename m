@@ -1,98 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 14:53:48 +0200
-Subject: [Buildroot] [PATCH v3 1/2] x264: new package
-In-Reply-To: <1412326439-12230-1-git-send-email-0intro@gmail.com>
-References: <1412326439-12230-1-git-send-email-0intro@gmail.com>
-Message-ID: <20141005145348.2913eb46@free-electrons.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Sun, 05 Oct 2014 21:01:43 +0800
+Subject: [Buildroot] [PATCH] bandwidthd: fix static build
+In-Reply-To: <20141005144043.7b3aaac0@free-electrons.com>
+References: <7d38491011008b60f8ad91ec0261af046d453685.1412232567.git.baruch@tkos.co.il>	<542CFECE.9020103@gmail.com>	<20141002075203.GG3006@sapphire.tkos.co.il>	<542D0518.3050704@gmail.com>	<20141002075844.GH3006@sapphire.tkos.co.il>	<542D0BC9.4060905@gmail.com>	<20141002083349.GI3006@sapphire.tkos.co.il>	<542E43A7.6080003@gmail.com>	<20141005045037.GA2567@sapphire.tkos.co.il>
+ <20141005144043.7b3aaac0@free-electrons.com>
+Message-ID: <54314137.7020007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David du Colombier,
+On 05/10/14 20:40, Thomas Petazzoni wrote:
+> Baruch, Nathaniel,
+> 
+> On Sun, 5 Oct 2014 07:50:37 +0300, Baruch Siach wrote:
+> 
+>>> Hi Baruch, I didn't end up using pcap-config, but could you check git
+>>> version 4b07a0b3d3a280cdde582060cb29f3333ba4bf6e for me? It seems to
+>>> work in the config you pasted above and I haven't had any issues in my
+>>> other tests.
+>>
+>> I can confirm that upgrading bandwidthd to 
+>> 4b07a0b3d3a280cdde582060cb29f3333ba4bf6e fixes the build of the config above. 
+>> I still think that holding the complete knowledge of all your indirect 
+>> dependencies, mandatory and optional, is not robust. A better future proof 
+>> solution IMO is to use tools like pkg-config (or pcap-config in the case of 
+>> libpcap) to list all dependencies that are in actual use for this specific 
+>> build. But this is your call as upstream.
+> 
+> I definitely agree with Baruch here. Using pkg-config is much more
+> robust, as it figures out the indirect dependencies automatically,
+> without hardcoding them in bandwidthd and/or Buildroot.
+> 
+> However, Baruch patch doesn't seem to be fully correct: it does both a
+> PKG_CHECK_MODULES on libpng, and an AC_CHECK_LIB, which seems a bit
+> redundant.
+> 
+> Therefore, Nathaniel, since you're now the upstream developer, could
+> you make the necessary changes in configure.ac to use pkg-config
+> instead, and then send a patch updating Buildroot to a new version of
+> bandwidthd ?
+> 
+> In the mean time, I'll mark:
+> 
+>   http://patchwork.ozlabs.org/patch/395809/
+>   http://patchwork.ozlabs.org/patch/381899/
+> 
+> as 'Changes requested'.
+> 
+> Thanks,
+> 
+> Thomas
+> 
 
-On Fri,  3 Oct 2014 10:53:58 +0200, David du Colombier wrote:
+Thomas, Baruch:
 
-> +if BR2_PACKAGE_X264
-> +
-> +config BR2_PACKAGE_X264_CLI
-> +	bool "CLI"
-> +	default n
+Yeah, I'm starting to lean that way too. Although I was a little
+hesitant adding another build dependency, I now realise that it's
+probably getting built anyway, and the version that's currently up on
+github was more a case of "getting it to work".
 
-default n is not needed, as the default for a boolean option is to be
-disabled.
+I've had a look at pcap-config and it doesn't seem to do -lpthreads (or
+from what I could see anything useful in this case), so I'll likely
+adapt Baruch's original patch into upstream for both lpcap and lpng.
 
-> +	help
-> +	  Command Line Interface
+It might take me a few days as my study load has increased, but I'll get
+it done.
 
-Maybe more text would be needed here.
+Thanks,
 
-But the biggest problem is that it doesn't build:
-
-Try this configuration:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.08.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-BR2_PACKAGE_X264=y
-BR2_PACKAGE_X264_CLI=y
-
-It will fail with:
-
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-as -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wall -I. -I. -std=gnu99 -mcpu=cortex-a8 -mfpu=neon -c -DSTACK_ALIGNMENT=16 -DPIC -DHIGH_BIT_DEPTH=0 -DBIT_DEPTH=8 -o common/arm/cpu-a.o common/arm/cpu-a.S
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-as: unrecognized option '-_LARGEFILE_SOURCE'
-
-This is caused by the following code in the configure script:
-
-if [ $asm = auto -a $ARCH = ARM ] ; then
-    # set flags so neon is built by default
-    echo $CFLAGS | grep -Eq '(-mcpu|-march|-mfpu)' || CFLAGS="$CFLAGS -mcpu=cortex-a8 -mfpu=neon"
-
-    if  cc_check '' '' '__asm__("rev ip, ip");' ; then      define HAVE_ARMV6
-        cc_check '' '' '__asm__("movt r0, #0");'         && define HAVE_ARMV6T2
-        cc_check '' '' '__asm__("vadd.i16 q0, q0, q0");' && define HAVE_NEON
-        ASFLAGS="$ASFLAGS $CFLAGS -c"
-    else
-        echo "You specified a pre-ARMv6 or Thumb-1 CPU in your CFLAGS."
-        echo "If you really want to run on such a CPU, configure with --disable-asm."
-        exit 1
-    fi
-fi
-
-When you're on ARM, CFLAGS is added to ASFLAGS. However, the CFLAGS
-passed by Buildroot contain options that are not suitable for AS.
-Basically, what x264 is doing here is completely stupid: assuming that
-all compiler flags can be passed as assembler flags.
-
-Also, the "else" condition above is interesting: the assembly code is
-only valid for ARMv6+. So in your x264.mk file, the following snippet
-is wrong:
-
-ifeq ($(BR2_arm)$(BR2_i386)$(BR2_powerpc)$(BR2_x86_64),)
-        X264_CONF_OPTS += --disable-asm
-endif
-
-Because if you're on ARMv5, we will *not* pass --disable-asm, while we
-should. So this logic should be refined to take into account variants
-of the ARM architecture.
-
-Could you look into this and send an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Nathaniel.
