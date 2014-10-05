@@ -1,27 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 20:47:10 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libshairplay: bump git snapshot
-In-Reply-To: <1412197917-16535-1-git-send-email-jkrause@posteo.de>
-References: <1412197917-16535-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141005204710.6c24c7d4@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 05 Oct 2014 20:47:34 +0200
+Subject: [Buildroot] [PATCH v2 08/16] package/apr-util: add optional
+	dependency to openssl
+References: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
+ <1412530744-20649-9-git-send-email-bernd.kuhls@t-online.de>
+ <20141005203902.5d8c5dcf@free-electrons.com>
+Message-ID: <XnsA3BDD3838E18DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141005203902.5d8c5dcf at free-electrons.com:
 
-On Wed,  1 Oct 2014 23:11:57 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/libshairplay/libshairplay.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> +APR_UTIL_CONF_OPTS += --without-ssl
+>> +endif
+> 
+> This looks weird, because there's no symmetry between --with-openssl
+> --with-crypto and --without-ssl. Isn't there an issue here?
 
-Applied, thanks.
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+oops, without-ssl should have been without-crypto.
+
+To enable OpenSSL support
+
+a) --with-crypto is needed to enable the crypto stuff as such and
+b) --with-openssl to enable the use of the OpenSSL library itself.
+
+I will update this patch in v3, thanks!
+
+Regards, Bernd
