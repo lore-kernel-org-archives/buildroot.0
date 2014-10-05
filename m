@@ -1,175 +1,114 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Oct 2014 15:45:17 +0200
-Subject: [Buildroot] [PATCH 7/8] Apache: New package
-In-Reply-To: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412516718-12597-7-git-send-email-bernd.kuhls@t-online.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 5 Oct 2014 09:25:45 -0500
+Subject: [Buildroot] How to deploy Buildroot's crosscompile toolchain???
+In-Reply-To: <1412512533.81855.YahooMailNeo@web122104.mail.ne1.yahoo.com>
+References: <1412490777.5471.YahooMailNeo@web122103.mail.ne1.yahoo.com>
+ <trinity-d0fde3a4-5265-425d-a8e3-bc6594774602-1412502612155@3capp-gmx-bs54>
+ <1412512533.81855.YahooMailNeo@web122104.mail.ne1.yahoo.com>
+Message-ID: <CANQCQpZLHyfQBwK+APtShFmNU6oNrM6jvdxdWYbOZ_iaOOtdXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tal,
+On Oct 5, 2014 7:35 AM, "Tal Lubko" <tallubko@yahoo.com> wrote:
+>
+> Hi
+>
+> For some reason with external toolchain it's different...
+> I've found out that the right way to do it is to set "Build options -->
+Host dir" to the desired path (/opt/<bla_bla>)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in                              |    1 +
- package/apache/Config.in                       |   19 ++++++++
- package/apache/apache-0001-cross-compile.patch |   58 ++++++++++++++++++++++++
- package/apache/apache.mk                       |   42 +++++++++++++++++
- 4 files changed, 120 insertions(+)
- create mode 100644 package/apache/Config.in
- create mode 100644 package/apache/apache-0001-cross-compile.patch
- create mode 100644 package/apache/apache.mk
+There is an open todo to make the buildroot toolchain relocatable.  I think
+this might have been discussed at a previous developers meeting (see
+meeting notes from last year, i think...).
 
-diff --git a/package/Config.in b/package/Config.in
-index 318b743..3b22d25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -945,6 +945,7 @@ endmenu
- menu "Networking applications"
- 	source "package/aiccu/Config.in"
- 	source "package/aircrack-ng/Config.in"
-+	source "package/apache/Config.in"
- 	source "package/argus/Config.in"
- 	source "package/arptables/Config.in"
- 	source "package/atftp/Config.in"
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-new file mode 100644
-index 0000000..172346c
---- /dev/null
-+++ b/package/apache/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_APACHE
-+	bool "apache"
-+	select BR2_PACKAGE_APR_UTIL
-+	select BR2_PACKAGE_PCRE
-+	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # apr
-+	help
-+	  The Apache HTTP Server Project is an effort to develop and maintain an
-+	  open-source HTTP server for modern operating systems including UNIX
-+	  and Windows NT. The goal of this project is to provide a secure,
-+	  efficient and extensible server that provides HTTP services in sync
-+	  with the current HTTP standards.
-+
-+	  http://httpd.apache.org
-+
-+comment "apache needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/apache/apache-0001-cross-compile.patch b/package/apache/apache-0001-cross-compile.patch
-new file mode 100644
-index 0000000..05e99dd
---- /dev/null
-+++ b/package/apache/apache-0001-cross-compile.patch
-@@ -0,0 +1,58 @@
-+Fix cross-compilation
-+
-+Fetched httpd-2.4.x-cross_compile.diff from upstream bugtracker:
-+https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: server/Makefile.in
-+===================================================================
-+--- a/server/Makefile.in	(revision 1328714)
-++++ b/server/Makefile.in	(working copy)
-+@@ -22,9 +22,14 @@
-+ include $(top_builddir)/build/rules.mk
-+ include $(top_srcdir)/build/library.mk
-+ 
-++ifdef CC_FOR_BUILD
-++gen_test_char: gen_test_char.c
-++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
-++else
-+ gen_test_char_OBJECTS = gen_test_char.lo
-+ gen_test_char: $(gen_test_char_OBJECTS)
-+ 	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
-++endif
-+ 
-+ test_char.h: gen_test_char
-+ 	./gen_test_char > test_char.h
-+Index: configure.in
-+===================================================================
-+--- a/configure.in	(revision 1328714)
-++++ b/configure.in	(working copy)
-+@@ -193,6 +193,14 @@
-+ dnl Try to get c99 support for variadic macros
-+ ifdef([AC_PROG_CC_C99], [AC_PROG_CC_C99])
-+ 
-++dnl In case of cross compilation we set CC_FOR_BUILD to cc unless
-++dnl we got already CC_FOR_BUILD from environment.
-++if test "x${build_alias}" != "x${host_alias}"; then
-++  if test "x${CC_FOR_BUILD}" = "x"; then
-++    CC_FOR_BUILD=cc
-++  fi
-++fi
-++
-+ if test "x${cache_file}" = "x/dev/null"; then
-+   # Likewise, ensure that CC and CPP are passed through to the pcre
-+   # configure script iff caching is disabled (the autoconf 2.5x default).
-+Index: acinclude.m4
-+===================================================================
-+--- a/acinclude.m4	(revision 1328714)
-++++ ab/cinclude.m4	(working copy)
-+@@ -53,6 +53,8 @@
-+   APACHE_SUBST(CPPFLAGS)
-+   APACHE_SUBST(CFLAGS)
-+   APACHE_SUBST(CXXFLAGS)
-++  APACHE_SUBST(CC_FOR_BUILD)
-++  APACHE_SUBST(CFLAGS_FOR_BUILD)
-+   APACHE_SUBST(LTFLAGS)
-+   APACHE_SUBST(LDFLAGS)
-+   APACHE_SUBST(LT_LDFLAGS)
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-new file mode 100644
-index 0000000..d525024
---- /dev/null
-+++ b/package/apache/apache.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# apache
-+#
-+################################################################################
-+
-+APACHE_VERSION = 2.4.10
-+APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
-+APACHE_SITE = http://archive.apache.org/dist/httpd
-+APACHE_LICENSE = Apache-2.0
-+APACHE_LICENSE_FILES = LICENSE
-+APACHE_INSTALL_STAGING = YES
-+APACHE_AUTORECONF = YES
-+APACHE_DEPENDENCIES = apr-util pcre
-+
-+APACHE_CONF_ENV= \
-+	CC_FOR_BUILD="$(HOSTCC)" \
-+	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-+	ap_cv_void_ptr_lt_long=no \
-+	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
-+
-+APACHE_CONF_OPTS = \
-+	--sysconfdir=/etc/apache2 \
-+	--with-apr=$(STAGING_DIR)/usr \
-+	--with-apr-util=$(STAGING_DIR)/usr \
-+	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
-+	--enable-http \
-+	--enable-dbd \
-+	--enable-proxy \
-+	--enable-mime-magic \
-+	--without-suexec-bin \
-+	--enable-mods-shared=all \
-+	--with-mpm=worker \
-+	--enable-nonportable-atomics=yes
-+
-+define APACHE_FIX_STAGING_APACHE_CONFIG
-+	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
-+	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
-+endef
-+APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+Beyond the compiler, there are also possible issues with absolute paths in
+python scripts, .pc files for pkgconfig, or other scripts installed in the
+host folder structure used as host tools. Personally we wrote a script to
+handle installing of a sdk(host, legal info and images folders) release
+which does the required fixups but still has a limitation of needing a
+relocatable toolchain(so we test to make sure it is).
+
+>
+> Thanks for the help
+> Tal
+>
+> ________________________________
+> From: Peter Kuemmel <syntheticpp@gmx.net>
+> To:
+> Cc: "buildroot at busybox.net" <buildroot@busybox.net>
+> Sent: Sunday, October 5, 2014 12:50 PM
+> Subject: Re: [Buildroot] How to deploy Buildroot's crosscompile
+toolchain???
+>
+> Hi Tal,
+>
+> when you change the "host dir" to a sharable path (something like
+/opt/buildroot/compiler")
+> then I assume you could copy this directory to another machine, at least
+when the Linux is the same.
+>
+> I've not tested it, but the compiler in the "host dir" is usable even
+when I remove the output/ dir.
+> I use such a compiler as external toolchain for multiple buildroot
+configuration without having to
+> rebuild the compiler each time after a complete clean of the buildroot
+directory.
+>
+> Only disadvantage is that you must make the subdirectory in /opt
+user-writable.
+>
+> Peter
+>
+> Gesendet: Sonntag, 05. Oktober 2014 um 08:32 Uhr
+> Von: "Tal Lubko" <tallubko@yahoo.com>
+> An: "buildroot at busybox.net" <buildroot@busybox.net>
+> Betreff: [Buildroot] How to deploy Buildroot's crosscompile toolchain???
+>
+>
+> Hi
+>
+> I've wanted to ask what is the right way to build and deploy Buildroot's
+toolchain to other machines?
+> These machines don't have Buildroot to build the toolchain.
+>
+> Currently (being ignorant about the right way to do it), after building
+the toolcahin, I'm just making a tar of output/host and copy it to
+other machine. There I'm untarring it to some directory and starting to
+cross compile...
+>
+> Things seemed to be working when I've worked with an External toolchain
+(Sourcery CodeBench). However when I've switched to Buildroot's toolchain,
+I got a message about missing libmpc.so.3. Then I've started to wonder what
+is the right way to build and deploy the toolchain.
+>
+> When I run "gcc -v"
+> I get a lot parameters like prefix, sysroot and more that show the
+directory it was build in:
+> /home/tal/buildroot/2014.08/...
+>
+> Which leads me again to think that I'm doing something wrong...
+> Any help will be appreciated.
+>
+> Thanks,
+> Tal
+> _______________________________________________ buildroot mailing list
+buildroot at busybox.net http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141005/466191ff/attachment.html>
