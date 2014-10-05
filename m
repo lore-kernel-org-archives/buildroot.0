@@ -1,47 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  5 Oct 2014 13:06:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
- due to missing header files in include path
-In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
-References: <bug-7478-163@https.bugs.busybox.net/>
-Message-ID: <20141005130606.8091BB094D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Oct 2014 15:08:14 +0200
+Subject: [Buildroot] [PATCH 2 of 2] kmod: add patches to support build
+ on Redhat 5
+In-Reply-To: <f2b8b2b5efec1b2340c4.1409649946@localhost>
+References: <patchbomb.1409649944@localhost>
+ <f2b8b2b5efec1b2340c4.1409649946@localhost>
+Message-ID: <20141005150814.302e5d43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7478
+Dear Thomas De Schampheleire,
 
---- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-10-05 13:06:05 UTC ---
-I did some further investigation: 
+On Tue, 02 Sep 2014 11:25:46 +0200, Thomas De Schampheleire wrote:
+> # HG changeset patch
+> # User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+> # Date 1407153133 -7200
+> #      Mon Aug 04 13:52:13 2014 +0200
+> # Node ID f2b8b2b5efec1b2340c423f14f12df11a95ceac7
+> # Parent  2c7735c0247a4c83a3c2ea1d58e74be613465255
+> kmod: add patches to support build on Redhat 5
+> 
+> kmod uses certain features not available on older Redhat 5 machines.
+> This commit imports two patches from OpenEmbedded to fix that.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-a. the build message "Python build finished, but the necessary bits to build
-these modules were not found" occurs when a python module requires some
-external support but this support is not present.
-For example, when SSL is not selected in the buildroot configuration, then you
-get this message for the 'ssl' python module. In this case '_ssl' will be in
-the list.
+Following the discussion with Peter, I'm marking this patch as Changes
+requested in patchwork.
 
-b. if I build your configuration (but use an external toolchain and disable the
-kernel, htop, vlc, util-linux, and grub, to save build time), I do not see the
-same issue. I do get a message about some bits not found, but not for ssl,
-sqlite, nor any of the other modules you selected.
-This makes sense: when these python modules are selected in the python
-configuration, the corresponding dependencies like the ssl package, the sqlite
-package, etc. are built automatically.
-
-This makes me believe that there may be a one-time issue due to some particular
-action you did on your buildroot directory.
-Have you tried starting from a clean build, i.e. run
-'make clean all'
-
-Does the problem occur again?
-
-Thanks,
 Thomas
-
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
