@@ -1,7 +1,7 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  5 Oct 2014 12:31:14 +0200
-Subject: [Buildroot] [PATCH v5] package/nginx: new package
-Message-ID: <1412505074-14086-1-git-send-email-s.martin49@gmail.com>
+Date: Sun,  5 Oct 2014 12:46:22 +0200
+Subject: [Buildroot] [PATCH v6] package/nginx: new package
+Message-ID: <1412505982-18274-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -35,6 +35,9 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 ---
+changes v5 -> v6:
+- update NGINX_{DEPENDENCIES,CONF_OPTS} wrt to SPDY changes in v5
+
 changes v4 -> v5:
 - rebase
 - rename NGINX_*_OPT -> NGINX_*_OPTS
@@ -71,9 +74,9 @@ changes v1 -> v2:
  ...bxslt-conf-allow-to-override-ngx_feature_.patch |  42 +++
  ...nix-make-sys_nerr-guessing-cross-friendly.patch | 133 +++++++++
  package/nginx/nginx.logrotate                      |   9 +
- package/nginx/nginx.mk                             | 236 +++++++++++++++
+ package/nginx/nginx.mk                             | 240 +++++++++++++++
  package/nginx/nginx.service                        |  15 +
- 11 files changed, 1219 insertions(+)
+ 11 files changed, 1223 insertions(+)
  create mode 100644 package/nginx/Config.in
  create mode 100755 package/nginx/S50nginx
  create mode 100644 package/nginx/nginx-0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
@@ -1114,10 +1117,10 @@ index 0000000..e0fa9ec
 +}
 diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
 new file mode 100644
-index 0000000..b59f0e0
+index 0000000..f2fa127
 --- /dev/null
 +++ b/package/nginx/nginx.mk
-@@ -0,0 +1,236 @@
+@@ -0,0 +1,240 @@
 +################################################################################
 +#
 +# nginx
@@ -1225,6 +1228,11 @@ index 0000000..b59f0e0
 +NGINX_CONF_OPTS += --without-http-cache
 +endif
 +
++ifeq ($(BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE),y)
++NGINX_DEPENDENCIES += zlib
++NGINX_CONF_OPTS += --with-http_spdy_module
++endif
++
 +ifeq ($(BR2_PACKAGE_NGINX_HTTP_SSL_MODULE),y)
 +NGINX_DEPENDENCIES += openssl
 +NGINX_CONF_OPTS += --with-http_ssl_module
@@ -1270,7 +1278,6 @@ index 0000000..b59f0e0
 +endif
 +
 +NGINX_CONF_OPTS += \
-+	$(if $(BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE),--with-http_spdy_module) \
 +	$(if $(BR2_PACKAGE_NGINX_HTTP_REALIP_MODULE),--with-http_realip_module) \
 +	$(if $(BR2_PACKAGE_NGINX_HTTP_ADDITION_MODULE),--with-http_addition_module) \
 +	$(if $(BR2_PACKAGE_NGINX_HTTP_SUB_MODULE),--with-http_sub_module) \
