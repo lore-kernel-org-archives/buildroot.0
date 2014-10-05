@@ -1,73 +1,47 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun, 05 Oct 2014 21:01:43 +0800
-Subject: [Buildroot] [PATCH] bandwidthd: fix static build
-In-Reply-To: <20141005144043.7b3aaac0@free-electrons.com>
-References: <7d38491011008b60f8ad91ec0261af046d453685.1412232567.git.baruch@tkos.co.il>	<542CFECE.9020103@gmail.com>	<20141002075203.GG3006@sapphire.tkos.co.il>	<542D0518.3050704@gmail.com>	<20141002075844.GH3006@sapphire.tkos.co.il>	<542D0BC9.4060905@gmail.com>	<20141002083349.GI3006@sapphire.tkos.co.il>	<542E43A7.6080003@gmail.com>	<20141005045037.GA2567@sapphire.tkos.co.il>
- <20141005144043.7b3aaac0@free-electrons.com>
-Message-ID: <54314137.7020007@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  5 Oct 2014 13:06:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
+ due to missing header files in include path
+In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
+References: <bug-7478-163@https.bugs.busybox.net/>
+Message-ID: <20141005130606.8091BB094D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/14 20:40, Thomas Petazzoni wrote:
-> Baruch, Nathaniel,
-> 
-> On Sun, 5 Oct 2014 07:50:37 +0300, Baruch Siach wrote:
-> 
->>> Hi Baruch, I didn't end up using pcap-config, but could you check git
->>> version 4b07a0b3d3a280cdde582060cb29f3333ba4bf6e for me? It seems to
->>> work in the config you pasted above and I haven't had any issues in my
->>> other tests.
->>
->> I can confirm that upgrading bandwidthd to 
->> 4b07a0b3d3a280cdde582060cb29f3333ba4bf6e fixes the build of the config above. 
->> I still think that holding the complete knowledge of all your indirect 
->> dependencies, mandatory and optional, is not robust. A better future proof 
->> solution IMO is to use tools like pkg-config (or pcap-config in the case of 
->> libpcap) to list all dependencies that are in actual use for this specific 
->> build. But this is your call as upstream.
-> 
-> I definitely agree with Baruch here. Using pkg-config is much more
-> robust, as it figures out the indirect dependencies automatically,
-> without hardcoding them in bandwidthd and/or Buildroot.
-> 
-> However, Baruch patch doesn't seem to be fully correct: it does both a
-> PKG_CHECK_MODULES on libpng, and an AC_CHECK_LIB, which seems a bit
-> redundant.
-> 
-> Therefore, Nathaniel, since you're now the upstream developer, could
-> you make the necessary changes in configure.ac to use pkg-config
-> instead, and then send a patch updating Buildroot to a new version of
-> bandwidthd ?
-> 
-> In the mean time, I'll mark:
-> 
->   http://patchwork.ozlabs.org/patch/395809/
->   http://patchwork.ozlabs.org/patch/381899/
-> 
-> as 'Changes requested'.
-> 
-> Thanks,
-> 
-> Thomas
-> 
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
-Thomas, Baruch:
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-10-05 13:06:05 UTC ---
+I did some further investigation: 
 
-Yeah, I'm starting to lean that way too. Although I was a little
-hesitant adding another build dependency, I now realise that it's
-probably getting built anyway, and the version that's currently up on
-github was more a case of "getting it to work".
+a. the build message "Python build finished, but the necessary bits to build
+these modules were not found" occurs when a python module requires some
+external support but this support is not present.
+For example, when SSL is not selected in the buildroot configuration, then you
+get this message for the 'ssl' python module. In this case '_ssl' will be in
+the list.
 
-I've had a look at pcap-config and it doesn't seem to do -lpthreads (or
-from what I could see anything useful in this case), so I'll likely
-adapt Baruch's original patch into upstream for both lpcap and lpng.
+b. if I build your configuration (but use an external toolchain and disable the
+kernel, htop, vlc, util-linux, and grub, to save build time), I do not see the
+same issue. I do get a message about some bits not found, but not for ssl,
+sqlite, nor any of the other modules you selected.
+This makes sense: when these python modules are selected in the python
+configuration, the corresponding dependencies like the ssl package, the sqlite
+package, etc. are built automatically.
 
-It might take me a few days as my study load has increased, but I'll get
-it done.
+This makes me believe that there may be a one-time issue due to some particular
+action you did on your buildroot directory.
+Have you tried starting from a clean build, i.e. run
+'make clean all'
+
+Does the problem occur again?
 
 Thanks,
+Thomas
 
-Nathaniel.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
