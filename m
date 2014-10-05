@@ -1,39 +1,41 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 5 Oct 2014 18:17:00 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu-aarch64: Update to latest kernel.
-Message-ID: <20141005161659.GA1971@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Oct 2014 18:16:38 +0200
+Subject: [Buildroot] [PATCH 1/8] package/apr: Bump version to 1.5.1
+In-Reply-To: <20141005144248.GG4220@free.fr>
+References: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141005144248.GG4220@free.fr>
+Message-ID: <20141005181638.2614c86f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to Linux 3.16.3.
+Dear Yann E. MORIN,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- configs/qemu_aarch64_virt_defconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, 5 Oct 2014 16:42:48 +0200, Yann E. MORIN wrote:
 
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 8ce28a8..6849587 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.16 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.16"
-+BR2_DEFAULT_KERNEL_VERSION="3.16.3"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.16.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> > diff --git a/package/apr/apr-0001-cross-compile.patch b/package/apr/apr-0001-cross-compile.patch
+> > new file mode 100644
+> > index 0000000..6bd1194
+> > --- /dev/null
+> > +++ b/package/apr/apr-0001-cross-compile.patch
+> > @@ -0,0 +1,53 @@
+> > +Fix cross-compilation
+> > +
+> > +Patch submitted upstream:
+> > +https://issues.apache.org/bugzilla/show_bug.cgi?id=57058
+> 
+> which is a bundle of upstream revisions:
+>     http://svn.apache.org/viewvc?view=revision&revision=1327907
+>     http://svn.apache.org/viewvc?view=revision&revision=1328390
+>     http://svn.apache.org/viewvc?view=revision&revision=1328714
+
+I'm confused: if some pieces of code are already upstream and
+backported, why do they need to be submitted upstream again?
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
