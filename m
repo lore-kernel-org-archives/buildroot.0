@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 13:39:48 +0200
-Subject: [Buildroot] [PATCH] package-infra: comment why all checks are
- done in pkg-generic
-In-Reply-To: <1412501714-1823-1-git-send-email-yann.morin.1998@free.fr>
-References: <1412501714-1823-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141005133948.04aa8076@free-electrons.com>
+Date: Sun, 5 Oct 2014 13:45:46 +0200
+Subject: [Buildroot] [git commit] perl: fix build on big endian arch
+Message-ID: <20141005114559.188F0B76B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=4daf09bff1f8eff1661513c1c723b7aed244e318
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Oct 2014 11:35:14 +0200, Yann E. MORIN wrote:
+see http://autobuild.buildroot.org/results/3a1/3a1c2f0bc802d3cec26ffd4ded8f5c04473a3d4b/build-end.log
 
->  # Ensure unified variable name conventions between all packages
-> +# Some of the variables are used by more than one infrastructure; so, rather
-> +# than duplicate the checks in each infrastructure, we check all variables
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-duplicate -> duplicating.
-
-Applied with this fixed.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 09b1aa7..3c3348a 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -58,6 +58,7 @@ PERL_CONF_OPTS = \
+ 	-Dld="$(TARGET_CC_NOCCACHE)" \
+ 	-Dccflags="$(TARGET_CFLAGS)" \
+ 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
++	-Dmultiarch \
+ 	-Dmydomain="" \
+ 	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
+ 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
