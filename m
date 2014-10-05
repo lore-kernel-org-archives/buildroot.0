@@ -1,43 +1,101 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 5 Oct 2014 08:38:35 +0200
-Subject: [Buildroot] How to deploy Buildroot's crosscompile toolchain???
-In-Reply-To: <1412490777.5471.YahooMailNeo@web122103.mail.ne1.yahoo.com>
-References: <1412490777.5471.YahooMailNeo@web122103.mail.ne1.yahoo.com>
-Message-ID: <20141005063835.GH7164@waldemar-brodkorb.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 5 Oct 2014 09:34:07 +0200
+Subject: [Buildroot] [PATCH 12 of 15] pkg-generic: add checks on
+ deprecated variables FOO_BAR_OPT
+In-Reply-To: <20141004221525.GA22416@free.fr>
+References: <patchbomb.1411846357@localhost>
+ <27f6b6064904e682eccc.1411846369@localhost>
+ <20141004191415.4db579ee@free-electrons.com> <20141004221525.GA22416@free.fr>
+Message-ID: <CAAXf6LUSXJ3=tDbxM4cHqdK7Lp3wC325n4g_=Cee=T8QN4kMeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Tal Lubko wrote,
+Hi Thomas, Yann,
 
-> Hi
-> 
-> I've wanted to ask what is the right way to build and deploy Buildroot's 
-> toolchain to other machines?
-> These machines don't have Buildroot to build the toolchain.
-> 
-> Currently (being ignorant about the right way to do it), after building the 
-> toolcahin, I'm just making a tar of output/host and copy it to other machine.
-> There I'm untarring it to some directory and starting to cross compile...
-> 
-> Things seemed to be working when I've worked with an External toolchain (
-> Sourcery CodeBench). However when I've switched to Buildroot's toolchain, I got
-> a message about missing libmpc.so.3. Then I've started to wonder what is the
-> right way to build and deploy the toolchain.
-> 
-> When I run "gcc -v"
-> I get a lot parameters like prefix, sysroot and more that show the directory it
-> was build in:
-> /home/tal/buildroot/2014.08/...
-> 
-> Which leads me again to think that I'm doing something wrong...
-> Any help will be appreciated.
+On Sun, Oct 5, 2014 at 12:15 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas?, All,
+>
+> On 2014-10-04 19:14 +0200, Thomas Petazzoni spake thusly:
+>> On Sat, 27 Sep 2014 21:32:49 +0200, Thomas De Schampheleire wrote:
+>>
+>> > +# Ensure unified variable name conventions between all packages
+>> > +$(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+>>
+>> I think the legacy variable checking should go to the respective
+>> package infrastructure they belong to: AUTORECONF_OPT and
+>> GETTEXTIZE_OPT should go to pkg-autotools.mk, KCONFIG_OPT to
+>> pkg-kconfig.mk, etc.
+>>
+>> The pkg-generic.mk infrastructure doesn't know anything about those
+>> variables, so there's no reason to have those checks at this level.
+>
+> I agree on principle.
+>
+> However, having all of them right here avoids duplication. For example:
+>   - $(2)_BUILD_OPT was valid for lua, perl and python packages,
+>   - $(2)_CONF_OPT was valid for autotools, cmake and perl packages,
+>   - ...
+>
+> Would you find appropriate that the checks be duplicated in all of the
+> impacted infras?
+>
+> Note: I don't mind either way, just inquiring.
+>
+>> Care to cook a followup patch fixing that?
+>
+> I can have a spin at it tomorrow, unless Thomas DS is not completely fed
+> up with this series! ;-)
 
-I am not 100% sure, but I think buildroot internal toolchains are
-not relocatable. At least not via a relative sysroot directory.
+For such small changes I make an exception :)
 
-best regards
- Waldemar
+I more or less feel the same as Yann: for some variables we can indeed
+move, but for others I'm not sure.
+Here is the list:
+
+>> > +$(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
+
+Such variables are used by several infras, like autotools and cmake.
+So moving them to one in particular is odd. Duplicating them would be
+equally undesirable.
+So in this case pkg-generic.mk seems the better place to me.
+
+Moreover, even if only one specialized infra would use such a
+variable, generic packages sometimes use the same common names like
+FOO_MAKE_OPTS for variables, even though their name is really
+arbitrary.
+
+>> > +$(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
+>> > +$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+
+This can be moved to pkg-autotools.mk, it makes more sense there.
+
+>> > +$(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+
+This variable serves basically the same function as FOO_MAKE_OPTS, but
+I guess it's not called '_MAKE_' because these infras (perl, python,
+...) do not pass them to make.
+Since they are re-used in several ones I tend to place them in pkg-generic too.
+
+>> > +$(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+
+This can be moved to package/pkg-kconfig indeed.
+
+Best regards,
+Thomas
