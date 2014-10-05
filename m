@@ -1,54 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 5 Oct 2014 20:59:25 +0200
-Subject: [Buildroot] [git commit] protobuf: bump version to 2.6.0
-In-Reply-To: <CANQCQpZJwWK1t5fKfMO3aT14PNvDYc-XejwiFXaOWpp7xE3zyg@mail.gmail.com>
-References: <20141002205533.3EADC9D7E9@busybox.osuosl.org>
- <CANQCQpZJwWK1t5fKfMO3aT14PNvDYc-XejwiFXaOWpp7xE3zyg@mail.gmail.com>
-Message-ID: <CAHXCMM+5snKS7vB_2OZ25fZF-05HYdc4D6hojy=Z+Z-_9Q5UNA@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun,  5 Oct 2014 21:47:52 +0200
+Subject: [Buildroot] [PATCH v3] libbsd: Enable the ARM architecture
+Message-ID: <1412538472-5067-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew, Peter, all,
+Rework the architecture support.
 
-On Thu, Oct 2, 2014 at 11:42 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Peter,
->
-> On Thu, Oct 2, 2014 at 3:54 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->> commit: http://git.buildroot.net/buildroot/commit/?id=7b6304af9d69d44ee3040c00b0670f19c02de7d2
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>
->> * Adds powerpc architecture support
->> * Changes to the new github upstream site
->> * Updates the license filename
->>
-> <snip>
->>
->> -PROTOBUF_VERSION = 2.5.0
->> -PROTOBUF_SITE = http://protobuf.googlecode.com/files
->> +PROTOBUF_VERSION = 2.6.0
->> +PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)/
->
-> (Just a general comment) I noticed that the github helper didn't work
-> for this site.  I didn't dig to far into it, but I'm guessing github
-> now has a couple ways they're hosting release archives?
->
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v2 -> v3:
+    - Change title of the commit
+    - Add LIBBSD_ARCH_SUPPORT variable
+    - Modify comment
+v1 -> v2:
+    - Remove m68k as it is currently marked broken in BR
+---
+ package/libbsd/Config.in | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-In this case, the github helper does not work because, as is, it only
-intends to be used when there is no explicit tarball available for a
-given version (i.e. a version on a sha1 or a tag for which there is no
-official download location).
-
-In this case, there is a release section with download links (that
-should not be moved so often by github poeple).
-
-Maybe this particular point could be more explicit in the manual...
-
-Regards,
-
-
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index e22226a..d521f05 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -1,8 +1,13 @@
++config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	bool
++	# libbsd requires a.out.h, which is only available for those
++	# architectures: arm, x86 (and alpha, currently not supported in Buildroot;
++	# also m68k which is currently not enabled, so can't be tested.)
++	default y if BR2_arm || BR2_i386 || BR2_x86_64
++
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+-	# libbsd requires a.out.h, which is only available for those
+-	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
+-	depends on ( BR2_i386 || BR2_x86_64 )
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+@@ -15,5 +20,5 @@ config BR2_PACKAGE_LIBBSD
+ 	  http://libbsd.freedesktop.org/
+ 
+ comment "libbsd needs an (e)glibc toolchain w/ threads"
+-	depends on ( BR2_i386 || BR2_x86_64 )
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
 -- 
-Samuel
+2.1.1
