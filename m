@@ -1,121 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 18:47:08 +0200
-Subject: [Buildroot] [PATCH 1/3 v2] package/opengl-registry: new package
-In-Reply-To: <6c5dbcd315ecd266891ca9932c47c5e5f86eaf9b.1411334346.git.yann.morin.1998@free.fr>
-References: <cover.1411334346.git.yann.morin.1998@free.fr>
- <6c5dbcd315ecd266891ca9932c47c5e5f86eaf9b.1411334346.git.yann.morin.1998@free.fr>
-Message-ID: <20141005184708.128aa15e@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 05 Oct 2014 13:48:25 -0300
+Subject: [Buildroot] [PATCH 8/8] package/php: Add Apache support
+In-Reply-To: <20141005155638.GM4220@free.fr>
+References: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
+ <1412516718-12597-8-git-send-email-bernd.kuhls@t-online.de>
+ <20141005155638.GM4220@free.fr>
+Message-ID: <54317659.7090206@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+On 10/05/2014 12:56 PM, Yann E. MORIN wrote:
+> Unrelated to your patch, but this choice is getting ugly. Maybe we should
+> switch to something like:
+> 
+>     config BR2_PACKAGE_PHP
+>         bool "php"
+>         select BR2_PACKAGE_PHP_SAPI_CGI if !BR2_PACKAGE_PHP_HAS_SAPI
+> 
+>     config BR2_PACKAGE_PHP_HAS_SAPI
+>         bool
+> 
+>     config BR2_PACKAGE_PHP_SAPI_CGI
+>         bool "CGI"
+> 
+>     config BR2_PACKAGE_PHP_SAPI_CLI
+>         bool "CLI"
+>         select BR2_PACKAGE_PHP_HAS_SAPI
+> 
+>     config BR2_PACKAGE_PHP_SAPI_APACHE
+>         bool "Apache"
+>         select BR2_PACKAGE_PHP_HAS_SAPI
+> 
+>     config BR2_PACKAGE_PHP_SAPI_FPM
+>         bool "FPM"
+>         select BR2_PACKAGE_PHP_HAS_SAPI
+> 
+> That way, we ensure at least one is selected, which was the initial
+> reason for the choice, while stil allowing multiple to be selected.
 
-On Sun, 21 Sep 2014 23:22:54 +0200, Yann E. MORIN wrote:
++1 the choice is going wild.
 
-> We use the last svn revision at which the api directory was *changed*,
-> not the revision the repository is currently at.
+> Then, if some are incompatible, we could do, for example:
 
-Why does this matter?
-
-
->  package/Config.in                                  |    1 +
->  package/opengl-registry/Config.in                  |   18 +
->  package/opengl-registry/gl.h                       | 2115 ++++++++++++++++++++
-
-Hum, I was wondering if we couldn't instead download this file from the
-Mesa git repository instead. But looks like <pkg>_EXTRA_DOWNLOADS
-assumes the file is located at the same URL as <pkg>_SOURCE.
-
-Do we know why this gl.h is not part of the upstream opengl-registry?
-
-> diff --git a/package/opengl-registry/Config.in b/package/opengl-registry/Config.in
-> new file mode 100644
-> index 0000000..1d4566b
-> --- /dev/null
-> +++ b/package/opengl-registry/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_OPENGL_REGISTRY
-> +	bool "opengl-registry"
-> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES || BR2_PACKAGE_HAS_LIBEGL
-> +	help
-> +	  The OpenGL Registry contains specifications, header files, and
-> +	  related documentation for OpenGL and related APIs including GLU,
-> +	  GLX, and WGL. In addition to the core API specifications, many
-> +	  extensions to these APIs have been defined by vendors, groups of
-> +	  vendors, and the ARB. The Registry also contains specifications
-> +	  and header files for all registered extensions, written as
-> +	  modifications to the appropriate core API specifications.
-> +
-> +	  This package installs the openGL header files. You do not need them
-> +	  if the OpenGL/EGL/GLES implementation provides its own headers.
-> +	  Currently, the only known implementation requiring OpenGL Resgistry
-> +	  is the NVidia proprietary driver.
-> +
-> +	  https://www.opengl.org/registry/
-
-Should we foresee any problem if an OpenGL implementation providing its
-own header files (e.g rpi-userland, gpu-imx, etc.) gets selected in
-addition to this package? They will overwrite each other files, no?
-
-> diff --git a/package/opengl-registry/opengl-registry.mk b/package/opengl-registry/opengl-registry.mk
-> new file mode 100644
-> index 0000000..0c4da28
-> --- /dev/null
-> +++ b/package/opengl-registry/opengl-registry.mk
-> @@ -0,0 +1,76 @@
-> +################################################################################
-> +#
-> +# opengl-registry
-> +#
-> +################################################################################
-> +
-> +# Using last revision at which the 'api' directory was *changed*
-> +OPENGL_REGISTRY_VERSION = 28221
-> +OPENGL_REGISTRY_SITE = https://cvs.khronos.org/svn/repos/ogl/trunk/doc/registry/public/api
-> +OPENGL_REGISTRY_SITE_METHOD = svn
-> +# The license is MIT, but with 's/Software/Materials/' so it is not exactly MIT
-> +OPENGL_REGISTRY_LICENSE = MIT-like
-> +# No license file, license header in all generated headers
-> +
-> +# The registry only installs header files
-> +OPENGL_REGISTRY_INSTALL_STAGING = YES
-> +OPENGL_REGISTRY_INSTALL_TARGET = NO
-> +
-> +# opengl-registry depends on at least one of those virtual packages,
-> +# so we can be sure we'll have _DIRS set to non-empty.
-> +OPENGL_REGISTRY_DIRS = $(if $(BR2_PACKAGE_HAS_LIBGL),GL)
-> +OPENGL_REGISTRY_DIRS += $(if $(BR2_PACKAGE_HAS_LIBEGL),EGL)
-> +OPENGL_REGISTRY_DIRS += $(if $(BR2_PACKAGE_HAS_LIBGLES),GLES GLES2 GLES3)
-
-Maybe just:
-
-OPENGL_REGISTRY_DIRS = \
-	$(if $(BR2_PACKAGE_HAS_LIBGL),GL) \
-	$(if $(BR2_PACKAGE_HAS_LIBEGL),EGL) \
-	$(if $(BR2_PACKAGE_HAS_LIBGLES),GLES GLES2 GLES3)
-
-> +# Remove pre-generated files
-> +define OPENGL_REGISTRY_RM_H
-> +	rm -f $(@D)/GL/*.h
-> +endef
-> +OPENGL_REGISTRY_POST_EXTRACT_HOOKS += OPENGL_REGISTRY_RM_H
-> +
-> +# We need to tweak glx.h to:
-> +# - include the X11 headers it needs
-> +# - include glxext.h like mesa3d's one does
-> +# - define the glxext prototypes
-
-Why not simply use a patch instead of this awk magic? We generally use
-patches when possible. In this case, you're patching only one file, so
-clearly a patch seems to make sense here, no?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+AFAIK you can combine anything the way you like as long as the
+dependencies are met since the php build system rebuilds for each case.
+Regards.
