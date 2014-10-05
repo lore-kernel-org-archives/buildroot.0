@@ -1,86 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 5 Oct 2014 14:32:41 +0200
-Subject: [Buildroot] [git commit] python,
-	python3: convert py/pyc removal to TARGET_FINALIZE_HOOKS
-Message-ID: <20141005123249.C22D8B08F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pyparsing: bump to version 2.0.2,
+	enable on Python 3
+Message-ID: <20141005123249.A4A26B08F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=899d2af16d3a4345a4966e9eb3f552847b57a116
+commit: http://git.buildroot.net/buildroot/commit/?id=fad1e2322fe0556ebf7e8887334a9d02712980a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the removal of py/pyc files is Python-specific, this commit
-moves the logic removing those files to python.mk and python3.mk
-respectively.
+This commit bumps the pyparsing package to version 2.0.2, and
+therefore enables it usage with Python 3.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 ---
- Makefile                   |    6 ------
- package/python/python.mk   |   14 ++++++++++++++
- package/python3/python3.mk |   14 ++++++++++++++
- 3 files changed, 28 insertions(+), 6 deletions(-)
+ package/python-pyparsing/Config.in           |    2 +-
+ package/python-pyparsing/python-pyparsing.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 53f8ad5..6068e7f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -573,12 +573,6 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
--ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY)$(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
--	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -print0 | xargs -0 rm -f
--endif
--ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
--	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
--endif
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-diff --git a/package/python/python.mk b/package/python/python.mk
-index f9968ca..24367a3 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -208,3 +208,17 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+index 49a474b..0408e5e 100644
+--- a/package/python-pyparsing/Config.in
++++ b/package/python-pyparsing/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYPARSING
+ 	bool "python-pyparsing"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  The pyparsing module is an alternative approach to creating and
+ 	  executing simple grammars, vs. the traditional lex/yacc approach,
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 07dda58..82a907b 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-+define PYTHON_FINALIZE_TARGET
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
-+define PYTHON_FINALIZE_TARGET
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-+endef
-+endif
-+
-+TARGET_FINALIZE_HOOKS += PYTHON_FINALIZE_TARGET
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 3b01550..d952323 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -187,3 +187,17 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-+define PYTHON3_FINALIZE_TARGET
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
-+define PYTHON3_FINALIZE_TARGET
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-+endef
-+endif
-+
-+TARGET_FINALIZE_HOOKS += PYTHON3_FINALIZE_TARGET
+-PYTHON_PYPARSING_VERSION         = 1.5.6
++PYTHON_PYPARSING_VERSION         = 2.0.2
+ PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+ PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
+ PYTHON_PYPARSING_LICENSE         = MIT
