@@ -1,65 +1,180 @@
 From: David du Colombier <0intro@gmail.com>
-Date: Sun, 5 Oct 2014 18:26:33 +0200
-Subject: [Buildroot] [PATCH v3 1/2] x264: new package
-In-Reply-To: <20141005145348.2913eb46@free-electrons.com>
-References: <1412326439-12230-1-git-send-email-0intro@gmail.com>
- <20141005145348.2913eb46@free-electrons.com>
-Message-ID: <20141005182633.18741d81@zinc.9fans.fr>
+Date: Sun,  5 Oct 2014 18:29:56 +0200
+Subject: [Buildroot] [PATCH v4 1/2] x264: new package
+Message-ID: <1412526597-31347-1-git-send-email-0intro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > +if BR2_PACKAGE_X264
-> > +
-> > +config BR2_PACKAGE_X264_CLI
-> > +	bool "CLI"
-> > +	default n
-> 
-> default n is not needed, as the default for a boolean option is to be
-> disabled.
+This package is based on an earlier package
+proposed by Ayaka in December 2013.
 
-Done.
+Signed-off-by: David du Colombier <0intro@gmail.com>
+---
+Changes v3 -> v4:
+  - suggestions by Thomas Petazzoni
+  - explicitly depend on yasm on x86
 
-> > +	help
-> > +	  Command Line Interface
-> 
-> Maybe more text would be needed here.
+Changes v2 -> v3:
+  - suggestions by Peter Korsgaard
 
-Done.
+Changes v1 -> v2:
+  - suggestions by Thomas Petazzoni
+---
+ package/Config.in                                  |  1 +
+ .../0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch | 34 +++++++++++++
+ package/x264/Config.in                             | 23 +++++++++
+ package/x264/x264.mk                               | 57 ++++++++++++++++++++++
+ 4 files changed, 115 insertions(+)
+ create mode 100644 package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch
+ create mode 100644 package/x264/Config.in
+ create mode 100644 package/x264/x264.mk
 
-> When you're on ARM, CFLAGS is added to ASFLAGS. However, the CFLAGS
-> passed by Buildroot contain options that are not suitable for AS.
-> Basically, what x264 is doing here is completely stupid: assuming that
-> all compiler flags can be passed as assembler flags.
-
-It seems this issue has already been fixed in the x264
-master branch.
-
-http://git.videolan.org/gitweb.cgi/x264.git/?a=commit;h=716ee56d0b35e512e8e0ae1a3e71f26e65e86be3
-
-I've imported the patch in the x264 package.
-
-> Also, the "else" condition above is interesting: the assembly code is
-> only valid for ARMv6+. So in your x264.mk file, the following snippet
-> is wrong:
-> 
-> ifeq ($(BR2_arm)$(BR2_i386)$(BR2_powerpc)$(BR2_x86_64),)
->         X264_CONF_OPTS += --disable-asm
-> endif
-> 
-> Because if you're on ARMv5, we will *not* pass --disable-asm, while we
-> should. So this logic should be refined to take into account variants
-> of the ARM architecture.
-
-It seems the ARM assembly files aren't compatible with the
-GNU assembler, so I finally chose to enable assembly files
-on x86 only.
-
-> Could you look into this and send an updated version?
-
-I'll send a v4 patch.
-
+diff --git a/package/Config.in b/package/Config.in
+index f488728..686d10d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -756,6 +756,7 @@ menu "Multimedia"
+ 	source "package/libtheora/Config.in"
+ 	source "package/live555/Config.in"
+ 	source "package/mediastreamer/Config.in"
++	source "package/x264/Config.in"
+ endmenu
+ 
+ menu "Networking"
+diff --git a/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch b/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch
+new file mode 100644
+index 0000000..3d40507
+--- /dev/null
++++ b/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch
+@@ -0,0 +1,34 @@
++From 716ee56d0b35e512e8e0ae1a3e71f26e65e86be3 Mon Sep 17 00:00:00 2001
++From: Janne Grunau <janne-x264@jannau.net>
++Date: Sun, 20 Jul 2014 12:55:53 +0200
++Subject: [PATCH 01/24] arm: do not append CFLAGS to ASFLAGS
++
++---
++ configure | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 0a4cb94..a50f8d5 100755
++--- a/configure
+++++ b/configure
++@@ -296,7 +296,7 @@ opencl="yes"
++ CFLAGS="$CFLAGS -Wall -I. -I\$(SRCPATH)"
++ LDFLAGS="$LDFLAGS"
++ LDFLAGSCLI="$LDFLAGSCLI"
++-ASFLAGS="$ASFLAGS"
+++ASFLAGS="$ASFLAGS -I. -I\$(SRCPATH)"
++ RCFLAGS="$RCFLAGS"
++ HAVE_GETOPT_LONG=1
++ cross_prefix=""
++@@ -752,7 +752,7 @@ if [ $asm = auto -a $ARCH = ARM ] ; then
++     if  cc_check '' '' '__asm__("rev ip, ip");' ; then      define HAVE_ARMV6
++         cc_check '' '' '__asm__("movt r0, #0");'         && define HAVE_ARMV6T2
++         cc_check '' '' '__asm__("vadd.i16 q0, q0, q0");' && define HAVE_NEON
++-        ASFLAGS="$ASFLAGS $CFLAGS -c"
+++        ASFLAGS="$ASFLAGS -c"
++     else
++         echo "You specified a pre-ARMv6 or Thumb-1 CPU in your CFLAGS."
++         echo "If you really want to run on such a CPU, configure with --disable-asm."
++-- 
++1.8.3.1
++
+diff --git a/package/x264/Config.in b/package/x264/Config.in
+new file mode 100644
+index 0000000..5e614b5
+--- /dev/null
++++ b/package/x264/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_X264
++	bool "x264"
++	depends on BR2_LARGEFILE
++	help
++	  x264 is a free software library and application for
++	  encoding video streams into the H.264/MPEG-4 AVC
++	  compression format, and is released under the terms
++	  of the GNU GPL.
++
++	  https://www.videolan.org/developers/x264.html
++
++if BR2_PACKAGE_X264
++
++config BR2_PACKAGE_X264_CLI
++	bool "CLI"
++	help
++	  Command-line tool to encode video streams into the
++	  H.264/MPEG-4 AVC compression format.
++
++endif
++
++comment "x264 needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+new file mode 100644
+index 0000000..c2397f8
+--- /dev/null
++++ b/package/x264/x264.mk
+@@ -0,0 +1,57 @@
++###############################################################
++#
++# x264
++#
++###############################################################
++
++X264_VERSION = 20140930-2245-stable
++X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
++X264_SITE = ftp://ftp.videolan.org/pub/videolan/x264/snapshots
++X264_LICENSE = GPLv2+
++X264_DEPENDENCIES = host-pkgconf
++X264_LICENSE_FILES = COPYING
++X264_INSTALL_STAGING = YES
++
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++	FFMPEG_DEPENDENCIES += host-yasm
++else
++	X264_CONF_OPTS += --disable-asm
++endif
++
++ifeq ($(BR2_PREFER_STATIC_LIB),)
++	X264_CONF_OPTS += --enable-pic --enable-shared
++endif
++
++ifeq ($(BR2_PACKAGE_X264_CLI),)
++	X264_CONF_OPTS += --disable-cli
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++	X264_CONF_OPTS += --disable-thread
++endif
++
++# the configure script is not generated by autoconf
++define X264_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure \
++		--prefix=/usr \
++		--host="$(GNU_TARGET_NAME)" \
++		--cross-prefix="$(TARGET_CROSS)" \
++		--disable-ffms \
++		--enable-static \
++		$(X264_CONF_OPTS) \
++	)
++endef
++
++define X264_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define X264_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
++endef
++
++define X264_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
-David du Colombier
+1.8.3.1
