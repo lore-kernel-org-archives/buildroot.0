@@ -1,149 +1,255 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Oct 2014 18:57:41 +0200
-Subject: [Buildroot] [PATCH 1/3 v2] package/opengl-registry: new package
-In-Reply-To: <20141005184708.128aa15e@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Oct 2014 18:59:14 +0200
+Subject: [Buildroot] [PATCH 2/3 v2] package/nvidia-driver: add NVidia's
+ OpenGL binary blob
+In-Reply-To: <07a540e8ae21ae3aa8082c0031c2a204343e891b.1411334346.git.yann.morin.1998@free.fr>
 References: <cover.1411334346.git.yann.morin.1998@free.fr>
- <6c5dbcd315ecd266891ca9932c47c5e5f86eaf9b.1411334346.git.yann.morin.1998@free.fr>
- <20141005184708.128aa15e@free-electrons.com>
-Message-ID: <20141005165741.GN4220@free.fr>
+ <07a540e8ae21ae3aa8082c0031c2a204343e891b.1411334346.git.yann.morin.1998@free.fr>
+Message-ID: <20141005185914.661f0c3d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Yann E. MORIN,
 
-On 2014-10-05 18:47 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Sun, 21 Sep 2014 23:22:54 +0200, Yann E. MORIN wrote:
-> 
-> > We use the last svn revision at which the api directory was *changed*,
-> > not the revision the repository is currently at.
-> 
-> Why does this matter?
+On Sun, 21 Sep 2014 23:22:55 +0200, Yann E. MORIN wrote:
 
-It does not matter. It is just a note that the revision used might be
-different than the current revision in the SVN tree, because the tree
-contains many other things than the registry, some of which are not even
-public.
+> diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
+> new file mode 100644
+> index 0000000..becb1ae
+> --- /dev/null
+> +++ b/package/nvidia-driver/Config.in
+> @@ -0,0 +1,64 @@
+> +# Note: we only require 'threads', although that might well be NPTL.
+> +# But we require (e)glibc, which nowadays only has NPTL anyway.
+> +comment "nvidia-driver needs an (e)glibc toolchain w/ threads"
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_PACKAGE_NVIDIA_DRIVER_arm_OK
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
 
-> >  package/Config.in                                  |    1 +
-> >  package/opengl-registry/Config.in                  |   18 +
-> >  package/opengl-registry/gl.h                       | 2115 ++++++++++++++++++++
-> 
-> Hum, I was wondering if we couldn't instead download this file from the
-> Mesa git repository instead. But looks like <pkg>_EXTRA_DOWNLOADS
-> assumes the file is located at the same URL as <pkg>_SOURCE.
+Is it possible to have a glibc toolchain without thread support?
 
-Yes, that's still the case. I remember we already had this discussion a
-while ago, but it is still not possible to provide a complete URL for
-extra downloads.
+> +
+> +# Nividia has an ARM driver, but it's only little-endian,
+> +# armv7 and gnueabihf
+> +config BR2_PACKAGE_NVIDIA_DRIVER_arm_OK
 
-If that was to change, then yes, we could download it rather than bundle
-it.
+Capital letters for the entire option.
 
-> Do we know why this gl.h is not part of the upstream opengl-registry?
+> +	bool
+> +	default y
+> +	depends on BR2_arm
+> +	depends on BR2_ARM_EABIHF
+> +	depends on BR2_cortex_a5 || BR2_cortex_a7 || BR2_cortex_a8 \
+> +		|| BR2_cortex_a9 || BR2_cortex_a12 || BR2_cortex_a15 \
+> +		|| BR2_pj4
 
-No, I have no idea.
+However, I'm wondering if we should use the more traditional
+BR2_PACKAGE_NVIDIA_DRIVER_ARCH_SUPPORTS logic. Something like:
 
-> > diff --git a/package/opengl-registry/Config.in b/package/opengl-registry/Config.in
-> > new file mode 100644
-> > index 0000000..1d4566b
-> > --- /dev/null
-> > +++ b/package/opengl-registry/Config.in
-> > @@ -0,0 +1,18 @@
-> > +config BR2_PACKAGE_OPENGL_REGISTRY
-> > +	bool "opengl-registry"
-> > +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES || BR2_PACKAGE_HAS_LIBEGL
-> > +	help
-> > +	  The OpenGL Registry contains specifications, header files, and
-> > +	  related documentation for OpenGL and related APIs including GLU,
-> > +	  GLX, and WGL. In addition to the core API specifications, many
-> > +	  extensions to these APIs have been defined by vendors, groups of
-> > +	  vendors, and the ARB. The Registry also contains specifications
-> > +	  and header files for all registered extensions, written as
-> > +	  modifications to the appropriate core API specifications.
-> > +
-> > +	  This package installs the openGL header files. You do not need them
-> > +	  if the OpenGL/EGL/GLES implementation provides its own headers.
-> > +	  Currently, the only known implementation requiring OpenGL Resgistry
-> > +	  is the NVidia proprietary driver.
-> > +
-> > +	  https://www.opengl.org/registry/
-> 
-> Should we foresee any problem if an OpenGL implementation providing its
-> own header files (e.g rpi-userland, gpu-imx, etc.) gets selected in
-> addition to this package? They will overwrite each other files, no?
+config BR2_PACKAGE_NVIDIA_DRIVER_ARCH_SUPPORTS
+	bool
+	default y if BR2_i386
+	default y if BR2_x86_64
+	default y if (BR2_arm && BR2_ARM_EABIHF && \
+		(BR2_cortex_a5 || BR2_cortex_a7 || ...)
 
-Hmm.. I think I thought about that when I did the patch, I can't
-remember what I came up with as a conclusion. Lemme think about it once
-again...
+Maybe it's time to introduce some kconfig booleans such as
+BR2_ARM_ARMV5, BR2_ARM_ARMV6, BR2_ARM_ARMV7, because we're duplicating
+this BR2_cortexa<foo> logic in  multiple places. Not related to this
+patch, though.
 
-> > diff --git a/package/opengl-registry/opengl-registry.mk b/package/opengl-registry/opengl-registry.mk
-> > new file mode 100644
-> > index 0000000..0c4da28
-> > --- /dev/null
-> > +++ b/package/opengl-registry/opengl-registry.mk
-> > @@ -0,0 +1,76 @@
-> > +################################################################################
-> > +#
-> > +# opengl-registry
-> > +#
-> > +################################################################################
-> > +
-> > +# Using last revision at which the 'api' directory was *changed*
-> > +OPENGL_REGISTRY_VERSION = 28221
-> > +OPENGL_REGISTRY_SITE = https://cvs.khronos.org/svn/repos/ogl/trunk/doc/registry/public/api
-> > +OPENGL_REGISTRY_SITE_METHOD = svn
-> > +# The license is MIT, but with 's/Software/Materials/' so it is not exactly MIT
-> > +OPENGL_REGISTRY_LICENSE = MIT-like
-> > +# No license file, license header in all generated headers
-> > +
-> > +# The registry only installs header files
-> > +OPENGL_REGISTRY_INSTALL_STAGING = YES
-> > +OPENGL_REGISTRY_INSTALL_TARGET = NO
-> > +
-> > +# opengl-registry depends on at least one of those virtual packages,
-> > +# so we can be sure we'll have _DIRS set to non-empty.
-> > +OPENGL_REGISTRY_DIRS = $(if $(BR2_PACKAGE_HAS_LIBGL),GL)
-> > +OPENGL_REGISTRY_DIRS += $(if $(BR2_PACKAGE_HAS_LIBEGL),EGL)
-> > +OPENGL_REGISTRY_DIRS += $(if $(BR2_PACKAGE_HAS_LIBGLES),GLES GLES2 GLES3)
-> 
-> Maybe just:
-> 
-> OPENGL_REGISTRY_DIRS = \
-> 	$(if $(BR2_PACKAGE_HAS_LIBGL),GL) \
-> 	$(if $(BR2_PACKAGE_HAS_LIBEGL),EGL) \
-> 	$(if $(BR2_PACKAGE_HAS_LIBGLES),GLES GLES2 GLES3)
+> +
+> +config BR2_PACKAGE_NVIDIA_DRIVER
+> +	bool "nvidia-driver"
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_PACKAGE_NVIDIA_DRIVER_arm_OK
 
-OK.
+Would become depends on BR2_PACKAGE_NVIDIA_DRIVER_ARCH_SUPPORTS.
 
-> > +# Remove pre-generated files
-> > +define OPENGL_REGISTRY_RM_H
-> > +	rm -f $(@D)/GL/*.h
-> > +endef
-> > +OPENGL_REGISTRY_POST_EXTRACT_HOOKS += OPENGL_REGISTRY_RM_H
-> > +
-> > +# We need to tweak glx.h to:
-> > +# - include the X11 headers it needs
-> > +# - include glxext.h like mesa3d's one does
-> > +# - define the glxext prototypes
-> 
-> Why not simply use a patch instead of this awk magic? We generally use
-> patches when possible. In this case, you're patching only one file, so
-> clearly a patch seems to make sense here, no?
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
 
-Because it is done after the build, and changs a generated file.
+Should we have a comment about this? We generally depend on just
+BR2_PACKAGE_XORG7. But agree it's a bit hard to "select" the modular
+server.
 
-Regards,
-Yann E. MORIN.
+> +	select BR2_PACKAGE_OPENGL_REGISTRY
+> +	select BR2_PACKAGE_XLIB_LIBX11
+> +	select BR2_PACKAGE_XLIB_LIBXEXT
+> +	select BR2_PACKAGE_HAS_LIBGL
+> +	select BR2_PACKAGE_HAS_LIBEGL
+> +	select BR2_PACKAGE_HAS_LIBGLES
+> +	help
+> +	  The binary-only driver blob for NVidia cards.
+> +	  This is the userland part only.
+> +
+> +	  http://www.nvidia.com/
+> +
+> +if BR2_PACKAGE_NVIDIA_DRIVER
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBGL
+> +	default "nvidia-driver"
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBEGL
+> +	default "nvidia-driver"
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBGLES
+> +	default "nvidia-driver"
+> +
+> +config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
+> +	bool "CUDA support"
+> +
+> +config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
+> +	bool "OpenCL support"
+> +	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
+> +
+> +config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
+> +	bool "Install private libraries"
+> +	help
+> +	  Two libraries require special agreement with NVidia to develop code
+> +	  linking to those libraries: libnvidia-ifr.so and libnvidia-fbc.so
+> +	  (to grab and encode an OpenGL buffer or an X framebuffer.)
+> +
+> +	  Say 'y' here if you plan on running a program that uses those
+> +	  private libraries.
+> +
+> +endif # BR2_PACKAGE_NVIDIA_DRIVER
+> diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+> new file mode 100644
+> index 0000000..efe3fa0
+> --- /dev/null
+> +++ b/package/nvidia-driver/nvidia-driver.mk
+> @@ -0,0 +1,92 @@
+> +################################################################################
+> +#
+> +# nvidia-driver
+> +#
+> +################################################################################
+> +
+> +NVIDIA_DRIVER_VERSION = 340.32
+> +NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+> +NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+> +NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
 
+Hum, and this works for ARM ? the 'x86' part of the filename would
+indicate not, but I haven't checked.
+
+> +NVIDIA_DRIVER_LICENSE = NVIDIA Software License
+> +NVIDIA_DRIVER_LICENSE_FILES = LICENSE
+> +NVIDIA_DRIVER_REDISTRIBUTE = NO
+> +NVIDIA_DRIVER_INSTALL_STAGING = YES
+> +
+> +NVIDIA_DRIVER_DEPENDENCIES = opengl-registry xlib_libX11 xlib_libXext
+> +NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
+> +
+> +NVIDIA_DRIVER_LIBS_NO_VERSION =
+
+Not really needed, variables are empty by default.
+
+> +NVIDIA_DRIVER_LIBS = libEGL libGLESv1_CM libGLESv2 libGL \
+> +		       libnvidia-glcore libnvidia-eglcore libnvidia-glsi \
+> +		       tls/libnvidia-tls \
+> +		       libvdpau libvdpau_nvidia \
+> +		       libnvidia-ml
+
+Only one tab for the indentation on continuation lines.
+
+> +
+> +ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
+> +NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
+> +NVIDIA_DRIVER_LIBS_NO_VERSION += libOpenCL.so.1.0.0
+
+What is special about this one to be marked "NO_VERSION" ?
+
+> +NVIDIA_DRIVER_LIBS += libnvidia-opencl
+> +endif
+> +
+> +# Those libraries are 'private' libraries requiring an agreement with
+> +# NVidia to develop code for those libs. There seems to be no restriction
+> +# on using those libraries (e.g. if the user has such an agreement, or
+> +# wants to run a third-party program developped under such an agreement).
+> +ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
+> +NVIDIA_DRIVER_LIBS += libnvidia-ifr libnvidia-fbc
+> +endif
+> +
+> +# We refer to the destination path; the origin file has no directory component
+> +NVIDIA_DRIVER_X_MODS = drivers/nvidia_drv.so \
+> +			 extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
+> +			 libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
+
+Ditto.
+
+> +
+> +# The downloaded archive is in fact an auto-extract script. So, it can run
+> +# virtually everywhere, and it is fine enough to provide useful options.
+> +# Except it can't extract into an existing (even empty) directory.
+> +define NVIDIA_DRIVER_EXTRACT_CMDS
+> +	$(SHELL) $(DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target $(@D)/foo
+> +	mv $(@D)/foo/* $(@D)/foo/.manifest $(@D)
+> +	rm -rf $(@D)/foo
+
+Is 'foo' the right temporary name ? :-)
+
+> +endef
+> +
+> +# Helper to install libraries
+> +# $1: destination directory (target or staging)
+> +define NVIDIA_DRIVER_INSTALL_LIBS
+> +	for lib in $(patsubst %,%.so.$(NVIDIA_DRIVER_VERSION),$(NVIDIA_DRIVER_LIBS)) \
+> +	           $(NVIDIA_DRIVER_LIBS_NO_VERSION); \
+> +	do \
+> +		$(INSTALL) -v -D -m 0644 $(@D)/$${lib} $(1)/usr/lib/$${lib##*/}; \
+> +		n="$$( $(TARGET_READELF) -d "$(@D)/$${lib}" \
+> +		       |sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
+> +		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
+> +			ln -sfv $${lib##*/} $(1)/usr/lib/$${n}; \
+> +		fi; \
+> +		n="$${lib##*/}"; n="$${n/.so*}.so"; \
+> +		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
+> +			ln -sfv $${lib##*/} $(1)/usr/lib/$${n}; \
+> +		fi; \
+> +	done
+
+Wow. This is a *lot* of $ and # signs. Do we really need to do all that
+stuff, looking at the SONAME and so on?
+
+At the very least, some comments would be good to have. But a simpler
+solution would be even better :-)
+
+> +endef
+> +
+> +# For staging, install libraries and development files
+> +define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
+> +	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
+> +	$(INSTALL) -v -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
+
+Why -v ?
+
+> +	$(SED) 's/-L[^[:space:]]\+//' $(STAGING_DIR)/usr/lib/libGL.la
+
+Do we really need to install the .la file here?
+
+> +endef
+> +
+> +# For target, install libraries and X.org modules
+> +define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+> +	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
+> +	for m in $(NVIDIA_DRIVER_X_MODS); do \
+> +		 $(INSTALL) -v -D -m 0644 $(@D)/$${m##*/} \
+> +					  $(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
+
+Less indentation for the continuation line, and no -v option for
+$(INSTALL).
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
