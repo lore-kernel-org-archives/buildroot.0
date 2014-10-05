@@ -1,40 +1,25 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Sun,  5 Oct 2014 18:29:57 +0200
-Subject: [Buildroot] [PATCH v4 2/2] ffmpeg: enable x264 support
-In-Reply-To: <1412526597-31347-1-git-send-email-0intro@gmail.com>
-References: <1412526597-31347-1-git-send-email-0intro@gmail.com>
-Message-ID: <1412526597-31347-2-git-send-email-0intro@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 05 Oct 2014 18:30:40 +0200
+Subject: [Buildroot] [PATCH 1/8] package/apr: Bump version to 1.5.1
+References: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141005144248.GG4220@free.fr> <20141005181638.2614c86f@free-electrons.com>
+Message-ID: <XnsA3BDBC4D8D9A7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
----
-Changes v1 -> v4:
-  - s/FFMPEG_CONF_OPT/FFMPEG_CONF_OPTS/
----
- package/ffmpeg/ffmpeg.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141005181638.2614c86f at free-electrons.com:
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 41b06a7..6b5711c 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -229,6 +229,13 @@ else
- FFMPEG_CONF_OPTS += --disable-libvpx
- endif
- 
-+ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
-+FFMPEG_CONF_OPTS += --enable-libx264
-+FFMPEG_DEPENDENCIES += x264
-+else
-+FFMPEG_CONF_OPTS += --disable-libx264
-+endif
-+
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
--- 
-1.8.3.1
+> I'm confused: if some pieces of code are already upstream and
+> backported, why do they need to be submitted upstream again?
+
+Hi Thomas,
+
+both Apache httpd and standalone apr contain the source for gen_test_char, 
+the cross-compile patches were only applied to the build system of httpd, not 
+apr, therefore the need for the backport.
+
+Regards, Bernd
