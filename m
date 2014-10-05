@@ -1,39 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 23:36:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/sispmctl: fix static linking
-In-Reply-To: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
-References: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141005233651.6320c514@free-electrons.com>
+Date: Sun, 5 Oct 2014 23:40:10 +0200
+Subject: [Buildroot] [PATCH 1/1] uclibc/ffmpeg: Fix fminf-related build
+ error
+In-Reply-To: <1411479699-16331-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1411479699-16331-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141005234010.17ab13c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Bernd Kuhls,
 
-On Tue, 26 Aug 2014 01:12:33 +0200, Romain Naour wrote:
-> The static linking doesn't works with libusb-compat when using libusb-config.
-> Also the CFLAGS initialization with libusb-config --cflags is comented out.
+On Tue, 23 Sep 2014 15:41:39 +0200, Bernd Kuhls wrote:
+> The build error I saw while bumping ffmpeg to 2.3.1 was caused by uClibc, not
+> ffmpeg:
+> http://news.gmane.org/find-root.php?message_id=20140804213955.42443190%40debian
 > 
-> Based on libftdi's patch, add the support for pkg-config to link sispmctl
-> correctly.
+> ffmpeg-0001-fminf.patch can be removed in favour of uclibc-0063-fminf.patch.
 > 
-> This allow to add correct include directory to CFLAGS
-> (Add -I$(STAGING_DIR)/usr/include and -I$(STAGING_DIR)/usr/include/libusb-1.0)
-> Also add needed libraries during static linking (-lusb -lusb-1.0 and -pthread)
-> 
-> Since configure.ac is modified, the configure script needs to be regenerated
-> with autoreconf.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/647/6473088e751d3ab3a5227e9d7876966934e66378/build-end.log
-> 
-> Cc: Phil Eichinger <phil.eichinger@gmail.com>
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/ffmpeg/ffmpeg-0001-fminf.patch          |   47 ---------
+>  package/uclibc/0.9.33.2/uclibc-0063-fminf.patch |  127 +++++++++++++++++++++++
+>  2 files changed, 127 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/ffmpeg/ffmpeg-0001-fminf.patch
+>  create mode 100644 package/uclibc/0.9.33.2/uclibc-0063-fminf.patch
 
-Thanks, applied. Please submit the patch upstream so that one day we
-can remove it from Buildroot.
+Even though this looks like the right fix, it is a bit annoying,
+because it means that ffmpeg will no longer build with a large number
+of external uClibc toolchains (built with Buildroot versions older than
+the one that would have this commit included, built with Crosstool-NG,
+made available by third-parties, etc.).
+
+Do you think we could have a solution that combines keeping the ffmpeg
+fminf() patch, and adding the uClibc patch? Having the uClibc patch is
+good because it fixes a real issue in uClibc. Keeping the ffmpeg
+fminf() patch ensures that our ffmpeg package builds with other uClibc
+toolchains than just the latest Buildroot uClibc toolchain.
+
+What do you think?
 
 Thanks,
 
