@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 18:00:59 +0200
-Subject: [Buildroot] [PATCH] [RFC] package/libplist: bump version
-In-Reply-To: <1412515402-22348-1-git-send-email-yann.morin.1998@free.fr>
-References: <1412515402-22348-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141005180059.07e9ddab@free-electrons.com>
+Date: Sun, 5 Oct 2014 18:01:16 +0200
+Subject: [Buildroot] [git commit] package/apr-util: Add comment to describe
+	toolchain dependencies
+Message-ID: <20141005160134.1AFD0B09B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=99c4a8354f0a8aef0bae5280fcd48738cd7f3084
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Oct 2014 15:23:22 +0200, Yann E. MORIN wrote:
-> libplist has switched to using autotools, so remove our cmake-related
-> patches.
-> 
-> Completely disable Python bindings:
->   - it requires cython, which we do not have packaged (so far)
->   - the only user of libplist is XBMC, which does not need the Python
->     bindings.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apr-util/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index 3d4ec23..fcef693 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -12,3 +12,7 @@ config BR2_PACKAGE_APR_UTIL
+ 	  The utility library for the apache runtime project
+ 
+ 	  http://apr.apache.org/
++
++comment "apr-util needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PREFER_STATIC_LIB
