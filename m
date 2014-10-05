@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Oct 2014 19:39:04 +0200
-Subject: [Buildroot] [PATCH v2 16/16] package/php: Add Apache support
+Date: Sun,  5 Oct 2014 19:38:59 +0200
+Subject: [Buildroot] [PATCH v2 11/16] package/php: Add support for mbstring
+	module
 In-Reply-To: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412530744-20649-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1412530744-20649-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,145 +14,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.in           |   17 +++++++++++
- package/php/php-04-apache.patch |   63 +++++++++++++++++++++++++++++++++++++++
- package/php/php.mk              |   19 ++++++++++++
- 3 files changed, 99 insertions(+)
- create mode 100644 package/php/php-04-apache.patch
+ package/php/Config.ext |    5 +++++
+ package/php/php.mk     |    1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 32faa32..db4e647 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -11,6 +11,9 @@ if BR2_PACKAGE_PHP
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 4649375..241e4a9 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -192,6 +192,11 @@ comment "intl support needs a toolchain w/ C++, wchar, threads"
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
  
- source "package/php/Config.ext"
- 
-+config BR2_PACKAGE_PHP_APACHE
-+	bool
-+
- config BR2_PACKAGE_PHP_CLI
- 	bool
- 
-@@ -26,6 +29,20 @@ choice
- 	help
- 	  Select the PHP interface(s).
- 
-+config BR2_PACKAGE_PHP_SAPI_APACHE
-+	bool "Apache"
-+	select BR2_PACKAGE_APACHE
-+	select BR2_PACKAGE_PHP_APACHE
-+	depends on !BR2_PREFER_STATIC_LIB # apache
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # apache
-+	depends on BR2_USE_MMU # apr
++config BR2_PACKAGE_PHP_EXT_MBSTRING
++	bool "mbstring"
 +	help
-+	  Apache module
++	  multibyte string support
 +
-+comment "apache module needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_PHP_SAPI_CGI
- 	bool "CGI"
- 	# CGI uses fork()
-diff --git a/package/php/php-04-apache.patch b/package/php/php-04-apache.patch
-new file mode 100644
-index 0000000..aa0dc16
---- /dev/null
-+++ b/package/php/php-04-apache.patch
-@@ -0,0 +1,63 @@
-+Fix cross-compilation when used as Apache module.
-+
-+Avoid calling the Apache httpd target binary to check for its presence.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr php-5.5.17.org/configure php-5.5.17/configure
-+--- php-5.5.17.org/configure	2014-09-16 14:53:57.000000000 +0200
-++++ php-5.5.17/configure	2014-10-05 15:06:12.162625672 +0200
-+@@ -6342,7 +6342,7 @@
-+ 
-+   # Test that we're trying to configure with apache 1.x
-+ 
-+-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
-++  ac_output='Server version: Apache/2.4.10 (Unix)'
-+   ac_IFS=$IFS
-+ IFS="- /.
-+ "
-+@@ -7626,7 +7626,7 @@
-+ 
-+   # Test that we're trying to configure with apache 2.x
-+ 
-+-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
-++  ac_output='Server version: Apache/2.4.10 (Unix)'
-+   ac_IFS=$IFS
-+ IFS="- /.
-+ "
-+@@ -8332,7 +8332,7 @@
-+ 
-+     fi
-+   else
-+-    APACHE_THREADED_MPM=`$APXS_HTTPD -V | grep 'threaded:.*yes'`
-++    APACHE_THREADED_MPM="threaded:     yes (fixed thread count)"
-+     if test -n "$APACHE_THREADED_MPM"; then
-+ 
-+   enable_maintainer_zts=yes
-+@@ -8450,7 +8450,7 @@
-+ 
-+   # Test that we're trying to configure with apache 2.x
-+ 
-+-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
-++  ac_output='Server version: Apache/2.4.10 (Unix)'
-+   ac_IFS=$IFS
-+ IFS="- /.
-+ "
-+@@ -9156,7 +9156,7 @@
-+ 
-+     fi
-+   else
-+-    APACHE_THREADED_MPM=`$APXS_HTTPD -V | grep 'threaded:.*yes'`
-++    APACHE_THREADED_MPM="threaded:     yes (fixed thread count)"
-+     if test -n "$APACHE_THREADED_MPM"; then
-+ 
-+   enable_maintainer_zts=yes
-+@@ -9255,7 +9255,7 @@
-+ 
-+   # Test that we're trying to configure with apache 1.x
-+ 
-+-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
-++  ac_output='Server version: Apache/2.4.10 (Unix)'
-+   ac_IFS=$IFS
-+ IFS="- /.
-+ "
+ comment "Image processing"
+ 
+ config BR2_PACKAGE_PHP_EXT_EXIF
 diff --git a/package/php/php.mk b/package/php/php.mk
-index e6c2db7..444c690 100644
+index 0cf4058..e6c2db7 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -50,6 +50,25 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable-fpm)
+@@ -76,6 +76,7 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
+ 		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
+ 		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
+ 		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
++		$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
+ 		$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
  
-+ifeq ($(BR2_PACKAGE_PHP_APACHE),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+define PHP_FIX_THREADS_DETECTION
-+	$(SED) 's/pthreads_working\=no/pthreads_working\=yes/' $(@D)/configure
-+endef
-+# PHP assumes pthreads are not working when cross-compiling,
-+# needed for Apache-MPM worker
-+PHP_POST_PATCH_HOOKS += PHP_FIX_THREADS_DETECTION
-+endif
-+PHP_CONF_OPTS += \
-+	--with-apxs2=$(STAGING_DIR)/usr/bin/apxs \
-+	--with-config-file-path=/etc/apache2 \
-+	--with-config-file-scan-dir=/etc/apache2/php \
-+	--oldincludedir=$(STAGING_DIR)/usr/include \
-+	--enable-pthreads \
-+	--localstatedir=/var
-+PHP_DEPENDENCIES += apache
-+endif
-+
- ### Extensions
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_POSIX),--enable-posix) \
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
 -- 
 1.7.10.4
