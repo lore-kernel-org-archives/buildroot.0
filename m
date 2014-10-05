@@ -1,205 +1,164 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 17:47:46 +0200
-Subject: [Buildroot] [git commit] package/libplist: bump version
-Message-ID: <20141005155028.AECAAB7774@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Oct 2014 17:56:38 +0200
+Subject: [Buildroot] [PATCH 8/8] package/php: Add Apache support
+In-Reply-To: <1412516718-12597-8-git-send-email-bernd.kuhls@t-online.de>
+References: <1412516718-12597-1-git-send-email-bernd.kuhls@t-online.de>
+ <1412516718-12597-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141005155638.GM4220@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe70cb0187d3e1e75e009b924392fee9cc4dc680
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-libplist has switched to using autotools, so remove our cmake-related
-patches.
+On 2014-10-05 15:45 +0200, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/php/Config.in                            |   17 +++
+>  package/php/php-04-cross-compile.only-for-apache |  131 ++++++++++++++++++++++
+>  package/php/php.mk                               |   16 +++
+>  3 files changed, 164 insertions(+)
+>  create mode 100644 package/php/php-04-cross-compile.only-for-apache
+> 
+> diff --git a/package/php/Config.in b/package/php/Config.in
+> index 32faa32..db4e647 100644
+> --- a/package/php/Config.in
+> +++ b/package/php/Config.in
+> @@ -11,6 +11,9 @@ if BR2_PACKAGE_PHP
+>  
+>  source "package/php/Config.ext"
+>  
+> +config BR2_PACKAGE_PHP_APACHE
+> +	bool
+> +
+>  config BR2_PACKAGE_PHP_CLI
+>  	bool
+>  
+> @@ -26,6 +29,20 @@ choice
+>  	help
+>  	  Select the PHP interface(s).
+>  
+> +config BR2_PACKAGE_PHP_SAPI_APACHE
+> +	bool "Apache"
+> +	select BR2_PACKAGE_APACHE
+> +	select BR2_PACKAGE_PHP_APACHE
+> +	depends on !BR2_PREFER_STATIC_LIB # apache
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # apache
+> +	depends on BR2_USE_MMU # apr
+> +	help
+> +	  Apache module
+> +
+> +comment "apache module needs a toolchain w/ dynamic library, threads"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
+> +
 
-Completely disable Python bindings:
-  - it requires cython, which we do not have packaged (so far)
-  - the only user of libplist is XBMC, which does not need the Python
-    bindings.
+Unrelated to your patch, but this choice is getting ugly. Maybe we should
+switch to something like:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...1-cmake-let-CMake-drives-the-library-type.patch |   37 ---------------
- ...sure-the-libxml2-module-correctly-set-all.patch |   48 --------------------
- ...support-python2-and-python3-when-defining.patch |   27 -----------
- package/libplist/libplist.mk                       |   28 +++++-------
- 4 files changed, 12 insertions(+), 128 deletions(-)
+    config BR2_PACKAGE_PHP
+        bool "php"
+        select BR2_PACKAGE_PHP_SAPI_CGI if !BR2_PACKAGE_PHP_HAS_SAPI
 
-diff --git a/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch b/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch
-deleted file mode 100644
-index 247f3f0..0000000
---- a/package/libplist/libplist-0001-cmake-let-CMake-drives-the-library-type.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 13150b8e2b49a9c95eaad831ff69429ff9f66aa4 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sat, 30 Aug 2014 11:20:36 +0200
--Subject: [PATCH 1/2] cmake: let CMake drives the library type
--
--Do not force CMake to build shared object when BUILD_SHARED_LIBS is off.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- src/CMakeLists.txt | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index a0d6179..78946b1 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -34,7 +34,7 @@ SET(libcnary_object_files
-- 
-- SET_SOURCE_FILES_PROPERTIES(${libcnary_object_files} PROPERTIES EXTERNAL_OBJECT true GENERATED true)
-- 
---ADD_LIBRARY( plist SHARED ${libplist_SRC} ${libcnary_object_files} )
--+ADD_LIBRARY( plist ${libplist_SRC} ${libcnary_object_files} )
-- TARGET_LINK_LIBRARIES( plist ${LIBXML2_LIBRARIES} )
-- SET_TARGET_PROPERTIES( plist PROPERTIES VERSION ${LIBPLIST_LIBVERSION} )
-- SET_TARGET_PROPERTIES( plist PROPERTIES SOVERSION ${LIBPLIST_SOVERSION} )
--@@ -42,7 +42,7 @@ if(APPLE)
--   SET_TARGET_PROPERTIES( plist PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-- endif()
-- 
---ADD_LIBRARY( plist++ SHARED ${libplist++_SRC} )
--+ADD_LIBRARY( plist++ ${libplist++_SRC} )
-- TARGET_LINK_LIBRARIES( plist++ plist )
-- SET_TARGET_PROPERTIES( plist++ PROPERTIES VERSION ${LIBPLIST_LIBVERSION} )
-- SET_TARGET_PROPERTIES( plist++ PROPERTIES SOVERSION ${LIBPLIST_SOVERSION} )
---- 
--2.1.0
--
-diff --git a/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch b/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch
-deleted file mode 100644
-index 2a807be..0000000
---- a/package/libplist/libplist-0002-cmake-make-sure-the-libxml2-module-correctly-set-all.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 49f7f7566ecd45ce87be07ac46bb27cf2abf9c3c Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sun, 31 Aug 2014 10:08:47 +0200
--Subject: [PATCH] cmake: make sure the libxml2 module correctly set all ldflags
-- in case of static link
--
--libxml2 dependencies against zlib and libiconv are optional.
--
--When executing a statically linked build, the default libxml2 CMake
--module fails to get the libxml2 dependencies (both the required and
--optional ones); so the link phase fails.
--
--However, pkg-config correctly gives these dependencies, even for static
--build. So, extend the libxml2 library list with what the pkg_check_modules
--CMake primitive (which will uses pkg-config) found.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- cmake/modules/FindLibXml2.cmake | 13 +++++++++++++
-- 1 file changed, 13 insertions(+)
--
--diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
--index 8d3c77e..19bc930 100644
----- a/cmake/modules/FindLibXml2.cmake
--+++ b/cmake/modules/FindLibXml2.cmake
--@@ -39,6 +39,19 @@ FIND_LIBRARY(LIBXML2_LIBRARIES NAMES xml2 libxml2
--    ${PC_LIBXML_LIBRARY_DIRS}
--    )
-- 
--+# Make sure we get all ldflags in case of static link
--+IF(NOT BUILD_SHARED_LIBS)
--+    FOREACH(_lib ${PC_LIBXML_STATIC_LIBRARIES})
--+        STRING(TOUPPER ${_lib} _Ulib)
--+        FIND_LIBRARY(_${_Ulib}_LIBRARIES NAMES ${_lib} lib${_lib}
--+            HINTS
--+            ${PC_LIBXML_LIBDIR}
--+            ${PC_LIBXML_LIBRARY_DIRS}
--+            )
--+        LIST(APPEND LIBXML2_LIBRARIES ${_${_Ulib}_LIBRARIES})
--+    ENDFOREACH()
--+ENDIF(NOT BUILD_SHARED_LIBS)
--+
-- FIND_PROGRAM(LIBXML2_XMLLINT_EXECUTABLE xmllint)
-- # for backwards compat. with KDE 4.0.x:
-- SET(XMLLINT_EXECUTABLE "${LIBXML2_XMLLINT_EXECUTABLE}")
---- 
--2.1.0
--
-diff --git a/package/libplist/libplist-0003-cmake-swig-support-python2-and-python3-when-defining.patch b/package/libplist/libplist-0003-cmake-swig-support-python2-and-python3-when-defining.patch
-deleted file mode 100644
-index a5218e8..0000000
---- a/package/libplist/libplist-0003-cmake-swig-support-python2-and-python3-when-defining.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 114d242a3b6b749b404cda80304e621556325d34 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sun, 5 Oct 2014 10:13:06 +0200
--Subject: [PATCH] cmake: swig: support python2 and python3 when defining
-- DISTUTILS_PYTHON_ILIBRARY_PATH
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- swig/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/swig/CMakeLists.txt b/swig/CMakeLists.txt
--index 379cb95..ae6f0e7 100644
----- a/swig/CMakeLists.txt
--+++ b/swig/CMakeLists.txt
--@@ -9,7 +9,7 @@ SWIG_ADD_MODULE( plist python plist.i )
-- SWIG_LINK_LIBRARIES( plist plist plist++ ${PYTHON_LIBRARIES} )
-- 
-- EXEC_PROGRAM("${PYTHON_EXECUTABLE}"
---    ARGS "-c 'try:\n import distutils.sysconfig; print distutils.sysconfig.get_python_lib(plat_specific=1)\nexcept: pass\n'"
--+    ARGS "-c 'from __future__ import print_function\ntry:\n import distutils.sysconfig; print(distutils.sysconfig.get_python_lib(plat_specific=1))\nexcept: pass\n'"
--     OUTPUT_VARIABLE DISTUTILS_PYTHON_ILIBRARY_PATH
--     )
-- 
---- 
--2.1.2
--
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 1e44fff..1185370 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,25 +4,21 @@
- #
- ################################################################################
- 
--LIBPLIST_VERSION = 1.6
-+LIBPLIST_VERSION = 1.11
- LIBPLIST_SITE = http://cgit.sukimashita.com/libplist.git/snapshot
--LIBPLIST_DEPENDENCIES = libxml2
-+LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
- LIBPLIST_INSTALL_STAGING = YES
--LIBPLIST_MAKE = $(MAKE1)
- LIBPLIST_LICENSE = LGPLv2.1+
- LIBPLIST_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
--LIBPLIST_DEPENDENCIES += \
--	python$(if $(BR2_PACKAGE_PYTHON3),3) \
--	host-swig
--LIBPLIST_CONF_OPTS += \
--	-DENABLE_PYTHON=ON \
--	-DSWIG_EXECUTABLE=$(SWIG)
--else
--LIBPLIST_CONF_OPTS += \
--	-DENABLE_PYTHON=OFF \
--	-DSWIG_EXECUTABLE=SWIG_EXECUTABLE-NOTFOUND
--endif
-+# Straight out of the git tree:
-+LIBPLIST_AUTORECONF = YES
-+
-+# Does not build in parallel
-+LIBPLIST_MAKE = $(MAKE1)
-+
-+# Disable building Python bindings, because it requires host-cython, which
-+# is not packaged in Buildroot at all.
-+LIBPLIST_CONF_OPTS = --without-cython
- 
--$(eval $(cmake-package))
-+$(eval $(autotools-package))
+    config BR2_PACKAGE_PHP_HAS_SAPI
+        bool
+
+    config BR2_PACKAGE_PHP_SAPI_CGI
+        bool "CGI"
+
+    config BR2_PACKAGE_PHP_SAPI_CLI
+        bool "CLI"
+        select BR2_PACKAGE_PHP_HAS_SAPI
+
+    config BR2_PACKAGE_PHP_SAPI_APACHE
+        bool "Apache"
+        select BR2_PACKAGE_PHP_HAS_SAPI
+
+    config BR2_PACKAGE_PHP_SAPI_FPM
+        bool "FPM"
+        select BR2_PACKAGE_PHP_HAS_SAPI
+
+That way, we ensure at least one is selected, which was the initial
+reason for the choice, while stil allowing multiple to be selected.
+
+Then, if some are incompatible, we could do, for example:
+
+    config BR2_PACKAGE_PHP_SAPI_APACHE
+        bool "Apache"
+        depends on !BR2_PACKAGE_PHP_SAPI_CLI
+        select BR2_PACKAGE_PHP_HAS_SAPI
+
+>  config BR2_PACKAGE_PHP_SAPI_CGI
+>  	bool "CGI"
+>  	# CGI uses fork()
+> diff --git a/package/php/php-04-cross-compile.only-for-apache b/package/php/php-04-cross-compile.only-for-apache
+> new file mode 100644
+> index 0000000..a72befc
+> --- /dev/null
+> +++ b/package/php/php-04-cross-compile.only-for-apache
+> @@ -0,0 +1,131 @@
+> +Fix cross-compilation when used as Apache module.
+> +
+> +Apache is configured to use the worker MPM which depends on threads.
+> +As PHP?s phtread detection is broken in a cross-compile environment, it is not
+> +possible to apply this patch unconditionally, since php itself works without
+> +thread support,
+
+I have to say I do not like this much. How complex would it be to have a
+proper patch that would work both with apache enabled or disabled?
+
+We should try to have such a patch, and push it upstream.
+
+[--SNIP--]
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 2e97c9a..0b32bca 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -50,6 +50,22 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
+>  PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
+>  PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable-fpm)
+>  
+> +ifeq ($(BR2_PACKAGE_PHP_APACHE),y)
+> +# this patchset is only needed when cross-compiling mod_php for Apache
+> +define PHP_PATCH_FOR_APACHE
+> +	patch -d $(@D) -p1 -E -i $(TOPDIR)/$(PKGDIR)php-04-cross-compile.only-for-apache
+
+Yes, $(PKGDIR) already has a trailing '/', for for readability, I'd
+prefer we add one here. Multiple '/' in a path are innocuous.
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +PHP_POST_PATCH_HOOKS += PHP_PATCH_FOR_APACHE
+> +PHP_CONF_OPTS += \
+> +	--with-apxs2=$(STAGING_DIR)/usr/bin/apxs \
+> +	--with-config-file-path=/etc/apache2 \
+> +	--with-config-file-scan-dir=/etc/apache2/php \
+> +	--oldincludedir=$(STAGING_DIR)/usr/include \
+> +	--enable-pthreads \
+> +	--localstatedir=/var
+> +PHP_DEPENDENCIES += apache
+> +endif
+> +
+>  ### Extensions
+>  PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
+>  		$(if $(BR2_PACKAGE_PHP_EXT_POSIX),--enable-posix) \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
