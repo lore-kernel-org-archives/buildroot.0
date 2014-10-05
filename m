@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Oct 2014 19:38:59 +0200
-Subject: [Buildroot] [PATCH v2 11/16] package/php: Add support for mbstring
-	module
+Date: Sun,  5 Oct 2014 19:38:52 +0200
+Subject: [Buildroot] [PATCH v2 04/16] package/apr-util: make sqlite optional
 In-Reply-To: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1412530744-20649-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412530744-20649-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1412530744-20649-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +13,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.ext |    5 +++++
- package/php/php.mk     |    1 +
- 2 files changed, 6 insertions(+)
+ package/apr-util/Config.in   |    1 -
+ package/apr-util/apr-util.mk |    9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 4649375..241e4a9 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -192,6 +192,11 @@ comment "intl support needs a toolchain w/ C++, wchar, threads"
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index f54e85a..6757e7e 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_APR_UTIL
+ 	bool "apr-util"
+ 	select BR2_PACKAGE_APR
+-	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_EXPAT
+ 	# apr really needs shared library support
+ 	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 1b85dae..6bc6ee9 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -9,7 +9,7 @@ APR_UTIL_SITE = http://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
+ APR_UTIL_LICENSE_FILES = LICENSE
+ APR_UTIL_INSTALL_STAGING = YES
+-APR_UTIL_DEPENDENCIES = apr expat sqlite
++APR_UTIL_DEPENDENCIES = apr expat
+ APR_UTIL_CONF_OPTS = \
+ 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config
+ APR_UTIL_CONFIG_SCRIPTS = apu-1-config
+@@ -18,4 +18,11 @@ APR_UTIL_CONFIG_SCRIPTS = apu-1-config
+ # features.
+ APR_UTIL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
  
-+config BR2_PACKAGE_PHP_EXT_MBSTRING
-+	bool "mbstring"
-+	help
-+	  multibyte string support
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++APR_UTIL_CONF_OPTS += --with-sqlite3="$(STAGING_DIR)/usr"
++APR_UTIL_DEPENDENCIES += sqlite
++else
++APR_UTIL_CONF_OPTS += --without-sqlite3
++endif
 +
- comment "Image processing"
- 
- config BR2_PACKAGE_PHP_EXT_EXIF
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0cf4058..e6c2db7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -76,6 +76,7 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
-+		$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
