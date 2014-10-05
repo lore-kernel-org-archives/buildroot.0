@@ -1,83 +1,63 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 5 Oct 2014 09:58:01 +0200
-Subject: [Buildroot] [PATCH 12 of 15] pkg-generic: add checks on
- deprecated variables FOO_BAR_OPT
-In-Reply-To: <20141005095422.6a66005d@free-electrons.com>
-References: <patchbomb.1411846357@localhost>
- <27f6b6064904e682eccc.1411846369@localhost>
- <20141004191415.4db579ee@free-electrons.com> <20141004221525.GA22416@free.fr>
- <CAAXf6LUSXJ3=tDbxM4cHqdK7Lp3wC325n4g_=Cee=T8QN4kMeg@mail.gmail.com>
- <20141005095422.6a66005d@free-electrons.com>
-Message-ID: <CAAXf6LXK-yH-ZqPDLnnxmZ6JVHs-DGT47g66tPBFQ_GT_iYcdg@mail.gmail.com>
+Date: Sun, 05 Oct 2014 09:58:31 +0200
+Subject: [Buildroot] [PATCH 1 of 2] check-deprecated-variable: move from
+ pkg-generic.mk to pkg-utils.mk
+Message-ID: <98b4f7f5e2ea63e41fa1.1412495911@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-On Sun, Oct 5, 2014 at 9:54 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sun, 5 Oct 2014 09:34:07 +0200, Thomas De Schampheleire wrote:
->
->> >> > +$(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
->>
->> Such variables are used by several infras, like autotools and cmake.
->> So moving them to one in particular is odd. Duplicating them would be
->> equally undesirable.
->> So in this case pkg-generic.mk seems the better place to me.
->
-> Hum, right, I didn't realize that.
->
->> Moreover, even if only one specialized infra would use such a
->> variable, generic packages sometimes use the same common names like
->> FOO_MAKE_OPTS for variables, even though their name is really
->> arbitrary.
->
-> Yes. Though it's kind of weird to "enforce" the non-usage of
-> <foo>_MAKE_OPT for generic-package, since such a variable is not
-> defined by the package infrastructure, and its naming left to the
-> choice of the package writer. But since we indeed want to see
-> <foo>_MAKE_OPTS being used instead, probably it makes sense.
->
->> >> > +$(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
->> >> > +$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
->>
->> This can be moved to pkg-autotools.mk, it makes more sense there.
->>
->> >> > +$(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
->>
->> This variable serves basically the same function as FOO_MAKE_OPTS, but
->> I guess it's not called '_MAKE_' because these infras (perl, python,
->> ...) do not pass them to make.
->> Since they are re-used in several ones I tend to place them in pkg-generic too.
->>
->> >> > +$(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
->>
->> This can be moved to package/pkg-kconfig indeed.
->
-> Yeah, well, with this duplication thing, I'm no longer sure it's really
-> worth the effort. Maybe for clarity it's better to just duplicate what
-> needs to be duplicated, instead of having some variables handled in
-> each individual package infra, and some others at the pkg-generic level
-> even though they are specific to some package infrastructures?
->
-> No strong feeling here.
+---
+ package/pkg-generic.mk |  15 ---------------
+ package/pkg-utils.mk   |   9 +++++++++
+ 2 files changed, 9 insertions(+), 15 deletions(-)
 
-I'm not sure what you mean here.
-There doesn't need to be any duplication, unless you prefer to check
-for, say, FOO_MAKE_OPT in several infras instead of in generic.
-
-I did the moving around, I'll send the patches now so you can see and
-we can decide the final solution.
-
-Best regards,
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -264,21 +264,6 @@
+ endef
+ 
+ ################################################################################
+-# check-deprecated-variable -- throw an error on deprecated variables
+-#
+-# argument 1 is the deprecated variable
+-# argument 2 is the new variable to use
+-#
+-# example:
+-#   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+-################################################################################
+-define check-deprecated-variable
+-ifneq ($$(origin $(1)),undefined)
+-$$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
+-endif
+-endef
+-
+-################################################################################
+ # inner-generic-package -- generates the make targets needed to build a
+ # generic package
+ #
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -88,6 +88,15 @@
+ 
+ endef
+ 
++# check-deprecated-variable -- throw an error on deprecated variables
++# example:
++#   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
++define check-deprecated-variable # (deprecated var, new var)
++ifneq ($$(origin $(1)),undefined)
++$$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
++endif
++endef
++
+ #
+ # legal-info helper functions
+ #
