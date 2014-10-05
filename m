@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 13:39:31 +0200
-Subject: [Buildroot] [PATCH 2 of 2] check-deprecated-variable: move call
- to respective infra where appropriate
-In-Reply-To: <17b8f7627130f84d5e80.1412495912@localhost>
+Date: Sun, 5 Oct 2014 13:39:18 +0200
+Subject: [Buildroot] [PATCH 1 of 2] check-deprecated-variable: move from
+ pkg-generic.mk to pkg-utils.mk
+In-Reply-To: <98b4f7f5e2ea63e41fa1.1412495911@localhost>
 References: <98b4f7f5e2ea63e41fa1.1412495911@localhost>
- <17b8f7627130f84d5e80.1412495912@localhost>
-Message-ID: <20141005133931.74d85bdf@free-electrons.com>
+Message-ID: <20141005133918.6df51a4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +13,16 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Sun, 05 Oct 2014 09:58:32 +0200, Thomas De Schampheleire wrote:
-> Move the checks for AUTORECONF_OPT, GETTEXTIZE_OPT to pkg-autotools.mk,
-> and for KCONFIG_OPT to pkg-kconfig.mk.
+On Sun, 05 Oct 2014 09:58:31 +0200, Thomas De Schampheleire wrote:
+> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> The other checks are used by several infras and are therefore better placed
-> in pkg-generic.mk.
+> ---
+>  package/pkg-generic.mk |  15 ---------------
+>  package/pkg-utils.mk   |   9 +++++++++
+>  2 files changed, 9 insertions(+), 15 deletions(-)
 
-As per the discussion with Yann, I've rejected this patch.
+Applied, thanks.
 
 Thomas
 -- 
