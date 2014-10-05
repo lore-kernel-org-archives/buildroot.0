@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 13:46:11 +0200
-Subject: [Buildroot] [PATCH] perl: fix build on big endian arch
-In-Reply-To: <1412495953-24980-1-git-send-email-francois.perrad@gadz.org>
-References: <1412495953-24980-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20141005134611.31f2802e@free-electrons.com>
+Date: Sun, 5 Oct 2014 13:46:22 +0200
+Subject: [Buildroot] [git commit] package/swig: define SWIG pointing to the
+	host swig program
+Message-ID: <20141005114629.60031B046F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=8e07296cb9947b18cf24ec980f313d1606485da0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Oct 2014 09:59:13 +0200, Francois Perrad wrote:
-> see http://autobuild.buildroot.org/results/3a1/3a1c2f0bc802d3cec26ffd4ded8f5c04473a3d4b/build-end.log
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/perl.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/swig/swig.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 9996e95..3ef56d6 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -31,3 +31,5 @@ endef
+ HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_SYMLINK
+ 
+ $(eval $(host-autotools-package))
++
++SWIG = $(HOST_DIR)/usr/bin/swig$(SWIG_MAJOR)
