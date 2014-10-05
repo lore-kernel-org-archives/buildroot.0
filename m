@@ -1,47 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Oct 2014 23:16:30 +0200
-Subject: [Buildroot] [PATCH v4] netcat-openbsd: new package
-In-Reply-To: <1412538482-5116-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1412538482-5116-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141005231630.3f24195b@free-electrons.com>
+Date: Sun, 5 Oct 2014 23:22:15 +0200
+Subject: [Buildroot] [PATCH 2/3] hicolor-icon-theme: new package
+In-Reply-To: <1411489271-26899-3-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1411489271-26899-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141005232215.48f593d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Eric Le Bihan,
 
-On Sun,  5 Oct 2014 21:48:02 +0200, Maxime Hadjinlian wrote:
-> The OpenBSD implementations of netcat.
-> The main difference from netcat is the support for IPv6, proxies, and
-> Unix sockets.
+On Tue, 23 Sep 2014 18:21:10 +0200, Eric Le Bihan wrote:
+> This new package provides Freedesktop Hicolor icon theme.
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > ---
-> v3 -> v4:
->     - Propagage libbsd dependencies
->     - Add host-pkgconf as dependencies
-> v2 -> v3:
->     - Use the debian git tree
->     - Remove the patch and uses a hook to apply them
->     - Set the license_file
-> v1 -> v2:
->     - Add missing license
-> ---
->  package/Config.in                        |  1 +
->  package/netcat-openbsd/Config.in         | 24 ++++++++++++++++++++++++
->  package/netcat-openbsd/netcat-openbsd.mk | 29 +++++++++++++++++++++++++++++
->  3 files changed, 54 insertions(+)
->  create mode 100644 package/netcat-openbsd/Config.in
->  create mode 100644 package/netcat-openbsd/netcat-openbsd.mk
+>  package/Config.in                                |  1 +
+>  package/hicolor-icon-theme/Config.in             |  4 ++++
+>  package/hicolor-icon-theme/hicolor-icon-theme.mk | 12 ++++++++++++
+>  3 files changed, 17 insertions(+)
+>  create mode 100644 package/hicolor-icon-theme/Config.in
+>  create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.mk
 
-Applied, after doing two changes:
-
- * Use tabs in the command applying Debian patches
-
- * Add an optional dependency on Busybox when Busybox is enabled. This
-   ensures we overwrite the Busybox nc with netcat-openbsd nc.
+I'm a bit confused by what this package does: it doesn't contain
+anything, and does not install anything except a huge number of
+directories (empty) in usr/share/icons/. Is this the intended behavior?
+I would have expected an icon theme to install some .svg or .png files,
+no?
 
 Thanks,
 
