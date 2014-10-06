@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 21:16:09 +0200
-Subject: [Buildroot] [git commit] openvmtools: remove unnecessary C flag
-Message-ID: <20141006192628.843C4B0CAA@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  6 Oct 2014 21:28:10 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libva: Bump version to 1.4.0
+Message-ID: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7349af1bc4ed941d59c0c9971007479881379d3f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 8bec0a1af57165081dc275f813c8c5c74ff12c14
-the -Wno-unused-local-typedefs CFLAG in not needed.
-
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openvmtools/openvmtools.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/libva/libva.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 598107c..7aa04af 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -41,7 +41,6 @@ endif
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 857cb17..984222d 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
- OPENVMTOOLS_CONF_OPTS += --with-pam
--OPENVMTOOLS_MAKE_OPTS += CFLAGS+="-Wno-unused-local-typedefs"
- OPENVMTOOLS_DEPENDENCIES += linux-pam
- else
- OPENVMTOOLS_CONF_OPTS += --without-pam
+-LIBVA_VERSION = 1.3.1
++LIBVA_VERSION = 1.4.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
+-- 
+1.7.10.4
