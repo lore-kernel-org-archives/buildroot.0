@@ -1,72 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Oct 2014 00:35:13 +0200
-Subject: [Buildroot] [PATCH 7/7 v2] package/weston: add support for the RDP
-	compositor
-In-Reply-To: <cover.1412634775.git.yann.morin.1998@free.fr>
-References: <cover.1412634775.git.yann.morin.1998@free.fr>
-Message-ID: <66cae859536aae20b149c905d270b48176057b9d.1412634775.git.yann.morin.1998@free.fr>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Mon, 6 Oct 2014 19:42:33 -0300
+Subject: [Buildroot] [PATCH] Add dummy definition of O_CLOEXEC
+In-Reply-To: <CAAXf6LVjWD+08NPqtwJWFVhTz4KE8nnEQNRU+cyNzQz4HQYBKg@mail.gmail.com>
+References: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAKi4VAKVL7oxZ6dvHbixeihtiOD2GDkHLknht_jSg3-+hWWGBQ@mail.gmail.com>
+ <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com>
+ <CAKi4VAKpGe7q0Q3HhVCr+0-iGgBBMC5TGcSOckHBed56zs5TNg@mail.gmail.com>
+ <CAAXf6LX90woPh+2tm6yCa8EGgGrvYx8D8v+q0tJS1DY5=dM+Rw@mail.gmail.com>
+ <CAKi4VAK=FcaCGDbzVwKvYWtLEqF-0uu0WEmbjQHtP5VmoKABdQ@mail.gmail.com>
+ <CAAXf6LVjWD+08NPqtwJWFVhTz4KE8nnEQNRU+cyNzQz4HQYBKg@mail.gmail.com>
+Message-ID: <CAKi4VALmguvjHkx+fZzxLHA0oKrOdexUhmRFO+8=rk8xw65rRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the RDP compositor, one can run a headless machine to serve remote
-clients, using the RDP protocol.
+On Fri, Oct 3, 2014 at 7:27 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi Lucas,
+>
+> On Thu, Oct 2, 2014 at 7:55 PM, Lucas De Marchi
+> <lucas.de.marchi@gmail.com> wrote:
+>
+>>>> They shouldn't be defining O_CLOEXEC to 0 in the first place. I don't
+>>>> want to support leaking file descriptors to child process. You are
+>>>> silently giving different behavior to your target depending on the
+>>>> machine it was built with :-o.
+>>>
+>>> As explained above, this is not what is happening. The O_CLOEXEC dummy
+>>> definition to 0 is only relevant when building host tools (depmod) on
+>>> old systems like RHEL5. These host tools are effectively run on the
+>>> same host where they are built. When building for the target, or when
+>>> building on modern host systems, the dummy does not set in and there
+>>> is anyway no impact.
+>>>
+>>> Hope this clarifies,
+>>
+>> Yep, this clarifies, thanks.
+>>
+>> However it only makes sense for this specific scenario, i.e. you don't
+>> care for depmod leaking fds on the host... It's not something
+>> acceptable to do on upstream, sorry.
+>
+> I'm trying to understand the reason you object to this patch.
+>
+> We both agree that the dummy implementation of O_CLOEXEC will only
+> take effect when building kmod using kernel headers < 2.6.23, correct?
 
-Add an option to enable the rdp-backend.
+yes. But I don't want to pretend that kmod works fine there. It doesn't.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/weston/Config.in | 17 +++++++++++++++++
- package/weston/weston.mk |  7 +++++++
- 2 files changed, 24 insertions(+)
+> In such a case, there are three paths:
+>
+> 1. Don't make any change (the current situation). In this case, kmod
+> cannot be compiled due to the missing O_CLOEXEC definition and thus
+> cannot be used at all.
+>
+> 2. Add a dummy definition (as proposed by the patch) to allow
+> compilation of kmod. In this case, the O_CLOEXEC flag will not take
+> effect, indeed with the leaking file descriptors into child processes,
+> but only in this exceptional case where kmod is built for older
+> kernels.
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index fafdf95..c08b33c 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -40,6 +40,23 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
-+config BR2_PACKAGE_WESTON_RDP
-+	bool "RDP compositor"
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+	help
-+	  This enables the RDP backend, which allows accessing weston
-+	  through the network with any RDP-compliant client.
-+
-+	  Please note that one must pass those options to weston for RDP
-+	  to be functional:
-+	    --rdp-tls-cert=/path/to/server.crt
-+	    --rdp-tls-key=/path/to/server.key
-+
-+	  By default, Buildroot installs such files in /etc/freerdp/server/
-+	  so you may want to change them in a post-build script or a rootfs
-+	  overlay.
-+
- comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
- 	depends on BR2_arm
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 9964b90..2829a10 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -32,6 +32,13 @@ else
- WESTON_CONF_OPTS += --disable-libinput-backend
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
-+WESTON_DEPENDENCIES += freerdp
-+WESTON_CONF_OPTS += --enable-rdp-compositor
-+else
-+WESTON_CONF_OPTS += --disable-rdp-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
+The problem here is that you are silently accepting the misbehave.
+
+>
+> 3. Use explicit fcntl(..., FD_CLOEXEC...) calls after the open's.
+> However, this is not easily done without impact on the standard case
+> with modern headers. I assume you will like this even less.
+>
+> To me, case 2 seems a valid solution to an otherwise unusable kmod on
+> systems with old kernels / kernel headers. The impact of the leaked
+> file descriptors is to be accepted in this case.
+
+I'm all for accepting the leaked file descriptors *in this case*. Not
+in the general case in which one takes kmod and realizes it works fine
+in < 2.6.23. Because it doesn't and pretending it does is just asking
+for invalid bug reports.
+
+So as I said, I don't think this is material for upstream.
+
+What we could do is to hide the definition of O_CLOEXEC behind a
+configure flag... but then the amount of ifdef, the benefits from it
+and having to maintain that on build sys don't pay off IMO.
+
+> However, if you still feel this is not upstreamable, then I will back
+> off and hope that Peter will accept the patch in Buildroot :)
+
+I do think this could be accepted there. AFAICS he already acked on
+it. Just make sure this is a patch that gets applied on host-kmod
+only, not the one running on target. Let's try this approach and come
+back to what I suggested above if it becomes too troublesome to
+downstream?
+
+
 -- 
-1.9.1
+Lucas De Marchi
