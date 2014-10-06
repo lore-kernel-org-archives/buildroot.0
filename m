@@ -1,60 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Oct 2014 14:45:07 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-04
-In-Reply-To: <20141005063015.846CF101508@stock.ovh.net>
-References: <20141005063015.846CF101508@stock.ovh.net>
-Message-ID: <CANQCQpYkPJATN4b8hYwCWtLpz3XhO5ZtESWb9crSChA2jYgrjQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 06 Oct 2014 21:47:17 +0200
+Subject: [Buildroot] [PATCH 1/3] host-pkgconf: install pkg-config-native
+In-Reply-To: <1411489271-26899-2-git-send-email-eric.le.bihan.dev@free.fr>
+ (Eric Le Bihan's message of "Tue, 23 Sep 2014 18:21:09 +0200")
+References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1411489271-26899-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <87r3ylhtfe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
-On Sun, Oct 5, 2014 at 1:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-10-04
-> ===============================
->
->         success : 193
->        failures : 97
->        timeouts : 0
->           TOTAL : 290
->
-> Classification of failures by reason
-> ====================================
->
->     host-protobuf-c-v1.0.0-rc1 | 21
->                    atftp-0.7.1 | 19
->                    perl-5.20.1 | 8
->                    dejavu-2.34 | 7
->                   fan-ctrl-1.3 | 6
->          python-protobuf-2.6.0 | 5
->                  opencv-2.4.10 | 4
->                valgrind-3.10.0 | 2
->                  webkit-1.11.5 | 2
->                      tcl-8.6.2 | 2
->                 protobuf-2.6.0 | 2
-<snip>
->      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/3c1c620684a23b4cbb1cfa560096094cd9bf09ec/
->      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/f1b70ebabd587987547424a21eefc530317026cd/
+ > The package host-pkgconf now provides `pkg-config-native`, which uses the
+ > host native sysroot. It is useful for packages which compile build-time
+ > helper tools (such as Gtk+ 3.0).
 
-These powerpc builds use a gcc 4.5 compiler which doesn't provide the
-generic atomicops implementation which is only exposed if GCC >= 4.7.
-I looked at the BR2_ARCH_HAS_ATOMICS option as a possible dependency
-to fix this but it seems like that option is always set if the ARCH
-supports it.  Not necessarily based on if a toolchain provides a
-generic.
+ > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ > ---
+ >  package/pkgconf/pkg-config-native.in | 3 +++
+ >  package/pkgconf/pkgconf.mk           | 8 ++++++++
+ >  2 files changed, 11 insertions(+)
+ >  create mode 100644 package/pkgconf/pkg-config-native.in
 
+ > diff --git a/package/pkgconf/pkg-config-native.in b/package/pkgconf/pkg-config-native.in
+ > new file mode 100644
+ > index 0000000..7e25cd2
+ > --- /dev/null
+ > +++ b/package/pkgconf/pkg-config-native.in
+ > @@ -0,0 +1,3 @@
+ > +#!/bin/sh
+ > +
+ > +PKG_CONFIG_LIBDIR=@HOST_DIR@/usr/lib/pkgconfig:@HOST_DIR@/usr/share/pkgconfig @HOST_DIR@/usr/bin/pkgconf $@
+
+Why is that needed? host-pkgconf is already built with
+--prefix=$HOST_DIR/usr, so it does the right thing:
+
+strace output/host/usr/bin/pkgconf --cflags blah 2>&1 |grep blah                      ~/source/buildroot
+execve("output/host/usr/bin/pkgconf", ["output/host/usr/bin/pkgconf", "--cflags", "blah"], [/* 50 vars */]) = 0
+open("/home/peko/source/buildroot/output/host/usr/lib/pkgconfig/blah-uninstalled.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/home/peko/source/buildroot/output/host/usr/lib/pkgconfig/blah.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/home/peko/source/buildroot/output/host/usr/share/pkgconfig/blah-uninstalled.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/home/peko/source/buildroot/output/host/usr/share/pkgconfig/blah.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Bye, Peter Korsgaard
