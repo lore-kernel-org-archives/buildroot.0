@@ -1,34 +1,27 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  6 Oct 2014 21:28:11 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libva-intel-driver: Bump version to
-	1.4.0
-In-Reply-To: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1412623692-3322-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 06 Oct 2014 21:27:38 +0200
+Subject: [Buildroot] [PATCH 1/1] uclibc/ffmpeg: Fix fminf-related build
+	error
+References: <1411479699-16331-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141005234010.17ab13c5@free-electrons.com>
+Message-ID: <XnsA3BEDA4F21A53berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-intel-driver/libva-intel-driver.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141005234010.17ab13c5 at free-electrons.com:
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index b717e29..5aed95b 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 1.3.2
-+LIBVA_INTEL_DRIVER_VERSION = 1.4.0
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
--- 
-1.7.10.4
+> Do you think we could have a solution that combines keeping the ffmpeg
+> fminf() patch, and adding the uClibc patch?
+
+Hi,
+
+I will investigate, but it will take several days for me to do so. Meanwhile 
+I will send the next ffmpeg version bump now ;)
+
+Regards, Bernd
