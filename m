@@ -1,59 +1,63 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  6 Oct 2014 22:19:26 +0200
-Subject: [Buildroot] [PATCH v4 9/9] package/gstreamer1/gst1-plugins-bad:
-	rework opencv plugin dependencies
-In-Reply-To: <1412626766-24683-1-git-send-email-s.martin49@gmail.com>
-References: <1412626766-24683-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1412626766-24683-10-git-send-email-s.martin49@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 6 Oct 2014 15:20:45 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-05
+In-Reply-To: <1412626268.2656.6.camel@abrodkin-8560l.internal.synopsys.com>
+References: <20141006063013.D7B26101723@stock.ovh.net>
+ <20141006094333.211d8a76@free-electrons.com>
+ <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
+ <20141006214408.2af48bbb@free-electrons.com>
+ <CANQCQpaPvCgGzzukyUAASZqO9-d28Q7UwUemsjvc9xtJ5TTeKg@mail.gmail.com>
+ <1412626268.2656.6.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <CANQCQpYo55QJoGPNcg7ZfEq5O+9qQO9f-G5wocD+NDDj=HuBRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst1 opencv plugin source code still include OpenCV's headers from its
-deprecated API.
+Hi Alexey,
 
-Use the newly introduced BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS to
-select all required OpenCV module dependencies.
+On Mon, Oct 6, 2014 at 3:11 PM, Alexey Brodkin
+<Alexey.Brodkin@synopsys.com> wrote:
+> Hi Matthew,
+>
+>
+> On Mon, 2014-10-06 at 14:47 -0500, Matthew Weber wrote:
+>> Thomas, Gustoavo,
+>
+>> They actually cleaned up the library and now default to the GCC
+>> provided generics.  So in the case of PPC it doesn't even need a
+>> definition in this file.  However.....  These powerpc builds use a gcc
+>> 4.5 compiler which doesn't provide the generic atomicops
+>> implementation which is only exposed if GCC >= 4.7.  I looked at the
+>> BR2_ARCH_HAS_ATOMICS option as a possible dependency
+>> to fix this but it seems like that option is always set if the ARCH
+>> supports it.  Not necessarily based on if a toolchain provides a
+>> generic.  Thoughts?
+>
+> Well it's not necessary hard-coded for particular arches.
+> For example on ARC
+> http://git.buildroot.net/buildroot/tree/arch/Config.in.arc we have an
+> ability to select if toolchain will be built with atomics enabled or
+> not. And then according to this selection BR2_ARCH_HAS_ATOMICS will be
+> used for filtering packages that require atomics.
+>
+> Still this topic of atomics requires more love and discussions to
+> follow.
+>
+> -Alexey
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Ok, good point. I wonder if it's something that could be set by
+default during the toolchain detection based on GCC >= 4.7 and
+existence of atomicops.h?
 
----
-changes v3 -> v4:
-- rebase
-
-changes v2 -> v3:
-- rebase
-- update A/R/T tags
-
-changes v1 -> v2:
-- new patch
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index c455aca..e59620f 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -437,15 +437,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	# Remove the following opencv modules when gstreamer fixes the
- 	# problem of including the old "cv.h" header
- 	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
--	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
--	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV_LIB_FLANN
--	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV_LIB_LEGACY
--	select BR2_PACKAGE_OPENCV_LIB_ML
--	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
--	select BR2_PACKAGE_OPENCV_LIB_VIDEO
-+	select BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
- 	help
- 	  GStreamer OpenCV Plugins
- 
 -- 
-2.1.2
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
