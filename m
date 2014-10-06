@@ -1,49 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Oct 2014 16:06:22 -0300
-Subject: [Buildroot] [PATCH] slang: disable termcap
-Message-ID: <1412622382-11624-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 06 Oct 2014 21:14:01 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-05
+References: <20141006063013.D7B26101723@stock.ovh.net>
+ <20141006094333.211d8a76@free-electrons.com>
+Message-ID: <XnsA3BED80009E38berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't have/do it and sometimes it misdetects. Fixes:
-http://autobuild.buildroot.net/results/ec9/ec9f1d7680aa50357d9a6646cef610dcaa1e8041/
+[posted and mailed]
 
-Also add hash file.
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20141006094333.211d8a76 at free-electrons.com: 
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/slang/slang.hash | 2 ++
- package/slang/slang.mk   | 6 ++++++
- 2 files changed, 8 insertions(+)
- create mode 100644 package/slang/slang.hash
+>>         sh4a |                      vlc-2.1.5 | NOK |
+>>         http://autobuild.buildroot.net/results/4e6b7a7822ef2c0f1d2e52103
+>>         6252960e999acfa/ 
+> VLC/Qt issue:
+>   CXX      libqt4_plugin_la-main_interface.moc.lo
+> main_interface.moc.cpp:14:2: error: #error "This file was generated
+> using the moc from 4.6.3. It" main_interface.moc.cpp:15:2: error: #error
+> "cannot be used with the include files from this version of Qt." 
+> main_interface.moc.cpp:16:2: error: #error "(The moc has changed too
+> much.)" Bernd, maybe ?
 
-diff --git a/package/slang/slang.hash b/package/slang/slang.hash
-new file mode 100644
-index 0000000..000ac11
---- /dev/null
-+++ b/package/slang/slang.hash
-@@ -0,0 +1,2 @@
-+# From http://www.jedsoft.org/releases/slang/
-+sha1	c3270b58a58e6cbfd47f0a6e3d2194dd9e7c7d14	slang-2.3.0.tar.gz
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 6962e77..15b65b3 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -11,6 +11,12 @@ SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
- SLANG_MAKE = $(MAKE1)
- 
-+# Racy and we don't have/do libtermcap
-+define SLANG_DISABLE_TERMCAP
-+	$(SED) '/^TERMCAP=/s:=.*:=:' $(@D)/configure
-+endef
-+SLANG_POST_PATCH_HOOKS += SLANG_DISABLE_TERMCAP
-+
- # Absolute path hell, sigh...
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- 	SLANG_CONF_OPTS += --with-png=$(STAGING_DIR)/usr
--- 
-2.0.4
+Hi Thomas,
+
+I still can not reproduce the error here:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/94721
+
+It only happens on Peter?s autobuilder since Sep 13th:
+http://autobuild.buildroot.net/?reason=vlc-2.1.5
+
+Maybe a local moc binary is getting in the way?
+
+Regards, Bernd
