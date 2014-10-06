@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 09:33:46 +0200
-Subject: [Buildroot] [git commit] dejavu: add hash file
-Message-ID: <20141006073423.6CA8BB0B8F@busybox.osuosl.org>
+Date: Mon, 6 Oct 2014 09:36:04 +0200
+Subject: [Buildroot] [git commit] fan-ctrl: add hash file
+Message-ID: <20141006073630.0859CB0B99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be4f0dfbb280b57dbb5a87ec6819814587218380
+commit: http://git.buildroot.net/buildroot/commit/?id=80498940879b25e22a068b2fa3d8d3c14e815f7e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Should avoid download issues in the autobuilders, and therefore
-ultimately fix issues such as:
+Should avoid autobuilder download issues, and therefore fix issues
+such as:
 
-  http://autobuild.buildroot.net/results/3da/3dadab55abebf89ab1abd6b943b66d2f70a07e14/
+  http://autobuild.buildroot.net/results/afc/afcf6977e7845cf423d3f58d751f762622d84615/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dejavu/dejavu.hash |    2 ++
+ package/fan-ctrl/fan-ctrl.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+diff --git a/package/fan-ctrl/fan-ctrl.hash b/package/fan-ctrl/fan-ctrl.hash
 new file mode 100644
-index 0000000..11e0d1c
+index 0000000..0bd5d60
 --- /dev/null
-+++ b/package/dejavu/dejavu.hash
++++ b/package/fan-ctrl/fan-ctrl.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha1 33fa825aa1dd44ce23a11af92b3078e978ff513d dejavu-fonts-ttf-2.34.tar.bz2
++sha1 d8ba5bac15e90c36a4e908ca1c98fac83bf702ea fan-ctrl.c?revision=1.3
