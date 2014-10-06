@@ -1,40 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 18:23:42 +0200
-Subject: [Buildroot] [PATCH v8] package/canfestival: new package
-In-Reply-To: <1412027000-15481-2-git-send-email-s.martin49@gmail.com>
-References: <1412027000-15481-1-git-send-email-s.martin49@gmail.com>
- <1412027000-15481-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20141006182342.77360f5e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Oct 2014 19:17:59 +0200
+Subject: [Buildroot] [PATCH] libxml2: Add patch to remove weak symbol
+ trickery
+In-Reply-To: <1744839.Qfi6dWdBgg@hyperion>
+References: <1410410325-23801-1-git-send-email-maarten@treewalker.org>
+ <20141005193557.25145932@free-electrons.com>
+ <1744839.Qfi6dWdBgg@hyperion>
+Message-ID: <20141006171759.GA4122@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Maarten, All,
 
-On Mon, 29 Sep 2014 23:43:20 +0200, Samuel Martin wrote:
-> Note: the patch adding the pkgconfig module has been sent upstream [1].
+On 2014-10-06 01:29 +0200, Maarten ter Huurne spake thusly:
+> On Sunday 05 October 2014 19:35:57 Thomas Petazzoni wrote:
+> > On Thu, 11 Sep 2014 06:38:45 +0200, Maarten ter Huurne wrote:
+> > > This avoids runtime problems when linking libpthread statically and it
+> > > fixes compilation with musl libc.
+> > > 
+> > > The patch is based on this one:
+> > >   https://github.com/sabotage-linux/sabotage/blob/master/KEEP/libxml2-pt
+> > >   hread.patch> 
+> > > I added the configure modification to ensure that libxml-2.0.pc will
+> > > list libpthread as a private dependency.
+> > 
+> > Missing SoB line.
 > 
-> [1] http://sourceforge.net/p/canfestival/mailman/message/32876320/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
-> Cc: Julien Boibessot <julien.boibessot@armadeus.com>
-> Cc: Davide Viti <zinosat@tiscali.it>
-> Cc: Claudio Laurita <claudio.laurita@integrazionetotale.it>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Is there a policy for including 3rd party patches? In this case the fragment 
+> I took from Sabotage Linux only removes code, so I don't think there could 
+> be any copyright issues there (no creativity involved), but in general would 
+> my SoB line be sufficient or would I need one from the 3rd party author as 
+> well?
 
-Thanks, applied, after doing a few changes:
+When using a patch from somewhere else:
+  - take the patch as-is,
+  - add to the description of that patch the URL where you got it: an
+    upstream commit, a bug-tracker, a mailing...
+  - add your own SoB line.
 
-    [Thomas:
-     - license seems to be only LGPLv2.1+. At least, the specific files
-       pointed to be GPLv2 carry a LGPLv2.1+ header.
-     - added thread dependency
-     - minor rewording here and there.]
+That way, proper attribution is done, both for the original author(s)
+and you.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
