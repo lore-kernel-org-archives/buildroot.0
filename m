@@ -1,70 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 17:18:14 +0200
-Subject: [Buildroot] [RFC/PATCH 1/1] gst-fsl-plugins: fix compile for
- sysroot based on newer linux kernel headers
-In-Reply-To: <1393366722-27644-2-git-send-email-ps.report@gmx.net>
-References: <1393366722-27644-1-git-send-email-ps.report@gmx.net>
- <1393366722-27644-2-git-send-email-ps.report@gmx.net>
-Message-ID: <20141006171814.378d6558@free-electrons.com>
+Date: Mon, 6 Oct 2014 17:37:46 +0200
+Subject: [Buildroot] [PATCH 5/6] intltool: refactor with host-perl
+In-Reply-To: <CAB0FRsskEMr08iL9=Fcmmi=StVdCPk84jQcJC1V044tUi7hY2Q@mail.gmail.com>
+References: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
+ <1408471638-4551-5-git-send-email-francois.perrad@gadz.org>
+ <20140820142128.62163ff9@free-electrons.com>
+ <CAB0FRsskEMr08iL9=Fcmmi=StVdCPk84jQcJC1V044tUi7hY2Q@mail.gmail.com>
+Message-ID: <20141006173746.19e1109d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Fran?ois Perrad,
 
-On Tue, 25 Feb 2014 23:18:42 +0100, Peter Seiderer wrote:
-> The v4l2 ioctl VIDIOC_DBG_G_CHIP_IDENT was removed in linux-3.11 (see [1]/[2]).
+On Wed, 20 Aug 2014 18:45:07 +0200, Fran?ois Perrad wrote:
+
+> host-intltool depends on host-perl-xml-parser,
+> and now, host-perl-xml-parser depends on host-perl.
 > 
-> To avoid build failure of the gst-fsl-plugins/mfw_gst_v4lsrc with toolchains based
-> on newer linux kernel headers this patch gives the include of the custom linux
-> kernel headers precedence over the sysroot linux kernel headers (oposed to the
-> previous behavior).
-> 
-> Fixes the following compile error with buildroot/glibc toolchain:
-> 
-> mfw_gst_v4lsrc.c: In function 'mfw_gst_v4lsrc_capture_setup':
-> mfw_gst_v4lsrc.c:452:10: error: variable 'chip' has initializer but incomplete type
->    struct v4l2_dbg_chip_ident chip = {0};
->           ^
-> mfw_gst_v4lsrc.c:452:10: warning: excess elements in struct initializer [enabled by default]
-> mfw_gst_v4lsrc.c:452:10: warning: (near initialization for 'chip') [enabled by default]
-> mfw_gst_v4lsrc.c:452:30: error: storage size of 'chip' isn't known
->    struct v4l2_dbg_chip_ident chip = {0};
->                               ^
-> mfw_gst_v4lsrc.c:464:22: error: 'VIDIOC_DBG_G_CHIP_IDENT' undeclared (first use in this function)
->    if (ioctl (fd_v4l, VIDIOC_DBG_G_CHIP_IDENT, &chip)) {
->                       ^
-> 
-> [1] http://www.spinics.net/lists/linux-media/msg64081.html
-> [2] https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/videodev2.h?id=b71c99801e18eb172ae34851daf25044a3bf644a
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> A host-perl-foo-module cannot depend on host-perl OR system-perl.
+> All host-perl-foo-module must depend on host-perl.
 
-I believe this problem has been fixed by the following commit:
+Sorry, but it's not acceptable to have host-intltool depend on
+host-perl. It's bringing a huge dependency (host-perl) in a large
+number of configurations, since host-intltool is used by so many
+packages.
 
-commit daf3708be46d7eb7e9352ee987f37e32eb00c6bd
-Author: Gary Bisson <bisson.gary@gmail.com>
-Date:   Fri Jul 25 22:34:30 2014 -0700
+I had a discussion with Gustavo about this not long ago, and here is
+our proposal: change host-perl-xml-parser to *not* use the perl package
+infrastructure, as an exception. This way, it will not depend on
+host-perl, and we'll be happy. Of course, it's a bit ugly because we
+have a Perl package not handled by the package infrastructure, but
+that's a reasonable solution for this problem.
 
-    gst-fsl-plugins: fix build for kernel headers >= 3.10
-    
-    This package couldn't build using a toolchain with kernel headers >=
-    3.10 because of the use of VIDIOC_DBG_G_CHIP_IDENT. As stated in
-    videodev2.h, this ioctl should never be used.
-    
-    Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-    Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Another approach would be to make host-intltool not depend on
+XML::Parser. It seems like it's possible to get rid of the XML::Parser
+dependency by passing no-xml as the second argument of the
+IT_PROG_INTLTOOL macro. But this needs to be done in each and every
+package using intltool. All of the packages that are not using XML
+based translation files could pass no-xml, and we would get rid of the
+dependency on host-perl-xml-parser for those packages. That could be
+one option.
 
-Therefore, I'm marking your patch as Superseded in our patch tracking
-system.
+Since the vast majority of projects seem to be using "ini style"
+translation files, we could probably use no-xml on many of them and get
+rid of the problem.
 
-Best regards,
+Thoughts?
+
+Thanks,
 
 Thomas
 -- 
