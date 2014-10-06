@@ -1,46 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Oct 2014 19:27:40 +0200
-Subject: [Buildroot] [PATCH 1/1] openvmtools: remove unnecessary C flag
-In-Reply-To: <1412594238-39906-1-git-send-email-kaszak@gmail.com>
-References: <1412594238-39906-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20141006172740.GB4122@free.fr>
+Date: Mon, 6 Oct 2014 19:28:52 +0200
+Subject: [Buildroot] [PATCH] legal-info: fix bug leading to one package
+ not being considered
+In-Reply-To: <1412612170-31047-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1412612170-31047-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141006172852.GC4122@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Karoly, All,
+Thomas, All,
 
-On 2014-10-06 13:17 +0200, Karoly Kasza spake thusly:
-> Since commit 8bec0a1af57165081dc275f813c8c5c74ff12c14
-> the -Wno-unused-local-typedefs CFLAG in not needed.
+On 2014-10-06 18:16 +0200, Thomas Petazzoni spake thusly:
+> Due to excessive parenthesis, the TARGETS_LEGAL_INFO expression was
+> evaluated to something like this:
 > 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+>   toolchain-legal-info toolchain-external-legal-info busybox-legal-info zlib-legal-info))
+> 
+> Yes, with the last two parenthesis. This had the effect that the
+> zlib-legal-info rule was never called: the last package of $(TARGETS)
+> $(TARGET_HOST_DEPS) $(HOST_DEPS) was never added in the legal-info
+> information.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Oviously an issue, indeed.
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/openvmtools/openvmtools.mk |    1 -
->  1 file changed, 1 deletion(-)
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-> index 598107c..7aa04af 100644
-> --- a/package/openvmtools/openvmtools.mk
-> +++ b/package/openvmtools/openvmtools.mk
-> @@ -41,7 +41,6 @@ endif
+> diff --git a/Makefile b/Makefile
+> index 6068e7f..3f56648 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -414,7 +414,7 @@ HOST_DEPS = $(sort $(foreach dep,\
+>  HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
 >  
->  ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
->  OPENVMTOOLS_CONF_OPTS += --with-pam
-> -OPENVMTOOLS_MAKE_OPTS += CFLAGS+="-Wno-unused-local-typedefs"
->  OPENVMTOOLS_DEPENDENCIES += linux-pam
->  else
->  OPENVMTOOLS_CONF_OPTS += --without-pam
+>  TARGETS_LEGAL_INFO := $(patsubst %,%-legal-info,\
+> -		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+> +		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
+>  
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+>  	$(HOST_DIR) $(BINARIES_DIR)
 > -- 
-> 1.7.10.4
+> 2.0.0
 > 
 
 -- 
