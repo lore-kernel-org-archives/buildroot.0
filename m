@@ -1,100 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Oct 2014 00:35:10 +0200
-Subject: [Buildroot] [PATCH 4/7 v2] package/freerdp: add options to
-	enable/disable server and/or client
+Date: Tue,  7 Oct 2014 00:35:12 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] package/freerdp: install server key and
+	certificate
 In-Reply-To: <cover.1412634775.git.yann.morin.1998@free.fr>
 References: <cover.1412634775.git.yann.morin.1998@free.fr>
-Message-ID: <c3e7653516c234689d95b3a3b74cd06b6e7ef664.1412634775.git.yann.morin.1998@free.fr>
+Message-ID: <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the client or the server requires an X.Org stack.
-
-Since freerdp can also be used for weston (wayland-based, hence no X.Org
-stack), we may want to disable the client and server.
-
-Conversely, with on an X.Org stack, we may want to enable either or
-none if we're just interested in the library.
-
-Add two options, one to enable the server, the other the client; both
-default to 'y' so that a previous .config can be re-used as-is, and
-echibit the same behaviour, that is to build the server and client.
+This is mandatory for an RDP server to have a key and a certificate,
+otherwise clients will refuse to connect to that server.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- package/freerdp/Config.in  | 20 ++++++++++++++++++--
- package/freerdp/freerdp.mk | 15 +++++++++++++++
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ package/freerdp/freerdp.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 23d0b0f..8e29a5b 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -6,17 +6,33 @@ config BR2_PACKAGE_FREERDP
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
- 
-+	  This only installs the freerdp library.
-+
- 	  http://www.freerdp.com/
- 
- if BR2_PACKAGE_FREERDP
- 
- config BR2_PACKAGE_FREERDP_NEEDS_XLIBS
--	def_bool y
--	depends on BR2_PACKAGE_XORG7
-+	bool
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 
-+config BR2_PACKAGE_FREERDP_SERVER
-+	bool "build server"
-+	default y
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FREERDP_NEEDS_XLIBS
-+
-+config BR2_PACKAGE_FREERDP_CLIENT
-+	bool "build client"
-+	default y
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FREERDP_NEEDS_XLIBS
-+
-+comment "freerdp server and client needs X.Org"
-+	depends on !BR2_PACKAGE_XORG7
-+
- endif
 diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index b50fd1e..594bab3 100644
+index ea590d1..e643e57 100644
 --- a/package/freerdp/freerdp.mk
 +++ b/package/freerdp/freerdp.mk
-@@ -20,6 +20,21 @@ else
- FREERDP_CONF_OPTS += -DWITH_X11=OFF
+@@ -86,4 +86,14 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
  endif
  
-+# We need to tell CMake to only create position-independent code,
-+# othwerwise the server does not build.
-+ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
-+FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
-+endif
++# Install the server key and certificate, so that a client can connect.
++# A user can override them with its opwn in a post-build script, if needed.
++define FREERDP_INSTALL_KEYS
++	$(INSTALL) -D $(@D)/server/X11/server.key \
++		      $(TARGET_DIR)/etc/freerdp/keys/server.key
++	$(INSTALL) -D $(@D)/server/X11/server.crt \
++		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
++endef
++FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
 +
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_CUPS),y)
- FREERDP_CONF_OPTS += -DWITH_CUPS=ON
- FREERDP_DEPENDENCIES += cups
+ $(eval $(cmake-package))
 -- 
 1.9.1
