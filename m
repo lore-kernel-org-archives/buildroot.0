@@ -1,59 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 17:37:46 +0200
-Subject: [Buildroot] [PATCH 5/6] intltool: refactor with host-perl
-In-Reply-To: <CAB0FRsskEMr08iL9=Fcmmi=StVdCPk84jQcJC1V044tUi7hY2Q@mail.gmail.com>
-References: <1408471638-4551-1-git-send-email-francois.perrad@gadz.org>
- <1408471638-4551-5-git-send-email-francois.perrad@gadz.org>
- <20140820142128.62163ff9@free-electrons.com>
- <CAB0FRsskEMr08iL9=Fcmmi=StVdCPk84jQcJC1V044tUi7hY2Q@mail.gmail.com>
-Message-ID: <20141006173746.19e1109d@free-electrons.com>
+Date: Mon, 6 Oct 2014 17:39:37 +0200
+Subject: [Buildroot] [git commit] package/erlang: build host-erlang with
+	support for openssl
+Message-ID: <20141006153947.A083EB0BE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=58381b3eca628776bdd02abfc5566c3ae0232839
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Aug 2014 18:45:07 +0200, Fran?ois Perrad wrote:
+Erlang uses openssl for all things crypto.
 
-> host-intltool depends on host-perl-xml-parser,
-> and now, host-perl-xml-parser depends on host-perl.
-> 
-> A host-perl-foo-module cannot depend on host-perl OR system-perl.
-> All host-perl-foo-module must depend on host-perl.
+Since there are host Erlang tools that use crypto (such as rebar), we
+need to build host-erlang with support for crypto, and thus it shall
+depends on openssl.
 
-Sorry, but it's not acceptable to have host-intltool depend on
-host-perl. It's bringing a huge dependency (host-perl) in a large
-number of configurations, since host-intltool is used by so many
-packages.
+Suggested-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/erlang.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-I had a discussion with Gustavo about this not long ago, and here is
-our proposal: change host-perl-xml-parser to *not* use the perl package
-infrastructure, as an exception. This way, it will not depend on
-host-perl, and we'll be happy. Of course, it's a bit ugly because we
-have a Perl package not handled by the package infrastructure, but
-that's a reasonable solution for this problem.
-
-Another approach would be to make host-intltool not depend on
-XML::Parser. It seems like it's possible to get rid of the XML::Parser
-dependency by passing no-xml as the second argument of the
-IT_PROG_INTLTOOL macro. But this needs to be done in each and every
-package using intltool. All of the packages that are not using XML
-based translation files could pass no-xml, and we would get rid of the
-dependency on host-perl-xml-parser for those packages. That could be
-one option.
-
-Since the vast majority of projects seem to be using "ini style"
-translation files, we could probably use no-xml on many of them and get
-rid of the problem.
-
-Thoughts?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 986b6c9..e6899de 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -8,7 +8,6 @@ ERLANG_VERSION = 17.3
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+-HOST_ERLANG_DEPENDENCIES =
+ 
+ ERLANG_LICENSE = EPL
+ ERLANG_LICENSE_FILES = EPLICENCE
+@@ -22,7 +21,11 @@ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
+ 
+ ERLANG_CONF_OPTS = --without-javac
+-HOST_ERLANG_CONF_OPTS = --without-javac
++
++# erlang uses openssl for all things crypto. Since the host tools (such as
++# rebar) uses crypto, we need to build host-erlang with support for openssl.
++HOST_ERLANG_DEPENDENCIES = host-openssl
++HOST_ERLANG_CONF_OPTS = --without-javac --with-ssl=$(HOST_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ ERLANG_CONF_OPTS += --with-termcap
