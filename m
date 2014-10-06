@@ -1,44 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 6 Oct 2014 20:11:09 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-10-05
-In-Reply-To: <CANQCQpaPvCgGzzukyUAASZqO9-d28Q7UwUemsjvc9xtJ5TTeKg@mail.gmail.com>
-References: <20141006063013.D7B26101723@stock.ovh.net>
- <20141006094333.211d8a76@free-electrons.com>
- <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
- <20141006214408.2af48bbb@free-electrons.com>
- <CANQCQpaPvCgGzzukyUAASZqO9-d28Q7UwUemsjvc9xtJ5TTeKg@mail.gmail.com>
-Message-ID: <1412626268.2656.6.camel@abrodkin-8560l.internal.synopsys.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon,  6 Oct 2014 22:19:17 +0200
+Subject: [Buildroot] [PATCH v4 0/9] OpenCV improvement
+Message-ID: <1412626766-24683-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Hi all,
 
+Here is a couple of improvement in OpenCV package and its reverse
+dependencies.
 
-On Mon, 2014-10-06 at 14:47 -0500, Matthew Weber wrote:
-> Thomas, Gustoavo,
+Cheers,
 
-> They actually cleaned up the library and now default to the GCC
-> provided generics.  So in the case of PPC it doesn't even need a
-> definition in this file.  However.....  These powerpc builds use a gcc
-> 4.5 compiler which doesn't provide the generic atomicops
-> implementation which is only exposed if GCC >= 4.7.  I looked at the
-> BR2_ARCH_HAS_ATOMICS option as a possible dependency
-> to fix this but it seems like that option is always set if the ARCH
-> supports it.  Not necessarily based on if a toolchain provides a
-> generic.  Thoughts?
+Samuel Martin (9):
+  package/opencv: update opencv options after last version bump
+  package/opencv: add Qt5 support
+  package/opencv: add python/numpy support
+  package/opencv: add Gstreamer-1 support
+  package/opencv: define modules inter-dependencies
+  package/opencv: add hidden symbol
+    BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
+  package/opencv: fix opencv.pc file generation
+  package/vlc: add opencv support
+  package/gstreamer1/gst1-plugins-bad: rework opencv plugin dependencies
 
-Well it's not necessary hard-coded for particular arches.
-For example on ARC
-http://git.buildroot.net/buildroot/tree/arch/Config.in.arc we have an
-ability to select if toolchain will be built with atomics enabled or
-not. And then according to this selection BR2_ARCH_HAS_ATOMICS will be
-used for filtering packages that require atomics.
+ package/gstreamer1/gst1-plugins-bad/Config.in      |  10 +-
+ package/opencv/Config.in                           | 164 +++++++++++++++++----
+ ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 ++++++++++++++++++++
+ ...0002-cmake-fix-gstreamer-check-conditions.patch |  78 ++++++++++
+ package/opencv/opencv.mk                           |  39 ++++-
+ package/vlc/Config.in                              |   1 +
+ package/vlc/vlc.mk                                 |   7 +
+ 7 files changed, 410 insertions(+), 45 deletions(-)
+ create mode 100644 package/opencv/opencv-0001-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+ create mode 100644 package/opencv/opencv-0002-cmake-fix-gstreamer-check-conditions.patch
 
-Still this topic of atomics requires more love and discussions to
-follow.
-
--Alexey
+--
+2.1.2
