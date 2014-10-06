@@ -1,58 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 21:44:08 +0200
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 6 Oct 2014 14:45:07 -0500
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-10-05
-In-Reply-To: <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
-References: <20141006063013.D7B26101723@stock.ovh.net>
- <20141006094333.211d8a76@free-electrons.com>
- <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
-Message-ID: <20141006214408.2af48bbb@free-electrons.com>
+	2014-10-04
+In-Reply-To: <20141005063015.846CF101508@stock.ovh.net>
+References: <20141005063015.846CF101508@stock.ovh.net>
+Message-ID: <CANQCQpYkPJATN4b8hYwCWtLpz3XhO5ZtESWb9crSChA2jYgrjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Weber,
+Thomas,
 
-On Mon, 6 Oct 2014 14:22:29 -0500, Matthew Weber wrote:
+On Sun, Oct 5, 2014 at 1:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-10-04
+> ===============================
+>
+>         success : 193
+>        failures : 97
+>        timeouts : 0
+>           TOTAL : 290
+>
+> Classification of failures by reason
+> ====================================
+>
+>     host-protobuf-c-v1.0.0-rc1 | 21
+>                    atftp-0.7.1 | 19
+>                    perl-5.20.1 | 8
+>                    dejavu-2.34 | 7
+>                   fan-ctrl-1.3 | 6
+>          python-protobuf-2.6.0 | 5
+>                  opencv-2.4.10 | 4
+>                valgrind-3.10.0 | 2
+>                  webkit-1.11.5 | 2
+>                      tcl-8.6.2 | 2
+>                 protobuf-2.6.0 | 2
+<snip>
+>      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/3c1c620684a23b4cbb1cfa560096094cd9bf09ec/
+>      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/f1b70ebabd587987547424a21eefc530317026cd/
 
-> I've got the fixes captured and hope to have something tomorrow after
-> testing.  I also noticed in the build results from the day before,
-> protobuf 2.6 has some failures with a specific powerpc toolchain
-> (looks like atomics). I should also have fixes for that in the next
-> series.
+These powerpc builds use a gcc 4.5 compiler which doesn't provide the
+generic atomicops implementation which is only exposed if GCC >= 4.7.
+I looked at the BR2_ARCH_HAS_ATOMICS option as a possible dependency
+to fix this but it seems like that option is always set if the ARCH
+supports it.  Not necessarily based on if a toolchain provides a
+generic.
 
-Great, thanks!
 
-Regarding the PowerPC result at
-http://autobuild.buildroot.org/results/d45/d459457d0046cf96b56c5fc0660eca326d90401d/build-end.log,
-it looks weird, because the code is:
-
-#elif defined(__ppc__)
-#define GOOGLE_PROTOBUF_ARCH_PPC 1
-#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
-#elif defined(__GNUC__) && \
- (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4))
-// We fallback to the generic GCC >= 4.7 implementation in atomicops.h
-# if __LP64__
-#  define GOOGLE_PROTOBUF_ARCH_64_BIT 1
-# else
-#  define GOOGLE_PROTOBUF_ARCH_32_BIT 1
-# endif
-#else
-#error Host architecture was not detected as supported by protobuf
-#endif
-
-Since the failure is on PowerPC, __ppc__ should be defined, and we
-shouldn't have the #error.
-
-Maybe Gustavo, you know if __ppc__ is not defined on certain PPC platforms?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
