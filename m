@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 12:33:34 +0200
-Subject: [Buildroot] [PATCH 1/1] ipmiutil: new package
-In-Reply-To: <CAJeZidJkZt99WSLzWCuzY4k650o4JFBaoBCiqy2GmHTook59KQ@mail.gmail.com>
-References: <1411033115-6914-1-git-send-email-david.bachelart@bbright.com>
- <20141005234727.1ed88b20@free-electrons.com>
- <CAJeZidJkZt99WSLzWCuzY4k650o4JFBaoBCiqy2GmHTook59KQ@mail.gmail.com>
-Message-ID: <20141006123334.6dee2ae6@free-electrons.com>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Mon,  6 Oct 2014 13:17:18 +0200
+Subject: [Buildroot] [PATCH 1/1] openvmtools: remove unnecessary C flag
+Message-ID: <1412594238-39906-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+Since commit 8bec0a1af57165081dc275f813c8c5c74ff12c14
+the -Wno-unused-local-typedefs CFLAG in not needed.
 
-On Mon, 6 Oct 2014 10:37:51 +0200, David Bachelart wrote:
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+---
+ package/openvmtools/openvmtools.mk |    1 -
+ 1 file changed, 1 deletion(-)
 
-> Yes, I do... I'm in a rush, I hope I'll submit a new patch in a few
-> days/weeks.
-
-Sure, I'll mark your patch as "Changes requested" in patch then.
-So, please remember to resend a new version, as we will not send
-another reminder since the patch will no longer be in our TODO-list of
-patches to review.
-
-Thanks!
-
-Thomas
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 598107c..7aa04af 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -41,7 +41,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+ OPENVMTOOLS_CONF_OPTS += --with-pam
+-OPENVMTOOLS_MAKE_OPTS += CFLAGS+="-Wno-unused-local-typedefs"
+ OPENVMTOOLS_DEPENDENCIES += linux-pam
+ else
+ OPENVMTOOLS_CONF_OPTS += --without-pam
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
