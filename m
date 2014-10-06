@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Oct 2014 21:01:13 +0200
-Subject: [Buildroot] [PATCH] bash: security bump to patchlevel 30
-In-Reply-To: <1412617389-21660-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1412617389-21660-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141006210113.2da7357e@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  6 Oct 2014 16:06:22 -0300
+Subject: [Buildroot] [PATCH] slang: disable termcap
+Message-ID: <1412622382-11624-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+We don't have/do it and sometimes it misdetects. Fixes:
+http://autobuild.buildroot.net/results/ec9/ec9f1d7680aa50357d9a6646cef610dcaa1e8041/
 
-On Mon,  6 Oct 2014 14:43:09 -0300, Gustavo Zacarias wrote:
-> More security issues, sigh.
-> Also fix typo in pl29 patch.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/bash/bash-003-patchlevel29.patch |    2 +-
->  package/bash/bash-004-patchlevel30.patch | 2069 ++++++++++++++++++++++++++++++
->  2 files changed, 2070 insertions(+), 1 deletion(-)
->  create mode 100644 package/bash/bash-004-patchlevel30.patch
+Also add hash file.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/slang/slang.hash | 2 ++
+ package/slang/slang.mk   | 6 ++++++
+ 2 files changed, 8 insertions(+)
+ create mode 100644 package/slang/slang.hash
 
-Thomas
+diff --git a/package/slang/slang.hash b/package/slang/slang.hash
+new file mode 100644
+index 0000000..000ac11
+--- /dev/null
++++ b/package/slang/slang.hash
+@@ -0,0 +1,2 @@
++# From http://www.jedsoft.org/releases/slang/
++sha1	c3270b58a58e6cbfd47f0a6e3d2194dd9e7c7d14	slang-2.3.0.tar.gz
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 6962e77..15b65b3 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -11,6 +11,12 @@ SLANG_LICENSE_FILES = COPYING
+ SLANG_INSTALL_STAGING = YES
+ SLANG_MAKE = $(MAKE1)
+ 
++# Racy and we don't have/do libtermcap
++define SLANG_DISABLE_TERMCAP
++	$(SED) '/^TERMCAP=/s:=.*:=:' $(@D)/configure
++endef
++SLANG_POST_PATCH_HOOKS += SLANG_DISABLE_TERMCAP
++
+ # Absolute path hell, sigh...
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ 	SLANG_CONF_OPTS += --with-png=$(STAGING_DIR)/usr
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
