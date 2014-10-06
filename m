@@ -1,38 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  6 Oct 2014 21:32:09 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/apr-util: add optional
-	dependency to openssl
-Message-ID: <1412623929-4638-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  6 Oct 2014 16:33:20 -0300
+Subject: [Buildroot] [PATCH] liboping: bump to version 1.7.0
+Message-ID: <1412624000-8938-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v3: Fixed configure option to disable OpenSSL support (Thomas)
-v2: split patch and reordered apr-util dependencies (Yann)
+ package/liboping/liboping.hash | 2 ++
+ package/liboping/liboping.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/liboping/liboping.hash
 
- package/apr-util/apr-util.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index 42506bb..85235c9 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
-@@ -46,4 +46,11 @@ else
- APR_UTIL_CONF_OPTS += --without-sqlite3
- endif
+diff --git a/package/liboping/liboping.hash b/package/liboping/liboping.hash
+new file mode 100644
+index 0000000..5987d7a
+--- /dev/null
++++ b/package/liboping/liboping.hash
+@@ -0,0 +1,2 @@
++# From http://verplant.org/liboping/#download
++sha256	25cf9417fe84d70c4b1bd97f1f92e597ccdc1ec2da3b7eb311f33f5e7033a70e	liboping-1.7.0.tar.gz
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index 22fa4fb..bb02616 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+APR_UTIL_CONF_OPTS += --with-crypto --with-openssl="$(STAGING_DIR)/usr"
-+APR_UTIL_DEPENDENCIES += openssl
-+else
-+APR_UTIL_CONF_OPTS += --without-crypto
-+endif
-+
- $(eval $(autotools-package))
+-LIBOPING_VERSION = 1.6.2
++LIBOPING_VERSION = 1.7.0
+ LIBOPING_SITE = http://verplant.org/liboping/files
+ LIBOPING_INSTALL_STAGING = YES
+ LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
 -- 
-1.7.10.4
+2.0.4
