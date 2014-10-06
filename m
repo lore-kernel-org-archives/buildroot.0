@@ -1,68 +1,92 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Oct 2014 15:41:50 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-05
-In-Reply-To: <1412627319.2656.9.camel@abrodkin-8560l.internal.synopsys.com>
-References: <20141006063013.D7B26101723@stock.ovh.net>
- <20141006094333.211d8a76@free-electrons.com>
- <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
- <20141006214408.2af48bbb@free-electrons.com>
- <CANQCQpaPvCgGzzukyUAASZqO9-d28Q7UwUemsjvc9xtJ5TTeKg@mail.gmail.com>
- <1412626268.2656.6.camel@abrodkin-8560l.internal.synopsys.com>
- <CANQCQpYo55QJoGPNcg7ZfEq5O+9qQO9f-G5wocD+NDDj=HuBRA@mail.gmail.com>
- <1412627319.2656.9.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <CANQCQpYdn-iNPbKb0FPVHbONKcsrfKscPJ1d1mfyn0ZYQcz66w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  6 Oct 2014 22:48:01 +0200
+Subject: [Buildroot] [RFC/PATCH v2 2/4] Rename XBMC to Kodi - part I - move
+	files
+In-Reply-To: <1412628483-23641-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1412628483-23641-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1412628483-23641-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+Background information: http://xbmc.org/introducing-kodi-14
 
-On Mon, Oct 6, 2014 at 3:28 PM, Alexey Brodkin
-<Alexey.Brodkin@synopsys.com> wrote:
-> Hi Matthew,
->
-> On Mon, 2014-10-06 at 15:20 -0500, Matthew Weber wrote:
->> Ok, good point. I wonder if it's something that could be set by
->> default during the toolchain detection based on GCC >= 4.7 and
->> existence of atomicops.h?
->
-> Well definitely that's possible.
-> You may see how it's implemented here -
-> http://git.buildroot.net/buildroot/tree/package/gcc/gcc.mk#n112
->
-> But
-> 1. Are you sure that with GCC >= 4.7 atomic ops are always there?
+In a first step to bump version to 14.0-Helix move the package
+to its new directory. Because git will not recognize the moved
+files due to many upcoming changes to variable names the move
+is done in this seperate commit.
 
-Not sure yet, the atomicops.h file actually is part of the protobuf
-package not gcc (my confusion on that one).  So I'll have to do some
-research on the generic atomics implementation that they do in that
-header and figure-out why the >= 4.7 dependency is checked when this
-package builds.   It might just be what this package picked as a
-minimum version for it's generic atomics implementation.
+The "Rename XBMC to Kodi" is split in two parts for easier review,
+please apply both patches in one commit.
 
-> 2. I assume it is only applicable to one particular architecture?
-At this point I'm not sure if it's just specific to how this package
-is checking or if it would be something that could be checked for.
-protobuf implements custom atomics for specific architectures and
-defaults to a requirement of GCC >= 4.7.  Looking at buildroot in
-general, I'm wondering if the only thing that's missing is a minimum
-GCC version if atomics is enabled (need to still confirm this and it
-would probably be arch independent)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in                                                    |    2 +-
+ package/{xbmc => kodi}/Config.in                                     |    0
+ package/{xbmc/S50xbmc => kodi/S50kodi}                               |    0
+ package/{xbmc/br-xbmc => kodi/br-kodi}                               |    0
+ .../kodi-0001-Fixup-include-path.patch}                              |    0
+ .../{xbmc/xbmc-0002-mathutil.patch => kodi/kodi-0002-mathutil.patch} |    0
+ package/{xbmc/xbmc.mk => kodi/kodi.mk}                               |    0
+ package/{xbmc/xbmc.service => kodi/kodi.service}                     |    0
+ 8 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/{xbmc => kodi}/Config.in (100%)
+ rename package/{xbmc/S50xbmc => kodi/S50kodi} (100%)
+ rename package/{xbmc/br-xbmc => kodi/br-kodi} (100%)
+ rename package/{xbmc/xbmc-0001-Fixup-include-path.patch => kodi/kodi-0001-Fixup-include-path.patch} (100%)
+ rename package/{xbmc/xbmc-0002-mathutil.patch => kodi/kodi-0002-mathutil.patch} (100%)
+ rename package/{xbmc/xbmc.mk => kodi/kodi.mk} (100%)
+ rename package/{xbmc/xbmc.service => kodi/kodi.service} (100%)
 
->
-> -Alexey
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 2dbe6f8..71cc533 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -14,6 +14,7 @@ menu "Audio and video applications"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+ 	source "package/jack2/Config.in"
++	source "package/kodi/Config.in"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
+@@ -33,7 +34,6 @@ menu "Audio and video applications"
+ 	source "package/vlc/Config.in"
+ 	source "package/vorbis-tools/Config.in"
+ 	source "package/wavpack/Config.in"
+-	source "package/xbmc/Config.in"
+ 	source "package/yavta/Config.in"
+ 	source "package/ympd/Config.in"
+ endmenu
+diff --git a/package/xbmc/Config.in b/package/kodi/Config.in
+similarity index 100%
+rename from package/xbmc/Config.in
+rename to package/kodi/Config.in
+diff --git a/package/xbmc/S50xbmc b/package/kodi/S50kodi
+similarity index 100%
+rename from package/xbmc/S50xbmc
+rename to package/kodi/S50kodi
+diff --git a/package/xbmc/br-xbmc b/package/kodi/br-kodi
+similarity index 100%
+rename from package/xbmc/br-xbmc
+rename to package/kodi/br-kodi
+diff --git a/package/xbmc/xbmc-0001-Fixup-include-path.patch b/package/kodi/kodi-0001-Fixup-include-path.patch
+similarity index 100%
+rename from package/xbmc/xbmc-0001-Fixup-include-path.patch
+rename to package/kodi/kodi-0001-Fixup-include-path.patch
+diff --git a/package/xbmc/xbmc-0002-mathutil.patch b/package/kodi/kodi-0002-mathutil.patch
+similarity index 100%
+rename from package/xbmc/xbmc-0002-mathutil.patch
+rename to package/kodi/kodi-0002-mathutil.patch
+diff --git a/package/xbmc/xbmc.mk b/package/kodi/kodi.mk
+similarity index 100%
+rename from package/xbmc/xbmc.mk
+rename to package/kodi/kodi.mk
+diff --git a/package/xbmc/xbmc.service b/package/kodi/kodi.service
+similarity index 100%
+rename from package/xbmc/xbmc.service
+rename to package/kodi/kodi.service
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.7.10.4
