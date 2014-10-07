@@ -1,71 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Oct 2014 00:29:33 +0200
-Subject: [Buildroot] [Patch v2 1/1] Fix selection of bootloaders from
- $(BR2_EXTERNAL)
-In-Reply-To: <20141007212938.GA2949@itchy>
-References: <1412686892-29394-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20141007154851.4a94c0f7@free-electrons.com>
- <20141007212938.GA2949@itchy>
-Message-ID: <20141007222933.GC27580@free.fr>
+Date: Wed,  8 Oct 2014 00:38:34 +0200
+Subject: [Buildroot] [PATCH 0/30] QEMU on the target (branch yem/target-qemu)
+Message-ID: <cover.1412719495.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, Thomas, All,
+Hello All!
 
-On 2014-10-07 23:29 +0200, Eric Le Bihan spake thusly:
-> On Tue, Oct 07, 2014 at 03:48:51PM +0200, Thomas Petazzoni wrote:
-> > Dear Eric Le Bihan,
-> >
-> > On Tue,  7 Oct 2014 15:01:32 +0200, Eric Le Bihan wrote:
-> > > If a package is based on "generic-package", pkg-generic.mk will compute
-> > > the name of the Kconfig variable to use for checking if this package has
-> > > been selected by the user.
-> > >
-> > > Unfortunately, this mechanism does not take into account the case where
-> > > a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
-> > >
-> > > So, even if the bootloader has been selected, it will not be added to
-> > > $(TARGETS) and will not be built.
-> > >
-> > > This patch fixes this issue, as well as handle toolchains.
-[--SNIP--]
-> > Well, this makes the assumption that $(BR2_EXTERNAL) bootloaders should
-> > be in boot/ and $(BR2_EXTERNAL) toolchain stuff should be in toolchain/.
-> >
-> > In practice, the boot/ and toolchain/ organization in the main
-> > Buildroot does not necessarily need to be reflected in $(BR2_EXTERNAL):
-> > you can have a bootloader in $(BR2_EXTERNAL)/package/foobar/, just name
-> > its option BR2_PACKAGE_FOOBAR and not BR2_TARGET_FOOBAR.
-> 
-> On the contrary, I find it confusing *not* to reflect the main Buildroot
-> organization in $(BR2_EXTERNAL).
-> 
-> To me, the $(BR2_EXTERNAL)/package directory should contain Makefiles for
-> programs to be deployed in the rootfs of the target or host tools to build
-> them. But a bootloader is not to be deployed on the rootfs, but to be built
-> next to it. So it is more sensible to put the Makefile for a new/proprietary
-> bootloader in $(BR2_EXTERNAL)/boot.
+After too long a time in limbo, here is a respin of my series about
+running QEMU on the target.
 
-I have to agree with Eric here: I think allowing (not enforcing) the
-same layout in br2-external as in Buildroot is a good thing.
+Having QEMU on the target can be usefull in more cases than one might
+expect Buildroot to catter for:
 
-> For $(BR2_EXTERNAL)/toolchain, a user may want to use a proprietary toolchain
-> that is not available as a tarball and thus not installable via the
-> traditional means.
+  - deploy a brand new system on a new board, but with a legacy
+    application that only runs on DOS, Windows. After some feedback,
+    this happens more often than we would think; legacy DOS applications
+    are legions, and as is often the case for those antiquated type of
+    software, source code and specifications are long lost, so it is not
+    possible to re-build the application.
 
-But does that even work at all?
+  - for the same reason, a new design that uses a different architecture,
+    but still requries such a legacy (obviously Linux) application to
+    still run. qemu-user can come handy in those cases.
 
-Toolchains are not packages; br2-external was not designed to get new
-toolchain definitions. That it works, if it does at all, is just merely
-happenstance.
+  - in some systems, it is better to completely isolate untrusted parts
+    of an application in a VM, even at the cost of performance, as a VM
+    provides almost-complete isolation.
 
-I wonder if/how we should/could get this to work.
+  - coupled with libvirt (to come in a future patchset), we can build a
+    very lightweight system to host VMs.
+
+Currently, we make QEMU only available on x86 (32-bit or 64-bit), as
+that's what it was tested with. QEMU is also supposed to run on a PPC,
+that can be added later on by an interested party.
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit e17afee1b9d6e6503aa68211341efad437ef181d:
+
+  slang: disable termcap (2014-10-07 22:36:02 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/target-qemu
+
+for you to fetch changes up to ae4e379071183585d080fdedcf006e19b7e58a43:
+
+  package/qemu: add support for FDT (2014-10-07 22:53:52 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (30):
+      package/qemu: do not use autotools for qemu
+      package/qemu: bump version
+      package/qemu: build for the target (i386 or x86_64 only)
+      package/qemu: add basic target selection
+      package/qemu: add fine-grained target selection
+      package/qemu: add SDL frontends
+      package/qemu: add option to enable/disable the VNC frontend
+      package/qemu: add VNC jpeg and png compression
+      package/qemu: add VNC TLS-encryption
+      package/qemu: add option to not install blobs
+      package/qemu: add option to remove unwanted keymaps
+      package/qemu: add uuid support
+      package/qemu: add support for capabilities
+      package/qemu: add attr/xattr option
+      package/qemu: add support for virtfs
+      package/qemu: add support for cURL
+      package/qemu: enable use of the curses frontend
+      package/qemu: add BlueZ connectivity
+      package/qemu: add AIO support
+      package/qemu: add support for VDE switches
+      package/qemu: add iSCSI support
+      package/qemu: add support for USB redirection
+      package/qemu: add support for Spice
+      package/qemu: enable sound
+      package/qemu: add support for libseccomp
+      package/qemu: option to build the docs
+      package/qemu: add option to install tools on the target
+      package/qemu: move sub-options into a sub-menu
+      package/qemu: enable a static build
+      package/qemu: add support for FDT
+
+ package/Config.in                        |   1 +
+ package/qemu/Config.in                   | 316 +++++++++++++++++++++++++++++++
+ package/qemu/qemu-0000-static-curl.patch |  69 +++++++
+ package/qemu/qemu-0001-static-sdl.patch  |  53 ++++++
+ package/qemu/qemu.mk                     | 311 +++++++++++++++++++++++++++++-
+ 5 files changed, 742 insertions(+), 8 deletions(-)
+ create mode 100644 package/qemu/Config.in
+ create mode 100644 package/qemu/qemu-0000-static-curl.patch
+ create mode 100644 package/qemu/qemu-0001-static-sdl.patch
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
