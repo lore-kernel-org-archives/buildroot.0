@@ -1,28 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Oct 2014 22:21:41 +0200
-Subject: [Buildroot] [PATCH] ti-utils: link with pthread to avoid build
-	failure
-In-Reply-To: <1412695448-3117-1-git-send-email-yuvaraj.patil@wipro.com>
- (Yuvaraj Patil's message of "Tue, 7 Oct 2014 20:54:08 +0530")
-References: <1412695448-3117-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <87tx3ffx62.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Oct 2014 22:32:44 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libva: Bump version to 1.4.0
+In-Reply-To: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Mon, 6 Oct 2014 21:28:10 +0200")
+References: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87ppe3fwnn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yuvaraj" == Yuvaraj Patil <yuvaraj.patil@wipro.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Add '-lpthread' option to LIBS in ti-utils.mk file
- > to link this package with pthread
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Fixes:
- > http://autobuild.buildroot.net/results/132/132072d849a3ec572aa80e51833bf6906a54400a//
-
- > Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-
-Committed, thanks.
+Committed all 3, thanks. For future patches, it would be good if you
+would add the tarball hashes as the libva* release announcements had
+them (I've added them now).
 
 -- 
 Bye, Peter Korsgaard
