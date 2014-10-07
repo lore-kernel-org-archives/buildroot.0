@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Oct 2014 09:29:44 -0300
-Subject: [Buildroot] [PATCH 09/19] qemu/mipsel-malta: update to the latest
+Date: Tue,  7 Oct 2014 09:29:45 -0300
+Subject: [Buildroot] [PATCH 10/19] qemu/mips-malta: update to the latest
 	versions
 In-Reply-To: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412684994-28760-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412684994-28760-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../qemu/mipsel-malta/{linux-3.16.config => linux-3.17.config} |  0
- board/qemu/mipsel-malta/readme.txt                             |  2 +-
- configs/qemu_mipsel_malta_defconfig                            | 10 +++++-----
+ board/qemu/mips-malta/{linux-3.16.config => linux-3.17.config} |  0
+ board/qemu/mips-malta/readme.txt                               |  2 +-
+ configs/qemu_mips_malta_defconfig                              | 10 +++++-----
  3 files changed, 6 insertions(+), 6 deletions(-)
- rename board/qemu/mipsel-malta/{linux-3.16.config => linux-3.17.config} (100%)
+ rename board/qemu/mips-malta/{linux-3.16.config => linux-3.17.config} (100%)
 
-diff --git a/board/qemu/mipsel-malta/linux-3.16.config b/board/qemu/mipsel-malta/linux-3.17.config
+diff --git a/board/qemu/mips-malta/linux-3.16.config b/board/qemu/mips-malta/linux-3.17.config
 similarity index 100%
-rename from board/qemu/mipsel-malta/linux-3.16.config
-rename to board/qemu/mipsel-malta/linux-3.17.config
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-index fe7b6a9..4dbe9b7 100644
---- a/board/qemu/mipsel-malta/readme.txt
-+++ b/board/qemu/mipsel-malta/readme.txt
+rename from board/qemu/mips-malta/linux-3.16.config
+rename to board/qemu/mips-malta/linux-3.17.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index cd556f4..048932e 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
 @@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
  graphical window is the framebuffer. No keyboard support has been
  enabled.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 1818992..a80d914 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index a6d02a6..342eef1 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
 @@ -6,17 +6,17 @@ BR2_mips_32r2=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
@@ -55,8 +55,8 @@ index 1818992..a80d914 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.17.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.17.config"
  BR2_LINUX_KERNEL_VMLINUX=y
  
  # Serial port config
