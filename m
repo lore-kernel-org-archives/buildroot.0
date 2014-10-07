@@ -1,51 +1,89 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue,  7 Oct 2014 15:01:32 +0200
-Subject: [Buildroot] [Patch v2 1/1] Fix selection of bootloaders from
-	$(BR2_EXTERNAL)
-Message-ID: <1412686892-29394-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Oct 2014 15:01:56 +0200
+Subject: [Buildroot] [PATCH 1/1] .mk files: bulk aligment and whitespace
+	cleanup of assignments
+In-Reply-To: <1412665563-5103-1-git-send-email-patrickdepinguin@gmail.com>
+ (Thomas De Schampheleire's message of "Tue, 7 Oct 2014 09:06:03
+ +0200")
+References: <1412665563-5103-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <871tqkhw3f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a package is based on "generic-package", pkg-generic.mk will compute
-the name of the Kconfig variable to use for checking if this package has
-been selected by the user.
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Unfortunately, this mechanism does not take into account the case where
-a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
+ > From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > The Buildroot coding style defines one space around make assignments and
+ > does not align the assignment symbols.
 
-So, even if the bootloader has been selected, it will not be added to
-$(TARGETS) and will not be built.
+ > This patch does a bulk fix of offending packages. The package
+ > infrastructures (or more in general assignments to calculated variable
+ > names, like $(2)_FOO) are not touched.
 
-This patch fixes this issue, as well as handle toolchains.
+ > Alignment of line continuation characters (\) is kept as-is.
 
-Changes v1 -> v2:
+ > The sed command used to do this replacement is:
+ > find * -name "*.mk" | xargs sed -i \
+ >     -e 's#^\([A-Z0-9a-z_]\+\)\s*\([?:+]\?=\)\s*$#\1 \2#'
+ >     -e 's#^\([A-Z0-9a-z_]\+\)\s*\([?:+]\?=\)\s*\([^\\]\+\)$#\1 \2 \3#'
+ >     -e 's#^\([A-Z0-9a-z_]\+\)\s*\([?:+]\?=\)\s*\([^\\ \t]\+\s*\\\)\s*$#\1 \2 \3#'
+ >     -e 's#^\([A-Z0-9a-z_]\+\)\s*\([?:+]\?=\)\(\s*\\\)#\1 \2\3#'
 
-  - use multiple patterns in filter (suggested by ThomasDS).
-  - handle toolchains.
+ > Brief explanation of this command:
+ >     ^\([A-Z0-9a-z_]\+\)     a regular variable at the beginning of the line
+ >     \([?:+]\?=\)            any assignment character =, :=, ?=, +=
+ >     \([^\\]\+\)             any string not containing a line continuation
+ >     \([^\\ \t]\+\s*\\\)     string, optional whitespace, followed by a
+ >                             line continuation character
+ >     \(\s*\\\)               optional whitespace, followed by a line
+ >                             continuation character
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Hence, the first subexpression handles empty assignments, the second
+ > handles regular assignments, the third handles regular assignments with
+ > line continuation, and the fourth empty assignments with line
+ > continuation.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d04fd36..e201803 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -614,9 +614,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifneq ($$(filter boot/%,$(pkgdir)),)
-+else ifneq ($$(filter boot/% $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
--else ifneq ($$(filter toolchain/%,$(pkgdir)),)
-+else ifneq ($$(filter toolchain/% $(BR2_EXTERNAL)/toolchain/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
---
-1.9.1
+ > This expression was tested on following test text: (initial tab not
+ > included)
+
+ > 	FOO     = spaces before
+ > 	FOO     =   spaces before and after
+ > 	FOO	= tab before
+ > 	FOO	  = tab and spaces before
+ > 	FOO =	tab after
+ > 	FOO =	   tab and spaces after
+ > 	FOO =   	spaces and tab after
+ > 	FOO =    \
+ > 	FOO = bar \
+ > 	FOO = bar space    \
+ > 	FOO   =		   \
+ > 	GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
+ > 	FOO     += spaces before
+ > 	FOO     ?=   spaces before and after
+ > 	FOO     :=
+ > 	FOO     =
+ > 	FOO	=
+ > 	FOO	  =
+ > 	FOO =
+ > 	   $(MAKE1) CROSS_COMPILE=$(TARGET_CROSS) -C
+ > 	AT91BOOTSTRAP3_DEFCONFIG = \
+ > 	AXEL_DISABLE_I18N=--i18n=0
+
+ > After this bulk change, following manual fixups were done:
+ > - fix line continuation alignment in cegui06 and spice (the sed
+ >   expression leaves the number of whitespace between the value and line
+ >   continuation character intact, but the whitespace before that could have
+ >   changed, causing misalignment.
+ > - qt5base was reverted, as this package uses extensive alignment which
+ >   actually makes the code more readable.
+
+ > Finally, the end result was manually reviewed.
+
+Committed, thanks. I verified with git diff -w that it only contains
+white space changes.
+
+-- 
+Bye, Peter Korsgaard
