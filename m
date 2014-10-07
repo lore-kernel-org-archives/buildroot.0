@@ -1,41 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Oct 2014 19:23:31 +0200
-Subject: [Buildroot] [PATCH] ser2net: Add a hash file
-In-Reply-To: <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 7 Oct 2014 19:28:25 +0200
+Subject: [Buildroot] [PATCH] ser2net: Fix compilation failures due to
+ missing TIOCSRS485 macro
+In-Reply-To: <CAGm1_ktbFdMqF5SOrB1KAP=kdZN8=_Gg6zirOONFw7jPqL4kwg@mail.gmail.com>
 References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141007192331.0908bbcd@free-electrons.com>
+ <CAGm1_ktbFdMqF5SOrB1KAP=kdZN8=_Gg6zirOONFw7jPqL4kwg@mail.gmail.com>
+Message-ID: <20141007192825.7978163b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Yegor Yefremov,
 
-On Tue, 7 Oct 2014 15:30:50 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/ser2net/ser2net.hash |    6 ++++++
->  1 files changed, 6 insertions(+), 0 deletions(-)
->  create mode 100644 package/ser2net/ser2net.hash
-> 
-> diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-> new file mode 100644
-> index 0000000..d24e3a8
-> --- /dev/null
-> +++ b/package/ser2net/ser2net.hash
-> @@ -0,0 +1,6 @@
-> +md5 cd937041144de83d41d811521e72158c ser2net-2.10.0.tar.gz
-> +sha1 80e826ef1630cbf282d8a656754967d0f842ecba ser2net-2.10.0.tar.gz
-> +sha224 1d851e90fde37db55109a7399f3c7166628ca23d53e87f2c65b5b01a ser2net-2.10.0.tar.gz
-> +sha256 98f6193225338e25f35302fef5e1f16688693ed43e7b3c3e9e09187eb54547ac ser2net-2.10.0.tar.gz
-> +sha384 b4ea0014e5ffd303f7a2a6b0cd31ec2b24640fea535cd87631aa685b7b33464261dee0e4baba8c418209767c83961dca ser2net-2.10.0.tar.gz
-> +sha512 dd3e37619b10d8bf20d738e90c253bc2d109e0a57ee9f3a8b2a85a69399afa5a8459a4602b2856f0b655427023a36c78330851bf7f8d8da0f28d1fe22c1d5e10 ser2net-2.10.0.tar.gz
+On Tue, 7 Oct 2014 16:33:09 +0200, Yegor Yefremov wrote:
 
-Why having all those hashes? And the comment indicating how they have
-been found is missing (locally computed? found on the upstream web
-site).
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+If you actually agree with the patch, or tested it, or have reviewed
+it, you should give a Tested-by, Acked-by or Reviewed-by, not a
+Signed-off-by. Please see
+http://buildroot.org/downloads/manual/manual.html#_reviewing_and_testing_patches.
 
 Best regards,
 
