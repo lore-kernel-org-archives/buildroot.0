@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Oct 2014 09:29:38 -0300
-Subject: [Buildroot] [PATCH 03/19] qemu/arm-versatile: update to the latest
+Date: Tue,  7 Oct 2014 09:29:39 -0300
+Subject: [Buildroot] [PATCH 04/19] qemu/arm-vexpress: update to the latest
 	versions
 In-Reply-To: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412684994-28760-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412684994-28760-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../arm-versatile/{linux-3.16.config => linux-3.17.config}     |  2 +-
- board/qemu/arm-versatile/readme.txt                            |  2 +-
- configs/qemu_arm_versatile_defconfig                           | 10 +++++-----
- 3 files changed, 7 insertions(+), 7 deletions(-)
- rename board/qemu/arm-versatile/{linux-3.16.config => linux-3.17.config} (98%)
+ board/qemu/arm-vexpress/readme.txt  | 2 +-
+ configs/qemu_arm_vexpress_defconfig | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/qemu/arm-versatile/linux-3.16.config b/board/qemu/arm-versatile/linux-3.17.config
-similarity index 98%
-rename from board/qemu/arm-versatile/linux-3.16.config
-rename to board/qemu/arm-versatile/linux-3.17.config
-index 38c6466..e425d45 100644
---- a/board/qemu/arm-versatile/linux-3.16.config
-+++ b/board/qemu/arm-versatile/linux-3.17.config
-@@ -59,7 +59,7 @@ CONFIG_SND_PCM_OSS=m
- CONFIG_SND_ARMAACI=m
- CONFIG_MMC=y
- CONFIG_MMC_ARMMMCI=m
--CONFIG_EXT2_FS=y
-+CONFIG_EXT4_FS=y
- CONFIG_VFAT_FS=m
- CONFIG_JFFS2_FS=y
- CONFIG_CRAMFS=y
-diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
-index d2eeb19..f2a5cd1 100644
---- a/board/qemu/arm-versatile/readme.txt
-+++ b/board/qemu/arm-versatile/readme.txt
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index 01304c5..df7b720 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
 @@ -5,4 +5,4 @@ Run the emulation with:
  The login prompt will appear in the terminal that started Qemu. The
  graphical window is the framebuffer.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 510e739..c3d90d7 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -10,15 +10,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index d6d7c20..ecfcf01 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -13,14 +13,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -66,9 +48,7 @@ index 510e739..c3d90d7 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.17.config"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
  BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 2.0.4
