@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Oct 2014 09:29:36 -0300
-Subject: [Buildroot] [PATCH 01/19] qemu/aarch64-virt: update to the latest
+Date: Tue,  7 Oct 2014 09:29:37 -0300
+Subject: [Buildroot] [PATCH 02/19] qemu/arm-nuri: update to the latest
 	versions
 In-Reply-To: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412684994-28760-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412684994-28760-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../qemu/aarch64-virt/{linux-3.16.config => linux-3.17.config} |  3 +--
- board/qemu/aarch64-virt/readme.txt                             |  2 +-
- configs/qemu_aarch64_virt_defconfig                            | 10 +++++-----
- 3 files changed, 7 insertions(+), 8 deletions(-)
- rename board/qemu/aarch64-virt/{linux-3.16.config => linux-3.17.config} (96%)
+ board/qemu/arm-nuri/readme.txt  | 2 +-
+ configs/qemu_arm_nuri_defconfig | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/qemu/aarch64-virt/linux-3.16.config b/board/qemu/aarch64-virt/linux-3.17.config
-similarity index 96%
-rename from board/qemu/aarch64-virt/linux-3.16.config
-rename to board/qemu/aarch64-virt/linux-3.17.config
-index 594f424..93cb42f 100644
---- a/board/qemu/aarch64-virt/linux-3.16.config
-+++ b/board/qemu/aarch64-virt/linux-3.17.config
-@@ -22,7 +22,7 @@ CONFIG_NET_KEY=y
- CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_BRIDGE=y
-+CONFIG_BRIDGE=m
- CONFIG_NET_SCHED=y
- CONFIG_VSOCKETS=y
- CONFIG_DEVTMPFS=y
-@@ -30,7 +30,6 @@ CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_MULTI_LUN=y
- CONFIG_SCSI_CONSTANTS=y
- CONFIG_SCSI_LOGGING=y
- CONFIG_SCSI_SCAN_ASYNC=y
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index f011de1..5d5c581 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
+diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
+index 0cf8d0b..15b5ac7 100644
+--- a/board/qemu/arm-nuri/readme.txt
++++ b/board/qemu/arm-nuri/readme.txt
+@@ -7,4 +7,4 @@ graphical window is the framebuffer.
  
- The login prompt will appear in the terminal that started Qemu.
+ Startup time is slow because of the SMP CPU emulation so be patient.
  
--Tested with QEMU 2.1.0
+-Tested with QEMU 1.7.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 6849587..88e5709 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -8,16 +8,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Lock to 3.16 headers to avoid breaking with newer kernels
-+# Lock to 3.17 headers to avoid breaking with newer kernels
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 40dcb37..174810b 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -16,12 +16,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Lock to 3.10 headers to avoid breaking with newer kernels
+ # Stuck at 3.10.x because there's no Nuri DTS
  BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.16.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.32"
++BR2_DEFAULT_KERNEL_VERSION="3.10.56"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
  
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.17.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
- BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.32"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.56"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 2.0.4
