@@ -1,43 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 12:21:33 +0200
-Subject: [Buildroot] [git commit] libksba: bump to version 1.3.1
-Message-ID: <20141007103613.05981B780F@busybox.osuosl.org>
+Date: Tue, 7 Oct 2014 12:31:05 +0200
+Subject: [Buildroot] [git commit] libgcrypt: add hash file
+Message-ID: <20141007103613.1DCE1B0E22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67a0403a2b079279466d86cebe4304a5de44a47e
+commit: http://git.buildroot.net/buildroot/commit/?id=766435b7228b9f153c4d472e0c621bc6cec56fd7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libksba/libksba.hash |    2 ++
- package/libksba/libksba.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/libgcrypt/libgcrypt.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
 new file mode 100644
-index 0000000..c7d209a
+index 0000000..2ce7a67
 --- /dev/null
-+++ b/package/libksba/libksba.hash
++++ b/package/libgcrypt/libgcrypt.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	bc96b95516bd2b67f413bc8b5cc5a75a2583c6e666d24dfd0d5bcc6b1aab46f9	libksba-1.3.1.tar.bz2
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index 086d019..aaf9b62 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBKSBA_VERSION = 1.3.0
-+LIBKSBA_VERSION = 1.3.1
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q3/000355.html
++sha1	cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec	libgcrypt-1.6.2.tar.bz2
