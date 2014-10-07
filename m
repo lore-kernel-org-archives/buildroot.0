@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Oct 2014 09:29:41 -0300
-Subject: [Buildroot] [PATCH 06/19] qemu/microblazeel-mmu: update to the
-	latest versions
+Date: Tue,  7 Oct 2014 09:29:42 -0300
+Subject: [Buildroot] [PATCH 07/19] qemu/mips64el-malta: update to the latest
+	versions
 In-Reply-To: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412684994-28760-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412684994-28760-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../microblazeel-mmu/{linux-3.16.config => linux-3.17.config}  |  6 ++----
- board/qemu/microblazeel-mmu/readme.txt                         |  2 +-
- configs/qemu_microblazeel_mmu_defconfig                        | 10 +++++-----
- 3 files changed, 8 insertions(+), 10 deletions(-)
- rename board/qemu/microblazeel-mmu/{linux-3.16.config => linux-3.17.config} (92%)
+ .../mips64el-malta/{linux-3.16.config => linux-3.17.config}    |  0
+ board/qemu/mips64el-malta/readme.txt                           |  2 +-
+ configs/qemu_mips64el_malta_defconfig                          | 10 +++++-----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+ rename board/qemu/mips64el-malta/{linux-3.16.config => linux-3.17.config} (100%)
 
-diff --git a/board/qemu/microblazeel-mmu/linux-3.16.config b/board/qemu/microblazeel-mmu/linux-3.17.config
-similarity index 92%
-rename from board/qemu/microblazeel-mmu/linux-3.16.config
-rename to board/qemu/microblazeel-mmu/linux-3.17.config
-index d31faf6..53ef203 100644
---- a/board/qemu/microblazeel-mmu/linux-3.16.config
-+++ b/board/qemu/microblazeel-mmu/linux-3.17.config
-@@ -3,7 +3,6 @@ CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
--CONFIG_INITRAMFS_COMPRESSION_GZIP=y
- CONFIG_EXPERT=y
- CONFIG_KALLSYMS_ALL=y
- # CONFIG_BASE_FULL is not set
-@@ -31,11 +30,9 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- # CONFIG_INET_LRO is not set
- # CONFIG_IPV6 is not set
--CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=8192
- CONFIG_NETDEVICES=y
--CONFIG_NET_VENDOR_XILINX=y
- CONFIG_XILINX_EMACLITE=y
- # CONFIG_INPUT is not set
- # CONFIG_SERIO is not set
-@@ -45,7 +42,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
- # CONFIG_HW_RANDOM is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
--CONFIG_EXT2_FS=y
- # CONFIG_DNOTIFY is not set
- CONFIG_NFS_FS=y
- CONFIG_CIFS=y
-@@ -56,4 +52,6 @@ CONFIG_DEBUG_SLAB=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_DEBUG_SPINLOCK=y
- CONFIG_EARLY_PRINTK=y
-+CONFIG_CRYPTO_CRC32C=y
- # CONFIG_CRYPTO_ANSI_CPRNG is not set
-+CONFIG_CRC16=y
-diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
-index 05a054a..fdec3cb 100644
---- a/board/qemu/microblazeel-mmu/readme.txt
-+++ b/board/qemu/microblazeel-mmu/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu.
+diff --git a/board/qemu/mips64el-malta/linux-3.16.config b/board/qemu/mips64el-malta/linux-3.17.config
+similarity index 100%
+rename from board/qemu/mips64el-malta/linux-3.16.config
+rename to board/qemu/mips64el-malta/linux-3.17.config
+diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
+index 83faad8..938e39d 100644
+--- a/board/qemu/mips64el-malta/readme.txt
++++ b/board/qemu/mips64el-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 14b6cd9..95d62b4 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 6bf2fa4..9171c4d 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+ BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.16 headers to avoid breaking with newer kernels
 +# Lock to 3.17 headers to avoid breaking with newer kernels
@@ -93,9 +55,10 @@ index 14b6cd9..95d62b4 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.17.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.17.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
 -- 
 2.0.4
