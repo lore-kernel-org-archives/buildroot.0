@@ -1,11 +1,11 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 7 Oct 2014 14:12:24 +0200
-Subject: [Buildroot] [PATCH 1/3] host-pkgconf: install pkg-config-native
-In-Reply-To: <87r3ylhtfe.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Oct 2014 14:25:15 +0200
+Subject: [Buildroot] [PATCH 2/3] hicolor-icon-theme: new package
+In-Reply-To: <20141005232215.48f593d8@free-electrons.com>
 References: <1411489271-26899-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1411489271-26899-2-git-send-email-eric.le.bihan.dev@free.fr>
- <87r3ylhtfe.fsf@dell.be.48ers.dk>
-Message-ID: <20141007121217.GA4028@rmm-p1267483>
+ <1411489271-26899-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20141005232215.48f593d8@free-electrons.com>
+Message-ID: <20141007122515.GB4028@rmm-p1267483>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,40 @@ To: buildroot@busybox.net
 
 Hi!
 
-On Mon, Oct 06, 2014 at 09:47:17PM +0200, Peter Korsgaard wrote:
-> >>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+On Sun, Oct 05, 2014 at 11:22:15PM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
 >
->  > The package host-pkgconf now provides `pkg-config-native`, which uses the
->  > host native sysroot. It is useful for packages which compile build-time
->  > helper tools (such as Gtk+ 3.0).
+> On Tue, 23 Sep 2014 18:21:10 +0200, Eric Le Bihan wrote:
+> > This new package provides Freedesktop Hicolor icon theme.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/Config.in                                |  1 +
+> >  package/hicolor-icon-theme/Config.in             |  4 ++++
+> >  package/hicolor-icon-theme/hicolor-icon-theme.mk | 12 ++++++++++++
+> >  3 files changed, 17 insertions(+)
+> >  create mode 100644 package/hicolor-icon-theme/Config.in
+> >  create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.mk
 >
->  > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->  > ---
->  >  package/pkgconf/pkg-config-native.in | 3 +++
->  >  package/pkgconf/pkgconf.mk           | 8 ++++++++
->  >  2 files changed, 11 insertions(+)
->  >  create mode 100644 package/pkgconf/pkg-config-native.in
->
->  > diff --git a/package/pkgconf/pkg-config-native.in b/package/pkgconf/pkg-config-native.in
->  > new file mode 100644
->  > index 0000000..7e25cd2
->  > --- /dev/null
->  > +++ b/package/pkgconf/pkg-config-native.in
->  > @@ -0,0 +1,3 @@
->  > +#!/bin/sh
->  > +
->  > +PKG_CONFIG_LIBDIR=@HOST_DIR@/usr/lib/pkgconfig:@HOST_DIR@/usr/share/pkgconfig @HOST_DIR@/usr/bin/pkgconf $@
->
-> Why is that needed? host-pkgconf is already built with
-> --prefix=$HOST_DIR/usr, so it does the right thing:
->
-> strace output/host/usr/bin/pkgconf --cflags blah 2>&1 |grep blah                      ~/source/buildroot
-> execve("output/host/usr/bin/pkgconf", ["output/host/usr/bin/pkgconf", "--cflags", "blah"], [/* 50 vars */]) = 0
-> open("/home/peko/source/buildroot/output/host/usr/lib/pkgconfig/blah-uninstalled.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/home/peko/source/buildroot/output/host/usr/lib/pkgconfig/blah.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/home/peko/source/buildroot/output/host/usr/share/pkgconfig/blah-uninstalled.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/home/peko/source/buildroot/output/host/usr/share/pkgconfig/blah.pc", O_RDONLY) = -1 ENOENT (No such file or directory)
+> I'm a bit confused by what this package does: it doesn't contain
+> anything, and does not install anything except a huge number of
+> directories (empty) in usr/share/icons/. Is this the intended behavior?
+> I would have expected an icon theme to install some .svg or .png files,
+> no?
 
-Of course! No need to re-invent the wheel! Thanks for pointing it out. I will
-remove this patch and update the one for libgtk3.
+The hicolor icon theme is the *fallback* icon theme. As explained in the
+specifications [1], this theme is required to have a place for third-party
+applications to install their icons. If a icon is not found in the current
+theme, then hicolor is the theme to look into.
+
+So the package just installs a directory structure as well as an index.
+
+I added it to avoid some warnings when executing the gtk3-demo application.
+
+When I'll provide a patch bumping libgtk3 to 3.14, I will also provide a
+package for adwaita-icon-theme, which is a true icon theme, weighting 18 MB!
+
+[1] http://standards.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
 
 Best regards,
 ELB
