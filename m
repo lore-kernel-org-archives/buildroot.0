@@ -1,68 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Oct 2014 15:48:51 +0200
-Subject: [Buildroot] [Patch v2 1/1] Fix selection of bootloaders from
- $(BR2_EXTERNAL)
-In-Reply-To: <1412686892-29394-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1412686892-29394-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20141007154851.4a94c0f7@free-electrons.com>
+From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Date: Tue, 7 Oct 2014 19:41:38 +0530
+Subject: [Buildroot] [PATCH] ympd: Depends on MMU
+Message-ID: <1412691098-2614-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+This package needs MMU. Hence added dependency on BR2_USE_MMU
 
-On Tue,  7 Oct 2014 15:01:32 +0200, Eric Le Bihan wrote:
-> If a package is based on "generic-package", pkg-generic.mk will compute
-> the name of the Kconfig variable to use for checking if this package has
-> been selected by the user.
-> 
-> Unfortunately, this mechanism does not take into account the case where
-> a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
-> 
-> So, even if the bootloader has been selected, it will not be added to
-> $(TARGETS) and will not be built.
-> 
-> This patch fixes this issue, as well as handle toolchains.
-> 
-> Changes v1 -> v2:
-> 
->   - use multiple patterns in filter (suggested by ThomasDS).
->   - handle toolchains.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/pkg-generic.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d04fd36..e201803 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -614,9 +614,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
->  # kernel case, the bootloaders case, and the normal packages case.
->  ifeq ($(1),linux)
->  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
-> -else ifneq ($$(filter boot/%,$(pkgdir)),)
-> +else ifneq ($$(filter boot/% $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
->  $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
-> -else ifneq ($$(filter toolchain/%,$(pkgdir)),)
-> +else ifneq ($$(filter toolchain/% $(BR2_EXTERNAL)/toolchain/%,$(pkgdir)),)
->  $(2)_KCONFIG_VAR = BR2_$(2)
->  else
->  $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+Fixes:
+http://autobuild.buildroot.net/results/834/8340e69763e263fcf20e73f75eafcb31989e9f51//
 
-Well, this makes the assumption that $(BR2_EXTERNAL) bootloaders should
-be in boot/ and $(BR2_EXTERNAL) toolchain stuff should be in toolchain/.
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+---
+ package/ympd/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-In practice, the boot/ and toolchain/ organization in the main
-Buildroot does not necessarily need to be reflected in $(BR2_EXTERNAL):
-you can have a bootloader in $(BR2_EXTERNAL)/package/foobar/, just name
-its option BR2_PACKAGE_FOOBAR and not BR2_TARGET_FOOBAR.
-
-Thomas
+diff --git a/package/ympd/Config.in b/package/ympd/Config.in
+index 0223af7..38a0cf9 100644
+--- a/package/ympd/Config.in
++++ b/package/ympd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_YMPD
+ 	bool "ympd"
+ 	select BR2_PACKAGE_LIBMPDCLIENT
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_LARGEFILE
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
