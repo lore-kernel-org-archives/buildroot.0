@@ -1,48 +1,46 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 07 Oct 2014 09:42:19 -0700
-Subject: [Buildroot] [02/11] freescale-imx: bump to version 3.10.17-1.0.1
-In-Reply-To: <1412340212-3089-3-git-send-email-jezz@sysmic.org>
-References: <1412340212-3089-3-git-send-email-jezz@sysmic.org>
-Message-ID: <543417EB.4080301@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Oct 2014 19:23:31 +0200
+Subject: [Buildroot] [PATCH] ser2net: Add a hash file
+In-Reply-To: <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141007192331.0908bbcd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerome,
+Dear Vicente Olivert Riera,
 
-On 10/03/2014 05:43 AM, J?r?me Pouiller wrote:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+On Tue, 7 Oct 2014 15:30:50 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->   package/freescale-imx/freescale-imx.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-> index 64ea1f9..58dc9f0 100644
-> --- a/package/freescale-imx/freescale-imx.mk
-> +++ b/package/freescale-imx/freescale-imx.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -FREESCALE_IMX_VERSION = 3.10.17-1.0.0
-> +FREESCALE_IMX_VERSION = 3.10.17-1.0.1
-This FREESCALE_IMX_VERSION variable is used by other packages which do 
-not have a 1.0.1 update such as imx-lib, imx-vpu or firmware-imx. 
-Therefore this patch would break them.
-I suggest modifying only the gpu-viv package version but this implies to 
-also modifying all the i.MX6 configs to update their kernels as it has 
-been done in Yocto:
-https://lists.yoctoproject.org/pipermail/meta-freescale/2014-August/009906.html
+>  package/ser2net/ser2net.hash |    6 ++++++
+>  1 files changed, 6 insertions(+), 0 deletions(-)
+>  create mode 100644 package/ser2net/ser2net.hash
+> 
+> diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+> new file mode 100644
+> index 0000000..d24e3a8
+> --- /dev/null
+> +++ b/package/ser2net/ser2net.hash
+> @@ -0,0 +1,6 @@
+> +md5 cd937041144de83d41d811521e72158c ser2net-2.10.0.tar.gz
+> +sha1 80e826ef1630cbf282d8a656754967d0f842ecba ser2net-2.10.0.tar.gz
+> +sha224 1d851e90fde37db55109a7399f3c7166628ca23d53e87f2c65b5b01a ser2net-2.10.0.tar.gz
+> +sha256 98f6193225338e25f35302fef5e1f16688693ed43e7b3c3e9e09187eb54547ac ser2net-2.10.0.tar.gz
+> +sha384 b4ea0014e5ffd303f7a2a6b0cd31ec2b24640fea535cd87631aa685b7b33464261dee0e4baba8c418209767c83961dca ser2net-2.10.0.tar.gz
+> +sha512 dd3e37619b10d8bf20d738e90c253bc2d109e0a57ee9f3a8b2a85a69399afa5a8459a4602b2856f0b655427023a36c78330851bf7f8d8da0f28d1fe22c1d5e10 ser2net-2.10.0.tar.gz
 
-Let me know if you need help updating all the configurations 
-(nitrogen6x, sabresd, wandboard etc...).
+Why having all those hashes? And the comment indicating how they have
+been found is missing (locally computed? found on the upstream web
+site).
 
-Thanks,
-Gary
->   FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
->   
->   include $(sort $(wildcard package/freescale-imx/*/*.mk))
->
->
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
