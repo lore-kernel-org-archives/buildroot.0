@@ -1,64 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 16:53:31 +0200
-Subject: [Buildroot] [git commit] qemu/aarch64-virt: update to the latest
-	versions
-Message-ID: <20141007150307.8C6C0B0C2F@busybox.osuosl.org>
+Date: Tue, 7 Oct 2014 16:58:03 +0200
+Subject: [Buildroot] [git commit] qemu/microblazebe-mmu: update to the
+	latest versions
+Message-ID: <20141007150307.B18E7B0C2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0833126567ed6e128862b650299533783ce9eb7a
+commit: http://git.buildroot.net/buildroot/commit/?id=e9cfeca9c20fdc25e92c33d469f02dfb13be53e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../{linux-3.16.config => linux-3.17.config}       |    3 +--
- board/qemu/aarch64-virt/readme.txt                 |    2 +-
- configs/qemu_aarch64_virt_defconfig                |   10 +++++-----
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ .../{linux-3.16.config => linux-3.17.config}       |    4 ----
+ board/qemu/microblazebe-mmu/readme.txt             |    2 +-
+ configs/qemu_microblazebe_mmu_defconfig            |   10 +++++-----
+ 3 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/board/qemu/aarch64-virt/linux-3.16.config b/board/qemu/aarch64-virt/linux-3.17.config
-similarity index 96%
-rename from board/qemu/aarch64-virt/linux-3.16.config
-rename to board/qemu/aarch64-virt/linux-3.17.config
-index 594f424..93cb42f 100644
---- a/board/qemu/aarch64-virt/linux-3.16.config
-+++ b/board/qemu/aarch64-virt/linux-3.17.config
-@@ -22,7 +22,7 @@ CONFIG_NET_KEY=y
+diff --git a/board/qemu/microblazebe-mmu/linux-3.16.config b/board/qemu/microblazebe-mmu/linux-3.17.config
+similarity index 92%
+rename from board/qemu/microblazebe-mmu/linux-3.16.config
+rename to board/qemu/microblazebe-mmu/linux-3.17.config
+index d7e3235..fc25c9d 100644
+--- a/board/qemu/microblazebe-mmu/linux-3.16.config
++++ b/board/qemu/microblazebe-mmu/linux-3.17.config
+@@ -3,7 +3,6 @@ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
+-CONFIG_INITRAMFS_COMPRESSION_GZIP=y
+ CONFIG_EXPERT=y
+ CONFIG_KALLSYMS_ALL=y
+ # CONFIG_BASE_FULL is not set
+@@ -32,11 +31,9 @@ CONFIG_UNIX=y
  CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_BRIDGE=y
-+CONFIG_BRIDGE=m
- CONFIG_NET_SCHED=y
- CONFIG_VSOCKETS=y
- CONFIG_DEVTMPFS=y
-@@ -30,7 +30,6 @@ CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_MULTI_LUN=y
- CONFIG_SCSI_CONSTANTS=y
- CONFIG_SCSI_LOGGING=y
- CONFIG_SCSI_SCAN_ASYNC=y
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index f011de1..5d5c581 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
+ # CONFIG_INET_LRO is not set
+ # CONFIG_IPV6 is not set
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_BLK_DEV_RAM=y
+ CONFIG_BLK_DEV_RAM_SIZE=8192
+ CONFIG_NETDEVICES=y
+-CONFIG_NET_VENDOR_XILINX=y
+ CONFIG_XILINX_EMACLITE=y
+ # CONFIG_INPUT is not set
+ # CONFIG_SERIO is not set
+@@ -46,7 +43,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
+ # CONFIG_HW_RANDOM is not set
+ # CONFIG_HWMON is not set
+ # CONFIG_USB_SUPPORT is not set
+-CONFIG_EXT2_FS=y
+ # CONFIG_DNOTIFY is not set
+ CONFIG_NFS_FS=y
+ CONFIG_CIFS=y
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index 66a2f9b..eec9175 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
 @@ -4,4 +4,4 @@ Run the emulation with:
  
  The login prompt will appear in the terminal that started Qemu.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 6849587..88e5709 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -8,16 +8,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 4f78c32..176e16d 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
  # BR2_TARGET_ROOTFS_TAR is not set
  BR2_TARGET_ROOTFS_INITRAMFS=y
  
@@ -76,7 +87,7 @@ index 6849587..88e5709 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.17.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
- BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.17.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
