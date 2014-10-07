@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Oct 2014 09:29:40 -0300
-Subject: [Buildroot] [PATCH 05/19] qemu/microblazebe-mmu: update to the
+Date: Tue,  7 Oct 2014 09:29:41 -0300
+Subject: [Buildroot] [PATCH 06/19] qemu/microblazeel-mmu: update to the
 	latest versions
 In-Reply-To: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412684994-28760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412684994-28760-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412684994-28760-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../microblazebe-mmu/{linux-3.16.config => linux-3.17.config}  |  4 ----
- board/qemu/microblazebe-mmu/readme.txt                         |  2 +-
- configs/qemu_microblazebe_mmu_defconfig                        | 10 +++++-----
- 3 files changed, 6 insertions(+), 10 deletions(-)
- rename board/qemu/microblazebe-mmu/{linux-3.16.config => linux-3.17.config} (92%)
+ .../microblazeel-mmu/{linux-3.16.config => linux-3.17.config}  |  6 ++----
+ board/qemu/microblazeel-mmu/readme.txt                         |  2 +-
+ configs/qemu_microblazeel_mmu_defconfig                        | 10 +++++-----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
+ rename board/qemu/microblazeel-mmu/{linux-3.16.config => linux-3.17.config} (92%)
 
-diff --git a/board/qemu/microblazebe-mmu/linux-3.16.config b/board/qemu/microblazebe-mmu/linux-3.17.config
+diff --git a/board/qemu/microblazeel-mmu/linux-3.16.config b/board/qemu/microblazeel-mmu/linux-3.17.config
 similarity index 92%
-rename from board/qemu/microblazebe-mmu/linux-3.16.config
-rename to board/qemu/microblazebe-mmu/linux-3.17.config
-index d7e3235..fc25c9d 100644
---- a/board/qemu/microblazebe-mmu/linux-3.16.config
-+++ b/board/qemu/microblazebe-mmu/linux-3.17.config
+rename from board/qemu/microblazeel-mmu/linux-3.16.config
+rename to board/qemu/microblazeel-mmu/linux-3.17.config
+index d31faf6..53ef203 100644
+--- a/board/qemu/microblazeel-mmu/linux-3.16.config
++++ b/board/qemu/microblazeel-mmu/linux-3.17.config
 @@ -3,7 +3,6 @@ CONFIG_IKCONFIG=y
  CONFIG_IKCONFIG_PROC=y
  CONFIG_BLK_DEV_INITRD=y
@@ -34,7 +34,7 @@ index d7e3235..fc25c9d 100644
  CONFIG_EXPERT=y
  CONFIG_KALLSYMS_ALL=y
  # CONFIG_BASE_FULL is not set
-@@ -32,11 +31,9 @@ CONFIG_UNIX=y
+@@ -31,11 +30,9 @@ CONFIG_UNIX=y
  CONFIG_INET=y
  # CONFIG_INET_LRO is not set
  # CONFIG_IPV6 is not set
@@ -46,7 +46,7 @@ index d7e3235..fc25c9d 100644
  CONFIG_XILINX_EMACLITE=y
  # CONFIG_INPUT is not set
  # CONFIG_SERIO is not set
-@@ -46,7 +43,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
+@@ -45,7 +42,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
  # CONFIG_HW_RANDOM is not set
  # CONFIG_HWMON is not set
  # CONFIG_USB_SUPPORT is not set
@@ -54,20 +54,27 @@ index d7e3235..fc25c9d 100644
  # CONFIG_DNOTIFY is not set
  CONFIG_NFS_FS=y
  CONFIG_CIFS=y
-diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
-index 66a2f9b..eec9175 100644
---- a/board/qemu/microblazebe-mmu/readme.txt
-+++ b/board/qemu/microblazebe-mmu/readme.txt
+@@ -56,4 +52,6 @@ CONFIG_DEBUG_SLAB=y
+ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_DEBUG_SPINLOCK=y
+ CONFIG_EARLY_PRINTK=y
++CONFIG_CRYPTO_CRC32C=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRC16=y
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 05a054a..fdec3cb 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
 @@ -4,4 +4,4 @@ Run the emulation with:
  
  The login prompt will appear in the terminal that started Qemu.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 4f78c32..176e16d 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 14b6cd9..95d62b4 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
 @@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
  # BR2_TARGET_ROOTFS_TAR is not set
  BR2_TARGET_ROOTFS_INITRAMFS=y
@@ -86,9 +93,9 @@ index 4f78c32..176e16d 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.17.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.17.config"
  BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
 -- 
 2.0.4
