@@ -1,33 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 17:01:42 +0200
-Subject: [Buildroot] [git commit] qemu/ppc64-pseries: update to the latest
+Date: Tue, 7 Oct 2014 17:01:10 +0200
+Subject: [Buildroot] [git commit] qemu/ppc-g3beige: update to the latest
 	versions
-Message-ID: <20141007150308.307EAB0C2F@busybox.osuosl.org>
+Message-ID: <20141007150308.1B7FEB0C2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80d4172f51aa49636ce0d31b00f1523b640ba69c
+commit: http://git.buildroot.net/buildroot/commit/?id=df6a3dbec0c18b96f8a0bceacf31140475437ce1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../readme.txt                                     |    0
- configs/qemu_ppc64_pseries_defconfig               |    8 ++++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../linux-3.17.config}                             |    4 +---
+ .../{powerpc-g3beige => ppc-g3beige}/readme.txt    |    2 +-
+ configs/qemu_ppc_g3beige_defconfig                 |   10 +++++-----
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/board/qemu/powerpc64-pseries/readme.txt b/board/qemu/ppc64-pseries/readme.txt
-similarity index 100%
-rename from board/qemu/powerpc64-pseries/readme.txt
-rename to board/qemu/ppc64-pseries/readme.txt
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index 7b62735..8a483a2 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+diff --git a/board/qemu/powerpc-g3beige/linux-3.16.config b/board/qemu/ppc-g3beige/linux-3.17.config
+similarity index 93%
+rename from board/qemu/powerpc-g3beige/linux-3.16.config
+rename to board/qemu/ppc-g3beige/linux-3.17.config
+index a8dd1f6..cf84c75 100644
+--- a/board/qemu/powerpc-g3beige/linux-3.16.config
++++ b/board/qemu/ppc-g3beige/linux-3.17.config
+@@ -13,7 +13,6 @@ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
+ CONFIG_CONNECTOR=y
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_IDE=y
+ CONFIG_BLK_DEV_IDECD=y
+@@ -38,8 +37,7 @@ CONFIG_SERIAL_PMACZILOG_CONSOLE=y
+ CONFIG_SSB=y
+ CONFIG_SSB_PCMCIAHOST=y
+ CONFIG_SSB_DRIVER_PCICORE=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
++CONFIG_EXT4_FS=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+ CONFIG_SQUASHFS=y
+diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/ppc-g3beige/readme.txt
+similarity index 93%
+rename from board/qemu/powerpc-g3beige/readme.txt
+rename to board/qemu/ppc-g3beige/readme.txt
+index e716830..d227650 100644
+--- a/board/qemu/powerpc-g3beige/readme.txt
++++ b/board/qemu/ppc-g3beige/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 2.1.0
++Tested with QEMU 2.1.2
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index ad2de80..5aa7157 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -6,17 +6,17 @@ BR2_powerpc_750=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -44,5 +79,9 @@ index 7b62735..8a483a2 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-3.17.config"
  BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
