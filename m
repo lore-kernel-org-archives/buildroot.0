@@ -1,77 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 16:58:03 +0200
-Subject: [Buildroot] [git commit] qemu/microblazebe-mmu: update to the
-	latest versions
-Message-ID: <20141007150307.B18E7B0C2F@busybox.osuosl.org>
+Date: Tue, 7 Oct 2014 16:59:52 +0200
+Subject: [Buildroot] [git commit] qemu/mips-malta: update to the latest
+	versions
+Message-ID: <20141007150307.DE529B0C2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9cfeca9c20fdc25e92c33d469f02dfb13be53e7
+commit: http://git.buildroot.net/buildroot/commit/?id=b0b5038b4d4e3b1befc605f6261cb63fd8e6982e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../{linux-3.16.config => linux-3.17.config}       |    4 ----
- board/qemu/microblazebe-mmu/readme.txt             |    2 +-
- configs/qemu_microblazebe_mmu_defconfig            |   10 +++++-----
- 3 files changed, 6 insertions(+), 10 deletions(-)
+ .../{linux-3.16.config => linux-3.17.config}       |    0
+ board/qemu/mips-malta/readme.txt                   |    2 +-
+ configs/qemu_mips_malta_defconfig                  |   10 +++++-----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/qemu/microblazebe-mmu/linux-3.16.config b/board/qemu/microblazebe-mmu/linux-3.17.config
-similarity index 92%
-rename from board/qemu/microblazebe-mmu/linux-3.16.config
-rename to board/qemu/microblazebe-mmu/linux-3.17.config
-index d7e3235..fc25c9d 100644
---- a/board/qemu/microblazebe-mmu/linux-3.16.config
-+++ b/board/qemu/microblazebe-mmu/linux-3.17.config
-@@ -3,7 +3,6 @@ CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
--CONFIG_INITRAMFS_COMPRESSION_GZIP=y
- CONFIG_EXPERT=y
- CONFIG_KALLSYMS_ALL=y
- # CONFIG_BASE_FULL is not set
-@@ -32,11 +31,9 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- # CONFIG_INET_LRO is not set
- # CONFIG_IPV6 is not set
--CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=8192
- CONFIG_NETDEVICES=y
--CONFIG_NET_VENDOR_XILINX=y
- CONFIG_XILINX_EMACLITE=y
- # CONFIG_INPUT is not set
- # CONFIG_SERIO is not set
-@@ -46,7 +43,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
- # CONFIG_HW_RANDOM is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
--CONFIG_EXT2_FS=y
- # CONFIG_DNOTIFY is not set
- CONFIG_NFS_FS=y
- CONFIG_CIFS=y
-diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
-index 66a2f9b..eec9175 100644
---- a/board/qemu/microblazebe-mmu/readme.txt
-+++ b/board/qemu/microblazebe-mmu/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu.
+diff --git a/board/qemu/mips-malta/linux-3.16.config b/board/qemu/mips-malta/linux-3.17.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.16.config
+rename to board/qemu/mips-malta/linux-3.17.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index cd556f4..048932e 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 4f78c32..176e16d 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index a6d02a6..342eef1 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.16 headers to avoid breaking with newer kernels
 +# Lock to 3.17 headers to avoid breaking with newer kernels
@@ -87,7 +56,8 @@ index 4f78c32..176e16d 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.16.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.17.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.17.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
