@@ -1,32 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 22:22:47 +0200
-Subject: [Buildroot] [git commit] package/libva: Bump version to 1.4.0
-Message-ID: <20141007203313.4CA93B0F28@busybox.osuosl.org>
+Date: Tue, 7 Oct 2014 22:30:05 +0200
+Subject: [Buildroot] [git commit] libva-intel-driver: add tarball hash
+Message-ID: <20141007203313.71094B0F26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=78451b1e1abbf0567d8d600064a18e5805750581
+commit: http://git.buildroot.net/buildroot/commit/?id=4f3c82fa48de5c5473744fb10dd8130329283a7c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/libva.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libva-intel-driver/libva-intel-driver.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 857cb17..984222d 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 1.3.1
-+LIBVA_VERSION = 1.4.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
- LIBVA_LICENSE = MIT
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+new file mode 100644
+index 0000000..de56015
+--- /dev/null
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -0,0 +1,2 @@
++# From http://lists.freedesktop.org/archives/libva/2014-September/002747.html
++sha1	2d4f40c5d239f3a8f4671b27e6fd2da8652dc546	libva-intel-driver-1.4.0.tar.bz2
