@@ -1,23 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Oct 2014 22:32:44 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libva: Bump version to 1.4.0
-In-Reply-To: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Mon, 6 Oct 2014 21:28:10 +0200")
-References: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87ppe3fwnn.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 7 Oct 2014 22:21:24 +0200
+Subject: [Buildroot] [git commit] ti-utils: link with pthread to avoid build
+	failure
+Message-ID: <20141007203313.44205B0F27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6ae29cdfe0b04a0a824463f462d2fd6dc26b8d9e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add '-lpthread' option to LIBS in ti-utils.mk file
+to link this package with pthread
 
-Committed all 3, thanks. For future patches, it would be good if you
-would add the tarball hashes as the libva* release announcements had
-them (I've added them now).
+Fixes:
+http://autobuild.buildroot.net/results/132/132072d849a3ec572aa80e51833bf6906a54400a//
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ti-utils/ti-utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index c0a3663..7ee7afa 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -13,7 +13,7 @@ TI_UTILS_LICENSE_FILES = COPYING
+ define TI_UTILS_BUILD_CMDS
+ 	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
+ 		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -I$(STAGING_DIR)/usr/include/libnl3" \
+-		LIBS="-lnl-3 -lnl-genl-3 -lm" -C $(@D) all
++		LIBS="-lnl-3 -lnl-genl-3 -lpthread -lm" -C $(@D) all
+ endef
+ 
+ define TI_UTILS_INSTALL_TARGET_CMDS
