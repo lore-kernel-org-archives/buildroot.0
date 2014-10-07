@@ -1,41 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 16:57:29 +0200
-Subject: [Buildroot] [git commit] qemu/arm-vexpress: update to the latest
-	versions
-Message-ID: <20141007150307.A7CA0B0C2F@busybox.osuosl.org>
+Date: Tue, 7 Oct 2014 16:58:52 +0200
+Subject: [Buildroot] [git commit] qemu/microblazeel-mmu: update to the
+	latest versions
+Message-ID: <20141007150307.BA7A0B0C2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbf300b11bae2c8cd387a8ebc5dec40188909ac3
+commit: http://git.buildroot.net/buildroot/commit/?id=f8fd3e79c02d1caf833b33017d2d01216b367bf1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/qemu/arm-vexpress/readme.txt  |    2 +-
- configs/qemu_arm_vexpress_defconfig |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../{linux-3.16.config => linux-3.17.config}       |    6 ++----
+ board/qemu/microblazeel-mmu/readme.txt             |    2 +-
+ configs/qemu_microblazeel_mmu_defconfig            |   10 +++++-----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index 01304c5..df7b720 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
+diff --git a/board/qemu/microblazeel-mmu/linux-3.16.config b/board/qemu/microblazeel-mmu/linux-3.17.config
+similarity index 92%
+rename from board/qemu/microblazeel-mmu/linux-3.16.config
+rename to board/qemu/microblazeel-mmu/linux-3.17.config
+index d31faf6..53ef203 100644
+--- a/board/qemu/microblazeel-mmu/linux-3.16.config
++++ b/board/qemu/microblazeel-mmu/linux-3.17.config
+@@ -3,7 +3,6 @@ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
+-CONFIG_INITRAMFS_COMPRESSION_GZIP=y
+ CONFIG_EXPERT=y
+ CONFIG_KALLSYMS_ALL=y
+ # CONFIG_BASE_FULL is not set
+@@ -31,11 +30,9 @@ CONFIG_UNIX=y
+ CONFIG_INET=y
+ # CONFIG_INET_LRO is not set
+ # CONFIG_IPV6 is not set
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_BLK_DEV_RAM=y
+ CONFIG_BLK_DEV_RAM_SIZE=8192
+ CONFIG_NETDEVICES=y
+-CONFIG_NET_VENDOR_XILINX=y
+ CONFIG_XILINX_EMACLITE=y
+ # CONFIG_INPUT is not set
+ # CONFIG_SERIO is not set
+@@ -45,7 +42,6 @@ CONFIG_SERIAL_UARTLITE_CONSOLE=y
+ # CONFIG_HW_RANDOM is not set
+ # CONFIG_HWMON is not set
+ # CONFIG_USB_SUPPORT is not set
+-CONFIG_EXT2_FS=y
+ # CONFIG_DNOTIFY is not set
+ CONFIG_NFS_FS=y
+ CONFIG_CIFS=y
+@@ -56,4 +52,6 @@ CONFIG_DEBUG_SLAB=y
+ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_DEBUG_SPINLOCK=y
+ CONFIG_EARLY_PRINTK=y
++CONFIG_CRYPTO_CRC32C=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRC16=y
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 05a054a..fdec3cb 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
  
 -Tested with QEMU 2.1.0
 +Tested with QEMU 2.1.2
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index d6d7c20..ecfcf01 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -13,14 +13,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 14b6cd9..95d62b4 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
  # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.16 headers to avoid breaking with newer kernels
 +# Lock to 3.17 headers to avoid breaking with newer kernels
@@ -50,5 +93,8 @@ index d6d7c20..ecfcf01 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16.3"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.16.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.17.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
