@@ -1,107 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 00:25:59 +0200
-Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: bump
-	kernel to version 3.17
-Message-ID: <20141007222740.28550B11B3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Oct 2014 00:29:33 +0200
+Subject: [Buildroot] [Patch v2 1/1] Fix selection of bootloaders from
+ $(BR2_EXTERNAL)
+In-Reply-To: <20141007212938.GA2949@itchy>
+References: <1412686892-29394-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20141007154851.4a94c0f7@free-electrons.com>
+ <20141007212938.GA2949@itchy>
+Message-ID: <20141007222933.GC27580@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed4e304925254f65c15e7741ee69c30309e5ac5d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Eric, Thomas, All,
 
-The audio patch has not been upstreamed and no longer applies.
+On 2014-10-07 23:29 +0200, Eric Le Bihan spake thusly:
+> On Tue, Oct 07, 2014 at 03:48:51PM +0200, Thomas Petazzoni wrote:
+> > Dear Eric Le Bihan,
+> >
+> > On Tue,  7 Oct 2014 15:01:32 +0200, Eric Le Bihan wrote:
+> > > If a package is based on "generic-package", pkg-generic.mk will compute
+> > > the name of the Kconfig variable to use for checking if this package has
+> > > been selected by the user.
+> > >
+> > > Unfortunately, this mechanism does not take into account the case where
+> > > a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
+> > >
+> > > So, even if the bootloader has been selected, it will not be added to
+> > > $(TARGETS) and will not be built.
+> > >
+> > > This patch fixes this issue, as well as handle toolchains.
+[--SNIP--]
+> > Well, this makes the assumption that $(BR2_EXTERNAL) bootloaders should
+> > be in boot/ and $(BR2_EXTERNAL) toolchain stuff should be in toolchain/.
+> >
+> > In practice, the boot/ and toolchain/ organization in the main
+> > Buildroot does not necessarily need to be reflected in $(BR2_EXTERNAL):
+> > you can have a bootloader in $(BR2_EXTERNAL)/package/foobar/, just name
+> > its option BR2_PACKAGE_FOOBAR and not BR2_TARGET_FOOBAR.
+> 
+> On the contrary, I find it confusing *not* to reflect the main Buildroot
+> organization in $(BR2_EXTERNAL).
+> 
+> To me, the $(BR2_EXTERNAL)/package directory should contain Makefiles for
+> programs to be deployed in the rootfs of the target or host tools to build
+> them. But a bootloader is not to be deployed on the rootfs, but to be built
+> next to it. So it is more sensible to put the Makefile for a new/proprietary
+> bootloader in $(BR2_EXTERNAL)/boot.
 
-[Peter: explain why patch is dropped]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{linux-3.16.config => linux-3.17.config}       |   20 --------------------
- configs/olimex_imx233_olinuxino_defconfig          |    9 ++++-----
- 2 files changed, 4 insertions(+), 25 deletions(-)
+I have to agree with Eric here: I think allowing (not enforcing) the
+same layout in br2-external as in Buildroot is a good thing.
 
-diff --git a/board/olimex/imx233_olinuxino/linux-3.16.config b/board/olimex/imx233_olinuxino/linux-3.17.config
-similarity index 86%
-rename from board/olimex/imx233_olinuxino/linux-3.16.config
-rename to board/olimex/imx233_olinuxino/linux-3.17.config
-index 4795023..d46d4d5 100644
---- a/board/olimex/imx233_olinuxino/linux-3.16.config
-+++ b/board/olimex/imx233_olinuxino/linux-3.17.config
-@@ -1,17 +1,6 @@
- CONFIG_SYSVIPC=y
- CONFIG_NO_HZ=y
- CONFIG_HIGH_RES_TIMERS=y
--CONFIG_TASKSTATS=y
--CONFIG_TASK_DELAY_ACCT=y
--CONFIG_TASK_XACCT=y
--CONFIG_TASK_IO_ACCOUNTING=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--# CONFIG_UTS_NS is not set
--# CONFIG_IPC_NS is not set
--# CONFIG_PID_NS is not set
--# CONFIG_NET_NS is not set
--CONFIG_RELAY=y
- CONFIG_PERF_EVENTS=y
- # CONFIG_COMPAT_BRK is not set
- CONFIG_MODULES=y
-@@ -20,8 +9,6 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_MODULE_FORCE_UNLOAD=y
- CONFIG_MODVERSIONS=y
- CONFIG_BLK_DEV_INTEGRITY=y
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_MXS=y
- # CONFIG_ARM_THUMB is not set
-@@ -37,12 +24,6 @@ CONFIG_INET=y
- CONFIG_IP_PNP=y
- CONFIG_IP_PNP_DHCP=y
- CONFIG_SYN_COOKIES=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
- CONFIG_CFG80211=y
- CONFIG_CFG80211_WEXT=y
- CONFIG_MAC80211=y
-@@ -123,7 +104,6 @@ CONFIG_SND_HRTIMER=y
- # CONFIG_SND_SPI is not set
- # CONFIG_SND_USB is not set
- CONFIG_SND_SOC=y
--CONFIG_SND_MXS_SOC_BUILTIN=y
- CONFIG_USB=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_STORAGE=y
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index d516cb4..cbe4504 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -15,8 +15,8 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.16"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- 
- # Bootloader
- BR2_TARGET_MXS_BOOTLETS=y
-@@ -27,10 +27,9 @@ BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME="imx23_olinuxino_dev"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.16.config"
--BR2_LINUX_KERNEL_PATCH="http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/101-soc-audio-dts.patch http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/ASoC_driver_for_i.MX233.patch"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.17.config"
- BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
- 
+> For $(BR2_EXTERNAL)/toolchain, a user may want to use a proprietary toolchain
+> that is not available as a tarball and thus not installable via the
+> traditional means.
+
+But does that even work at all?
+
+Toolchains are not packages; br2-external was not designed to get new
+toolchain definitions. That it works, if it does at all, is just merely
+happenstance.
+
+I wonder if/how we should/could get this to work.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
