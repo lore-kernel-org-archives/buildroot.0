@@ -1,117 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 00:13:13 +0200
-Subject: [Buildroot] [git commit] botan: new package
-Message-ID: <20141007222141.4E5D0B1161@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2014 00:25:50 +0200
+Subject: [Buildroot] [PATCH] configs/olimex_imx233_olinuxino: bump
+	kernel to version 3.17
+In-Reply-To: <1412720339-11029-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 7 Oct 2014 19:18:59 -0300")
+References: <1412720339-11029-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vbnvecup.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e43da7bb32285bbd41b38a379aef77132d149df7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in       |    1 +
- package/botan/Config.in |   10 +++++++
- package/botan/botan.mk  |   62 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 0 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/Config.in b/package/Config.in
-index e773715..ea89c96 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -571,6 +571,7 @@ endmenu
- 
- menu "Crypto"
- 	source "package/beecrypt/Config.in"
-+	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev/Config.in"
- 	source "package/gnutls/Config.in"
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-new file mode 100644
-index 0000000..4911872
---- /dev/null
-+++ b/package/botan/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_BOTAN
-+	bool "botan"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Botan is a crypto library for C++
-+
-+	  http://botan.randombit.net
-+
-+comment "botan needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-new file mode 100644
-index 0000000..ae0e02d
---- /dev/null
-+++ b/package/botan/botan.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# botan
-+#
-+################################################################################
-+
-+BOTAN_VERSION = 1.10.8
-+BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
-+BOTAN_SITE = http://files.randombit.net/botan
-+BOTAN_LICENSE = BSD-2c
-+BOTAN_LICENSE_FILES = doc/license.txt
-+
-+BOTAN_INSTALL_STAGING = YES
-+BOTAN_INSTALL_TARGET = YES
-+
-+BOTAN_CONF_OPTS = \
-+	--cpu=$(BR2_ARCH) \
-+	--os=linux \
-+	--cc=gcc \
-+	--cc-bin="$(TARGET_CXX)"
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	BOTAN_CONF_OPTS += --disable-shared
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+	BOTAN_DEPENDENCIES += bzip2
-+	BOTAN_CONF_OPTS += --with-bzip2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GMP),y)
-+	BOTAN_DEPENDENCIES += gmp
-+	BOTAN_CONF_OPTS += --with-gnump
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	BOTAN_DEPENDENCIES += openssl
-+	BOTAN_CONF_OPTS += --with-openssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+	BOTAN_DEPENDENCIES += zlib
-+	BOTAN_CONF_OPTS += --with-zlib
-+endif
-+
-+define BOTAN_CONFIGURE_CMDS
-+	(cd $(@D); ./configure.py $(BOTAN_CONF_OPTS))
-+endef
-+
-+define BOTAN_BUILD_CMDS
-+	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
-+endef
-+
-+define BOTAN_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
-+endef
-+
-+define BOTAN_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
-+endef
-+
-+$(eval $(generic-package))
+ >  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ > -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.16.config"
+ > -BR2_LINUX_KERNEL_PATCH="http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/101-soc-audio-dts.patch http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/ASoC_driver_for_i.MX233.patch"
+
+From the discussion on IRC I understood that this (non-upstream) patch
+no longer applies. I've added a note to the commit message and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
