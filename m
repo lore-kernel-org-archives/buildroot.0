@@ -1,36 +1,25 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 7 Oct 2014 21:34:42 +0200
-Subject: [Buildroot] [PATCH] ser2net: Fix compilation failures due to
- missing TIOCSRS485 macro
-In-Reply-To: <20141007192825.7978163b@free-electrons.com>
-References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAGm1_ktbFdMqF5SOrB1KAP=kdZN8=_Gg6zirOONFw7jPqL4kwg@mail.gmail.com>
- <20141007192825.7978163b@free-electrons.com>
-Message-ID: <CAGm1_ku37XtqFR17XBcMLHHSn4pkW66K6Zt6S2r9zA=HmMpLzQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Oct 2014 22:13:14 +0200
+Subject: [Buildroot] [PATCH] ts5x00: bump to Linux 3.17
+In-Reply-To: <1412630664-9527-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ (Vivien Didelot's message of "Mon, 6 Oct 2014 17:24:24 -0400")
+References: <1412630664-9527-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <8738azhc4l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 7, 2014 at 7:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yegor Yefremov,
->
-> On Tue, 7 Oct 2014 16:33:09 +0200, Yegor Yefremov wrote:
->
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> If you actually agree with the patch, or tested it, or have reviewed
-> it, you should give a Tested-by, Acked-by or Reviewed-by, not a
-> Signed-off-by. Please see
-> http://buildroot.org/downloads/manual/manual.html#_reviewing_and_testing_patches.
+>>>>> "Vivien" == Vivien Didelot <vivien.didelot@savoirfairelinux.com> writes:
 
-Then I'll choose
+ > The support for the TS-5400 platform is mainlined since Linux 3.17.
+ > This commit removes the outdated support patch and bumps the kernel
+ > headers (and thus Linux) to 3.17.x.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-I was actually the author of the upstream ser2net patch, that's why I
-thought SoB would be OK :-)
+Committed, thanks.
 
-Yegor
+-- 
+Bye, Peter Korsgaard
