@@ -1,50 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Oct 2014 22:36:02 +0200
-Subject: [Buildroot] [git commit] slang: disable termcap
-Message-ID: <20141007203649.DD55BB0F3A@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 07 Oct 2014 22:58:49 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libva: Bump version to 1.4.0
+References: <1412623692-3322-1-git-send-email-bernd.kuhls@t-online.de>
+ <87ppe3fwnn.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA3BFE9C44990FberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e17afee1b9d6e6503aa68211341efad437ef181d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> wrote in 
+news:87ppe3fwnn.fsf at dell.be.48ers.dk:
 
-We don't have/do it and sometimes it misdetects. Fixes:
-http://autobuild.buildroot.net/results/ec9/ec9f1d7680aa50357d9a6646cef610dcaa1e8041/
+> Committed all 3, thanks. For future patches, it would be good if you
+> would add the tarball hashes as the libva* release announcements had
+> them (I've added them now).
 
-Also add hash file.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/slang/slang.hash |    2 ++
- package/slang/slang.mk   |    6 ++++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ok, I will do so.
 
-diff --git a/package/slang/slang.hash b/package/slang/slang.hash
-new file mode 100644
-index 0000000..000ac11
---- /dev/null
-+++ b/package/slang/slang.hash
-@@ -0,0 +1,2 @@
-+# From http://www.jedsoft.org/releases/slang/
-+sha1	c3270b58a58e6cbfd47f0a6e3d2194dd9e7c7d14	slang-2.3.0.tar.gz
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 6962e77..15b65b3 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -11,6 +11,12 @@ SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
- SLANG_MAKE = $(MAKE1)
- 
-+# Racy and we don't have/do libtermcap
-+define SLANG_DISABLE_TERMCAP
-+	$(SED) '/^TERMCAP=/s:=.*:=:' $(@D)/configure
-+endef
-+SLANG_POST_PATCH_HOOKS += SLANG_DISABLE_TERMCAP
-+
- # Absolute path hell, sigh...
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- 	SLANG_CONF_OPTS += --with-png=$(STAGING_DIR)/usr
+Until now I did not really bother for my non-security-related packages 
+because I remembered the commit description
+http://git.buildroot.net/buildroot/commit/support/download/check-hash?id=
+9bd8b59526c4521879f0ae5f765cb1a748725c49 where Yann talked about "sensitive 
+packages, related to security: openssl, dropbear, ca-certificates...", so I 
+thought hashes are optional[1]. It seems I did not notice the change of 
+policy regarding hashes.
+In other words: Is there a reason _not_ to include a hash for a source 
+tarball?
+
+Regards, Bernd
+
+[1] According to the doc
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash
+they are still optional ;)
