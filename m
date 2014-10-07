@@ -1,66 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 7 Oct 2014 11:30:00 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-04
-In-Reply-To: <20141007094832.01c0f443@free-electrons.com>
-References: <20141005063015.846CF101508@stock.ovh.net>
- <CANQCQpYkPJATN4b8hYwCWtLpz3XhO5ZtESWb9crSChA2jYgrjQ@mail.gmail.com>
- <20141007094832.01c0f443@free-electrons.com>
-Message-ID: <CANQCQpZQ0PKOrMR_D-43oiUTQg3vvCub=i8aU=Wndx+FKdQvOQ@mail.gmail.com>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Tue, 07 Oct 2014 09:42:19 -0700
+Subject: [Buildroot] [02/11] freescale-imx: bump to version 3.10.17-1.0.1
+In-Reply-To: <1412340212-3089-3-git-send-email-jezz@sysmic.org>
+References: <1412340212-3089-3-git-send-email-jezz@sysmic.org>
+Message-ID: <543417EB.4080301@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Jerome,
 
-On Tue, Oct 7, 2014 at 2:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Matthew Weber,
+On 10/03/2014 05:43 AM, J?r?me Pouiller wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>   package/freescale-imx/freescale-imx.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> On Mon, 6 Oct 2014 14:45:07 -0500, Matthew Weber wrote:
+> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+> index 64ea1f9..58dc9f0 100644
+> --- a/package/freescale-imx/freescale-imx.mk
+> +++ b/package/freescale-imx/freescale-imx.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -FREESCALE_IMX_VERSION = 3.10.17-1.0.0
+> +FREESCALE_IMX_VERSION = 3.10.17-1.0.1
+This FREESCALE_IMX_VERSION variable is used by other packages which do 
+not have a 1.0.1 update such as imx-lib, imx-vpu or firmware-imx. 
+Therefore this patch would break them.
+I suggest modifying only the gpu-viv package version but this implies to 
+also modifying all the i.MX6 configs to update their kernels as it has 
+been done in Yocto:
+https://lists.yoctoproject.org/pipermail/meta-freescale/2014-August/009906.html
+
+Let me know if you need help updating all the configurations 
+(nitrogen6x, sabresd, wandboard etc...).
+
+Thanks,
+Gary
+>   FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
+>   
+>   include $(sort $(wildcard package/freescale-imx/*/*.mk))
 >
->> >      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/3c1c620684a23b4cbb1cfa560096094cd9bf09ec/
->> >      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/f1b70ebabd587987547424a21eefc530317026cd/
->>
->> These powerpc builds use a gcc 4.5 compiler which doesn't provide the
->> generic atomicops implementation which is only exposed if GCC >= 4.7.
->> I looked at the BR2_ARCH_HAS_ATOMICS option as a possible dependency
->> to fix this but it seems like that option is always set if the ARCH
->> supports it.  Not necessarily based on if a toolchain provides a
->> generic.
 >
-> Gaah, yes. We knew that we introducing the BR2_ARCH_HAS_ATOMICS thing,
-> but making it a per-compiler version thing was really too annoying.
->
-> Is there a way to build protobuf without those atomic operations, or
-> not at all?
-
-Yeah, I believe the GCC version check is arbitrary.  I was going to
-take a look at the generic atomics implementations and see if they
-were stub functions.  If so, we could patch in a workaround to allow
-GCC  >= 4.3 to build (with that being an arbitrarily old compiler
-version.....)  or just open it up to any version and test if we get
-compiler failures.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
