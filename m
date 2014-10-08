@@ -1,39 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 22:52:16 +0200
-Subject: [Buildroot] [git commit] botan: add type to
-	BR2_PACKAGE_BOTAN_ARCH_SUPPORTS option
-Message-ID: <20141008205419.468FCB783D@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 8 Oct 2014 22:58:53 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] package/freerdp: install server key
+ and certificate
+In-Reply-To: <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
+References: <cover.1412634775.git.yann.morin.1998@free.fr>
+ <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21b617b299922a9df740e6a814f83f126ff7bc3e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann,
 
-Commit 1737af367993326ee47e847bd755806c8a78ced8 ('botan: limit to
-supported CPU architectures') introduced the
-BR2_PACKAGE_BOTAN_ARCH_SUPPORTS with a default value, but forgot to
-define a type, which leads to a kconfig warning:
+On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> This is mandatory for an RDP server to have a key and a certificate,
+> otherwise clients will refuse to connect to that server.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/freerdp/freerdp.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index ea590d1..e643e57 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -86,4 +86,14 @@ else
+>  FREERDP_CONF_OPTS += -DWITH_XV=OFF
+>  endif
+>
+> +# Install the server key and certificate, so that a client can connect.
+> +# A user can override them with its opwn in a post-build script, if needed.
 
-  package/botan/Config.in:1:warning: config symbol defined without type
+s/opwn/own/
 
-This commit fixes that by properly setting the type.
+> +define FREERDP_INSTALL_KEYS
+> +       $(INSTALL) -D $(@D)/server/X11/server.key \
+> +                     $(TARGET_DIR)/etc/freerdp/keys/server.key
+> +       $(INSTALL) -D $(@D)/server/X11/server.crt \
+> +                     $(TARGET_DIR)/etc/freerdp/keys/server.crt
+> +endef
+> +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/botan/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+It is useful for the client only? or the server? or both?
+If it is only useful for one or the other, maybe it should be nested
+in a if-block using the BR2_PACKAGE_FREERDP_CLIENT (or
+BR2_PACKAGE_FREERDP_SERVER)?
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index b9e2e3a..dc9aa05 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-+	bool
- 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k    || \
- 		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		BR2_powerpc || BR2_powerpc64 || BR2_sparc || BR2_sh  || \
+> +
+>  $(eval $(cmake-package))
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
+-- 
+Samuel
