@@ -1,58 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 19:28:34 +0200
-Subject: [Buildroot] [git commit] bash: minor install tweaks
-Message-ID: <20141008180329.D5539B16BC@busybox.osuosl.org>
+Date: Wed, 8 Oct 2014 19:32:14 +0200
+Subject: [Buildroot] [git commit] procps-ng: bump to version 3.3.10
+Message-ID: <20141008180329.DCEF2B1427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=350bd00ec5993e24191cd07aaa0c07ae06d68a3a
+commit: http://git.buildroot.net/buildroot/commit/?id=d1058c2d2d9204bea3a903cc92c1d21f4c5aae54
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove the old symlink backup since we don't do uninstalls now.
-Make the busybox dependency conditional shorter.
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash/bash.mk |   14 ++++----------
- 1 files changed, 4 insertions(+), 10 deletions(-)
+ package/procps-ng/procps-ng.hash |    3 +++
+ package/procps-ng/procps-ng.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index acd64f1..6510af5 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -6,7 +6,9 @@
+diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
+new file mode 100644
+index 0000000..e011356
+--- /dev/null
++++ b/package/procps-ng/procps-ng.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/procps-ng/files/Production/
++md5	1fb7f3f6bf92ce6c5c9ed9949ae858fe	procps-ng-3.3.10.tar.xz
++sha1	484db198d6a18a42b4011d5ecb2cb784a81b0e4f	procps-ng-3.3.10.tar.xz
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index d82db76..71e32dd 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BASH_VERSION = 4.3
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
--BASH_DEPENDENCIES = ncurses readline host-bison
-+# Build after since bash is better than busybox shells
-+BASH_DEPENDENCIES = ncurses readline host-bison \
-+	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
- BASH_CONF_OPTS = --with-installed-readline
- BASH_LICENSE = GPLv3+
- BASH_LICENSE_FILES = COPYING
-@@ -28,19 +30,11 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
- BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
- endif
- 
--# Make sure we build after busybox so that /bin/sh links to bash
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--BASH_DEPENDENCIES += busybox
--endif
--
--# Save the old sh file/link if there is one and symlink bash->sh
-+# Make /bin/sh -> bash (no other shell, better than busybox shells)
- define BASH_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
- 	rm -f $(TARGET_DIR)/bin/bashbug
--	if [ -e $(TARGET_DIR)/bin/sh ]; then \
--		mv -f $(TARGET_DIR)/bin/sh $(TARGET_DIR)/bin/sh.prebash; \
--	fi
- 	ln -sf bash $(TARGET_DIR)/bin/sh
- endef
- 
+-PROCPS_NG_VERSION = 3.3.9
++PROCPS_NG_VERSION = 3.3.10
+ PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
+ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPLv2+, libproc and libps LGPLv2+
