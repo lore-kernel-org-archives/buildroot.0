@@ -1,10 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Oct 2014 21:50:53 +0200
-Subject: [Buildroot] [PATCH 1/2] x264: fix typo in variable name
-In-Reply-To: <1412797026-16602-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 8 Oct 2014 21:37:05 +0200")
+Date: Wed, 08 Oct 2014 21:51:12 +0200
+Subject: [Buildroot] [PATCH 2/2] x264: fix non-standard indentation of
+	variable definitions
+In-Reply-To: <1412797026-16602-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 8 Oct 2014 21:37:06 +0200")
 References: <1412797026-16602-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87lhoqbasi.fsf@dell.be.48ers.dk>
+ <1412797026-16602-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87h9zebarz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +15,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/d37/d37856be02bdff5711fc5d6fb1f3d4614fe5fed3/
-
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  package/x264/x264.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/x264/x264.mk b/package/x264/x264.mk
- > index c2397f8..ccf8e2b 100644
- > --- a/package/x264/x264.mk
- > +++ b/package/x264/x264.mk
- > @@ -13,7 +13,7 @@ X264_LICENSE_FILES = COPYING
- >  X264_INSTALL_STAGING = YES
- 
- >  ifeq ($(BR2_i386)$(BR2_x86_64),y)
- > -	FFMPEG_DEPENDENCIES += host-yasm
- > +	X264_DEPENDENCIES += host-yasm
 
 Committed, thanks.
 
