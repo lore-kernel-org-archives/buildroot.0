@@ -1,36 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 08 Oct 2014 14:36:17 -0300
-Subject: [Buildroot] [PATCH 2/5] zsh: security bump to version 5.0.7
-In-Reply-To: <87a956eadv.fsf@dell.be.48ers.dk>
-References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>	<1412774389-11297-2-git-send-email-gustavo@zacarias.com.ar>
- <87a956eadv.fsf@dell.be.48ers.dk>
-Message-ID: <54357611.2050005@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2014 19:36:55 +0200
+Subject: [Buildroot] [PATCH 5/5] sysklogd: security bump to version 1.5.1
+In-Reply-To: <1412774389-11297-5-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 8 Oct 2014 10:19:49 -0300")
+References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>
+ <1412774389-11297-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wq8acvk8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 02:31 PM, Peter Korsgaard wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Sigh, what is it about shells for the moment?
-> 
-> Same comment as for dash, who should "win" the /bin/sh symlink?
-> 
-> maybe busybox -> dash -> zsh -> bash?
+ > Fixes CVE-2014-3634 - invalid priority values between 192 and 1023
+ > (directly or arrived at via overflow wraparound) can propagate through
+ > code causing out-of-bounds access to the f_pmask array within the
+ > 'filed' structure by up to 104 bytes past its end.
 
-Forgot to cc the list ;)
-It's not really/only a matter of which one wins, it's an init system
-nightmare that i'm solving.
-Say you've got:
+ > Switch to vanilla since Debian hasn't handled this yet and add hash
+ > file.
 
-busybox-init + some better shell = the better shell should win.
-sysvinit + busybox + some better shell = same as above
-sysvinit + no busybox + some better shell = oops since there's no /bin/sh
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I don't care which of the better is "betterer", it's pretty subjective,
-i just want the crazy combinations to work :)
-Of course there's sysvinit + no busybox + no shell but that's another
-problem.
+Committed, thanks.
 
-Regards.
+-- 
+Bye, Peter Korsgaard
