@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 18:14:24 +0200
+Date: Wed, 8 Oct 2014 18:14:44 +0200
 Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
-In-Reply-To: <CAGduivy-PEV9kqjD50yhKc3T8=iZa6cdg-q0Z48dQvA4SnYg1g@mail.gmail.com>
+In-Reply-To: <1490631735.26304543.1412767037821.JavaMail.root@openwide.fr>
 References: <20141008104845.495ad683@free-electrons.com>
- <CAHXCMMLaWJki-F0NXKAw243DWUKdtWeE=q1iDNoVdi+2_z9s7w@mail.gmail.com>
- <CAGduivy-PEV9kqjD50yhKc3T8=iZa6cdg-q0Z48dQvA4SnYg1g@mail.gmail.com>
-Message-ID: <20141008181424.27e753c8@free-electrons.com>
+ <1490631735.26304543.1412767037821.JavaMail.root@openwide.fr>
+Message-ID: <20141008181444.7a45d243@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Jeremy Rosen,
 
-On Wed, 8 Oct 2014 13:01:56 +0200, Maxime Hadjinlian wrote:
+On Wed, 8 Oct 2014 13:17:17 +0200 (CEST), Jeremy Rosen wrote:
 
-> >>  - SystemV/systemd init scripts. The idea was to do automatic
-> >>    installation of init scripts / service files located in
-> >>    package/<foo>/. Maxime Hadjinlian said he would work on this, but
-> >>    not much happened. On a related note, there is a need to separate
-> >>    the skeleton to not avoid Busybox-related init scripts in a pure
-> >>    systemd configuration.
-> I know.. shame on me.
+> >  - Evaluation of BR2_EXTERNAL. Not sure exactly what was needed
+> >    here. Jeremy Rosen was supposed to submit a patch, but I'm not
+> >    sure
+> >    if it happened, or even if something needs to happen.
+> > 
+> 
+> The patch was more or less deprecated/implemented differently.
+> 
+> buildroot-submodules covers the underlying idea of that particular 
+> action point : how complete is BR2_EXTERNAL, can we externalize 
+> everything ? at this point, the answer is definitely yes, so
+> this can be considered closed
 
-No problem. The point of doing a review of the action points is
-definitely *not* to put the blame on anybody.
-
-> I still have a branch with a beginning of something. I would *really*
-> like to finish this during the dev-days, it would be great.
-
-Ok. Though from my perspective, active development could better take
-place outside of the dev-days. Maybe focusing the dev-days on
-cleaning up the patchwork backlog is a better idea.
+Ok, thanks for the feedback!
 
 Thomas
 -- 
