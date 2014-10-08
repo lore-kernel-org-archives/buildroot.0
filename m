@@ -1,54 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Oct 2014 20:03:08 +0200
-Subject: [Buildroot] [PATCH 2/2] quota: bump to version 4.01
-In-Reply-To: <1412779736-11412-2-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Wed, 8 Oct 2014 16:48:52 +0200")
-References: <1412779736-11412-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1412779736-11412-2-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87oatmcucj.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Oct 2014 20:03:13 +0200
+Subject: [Buildroot] [PATCH] ulogd: only for kernels <= 3.16.x
+In-Reply-To: <1412789575-31614-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1412789575-31614-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141008180313.GB4718@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+Gustavo, All,
 
- > Also add hash file.
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
- > ---
- >  package/quota/quota-01-tools-getrpcbynumber.patch |    4 ++--
- >  package/quota/quota.hash                          |    3 +++
- >  package/quota/quota.mk                            |    2 +-
- >  3 files changed, 6 insertions(+), 3 deletions(-)
- >  create mode 100644 package/quota/quota.hash
+On 2014-10-08 14:32 -0300, Gustavo Zacarias spake thusly:
+> The ulog netfilter target has been deprecated for some time and removed
+> in kernels >= 3.17.x so limit it to older headers. Fixes:
+> http://autobuild.buildroot.net/results/9ca/9ca43764c7363f9a00b8a0c7df20a492c00088b5/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > diff --git a/package/quota/quota-01-tools-getrpcbynumber.patch b/package/quota/quota-01-tools-getrpcbynumber.patch
- > index 3fed853..899db91 100644
- > --- a/package/quota/quota-01-tools-getrpcbynumber.patch
- > +++ b/package/quota/quota-01-tools-getrpcbynumber.patch
- > @@ -20,8 +20,8 @@ Index: b/configure.in
- >  +   AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
- >  +fi
- >  +
- > - AC_ARG_ENABLE(altformat,
- > - 	[  --enable-altformat=[yes/no]     Enable alternative format used by edquota [default=yes].],
- > + AC_ARG_ENABLE(rpc,
- > + 	[  --enable-rpc=[yes/no]           Enable RPC support [default=yes].],
- >   	,
- >  Index: b/svc_socket.c
- >  ===================================================================
- > diff --git a/package/quota/quota.hash b/package/quota/quota.hash
- > new file mode 100644
- > index 0000000..7bba98d
- > --- /dev/null
- > +++ b/package/quota/quota.hash
- > @@ -0,0 +1,3 @@
- > +# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.01/ (click an info button)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-s/an info/on info/
+Regards,
+Yann E. MORIN.
 
-Committed both with that fixed, thanks.
+> ---
+>  package/ulogd/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
+> index 04acf0c..c792973 100644
+> --- a/package/ulogd/Config.in
+> +++ b/package/ulogd/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_ULOGD
+>  	depends on BR2_LARGEFILE
+>  	depends on !BR2_PREFER_STATIC_LIB
+>  	depends on BR2_USE_MMU
+> +	# ulog support removed for kernels >= 3.17
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+>  	select BR2_PACKAGE_LIBMNL
+>  	select BR2_PACKAGE_LIBNETFILTER_ACCT
+>  	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+> @@ -17,3 +19,4 @@ config BR2_PACKAGE_ULOGD
+>  comment "ulogd needs a toolchain w/ IPv6, largefile, dynamic library"
+>  	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
+>  	depends on BR2_USE_MMU
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> -- 
+> 2.0.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
