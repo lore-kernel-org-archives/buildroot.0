@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 18:13:19 +0200
-Subject: [Buildroot] Topics to discuss at the meeting
-In-Reply-To: <CAGm1_kvhqNy_3BKg2figgWw-FbCcBTAGxrXWJm3wUwv=e42sMQ@mail.gmail.com>
-References: <20141008105653.7252facd@free-electrons.com>
- <CAGm1_kvhqNy_3BKg2figgWw-FbCcBTAGxrXWJm3wUwv=e42sMQ@mail.gmail.com>
-Message-ID: <20141008181319.17f49595@free-electrons.com>
+Date: Wed, 8 Oct 2014 18:14:24 +0200
+Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
+In-Reply-To: <CAGduivy-PEV9kqjD50yhKc3T8=iZa6cdg-q0Z48dQvA4SnYg1g@mail.gmail.com>
+References: <20141008104845.495ad683@free-electrons.com>
+ <CAHXCMMLaWJki-F0NXKAw243DWUKdtWeE=q1iDNoVdi+2_z9s7w@mail.gmail.com>
+ <CAGduivy-PEV9kqjD50yhKc3T8=iZa6cdg-q0Z48dQvA4SnYg1g@mail.gmail.com>
+Message-ID: <20141008181424.27e753c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Maxime Hadjinlian,
 
-On Wed, 8 Oct 2014 11:10:25 +0200, Yegor Yefremov wrote:
+On Wed, 8 Oct 2014 13:01:56 +0200, Maxime Hadjinlian wrote:
 
-> > Feel free to comment on these topics, or add new ones. For those who
-> > have an account, do not hesitate to update the Wiki accordingly.
-> 
-> Could we add FIT topic? Basic creation and installation is already
-> implemented (http://patchwork.ozlabs.org/patch/396240/). The bigger
-> part is to control the priorities when and what step should be taken
-> first: at fist cpio and then fit, first fit and then ext2 etc.
-> I doubt, that ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS and
-> ROOTFS_$(FSTYPE)_POST_TARGETS will help here.
+> >>  - SystemV/systemd init scripts. The idea was to do automatic
+> >>    installation of init scripts / service files located in
+> >>    package/<foo>/. Maxime Hadjinlian said he would work on this, but
+> >>    not much happened. On a related note, there is a need to separate
+> >>    the skeleton to not avoid Busybox-related init scripts in a pure
+> >>    systemd configuration.
+> I know.. shame on me.
 
-Sure. However, the two persons having expressed some knowledge about
-FIT are you and Thomas DS, and none of you will be at the meeting.
+No problem. The point of doing a review of the action points is
+definitely *not* to put the blame on anybody.
 
-Could you give some examples about the two cases you have (cpio and
-ext2) and how they cause issues with the current Buildroot? I
-understand it's a build ordering problem, but I'd like to understand
-better the use cases of FIT to see how we can solve this.
+> I still have a branch with a beginning of something. I would *really*
+> like to finish this during the dev-days, it would be great.
 
-Thanks!
+Ok. Though from my perspective, active development could better take
+place outside of the dev-days. Maybe focusing the dev-days on
+cleaning up the patchwork backlog is a better idea.
 
 Thomas
 -- 
