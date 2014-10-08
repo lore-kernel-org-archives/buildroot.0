@@ -1,42 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Oct 2014 11:08:25 -0300
-Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.38
-Message-ID: <1412777305-5005-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  8 Oct 2014 11:39:24 -0300
+Subject: [Buildroot] [PATCH 1/2] package/sysvinit: don't start logging
+Message-ID: <1412779165-13366-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Don't try to start logging from /etc/inittab because busybox installs a
+S01logging script that handles that and can lead to duplicate logging
+processes.
+Let's handle the logging in each package that provides it since we can
+get multiple variants in the future like syslog-ng that have different
+initialization routines.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 ++
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/libmicrohttpd/libmicrohttpd.hash
+ package/sysvinit/inittab | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-new file mode 100644
-index 0000000..8cc7d59
---- /dev/null
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721	libmicrohttpd-0.9.38.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index e7a8e6e..80dcfa0 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index 8812cca..d3de4a7 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -17,16 +17,9 @@ init::sysinit:/etc/init.d/rcS
  
--LIBMICROHTTPD_VERSION = 0.9.37
-+LIBMICROHTTPD_VERSION = 0.9.38
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+ # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+ 
+-# Logging junk
+-mess::sysinit:/bin/touch /var/log/messages
+-sysl:1:respawn:/sbin/syslogd -n -m 0
+-klog:1:respawn:/sbin/klogd -n
+-
+ # Stuff to do for the 3-finger salute
+ rebo::ctrlaltdel:/sbin/reboot
+ 
+ # Stuff to do before rebooting
+-sklo:6:wait:/usr/bin/killall klogd
+-ssys:6:wait:/usr/bin/killall syslogd
+ umou:6:wait:/bin/umount -a -r
+ swap:6:wait:/sbin/swapoff -a
 -- 
 2.0.4
