@@ -1,36 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 19:58:25 +0200
-Subject: [Buildroot] [git commit] quota: don't try to strip binaries during
-	installation
-Message-ID: <20141008180330.193F5B16BB@busybox.osuosl.org>
+Date: Wed, 8 Oct 2014 19:37:10 +0200
+Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.38
+Message-ID: <20141008180329.F13DEB1427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61a7a3a2f7041723c76ddb185486de420e94d079
+commit: http://git.buildroot.net/buildroot/commit/?id=eba33396d37e1c0b72a15dc0e4a7348ad760a5bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-quota strips binaries during installation by default using 'install -s', but
-that uses the host strip so doesn't work for cross compilation, and
-stripping or not is handled globally in Buildroot during target-finalize, so
-disable it here.
+Also add hash file.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quota/quota.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash |    2 ++
+ package/libmicrohttpd/libmicrohttpd.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 5011c0f..0e7a2b0 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -9,6 +9,7 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
- QUOTA_DEPENDENCIES = host-gettext
- QUOTA_AUTORECONF = YES
- QUOTA_LICENSE = GPLv2+
-+QUOTA_CONF_OPTS = --disable-strip-binaries
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+new file mode 100644
+index 0000000..8cc7d59
+--- /dev/null
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721	libmicrohttpd-0.9.38.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index e7a8e6e..80dcfa0 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- QUOTA_CFLAGS = $(TARGET_CFLAGS)
- QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
+-LIBMICROHTTPD_VERSION = 0.9.37
++LIBMICROHTTPD_VERSION = 0.9.38
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
