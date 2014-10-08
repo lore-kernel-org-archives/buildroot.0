@@ -1,31 +1,38 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 8 Oct 2014 15:57:42 +0100
-Subject: [Buildroot] [PATCH v2] package/trinity: New package
-In-Reply-To: <54355087.3090108@imgtec.com>
-References: <1412763762-58202-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141008145331.GC3117@waldemar-brodkorb.de> <54355087.3090108@imgtec.com>
-Message-ID: <543550E6.9070501@imgtec.com>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Wed,  8 Oct 2014 17:00:02 +0200
+Subject: [Buildroot] [PATCH v2 0/1] ipmiutil: new package
+Message-ID: <1412780403-11092-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 03:56 PM, Vicente Olivert Riera wrote:
-> Dear Waldemar Brodkorb,
-> 
-> On 10/08/2014 03:53 PM, Waldemar Brodkorb wrote:
->> Hi,
->>
->> may be I missed it in v1, is there a reason for
->> depends on !BR2_TOOLCHAIN_USES_UCLIBC ?
-> 
-> This is the v1 patch. You can see the reason there.
-> 
+Hi,
 
-Still it's probably a good idea to have a comment in Config.in
-since neither Config.in nor commit message explain the reason so one may
-forget and remove the restriction in the future.
+This is my second attempt to add ipmitutil package to buildroot. As suggested by 
+Thomas Petazzoni, I added a dependency on BR2_USE_MMU and thread support. I also
+removed the dependency on zlib.
+
+The package builds fine using an internal toolchain that has SSP enabled.
+
+I also tried these configs :
+http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
+http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
+http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
+http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
+
+Since SSP or MMU is not enabled in those configs, the package can't be built.
+
+David Bachelart (1):
+  ipmiutil: new package
+
+ package/Config.in            |    1 +
+ package/ipmiutil/Config.in   |   15 +++++++++++++++
+ package/ipmiutil/ipmiutil.mk |   15 +++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 package/ipmiutil/Config.in
+ create mode 100644 package/ipmiutil/ipmiutil.mk
 
 -- 
-markos
+1.7.10.4
