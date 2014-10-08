@@ -1,66 +1,88 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 8 Oct 2014 11:18:55 +0100
-Subject: [Buildroot] [PATCH] ser2net: Add a hash file
-In-Reply-To: <54350DC0.3040802@zacarias.com.ar>
-References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
- <20141007192331.0908bbcd@free-electrons.com> <5434FC83.3070303@imgtec.com>
- <20141008112001.2e0b8b9b@free-electrons.com> <543505F5.4080805@imgtec.com>
- <54350DC0.3040802@zacarias.com.ar>
-Message-ID: <54350F8F.1020506@imgtec.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 8 Oct 2014 11:22:42 +0100
+Subject: [Buildroot] [PATCH v2] package/trinity: New package
+Message-ID: <1412763762-58202-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 11:11 AM, Gustavo Zacarias wrote:
-> On 10/08/2014 06:37 AM, Markos Chandras wrote:
-> 
->>>>> Why having all those hashes?
->>>>
->>>> Why not? Those are all the hashes supported in Buildroot. The more we 
->>>> have the better.
->>>
->>> I disagree: more hashes means more work to do when bumping the package.
->>> Either one strong hash, or two weaker hashes should be sufficient IMO.
->>>
->>> Something to be discussed at the meeting maybe?
->>
->> I am curious, what's the point of supporting more than one hash types?
->> Why not support only the strongest one?
-> 
-> Normally you want to use upstream-provided hashes and they're not of the
-> same class for security.
-> You've got basically 3 kinds of security:
-> 1) Upstream releases new version/software with hashes.
-> 2) Upstream releases tarball signed (pgp).
-> 3) Upstream just releases.
-> 
-> 1 and 2 can intersect which is great.
-> Announcements ideally go into a mailing list hence the chance of
-> compromising that is far lower than a hash file or note in the web page
-> (which can be the same hosting site/server as the tarball).
-> If you use a signed pgp that reduces the chance of website compromise
-> since ideally the key is stored elsewhere as well.
-> If the hash/signature is on a mailing list archive the same happens
-> (another site, harder to get all the pieces together).
-> If the release is using a weak hash (md5, sha1) for which there are
-> possible collissions using two hashes makes it extremely difficult to
-> collide in a useful way.
-> (re)computing the hash for a bump/package requires that people check the
-> signature and we trust that they did it right (did anyone recheck
-> besides Baruch with openssh?) instead of just sha256sum(ing) the file
-> and sticking that result.
-> I think i've covered most of the cases here :)
-> Regards.
-> 
+Adding the Trinity Linux System call fuzz tester.
 
-I understand that, but realistically speaking, supporting so many
-different hashes is not very efficient. If an upstream uses weak hashes
-for released tarballs, just verify the weak hash on your local pc and
-then generate a strong hash yourself. Is there really a point having a
-week md5 and a strong sha256 hash at the same time?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/Config.in          |    1 +
+ package/trinity/Config.in  |   10 ++++++++++
+ package/trinity/trinity.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
+ create mode 100644 package/trinity/Config.in
+ create mode 100644 package/trinity/trinity.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index ea89c96..3b570ee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -89,6 +89,7 @@ endif
+ 	source "package/sysprof/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
++	source "package/trinity/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+new file mode 100644
+index 0000000..c648694
+--- /dev/null
++++ b/package/trinity/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_TRINITY
++	bool "trinity"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  A Linux System call fuzz tester
++
++	  http://codemonkey.org.uk/projects/trinity/
++
++comment "trinity is not supported for uClibc"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+new file mode 100644
+index 0000000..1e6c54a
+--- /dev/null
++++ b/package/trinity/trinity.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# trinity
++#
++################################################################################
++
++TRINITY_VERSION = c02034ec08d951cde3429905e64afe450cbc47db
++TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
++TRINITY_LICENSE = GPLv2
++TRINITY_LICENSE_FILES = COPYING
++
++define TRINITY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
++endef
++
++define TRINITY_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define TRINITY_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
++endef
++
++# Install helper scripts
++define TRINITY_INSTALL_HELPER_SCRIPTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/trinity
++	cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
++endef
++TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
++
++$(eval $(generic-package))
 -- 
-markos
+1.7.1
