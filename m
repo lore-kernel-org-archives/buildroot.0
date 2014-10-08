@@ -1,56 +1,42 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 8 Oct 2014 22:58:53 +0200
-Subject: [Buildroot] [PATCH 6/7 v2] package/freerdp: install server key
- and certificate
-In-Reply-To: <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
+Date: Wed, 8 Oct 2014 22:59:37 +0200
+Subject: [Buildroot] [PATCH 5/7 v2] package/freerdp: also install to
+	staging
+In-Reply-To: <9a8e25046eacb4cdc4cacc5d21817e08762b008e.1412634775.git.yann.morin.1998@free.fr>
 References: <cover.1412634775.git.yann.morin.1998@free.fr>
- <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
+ <9a8e25046eacb4cdc4cacc5d21817e08762b008e.1412634775.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+UoooK+oJ4L2qb8efSX5Er4iSVE-LwhsdKy74Lp_ADFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
-
 On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> This is mandatory for an RDP server to have a key and a certificate,
-> otherwise clients will refuse to connect to that server.
+> freerdp installs a library that other packages may use, so
+> we must also install it to staging.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+
 > ---
->  package/freerdp/freerdp.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  package/freerdp/freerdp.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index ea590d1..e643e57 100644
+> index 594bab3..ea590d1 100644
 > --- a/package/freerdp/freerdp.mk
 > +++ b/package/freerdp/freerdp.mk
-> @@ -86,4 +86,14 @@ else
->  FREERDP_CONF_OPTS += -DWITH_XV=OFF
->  endif
+> @@ -11,6 +11,8 @@ FREERDP_DEPENDENCIES = openssl zlib
+>  FREERDP_LICENSE = Apache-2.0
+>  FREERDP_LICENSE_FILES = LICENSE
 >
-> +# Install the server key and certificate, so that a client can connect.
-> +# A user can override them with its opwn in a post-build script, if needed.
-
-s/opwn/own/
-
-> +define FREERDP_INSTALL_KEYS
-> +       $(INSTALL) -D $(@D)/server/X11/server.key \
-> +                     $(TARGET_DIR)/etc/freerdp/keys/server.key
-> +       $(INSTALL) -D $(@D)/server/X11/server.crt \
-> +                     $(TARGET_DIR)/etc/freerdp/keys/server.crt
-> +endef
-> +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
-
-It is useful for the client only? or the server? or both?
-If it is only useful for one or the other, maybe it should be nested
-in a if-block using the BR2_PACKAGE_FREERDP_CLIENT (or
-BR2_PACKAGE_FREERDP_SERVER)?
-
+> +FREERDP_INSTALL_STAGING = YES
 > +
->  $(eval $(cmake-package))
+>  FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF
+>
+>  ifeq ($(BR2_PACKAGE_FREERDP_NEEDS_XLIBS),y)
 > --
 > 1.9.1
 >
@@ -59,7 +45,7 @@ BR2_PACKAGE_FREERDP_SERVER)?
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Regards,
+
 
 -- 
 Samuel
