@@ -1,138 +1,49 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 8 Oct 2014 13:17:17 +0200 (CEST)
-Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
-In-Reply-To: <20141008104845.495ad683@free-electrons.com>
-Message-ID: <1490631735.26304543.1412767037821.JavaMail.root@openwide.fr>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Wed, 8 Oct 2014 12:25:54 +0100
+Subject: [Buildroot] [PATCH] ser2net: Add a hash file
+In-Reply-To: <5435155D.4020903@zacarias.com.ar>
+References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+ <20141007192331.0908bbcd@free-electrons.com> <5434FC83.3070303@imgtec.com>
+ <20141008112001.2e0b8b9b@free-electrons.com> <543505F5.4080805@imgtec.com>
+ <54350DC0.3040802@zacarias.com.ar> <54350F8F.1020506@imgtec.com>
+ <5435155D.4020903@zacarias.com.ar>
+Message-ID: <54351F42.2090800@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 10/08/2014 11:43 AM, Gustavo Zacarias wrote:
+> On 10/08/2014 07:18 AM, Markos Chandras wrote:
+>> I understand that, but realistically speaking, supporting so many
+>> different hashes is not very efficient. If an upstream uses weak hashes
+>> for released tarballs, just verify the weak hash on your local pc and
+>> then generate a strong hash yourself. Is there really a point having a
+>> week md5 and a strong sha256 hash at the same time?
+> 
+> "strong" hashes are so for now, weak hashes were strong at the time too
+> remember, they're, grossly said, glorified checksums/CRCs (which were
+> also considered well enough until the data set and computation power grew).
+> If you truly want to ensure a certain degree of tamper resistance you
+> need to go to the 2-way collision.
+> After all a single value of 256 or 512 bits representing a file of 1 MB
+> of compressed data is bound to hit some issue eventually.
+> With two different hashing methods it's statistically very complex to
+> win the lottery.
+> Regards.
+> 
+Sure. But this probably is not a strong argument because for all I know
+they may find sha256 broken tomorrow morning and you have to update all
+the buildroot packages using that hash to verify the tarball. If you
+think something is "not strong enough" then don't use it :)
+Perhaps it's best if buildroot supported the two strongest algorithms
+and request that information for every package? I really see no point
+supporting eg md5 since we know it's weak. Anyway, that's my personal
+opinion, I just feel there is no clear "rule" here so developers are
+free to use whatever they want which may not always be acceptable by the
+maintainers :)
 
-
-
------ Mail original -----
-> Hello,
-> 
-> In preparation for the upcoming developers meeting on
-> Saturday/Sunday,
-> I had a look at all the topics/action points from the FOSDEM 2014
-> meeting, and tried to see which ones were implemented, which ones
-> were
-> not. The idea is to create some discussion around those action
-> points,
-> and see if anything needs to be done about the remaining one,
-> discussed
-> this week-end, etc.
-> 
->  - BR2_PREFER_STATIC_LIB refactoring. The point is to clarify
->    BR2_PREFER_STATIC_LIB, and separate three cases: static only,
->    shared+static, shared only. Thomas P. was supposed to work on
->    this,
->    but nothing happened.
-> 
->  - Hashes of download. This has been implemented by Yann, and merged,
->    and more and more packages are gaining hash files.
-> 
->  - SystemV/systemd init scripts. The idea was to do automatic
->    installation of init scripts / service files located in
->    package/<foo>/. Maxime Hadjinlian said he would work on this, but
->    not much happened. On a related note, there is a need to separate
->    the skeleton to not avoid Busybox-related init scripts in a pure
->    systemd configuration.
-> 
->  - Clarification of the meaning of Acked-by/Reviewed-by tag in the
->    Buildroot manual. I think this has been done by Thomas DS. To be
->    confirmed.
-> 
->  - Evaluation of the patch acceptance process. The idea of a
->  statistic
->    of the list of pending patches in patchwork has not been fully
->    implemented: Arnout has proposed a script, but it has never been
->    converted into a cronjob to provide publicly visible statistics.
-> 
->    Regarding Thomas P. taking over the commit access when Peter is
->    away, this is happening more and more frequently.
-> 
->  - Autouilder wishlist:
-> 
->    - Run-time tests. Nothing has been done, since we had no GSoC to
->      make progress on this.
-> 
->    - Expand the number of autobuild machines: done, thanks to the
->      autobuild-run script. Nathaniel Roach and Richard Braun are
->      participating to the testing effort, and Peter has added more
->      machines. We now have ~200-230 builds per day, up from ~100
->      builds per day.
-> 
->    - Click on a package and see the last failures of that package:
->      this has been implemented.
-> 
->    - Expose read-only SQL queries: not done, maybe a bit difficult
->      security wise.
-> 
->  - Genimages. No progress has been made on that front.
-> 
->  - How to handle the uClibc problem.
-> 
->    Recently, we've had less problems caused specifically by uClibc
->    feature patches. And uClibc-ng has appeared, which is giving some
->    hope of improvement.
-> 
->  - Website and branding.
-> 
->    A new http://buildroot.org has been put online, thanks to the work
->    done by Maxime Hadjinlian.
-> 
->  - Google Summer of Code
-> 
->    One student (Hadrien Boutteville) participated. Unfortunately, it
->    didn't work very well, and not many patches have been contributed.
-> 
->  - Evaluation of BR2_EXTERNAL. Not sure exactly what was needed
->    here. Jeremy Rosen was supposed to submit a patch, but I'm not
->    sure
->    if it happened, or even if something needs to happen.
-> 
-
-The patch was more or less deprecated/implemented differently.
-
-buildroot-submodules covers the underlying idea of that particular 
-action point : how complete is BR2_EXTERNAL, can we externalize 
-everything ? at this point, the answer is definitely yes, so
-this can be considered closed
-
-
->  - State of major patch sets
-> 
->    - Systemd/udev support. Has been merged.
->    - Perl package infra. Has been merged.
->    - SELinux. Still not merged, but not really pushed actively
->      anymore.
->    - libdrm/mesa3d updates. A lot of things happened in this area,
->      with now a clear owner/maintainer of this package (Bernd).
-> 
->  - 'target' defconfigs vs. 'development' configs. This was supposed
->    to be an addition to the Buildroot manual, but it never
->    happened. Not sure this is very important.
-> 
->  - Python packages: depends vs .select. Conclusion: we change the
->    handling of optional python bindings: instead of selecting them
->    automatically when python is enabled, we add explicit config
->    symbols for them. ThomasDS will update the patches accordingly.
-> 
->    Not sure what happened on this topic.
-> 
->  - pkgparentdir removal. Has been done.
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+markos
