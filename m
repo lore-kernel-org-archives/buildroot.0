@@ -1,132 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Oct 2014 17:28:20 -0300
-Subject: [Buildroot] [PATCH] configs/qemu-sparc-ss10: enable tmpfs
-Message-ID: <1412800100-9223-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Oct 2014 22:29:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/sispmctl: fix static linking
+In-Reply-To: <54359BF5.80004@openwide.fr>
+References: <1409008353-20940-1-git-send-email-romain.naour@openwide.fr>
+ <20141005233651.6320c514@free-electrons.com>
+ <54359BF5.80004@openwide.fr>
+Message-ID: <20141008222926.30c92d32@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- board/qemu/sparc-ss10/linux-3.17.config | 95 +++++++++++++++++++++++++++++++++
- configs/qemu_sparc_ss10_defconfig       |  3 +-
- 2 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100644 board/qemu/sparc-ss10/linux-3.17.config
+Dear Romain Naour,
 
-diff --git a/board/qemu/sparc-ss10/linux-3.17.config b/board/qemu/sparc-ss10/linux-3.17.config
-new file mode 100644
-index 0000000..0e7e500
---- /dev/null
-+++ b/board/qemu/sparc-ss10/linux-3.17.config
-@@ -0,0 +1,95 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_SUN_OPENPROMFS=m
-+CONFIG_BINFMT_MISC=m
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_XFRM_USER=m
-+CONFIG_NET_KEY=m
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_INET_AH=y
-+CONFIG_INET_ESP=y
-+CONFIG_INET_IPCOMP=y
-+# CONFIG_INET_LRO is not set
-+CONFIG_INET6_AH=m
-+CONFIG_INET6_ESP=m
-+CONFIG_INET6_IPCOMP=m
-+CONFIG_IPV6_TUNNEL=m
-+CONFIG_NET_PKTGEN=m
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_BLK_DEV_LOOP=m
-+CONFIG_BLK_DEV_CRYPTOLOOP=m
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_BLK_DEV_SR=m
-+CONFIG_CHR_DEV_SG=m
-+CONFIG_SCSI_QLOGICPTI=m
-+CONFIG_SCSI_SUNESP=y
-+CONFIG_NETDEVICES=y
-+CONFIG_DUMMY=m
-+CONFIG_SUNLANCE=y
-+CONFIG_HAPPYMEAL=m
-+CONFIG_SUNBMAC=m
-+CONFIG_SUNQE=m
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_JOYDEV=m
-+CONFIG_INPUT_EVDEV=m
-+CONFIG_INPUT_EVBUG=m
-+CONFIG_KEYBOARD_ATKBD=m
-+CONFIG_KEYBOARD_SUNKBD=m
-+CONFIG_MOUSE_PS2=m
-+CONFIG_MOUSE_SERIAL=m
-+CONFIG_SERIO=m
-+CONFIG_SERIAL_SUNZILOG=y
-+CONFIG_SERIAL_SUNZILOG_CONSOLE=y
-+CONFIG_SERIAL_SUNSU=y
-+CONFIG_SERIAL_SUNSU_CONSOLE=y
-+CONFIG_SPI=y
-+CONFIG_SPI_XILINX=m
-+CONFIG_SUN_OPENPROMIO=m
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_AUTOFS4_FS=m
-+CONFIG_ISO9660_FS=m
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_ROMFS_FS=m
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_NLS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_DETECT_HUNG_TASK=y
-+# CONFIG_SCHED_DEBUG is not set
-+CONFIG_KGDB=y
-+CONFIG_KGDB_TESTS=y
-+CONFIG_CRYPTO_NULL=m
-+CONFIG_CRYPTO_ECB=m
-+CONFIG_CRYPTO_PCBC=m
-+CONFIG_CRYPTO_MD4=y
-+CONFIG_CRYPTO_MICHAEL_MIC=m
-+CONFIG_CRYPTO_SHA256=m
-+CONFIG_CRYPTO_SHA512=m
-+CONFIG_CRYPTO_ARC4=m
-+CONFIG_CRYPTO_BLOWFISH=m
-+CONFIG_CRYPTO_CAST5=m
-+CONFIG_CRYPTO_CAST6=m
-+CONFIG_CRYPTO_SERPENT=m
-+CONFIG_CRYPTO_TWOFISH=m
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_LIBCRC32C=m
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 6e2c600..595e42f 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -17,5 +17,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
--BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.17.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+On Wed, 08 Oct 2014 22:17:57 +0200, Romain Naour wrote:
+
+> > Thanks, applied. Please submit the patch upstream so that one day we
+> > can remove it from Buildroot.
+> 
+> Patch submitted in the sispmctl forum:
+> https://sourceforge.net/p/sispmctl/discussion/539852/thread/35ad2797/
+
+Thanks for doing this. Unfortunately it seems like upstream isn't
+particularly active :/
+
+Thomas
 -- 
-2.0.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
