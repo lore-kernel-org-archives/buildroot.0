@@ -1,67 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Oct 2014 23:08:56 +0200
-Subject: [Buildroot] [PATCH 6/7 v2] package/freerdp: install server key
- and certificate
-In-Reply-To: <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
-References: <cover.1412634775.git.yann.morin.1998@free.fr>
- <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
- <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
-Message-ID: <20141008210856.GF4718@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Oct 2014 23:10:40 +0200
+Subject: [Buildroot] [PATCH 1/1] openocd bump to 0.8.0
+In-Reply-To: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>
+References: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>
+Message-ID: <20141008231040.57406af4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Dear Claudio Laurita,
 
-On 2014-10-08 22:58 +0200, Samuel Martin spake thusly:
-> On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > This is mandatory for an RDP server to have a key and a certificate,
-> > otherwise clients will refuse to connect to that server.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/freerdp/freerdp.mk | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> > index ea590d1..e643e57 100644
-> > --- a/package/freerdp/freerdp.mk
-> > +++ b/package/freerdp/freerdp.mk
-> > @@ -86,4 +86,14 @@ else
-> >  FREERDP_CONF_OPTS += -DWITH_XV=OFF
-> >  endif
-> >
-> > +# Install the server key and certificate, so that a client can connect.
-> > +# A user can override them with its opwn in a post-build script, if needed.
+Thanks for this contribution! See some comments below.
+
+On Wed,  8 Oct 2014 22:53:53 +0200, Claudio Laurita wrote:
+> Signed-off-by: Claudio Laurita <claudio.laurita@integrazionetotale.it>
+> ---
+>  .../openocd/001-fix-gcc-warning-in-mini51.patch    |  13 ++
+>  package/openocd/Config.in                          | 191 +++++++++++++++++++--
+>  ...s-compilation-host-libsub-was-used-before.patch |  33 ----
+>  ...002-fix-xscale-uninitialise-breakpoint_pc.patch |  20 ---
+>  package/openocd/openocd-0003-force-gnu99.patch     |  19 --
+>  .../openocd/openocd-0004-force_jimtcl_static.patch |  25 ---
+>  .../openocd/openocd-0005-dont-force-ldflags.patch  |  37 ----
+>  package/openocd/openocd-0006-automake-compat.patch |  40 -----
+>  package/openocd/openocd.mk                         | 150 ++++++++++++++--
+>  9 files changed, 330 insertions(+), 198 deletions(-)
+>  create mode 100644 package/openocd/001-fix-gcc-warning-in-mini51.patch
+>  delete mode 100644 package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+>  delete mode 100644 package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+>  delete mode 100644 package/openocd/openocd-0003-force-gnu99.patch
+>  delete mode 100644 package/openocd/openocd-0004-force_jimtcl_static.patch
+>  delete mode 100644 package/openocd/openocd-0005-dont-force-ldflags.patch
+>  delete mode 100644 package/openocd/openocd-0006-automake-compat.patch
+
+The patch is doing a lot more than just bumping the version, so it
+would be good to have some details about the changes that are made.
+
 > 
-> s/opwn/own/
+> diff --git a/package/openocd/001-fix-gcc-warning-in-mini51.patch b/package/openocd/001-fix-gcc-warning-in-mini51.patch
+> new file mode 100644!
+> index 0000000..514d166
+> --- /dev/null
+> +++ b/package/openocd/001-fix-gcc-warning-in-mini51.patch
 
-Yup.
+Patches should have a description + Signed-off-by. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 
-> > +define FREERDP_INSTALL_KEYS
-> > +       $(INSTALL) -D $(@D)/server/X11/server.key \
-> > +                     $(TARGET_DIR)/etc/freerdp/keys/server.key
-> > +       $(INSTALL) -D $(@D)/server/X11/server.crt \
-> > +                     $(TARGET_DIR)/etc/freerdp/keys/server.crt
-> > +endef
-> > +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
-> 
-> It is useful for the client only? or the server? or both?
-> If it is only useful for one or the other, maybe it should be nested
-> in a if-block using the BR2_PACKAGE_FREERDP_CLIENT (or
-> BR2_PACKAGE_FREERDP_SERVER)?
+> -HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
+> +HOST_OPENOCD_CONF_OPTS = $(OPENOCD_CONF_OPTS)
 
-It;s for the server only. Will fix. Thanks!
+Target options should normally not affect the build of host tools:
+remember that someone can enable the host OpenOCD without building the
+target OpenOCD.
 
-Regards,
-Yann E. MORIN.
+> +# force disabling shared libraries to let jimtcl build its static version
+> +SHARED_STATIC_LIBS_OPTS=
 
+This is clearly not a solution: the namespace of variables in Buildroot
+is global, so you are not allowed to modify such a global variable. You
+can always force --enable-static --disable-shared in OPENOCD_CONF_OPTS
+if needed.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
