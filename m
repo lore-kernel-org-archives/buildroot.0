@@ -1,44 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 19:32:14 +0200
-Subject: [Buildroot] [git commit] procps-ng: bump to version 3.3.10
-Message-ID: <20141008180329.DCEF2B1427@busybox.osuosl.org>
+Date: Wed, 8 Oct 2014 19:33:02 +0200
+Subject: [Buildroot] [git commit] sysklogd: security bump to version 1.5.1
+Message-ID: <20141008180329.E7353B1427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1058c2d2d9204bea3a903cc92c1d21f4c5aae54
+commit: http://git.buildroot.net/buildroot/commit/?id=ff4201ed9c5b7994815caa01cd5114b8d799ee76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Fixes CVE-2014-3634 - invalid priority values between 192 and 1023
+(directly or arrived at via overflow wraparound) can propagate through
+code causing out-of-bounds access to the f_pmask array within the
+'filed' structure by up to 104 bytes past its end.
+
+Switch to vanilla since Debian hasn't handled this yet and add hash
+file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/procps-ng/procps-ng.hash |    3 +++
- package/procps-ng/procps-ng.mk   |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ package/sysklogd/Config.in     |    2 +-
+ package/sysklogd/sysklogd.hash |    2 ++
+ package/sysklogd/sysklogd.mk   |   14 ++------------
+ 3 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
+diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
+index 6339d76..4a0ac13 100644
+--- a/package/sysklogd/Config.in
++++ b/package/sysklogd/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSKLOGD
+ 	help
+ 	  System log daemons syslogd and klogd.
+ 
+-	  http://www.infodrom.org/products/sysklogd/
++	  http://www.infodrom.org/projects/sysklogd/
+ 
+ comment "syslogd needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
 new file mode 100644
-index 0000000..e011356
+index 0000000..dd5b89a
 --- /dev/null
-+++ b/package/procps-ng/procps-ng.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/procps-ng/files/Production/
-+md5	1fb7f3f6bf92ce6c5c9ed9949ae858fe	procps-ng-3.3.10.tar.xz
-+sha1	484db198d6a18a42b4011d5ecb2cb784a81b0e4f	procps-ng-3.3.10.tar.xz
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index d82db76..71e32dd 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -4,7 +4,7 @@
++++ b/package/sysklogd/sysklogd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated from download (no sig, hash)
++sha256	5166c185ae23c92e8b9feee66a6e3d0bc944bf673112f53e3ecf62e08ce7c201	sysklogd-1.5.1.tar.gz
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 37293da..efc5a4d 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,10 +4,8 @@
  #
  ################################################################################
  
--PROCPS_NG_VERSION = 3.3.9
-+PROCPS_NG_VERSION = 3.3.10
- PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPLv2+, libproc and libps LGPLv2+
+-SYSKLOGD_VERSION = 1.5
+-SYSKLOGD_SOURCE = sysklogd_$(SYSKLOGD_VERSION).orig.tar.gz
+-SYSKLOGD_PATCH = sysklogd_$(SYSKLOGD_VERSION)-6.diff.gz
+-SYSKLOGD_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sysklogd
++SYSKLOGD_VERSION = 1.5.1
++SYSKLOGD_SITE = http://www.infodrom.org/projects/sysklogd/download
+ SYSKLOGD_LICENSE = GPLv2+
+ SYSKLOGD_LICENSE_FILES = COPYING
+ 
+@@ -16,14 +14,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSKLOGD_DEPENDENCIES = busybox
+ endif
+ 
+-define SYSKLOGD_DEBIAN_PATCHES
+-	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
+-	fi
+-endef
+-
+-SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_DEBIAN_PATCHES
+-
+ define SYSKLOGD_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
