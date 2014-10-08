@@ -1,59 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Oct 2014 22:50:28 +0200
-Subject: [Buildroot] [PATCH 1/2] docs/manual: slightly improve faq entry
- about compiler on target
-In-Reply-To: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141008205028.GE4718@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2014 22:52:29 +0200
+Subject: [Buildroot] [PATCH] botan: add type to
+	BR2_PACKAGE_BOTAN_ARCH_SUPPORTS option
+In-Reply-To: <1412798411-18889-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 8 Oct 2014 22:00:11 +0200")
+References: <1412798411-18889-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878ukqb7xu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2014-10-08 22:16 +0200, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Commit 1737af367993326ee47e847bd755806c8a78ced8 ('botan: limit to
+ > supported CPU architectures') introduced the
+ > BR2_PACKAGE_BOTAN_ARCH_SUPPORTS with a default value, but forgot to
+ > define a type, which leads to a kconfig warning:
 
-I agree with your reply to my previous comment, so:
+ >   package/botan/Config.in:1:warning: config symbol defined without type
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > This commit fixes that by properly setting the type.
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> ---
->  docs/manual/faq-troubleshooting.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> index 7195234..693028c 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -35,7 +35,9 @@ target_ would be stopped from the Buildroot-2012.11 release because:
->  * this feature was only available for Buildroot toolchains;
->  * Buildroot mostly targets _small_ or _very small_ target hardware
->    with limited resource onboard (CPU, ram, mass-storage), for which
-> -  compiling does not make much sense.
-> +  compiling on the target does not make much sense;
-> +* Buildroot aims at easing the cross-compilation, making native
-> +  compilation on the target unnecessary.
->  
->  If you need a compiler on your target anyway, then Buildroot is not
->  suitable for your purpose. In such case, you need a _real
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
