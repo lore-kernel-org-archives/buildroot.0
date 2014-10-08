@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  8 Oct 2014 21:33:34 +0200
-Subject: [Buildroot] [PATCH] botan: limit to supported CPU architectures
-Message-ID: <1412796814-12333-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed,  8 Oct 2014 21:34:10 +0200
+Subject: [Buildroot] [PATCHv2] botan: limit to supported CPU architectures
+Message-ID: <1412796850-12402-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,16 @@ To: buildroot@busybox.net
 
 See src/build-data/arch/ for the list of supported CPU architectures.
 
+Fixes:
+
+  http://autobuild.buildroot.org/results/69f/69fdecb06a03e6a95adfab70adf8ebf45971f0da/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Francois Perrad <fperrad@gmail.com>
+---
+v1 -> v2: add autobuilder reference
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/botan/Config.in | 8 ++++++++
  1 file changed, 8 insertions(+)
