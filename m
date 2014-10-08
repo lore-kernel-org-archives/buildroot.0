@@ -1,44 +1,51 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 8 Oct 2014 10:41:54 +0100
-Subject: [Buildroot] [PATCH] ser2net: Add a hash file
-In-Reply-To: <543505F5.4080805@imgtec.com>
-References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
- <20141007192331.0908bbcd@free-electrons.com> <5434FC83.3070303@imgtec.com>
- <20141008112001.2e0b8b9b@free-electrons.com> <543505F5.4080805@imgtec.com>
-Message-ID: <543506E2.2000608@imgtec.com>
+Date: Wed, 8 Oct 2014 10:44:17 +0100
+Subject: [Buildroot] [PATCH] package/trinity: New package
+In-Reply-To: <874mvffs2a.fsf@dell.be.48ers.dk>
+References: <1412594507-48779-1-git-send-email-Vincent.Riera@imgtec.com>
+ <874mvffs2a.fsf@dell.be.48ers.dk>
+Message-ID: <54350771.9000208@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 10:37 AM, Markos Chandras wrote:
-> On 10/08/2014 10:20 AM, Thomas Petazzoni wrote:
->> Dear Vicente Olivert Riera,
->>
->> On Wed, 8 Oct 2014 09:57:39 +0100, Vicente Olivert Riera wrote:
->>
->>>> Why having all those hashes?
->>>
->>> Why not? Those are all the hashes supported in Buildroot. The more we
->>> have the better.
->>
->> I disagree: more hashes means more work to do when bumping the package.
->> Either one strong hash, or two weaker hashes should be sufficient IMO.
->>
->> Something to be discussed at the meeting maybe?
->
-> I am curious, what's the point of supporting more than one hash types?
-> Why not support only the strongest one?
+Dear Peter Korsgaard,
 
-The hashes have a limited range of values, so it's possible to have two 
-inputs which produce the same hash. It's very unlikely, but it can 
-happen. So, supporting more than one hash type is to increase the 
-security. It's very unlikely that two inputs generate the same hash for 
-one algorithm, and it's even more unlikely if those two input generate 
-the same hashes for two different algorithms, and more for three 
-algorithms, etc.
+On 10/07/2014 11:11 PM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>
+>   > Adding the Trinity Linux System call fuzz tester.
+>   > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>
+> Thanks, but a quick test build with uClibc fails:
+>
+> make[1]: Entering directory '/home/peko/source/buildroot/output/build/trinity-c02034ec08d951cde3429905e64afe450cbc47db'
+>    CC    arg-decoder.o
+>    CC    blockdevs.o
+>    CC    child.o
+>    CC    debug.o
+>    CC    devices.o
+> debug.c:5:22: fatal error: execinfo.h: No such file or directory
+> compilation terminated.
+> Makefile:96: recipe for target 'debug.o' failed
+> make[1]: *** [debug.o] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make[1]: Leaving directory '/home/peko/source/buildroot/output/build/trinity-c02034ec08d951cde3429905e64afe450cbc47db'
+>
+> execinfo.h is only available if uClibc is built with
+> UCLIBC_HAS_BACKTRACE=y (which it isn't by default).
+>
+> Perhaps the backtrace() stuff can get #ifdef'ed out if not available?
+
+It looks like a change to be made upstream. Maybe it needs to include a 
+header check in the configure.sh script, then defining a macro if the 
+header is present, and then modify the source code to take that macro 
+into account to do things like "#ifdef USE_EXECINFO"...
+
+So, what do you propose by now for the Buildroot package? Disabling it 
+for uClibc until upstream fixes that?
 
 -- 
 Vincent
