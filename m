@@ -1,23 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 19:39:03 +0200
-Subject: [Buildroot] [git commit] quota: rename patch
-Message-ID: <20141008180330.070ADB1427@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2014 20:05:05 +0200
+Subject: [Buildroot] [PATCH 1/5] dash: bump to version 0.5.8-1
+In-Reply-To: <5435748A.3090106@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Wed, 08 Oct 2014 14:29:46 -0300")
+References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>
+ <87eguieaky.fsf@dell.be.48ers.dk> <5435748A.3090106@zacarias.com.ar>
+Message-ID: <87k34acu9a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22d16f3f552a6aff3be5a3b22bdb00c1a5577927
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...r.patch => quota-01-tools-getrpcbynumber.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+ > On 10/08/2014 02:27 PM, Peter Korsgaard wrote:
+ >> So what about bash? Which one should "win"? bash?
 
-diff --git a/package/quota/quota-tools-getrpcbynumber.patch b/package/quota/quota-01-tools-getrpcbynumber.patch
-similarity index 100%
-rename from package/quota/quota-tools-getrpcbynumber.patch
-rename to package/quota/quota-01-tools-getrpcbynumber.patch
+ > We can't make that determination on the user behalf if he selected
+ > multiple shells, random order will prevail.
+ > However we can say that any of these is more feature-complete than what
+ > busybox has to offer.
+
+Random is not good, so I suggest we either:
+
+- Only do it for bash like today
+- Provide an option for the user to select
+- Decide on a fixed priority order (E.G. busybox->dash->zsh->bash) and
+  tell people to use a post-build script if they are not happy with it
+
+-- 
+Bye, Peter Korsgaard
