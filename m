@@ -1,59 +1,112 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Wed, 8 Oct 2014 10:19:49 +0200
-Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
-In-Reply-To: <248328749.26117708.1412323381026.JavaMail.root@openwide.fr>
-References: <825058379.26083702.1412244610243.JavaMail.root@openwide.fr>
- <248328749.26117708.1412323381026.JavaMail.root@openwide.fr>
-Message-ID: <CAM+bi4uA5FriQu0TR+gVOdn9frJBRjaQn8MZCzRdDcTdfiyBPg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Oct 2014 10:48:45 +0200
+Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
+Message-ID: <20141008104845.495ad683@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Jeremy
+Hello,
 
-That's a pretty long README and it's very clear. I've just sent you a
-pull request fixing a few typos, I couldn't think of any else to
-change.
+In preparation for the upcoming developers meeting on Saturday/Sunday,
+I had a look at all the topics/action points from the FOSDEM 2014
+meeting, and tried to see which ones were implemented, which ones were
+not. The idea is to create some discussion around those action points,
+and see if anything needs to be done about the remaining one, discussed
+this week-end, etc.
 
-I'm now using this latest version with my project and everything seems fine.
-I'm using a post build script to modify inittab accordingly and
-packages to selectively install the binary blobs I need on the
-simulation machine, so now I live happy with a fully common overlay.
+ - BR2_PREFER_STATIC_LIB refactoring. The point is to clarify
+   BR2_PREFER_STATIC_LIB, and separate three cases: static only,
+   shared+static, shared only. Thomas P. was supposed to work on this,
+   but nothing happened.
 
-I didn't know about building the toolchain as a separate project. It
-looks cool, although I'm currently using prebuilt toolchains and have
-not tested it yet.
+ - Hashes of download. This has been implemented by Yann, and merged,
+   and more and more packages are gaining hash files.
 
+ - SystemV/systemd init scripts. The idea was to do automatic
+   installation of init scripts / service files located in
+   package/<foo>/. Maxime Hadjinlian said he would work on this, but
+   not much happened. On a related note, there is a need to separate
+   the skeleton to not avoid Busybox-related init scripts in a pure
+   systemd configuration.
 
-Regards,
+ - Clarification of the meaning of Acked-by/Reviewed-by tag in the
+   Buildroot manual. I think this has been done by Thomas DS. To be
+   confirmed.
 
-2014-10-03 10:03 GMT+02:00 Jeremy Rosen <jeremy.rosen@openwide.fr>:
-> Ok, I have made quite a few changes, some of them are really interesting
->
-> * I have added a big README.md (which needs proofrreading) that covers
->   all sorts of interesting things, both on the project and how to
->   customize buildroot in general
-> * I have removed your Makefile.Project* files, I standardize on a
->   single project being "standard" and multiple projects being
->   "advanced" (but it's properly documented)
-> * I have changed defaults to "change as much as possible with
->   variants. This should not break your use-case since
->   * all is set via BR settings, so it can be overridden
->   * if it is already set, it won't be overwritten by the
->      infrastructure
-> * I have documented how to have per-project configuration options via
->   variables
-> * I have documented how to use variants to have the toolchain be a
->   separated project. This has been discussed here recently and is
->   rather easy to do with the submodule infrastructure
->
->
-> Feel free to test/break/send me feedback. This is starting to loo really
-> great.
+ - Evaluation of the patch acceptance process. The idea of a statistic
+   of the list of pending patches in patchwork has not been fully
+   implemented: Arnout has proposed a script, but it has never been
+   converted into a cronjob to provide publicly visible statistics.
 
+   Regarding Thomas P. taking over the commit access when Peter is
+   away, this is happening more and more frequently.
 
+ - Autouilder wishlist:
 
+   - Run-time tests. Nothing has been done, since we had no GSoC to
+     make progress on this.
+
+   - Expand the number of autobuild machines: done, thanks to the
+     autobuild-run script. Nathaniel Roach and Richard Braun are
+     participating to the testing effort, and Peter has added more
+     machines. We now have ~200-230 builds per day, up from ~100
+     builds per day.
+
+   - Click on a package and see the last failures of that package:
+     this has been implemented.
+
+   - Expose read-only SQL queries: not done, maybe a bit difficult
+     security wise.
+
+ - Genimages. No progress has been made on that front.
+
+ - How to handle the uClibc problem.
+
+   Recently, we've had less problems caused specifically by uClibc
+   feature patches. And uClibc-ng has appeared, which is giving some
+   hope of improvement.
+
+ - Website and branding.
+
+   A new http://buildroot.org has been put online, thanks to the work
+   done by Maxime Hadjinlian.
+
+ - Google Summer of Code
+
+   One student (Hadrien Boutteville) participated. Unfortunately, it
+   didn't work very well, and not many patches have been contributed.
+
+ - Evaluation of BR2_EXTERNAL. Not sure exactly what was needed
+   here. Jeremy Rosen was supposed to submit a patch, but I'm not sure
+   if it happened, or even if something needs to happen.
+
+ - State of major patch sets
+
+   - Systemd/udev support. Has been merged.
+   - Perl package infra. Has been merged.
+   - SELinux. Still not merged, but not really pushed actively
+     anymore.
+   - libdrm/mesa3d updates. A lot of things happened in this area,
+     with now a clear owner/maintainer of this package (Bernd).
+
+ - 'target' defconfigs vs. 'development' configs. This was supposed
+   to be an addition to the Buildroot manual, but it never
+   happened. Not sure this is very important.
+
+ - Python packages: depends vs .select. Conclusion: we change the
+   handling of optional python bindings: instead of selecting them
+   automatically when python is enabled, we add explicit config
+   symbols for them. ThomasDS will update the patches accordingly.
+
+   Not sure what happened on this topic.
+
+ - pkgparentdir removal. Has been done.
+
+Thomas
 -- 
-?lvaro G?mez Machado
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
