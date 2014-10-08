@@ -1,82 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Oct 2014 19:33:02 +0200
-Subject: [Buildroot] [git commit] sysklogd: security bump to version 1.5.1
-Message-ID: <20141008180329.E7353B1427@busybox.osuosl.org>
+Date: Wed, 8 Oct 2014 19:58:25 +0200
+Subject: [Buildroot] [git commit] quota: don't try to strip binaries during
+	installation
+Message-ID: <20141008180330.193F5B16BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff4201ed9c5b7994815caa01cd5114b8d799ee76
+commit: http://git.buildroot.net/buildroot/commit/?id=61a7a3a2f7041723c76ddb185486de420e94d079
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-3634 - invalid priority values between 192 and 1023
-(directly or arrived at via overflow wraparound) can propagate through
-code causing out-of-bounds access to the f_pmask array within the
-'filed' structure by up to 104 bytes past its end.
+quota strips binaries during installation by default using 'install -s', but
+that uses the host strip so doesn't work for cross compilation, and
+stripping or not is handled globally in Buildroot during target-finalize, so
+disable it here.
 
-Switch to vanilla since Debian hasn't handled this yet and add hash
-file.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/Config.in     |    2 +-
- package/sysklogd/sysklogd.hash |    2 ++
- package/sysklogd/sysklogd.mk   |   14 ++------------
- 3 files changed, 5 insertions(+), 13 deletions(-)
+ package/quota/quota.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
-index 6339d76..4a0ac13 100644
---- a/package/sysklogd/Config.in
-+++ b/package/sysklogd/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSKLOGD
- 	help
- 	  System log daemons syslogd and klogd.
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 5011c0f..0e7a2b0 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -9,6 +9,7 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
+ QUOTA_DEPENDENCIES = host-gettext
+ QUOTA_AUTORECONF = YES
+ QUOTA_LICENSE = GPLv2+
++QUOTA_CONF_OPTS = --disable-strip-binaries
  
--	  http://www.infodrom.org/products/sysklogd/
-+	  http://www.infodrom.org/projects/sysklogd/
- 
- comment "syslogd needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-new file mode 100644
-index 0000000..dd5b89a
---- /dev/null
-+++ b/package/sysklogd/sysklogd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated from download (no sig, hash)
-+sha256	5166c185ae23c92e8b9feee66a6e3d0bc944bf673112f53e3ecf62e08ce7c201	sysklogd-1.5.1.tar.gz
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 37293da..efc5a4d 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,10 +4,8 @@
- #
- ################################################################################
- 
--SYSKLOGD_VERSION = 1.5
--SYSKLOGD_SOURCE = sysklogd_$(SYSKLOGD_VERSION).orig.tar.gz
--SYSKLOGD_PATCH = sysklogd_$(SYSKLOGD_VERSION)-6.diff.gz
--SYSKLOGD_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sysklogd
-+SYSKLOGD_VERSION = 1.5.1
-+SYSKLOGD_SITE = http://www.infodrom.org/projects/sysklogd/download
- SYSKLOGD_LICENSE = GPLv2+
- SYSKLOGD_LICENSE_FILES = COPYING
- 
-@@ -16,14 +14,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSKLOGD_DEPENDENCIES = busybox
- endif
- 
--define SYSKLOGD_DEBIAN_PATCHES
--	if [ -d $(@D)/debian/patches ]; then \
--		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
--	fi
--endef
--
--SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_DEBIAN_PATCHES
--
- define SYSKLOGD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
+ QUOTA_CFLAGS = $(TARGET_CFLAGS)
+ QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
