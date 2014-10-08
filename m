@@ -1,61 +1,108 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed,  8 Oct 2014 16:48:52 +0200
-Subject: [Buildroot] [PATCH 2/2] quota: bump to version 4.01
-In-Reply-To: <1412779736-11412-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1412779736-11412-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1412779736-11412-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 8 Oct 2014 16:53:31 +0200
+Subject: [Buildroot] [PATCH v2] package/trinity: New package
+In-Reply-To: <1412763762-58202-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1412763762-58202-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141008145331.GC3117@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Hi,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/quota/quota-01-tools-getrpcbynumber.patch |    4 ++--
- package/quota/quota.hash                          |    3 +++
- package/quota/quota.mk                            |    2 +-
- 3 files changed, 6 insertions(+), 3 deletions(-)
- create mode 100644 package/quota/quota.hash
+may be I missed it in v1, is there a reason for
+depends on !BR2_TOOLCHAIN_USES_UCLIBC ?
+May be you can add a comment about it.
 
-diff --git a/package/quota/quota-01-tools-getrpcbynumber.patch b/package/quota/quota-01-tools-getrpcbynumber.patch
-index 3fed853..899db91 100644
---- a/package/quota/quota-01-tools-getrpcbynumber.patch
-+++ b/package/quota/quota-01-tools-getrpcbynumber.patch
-@@ -20,8 +20,8 @@ Index: b/configure.in
- +   AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
- +fi
- +
-- AC_ARG_ENABLE(altformat,
-- 	[  --enable-altformat=[yes/no]     Enable alternative format used by edquota [default=yes].],
-+ AC_ARG_ENABLE(rpc,
-+ 	[  --enable-rpc=[yes/no]           Enable RPC support [default=yes].],
-  	,
- Index: b/svc_socket.c
- ===================================================================
-diff --git a/package/quota/quota.hash b/package/quota/quota.hash
-new file mode 100644
-index 0000000..7bba98d
---- /dev/null
-+++ b/package/quota/quota.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.01/ (click an info button)
-+md5	5c2c31e321d2e1322ce12d69ae5c66d6	quota-4.01.tar.gz
-+sha1	64d2ab8b039cfea1aa4bd9e77e8c373488a7f0bf	quota-4.01.tar.gz
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index cd15375..5011c0f 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QUOTA_VERSION = 4.00
-+QUOTA_VERSION = 4.01
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
- QUOTA_DEPENDENCIES = host-gettext
- QUOTA_AUTORECONF = YES
--- 
-1.7.9.5
+best regards
+  Waldemar
+
+
+Vicente Olivert Riera wrote,
+
+> Adding the Trinity Linux System call fuzz tester.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/Config.in          |    1 +
+>  package/trinity/Config.in  |   10 ++++++++++
+>  package/trinity/trinity.mk |   31 +++++++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+), 0 deletions(-)
+>  create mode 100644 package/trinity/Config.in
+>  create mode 100644 package/trinity/trinity.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index ea89c96..3b570ee 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -89,6 +89,7 @@ endif
+>  	source "package/sysprof/Config.in"
+>  	source "package/tinymembench/Config.in"
+>  	source "package/trace-cmd/Config.in"
+> +	source "package/trinity/Config.in"
+>  	source "package/valgrind/Config.in"
+>  	source "package/whetstone/Config.in"
+>  endmenu
+> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+> new file mode 100644
+> index 0000000..c648694
+> --- /dev/null
+> +++ b/package/trinity/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_TRINITY
+> +	bool "trinity"
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+> +	help
+> +	  A Linux System call fuzz tester
+> +
+> +	  http://codemonkey.org.uk/projects/trinity/
+> +
+> +comment "trinity is not supported for uClibc"
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC
+> diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+> new file mode 100644
+> index 0000000..1e6c54a
+> --- /dev/null
+> +++ b/package/trinity/trinity.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# trinity
+> +#
+> +################################################################################
+> +
+> +TRINITY_VERSION = c02034ec08d951cde3429905e64afe450cbc47db
+> +TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+> +TRINITY_LICENSE = GPLv2
+> +TRINITY_LICENSE_FILES = COPYING
+> +
+> +define TRINITY_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
+> +endef
+> +
+> +define TRINITY_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define TRINITY_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
+> +endef
+> +
+> +# Install helper scripts
+> +define TRINITY_INSTALL_HELPER_SCRIPTS
+> +	mkdir -p $(TARGET_DIR)/usr/libexec/trinity
+> +	cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
+> +endef
+> +TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
