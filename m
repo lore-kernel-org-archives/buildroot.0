@@ -1,39 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 08 Oct 2014 08:35:02 -0300
-Subject: [Buildroot] [PATCH] ser2net: Add a hash file
-In-Reply-To: <54351F42.2090800@imgtec.com>
-References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
- <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
- <20141007192331.0908bbcd@free-electrons.com> <5434FC83.3070303@imgtec.com>
- <20141008112001.2e0b8b9b@free-electrons.com> <543505F5.4080805@imgtec.com>
- <54350DC0.3040802@zacarias.com.ar> <54350F8F.1020506@imgtec.com>
- <5435155D.4020903@zacarias.com.ar> <54351F42.2090800@imgtec.com>
-Message-ID: <54352166.5050500@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 8 Oct 2014 13:43:44 +0200
+Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
+In-Reply-To: <20141008104845.495ad683@free-electrons.com>
+References: <20141008104845.495ad683@free-electrons.com>
+Message-ID: <CAAXf6LXXN4YhhZ6uo8XAGSeaZyvh31yfrxSJ5MWA9w-vh5+ptQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 08:25 AM, Markos Chandras wrote:
+Hi Thomas,
 
-> Sure. But this probably is not a strong argument because for all I know
-> they may find sha256 broken tomorrow morning and you have to update all
-> the buildroot packages using that hash to verify the tarball. If you
-> think something is "not strong enough" then don't use it :)
-> Perhaps it's best if buildroot supported the two strongest algorithms
-> and request that information for every package? I really see no point
-> supporting eg md5 since we know it's weak. Anyway, that's my personal
-> opinion, I just feel there is no clear "rule" here so developers are
-> free to use whatever they want which may not always be acceptable by the
-> maintainers :)
+On Wed, Oct 8, 2014 at 10:48 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+>  - Clarification of the meaning of Acked-by/Reviewed-by tag in the
+>    Buildroot manual. I think this has been done by Thomas DS. To be
+>    confirmed.
 
-Those last lines ^^^ :)
-If upstream maintainers ship with md5 there's not much we can do about it.
-In the end we do hashes for integrity above everything else and we don't
-want to get in the way of new/bumped packages hence hashes aren't
-mandatory for now (it would be good to have them all though).
-Regards.
+Has been updated in the manual, indeed.
 
-PS: and to detect sucky upstream that switches tarballs without bumping
-versions to cover their lower heads.
+>
+>  - 'target' defconfigs vs. 'development' configs. This was supposed
+>    to be an addition to the Buildroot manual, but it never
+>    happened. Not sure this is very important.
+
+I will add this to my todo list for the manual, but do not expect this
+to be fixed soon. I indeed don't think it is a very important aspect.
+
+>
+>  - Python packages: depends vs .select. Conclusion: we change the
+>    handling of optional python bindings: instead of selecting them
+>    automatically when python is enabled, we add explicit config
+>    symbols for them. ThomasDS will update the patches accordingly.
+>
+>    Not sure what happened on this topic.
+
+This is still on my list, but currently not at the top.
+Main topics I have now for 2014.11 is
+a. extension of kconfig-package to linux and barebox, and
+b. implement an autobuilder instance
+c. remove deprecated packages
+d. during the stabilization month: further manual enhancements
+
+Best regards,
+Thomas
