@@ -1,91 +1,73 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 7 Oct 2014 20:06:59 -0500
+Date: Tue, 7 Oct 2014 20:52:15 -0500
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-05
-In-Reply-To: <CANQCQpYdn-iNPbKb0FPVHbONKcsrfKscPJ1d1mfyn0ZYQcz66w@mail.gmail.com>
-References: <20141006063013.D7B26101723@stock.ovh.net>
- <20141006094333.211d8a76@free-electrons.com>
- <CANQCQpYH7XGPbR_p2-wZqrhLMu_-GyR0HBqiwEEtgK9GX60QVg@mail.gmail.com>
- <20141006214408.2af48bbb@free-electrons.com>
- <CANQCQpaPvCgGzzukyUAASZqO9-d28Q7UwUemsjvc9xtJ5TTeKg@mail.gmail.com>
- <1412626268.2656.6.camel@abrodkin-8560l.internal.synopsys.com>
- <CANQCQpYo55QJoGPNcg7ZfEq5O+9qQO9f-G5wocD+NDDj=HuBRA@mail.gmail.com>
- <1412627319.2656.9.camel@abrodkin-8560l.internal.synopsys.com>
- <CANQCQpYdn-iNPbKb0FPVHbONKcsrfKscPJ1d1mfyn0ZYQcz66w@mail.gmail.com>
-Message-ID: <CANQCQpbvHPvPwDH-yz94e2zEmHk_R9iNw1gsopygfUdMn8Oi9w@mail.gmail.com>
+	2014-10-04
+In-Reply-To: <CANQCQpZQ0PKOrMR_D-43oiUTQg3vvCub=i8aU=Wndx+FKdQvOQ@mail.gmail.com>
+References: <20141005063015.846CF101508@stock.ovh.net>
+ <CANQCQpYkPJATN4b8hYwCWtLpz3XhO5ZtESWb9crSChA2jYgrjQ@mail.gmail.com>
+ <20141007094832.01c0f443@free-electrons.com>
+ <CANQCQpZQ0PKOrMR_D-43oiUTQg3vvCub=i8aU=Wndx+FKdQvOQ@mail.gmail.com>
+Message-ID: <CANQCQpbYMUU64NYZshBXa-pMXJ2q1gB4pLZODUDB1V5Ch9yO1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey, Thomas,
+Thomas,
 
-On Mon, Oct 6, 2014 at 3:41 PM, Matthew Weber
+On Tue, Oct 7, 2014 at 11:30 AM, Matthew Weber
 <matthew.weber@rockwellcollins.com> wrote:
-> Hi Alexey,
+> Hi Thomas,
 >
-> On Mon, Oct 6, 2014 at 3:28 PM, Alexey Brodkin
-> <Alexey.Brodkin@synopsys.com> wrote:
->> Hi Matthew,
+> On Tue, Oct 7, 2014 at 2:48 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Matthew Weber,
 >>
->> On Mon, 2014-10-06 at 15:20 -0500, Matthew Weber wrote:
->>> Ok, good point. I wonder if it's something that could be set by
->>> default during the toolchain detection based on GCC >= 4.7 and
->>> existence of atomicops.h?
+>> On Mon, 6 Oct 2014 14:45:07 -0500, Matthew Weber wrote:
 >>
->> Well definitely that's possible.
->> You may see how it's implemented here -
->> http://git.buildroot.net/buildroot/tree/package/gcc/gcc.mk#n112
+>>> >      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/3c1c620684a23b4cbb1cfa560096094cd9bf09ec/
+>>> >      powerpc |                 protobuf-2.6.0 | NOK | http://autobuild.buildroot.net/results/f1b70ebabd587987547424a21eefc530317026cd/
+>>>
+>>> These powerpc builds use a gcc 4.5 compiler which doesn't provide the
+>>> generic atomicops implementation which is only exposed if GCC >= 4.7.
+>>> I looked at the BR2_ARCH_HAS_ATOMICS option as a possible dependency
+>>> to fix this but it seems like that option is always set if the ARCH
+>>> supports it.  Not necessarily based on if a toolchain provides a
+>>> generic.
 >>
->> But
->> 1. Are you sure that with GCC >= 4.7 atomic ops are always there?
+>> Gaah, yes. We knew that we introducing the BR2_ARCH_HAS_ATOMICS thing,
+>> but making it a per-compiler version thing was really too annoying.
+>>
+>> Is there a way to build protobuf without those atomic operations, or
+>> not at all?
 >
-> Not sure yet, the atomicops.h file actually is part of the protobuf
-> package not gcc (my confusion on that one).  So I'll have to do some
-> research on the generic atomics implementation that they do in that
-> header and figure-out why the >= 4.7 dependency is checked when this
-> package builds.   It might just be what this package picked as a
-> minimum version for it's generic atomics implementation.
+> Yeah, I believe the GCC version check is arbitrary.  I was going to
+> take a look at the generic atomics implementations and see if they
+> were stub functions.  If so, we could patch in a workaround to allow
+> GCC  >= 4.3 to build (with that being an arbitrarily old compiler
+> version.....)  or just open it up to any version and test if we get
+> compiler failures.
 
-I think I may have got some clarification from Fedora's updates to how
-they built ARM packages.
-
-"....consider using the GCC built-in functions to implement the
-necessary functionality. According to the GCC documentation, there are
-two alternatives, __sync built-in functions for atomic memory access
-(as of GCC-4.1, considered legacy) and Built-in functions for memory
-model aware atomic operations (__atomic, as of GCC-4.7).
-
-The __sync built-in functions are more widely supported (older
-versions of GCC), but are now considered 'legacy', and will be
-deprecated. In addition, they do not provide support for older ARM
-processors (ARMv5 and older). The __atomic built-in functions are the
-replacement for __sync, and do provide support for ARMv5 through
-fall-back library functions, but only support the C++11 memory model
-(GCC-4.7 or newer). ....  "
-(http://fedoraproject.org/wiki/Architectures/ARM/GCCBuiltInAtomicOperations)
-
-So the check for GCC4.7 in the code for protobuf is correct.  When I
-checked the atomic operations it implemented in the generic atomics
-header (using the GCC calls), they were correct for the newer model of
-__atomic built-ins.  So maybe a GCC version check is required to set
-"BR2_ARCH_HAS_ATOMICS".  I assuming this option is only relevant when
-a newer compiler GCC >=4.7 is used?
-
+It does look like the version check is correct.  They implemented
+atomics in the latest release and the generic implementation for arch
+not supporting the custom atomics uses the built-in GCC >= 4.7
+functions.  I was looking at conditionally setting
+BR2_ARCH_HAS_ATOMICS and to get it completely correct is quite
+invasive like you mentioned.  What about if we just set it for
+buildroot and external toolchains that we where we know if they are
+>=4.7.  Leaving any user defined external toolchains to possibly run
+into this issue, but maybe that's ok?
 
 >
->> 2. I assume it is only applicable to one particular architecture?
-> At this point I'm not sure if it's just specific to how this package
-> is checking or if it would be something that could be checked for.
-> protobuf implements custom atomics for specific architectures and
-> defaults to a requirement of GCC >= 4.7.  Looking at buildroot in
-> general, I'm wondering if the only thing that's missing is a minimum
-> GCC version if atomics is enabled (need to still confirm this and it
-> would probably be arch independent)
->
 >>
->> -Alexey
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
 >
 >
 >
