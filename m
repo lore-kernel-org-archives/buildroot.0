@@ -1,39 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Oct 2014 14:32:55 -0300
-Subject: [Buildroot] [PATCH] ulogd: only for kernels <= 3.16.x
-Message-ID: <1412789575-31614-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 08 Oct 2014 14:36:17 -0300
+Subject: [Buildroot] [PATCH 2/5] zsh: security bump to version 5.0.7
+In-Reply-To: <87a956eadv.fsf@dell.be.48ers.dk>
+References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>	<1412774389-11297-2-git-send-email-gustavo@zacarias.com.ar>
+ <87a956eadv.fsf@dell.be.48ers.dk>
+Message-ID: <54357611.2050005@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ulog netfilter target has been deprecated for some time and removed
-in kernels >= 3.17.x so limit it to older headers. Fixes:
-http://autobuild.buildroot.net/results/9ca/9ca43764c7363f9a00b8a0c7df20a492c00088b5/
+On 10/08/2014 02:31 PM, Peter Korsgaard wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ulogd/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+> Sigh, what is it about shells for the moment?
+> 
+> Same comment as for dash, who should "win" the /bin/sh symlink?
+> 
+> maybe busybox -> dash -> zsh -> bash?
 
-diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
-index 04acf0c..c792973 100644
---- a/package/ulogd/Config.in
-+++ b/package/ulogd/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_ULOGD
- 	depends on BR2_LARGEFILE
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_MMU
-+	# ulog support removed for kernels >= 3.17
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNETFILTER_ACCT
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-@@ -17,3 +19,4 @@ config BR2_PACKAGE_ULOGD
- comment "ulogd needs a toolchain w/ IPv6, largefile, dynamic library"
- 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
--- 
-2.0.4
+Forgot to cc the list ;)
+It's not really/only a matter of which one wins, it's an init system
+nightmare that i'm solving.
+Say you've got:
+
+busybox-init + some better shell = the better shell should win.
+sysvinit + busybox + some better shell = same as above
+sysvinit + no busybox + some better shell = oops since there's no /bin/sh
+
+I don't care which of the better is "betterer", it's pretty subjective,
+i just want the crazy combinations to work :)
+Of course there's sysvinit + no busybox + no shell but that's another
+problem.
+
+Regards.
