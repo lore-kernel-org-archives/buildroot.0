@@ -1,73 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Oct 2014 10:19:46 -0300
-Subject: [Buildroot] [PATCH 2/5] zsh: security bump to version 5.0.7
+Date: Wed,  8 Oct 2014 10:19:47 -0300
+Subject: [Buildroot] [PATCH 3/5] bash: minor install tweaks
 In-Reply-To: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1412774389-11297-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1412774389-11297-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes shellshock-alike exploits.
-Add /bin/sh -> zsh symlink, install binary to /bin as all shells should
-be, add hash file and build after busybox.
+Remove the old symlink backup since we don't do uninstalls now.
+Make the busybox dependency conditional shorter.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/zsh/Config.in |  2 +-
- package/zsh/zsh.hash  |  2 ++
- package/zsh/zsh.mk    | 17 ++++++++++++++---
- 3 files changed, 17 insertions(+), 4 deletions(-)
- create mode 100644 package/zsh/zsh.hash
+ package/bash/bash.mk | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/package/zsh/Config.in b/package/zsh/Config.in
-index 6853249..261df42 100644
---- a/package/zsh/Config.in
-+++ b/package/zsh/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_ZSH
- 	  ksh, and tcsh were incorporated into zsh; many original features
- 	  were added.
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index acd64f1..6510af5 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -6,7 +6,9 @@
  
--	  http://zsh.sourceforge.net/
-+	  http://www.zsh.org/
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-new file mode 100644
-index 0000000..358033f
---- /dev/null
-+++ b/package/zsh/zsh.hash
-@@ -0,0 +1,2 @@
-+# From http://www.zsh.org/pub/MD5SUM
-+md5	76726ff50309e628de670476e0508b3a	zsh-5.0.7.tar.gz
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index f4daeeb..87c24af 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,10 +4,21 @@
- #
- ################################################################################
+ BASH_VERSION = 4.3
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+-BASH_DEPENDENCIES = ncurses readline host-bison
++# Build after since bash is better than busybox shells
++BASH_DEPENDENCIES = ncurses readline host-bison \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ BASH_CONF_OPTS = --with-installed-readline
+ BASH_LICENSE = GPLv3+
+ BASH_LICENSE_FILES = COPYING
+@@ -28,19 +30,11 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
+ endif
  
--ZSH_VERSION = 5.0.6
--ZSH_SITE = http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
-+ZSH_VERSION = 5.0.7
-+ZSH_SITE = http://www.zsh.org/pub
-+# Build after since zsh is better than busybox shells
-+ZSH_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) \
-+	ncurses
-+ZSH_CONF_OPTS = --bindir=/bin
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
--ZSH_DEPENDENCIES = ncurses
-+
-+# Make /bin/sh -> zsh (no other shell, better than busybox shells)
-+# Remove versioned zsh-x.y.z binary taking up space
-+define ZSH_TARGET_INSTALL_FIXUPS
-+	ln -sf zsh $(TARGET_DIR)/bin/sh
-+	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
-+endef
-+ZSH_POST_INSTALL_TARGET_HOOKS += ZSH_TARGET_INSTALL_FIXUPS
+-# Make sure we build after busybox so that /bin/sh links to bash
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-BASH_DEPENDENCIES += busybox
+-endif
+-
+-# Save the old sh file/link if there is one and symlink bash->sh
++# Make /bin/sh -> bash (no other shell, better than busybox shells)
+ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+ 	rm -f $(TARGET_DIR)/bin/bashbug
+-	if [ -e $(TARGET_DIR)/bin/sh ]; then \
+-		mv -f $(TARGET_DIR)/bin/sh $(TARGET_DIR)/bin/sh.prebash; \
+-	fi
+ 	ln -sf bash $(TARGET_DIR)/bin/sh
+ endef
  
- $(eval $(autotools-package))
 -- 
 2.0.4
