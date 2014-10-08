@@ -1,87 +1,67 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 8 Oct 2014 23:05:11 +0200
-Subject: [Buildroot] [PATCH 7/7 v2] package/weston: add support for the
- RDP compositor
-In-Reply-To: <66cae859536aae20b149c905d270b48176057b9d.1412634775.git.yann.morin.1998@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Oct 2014 23:08:56 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] package/freerdp: install server key
+ and certificate
+In-Reply-To: <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
 References: <cover.1412634775.git.yann.morin.1998@free.fr>
- <66cae859536aae20b149c905d270b48176057b9d.1412634775.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMJMqnzm4zmxYhqqQ2qXYZrMnpwvPmhEzw5s71Xjw-BtZw@mail.gmail.com>
+ <2936c6dcc73bf7c96cf67e04b488c7ab4dcb5680.1412634775.git.yann.morin.1998@free.fr>
+ <CAHXCMMKMdCtW0-yOun432nn-A8D_VikANig5tkhPhEcW5K-5SQ@mail.gmail.com>
+Message-ID: <20141008210856.GF4718@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Using the RDP compositor, one can run a headless machine to serve remote
-> clients, using the RDP protocol.
->
-> Add an option to enable the rdp-backend.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Samuel, All,
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+On 2014-10-08 22:58 +0200, Samuel Martin spake thusly:
+> On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > This is mandatory for an RDP server to have a key and a certificate,
+> > otherwise clients will refuse to connect to that server.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/freerdp/freerdp.mk | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> > index ea590d1..e643e57 100644
+> > --- a/package/freerdp/freerdp.mk
+> > +++ b/package/freerdp/freerdp.mk
+> > @@ -86,4 +86,14 @@ else
+> >  FREERDP_CONF_OPTS += -DWITH_XV=OFF
+> >  endif
+> >
+> > +# Install the server key and certificate, so that a client can connect.
+> > +# A user can override them with its opwn in a post-build script, if needed.
+> 
+> s/opwn/own/
 
-> ---
->  package/weston/Config.in | 17 +++++++++++++++++
->  package/weston/weston.mk |  7 +++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index fafdf95..c08b33c 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -40,6 +40,23 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
->  config BR2_PACKAGE_WESTON_FBDEV
->         bool "fbdev compositor"
->
-> +config BR2_PACKAGE_WESTON_RDP
-> +       bool "RDP compositor"
-> +       select BR2_PACKAGE_FREERDP
-> +       select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-> +       help
-> +         This enables the RDP backend, which allows accessing weston
-> +         through the network with any RDP-compliant client.
-> +
-> +         Please note that one must pass those options to weston for RDP
-> +         to be functional:
-> +           --rdp-tls-cert=/path/to/server.crt
-> +           --rdp-tls-key=/path/to/server.key
-> +
-> +         By default, Buildroot installs such files in /etc/freerdp/server/
-> +         so you may want to change them in a post-build script or a rootfs
-> +         overlay.
-> +
->  comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
->         depends on BR2_arm
->         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index 9964b90..2829a10 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -32,6 +32,13 @@ else
->  WESTON_CONF_OPTS += --disable-libinput-backend
->  endif
->
-> +ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
-> +WESTON_DEPENDENCIES += freerdp
-> +WESTON_CONF_OPTS += --enable-rdp-compositor
-> +else
-> +WESTON_CONF_OPTS += --disable-rdp-compositor
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
->  WESTON_DEPENDENCIES += libunwind
->  else
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yup.
 
+> > +define FREERDP_INSTALL_KEYS
+> > +       $(INSTALL) -D $(@D)/server/X11/server.key \
+> > +                     $(TARGET_DIR)/etc/freerdp/keys/server.key
+> > +       $(INSTALL) -D $(@D)/server/X11/server.crt \
+> > +                     $(TARGET_DIR)/etc/freerdp/keys/server.crt
+> > +endef
+> > +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
+> 
+> It is useful for the client only? or the server? or both?
+> If it is only useful for one or the other, maybe it should be nested
+> in a if-block using the BR2_PACKAGE_FREERDP_CLIENT (or
+> BR2_PACKAGE_FREERDP_SERVER)?
 
+It;s for the server only. Will fix. Thanks!
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
