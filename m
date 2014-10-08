@@ -1,47 +1,164 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 08 Oct 2014 13:24:28 -0300
-Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
-In-Reply-To: <20141008181424.27e753c8@free-electrons.com>
-References: <20141008104845.495ad683@free-electrons.com>
- <CAHXCMMLaWJki-F0NXKAw243DWUKdtWeE=q1iDNoVdi+2_z9s7w@mail.gmail.com>
- <CAGduivy-PEV9kqjD50yhKc3T8=iZa6cdg-q0Z48dQvA4SnYg1g@mail.gmail.com>
- <20141008181424.27e753c8@free-electrons.com>
-Message-ID: <5435653C.1030209@zacarias.com.ar>
+Date: Wed,  8 Oct 2014 13:29:32 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: enable tmpfs for custom configs
+Message-ID: <1412785772-32552-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 01:14 PM, Thomas Petazzoni wrote:
->>>>  - SystemV/systemd init scripts. The idea was to do automatic
->>>>    installation of init scripts / service files located in
->>>>    package/<foo>/. Maxime Hadjinlian said he would work on this, but
->>>>    not much happened. On a related note, there is a need to separate
->>>>    the skeleton to not avoid Busybox-related init scripts in a pure
->>>>    systemd configuration.
->> I know.. shame on me.
-> 
-> No problem. The point of doing a review of the action points is
-> definitely *not* to put the blame on anybody.
-> 
->> I still have a branch with a beginning of something. I would *really*
->> like to finish this during the dev-days, it would be great.
-> 
-> Ok. Though from my perspective, active development could better take
-> place outside of the dev-days. Maybe focusing the dev-days on
-> cleaning up the patchwork backlog is a better idea.
+Enable TMPFS support for our custom qemu kernel configs, it's generally
+used and can lead to failures/confusion.
+Moreover enable ACL & XATTR TMPFS support for SystemD.
 
-FYI i'm doing some cleanup regarding busybox/sysvinit init (sic) and
-patches are flowing with what i'm finding out.
-In the end with sysvinit it's difficult to deal with the PNP approach in
-that if people want a normal booting system without busybox they'll need
-to throw a bunch of packages into the mix.
-I can compile a list of the usual ones and we can add some documentation
-about it, but i don't think forcing (selecting) them is a good idea
-since customizing the init process can drop the need for some.
-I'll also do some systemd testing but it's really low priority for me.
-I think the PKG_INSTALL_INIT_SYSV defines are good enough unless we want
-to deal with runlevels (wouldn't make sense, at least for me), systemd
-is a whole different story as we discussed before.
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ board/qemu/arm-versatile/linux-3.17.config  | 2 ++
+ board/qemu/mips-malta/linux-3.17.config     | 1 +
+ board/qemu/mips64-malta/linux-3.17.config   | 1 +
+ board/qemu/mips64el-malta/linux-3.17.config | 1 +
+ board/qemu/mipsel-malta/linux-3.17.config   | 1 +
+ board/qemu/ppc-g3beige/linux-3.17.config    | 1 +
+ board/qemu/sh4-r2d/linux-3.17.config        | 1 +
+ board/qemu/x86/linux-3.17.config            | 2 ++
+ board/qemu/x86_64/linux-3.17.config         | 2 ++
+ board/qemu/xtensa-lx60/linux-3.17.config    | 6 ++++--
+ 10 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/board/qemu/arm-versatile/linux-3.17.config b/board/qemu/arm-versatile/linux-3.17.config
+index e425d45..dd5db53 100644
+--- a/board/qemu/arm-versatile/linux-3.17.config
++++ b/board/qemu/arm-versatile/linux-3.17.config
+@@ -61,6 +61,8 @@ CONFIG_MMC=y
+ CONFIG_MMC_ARMMMCI=m
+ CONFIG_EXT4_FS=y
+ CONFIG_VFAT_FS=m
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_JFFS2_FS=y
+ CONFIG_CRAMFS=y
+ CONFIG_MINIX_FS=y
+diff --git a/board/qemu/mips-malta/linux-3.17.config b/board/qemu/mips-malta/linux-3.17.config
+index 2b65c93..4716bb6 100644
+--- a/board/qemu/mips-malta/linux-3.17.config
++++ b/board/qemu/mips-malta/linux-3.17.config
+@@ -55,5 +55,6 @@ CONFIG_EXT4_FS=y
+ CONFIG_QUOTA=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64-malta/linux-3.17.config b/board/qemu/mips64-malta/linux-3.17.config
+index c112793..f850f09 100644
+--- a/board/qemu/mips64-malta/linux-3.17.config
++++ b/board/qemu/mips64-malta/linux-3.17.config
+@@ -55,5 +55,6 @@ CONFIG_FB_CIRRUS=y
+ CONFIG_EXT4_FS=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64el-malta/linux-3.17.config b/board/qemu/mips64el-malta/linux-3.17.config
+index e980476..6fe3594 100644
+--- a/board/qemu/mips64el-malta/linux-3.17.config
++++ b/board/qemu/mips64el-malta/linux-3.17.config
+@@ -56,5 +56,6 @@ CONFIG_FB_CIRRUS=y
+ CONFIG_EXT4_FS=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mipsel-malta/linux-3.17.config b/board/qemu/mipsel-malta/linux-3.17.config
+index b0372ae..4ce1d91 100644
+--- a/board/qemu/mipsel-malta/linux-3.17.config
++++ b/board/qemu/mipsel-malta/linux-3.17.config
+@@ -56,5 +56,6 @@ CONFIG_EXT4_FS=y
+ CONFIG_QUOTA=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/ppc-g3beige/linux-3.17.config b/board/qemu/ppc-g3beige/linux-3.17.config
+index cf84c75..26be1c5 100644
+--- a/board/qemu/ppc-g3beige/linux-3.17.config
++++ b/board/qemu/ppc-g3beige/linux-3.17.config
+@@ -40,6 +40,7 @@ CONFIG_SSB_DRIVER_PCICORE=y
+ CONFIG_EXT4_FS=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_SQUASHFS=y
+ CONFIG_LIBCRC32C=y
+ CONFIG_BOOTX_TEXT=y
+diff --git a/board/qemu/sh4-r2d/linux-3.17.config b/board/qemu/sh4-r2d/linux-3.17.config
+index ce16cb8..5a98a69 100644
+--- a/board/qemu/sh4-r2d/linux-3.17.config
++++ b/board/qemu/sh4-r2d/linux-3.17.config
+@@ -63,6 +63,7 @@ CONFIG_MSDOS_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_MINIX_FS=y
+ CONFIG_NLS_CODEPAGE_932=y
+ CONFIG_DEBUG_FS=y
+diff --git a/board/qemu/x86/linux-3.17.config b/board/qemu/x86/linux-3.17.config
+index 920a0a6..602a9bb 100644
+--- a/board/qemu/x86/linux-3.17.config
++++ b/board/qemu/x86/linux-3.17.config
+@@ -50,6 +50,8 @@ CONFIG_SND_HDA_INTEL=y
+ CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/x86_64/linux-3.17.config b/board/qemu/x86_64/linux-3.17.config
+index 920a0a6..602a9bb 100644
+--- a/board/qemu/x86_64/linux-3.17.config
++++ b/board/qemu/x86_64/linux-3.17.config
+@@ -50,6 +50,8 @@ CONFIG_SND_HDA_INTEL=y
+ CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/xtensa-lx60/linux-3.17.config b/board/qemu/xtensa-lx60/linux-3.17.config
+index e231368..51701b2 100644
+--- a/board/qemu/xtensa-lx60/linux-3.17.config
++++ b/board/qemu/xtensa-lx60/linux-3.17.config
+@@ -1,4 +1,5 @@
+ # CONFIG_SWAP is not set
++# CONFIG_CROSS_MEMORY_ATTACH is not set
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_XTENSA_VARIANT_DC232B=y
+ # CONFIG_INITIALIZE_XTENSA_MMU_INSIDE_VMLINUX is not set
+@@ -7,7 +8,6 @@ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="console=ttyS0,38400"
+ # CONFIG_COMPACTION is not set
+ # CONFIG_BOUNCE is not set
+-# CONFIG_CROSS_MEMORY_ATTACH is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+@@ -30,5 +30,7 @@ CONFIG_SERIAL_8250_CONSOLE=y
+ # CONFIG_HW_RANDOM is not set
+ # CONFIG_HWMON is not set
+ # CONFIG_VGA_CONSOLE is not set
+-# CONFIG_S32C1I_SELFTEST is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+ CONFIG_LD_NO_RELAX=y
++# CONFIG_S32C1I_SELFTEST is not set
+-- 
+2.0.4
