@@ -1,47 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 22:25:48 +0200
-Subject: [Buildroot] [PATCH 1/2] docs/manual: slightly improve faq entry
- about compiler on target
-In-Reply-To: <20141008202313.GC4718@free.fr>
-References: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141008202313.GC4718@free.fr>
-Message-ID: <20141008222548.259fca7b@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  8 Oct 2014 22:26:35 +0200
+Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Add optional package
+	xlib_libXcomposite as dependency
+Message-ID: <1412799995-20244-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Make sure that xlib_libXcomposite is build before xserver_xorg-server.
 
-On Wed, 8 Oct 2014 22:23:13 +0200, Yann E. MORIN wrote:
+With this defconfig
 
-> > diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> > index 7195234..693028c 100644
-> > --- a/docs/manual/faq-troubleshooting.txt
-> > +++ b/docs/manual/faq-troubleshooting.txt
-> > @@ -35,7 +35,9 @@ target_ would be stopped from the Buildroot-2012.11 release because:
-> >  * this feature was only available for Buildroot toolchains;
-> >  * Buildroot mostly targets _small_ or _very small_ target hardware
-> >    with limited resource onboard (CPU, ram, mass-storage), for which
-> > -  compiling does not make much sense.
-> > +  compiling on the target does not make much sense;
-> 
-> I'd phrase that differently:
-> 
->     Buildroot mostly targets _small_ or _very small_ target hardware
->     with limited resource onboard (CPU, ram, mass-storage), on which
->     compiling does not much much sense.
-> 
-> Note:  s/for/on/
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XLIB_LIBXCOMPOSITE=y
 
-Right, that's another option, but I find my version to be even more
-explicit. Your version is correct, but still leaves a still bit of
-fuzziness about the machine on which we're talking about compiling
-things on.
+and "make xserver_xorg-server" the package xlib_libXcomposite was ignored.
 
-Thomas
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index f9522ed..c27dd80 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -161,7 +161,9 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xvmc
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXcomposite
++else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-composite
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
