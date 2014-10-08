@@ -1,71 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 08 Oct 2014 16:16:51 -0300
-Subject: [Buildroot] [PATCH 1/5] dash: bump to version 0.5.8-1
-In-Reply-To: <87y4sqbds4.fsf@dell.be.48ers.dk>
-References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>	<87eguieaky.fsf@dell.be.48ers.dk>
- <5435748A.3090106@zacarias.com.ar>	<87k34acu9a.fsf@dell.be.48ers.dk>
- <543580C6.1090600@zacarias.com.ar> <87y4sqbds4.fsf@dell.be.48ers.dk>
-Message-ID: <54358DA3.1030103@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  8 Oct 2014 21:33:34 +0200
+Subject: [Buildroot] [PATCH] botan: limit to supported CPU architectures
+Message-ID: <1412796814-12333-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 03:46 PM, Peter Korsgaard wrote:
+See src/build-data/arch/ for the list of supported CPU architectures.
 
-> But a buildroot config without busybox is quite unlikely.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ package/botan/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Well that's what i'm testing here and other than the other patches
-that's the only big broken thing that i've found.
-For a basic boot the required packages are:
-
-coreutils -> cat, echo, and a ton of other tiny utils
-net-tools -> hostname, ifconfig and such
-util-linux (agetty, fsck, kill, login utils, mount/umount)
-some shell (bash, dash, zsh)
-
-Optional but nice:
-
-sysklogd -> a logger, not strictly necessary but convenient.
-procps-ng -> ps utils.
-and many others for the usual complete shell experience.
-
-Not covered yet:
-
-ifdown/ifup - we can package it.
-start-stop-daemon - we can probably get away without it by tweaking
-initscripts.
-
-The problem is that we allow busybox to be turned off for
-systemv/systemd so we've gotta cover those use cases.
-
->  > It's possible, probably best in System Configuration an option that
->  > selects the appropiate package.
->  > I wouldn't pull in busybox though, only make the option available if
->  > BR2_PACKAGE_BUSYBOX.
->  > And make the symlink in target-finalize to avoid touching the packages
->  > much (actually making them simpler).
-> 
-> Yes, we can do something like that if there's interest / need. I
-> personally don't care enough about it do it myself, but I do want
-> reproducible builds.
-> 
-> A real config with multiple (non busybox) shells is imho quite unlikely
-> though.
-
-I'll give it a shot, it shouldn't be hard.
-Yes it would be odd for multiple non-busybox shells to exist, that was
-my reasoning that any full shell would step on /bin/sh, see? ;)
-
-> Sure it is arbitrary, but that's what we have today and I haven't heard
-> anybody complaining.
-
-Well, we can evolve it a bit, once the selection option is done it will
-be quite easy to add new shell options which, contrary to adding a ton
-of ifeqs, is nicer.
-It might be interesting in the long run since we'll have to deal with
-/etc/shells (not quite the same but still in the same area) for
-non-busybox scenarios.
-
-Regards.
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 4911872..b9e2e3a 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -1,6 +1,13 @@
++config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k    || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_powerpc64 || BR2_sparc || BR2_sh  || \
++		BR2_x86_64
++
+ config BR2_PACKAGE_BOTAN
+ 	bool "botan"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ 	help
+ 	  Botan is a crypto library for C++
+ 
+@@ -8,3 +15,4 @@ config BR2_PACKAGE_BOTAN
+ 
+ comment "botan needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+-- 
+2.0.0
