@@ -1,30 +1,97 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 8 Oct 2014 16:02:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/sysvinit: don't start logging
-In-Reply-To: <1412779165-13366-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1412779165-13366-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <54355204.7040701@imgtec.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 8 Oct 2014 16:12:05 +0100
+Subject: [Buildroot] [PATCH v3] package/trinity: New package
+Message-ID: <1412781125-11737-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2014 03:39 PM, Gustavo Zacarias wrote:
-> Don't try to start logging from /etc/inittab because busybox installs a
-> S01logging script that handles that and can lead to duplicate logging
-> processes.
-> Let's handle the logging in each package that provides it since we can
-> get multiple variants in the future like syslog-ng that have different
-> initialization routines.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
+Adding the Trinity Linux System call fuzz tester.
 
-Thanks. That has always been bugging me but never got around to fix it
-myself
+Fails to compile for uClibc because it tries to include 'execinfo.h'
+which is only available if uClibc has been built with
+UCLIBC_HAS_BACKTRACE=y (which it isn't by default). We disable this
+package for uClibc by now until upstream fixes this problem.
 
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/Config.in          |    1 +
+ package/trinity/Config.in  |   14 ++++++++++++++
+ package/trinity/trinity.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/trinity/Config.in
+ create mode 100644 package/trinity/trinity.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index ea89c96..3b570ee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -89,6 +89,7 @@ endif
+ 	source "package/sysprof/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
++	source "package/trinity/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+new file mode 100644
+index 0000000..ea2c458
+--- /dev/null
++++ b/package/trinity/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_TRINITY
++	bool "trinity"
++	# Fails to compile for uClibc because it tries to include 'execinfo.h'
++	# which is only available if uClibc has been built with
++	# UCLIBC_HAS_BACKTRACE=y (which it isn't by default). We disable this
++	# package for uClibc by now until upstream fixes this problem.
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  A Linux System call fuzz tester
++
++	  http://codemonkey.org.uk/projects/trinity/
++
++comment "trinity is not supported for uClibc"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+new file mode 100644
+index 0000000..1e6c54a
+--- /dev/null
++++ b/package/trinity/trinity.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# trinity
++#
++################################################################################
++
++TRINITY_VERSION = c02034ec08d951cde3429905e64afe450cbc47db
++TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
++TRINITY_LICENSE = GPLv2
++TRINITY_LICENSE_FILES = COPYING
++
++define TRINITY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
++endef
++
++define TRINITY_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define TRINITY_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
++endef
++
++# Install helper scripts
++define TRINITY_INSTALL_HELPER_SCRIPTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/trinity
++	cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
++endef
++TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
++
++$(eval $(generic-package))
 -- 
-markos
+1.7.1
