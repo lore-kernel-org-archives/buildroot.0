@@ -1,55 +1,66 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 8 Oct 2014 20:11:11 +0000
-Subject: [Buildroot] [PATCH] ARC: gcc - fixes for improperly calculated
- jump/branch offsets
-In-Reply-To: <87ppe2bcp8.fsf@dell.be.48ers.dk>
-References: <1412792377-6312-1-git-send-email-abrodkin@synopsys.com>
- <87ppe2bcp8.fsf@dell.be.48ers.dk>
-Message-ID: <1412799069.8158.1.camel@abrodkin-8560l.internal.synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  8 Oct 2014 22:16:50 +0200
+Subject: [Buildroot] [PATCH 2/2] docs/manual: add FAQ entry about speeding
+	up the build process
+In-Reply-To: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1412799410-19667-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+This is a very frequently asked question, so let's add a FAQ entry
+about it, that we can progressively extend with more advices for our
+users.
 
-On Wed, 2014-10-08 at 21:09 +0200, Peter Korsgaard wrote:
-> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
-> 
->  > Symptoms usually seen are like that:
->  ---> ---
->  > Error: operand out of range (128 is not between -128 and 127)
->  ---> ---
->  > where range may differ.
-> 
->  > Since compiler tries to use jump/branch instructions with the shortes encoding
->  > of offset it's important to calculate required offset properly.
-> 
->  > In case of miscalculation by compiler later assembler throws an error because of
->  > inability to encode requested value.
-> 
->  > Fixes are taken from current development branch of GCC for ARC and will be a
->  > part of the next release of ARC tools, so at that point patch should be dropped.
-> 
->  > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
->  > Cc: Anton Kolesov <akolesov@synopsys.com>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  > Cc: Peter Korsgaard <peter@korsgaard.com>
-> 
-> This presumably fixes the recent autobuild issues?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-At least the one reported against "hostapd" here.
-
-> >          arc |                    hostapd-2.2 | NOK |
-http://autobuild.buildroot.net/results/bc5100d6462af4e2805f2bc8d39c87a55d843e2b/
-> 
-> {standard input}: Assembler messages:
-> {standard input}:863: Error: operand out of range (512 is not between
--512 and 511)
-> make[1]: *** [../src/wps/wps_attr_parse.o] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-
-This should be now solved.
-
--Alexey
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index 693028c..9325ac0 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -205,3 +205,37 @@ On this matter, the Buildroot developers make this position statement:
+    upgrades by upgrading the entire root filesystem image at once,
+    the image deployed to the embedded system is guaranteed to really
+    be the one that has been tested and validated.
++
++[[faq-speeding-up-build]]
++=== How to speed-up the build process?
++
++Since Buildroot often involves doing full rebuilds of the entire
++system that can be quite long, we provide below a number of tips to
++help reduce the build time:
++
++ * Use a pre-built external toolchain instead of the default Buildroot
++   internal toolchain. By using a pre-built Linaro toolchain (on ARM)
++   or a Sourcery CodeBench toolchain (for ARM, x86, x86-64, MIPS,
++   etc.), you will the build time of the toolchain at each build,
++   approximately 15 to 20 minutes. Note that using an external
++   toolchain temporarily does not prevent you to switch back to an
++   internal toolchain (that may provide a higher level of
++   customization) once the rest of your system is working;
++
++ * Use the +ccache+ compiler cache (see: xref:ccache[]);
++
++ * Learn about rebuilding only the few packages you actually care
++   about (see xref:rebuild-pkg[]), but beware that sometimes full
++   rebuilds are anyway necessary (see xref:full-rebuild[]);
++
++ * Make sure you are not using a virtual machine for the Linux system
++   used to run Buildroot. Most of the virtual machine technologies are
++   known to cause a significant performance impact on I/O, which is
++   really important for building source code;
++
++ * Make sure that you're using only local files: do not attempt to do
++   a build over NFS, or to keep the Buildroot download folder over
++   NFS. This significantly slows down the build;
++
++ * Buy (or convince your boss to) new hardware. SSDs and lots of RAM
++   are key to speeding up the builds.
+-- 
+2.0.0
