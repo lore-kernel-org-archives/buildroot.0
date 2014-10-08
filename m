@@ -1,51 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  8 Oct 2014 21:34:10 +0200
-Subject: [Buildroot] [PATCHv2] botan: limit to supported CPU architectures
-Message-ID: <1412796850-12402-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed,  8 Oct 2014 21:37:05 +0200
+Subject: [Buildroot] [PATCH 1/2] x264: fix typo in variable name
+Message-ID: <1412797026-16602-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See src/build-data/arch/ for the list of supported CPU architectures.
-
 Fixes:
 
-  http://autobuild.buildroot.org/results/69f/69fdecb06a03e6a95adfab70adf8ebf45971f0da/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Francois Perrad <fperrad@gmail.com>
----
-v1 -> v2: add autobuilder reference
+  http://autobuild.buildroot.org/results/d37/d37856be02bdff5711fc5d6fb1f3d4614fe5fed3/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/botan/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 4911872..b9e2e3a 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -1,6 +1,13 @@
-+config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-+	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k    || \
-+		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		BR2_powerpc || BR2_powerpc64 || BR2_sparc || BR2_sh  || \
-+		BR2_x86_64
-+
- config BR2_PACKAGE_BOTAN
- 	bool "botan"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
- 	help
- 	  Botan is a crypto library for C++
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index c2397f8..ccf8e2b 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -13,7 +13,7 @@ X264_LICENSE_FILES = COPYING
+ X264_INSTALL_STAGING = YES
  
-@@ -8,3 +15,4 @@ config BR2_PACKAGE_BOTAN
- 
- comment "botan needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-	FFMPEG_DEPENDENCIES += host-yasm
++	X264_DEPENDENCIES += host-yasm
+ else
+ 	X264_CONF_OPTS += --disable-asm
+ endif
 -- 
 2.0.0
