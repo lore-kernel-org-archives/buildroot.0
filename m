@@ -1,31 +1,35 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Wed, 8 Oct 2014 11:47:33 +0200
-Subject: [Buildroot] [PATCH v4 1/2] x264: new package
-In-Reply-To: <20141008101302.4a55429a@free-electrons.com>
-References: <1412526597-31347-1-git-send-email-0intro@gmail.com>
- <20141008101302.4a55429a@free-electrons.com>
-Message-ID: <CANUoZoH5MNQu=57RqGV40XSt2nT+NUqjSXQC545LQRDcHRD1Yg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2014 11:58:37 +0200
+Subject: [Buildroot] [PATCH] package/trinity: New package
+In-Reply-To: <54350771.9000208@imgtec.com> (Vicente Olivert Riera's message of
+ "Wed, 8 Oct 2014 10:44:17 +0100")
+References: <1412594507-48779-1-git-send-email-Vincent.Riera@imgtec.com>
+ <874mvffs2a.fsf@dell.be.48ers.dk> <54350771.9000208@imgtec.com>
+Message-ID: <87mw96evci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Well, I still believe this is suboptimal since there is some assembly
-> code for ARM that is available, but only for ARMv6+. But oh well, it
-> can always be implemented as a followup improvement.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Yes, I finally enabled assembly files on ARMv7 platforms.
+Hi,
 
-It seems the ARMv6 processors (ARM1136JF-S, ARM1176JZ-S
-and ARM1176JZF-S) are not supported:
+ >> execinfo.h is only available if uClibc is built with
+ >> UCLIBC_HAS_BACKTRACE=y (which it isn't by default).
+ >> 
+ >> Perhaps the backtrace() stuff can get #ifdef'ed out if not available?
 
-common/arm/pixel-a.S:1281: Error: selected processor does not support
-ARM mode `movw ip,#:lower16:235963'
-common/arm/pixel-a.S:1281: Error: selected processor does not support
-ARM mode `movt ip,#:upper16:235963'
+ > It looks like a change to be made upstream. Maybe it needs to include
+ > a header check in the configure.sh script, then defining a macro if
+ > the header is present, and then modify the source code to take that
+ > macro into account to do things like "#ifdef USE_EXECINFO"...
 
-I'll send a patch soon.
+ > So, what do you propose by now for the Buildroot package? Disabling it
+ > for uClibc until upstream fixes that?
+
+Either that or submit a patch upstream.
 
 -- 
-David du Colombier
+Bye, Peter Korsgaard
