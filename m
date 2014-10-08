@@ -1,77 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 10:56:53 +0200
-Subject: [Buildroot] Topics to discuss at the meeting
-Message-ID: <20141008105653.7252facd@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 8 Oct 2014 09:57:39 +0100
+Subject: [Buildroot] [PATCH] ser2net: Add a hash file
+In-Reply-To: <20141007192331.0908bbcd@free-electrons.com>
+References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>	<1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+ <20141007192331.0908bbcd@free-electrons.com>
+Message-ID: <5434FC83.3070303@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas Petazzoni,
 
-The meeting is approaching, so to foster some preliminary discussion,
-here is the current list of topics we have in the Wiki:
+On 10/07/2014 06:23 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+>
+> On Tue, 7 Oct 2014 15:30:50 +0100, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>   package/ser2net/ser2net.hash |    6 ++++++
+>>   1 files changed, 6 insertions(+), 0 deletions(-)
+>>   create mode 100644 package/ser2net/ser2net.hash
+>>
+>> diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+>> new file mode 100644
+>> index 0000000..d24e3a8
+>> --- /dev/null
+>> +++ b/package/ser2net/ser2net.hash
+>> @@ -0,0 +1,6 @@
+>> +md5 cd937041144de83d41d811521e72158c ser2net-2.10.0.tar.gz
+>> +sha1 80e826ef1630cbf282d8a656754967d0f842ecba ser2net-2.10.0.tar.gz
+>> +sha224 1d851e90fde37db55109a7399f3c7166628ca23d53e87f2c65b5b01a ser2net-2.10.0.tar.gz
+>> +sha256 98f6193225338e25f35302fef5e1f16688693ed43e7b3c3e9e09187eb54547ac ser2net-2.10.0.tar.gz
+>> +sha384 b4ea0014e5ffd303f7a2a6b0cd31ec2b24640fea535cd87631aa685b7b33464261dee0e4baba8c418209767c83961dca ser2net-2.10.0.tar.gz
+>> +sha512 dd3e37619b10d8bf20d738e90c253bc2d109e0a57ee9f3a8b2a85a69399afa5a8459a4602b2856f0b655427023a36c78330851bf7f8d8da0f28d1fe22c1d5e10 ser2net-2.10.0.tar.gz
+>
+> Why having all those hashes?
 
- - Look-back to action points from previous developer days at Fosdem
-   2014: is everything that was decided done? What remains?
+Why not? Those are all the hashes supported in Buildroot. The more we 
+have the better.
 
- - Patch naming: current convention is
-   package-number-description.patch, but a proposal was made on the
-   list to simplify this to number-description.patch. Go or no-go?
+> And the comment indicating how they have
+> been found is missing (locally computed? found on the upstream web
+> site).
 
- - Since Luca will be present: state of legal-info infrastructure,
-   improvements to be made?
+I haven't added any comment because those hashes were locally computed. 
+Do I need to add a comment explain that?
 
-   - Could more details be added here (by Thomas DS, who proposed the
-     topic)
-
- - Discussion on atomic operations and how to handle the related
-   dependencies at the kconfig level
-
- - Cleanup the patchwork; triage patches in two categories:
-
-   - things that hasn't been pushed enough but that we believe is useful
-
-   - things that haven't been pushed enough and that are too anecdotic
-     for us to care about
-
- - Pending large series:
-
-   - The paranoid wrapper series from Thomas P.
-   - The march/mcpu conflict on ARM series from Thomas P.
-   - The Qemu series from Yann
-   - The freerdp series from Yann
-   - The NVidia series from Yann
-   - The OpenCV series from Samuel
-   - The apr-util/apache series from Bernd
-   - The gendoc series from Yann (IMPORTANT)
-   - The X.org/i.MX6 series from J?r?me
-   - The libudev series from Yann (IMPORTANT)
-
- - Key-signing party: it would be usefull to have a web-of-trust
-   amongst Buildroot developpers, to submit sensitive information, such
-   as the hashes.
-
- - Project maintenance:
-
-   - Peter seems to be less active now
-
-   - Thomas (who acts as deputy committer) has new responsibilities,
-     and risks being less available too
-
-  - How do we see the short- and long-term maintenance of the project?
-
- - Should we move buildroot.org to its own server, and split from
-   busybox.net and uclibc.org?
-
-Feel free to comment on these topics, or add new ones. For those who
-have an account, do not hesitate to update the Wiki accordingly.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vincent
