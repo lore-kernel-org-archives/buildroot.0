@@ -1,130 +1,62 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 8 Oct 2014 23:37:09 +0200
-Subject: [Buildroot] [PATCH 4/7 v2] package/freerdp: add options to
- enable/disable server and/or client
-In-Reply-To: <c3e7653516c234689d95b3a3b74cd06b6e7ef664.1412634775.git.yann.morin.1998@free.fr>
-References: <cover.1412634775.git.yann.morin.1998@free.fr>
- <c3e7653516c234689d95b3a3b74cd06b6e7ef664.1412634775.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMLvyDpaxgwQ=USd4r-ULY5YYNWYGUod0wxbaQwuub0R+w@mail.gmail.com>
+From: Claudio Laurita <claudio.laurita@integrazionetotale.it>
+Date: Thu, 09 Oct 2014 01:01:25 +0200
+Subject: [Buildroot] [PATCH 1/1] openocd bump to 0.8.0
+In-Reply-To: <20141008231040.57406af4@free-electrons.com>
+References: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>
+ <20141008231040.57406af4@free-electrons.com>
+Message-ID: <5435C245.1090100@integrazionetotale.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+This is my first tentative of "real" collaboration, so thank you for the 
+patience.
 
-On Tue, Oct 7, 2014 at 12:35 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Building the client or the server requires an X.Org stack.
+ > The patch is doing a lot more than just bumping the version, so it 
+would be good to have some details about the changes that are made.
+
+Ok, I thought it was not a lot ;-)
+>> diff --git a/package/openocd/001-fix-gcc-warning-in-mini51.patch b/package/openocd/001-fix-gcc-warning-in-mini51.patch
+>> new file mode 100644!
+>> index 0000000..514d166
+>> --- /dev/null
+>> +++ b/package/openocd/001-fix-gcc-warning-in-mini51.patch
+> Patches should have a description + Signed-off-by. See
+> http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+Ok. I thought it was inherited from the main patch. Silly thought.
+>> -HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
+>> +HOST_OPENOCD_CONF_OPTS = $(OPENOCD_CONF_OPTS)
+> Target options should normally not affect the build of host tools:
+> remember that someone can enable the host OpenOCD without building the
+> target OpenOCD.
+You're perfectly right, obviously. I made an hard shortcut ;-)
+I tried to find a way to avoid duplicating the logic of selecting 
+options and finding related real dependencies. In current version it's 
+not allowed any choice for the host and I think it's a limit. 
+Duplicating everything is a bit redundant, but my idea was terribly 
+based on my actual needs. I apologize.
+>> +# force disabling shared libraries to let jimtcl build its static version
+>> +SHARED_STATIC_LIBS_OPTS=
+> This is clearly not a solution: the namespace of variables in Buildroot
+> is global, so you are not allowed to modify such a global variable. You
+> can always force --enable-static --disable-shared in OPENOCD_CONF_OPTS
+> if needed.
 >
-> Since freerdp can also be used for weston (wayland-based, hence no X.Org
-> stack), we may want to disable the client and server.
->
-> Conversely, with on an X.Org stack, we may want to enable either or
-> none if we're just interested in the library.
->
-> Add two options, one to enable the server, the other the client; both
-> default to 'y' so that a previous .config can be re-used as-is, and
-> echibit the same behaviour, that is to build the server and client.
+This is a problem.
+If I understand, changing this variable would affect every successive 
+step of the global build. Is this the point? Not bad, as a mistake. I 
+should have studied better the main makefile. Sorry.
+Anyway, SHARED_STATIC_LIBS_OPT is added by default to the configure 
+parameters. If your default is having shared preferred, It ends up in a 
+first assignment to --enable-shared (the global) and a second one to 
+--disable-shared (the local). Unfortunately, jimtcl ignores the second 
+one and keeps building only the shared lib, making openocd build fail. 
+The current BR implementation applies a patch to auto.def of jimtcl to 
+force it ignore -enable-shared. I don't like much this approach and 
+tried to find an alternative to avoid the patch. So, the only way is 
+redefining OPENOCD_CONFIGURE_CMDS entirely?
 
-s/echibit/exhibit/
-
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/freerdp/Config.in  | 20 ++++++++++++++++++--
->  package/freerdp/freerdp.mk | 15 +++++++++++++++
->  2 files changed, 33 insertions(+), 2 deletions(-)
->
-> diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-> index 23d0b0f..8e29a5b 100644
-> --- a/package/freerdp/Config.in
-> +++ b/package/freerdp/Config.in
-> @@ -6,17 +6,33 @@ config BR2_PACKAGE_FREERDP
->           FreeRDP is a free implementation of the Remote Desktop
->           Protocol (RDP), released under the Apache license
->
-> +         This only installs the freerdp library.
-> +
->           http://www.freerdp.com/
->
->  if BR2_PACKAGE_FREERDP
->
->  config BR2_PACKAGE_FREERDP_NEEDS_XLIBS
-> -       def_bool y
-> -       depends on BR2_PACKAGE_XORG7
-> +       bool
->         select BR2_PACKAGE_XLIB_LIBX11
->         select BR2_PACKAGE_XLIB_LIBXT
->         select BR2_PACKAGE_XLIB_LIBXEXT
->         select BR2_PACKAGE_XLIB_LIBXCURSOR
->         select BR2_PACKAGE_XLIB_LIBXDAMAGE
->
-> +config BR2_PACKAGE_FREERDP_SERVER
-> +       bool "build server"
-> +       default y
-> +       depends on BR2_PACKAGE_XORG7
-> +       select BR2_PACKAGE_FREERDP_NEEDS_XLIBS
-> +
-> +config BR2_PACKAGE_FREERDP_CLIENT
-> +       bool "build client"
-> +       default y
-> +       depends on BR2_PACKAGE_XORG7
-> +       select BR2_PACKAGE_FREERDP_NEEDS_XLIBS
-> +
-> +comment "freerdp server and client needs X.Org"
-> +       depends on !BR2_PACKAGE_XORG7
-> +
->  endif
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index b50fd1e..594bab3 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -20,6 +20,21 @@ else
->  FREERDP_CONF_OPTS += -DWITH_X11=OFF
->  endif
->
-> +# We need to tell CMake to only create position-independent code,
-> +# othwerwise the server does not build.
-
-Hmm... here you could be a bit more talkative in the comment ;-), e.g. adding:
-
-libfoo.a is used to build libbar.so, so even if we are building a
-static library (libfoo), it has to be built with PIC.
-
-
-> +ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
-> +FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON \
-> +       -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-
-CMAKE_POSITION_INDEPENDENT_CODE is global option. It is possible to
-set it locally using set_target_properties or set_property. But this
-requires patching the CMake; this should looks like this: [1] (not
-tested at all ;-]).
-
-> +else
-> +FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-> +FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
-> +else
-> +FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_CUPS),y)
->  FREERDP_CONF_OPTS += -DWITH_CUPS=ON
->  FREERDP_DEPENDENCIES += cups
-> --
-> 1.9.1
->
-
-Regards,
-
-
-[1] http://code.bulix.org/oixnjp-87161/?raw
-
-
--- 
-Samuel
+Thank you very much for your attention.
+Claudio
