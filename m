@@ -1,45 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 18:16:26 +0200
+Date: Wed, 8 Oct 2014 18:18:11 +0200
 Subject: [Buildroot] Review of FOSDEM 2014 meeting action points
-In-Reply-To: <CAAXf6LXXN4YhhZ6uo8XAGSeaZyvh31yfrxSJ5MWA9w-vh5+ptQ@mail.gmail.com>
+In-Reply-To: <CAHXCMMLaWJki-F0NXKAw243DWUKdtWeE=q1iDNoVdi+2_z9s7w@mail.gmail.com>
 References: <20141008104845.495ad683@free-electrons.com>
- <CAAXf6LXXN4YhhZ6uo8XAGSeaZyvh31yfrxSJ5MWA9w-vh5+ptQ@mail.gmail.com>
-Message-ID: <20141008181626.38284d9d@free-electrons.com>
+ <CAHXCMMLaWJki-F0NXKAw243DWUKdtWeE=q1iDNoVdi+2_z9s7w@mail.gmail.com>
+Message-ID: <20141008181811.22ce7d64@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Samuel Martin,
 
-On Wed, 8 Oct 2014 13:43:44 +0200, Thomas De Schampheleire wrote:
+On Wed, 8 Oct 2014 10:54:04 +0200, Samuel Martin wrote:
 
-> >  - Clarification of the meaning of Acked-by/Reviewed-by tag in the
-> >    Buildroot manual. I think this has been done by Thomas DS. To be
-> >    confirmed.
+> >  - Autouilder wishlist:
+> >
+> >    - Run-time tests. Nothing has been done, since we had no GSoC to
+> >      make progress on this.
+> >
+> >    - Expand the number of autobuild machines: done, thanks to the
+> >      autobuild-run script. Nathaniel Roach and Richard Braun are
+> >      participating to the testing effort, and Peter has added more
+> >      machines. We now have ~200-230 builds per day, up from ~100
+> >      builds per day.
+> >
+> >    - Click on a package and see the last failures of that package:
+> >      this has been implemented.
+> >
+> >    - Expose read-only SQL queries: not done, maybe a bit difficult
+> >      security wise.
 > 
-> Has been updated in the manual, indeed.
+> - Having the package patch/configure/build/install phases in the
+> build.log file (not just the N line of the build).
 
-Ok, thanks.
+Indeed. Patches welcome :-)
 
-> >  - 'target' defconfigs vs. 'development' configs. This was supposed
-> >    to be an addition to the Buildroot manual, but it never
-> >    happened. Not sure this is very important.
-> 
-> I will add this to my todo list for the manual, but do not expect this
-> to be fixed soon. I indeed don't think it is a very important aspect.
+>   You could even image having the config.log or CMakeCache.txt file
+> uploaded as well to help investigation.
 
-Indeed.
+There is already a patch implementing this, from Romain Naour, see
+"[PATCH 1/1] autobuild-run: Include the config.log file (when it
+exists) in the tarball" on the list. I haven't reviewed it yet, but on
+principle, it looks like something useful to do.
 
-> This is still on my list, but currently not at the top.
-> Main topics I have now for 2014.11 is
-> a. extension of kconfig-package to linux and barebox, and
-> b. implement an autobuilder instance
-> c. remove deprecated packages
-> d. during the stabilization month: further manual enhancements
-
-Seems like a good list :-)
+Thanks,
 
 Thomas
 -- 
