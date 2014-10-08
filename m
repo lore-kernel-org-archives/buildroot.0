@@ -1,47 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Oct 2014 22:18:07 +0200
-Subject: [Buildroot] [PATCH 1/3] package/squid: enable ICAP server
- support in squid and define logdir, pidfile and swapdir
-In-Reply-To: <5435988F.70209@oliseo.fr>
-References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1411032426-11463-2-git-send-email-guillaume.gardet@oliseo.fr>
- <20141005235232.66d3c09c@free-electrons.com>
- <5435988F.70209@oliseo.fr>
-Message-ID: <20141008221807.3b9e147d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Oct 2014 22:23:13 +0200
+Subject: [Buildroot] [PATCH 1/2] docs/manual: slightly improve faq entry
+ about compiler on target
+In-Reply-To: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1412799410-19667-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141008202313.GC4718@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed, 08 Oct 2014 22:03:27 +0200, Guillaume GARDET - Olis?o wrote:
-
-> > I believe the changes of adding the log directory, pidfile and swapdir
-> > on one side, and adding the ICAP client option on the other side should
-> > be two separate patches.
+On 2014-10-08 22:16 +0200, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/faq-troubleshooting.txt | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Ok, will submit two patches then.
+> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+> index 7195234..693028c 100644
+> --- a/docs/manual/faq-troubleshooting.txt
+> +++ b/docs/manual/faq-troubleshooting.txt
+> @@ -35,7 +35,9 @@ target_ would be stopped from the Buildroot-2012.11 release because:
+>  * this feature was only available for Buildroot toolchains;
+>  * Buildroot mostly targets _small_ or _very small_ target hardware
+>    with limited resource onboard (CPU, ram, mass-storage), for which
+> -  compiling does not make much sense.
+> +  compiling on the target does not make much sense;
 
-Great thanks.
+I'd phrase that differently:
 
-> > Also, how much does the ICAP client support adds to Squid size? I'm
-> > trying to see if this should be optional instead of always enabled like
-> > you're proposing.
+    Buildroot mostly targets _small_ or _very small_ target hardware
+    with limited resource onboard (CPU, ram, mass-storage), on which
+    compiling does not much much sense.
+
+Note:  s/for/on/
+
+Regards,
+Yann E. MORIN.
+
+> +* Buildroot aims at easing the cross-compilation, making native
+> +  compilation on the target unnecessary.
+>  
+>  If you need a compiler on your target anyway, then Buildroot is not
+>  suitable for your purpose. In such case, you need a _real
+> -- 
+> 2.0.0
 > 
-> Without: 2.7 MB,and with c-icap: 3.0 MB
-> 
-> Should I make it optionnal?
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I would tend to say yes. Making it optional not only saves space, but
-it also makes it explicit that our Squid build can support the ICAP
-client functionality.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
