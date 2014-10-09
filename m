@@ -1,28 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  9 Oct 2014 18:10:48 +0200
-Subject: [Buildroot] [PATCH 5/5] libgeotiff: add hash file
-In-Reply-To: <1412871048-28981-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1412871048-28981-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1412871048-28981-5-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 9 Oct 2014 18:40:05 +0200
+Subject: [Buildroot] Problems with uClicbc and libc.so.6
+In-Reply-To: <20141009180201.01d7ff1c@free-electrons.com>
+References: <CA+TH9VnNeLUgYs5yahr3FNz6+bcz8A_KR_6390kcWUXv7LVxOA@mail.gmail.com>
+ <20141009135427.63f010b0@free-electrons.com>
+ <CA+TH9VnQmn=7qX9Ao2qST1z3Sr8uVsFBB5xe5ASrNCLBdo9GsQ@mail.gmail.com>
+ <20141009150727.441ae173@free-electrons.com>
+ <CA+TH9VnFAqd-4ZFQ3Bi2kcDD1rqX-de8BwvErpUxOhaytGF7EA@mail.gmail.com>
+ <20141009180201.01d7ff1c@free-electrons.com>
+Message-ID: <CA+TH9Vnoy5ZeGG3h9VOLMFHCF1R3USboHG6jg2TMK1QakWy4Ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgeotiff/libgeotiff.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/libgeotiff/libgeotiff.hash
+Hi Thomas,
 
-diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
-new file mode 100644
-index 0000000..66b8cb7
---- /dev/null
-+++ b/package/libgeotiff/libgeotiff.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha1 4c6f405869826bb7d9f35f1d69167e3b44a57ef0 libgeotiff-1.4.0.tar.gz
+2014-10-09 18:02 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+
+Angelo could suffice ;) !
+
+> Thanks, but I know nothing about Mono, so what command am I supposed to
+> run on the target to reproduce the issue?
+
+Sorry, sometimes I forget my stupidity ...
+
+Attached you can find a minimal mono example.
+
+You can compile it with:
+
+mcs weblient.cs
+
+and run it with
+
+mono webclient.exe http://www.google.com
+
+It should suffice for triggering the error.
+
+Again, thank you!
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.0.0
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: webclient.cs
+Type: text/x-csharp
+Size: 767 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141009/89dfd5b9/attachment.bin>
