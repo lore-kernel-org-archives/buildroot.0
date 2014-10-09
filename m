@@ -1,73 +1,71 @@
-From: =?windows-1252?Q?Guillaume_GARDET_-_Olis=E9o?= <guillaume.gardet@oliseo.fr>
-Date: Wed, 08 Oct 2014 22:03:27 +0200
-Subject: [Buildroot] [PATCH 1/3] package/squid: enable ICAP server
- support in squid and define logdir, pidfile and swapdir
-In-Reply-To: <20141005235232.66d3c09c@free-electrons.com>
-References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>	<1411032426-11463-2-git-send-email-guillaume.gardet@oliseo.fr>
- <20141005235232.66d3c09c@free-electrons.com>
-Message-ID: <5435988F.70209@oliseo.fr>
+From: yuvaraj.patil at wipro.com <yuvaraj.patil@wipro.com>
+Date: Thu, 9 Oct 2014 04:56:28 +0000
+Subject: [Buildroot] [git commit] botan: limit to supported CPU
+ architectures
+In-Reply-To: <20141008195304.A0FF3B1B4F@busybox.osuosl.org>
+References: <20141008195304.A0FF3B1B4F@busybox.osuosl.org>
+Message-ID: <C89D20716E201D428CB114157FC1F4E380F4F02F@BLR-SJP-MBX-1.wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Thomas, Peter,
 
+Similar issue is reported on Blackfin architecture for this package.
+http://autobuild.buildroot.net/results/a2a/a2ad841630b411df3fc26461a868fe796a8b67ff//
 
-Le 05/10/2014 23:52, Thomas Petazzoni a ?crit :
-> Dear Guillaume GARDET,
->
-> On Thu, 18 Sep 2014 11:27:04 +0200, Guillaume GARDET wrote:
->> This patch adds ICAP server support to squid and also defines logdir,
->> pidfile and swapdir.
->>
->> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> Thanks for this contribution. A few comments below.
->
->> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
->> index 6dffae8..f68a402 100644
->> --- a/package/squid/squid.mk
->> +++ b/package/squid/squid.mk
->> @@ -26,7 +26,11 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
->>   			--enable-auth-negotiate="wrapper" \
->>   			--enable-auth-ntlm="fake" \
->>   			--disable-strict-error-checking \
->> -			--enable-external-acl-helpers="file_userip"
->> +			--enable-external-acl-helpers="file_userip" \
->> +			--with-logdir=/var/log/squid/ \
->> +			--with-pidfile=/var/run/squid.pid \
->> +			--with-swapdir=/var/cache/squid/ \
->> +			--enable-icap-client
->>   
->>   # On uClibc librt needs libpthread
->>   ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
->> @@ -45,6 +49,10 @@ define SQUID_CLEANUP_TARGET
->>   		cachemgr.conf mime.conf.default squid.conf.default)
->>   endef
->>   
->> -SQUID_POST_INSTALL_TARGET_HOOKS += SQUID_CLEANUP_TARGET
->> +define SQUID_CREATE_MISSING_FOLDER
->> +	mkdir -p $(TARGET_DIR)/var/log/squid/
->> +endef
->> +
->> +SQUID_POST_INSTALL_TARGET_HOOKS += SQUID_CLEANUP_TARGET SQUID_CREATE_MISSING_FOLDER
->>   
->>   $(eval $(autotools-package))
-> I believe the changes of adding the log directory, pidfile and swapdir
-> on one side, and adding the ICAP client option on the other side should
-> be two separate patches.
+Does the fix provided in below email addresses this as well?
 
-Ok, will submit two patches then.
+Thanks
+Yuvaraj
 
->
-> Also, how much does the ICAP client support adds to Squid size? I'm
-> trying to see if this should be optional instead of always enabled like
-> you're proposing.
+-----Original Message-----
+From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Peter Korsgaard
+Sent: Thursday, October 09, 2014 1:23 AM
+To: buildroot at busybox.net
+Subject: [Buildroot] [git commit] botan: limit to supported CPU architectures
 
-Without: 2.7 MB,and with c-icap: 3.0 MB
+commit: http://git.buildroot.net/buildroot/commit/?id=1737af367993326ee47e847bd755806c8a78ced8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Should I make it optionnal?
+See src/build-data/arch/ for the list of supported CPU architectures.
 
+Fixes:
 
-Guillaume
+  http://autobuild.buildroot.org/results/69f/69fdecb06a03e6a95adfab70adf8ebf45971f0da/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Francois Perrad <fperrad@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/botan/Config.in |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/package/botan/Config.in b/package/botan/Config.in index 4911872..b9e2e3a 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -1,6 +1,13 @@
++config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k    || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_powerpc64 || BR2_sparc || BR2_sh  || \
++		BR2_x86_64
++
+ config BR2_PACKAGE_BOTAN
+ 	bool "botan"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ 	help
+ 	  Botan is a crypto library for C++
+ 
+@@ -8,3 +15,4 @@ config BR2_PACKAGE_BOTAN
+ 
+ comment "botan needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
