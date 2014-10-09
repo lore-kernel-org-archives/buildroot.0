@@ -1,51 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 9 Oct 2014 16:20:15 +0100
-Subject: [Buildroot] [PATCH v3] package/trinity: New package
-In-Reply-To: <54364271.50001@imgtec.com>
-References: <1412781125-11737-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMM+an7ijdVvZGnxTndxauwdhivNjjmC6-7mdD4TYFPL0xQ@mail.gmail.com>
- <54364271.50001@imgtec.com>
-Message-ID: <5436A7AF.2070906@imgtec.com>
+From: Claudio Laurita <claudio.laurita@integrazionetotale.it>
+Date: Thu, 09 Oct 2014 17:13:26 +0200
+Subject: [Buildroot] [PATCH 1/1] openocd bump to 0.8.0
+In-Reply-To: <20141009132830.77fc2c47@free-electrons.com>
+References: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>	<20141008231040.57406af4@free-electrons.com>	<5435C245.1090100@integrazionetotale.it>	<20141009095735.529fd5ca@free-electrons.com>	<543655B0.8030304@integrazionetotale.it>
+ <20141009132830.77fc2c47@free-electrons.com>
+Message-ID: <5436A616.1090407@integrazionetotale.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Il 09/10/2014 13:28, Thomas Petazzoni ha scritto:
+> No, it's buggy: the OpenOCD build system is based on the autotools, 
+> and the autotools normally guarantee that you can do: --enable-foo 
+> --disable-foo and be sure that "foo" will be disabled. The fact that 
+> OpenOCD doesn't comply with that makes it incorrect. The reason why we 
+> don't allow to change the base options is because you never need to do 
+> so: you can override them as I just exposed above. And the build 
+> system of OpenOCD is really buggy: if you specify --enable-shared 
+> --enable-static, it builds a shared variant of jimtcl, but OpenOCD 
+> tries to link against the static variant. This is not coherent at all. 
 
-On 10/09/2014 09:08 AM, Vicente Olivert Riera wrote:
-> Dear Samuel Martin,
->
-> On 10/08/2014 08:39 PM, Samuel Martin wrote:
->> It looks like you can now bump the version to [1] and get rid of this
->> uclibc stuff ;-)
->>
->> [1]
->> https://github.com/kernelslacker/trinity/commit/1cc389fb22ca4a7447011a7a14bb526d44197255
->>
->>
->> Regards,
->
-> the upstream maintainer and me are working together to fix the problems
-> with uClibc. That was the first problem and is now fixed. However, there
-> are more problems after that one, so this package is not yet ready to be
-> built for uClibc.
->
-> Regards,
->
+OK, let's opt for buggy.
 
-patch v4 submitted to set the version to the latest upstream commit.
+> Another option you could look at is to use the existing Buildroot 
+> jimtcl package, instead of relying on the jimtcl implementation built 
+> into OpenOCD. I've seen that OpenOCD has an option to use an external 
+> jimtcl implementation. Best regards, Thomas 
 
-   http://patchwork.ozlabs.org/patch/398071/
+I was aware of the external option, but the actual BR package script for 
+jimtcl suffers exactly of the same problem. No patches applied there and 
+no autotools-package called. A custom configure command and 
+generic-package management. But no way to build a static library if 
+--enable-shared is globally adopted.
 
-All the uClibc issues have been fixed upstream and should be fine now.
+Anyway, I collected enough information to start working on release 2. 
+Just need some spare hours, now.
 
-Regards,
-
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Thanks a lot
+Claudio
