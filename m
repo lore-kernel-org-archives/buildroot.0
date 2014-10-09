@@ -1,85 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Oct 2014 22:20:20 +0200
-Subject: [Buildroot] Problems with uClicbc and libc.so.6
-In-Reply-To: <CA+TH9Vnoy5ZeGG3h9VOLMFHCF1R3USboHG6jg2TMK1QakWy4Ww@mail.gmail.com>
-References: <CA+TH9VnNeLUgYs5yahr3FNz6+bcz8A_KR_6390kcWUXv7LVxOA@mail.gmail.com>
- <20141009135427.63f010b0@free-electrons.com>
- <CA+TH9VnQmn=7qX9Ao2qST1z3Sr8uVsFBB5xe5ASrNCLBdo9GsQ@mail.gmail.com>
- <20141009150727.441ae173@free-electrons.com>
- <CA+TH9VnFAqd-4ZFQ3Bi2kcDD1rqX-de8BwvErpUxOhaytGF7EA@mail.gmail.com>
- <20141009180201.01d7ff1c@free-electrons.com>
- <CA+TH9Vnoy5ZeGG3h9VOLMFHCF1R3USboHG6jg2TMK1QakWy4Ww@mail.gmail.com>
-Message-ID: <20141009222020.5bd77d67@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 10 Oct 2014 00:22:01 +0200
+Subject: [Buildroot] [PATCH 09/25 v6] docs/manual: do not hardcode name
+ of the generated document
+In-Reply-To: <20140929202629.GC6211@free.fr>
+References: <cover.1411812968.git.yann.morin.1998@free.fr>
+ <06692733754cdc2bf2b340c5e6b0201f5770740d.1411812968.git.yann.morin.1998@free.fr>
+ <CAAXf6LVCKLRLj_CLgVkEpjtET=90rK5v+6sE493cOmFxLgY8ew@mail.gmail.com>
+ <20140929200105.GB6211@free.fr>
+ <19a2025b-9e6b-458a-9f8a-9b15c42f01cf@email.android.com>
+ <20140929202629.GC6211@free.fr>
+Message-ID: <54370A89.5070109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+On 29/09/14 22:26, Yann E. MORIN wrote:
+> Thomas, All,
+[snip]
 
-On Thu, 9 Oct 2014 18:40:05 +0200, Angelo Compagnucci wrote:
-
-> > Thanks, but I know nothing about Mono, so what command am I supposed to
-> > run on the target to reproduce the issue?
+>>> But it does not really matter: we can quote messages, now. Or not.
+>>
+>> True. I don't understand though why we wouldn't
+>>  change all unnecessary quoting in the quest for symmetry and simplicity.
 > 
-> Sorry, sometimes I forget my stupidity ...
+> If at all, we should change to always quote messages.
 > 
-> Attached you can find a minimal mono example.
+> The problem is two-fold:
 > 
-> You can compile it with:
+>   - no quoting: we can not have a comma in the message, otherwise make
+>     would split on it:  $(call MESSAGE,This, and that, should foo)
+
+ "-quotes are completely transparent for make, so quoting doesn't help for
+commas. You need $(call MESSAGE,This$(comma) and that$(comma) should foo).
+
+
+ Regards,
+ Arnout
+
+>   - always quoting: the MESSAGE definition already does the quoting to
+>     ensure it does not break on a semi-colon (which you noticed):
+>     $(call MESSAGE,"; echo shellshock")
 > 
-> mcs weblient.cs
+> (He, shellshock is all the hype nowadays. Even superseeds heartbleed!)
 > 
-> and run it with
+> If MESSAGE would not do the quoting, and rely on the caller to do it,
+> we'd be vulnerable to: $(call MESSAGE,; echo shellshock)
 > 
-> mono webclient.exe http://www.google.com
+> So: we want MESSAGE to always quote its arguments (and no, single quotes
+> do not cut it either, because a message might have single quotes too),
+> while still allowing callers to do the quoting. Or not.
 > 
-> It should suffice for triggering the error.
+> Regards,
+> Yann E. MORIN.
+> 
 
-It indeed triggers an error here, but not the same as yours:
 
-# mono webclient.exe http://www.google.com
-
-Unhandled Exception:
-System.Net.WebException: An error occurred performing a WebClient request. ---> System.NotSupportedException: http://www.google.com/
-  at System.Net.WebRequest.GetCreator (System.String prefix) [0x00000] in <filename unknown>:0 
-  at System.Net.WebRequest.Create (System.Uri requestUri) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.GetWebRequest (System.Uri address) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.SetupRequest (System.Uri uri) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.OpenRead (System.Uri address) [0x00000] in <filename unknown>:0 
-  --- End of inner exception stack trace ---
-  at System.Net.WebClient.OpenRead (System.Uri address) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.OpenRead (System.String address) [0x00000] in <filename unknown>:0 
-  at (wrapper remoting-invoke-with-check) System.Net.WebClient:OpenRead (string)
-  at Test.Main (System.String[] args) [0x00000] in <filename unknown>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.Net.WebException: An error occurred performing a WebClient request. ---> System.NotSupportedException: http://www.google.com/
-  at System.Net.WebRequest.GetCreator (System.String prefix) [0x00000] in <filename unknown>:0 
-  at System.Net.WebRequest.Create (System.Uri requestUri) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.GetWebRequest (System.Uri address) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.SetupRequest (System.Uri uri) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.OpenRead (System.Uri address) [0x00000] in <filename unknown>:0 
-  --- End of inner exception stack trace ---
-  at System.Net.WebClient.OpenRead (System.Uri address) [0x00000] in <filename unknown>:0 
-  at System.Net.WebClient.OpenRead (System.String address) [0x00000] in <filename unknown>:0 
-  at (wrapper remoting-invoke-with-check) System.Net.WebClient:OpenRead (string)
-  at Test.Main (System.String[] args) [0x00000] in <filename unknown>:0 
-
-It happens either with webclient.exe built using mcs on the host
-machine, or mcs on the target machine.
-
-Another thing I've noticed is that the Mono installation is
-*huge*. /usr/lib/mono takes 132 MB. Is all of it necessary?
-
-Also, why do you have two packages, mono-managed and mono-native? One
-builds the stuff for the host, and one builds the stuff for the target.
-It could simply be one single package called mono, which builds both
-for the host and the target.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
