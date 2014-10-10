@@ -1,52 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Oct 2014 11:06:34 +0200
-Subject: [Buildroot] [PATCH] kmod: add host-automake dependency
-In-Reply-To: <1412930455-40512-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1412930455-40512-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141010110634.2ef7a7a5@free-electrons.com>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Fri, 10 Oct 2014 11:14:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: add --delete to
+	rsync
+Message-ID: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+When a source overriden package is built and then its source code is modified
+and rebuilt with make package-rebuild, it is needed for the build directory
+to contain exactly the same source that is in the original directory,
+so rsync must not only copy missing files, but also remove those that existed
+previously but now don't.
 
-On Fri, 10 Oct 2014 09:40:55 +0100, Vicente Olivert Riera wrote:
-> kmod can fail to build in systems which have old automake versions like
-> CentOS 6.5, for instance. It will cause an error like this one:
-> 
-> /buildroot/output/build/kmod-18/build-aux/missing: line 81:
-> aclocal-1.14: command not found
-> 
-> Adding host-automake as a dependency fixes the problem.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-> ---
->  package/kmod/kmod.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index 1f170dd..c0212bb 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -8,8 +8,8 @@ KMOD_VERSION = 18
->  KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
->  KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
->  KMOD_INSTALL_STAGING = YES
-> -KMOD_DEPENDENCIES = host-pkgconf
-> -HOST_KMOD_DEPENDENCIES = host-pkgconf
-> +KMOD_DEPENDENCIES = host-automake host-pkgconf
-> +HOST_KMOD_DEPENDENCIES = host-automake host-pkgconf
->  
->  # license info for libkmod only, conditionally add more below
->  KMOD_LICENSE = LGPLv2.1+
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This seems wrong. Why not use KMOD_AUTORECONF = YES instead?
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f09f83e..440a750 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -117,7 +117,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+-	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
++	rsync --delete -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
