@@ -1,41 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Oct 2014 08:44:56 +0200
-Subject: [Buildroot] [git commit] nginx: Depends on MMU
-Message-ID: <20141010100415.D699AB1D2D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Oct 2014 12:18:51 +0200
+Subject: [Buildroot] Topics to discuss at the meeting
+In-Reply-To: <CAAXf6LUXNKA-C9P9a97w=9Red=y=TCpMQK9Cndxj3E9trB2VWQ@mail.gmail.com>
+References: <20141008105653.7252facd@free-electrons.com>
+ <CAAXf6LVHz0qp3VsyAFRhrkH6ekaQ-evzJeoaYSZ+oCkg0cuTWA@mail.gmail.com>
+ <20141008181204.599a5e55@free-electrons.com>
+ <CAAXf6LUXNKA-C9P9a97w=9Red=y=TCpMQK9Cndxj3E9trB2VWQ@mail.gmail.com>
+Message-ID: <20141010121851.72b2de6e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9737ee7f8010e5fa9ba8b6e8c849e0ef6c4d371
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas De Schampheleire,
 
-This package needs MMU. Hence added dependency on BR2_USE_MMU
+On Fri, 10 Oct 2014 11:50:56 +0200, Thomas De Schampheleire wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/224/2240f11fc52e07ff64913844078e2616842a63dc//
+> > Then yes, we need to do something about it, but I don't think there's a
+> > need to identify the C library, compiler and so on. Most of the
+> > external toolchain providers already provide a tarball of the sources
+> > they use to build the toolchain. At least that's the case for Sourcery
+> > CodeBench toolchains and Linaro toolchains. But I'm not sure how to
+> > integrate this with the licensing infrastructure, which assumes that
+> > what each package downloads is already the source code.
+> 
+> Sources are one thing, the manifest is the other. Both are pretty
+> independent. Even if you find some way of obtaining the sources for
+> the external toolchain, you still have to list the components used in
+> the manifest. For a toolchain, some components are host components
+> (the actual compiler, linker etc.) and some are target components,
+> like the C library, C++ library, libgcc, etc. Each of these have a
+> license, version etc.
 
-[Peter: also add dependency to menuconfig option]
-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nginx/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Right, not easy. Something to be discussed at the meeting maybe, even
+though I'd like to avoid long and unproductive discussions if
+possible :-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index da9fd01..30cc9d2 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -1,9 +1,11 @@
- comment "nginx needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-+	depends on BR2_USE_MMU # fork()
- 
- menuconfig BR2_PACKAGE_NGINX
- 	bool "nginx"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  nginx is an HTTP and reverse proxy server, as well as a mail proxy
- 	  server.
+> To be correct, this should be reported and fixed upstream.
+
+Except that in many cases, those packages not having any license files
+are old, not really maintained packages, where upstream is close to
+dead.
+
+> In the meantime, adding the license to buildroot seems a bit odd.
+> Rather I would mark the package with some magic string (like
+> '(missing)' that indicates that the license text is missing. However,
+> I vaguely recall that we discussed that before, and that not everyone
+> was agreeing with such a magic string.
+
+Did we discuss that in the past? I believe it would be a good idea, as
+we allow us to distinguish the cases where we have already done some
+inspection and concluded that there is really no license from the cases
+where the license files information hasn't been added. Though it's true
+that in general, when <pkg>_LICENSE is mentioned but not
+<pkg>_LICENSE_FILES, it's already an indication that the license
+information has been inspected and that the conclusion was that there
+was no license file available.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
