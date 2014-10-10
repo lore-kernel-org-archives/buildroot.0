@@ -1,74 +1,71 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 10 Oct 2014 12:45:28 +0200
-Subject: [Buildroot] Problems with uClicbc and libc.so.6
-In-Reply-To: <20141010123449.04163d4c@free-electrons.com>
-References: <CA+TH9VnNeLUgYs5yahr3FNz6+bcz8A_KR_6390kcWUXv7LVxOA@mail.gmail.com>
- <20141009135427.63f010b0@free-electrons.com>
- <CA+TH9VnQmn=7qX9Ao2qST1z3Sr8uVsFBB5xe5ASrNCLBdo9GsQ@mail.gmail.com>
- <20141009150727.441ae173@free-electrons.com>
- <CA+TH9VnFAqd-4ZFQ3Bi2kcDD1rqX-de8BwvErpUxOhaytGF7EA@mail.gmail.com>
- <20141009180201.01d7ff1c@free-electrons.com>
- <CA+TH9Vnoy5ZeGG3h9VOLMFHCF1R3USboHG6jg2TMK1QakWy4Ww@mail.gmail.com>
- <20141009222020.5bd77d67@free-electrons.com>
- <CA+TH9VkiMj5PNJaO1k2fHpEbjY2mgCDO9NmQtny7T4GVPpYX0g@mail.gmail.com>
- <20141010123449.04163d4c@free-electrons.com>
-Message-ID: <CA+TH9V=mCGn6WtS0RJHV9HHy6wrYBvxSW3aveQWdQWP-9UW0Bg@mail.gmail.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Fri, 10 Oct 2014 12:45:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: add --delete to
+	rsync
+In-Reply-To: <20141010123659.187fd60d@free-electrons.com>
+References: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
+ <20141010123659.187fd60d@free-electrons.com>
+Message-ID: <CAM+bi4tggsVGy7w9eRKRF_zy_o2dFU7CEJu6nx2Nv1=vVrVtig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas!
+Hi, Thomas
 
-> The fix is pretty simple: edit /etc/mono/config and change the line:
+Yes, it would.
+
+I think I see where your question comes from.
+
+You would like for the object files to remain there in case nothing or
+little has changed and its compilation can be omitted by the build
+tool (make or whatever).
+
+But it is my understanding that the main idea is to make $(@D) a copy
+of the source to do the build there.
+I've faced a problem in the case of a build that basically does gcc *.c -o out.
+In this situation, if I remove one .c file on the source directory,
+this doesn't get removed from $(@D) and the next time I invoke
+package-rebuild this removed file is still compiled, even though it
+doesn't exist now on the source.
+
+Regards
+
+
+
+2014-10-10 12:36 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Alvaro G. M,
 >
-> <dllmap dll="libc" target="libc.so.6" os="!windows"/>
+> On Fri, 10 Oct 2014 11:14:47 +0200, Alvaro G. M wrote:
+>> When a source overriden package is built and then its source code is modified
+>> and rebuilt with make package-rebuild, it is needed for the build directory
+>> to contain exactly the same source that is in the original directory,
+>> so rsync must not only copy missing files, but also remove those that existed
+>> previously but now don't.
+>>
+>> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+>> ---
+>>  package/pkg-generic.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index f09f83e..440a750 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -117,7 +117,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+>>       @$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+>>       @test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+>>       $(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+>> -     rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
+>> +     rsync --delete -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
+>>       $(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+>>       $(Q)touch $@
 >
-> to:
->
-> <dllmap dll="libc" target="libc.so.0" os="!windows"/>
-
-This is pretty wonderfull! I totally missed that! I'll include it in a
-patch file! May it work also with glibc? If yes, I can tweak a static
-version of that file to include.
-
->>If you think it's important, I can update my patch to offer a
->> selection of which mono version should be shipped into the target
->> folder, so reducing to the essential the libraries components.
-
-> I believe this would be useful.
-
-Great! I'll work on that!
-
->> Of course you can further shrink manually your mono installation by
->> delete libraries that you don't use, but this part is not easily
->> doable and it's an optimization step that only a software developer
->> can do basing on his software.
-
-> Yes, that's more something left for a post-build script I believe.
-
-Sure, the developer implementing his own software can write a script
-to delete all the unneeded libraries.
-
-> I don't think you understood my comment properly: I do not claim there
-> is no need for a host package. I claim that you currently have your
-> host package (mono-managed) separate for the target package
-> (mono-native) and that this is not needed. They could be both in a
-> single package called mono, where the host variant of the package
-> builds the "managed" stuff, and the target variant builds the "native"
-> stuff. I'll adjust your patch to see if it's indeed possible and if it
-> is, I'll show you what it looks like.
-
-Yes, Thomas, you caught me, I did not understand your comment!
-Actually I really don't know haw to achieve such a dual package in
-one, but if you prompt me a minimal example, I'll work on understand
-it!
-
-Thank you for your time!
-
->
-> Thanks,
+> I don't remember how rsync behave exactly, but wouldn't this also
+> remove object files, shared libraries and executables that will have
+> been built in $(@D) ?
 >
 > Thomas
 > --
@@ -79,4 +76,4 @@ Thank you for your time!
 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+?lvaro G?mez Machado
