@@ -1,27 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Oct 2014 08:41:33 +0200
-Subject: [Buildroot] [git commit] libgeotiff: add hash file
-Message-ID: <20141010100415.A42CDB1D53@busybox.osuosl.org>
+Date: Fri, 10 Oct 2014 08:36:09 +0200
+Subject: [Buildroot] [git commit] libgeotiff: explicit optional dependencies
+	on zlib and jpeg
+Message-ID: <20141010100415.94EDEB1D2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24c38eba4158053f5626a1875b539ec523b2d998
+commit: http://git.buildroot.net/buildroot/commit/?id=b2ec261b3a9a123e6f384ab30f89689f2cf90003
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In order to provide consistent behavior, this commit explicits the
+optional dependencies of libgeotiff on zlib and jpeg.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeotiff/libgeotiff.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libgeotiff/libgeotiff.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
-new file mode 100644
-index 0000000..66b8cb7
---- /dev/null
-+++ b/package/libgeotiff/libgeotiff.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha1 4c6f405869826bb7d9f35f1d69167e3b44a57ef0 libgeotiff-1.4.0.tar.gz
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index 722e71c..61f5c21 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -10,4 +10,18 @@ LIBGEOTIFF_DEPENDENCIES = tiff host-pkgconf
+ LIBGEOTIFF_INSTALL_STAGING = YES
+ LIBGEOTIFF_AUTORECONF = YES
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBGEOTIFF_DEPENDENCIES += zlib
++LIBGEOTIFF_CONF_OPTS += --with-zlib
++else
++LIBGEOTIFF_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBGEOTIFF_DEPENDENCIES += jpeg
++LIBGEOTIFF_CONF_OPTS += --with-jpeg
++else
++LIBGEOTIFF_CONF_OPTS += --without-jpeg
++endif
++
+ $(eval $(autotools-package))
