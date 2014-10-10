@@ -1,43 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 Oct 2014 08:45:57 +0200
-Subject: [Buildroot] [PATCH] nginx: Depends on MMU
-In-Reply-To: <1412917803-2523-1-git-send-email-yuvaraj.patil@wipro.com>
- (Yuvaraj Patil's message of "Fri, 10 Oct 2014 10:40:03 +0530")
-References: <1412917803-2523-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <87y4so8lsq.fsf@dell.be.48ers.dk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 10 Oct 2014 09:41:57 +0200
+Subject: [Buildroot] Topics to discuss at the meeting
+In-Reply-To: <20141008181319.17f49595@free-electrons.com>
+References: <20141008105653.7252facd@free-electrons.com>
+ <CAGm1_kvhqNy_3BKg2figgWw-FbCcBTAGxrXWJm3wUwv=e42sMQ@mail.gmail.com>
+ <20141008181319.17f49595@free-electrons.com>
+Message-ID: <CAGm1_ksryT=qOg3kJ5wnY31eioxZubQwgz_xOScgsqNDp_j7fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yuvaraj" == Yuvaraj Patil <yuvaraj.patil@wipro.com> writes:
+On Wed, Oct 8, 2014 at 6:13 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
+>
+> On Wed, 8 Oct 2014 11:10:25 +0200, Yegor Yefremov wrote:
+>
+>> > Feel free to comment on these topics, or add new ones. For those who
+>> > have an account, do not hesitate to update the Wiki accordingly.
+>>
+>> Could we add FIT topic? Basic creation and installation is already
+>> implemented (http://patchwork.ozlabs.org/patch/396240/). The bigger
+>> part is to control the priorities when and what step should be taken
+>> first: at fist cpio and then fit, first fit and then ext2 etc.
+>> I doubt, that ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS and
+>> ROOTFS_$(FSTYPE)_POST_TARGETS will help here.
+>
+> Sure. However, the two persons having expressed some knowledge about
+> FIT are you and Thomas DS, and none of you will be at the meeting.
+>
+> Could you give some examples about the two cases you have (cpio and
+> ext2) and how they cause issues with the current Buildroot? I
+> understand it's a build ordering problem, but I'd like to understand
+> better the use cases of FIT to see how we can solve this.
 
- > This package needs MMU. Hence added dependency on BR2_USE_MMU
- > Fixes:
- > http://autobuild.buildroot.net/results/224/2240f11fc52e07ff64913844078e2616842a63dc//
+I've added FIT topic to the TODO list on elinux.org:
+http://elinux.org/Buildroot#Core_Buildroot_infrastructure
 
- > Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
- > ---
- >  package/nginx/Config.in |    1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/nginx/Config.in b/package/nginx/Config.in
- > index da9fd01..b4a1e94 100644
- > --- a/package/nginx/Config.in
- > +++ b/package/nginx/Config.in
- > @@ -1,5 +1,6 @@
- >  comment "nginx needs a toolchain w/ largefile"
- >  	depends on !BR2_LARGEFILE
- > +	depends on BR2_USE_MMU # fork()
- 
- >  menuconfig BR2_PACKAGE_NGINX
- >  	bool "nginx"
-
-The real (BR2_PACKAGE_NGINX) option should also have this dependency,
-not just the comment.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Yegor
