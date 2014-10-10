@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Oct 2014 15:28:56 +0200
-Subject: [Buildroot] [PATCH 1/2] automake: update gtk-doc.m4 to serial 2
-In-Reply-To: <5437BF0F.8040009@zacarias.com.ar>
-References: <1412936897-8478-1-git-send-email-gustavo@zacarias.com.ar>
- <20141010124101.0388b2b3@free-electrons.com>
- <5437B8B3.7070105@zacarias.com.ar>
- <20141010130114.71fd0a73@free-electrons.com>
- <5437BF0F.8040009@zacarias.com.ar>
-Message-ID: <20141010152856.19129c7c@free-electrons.com>
+Date: Fri, 10 Oct 2014 15:33:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: add --delete to
+ rsync
+In-Reply-To: <CAM+bi4tggsVGy7w9eRKRF_zy_o2dFU7CEJu6nx2Nv1=vVrVtig@mail.gmail.com>
+References: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
+ <20141010123659.187fd60d@free-electrons.com>
+ <CAM+bi4tggsVGy7w9eRKRF_zy_o2dFU7CEJu6nx2Nv1=vVrVtig@mail.gmail.com>
+Message-ID: <20141010153342.2794ef55@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Alvaro Gamez,
 
-On Fri, 10 Oct 2014 08:12:15 -0300, Gustavo Zacarias wrote:
+On Fri, 10 Oct 2014 12:45:59 +0200, Alvaro Gamez wrote:
 
-> > Yes, correct, that's my idea. I think it's more correct than globally
-> > adding this host-pkgconf dependency.
-> 
-> "When you autoreconf you might need host-pkgconf in DEPENDENCIES whereas
-> you didn't before"... really?
+> You would like for the object files to remain there in case nothing or
+> little has changed and its compilation can be omitted by the build
+> tool (make or whatever).
 
-Come on Gustavo, no need to start being aggressive here.
+Absolutely. That's the whole point of the OVERRIDE_SRCDIR mechanism:
+you make a change in your external source directory, you run "make
+<pkg>-rebuild", and it triggers a rsync of the source and then starts
+rebuilding. But it should not rebuild from scratch, only rebuild the
+source files that have changed.
 
-Yes, that's exactly what I suggest. And actually, we already need to
-add host-pkgconf in DEPENDENCIES when doing autoreconf, if the
-configure.ac uses PKG_CHECK_MODULES, which is far more common than
-packages using gtk-doc.m4 specifically.
+> But it is my understanding that the main idea is to make $(@D) a copy
+> of the source to do the build there.
+> I've faced a problem in the case of a build that basically does gcc *.c -o out.
+> In this situation, if I remove one .c file on the source directory,
+> this doesn't get removed from $(@D) and the next time I invoke
+> package-rebuild this removed file is still compiled, even though it
+> doesn't exist now on the source.
 
-PKG_CHECK_MODULES in configure.ac requiring host-pkgconf in the
-DEPENDENCIES is precisely the reason why I proposed
-http://patchwork.ozlabs.org/patch/340902/ some time ago. Nothing
-prevents from adding a similar check to see if the package uses
-the gtk-doc.m4 macros or not. That would at least warn loudly if such
-macros are used without the package having host-pkgconf in its
-dependencies.
+Yes, I understand the issue. However, a quick test seems to suggest
+that rsync --delete will also remove object files, which kind of
+defeats the purpose of OVERRIDE_SRCDIR.
 
-Thanks,
+Not sure how to distinguish files that should be removed from files
+that should be kept...
 
 Thomas
 -- 
