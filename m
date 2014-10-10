@@ -1,41 +1,247 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 10 Oct 2014 10:50:26 -0300
-Subject: [Buildroot] [PATCH 1/2] automake: update gtk-doc.m4 to serial 2
-In-Reply-To: <20141010152856.19129c7c@free-electrons.com>
-References: <1412936897-8478-1-git-send-email-gustavo@zacarias.com.ar>	<20141010124101.0388b2b3@free-electrons.com>	<5437B8B3.7070105@zacarias.com.ar>	<20141010130114.71fd0a73@free-electrons.com>	<5437BF0F.8040009@zacarias.com.ar>
- <20141010152856.19129c7c@free-electrons.com>
-Message-ID: <5437E422.5030502@zacarias.com.ar>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Fri, 10 Oct 2014 16:22:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.8.2
+Message-ID: <1412950929-9961-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/10/2014 10:28 AM, Thomas Petazzoni wrote:
+Remove of uclibc and musl patches since they are upstream now.
 
-> Come on Gustavo, no need to start being aggressive here.
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch | 159 ----------------------
+ package/upmpdcli/upmpdcli-0002-musl-fixes.patch   |  40 ------
+ package/upmpdcli/upmpdcli.mk                      |   2 +-
+ 3 files changed, 1 insertion(+), 200 deletions(-)
+ delete mode 100644 package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
+ delete mode 100644 package/upmpdcli/upmpdcli-0002-musl-fixes.patch
 
-Huh? It's not intended to be aggressive.
-
-> Yes, that's exactly what I suggest. And actually, we already need to
-> add host-pkgconf in DEPENDENCIES when doing autoreconf, if the
-> configure.ac uses PKG_CHECK_MODULES, which is far more common than
-> packages using gtk-doc.m4 specifically.
-> 
-> PKG_CHECK_MODULES in configure.ac requiring host-pkgconf in the
-> DEPENDENCIES is precisely the reason why I proposed
-> http://patchwork.ozlabs.org/patch/340902/ some time ago. Nothing
-> prevents from adding a similar check to see if the package uses
-> the gtk-doc.m4 macros or not. That would at least warn loudly if such
-> macros are used without the package having host-pkgconf in its
-> dependencies.
-
-Well, at least from my POV it's making some packages need host-pkgconf
-just because they use gtk-doc.m4, we're bumping the version and they're
-AUTORECONFed. If they weren't AUTORECONFed they maybe didn't need
-host-pkgconf (maybe for other purposes, but not because of the old
-gtk-doc.m4) so it seems to me it's autotools/autoreconfs fault, and it
-should be handled there.
-It has nothing to do with packages that don't account for host-pkgconf
-usage without accounting for it in the first place.
-Regards.
+diff --git a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
+deleted file mode 100644
+index 2d46b94..0000000
+--- a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
++++ /dev/null
+@@ -1,159 +0,0 @@
+-From 722ffb8612631b9f11d888c737facdcb0580aaad Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+-Date: Wed, 1 Oct 2014 22:31:11 +0200
+-Subject: [PATCH 1/1] uclibc fixes
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Add necessary fixes to build with uClibc
+-
+- - Missing #include of C library headers
+- - exp10 is not available in uClibc
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+----
+- libupnpp/control/avtransport.cxx      | 2 ++
+- libupnpp/control/ohplaylist.cxx       | 1 +
+- libupnpp/control/renderingcontrol.cxx | 2 ++
+- libupnpp/device/device.cxx            | 1 +
+- libupnpp/soaphelp.cxx                 | 4 ++++
+- libupnpp/upnpavutils.cxx              | 1 +
+- upmpd/upmpd.cxx                       | 1 +
+- upmpd/upmpdutils.cxx                  | 7 +++++++
+- 8 files changed, 19 insertions(+)
+-
+-Index: b/libupnpp/control/avtransport.cxx
+-===================================================================
+---- a/libupnpp/control/avtransport.cxx
+-+++ b/libupnpp/control/avtransport.cxx
+-@@ -15,6 +15,8 @@
+-  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-  */
+- 
+-+#include <stdlib.h>
+-+
+- #include <string>
+- #include <functional>
+- 
+-Index: b/libupnpp/control/ohplaylist.cxx
+-===================================================================
+---- a/libupnpp/control/ohplaylist.cxx
+-+++ b/libupnpp/control/ohplaylist.cxx
+-@@ -14,6 +14,7 @@
+-  *       Free Software Foundation, Inc.,
+-  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-  */
+-+#include <stdlib.h>
+- #include <arpa/inet.h>
+- 
+- #include <string>
+-Index: b/libupnpp/control/renderingcontrol.cxx
+-===================================================================
+---- a/libupnpp/control/renderingcontrol.cxx
+-+++ b/libupnpp/control/renderingcontrol.cxx
+-@@ -15,6 +15,8 @@
+-  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-  */
+- 
+-+#include <stdlib.h>
+-+
+- #include <string>
+- #include <functional>
+- 
+-Index: b/libupnpp/device/device.cxx
+-===================================================================
+---- a/libupnpp/device/device.cxx
+-+++ b/libupnpp/device/device.cxx
+-@@ -17,6 +17,7 @@
+- #include "config.h"
+- 
+- #include <time.h>
+-+#include <errno.h>
+- #include <sys/time.h>
+- 
+- #include <iostream>
+-Index: b/libupnpp/soaphelp.cxx
+-===================================================================
+---- a/libupnpp/soaphelp.cxx
+-+++ b/libupnpp/soaphelp.cxx
+-@@ -16,6 +16,10 @@
+-  */
+- #include "config.h"
+- 
+-+#include <string.h>
+-+#include <stdlib.h>
+-+#include <stdio.h>
+-+
+- #include <iostream>
+- using namespace std;
+- 
+-Index: b/libupnpp/upnpavutils.cxx
+-===================================================================
+---- a/libupnpp/upnpavutils.cxx
+-+++ b/libupnpp/upnpavutils.cxx
+-@@ -14,6 +14,7 @@
+-  *       Free Software Foundation, Inc.,
+-  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-  */
+-+#include <cstdio>
+- #include <string>
+- using namespace std;
+- 
+-Index: b/upmpd/upmpd.cxx
+-===================================================================
+---- a/upmpd/upmpd.cxx
+-+++ b/upmpd/upmpd.cxx
+-@@ -22,6 +22,7 @@
+- #include <signal.h>
+- #include <sys/types.h>
+- #include <pwd.h>
+-+#include <errno.h>
+- 
+- #include <string>
+- #include <iostream>
+-Index: b/upmpd/upmpdutils.cxx
+-===================================================================
+---- a/upmpd/upmpdutils.cxx
+-+++ b/upmpd/upmpdutils.cxx
+-@@ -21,6 +21,8 @@
+- // not linking to Qt or glib just to get path-concatenating
+- // functions...
+- 
+-+#define _GNU_SOURCE
+-+
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <sys/types.h>
+-@@ -31,6 +33,7 @@
+- #include <regex.h>
+- #include <errno.h>
+- #include <string.h>
+-+#include <stdlib.h>
+- #ifndef O_STREAMING
+- #define O_STREAMING 0
+- #endif
+-@@ -283,6 +286,10 @@
+- #ifdef __APPLE__
+- #define exp10 __exp10
+- #endif
+-+#ifdef __UCLIBC__
+-+/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
+-+#define exp10(x) (exp((x) * log(10)))
+-+#endif /* __UCLIBC__ */
+- 
+- // Translate VolumeDB to MPD 0-100
+- int dbvaluetopercent(int dbvalue)
+-Index: b/upmpd/ohmetacache.cxx
+-===================================================================
+---- a/upmpd/ohmetacache.cxx
+-+++ b/upmpd/ohmetacache.cxx
+-@@ -18,6 +18,7 @@
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <string.h>
+-+#include <errno.h>
+- 
+- #include <iostream>
+- using namespace std;
+diff --git a/package/upmpdcli/upmpdcli-0002-musl-fixes.patch b/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
+deleted file mode 100644
+index c744319..0000000
+--- a/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From bd1a8b6b547e06456cbede686d8c2f3cfdfa47d1 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+-Date: Tue, 30 Sep 2014 00:07:26 +0200
+-Subject: [PATCH 2/2] musl fixes
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Instead of using the nonstandard pthread_yield call use the standardized 
+-sched_yield.
+-
+-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+----
+- libupnpp/control/discovery.cxx | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/libupnpp/control/discovery.cxx b/libupnpp/control/discovery.cxx
+-index ac14a82..0a293c7 100644
+---- a/libupnpp/control/discovery.cxx
+-+++ b/libupnpp/control/discovery.cxx
+-@@ -18,6 +18,7 @@
+- 
+- #include <stdlib.h>
+- #include <errno.h>
+-+#include <sched.h>
+- #include <unistd.h>
+- 
+- #include <iostream>
+-@@ -297,7 +298,7 @@ UPnPDeviceDirectory::UPnPDeviceDirectory(time_t search_window)
+-         m_reason = "Discover work queue start failed";
+-         return;
+-     }
+--    pthread_yield();
+-+    sched_yield();
+-     LibUPnP *lib = LibUPnP::getLibUPnP();
+-     if (lib == 0) {
+-         m_reason = "Can't get lib";
+--- 
+-2.1.1
+-
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 37d8581..0d18dc1 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 0.8.1
++UPMPDCLI_VERSION = 0.8.2
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
+-- 
+2.1.2
