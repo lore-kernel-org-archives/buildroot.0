@@ -1,32 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Oct 2014 23:56:37 +0200
-Subject: [Buildroot] [git commit] libgeotiff: bump to version 1.4.0
-Message-ID: <20141010100415.3D750B1D34@busybox.osuosl.org>
+Date: Fri, 10 Oct 2014 08:42:01 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{16, 14, 10}.x series
+Message-ID: <20141010100415.AEC76B1D55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f5e9f200dc3295d2a9e6f4f1dd839485ad350b1
+commit: http://git.buildroot.net/buildroot/commit/?id=69c91f421d4b5706a0a791287a5d44a7de48eeb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeotiff/libgeotiff.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
-index 5cfcbea..f6568c1 100644
---- a/package/libgeotiff/libgeotiff.mk
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGEOTIFF_VERSION = 1.3.0
-+LIBGEOTIFF_VERSION = 1.4.0
- LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
- LIBGEOTIFF_DEPENDENCIES = tiff
- LIBGEOTIFF_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 95a06bb..101136a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -171,12 +171,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.56"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.57"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.30"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.20"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.21"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+-	default "3.16.4"	if BR2_KERNEL_HEADERS_3_16
++	default "3.16.5"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17"		if BR2_KERNEL_HEADERS_3_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
