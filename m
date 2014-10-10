@@ -1,247 +1,223 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Fri, 10 Oct 2014 16:22:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.8.2
-Message-ID: <1412950929-9961-1-git-send-email-jkrause@posteo.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 10 Oct 2014 16:23:37 +0200
+Subject: [Buildroot] [PATCH v3] package/mono: new package
+Message-ID: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove of uclibc and musl patches since they are upstream now.
+This patch adds the complete Mono implementation. This patch compiles
+both the native and managed parts.
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch | 159 ----------------------
- package/upmpdcli/upmpdcli-0002-musl-fixes.patch   |  40 ------
- package/upmpdcli/upmpdcli.mk                      |   2 +-
- 3 files changed, 1 insertion(+), 200 deletions(-)
- delete mode 100644 package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
- delete mode 100644 package/upmpdcli/upmpdcli-0002-musl-fixes.patch
+Changelog:
 
-diff --git a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-deleted file mode 100644
-index 2d46b94..0000000
---- a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-+++ /dev/null
-@@ -1,159 +0,0 @@
--From 722ffb8612631b9f11d888c737facdcb0580aaad Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
--Date: Wed, 1 Oct 2014 22:31:11 +0200
--Subject: [PATCH 1/1] uclibc fixes
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Add necessary fixes to build with uClibc
--
-- - Missing #include of C library headers
-- - exp10 is not available in uClibc
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: J?rg Krause <jkrause@posteo.de>
-----
-- libupnpp/control/avtransport.cxx      | 2 ++
-- libupnpp/control/ohplaylist.cxx       | 1 +
-- libupnpp/control/renderingcontrol.cxx | 2 ++
-- libupnpp/device/device.cxx            | 1 +
-- libupnpp/soaphelp.cxx                 | 4 ++++
-- libupnpp/upnpavutils.cxx              | 1 +
-- upmpd/upmpd.cxx                       | 1 +
-- upmpd/upmpdutils.cxx                  | 7 +++++++
-- 8 files changed, 19 insertions(+)
--
--Index: b/libupnpp/control/avtransport.cxx
--===================================================================
----- a/libupnpp/control/avtransport.cxx
--+++ b/libupnpp/control/avtransport.cxx
--@@ -15,6 +15,8 @@
--  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
--  */
-- 
--+#include <stdlib.h>
--+
-- #include <string>
-- #include <functional>
-- 
--Index: b/libupnpp/control/ohplaylist.cxx
--===================================================================
----- a/libupnpp/control/ohplaylist.cxx
--+++ b/libupnpp/control/ohplaylist.cxx
--@@ -14,6 +14,7 @@
--  *       Free Software Foundation, Inc.,
--  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
--  */
--+#include <stdlib.h>
-- #include <arpa/inet.h>
-- 
-- #include <string>
--Index: b/libupnpp/control/renderingcontrol.cxx
--===================================================================
----- a/libupnpp/control/renderingcontrol.cxx
--+++ b/libupnpp/control/renderingcontrol.cxx
--@@ -15,6 +15,8 @@
--  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
--  */
-- 
--+#include <stdlib.h>
--+
-- #include <string>
-- #include <functional>
-- 
--Index: b/libupnpp/device/device.cxx
--===================================================================
----- a/libupnpp/device/device.cxx
--+++ b/libupnpp/device/device.cxx
--@@ -17,6 +17,7 @@
-- #include "config.h"
-- 
-- #include <time.h>
--+#include <errno.h>
-- #include <sys/time.h>
-- 
-- #include <iostream>
--Index: b/libupnpp/soaphelp.cxx
--===================================================================
----- a/libupnpp/soaphelp.cxx
--+++ b/libupnpp/soaphelp.cxx
--@@ -16,6 +16,10 @@
--  */
-- #include "config.h"
-- 
--+#include <string.h>
--+#include <stdlib.h>
--+#include <stdio.h>
--+
-- #include <iostream>
-- using namespace std;
-- 
--Index: b/libupnpp/upnpavutils.cxx
--===================================================================
----- a/libupnpp/upnpavutils.cxx
--+++ b/libupnpp/upnpavutils.cxx
--@@ -14,6 +14,7 @@
--  *       Free Software Foundation, Inc.,
--  *       59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
--  */
--+#include <cstdio>
-- #include <string>
-- using namespace std;
-- 
--Index: b/upmpd/upmpd.cxx
--===================================================================
----- a/upmpd/upmpd.cxx
--+++ b/upmpd/upmpd.cxx
--@@ -22,6 +22,7 @@
-- #include <signal.h>
-- #include <sys/types.h>
-- #include <pwd.h>
--+#include <errno.h>
-- 
-- #include <string>
-- #include <iostream>
--Index: b/upmpd/upmpdutils.cxx
--===================================================================
----- a/upmpd/upmpdutils.cxx
--+++ b/upmpd/upmpdutils.cxx
--@@ -21,6 +21,8 @@
-- // not linking to Qt or glib just to get path-concatenating
-- // functions...
-- 
--+#define _GNU_SOURCE
--+
-- #include <unistd.h>
-- #include <fcntl.h>
-- #include <sys/types.h>
--@@ -31,6 +33,7 @@
-- #include <regex.h>
-- #include <errno.h>
-- #include <string.h>
--+#include <stdlib.h>
-- #ifndef O_STREAMING
-- #define O_STREAMING 0
-- #endif
--@@ -283,6 +286,10 @@
-- #ifdef __APPLE__
-- #define exp10 __exp10
-- #endif
--+#ifdef __UCLIBC__
--+/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
--+#define exp10(x) (exp((x) * log(10)))
--+#endif /* __UCLIBC__ */
-- 
-- // Translate VolumeDB to MPD 0-100
-- int dbvaluetopercent(int dbvalue)
--Index: b/upmpd/ohmetacache.cxx
--===================================================================
----- a/upmpd/ohmetacache.cxx
--+++ b/upmpd/ohmetacache.cxx
--@@ -18,6 +18,7 @@
-- #include <unistd.h>
-- #include <fcntl.h>
-- #include <string.h>
--+#include <errno.h>
-- 
-- #include <iostream>
-- using namespace std;
-diff --git a/package/upmpdcli/upmpdcli-0002-musl-fixes.patch b/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
-deleted file mode 100644
-index c744319..0000000
---- a/package/upmpdcli/upmpdcli-0002-musl-fixes.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From bd1a8b6b547e06456cbede686d8c2f3cfdfa47d1 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
--Date: Tue, 30 Sep 2014 00:07:26 +0200
--Subject: [PATCH 2/2] musl fixes
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Instead of using the nonstandard pthread_yield call use the standardized 
--sched_yield.
--
--Signed-off-by: J?rg Krause <jkrause@posteo.de>
-----
-- libupnpp/control/discovery.cxx | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/libupnpp/control/discovery.cxx b/libupnpp/control/discovery.cxx
--index ac14a82..0a293c7 100644
----- a/libupnpp/control/discovery.cxx
--+++ b/libupnpp/control/discovery.cxx
--@@ -18,6 +18,7 @@
-- 
-- #include <stdlib.h>
-- #include <errno.h>
--+#include <sched.h>
-- #include <unistd.h>
-- 
-- #include <iostream>
--@@ -297,7 +298,7 @@ UPnPDeviceDirectory::UPnPDeviceDirectory(time_t search_window)
--         m_reason = "Discover work queue start failed";
--         return;
--     }
---    pthread_yield();
--+    sched_yield();
--     LibUPnP *lib = LibUPnP::getLibUPnP();
--     if (lib == 0) {
--         m_reason = "Can't get lib";
---- 
--2.1.1
--
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 37d8581..0d18dc1 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 0.8.1
-+UPMPDCLI_VERSION = 0.8.2
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+* Bump to version 3.10.0 (released today!)
+* Various build optimization
+* Fixing problems with uClibc
+* Mono library version chooser added
+
+I tried to merge mono-managed and mono-native in a single package,
+but crosscompiling and compiling in the same folder without a clean
+makes a big mess, so I think these packages should remain splitted.
+Any hint appreciated!
+
+ package/Config.in                                  |  1 +
+ package/mono/Config.in                             | 34 ++++++++++++++++++
+ package/mono/mono-managed/mono-managed.mk          | 42 ++++++++++++++++++++++
+ .../mono-native/mono-native-001-fix_uclibc.patch   | 14 ++++++++
+ package/mono/mono-native/mono-native.mk            | 31 ++++++++++++++++
+ package/mono/mono.mk                               | 18 ++++++++++
+ 6 files changed, 140 insertions(+)
+ create mode 100644 package/mono/Config.in
+ create mode 100644 package/mono/mono-managed/mono-managed.mk
+ create mode 100644 package/mono/mono-native/mono-native-001-fix_uclibc.patch
+ create mode 100644 package/mono/mono-native/mono-native.mk
+ create mode 100644 package/mono/mono.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index ea89c96..92cf4b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -433,6 +433,7 @@ menu "Lua libraries/modules"
+ 	source "package/xavante/Config.in"
+ endmenu
+ endif
++	source "package/mono/Config.in"
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+new file mode 100644
+index 0000000..1b2471e
+--- /dev/null
++++ b/package/mono/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_MONO
++	bool "mono"
++	select BR2_STRIP_none
++	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips \
++		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
++	depends on BR2_INET_IPV6
++	help
++	  An open source, cross-platform, implementation of C#
++	  and the CLR that is binary compatible with Microsoft.NET.
++
++	  http://download.mono-project.com/sources/mono/
++
++if BR2_PACKAGE_MONO
++	config BR2_PACKAGE_MONO_20
++		bool "2.0 .Net Runtime"
++		help
++		  Version 2.0 of Mono .Net runtime
++	config BR2_PACKAGE_MONO_30
++		bool "3.0 .Net Runtime"
++		help
++		  Version 3.0 of Mono .Net runtime
++	config BR2_PACKAGE_MONO_40
++		bool "4.0 .Net Runtime"
++		help
++		  Version 4.0 of Mono .Net runtime
++	config BR2_PACKAGE_MONO_45
++		default y
++		bool "4.5 .Net Runtime"
++		help
++		  Version 4.5 of Mono .Net runtime
++endif
++
++comment "mono needs a toolchain w/ IPv6"
++	depends on !BR2_INET_IPV6
+diff --git a/package/mono/mono-managed/mono-managed.mk b/package/mono/mono-managed/mono-managed.mk
+new file mode 100644
+index 0000000..7010106
+--- /dev/null
++++ b/package/mono/mono-managed/mono-managed.mk
+@@ -0,0 +1,42 @@
++#############################################################
++#
++# mono-managed
++#
++#############################################################
++
++MONO_MANAGED_VERSION = $(MONO_VERSION)
++MONO_MANAGED_SITE = $(MONO_SITE)
++MONO_MANAGED_SOURCE = $(MONO_SOURCE)
++
++HOST_MONO_MANAGED_CONF_OPTS = $(MONO_CONF_OPT) --enable-static \
++	--enable-minimal=aot,profiler,debug
++
++ifeq ($(BR2_PACKAGE_MONO_20),y)
++	ASSEMBLY_SRC += $(HOST_DIR)/usr/lib/mono/2.0
++endif
++
++ifeq ($(BR2_PACKAGE_MONO_30),y)
++	ASSEMBLY_SRC += $(HOST_DIR)/usr/lib/mono/3.0
++endif
++
++ifeq ($(BR2_PACKAGE_MONO_40),y)
++	ASSEMBLY_SRC += $(HOST_DIR)/usr/lib/mono/4.0
++endif
++
++ifeq ($(BR2_PACKAGE_MONO_45),y)
++	ASSEMBLY_SRC += $(HOST_DIR)/usr/lib/mono/4.5
++endif
++
++define MONO_MANAGED_GETMONOLITE
++	$(MAKE) -C $(@D) get-monolite-latest
++endef
++
++define MONO_MANAGED_INSTALL
++	rsync -av --exclude=*.so --exclude=*.mdb --exclude=[0-9].[0-9] $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
++	rsync -av --exclude=*.so --exclude=*.mdb $(ASSEMBLY_SRC) $(TARGET_DIR)/usr/lib/mono/
++endef
++
++HOST_MONO_MANAGED_POST_CONFIGURE_HOOKS += MONO_MANAGED_GETMONOLITE
++HOST_MONO_MANAGED_POST_INSTALL_HOOKS += MONO_MANAGED_INSTALL
++
++$(eval $(host-autotools-package))
+diff --git a/package/mono/mono-native/mono-native-001-fix_uclibc.patch b/package/mono/mono-native/mono-native-001-fix_uclibc.patch
+new file mode 100644
+index 0000000..c82f24b
+--- /dev/null
++++ b/package/mono/mono-native/mono-native-001-fix_uclibc.patch
+@@ -0,0 +1,14 @@
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++
++diff -purN mono-native-3.8.0.orig/libgc/include/gc.h mono-native-3.8.0/libgc/include/gc.h
++--- mono-native-3.8.0.orig/libgc/include/gc.h	2014-10-07 15:00:21.259466731 +0200
+++++ mono-native-3.8.0/libgc/include/gc.h	2014-10-07 15:05:25.560975681 +0200
++@@ -500,7 +500,7 @@ GC_API GC_PTR GC_malloc_atomic_ignore_of
++ #ifdef __linux__
++ # include <features.h>
++ # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
++-     && !defined(__ia64__)
+++     && !defined(__ia64__) && !defined(__UCLIBC__)
++ #   ifndef GC_HAVE_BUILTIN_BACKTRACE
++ #     define GC_HAVE_BUILTIN_BACKTRACE
++ #   endif
+diff --git a/package/mono/mono-native/mono-native.mk b/package/mono/mono-native/mono-native.mk
+new file mode 100644
+index 0000000..6c371d0
+--- /dev/null
++++ b/package/mono/mono-native/mono-native.mk
+@@ -0,0 +1,31 @@
++#############################################################
++#
++# mono-native
++#
++#############################################################
++
++MONO_NATIVE_VERSION = $(MONO_VERSION)
++MONO_NATIVE_SITE = $(MONO_SITE)
++MONO_NATIVE_SOURCE = $(MONO_SOURCE)
++MONO_NATIVE_INSTALL_STAGING = $(MONO_INSTALL_STAGING)
++
++MONO_NATIVE_DEPENDENCIES += host-mono-managed
++
++# Disable managed code (mcs folder) from building
++MONO_NATIVE_CONF_OPTS = $(MONO_CONF_OPT) --disable-mcs-build
++
++define MONO_NATIVE_TWEAK_LIBC_NAME
++	$(SED) 's/libc.so.6/$(MONO_LIBC_NAME)/g' $(TARGET_DIR)/etc/mono/config
++endef
++
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++	MONO_LIBC_NAME = libc.so.0
++else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++	MONO_LIBC_NAME = libc.so
++endif
++
++ifneq ($(MONO_LIBC_NAME),)
++	MONO_NATIVE_POST_INSTALL_TARGET_HOOKS += MONO_NATIVE_TWEAK_LIBC_NAME
++endif
++
++$(eval $(autotools-package))
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+new file mode 100644
+index 0000000..541f9ad
+--- /dev/null
++++ b/package/mono/mono.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# mono
++#
++#############################################################
++
++MONO_VERSION = 3.10.0
++MONO_SITE = http://download.mono-project.com/sources/mono/
++MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
++MONO_INSTALL_STAGING = YES
++
++MONO_CONF_OPT = --disable-gtk-doc --with-mcs-docs=no \
++	--with-moonlight=no --disable-libraries --with-ikvm-native=no
++
++ifeq ($(BR2_PACKAGE_MONO),y)
++	include package/mono/*/*.mk
++	TARGETS += mono-native mono-managed
++endif
 -- 
-2.1.2
+2.1.1
