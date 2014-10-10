@@ -1,37 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Oct 2014 15:45:49 +0200
-Subject: [Buildroot] Following the Buildroot meeting through Google Hangout
-Message-ID: <20141010154549.6aeb149c@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 10 Oct 2014 17:49:29 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-09
+In-Reply-To: <20141010063012.D7B521012DC@stock.ovh.net>
+References: <20141010063012.D7B521012DC@stock.ovh.net>
+Message-ID: <CAMo8BfKw9NCroCWfNdcDzxP5ZSX5JsuXtBdZpvx9xs1gMp_7-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Oct 10, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/ccb67643055a63e90f8ffbcc18da7137db6d3fbe/
+>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/89e1a6328e0105021a22858e97f12107ad786782/
+>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/415966eab988b04b3f1ffa5ae1bdb9ff3665c3c1/
 
-If some people are interested, we'll try like other years, to start a
-Google Hangout session to allow persons not physically present at the
-meeting to listen to the discussions, and participate.
+That's the same bug with --gc-sections we've put a workaround in
+kmod-17, and now despite the workaround is still applied I see
+--gc-sections in ldflags.
 
-If you're interested, please send me (potentially privately) your
-Google e-mail address. If you're not used to Google Hangout, please
-make sure to install the necessary Web browser plug-in.
-
-Note that we do not guarantee that things will work: we don't have a
-clear idea of how much bandwidth we'll have, and what the meeting room
-will look like. Hopefully at least audio should be working.
-
-The meeting will start on Saturday at around 9 AM UTC+2, and will
-continue until the evening, probably until 10 PM or 11 PM, depending on
-the participants energy and motivation. We will restart on Sunday,
-maybe a little bit later, for the entire day as well, but probably
-finishing earlier in the evening than on Saturday.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
