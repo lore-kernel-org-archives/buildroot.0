@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Oct 2014 20:48:40 +0200
-Subject: [Buildroot] [PATCH v3] package/mono: new package
-In-Reply-To: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20141010204840.4ec4d5d3@free-electrons.com>
+Date: Fri, 10 Oct 2014 20:59:35 +0200
+Subject: [Buildroot] Perl libraries/modules sub-menu is empty
+In-Reply-To: <CAP6ETiSDXeQJhUG5b4o37HoesirmzYUncWLTghn0G5TUJ-TA-Q@mail.gmail.com>
+References: <CAP6ETiSDXeQJhUG5b4o37HoesirmzYUncWLTghn0G5TUJ-TA-Q@mail.gmail.com>
+Message-ID: <20141010205935.28abfebb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Pedro Silva,
 
-On Fri, 10 Oct 2014 16:23:37 +0200, Angelo Compagnucci wrote:
+On Fri, 10 Oct 2014 15:43:57 +0100, Pedro Silva wrote:
 
-> I tried to merge mono-managed and mono-native in a single package,
-> but crosscompiling and compiling in the same folder without a clean
-> makes a big mess, so I think these packages should remain splitted.
-> Any hint appreciated!
+> I am trying to add "mosh" (mobile shell) to buildroot but it is missing
+> some perl modules, namely the socket module...
+> ? The error is: ?Can't locate Socket.pm in @INC (you may need to install
+> the Socket module)?.
+> 
+> ?The problem is that in buildroot, with perl package checked ("Interpreter
+> languages and scripting"), the ?"Perl libraries/modules" is empty and cause
+> of that I am not able to select any additional module.
+> ?Any hint on this issue??
 
-I still don't understand why you think the build takes place in the
-same folder: the host and target variants of the same package are built
-in separate directories.
-
-I'm working on the patches that use a single mono package. There are
-other issues with your patch: host-mono-managed automatically downloads
-monolite, which is bad, as it circumvents the download infrastructure
-of Buildroot. I'll show you an approach to fix that.
+You're using Buildroot 2014.05, and back in this version, there were no
+target Perl modules packaged in Buildroot. They started to appear in
+Buildroot 2014.08.
 
 Best regards,
 
