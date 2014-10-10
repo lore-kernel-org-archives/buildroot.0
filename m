@@ -1,130 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Oct 2014 00:11:01 +0200
-Subject: [Buildroot] [git commit] libgeotiff: fix static linking issue
-Message-ID: <20141010100415.81663B1D15@busybox.osuosl.org>
+Date: Fri, 10 Oct 2014 08:44:56 +0200
+Subject: [Buildroot] [git commit] nginx: Depends on MMU
+Message-ID: <20141010100415.D699AB1D2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca3465f6673201a28af076755cc01c57bf1090de
+commit: http://git.buildroot.net/buildroot/commit/?id=c9737ee7f8010e5fa9ba8b6e8c849e0ef6c4d371
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to improve the libgeotiff configure script to
-use pkg-config to detect libtiff, which allows to properly take into
-account dependant libraries such as libz and libjpeg.
-
-As a consequence, we now autoreconf the libgeotiff package, and add
-host-pkgconf as a dependency.
+This package needs MMU. Hence added dependency on BR2_USE_MMU
 
 Fixes:
+http://autobuild.buildroot.net/results/224/2240f11fc52e07ff64913844078e2616842a63dc//
 
-  http://autobuild.buildroot.org/results/649/6498d6516a412b12d68fa9f6a66172021abadc34/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: also add dependency to menuconfig option]
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libgeotiff-0001-use-pkg-config.patch           |   79 ++++++++++++++++++++
- package/libgeotiff/libgeotiff.mk                   |    3 +-
- 2 files changed, 81 insertions(+), 1 deletions(-)
+ package/nginx/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgeotiff/libgeotiff-0001-use-pkg-config.patch b/package/libgeotiff/libgeotiff-0001-use-pkg-config.patch
-new file mode 100644
-index 0000000..a4b11f1
---- /dev/null
-+++ b/package/libgeotiff/libgeotiff-0001-use-pkg-config.patch
-@@ -0,0 +1,79 @@
-+Use pkg-config for libtiff detection
-+
-+Using pkg-config allows proper behavior in static-only contexts: the
-+libtiff library might depend on libz and libjpeg.
-+
-+This patch also fixes a few other issues in the configure.ac script
-+that prevents autoreconf to work, or proper detection of the proj
-+library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -196,39 +196,12 @@
-+ 
-+ TIFF_CONFIG="no"
-+ 
-+-AC_ARG_WITH(libtiff, [  --with-libtiff=dir      Use libtiff in directory dir],,)
-+-
-+-if test "$with_libtiff" != "" ; then
-+-  if test -f $with_libtiff/include/tiffio.h -a -d $with_libtiff/lib ; then
-+-    LIBS="-L$with_libtiff/lib -ltiff $LIBS"
-+-    TIFF_INC=-I$with_libtiff/include
-+-  else
-+-    LIBS="-L$with_libtiff -ltiff $LIBS"
-+-    TIFF_INC=-I$with_libtiff
-+-  fi
-+-  LIBS_SAVED="$LIBS"
-+-  AC_CHECK_LIB(tiff,TIFFOpen,[TIFF_CONFIG=yes],
-+-               AC_MSG_ERROR([failed to link with -ltiff to find TIFFOpen]),-lm)
-+-  AC_CHECK_LIB(tiff,TIFFMergeFieldInfo,[TIFF_CONFIG=yes],
-+-               AC_MSG_ERROR([Libtiff 3.6.0 Beta or later required for this version of
-+-libgeotiff. Please upgrade or use an older version of libgeotiff.]),-lm)
-+-  LIBS="$LIBS_SAVED"
-+-else
-+-  AC_CHECK_LIB(tiff,TIFFOpen,[TIFF_CONFIG=yes],
-+-               AC_MSG_ERROR([You will need to substantially rewrite libxtiff to
-+-build libgeotiff without libtiff]),-lm)
-+-  LIBS_SAVED="$LIBS"
-+-  AC_CHECK_LIB(tiff,TIFFMergeFieldInfo,[TIFF_CONFIG=yes],
-+-               AC_MSG_ERROR([Libtiff 3.6.0 Beta or later required for this version of
-+-libgeotiff. Please upgrade libtiff or use an older version of libgeotiff.]),-lm)
-+-  LIBS="$LIBS -ltiff"
-+-  TIFF_INC=
-+-  TIFF_CONFIG="yes"
-+-fi
-+-
-++PKG_CHECK_MODULES(LIBTIFF, libtiff-4)
-++TIFF_INC="$LIBTIFF_CFLAGS"
-++LIBS="$LIBS $LIBTIFF_LIBS"
-++TIFF_CONFIG="yes"
-+ 
-+ AC_SUBST([TIFF_INC])
-+-AC_SUBST([TIFF_PREFIX])
-+ AM_CONDITIONAL([TIFF_IS_CONFIG], [test ! x$TIFF_CONFIG = xno])
-+ 
-+ dnl
-+@@ -280,15 +253,16 @@
-+   PROJ_INC=-I$PROJ_INC
-+ 
-+   AC_SUBST(PROJ_INC,$PROJ_INC)
-+-  AC_DEFINE(HAVE_PROJECTS_H)
-++  AC_DEFINE([HAVE_PROJECTS_H], [], [Whether proj library header is available])
-+   AC_DEFINE(HAVE_LIBPROJ)
-+   AC_SUBST([HAVE_LIBPROJ])
-+   PROJ_CONFIG="yes"
-+-
-+ else
-+   AC_CHECK_LIB(proj,pj_init,,,-lm)
-+   AC_CHECK_HEADERS(proj_api.h,,)
-+-  PROJ_CONFIG="yes"
-++  if "$ac_cv_lib_proj_pj_init" = "yes" -a "$ac_cv_header_proj_api_h" = "yes"; then
-++    PROJ_CONFIG="yes"
-++  fi
-+ fi
-+ 
-+ AM_CONDITIONAL([PROJ_IS_CONFIG], [test ! x$PROJ_CONFIG = xno])
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
-index f6568c1..722e71c 100644
---- a/package/libgeotiff/libgeotiff.mk
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -6,7 +6,8 @@
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index da9fd01..30cc9d2 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -1,9 +1,11 @@
+ comment "nginx needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
  
- LIBGEOTIFF_VERSION = 1.4.0
- LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
--LIBGEOTIFF_DEPENDENCIES = tiff
-+LIBGEOTIFF_DEPENDENCIES = tiff host-pkgconf
- LIBGEOTIFF_INSTALL_STAGING = YES
-+LIBGEOTIFF_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+ menuconfig BR2_PACKAGE_NGINX
+ 	bool "nginx"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  nginx is an HTTP and reverse proxy server, as well as a mail proxy
+ 	  server.
