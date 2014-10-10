@@ -1,48 +1,89 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 10 Oct 2014 21:36:33 +0200
-Subject: [Buildroot] [PATCH v3] package/mono: new package
-In-Reply-To: <CA+TH9VkBYm1viE8=o9Miy8Pb4mGrmUxCdDJZ1rTncSysfbcPiA@mail.gmail.com>
-References: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141010204840.4ec4d5d3@free-electrons.com>
- <CA+TH9VkBYm1viE8=o9Miy8Pb4mGrmUxCdDJZ1rTncSysfbcPiA@mail.gmail.com>
-Message-ID: <CA+TH9V=qR-vBU+RHrzFj9KYqouzKnTgLZ4y+hUYOWkab6XS8hg@mail.gmail.com>
+From: Michael Sumulong <msumulong@gmail.com>
+Date: Fri, 10 Oct 2014 15:46:02 -0400
+Subject: [Buildroot] partclone package issues
+Message-ID: <CABDNR17qm+njSsYRcyzvSPy3c9yyrXGH_Y66_KwOOKAgWbqa2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+I am trying to add a new package (partclone) to buildroot but I think there
+may be errors in the autoconf config files or some configuration setting
+with the ext2 libraries.
 
->> I'm working on the patches that use a single mono package. There are
->> other issues with your patch: host-mono-managed automatically downloads
->> monolite, which is bad, as it circumvents the download infrastructure
->> of Buildroot. I'll show you an approach to fix that.
+My current config is buildroot-2014.08 and I'm trying to add partclone
+0.2.70.
 
-Another thing. I'm using this patch as a training to understand better
-how to write good buildroot packages. I hope to contribute more in the
-future! I really appreciate any hint and I prefer to write the patch
-myself!
-So I will be really grateful if you can review this patch and point me
-to the right direction, step by step, if it's not to much a hassle for
-you!
-
-Again, thank you for your time!
-
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
+I think my issue is that the partclone/configure.ac invokes a shell command
+to compile a .c file but uses a hardcoded 'gcc' in the shell command. I
+changed the gcc to use $cc but now it cannot find the libext2fs shared
+object file. I do see libext2fs.a in output/host/usr/lib but not
+libext2fs.so.2.
 
 
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+The error that I get occurs during the autoreconf phase:
+
+checking for unistd.h... yes
+checking ext2fs/ext2fs.h usability... yes
+checking ext2fs/ext2fs.h presence... yes
+checking for ext2fs/ext2fs.h... yes
+checking for ext2fs_initialize in -lext2fs... yes
+checking version of libextfs... ./get_lib_version: error while loading
+shared libraries: libext2fs.so.2: cannot open shared object file: No such
+file or directory
+./get_lib_version: error while loading shared libraries: libext2fs.so.2:
+cannot open shared object file: No such file or directory
+./get_lib_version: error while loading shared libraries: libext2fs.so.2:
+cannot open shared object file: No such file or directory
+./get_lib_version: error while loading shared libraries: libext2fs.so.2:
+cannot open shared object file: No such file or directory
+?.?.?; bad
+configure: error: Please check your libextfs!
+make: ***
+[/home/br/Desktop/buildroot/bin/buildroot-2014.08/output/build/partclone-0.2.70/.stamp_configured]
+Error 1
+
+
+
+
+partclone-0.2.70/configure.ac:
+
+if test "$enable_extfs" = "yes"; then
+#check library of some filesystems
+dnl Check for EXT2/3
+AC_CHECKING([ for EXT2/3 Library and Header files ... ])
+AC_CHECK_HEADERS([ext2fs/ext2fs.h], ,
+  AC_MSG_ERROR([*** EXT2/3 header files (ext2fs/ext2fs.h) not found])
+)
+AC_CHECK_LIB([ext2fs], [ext2fs_initialize], true,
+    AC_MSG_ERROR([*** EXT2/3 library (libext2fs) not found]))
+
+AC_MSG_CHECKING(version of libextfs)
+extfs_version=`$cc $srcdir/src/deplib_version.c -o $srcdir/get_lib_version
+-lext2fs -DEXTFS`
+extfs_version=`$srcdir/get_lib_version extfs`
+
+
+partclone.mk:
+
+PARTCLONE_VERSION = 0.2.70
+PARTCLONE_SOURCE = partclone-$(PARTCLONE_VERSION).tar.gz
+PARTCLONE_SITE =
+http://sourceforge.net/projects/partclone/files/testing/src/
+PARTCLONE_INSTALL_STAGING = YES
+PARTCLONE_INSTALL_TARGET = YES
+PARTCLONE_AUTORECONF = YES
+PARTCLONE_DEPENDENCIES = attr e2fsprogs libgcrypt lzo xz zlib
+PARTCLONE_CONF_OPT = --enable-ntfs --enable-extfs --enable-fat
+--enable-ncursesw
+
+$(eval $(autotools-package))
+
+
+Thanks,
+Mike
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141010/13877ec8/attachment.html>
