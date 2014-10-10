@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Oct 2014 10:07:21 +0200
-Subject: [Buildroot] Topics to discuss at the meeting
-In-Reply-To: <CAGm1_ksryT=qOg3kJ5wnY31eioxZubQwgz_xOScgsqNDp_j7fg@mail.gmail.com>
-References: <20141008105653.7252facd@free-electrons.com>
- <CAGm1_kvhqNy_3BKg2figgWw-FbCcBTAGxrXWJm3wUwv=e42sMQ@mail.gmail.com>
- <20141008181319.17f49595@free-electrons.com>
- <CAGm1_ksryT=qOg3kJ5wnY31eioxZubQwgz_xOScgsqNDp_j7fg@mail.gmail.com>
-Message-ID: <20141010100721.2533ba33@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 10 Oct 2014 09:40:55 +0100
+Subject: [Buildroot] [PATCH] kmod: add host-automake dependency
+Message-ID: <1412930455-40512-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+kmod can fail to build in systems which have old automake versions like
+CentOS 6.5, for instance. It will cause an error like this one:
 
-On Fri, 10 Oct 2014 09:41:57 +0200, Yegor Yefremov wrote:
+/buildroot/output/build/kmod-18/build-aux/missing: line 81:
+aclocal-1.14: command not found
 
-> > Sure. However, the two persons having expressed some knowledge about
-> > FIT are you and Thomas DS, and none of you will be at the meeting.
-> >
-> > Could you give some examples about the two cases you have (cpio and
-> > ext2) and how they cause issues with the current Buildroot? I
-> > understand it's a build ordering problem, but I'd like to understand
-> > better the use cases of FIT to see how we can solve this.
-> 
-> I've added FIT topic to the TODO list on elinux.org:
-> http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+Adding host-automake as a dependency fixes the problem.
 
-Well, if you want the FIT topic to be discussed during the meeting,
-that's not the right place. The right place is
-http://elinux.org/Buildroot:DeveloperDaysELCE2014, which is the page
-dedicated to the meeting.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+---
+ package/kmod/kmod.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 1f170dd..c0212bb 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -8,8 +8,8 @@ KMOD_VERSION = 18
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
+-KMOD_DEPENDENCIES = host-pkgconf
+-HOST_KMOD_DEPENDENCIES = host-pkgconf
++KMOD_DEPENDENCIES = host-automake host-pkgconf
++HOST_KMOD_DEPENDENCIES = host-automake host-pkgconf
+ 
+ # license info for libkmod only, conditionally add more below
+ KMOD_LICENSE = LGPLv2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
