@@ -1,59 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Oct 2014 23:57:45 +0200
-Subject: [Buildroot] [git commit] vlc: fix build when Qt4 development files
-	are installed on the host
-Message-ID: <20141010215904.391DEB1DF8@busybox.osuosl.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sat, 11 Oct 2014 02:05:17 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-09
+In-Reply-To: <CAMo8BfKw9NCroCWfNdcDzxP5ZSX5JsuXtBdZpvx9xs1gMp_7-g@mail.gmail.com>
+References: <20141010063012.D7B521012DC@stock.ovh.net>
+ <CAMo8BfKw9NCroCWfNdcDzxP5ZSX5JsuXtBdZpvx9xs1gMp_7-g@mail.gmail.com>
+Message-ID: <CAMo8BfK8DUPCyUUHoC0N2-GP1YOwvt1b=8ifApupiP5=FctL1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b0946ad07e9ad2e19e1c81bdc8f06a4ba6a461e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, Oct 10, 2014 at 5:49 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Fri, Oct 10, 2014 at 10:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/ccb67643055a63e90f8ffbcc18da7137db6d3fbe/
+>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/89e1a6328e0105021a22858e97f12107ad786782/
+>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/415966eab988b04b3f1ffa5ae1bdb9ff3665c3c1/
+>
+> That's the same bug with --gc-sections we've put a workaround in
+> kmod-17, and now despite the workaround is still applied I see
+> --gc-sections in ldflags.
 
-When Qt4 development files are installed on the host, VLC uses
-/usr/bin/moc, /usr/bin/uic and /usr/bin/rcc when Qt support is
-enabled. However, those host installed versions are not necessarily
-compatible with the Qt version used in Buildroot, causes some build
-failures.
+Ok, turns out it's caused by the commit
 
-This commit therefore passes explicit ac_cv_path_MOC, ac_cv_path_RCC
-and ac_cv_path_UIC variables to make sure the Qt host tools built by
-Buildroot are used.
+cc7da47 kmod: add patches to support build on RHEL 5
 
-Note that the VLC configure.ac script uses 'pkg-config
---variable=exec_prefix QtCore' to find the location of such tools, but
-this invocation returns /usr. One solution would have been to extend
-the pkgconf-01-fix-variable.patch we have against pkgconf to also
-cover exec_prefix, but this has more uncertain consequences than just
-fixing VLC.
+which added a patch that modifies configure.ac, but does not call reconfigure.
+Because of that reconfigure is called at the build step, with empty environment,
+leading to build error on xtensa.
+However if I add KMOD_AUTORECONF = YES reconfiguring fails with the
+following message:
 
-Fixes:
+libkmod/docs/gtk-doc.make:270: error: HAVE_GTK_DOC does not appear in
+AM_CONDITIONAL
 
-  http://autobuild.buildroot.org/results/061/06174eaeb7f2b8a591395e607912ad72623b79e3/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 0b275f2..13c72ce 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -251,6 +251,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPTS += --enable-qt
-+VLC_CONF_ENV += \
-+       ac_cv_path_MOC=$(HOST_DIR)/usr/bin/moc \
-+       ac_cv_path_RCC=$(HOST_DIR)/usr/bin/rcc \
-+       ac_cv_path_UIC=$(HOST_DIR)/usr/bin/uic
- VLC_DEPENDENCIES += qt
- else
- VLC_CONF_OPTS += --disable-qt
+Ideas?
+-- 
+Thanks.
+-- Max
