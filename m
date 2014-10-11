@@ -1,7 +1,10 @@
 From: lf <micro1183@gmail.com>
-Date: Sat, 11 Oct 2014 17:23:18 +0200
-Subject: [Buildroot] [PATCH 1/2] mesa3d xa option cleanup
-Message-ID: <1413040999-3426-1-git-send-email-micro1183@gmail.com>
+Date: Sat, 11 Oct 2014 17:23:19 +0200
+Subject: [Buildroot] [PATCH 2/2] mesa3d add option for Radeon
+	r300/r600/radeonsi gallium drivers
+In-Reply-To: <1413040999-3426-1-git-send-email-micro1183@gmail.com>
+References: <1413040999-3426-1-git-send-email-micro1183@gmail.com>
+Message-ID: <1413040999-3426-2-git-send-email-micro1183@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +13,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: lf <micro1183@gmail.com>
 ---
- package/mesa3d/Config.in | 5 +++++
- package/mesa3d/mesa3d.mk | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 27 +++++++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk |  3 +++
+ 2 files changed, 30 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 74ebbed..1bd92ea 100644
+index 1bd92ea..f149a68 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -43,6 +43,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
+@@ -47,6 +47,33 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
  	help
  	  Supports all Nvidia GPUs.
  
-@@ -51,6 +52,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VMWGFX
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
++	bool "Gallium Radeon R300 driver"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_RADEON
 +	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  This is a virtual GPU driver for VMWare virtual machines.
- 
-@@ -61,6 +63,9 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
-+config BR2_PACKAGE_MESA3D_NEEDS_XA
-+	bool
++	help
++	  Driver for ATI/AMD Radeon R300/R400/R500 GPUs.
 +
- comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
- 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	bool "Gallium Radeon R600 driver"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	help
++	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
++
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++	bool "Gallium Radeon SI driver"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	help
++	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	bool "Gallium vmware svga driver"
+ 	depends on BR2_i386 || BR2_x86_64
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 844884b..8fbd72c 100644
+index 8fbd72c..76cfe7a 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -36,7 +36,7 @@ MESA3D_DEPENDENCIES += \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx
- # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
--ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
-+ifneq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),)
- MESA3D_CONF_OPTS += --enable-xa
- else
- MESA3D_CONF_OPTS += --disable-xa
+@@ -56,6 +56,9 @@ endif
+ 
+ #Gallium Drivers
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
+ # DRI Drivers
 -- 
 1.9.1
