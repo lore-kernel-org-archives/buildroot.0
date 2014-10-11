@@ -1,50 +1,130 @@
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Date: Sat, 11 Oct 2014 13:45:48 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-09
-In-Reply-To: <CAMo8BfK8DUPCyUUHoC0N2-GP1YOwvt1b=8ifApupiP5=FctL1Q@mail.gmail.com>
-References: <20141010063012.D7B521012DC@stock.ovh.net>
- <CAMo8BfKw9NCroCWfNdcDzxP5ZSX5JsuXtBdZpvx9xs1gMp_7-g@mail.gmail.com>
- <CAMo8BfK8DUPCyUUHoC0N2-GP1YOwvt1b=8ifApupiP5=FctL1Q@mail.gmail.com>
-Message-ID: <CAAXf6LUBxAVgsy=935AxzW9MVScbp6kV6YHde2Lt6cNPk7G-DQ@mail.gmail.com>
+From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 11 Oct 2014 12:57:52 +0000
+Subject: [Buildroot] [PATCH v4] package/trinity: New package
+In-Reply-To: <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
+References: <1412867742-53521-1-git-send-email-Vincent.Riera@imgtec.com>,
+ <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
+Message-ID: <38121FAB319C3344930C920E7B51831320FD3A02@LEMAIL01.le.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
+Dear Samuel Martin,
 
-On Sat, Oct 11, 2014 at 12:05 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> On Fri, Oct 10, 2014 at 5:49 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
->> On Fri, Oct 10, 2014 at 10:30 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/ccb67643055a63e90f8ffbcc18da7137db6d3fbe/
->>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/89e1a6328e0105021a22858e97f12107ad786782/
->>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/415966eab988b04b3f1ffa5ae1bdb9ff3665c3c1/
->>
->> That's the same bug with --gc-sections we've put a workaround in
->> kmod-17, and now despite the workaround is still applied I see
->> --gc-sections in ldflags.
->
-> Ok, turns out it's caused by the commit
->
-> cc7da47 kmod: add patches to support build on RHEL 5
->
-> which added a patch that modifies configure.ac, but does not call reconfigure.
-> Because of that reconfigure is called at the build step, with empty environment,
-> leading to build error on xtensa.
-> However if I add KMOD_AUTORECONF = YES reconfiguring fails with the
-> following message:
->
-> libkmod/docs/gtk-doc.make:270: error: HAVE_GTK_DOC does not appear in
-> AM_CONDITIONAL
->
+can you provide a defconfig which fails? I have built it twice few minutes ago.
 
-A fix for this problem has been submitted by Gustavo / Vicente in the mean time:
+Also, it will be faster if you send an email directly to the maintainer instead of a pull request, as it's said in the "Downloads:" section of trinity's website.
 
-http://patchwork.ozlabs.org/patch/398508/
-http://patchwork.ozlabs.org/patch/398509/
+Regards,
 
-Best regards,
-Thomas
+--
+Vincent
+________________________________________
+From: Samuel Martin [s.martin49 at gmail.com]
+Sent: 10 October 2014 22:03
+To: Vincent Olivert Riera
+Cc: buildroot
+Subject: Re: [Buildroot] [PATCH v4] package/trinity: New package
+
+Hi Vincente,
+
+On Thu, Oct 9, 2014 at 5:15 PM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> Adding the Trinity Linux System call fuzz tester.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/Config.in          |    1 +
+>  package/trinity/Config.in  |    6 ++++++
+>  package/trinity/trinity.mk |   35 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+), 0 deletions(-)
+>  create mode 100644 package/trinity/Config.in
+>  create mode 100644 package/trinity/trinity.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index ea89c96..3b570ee 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -89,6 +89,7 @@ endif
+>         source "package/sysprof/Config.in"
+>         source "package/tinymembench/Config.in"
+>         source "package/trace-cmd/Config.in"
+> +       source "package/trinity/Config.in"
+>         source "package/valgrind/Config.in"
+>         source "package/whetstone/Config.in"
+>  endmenu
+> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+> new file mode 100644
+> index 0000000..de9c467
+> --- /dev/null
+> +++ b/package/trinity/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_TRINITY
+> +       bool "trinity"
+> +       help
+> +         A Linux System call fuzz tester
+> +
+> +         http://codemonkey.org.uk/projects/trinity/
+> diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+> new file mode 100644
+> index 0000000..b46f1a6
+> --- /dev/null
+> +++ b/package/trinity/trinity.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# trinity
+> +#
+> +################################################################################
+> +
+> +TRINITY_VERSION = 780d879c71979f54dfc9ec0a26e6f1e0d5e361e1
+> +TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+> +TRINITY_LICENSE = GPLv2
+> +TRINITY_LICENSE_FILES = COPYING
+> +
+> +ifeq ($(BR2_INET_IPV6),)
+> +TARGET_CONFIGURE_OPTS += IPV6=no
+> +endif
+> +
+> +define TRINITY_CONFIGURE_CMDS
+> +       (cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
+> +endef
+> +
+> +define TRINITY_BUILD_CMDS
+> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define TRINITY_INSTALL_TARGET_CMDS
+> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
+> +endef
+> +
+> +# Install helper scripts
+> +define TRINITY_INSTALL_HELPER_SCRIPTS
+> +       mkdir -p $(TARGET_DIR)/usr/libexec/trinity
+> +       cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
+> +endef
+> +TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
+> +
+> +$(eval $(generic-package))
+> --
+> 1.7.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Patch looks good, but unfortunately it does not build because of
+gen-versionh.sh that does not correctly handle sources from a
+git-archive tarball. :-(
+I've sent a PR [1].
+
+
+Regards,
+
+[1] https://github.com/kernelslacker/trinity/pull/5
+
+--
+Samuel
