@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 11 Oct 2014 08:36:43 +0200
-Subject: [Buildroot] [V2 2/4] perl: add host variant
+Date: Sat, 11 Oct 2014 08:36:44 +0200
+Subject: [Buildroot] [V2 3/4] pkg-perl: refactor with host-perl
 In-Reply-To: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
 References: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1413009405-13870-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1413009405-13870-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,118 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/perl.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/Makefile.in |  3 ---
+ package/pkg-perl.mk | 23 +++++++++++------------
+ 2 files changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 1816a9e..16a8d68 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -126,7 +126,25 @@ endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 7d9943c..2f26144 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -232,9 +232,6 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/
+ HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
  
- PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_CORE_H
+-HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
+-export PERL5LIB := $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
+-
+ TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 808d2ce..f41a2f9 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -20,6 +20,7 @@
+ ################################################################################
  
-+HOST_PERL_CONF_OPTS = \
-+	-des \
-+	-Dprefix="$(HOST_DIR)/usr" \
-+	-Dcc="$(HOSTCC)"
-+
-+define HOST_PERL_CONFIGURE_CMDS
-+	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./Configure $(HOST_PERL_CONF_OPTS))
-+endef
-+
-+define HOST_PERL_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define HOST_PERL_INSTALL_CMDS
-+	$(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ PERL_ARCHNAME = $(ARCH)-linux
++PERL_RUN = $(HOST_DIR)/usr/bin/perl
  
- define PERL_FINALIZE_TARGET
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+ ################################################################################
+ # inner-perl-package -- defines how the configuration, compilation and
+@@ -38,6 +39,8 @@ PERL_ARCHNAME = $(ARCH)-linux
+ 
+ define inner-perl-package
+ 
++$(2)_DEPENDENCIES += host-perl
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
+@@ -51,7 +54,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+-		perl Build.PL \
++		$$(PERL_RUN) Build.PL \
+ 			--config ar="$$(TARGET_AR)" \
+ 			--config full_ar="$$(TARGET_AR)" \
+ 			--config cc="$$(TARGET_CC)" \
+@@ -74,7 +77,7 @@ define $(2)_CONFIGURE_CMDS
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+-		perl Makefile.PL \
++		$$(PERL_RUN) Makefile.PL \
+ 			AR="$$(TARGET_AR)" \
+ 			FULL_AR="$$(TARGET_AR)" \
+ 			CC="$$(TARGET_CC)" \
+@@ -101,17 +104,13 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+-		perl Build.PL \
+-			--install_base $$(HOST_DIR)/usr \
+-			--installdirs vendor \
++		$$(PERL_RUN) Build.PL \
+ 			$$($(2)_CONF_OPTS); \
+ 	else \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+-		perl Makefile.PL \
+-			INSTALL_BASE=$$(HOST_DIR)/usr \
+-			INSTALLDIRS=vendor \
++		$$(PERL_RUN) Makefile.PL \
+ 			$$($(2)_CONF_OPTS); \
+ 	fi
+ endef
+@@ -129,7 +128,7 @@ ifeq ($(4),target)
+ # Build package for target
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_BUILD_OPTS) build; \
++		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
+ 	else \
+ 		$$(MAKE1) \
+ 			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
+@@ -141,7 +140,7 @@ else
+ # Build package for host
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_BUILD_OPTS) build; \
++		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_BUILD_OPTS) pure_all; \
+ 	fi
+@@ -156,7 +155,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_INSTALL_TARGET_OPTS) install; \
++		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
+ 	fi
+@@ -170,7 +169,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_INSTALL_TARGET_OPTS) install; \
++		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
+ 	fi
 -- 
 1.9.1
