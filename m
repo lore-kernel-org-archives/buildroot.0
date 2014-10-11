@@ -1,40 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Oct 2014 18:55:04 -0300
-Subject: [Buildroot] [PATCH 1/2] file: bump to version 5.20
-Message-ID: <1413064505-23839-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 11 Oct 2014 18:55:05 -0300
+Subject: [Buildroot] [PATCH 2/2] mpg132: bump to version 1.21.0
+In-Reply-To: <1413064505-23839-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1413064505-23839-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1413064505-23839-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash file.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/file/file.hash | 2 ++
- package/file/file.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/file/file.hash
+ package/mpg123/mpg123.hash | 3 +++
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/mpg123/mpg123.hash
 
-diff --git a/package/file/file.hash b/package/file/file.hash
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
 new file mode 100644
-index 0000000..1043d74
+index 0000000..22d16a7
 --- /dev/null
-+++ b/package/file/file.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	5bc36bfbb83a009da25a7174848f1bc5824be03192a8fdce7f83dc897ed2d247	file-5.20.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 5df024f..603e510 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
++++ b/package/mpg123/mpg123.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/mpg123/files/mpg123/1.21.0/
++md5	13a9df5d4e7aa110e4ae27cf30128ce9	mpg123-1.21.0.tar.bz2
++sha1	a2fd84078632b7ab73ae4cd64c3f941d140167a8	mpg123-1.21.0.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 7ec8786..de21ec0 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FILE_VERSION = 5.19
-+FILE_VERSION = 5.20
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+-MPG123_VERSION = 1.20.1
++MPG123_VERSION = 1.21.0
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
 2.0.4
