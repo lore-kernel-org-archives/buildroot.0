@@ -1,52 +1,61 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 11 Oct 2014 17:16:52 +0200
-Subject: [Buildroot] [PATCH] rt-tests: enable on MIPS uClibc again
-In-Reply-To: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1413040612-19235-1-git-send-email-arnout@mind.be>
+From: lf <micro1183@gmail.com>
+Date: Sat, 11 Oct 2014 17:23:18 +0200
+Subject: [Buildroot] [PATCH 1/2] mesa3d xa option cleanup
+Message-ID: <1413040999-3426-1-git-send-email-micro1183@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have fixes in the internal toolchain; an external toolchain is most
-likely a buildroot-built toolchain anyway, so it will also have the
-fix. But we still keep a comment to warn the user for potentially-broken
-external toolchains.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: lf <micro1183@gmail.com>
 ---
- package/rt-tests/Config.in | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/mesa3d/Config.in | 5 +++++
+ package/mesa3d/mesa3d.mk | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 28a4a11..81e5d06 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	# no _tid field in 'struct sigevent'
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
--		BR2_mips64 || BR2_mips64el))
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 74ebbed..1bd92ea 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -43,6 +43,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_NOUVEAU
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
  	help
- 	  Set of utilities for testing the real-time behaviour of a
-@@ -23,9 +21,10 @@ config BR2_PACKAGE_RT_TESTS
- 	  http://rt.wiki.kernel.org
+ 	  Supports all Nvidia GPUs.
  
+@@ -51,6 +52,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_VMWGFX
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  This is a virtual GPU driver for VMWare virtual machines.
  
--comment "rt-tests needs an (e)glibc toolchain"
--	depends on BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
--		BR2_mips64 || BR2_mips64el)
-+comment "rt-tests may not work on MIPS with an external uClibc toolchain"
-+	depends on BR2_PACKAGE_RT_TESTS
-+	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -61,6 +63,9 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
  
- comment "rt-tests needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++config BR2_PACKAGE_MESA3D_NEEDS_XA
++	bool
++
+ comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
+ 	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 844884b..8fbd72c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -36,7 +36,7 @@ MESA3D_DEPENDENCIES += \
+ 	libxcb
+ MESA3D_CONF_OPTS += --enable-glx
+ # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
+-ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
++ifneq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),)
+ MESA3D_CONF_OPTS += --enable-xa
+ else
+ MESA3D_CONF_OPTS += --disable-xa
 -- 
-2.1.1
+1.9.1
