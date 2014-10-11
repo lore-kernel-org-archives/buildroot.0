@@ -1,130 +1,33 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 11 Oct 2014 12:57:52 +0000
-Subject: [Buildroot] [PATCH v4] package/trinity: New package
-In-Reply-To: <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
-References: <1412867742-53521-1-git-send-email-Vincent.Riera@imgtec.com>,
- <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
-Message-ID: <38121FAB319C3344930C920E7B51831320FD3A02@LEMAIL01.le.imgtec.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 Oct 2014 15:31:37 +0200
+Subject: [Buildroot] [PATCH] canfestival: fix build failure
+In-Reply-To: <1412979947-29774-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sat, 11 Oct 2014 00:25:47 +0200")
+References: <1412979947-29774-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87oati7mx2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-can you provide a defconfig which fails? I have built it twice few minutes ago.
+ > Some canfestival python build scripts are not python2 compliant.
+ > So, this patch add a patch allowing to set the python interperter and
+ > set it in the make environment. This pulls a host-python dependency on
+ > canfestival.
 
-Also, it will be faster if you send an email directly to the maintainer instead of a pull request, as it's said in the "Downloads:" section of trinity's website.
+ > This patch has been sent upstream: [1].
 
-Regards,
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/98d/98dce833dfa8255522af672d4f41c2504c00e64e/
 
---
-Vincent
-________________________________________
-From: Samuel Martin [s.martin49 at gmail.com]
-Sent: 10 October 2014 22:03
-To: Vincent Olivert Riera
-Cc: buildroot
-Subject: Re: [Buildroot] [PATCH v4] package/trinity: New package
+ > [1] http://sourceforge.net/p/canfestival/mailman/message/32919038/
 
-Hi Vincente,
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-On Thu, Oct 9, 2014 at 5:15 PM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Adding the Trinity Linux System call fuzz tester.
->
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/Config.in          |    1 +
->  package/trinity/Config.in  |    6 ++++++
->  package/trinity/trinity.mk |   35 +++++++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+), 0 deletions(-)
->  create mode 100644 package/trinity/Config.in
->  create mode 100644 package/trinity/trinity.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index ea89c96..3b570ee 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -89,6 +89,7 @@ endif
->         source "package/sysprof/Config.in"
->         source "package/tinymembench/Config.in"
->         source "package/trace-cmd/Config.in"
-> +       source "package/trinity/Config.in"
->         source "package/valgrind/Config.in"
->         source "package/whetstone/Config.in"
->  endmenu
-> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-> new file mode 100644
-> index 0000000..de9c467
-> --- /dev/null
-> +++ b/package/trinity/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_TRINITY
-> +       bool "trinity"
-> +       help
-> +         A Linux System call fuzz tester
-> +
-> +         http://codemonkey.org.uk/projects/trinity/
-> diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-> new file mode 100644
-> index 0000000..b46f1a6
-> --- /dev/null
-> +++ b/package/trinity/trinity.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# trinity
-> +#
-> +################################################################################
-> +
-> +TRINITY_VERSION = 780d879c71979f54dfc9ec0a26e6f1e0d5e361e1
-> +TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
-> +TRINITY_LICENSE = GPLv2
-> +TRINITY_LICENSE_FILES = COPYING
-> +
-> +ifeq ($(BR2_INET_IPV6),)
-> +TARGET_CONFIGURE_OPTS += IPV6=no
-> +endif
-> +
-> +define TRINITY_CONFIGURE_CMDS
-> +       (cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
-> +endef
-> +
-> +define TRINITY_BUILD_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define TRINITY_INSTALL_TARGET_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-> +endef
-> +
-> +# Install helper scripts
-> +define TRINITY_INSTALL_HELPER_SCRIPTS
-> +       mkdir -p $(TARGET_DIR)/usr/libexec/trinity
-> +       cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
-> +endef
-> +TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
-> +
-> +$(eval $(generic-package))
-> --
-> 1.7.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
-Patch looks good, but unfortunately it does not build because of
-gen-versionh.sh that does not correctly handle sources from a
-git-archive tarball. :-(
-I've sent a PR [1].
-
-
-Regards,
-
-[1] https://github.com/kernelslacker/trinity/pull/5
-
---
-Samuel
+-- 
+Bye, Peter Korsgaard
