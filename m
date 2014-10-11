@@ -1,41 +1,121 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 11 Oct 2014 08:36:41 +0200
-Subject: [Buildroot] [V2 0/4] host-perl
-Message-ID: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 11 Oct 2014 08:36:42 +0200
+Subject: [Buildroot] [V2 1/4] libxml-parser-perl: restore it like before
+	perl infra
+In-Reply-To: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+References: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1413009405-13870-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-perl infrastructure using a host-perl instead of the system perl
+intltool uses this package,
+and we don't want that it depends on host-perl,
+but on system perl
 
-V1 -> V2:
-  - rebase the serie
-  - XML-Parser doesn't use the infrastructure
-
-Note: no test done for metacity
-
-Francois Perrad (4):
-  libxml-parser-perl: restore it like before perl infra
-  perl: add host variant
-  pkg-perl: refactor with host-perl
-  perl: remove useless hacks
-
- package/Makefile.in                                |  3 --
- package/intltool/intltool.mk                       |  5 ++-
- package/libxml-parser-perl/libxml-parser-perl.mk   | 34 +++++++++++++++++++
- package/metacity/metacity.mk                       |  2 +-
- package/perl-gd/Config.in                          |  2 --
- package/perl-gdgraph/Config.in                     |  1 -
- .../perl-gdgraph-01-fix-Makefile-PL.patch          | 24 --------------
- package/perl-xml-parser/perl-xml-parser.mk         | 17 ----------
- package/perl/perl.mk                               | 38 +++++++++-------------
- package/pkg-perl.mk                                | 23 +++++++------
- 10 files changed, 65 insertions(+), 84 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/intltool/intltool.mk                     |  5 +++-
+ package/libxml-parser-perl/libxml-parser-perl.mk | 34 ++++++++++++++++++++++++
+ package/metacity/metacity.mk                     |  2 +-
+ package/perl-xml-parser/perl-xml-parser.mk       | 17 ------------
+ 4 files changed, 39 insertions(+), 19 deletions(-)
  create mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
- delete mode 100644 package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
  delete mode 100644 package/perl-xml-parser/perl-xml-parser.mk
 
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 5c2dca8..a7afe0d 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -9,7 +9,10 @@ INTLTOOL_SITE = https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+downlo
+ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
+ 
+-HOST_INTLTOOL_DEPENDENCIES = host-gettext host-perl-xml-parser
++HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
++HOST_INTLTOOL_CONF_OPTS = \
++	PERL=`which perl` \
++	PERL5LIB=$(HOST_DIR)/usr/lib/perl
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+new file mode 100644
+index 0000000..a07f0a0
+--- /dev/null
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# libxml-parser-perl
++#
++################################################################################
++
++LIBXML_PARSER_PERL_VERSION = 2.41
++LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
++LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
++LIBXML_PARSER_PERL_DEPENDENCIES = expat
++LIBXML_PARSER_PERL_LICENSE = Artistic or GPLv1+
++LIBXML_PARSER_PERL_RUN_PERL = `which perl`
++
++define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
++ (cd $(@D) ; \
++   $(HOST_CONFIGURE_OPTS) $(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
++        PREFIX=$(HOST_DIR)/usr \
++        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
++        EXPATINCPATH=$(HOST_DIR)/usr/include \
++        INSTALLDIRS=site \
++        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
++        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
++ )
++endef
++
++define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(host-generic-package))
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index f7e8b92..1d3e143 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -19,7 +19,7 @@ METACITY_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 
+ METACITY_DEPENDENCIES = libgtk2 \
+ 	xlib_libX11 \
+-	host-perl-xml-parser \
++	host-libxml-parser-perl \
+ 	xlib_libXcomposite \
+ 	xlib_libXfixes \
+ 	xlib_libXrender \
+diff --git a/package/perl-xml-parser/perl-xml-parser.mk b/package/perl-xml-parser/perl-xml-parser.mk
+deleted file mode 100644
+index 21c9162..0000000
+--- a/package/perl-xml-parser/perl-xml-parser.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# perl-xml-parser
+-#
+-################################################################################
+-
+-PERL_XML_PARSER_VERSION = 2.41
+-PERL_XML_PARSER_SOURCE = XML-Parser-$(PERL_XML_PARSER_VERSION).tar.gz
+-PERL_XML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+-PERL_XML_PARSER_DEPENDENCIES = expat
+-PERL_XML_PARSER_LICENSE = Artistic or GPLv1+
+-
+-HOST_PERL_XML_PARSER_CONF_OPTS = \
+-	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+-	EXPATINCPATH=$(HOST_DIR)/usr/include
+-
+-$(eval $(host-perl-package))
 -- 
 1.9.1
