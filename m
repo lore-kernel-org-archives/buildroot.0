@@ -1,67 +1,71 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 11 Oct 2014 14:03:56 +0000
-Subject: [Buildroot] [PATCH v4] package/trinity: New package
-In-Reply-To: <CAHXCMML3v10VLchF0dknLiQmpi-y_nj3bEqC6mJHu=GVG4Z8Qg@mail.gmail.com>
-References: <1412867742-53521-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
- <38121FAB319C3344930C920E7B51831320FD3A02@LEMAIL01.le.imgtec.org>,
- <CAHXCMML3v10VLchF0dknLiQmpi-y_nj3bEqC6mJHu=GVG4Z8Qg@mail.gmail.com>
-Message-ID: <38121FAB319C3344930C920E7B51831320FD3B9E@LEMAIL01.le.imgtec.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Oct 2014 16:28:05 +0200
+Subject: [Buildroot] [PATCH 1/5] dash: bump to version 0.5.8-1
+In-Reply-To: <54358DA3.1030103@zacarias.com.ar>
+References: <1412774389-11297-1-git-send-email-gustavo@zacarias.com.ar>	<87eguieaky.fsf@dell.be.48ers.dk>
+ <5435748A.3090106@zacarias.com.ar>	<87k34acu9a.fsf@dell.be.48ers.dk>
+ <543580C6.1090600@zacarias.com.ar> <87y4sqbds4.fsf@dell.be.48ers.dk>
+ <54358DA3.1030103@zacarias.com.ar>
+Message-ID: <54393E75.2090206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+On 08/10/14 21:16, Gustavo Zacarias wrote:
+> On 10/08/2014 03:46 PM, Peter Korsgaard wrote:
+> 
+[snip]
+>>  > It's possible, probably best in System Configuration an option that
+>>  > selects the appropiate package.
+>>  > I wouldn't pull in busybox though, only make the option available if
+>>  > BR2_PACKAGE_BUSYBOX.
+>>  > And make the symlink in target-finalize to avoid touching the packages
+>>  > much (actually making them simpler).
+>>
+>> Yes, we can do something like that if there's interest / need. I
+>> personally don't care enough about it do it myself, but I do want
+>> reproducible builds.
+>>
+>> A real config with multiple (non busybox) shells is imho quite unlikely
+>> though.
+> 
+> I'll give it a shot, it shouldn't be hard.
+> Yes it would be odd for multiple non-busybox shells to exist, that was
+> my reasoning that any full shell would step on /bin/sh, see? ;)
 
-it's very weird. I just used your defconfig and everything was fine. Look:
+ Hi Gustavo,
 
-[...]
-/usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/peratu/downloads/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-$ make savedefconfig && cat defconfig
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2014.08.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_PACKAGE_TRINITY=y
+ We discussed the sh stuff at the BR developer meeting and it would be nice if
+we had:
 
-Regards,
+- a config option in the system menu that lets the user select the shell: none,
+busybox, dash, bash, zsh (default busybox);
 
---
-Vincent
-________________________________________
-From: Samuel Martin [s.martin49 at gmail.com]
-Sent: 11 October 2014 14:40
-To: Vincent Olivert Riera
-Cc: buildroot
-Subject: Re: [Buildroot] [PATCH v4] package/trinity: New package
+- the config option selects the appropriate package;
 
-Hi Vicente,
+- target-finalize creates the symlink;
 
-On Sat, Oct 11, 2014 at 2:57 PM, Vincent Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Dear Samuel Martin,
->
-> can you provide a defconfig which fails? I have built it twice few minutes ago.
-
-Here it is: http://code.bulix.org/4oyy7r-87179/?raw
-
-And here the build error: http://code.bulix.org/j2n1a8-87180/?raw
-
-(I've just apply the patch from patchwork on top of master).
-
->
-> Also, it will be faster if you send an email directly to the maintainer instead of a pull request, as it's said in the "Downloads:" section of trinity's website.
-
-Oops, forgot to check that :-s
-I will send a mail.
-
-Regards,
+- if sh is busybox, then it's up to the user to choose the appropriate
+FEATURE_SH_IS_* option in busybox; we will still create the symlink to busybox
+from buildroot.
 
 
---
-Samuel
+ Will you take this up? Thanks!
+
+
+ Regards,
+ Arnout
+
+
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
