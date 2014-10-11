@@ -1,33 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Oct 2014 15:31:37 +0200
-Subject: [Buildroot] [PATCH] canfestival: fix build failure
-In-Reply-To: <1412979947-29774-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sat, 11 Oct 2014 00:25:47 +0200")
-References: <1412979947-29774-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87oati7mx2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Oct 2014 14:55:20 +0200
+Subject: [Buildroot] [git commit] grub2: modify kernel location to
+	/boot/zImage
+Message-ID: <20141011133202.99E45B1F50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b5bd127857a786c63d133de8991d6ba11bb19df2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Some canfestival python build scripts are not python2 compliant.
- > So, this patch add a patch allowing to set the python interperter and
- > set it in the make environment. This pulls a host-python dependency on
- > canfestival.
+This is the location where buildroot install the image if requested,
+so this should be the default search path for the bootloader.
 
- > This patch has been sent upstream: [1].
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/grub2/grub.cfg |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/98d/98dce833dfa8255522af672d4f41c2504c00e64e/
-
- > [1] http://sourceforge.net/p/canfestival/mailman/message/32919038/
-
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/grub2/grub.cfg b/boot/grub2/grub.cfg
+index 9ea5281..c8abbd3 100644
+--- a/boot/grub2/grub.cfg
++++ b/boot/grub2/grub.cfg
+@@ -2,5 +2,5 @@ set default="0"
+ set timeout="5"
+ 
+ menuentry "Buildroot" {
+-	linux /bzImage root=/dev/sda1 console=tty1
++	linux /boot/bzImage root=/dev/sda1 console=tty1
+ }
