@@ -1,133 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Oct 2014 12:59:04 +0200
-Subject: [Buildroot] [git commit] configs/qemu-sparc-ss10: enable tmpfs
-Message-ID: <20141011112420.96193B7814@busybox.osuosl.org>
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Date: Sat, 11 Oct 2014 13:45:48 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-09
+In-Reply-To: <CAMo8BfK8DUPCyUUHoC0N2-GP1YOwvt1b=8ifApupiP5=FctL1Q@mail.gmail.com>
+References: <20141010063012.D7B521012DC@stock.ovh.net>
+ <CAMo8BfKw9NCroCWfNdcDzxP5ZSX5JsuXtBdZpvx9xs1gMp_7-g@mail.gmail.com>
+ <CAMo8BfK8DUPCyUUHoC0N2-GP1YOwvt1b=8ifApupiP5=FctL1Q@mail.gmail.com>
+Message-ID: <CAAXf6LUBxAVgsy=935AxzW9MVScbp6kV6YHde2Lt6cNPk7G-DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7417616e09eab582accf73e2ec2f7cec9cef6cd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Max,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/sparc-ss10/linux-3.17.config |   95 +++++++++++++++++++++++++++++++
- configs/qemu_sparc_ss10_defconfig       |    3 +-
- 2 files changed, 97 insertions(+), 1 deletions(-)
+On Sat, Oct 11, 2014 at 12:05 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Fri, Oct 10, 2014 at 5:49 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+>> On Fri, Oct 10, 2014 at 10:30 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/ccb67643055a63e90f8ffbcc18da7137db6d3fbe/
+>>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/89e1a6328e0105021a22858e97f12107ad786782/
+>>>       xtensa |                        kmod-18 | NOK | http://autobuild.buildroot.net/results/415966eab988b04b3f1ffa5ae1bdb9ff3665c3c1/
+>>
+>> That's the same bug with --gc-sections we've put a workaround in
+>> kmod-17, and now despite the workaround is still applied I see
+>> --gc-sections in ldflags.
+>
+> Ok, turns out it's caused by the commit
+>
+> cc7da47 kmod: add patches to support build on RHEL 5
+>
+> which added a patch that modifies configure.ac, but does not call reconfigure.
+> Because of that reconfigure is called at the build step, with empty environment,
+> leading to build error on xtensa.
+> However if I add KMOD_AUTORECONF = YES reconfiguring fails with the
+> following message:
+>
+> libkmod/docs/gtk-doc.make:270: error: HAVE_GTK_DOC does not appear in
+> AM_CONDITIONAL
+>
 
-diff --git a/board/qemu/sparc-ss10/linux-3.17.config b/board/qemu/sparc-ss10/linux-3.17.config
-new file mode 100644
-index 0000000..0e7e500
---- /dev/null
-+++ b/board/qemu/sparc-ss10/linux-3.17.config
-@@ -0,0 +1,95 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_SUN_OPENPROMFS=m
-+CONFIG_BINFMT_MISC=m
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_XFRM_USER=m
-+CONFIG_NET_KEY=m
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_INET_AH=y
-+CONFIG_INET_ESP=y
-+CONFIG_INET_IPCOMP=y
-+# CONFIG_INET_LRO is not set
-+CONFIG_INET6_AH=m
-+CONFIG_INET6_ESP=m
-+CONFIG_INET6_IPCOMP=m
-+CONFIG_IPV6_TUNNEL=m
-+CONFIG_NET_PKTGEN=m
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_BLK_DEV_LOOP=m
-+CONFIG_BLK_DEV_CRYPTOLOOP=m
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_BLK_DEV_SR=m
-+CONFIG_CHR_DEV_SG=m
-+CONFIG_SCSI_QLOGICPTI=m
-+CONFIG_SCSI_SUNESP=y
-+CONFIG_NETDEVICES=y
-+CONFIG_DUMMY=m
-+CONFIG_SUNLANCE=y
-+CONFIG_HAPPYMEAL=m
-+CONFIG_SUNBMAC=m
-+CONFIG_SUNQE=m
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_JOYDEV=m
-+CONFIG_INPUT_EVDEV=m
-+CONFIG_INPUT_EVBUG=m
-+CONFIG_KEYBOARD_ATKBD=m
-+CONFIG_KEYBOARD_SUNKBD=m
-+CONFIG_MOUSE_PS2=m
-+CONFIG_MOUSE_SERIAL=m
-+CONFIG_SERIO=m
-+CONFIG_SERIAL_SUNZILOG=y
-+CONFIG_SERIAL_SUNZILOG_CONSOLE=y
-+CONFIG_SERIAL_SUNSU=y
-+CONFIG_SERIAL_SUNSU_CONSOLE=y
-+CONFIG_SPI=y
-+CONFIG_SPI_XILINX=m
-+CONFIG_SUN_OPENPROMIO=m
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_AUTOFS4_FS=m
-+CONFIG_ISO9660_FS=m
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_ROMFS_FS=m
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_NLS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_DETECT_HUNG_TASK=y
-+# CONFIG_SCHED_DEBUG is not set
-+CONFIG_KGDB=y
-+CONFIG_KGDB_TESTS=y
-+CONFIG_CRYPTO_NULL=m
-+CONFIG_CRYPTO_ECB=m
-+CONFIG_CRYPTO_PCBC=m
-+CONFIG_CRYPTO_MD4=y
-+CONFIG_CRYPTO_MICHAEL_MIC=m
-+CONFIG_CRYPTO_SHA256=m
-+CONFIG_CRYPTO_SHA512=m
-+CONFIG_CRYPTO_ARC4=m
-+CONFIG_CRYPTO_BLOWFISH=m
-+CONFIG_CRYPTO_CAST5=m
-+CONFIG_CRYPTO_CAST6=m
-+CONFIG_CRYPTO_SERPENT=m
-+CONFIG_CRYPTO_TWOFISH=m
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_LIBCRC32C=m
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 6e2c600..595e42f 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -17,5 +17,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
--BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.17.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+A fix for this problem has been submitted by Gustavo / Vicente in the mean time:
+
+http://patchwork.ozlabs.org/patch/398508/
+http://patchwork.ozlabs.org/patch/398509/
+
+Best regards,
+Thomas
