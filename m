@@ -1,320 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Oct 2014 10:38:10 +0200
-Subject: [Buildroot] [git commit] uclibc: add ptrace fixes for ppc & sparc
-Message-ID: <20141011083840.89C2BB1BA8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Oct 2014 12:32:36 +0200
+Subject: [Buildroot] [PATCH v3] package/mono: new package
+In-Reply-To: <CA+TH9V=qR-vBU+RHrzFj9KYqouzKnTgLZ4y+hUYOWkab6XS8hg@mail.gmail.com>
+References: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141010204840.4ec4d5d3@free-electrons.com>
+ <CA+TH9VkBYm1viE8=o9Miy8Pb4mGrmUxCdDJZ1rTncSysfbcPiA@mail.gmail.com>
+ <CA+TH9V=qR-vBU+RHrzFj9KYqouzKnTgLZ4y+hUYOWkab6XS8hg@mail.gmail.com>
+Message-ID: <20141011123236.3c9d4cc9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0a4d9fa6fa68b95181fbaf1babcbb3cf2c9c63b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Angelo Compagnucci,
 
-Add ptrace header fixes for ppc and sparc.
-Patch status: upstream.
+On Fri, 10 Oct 2014 21:36:33 +0200, Angelo Compagnucci wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...erpc-update-ptrace.h-to-latest-from-glibc.patch |  134 +++++++++++++++++
- ...parc-update-ptrace.h-to-latest-from-glibc.patch |  151 ++++++++++++++++++++
- 2 files changed, 285 insertions(+), 0 deletions(-)
+> Another thing. I'm using this patch as a training to understand better
+> how to write good buildroot packages. I hope to contribute more in the
+> future! I really appreciate any hint and I prefer to write the patch
+> myself!
+> So I will be really grateful if you can review this patch and point me
+> to the right direction, step by step, if it's not to much a hassle for
+> you!
 
-diff --git a/package/uclibc/0.9.33.2/uclibc-0063-powerpc-update-ptrace.h-to-latest-from-glibc.patch b/package/uclibc/0.9.33.2/uclibc-0063-powerpc-update-ptrace.h-to-latest-from-glibc.patch
-new file mode 100644
-index 0000000..58e4b91
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0063-powerpc-update-ptrace.h-to-latest-from-glibc.patch
-@@ -0,0 +1,134 @@
-+From 56824024e4f3fa8b5c6f696934c51fbc86946a80 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sun, 7 Sep 2014 12:01:33 -0300
-+Subject: [PATCH] powerpc: update ptrace.h to latest from glibc
-+
-+Update sys/ptrace.h to latest glibc release for a lot of missing
-+definitions.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+ libc/sysdeps/linux/powerpc/sys/ptrace.h | 93 ++++++++++++++++++++++++++++++++-
-+ 1 file changed, 91 insertions(+), 2 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/powerpc/sys/ptrace.h b/libc/sysdeps/linux/powerpc/sys/ptrace.h
-+index 02c303c..dd81efc 100644
-+--- a/libc/sysdeps/linux/powerpc/sys/ptrace.h
-++++ b/libc/sysdeps/linux/powerpc/sys/ptrace.h
-+@@ -1,5 +1,5 @@
-+ /* `ptrace' debugger support interface.  Linux version.
-+-   Copyright (C) 2001 Free Software Foundation, Inc.
-++   Copyright (C) 2001-2014 Free Software Foundation, Inc.
-+    This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -20,6 +20,7 @@
-+ #define _SYS_PTRACE_H	1
-+ 
-+ #include <features.h>
-++#include <bits/types.h>
-+ 
-+ __BEGIN_DECLS
-+ 
-+@@ -78,8 +79,96 @@ enum __ptrace_request
-+ #define PT_DETACH PTRACE_DETACH
-+ 
-+   /* Continue and stop at the next (return from) syscall.  */
-+-  PTRACE_SYSCALL = 24
-++  PTRACE_SYSCALL = 24,
-+ #define PT_SYSCALL PTRACE_SYSCALL
-++
-++  /* Set ptrace filter options.  */
-++  PTRACE_SETOPTIONS = 0x4200,
-++#define PT_SETOPTIONS PTRACE_SETOPTIONS
-++
-++  /* Get last ptrace message.  */
-++  PTRACE_GETEVENTMSG = 0x4201,
-++#define PT_GETEVENTMSG PTRACE_GETEVENTMSG
-++
-++  /* Get siginfo for process.  */
-++  PTRACE_GETSIGINFO = 0x4202,
-++#define PT_GETSIGINFO PTRACE_GETSIGINFO
-++
-++  /* Set new siginfo for process.  */
-++  PTRACE_SETSIGINFO = 0x4203,
-++#define PT_SETSIGINFO PTRACE_SETSIGINFO
-++
-++  /* Get register content.  */
-++  PTRACE_GETREGSET = 0x4204,
-++#define PTRACE_GETREGSET PTRACE_GETREGSET
-++
-++  /* Set register content.  */
-++  PTRACE_SETREGSET = 0x4205,
-++#define PTRACE_SETREGSET PTRACE_SETREGSET
-++
-++  /* Like PTRACE_ATTACH, but do not force tracee to trap and do not affect
-++     signal or group stop state.  */
-++  PTRACE_SEIZE = 0x4206,
-++#define PTRACE_SEIZE PTRACE_SEIZE
-++
-++  /* Trap seized tracee.  */
-++  PTRACE_INTERRUPT = 0x4207,
-++#define PTRACE_INTERRUPT PTRACE_INTERRUPT
-++
-++  /* Wait for next group event.  */
-++  PTRACE_LISTEN = 0x4208,
-++#define PTRACE_LISTEN PTRACE_LISTEN
-++
-++  PTRACE_PEEKSIGINFO = 0x4209
-++#define PTRACE_PEEKSIGINFO PTRACE_PEEKSIGINFO
-++};
-++
-++
-++/* Flag for PTRACE_LISTEN.  */
-++enum __ptrace_flags
-++{
-++  PTRACE_SEIZE_DEVEL = 0x80000000
-++};
-++
-++/* Options set using PTRACE_SETOPTIONS.  */
-++enum __ptrace_setoptions
-++{
-++  PTRACE_O_TRACESYSGOOD	= 0x00000001,
-++  PTRACE_O_TRACEFORK	= 0x00000002,
-++  PTRACE_O_TRACEVFORK   = 0x00000004,
-++  PTRACE_O_TRACECLONE	= 0x00000008,
-++  PTRACE_O_TRACEEXEC	= 0x00000010,
-++  PTRACE_O_TRACEVFORKDONE = 0x00000020,
-++  PTRACE_O_TRACEEXIT	= 0x00000040,
-++  PTRACE_O_TRACESECCOMP = 0x00000080,
-++  PTRACE_O_EXITKILL	= 0x00100000,
-++  PTRACE_O_MASK		= 0x001000ff
-++};
-++
-++/* Wait extended result codes for the above trace options.  */
-++enum __ptrace_eventcodes
-++{
-++  PTRACE_EVENT_FORK	= 1,
-++  PTRACE_EVENT_VFORK	= 2,
-++  PTRACE_EVENT_CLONE	= 3,
-++  PTRACE_EVENT_EXEC	= 4,
-++  PTRACE_EVENT_VFORK_DONE = 5,
-++  PTRACE_EVENT_EXIT	= 6,
-++  PTRACE_EVENT_SECCOMP  = 7
-++};
-++
-++/* Arguments for PTRACE_PEEKSIGINFO.  */
-++struct __ptrace_peeksiginfo_args
-++{
-++  __uint64_t off;	/* From which siginfo to start.  */
-++  __uint32_t flags;	/* Flags for peeksiginfo.  */
-++  __int32_t nr;		/* How many siginfos to take.  */
-++};
-++
-++enum __ptrace_peeksiginfo_flags
-++{
-++  /* Read signals from a shared (process wide) queue.  */
-++  PTRACE_PEEKSIGINFO_SHARED = (1 << 0)
-+ };
-+ 
-+ /* Perform process tracing functions.  REQUEST is one of the values
-+-- 
-+2.0.4
-+
-diff --git a/package/uclibc/0.9.33.2/uclibc-0064-sparc-update-ptrace.h-to-latest-from-glibc.patch b/package/uclibc/0.9.33.2/uclibc-0064-sparc-update-ptrace.h-to-latest-from-glibc.patch
-new file mode 100644
-index 0000000..77b2c2e
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0064-sparc-update-ptrace.h-to-latest-from-glibc.patch
-@@ -0,0 +1,151 @@
-+From 085465e5c507822b25daec6c0fc1a78da48bff9e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sun, 7 Sep 2014 12:01:34 -0300
-+Subject: [PATCH] sparc: update ptrace.h to latest from glibc
-+
-+Update sys/ptrace.h to latest glibc release for a lot of missing
-+definitions.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+ libc/sysdeps/linux/sparc/sys/ptrace.h | 97 +++++++++++++++++++++++++++++++++--
-+ 1 file changed, 92 insertions(+), 5 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/sparc/sys/ptrace.h b/libc/sysdeps/linux/sparc/sys/ptrace.h
-+index 26fa4b3..0f6c2cc 100644
-+--- a/libc/sysdeps/linux/sparc/sys/ptrace.h
-++++ b/libc/sysdeps/linux/sparc/sys/ptrace.h
-+@@ -1,5 +1,5 @@
-+ /* `ptrace' debugger support interface.  Linux/SPARC version.
-+-   Copyright (C) 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
-++   Copyright (C) 1996-2014 Free Software Foundation, Inc.
-+    This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -20,7 +20,7 @@
-+ #define _SYS_PTRACE_H	1
-+ 
-+ #include <features.h>
-+-
-++#include <bits/types.h>
-+ #include <bits/wordsize.h>
-+ 
-+ /* Linux/SPARC kernels up to 2.3.18 do not care much
-+@@ -147,12 +147,11 @@ enum __ptrace_request
-+ #endif
-+ 
-+   /* Continue and stop at the next (return from) syscall.  */
-+-  PTRACE_SYSCALL = 24
-++  PTRACE_SYSCALL = 24,
-+ #define PTRACE_SYSCALL PTRACE_SYSCALL
-+ 
-+ #if __WORDSIZE == 64
-+ 
-+-  ,
-+   /* Get all floating point registers used by a processes.
-+      This is not supported on all machines.  */
-+    PTRACE_GETFPREGS = 25,
-+@@ -160,10 +159,98 @@ enum __ptrace_request
-+ 
-+   /* Set all floating point registers used by a processes.
-+      This is not supported on all machines.  */
-+-   PTRACE_SETFPREGS = 26
-++   PTRACE_SETFPREGS = 26,
-+ #define PT_SETFPREGS PTRACE_SETFPREGS
-+ 
-+ #endif
-++
-++  /* Set ptrace filter options.  */
-++  PTRACE_SETOPTIONS = 0x4200,
-++#define PT_SETOPTIONS PTRACE_SETOPTIONS
-++
-++  /* Get last ptrace message.  */
-++  PTRACE_GETEVENTMSG = 0x4201,
-++#define PT_GETEVENTMSG PTRACE_GETEVENTMSG
-++
-++  /* Get siginfo for process.  */
-++  PTRACE_GETSIGINFO = 0x4202,
-++#define PT_GETSIGINFO PTRACE_GETSIGINFO
-++
-++  /* Set new siginfo for process.  */
-++  PTRACE_SETSIGINFO = 0x4203,
-++#define PT_SETSIGINFO PTRACE_SETSIGINFO
-++
-++  /* Get register content.  */
-++  PTRACE_GETREGSET = 0x4204,
-++#define PTRACE_GETREGSET PTRACE_GETREGSET
-++
-++  /* Set register content.  */
-++  PTRACE_SETREGSET = 0x4205,
-++#define PTRACE_SETREGSET PTRACE_SETREGSET
-++
-++  /* Like PTRACE_ATTACH, but do not force tracee to trap and do not affect
-++     signal or group stop state.  */
-++  PTRACE_SEIZE = 0x4206,
-++#define PTRACE_SEIZE PTRACE_SEIZE
-++
-++  /* Trap seized tracee.  */
-++  PTRACE_INTERRUPT = 0x4207,
-++#define PTRACE_INTERRUPT PTRACE_INTERRUPT
-++
-++  /* Wait for next group event.  */
-++  PTRACE_LISTEN = 0x4208,
-++#define PTRACE_LISTEN PTRACE_LISTEN
-++
-++  PTRACE_PEEKSIGINFO = 0x4209
-++#define PTRACE_PEEKSIGINFO PTRACE_PEEKSIGINFO
-++};
-++
-++
-++/* Flag for PTRACE_LISTEN.  */
-++enum __ptrace_flags
-++{
-++  PTRACE_SEIZE_DEVEL = 0x80000000
-++};
-++
-++/* Options set using PTRACE_SETOPTIONS.  */
-++enum __ptrace_setoptions
-++{
-++  PTRACE_O_TRACESYSGOOD	= 0x00000001,
-++  PTRACE_O_TRACEFORK	= 0x00000002,
-++  PTRACE_O_TRACEVFORK   = 0x00000004,
-++  PTRACE_O_TRACECLONE	= 0x00000008,
-++  PTRACE_O_TRACEEXEC	= 0x00000010,
-++  PTRACE_O_TRACEVFORKDONE = 0x00000020,
-++  PTRACE_O_TRACEEXIT	= 0x00000040,
-++  PTRACE_O_TRACESECCOMP = 0x00000080,
-++  PTRACE_O_EXITKILL	= 0x00100000,
-++  PTRACE_O_MASK		= 0x001000ff
-++};
-++
-++/* Wait extended result codes for the above trace options.  */
-++enum __ptrace_eventcodes
-++{
-++  PTRACE_EVENT_FORK	= 1,
-++  PTRACE_EVENT_VFORK	= 2,
-++  PTRACE_EVENT_CLONE	= 3,
-++  PTRACE_EVENT_EXEC	= 4,
-++  PTRACE_EVENT_VFORK_DONE = 5,
-++  PTRACE_EVENT_EXIT	= 6,
-++  PTRACE_EVENT_SECCOMP  = 7
-++};
-++
-++/* Arguments for PTRACE_PEEKSIGINFO.  */
-++struct __ptrace_peeksiginfo_args
-++{
-++  __uint64_t off;	/* From which siginfo to start.  */
-++  __uint32_t flags;	/* Flags for peeksiginfo.  */
-++  __int32_t nr;		/* How many siginfos to take.  */
-++};
-++
-++enum __ptrace_peeksiginfo_flags
-++{
-++  /* Read signals from a shared (process wide) queue.  */
-++  PTRACE_PEEKSIGINFO_SHARED = (1 << 0)
-+ };
-+ 
-+ /* Perform process tracing functions.  REQUEST is one of the values
-+-- 
-+2.0.4
-+
+Here are improved patches:
+
+ * One patch adding the host-monolite package, so that Mono doesn't
+   download Monolite on its own.
+
+ * One patch adding the mono and host-mono packages.
+
+It's still using the old Mono version, so you'll have to update that
+and check that it continues to work.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-monolite-new-package.patch
+Type: text/x-patch
+Size: 1181 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141011/42105c16/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-mono-new-package.patch
+Type: text/x-patch
+Size: 6364 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141011/42105c16/attachment-0001.bin>
