@@ -1,43 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 15:43:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/systemd: check
-	BR2_TARGET_GENERIC_GETTY
-In-Reply-To: <1412863083-24764-2-git-send-email-dywi@mailerd.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Erdmann"'s message of "Thu, 9 Oct 2014 15:58:03 +0200")
-References: <1412863083-24764-1-git-send-email-dywi@mailerd.de>
- <1412863083-24764-2-git-send-email-dywi@mailerd.de>
-Message-ID: <87wq85xv1v.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Oct 2014 15:44:00 +0200
+Subject: [Buildroot] [PATCH] docs/manual: remove example comment causing
+ issues
+In-Reply-To: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141012134400.GA3674@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Erdmann <dywi@mailerd.de> writes:
+Thomas, All,
 
- > Do not create a [serial-]getty link if BR2_TARGET_GENERIC_GETTY is not set.
- > Might be useful for custom setups (rootfs overlay).
+On 2014-10-12 15:21 +0200, Thomas Petazzoni spake thusly:
+> The manual gives this example for using the github macro:
+> 
+>   FOO_VERSION = v1.0 # tag or full commit ID
+> 
+> Unfortunately, people copy/pasting this example will face weird make
+> errors, because it leads the FOO_VERSION variable to end with a
+> space. Since the manual is anyway explaining just below the example
+> that FOO_VERSION can be used either with a tag or a full commit ID,
+> the simplest solution is to simply remove this comment.
+> 
+> Reported-by: Edd Robbins <edd.robbins@gmail.com>
+> Cc: Edd Robbins <edd.robbins@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
- > ---
- >  package/systemd/systemd.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
- > index fec96d0..3034b76 100644
- > --- a/package/systemd/systemd.mk
- > +++ b/package/systemd/systemd.mk
- > @@ -187,6 +187,7 @@ define SYSTEMD_DISABLE_SERVICE_TTY1
- >  	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
- >  endef
- 
- > +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+Regards,
+Yann E. MORIN.
 
-I would prefer to use BR2_TARGET_GENERIC_GETTY_PORT as that is what is
-used below.
-
-Committed with that fixed, thanks.
+> ---
+>  docs/manual/adding-packages-tips.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+> index 0d4fcb0..fde0a44 100644
+> --- a/docs/manual/adding-packages-tips.txt
+> +++ b/docs/manual/adding-packages-tips.txt
+> @@ -42,7 +42,7 @@ on GitHub. As GitHub is known to have changed download mechanisms in the
+>  past, the 'github' helper function should be used as shown below.
+>  
+>  ------------------------
+> -FOO_VERSION = v1.0 # tag or full commit ID
+> +FOO_VERSION = v1.0
+>  FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+>  ------------------------
+>  
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
