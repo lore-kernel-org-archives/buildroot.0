@@ -1,38 +1,33 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Oct 2014 19:41:41 +0200
-Subject: [Buildroot] [PATCH] libva-intel-driver: add indirect dependency on
-	BR2_PREFER_STATIC_LIB
-Message-ID: <1413135701-588-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 19:43:52 +0200
+Subject: [Buildroot] [PATCH] valgrind: add patch to fix build on PowerPC
+	uClibc
+In-Reply-To: <1413134834-7464-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 12 Oct 2014 19:27:14 +0200")
+References: <1413134834-7464-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87bnphtc87.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libva-intel-driver/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index 89a3264..16e7ced 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -9,11 +9,13 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
- 	depends on BR2_LARGEFILE # libdrm
-+        depends on !BR2_PREFER_STATIC_LIB # libva
- 	help
- 	  VA-API back-end driver for Intel graphics chips
- 
- 	  https://01.org/linuxgraphics/community/vaapi
- 
--comment "libva intel driver needs a toolchain w/ largefile, threads"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libva intel driver needs a toolchain w/ largefile, threads, dynamic library"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_PREFER_STATIC_LIB
- 	depends on BR2_i386 || BR2_x86_64
+ > uClibc on PowerPC forgot to define some PTRACE_* definitions. Even
+ > though the Buildroot uClibc package has a fix for this, it doesn't fix
+ > external uClibc toolchains that are not patched. Therefore this commit
+ > adds a patch to Valgrind to workaround the problem by defining
+ > PTRACE_GETSIGINFO to the appropriate value on PowerPC when it's not
+ > defined by the C library.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/bc6/bc6be9aa1ad39201a1045a65c0c3eb1e968371f2/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.1.1
+Bye, Peter Korsgaard
