@@ -1,17 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 07:46:28 +0200
-Subject: [Buildroot] [git commit] docs/manual: document the asciidoc infra
-Message-ID: <20141012072420.5E9AFB1909@busybox.osuosl.org>
+Date: Sun, 12 Oct 2014 07:46:27 +0200
+Subject: [Buildroot] [git commit] docs/manual: do not hardcode name of the
+	generated document
+Message-ID: <20141012072419.B19B5B1909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25b1d130f4178820c222f9f176ef60a1591aad8a
+commit: http://git.buildroot.net/buildroot/commit/?id=c7f9d2e878cf1312901a97f001ff51ca2c464135
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: move periods outside paranthesis as suggested by Thomas De Schampheleire]
+Currently, GENDOC_INNER hard-codes some variables to have the name of the
+document in them:
+    MANUAL_$(2)_ASCIIDOC_CONF
+    MANUAL_$(2)_ASCIIDOC_OPTS
+    MANUAL_$(2)_A2X_OPTS
+    MANUAL_$(2)_INSTALL_CMDS
+    ...
+
+Also, it defines some dependency on the generation rule, onto:
+    manual-check-dependencies
+    manual-check-dependencies-$(3)
+    manual-prepare-sources
+
+This is problematic, as it is not possible to have another document
+generated with the GENDOC infra, or it would trigger the rules, and use
+the variables for our own document, 'manual'.
+
+Add a new argument to GENDOC_INNER to be the uppercase name of the
+document, much like it is done for the PKG_*_INNER functions. Replace
+any reference to 'manual' with the currently passed named of the current
+document, $(1).
+
+The remaining references to 'manual' are on purpose, as they really
+pertain to our manual.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
@@ -19,145 +44,175 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-asciidoc.txt |  119 ++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt          |    2 +
- 2 files changed, 121 insertions(+), 0 deletions(-)
+ docs/manual/manual.mk |   93 +++++++++++++++++++++++++------------------------
+ 1 files changed, 47 insertions(+), 46 deletions(-)
 
-diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-new file mode 100644
-index 0000000..6e21786
---- /dev/null
-+++ b/docs/manual/adding-packages-asciidoc.txt
-@@ -0,0 +1,119 @@
-+// -*- mode:doc; -*-
-+// vim: syntax=asciidoc
-+
-+=== Infrastructure for asciidoc documents
-+
-+[[asciidoc-documents-tutorial]]
-+
-+The Buildroot manual, which you are currently reading, is entirely written
-+using the http://asciidoc.org/[AsciiDoc] mark-up syntax. The manual is then
-+rendered to many formats:
-+
-+* html
-+* split-html
-+* pdf
-+* epub
-+* text
-+
-+Although Buildroot only contains one document written in AsciiDoc, there
-+is, as for packages, an infrastructure for rendering documents using the
-+AsciiDoc syntax.
-+
-+Also as for packages, the AsciiDoc infrastructure is available from
-+xref:outside-br-custom[BR2_EXTERNAL]. This allows documentation for a
-+BR2_EXTERNAL tree to match the Buildroot documentation, as it will be
-+rendered to the same formats and use the same layout and theme.
-+
-+==== +asciidoc-document+ tutorial
-+
-+Whereas package infrastructures are suffixed with +-package+, the document
-+infrastructures are suffixed with +-document+. So, the AsciiDoc infrastructure
-+is named +asciidoc-document+.
-+
-+Here is an example to render a simple AsciiDoc document.
-+
-+----
-+01: ################################################################################
-+02: #
-+03: # foo-document
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_SOURCES = $(sort $(wildcard $(pkgdir)/*))
-+08: $(eval $(call asciidoc-document))
-+----
-+
-+On line 7, the Makefile declares what the sources of the document are.
-+Currently, it is expected that the document's sources are only local;
-+Buildroot will not attempt to download anything to render a document.
-+Thus, you must indicate where the sources are. Usually, the string
-+above is sufficient for a document with no sub-directory structure.
-+
-+On line 8, we call the +asciidoc-document+ function, which generates all
-+the Makefile code necessary to render the document.
-+
-+==== +asciidoc-document+ reference
-+
-+The list of variables that can be set in a +.mk+ file to give metadata
-+information is (assuming the document name is +foo+) :
-+
-+* +FOO_SOURCES+, mandatory, defines the source files for the document.
-+
-+* +FOO_RESOURCES+, optional, may contain a space-separated list of paths
-+  to one or more directories containing so-called resources (like CSS or
-+  images). By default, empty.
-+
-+There are also additional hooks (see xref:hooks[] for general information
-+on hooks), that a document may set to define extra actions to be done at
-+various steps:
-+
-+* +FOO_POST_RSYNC_HOOKS+ to run additional commands after the sources
-+  have been copied by Buildroot. This can for example be used to
-+  generate part of the manual with information extracted from the
-+  tree. As an example, Buildroot uses this hook to generate the tables
-+  in the appendices.
-+
-+* +FOO_CHECK_DEPENDENCIES_HOOKS+ to run additional tests on required
-+  components to generate the document. In AsciiDoc, it is possible to
-+  call filters, that is, programs that will parse an AsciiDoc block and
-+  render it appropriately (e.g. http://ditaa.sourceforge.net/[ditaa] or
-+  https://pythonhosted.org/aafigure/[aafigure]).
-+
-+* +FOO_CHECK_DEPENDENCIES_<FMT>_HOOKS+, to run additional tests for
-+  the specified format +<FMT>+ (see the list of rendered formats, above).
-+
-+Here is a complete example that uses all variables and all hooks:
-+
-+----
-+01: ################################################################################
-+02: #
-+03: # foo-document
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_SOURCES = $(sort $(wildcard $(pkgdir)/*))
-+08: FOO_RESOURCES = $(sort $(wildcard $(pkgdir)/ressources))
-+09:
-+10: define FOO_GEN_EXTRA_DOC
-+11:     /path/to/generate-script --outdir=$(@D)
-+12: endef
-+13: FOO_POST_RSYNC_HOOKS += FOO_GEN_EXTRA_DOC
-+14:
-+15: define FOO_CHECK_MY_PROG
-+16:     if ! which my-prog >/dev/null 2>&1; then \
-+17:         echo "You need my-prog to generate the foo document"; \
-+18:         exit 1; \
-+19:     fi
-+20: endef
-+21: FOO_CHECK_DEPENDENCIES_HOOKS += FOO_CHECK_MY_PROG
-+22:
-+23: define FOO_CHECK_MY_OTHER_PROG
-+24:     if ! which my-other-prog >/dev/null 2>&1; then \
-+25:         echo "You need my-other-prog to generate the foo document as PDF"; \
-+26:         exit 1; \
-+27:     fi
-+28: endef
-+29: FOO_CHECK_DEPENDENCIES_PDF_HOOKS += FOO_CHECK_MY_OTHER_PROG
-+30:
-+31: $(eval $(call asciidoc-document))
-+----
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 9c97128..feb0d13 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -27,6 +27,8 @@ include::adding-packages-virtual.txt[]
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index c40f371..40bb1b1 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -14,17 +14,17 @@ manual-prepare-sources: manual-update-lists
+ manual-check-dependencies:
+ 	$(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
+ 		echo "You need a sufficiently recent asciidoc on your host" \
+-			"to generate the manual"; \
++			"to generate documents"; \
+ 		exit 1; \
+ 	fi
+ 	$(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
+-		echo "You need w3m on your host to generate the manual"; \
++		echo "You need w3m on your host to generate documents"; \
+ 		exit 1; \
+ 	fi
  
- include::adding-packages-kconfig.txt[]
+ manual-check-dependencies-pdf:
+ 	$(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
+-		echo "You need dblatex on your host to generate the pdf manual"; \
++		echo "You need dblatex on your host to generate PDF documents"; \
+ 		exit 1; \
+ 	fi
  
-+include::adding-packages-asciidoc.txt[]
-+
- include::adding-packages-hooks.txt[]
+@@ -35,18 +35,18 @@ manual-check-dependencies-lists:
+ 		exit 1; \
+ 	fi
  
- include::adding-packages-gettext.txt[]
+-# PDF manual generation is broken because of a bug in xsltproc program provided
++# PDF generation is broken because of a bug in xsltproc program provided
+ # by libxslt <=1.1.28, which does not honor an option we need to set.
+ # Fortunately, this bug is already fixed upstream:
+ #   https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42712e7305de35c
+ #
+-# So, bail out when trying to build the pdf manual using a buggy version of the
++# So, bail out when trying to build a PDF using a buggy version of the
+ # xsltproc program.
+ #
+-# So, to overcome this issue and being able to build the pdf manual, you can
+-# build xsltproc from it source repository, then run:
++# So, to overcome this issue and being able to build a PDF, you can
++# build xsltproc from its source repository, then run:
+ #   $ PATH=/path/to/custom-xsltproc/bin:${PATH} make manual
+-MANUAL_XSLTPROC_IS_BROKEN = \
++GENDOC_XSLTPROC_IS_BROKEN = \
+ 	$(shell xsltproc --maxvars 0 >/dev/null 2>/dev/null || echo y)
+ 
+ ################################################################################
+@@ -55,11 +55,12 @@ MANUAL_XSLTPROC_IS_BROKEN = \
+ #
+ #  argument 1 is the name of the document and must be a subdirectory of docs/;
+ #             the top-level asciidoc file must have the same name
+-#  argument 2 is the type of document to generate (-f argument of a2x)
+-#  argument 3 is the document type as used in the make target
+-#  argument 4 is the output file extension for the document type
+-#  argument 5 is the human text for the document type
+-#  argument 6 (optional) are extra arguments for a2x
++#  argument 2 is the uppercase name of the document
++#  argument 3 is the type of document to generate (-f argument of a2x)
++#  argument 4 is the document type as used in the make target
++#  argument 5 is the output file extension for the document type
++#  argument 6 is the human text for the document type
++#  argument 7 (optional) are extra arguments for a2x
+ #
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+ #
+@@ -67,50 +68,50 @@ MANUAL_XSLTPROC_IS_BROKEN = \
+ # all variable references except the arguments must be $$-quoted.
+ ################################################################################
+ define GENDOC_INNER
+-$(1): $(1)-$(3)
+-.PHONY: $(1)-$(3)
+-$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
++$(1): $(1)-$(4)
++.PHONY: $(1)-$(4)
++$(1)-$(4): $$(O)/docs/$(1)/$(1).$(5)
+ 
+-manual-check-dependencies-$(3):
++$(1)-check-dependencies-$(4):
+ 
+-MANUAL_$(2)_ASCIIDOC_CONF = docs/$(1)/asciidoc-$(2).conf
+-ifneq ($$(wildcard $$(MANUAL_$(2)_ASCIIDOC_CONF)),)
+-MANUAL_$(2)_ASCIIDOC_OPTS += -f $$(MANUAL_$(2)_ASCIIDOC_CONF)
++$(2)_$(3)_ASCIIDOC_CONF = docs/$(1)/asciidoc-$(3).conf
++ifneq ($$(wildcard $$($(2)_$(3)_ASCIIDOC_CONF)),)
++$(2)_$(3)_ASCIIDOC_OPTS += -f $$($(2)_$(3)_ASCIIDOC_CONF)
+ endif
+ 
+ # Handle a2x warning about --destination-dir option only applicable to HTML
+ # based outputs. So:
+ # - use the --destination-dir option if possible (html and split-html),
+-# - otherwise copy the generated manual to the output directory
+-MANUAL_$(2)_A2X_OPTS =
+-ifneq ($$(filter $(3),html split-html),)
+-MANUAL_$(2)_A2X_OPTS += --destination-dir="$$(@D)"
++# - otherwise copy the generated document to the output directory
++$(2)_$(3)_A2X_OPTS =
++ifneq ($$(filter $(4),html split-html),)
++$(2)_$(3)_A2X_OPTS += --destination-dir="$$(@D)"
+ else
+-define MANUAL_$(2)_INSTALL_CMDS
+-	$$(Q)cp -f $$(BUILD_DIR)/docs/$(1)/$(1).$(4) $$(@D)
++define $(2)_$(3)_INSTALL_CMDS
++	$$(Q)cp -f $$(BUILD_DIR)/docs/$(1)/$(1).$(5) $$(@D)
+ endef
+ endif
+ 
+-ifeq ($(4)-$$(MANUAL_XSLTPROC_IS_BROKEN),pdf-y)
+-$$(O)/docs/$(1)/$(1).$(4):
+-	$$(warning PDF manual generation is disabled because of a bug in \
+-		xsltproc. To be able to generate the PDF manual, you should \
++ifeq ($(5)-$$(GENDOC_XSLTPROC_IS_BROKEN),pdf-y)
++$$(O)/docs/$(1)/$(1).$(5):
++	$$(warning PDF generation is disabled because of a bug in \
++		xsltproc. To be able to generate a PDF, you should \
+ 		build xsltproc from the libxslt sources >=1.1.29 and pass it \
+ 		to make through the command line: \
+-		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make manual-pdf')
++		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make $(1)-pdf')
+ else
+-$$(O)/docs/$(1)/$(1).$(4): $$($$(call UPPERCASE,$(1))_SOURCES) \
+-			   manual-check-dependencies \
+-			   manual-check-dependencies-$(3) \
+-			   manual-prepare-sources
+-	$$(Q)$$(call MESSAGE,"Generating $(5) $(1)...")
++$$(O)/docs/$(1)/$(1).$(5): $$($(2)_SOURCES) \
++			   $(1)-check-dependencies \
++			   $(1)-check-dependencies-$(4) \
++			   $(1)-prepare-sources
++	$$(Q)$$(call MESSAGE,"Generating $(6) $(1)...")
+ 	$$(Q)mkdir -p $$(@D)
+-	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
+-		$$(MANUAL_$(2)_A2X_OPTS) \
+-		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
++	$$(Q)a2x $(7) -f $(3) -d book -L -r $$(TOPDIR)/docs/images \
++		$$($(2)_$(3)_A2X_OPTS) \
++		--asciidoc-opts="$$($(2)_$(3)_ASCIIDOC_OPTS)" \
+ 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
+-# install the generated manual
+-	$$(MANUAL_$(2)_INSTALL_CMDS)
++# install the generated document
++	$$($(2)_$(3)_INSTALL_CMDS)
+ endif
+ endef
+ 
+@@ -129,17 +130,17 @@ $(pkgname)-rsync: $$(BUILD_DIR)/docs/$(pkgname)
+ 
+ $(pkgname)-prepare-sources: $(pkgname)-rsync
+ 
+-$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),xhtml,html,html,HTML,\
+ 	--xsltproc-opts "--stringparam toc.section.depth 1")
+-$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),chunked,split-html,chunked,split HTML,\
+ 	--xsltproc-opts "--stringparam toc.section.depth 1")
+ # dblatex needs to pass the '--maxvars ...' option to xsltproc to prevent it
+ # from reaching the template recursion limit when processing the (long) target
+ # package table and bailing out.
+-$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,\
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),pdf,pdf,pdf,PDF,\
+ 	--dblatex-opts "-P latex.output.revhistory=0 -x '--maxvars 100000'")
+-$(call GENDOC_INNER,$(pkgname),text,text,text,text)
+-$(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),text,text,text,text)
++$(call GENDOC_INNER,$(pkgname),$$(call UPPERCASE,$(pkgname)),epub,epub,epub,ePUB)
+ clean: $(pkgname)-clean
+ $(pkgname)-clean:
+ 	$$(Q)$$(RM) -rf $$(BUILD_DIR)/docs/$(pkgname)
