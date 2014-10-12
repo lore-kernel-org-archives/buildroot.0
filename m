@@ -1,69 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 07:46:26 +0200
-Subject: [Buildroot] [git commit] gendoc infra: avoid a2x warning
-Message-ID: <20141012072419.6D5EDB1B51@busybox.osuosl.org>
+Date: Sun, 12 Oct 2014 07:46:27 +0200
+Subject: [Buildroot] [git commit] docs/manual: always look for resources in
+	destination directory
+Message-ID: <20141012072420.04D57B1909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7cfa38274f00c54e8097f9285b7da5cbc4ebc60
+commit: http://git.buildroot.net/buildroot/commit/?id=d8618763223d40f6ef8cb8ecdd29602784e06cba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Though the --destination-dir option works as expected, a2x displays the
-following message when generating the pdf and text manual:
+Our manual does not use external filters in asciidoc, so we are happy
+with just looking for resources from our source tree.
 
-  a2x: WARNING: --destination-dir option is only applicable to HTML based outputs
+However, other documents (like ones in br2-external) may use such
+filters, to generate diagrams, graphs...
 
-To avoid this warning, we now just build the manual in its build location,
-then move the generated files into $(O)/docs/manual.
+External filters generate their output files in the output directory, so
+we must also look for resources in there.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: tested all but PDF]
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Note: external filters in asccidoc are used thus:
+    ["filter-name"]
+    ----
+    Text to be rendered
+    ----
+
+In the future, our own manual may even make use of filters to include
+some of the graphs we generate, to store in the documentation.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.mk |   17 ++++++++++++++++-
- 1 files changed, 16 insertions(+), 1 deletions(-)
+ docs/manual/manual.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index cdc4c73..03e3a0b 100644
+index e9e0516..0b88fd8 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -70,6 +70,19 @@ ifneq ($$(wildcard $$(MANUAL_$(2)_ASCIIDOC_CONF)),)
- MANUAL_$(2)_ASCIIDOC_OPTS += -f $$(MANUAL_$(2)_ASCIIDOC_CONF)
- endif
- 
-+# Handle a2x warning about --destination-dir option only applicable to HTML
-+# based outputs. So:
-+# - use the --destination-dir option if possible (html and split-html),
-+# - otherwise copy the generated manual to the output directory
-+MANUAL_$(2)_A2X_OPTS =
-+ifneq ($$(filter $(3),html split-html),)
-+MANUAL_$(2)_A2X_OPTS += --destination-dir="$$(@D)"
-+else
-+define MANUAL_$(2)_INSTALL_CMDS
-+	$$(Q)cp -f $$(BUILD_DIR)/docs/$(1)/$(1).$(4) $$(@D)
-+endef
-+endif
-+
- $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
-@@ -78,9 +91,11 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 	$$(Q)$$(call MESSAGE,"Generating $(5) $(1)...")
+@@ -86,6 +86,8 @@ $$(O)/docs/$(1)/$(1).$(6):
+ 		to make through the command line: \
+ 		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make $(1)-pdf')
+ else
++# -r $(@D) is there for documents that use external filters; those filters
++# generate code at the same location it finds the document's source files.
+ $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
+ 			   $(1)-check-dependencies \
+ 			   $(1)-check-dependencies-$(5) \
+@@ -93,7 +95,7 @@ $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
+ 	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
  	$$(Q)mkdir -p $$(@D)
- 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
-+		$$(MANUAL_$(2)_A2X_OPTS) \
- 		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
--		-D $$(@D) \
+ 	$$(Q)a2x $(8) -f $(4) -d book -L \
+-		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) \
++		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) -r $$(@D) \
+ 		$$($(2)_$(4)_A2X_OPTS) \
+ 		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
  		$$(BUILD_DIR)/docs/$(1)/$(1).txt
-+# install the generated manual
-+	$$(MANUAL_$(2)_INSTALL_CMDS)
- endef
- 
- ################################################################################
