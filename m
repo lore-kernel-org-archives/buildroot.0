@@ -1,37 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Oct 2014 20:13:28 +0200
-Subject: [Buildroot] [PATCH 6/8] package/tvheadend: Enable bundled build
+Date: Sun, 12 Oct 2014 20:13:24 +0200
+Subject: [Buildroot] [PATCH 2/8] package/ffmpeg: Enable support for
+	libavresample
 In-Reply-To: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413137610-21887-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413137610-21887-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-python is needed to create a bundled version of the tvheadend binary which
-includes all files used by the web UI.
-
-Having host-python alone as dependency is not enough, we need to add
---enable-bundle to enable this functionality.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/tvheadend.mk |    1 +
- 1 file changed, 1 insertion(+)
+ package/ffmpeg/Config.in |    5 +++++
+ package/ffmpeg/ffmpeg.mk |    6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 9909b5c..c152717 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -31,6 +31,7 @@ TVHEADEND_CONF_OPTS += \
- 	--arch="$(ARCH)" \
- 	--cpu="$(BR2_GCC_TARGET_CPU)" \
- 	--python="$(HOST_DIR)/usr/bin/python" \
-+	--enable-bundle \
- 	--disable-dvbscan
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 20d5231..6fde46e 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -49,6 +49,11 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	help
+ 	  FFserver is a streaming server for both audio and video.
  
- #----------------------------------------------------------------------------
++config BR2_PACKAGE_FFMPEG_AVRESAMPLE
++	bool "Build libavresample"
++	help
++	  Avresample is a audio conversion library for compatibility.
++
+ config BR2_PACKAGE_FFMPEG_POSTPROC
+ 	bool "Build libpostproc"
+ 	depends on BR2_PACKAGE_FFMPEG_GPL
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index af4e1f6..0493385 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -104,6 +104,12 @@ else
+ FFMPEG_CONF_OPTS += --disable-ffserver
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
++FFMPEG_CONF_OPTS += --enable-avresample
++else
++FFMPEG_CONF_OPTS += --disable-avresample
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPTS += --enable-postproc
+ else
 -- 
 1.7.10.4
