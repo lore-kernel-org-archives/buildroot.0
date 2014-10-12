@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 16:17:03 +0200
-Subject: [Buildroot] [PATCH] package/opencv: fix build failure on x86
-In-Reply-To: <1413112262-31684-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 12 Oct 2014 13:11:02 +0200")
-References: <1413112262-31684-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87fvetxti8.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Oct 2014 16:18:15 +0200
+Subject: [Buildroot] [PATCH] docs/manual: remove example comment causing
+	issues
+In-Reply-To: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 12 Oct 2014 15:21:25 +0200")
+References: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87bnphxtg8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This change adds a patch fixing some opencv asm causing build failures on
- > i*86 with PIC.
+ > The manual gives this example for using the github macro:
+ >   FOO_VERSION = v1.0 # tag or full commit ID
 
- > This patch has been sent upstream [1].
+ > Unfortunately, people copy/pasting this example will face weird make
+ > errors, because it leads the FOO_VERSION variable to end with a
+ > space. Since the manual is anyway explaining just below the example
+ > that FOO_VERSION can be used either with a tag or a full commit ID,
+ > the simplest solution is to simply remove this comment.
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/483/4838285b25d6293a5cf0bb9eadd5040a7c75d766/
- >   http://autobuild.buildroot.org/?reason=opencv-2.4.10&&arch=i686
+ > Reported-by: Edd Robbins <edd.robbins@gmail.com>
+ > Cc: Edd Robbins <edd.robbins@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > [1] https://github.com/Itseez/opencv/pull/3331
-
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- > ---
- >  ...cv-0001-core-fix-x86-PIC-code-compilation.patch | 49 ++++++++++++++++++++++
- >  1 file changed, 49 insertions(+)
- >  create mode 100644 package/opencv/opencv-0001-core-fix-x86-PIC-code-compilation.patch
-
-Committed, thanks.
+Thanks, but I'll rather just fix the issue instead as people can very
+easily end up with something like this when E.G. testing a version bump.
 
 -- 
 Bye, Peter Korsgaard
