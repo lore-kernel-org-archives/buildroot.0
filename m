@@ -1,27 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 09:46:41 +0200
-Subject: [Buildroot] [PATCH 2/2] uclibc: Make __SIGEV_PAD_SIZE to take
-	__WORDSIZE into account
-In-Reply-To: <1389202364-19387-2-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 8 Jan 2014 17:32:44 +0000")
+Date: Sun, 12 Oct 2014 09:47:07 +0200
+Subject: [Buildroot] [PATCH] rt-tests: enable on MIPS uClibc again
+In-Reply-To: <1413040612-19235-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 11 Oct 2014 17:16:52 +0200")
 References: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
- <1389202364-19387-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87bnph3f32.fsf@dell.be.48ers.dk>
+ <1413040612-19235-1-git-send-email-arnout@mind.be>
+Message-ID: <877g053f2c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Applying an upstream patch to make __SIGEV_PAD_SIZE to take __WORDSIZE
- > into account for alpha, mips and ia64 arches.
+ > We have fixes in the internal toolchain; an external toolchain is most
+ > likely a buildroot-built toolchain anyway, so it will also have the
+ > fix. But we still keep a comment to warn the user for potentially-broken
+ > external toolchains.
 
- > Upstream patch URL:
- >    http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=b97b4b698b023f75b54f987859c856ab4861ea00
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
