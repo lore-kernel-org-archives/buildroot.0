@@ -1,59 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 19:25:45 +0200
-Subject: [Buildroot] [PATCH] libevent: use github call
-In-Reply-To: <CAGduivydE4+6whagL3qf8sp81rwT_70GL21FLavy5Z5vb68R=g@mail.gmail.com>
-References: <1413129607-9134-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20141012181720.2b5dd0ee@free-electrons.com>
- <CAGduivwSZEN-yMsGr2xpJZudy0PxcUhkxkOqmmpXLE4YGmBFtA@mail.gmail.com>
- <20141012184649.6d7ec0d7@free-electrons.com>
- <CAHXCMM+=Os_NwrLSkYw+DFYZxz8K5STqq_EwAg3ZXyF4sT6_EA@mail.gmail.com>
- <CAGduivxcJgxa7N2fDdHsdnO5wJQVM1ydPwFBegV-Qxn_7fGs-A@mail.gmail.com>
- <20141012190804.6d3bc3f1@free-electrons.com>
- <CAGduivydE4+6whagL3qf8sp81rwT_70GL21FLavy5Z5vb68R=g@mail.gmail.com>
-Message-ID: <20141012192545.46b6a914@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 12 Oct 2014 19:26:35 +0200
+Subject: [Buildroot] [PATCH] randconfig: seed with BR2_RAND_PRESEED_CONFIG
+In-Reply-To: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1413134795-32050-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Currently, randconfig is completely unusable. Instead, we use
+randpackageconfig, with two use cases: in the autobuilders, and when
+doing manual testing of the validity of depends/select chains. In both
+cases, we actually want the possibility to explicitly select some
+packages or to set a string value or to randomise between a choice or
+to test bootloaders and kernels - all of this is currently impossible.
 
-On Sun, 12 Oct 2014 19:22:43 +0200, Maxime Hadjinlian wrote:
+With this patch, we can use randconfig instead of randpackageconfig,
+and provide it with a seed file specified with BR2_RAND_PRESEED_CONFIG.
 
-> To put everything cleary in a mail:
-> 
-> When a maintainer do a release from github, there's two possibilities:
-> Either you don't upload a file, then the tarball you download is
-> generated from the tag.
-> 
-> Or you upload a file, and then the tarball, is *NOT* generated, it's
-> the file that you uploaded.
-> 
-> Since the hepers, will call the http URL of github (and not doing a
-> git clone), for me the github helper is used for any generated
-> tarball.
-> *BUT* if the releases is a manually uploaded file, then we have to
-> uses the http link and not the helper. I'd recommend to put a comments
-> on each one theses cases.
-> 
-> In the case of libevent, the link from the website points to the
-> release on github, which is a generated tarball, not an uploaded one.
-> So the uses of the helper is perfectly fine here.
-> 
-> Hope I gave enough details here, maybe this should be put in the
-> manual ? Don't know if it's really usefull.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Makes sense, especially when you add the information that the github
-helper doesn't provide a git URL that will lead to a git clone, but a
-http URL that will lead to wget-ing a tarball.
-
-So, fine with using the github helper here.
-
-Thanks,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index c0dcec8..79b12c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -727,7 +727,16 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
++ifneq ($(BR2_RAND_PRESEED_CONFIG),)
++	@cp $(BR2_RAND_PRESEED_CONFIG) $(CONFIG_DIR)/.config.nopkg
++endif
++	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
++		while read config pkg; do \
++		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
++	@$(COMMON_CONFIG_ENV) \
++		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
++		$< --randconfig $(CONFIG_CONFIG_IN)
++	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+ allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+@@ -852,7 +861,8 @@ help:
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
+ 	@echo '  silentoldconfig        - Same as oldconfig, but quietly, additionally update deps'
+ 	@echo '  olddefconfig           - Same as silentoldconfig but sets new symbols to their default value'
+-	@echo '  randconfig             - New config with random answer to all options'
++	@echo '  randconfig             - New config with random answer to all options -'
++	@echo '                             options can be forced by setting BR2_RAND_PRESEED_CONFIG'
+ 	@echo '  defconfig              - New config with default answer to all options'
+ 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
+ 	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
