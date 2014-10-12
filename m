@@ -1,48 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 13:00:48 +0200
-Subject: [Buildroot] [git commit] package/sysvinit: don't start logging
-Message-ID: <20141012110315.44DE1B2418@busybox.osuosl.org>
+Date: Sun, 12 Oct 2014 13:01:00 +0200
+Subject: [Buildroot] [git commit] sysklogd: add initscript
+Message-ID: <20141012110315.6A050B2378@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d61c8d73d409f4df6162fb32a02617360e4a02e6
+commit: http://git.buildroot.net/buildroot/commit/?id=526e3d0ac6641c0a969d08f5839aa7b12b0dba9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Don't try to start logging from /etc/inittab because busybox installs a
-S01logging script that handles that and can lead to duplicate logging
-processes.
-Let's handle the logging in each package that provides it since we can
-get multiple variants in the future like syslog-ng that have different
-initialization routines.
+Since we don't handle it in sysvinit inittab any longer let's add an
+initscript to get things back into plug-and-play shape.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysvinit/inittab |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/sysklogd/S01logging  |   25 +++++++++++++++++++++++++
+ package/sysklogd/sysklogd.mk |    5 +++++
+ 2 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 8812cca..d3de4a7 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -17,16 +17,9 @@ init::sysinit:/etc/init.d/rcS
+diff --git a/package/sysklogd/S01logging b/package/sysklogd/S01logging
+new file mode 100644
+index 0000000..a0b683f
+--- /dev/null
++++ b/package/sysklogd/S01logging
+@@ -0,0 +1,25 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		echo -n "Starting logging: "
++		/sbin/syslogd -m 0
++		/sbin/klogd
++		echo "OK"
++		;;
++	stop)
++		echo -n "Stopping logging: "
++		[ -f /var/run/klogd.pid ] && kill `cat /var/run/klogd.pid`
++		[ -f /var/run/syslogd.pid ] && kill `cat /var/run/syslogd.pid`
++		echo "OK"
++		;;
++	restart|reload)
++		$0 stop
++		$0 start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index efc5a4d..2b60b45 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -27,4 +27,9 @@ define SYSKLOGD_INSTALL_TARGET_CMDS
+ 	fi
+ endef
  
- # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
- 
--# Logging junk
--mess::sysinit:/bin/touch /var/log/messages
--sysl:1:respawn:/sbin/syslogd -n -m 0
--klog:1:respawn:/sbin/klogd -n
--
- # Stuff to do for the 3-finger salute
- rebo::ctrlaltdel:/sbin/reboot
- 
- # Stuff to do before rebooting
--sklo:6:wait:/usr/bin/killall klogd
--ssys:6:wait:/usr/bin/killall syslogd
- umou:6:wait:/bin/umount -a -r
- swap:6:wait:/sbin/swapoff -a
++define SYSKLOGD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/sysklogd/S01logging \
++		$(TARGET_DIR)/etc/init.d/S01logging
++endef
++
+ $(eval $(generic-package))
