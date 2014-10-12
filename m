@@ -1,42 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 12:39:52 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: make help: remove <package>-
-	help, add link to online manual
-In-Reply-To: <1413109324-24401-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 12 Oct 2014 12:22:04 +0200")
-References: <1413109039-23845-1-git-send-email-arnout@mind.be>
- <1413109324-24401-1-git-send-email-arnout@mind.be>
-Message-ID: <87zjd1zi4n.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Sun, 12 Oct 2014 12:40:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.8.3
+Message-ID: <1413110453-20327-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Since version 0.8.2 upmpdcli builds with gcc >= 4.5. This allows compilation  
+with the CodeSourcery toolchain versions 2011.03 and 2010.09 for the PowerPC 
+architecture.
 
- > We only documented a few of the <package>- targets and it's hard to
- > decide which ones are relevant for make help. Since the help is already
- > way too long, it's better to remove these advanced targets.
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/upmpdcli/Config.in   | 2 --
+ package/upmpdcli/upmpdcli.mk | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
- > Instead, let's refer to the online manual.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
- > ---
- > v2: move the link to the online manual to the bottom.
-
- > At the BR developer meeting we decided to go for this option.
-
- > A TODO item has been added to create a 'make <package>-help' target
- > that shows all the package-specific targets.
-
- > Perhaps something similar should be done for the defconfigs and
- > for the allyesconfig etc. targets as well.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed, thanks.
-
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index e99fddb..dbbc9b5 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_UPMPDCLI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE # libupnp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 0d18dc1..88a5a16 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 0.8.2
++UPMPDCLI_VERSION = 0.8.3
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.1.2
