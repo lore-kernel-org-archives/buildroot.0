@@ -1,61 +1,96 @@
-From: Alan Ott <alan@signal11.us>
-Date: Sun, 12 Oct 2014 11:22:53 -0400
-Subject: [Buildroot] [PATCH] python-pyqt: new package
-In-Reply-To: <CAGtNMfN5y9yU3P9E+cS=1XySGK=S1n_XKPkc9=gfzZ0eaiqv9w@mail.gmail.com>
-References: <1382190416-9928-1-git-send-email-sergey.kostanbaev@gmail.com>
- <CAGtNMfN5y9yU3P9E+cS=1XySGK=S1n_XKPkc9=gfzZ0eaiqv9w@mail.gmail.com>
-Message-ID: <543A9CCD.6010006@signal11.us>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Oct 2014 17:29:55 +0200
+Subject: [Buildroot] [PATCH v2] postgresql: add systemd service file
+In-Reply-To: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
+References: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
+Message-ID: <543A9E73.3030206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/12/2014 02:04 PM, sergey kostanbaev wrote:
-> Any comments about my patches (python-sip and python-pyqt)? Is 
-> something wrong with them?
+On 20/05/14 23:16, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Hi Sergey,
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Sorry for so much delay in looking at this. I tried out your patches 
-today and have the following comments:
+ Looks good. It has two things that aren't present in the sysvinit start script,
+though:
 
-1. Your python-sip.mk builds both the sip executable and the sip library 
-using the target compiler and installs both into $(TARGET_DIR). Since 
-the sip executable is used to generate C++ code which must be compiled, 
-it doesn't make sense to install the sip executable on the target. The 
-library needs to go in $(TARGET_DIR) (and be built with the target 
-compiler), and the sip executable needs to go in $(HOST_DIR) (and be 
-built with the host compiler).
+- the -w option mentioned below;
 
-2. When building pyqt, if the sip executable is not installed on the 
-host system, the build will fail, since it can't use the target-compiled 
-sip executable built by the python-sip package (because of #1 above).
+- the Reload option (sysvinit just restarts).
 
-3. As you said in your email comments, you are generating the 
-qtdetail.out file based on the buildroot configuration. This makes 
-sense, but there is a case it isn't considering. If you don't select 
-BR2_PACKAGE_QT_LICENSE_APPROVED from menuconfig, buildroot will prompt 
-you to select a QT license from the console during the build. If you do 
-it that way, BR2_PACKAGE_QT_LICENSE_APPROVED will _not_ get set, and 
-then python-pyqt.mk will not generate a qtdetail.out that pyqt's 
-configure-ng.py can properly parse, causing pyqt's configure-ng.py to 
-fail with "Error: Qt has been built as static libraries so either the 
---consolidate or --static argument should be used." This error message, 
-while seemingly unrelated, comes as a result of the way the 
-configure-ng.py parses the qtdetail.out (by splitting the lines into an 
-array and reading lines by hard-coded index, which fails when there is 
-an empty line at the beginning).
+ But both are a good idea.
 
-4. After consulting with Thomas Petazzoni and Arnout Vandecappelle, we 
-think the config item for python-sip (packages/Config.in) should go 
-under "python external modules" instead of under Qt in the menu.
+ Regards,
+ Arnout
 
-So I guess it comes down to:
-1. Make sure it builds without sip being installed on the host system
-2. Make sure it builds when "Approve Free License" 
-(BR2_PACKAGE_QT_LICENSE_APPROVED) is not set in the configuration.
+> ---
+> Changes v1 -> v2:
+>   - add '-w' (wait) to pg_ctl start command (to ensure pid
+>     file generation)
+> ---
+>  package/postgresql/postgresql.mk      |  8 ++++++++
+>  package/postgresql/postgresql.service | 24 ++++++++++++++++++++++++
+>  2 files changed, 32 insertions(+)
+>  create mode 100644 package/postgresql/postgresql.service
+> 
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index b331737..cf4700a 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -58,4 +58,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
+>  		$(TARGET_DIR)/etc/init.d/S50postgresql
+>  endef
+>  
+> +define POSTGRESQL_INSTALL_INIT_SYSTEMD
+> +        $(INSTALL) -D -m 644 package/postgresql/postgresql.service \
+> +                $(TARGET_DIR)/etc/systemd/system/postgresql.service
+> +        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +        ln -fs ../postgresql.service \
+> +                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+> new file mode 100644
+> index 0000000..4a96258
+> --- /dev/null
+> +++ b/package/postgresql/postgresql.service
+> @@ -0,0 +1,24 @@
+> +[Unit]
+> +Description=PostgreSQL database server
+> +After=network.target
+> +
+> +[Service]
+> +Type=forking
+> +
+> +# start timeout disabled because initdb may run a little
+> +# longer (eg. 5 minutes on RaspberryPi)
+> +TimeoutStartSec=0
+> +
+> +User=postgres
+> +Group=postgres
+> +
+> +SyslogIdentifier=postgres
+> +PIDFile=/var/lib/pgsql/postmaster.pid
+> +
+> +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+> +ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
+> +ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
+> +ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> 
 
-Thanks for the patch. This looks like it was a lot of work.
 
-Alan.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
