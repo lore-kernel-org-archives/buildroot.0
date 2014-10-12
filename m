@@ -1,96 +1,129 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Oct 2014 17:29:55 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: add systemd service file
-In-Reply-To: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
-References: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
-Message-ID: <543A9E73.3030206@mind.be>
+From: Alexey Brodkin <alexey.brodkin@gmail.com>
+Date: Sun, 12 Oct 2014 17:34:00 +0200
+Subject: [Buildroot] [PATCH] infra: BR2_PREFER_STATIC_LIB now selects static
+	building of packages
+Message-ID: <1413128040-1860-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/05/14 23:16, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+With time BR2_PREFER_STATIC_LIB option meaning changed from "prefer static
+libs when possible" to "do not build dynamic libs and build statically linked
+applications".
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This patch changes variable description and takes care of uClibc settings so
+it doesn't build shared libs.
 
- Looks good. It has two things that aren't present in the sysvinit start script,
-though:
+Note that variable name is kept unchanged on purpose - it will be modified later
+when real "prefer static" mode will be introduced.
 
-- the -w option mentioned below;
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-- the Reload option (sysvinit just restarts).
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in                             | 14 ++++++++------
+ package/uclibc/uClibc-0.9.31.config   |  1 -
+ package/uclibc/uClibc-0.9.33.config   |  1 -
+ package/uclibc/uClibc-snapshot.config |  1 -
+ package/uclibc/uclibc.mk              | 11 +++++++++++
+ 5 files changed, 19 insertions(+), 9 deletions(-)
 
- But both are a good idea.
-
- Regards,
- Arnout
-
-> ---
-> Changes v1 -> v2:
->   - add '-w' (wait) to pg_ctl start command (to ensure pid
->     file generation)
-> ---
->  package/postgresql/postgresql.mk      |  8 ++++++++
->  package/postgresql/postgresql.service | 24 ++++++++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 package/postgresql/postgresql.service
-> 
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index b331737..cf4700a 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -58,4 +58,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S50postgresql
->  endef
->  
-> +define POSTGRESQL_INSTALL_INIT_SYSTEMD
-> +        $(INSTALL) -D -m 644 package/postgresql/postgresql.service \
-> +                $(TARGET_DIR)/etc/systemd/system/postgresql.service
-> +        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +        ln -fs ../postgresql.service \
-> +                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-> new file mode 100644
-> index 0000000..4a96258
-> --- /dev/null
-> +++ b/package/postgresql/postgresql.service
-> @@ -0,0 +1,24 @@
-> +[Unit]
-> +Description=PostgreSQL database server
-> +After=network.target
-> +
-> +[Service]
-> +Type=forking
-> +
-> +# start timeout disabled because initdb may run a little
-> +# longer (eg. 5 minutes on RaspberryPi)
-> +TimeoutStartSec=0
-> +
-> +User=postgres
-> +Group=postgres
-> +
-> +SyslogIdentifier=postgres
-> +PIDFile=/var/lib/pgsql/postmaster.pid
-> +
-> +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
-> +ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
-> +ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
-> +ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> 
-
-
+diff --git a/Config.in b/Config.in
+index 24aa883..e58dae6 100644
+--- a/Config.in
++++ b/Config.in
+@@ -536,15 +536,17 @@ comment "enabling Stack Smashing Protection requires support in the toolchain"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
+ config BR2_PREFER_STATIC_LIB
+-	bool "prefer static libraries"
++	bool "build statically linked applications, no dynamic libraries"
+ 	help
+-	  Where possible, build and use static libraries for the target.
+-	  This potentially increases your code size and should only be
++	  Build all application for the target statically linked.
++	  This potentially increases your filesystem size and should only be
+ 	  used if you know what you do.
+-	  The default is to build dynamic libraries and use those on
+-	  the target filesystem.
+ 
+-	  WARNING: This is highly experimental at the moment.
++	  Note that some applications cannot be build statically and so are
++	  intentionally disabled.
++
++	  The default is to build dynamic libraries and dynamically linked
++	  applications to use those on the target filesystem.
+ 
+ config BR2_PACKAGE_OVERRIDE_FILE
+ 	string "location of a package override file"
+diff --git a/package/uclibc/uClibc-0.9.31.config b/package/uclibc/uClibc-0.9.31.config
+index b23ba73..76772e8 100644
+--- a/package/uclibc/uClibc-0.9.31.config
++++ b/package/uclibc/uClibc-0.9.31.config
+@@ -61,7 +61,6 @@ HAVE_DOT_CONFIG=y
+ DOPIC=y
+ # ARCH_HAS_NO_SHARED is not set
+ # ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+ # FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+ LDSO_LDD_SUPPORT=y
+ # LDSO_CACHE_SUPPORT is not set
+diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
+index 0fbce19..1b07d4a 100644
+--- a/package/uclibc/uClibc-0.9.33.config
++++ b/package/uclibc/uClibc-0.9.33.config
+@@ -83,7 +83,6 @@ HAVE_DOT_CONFIG=y
+ DOPIC=y
+ # ARCH_HAS_NO_SHARED is not set
+ # ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+ # FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+ LDSO_LDD_SUPPORT=y
+ # LDSO_CACHE_SUPPORT is not set
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index 11dde03..1f04561 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -85,7 +85,6 @@ HAVE_DOT_CONFIG=y
+ DOPIC=y
+ # ARCH_HAS_NO_SHARED is not set
+ # ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+ # FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+ LDSO_LDD_SUPPORT=y
+ # LDSO_CACHE_SUPPORT is not set
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 4e09b31..5b83c74 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -395,6 +395,16 @@ UCLIBC_WCHAR_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_WCHAR,$(@D)/.config)
+ endif
+ 
+ #
++# static/shared libs
++#
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_DISABLE_OPT,HAVE_SHARED,$(@D)/.config)
++else
++UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_ENABLE_OPT,HAVE_SHARED,$(@D)/.config)
++endif
++
++#
+ # Commands
+ #
+ 
+@@ -434,6 +444,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_THREAD_DEBUG_CONFIG)
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
++	$(UCLIBC_SHARED_LIBS_CONFIG)
+ endef
+ 
+ ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
