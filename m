@@ -1,126 +1,118 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Oct 2014 15:15:37 +0200
-Subject: [Buildroot] [PATCH] [RFC] system: add option to choose what
- /bin/sh points to
-In-Reply-To: <87h9z91ug0.fsf@dell.be.48ers.dk>
-References: <1413049741-1340-1-git-send-email-yann.morin.1998@free.fr>
- <87h9z91ug0.fsf@dell.be.48ers.dk>
-Message-ID: <543A7EF9.2080106@mind.be>
+From: Alexey Brodkin <alexey.brodkin@gmail.com>
+Date: Sun, 12 Oct 2014 15:15:39 +0200
+Subject: [Buildroot] [PATCH] uclibc: build uclibc unstripped by default
+Message-ID: <1413119739-4977-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/10/14 11:57, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Not all our shells do install a pointer to /bin/sh. Besides, between
->  > those that do and multiple ones are enabled, the last one to install
->  > wins the the symlink.
-> 
->  > Add a new config choice in the system sub-menu that allows the user to
->  > explicitly select the shell to provide /bin/sh.
-> 
->  > Remove the symlink creation from bash.mk at the same time.
-> 
->  > Note: for every shell, we select them, except busybox, on which we
->  > depend, on the assumption that we do not want to force busybox in case
->  > the user decided not to enable it.
-> 
-> But we default to BR2_INIT_BUSYBOX, so you still need to go into the
-> system menu and disable that before you can deselect busybox.
-> 
-> Another issue with the 'depends on' is that if you disable busybox the
-> choice then jumps to the next option which pulls in bash (which might
-> not really be what you want when you try to save space by disabling
-> busybox).
-> 
-> So I think it is better to use selects everywhere.
+uClibc could be build stripped (implemented as link-time option in uClibc).
+This could be useful for those who build root fs manually.
 
- I disagree.
+In Buildroot there's it's own strip stage wich strips most of shared libs
+in "target" folder (well except kernel modules known to not work properly being
+stripped and libpthread required to be non-stripped for correct debugging with
+gdb of multi-threaded apps).
 
- For people who want to avoid busybox, it is already annoying that they have to
-change their init system first. Adding more implicit selects of busybox is not
-going to make their life easier.
+So there're few problems with current implementation:
+ 1. uClibc is being stripped 2 times (first on its build stage, second on
+    global Buildroot strip stage)
+ 2. uClibc libs in "staging" folder are also always stripped except if
+    "no strip" (BR2_STRIP_none) is explicitly is selected in Buildroot config.
+    That makes it possible to remote debug uClibc libs on target only if target
+    rootfs was not stripped (which might not be possible due to huge libs
+    like Qt)
 
- For the jumping, it's better to fix it by adding a 'default dash if !busybox' line.
+This patch disables embedded strip in uClibc (still users may modify uClibc
+config and explicitly set "DOSTRIP=yes" if really needed).
 
- And since busybox is on by default, there is no strong need for a select - if
-the user deselects busybox I guess they know what they're doing.
+Interesting that DOSTRIP was not only selected in uClibc config but also was
+force set with Buildroot on uClibc configuration step with UCLIBC_STRIP_CONFIG.
 
- And also using a depends solves the issue you mention below :-)
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc/uClibc-0.9.31.config   |  2 +-
+ package/uclibc/uClibc-0.9.33.config   |  2 +-
+ package/uclibc/uClibc-snapshot.config |  2 +-
+ package/uclibc/uclibc.mk              | 11 -----------
+ 4 files changed, 3 insertions(+), 14 deletions(-)
 
- Regards,
- Arnout
-
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
->  > ---
->  >  package/bash/bash.mk |  1 -
->  >  system/Config.in     | 43 +++++++++++++++++++++++++++++++++++++++++++
->  >  system/system.mk     | 12 ++++++++++++
->  >  3 files changed, 55 insertions(+), 1 deletion(-)
-> 
->  > diff --git a/package/bash/bash.mk b/package/bash/bash.mk
->  > index 6510af5..34a3a73 100644
->  > --- a/package/bash/bash.mk
->  > +++ b/package/bash/bash.mk
->  > @@ -35,7 +35,6 @@ define BASH_INSTALL_TARGET_CMDS
->  >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  >  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
->  >  	rm -f $(TARGET_DIR)/bin/bashbug
->  > -	ln -sf bash $(TARGET_DIR)/bin/sh
->  >  endef
->  
->  >  $(eval $(autotools-package))
->  > diff --git a/system/Config.in b/system/Config.in
->  > index e7e146a..22f37ea 100644
->  > --- a/system/Config.in
->  > +++ b/system/Config.in
->  > @@ -211,6 +211,49 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
->  >  	  in the build log! Avoid using a valuable password if either the
->  >  	  .config file or the build log may be distributed!
->  
->  > +choice
->  > +	bool "/bin/sh"
->  > +	help
->  > +	  Select which shell will provide /bin/sh.
->  > +
->  > +# busybox has shells that work on noMMU
->  > +config BR2_SYSTEM_BIN_SH_BUSYBOX
->  > +	bool "busybox' default shell"
->  > +	depends on BR2_PACKAGE_BUSYBOX
->  > +
->  > +config BR2_SYSTEM_BIN_SH_BASH
->  > +	bool "bash"
->  > +	depends on BR2_USE_MMU # bash
->  > +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || !BR2_PACKAGE_BUSYBOX
-> 
-> You arguably don't need the || !BR2_PACKAGE_BUSYBOX as we do a trick and
-> make BR2_PACKAGE_BUSYBOX_SHOW_OTHERS a hidden symbol (=y) when busybox
-> isn't enabled.
-> 
-> With that said, it doesn't actually work when I change the busybox
-> option to use select:
-> 
-> system/Config.in:214:error: recursive dependency detected!
-> system/Config.in:214:   choice <choice> contains symbol BR2_SYSTEM_BIN_SH_BASH
-> system/Config.in:224:   symbol BR2_SYSTEM_BIN_SH_BASH depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> package/busybox/Config.in:23:   symbol BR2_PACKAGE_BUSYBOX_SHOW_OTHERS depends on BR2_PACKAGE_BUSYBOX
-> package/busybox/Config.in:1:    symbol BR2_PACKAGE_BUSYBOX is selected by BR2_SYSTEM_BIN_SH_BUSYBOX
-> system/Config.in:220:   symbol BR2_SYSTEM_BIN_SH_BUSYBOX is part of choice <choice>
-> 
-> Any idea what we can do?
-> 
-
-
+diff --git a/package/uclibc/uClibc-0.9.31.config b/package/uclibc/uClibc-0.9.31.config
+index e990178..b23ba73 100644
+--- a/package/uclibc/uClibc-0.9.31.config
++++ b/package/uclibc/uClibc-0.9.31.config
+@@ -228,7 +228,7 @@ CROSS_COMPILER_PREFIX=""
+ UCLIBC_EXTRA_CFLAGS=""
+ # DODEBUG is not set
+ # DODEBUG_PT is not set
+-DOSTRIP=y
++# DOSTRIP is not set
+ # DOASSERTS is not set
+ # SUPPORT_LD_DEBUG is not set
+ # SUPPORT_LD_DEBUG_EARLY is not set
+diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
+index eb39df6..0fbce19 100644
+--- a/package/uclibc/uClibc-0.9.33.config
++++ b/package/uclibc/uClibc-0.9.33.config
+@@ -266,7 +266,7 @@ CROSS_COMPILER_PREFIX=""
+ UCLIBC_EXTRA_CFLAGS=""
+ # DODEBUG is not set
+ # DODEBUG_PT is not set
+-DOSTRIP=y
++# DOSTRIP is not set
+ # DOASSERTS is not set
+ # SUPPORT_LD_DEBUG is not set
+ # SUPPORT_LD_DEBUG_EARLY is not set
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index 4856287..11dde03 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -271,7 +271,7 @@ CROSS_COMPILER_PREFIX=""
+ UCLIBC_EXTRA_CFLAGS=""
+ # DODEBUG is not set
+ # DODEBUG_PT is not set
+-DOSTRIP=y
++# DOSTRIP is not set
+ # DOASSERTS is not set
+ # SUPPORT_LD_DEBUG is not set
+ # SUPPORT_LD_DEBUG_EARLY is not set
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ffd1d89..4e09b31 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -395,16 +395,6 @@ UCLIBC_WCHAR_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_WCHAR,$(@D)/.config)
+ endif
+ 
+ #
+-# strip
+-#
+-
+-ifeq ($(BR2_STRIP_none),y)
+-UCLIBC_STRIP_CONFIG = $(call KCONFIG_DISABLE_OPT,DOSTRIP,$(@D)/.config)
+-else
+-UCLIBC_STRIP_CONFIG = $(call KCONFIG_ENABLE_OPT,DOSTRIP,$(@D)/.config)
+-endif
+-
+-#
+ # Commands
+ #
+ 
+@@ -444,7 +434,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_THREAD_DEBUG_CONFIG)
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
+-	$(UCLIBC_STRIP_CONFIG)
+ endef
+ 
+ ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
