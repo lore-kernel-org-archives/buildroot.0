@@ -1,30 +1,32 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 18:27:30 +0200
-Subject: [Buildroot] [PATCH] mongrel2: Use github call
-Message-ID: <1413131250-5929-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 18:28:09 +0200
+Subject: [Buildroot] [PATCH 1/1] beaglebone: better support for starting
+	and creating images
+In-Reply-To: <543A5A3A.2070605@mind.be> (Arnout Vandecappelle's message of
+ "Sun, 12 Oct 2014 12:38:50 +0200")
+References: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
+ <543A5A3A.2070605@mind.be>
+Message-ID: <87vbnpuuau.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/mongrel2/mongrel2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index 14e3a80..74383c4 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MONGREL2_VERSION = v1.9.1
--MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
-+MONGREL2_SITE = $(call github,zedshaw,mongrel2,$(MONGREL2_VERSION))
- MONGREL2_LICENSE = BSD-3c
- MONGREL2_LICENSE_FILES = LICENSE
- MONGREL2_DEPENDENCIES = sqlite zeromq
+ > On 14/03/14 13:13, Marcin Jabrzyk wrote:
+ >> - Added short readme file with description of first steps how to start.
+ >> - Added uEnv.txt so the board can start from SDCard
+ >> - Added post-image.sh script to copy included uEnv.txt to output/images
+ >> 
+ >> Signed-off-by: Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+
+ > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ >  I didn't actually test it in any way, but it looks good and Stephan tested it.
+
+Agreed - Committed, thanks.
+
 -- 
-2.1.1
+Bye, Peter Korsgaard
