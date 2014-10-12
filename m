@@ -1,46 +1,53 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 12 Oct 2014 12:52:21 +0200
-Subject: [Buildroot] [PATCH 1/2] scripts/graph-build-time: clarify backend
-	selection
-Message-ID: <1413111142-17643-1-git-send-email-luca@lucaceresoli.net>
+Date: Sun, 12 Oct 2014 12:52:22 +0200
+Subject: [Buildroot] [PATCH 2/2] scripts/graph-build-time: properly warn
+	about missing modules
+In-Reply-To: <1413111142-17643-1-git-send-email-luca@lucaceresoli.net>
+References: <1413111142-17643-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1413111142-17643-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This instruction in the middle of 'import' lines looks very strange.
+Currently the graph-build-time script prints a python exception if a
+needed module cannot be imported. Catch the exception and tell the user
+which packages are missing, as we do for other missing dependencies.
 
-Also, it was not obvious to me what the 'Agg' backend is.
-
-Both things are actually correct, but it took a while to find out why.
-So clarify with a comment to save someone else's time.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Sascha Arthur <sascha.arthur@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- support/scripts/graph-build-time | 5 +++++
- 1 file changed, 5 insertions(+)
+ support/scripts/graph-build-time | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index 4bb90c2..b2817bd 100755
+index b2817bd..fbb3d52 100755
 --- a/support/scripts/graph-build-time
 +++ b/support/scripts/graph-build-time
-@@ -52,7 +52,12 @@
- import matplotlib as mpl
- import numpy
+@@ -49,8 +49,14 @@
+ #   * argparse (by default in Python 2.7, requires python-argparse if
+ #     Python 2.6 is used)
  
-+# Use the Agg backend (which produces a PNG output, see
-+# http://matplotlib.org/faq/usage_faq.html#what-is-a-backend),
-+# otherwise an incorrect backend is used on soe host machines).
-+# Note: matplotlib.use() must be called *before* matplotlib.pyplot.
- mpl.use('Agg')
+-import matplotlib as mpl
+-import numpy
++import sys
 +
- import matplotlib.pyplot as plt
++try:
++    import matplotlib as mpl
++    import numpy
++except ImportError:
++    sys.stderr.write("You need python-matplotlib and python-numpy to generate build graphs\n")
++    exit(1)
+ 
+ # Use the Agg backend (which produces a PNG output, see
+ # http://matplotlib.org/faq/usage_faq.html#what-is-a-backend),
+@@ -62,7 +68,6 @@ import matplotlib.pyplot as plt
  import matplotlib.font_manager as fm
  import csv
+ import argparse
+-import sys
+ 
+ steps = [ 'extract', 'patch', 'configure', 'build',
+           'install-target', 'install-staging', 'install-images',
 -- 
 1.9.1
