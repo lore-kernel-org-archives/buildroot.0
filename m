@@ -1,35 +1,46 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 19:46:14 +0200
-Subject: [Buildroot] [PATCH v2] mongrel2: Add comments to avoid use of
-	github call
-Message-ID: <1413135974-18291-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Oct 2014 19:56:03 +0200
+Subject: [Buildroot] [PATCH] libva-intel-driver: add indirect dependency
+	on BR2_PREFER_STATIC_LIB
+References: <1413135701-588-1-git-send-email-arnout@mind.be>
+Message-ID: <XnsA3C4CAC83F6A6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As the comment says, we don't want to uses the github helper, as we
-would end up with a generated tarball, which is not the same one as the
-one linked with the releases.
+"Arnout Vandecappelle (Essensium/Mind)" <arnout-
+agwphqFHkxc@public.gmane.org> wrote in news:1413135701-588-1-git-send-
+email-arnout at mind.be:
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/mongrel2/mongrel2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout-
+agwphqFHkxc@public.gmane.org>
+> ---
+>  package/libva-intel-driver/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-
+driver/Config.in
+> index 89a3264..16e7ced 100644
+> --- a/package/libva-intel-driver/Config.in
+> +++ b/package/libva-intel-driver/Config.in
+> @@ -9,11 +9,13 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
+>       depends on BR2_i386 || BR2_x86_64
+>       depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
+>       depends on BR2_LARGEFILE # libdrm
+> +        depends on !BR2_PREFER_STATIC_LIB # libva
+>       help
+>         VA-API back-end driver for Intel graphics chips
+>  
+>         https://01.org/linuxgraphics/community/vaapi
+>  
+> -comment "libva intel driver needs a toolchain w/ largefile, threads"
+> -     depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "libva intel driver needs a toolchain w/ largefile, threads, 
+dynamic library"
+> +     depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +          BR2_PREFER_STATIC_LIB
+>       depends on BR2_i386 || BR2_x86_64
 
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index 14e3a80..aa2e8fc 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -5,6 +5,8 @@
- ################################################################################
- 
- MONGREL2_VERSION = v1.9.1
-+# Do not uses the github helper here, the generated tarball is *NOT* the same
-+# as the one uploaded by upstream for the release.
- MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
- MONGREL2_LICENSE = BSD-3c
- MONGREL2_LICENSE_FILES = LICENSE
--- 
-2.1.1
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
