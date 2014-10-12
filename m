@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 17:56:32 +0200
-Subject: [Buildroot] [PATCH] infra: BR2_PREFER_STATIC_LIB now selects
- static building of packages
-In-Reply-To: <1413128040-1860-1-git-send-email-abrodkin@synopsys.com>
-References: <1413128040-1860-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20141012175632.26e3bd89@free-electrons.com>
+Date: Sun, 12 Oct 2014 17:57:49 +0200
+Subject: [Buildroot] [PATCH 03/11] gdb: Patch for "unrecognized
+ real-time signal" bug
+In-Reply-To: <1396558881-29631-3-git-send-email-paul@crapouillou.net>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-3-git-send-email-paul@crapouillou.net>
+Message-ID: <20141012175749.62343466@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Paul Cercueil,
 
-On Sun, 12 Oct 2014 17:34:00 +0200, Alexey Brodkin wrote:
-> With time BR2_PREFER_STATIC_LIB option meaning changed from "prefer static
-> libs when possible" to "do not build dynamic libs and build statically linked
-> applications".
+On Thu,  3 Apr 2014 23:01:13 +0200, Paul Cercueil wrote:
+> From: Maarten ter Huurne <maarten@treewalker.org>
 > 
-> This patch changes variable description and takes care of uClibc settings so
-> it doesn't build shared libs.
+> This avoids the following error at GDB startup:
 > 
-> Note that variable name is kept unchanged on purpose - it will be modified later
-> when real "prefer static" mode will be introduced.
+> GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
 > 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> For details, see:
+>   http://sourceware.org/bugzilla/show_bug.cgi?id=14523
 > 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+> Acked-By: Paul Cercueil <paul@crapouillou.net>
 > ---
->  Config.in                             | 14 ++++++++------
->  package/uclibc/uClibc-0.9.31.config   |  1 -
->  package/uclibc/uClibc-0.9.33.config   |  1 -
->  package/uclibc/uClibc-snapshot.config |  1 -
->  package/uclibc/uclibc.mk              | 11 +++++++++++
->  5 files changed, 19 insertions(+), 9 deletions(-)
+>  package/gdb/7.4.1/signal-128.patch | 15 +++++++++++++++
+>  package/gdb/7.5.1/signal-128.patch | 15 +++++++++++++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 package/gdb/7.4.1/signal-128.patch
+>  create mode 100644 package/gdb/7.5.1/signal-128.patch
 
-This should definitely be two separate patches. One updating the
-BR2_PREFER_STATIC_LIB description, and one making sure that uClibc
-obeys to the correct semantic of BR2_PREFER_STATIC_LIB.
+Those gdb versions are no longer supported in Buildroot. Plus, as
+pointed out by Vicente, the bug is actually in uClibc and not in gdb,
+so we've marked this patch as Rejected in our patch tracking system.
+
+Thanks!
 
 Thomas
 -- 
