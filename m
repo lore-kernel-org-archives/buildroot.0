@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 13:02:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sysvinit: don't start logging
-In-Reply-To: <1412779165-13366-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 8 Oct 2014 11:39:24 -0300")
+Date: Sun, 12 Oct 2014 13:02:17 +0200
+Subject: [Buildroot] [PATCH 2/2] sysklogd: add initscript
+In-Reply-To: <1412779165-13366-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 8 Oct 2014 11:39:25 -0300")
 References: <1412779165-13366-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egudzh3f.fsf@dell.be.48ers.dk>
+ <1412779165-13366-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a951zh3a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Don't try to start logging from /etc/inittab because busybox installs a
- > S01logging script that handles that and can lead to duplicate logging
- > processes.
- > Let's handle the logging in each package that provides it since we can
- > get multiple variants in the future like syslog-ng that have different
- > initialization routines.
+ > Since we don't handle it in sysvinit inittab any longer let's add an
+ > initscript to get things back into plug-and-play shape.
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
