@@ -1,54 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 11:02:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: new package
-In-Reply-To: <CA+TH9VmaCh+6X7CQVWPctUQTz1mLZyrXB1FyAObNceO_9=BeWQ@mail.gmail.com>
-References: <1413100208-12776-1-git-send-email-angelo.compagnucci@gmail.com>
- <1413100208-12776-3-git-send-email-angelo.compagnucci@gmail.com>
- <20141012102554.39aa340a@free-electrons.com>
- <CA+TH9VmaCh+6X7CQVWPctUQTz1mLZyrXB1FyAObNceO_9=BeWQ@mail.gmail.com>
-Message-ID: <20141012110213.5b7c6c8a@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 12 Oct 2014 11:06:23 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gst-ffmpeg: add option for LGPL build
+In-Reply-To: <1390096790-1864-1-git-send-email-danomimanchego123@gmail.com>
+References: <1390096790-1864-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <543A448F.5080400@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Danomi Manchego,
 
-On Sun, 12 Oct 2014 10:44:21 +0200, Angelo Compagnucci wrote:
+Danomi Manchego wrote:
+> Add option to build a LGPL licensed gst-ffmpeg.
+>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> ---
+>
+> v1 -> v2:
+>   - Move GST_FFMPEG_CONF_OPT adjustment (introduced by this patch)
+>     higher in the file, so that GST_FFMPEG_CONF_EXTRA_OPT lines
+>     don't get split.
+> ---
+>   package/gstreamer/gst-ffmpeg/Config.in     |   13 ++++++++++++-
+>   package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |   11 ++++++++++-
+>   2 files changed, 22 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+> index d879f5e..220f4d7 100644
+> --- a/package/gstreamer/gst-ffmpeg/Config.in
+> +++ b/package/gstreamer/gst-ffmpeg/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_GST_FFMPEG
+> +menuconfig BR2_PACKAGE_GST_FFMPEG
+>   	bool "gst-ffmpeg"
+>   	select BR2_PACKAGE_GST_PLUGINS_BASE
+>   	depends on BR2_LARGEFILE
+> @@ -8,5 +8,16 @@ config BR2_PACKAGE_GST_FFMPEG
+>
+>   	  http://gstreamer.freedesktop.org/
 
-> Yes, you are right, but changing runtime version means you have to
-> recompile a lot of things. This way, you compile at first and simply
-> removing .stap_target_installed, you can have free a new mono runtime
-> version!
-> If you think that it necessary to have them disabled at compile time,
-> I'll do it!
+Not related to your patch, but how about providing a more specific URL
+such as http://gstreamer.freedesktop.org/modules/gst-ffmpeg.html?
 
-Yes, please, that's how we do things for all packages: if a configure
-option is there to not build something that is actually disabled in the
-Buildroot configuration, then we use that.
+It would be a separate patch of course.
 
-> >> +ifneq ($(ASSEMBLY_INCLUDED),)
-> >> +$(eval $(host-autotools-package))
-> >> +endif
-> >
-> > Conditional not needed. I think we should ensure at least one runtime
-> > version is enabled.
-> 
-> That's not always true. There is ways in mono to "freeze" the
-> assemblies your application requires, so only the mono vm is required.
-> Moreover, you can write an application that ships required assemblies
-> in your project folder and not using the system wide installed.
-> I think that having an option to only compile the vm is good!
+>
+> +if BR2_PACKAGE_GST_FFMPEG
+> +
+> +config BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD
+> +	bool "Build a LGPL licensed gst-ffmpeg"
+> +	help
+> +	  This removes --enable-gpl and --enable-postproc from the
+> +	  ffmpeg configure line, and disables building the postproc
+> +	  gstreamer plugin.
 
-Then, the conditional shouldn't be here, but around the dependency of
-mono on host-mono.
+I personally prefer positive options. If you enable this options, it
+will remove stuff. I suggest you mimic the BR2_PACKAGE_FFMPEG_GPL
+option, from the ffmpeg package.
 
-That being said, I would recommend you to keep things simple for now,
-and handle only this use case as a follow-up contribution.
+Also unrelated to this patch, but is this package actually using
+ffmpeg or libav? All kconfig stuff suggest ffmpeg, but the package
+tarball actually contains a copy of the library in a directory named
+gst-libs/ext/libav, and the licensing info you add below mention libav.
 
-Thomas
+It's worth adding a separate patch to clarify to the user that:
+  - this package uses an internal copy of the library, and
+  - which source library it actually is.
+
+> +
+> +endif
+> +
+>   comment "gst-ffmpeg needs a toolchain w/ largefile, IPv6"
+>   	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+> diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> index 6534f93..ed2b519 100644
+> --- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> +++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+> @@ -10,6 +10,15 @@ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+>   GST_FFMPEG_INSTALL_STAGING = YES
+>   GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
+>
+> +ifeq ($(BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD),y)
+> +GST_FFMPEG_CONF_OPT += --enable-lgpl
+
+Your patch does not apply anymore to current master because _CONF_OPT
+have been renamed to _CONF_OPTS. Care to you rebase and resend?
+
+Otherwise looks good. I did a quick build test and it worked.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
