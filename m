@@ -1,67 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Oct 2014 15:44:00 +0200
-Subject: [Buildroot] [PATCH] docs/manual: remove example comment causing
- issues
-In-Reply-To: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413120085-21063-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141012134400.GA3674@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Oct 2014 15:43:55 +0200
+Subject: [Buildroot] [git commit] package/systemd: check
+	BR2_TARGET_GENERIC_GETTY
+Message-ID: <20141012134426.3C930B2610@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=2a8ceecd80baf21df509c96d0cbc9a1b39cd7d4b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-10-12 15:21 +0200, Thomas Petazzoni spake thusly:
-> The manual gives this example for using the github macro:
-> 
->   FOO_VERSION = v1.0 # tag or full commit ID
-> 
-> Unfortunately, people copy/pasting this example will face weird make
-> errors, because it leads the FOO_VERSION variable to end with a
-> space. Since the manual is anyway explaining just below the example
-> that FOO_VERSION can be used either with a tag or a full commit ID,
-> the simplest solution is to simply remove this comment.
-> 
-> Reported-by: Edd Robbins <edd.robbins@gmail.com>
-> Cc: Edd Robbins <edd.robbins@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Do not create a [serial-]getty link if BR2_TARGET_GENERIC_GETTY is not set.
+Might be useful for custom setups (rootfs overlay).
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Peter: use BR2_TARGET_GENERIC_GETTY_PORT to match the code below]
+Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/systemd/systemd.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/adding-packages-tips.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-> index 0d4fcb0..fde0a44 100644
-> --- a/docs/manual/adding-packages-tips.txt
-> +++ b/docs/manual/adding-packages-tips.txt
-> @@ -42,7 +42,7 @@ on GitHub. As GitHub is known to have changed download mechanisms in the
->  past, the 'github' helper function should be used as shown below.
->  
->  ------------------------
-> -FOO_VERSION = v1.0 # tag or full commit ID
-> +FOO_VERSION = v1.0
->  FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
->  ------------------------
->  
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index dafc65c..94407ab 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -187,6 +187,7 @@ define SYSTEMD_DISABLE_SERVICE_TTY1
+ 	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
+ endef
+ 
++ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd needs getty.service for VTs and serial-getty.service for serial ttys
+ define SYSTEMD_INSTALL_SERVICE_TTY
+ 	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+@@ -198,6 +199,7 @@ define SYSTEMD_INSTALL_SERVICE_TTY
+ 	ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
+ 		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+ endef
++endif
+ 
+ define SYSTEMD_INSTALL_INIT_SYSTEMD
+ 	$(SYSTEMD_DISABLE_SERVICE_TTY1)
