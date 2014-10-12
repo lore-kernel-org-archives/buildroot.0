@@ -1,42 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 09:53:13 +0200
-Subject: [Buildroot] [PATCH 05/15 v5] package/eudev: bump to 1.10
-In-Reply-To: <c609d379d02a9d21286707a654b296687b28cd00.1409578332.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 1 Sep 2014 15:38:17 +0200")
-References: <cover.1409578332.git.yann.morin.1998@free.fr>
- <c609d379d02a9d21286707a654b296687b28cd00.1409578332.git.yann.morin.1998@free.fr>
-Message-ID: <8738at3es6.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Oct 2014 10:01:17 +0200
+Subject: [Buildroot] [PATCH 1/1] cramfs: add host utilities menu entry
+In-Reply-To: <1413025535-5896-1-git-send-email-eric.le.bihan.dev@free.fr>
+ (Eric Le Bihan's message of "Sat, 11 Oct 2014 13:05:35 +0200")
+References: <1413025535-5896-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <87y4sl1zua.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
- > Now requires Linux kernel headers >= 3.9.
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/eudev/Config.in | 8 ++++++--
- >  package/eudev/eudev.mk  | 2 +-
- >  system/Config.in        | 6 ++++--
- >  3 files changed, 11 insertions(+), 5 deletions(-)
+ > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
- > diff --git a/package/eudev/Config.in b/package/eudev/Config.in
- > index fa28a9f..7aaa540 100644
- > --- a/package/eudev/Config.in
- > +++ b/package/eudev/Config.in
- > @@ -1,5 +1,6 @@
- >  config BR2_PACKAGE_EUDEV
- >  	bool "eudev"
- > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+Committed, thanks.
 
-When respinning this series, please also adjust the eudev help text as
-it currently says 2.6.34:
-
-          eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-          and inotify.
+People should really consider using squashfs instead though.
 
 -- 
 Bye, Peter Korsgaard
