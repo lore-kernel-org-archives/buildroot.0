@@ -1,34 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Oct 2014 12:38:50 +0200
-Subject: [Buildroot] [PATCH 1/1] beaglebone: better support for starting
- and creating images
-In-Reply-To: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
-References: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
-Message-ID: <543A5A3A.2070605@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 12:39:52 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: make help: remove <package>-
+	help, add link to online manual
+In-Reply-To: <1413109324-24401-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 12 Oct 2014 12:22:04 +0200")
+References: <1413109039-23845-1-git-send-email-arnout@mind.be>
+ <1413109324-24401-1-git-send-email-arnout@mind.be>
+Message-ID: <87zjd1zi4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/03/14 13:13, Marcin Jabrzyk wrote:
-> - Added short readme file with description of first steps how to start.
-> - Added uEnv.txt so the board can start from SDCard
-> - Added post-image.sh script to copy included uEnv.txt to output/images
->
-> Signed-off-by: Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > We only documented a few of the <package>- targets and it's hard to
+ > decide which ones are relevant for make help. Since the help is already
+ > way too long, it's better to remove these advanced targets.
 
- I didn't actually test it in any way, but it looks good and Stephan tested it.
+ > Instead, let's refer to the online manual.
 
- Regards,
- Arnout
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+ > ---
+ > v2: move the link to the online manual to the bottom.
+
+ > At the BR developer meeting we decided to go for this option.
+
+ > A TODO item has been added to create a 'make <package>-help' target
+ > that shows all the package-specific targets.
+
+ > Perhaps something similar should be done for the defconfigs and
+ > for the allyesconfig etc. targets as well.
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
