@@ -1,187 +1,33 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 18:00:07 +0200
-Subject: [Buildroot] [PATCH] libevent: use github call
-Message-ID: <1413129607-9134-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 18:04:25 +0200
+Subject: [Buildroot] glmark2 and mesa3d-demos
+In-Reply-To: <XnsA3C4B57787209berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <20141012173729.0a6a883e@free-electrons.com>
+ <XnsA3C4B57787209berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20141012180425.1381197b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add AUTORECONF as theses releases don't contains 'configure'
-and such.
+Dear Bernd Kuhls,
 
-Two patchs are added to make the autotools happy.
-Theses patchs are already in upstream, waiting for a new release.
----
- .../0001-Disable-building-tests-programs.patch     | 30 ++++++++++
- .../libevent/0002-Remove-usage-of-top_srcdir.patch | 64 ++++++++++++++++++++++
- .../libevent-disable-building-test-programs.patch  | 30 ----------
- package/libevent/libevent.mk                       |  4 +-
- 4 files changed, 96 insertions(+), 32 deletions(-)
- create mode 100644 package/libevent/0001-Disable-building-tests-programs.patch
- create mode 100644 package/libevent/0002-Remove-usage-of-top_srcdir.patch
- delete mode 100644 package/libevent/libevent-disable-building-test-programs.patch
+On Sun, 12 Oct 2014 17:50:20 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/libevent/0001-Disable-building-tests-programs.patch b/package/libevent/0001-Disable-building-tests-programs.patch
-new file mode 100644
-index 0000000..65fd928
---- /dev/null
-+++ b/package/libevent/0001-Disable-building-tests-programs.patch
-@@ -0,0 +1,30 @@
-+From a4fb64af00b76600f85416471a513c89dc89d769 Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Sun, 12 Oct 2014 17:12:22 +0200
-+Subject: [PATCH 1/2] Disable building tests programs
-+
-+We are not really interested in building test programs.
-+Moreover, these programs use fork() function that is not available on
-+MMU-less architectures.
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 42879a3..dc90359 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -126,7 +126,7 @@ else
-+ noinst_LTLIBRARIES =  $(LIBEVENT_LIBS_LA)
-+ endif
-+ 
-+-SUBDIRS = . include sample test
-++SUBDIRS = . include sample
-+ 
-+ if BUILD_WIN32
-+ 
-+-- 
-+2.1.1
-+
-diff --git a/package/libevent/0002-Remove-usage-of-top_srcdir.patch b/package/libevent/0002-Remove-usage-of-top_srcdir.patch
-new file mode 100644
-index 0000000..34c90f0
---- /dev/null
-+++ b/package/libevent/0002-Remove-usage-of-top_srcdir.patch
-@@ -0,0 +1,64 @@
-+From 8fe87a7dd2179ae6a3697af5c2a43143adba3c82 Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Sun, 12 Oct 2014 17:41:41 +0200
-+Subject: [PATCH 2/2] Remove usage of top_srcdir
-+
-+This is already upstream, waiting for a release.
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ Makefile.am      |  4 +++-
-+ test/Makefile.am | 10 +++++++++-
-+ 2 files changed, 12 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index dc90359..c34576d 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -128,6 +128,8 @@ endif
-+ 
-+ SUBDIRS = . include sample
-+ 
-++DISTCLEANFILES=
-++
-+ if BUILD_WIN32
-+ 
-+ SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
-+@@ -239,5 +241,5 @@ doxygen: FORCE
-+ 	doxygen $(srcdir)/Doxyfile
-+ FORCE:
-+ 
-+-DISTCLEANFILES = *~ libevent.pc ./include/event2/event-config.h
-++DISTCLEANFILES += *~ libevent.pc ./include/event2/event-config.h
-+ 
-+diff --git a/test/Makefile.am b/test/Makefile.am
-+index b10c41a..ea468b3 100644
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -5,6 +5,7 @@
-+ # See LICENSE for copying information.
-+ 
-+ AUTOMAKE_OPTIONS = foreign
-++DISTCLEANFILES =
-+ 
-+ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/compat -I$(top_srcdir)/include -I../include -DTINYTEST_LOCAL
-+ 
-+@@ -19,7 +20,14 @@ endif
-+ EXTRA_PROGRAMS = regress
-+ noinst_HEADERS = tinytest.h tinytest_macros.h regress.h tinytest_local.h
-+ 
-+-TESTS = $(top_srcdir)/test/test.sh
-++# We need to copy this file, since automake doesn't want us to use top_srcdir
-++# in TESTS.
-++TESTS = test/test-script.sh
-++
-++test/test-script.sh: test/test.sh
-++ cp $< $@
-++
-++DISTCLEANFILES += test/test-script.sh
-+ 
-+ BUILT_SOURCES =
-+ if BUILD_REGRESS
-+-- 
-+2.1.1
-+
-diff --git a/package/libevent/libevent-disable-building-test-programs.patch b/package/libevent/libevent-disable-building-test-programs.patch
-deleted file mode 100644
-index 4b0f0d9..0000000
---- a/package/libevent/libevent-disable-building-test-programs.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From e932c8864e1bb8b6a7901d4b049a1100c4becba5 Mon Sep 17 00:00:00 2001
--From: Gilles Talis <gilles.talis@gmail.com>
--Date: Fri, 21 Jun 2013 15:25:11 -0700
--Subject: [PATCH] Disable building test programs
--
--We are not really interested in building test programs.
--Moreover, these programs use fork() function that is
--not available on MMU-less architectures.
--
--Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-----
-- Makefile.in |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 2ebefa2..4fba1ff 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -487,7 +487,7 @@ LIBEVENT_LIBS_LA = libevent.la libevent_core.la libevent_extra.la \
-- @INSTALL_LIBEVENT_TRUE at lib_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
-- @INSTALL_LIBEVENT_TRUE at pkgconfig_DATA = $(LIBEVENT_PKGCONFIG)
-- @INSTALL_LIBEVENT_FALSE at noinst_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
---SUBDIRS = . include sample test
--+SUBDIRS = . include sample
-- @BUILD_WIN32_FALSE at SYS_LIBS = 
-- @BUILD_WIN32_TRUE at SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
-- @BUILD_WIN32_FALSE at SYS_SRC = $(am__append_5) $(am__append_6) \
---- 
--1.7.4.1
--
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 73be502..fbc7c54 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -5,11 +5,11 @@
- ################################################################################
- 
- LIBEVENT_VERSION = 2.0.21
--LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
--LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
-+LIBEVENT_SITE = $(call github,libevent,libevent,release-$(LIBEVENT_VERSION)-stable)
- LIBEVENT_INSTALL_STAGING = YES
- LIBEVENT_LICENSE = BSD-3c, OpenBSD
- LIBEVENT_LICENSE_FILES = LICENSE
-+LIBEVENT_AUTORECONF = YES
- 
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+> > Would you be interested in picking up those patches?
+> 
+> I do not say no, but it will be low on my priority list because I do not need 
+> the packages myself -> added to my to-do list ;)
+
+Sure, I do not expect this to have a high priority. The patches have
+already been sitting there for more than a year, so a few more months
+will not hurt :-)
+
+Thanks for picking this up!
+
+Thomas
 -- 
-2.1.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
