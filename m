@@ -1,54 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 12 Oct 2014 13:58:34 +0200
-Subject: [Buildroot] [PATCH 1/2] scripts/graph-build-time:
-	clarify	backend selection
-In-Reply-To: <20141012105733.GC3870@free.fr>
-References: <1413111142-17643-1-git-send-email-luca@lucaceresoli.net>
- <20141012105733.GC3870@free.fr>
-Message-ID: <f6f34edf-f8b9-4592-804a-1ca989c141cb@email.android.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 12 Oct 2014 14:39:47 +0200
+Subject: [Buildroot] [PATCH 1/1] Bump libubox, libuci to last versions,
+ add ubus package
+In-Reply-To: <1413098996-358-1-git-send-email-swexru@gmail.com>
+References: <1413098996-358-1-git-send-email-swexru@gmail.com>
+Message-ID: <CAGm1_kvofnWhbRdRFfYRzfmANfn-_VJVYn=z-C1+z9=6J5QnBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->Luca, All,
->
->On 2014-10-12 12:52 +0200, Luca Ceresoli spake thusly:
->> This instruction in the middle of 'import' lines looks very strange.
->> 
->> Also, it was not obvious to me what the 'Agg' backend is.
->> 
->> Both things are actually correct, but it took a while to find out why.
->> So clarify with a comment to save someone else's time.
->> 
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Sascha Arthur <sascha.arthur@gmail.com>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->
->Except for a little typo:
->
->Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->> ---
->>  support/scripts/graph-build-time | 5 +++++
->>  1 file changed, 5 insertions(+)
->> 
->> diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
->> index 4bb90c2..b2817bd 100755
->> --- a/support/scripts/graph-build-time
->> +++ b/support/scripts/graph-build-time
->> @@ -52,7 +52,12 @@
->>  import matplotlib as mpl
->>  import numpy
->>  
->> +# Use the Agg backend (which produces a PNG output, see
->> +# http://matplotlib.org/faq/usage_faq.html#what-is-a-backend),
->> +# otherwise an incorrect backend is used on soe host machines).
->
->s/soe/smoe/
+Hi Alexey,
 
-Are you sure? ;-)
+On Sun, Oct 12, 2014 at 9:29 AM, Alexey Mednyy <swexru@gmail.com> wrote:
+> Signed-off-by: Alexey Mednyy <swexru@gmail.com>
+> ---
+>  package/Config.in                              |  1 +
+>  package/libubox/libubox.mk                     |  2 +-
+>  package/libuci/libuci.mk                       |  2 +-
+>  package/ubus/Config.in                         | 11 ++++++++++
+>  package/ubus/ubus-01-json-definition-fix.patch | 28 ++++++++++++++++++++++++++
+>  package/ubus/ubus.mk                           | 26 ++++++++++++++++++++++++
+
+Glad to see, that someone else is working on bringing OpenWrt stuff to
+BR. Have you tried to run LuCI on BR? What is still missing to run
+OpenWrt on BR?
+
+Regards,
+Yegor
