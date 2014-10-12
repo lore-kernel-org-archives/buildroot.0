@@ -1,61 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 18:41:26 +0200
-Subject: [Buildroot] [git commit] package/qemu: do not use autotools for qemu
-Message-ID: <20141012172417.A688CB2A75@busybox.osuosl.org>
+Date: Sun, 12 Oct 2014 19:22:40 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: uses fork(),
+	not available on no-MMU platforms
+Message-ID: <20141012172417.E4440B03FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb7a26cbb731aa67e1b2f853d8b4daa598fa112a
+commit: http://git.buildroot.net/buildroot/commit/?id=962e08e89b161f8bee6bd45cab56e32c90521af5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although QEMU has a ./configure script, it is not an autotools-package,
-so switch to providing build and install commands, and to using
-generic-package.
+The only package selecting wpa_supplicant is connman, and it is
+already depends on BR2_USE_MMU.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+
+  http://autobuild.buildroot.org/results/9ac/9ac3c0de573f5266a889f1ceb6d43aa92f715c55/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk |   18 +++++++++++-------
- 1 files changed, 11 insertions(+), 7 deletions(-)
+ package/wpa_supplicant/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 827bb77..9654b90 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -59,22 +59,26 @@ ifeq ($(HOST_QEMU_ARCH),powerpc)
- endif
- HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
- 
--# Note: although QEMU has a ./configure script, it is not a real autotools
--# package, and ./configure chokes on options such as --host or --target.
--# So, provide out own _CONFIGURE_CMDS to override the defaults.
- define HOST_QEMU_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
-+	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
- 		--target-list="$(HOST_QEMU_TARGETS)"    \
- 		--prefix="$(HOST_DIR)/usr"              \
- 		--interp-prefix=$(STAGING_DIR)          \
- 		--cc="$(HOSTCC)"                        \
- 		--host-cc="$(HOSTCC)"                   \
- 		--extra-cflags="$(HOST_CFLAGS)"         \
--		--extra-ldflags="$(HOST_LDFLAGS)"       \
--	)
-+		--extra-ldflags="$(HOST_LDFLAGS)"
- endef
- 
--$(eval $(host-autotools-package))
-+define HOST_QEMU_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_QEMU_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
-+endef
-+
-+$(eval $(host-generic-package))
- 
- # variable used by other packages
- QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 6b1c492..6ebd2fe 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WPA_SUPPLICANT
+ 	bool "wpa_supplicant"
++	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_avr32 # no epoll_create1
+ 	help
+ 	  WPA supplicant for secure wireless networks
