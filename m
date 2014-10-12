@@ -1,75 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 16:48:36 +0200
-Subject: [Buildroot] [PATCH] linux-headers: allow use of headers from
-	kernel "package" selected
-In-Reply-To: <1413105548-13590-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Sun, 12 Oct 2014 11:19:08 +0200")
-References: <1413105548-13590-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87y4slwdh7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 16:53:32 +0200
+Subject: [Buildroot] [PATCH 0/3] toolchain: Add support for Sourcery
+ Codebench Standard
+In-Reply-To: <1405277160-4686-1-git-send-email-romain.naour@openwide.fr>
+References: <1405277160-4686-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141012165332.07ee1277@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <alexey.brodkin@gmail.com> writes:
+Dear Romain Naour,
 
- > From: Karoly Kasza <kaszak@gmail.com>
- > This is a re-work of http://patchwork.ozlabs.org/patch/346823/
+On Sun, 13 Jul 2014 20:45:57 +0200, Romain Naour wrote:
 
- > In buildroot kernel headers used for building toolchain come from upstream
- > kernel sources (even though user may specify version, but not origin).
+> The purpose of this series is to provide support for Sourcery Codebench
+> Standard (licenced) edition in Buildroot.
+> 
+> Since these toolchain can't be downloaded, we need to use the custom toolchain
+> backend to import them into Buildroot.
 
- > This change makes it possible to use exactly the same sources for both
- > headers during toolchain building and for kernel building itself.
+Thanks for this patch series. As we discussed today during the meeting,
+the currently proposed implementation is a bit fragile because:
 
- > Moreover if "kernel" is selected to be built by defaut its sources will
- > be used for kernel headers on toolchain build.
+ * SYSROOT_DIR is empty/invalid in your situation, while most of the
+   code assumes SYSROOT_DIR exists. While your patches make sure every
+   time SYSROOT_DIR is used, we fallback to ARCH_SYSROOT_DIR if
+   SYSROOT_DIR doesn't exist, this may break in the future, especially
+   as we don't have access to this proprietary Sourcery Codebench
+   toolchain to test and check that future changes will keep this
+   toolchain working.
 
- > That way user might be sure that ABI mismatch won't happen between toolchain
- > and kernel.
+ * the dance with faking a SYSROOT_DIR being different from
+   ARCH_SYSROOT_DIR by one path component is really highly specific to
+   this toolchain, and will not work in other situations.
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Consequently, the proposal is to:
 
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  package/linux-headers/Config.in.host   | 8 ++++++++
- >  package/linux-headers/linux-headers.mk | 7 +++++++
- >  2 files changed, 15 insertions(+)
+ * Change the SYSROOT_DIR/ARCH_SYSROOT_DIR detection logic so that if
+   SYSROOT_DIR is empty/bogus, then the same value as ARCH_SYSROOT_DIR
+   is used. This ensures that both SYSROOT_DIR and ARCH_SYSROOT_DIR
+   point to valid directories (which would the same in the case of this
+   toolchain, which brings us back to the non-multilib toolchain case).
 
- > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
- > index 101136a..64d4b9e 100644
- > --- a/package/linux-headers/Config.in.host
- > +++ b/package/linux-headers/Config.in.host
- > @@ -5,6 +5,7 @@ comment "Kernel Header Options"
- 
- >  choice
- >  	prompt "Kernel Headers"
- > +	default BR2_KERNEL_HEADERS_SAME_AS_KERNEL if BR2_LINUX_KERNEL
- >  	default BR2_KERNEL_HEADERS_3_17
- >  	help
- >  	  Select the version of kernel header files you wish to use.
- > @@ -69,6 +70,13 @@ choice
- 
- >  	config BR2_KERNEL_HEADERS_VERSION
- >  		bool "Manually specified Linux version"
- > +
- > +	config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
- > +		bool "Use Linux kernel specified for target"
- > +		depends on BR2_LINUX_KERNEL
- > +		help
- > +		  Use the Linux kernel specified for the target in
- > +		  the Kernel menu.
+ * Adjust the symlink logic to handle a new case: when SYSROOT_DIR ==
+   ARCH_SYSROOT_DIR, look again at the real sysroot directory, and if
+   it's bogus, then it means we in fact have a multilib toolchain that
+   may need a symbolic link. If that's the case, then using
+   -print-sysroot with no flags, -print-sysroot with flags, and
+   computing the common part of both paths, we get the "base sysroot".
 
-Thanks, but we also need to have the BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_XX
-stuff working, so you need to show the version selection like we do for
-BR2_KERNEL_HEADERS_VERSION (but probably with another description).
+Thinking about it, we might also think of using the strategy described
+above to find the "base sysroot" and use this value in SYSROOT_DIR, no?
 
-With that said, is this really helpful when you still need to provide
-the kernel version for the _TOOLCHAIN_HEADERS_AT_LEAST_ stuff? The only
-reason I can think of is if you have custom kernel which provides some
-kind of extra userspace API (headers).
+In the mean time, I'll mark the three patches as Changes Requested in
+patchwork.
 
+Thomas
 -- 
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
