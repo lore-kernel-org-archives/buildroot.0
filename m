@@ -1,73 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 07:46:28 +0200
-Subject: [Buildroot] [git commit] docs/asciidoc: make it possible to use
-	$(@D) in hooks
-Message-ID: <20141012072420.30A91B1909@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 09:25:24 +0200
+Subject: [Buildroot] [PATCH 01/25 v7] gendoc infra: move manual build
+	location into $(BUILD_DIR)/docs/manual
+In-Reply-To: <2c6e9687c0d69163e2e87f9747fa3cf5856a4961.1412355549.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 3 Oct 2014 19:01:35 +0200")
+References: <cover.1412355549.git.yann.morin.1998@free.fr>
+ <2c6e9687c0d69163e2e87f9747fa3cf5856a4961.1412355549.git.yann.morin.1998@free.fr>
+Message-ID: <8738at7nrv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d2a49f78f6e342973b9301fd97097b90464dd43
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Currently, it is not possible to use $(@D) in documents' hooks, because
-there is no actual target file for the copying rule.
+ > From: Samuel Martin <s.martin49@gmail.com>
+ > This patch reworks the manual source preparation by:
+ > - moving the build directory under $(BUILD_DIR)/, this keeps consistency
+ >   with the other Buildroot infrastructures;
+ > - adding a couple of targets: 'manual-rsync' and 'manual-prepare-sources',
+ >   to deal more efficiently with the manual sources and avoid rsync-ing
+ >   them on every single manual-* target.
 
-So, use the same mechanism as for generic-package.
+ > The 'manual-rsync' target only copies the manual sources under git, while
+ > the 'manual-prepare-sources' also takes care of the generated ones. These
+ > targets are now run only once,  and the manual build is no longer cleaned
+ > after each manual format generation.
 
-We do not touch the target file, so it is easy to regenerate the manual
-without calling the -clean rule first.
+ > Now, the 'manual-clean' target only remove the manual build directory, but
+ > keeps the output one $(O)/output/doc/manual unchanged.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/manual.mk   |    2 +-
- package/doc-asciidoc.mk |   12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ > Doing so (moving the manual build directory and keeping it between 2
+ > manual format generation) ensures that all generated sources are taken
+ > in account when generating the manual [1].
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index a3011c6..d5db2c2 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -12,7 +12,7 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
- # should not be included in the manual.
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
- 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- endef
-diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index 6b5b2b7..9a18270 100644
---- a/package/doc-asciidoc.mk
-+++ b/package/doc-asciidoc.mk
-@@ -121,16 +121,16 @@ define ASCIIDOC
- $(1)-check-dependencies: asciidoc-check-dependencies
- 	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
- 
--$$(BUILD_DIR)/docs/$(1):
--	$$(Q)mkdir -p $$@
--
- # Single line, because splitting a foreach is not easy...
--$(1)-rsync: $$(BUILD_DIR)/docs/$(1)
-+# Do not touch the stamp file, so we get to rsync again every time we build
-+# the document.
-+$$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
- 	$$(Q)$$(call MESSAGE,"Preparing the $(1) sources...")
--	$$(Q)rsync -a $(3) $$^
-+	$$(Q)mkdir -p $$(@D)
-+	$$(Q)rsync -a $(3) $$(@D)
- 	$$(Q)$$(foreach hook,$$($(2)_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
- 
--$(1)-prepare-sources: $(1)-rsync
-+$(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
- 
- $(call ASCIIDOC_INNER,$(1),$(2),$(3),xhtml,html,html,HTML,\
- 	--xsltproc-opts "--stringparam toc.section.depth 1")
+ > [1] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
+
+ > Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > [yann.morin.1998 at free.fr: moved into $(BUILD_DIR)/docs/manual as per
+ > Thomas P. suggestion]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed series with the small comment of Thomas DS and the default
+make target fixed, thanks!
+
+-- 
+Bye, Peter Korsgaard
