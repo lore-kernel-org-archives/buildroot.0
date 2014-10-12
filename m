@@ -1,40 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 14:58:54 +0200
-Subject: [Buildroot] [git commit] package/Makefile.in: Fix dependency for
-	selecting uclinux as TARGET_OS
-Message-ID: <20141012130031.4B4C6B228A@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 12 Oct 2014 09:02:56 -0400
+Subject: [Buildroot] [PATCH] am335x-pru-package: new package
+In-Reply-To: <20141012105049.GB3870@free.fr>
+References: <1392255830-27810-1-git-send-email-fhunleth@troodon-software.com>
+ <20141012105049.GB3870@free.fr>
+Message-ID: <CA+-urNRkH7tw8mg0FV5_hBVbcXcQZpxO0pQMe4VSM-9gsc57Og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c25f6e6c0a57daac4786dbdf2f0242273641566
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Current setting only allows blackfin to select uclinux as TARGET_OS.
-However, some noMMU ARM platforms that using FLAT binary format also need to
-select uclinux as TARGET_OS. Fix the dependency.
+On Sun, Oct 12, 2014 at 6:50 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Frank, All,
+>
+> On 2014-02-12 20:43 -0500, Frank Hunleth spake thusly:
+> > am335x-pru-package provides an assembler and program loader for Texas
+> > Instrument's AM335x programmable real-time units.
+>
+> I've just sent an updated version of that patch:
+>     http://patchwork.ozlabs.org/patch/398921/
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Makefile.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for updating the patch! It seems like it's been a while since I
+worked on the project that required it, but it should help anyone
+using the PRU get going in the future. I'm really thankful for all of
+the work that you and everyone else put into this project.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7d9943c..28a5bfd 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -38,8 +38,8 @@ endif
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
- 
--# Blackfin FLAT needs uclinux
--ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-+# FLAT binary format needs uclinux
-+ifeq ($(BR2_BINFMT_FLAT),y)
- TARGET_OS = uclinux
- else
- TARGET_OS = linux
+Frank
