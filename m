@@ -1,41 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 12:50:48 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: Do not build rt-test with
- external MIPS uClibc
-In-Reply-To: <38121FAB319C3344930C920E7B51831320FD40F1@LEMAIL01.le.imgtec.org>
-References: <38121FAB319C3344930C920E7B51831320FD40F1@LEMAIL01.le.imgtec.org>
-Message-ID: <20141012125048.0a07baad@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Oct 2014 12:45:42 +0200
+Subject: [Buildroot] [git commit] dash: bump to version 0.5.8-1
+Message-ID: <20141012105052.B378AB23B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=9a0990c4088635ab4869849b79870c8b781fc5b8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Oct 2014 08:35:07 +0000, Vincent Olivert Riera wrote:
-> We do not allow some external MIPS uClibc toolchains to build the
-> rt-tests package because they do not have the necessary fixes applied.
-> 
-> Related:
->   http://git.buildroot.net/buildroot/commit/?id=af9d0442cdc8d10e1be55beb02d422194c94a6f9
->   http://git.buildroot.net/buildroot/commit/?id=a47d19d41055da20139d532a253108e9b17c7950
->   http://git.buildroot.net/buildroot/commit/?id=398e590e2d55668e9ef7420cc274f0afdd174684
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  scripts/autobuild-run | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Add hash file and use $(INSTALL) instead of cp for proper mode handling.
 
-Thanks, applied.
+[Peter: drop /bin/sh handling as we're going to handle it globally]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...tch => dash-0001-no-config.h-for-helpers.patch} |    0
+ package/dash/dash.hash                             |    3 +++
+ package/dash/dash.mk                               |    6 +++---
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-Peter, Maxime, Nathaniel, Richard, please remember to update your
-autobuild-run script to take into account this change.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dash/dash-0.5.7-no-config.h-for-helpers.patch b/package/dash/dash-0001-no-config.h-for-helpers.patch
+similarity index 100%
+rename from package/dash/dash-0.5.7-no-config.h-for-helpers.patch
+rename to package/dash/dash-0001-no-config.h-for-helpers.patch
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+new file mode 100644
+index 0000000..0198cd8
+--- /dev/null
++++ b/package/dash/dash.hash
+@@ -0,0 +1,3 @@
++# From http://ftp.debian.org/debian/pool/main/d/dash/dash_0.5.8-1.dsc
++sha256	c6db3a237747b02d20382a761397563d813b306c020ae28ce25a1c3915fac60f	dash_0.5.8.orig.tar.gz
++sha256	d751769cc1ef8b825a177e782f1cd3e35bde7c268107fa4febf8d235e12c64d9	dash_0.5.8-1.diff.gz
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 5bc0835..656748c 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
+ 
+-DASH_VERSION = 0.5.7
++DASH_VERSION = 0.5.8
+ DASH_SOURCE = dash_$(DASH_VERSION).orig.tar.gz
+ DASH_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
+-DASH_PATCH = dash_$(DASH_VERSION)-3.diff.gz
++DASH_PATCH = dash_$(DASH_VERSION)-1.diff.gz
+ DASH_LICENSE = BSD-3c, GPLv2+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+ 
+ define DASH_INSTALL_TARGET_CMDS
+-	cp -a $(@D)/src/dash $(TARGET_DIR)/bin/dash
++	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
+ endef
+ 
+ $(eval $(autotools-package))
