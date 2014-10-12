@@ -1,22 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Oct 2014 17:50:20 +0200
-Subject: [Buildroot] glmark2 and mesa3d-demos
-References: <20141012173729.0a6a883e@free-electrons.com>
-Message-ID: <XnsA3C4B57787209berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 17:54:08 +0200
+Subject: [Buildroot] [PATCH] uClibc: ldso/libdl: Also include dl-tls.h
+	for for !SHARED.
+In-Reply-To: <1410439878-32028-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 11 Sep 2014 13:51:18 +0100")
+References: <1410439878-32028-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87zjd1uvvj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20141012173729.0a6a883e at free-electrons.com:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-> Would you be interested in picking up those patches?
+ > Apply an upstream patch:
+ >   http://git.uclibc.org/uClibc/commit/ldso/libdl/libdl.c?id=b57e9640db53166c88cdac66b79a046e46b8d728
 
-Hi,
+ > On MIPS, several relocations that were original only resolved by the
+ > dynamic linker were reused as static relocations.  Consequently the
+ > macros TLS_DTPREL_VALUE and TLS_TPREL_VALUE defined in
+ > libpthread/nptl/sysdeps/mips/dl-tls.h need to be available even for
+ > !SHARED.
 
-I do not say no, but it will be low on my priority list because I do not need 
-the packages myself -> added to my to-do list ;)
+ > Relevant: http://www.linux-mips.org/wiki/NPTL#History
 
-Regards, Bernd
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/85e/85e66962da9a6b80e1d1b721031b6ef0da45e3d5/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
