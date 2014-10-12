@@ -1,31 +1,51 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 18:23:53 +0200
-Subject: [Buildroot] [PATCH] luaposix: Use github call
-Message-ID: <1413131033-26185-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 18:26:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: add --delete to
+ rsync
+In-Reply-To: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20141012182600.5382ad4a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/luaposix/luaposix.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Dear Alvaro G. M,
 
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 46723a0..13fc266 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- LUAPOSIX_VERSION = 32
--LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
--LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
-+LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = COPYING
- LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
+On Fri, 10 Oct 2014 11:14:47 +0200, Alvaro G. M wrote:
+> When a source overriden package is built and then its source code is modified
+> and rebuilt with make package-rebuild, it is needed for the build directory
+> to contain exactly the same source that is in the original directory,
+> so rsync must not only copy missing files, but also remove those that existed
+> previously but now don't.
+> 
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+> ---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+The fact that adding --delete would delete all object/generated files
+makes this patch really not usable, as it basically kills completely
+the entire purpose of OVERRIDE_SRCDIR + make <foo>-rebuild. We think
+that the small advantage brought by this patch is largely outweighed by
+the major inconvenience it causes. The build system of most packages is
+reasonable, and will not take into account random source files hanging
+around. If the build system of your package is so broken that it builds
+random files by just building *.c or *.cpp, then it's really the build
+system that should be fixed.
+
+Since there is no way to distinguish the files to remove from the files
+to keep, we prefer to keep them all, in order to keep its usefulness to
+'make <foo>-rebuild'.
+
+As a consequence, we've marked the patch as Rejected in our patch
+tracking system.
+
+Best regards,
+
+Thomas
 -- 
-2.1.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
