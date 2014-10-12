@@ -1,95 +1,69 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 12 Oct 2014 11:06:23 +0200
-Subject: [Buildroot] [PATCH v2 1/1] gst-ffmpeg: add option for LGPL build
-In-Reply-To: <1390096790-1864-1-git-send-email-danomimanchego123@gmail.com>
-References: <1390096790-1864-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <543A448F.5080400@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 11:07:26 +0200
+Subject: [Buildroot] [PATCH 1/2] automake: update gtk-doc.m4 to serial 2
+In-Reply-To: <1412936897-8478-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 10 Oct 2014 07:28:16 -0300")
+References: <1412936897-8478-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ppdx1ws1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Danomi Manchego wrote:
-> Add option to build a LGPL licensed gst-ffmpeg.
->
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->
-> ---
->
-> v1 -> v2:
->   - Move GST_FFMPEG_CONF_OPT adjustment (introduced by this patch)
->     higher in the file, so that GST_FFMPEG_CONF_EXTRA_OPT lines
->     don't get split.
-> ---
->   package/gstreamer/gst-ffmpeg/Config.in     |   13 ++++++++++++-
->   package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |   11 ++++++++++-
->   2 files changed, 22 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
-> index d879f5e..220f4d7 100644
-> --- a/package/gstreamer/gst-ffmpeg/Config.in
-> +++ b/package/gstreamer/gst-ffmpeg/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_GST_FFMPEG
-> +menuconfig BR2_PACKAGE_GST_FFMPEG
->   	bool "gst-ffmpeg"
->   	select BR2_PACKAGE_GST_PLUGINS_BASE
->   	depends on BR2_LARGEFILE
-> @@ -8,5 +8,16 @@ config BR2_PACKAGE_GST_FFMPEG
->
->   	  http://gstreamer.freedesktop.org/
+ > Update gtk-doc.m4 infra to serial (version) 2.
+ > Some packages start to need/ship with the new version and can't be
+ > properly autoreconf'ed, like kmod 18+.
+ > The file was picked up from kmod-18 itself actually.
+ > Also add host-pkgconf to DEPENDENCIES since it's required by gtk-doc.m4
+ > and rather than tweak it we'd prefer to use vanilla - it's actually a
+ > small price in build time if we are autoreconfiguring anyway.
 
-Not related to your patch, but how about providing a more specific URL
-such as http://gstreamer.freedesktop.org/modules/gst-ffmpeg.html?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/automake/automake.mk |  2 +-
+ >  package/automake/gtk-doc.m4  | 47 ++++++++++++++++++++++++++++++++++----------
+ >  2 files changed, 38 insertions(+), 11 deletions(-)
 
-It would be a separate patch of course.
+ > diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+ > index 8d7e291..ab17c5d 100644
+ > --- a/package/automake/automake.mk
+ > +++ b/package/automake/automake.mk
+ > @@ -10,7 +10,7 @@ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+ >  AUTOMAKE_LICENSE = GPLv2+
+ >  AUTOMAKE_LICENSE_FILES = COPYING
+ 
+ > -HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ > +HOST_AUTOMAKE_DEPENDENCIES = host-autoconf host-pkgconf
+ 
+ >  define GTK_DOC_M4_INSTALL
+ >   $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
+ > diff --git a/package/automake/gtk-doc.m4 b/package/automake/gtk-doc.m4
+ > index 2cfa1e7..3675543 100644
+ > --- a/package/automake/gtk-doc.m4
+ > +++ b/package/automake/gtk-doc.m4
+ > @@ -27,17 +44,22 @@ AC_DEFUN([GTK_DOC_CHECK],
+ >                     [use gtk-doc to build documentation [[default=no]]]),,
+ >      [enable_gtk_doc=no])
+ 
+ > -  if test x$enable_gtk_doc = xyes; then
+ > -    ifelse([$1],[],
+ > -      [PKG_CHECK_EXISTS([gtk-doc],,
+ > -                        AC_MSG_ERROR([gtk-doc not installed and --enable-gtk-doc requested]))],
+ > -      [PKG_CHECK_EXISTS([gtk-doc >= $1],,
+ > -                        AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build $PACKAGE_NAME]))])
+ > -  fi
+ > -
 
->
-> +if BR2_PACKAGE_GST_FFMPEG
-> +
-> +config BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD
-> +	bool "Build a LGPL licensed gst-ffmpeg"
-> +	help
-> +	  This removes --enable-gpl and --enable-postproc from the
-> +	  ffmpeg configure line, and disables building the postproc
-> +	  gstreamer plugin.
+So the old version of gtk-doc.m4 already needed host-pkgconf when
+autoreconfiguring, and the bump shouldn't cause any more breakage.
 
-I personally prefer positive options. If you enable this options, it
-will remove stuff. I suggest you mimic the BR2_PACKAGE_FFMPEG_GPL
-option, from the ffmpeg package.
-
-Also unrelated to this patch, but is this package actually using
-ffmpeg or libav? All kconfig stuff suggest ffmpeg, but the package
-tarball actually contains a copy of the library in a directory named
-gst-libs/ext/libav, and the licensing info you add below mention libav.
-
-It's worth adding a separate patch to clarify to the user that:
-  - this package uses an internal copy of the library, and
-  - which source library it actually is.
-
-> +
-> +endif
-> +
->   comment "gst-ffmpeg needs a toolchain w/ largefile, IPv6"
->   	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-> diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> index 6534f93..ed2b519 100644
-> --- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> +++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-> @@ -10,6 +10,15 @@ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
->   GST_FFMPEG_INSTALL_STAGING = YES
->   GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
->
-> +ifeq ($(BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD),y)
-> +GST_FFMPEG_CONF_OPT += --enable-lgpl
-
-Your patch does not apply anymore to current master because _CONF_OPT
-have been renamed to _CONF_OPTS. Care to you rebase and resend?
-
-Otherwise looks good. I did a quick build test and it worked.
+We discussed it during the dev days. Considering how fast host-pkgconf
+builds we should probably just automatically pull it in for all
+autotools packages (even if they don't autoreconf) so we don't need to
+add it everywhere, but that's for later.
 
 -- 
-Luca
+Bye, Peter Korsgaard
