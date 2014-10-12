@@ -1,78 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 18:54:34 +0200
-Subject: [Buildroot] [git commit] package/qemu: add basic target selection
-Message-ID: <20141012172417.C915EB03FA@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Oct 2014 19:25:01 +0200
+Subject: [Buildroot] [PATCH] mongrel2: Use github call
+In-Reply-To: <CAHXCMMLUUD98yZ+7_XS4+nYCKh-LUUw4a3nr3K5CSrKsgWibRw@mail.gmail.com>
+References: <1413131250-5929-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAHXCMMLUUD98yZ+7_XS4+nYCKh-LUUw4a3nr3K5CSrKsgWibRw@mail.gmail.com>
+Message-ID: <CAGduivwyhyq7UhACXhP_8B1YF+HrkEXEdZbiFYJZu1WnrYAvRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68ec49acc7be3cefdbc0cfb8a4ea40c223e8afe0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/Config.in |   18 ++++++++++++++++++
- package/qemu/qemu.mk   |   14 ++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 6cd6cc8..96ec301 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -26,3 +26,21 @@ config BR2_PACKAGE_QEMU
- 	  server and embedded PowerPC, and S390 guests.
- 
- 	  http://qemu.org/
-+
-+if BR2_PACKAGE_QEMU
-+
-+comment "Emulators selection"
-+
-+config BR2_PACKAGE_QEMU_SYSTEM
-+	bool "Enable all systems emulation"
-+	help
-+	  Say 'y' to build all system emulators/virtualisers that QEMU supports.
-+
-+config BR2_PACKAGE_QEMU_LINUX_USER
-+	bool "Enable all Linux user-land emulation"
-+	help
-+	  Say 'y' to build all Linux user-land emulators that QEMU supports.
-+
-+# Note: bsd-user can not be build on Linux
-+
-+endif # BR2_PACKAGE_QEMU
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index d6ccc08..9f76145 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -99,6 +99,18 @@ QEMU_VARS = \
-     PYTHON=$(HOST_DIR)/usr/bin/python \
-     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
-+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
-+QEMU_OPTS += --enable-system
-+else
-+QEMU_OPTS += --disable-system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_LINUX_USER),y)
-+QEMU_OPTS += --enable-linux-user
-+else
-+QEMU_OPTS += --disable-linux-user
-+endif
-+
- define QEMU_CONFIGURE_CMDS
- 	( cd $(@D);                                 \
- 	    LIBS='$(QEMU_LIBS)'                     \
-@@ -113,8 +125,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --enable-kvm                        \
- 	        --enable-attr                       \
- 	        --enable-vhost-net                  \
--	        --enable-system                     \
--	        --enable-linux-user                 \
- 	        --disable-bsd-user                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
+On Sun, Oct 12, 2014 at 6:53 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Maxime,
+>
+> On Sun, Oct 12, 2014 at 6:27 PM, Maxime Hadjinlian
+> <maxime.hadjinlian@gmail.com> wrote:
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>>  package/mongrel2/mongrel2.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+>> index 14e3a80..74383c4 100644
+>> --- a/package/mongrel2/mongrel2.mk
+>> +++ b/package/mongrel2/mongrel2.mk
+>> @@ -5,7 +5,7 @@
+>>  ################################################################################
+>>
+>>  MONGREL2_VERSION = v1.9.1
+>> -MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
+>> +MONGREL2_SITE = $(call github,zedshaw,mongrel2,$(MONGREL2_VERSION))
+>
+> I'm dubious about this change. What are your motivations for this change?
+> Mongrel2 has an explicit release/download location.
+> IMHO, github won't change because this page aims to be the place where
+> release tarball can be found, unlike git-archive tarball based on a
+> tag or a sha1.
+You are right. The releases is an uploaded file so we must use the URL.
+I'll drop this patch and push a new one to simply add a comment
+stating that it should not be changed.
+>
+>>  MONGREL2_LICENSE = BSD-3c
+>>  MONGREL2_LICENSE_FILES = LICENSE
+>>  MONGREL2_DEPENDENCIES = sqlite zeromq
+>> --
+>> 2.1.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Regards,
+>
+> --
+> Samuel
