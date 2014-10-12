@@ -1,51 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 09:25:24 +0200
-Subject: [Buildroot] [PATCH 01/25 v7] gendoc infra: move manual build
-	location into $(BUILD_DIR)/docs/manual
-In-Reply-To: <2c6e9687c0d69163e2e87f9747fa3cf5856a4961.1412355549.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 3 Oct 2014 19:01:35 +0200")
-References: <cover.1412355549.git.yann.morin.1998@free.fr>
- <2c6e9687c0d69163e2e87f9747fa3cf5856a4961.1412355549.git.yann.morin.1998@free.fr>
-Message-ID: <8738at7nrv.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Oct 2014 09:27:48 +0200
+Subject: [Buildroot] [PATCH] eudev: improve S10udev script for startup
+In-Reply-To: <1413098527-17162-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 12 Oct 2014 09:22:07 +0200")
+References: <1413098527-17162-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y4sl693f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > From: Samuel Martin <s.martin49@gmail.com>
- > This patch reworks the manual source preparation by:
- > - moving the build directory under $(BUILD_DIR)/, this keeps consistency
- >   with the other Buildroot infrastructures;
- > - adding a couple of targets: 'manual-rsync' and 'manual-prepare-sources',
- >   to deal more efficiently with the manual sources and avoid rsync-ing
- >   them on every single manual-* target.
+ > From: Paul Cercueil <paul@crapouillou.net>
+ > This commit adjusts the S10udev script by:
 
- > The 'manual-rsync' target only copies the manual sources under git, while
- > the 'manual-prepare-sources' also takes care of the generated ones. These
- > targets are now run only once,  and the manual build is no longer cleaned
- > after each manual format generation.
+ >  * Using the --action=add option to udevadm trigger. By default, only
+ >    the "change" events are handled by 'udevadm trigger', which means
+ >    it doesn't handle all the "device add" events that occured during
+ >    the boot time, before eudev was started.
 
- > Now, the 'manual-clean' target only remove the manual build directory, but
- > keeps the output one $(O)/output/doc/manual unchanged.
+ >  * Adds a call to 'udevadm settle' to make sure we wait for udev to
+ >    handle all the events that occured before eudev was started.
 
- > Doing so (moving the manual build directory and keeping it between 2
- > manual format generation) ensures that all generated sources are taken
- > in account when generating the manual [1].
+ > Both of these change match what the Ubuntu and Debian udev startup
+ > scripts are doing.
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
+ > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- > [yann.morin.1998 at free.fr: moved into $(BUILD_DIR)/docs/manual as per
- > Thomas P. suggestion]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed series with the small comment of Thomas DS and the default
-make target fixed, thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
