@@ -1,53 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Oct 2014 18:53:48 +0200
-Subject: [Buildroot] [PATCH] mongrel2: Use github call
-In-Reply-To: <1413131250-5929-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413131250-5929-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <CAHXCMMLUUD98yZ+7_XS4+nYCKh-LUUw4a3nr3K5CSrKsgWibRw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 18:55:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: add --delete to
+ rsync
+In-Reply-To: <CAM+bi4sERYCa0rsUgskkEOtO_EKLHGsJvkYC+d54hgH-xbue9Q@mail.gmail.com>
+References: <1412932487-25373-1-git-send-email-alvaro.gamez@hazent.com>
+ <20141012182600.5382ad4a@free-electrons.com>
+ <CAM+bi4sERYCa0rsUgskkEOtO_EKLHGsJvkYC+d54hgH-xbue9Q@mail.gmail.com>
+Message-ID: <20141012185507.3bfb8f72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Dear Alvaro Gamez,
 
-On Sun, Oct 12, 2014 at 6:27 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/mongrel2/mongrel2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-> index 14e3a80..74383c4 100644
-> --- a/package/mongrel2/mongrel2.mk
-> +++ b/package/mongrel2/mongrel2.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->
->  MONGREL2_VERSION = v1.9.1
-> -MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
-> +MONGREL2_SITE = $(call github,zedshaw,mongrel2,$(MONGREL2_VERSION))
+On Sun, 12 Oct 2014 18:37:28 +0200, Alvaro Gamez wrote:
 
-I'm dubious about this change. What are your motivations for this change?
-Mongrel2 has an explicit release/download location.
-IMHO, github won't change because this page aims to be the place where
-release tarball can be found, unlike git-archive tarball based on a
-tag or a sha1.
+> Although it's true that something like gcc *.c isn't very elegant, I
+> can't agree on being the build system broken.
 
->  MONGREL2_LICENSE = BSD-3c
->  MONGREL2_LICENSE_FILES = LICENSE
->  MONGREL2_DEPENDENCIES = sqlite zeromq
-> --
-> 2.1.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Well, I guess it's a matter of definition of the word 'broken' :-)
 
-Regards,
+> After all, if you start
+> adding and removing files from the source code, the expectation should
+> be that the next build is going to be different from the previous one.
+> Nevertheless, if this hasn't come to attention before it's probably a
+> non problem (I saw this happen on a custom package that isn't even a
+> real package, just fiddling around and making tests), so I understand
+> the reject.
+> 
+> The only solution I can think of that satisfies both conditions (fast
+> builds and identical tree) is something like saving (where?) the
+> output of `find $(X_OVERRIDE_SRCDIR)` before rsyncing for the first
+> time, and after rsyncing for the second time remove files listed on
+> the saved list from before previous to doing the next rsync.
+> 
+> Do you have any opinion on this idea? Admittedly, it seems ugly.
 
+You can experiment with that if you wish, but it indeed doesn't seem
+very pretty, so I'm not sure we will be willing to merge something like
+this.
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
