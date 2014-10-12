@@ -1,36 +1,85 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 21:13:48 +0200
-Subject: [Buildroot] [PATCH] libva-intel-driver: add indirect dependency
-	on BR2_PREFER_STATIC_LIB
-In-Reply-To: <1413135701-588-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 12 Oct 2014 19:41:41 +0200")
-References: <1413135701-588-1-git-send-email-arnout@mind.be>
-Message-ID: <874mv9t82b.fsf@dell.be.48ers.dk>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 12 Oct 2014 15:30:04 -0400
+Subject: [Buildroot] [PATCH v3 1/3] gst-ffmpeg: add option to select GPL vs
+	LGPL build
+Message-ID: <1413142206-30581-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- >  package/libva-intel-driver/Config.in | 6 ++++--
- >  1 file changed, 4 insertions(+), 2 deletions(-)
+---
 
- > diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
- > index 89a3264..16e7ced 100644
- > --- a/package/libva-intel-driver/Config.in
- > +++ b/package/libva-intel-driver/Config.in
- > @@ -9,11 +9,13 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- >  	depends on BR2_i386 || BR2_x86_64
- >  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
- >  	depends on BR2_LARGEFILE # libdrm
- > +        depends on !BR2_PREFER_STATIC_LIB # libva
+v2 -> v3:
+ - Change enable-LGPL option to an enable-GPL, like the ffmpeg
+   option, per recommendation from Luca Ceresoli.
 
-Should have been indented with a <tab>. Committed with that fixed,
-thanks.
+v1 -> v2:
+ - Move GST_FFMPEG_CONF_OPT adjustment (introduced by this patch)
+   higher in the file, so that GST_FFMPEG_CONF_EXTRA_OPT lines
+   don't get split.
+---
+ package/gstreamer/gst-ffmpeg/Config.in     | 12 +++++++++++-
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 12 +++++++++++-
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
+diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+index d879f5e..00c3471 100644
+--- a/package/gstreamer/gst-ffmpeg/Config.in
++++ b/package/gstreamer/gst-ffmpeg/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_GST_FFMPEG
++menuconfig BR2_PACKAGE_GST_FFMPEG
+ 	bool "gst-ffmpeg"
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	depends on BR2_LARGEFILE
+@@ -8,5 +8,15 @@ config BR2_PACKAGE_GST_FFMPEG
+ 
+ 	  http://gstreamer.freedesktop.org/
+ 
++if BR2_PACKAGE_GST_FFMPEG
++
++config BR2_PACKAGE_GST_FFMPEG_GPL
++	bool "Enable GPL code"
++	help
++	  Allow use of GPL code.  The resulting libs and binaries will
++	  be under GPL.
++
++endif
++
+ comment "gst-ffmpeg needs a toolchain w/ largefile, IPv6"
+ 	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index b94fb0f..af3e880 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -10,6 +10,16 @@ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+ GST_FFMPEG_INSTALL_STAGING = YES
+ GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
+ 
++ifeq ($(BR2_PACKAGE_GST_FFMPEG_GPL),y)
++GST_FFMPEG_CONF_OPTS += --disable-lgpl
++GST_FFMPEG_LICENSE = GPLv2+ (gst-ffmpeg), GPLv2+/GPL3+ (libav)
++GST_FFMPEG_LICENSE_FILES = COPYING gst-libs/ext/libav/COPYING.GPLv2 gst-libs/ext/libav/COPYING.GPLv3
++else
++GST_FFMPEG_CONF_OPTS += --enable-lgpl
++GST_FFMPEG_LICENSE = LGPL2+ (gst-ffmpeg), LGPLv2.1+/LGPL3+ (libav)
++GST_FFMPEG_LICENSE_FILES = COPYING.LIB gst-libs/ext/libav/COPYING.LGPLv2.1 gst-libs/ext/libav/COPYING.LGPLv3
++endif
++
+ GST_FFMPEG_CONF_EXTRA_OPTS = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+ 		--target-os=linux
+@@ -73,6 +83,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ GST_FFMPEG_CONF_EXTRA_OPTS += --enable-pic
+ endif
+ 
+-GST_FFMPEG_CONF_OPTS = --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPTS)"
++GST_FFMPEG_CONF_OPTS += --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPTS)"
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.9.1
