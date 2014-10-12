@@ -1,63 +1,64 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Oct 2014 19:26:35 +0200
-Subject: [Buildroot] [PATCH] randconfig: seed with BR2_RAND_PRESEED_CONFIG
-In-Reply-To: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1413134795-32050-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 19:27:14 +0200
+Subject: [Buildroot] [PATCH] valgrind: add patch to fix build on PowerPC
+	uClibc
+Message-ID: <1413134834-7464-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, randconfig is completely unusable. Instead, we use
-randpackageconfig, with two use cases: in the autobuilders, and when
-doing manual testing of the validity of depends/select chains. In both
-cases, we actually want the possibility to explicitly select some
-packages or to set a string value or to randomise between a choice or
-to test bootloaders and kernels - all of this is currently impossible.
+uClibc on PowerPC forgot to define some PTRACE_* definitions. Even
+though the Buildroot uClibc package has a fix for this, it doesn't fix
+external uClibc toolchains that are not patched. Therefore this commit
+adds a patch to Valgrind to workaround the problem by defining
+PTRACE_GETSIGINFO to the appropriate value on PowerPC when it's not
+defined by the C library.
 
-With this patch, we can use randconfig instead of randpackageconfig,
-and provide it with a seed file specified with BR2_RAND_PRESEED_CONFIG.
+Fixes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  http://autobuild.buildroot.org/results/bc6/bc6be9aa1ad39201a1045a65c0c3eb1e968371f2/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ ...-add-missing-ptrace-getsiginfo-on-powerpc.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
 
-diff --git a/Makefile b/Makefile
-index c0dcec8..79b12c6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -727,7 +727,16 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
-+ifneq ($(BR2_RAND_PRESEED_CONFIG),)
-+	@cp $(BR2_RAND_PRESEED_CONFIG) $(CONFIG_DIR)/.config.nopkg
-+endif
-+	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
-+		while read config pkg; do \
-+		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
-+	@$(COMMON_CONFIG_ENV) \
-+		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-+		$< --randconfig $(CONFIG_CONFIG_IN)
-+	@rm -f $(CONFIG_DIR)/.config.nopkg
- 
- allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -852,7 +861,8 @@ help:
- 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
- 	@echo '  silentoldconfig        - Same as oldconfig, but quietly, additionally update deps'
- 	@echo '  olddefconfig           - Same as silentoldconfig but sets new symbols to their default value'
--	@echo '  randconfig             - New config with random answer to all options'
-+	@echo '  randconfig             - New config with random answer to all options -'
-+	@echo '                             options can be forced by setting BR2_RAND_PRESEED_CONFIG'
- 	@echo '  defconfig              - New config with default answer to all options'
- 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
- 	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
+diff --git a/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
+new file mode 100644
+index 0000000..f663825
+--- /dev/null
++++ b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
+@@ -0,0 +1,28 @@
++Define PTRACE_GETSIGINFO on PowerPC when not available
++
++uClibc 0.9.33.2 does not define PTRACE_GETSIGINFO in PowerPC. Even
++though Buildroot has a uClibc patch doing that, it doesn't solve the
++case of external uClibc toolchain from other sources (such as
++Crosstool-NG). Therefore, this patch modifies Valgrind to define
++PTRACE_GETSIGINFO on PowerPC to the right value, when such definition
++is not available from the C library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/coregrind/vgdb-invoker-ptrace.c
++===================================================================
++--- a/coregrind/vgdb-invoker-ptrace.c
+++++ b/coregrind/vgdb-invoker-ptrace.c
++@@ -71,6 +71,12 @@
++ #   endif
++ #endif
++ 
+++#if defined(__powerpc__)
+++# ifndef PTRACE_GETSIGINFO
+++#  define PTRACE_GETSIGINFO 0x4202
+++# endif
+++#endif
+++
++ #if VEX_HOST_WORDSIZE == 8
++ typedef Addr64 CORE_ADDR;
++ #elif VEX_HOST_WORDSIZE == 4
 -- 
-2.1.1
+2.0.0
