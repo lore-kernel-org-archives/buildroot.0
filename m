@@ -1,45 +1,102 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 12 Oct 2014 08:35:07 +0000
-Subject: [Buildroot] [PATCH] autobuild-run: Do not build rt-test with
- external MIPS uClibc
-Message-ID: <38121FAB319C3344930C920E7B51831320FD40F1@LEMAIL01.le.imgtec.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Oct 2014 10:35:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Add new package: biosdevname
+In-Reply-To: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
+References: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
+Message-ID: <20141012083548.GA3870@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We do not allow some external MIPS uClibc toolchains to build the
-rt-tests package because they do not have the necessary fixes applied.
+Ryan, All,
 
-Related:
-  http://git.buildroot.net/buildroot/commit/?id=af9d0442cdc8d10e1be55beb02d422194c94a6f9
-  http://git.buildroot.net/buildroot/commit/?id=a47d19d41055da20139d532a253108e9b17c7950
-  http://git.buildroot.net/buildroot/commit/?id=398e590e2d55668e9ef7420cc274f0afdd174684
+On 2014-02-03 16:37 -0500, Ryan Wilkins spake thusly:
+> Signed-off-by: Ryan Wilkins <ryan@deadfrog.net>
+> ---
+> v2: incorporated comments from Arnout
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- scripts/autobuild-run | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I've sent an updated version of that patch:
+    http://patchwork.ozlabs.org/patch/398911/
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 7497001..02ed668 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -284,6 +284,14 @@ def fixup_config(instance, sysinfo):
-     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
-         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
-         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
-+    # This MIPS uClibc toolchain fails to build the rt-tests package
-+    if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.08.tar.bz2"\n' in configlines:
-+        return False
-+    # This MIPS uClibc toolchain fails to build the rt-tests package
-+    if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+        return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Config.in                  |    1 +
+>  package/biosdevname/Config.in      |   13 +++++++++++++
+>  package/biosdevname/biosdevname.mk |   15 +++++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 package/biosdevname/Config.in
+>  create mode 100644 package/biosdevname/biosdevname.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 93d23cb..d2aeab8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -265,6 +265,7 @@ endmenu
+>  source "package/a10disp/Config.in"
+>  source "package/acpid/Config.in"
+>  source "package/avrdude/Config.in"
+> +source "package/biosdevname/Config.in"
+>  source "package/cdrkit/Config.in"
+>  source "package/cryptsetup/Config.in"
+>  source "package/cwiid/Config.in"
+> diff --git a/package/biosdevname/Config.in b/package/biosdevname/Config.in
+> new file mode 100644
+> index 0000000..17a9aa4
+> --- /dev/null
+> +++ b/package/biosdevname/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_BIOSDEVNAME
+> +	bool "biosdevname"
+> +	depends on (BR2_i386 || BR2_x86_64) && BR2_PACKAGE_UDEV
+> +	select BR2_PACKAGE_PCIUTILS
+> +	help
+> +	  Biosdevname is a udev helper that looks at various BIOS tables to
+> +	  figure out what the actual hardware names are for Ethernet ports
+> +	  and renames the ports accordingly.  This has the advantage of
+> +	  always referring to the same port regardless of system or
+> +	  hardware changes that might otherwise alter the typical ethX
+> +	  naming.
+> +
+> +	  http://linux.dell.com/biosdevname/
+> diff --git a/package/biosdevname/biosdevname.mk b/package/biosdevname/biosdevname.mk
+> new file mode 100644
+> index 0000000..be1c6af
+> --- /dev/null
+> +++ b/package/biosdevname/biosdevname.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# biosdevname
+> +#
+> +################################################################################
+> +
+> +BIOSDEVNAME_VERSION = 0.4.1
+> +BIOSDEVNAME_SITE = http://linux.dell.com/biosdevname/biosdevname-$(BIOSDEVNAME_VERSION)
+> +BIOSDEVNAME_LICENSE = GPL
+> +BIOSDEVNAME_LICENSE_FILES = COPYING
+> +BIOSDEVNAME_INSTALL_TARGET = YES
+> +BIOSDEVNAME_CONF_OPT = --exec-prefix=/
+> +BIOSDEVNAME_DEPENDENCIES = pciutils
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.7.9.5
+> 
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-2.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
