@@ -1,101 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 12 Oct 2014 07:46:26 +0200
-Subject: [Buildroot] [git commit] gendoc infra: move manual build location
-	into $(BUILD_DIR)/docs/manual
-Message-ID: <20141012072419.5CE47B1B51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: copying the manual sources is
+	a common action
+Message-ID: <20141012072419.8C80CB1B51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b118dfb4b18674b2d572899f90f0554d59239c8
+commit: http://git.buildroot.net/buildroot/commit/?id=1750f31b1f1f7c4300a427e1dcebfc379c411d7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch reworks the manual source preparation by:
-- moving the build directory under $(BUILD_DIR)/, this keeps consistency
-  with the other Buildroot infrastructures;
-- adding a couple of targets: 'manual-rsync' and 'manual-prepare-sources',
-  to deal more efficiently with the manual sources and avoid rsync-ing
-  them on every single manual-* target.
+Move the creation of $(BUILD_DIR)/manual and the rsyncing of the
+sources into GENDOC.
 
-The 'manual-rsync' target only copies the manual sources under git, while
-the 'manual-prepare-sources' also takes care of the generated ones. These
-targets are now run only once,  and the manual build is no longer cleaned
-after each manual format generation.
+This is is needed so that GENDOC can be easily used to generate another
+document, without requiring that document to duplicate the copying rules.
 
-Now, the 'manual-clean' target only remove the manual build directory, but
-keeps the output one $(O)/output/doc/manual unchanged.
-
-Doing so (moving the manual build directory and keeping it between 2
-manual format generation) ensures that all generated sources are taken
-in account when generating the manual [1].
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-August/104421.html
-
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: moved into $(BUILD_DIR)/docs/manual as per
-Thomas P. suggestion]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.mk |   24 ++++++++++++++++--------
- 1 files changed, 16 insertions(+), 8 deletions(-)
+ docs/manual/manual.mk |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 136f725..cdc4c73 100644
+index 69113e3..dd6f0ea 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -1,11 +1,20 @@
-+$(BUILD_DIR)/docs/$(pkgname):
-+	$(Q)mkdir -p $@
-+
-+manual-rsync: $(BUILD_DIR)/docs/$(pkgname)
-+	$(Q)$(call MESSAGE,"Preparing the manual sources...")
-+	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/docs/$(pkgname)
-+
+@@ -1,10 +1,3 @@
+-$(BUILD_DIR)/docs/$(pkgname):
+-	$(Q)mkdir -p $@
+-
+-manual-rsync: $(BUILD_DIR)/docs/$(pkgname)
+-	$(Q)$(call MESSAGE,"Preparing the manual sources...")
+-	$(Q)rsync -a docs/$(pkgname)/ $(BUILD_DIR)/docs/$(pkgname)
+-
  # Packages included in BR2_EXTERNAL are not part of buildroot, so they
  # should not be included in the manual.
--manual-update-lists: manual-check-dependencies-lists
-+manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
- 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- 
-+manual-prepare-sources: manual-rsync manual-update-lists
-+
- # we can't use suitable-host-package here because that's not available in
- # the context of 'make release'
- manual-check-dependencies:
-@@ -65,14 +74,13 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
- 			   manual-check-dependencies-$(3) \
--			   manual-update-lists
-+			   manual-prepare-sources
- 	$$(Q)$$(call MESSAGE,"Generating $(5) $(1)...")
--	$$(Q)mkdir -p $$(@D)/.build
--	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
-+	$$(Q)mkdir -p $$(@D)
- 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
- 		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
--		-D $$(@D) $$(@D)/.build/$(1).txt
--	-$$(Q)rm -rf $$(@D)/.build
-+		-D $$(@D) \
-+		$$(BUILD_DIR)/docs/$(1)/$(1).txt
- endef
- 
+ manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
+@@ -127,6 +120,13 @@ endef
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
  ################################################################################
-@@ -94,7 +102,7 @@ $(call GENDOC_INNER,$(pkgname),text,text,text,text)
- $(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
- clean: $(pkgname)-clean
- $(pkgname)-clean:
--	$$(Q)$$(RM) -rf $$(O)/docs/$(pkgname)
-+	$$(Q)$$(RM) -rf $$(BUILD_DIR)/docs/$(pkgname)
- .PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
- endef
- 
+ define GENDOC
++$$(BUILD_DIR)/docs/$(pkgname):
++	$$(Q)mkdir -p $$@
++
++$(pkgname)-rsync: $$(BUILD_DIR)/docs/$(pkgname)
++	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
++	$$(Q)rsync -a docs/$(pkgname)/ $$^
++
+ $(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,\
+ 	--xsltproc-opts "--stringparam toc.section.depth 1")
+ $(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,\
