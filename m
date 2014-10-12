@@ -1,29 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 19:23:50 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: uses fork(),
-	not available on no-MMU platforms
-In-Reply-To: <1413131995-28658-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 12 Oct 2014 18:39:55 +0200")
-References: <1413131995-28658-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k345td5l.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Oct 2014 18:41:26 +0200
+Subject: [Buildroot] [git commit] package/qemu: do not use autotools for qemu
+Message-ID: <20141012172417.A688CB2A75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fb7a26cbb731aa67e1b2f853d8b4daa598fa112a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The only package selecting wpa_supplicant is connman, and it is
- > already depends on BR2_USE_MMU.
+Although QEMU has a ./configure script, it is not an autotools-package,
+so switch to providing build and install commands, and to using
+generic-package.
 
- > Fixes:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qemu/qemu.mk |   18 +++++++++++-------
+ 1 files changed, 11 insertions(+), 7 deletions(-)
 
- >   http://autobuild.buildroot.org/results/9ac/9ac3c0de573f5266a889f1ceb6d43aa92f715c55/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 827bb77..9654b90 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -59,22 +59,26 @@ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ endif
+ HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+ 
+-# Note: although QEMU has a ./configure script, it is not a real autotools
+-# package, and ./configure chokes on options such as --host or --target.
+-# So, provide out own _CONFIGURE_CMDS to override the defaults.
+ define HOST_QEMU_CONFIGURE_CMDS
+-	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
++	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+ 		--target-list="$(HOST_QEMU_TARGETS)"    \
+ 		--prefix="$(HOST_DIR)/usr"              \
+ 		--interp-prefix=$(STAGING_DIR)          \
+ 		--cc="$(HOSTCC)"                        \
+ 		--host-cc="$(HOSTCC)"                   \
+ 		--extra-cflags="$(HOST_CFLAGS)"         \
+-		--extra-ldflags="$(HOST_LDFLAGS)"       \
+-	)
++		--extra-ldflags="$(HOST_LDFLAGS)"
+ endef
+ 
+-$(eval $(host-autotools-package))
++define HOST_QEMU_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_QEMU_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++endef
++
++$(eval $(host-generic-package))
+ 
+ # variable used by other packages
+ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
