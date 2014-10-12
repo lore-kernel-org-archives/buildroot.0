@@ -1,37 +1,38 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 20:00:27 +0200
-Subject: [Buildroot] [PATCH] snowball-hdmiservice: Use github call
-Message-ID: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Oct 2014 20:13:27 +0200
+Subject: [Buildroot] [PATCH 5/8] package/tvheadend: Add support for libdvbcsa
+In-Reply-To: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413137610-21887-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/snowball-hdmiservice/snowball-hdmiservice.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-index f254414..267b5ad 100644
---- a/package/snowball-hdmiservice/snowball-hdmiservice.mk
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-@@ -5,13 +5,13 @@
- ################################################################################
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/tvheadend.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 25a732c..9909b5c 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -14,6 +14,13 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+ TVHEADEND_DEPENDENCIES += avahi
+ endif
  
- SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
--SNOWBALL_HDMISERVICE_SITE = https://github.com/igloocommunity/hdmiservice
-+SNOWBALL_HDMISERVICE_SITE = $(call github,igloocommunity,hdmiservice,$(SNOWBALL_HDMISERVICE_VERSION))
- SNOWBALL_HDMISERVICE_LICENSE = MIT
- SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
- SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
- 
- define SNOWBALL_HDMISERVICE_BUILD_CMDS
--	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
- endef
- 
- define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
++ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
++TVHEADEND_DEPENDENCIES += libdvbcsa
++TVHEADEND_CONF_OPTS += --enable-dvbcsa
++else
++TVHEADEND_CONF_OPTS += --disable-dvbcsa
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TVHEADEND_DEPENDENCIES += libiconv
+ endif
 -- 
-2.1.1
+1.7.10.4
