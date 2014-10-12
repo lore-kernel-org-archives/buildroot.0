@@ -1,31 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 18:13:17 +0200
-Subject: [Buildroot] libdaemons localstatedir /usr/var
-In-Reply-To: <543AA492.2080907@posteo.de>
-References: <5439D19D.2030706@posteo.de>
- <20141012091818.04db85ae@free-electrons.com>
- <543A4928.5080901@posteo.de> <543A7D79.7010008@mind.be>
- <543AA492.2080907@posteo.de>
-Message-ID: <20141012181317.6ad4ba95@free-electrons.com>
+Date: Sun, 12 Oct 2014 18:17:20 +0200
+Subject: [Buildroot] [PATCH] libevent: use github call
+In-Reply-To: <1413129607-9134-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413129607-9134-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141012181720.2b5dd0ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Maxime Hadjinlian,
 
-On Sun, 12 Oct 2014 17:56:02 +0200, J?rg Krause wrote:
+Sorry, but the title of your patch is wrong: it does *much* more than
+use the github call.
 
-> >>      Bizarre things on the allyespackageconfig build
-> >>      (http://lists.busybox.net/pipermail/buildroot/2013-May/071856.html)
-> >   +1 to making it a global pkg-autotools option. J?rg, care to prepare a patch
-> > for that? Removing the existing --localstatedir should be a separate patch then.
+The title of the commit should summarize the entirety of the patch, and
+then the rest of the description should go in the details of what the
+patch does.
+
+On Sun, 12 Oct 2014 18:00:07 +0200, Maxime Hadjinlian wrote:
+> Add AUTORECONF as theses releases don't contains 'configure'
+> and such.
 > 
-> I will prepare a patch for this. Should I add this to host configure, 
-> too? I guess so...
+> Two patchs are added to make the autotools happy.
+> Theses patchs are already in upstream, waiting for a new release.
 
-If you add that to host configure, it should be $(HOST_DIR)/var.
+Missing SoB line.
+
+> diff --git a/package/libevent/0001-Disable-building-tests-programs.patch b/package/libevent/0001-Disable-building-tests-programs.patch
+> new file mode 100644
+> index 0000000..65fd928
+> --- /dev/null
+> +++ b/package/libevent/0001-Disable-building-tests-programs.patch
+> @@ -0,0 +1,30 @@
+> +From a4fb64af00b76600f85416471a513c89dc89d769 Mon Sep 17 00:00:00 2001
+> +From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> +Date: Sun, 12 Oct 2014 17:12:22 +0200
+> +Subject: [PATCH 1/2] Disable building tests programs
+> +
+> +We are not really interested in building test programs.
+> +Moreover, these programs use fork() function that is not available on
+> +MMU-less architectures.
+> +
+> +Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+You are not the author of this patch, it was written by Gilles Tallis.
+
+Please use git format-patch -M to enable rename detection so we see
+that it's actually the other patch that has only be changed slightly
+and renamed.
+
+>  LIBEVENT_VERSION = 2.0.21
+> -LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+> -LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
+> +LIBEVENT_SITE = $(call github,libevent,libevent,release-$(LIBEVENT_VERSION)-stable)
+>  LIBEVENT_INSTALL_STAGING = YES
+>  LIBEVENT_LICENSE = BSD-3c, OpenBSD
+>  LIBEVENT_LICENSE_FILES = LICENSE
+> +LIBEVENT_AUTORECONF = YES
+
+Why use the github function when a tarball is provided?
+
+Sorry, but patch unclear.
 
 Thomas
 -- 
