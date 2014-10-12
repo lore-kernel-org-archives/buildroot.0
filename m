@@ -1,100 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 11:57:51 +0200
-Subject: [Buildroot] [PATCH] [RFC] system: add option to choose what
-	/bin/sh points to
-In-Reply-To: <1413049741-1340-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 11 Oct 2014 19:49:01 +0200")
-References: <1413049741-1340-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87h9z91ug0.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 12 Oct 2014 12:06:35 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: new package
+In-Reply-To: <20141012114519.30aa9822@free-electrons.com>
+References: <1413100208-12776-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1413100208-12776-3-git-send-email-angelo.compagnucci@gmail.com>
+ <20141012102554.39aa340a@free-electrons.com>
+ <CA+TH9VmaCh+6X7CQVWPctUQTz1mLZyrXB1FyAObNceO_9=BeWQ@mail.gmail.com>
+ <20141012110213.5b7c6c8a@free-electrons.com>
+ <CA+TH9V=5MVzboiyLDxuuJwXJ=v-t9eZ-8kPF0q=AhXtDsS-1Rg@mail.gmail.com>
+ <20141012114519.30aa9822@free-electrons.com>
+Message-ID: <CA+TH9VmmxYDhPg7+LE73S3c-hXTB1h-aVP-_8MuBWqH5FvEkAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Thomas!
 
- > Not all our shells do install a pointer to /bin/sh. Besides, between
- > those that do and multiple ones are enabled, the last one to install
- > wins the the symlink.
+>> It is already:
+>>
+>> ifneq ($(MONO_ASSEMBLY_INCLUDED),)
+>> define MONO_INSTALL_LIBS
+>> rsync -av --exclude=*.so --exclude=*.mdb --exclude=[0-9].[0-9] \
+>> $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
+>> rsync -av --exclude=*.so --exclude=*.mdb $(MONO_ASSEMBLY_INCLUDED) \
+>> $(TARGET_DIR)/usr/lib/mono/
+>> endef
+>> MONO_DEPENDENCIES += host-mono
+>> MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+>> endif
+>>
+>> This way the dependency is met only when MONO_ASSEMBLY_INCLUDED.
+>> By the way, I'll remove this logic, make 4.5 as default version and if
+>> nothing selected, I'll default evenly on 4.5.
+>
+> Ok, right. Then don't add a condition around the host-autotools-package
+> call, this is useless.
 
- > Add a new config choice in the system sub-menu that allows the user to
- > explicitly select the shell to provide /bin/sh.
+OK! So it the end I can keep that logic? I think it's valuable!
+Obviously I can add a note on Config help.
 
- > Remove the symlink creation from bash.mk at the same time.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
- > Note: for every shell, we select them, except busybox, on which we
- > depend, on the assumption that we do not want to force busybox in case
- > the user decided not to enable it.
 
-But we default to BR2_INIT_BUSYBOX, so you still need to go into the
-system menu and disable that before you can deselect busybox.
-
-Another issue with the 'depends on' is that if you disable busybox the
-choice then jumps to the next option which pulls in bash (which might
-not really be what you want when you try to save space by disabling
-busybox).
-
-So I think it is better to use selects everywhere.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/bash/bash.mk |  1 -
- >  system/Config.in     | 43 +++++++++++++++++++++++++++++++++++++++++++
- >  system/system.mk     | 12 ++++++++++++
- >  3 files changed, 55 insertions(+), 1 deletion(-)
-
- > diff --git a/package/bash/bash.mk b/package/bash/bash.mk
- > index 6510af5..34a3a73 100644
- > --- a/package/bash/bash.mk
- > +++ b/package/bash/bash.mk
- > @@ -35,7 +35,6 @@ define BASH_INSTALL_TARGET_CMDS
- >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- >  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
- >  	rm -f $(TARGET_DIR)/bin/bashbug
- > -	ln -sf bash $(TARGET_DIR)/bin/sh
- >  endef
- 
- >  $(eval $(autotools-package))
- > diff --git a/system/Config.in b/system/Config.in
- > index e7e146a..22f37ea 100644
- > --- a/system/Config.in
- > +++ b/system/Config.in
- > @@ -211,6 +211,49 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- >  	  in the build log! Avoid using a valuable password if either the
- >  	  .config file or the build log may be distributed!
- 
- > +choice
- > +	bool "/bin/sh"
- > +	help
- > +	  Select which shell will provide /bin/sh.
- > +
- > +# busybox has shells that work on noMMU
- > +config BR2_SYSTEM_BIN_SH_BUSYBOX
- > +	bool "busybox' default shell"
- > +	depends on BR2_PACKAGE_BUSYBOX
- > +
- > +config BR2_SYSTEM_BIN_SH_BASH
- > +	bool "bash"
- > +	depends on BR2_USE_MMU # bash
- > +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || !BR2_PACKAGE_BUSYBOX
-
-You arguably don't need the || !BR2_PACKAGE_BUSYBOX as we do a trick and
-make BR2_PACKAGE_BUSYBOX_SHOW_OTHERS a hidden symbol (=y) when busybox
-isn't enabled.
-
-With that said, it doesn't actually work when I change the busybox
-option to use select:
-
-system/Config.in:214:error: recursive dependency detected!
-system/Config.in:214:   choice <choice> contains symbol BR2_SYSTEM_BIN_SH_BASH
-system/Config.in:224:   symbol BR2_SYSTEM_BIN_SH_BASH depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-package/busybox/Config.in:23:   symbol BR2_PACKAGE_BUSYBOX_SHOW_OTHERS depends on BR2_PACKAGE_BUSYBOX
-package/busybox/Config.in:1:    symbol BR2_PACKAGE_BUSYBOX is selected by BR2_SYSTEM_BIN_SH_BUSYBOX
-system/Config.in:220:   symbol BR2_SYSTEM_BIN_SH_BUSYBOX is part of choice <choice>
-
-Any idea what we can do?
 
 -- 
-Bye, Peter Korsgaard
+Profile: http://it.linkedin.com/in/compagnucciangelo
