@@ -1,32 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 18:28:09 +0200
-Subject: [Buildroot] [PATCH 1/1] beaglebone: better support for starting
-	and creating images
-In-Reply-To: <543A5A3A.2070605@mind.be> (Arnout Vandecappelle's message of
- "Sun, 12 Oct 2014 12:38:50 +0200")
-References: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
- <543A5A3A.2070605@mind.be>
-Message-ID: <87vbnpuuau.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 18:29:46 +0200
+Subject: [Buildroot] [PATCH] luaposix: Use github call
+In-Reply-To: <1413131033-26185-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413131033-26185-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141012182946.7db59593@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Dear Maxime Hadjinlian,
 
- > On 14/03/14 13:13, Marcin Jabrzyk wrote:
- >> - Added short readme file with description of first steps how to start.
- >> - Added uEnv.txt so the board can start from SDCard
- >> - Added post-image.sh script to copy included uEnv.txt to output/images
- >> 
- >> Signed-off-by: Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+On Sun, 12 Oct 2014 18:23:53 +0200, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/luaposix/luaposix.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+> index 46723a0..13fc266 100644
+> --- a/package/luaposix/luaposix.mk
+> +++ b/package/luaposix/luaposix.mk
+> @@ -5,8 +5,7 @@
+>  ################################################################################
+>  
+>  LUAPOSIX_VERSION = 32
+> -LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
+> -LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
+> +LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+>  LUAPOSIX_LICENSE = MIT
+>  LUAPOSIX_LICENSE_FILES = COPYING
+>  LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
 
- > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Why would we want to use git instead of a simple tarball?
 
- >  I didn't actually test it in any way, but it looks good and Stephan tested it.
-
-Agreed - Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
