@@ -1,64 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 19:27:14 +0200
-Subject: [Buildroot] [PATCH] valgrind: add patch to fix build on PowerPC
-	uClibc
-Message-ID: <1413134834-7464-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 19:29:49 +0200
+Subject: [Buildroot] [PATCH] nginx: disallow AIO support on AArch64
+In-Reply-To: <1413133117-8240-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 12 Oct 2014 18:58:37 +0200")
+References: <1413133117-8240-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvettcvm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc on PowerPC forgot to define some PTRACE_* definitions. Even
-though the Buildroot uClibc package has a fix for this, it doesn't fix
-external uClibc toolchains that are not patched. Therefore this commit
-adds a patch to Valgrind to workaround the problem by defining
-PTRACE_GETSIGINFO to the appropriate value on PowerPC when it's not
-defined by the C library.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
+ > The nginx AIO support cannot build on AArch64, because it hardcodes
+ > the usage of SYS_eventfd(), while it should just use eventfd() from
+ > the C library.
 
-  http://autobuild.buildroot.org/results/bc6/bc6be9aa1ad39201a1045a65c0c3eb1e968371f2/
+ > See https://bugs.launchpad.net/linaro-aarch64/+bug/1160013 for details.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-add-missing-ptrace-getsiginfo-on-powerpc.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
+ > Fixes:
 
-diff --git a/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
-new file mode 100644
-index 0000000..f663825
---- /dev/null
-+++ b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
-@@ -0,0 +1,28 @@
-+Define PTRACE_GETSIGINFO on PowerPC when not available
-+
-+uClibc 0.9.33.2 does not define PTRACE_GETSIGINFO in PowerPC. Even
-+though Buildroot has a uClibc patch doing that, it doesn't solve the
-+case of external uClibc toolchain from other sources (such as
-+Crosstool-NG). Therefore, this patch modifies Valgrind to define
-+PTRACE_GETSIGINFO on PowerPC to the right value, when such definition
-+is not available from the C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/coregrind/vgdb-invoker-ptrace.c
-+===================================================================
-+--- a/coregrind/vgdb-invoker-ptrace.c
-++++ b/coregrind/vgdb-invoker-ptrace.c
-+@@ -71,6 +71,12 @@
-+ #   endif
-+ #endif
-+ 
-++#if defined(__powerpc__)
-++# ifndef PTRACE_GETSIGINFO
-++#  define PTRACE_GETSIGINFO 0x4202
-++# endif
-++#endif
-++
-+ #if VEX_HOST_WORDSIZE == 8
-+ typedef Addr64 CORE_ADDR;
-+ #elif VEX_HOST_WORDSIZE == 4
+ >   http://autobuild.buildroot.org/results/54b/54bb761f9e774d91066b78217efcd583fdd85ff3/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.0.0
+Bye, Peter Korsgaard
