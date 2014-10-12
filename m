@@ -1,65 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 19:43:36 +0200
-Subject: [Buildroot] [git commit] valgrind: add patch to fix build on
-	PowerPC uClibc
-Message-ID: <20141012174428.09468B2B33@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Oct 2014 19:46:14 +0200
+Subject: [Buildroot] [PATCH v2] mongrel2: Add comments to avoid use of
+	github call
+Message-ID: <1413135974-18291-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1239610e223358d31bd9126f3bc5928deeba5d5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As the comment says, we don't want to uses the github helper, as we
+would end up with a generated tarball, which is not the same one as the
+one linked with the releases.
 
-uClibc on PowerPC forgot to define some PTRACE_* definitions. Even
-though the Buildroot uClibc package has a fix for this, it doesn't fix
-external uClibc toolchains that are not patched. Therefore this commit
-adds a patch to Valgrind to workaround the problem by defining
-PTRACE_GETSIGINFO to the appropriate value on PowerPC when it's not
-defined by the C library.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/bc6/bc6be9aa1ad39201a1045a65c0c3eb1e968371f2/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- ...-add-missing-ptrace-getsiginfo-on-powerpc.patch |   28 ++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/mongrel2/mongrel2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
-new file mode 100644
-index 0000000..f663825
---- /dev/null
-+++ b/package/valgrind/valgrind-0003-add-missing-ptrace-getsiginfo-on-powerpc.patch
-@@ -0,0 +1,28 @@
-+Define PTRACE_GETSIGINFO on PowerPC when not available
-+
-+uClibc 0.9.33.2 does not define PTRACE_GETSIGINFO in PowerPC. Even
-+though Buildroot has a uClibc patch doing that, it doesn't solve the
-+case of external uClibc toolchain from other sources (such as
-+Crosstool-NG). Therefore, this patch modifies Valgrind to define
-+PTRACE_GETSIGINFO on PowerPC to the right value, when such definition
-+is not available from the C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/coregrind/vgdb-invoker-ptrace.c
-+===================================================================
-+--- a/coregrind/vgdb-invoker-ptrace.c
-++++ b/coregrind/vgdb-invoker-ptrace.c
-+@@ -71,6 +71,12 @@
-+ #   endif
-+ #endif
-+ 
-++#if defined(__powerpc__)
-++# ifndef PTRACE_GETSIGINFO
-++#  define PTRACE_GETSIGINFO 0x4202
-++# endif
-++#endif
-++
-+ #if VEX_HOST_WORDSIZE == 8
-+ typedef Addr64 CORE_ADDR;
-+ #elif VEX_HOST_WORDSIZE == 4
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index 14e3a80..aa2e8fc 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -5,6 +5,8 @@
+ ################################################################################
+ 
+ MONGREL2_VERSION = v1.9.1
++# Do not uses the github helper here, the generated tarball is *NOT* the same
++# as the one uploaded by upstream for the release.
+ MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
+ MONGREL2_LICENSE = BSD-3c
+ MONGREL2_LICENSE_FILES = LICENSE
+-- 
+2.1.1
