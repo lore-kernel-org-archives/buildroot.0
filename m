@@ -1,120 +1,91 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 16:39:46 +0200
-Subject: [Buildroot] [PATCH v2] libressl: new package
-Message-ID: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 12 Oct 2014 09:41:59 -0500
+Subject: [Buildroot] Topics to discuss at the meeting
+In-Reply-To: <20141008105653.7252facd@free-electrons.com>
+References: <20141008105653.7252facd@free-electrons.com>
+Message-ID: <CANQCQpZeC6ds2btYrge5_CGHWXOeTLjfv+hYX1n1ynW7m6C=FA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-v1 -> v2:
-    - Add INSTALL_STAGING
----
- package/Config.in                                  |  1 +
- package/libressl/Config.in                         | 11 ++++++
- ...essl-0001-Fix-unavailable-file-for-uClibc.patch | 40 ++++++++++++++++++++++
- package/libressl/libressl.mk                       | 13 +++++++
- 4 files changed, 65 insertions(+)
- create mode 100644 package/libressl/Config.in
- create mode 100644 package/libressl/libressl-0001-Fix-unavailable-file-for-uClibc.patch
- create mode 100644 package/libressl/libressl.mk
+I'm unable to listen to the discussion this weekend, but I'd be curious
+where discussions on atomic operations go.
+On Oct 8, 2014 3:57 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 94e5f90..dc3d9bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -588,6 +588,7 @@ menu "Crypto"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
- 	source "package/libssh2/Config.in"
-+	source "package/libressl/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/polarssl/Config.in"
-diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-new file mode 100644
-index 0000000..f7d847d
---- /dev/null
-+++ b/package/libressl/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBRESSL
-+	bool "libressl"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  LibreSSL is a FREE version of the SSL/TLS protocol forked from OpenSSL
-+
-+	  http://www.libressl.org/
-+
-+comment "libressl needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libressl/libressl-0001-Fix-unavailable-file-for-uClibc.patch b/package/libressl/libressl-0001-Fix-unavailable-file-for-uClibc.patch
-new file mode 100644
-index 0000000..12dffe7
---- /dev/null
-+++ b/package/libressl/libressl-0001-Fix-unavailable-file-for-uClibc.patch
-@@ -0,0 +1,40 @@
-+From aec56aae7650399ae8103c1cff8050c5ea606425 Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Tue, 19 Aug 2014 21:58:15 +0200
-+Subject: [PATCH] Fix unavailable file for uClibc
-+
-+This file is not available for uClibc has it does not implement getauxval().
-+As specified in this discution:
-+https://github.com/libressl-portable/portable/pull/1
-+
-+This will never be fixed in libressl, patch have been sent for other
-+libc which should work.
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ crypto/compat/issetugid_linux.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/crypto/compat/issetugid_linux.c b/crypto/compat/issetugid_linux.c
-+index 669edce..19b2b57 100644
-+--- a/crypto/compat/issetugid_linux.c
-++++ b/crypto/compat/issetugid_linux.c
-+@@ -4,7 +4,6 @@
-+  */
-+
-+ #include <errno.h>
-+-#include <gnu/libc-version.h>
-+ #include <string.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+@@ -14,6 +13,7 @@
-+  * launched setuid/setgid or with additional capabilities.
-+  */
-+ #ifdef HAVE_GETAUXVAL
-++#include <gnu/libc-version.h>
-+ #include <sys/auxv.h>
-+ #endif
-+
-+--
-+2.0.1
-+
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-new file mode 100644
-index 0000000..e72d92b
---- /dev/null
-+++ b/package/libressl/libressl.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libressl
-+#
-+################################################################################
-+
-+LIBRESSL_VERSION = 2.0.5
-+LIBRESSL_SITE = http://ftp.openbsd.org/pub/OpenBSD/LibreSSL
-+LIBRESSL_LICENSE = Apache-1.0, BSD-4c, ISC License, Public Domain
-+LIBRESSL_INSTALL_STAGING = YES
-+LIBRESSL_LIBTOOL_PATCH = NO
-+
-+$(eval $(autotools-package))
--- 
-2.1.1
+> Hello,
+>
+> The meeting is approaching, so to foster some preliminary discussion,
+> here is the current list of topics we have in the Wiki:
+>
+>  - Look-back to action points from previous developer days at Fosdem
+>    2014: is everything that was decided done? What remains?
+>
+>  - Patch naming: current convention is
+>    package-number-description.patch, but a proposal was made on the
+>    list to simplify this to number-description.patch. Go or no-go?
+>
+>  - Since Luca will be present: state of legal-info infrastructure,
+>    improvements to be made?
+>
+>    - Could more details be added here (by Thomas DS, who proposed the
+>      topic)
+>
+>  - Discussion on atomic operations and how to handle the related
+>    dependencies at the kconfig level
+>
+>  - Cleanup the patchwork; triage patches in two categories:
+>
+>    - things that hasn't been pushed enough but that we believe is useful
+>
+>    - things that haven't been pushed enough and that are too anecdotic
+>      for us to care about
+>
+>  - Pending large series:
+>
+>    - The paranoid wrapper series from Thomas P.
+>    - The march/mcpu conflict on ARM series from Thomas P.
+>    - The Qemu series from Yann
+>    - The freerdp series from Yann
+>    - The NVidia series from Yann
+>    - The OpenCV series from Samuel
+>    - The apr-util/apache series from Bernd
+>    - The gendoc series from Yann (IMPORTANT)
+>    - The X.org/i.MX6 series from J?r?me
+>    - The libudev series from Yann (IMPORTANT)
+>
+>  - Key-signing party: it would be usefull to have a web-of-trust
+>    amongst Buildroot developpers, to submit sensitive information, such
+>    as the hashes.
+>
+>  - Project maintenance:
+>
+>    - Peter seems to be less active now
+>
+>    - Thomas (who acts as deputy committer) has new responsibilities,
+>      and risks being less available too
+>
+>   - How do we see the short- and long-term maintenance of the project?
+>
+>  - Should we move buildroot.org to its own server, and split from
+>    busybox.net and uclibc.org?
+>
+> Feel free to comment on these topics, or add new ones. For those who
+> have an account, do not hesitate to update the Wiki accordingly.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141012/b9402fb1/attachment.html>
