@@ -1,55 +1,48 @@
-From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
-Date: Sun, 12 Oct 2014 17:56:02 +0200
-Subject: [Buildroot] libdaemons localstatedir /usr/var
-In-Reply-To: <543A7D79.7010008@mind.be>
-References: <5439D19D.2030706@posteo.de>
- <20141012091818.04db85ae@free-electrons.com> <543A4928.5080901@posteo.de>
- <543A7D79.7010008@mind.be>
-Message-ID: <543AA492.2080907@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Oct 2014 17:56:32 +0200
+Subject: [Buildroot] [PATCH] infra: BR2_PREFER_STATIC_LIB now selects
+ static building of packages
+In-Reply-To: <1413128040-1860-1-git-send-email-abrodkin@synopsys.com>
+References: <1413128040-1860-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20141012175632.26e3bd89@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Alexey Brodkin,
 
-On 10/12/2014 03:09 PM, Arnout Vandecappelle wrote:
-> On 12/10/14 11:26, J?rg Krause wrote:
->> Dear Thomas Petazzoni,
->>
->> On 10/12/2014 09:18 AM, Thomas Petazzoni wrote:
->>> Dear J?rg Krause,
->>>
->>> On Sun, 12 Oct 2014 02:55:57 +0200, J?rg Krause wrote:
->>>> I have a package which uses libdaemon for running as a daemoon and for
->>>> creating the pid file. libdaemons default directory for opening the pid
->>>> file is /usr/var/run. However, buildroot does not create this directory
->>>> in the output directory by default. The package compiles successfully
->>>> but fails to run because of the missing directory.
->>>>
->>>> How should I deal with this?
->>>>
->>>> 1) patch libdaemon.mk: LIBDAEMON_CONF_OPTS = ... --localstatedir=/var
->>>> 2) add /usr/var/run to my rootfs overlay directory
->>>>
->>>> What do you think? Any other suggestions?
->>> I'd say (1).
->> Looks good. I will prepare a patch.
->>
->>> Isn't --localstatedir a common autoconf variable ? I see 26 packages
->>> passing --localstatedir=/var in Buildroot. Maybe it's time to move as a
->>> common definition, like --prefix=/usr ?
->> Yes, it is. There was a discussion on the mailing list long time ago:
->>
->>      Making --localstatedir=/var global?
->>      (http://lists.busybox.net/pipermail/buildroot/2011-April/042918.html.)
->>
->> And also this one:
->>
->>      Bizarre things on the allyespackageconfig build
->>      (http://lists.busybox.net/pipermail/buildroot/2013-May/071856.html)
->   +1 to making it a global pkg-autotools option. J?rg, care to prepare a patch
-> for that? Removing the existing --localstatedir should be a separate patch then.
+On Sun, 12 Oct 2014 17:34:00 +0200, Alexey Brodkin wrote:
+> With time BR2_PREFER_STATIC_LIB option meaning changed from "prefer static
+> libs when possible" to "do not build dynamic libs and build statically linked
+> applications".
+> 
+> This patch changes variable description and takes care of uClibc settings so
+> it doesn't build shared libs.
+> 
+> Note that variable name is kept unchanged on purpose - it will be modified later
+> when real "prefer static" mode will be introduced.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Config.in                             | 14 ++++++++------
+>  package/uclibc/uClibc-0.9.31.config   |  1 -
+>  package/uclibc/uClibc-0.9.33.config   |  1 -
+>  package/uclibc/uClibc-snapshot.config |  1 -
+>  package/uclibc/uclibc.mk              | 11 +++++++++++
+>  5 files changed, 19 insertions(+), 9 deletions(-)
 
-I will prepare a patch for this. Should I add this to host configure, 
-too? I guess so...
+This should definitely be two separate patches. One updating the
+BR2_PREFER_STATIC_LIB description, and one making sure that uClibc
+obeys to the correct semantic of BR2_PREFER_STATIC_LIB.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
