@@ -1,64 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 12 Oct 2014 07:46:27 +0200
-Subject: [Buildroot] [git commit] docs/manual: always look for resources in
-	destination directory
-Message-ID: <20141012072420.04D57B1909@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: allow documents to define
+	some hooks, as for a package
+Message-ID: <20141012072419.E29A0B1909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8618763223d40f6ef8cb8ecdd29602784e06cba
+commit: http://git.buildroot.net/buildroot/commit/?id=5b34e68369652c306a70a134004638139f901ca4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Our manual does not use external filters in asciidoc, so we are happy
-with just looking for resources from our source tree.
+Allow documents to define two hooks:
+  - DOC_CHECK_EXTRA_DEPENDENCIES_HOOKS
+    to check for extra dependencies required by this document
+  - DOC_CHECK_EXTRA_DEPENDENCIES_FMT_HOOKS
+    ditto, but for the specific format
+  - DOC_POST_EXTRACT_HOOKS:
+    to run additional actions to fill-in the build directory
 
-However, other documents (like ones in br2-external) may use such
-filters, to generate diagrams, graphs...
+(Replace 'DOC' with the uppercase name of the document, and 'FMT' with
+the format.)
 
-External filters generate their output files in the output directory, so
-we must also look for resources in there.
+This is supposed to replace the current use of overloading the internal
+dependency rules, and makes GENDOC behave yet a bit more like the
+package infrastructure.
 
-Note: external filters in asccidoc are used thus:
-    ["filter-name"]
-    ----
-    Text to be rendered
-    ----
-
-In the future, our own manual may even make use of filters to include
-some of the graphs we generate, to store in the documentation.
+Note that GENDOC_INNER already has the uppercase name as an argument,
+whereas GENDOC does not, so the two foreach loops are not exactly
+similar (for now.)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ docs/manual/manual.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index e9e0516..0b88fd8 100644
+index f6ef71e..ee7887c 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -86,6 +86,8 @@ $$(O)/docs/$(1)/$(1).$(6):
- 		to make through the command line: \
- 		'PATH=/path/to/custom-xsltproc/bin:$$$${PATH} make $(1)-pdf')
- else
-+# -r $(@D) is there for documents that use external filters; those filters
-+# generate code at the same location it finds the document's source files.
- $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
- 			   $(1)-check-dependencies \
- 			   $(1)-check-dependencies-$(5) \
-@@ -93,7 +95,7 @@ $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
- 	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
- 	$$(Q)mkdir -p $$(@D)
- 	$$(Q)a2x $(8) -f $(4) -d book -L \
--		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) \
-+		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) -r $$(@D) \
- 		$$($(2)_$(4)_A2X_OPTS) \
- 		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
- 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
+@@ -55,10 +55,10 @@ $(1): $(1)-$(5)
+ .PHONY: $(1)-$(5)
+ $(1)-$(5): $$(O)/docs/$(1)/$(1).$(6)
+ 
+-$(1)-check-dependencies: gendoc-check-dependencies
+-
++# Single line, because splitting a foreach is not easy...
+ gendoc-check-dependencies-$(5):
+ $(1)-check-dependencies-$(5): gendoc-check-dependencies-$(5)
++	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_$$(call UPPERCASE,$(5))_HOOKS),$$(call $$(hook))$$(sep))
+ 
+ $(2)_$(4)_ASCIIDOC_CONF = $(3)/asciidoc-$(4).conf
+ ifneq ($$(wildcard $$($(2)_$(4)_ASCIIDOC_CONF)),)
+@@ -110,12 +110,18 @@ endef
+ # resources, such as images, are located; must be an absolute path.
+ ################################################################################
+ define GENDOC
++# Single line, because splitting a foreach is not easy...
++$(pkgname)-check-dependencies: gendoc-check-dependencies
++	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
++
+ $$(BUILD_DIR)/docs/$(pkgname):
+ 	$$(Q)mkdir -p $$@
+ 
++# Single line, because splitting a foreach is not easy...
+ $(pkgname)-rsync: $$(BUILD_DIR)/docs/$(pkgname)
+ 	$$(Q)$$(call MESSAGE,"Preparing the $(pkgname) sources...")
+ 	$$(Q)rsync -a $(pkgdir) $$^
++	$$(Q)$$(foreach hook,$$($$(call UPPERCASE,$(pkgname))_POST_RSYNC_HOOKS),$$(call $$(hook))$$(sep))
+ 
+ $(pkgname)-prepare-sources: $(pkgname)-rsync
+ 
