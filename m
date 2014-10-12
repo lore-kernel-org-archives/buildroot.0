@@ -1,92 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 07:46:27 +0200
-Subject: [Buildroot] [git commit] docs/manual: properly separate rules
-	specific for our manual
-Message-ID: <20141012072419.CFF38B1909@busybox.osuosl.org>
+Date: Sun, 12 Oct 2014 07:46:26 +0200
+Subject: [Buildroot] [git commit] gendoc infra: avoid a2x warning
+Message-ID: <20141012072419.6D5EDB1B51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3789bafc85505baf25e817fd178e3d0b75f8d3ac
+commit: http://git.buildroot.net/buildroot/commit/?id=f7cfa38274f00c54e8097f9285b7da5cbc4ebc60
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move the rules specific to our own manual, so that they do not interfere
-with the generic rules of GENDOC.
+Though the --destination-dir option works as expected, a2x displays the
+following message when generating the pdf and text manual:
 
-Separate them with a shiny header. ;-)
+  a2x: WARNING: --destination-dir option is only applicable to HTML based outputs
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+To avoid this warning, we now just build the manual in its build location,
+then move the generated files into $(O)/docs/manual.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: tested all but PDF]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.mk |   41 +++++++++++++++++++++++------------------
- 1 files changed, 23 insertions(+), 18 deletions(-)
+ docs/manual/manual.mk |   17 ++++++++++++++++-
+ 1 files changed, 16 insertions(+), 1 deletions(-)
 
 diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index cf6f33c..536f939 100644
+index cdc4c73..03e3a0b 100644
 --- a/docs/manual/manual.mk
 +++ b/docs/manual/manual.mk
-@@ -1,14 +1,3 @@
--# Packages included in BR2_EXTERNAL are not part of buildroot, so they
--# should not be included in the manual.
--.PHONY: manual-update-lists
--manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
--	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
--		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
--		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
--
--manual-prepare-sources: manual-update-lists
--
- # we can't use suitable-host-package here because that's not available in
- # the context of 'make release'
- manual-check-dependencies:
-@@ -28,13 +17,6 @@ manual-check-dependencies-pdf:
- 		exit 1; \
- 	fi
+@@ -70,6 +70,19 @@ ifneq ($$(wildcard $$(MANUAL_$(2)_ASCIIDOC_CONF)),)
+ MANUAL_$(2)_ASCIIDOC_OPTS += -f $$(MANUAL_$(2)_ASCIIDOC_CONF)
+ endif
  
--manual-check-dependencies-lists:
--	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
--		echo "You need python with argparse on your host to generate" \
--			"the list of packages in the manual"; \
--		exit 1; \
--	fi
--
- # PDF generation is broken because of a bug in xsltproc program provided
- # by libxslt <=1.1.28, which does not honor an option we need to set.
- # Fortunately, this bug is already fixed upstream:
-@@ -156,6 +138,29 @@ $(pkgname)-clean:
- .PHONY: $(pkgname) $(pkgname)-clean
++# Handle a2x warning about --destination-dir option only applicable to HTML
++# based outputs. So:
++# - use the --destination-dir option if possible (html and split-html),
++# - otherwise copy the generated manual to the output directory
++MANUAL_$(2)_A2X_OPTS =
++ifneq ($$(filter $(3),html split-html),)
++MANUAL_$(2)_A2X_OPTS += --destination-dir="$$(@D)"
++else
++define MANUAL_$(2)_INSTALL_CMDS
++	$$(Q)cp -f $$(BUILD_DIR)/docs/$(1)/$(1).$(4) $$(@D)
++endef
++endif
++
+ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+ 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
+ 			   manual-check-dependencies \
+@@ -78,9 +91,11 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+ 	$$(Q)$$(call MESSAGE,"Generating $(5) $(1)...")
+ 	$$(Q)mkdir -p $$(@D)
+ 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
++		$$(MANUAL_$(2)_A2X_OPTS) \
+ 		--asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)" \
+-		-D $$(@D) \
+ 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
++# install the generated manual
++	$$(MANUAL_$(2)_INSTALL_CMDS)
  endef
  
-+################################################################################
-+# The Buildroot manual
-+################################################################################
-+
-+# Our manual needs to generate lists
-+manual-prepare-sources: manual-update-lists
-+
-+# Packages included in BR2_EXTERNAL are not part of buildroot, so they
-+# should not be included in the manual.
-+.PHONY: manual-update-lists
-+manual-update-lists: manual-check-dependencies-lists $(BUILD_DIR)/docs/$(pkgname)
-+	$(Q)$(call MESSAGE,"Updating the manual lists...")
-+	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(BUILD_DIR)/docs/$(pkgname) \
-+		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
-+		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
-+
-+manual-check-dependencies-lists:
-+	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
-+		echo "You need python with argparse on your host to generate" \
-+			"the list of packages in the manual"; \
-+		exit 1; \
-+	fi
-+
- MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
- MANUAL_RESOURCES = $(TOPDIR)/docs/images
- $(eval $(call GENDOC))
+ ################################################################################
