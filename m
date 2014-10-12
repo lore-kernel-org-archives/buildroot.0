@@ -1,102 +1,83 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 12 Oct 2014 14:06:05 +0000
-Subject: [Buildroot] [PATCH 03/11] gdb: Patch for "unrecognized
- real-time	signal" bug
-In-Reply-To: <1396558881-29631-3-git-send-email-paul@crapouillou.net>
-References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>,
- <1396558881-29631-3-git-send-email-paul@crapouillou.net>
-Message-ID: <38121FAB319C3344930C920E7B51831320FD487B@LEMAIL01.le.imgtec.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Oct 2014 16:14:37 +0200
+Subject: [Buildroot] [PATCH 1/7 v3] package/busybox: Add facility for
+ DHCP hooks
+In-Reply-To: <1402982507.184367.599670173206.1.gpush@pablo>
+References: <1402982507.184367.599670173206.1.gpush@pablo>
+Message-ID: <543A8CCD.9050603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul Cercueil,
+On 17/06/14 07:21, Jeremy Kerr wrote:
+> The (u)dhcpc hook installed by the busybox package configures the
+> network and exits. If we want to do anything further with a DHCP lease,
+> we'd have to replace the script entirely.
+> 
+> This change introduces a .d directory for hooks (based on the script
+> filename), which are executed after the interface configuration. This
+> allows packages to drop a script file in the .d directory to perform
+> actions on DHCP events.
+> 
+> We'll use this in a later change to notify petitboot of DHCP boot
+> information.
+> 
+> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
-this commit should fix the problem:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-http://git.buildroot.net/buildroot/commit/?id=54ba2704b07cacacb9247540a660c667fd5ffdd5
+ I could do some nitpicking but it's good enough as it is.
 
-Best regards,
+ Regards,
+ Arnout
 
---
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
-________________________________________
-From: buildroot-bounces@busybox.net [buildroot-bounces at busybox.net] on behalf of Paul Cercueil [paul at crapouillou.net]
-Sent: 03 April 2014 22:01
-To: buildroot at busybox.net
-Cc: Maarten ter Huurne
-Subject: [Buildroot] [PATCH 03/11] gdb: Patch for "unrecognized real-time       signal" bug
+> 
+> ---
+>  package/busybox/busybox.mk    |    2 ++
+>  package/busybox/udhcpc.script |    6 ++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index c368b80..bddeb63 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -222,6 +222,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>  	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+>  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+>  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+> +		$(INSTALL) -m 755 -d \
+> +			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
+>  	fi
+>  	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> index e23d1f1..50c52e6 100755
+> --- a/package/busybox/udhcpc.script
+> +++ b/package/busybox/udhcpc.script
+> @@ -64,4 +64,10 @@ case "$1" in
+>  		;;
+>  esac
+>  
+> +HOOK_DIR="$0.d"
+> +for hook in "${HOOK_DIR}/"*; do
+> +    [ -f "${hook}" -a -x "${hook}" ] || continue
+> +    "${hook}" "${@}"
+> +done
+> +
+>  exit 0
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-From: Maarten ter Huurne <maarten@treewalker.org>
 
-This avoids the following error at GDB startup:
-
-GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
-
-For details, see:
-  http://sourceware.org/bugzilla/show_bug.cgi?id=14523
-
-Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
-Acked-By: Paul Cercueil <paul@crapouillou.net>
----
- package/gdb/7.4.1/signal-128.patch | 15 +++++++++++++++
- package/gdb/7.5.1/signal-128.patch | 15 +++++++++++++++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/gdb/7.4.1/signal-128.patch
- create mode 100644 package/gdb/7.5.1/signal-128.patch
-
-diff --git a/package/gdb/7.4.1/signal-128.patch b/package/gdb/7.4.1/signal-128.patch
-new file mode 100644
-index 0000000..ea56372
---- /dev/null
-+++ b/package/gdb/7.4.1/signal-128.patch
-@@ -0,0 +1,15 @@
-+diff -ru gdb-7.4.1.org/gdb/common/signals.c gdb-7.4.1/gdb/common/signals.c
-+--- gdb-7.4.1.org/gdb/common/signals.c 2012-01-06 05:43:33.000000000 +0100
-++++ gdb-7.4.1/gdb/common/signals.c     2012-08-29 22:40:56.000000000 +0200
-+@@ -346,6 +346,11 @@
-+       else if (64 <= hostsig && hostsig <= 127)
-+       return (enum target_signal)
-+         (hostsig - 64 + (int) TARGET_SIGNAL_REALTIME_64);
-++      else if (hostsig == 128)
-++      /* Some platforms, such as Linux MIPS, have NSIG == 128, in which case
-++         signal 128 is the highest realtime signal. There is no constant for
-++         that though. */
-++      return TARGET_SIGNAL_UNKNOWN;
-+       else
-+       error (_("GDB bug: target.c (target_signal_from_host): "
-+              "unrecognized real-time signal"));
-diff --git a/package/gdb/7.5.1/signal-128.patch b/package/gdb/7.5.1/signal-128.patch
-new file mode 100644
-index 0000000..b46489e
---- /dev/null
-+++ b/package/gdb/7.5.1/signal-128.patch
-@@ -0,0 +1,15 @@
-+diff -ru gdb-7.5.org/gdb/common/signals.c gdb-7.5/gdb/common/signals.c
-+--- gdb-7.5.org/gdb/common/signals.c   2012-05-24 18:51:37.000000000 +0200
-++++ gdb-7.5/gdb/common/signals.c       2012-08-29 22:32:07.000000000 +0200
-+@@ -346,6 +346,11 @@
-+       else if (64 <= hostsig && hostsig <= 127)
-+       return (enum gdb_signal)
-+         (hostsig - 64 + (int) GDB_SIGNAL_REALTIME_64);
-++      else if (hostsig == 128)
-++      /* Some platforms, such as Linux MIPS, have NSIG == 128, in which case
-++         signal 128 is the highest realtime signal. There is no constant for
-++         that though. */
-++      return GDB_SIGNAL_UNKNOWN;
-+       else
-+       error (_("GDB bug: target.c (gdb_signal_from_host): "
-+              "unrecognized real-time signal"));
---
-1.9.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
