@@ -1,46 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 21:47:42 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: fix missing dependency
-	of libcurl
-Message-ID: <20141012195151.0E3D0B2B69@busybox.osuosl.org>
+From: Alan Ott <alan@signal11.us>
+Date: Sun, 12 Oct 2014 15:56:51 -0400
+Subject: [Buildroot] [PATCH 0/2] Updates to Poppler
+In-Reply-To: <20140406120221.5a5fd253@skate>
+References: <20140406120221.5a5fd253@skate>
+Message-ID: <1413143813-26783-1-git-send-email-alan@signal11.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1dbdf1e2a297f269c2820399705ed16b63796a2d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+These changes were proposed by Jeremie Scheer <jeremie.scheer@armadeus.com>
+earlier this year.
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/upmpdcli/Config.in   |    1 +
- package/upmpdcli/upmpdcli.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+Alan Ott (2):
+  poppler: Add option for Qt support
+  poppler: Install files into staging
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index dbbc9b5..f28c775 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_UPMPDCLI
- 	bool "upmpdcli"
- 	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBUPNP
- 	select BR2_PACKAGE_LIBMPDCLIENT
- 	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 88a5a16..547752a 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -8,7 +8,7 @@ UPMPDCLI_VERSION = 0.8.3
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
--UPMPDCLI_DEPENDENCIES = expat libupnp libmpdclient
-+UPMPDCLI_DEPENDENCIES = expat libcurl libupnp libmpdclient
- 
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
+ package/poppler/Config.in  | 9 +++++++++
+ package/poppler/poppler.mk | 8 ++++++++
+ 2 files changed, 17 insertions(+)
+
+-- 
+2.1.0
