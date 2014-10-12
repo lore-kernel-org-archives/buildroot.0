@@ -1,48 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 09:25:53 +0200
-Subject: [Buildroot] [git commit] eudev: improve S10udev script for startup
-Message-ID: <20141012073514.681CCB1F97@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 09:46:27 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc: add a missing function member
+	to siginfo.h
+In-Reply-To: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 8 Jan 2014 17:32:43 +0000")
+References: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87fvet3f3g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df8ae412a44ec21d9928e8ba753adee7207d02bc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-This commit adjusts the S10udev script by:
+ > Applying an upstream patch to add a missing function member on ia64,
+ > mips and sparc arches.
 
- * Using the --action=add option to udevadm trigger. By default, only
-   the "change" events are handled by 'udevadm trigger', which means
-   it doesn't handle all the "device add" events that occured during
-   the boot time, before eudev was started.
+ > Upstream patch URL:
+ >    http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=b4e6e61e2f7c6fb4bf59f66efaa74591a2112912
 
- * Adds a call to 'udevadm settle' to make sure we wait for udev to
-   handle all the events that occured before eudev was started.
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/fa0/fa03ecc087a4b30df8b0366bb238be3d167a56d9/
 
-Both of these change match what the Ubuntu and Debian udev startup
-scripts are doing.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eudev/S10udev |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Committed after the discussion at the dev days, thanks.
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index e00aa91..107dfd5 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -30,7 +30,8 @@ case "$1" in
-         printf "Populating ${udev_root:-/dev} using udev: "
-         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || (echo "FAIL" && exit 1)
--        udevadm trigger
-+        udevadm trigger --action=add
-+        udevadm settle
-         echo "done"
-         ;;
-     stop)
+-- 
+Bye, Peter Korsgaard
