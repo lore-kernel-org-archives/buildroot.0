@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Oct 2014 17:57:49 +0200
-Subject: [Buildroot] [PATCH 03/11] gdb: Patch for "unrecognized
- real-time signal" bug
-In-Reply-To: <1396558881-29631-3-git-send-email-paul@crapouillou.net>
-References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-3-git-send-email-paul@crapouillou.net>
-Message-ID: <20141012175749.62343466@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Oct 2014 17:57:57 +0200
+Subject: [Buildroot] [PATCH v3] Adding support for Ariag25 and Terra
+ board from Acmesystems
+In-Reply-To: <20140715202114.054f9329@free-electrons.com>
+References: <1403301175-3403-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20140715202114.054f9329@free-electrons.com>
+Message-ID: <543AA505.5080902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul Cercueil,
-
-On Thu,  3 Apr 2014 23:01:13 +0200, Paul Cercueil wrote:
-> From: Maarten ter Huurne <maarten@treewalker.org>
+On 15/07/14 20:21, Thomas Petazzoni wrote:
+> Dear Angelo Compagnucci,
 > 
-> This avoids the following error at GDB startup:
+> Thanks for this patch. See my comments below.
 > 
-> GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
+> The title of the patch should rather be something like:
 > 
-> For details, see:
->   http://sourceware.org/bugzilla/show_bug.cgi?id=14523
-> 
-> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
-> Acked-By: Paul Cercueil <paul@crapouillou.net>
-> ---
->  package/gdb/7.4.1/signal-128.patch | 15 +++++++++++++++
->  package/gdb/7.5.1/signal-128.patch | 15 +++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 package/gdb/7.4.1/signal-128.patch
->  create mode 100644 package/gdb/7.5.1/signal-128.patch
+>   board: add support for Acmesystems Ariag25 and Terra boards
 
-Those gdb versions are no longer supported in Buildroot. Plus, as
-pointed out by Vicente, the bug is actually in uClibc and not in gdb,
-so we've marked this patch as Rejected in our patch tracking system.
+ Hi Angelo,
 
-Thanks!
+ Do you plan to still take into account Thomas's comments and repost?
 
-Thomas
+ For the time being, we've marked this patch as Changes Requested in patchwork
+http://patchwork.ozlabs.org/patch/362357/
+
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
