@@ -1,63 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Oct 2014 12:22:04 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: make help: remove <package>- help,
-	add link to online manual
-In-Reply-To: <1413109039-23845-1-git-send-email-arnout@mind.be>
-References: <1413109039-23845-1-git-send-email-arnout@mind.be>
-Message-ID: <1413109324-24401-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 12:25:35 +0200
+Subject: [Buildroot] [PATCHv2] biosdevname: new package
+In-Reply-To: <1413102815-10117-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 12 Oct 2014 10:33:35 +0200")
+References: <1413102815-10117-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87d29x1t5s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We only documented a few of the <package>- targets and it's hard to
-decide which ones are relevant for make help. Since the help is already
-way too long, it's better to remove these advanced targets.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Instead, let's refer to the online manual.
+ > From: Ryan Wilkins <ryan@deadfrog.net>
+ > Signed-off-by: Ryan Wilkins <ryan@deadfrog.net>
+ > [yann.morin.1998 at free.fr: bump to 0.6.0; fix dependencies (udev+zlib);
+ >  add hashes; fix title]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
-v2: move the link to the online manual to the bottom.
+Committed, thanks.
 
-At the BR developer meeting we decided to go for this option.
-
-A TODO item has been added to create a 'make <package>-help' target
-that shows all the package-specific targets.
-
-Perhaps something similar should be done for the defconfigs and
-for the allyesconfig etc. targets as well.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 3f56648..c0dcec8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -843,9 +843,6 @@ help:
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
- 	@echo '  toolchain              - build toolchain'
--	@echo '  <package>-rebuild      - force recompile <package>'
--	@echo '  <package>-reconfigure  - force reconfigure <package>'
--	@echo '  <package>-graph-depends    - generate graph of the dependency tree for package'
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
-@@ -908,7 +905,8 @@ ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- endif
- 	@echo
--	@echo 'See docs/README, or generate the Buildroot manual for further details'
-+	@echo 'For further details, see README, generate the Buildroot manual, or consult'
-+	@echo 'it on-line at http://buildroot.org/docs.html'
- 	@echo
- 
- release: OUT = buildroot-$(BR2_VERSION)
 -- 
-2.1.1
+Bye, Peter Korsgaard
