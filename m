@@ -1,28 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Oct 2014 17:23:01 +0200
-Subject: [Buildroot] [PATCHv2 2/2] ecryptfs-utils: add runtime
- dependency on getent
-In-Reply-To: <1408355649-28891-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408355649-28891-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <543A9CD5.90001@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 17:23:30 +0200
+Subject: [Buildroot] [PATCH 2/2] scripts/graph-build-time: properly warn
+	about missing modules
+In-Reply-To: <1413111142-17643-2-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Sun, 12 Oct 2014 12:52:22 +0200")
+References: <1413111142-17643-1-git-send-email-luca@lucaceresoli.net>
+ <1413111142-17643-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87lholwbv1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/08/14 11:54, Thomas Petazzoni wrote:
-> Fixes bug #7142.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Currently the graph-build-time script prints a python exception if a
+ > needed module cannot be imported. Catch the exception and tell the user
+ > which packages are missing, as we do for other missing dependencies.
+
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
