@@ -1,35 +1,44 @@
-From: Alan Ott <alan@signal11.us>
-Date: Sun, 12 Oct 2014 15:56:53 -0400
-Subject: [Buildroot] [PATCH 2/2] poppler: Install files into staging
-In-Reply-To: <1413143813-26783-1-git-send-email-alan@signal11.us>
-References: <20140406120221.5a5fd253@skate>
- <1413143813-26783-1-git-send-email-alan@signal11.us>
-Message-ID: <1413143813-26783-3-git-send-email-alan@signal11.us>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 12 Oct 2014 22:14:39 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix build failure
+Message-ID: <1413144879-26661-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install poppler's header files into staging.
+Correctly set NGX_SYS_NERR, even when it is 0.
 
-Signed-off-by: Alan Ott <alan@signal11.us>
-Suggested-by: Jeremie Scheer <jeremie.scheer@armadeus.com>
+Fixes:
+  http://autobuild.buildroot.org/results/666/666d780bf61e10c9f89f765bb04ddc1afc11d0d1/
+  http://autobuild.buildroot.org/?reason=nginx-1.6.2&&arch=powerpc
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/poppler/poppler.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch   | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index a52b079..a972325 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -10,6 +10,7 @@ POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig
- POPPLER_LICENSE = GPLv2+
- POPPLER_LICENSE_FILES = COPYING
-+POPPLER_INSTALL_STAGING = YES
- POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
+diff --git a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+index 4c00755..d02de68 100644
+--- a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
++++ b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+@@ -22,7 +22,7 @@ new file mode 100644
+ index 0000000..25e7c22
+ --- /dev/null
+ +++ b/auto/os/sys_nerr
+-@@ -0,0 +1,77 @@
++@@ -0,0 +1,78 @@
+ +
+ +# Copyright (C) Samuel Martin <s.martin49@gmail.com>
+ +
+@@ -89,6 +89,7 @@ index 0000000..25e7c22
+ +
+ +if test -z $ngx_sys_nerr ; then
+ +    ngx_size=0
+++    ngx_sys_nerr=0
+ +fi
+ +
+ +cat << END >> $NGX_AUTO_CONFIG_H
 -- 
-2.1.0
+2.1.2
