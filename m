@@ -1,96 +1,75 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Oct 2014 16:45:12 +0200
-Subject: [Buildroot] [PATCH v3] uboot-tools: Allow users to use uboot's
-	sources
-Message-ID: <1413125112-14417-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Oct 2014 16:48:36 +0200
+Subject: [Buildroot] [PATCH] linux-headers: allow use of headers from
+	kernel "package" selected
+In-Reply-To: <1413105548-13590-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Sun, 12 Oct 2014 11:19:08 +0200")
+References: <1413105548-13590-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87y4slwdh7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the user has specified a custom U-Boot repository, he may also want
-to use it for U-Boot tools.
+>>>>> "Alexey" == Alexey Brodkin <alexey.brodkin@gmail.com> writes:
 
-This could be usefull in two identified use case:
-  - User want the same version for U-Boot tools and U-Boot
-  - User has modified U-Boot tools in his U-Boot repository
+ > From: Karoly Kasza <kaszak@gmail.com>
+ > This is a re-work of http://patchwork.ozlabs.org/patch/346823/
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-Changes v2 -> v3:
-    - Add a help on the choice option to warn users on the minimal
-      version needed for U-Boot
-Changes v1 -> v2:
-    - Add a choice option (Suggested by Luca Ceresoli)
-    - Add an if/then/else structure (Suggested by Luca Ceresoli)
-    - Take UBOOT_LICENSE and UBOOT_LICENCE_FILES into account (Suggested
-      by Arnout Vandecappelle)
----
- package/uboot-tools/Config.in      | 21 +++++++++++++++++++++
- package/uboot-tools/uboot-tools.mk | 13 +++++++++++++
- 2 files changed, 34 insertions(+)
+ > In buildroot kernel headers used for building toolchain come from upstream
+ > kernel sources (even though user may specify version, but not origin).
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index 7c8f17c..29957ad 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -7,6 +7,27 @@ config BR2_PACKAGE_UBOOT_TOOLS
+ > This change makes it possible to use exactly the same sources for both
+ > headers during toolchain building and for kernel building itself.
+
+ > Moreover if "kernel" is selected to be built by defaut its sources will
+ > be used for kernel headers on toolchain build.
+
+ > That way user might be sure that ABI mismatch won't happen between toolchain
+ > and kernel.
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  package/linux-headers/Config.in.host   | 8 ++++++++
+ >  package/linux-headers/linux-headers.mk | 7 +++++++
+ >  2 files changed, 15 insertions(+)
+
+ > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+ > index 101136a..64d4b9e 100644
+ > --- a/package/linux-headers/Config.in.host
+ > +++ b/package/linux-headers/Config.in.host
+ > @@ -5,6 +5,7 @@ comment "Kernel Header Options"
  
- if BR2_PACKAGE_UBOOT_TOOLS
+ >  choice
+ >  	prompt "Kernel Headers"
+ > +	default BR2_KERNEL_HEADERS_SAME_AS_KERNEL if BR2_LINUX_KERNEL
+ >  	default BR2_KERNEL_HEADERS_3_17
+ >  	help
+ >  	  Select the version of kernel header files you wish to use.
+ > @@ -69,6 +70,13 @@ choice
  
-+if BR2_TARGET_UBOOT
-+
-+choice
-+	prompt "version"
-+	default BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
-+	help
-+	  Select the specific uboot-tools version you want to use
-+
-+config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
-+	bool "Use latest upstream version"
-+
-+config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
-+	bool "Use the same version as the uboot package"
-+	help
-+	  You *MUST* use at least U-Boot 2014.04. Since then, changes happened in
-+	  the build infrastructur which lead to build breakage.
-+
-+endchoice
-+
-+endif
-+
- config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
- 	bool "mkimage"
- 	help
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 2e720ac..09735e5 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,11 +4,24 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION),y)
-+# We have to use the BR2_TARGET_UBOOT_VERSION because of the order of inclusion
-+# of the mk files.
-+UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
-+UBOOT_TOOLS_SOURCE = $(UBOOT_SOURCE)
-+UBOOT_TOOLS_SITE = $(UBOOT_SITE)
-+ifneq ($(UBOOT_SITE_METHOD),)
-+UBOOT_TOOL_SITE_METHOD = $(UBOOT_SITE_METHOD)
-+endif
-+UBOOT_TOOLS_LICENSE = $(UBOOT_LICENSE)
-+UBOOT_TOOLS_LICENSE_FILES = $(UBOOT_LICENSE_FILES)
-+else
- UBOOT_TOOLS_VERSION = 2014.07
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
- UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
-+endif
- 
- define UBOOT_TOOLS_BUILD_CMDS
- 	$(MAKE) -C $(@D) 			\
+ >  	config BR2_KERNEL_HEADERS_VERSION
+ >  		bool "Manually specified Linux version"
+ > +
+ > +	config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
+ > +		bool "Use Linux kernel specified for target"
+ > +		depends on BR2_LINUX_KERNEL
+ > +		help
+ > +		  Use the Linux kernel specified for the target in
+ > +		  the Kernel menu.
+
+Thanks, but we also need to have the BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_XX
+stuff working, so you need to show the version selection like we do for
+BR2_KERNEL_HEADERS_VERSION (but probably with another description).
+
+With that said, is this really helpful when you still need to provide
+the kernel version for the _TOOLCHAIN_HEADERS_AT_LEAST_ stuff? The only
+reason I can think of is if you have custom kernel which provides some
+kind of extra userspace API (headers).
+
 -- 
-2.1.1
+Peter Korsgaard 
