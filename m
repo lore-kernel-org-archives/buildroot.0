@@ -1,32 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Oct 2014 12:29:47 +0200
-Subject: [Buildroot] [git commit] libubox: bump version
-Message-ID: <20141012104112.9A916B23A6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Oct 2014 12:43:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.8.3
+In-Reply-To: <1413110453-20327-1-git-send-email-jkrause@posteo.de>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sun, 12 Oct 2014 12:40:53 +0200")
+References: <1413110453-20327-1-git-send-email-jkrause@posteo.de>
+Message-ID: <87vbnpzhz3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84a172cb18059f082e6d5f6823a94dfed6db5aa4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
 
-Signed-off-by: Alexey Mednyy <swexru@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libubox/libubox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Since version 0.8.2 upmpdcli builds with gcc >= 4.5. This allows compilation
+ > with the CodeSourcery toolchain versions 2011.03 and 2010.09 for the PowerPC
+ > architecture.
 
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 770b55d..7ff3c16 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
-+LIBUBOX_VERSION = 5a0bbefc8fa440446253b171d0ac038d839360e3
- LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
- LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
+ > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
