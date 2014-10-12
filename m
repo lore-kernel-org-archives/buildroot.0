@@ -1,66 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 12 Oct 2014 20:38:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
- due to missing header files in include path
-In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
-References: <bug-7478-163@https.bugs.busybox.net/>
-Message-ID: <20141012203822.F2606B0080@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Oct 2014 00:05:00 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix build failure
+In-Reply-To: <1413144879-26661-1-git-send-email-s.martin49@gmail.com>
+References: <1413144879-26661-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20141013000500.10452497@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7478
+Dear Samuel Martin,
 
---- Comment #5 from Christian Abegg <cma@vtxnet.ch> 2014-10-12 20:38:21 UTC ---
-Thanks a lot for your reply.
+On Sun, 12 Oct 2014 22:14:39 +0200, Samuel Martin wrote:
+> Correctly set NGX_SYS_NERR, even when it is 0.
+> 
+> Fixes:
+>   http://autobuild.buildroot.org/results/666/666d780bf61e10c9f89f765bb04ddc1afc11d0d1/
+>   http://autobuild.buildroot.org/?reason=nginx-1.6.2&&arch=powerpc
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  .../nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch   | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+> index 4c00755..d02de68 100644
+> --- a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+> +++ b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
 
-a. This seems logical. However, chosen modules in the configuration where
-showing up in that list.
+Description + SoB in the patch ?
 
-b. I retried multiple builds with the latest version of buildroot (git
-526e3d0). What I observed is that when using the buildroot internal toolchain,
-the python sqlite3 modules were never built. On the other hand, when using an
-external toolchain (I used Sourcery CodeBench x86/x86_64 2012.09) the python
-sqlite3 modules were correctly built.
-
-So using an external toolchain solves the problem, which is a bit strange.
-
-Here are some excerpts of the python build log, 
-
-using the buildroot toolchain:
-building '_curses' extension
-/tmp/buildroot/output/host/usr/bin/i686-buildroot-linux-gnu-gcc -fPIC
--fno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall
--Wstrict-prototypes -I. -IInclude -I./Include
--I/tmp/buildroot/output/build/python-2.7.8/Include
--I/tmp/buildroot/output/build/python-2.7.8 -c
-/tmp/buildroot/output/build/python-2.7.8/Modules/_cursesmodule.c -o
-build/temp.linux2-i686-2.7/tmp/buildroot/output/build/python-2.7.8/Modules/_cursesmodule.o
-
-using an external toolchain:
-building '_curses' extension
-/tmp/buildroot/output/host/usr/bin/i686-pc-linux-gnu-gcc -fPIC
--fno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -pipe -Os -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -I.
--IInclude -I./Include
--I/tmp/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include
--I/tmp/buildroot/output/build/python-2.7.8/Include
--I/tmp/buildroot/output/build/python-2.7.8 -c
-/tmp/buildroot/output/build/python-2.7.8/Modules/_cursesmodule.c -o
-build/temp.linux2-i686-2.7/tmp/buildroot/output/build/python-2.7.8/Modules/_cursesmodule.o
-
-The difference I see between the internal and external toolchain, is that with
-the external one python is built with an additional include path:
--I/tmp/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include.
-In this directory are the sqlite3.h headers among others.
-
-You said you used an external toolchain and the python sqlite module built
-fine. If you use the internal toolchain, does the module also build correctly?
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
