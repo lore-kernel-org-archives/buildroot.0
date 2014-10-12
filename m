@@ -1,50 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Oct 2014 19:19:46 +0200
-Subject: [Buildroot] [PATCH 07/30] package/qemu: add option to
-	enable/disable the VNC frontend
-In-Reply-To: <c6dd8b966482249f72c956413b15125f817f93d6.1412719495.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 8 Oct 2014 00:38:16 +0200")
-References: <cover.1412719495.git.yann.morin.1998@free.fr>
- <c6dd8b966482249f72c956413b15125f817f93d6.1412719495.git.yann.morin.1998@free.fr>
-Message-ID: <87siittdcd.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Oct 2014 19:21:32 +0200
+Subject: [Buildroot] [PATCH 1/1] beaglebone: better support for starting
+	and creating images
+In-Reply-To: <543AB544.80401@gmail.com> (Marcin Jabrzyk's message of "Sun, 12
+ Oct 2014 19:07:16 +0200")
+References: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
+ <543A5A3A.2070605@mind.be> <87vbnpuuau.fsf@dell.be.48ers.dk>
+ <543AB544.80401@gmail.com>
+Message-ID: <87oathtd9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Marcin" == Marcin Jabrzyk <marcin.jabrzyk@gmail.com> writes:
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/qemu/Config.in |  7 +++++++
- >  package/qemu/qemu.mk   | 11 ++++++++++-
- >  2 files changed, 17 insertions(+), 1 deletion(-)
+Hi,
 
- > diff --git a/package/qemu/Config.in b/package/qemu/Config.in
- > index f81b6ca..1c359e4 100644
- > --- a/package/qemu/Config.in
- > +++ b/package/qemu/Config.in
- > @@ -70,6 +70,13 @@ if QEMU_HAS_EMULS
- 
- >  comment "Frontends"
- 
- > +config BR2_PACKAGE_QEMU_VNC
- > +	bool "Enable VNC frontend"
- > +	select BR2_PACKAGE_VNC
+ >> Agreed - Committed, thanks.
+ >> 
+ > Big thanks! Finally merged :)
 
-what is BR2_PACKAGE_VNC?
-
- > +++ b/package/qemu/qemu.mk
- > @@ -116,6 +116,12 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
- >  QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
- >  endif
- 
- > +ifeq ($(BR2_PACKAGE_QEMU_VNC),y)
- > +QEMU_OPTS += --enable-vnc
- > +else
-
-And why doesn't it get added to QEMU_DEPENDENCIES?
+yeah, sorry about the LONG delay.
 
 -- 
 Bye, Peter Korsgaard
