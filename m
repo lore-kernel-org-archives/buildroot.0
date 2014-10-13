@@ -1,137 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Oct 2014 22:49:03 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/mono: new package
-In-Reply-To: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20141013224903.0bfe6d76@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 14 Oct 2014 00:05:37 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-imx: add package
+Message-ID: <trinity-ad8c7e8f-a488-4911-9c20-b2787070ff1d-1413237937175@3capp-gmx-bs30>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Hello Gray, Luca,
 
-On Mon, 13 Oct 2014 16:03:50 +0200, Angelo Compagnucci wrote:
+On Sun, Oct 12, 2014 at 09:18:40PM -0700, Gary Bisson wrote:
+> Hi Luca,
+> 
+> Thanks for your feedback, below are my comments.
+> Sorry Peter I didn't see your patch from March.
+> 
 
-> +config BR2_PACKAGE_MONO
-> +	bool "mono"
-> +	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
-> +	depends on BR2_INET_IPV6
-> +	help
-> +	  An open source, cross-platform, implementation of C#
-> +	  and the CLR that is binary compatible with Microsoft.NET.
-> +
-> +	  http://download.mono-project.com/sources/mono/
-> +
-> +if BR2_PACKAGE_MONO
-> +
-> +	config BR2_PACKAGE_MONO_20
-> +		bool "2.0/3.5 .Net Runtime"
-> +		help
-> +		  This option enables the installation of
-> +		  the 2.0/3.5 version of the Mono .Net runtime to the target
-> +
-> +	config BR2_PACKAGE_MONO_40
-> +		bool "4.0 .Net Runtime"
-> +		help
-> +		  This option enables the installation of
-> +		  the 4.0 version of the Mono .Net runtime to the target
-> +
-> +	config BR2_PACKAGE_MONO_45
-> +		bool "4.5 .Net Runtime"
-> +		default y
-> +		help
-> +		  This option enables the installation of
-> +		  the 4.5 version of the Mono .Net runtime to the target
+No problem...
 
-I think I already told you, but I repeat if: no indentation inside
-if ... endif, so:
+> On 10/12/2014 07:43 AM, Luca Ceresoli wrote:
+> >Dear Gary, Peter,
+> [...]
+> >It would be better to have only one comment showing all the dependencies
+> >at once to avoid cluttering the menuconfig screen when the dependencies
+> >are not met. Also, please format it according to the guidelines in
+> >http://nightly.buildroot.org/manual.html#dependencies-target-toolchain-options
+> >
+> Ok I can rework those comments.
+> >
+> >BTW, the last warning should be shown regardless of the value of
+> >BR2_PACKAGE_LIBFSLVPUWRAP, nope?
+> The goal here was to show only one comment at a time. Both comments
+> will be merged in one.
+> >[...]
+> >According to Gary, (e)glibc is needed. Peter, did you build-test with
+> >uClibc (or musl)?
 
-if BR2_PACKAGE_FOO
+Tested only with glibc...
 
-config BR2_PACKAGE_FOO_BAZ
-	bool "..."
+> Actually this dependency is not required as it is implicit, the real
+> eglibc dependency comes from the GPU_VIV package.
+> >
+> >How about imx-lib, libfslparser and libfslcodec?
+> No, Peter's dependencies seem to have some legacy from the old
+> gstreamer plugin, see package/gstreamer/gst-fsl-plugins/Config.in.
 
-config BR2_PACKAGE_FOO_BAZ2
-	bool "..."
+Yes, you are right ;-)
 
-endif
+> Moreover it is missing the GPU_VIV package dependency required to
+> have the imxg2d and imxegl plugins and also narrows this plugin to
+> iMX6 platforms only.
 
-Also, the wrapping of your help text for the runtime version options is
-weird.
+Yes, right too, tested only on iMX6...
 
+> >
+> >It would be great if you could have a list that really matches the
+> >package. It's probably going to be a mix of the two, but I don't know
+> >exactly which pieces should be picked.
+> The best is to compare the dependencies from the Yocto recipe:
+> https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-multimedia/gstreamer/gstreamer1.0-plugins-imx_0.9.9.bb
+> This is what I've based my package on.
+> >[...]
+> >Can you merge the two statements?
+> I can add the Kernel header comment but regarding the VPU I've
+> offered a patch for the firmware to be selected when imx-vpu package
+> is enabled:
+> http://lists.busybox.net/pipermail/buildroot/2014-October/107894.html
+> >[...]
+> >Use the github helper macro:
+> >http://nightly.buildroot.org/manual.html#github-download-url
+> Ok.
+> >[...]
+> >Peter's version does not depend on host-python, yours does.
+> >
+> >Actually that dependency is needed becase waf does not work with
+> >recent python3 interpreters. That's why all Buildroot packages that use
+> >waf (jack2, midori, samba4) depend on it.
+> Yes host-python is required.
+> >[...]
+> >...and you support X11 and Wayland, which is good.
+> >
+> >Overall your patch looks better, except Peter lists more mandatory
+> >dependencies (perhaps some or all are actually neede), has a more
+> >informative package description and uses the github helper. Merging
+> >the two patches to get the best of each would be good, and it would be
+> >great if you could cooperate to do that!
+> >
+> >I'm afraid I haven't much experience on i.MX to help, but I'll be glad
+> >to test your work (but please keep me in Cc:).
+> >
+> No problem I'll keep you in cc. But what is the plan now? Should I
+> offer a v2 or let Peter integrate the remarks above in his patch?
 
-> +ifneq ($(BR2_PACKAGE_MONO_20),y) 
-> +ifneq ($(BR2_PACKAGE_MONO_40),y)
-> +ifneq ($(BR2_PACKAGE_MONO_45),y)
-> +	BR2_PACKAGE_MONO_45 = y
-> +endif
-> +endif
-> +endif
+Feel free to use what you find useful from my patch...
 
-Noooooooo! Where have you seen that we're allowed to change the value
-of Config.in options from within Makefiles?
+And for the naming of the package 'gstreamer1-imx' was suggested
+by Peter Korsgaard [1] and has more matching with the upstream name,
+'gst1-plugins-imx' fits more with the gstreamer/buldroot plugin
+naming schema...
 
-Please handle this inside the Config.in directly in a proper way:
+Regards,
+Peter
 
-config BR2_PACKAGE_MONO
-	bool "mono"
-	...
-	select BR2_PACKAGE_MONO_45 if !BR2_PACKAGE_MONO20 && !BR2_PACKAGE_MONO40
+> 
+> Thanks,
+> Gary
+> 
 
-This way, you are guaranteed that if neither mono 2.0 nor mono 4.0 are
-selected, then mono 4.5 is selected.
-
-> +ifeq ($(BR2_PACKAGE_MONO_20),y)
-> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile2=no,--with-profile2=yes,$(HOST_MONO_CONF_OPTS))
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MONO_40),y)
-> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile4=no,--with-profile4=yes,$(HOST_MONO_CONF_OPTS))
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MONO_45),y)
-> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile4_5=no,--with-profile4_5=yes,$(HOST_MONO_CONF_OPTS))
-> +endif
-
-Whaaat?
-
-Remove:
-
-+	--with-profile2=no \
-+	--with-profile4=no \
-+	--with-profile4_5=no
-
-from the unconditional HOST_MONO_CONF_OPTS. And then simply do:
-
-ifeq ($(BR2_PACKAGE_MONO_20),y)
-HOST_MONO_CONF_OPTS += --with-profile2=yes
-else
-HOST_MONO_CONF_OPTS += --with-profile2=no
-endif
-
-And do it for each version. Or if you want a shorter version:
-
-HOST_MONO_CONF_OPTS += --with-profile2=$(if $(BR2_PACKAGE_MONO_20),yes,no)
-
-I'm not sure where you found this crazy patsubst solution, since what
-I'm proposing here is what is done in *all* Buildroot packages. Maybe
-you should spend a bit of time reading the .mk files of a few other
-packages to get some idea on how we generally do things.
-
-There's still on things that bothers me a bit: those options
-(BR2_PACKAGE_MONO_{20,40,45}) are target options, but they are in fact
-used when building host-mono, which isn't very clean. I assume it's not
-possible to have the target mono package build the runtime libraries
-using the compiler built by the host-mono package, right?
-
-If not, then keep things as they are today, but put a comment above the
-place where BR2_PAKCAGE_MONO_{20,40,45} is used in the .mk file
-explaining why we're using those target options for a host package.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] http://lists.busybox.net/pipermail/buildroot/2014-February/090496.html
