@@ -1,54 +1,37 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 09:55:49 +0200
-Subject: [Buildroot] [PATCH 2/2] gst-fsl-plugins: fix plugin loading
-In-Reply-To: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
-References: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1413186949-7006-2-git-send-email-jezz@sysmic.org>
+From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
+Date: Mon, 13 Oct 2014 10:14:41 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-12
+In-Reply-To: <20141013063012.69A4A1012C7@stock.ovh.net>
+References: <20141013063012.69A4A1012C7@stock.ovh.net>
+Message-ID: <543B89F1.1000601@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Problem was reported :
-  http://lists.busybox.net/pipermail/buildroot/2014-July/101566.html
-  http://lists.busybox.net/pipermail/buildroot/2014-October/107613.html
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk             | 9 +++++++++
- .../gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf  | 5 +++++
- 2 files changed, 14 insertions(+)
- create mode 100644 package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
+On 10/13/2014 08:30 AM, Thomas Petazzoni wrote:
+>
+>
+> Detail of failures
+> ===================
+>
+>
+>          bfin |                    hostapd-2.3 | NOK | http://autobuild.buildroot.net/results/f3b0c9f0cfd41d292c48367404b8fa76322391af/
+>          bfin |                    hostapd-2.3 | NOK | http://autobuild.buildroot.net/results/94543b865db2ff5da34434fdcdf15ea7db73f392/
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index 8d8b8b4..21046fc 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -40,4 +40,13 @@ endef
- 
- GST_FSL_PLUGINS_POST_PATCH_HOOKS += GST_FSL_PLUGINS_PATCH_M4
- 
-+define GST_FSL_PLUGINS_FIX_LD_PATH
-+	$(INSTALL) -d $(TARGET_DIR)/etc/ld.so.conf.d
-+	$(INSTALL) -m 644 \
-+		package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf \
-+		$(TARGET_DIR)/etc/ld.so.conf.d
-+endef
-+
-+GST_FSL_PLUGINS_POST_INSTALL_TARGET_HOOKS += GST_FSL_PLUGINS_FIX_LD_PATH
-+
- $(eval $(autotools-package))
-diff --git a/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
-new file mode 100644
-index 0000000..325fbf1
---- /dev/null
-+++ b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
-@@ -0,0 +1,5 @@
-+# cf. https://community.freescale.com/thread/300387
-+/usr/lib/imx-mm/audio-codec
-+/usr/lib/imx-mm/video-codec
-+/usr/lib/imx-mm/parser
-+
--- 
-1.9.1
+Fixed by commit: 
+http://git.buildroot.net/buildroot/commit/?id=21870ba6c033b71273fa88e2e0ff1fe7a8ee57d8
+
+>        x86_64 |                 upmpdcli-0.8.3 | NOK | http://autobuild.buildroot.net/results/7a67306839642468497b2fed963c27c077fc691d/
+
+Fixed by commit: 
+http://git.buildroot.net/buildroot/commit/?id=1dbdf1e2a297f269c2820399705ed16b63796a2d
+
+>          bfin |             wpa_supplicant-2.3 | NOK | http://autobuild.buildroot.net/results/9ac3c0de573f5266a889f1ceb6d43aa92f715c55/
+>          bfin |             wpa_supplicant-2.3 | NOK | http://autobuild.buildroot.net/results/9be612355ff1106746b7eb36eecd5103476e0e98/
+
+Fixed by commit: 
+http://git.buildroot.net/buildroot/commit/?id=962e08e89b161f8bee6bd45cab56e32c90521af5
