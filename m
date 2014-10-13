@@ -1,175 +1,137 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 Oct 2014 22:46:22 +0200
-Subject: [Buildroot] [PATCH 3/3] adding new package ubus.
-In-Reply-To: <1413102033-3263-3-git-send-email-swexru@gmail.com>
-References: <1413102033-3263-1-git-send-email-swexru@gmail.com>
- <1413102033-3263-3-git-send-email-swexru@gmail.com>
-Message-ID: <CAHXCMMLGfZo6feA30HRadsJLkUmmYvgtX_Wxk3sAmxG=H0MGDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Oct 2014 22:49:03 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package/mono: new package
+In-Reply-To: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20141013224903.0bfe6d76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+Dear Angelo Compagnucci,
 
-On Sun, Oct 12, 2014 at 10:20 AM, Alexey Mednyy <swexru@gmail.com> wrote:
-> Signed-off-by: Alexey Mednyy <swexru@gmail.com>
-> ---
->  package/Config.in                              |  1 +
->  package/ubus/Config.in                         | 11 ++++++++++
->  package/ubus/ubus-01-json-definition-fix.patch | 28 ++++++++++++++++++++++++++
->  package/ubus/ubus.mk                           | 26 ++++++++++++++++++++++++
->  4 files changed, 66 insertions(+)
->  create mode 100644 package/ubus/Config.in
->  create mode 100644 package/ubus/ubus-01-json-definition-fix.patch
->  create mode 100644 package/ubus/ubus.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index ea89c96..92fc6bb 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -872,6 +872,7 @@ menu "Other"
->         source "package/libtasn1/Config.in"
->         source "package/libtpl/Config.in"
->         source "package/libubox/Config.in"
-> +       source "package/ubus/Config.in"
+On Mon, 13 Oct 2014 16:03:50 +0200, Angelo Compagnucci wrote:
 
-Keep the list alphabetically sorted, please.
-
->         source "package/libuci/Config.in"
->         source "package/libunwind/Config.in"
->         source "package/liburcu/Config.in"
-> diff --git a/package/ubus/Config.in b/package/ubus/Config.in
-> new file mode 100644
-> index 0000000..6a9c73d
-> --- /dev/null
-> +++ b/package/ubus/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_UBUS
-> +       bool "ubus"
-> +       select BR2_PACKAGE_LIBUBOX
-> +       depends on !BR2_PREFER_STATIC_LIB
-> +       help
-> +         OpenWrt micro bus architecture, project
-> +          provide communication between various
-> +          daemons and applications.
-
-Indentation for the help text is 1 tab + 2 spaces (the first line is
-ok, the 2 following are not).
-At the end of the help message, the url of the package's project is missing.
-
+> +config BR2_PACKAGE_MONO
+> +	bool "mono"
+> +	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+> +	depends on BR2_INET_IPV6
+> +	help
+> +	  An open source, cross-platform, implementation of C#
+> +	  and the CLR that is binary compatible with Microsoft.NET.
 > +
-> +comment "ubus needs toolchain w/ dynamic library"
-> +       depends on BR2_PREFER_STATIC_LIB
-> diff --git a/package/ubus/ubus-01-json-definition-fix.patch b/package/ubus/ubus-01-json-definition-fix.patch
-> new file mode 100644
-> index 0000000..ccef101
-> --- /dev/null
-> +++ b/package/ubus/ubus-01-json-definition-fix.patch
-> @@ -0,0 +1,28 @@
-> +Fix wrong cmake behavior with json lib search
+> +	  http://download.mono-project.com/sources/mono/
 > +
-> +Signed-off-by: Alexey Mednyy swexru at gmail.com
+> +if BR2_PACKAGE_MONO
 > +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index cb2f420..679b258 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -25,11 +25,18 @@ TARGET_LINK_LIBRARIES(ubus ubox)
-> + ADD_EXECUTABLE(ubusd ubusd.c ubusd_id.c ubusd_obj.c ubusd_proto.c ubusd_event.c)
-> + TARGET_LINK_LIBRARIES(ubusd ubox)
+> +	config BR2_PACKAGE_MONO_20
+> +		bool "2.0/3.5 .Net Runtime"
+> +		help
+> +		  This option enables the installation of
+> +		  the 2.0/3.5 version of the Mono .Net runtime to the target
 > +
-> +-find_library(json NAMES json-c json)
-> ++find_library(json NAMES json-c)
-> + ADD_EXECUTABLE(cli cli.c)
-> + SET_TARGET_PROPERTIES(cli PROPERTIES OUTPUT_NAME ubus)
-> + TARGET_LINK_LIBRARIES(cli ubus ubox blobmsg_json ${json})
+> +	config BR2_PACKAGE_MONO_40
+> +		bool "4.0 .Net Runtime"
+> +		help
+> +		  This option enables the installation of
+> +		  the 4.0 version of the Mono .Net runtime to the target
 > +
-> ++INCLUDE(FindPkgConfig)
-> ++PKG_CHECK_MODULES(JSONC json-c)
-> ++IF(JSONC_FOUND)
-> ++  ADD_DEFINITIONS(-DJSONC)
-> ++  INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
-> ++ENDIF()
-> ++
+> +	config BR2_PACKAGE_MONO_45
+> +		bool "4.5 .Net Runtime"
+> +		default y
+> +		help
+> +		  This option enables the installation of
+> +		  the 4.5 version of the Mono .Net runtime to the target
 
-hmm... something is wrong here.
-First, you check for libjson-c using find_library, and you
-unconditionally link cli with it, then you check for json-c headers,
-and only update the cflags if they have been found.
+I think I already told you, but I repeat if: no indentation inside
+if ... endif, so:
 
-So,
-- pkg_check_modules sets both *_INCLUDE_DIRS and *_LIBRARIES variables
-(and others, see cmake doc [1]); so:
-  - you don't need the find_library call;
-  - you should move the pkg_check_modules call above/before:
-"target_link_library(cli ...)"
-- Instead of "include(FindPkgConfig)", i prefer using
-"find_package(PkgConfig)" which accepts options;
-- Is json-c dependency optional?
-  - if yes, then the "target_link_library(cli ${JSON_LIBRARIES})"
-should be nested in the "if(JSONC_FOUND)"-block;
-  - otherwise, the CMake should bail out because of the
-missing/unfound dependency.
+if BR2_PACKAGE_FOO
 
-> + ADD_SUBDIRECTORY(lua)
-> + ADD_SUBDIRECTORY(examples)
-> +
-> diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-> new file mode 100644
-> index 0000000..9ac45ab
-> --- /dev/null
-> +++ b/package/ubus/ubus.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# UBUS
-> +#
-> +################################################################################
-> +
-> +UBUS_VERSION = 4c4f35cf2230d70b9ddd87638ca911e8a563f2f3
-> +UBUS_SITE = git://nbd.name/luci2/ubus.git
-> +UBUS_LICENSE = LGPLv2.1
-> +UBUS_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
+config BR2_PACKAGE_FOO_BAZ
+	bool "..."
 
-host-pkgconf is already a CMake's dependency.
+config BR2_PACKAGE_FOO_BAZ2
+	bool "..."
 
-> +
-> +ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
-> +UBUS_DEPENDENCIES += lua
-> +UBUS_CONF_OPTS += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-> +       -DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+endif
 
-We usually like symetric option, even if it is the default value of
-the option; so you should add:
--DBUILD_LUA=ON
+Also, the wrapping of your help text for the runtime version options is
+weird.
 
-> +else
-> +       UBUS_CONF_OPTS += -DBUILD_LUA:BOOL=OFF
 
-no indentation here
-":BOOL" is not necessary here
+> +ifneq ($(BR2_PACKAGE_MONO_20),y) 
+> +ifneq ($(BR2_PACKAGE_MONO_40),y)
+> +ifneq ($(BR2_PACKAGE_MONO_45),y)
+> +	BR2_PACKAGE_MONO_45 = y
+> +endif
+> +endif
+> +endif
 
+Noooooooo! Where have you seen that we're allowed to change the value
+of Config.in options from within Makefiles?
+
+Please handle this inside the Config.in directly in a proper way:
+
+config BR2_PACKAGE_MONO
+	bool "mono"
+	...
+	select BR2_PACKAGE_MONO_45 if !BR2_PACKAGE_MONO20 && !BR2_PACKAGE_MONO40
+
+This way, you are guaranteed that if neither mono 2.0 nor mono 4.0 are
+selected, then mono 4.5 is selected.
+
+> +ifeq ($(BR2_PACKAGE_MONO_20),y)
+> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile2=no,--with-profile2=yes,$(HOST_MONO_CONF_OPTS))
 > +endif
 > +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +       UBUS_DEPENDENCIES += systemd
-> +else
-> +       UBUS_CONF_OPTS += -DENABLE_SYSTEMD:BOOL=OFF
-
-ditto (no indentation, no ":BOOL", symetric option)
-
+> +ifeq ($(BR2_PACKAGE_MONO_40),y)
+> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile4=no,--with-profile4=yes,$(HOST_MONO_CONF_OPTS))
 > +endif
 > +
-> +$(eval $(cmake-package))
-> --
-> 1.9.1
->
+> +ifeq ($(BR2_PACKAGE_MONO_45),y)
+> +	HOST_MONO_CONF_OPTS := $(patsubst --with-profile4_5=no,--with-profile4_5=yes,$(HOST_MONO_CONF_OPTS))
+> +endif
 
-[1] http://www.cmake.org/cmake/help/v3.0/module/FindPkgConfig.html
+Whaaat?
 
-Regards,
+Remove:
 
++	--with-profile2=no \
++	--with-profile4=no \
++	--with-profile4_5=no
+
+from the unconditional HOST_MONO_CONF_OPTS. And then simply do:
+
+ifeq ($(BR2_PACKAGE_MONO_20),y)
+HOST_MONO_CONF_OPTS += --with-profile2=yes
+else
+HOST_MONO_CONF_OPTS += --with-profile2=no
+endif
+
+And do it for each version. Or if you want a shorter version:
+
+HOST_MONO_CONF_OPTS += --with-profile2=$(if $(BR2_PACKAGE_MONO_20),yes,no)
+
+I'm not sure where you found this crazy patsubst solution, since what
+I'm proposing here is what is done in *all* Buildroot packages. Maybe
+you should spend a bit of time reading the .mk files of a few other
+packages to get some idea on how we generally do things.
+
+There's still on things that bothers me a bit: those options
+(BR2_PACKAGE_MONO_{20,40,45}) are target options, but they are in fact
+used when building host-mono, which isn't very clean. I assume it's not
+possible to have the target mono package build the runtime libraries
+using the compiler built by the host-mono package, right?
+
+If not, then keep things as they are today, but put a comment above the
+place where BR2_PAKCAGE_MONO_{20,40,45} is used in the .mk file
+explaining why we're using those target options for a host package.
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
