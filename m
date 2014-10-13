@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Oct 2014 19:45:52 +0200
-Subject: [Buildroot] [PATCH v2 2/7] package/ffmpeg: Enable support for
-	libavresample
+Date: Mon, 13 Oct 2014 19:45:57 +0200
+Subject: [Buildroot] [PATCH v2 7/7] package/tvheadend: Add transcoding
+	support by ffmpeg
 In-Reply-To: <1413222357-8299-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413222357-8299-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413222357-8299-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413222357-8299-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/Config.in |    5 +++++
- package/ffmpeg/ffmpeg.mk |    6 ++++++
- 2 files changed, 11 insertions(+)
+ package/tvheadend/tvheadend.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 20d5231..6fde46e 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -49,6 +49,11 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
- 	help
- 	  FFserver is a streaming server for both audio and video.
- 
-+config BR2_PACKAGE_FFMPEG_AVRESAMPLE
-+	bool "Build libavresample"
-+	help
-+	  Avresample is a audio conversion library for compatibility.
-+
- config BR2_PACKAGE_FFMPEG_POSTPROC
- 	bool "Build libpostproc"
- 	depends on BR2_PACKAGE_FFMPEG_GPL
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index af4e1f6..0493385 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -104,6 +104,12 @@ else
- FFMPEG_CONF_OPTS += --disable-ffserver
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5d67bbe..92baa20 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -14,6 +14,13 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+ TVHEADEND_DEPENDENCIES += avahi
  endif
  
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
-+FFMPEG_CONF_OPTS += --enable-avresample
++ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE),yy)
++TVHEADEND_DEPENDENCIES += ffmpeg
++TVHEADEND_CONF_OPTS += --enable-libav
 +else
-+FFMPEG_CONF_OPTS += --disable-avresample
++TVHEADEND_CONF_OPTS += --disable-libav
 +endif
 +
- ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
- FFMPEG_CONF_OPTS += --enable-postproc
- else
+ ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+ TVHEADEND_DEPENDENCIES += libdvbcsa
+ TVHEADEND_CONF_OPTS += --enable-dvbcsa
+@@ -38,6 +45,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 	 --python="$(HOST_DIR)/usr/bin/python"	\
+ 	 --disable-dvbscan			\
+ 	 --enable-bundle			\
++	 --disable-libffmpeg_static		\
+ 	)
+ endef
+ 
 -- 
 1.7.10.4
