@@ -1,35 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Oct 2014 20:05:26 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/mesa3d: Bump version to 10.3.1
-Message-ID: <1413223527-8740-1-git-send-email-bernd.kuhls@t-online.de>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Mon, 13 Oct 2014 20:38:05 +0200
+Subject: [Buildroot] [PATCH] manual: Add note about uses of github helper
+In-Reply-To: <1413189118-12645-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413189118-12645-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAKAx1cj59VbDXzsVTy1s=YmZAUsYFaJfTtL7srh=0JLoJK=qnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Maxime,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
- package/mesa3d/mesa3d.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, Oct 13, 2014 at 10:31 AM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> Add a little comment regarding the uses of the github helper for the releases.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  docs/manual/adding-packages-tips.txt | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+> index 0d4fcb0..30f8184 100644
+> --- a/docs/manual/adding-packages-tips.txt
+> +++ b/docs/manual/adding-packages-tips.txt
+> @@ -52,3 +52,14 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+>    Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
+>    so it is not necessary to specify it in the +.mk+ file.
+>  - When using a commit ID as version, you should use the full 40 hex characters.
+> +
+> +If the package you wish to add does have a release section on GitHub,
+> +you need to be careful, the maintainer of the package may have
+> +uploaded a specific file along with the releases.
+> +You can see it from the pages:
+> +- If there is a green download button, like
+> +  https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], you
+> +  should you should specify +FOO_SITE+ like any generic packages.
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 844884b..b647f36 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--MESA3D_VERSION = 10.3.0
-+MESA3D_VERSION = 10.3.1
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
--MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/10.3
-+MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
- MESA3D_AUTORECONF = YES
--- 
-1.7.10.4
+s/you should you should/you should/
+Maybe also state that the green button actually links to the correct
+URL we want to extract FOO_SITE from...
+
+> +- If there is grey downlaod button, like
+> +  https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then you
+> +  can use the 'github' helper.
+> --
+> 2.1.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+Lionel
