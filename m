@@ -1,37 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Oct 2014 00:17:55 +0200
-Subject: [Buildroot] [PATCH 1/2] Config.in: update description of
-	BR2_PREFER_STATIC_LIB
-In-Reply-To: <1413131685-5567-2-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Sun, 12 Oct 2014 18:34:44 +0200")
-References: <1413131685-5567-1-git-send-email-abrodkin@synopsys.com>
- <1413131685-5567-2-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87r3ydrkz0.fsf@dell.be.48ers.dk>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sun, 12 Oct 2014 21:18:40 -0700
+Subject: [Buildroot] [PATCH] gst1-plugins-imx: add package
+In-Reply-To: <543A9384.8050803@lucaceresoli.net>
+References: <1412545628-12153-1-git-send-email-bisson.gary@gmail.com>
+ <543A9384.8050803@lucaceresoli.net>
+Message-ID: <543B52A0.6060007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <alexey.brodkin@gmail.com> writes:
+Hi Luca,
 
- > With time BR2_PREFER_STATIC_LIB option meaning changed from "prefer static
- > libs when possible" to "do not build dynamic libs and build statically linked
- > applications".
+Thanks for your feedback, below are my comments.
+Sorry Peter I didn't see your patch from March.
 
- > This patch changes variable description.
+On 10/12/2014 07:43 AM, Luca Ceresoli wrote:
+> Dear Gary, Peter,
+[...]
+> It would be better to have only one comment showing all the dependencies
+> at once to avoid cluttering the menuconfig screen when the dependencies
+> are not met. Also, please format it according to the guidelines in
+> http://nightly.buildroot.org/manual.html#dependencies-target-toolchain-options 
+>
+Ok I can rework those comments.
+>
+> BTW, the last warning should be shown regardless of the value of
+> BR2_PACKAGE_LIBFSLVPUWRAP, nope?
+The goal here was to show only one comment at a time. Both comments will 
+be merged in one.
+> [...]
+> According to Gary, (e)glibc is needed. Peter, did you build-test with
+> uClibc (or musl)?
+Actually this dependency is not required as it is implicit, the real 
+eglibc dependency comes from the GPU_VIV package.
+>
+> How about imx-lib, libfslparser and libfslcodec?
+No, Peter's dependencies seem to have some legacy from the old gstreamer 
+plugin, see package/gstreamer/gst-fsl-plugins/Config.in. Moreover it is 
+missing the GPU_VIV package dependency required to have the imxg2d and 
+imxegl plugins and also narrows this plugin to iMX6 platforms only.
+>
+> It would be great if you could have a list that really matches the
+> package. It's probably going to be a mix of the two, but I don't know
+> exactly which pieces should be picked.
+The best is to compare the dependencies from the Yocto recipe:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-multimedia/gstreamer/gstreamer1.0-plugins-imx_0.9.9.bb
+This is what I've based my package on.
+> [...]
+> Can you merge the two statements?
+I can add the Kernel header comment but regarding the VPU I've offered a 
+patch for the firmware to be selected when imx-vpu package is enabled:
+http://lists.busybox.net/pipermail/buildroot/2014-October/107894.html
+> [...]
+> Use the github helper macro:
+> http://nightly.buildroot.org/manual.html#github-download-url
+Ok.
+> [...]
+> Peter's version does not depend on host-python, yours does.
+>
+> Actually that dependency is needed becase waf does not work with
+> recent python3 interpreters. That's why all Buildroot packages that use
+> waf (jack2, midori, samba4) depend on it.
+Yes host-python is required.
+> [...]
+> ...and you support X11 and Wayland, which is good.
+>
+> Overall your patch looks better, except Peter lists more mandatory
+> dependencies (perhaps some or all are actually neede), has a more
+> informative package description and uses the github helper. Merging
+> the two patches to get the best of each would be good, and it would be
+> great if you could cooperate to do that!
+>
+> I'm afraid I haven't much experience on i.MX to help, but I'll be glad
+> to test your work (but please keep me in Cc:).
+>
+No problem I'll keep you in cc. But what is the plan now? Should I offer 
+a v2 or let Peter integrate the remarks above in his patch?
 
- > Note that variable name is kept unchanged on purpose - it will be modified later
- > when real "prefer static" mode will be introduced.
-
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
-
-Committed with the minor text tweaks suggested fixed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Thanks,
+Gary
