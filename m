@@ -1,9 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Oct 2014 19:44:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mesa3d: Add hash file
-In-Reply-To: <1413222259-8240-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413222259-8240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413222259-8240-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 13 Oct 2014 19:44:18 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mesa3d: Bump version to 10.3.1
+Message-ID: <1413222259-8240-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +11,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/mesa3d.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/mesa3d/mesa3d.hash
+ package/mesa3d/mesa3d.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-new file mode 100644
-index 0000000..b7b905e
---- /dev/null
-+++ b/package/mesa3d/mesa3d.hash
-@@ -0,0 +1,2 @@
-+# From http://cgit.freedesktop.org/mesa/mesa/commit/?h=10.3&id=fa98c74692634de4f87694a40a299b59c4716ee5
-+sha256	b081d077d717e5d56f2d59677490856052c41573e50378ff86d6c72456714add	MesaLib-10.3.1.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 844884b..b647f36 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.3.0
++MESA3D_VERSION = 10.3.1
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+-MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/10.3
++MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+ MESA3D_AUTORECONF = YES
 -- 
 1.7.10.4
