@@ -1,92 +1,70 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Oct 2014 14:32:02 +0200
-Subject: [Buildroot] [PATCH] initscripts: new package
-In-Reply-To: <6226941.eYITS00seb@sagittea>
-References: <1413190990-24136-1-git-send-email-maxime.hadjinlian@gmail.com>
- <6226941.eYITS00seb@sagittea>
-Message-ID: <CAGduivxrV4=j5JirUBWMvmRyLkOu6MvWJDx6_-ktTLgr2KDiLg@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 13 Oct 2014 14:54:21 +0200
+Subject: [Buildroot] [Patch v2 0/2] Re-introducing libgtk3
+Message-ID: <1413204863-15372-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Oct 13, 2014 12:50 PM, "J?r?me Pouiller" <jezz@sysmic.org> wrote:
->
-> Hello Maxime,
->
-> On Monday 13 October 2014 11:03:10 Maxime Hadjinlian wrote:
-> > The folder init.d is currently installed by default since it's part of
-> > our skeleton.
-> > This patch creates a package out of it and make busybox/sysvinit depends
-> > on it.
-> >
-> > This way, if you chose another init, you don't end up with a useless
-> > init.d folder.
-> >
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > ---
-> >  package/busybox/busybox.mk            |  6 ++++
-> >  package/initscripts/busybox_inittab   | 36 +++++++++++++++++++++++
-> >  package/initscripts/init.d/S20urandom | 54
-> > +++++++++++++++++++++++++++++++++++
-package/initscripts/init.d/S40network |
-> > 25 ++++++++++++++++
-> >  package/initscripts/init.d/rcK        | 27 ++++++++++++++++++
-> >  package/initscripts/init.d/rcS        | 27 ++++++++++++++++++
-> >  package/initscripts/initscripts.mk    | 28 ++++++++++++++++++
-> >  package/initscripts/sysvinit_inittab  | 25 ++++++++++++++++
-> >  package/sysvinit/inittab              | 25 ----------------
-> >  package/sysvinit/sysvinit.mk          | 11 +++++--
-> >  system/skeleton/etc/init.d/S20urandom | 54
-> > -----------------------------------
-system/skeleton/etc/init.d/S40network |
-> > 25 ----------------
-> >  system/skeleton/etc/init.d/rcK        | 27 ------------------
-> >  system/skeleton/etc/init.d/rcS        | 27 ------------------
-> >  system/skeleton/etc/inittab           | 36 -----------------------
-> >  15 files changed, 237 insertions(+), 196 deletions(-)
-> >  create mode 100644 package/initscripts/busybox_inittab
-> >  create mode 100755 package/initscripts/init.d/S20urandom
-> >  create mode 100755 package/initscripts/init.d/S40network
-> >  create mode 100755 package/initscripts/init.d/rcK
-> >  create mode 100755 package/initscripts/init.d/rcS
-> >  create mode 100644 package/initscripts/initscripts.mk
-> >  create mode 100644 package/initscripts/sysvinit_inittab
-> >  delete mode 100644 package/sysvinit/inittab
-> >  delete mode 100755 system/skeleton/etc/init.d/S20urandom
-> >  delete mode 100755 system/skeleton/etc/init.d/S40network
-> >  delete mode 100755 system/skeleton/etc/init.d/rcK
-> >  delete mode 100755 system/skeleton/etc/init.d/rcS
-> >  delete mode 100644 system/skeleton/etc/inittab
-> Can you sent it using -M option in order to make it more readable?
-I resent it using this and finally fixed my setup but maybe it went awry
-also.
->
-> [...]
-> > diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-> > index d588122..d515882 100644
-> > --- a/package/sysvinit/sysvinit.mk
-> > +++ b/package/sysvinit/sysvinit.mk
-> > @@ -11,9 +11,13 @@ SYSVINIT_SITE =
-> [...]
-> >       done
-> > +<<<<<<< HEAD
-> >       # Override BusyBox's inittab with an inittab compatible with
-> >       # sysvinit
-> >       $(INSTALL) -D -m 0644 package/sysvinit/inittab
-$(TARGET_DIR)/etc/inittab
-> > +=======
-> > +>>>>>>> initscripts: new package
-> Something goes wrong here :-)
-Yes obviously. Sorry about that.
->
->
-> [...]
-> --
-> J?r?me Pouiller, Sysmic
-> Embedded Linux specialist
-> http://www.sysmic.fr
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141013/8c8cf773/attachment.html>
+Hi!
+
+This small series re-introduces libgtk3.
+
+The following changes have been made to the latest version posted by H.
+Bouteville:
+
+ - Add multiple backend support (X11, Wayland, Broadway).
+ - Use pkgconf, from host-pkgconf, to build host-libgtk3 and some native tools
+   in libgtk3.
+ - GSettings schemas compilation after installation (needed by gtk3-demo).
+ - Introduction of hicolor-icon-theme (needed by gtk3-demo).
+
+The following tests have been performed:
+
+ - running gtk3-demo in QEMU x86/ARM in a X11/Fluxbox environment.
+ - running gtk3-demo in QEMU x86/ARM in a Wayland/Weston environment.
+
+Note: since wayland has been bumped to 1.6.0, running gtk3-demo in Weston does
+not work anymore. Gtk+ 3.12.2 uses protocol version 3, whereas wayland 1.6.0
+introduces version 4. A runtime check is performed and the program refuses to
+start. This is solved with Gtk+ 3.14.0. Once this series is accepted, I will
+provide a series bumping libgtk3 and friends (libglib2, pango, etc).
+
+Best regards,
+ELB
+
+Changes v1 -> v2:
+
+  - removed patch introducing pkg-config-native, as pkgconf does the same job
+    (suggested by PeterK).
+  - updated comments for hicolor-icon-theme, to explain this is not a full
+    icon theme, but a fallback one (suggested by ThomasP).
+  - use LIBGTK3_CONF_OPTS instead of LIBGTK3_CONF_OPT.
+
+Eric Le Bihan (1):
+  hicolor-icon-theme: new package
+
+Hadrien Boutteville (1):
+  libgtk3: new package
+
+ package/Config.in                                  |   2 +
+ package/hicolor-icon-theme/Config.in               |   8 +
+ package/hicolor-icon-theme/hicolor-icon-theme.mk   |  12 ++
+ package/libgtk3/Config.in                          |  87 +++++++++++
+ package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |  25 +++
+ .../libgtk3-0002-fix-introspection-check.patch     |  28 ++++
+ .../libgtk3/libgtk3-0003-disable-atk-bridge.patch  |  45 ++++++
+ package/libgtk3/libgtk3.mk                         | 174 +++++++++++++++++++++
+ 8 files changed, 381 insertions(+)
+ create mode 100644 package/hicolor-icon-theme/Config.in
+ create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.mk
+ create mode 100644 package/libgtk3/Config.in
+ create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
+ create mode 100644 package/libgtk3/libgtk3-0002-fix-introspection-check.patch
+ create mode 100644 package/libgtk3/libgtk3-0003-disable-atk-bridge.patch
+ create mode 100644 package/libgtk3/libgtk3.mk
+
+--
+1.9.1
