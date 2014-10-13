@@ -1,69 +1,89 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 13:10:10 +0200
-Subject: [Buildroot] [PATCH v2 00/13] Add Xorg support for imx6
-Message-ID: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+Date: Mon, 13 Oct 2014 13:10:13 +0200
+Subject: [Buildroot] [PATCH v2 03/13] gpu-viv-bin-mx6q: fix compiling issues
+	with EGL_API_FB
+In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1413198623-22373-4-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+To compile with Vivante header and use framebuffer, it is necessary to
+pass option -DEGL_API_FB. This option is declared in pkg-config file of
+Vivante library. But many packages (especialy qt5 components) does not
+consider these flags.
 
-Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
-Xorg. This work is mainly adapted from Yocto.
+So instead of patching every packages that use EGL, it is more
+convenient to patch Vivante headers.
 
-v2:
-  - Rebase on new version of mesa3d
-  - Reorder some patches (in order to make examples I provide in commit message 
-    functional)
-  - Do not bump version of all freescale packages
-  - Bump kernel version of imx6 boards
+This commit add #define EGL_API_FB on top of eglvivante.h when
+necessary.
 
-J?r?me Pouiller (13):
-  mesa3d: Give possibility to external backends to enable DRI/Gallium
-  gpu-viv-bin-mx6q: provide libopenvg
-  gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
-  gpu-viv-bin-mx6q: fix GLESv2 support
-  gpu-viv-bin-mx6q: make fb/x11 choice explicit
-  gpu-viv-bin-mx6q: change output selection mecanism
-  libdrm: fix support for xserver with Vivante drivers
-  qt5base: fix Vivante x11/EGL configuration
-  xdriver_xf86-video-imx-viv: new package
-  Vivante drivers: bump to version 3.10.17-1.0.1
-  nitrogen6x_defconfig: bump kernel to 3.10.17_1.0.1_ga
-  freescale_imx6*_defconfig: bump kernel to 3.10.17_1.0.1_ga
-  qmx6_defconfig: update
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
+ package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
+ package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
+ 4 files changed, 9 insertions(+), 7 deletions(-)
 
- board/congatec/qmx6/6q_bootscript.txt              |  2 -
- board/congatec/qmx6/post-build.sh                  |  7 ---
- configs/freescale_imx6dlsabresd_defconfig          |  3 +-
- configs/freescale_imx6qsabresd_defconfig           |  3 +-
- configs/freescale_imx6sololiteevk_defconfig        |  3 +-
- configs/nitrogen6x_defconfig                       |  3 +-
- configs/qmx6_defconfig                             | 49 +++++++++++++++--
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 33 +++++++++++-
- package/freescale-imx/gpu-viv-bin-mx6q/egl.pc      |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc   |  2 +-
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 43 +++++++--------
- package/freescale-imx/gpu-viv-bin-mx6q/vg.pc       |  2 +-
- package/libdrm/libdrm-0001-update-arm.patch        | 37 +++++++++++++
- package/mesa3d/mesa3d.mk                           |  4 +-
- .../qt5base-0001-Force_egl_visual_ID_33.patch      | 23 ++++++++
- .../qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch   | 63 ++++++++++++++++++++++
- package/x11r7/Config.in                            |  1 +
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 32 +++++++++++
- ...xf86-video-imx-viv-0001-Fix-LoadExtenions.patch | 15 ++++++
- .../xdriver_xf86-video-imx-viv.mk                  | 32 +++++++++++
- 20 files changed, 313 insertions(+), 46 deletions(-)
- delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
- delete mode 100755 board/congatec/qmx6/post-build.sh
- create mode 100644 package/libdrm/libdrm-0001-update-arm.patch
- create mode 100644 package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch
- create mode 100644 package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv-0001-Fix-LoadExtenions.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+index c984247..d1d09a0 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+@@ -7,4 +7,4 @@ Name: egl
+ Description: Freescale gpu-viv-bin-mx6q implementation of EGL
+ Version: 1.0
+ Libs: -L${libdir} -lGAL -lEGL
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+index 7cfb5e7..74ce792 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+@@ -7,4 +7,4 @@ Name: glesv2
+ Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
+ Version: 2.0
+ Libs: -L${libdir} -lGAL -lEGL -lGLESv2
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index aef16a3..7725f86 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -58,14 +58,16 @@ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
++	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
++		$(SED) '/#define EGLAPIENTRY/ a \
++			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
++			#define EGL_API_FB \n\
++			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
++	fi
+ 	for lib in egl glesv2 vg; do \
+ 		$(INSTALL) -m 0644 -D \
+ 			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
+ 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+-		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
+-			$(SED) "s/-DEGL_API_FB=1//" \
+-				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+-		fi; \
+ 	done
+ endef
+ 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+index fb14005..677a7ee 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+@@ -7,4 +7,4 @@ Name: vg
+ Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
+ Version: 1.1
+ Libs: -L${libdir} -lGAL -lEGL -lOpenVG
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
 -- 
 1.9.1
