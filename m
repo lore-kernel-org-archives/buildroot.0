@@ -1,10 +1,10 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 13:10:22 +0200
-Subject: [Buildroot] [PATCH v2 12/13] freescale_imx6*_defconfig: bump kernel
-	to 3.10.17_1.0.1_ga
+Date: Mon, 13 Oct 2014 13:10:21 +0200
+Subject: [Buildroot] [PATCH v2 11/13] nitrogen6x_defconfig: bump kernel to
+	3.10.17_1.0.1_ga
 In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
 References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1413198623-22373-13-git-send-email-jezz@sysmic.org>
+Message-ID: <1413198623-22373-12-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- configs/freescale_imx6dlsabresd_defconfig   | 3 ++-
- configs/freescale_imx6qsabresd_defconfig    | 3 ++-
- configs/freescale_imx6sololiteevk_defconfig | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ configs/nitrogen6x_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 680031d..b4f0d74 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -17,7 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index e56bd60..d75f780 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,7 +26,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/898627a/linux-imx6-898627a.tar.gz"
++# Last version of branch boundary-imx_3.10.17_1.0.1_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/ea957c5/linux-imx6-ea957c5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
  BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index f2f702e..9ca89cb 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -17,7 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index f8ecc7b..f501fc3 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -9,7 +9,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
 1.9.1
