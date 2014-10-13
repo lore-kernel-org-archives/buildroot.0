@@ -1,80 +1,75 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 12:50:24 +0200
-Subject: [Buildroot] [PATCH] initscripts: new package
-In-Reply-To: <1413190990-24136-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413190990-24136-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <6226941.eYITS00seb@sagittea>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Mon, 13 Oct 2014 13:10:14 +0200
+Subject: [Buildroot] [PATCH v2 04/13] gpu-viv-bin-mx6q: fix GLESv2 support
+In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1413198623-22373-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxime,
+Tested with:
+    QMX6 board +
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_EGLFS=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
-On Monday 13 October 2014 11:03:10 Maxime Hadjinlian wrote:
-> The folder init.d is currently installed by default since it's part of
-> our skeleton.
-> This patch creates a package out of it and make busybox/sysvinit depends
-> on it.
-> 
-> This way, if you chose another init, you don't end up with a useless
-> init.d folder.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/busybox/busybox.mk            |  6 ++++
->  package/initscripts/busybox_inittab   | 36 +++++++++++++++++++++++
->  package/initscripts/init.d/S20urandom | 54
-> +++++++++++++++++++++++++++++++++++ package/initscripts/init.d/S40network |
-> 25 ++++++++++++++++
->  package/initscripts/init.d/rcK        | 27 ++++++++++++++++++
->  package/initscripts/init.d/rcS        | 27 ++++++++++++++++++
->  package/initscripts/initscripts.mk    | 28 ++++++++++++++++++
->  package/initscripts/sysvinit_inittab  | 25 ++++++++++++++++
->  package/sysvinit/inittab              | 25 ----------------
->  package/sysvinit/sysvinit.mk          | 11 +++++--
->  system/skeleton/etc/init.d/S20urandom | 54
-> ----------------------------------- system/skeleton/etc/init.d/S40network |
-> 25 ----------------
->  system/skeleton/etc/init.d/rcK        | 27 ------------------
->  system/skeleton/etc/init.d/rcS        | 27 ------------------
->  system/skeleton/etc/inittab           | 36 -----------------------
->  15 files changed, 237 insertions(+), 196 deletions(-)
->  create mode 100644 package/initscripts/busybox_inittab
->  create mode 100755 package/initscripts/init.d/S20urandom
->  create mode 100755 package/initscripts/init.d/S40network
->  create mode 100755 package/initscripts/init.d/rcK
->  create mode 100755 package/initscripts/init.d/rcS
->  create mode 100644 package/initscripts/initscripts.mk
->  create mode 100644 package/initscripts/sysvinit_inittab
->  delete mode 100644 package/sysvinit/inittab
->  delete mode 100755 system/skeleton/etc/init.d/S20urandom
->  delete mode 100755 system/skeleton/etc/init.d/S40network
->  delete mode 100755 system/skeleton/etc/init.d/rcK
->  delete mode 100755 system/skeleton/etc/init.d/rcS
->  delete mode 100644 system/skeleton/etc/inittab
-Can you sent it using -M option in order to make it more readable?
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-[...]
-> diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-> index d588122..d515882 100644
-> --- a/package/sysvinit/sysvinit.mk
-> +++ b/package/sysvinit/sysvinit.mk
-> @@ -11,9 +11,13 @@ SYSVINIT_SITE =
-[...]
->  	done
-> +<<<<<<< HEAD
->  	# Override BusyBox's inittab with an inittab compatible with
->  	# sysvinit
->  	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
-> +=======
-> +>>>>>>> initscripts: new package
-Something goes wrong here :-)
-
-
-[...]
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 7725f86..de126fe 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -48,12 +48,13 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+ 			$(@D)/usr/lib/lib$${lib}.so; \
+ 	done
+-	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+@@ -84,7 +85,7 @@ endif
+ define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
+ 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
+ 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.9.1
