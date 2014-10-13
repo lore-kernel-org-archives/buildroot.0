@@ -1,47 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 Oct 2014 06:38:26 +0200
-Subject: [Buildroot] [PATCH] package/nginx: fix build failure
-In-Reply-To: <20141013000500.10452497@free-electrons.com>
-References: <1413144879-26661-1-git-send-email-s.martin49@gmail.com>
- <20141013000500.10452497@free-electrons.com>
-Message-ID: <CAHXCMMLgwEyH_0bB+usTrQo6po1WtbhAu_e3tZpb3M8=4LAX-g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Oct 2014 08:36:25 +0300
+Subject: [Buildroot] [PATCH] hostapd: needs MMU
+Message-ID: <9e40988de91b109be1cf18bdb8999b15cf10020c.1413178585.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 13, 2014 at 12:05 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Samuel Martin,
->
-> On Sun, 12 Oct 2014 22:14:39 +0200, Samuel Martin wrote:
->> Correctly set NGX_SYS_NERR, even when it is 0.
->>
->> Fixes:
->>   http://autobuild.buildroot.org/results/666/666d780bf61e10c9f89f765bb04ddc1afc11d0d1/
->>   http://autobuild.buildroot.org/?reason=nginx-1.6.2&&arch=powerpc
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  .../nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch   | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
->> index 4c00755..d02de68 100644
->> --- a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
->> +++ b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
->
-> Description + SoB in the patch ?
+hostapd calls fork() since last version bump.
 
-Well, this is a change on an existing patch which already contains a
-description and my SoB...
-I don't think it is needed in this case.
+Fixes:
+http://autobuild.buildroot.net/results/945/94543b865db2ff5da34434fdcdf15ea7db73f392/
 
-BTW, I did not rename the patch(es) because I prefer doing this in another cset.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/hostapd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Regards,
-
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 8783e66132d3..6ca396ee3904 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOSTAPD
+ 	bool "hostapd"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBNL
+ 	help
+ 	  User space daemon for wireless access points.
+@@ -31,3 +32,4 @@ endif
+ 
+ comment "hostapd needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
 -- 
-Samuel
+2.1.1
