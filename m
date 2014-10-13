@@ -1,10 +1,10 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 13:10:11 +0200
-Subject: [Buildroot] [PATCH v2 01/13] mesa3d: Give possibility to external
-	backends to enable DRI/Gallium
+Date: Mon, 13 Oct 2014 13:10:16 +0200
+Subject: [Buildroot] [PATCH v2 06/13] gpu-viv-bin-mx6q: change output
+	selection mecanism
 In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
 References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1413198623-22373-2-git-send-email-jezz@sysmic.org>
+Message-ID: <1413198623-22373-7-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/mesa3d/mesa3d.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in    |  5 +++++
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk            | 21 +++++++++------------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 844884b..1e3e921 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -64,7 +64,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
- MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
- MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 904b011..489e68e 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -45,6 +45,11 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
  
--ifeq ($(MESA3D_GALLIUM_DRIVERS-y),)
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-gallium-drivers
- else
-@@ -73,7 +73,7 @@ MESA3D_CONF_OPTS += \
- 	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
- endif
+ endchoice
  
--ifeq ($(MESA3D_DRI_DRIVERS-y),)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-dri-drivers --without-dri --disable-dri3
- else
++config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT
++	string
++	default "x11" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
++	default "fb" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
++
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "gpu-viv-bin-mx6q"
+ 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index e24d171..6bc5d4d 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -24,14 +24,7 @@ GPU_VIV_BIN_MX6Q_LICENSE = Freescale Semiconductor Software License Agreement
+ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
+ 
+ GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+-
+-# DirectFB is not supported (wrong version)
+-ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
+-GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+-GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
+-else
+-GPU_VIV_BIN_MX6Q_LIB_TARGET = fb
+-endif
++GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
+ 
+ # The archive is a shell-self-extractor of a bzipped tar. It happens
+ # to extract in the correct directory (gpu-viv-bin-mx6q-x.y.z)
+@@ -48,13 +41,17 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE GLESv2; do \
+-		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+-			$(@D)/usr/lib/lib$${lib}.so; \
+-	done
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so.1
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so.1.0
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so.2
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so.2.0.0
++	ln -sf libVIVANTE-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libVIVANTE.so
++	ln -sf libGAL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGAL.so
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
 -- 
 1.9.1
