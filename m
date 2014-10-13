@@ -1,58 +1,69 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Mon, 13 Oct 2014 20:38:05 +0200
-Subject: [Buildroot] [PATCH] manual: Add note about uses of github helper
-In-Reply-To: <1413189118-12645-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413189118-12645-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <CAKAx1cj59VbDXzsVTy1s=YmZAUsYFaJfTtL7srh=0JLoJK=qnQ@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Oct 2014 14:12:43 -0500
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of ip
+	tables with C++
+Message-ID: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
 
-On Mon, Oct 13, 2014 at 10:31 AM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Add a little comment regarding the uses of the github helper for the releases.
->
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  docs/manual/adding-packages-tips.txt | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-> index 0d4fcb0..30f8184 100644
-> --- a/docs/manual/adding-packages-tips.txt
-> +++ b/docs/manual/adding-packages-tips.txt
-> @@ -52,3 +52,14 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
->    Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
->    so it is not necessary to specify it in the +.mk+ file.
->  - When using a commit ID as version, you should use the full 40 hex characters.
-> +
-> +If the package you wish to add does have a release section on GitHub,
-> +you need to be careful, the maintainer of the package may have
-> +uploaded a specific file along with the releases.
-> +You can see it from the pages:
-> +- If there is a green download button, like
-> +  https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], you
-> +  should you should specify +FOO_SITE+ like any generic packages.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
 
-s/you should you should/you should/
-Maybe also state that the green button actually links to the correct
-URL we want to extract FOO_SITE from...
-
-> +- If there is grey downlaod button, like
-> +  https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then you
-> +  can use the 'github' helper.
-> --
-> 2.1.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
-Lionel
+diff --git a/package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch b/package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+new file mode 100644
+index 0000000..5b769b1
+--- /dev/null
++++ b/package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+@@ -0,0 +1,43 @@
++From: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
++Date: Sun, 30 Sep 2012 22:49:11 -0600
++Subject: [PATCH] Fix userspace compilation of ip_tables.h/ip6_tables.h in
++	C++ mode
++
++The implicit cast from void * is not allowed for C++ compilers, and the
++arithmetic on void * generates warnings in C++ mode.
++
++$ g++ -c t.cc
++ip_tables.h:221:24: warning: pointer of type 'void *' used in arithmetic
++ip_tables.h:221:24: error: invalid conversion from 'void*' to 'xt_entry_target*'
++
++Signed-off-by: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
++---
++ include/linux/netfilter_ipv4/ip_tables.h  |    2 +-
++ include/linux/netfilter_ipv6/ip6_tables.h |    2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++diff --git a/include/linux/netfilter_ipv4/ip_tables.h b/include/linux/netfilter_ipv4/ip_tables.h
++index db79231..050ad8a 100644
++--- a/include/linux/netfilter_ipv4/ip_tables.h
+++++ b/include/linux/netfilter_ipv4/ip_tables.h
++@@ -226,7 +226,7 @@ struct ipt_get_entries {
++ static __inline__ struct xt_entry_target *
++ ipt_get_target(struct ipt_entry *e)
++ {
++-	return (void *)e + e->target_offset;
+++	return (struct xt_entry_target *)((__u8 *)e + e->target_offset);
++ }
++ 
++ /*
++diff --git a/include/linux/netfilter_ipv6/ip6_tables.h b/include/linux/netfilter_ipv6/ip6_tables.h
++index 08c2cbb..3349bf1 100644
++--- a/include/linux/netfilter_ipv6/ip6_tables.h
+++++ b/include/linux/netfilter_ipv6/ip6_tables.h
++@@ -263,7 +263,7 @@ struct ip6t_get_entries {
++ static __inline__ struct xt_entry_target *
++ ip6t_get_target(struct ip6t_entry *e)
++ {
++-	return (void *)e + e->target_offset;
+++	return (struct xt_entry_target *)((__u8 *)e + e->target_offset);
++ }
++ 
++ /*
+-- 
+1.7.9.5
