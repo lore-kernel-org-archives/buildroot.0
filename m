@@ -1,47 +1,92 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Oct 2014 11:17:48 +0200
-Subject: [Buildroot] [PATCHv2 1/2] getent: new package
-In-Reply-To: <543A9CC0.7020802@mind.be> (Arnout Vandecappelle's message of
- "Sun, 12 Oct 2014 17:22:40 +0200")
-References: <1408355649-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1408355649-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <543A9CC0.7020802@mind.be>
-Message-ID: <87fvess4zn.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 13 Oct 2014 09:35:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
+ due to missing header files in include path
+In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
+References: <bug-7478-163@https.bugs.busybox.net/>
+Message-ID: <20141013093502.9EE22AFEA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
- > On 18/08/14 11:54, Thomas Petazzoni wrote:
- >> The ecryptfs-utils scripts require the 'getent' program to be
- >> installed to find the home directory of users. However, Buildroot
- >> currently never installs this program, and therefore bug #7142 was
- >> reported, explaining that ecryptfs-utils is not working properly.
- >> 
- >> In normal Linux systems, the getent program is provided by glibc, and
- >> allows to query not only /etc/passwd, but also other NSS databases
- >> such as LDAP and others.
- >> 
- >> This solution allows to install a NSS-capable getent when glibc/eglibc
- >> is used, and otherwise to rely on uClibc's wrapper script.
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+--- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-10-13 09:35:02 UTC ---
+I now tried using an internal toolchain:
+BR2_x86_64=y
+BR2_DL_DIR="~/repo/contrib/dl"
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.13.config"
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_SQLITE=y
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
- > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+but this seems to build fine too, wrt sqlite.
 
- >  Fixes a (run-time) bug, so please apply.
+In the build log I also see the mentioned include paths present, for example:
 
-We have some autobuild issues, like:
+building '_sqlite3' extension
+creating
+build/temp.linux2-x86_64-2.7/home/tdescham/repo/contrib/buildroot-reproduce/output/build/python-2.7.8/Modules/_sqlite
+/home/tdescham/repo/contrib/buildroot-reproduce/output/host/usr/bin/x86_64-buildroot-linux-uclibc-gcc
+-fPIC -fno-strict-aliasing -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall
+-Wstrict-prototypes -DMODULE_NAME="sqlite3" -DSQLITE_OMIT_LOAD_EXTENSION=1
+-IModules/_sqlite
+-I/home/tdescham/repo/contrib/buildroot-reproduce/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include
+-I. -IInclude -I./Include
+-I/home/tdescham/repo/contrib/buildroot-reproduce/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include
+-I/home/tdescham/repo/contrib/buildroot-reproduce/output/build/python-2.7.8/Include
+-I/home/tdescham/repo/contrib/buildroot-reproduce/output/build/python-2.7.8 -c
+/home/tdescham/repo/contrib/buildroot-reproduce/output/build/python-2.7.8/Modules/_sqlite/cache.c
+-o
+build/temp.linux2-x86_64-2.7/home/tdescham/repo/contrib/buildroot-reproduce/output/build/python-2.7.8/Modules/_sqlite/cache.o
 
-http://autobuild.buildroot.net/results/820/8207527e3e42a226649c5f5fbf62fa8a77b89467/
 
-(codesourcery mips 2013.05)
+Your defconfig was:
+BR2_x86_i686=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_VLC=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_PYC=y
+BR2_PACKAGE_PYTHON_BZIP2=y
+BR2_PACKAGE_PYTHON_BSDDB=y
+BR2_PACKAGE_PYTHON_CODECSCJK=y
+BR2_PACKAGE_PYTHON_CURSES=y
+BR2_PACKAGE_PYTHON_PYEXPAT=y
+BR2_PACKAGE_PYTHON_READLINE=y
+BR2_PACKAGE_PYTHON_SSL=y
+BR2_PACKAGE_PYTHON_SQLITE=y
+BR2_PACKAGE_PYTHON_ZLIB=y
+BR2_PACKAGE_PYTHON_HASHLIB=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_UTIL_LINUX=y
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_GRUB=y
+BR2_TARGET_GRUB_FS_ISO9660=y
 
-Should we perhaps fallback to the uClibc emulation version if the
-toolchain doesn't provide it?
+so the main differences I see are:
+- 32-bit
+- glibc
+- c++ support
+
+I will now make a build with glibc and c++ to see if it makes a difference...
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
