@@ -1,27 +1,24 @@
-From: Ray Zin <rayzinpwr@gmail.com>
-Date: Mon, 13 Oct 2014 02:42:07 -0700
-Subject: [Buildroot] perl 'custom module selection'
-Message-ID: <CAKat-EZeif-fK5Zq9bB=00hGrVRu2bbOH9ax5xA7Lk7nRfh-Ag@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Oct 2014 12:03:50 +0200
+Subject: [Buildroot] [PATCH] connman: select dbus support in
+	wpa_supplicant
+In-Reply-To: <1413186454-1171-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Mon, 13 Oct 2014 09:47:34 +0200")
+References: <1413186454-1171-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87bnpgs2ux.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
-I've selected perl and configured the 'custom module selection' like this:
+ > ... else connman cannot communicate with wpa_supplicant
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Cwd File/Basename File/Temp Getopt/Long Carp FindBin Scalar/Util
+Committed, thanks.
 
-But I don't get Cwd or Scalar/Util (everything else, ok).
-
-Under my build, normally these would be under i686-linux. So I also tried:
-
-i686-linux/Cwd File/Basename File/Temp Getopt/Long Carp FindBin
-i686-linux/Scalar/Util
-
-Still no Cwd or Scalar/Util. Suggestions?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141013/96aedfd7/attachment.html>
+-- 
+Bye, Peter Korsgaard
