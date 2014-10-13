@@ -1,64 +1,123 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 13 Oct 2014 13:10:17 +0200
-Subject: [Buildroot] [PATCH v2 07/13] libdrm: fix support for xserver with
-	Vivante drivers
+Date: Mon, 13 Oct 2014 13:10:18 +0200
+Subject: [Buildroot] [PATCH v2 08/13] qt5base: fix Vivante x11/EGL
+	configuration
 In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
 References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1413198623-22373-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1413198623-22373-9-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fix compilation with Vivante headers and bug at runtime.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/libdrm/libdrm-0001-update-arm.patch | 37 +++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libdrm/libdrm-0001-update-arm.patch
+ .../qt5base-0001-Force_egl_visual_ID_33.patch      | 23 ++++++++
+ .../qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch   | 63 ++++++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch
+ create mode 100644 package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch
 
-diff --git a/package/libdrm/libdrm-0001-update-arm.patch b/package/libdrm/libdrm-0001-update-arm.patch
+diff --git a/package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch b/package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch
 new file mode 100644
-index 0000000..583dfb2
+index 0000000..b0be292
 --- /dev/null
-+++ b/package/libdrm/libdrm-0001-update-arm.patch
-@@ -0,0 +1,37 @@
-+(come from yocto)
++++ b/package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch
+@@ -0,0 +1,23 @@
++Workaround EGL initialization failure due visual mismatch
 +
-+Add ARM support into xf86arm.h.  This provides support for Xorg interface.
-+Without this the vivante samples will hang during close requiring a reboot
++Error:
 +
-+Upstream-Status: Pending
++Warning: EGL suggested using X Visual ID 33 (RGB888) for EGL config 28 (RGB444), but this is incompatable
++Unable to find an X11 visual which matches EGL config 28
++Could not initialize EGL
++Aborted
 +
-+Signed-off-by: Lauren Post <lauren.post@freescale.com>
-+Signed-off-by: Evan Kotara <evan.kotara@freescale.com>
++Upstream-Status: Inappropriate [workaround]
 +
-+diff --git a/xf86drm.h b/xf86drm.h
-+--- a/xf86drm.h
-++++ b/xf86drm.h
-+@@ -461,6 +461,23 @@ do {	register unsigned int __old __asm("
-+ 		: "cr0", "memory");			\
-+ 	} while (0)
++Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
++
++diff -Naur qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp
++--- qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:08:42.163895341 -0800
+++++ qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:09:37.207893799 -0800
++@@ -180,5 +180,5 @@
++     }
 + 
-++#elif defined(__arm__)
-++       #undef DRM_DEV_MODE
-++       #define DRM_DEV_MODE     (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
++     qWarning("Unable to find an X11 visual which matches EGL config %d", configId);
++-    return (VisualID)0;
+++    return (VisualID)33;
++ }
+diff --git a/package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch b/package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch
+new file mode 100644
+index 0000000..2bbd849
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch
+@@ -0,0 +1,63 @@
++The vivante headers pull in X11 defines which break eglconvenience
++
++* Adds a missing include to qeglplatformcontext.cpp
++* Fix namespace collision on CursorShape, pulled in from X11/X.h
++* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++
++[based on patch from Yocto project]
++Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++
++
++diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
++@@ -30,8 +30,10 @@
++         }
++     }
++ 
++-    # Avoid X11 header collision
++-    DEFINES += MESA_EGL_NO_X11_HEADERS
+++    !contains(QT_CONFIG,xcb) {
+++        # Avoid X11 header collision
+++        DEFINES += MESA_EGL_NO_X11_HEADERS
+++    }
++ 
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
++--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
++@@ -39,6 +39,7 @@
++ **
++ ****************************************************************************/
++ 
+++#include <qtextstream.h>
++ #include "qeglplatformcontext_p.h"
++ #include "qeglconvenience_p.h"
++ #include "qeglpbuffer_p.h"
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
++@@ -42,6 +42,11 @@
++ #ifndef QEGLPLATFORMCURSOR_H
++ #define QEGLPLATFORMCURSOR_H
++ 
+++// avoid namespace collision with X11/X.h
+++#ifdef CursorShape
+++#undef CursorShape
+++#endif
 ++
-++       #define DRM_CAS(lock,old,new,__ret)             \
-++       do {                                            \
-++               __asm__ __volatile__ (                  \
-++                       "1: ldrex %0, [%1]\n"           \
-++                       "   teq %0, %2\n"               \
-++                       "   ite eq\n"                   \
-++                       "   strexeq %0, %3, [%1]\n"     \
-++                       "   movne   %0, #1\n"           \
-++               : "=&r" (__ret)                         \
-++               : "r" (lock), "r" (old), "r" (new)      \
-++               : "cc","memory");                       \
-++       } while (0)
-++
-+ #endif /* architecture */
-+ #endif /* __GNUC__ >= 2 */
++ #include <qpa/qplatformcursor.h>
++ #include <qpa/qplatformscreen.h>
++ 
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
++@@ -49,8 +49,8 @@
++ 
++ #include <QtPlatformSupport/private/qdevicediscovery_p.h>
++ 
++-#include "qeglplatformcursor_p.h"
++ #include "qeglplatformintegration_p.h"
+++#include "qeglplatformcursor_p.h"
++ 
++ QT_BEGIN_NAMESPACE
 + 
 -- 
 1.9.1
