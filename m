@@ -1,27 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Oct 2014 09:37:48 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: Add hash file
-Message-ID: <20141014074531.12676B2C4B@busybox.osuosl.org>
+Date: Mon, 13 Oct 2014 11:14:23 +0200
+Subject: [Buildroot] [git commit] connman: select dbus support in
+	wpa_supplicant
+Message-ID: <20141014074530.E818BB2CE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=012b7d6007cde4c469155f17fde93c155def264e
+commit: http://git.buildroot.net/buildroot/commit/?id=d8645d43ac493760146a5a8d9bc82e812c931a4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+... else connman cannot communicate with wpa_supplicant
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/connman/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-new file mode 100644
-index 0000000..2695acb
---- /dev/null
-+++ b/package/mesa3d/mesa3d.hash
-@@ -0,0 +1,2 @@
-+# From http://www.mesa3d.org/relnotes/10.3.1.html
-+sha256	b081d077d717e5d56f2d59677490856052c41573e50378ff86d6c72456714add	MesaLib-10.3.1.tar.bz2
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index a42de17..8803aeb 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -24,6 +24,7 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
+ config BR2_PACKAGE_CONNMAN_WIFI
+ 	bool "enable WiFi support"
+ 	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
++	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW # runtime
+ 	help
+ 	  Enable WiFi support (scan and static/dhcp interface
+ 	  setup). ConnMan detects the start of wpa_supplicant
