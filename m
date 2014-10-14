@@ -1,43 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 14 Oct 2014 17:27:46 +0200
-Subject: [Buildroot] [git commit] libnss: bump to version 3.17.2
-Message-ID: <20141015125351.C3ABEB2DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] hostapd: add hash
+Message-ID: <20141015125351.D6A3BB2DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5ca8de85ec4b4e453aef63831c536bdbbb30116
+commit: http://git.buildroot.net/buildroot/commit/?id=ee1b691e0a0eccdc8c950ce0a6568d6ab76d81f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash |    5 ++---
- package/libnss/libnss.mk   |    2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/hostapd/hostapd.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 8c9420c..916aade 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,3 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_1_RTM/src/
--sha1	32347d8b476efa5c7a4cfa21f8e5a1d0d89942ea	nss-3.17.1.tar.gz
--sha256	0e210afba7cd1e033a08f61fcd1f466639649fc413e72aa050f3d52c19376e5f	nss-3.17.1.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_2_RTM/src/
-+sha256	134929e44e44b968a4883f4ee513a71ae45d55b486cee41ee8e26c3cc84dab8b	nss-3.17.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 066606f..e7b92e4 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.17.1
-+LIBNSS_VERSION = 3.17.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+new file mode 100644
+index 0000000..5aefa14
+--- /dev/null
++++ b/package/hostapd/hostapd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	c94c2b76876fad4c80a1063a06f958a2189ba5003475016fa7658a1ca49bb4df	hostapd-2.3.tar.gz
