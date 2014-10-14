@@ -1,30 +1,113 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 14 Oct 2014 21:46:19 +0200
-Subject: [Buildroot] [PATCH] libqmi: bump to 1.10.4
-Message-ID: <1413315979-6280-1-git-send-email-yegorslists@googlemail.com>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Tue, 14 Oct 2014 15:54:48 -0400
+Subject: [Buildroot] [PATCH 1/1] cppunit: Added package
+In-Reply-To: <543D4F50.8090208@openwide.fr>
+References: <1412279910-12645-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <543D4F50.8090208@openwide.fr>
+Message-ID: <543D7F88.1010005@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libqmi/libqmi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Romain,
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index ed71972..b083aea 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.10.2
-+LIBQMI_VERSION = 1.10.4
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
--- 
-1.8.3.2
+On 10/14/2014 12:29 PM, Romain Naour wrote:
+> Hi Sebastien,
+>
+> Le 02/10/2014 21:58, Sebastien Bourdelin a ?crit :
+>> CppUnit is the C++ port of the famous JUnit framework for unit testing.
+>> Test output is in XML or text format for automatic testing and GUI
+>> based for supervised tests.
+>>
+>> http://www.freedesktop.org/wiki/Software/cppunit/
+>> Signed-off-by: Sebastien Bourdelin<sebastien.bourdelin@savoirfairelinux.com>
+>> ---
+>>   package/Config.in          |  1 +
+>>   package/cppunit/Config.in  | 12 ++++++++++++
+>>   package/cppunit/cppunit.mk | 27 +++++++++++++++++++++++++++
+>>   3 files changed, 40 insertions(+)
+>>   create mode 100644 package/cppunit/Config.in
+>>   create mode 100644 package/cppunit/cppunit.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 2ad72bc..5cde341 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -831,6 +831,7 @@ menu "Other"
+>>   	source "package/clapack/Config.in"
+>>   	source "package/classpath/Config.in"
+>>   	source "package/cppcms/Config.in"
+>> +	source "package/cppunit/Config.in"
+>>   	source "package/eigen/Config.in"
+>>   	source "package/elfutils/Config.in"
+>>   	source "package/fftw/Config.in"
+>> diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
+>> new file mode 100644
+>> index 0000000..91700b8
+>> --- /dev/null
+>> +++ b/package/cppunit/Config.in
+>> @@ -0,0 +1,12 @@
+>> +config BR2_PACKAGE_CPPUNIT
+>> +	bool "cppunit"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	help
+>> +	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
+>> +	  Test output is in XML or text format for automatic testing and GUI
+>> +	  based for supervised tests.
+>> +
+>> +	http://www.freedesktop.org/wiki/Software/cppunit/
+>> +
+>> +comment "cppunit needs a toolchain w/ C++"
+>> +	depends on !BR2_INSTALL_LIBSTDCPP
+>> diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
+>> new file mode 100644
+>> index 0000000..47d27be
+>> --- /dev/null
+>> +++ b/package/cppunit/cppunit.mk
+>> @@ -0,0 +1,27 @@
+>> +################################################################################
+>> +#
+>> +# cppunit
+>> +#
+>> +################################################################################
+>> +
+>> +CPPUNIT_VERSION = cppunit-1.13.2
+>> +CPPUNIT_SITE = git://anongit.freedesktop.org/git/libreoffice/cppunit/
+>> +CPPUNIT_INSTALL_STAGING = YES
+>> +CPPUNIT_LICENSE = GPLv2
+>> +CPPUNIT_LICENSE_FILES = COPYING
+>> +
+>> +define CPPUNIT_RUN_AUTOGEN
+>> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+>> +endef
+>> +CPPUNIT_PRE_CONFIGURE_HOOKS += CPPUNIT_RUN_AUTOGEN
+> Why not using CPPUNIT_AUTORECONF = YES here ?
+> It seems that autoreconf mechanism works.
+I missed that option. Thanks!
+>> +
+>> +define CPPUNIT_CONFIGURE_CMDS
+>> +	(cd $(@D); \
+>> +		./configure \
+>> +		--host=$(GNU_TARGET_NAME) \
+>> +		--prefix=/usr \
+>> +		$(TARGET_CONFIGURE_OPTS) \
+>> +	)
+>> +endef
+> It's already done in pkg-autotools.mk, so you can remove this.
+Ok.
+>> +
+>> +$(eval $(autotools-package))
+> Have you tested cppunit over several toolchain configuration ?
+> Otherwise, looks good.
+Tested with an external toolchain and Buildroot toolchain with no other
+options that C++ support (e.g: without Large file / Wchar / etc...)
+I didn't try a toolchain without thread support but cppunit doesn't
+seems to need it.
+> Best regards,
+> Romain Naour
+I will send a new patch with your suggestions.
+
+Best regards,
+Sebastien Bourdelin.
