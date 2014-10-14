@@ -1,56 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Oct 2014 23:05:31 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-imx: add package
-In-Reply-To: <CADCpmyO_-VD52UDJf5MpZGDnTtzJwxyXcOONYwG-rsd4K_7DLQ@mail.gmail.com>
-References: <1412545628-12153-1-git-send-email-bisson.gary@gmail.com>	<543A9384.8050803@lucaceresoli.net>	<543B52A0.6060007@gmail.com>	<543BC031.60606@lucaceresoli.net>	<543D33DF.8070005@mind.be>
- <CADCpmyO_-VD52UDJf5MpZGDnTtzJwxyXcOONYwG-rsd4K_7DLQ@mail.gmail.com>
-Message-ID: <543D901B.8010806@mind.be>
+Date: Tue, 14 Oct 2014 23:11:14 +0200
+Subject: [Buildroot] [PATCH 6/6] tar: bump to version 1.28
+In-Reply-To: <543D4035.5050308@zacarias.com.ar>
+References: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>	<1413284044-20381-6-git-send-email-gustavo@zacarias.com.ar>
+ <87bnper9dy.fsf@dell.be.48ers.dk> <543D4035.5050308@zacarias.com.ar>
+Message-ID: <543D9172.7030700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/10/14 19:16, Gary Bisson wrote:
-> Arnout, all,
+On 14/10/14 17:24, Gustavo Zacarias wrote:
+> On 10/14/2014 11:52 AM, Peter Korsgaard wrote:
 > 
-> On Tue, Oct 14, 2014 at 7:31 AM, Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>> wrote:
+>> Please add S-O-B and note where it comes from exactly (upstream
+>> presumably?)
 > 
->     [snip]
->     > # Required by gpu-viv-bin-mx6q
->     > comment "gst1-plugins-imx needs an (e)glibc toolchain"
->     >     depends on BR2_arm
->     >     depends on !BR2_TOOLCHAIN_USES_GLIBC
-> 
->      That's not the right place for pointing to gpu-viv-bin-mx6q. It should be
->     something like:
-> 
->     config BR2_PACKAGE_GST1_PLUGINS_IMX
->             bool "gst1-plugins-imx"
->             depends on BR2_LINUX_KERNEL
->             depends on BR2_arm # Only relevant for i.MX
->             depends on BR2_TOOLCHAIN_USES_GLIBC # gpu-viv-bin-mx6q
->             select BR2_PACKAGE_GPU_VIV_BIN_MX6Q
->             # Cannot select libfslvpuwrap because user must select the CPU
->             depends on BR2_PACKAGE_LIBFSLVPUWRAP
-> 
->     (I added that thing about libfslvpuwrap but I'm not sure of it...)
-> 
->  
-> That is actually what I said in the first e-mail, I am not proud of all those
-> dependencies but I couldn't find a way to select GPU_VIV_MX6Q as it is only
-> selectable if  FREESCALE_IMX_PLATFORM is set to FREESCALE_IMX_PLATFORM_IMX6Q. A
-> select like above would give an error but I'm open to any other solution.
+> It's already upstream from the tar maintainer
+> http://git.savannah.gnu.org/cgit/tar.git
+> I tend not to touch the pristine ones that are already applied.
 
- Actually, you can do
-	select BR2_PACKAGE_FREESCALE_IMX
-	select BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ In that case, you should probably not add them to buildroot but instead do
 
- I'm not entirely sure if that's good though, because if the user has selected
-one of the other i.MX platforms and he thinks that he can use GStreamer with it,
-he'll get something completely different from what he expected...
+TAR_PATCH = http://git.savannah.gnu.org/cgit/tar.git/patch/?id=e9ddc08da0982f36581ae5a8c7763453ff41cfe8
 
+no?
 
  Regards,
  Arnout
