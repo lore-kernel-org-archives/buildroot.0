@@ -1,27 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Oct 2014 20:23:49 +0200
-Subject: [Buildroot] [PATCH v2 1/7] package/libdvbcsa: New package
-References: <1413222357-8299-1-git-send-email-bernd.kuhls@t-online.de>
- <20141014110212.GA22208@free.fr>
-Message-ID: <XnsA3C6CF7CDF186berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Tue, 14 Oct 2014 20:28:25 +0200
+Subject: [Buildroot] [PATCH v3 3/7] package/tvheadend: Needs iconv()
+In-Reply-To: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413311309-30811-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Fixes
+CC              src/intlconv.o
+src/intlconv.c:1:19: fatal error: iconv.h: No such file or directory
+ #include <iconv.h>
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20141014110212.GA22208 at free.fr:
+with this defconfig
 
-> Bernd, All,
-> 
-> Ah, there's a new series for this... Dam, I reviewed the previous. I'll
-> review this one a bit loater.
+BR2_arm=y
+BR2_cortex_a15=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_TVHEADEND=y
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes
+v2: no changes
 
-I am preparing v3 right now, please wait with your review ;)
+ package/tvheadend/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-Regards, Bernd
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index bb71d81..f7182a1 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_TVHEADEND
+ 	# architecture is avr32, which uses gcc 4.2.
+ 	depends on !BR2_avr32
+ 	select BR2_PACKAGE_DTV_SCAN_TABLES
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Tvheadend is a TV streaming server for Linux supporting DVB-S,
+-- 
+1.7.10.4
