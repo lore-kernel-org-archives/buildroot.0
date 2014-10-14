@@ -1,43 +1,99 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Oct 2014 07:54:03 -0300
-Subject: [Buildroot] [PATCH 5/6] libnss: bump to version 3.17.2
+Date: Tue, 14 Oct 2014 07:54:04 -0300
+Subject: [Buildroot] [PATCH 6/6] tar: bump to version 1.28
 In-Reply-To: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1413284044-20381-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1413284044-20381-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash file.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libnss/libnss.hash | 5 ++---
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/tar/tar-0001-fix-build-failure.patch | 47 ++++++++++++++++++++++++++++
+ package/tar/tar.hash                         |  2 ++
+ package/tar/tar.mk                           |  2 +-
+ 3 files changed, 50 insertions(+), 1 deletion(-)
+ create mode 100644 package/tar/tar-0001-fix-build-failure.patch
+ create mode 100644 package/tar/tar.hash
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 8c9420c..916aade 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,3 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_1_RTM/src/
--sha1	32347d8b476efa5c7a4cfa21f8e5a1d0d89942ea	nss-3.17.1.tar.gz
--sha256	0e210afba7cd1e033a08f61fcd1f466639649fc413e72aa050f3d52c19376e5f	nss-3.17.1.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_2_RTM/src/
-+sha256	134929e44e44b968a4883f4ee513a71ae45d55b486cee41ee8e26c3cc84dab8b	nss-3.17.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 066606f..e7b92e4 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/tar/tar-0001-fix-build-failure.patch b/package/tar/tar-0001-fix-build-failure.patch
+new file mode 100644
+index 0000000..62bdb3d
+--- /dev/null
++++ b/package/tar/tar-0001-fix-build-failure.patch
+@@ -0,0 +1,47 @@
++From e9ddc08da0982f36581ae5a8c7763453ff41cfe8 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Wed, 24 Sep 2014 21:22:16 +0000
++Subject: Bugfixes.
++
++* doc/tar.1: Fix typo in font spec.
++* src/tar.c (sort_mode_arg, sort_mode_flag): Protect "inode"
++(SAVEDIR_SORT_INODE) with D_INO_IN_DIRENT
++---
++diff --git a/doc/tar.1 b/doc/tar.1
++index 9000627..b91de63 100644
++--- a/doc/tar.1
+++++ b/doc/tar.1
++@@ -879,7 +879,7 @@ Exclude files matching patterns listed in FILE.
++ \fB\-\-strip\-components\fR=\fINUMBER\fR
++ Strip \fINUMBER\fR leading components from file names on extraction.
++ .TP
++-\fB\-\-transform\fR=\fIEXPRESSION\dR, \fB\-\-xform\fR=\fIEXPRESSION\fR
+++\fB\-\-transform\fR=\fIEXPRESSION\fR, \fB\-\-xform\fR=\fIEXPRESSION\fR
++ Use sed replace \fIEXPRESSION\fR to transform file names.
++ .SS File name matching options
++ These options affect both exclude and include patterns.
++diff --git a/src/tar.c b/src/tar.c
++index 225c624..f8102e0 100644
++--- a/src/tar.c
+++++ b/src/tar.c
++@@ -1341,14 +1341,18 @@ static char filename_terminator;
++ static char const *const sort_mode_arg[] = {
++   "none",
++   "name",
+++#if D_INO_IN_DIRENT
++   "inode",
+++#endif
++   NULL
++ };
++ 
++ static int sort_mode_flag[] = {
++     SAVEDIR_SORT_NONE,
++     SAVEDIR_SORT_NAME,
+++#if D_INO_IN_DIRENT
++     SAVEDIR_SORT_INODE
+++#endif
++ };
++ 
++ ARGMATCH_VERIFY (sort_mode_arg, sort_mode_flag);
++--
++cgit v0.9.0.2
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+new file mode 100644
+index 0000000..ffad2d2
+--- /dev/null
++++ b/package/tar/tar.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking signature
++sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 369dc9d..9250b43 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.17.1
-+LIBNSS_VERSION = 3.17.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-TAR_VERSION = 1.27.1
++TAR_VERSION = 1.28
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ TAR_LICENSE = GPLv3+
 -- 
 2.0.4
