@@ -1,34 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Oct 2014 11:14:23 +0200
-Subject: [Buildroot] [git commit] connman: select dbus support in
-	wpa_supplicant
-Message-ID: <20141014074530.E818BB2CE3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 Oct 2014 09:53:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: fix missing
+	dependency of libcurl
+In-Reply-To: <543B7F83.60106@posteo.de> (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s
+ message of "Mon, 13 Oct 2014 09:30:11 +0200")
+References: <1413140110-21289-1-git-send-email-jkrause@posteo.de>
+ <20141012213737.690ba4e1@free-electrons.com>
+ <543B7F83.60106@posteo.de>
+Message-ID: <87oatfqe7u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8645d43ac493760146a5a8d9bc82e812c931a4d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
 
-... else connman cannot communicate with wpa_supplicant
+ > Dear Thomas Petazzoni,
+ > On 10/12/2014 09:37 PM, Thomas Petazzoni wrote:
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ >     Dear J?rg Krause,
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index a42de17..8803aeb 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -24,6 +24,7 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
- config BR2_PACKAGE_CONNMAN_WIFI
- 	bool "enable WiFi support"
- 	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
-+	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW # runtime
- 	help
- 	  Enable WiFi support (scan and static/dhcp interface
- 	  setup). ConnMan detects the start of wpa_supplicant
+ >     If this is fixing an autobuilder issues, please include the autobuilder
+ >     result URL in the commit log.
+
+
+ > Sorry, I forgot. Patch is already committed now. Should I leave it as it is or?
+
+Yes, now it is too late (I forgot and didn't notice Thomas' mail). Just
+something to keep in mind for future patches.
+
+-- 
+Bye, Peter Korsgaard
