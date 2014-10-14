@@ -1,59 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Oct 2014 23:19:59 +0300
-Subject: [Buildroot] [PATCH] spidev_test: new package
-In-Reply-To: <d5114688-5ab5-4233-9038-8177f0f29d2e@email.android.com>
-References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
- <20141014195411.GI3500@tarshish>
- <d5114688-5ab5-4233-9038-8177f0f29d2e@email.android.com>
-Message-ID: <20141014201959.GK3500@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Oct 2014 22:24:58 +0200
+Subject: [Buildroot] [PATCH v3] package/mono: new package
+In-Reply-To: <CA+TH9V=9LtmDtdfrYGYw4MPUb3g5ZD6uuuuyjH5p1V+_E8+ryg@mail.gmail.com>
+References: <1412951017-6769-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141010204840.4ec4d5d3@free-electrons.com>
+ <CA+TH9VkBYm1viE8=o9Miy8Pb4mGrmUxCdDJZ1rTncSysfbcPiA@mail.gmail.com>
+ <CA+TH9V=qR-vBU+RHrzFj9KYqouzKnTgLZ4y+hUYOWkab6XS8hg@mail.gmail.com>
+ <CANQCQpZ42nvXDzKht1xk5XzQmCQ=Kp9JyAps6SGghaxtHqLb-A@mail.gmail.com>
+ <CA+TH9V=9LtmDtdfrYGYw4MPUb3g5ZD6uuuuyjH5p1V+_E8+ryg@mail.gmail.com>
+Message-ID: <543D869A.4070002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On Tue, Oct 14, 2014 at 10:14:57PM +0200, Thomas De Schampheleire wrote:
-> Baruch Siach <baruch@tkos.co.il> schreef:
-> >On Tue, Oct 14, 2014 at 12:45:53PM -0300, Gustavo Zacarias wrote:
-> >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> >
-> >[snip]
-> >
-> >> diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-> >> new file mode 100644
-> >> index 0000000..c0ed9ef
-> >> --- /dev/null
-> >> +++ b/package/spidev_test/Config.in
-> >> @@ -0,0 +1,15 @@
-> >> +config BR2_PACKAGE_SPIDEV_TEST
-> >> +	bool "spidev_test"
-> >> +	depends on BR2_LINUX_KERNEL
-> >
-> >That is a heavy dependency. As you noted in another message, it also make the 
-> >autobuilder skip this package. I suggest to download just spidev_test.c from 
-> >http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION), 
-> >and make it depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 (as of v3.17). This 
-> >solves both the autobuilder issue, and the toolchain headers dependency.
-> 
-> From where comes this dependency on 3.15/3.17?
+On 11/10/14 09:25, Angelo Compagnucci wrote:
+[snip]
+> I'm working on this patch for months now,
+> but only received a partial review from Yann some months ago. I really
+> want to became a buildroot contributor with something more substantial
+> than a couple of bugs fixed.
 
-Linux kernel commit c2e78c34ef0 (spi: spidev_test: Add support for Dual/Quad 
-SPI Transfers) added a build dependency on SPI_IOC_{RD,WR}_MODE32 which is 
-only available since v3.15.
+ The problem is that mono is really complicated stuff to cross-compile, so
+choosing that as your first package is a bit ambitious. Because it is so
+complicated, people are also afraid to review it. So bear with us please :-)
 
-> The test program was in the kernel for a very long time (2.6.x)...
-> 
-> Also, what is the autobuilder issue you are talking about?
 
-A dependency on BR2_LINUX_KERNEL means that the autobuilder won't build this 
-package, since the autobuilder does not build kernels, and so never enables 
-BR2_LINUX_KERNEL.
+ Regards,
+ Arnout
 
-baruch
-
+[snip]
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
