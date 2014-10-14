@@ -1,54 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Oct 2014 16:50:55 +0200
-Subject: [Buildroot] [PATCH] perf: fix typo and syntax error
-In-Reply-To: <1413284065-20424-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413284065-20424-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141014145055.GB4863@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 Oct 2014 16:52:41 +0200
+Subject: [Buildroot] [PATCH 6/6] tar: bump to version 1.28
+In-Reply-To: <1413284044-20381-6-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 14 Oct 2014 07:54:04 -0300")
+References: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>
+ <1413284044-20381-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bnper9dy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2014-10-14 07:54 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Also add hash file.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/tar/tar-0001-fix-build-failure.patch | 47 ++++++++++++++++++++++++++++
+ >  package/tar/tar.hash                         |  2 ++
+ >  package/tar/tar.mk                           |  2 +-
+ >  3 files changed, 50 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/tar/tar-0001-fix-build-failure.patch
+ >  create mode 100644 package/tar/tar.hash
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > diff --git a/package/tar/tar-0001-fix-build-failure.patch b/package/tar/tar-0001-fix-build-failure.patch
+ > new file mode 100644
+ > index 0000000..62bdb3d
+ > --- /dev/null
+ > +++ b/package/tar/tar-0001-fix-build-failure.patch
+ > @@ -0,0 +1,47 @@
+ > +From e9ddc08da0982f36581ae5a8c7763453ff41cfe8 Mon Sep 17 00:00:00 2001
+ > +From: Sergey Poznyakoff <gray@gnu.org>
+ > +Date: Wed, 24 Sep 2014 21:22:16 +0000
+ > +Subject: Bugfixes.
+ > +
+ > +* doc/tar.1: Fix typo in font spec.
+ > +* src/tar.c (sort_mode_arg, sort_mode_flag): Protect "inode"
+ > +(SAVEDIR_SORT_INODE) with D_INO_IN_DIRENT
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/perf/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/perf/Config.in b/package/perf/Config.in
-> index 703b48f..083086b 100644
-> --- a/package/perf/Config.in
-> +++ b/package/perf/Config.in
-> @@ -13,7 +13,7 @@ config BR2_PACKAGE_PERF
->  
->  	  This package builds and install the userspace 'perf'
->  	  command. It is up to the user to ensure that the kernel
-> -	  configuration has all suitable options enable to allow a
-> +	  configuration has all the suitable options enabled to allow a
->  	  proper operation of 'perf'.
->  
->  	  https://perf.wiki.kernel.org/
-> -- 
-> 2.0.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Please add S-O-B and note where it comes from exactly (upstream
+presumably?)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
