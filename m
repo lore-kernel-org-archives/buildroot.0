@@ -1,7 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Oct 2014 20:28:23 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/libdvbcsa: New package
-Message-ID: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 14 Oct 2014 20:28:28 +0200
+Subject: [Buildroot] [PATCH v3 6/7] package/tvheadend: Bump version to
+	current git master
+In-Reply-To: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413311309-30811-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,91 +14,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: removed md5 hash (Yann)
-v2: no changes
+v3: bump to current git master
+v2: bump to current git master
 
- package/Config.in                |    1 +
- package/libdvbcsa/Config.in      |    9 +++++++++
- package/libdvbcsa/libdvbcsa.hash |    4 ++++
- package/libdvbcsa/libdvbcsa.mk   |   31 +++++++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+)
- create mode 100644 package/libdvbcsa/Config.in
- create mode 100644 package/libdvbcsa/libdvbcsa.hash
- create mode 100644 package/libdvbcsa/libdvbcsa.mk
+ package/tvheadend/tvheadend.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 186ffea..da059d8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -745,6 +745,7 @@ endmenu
- menu "Multimedia"
- 	source "package/libass/Config.in"
- 	source "package/libbluray/Config.in"
-+	source "package/libdvbcsa/Config.in"
- 	source "package/libdvbsi/Config.in"
- 	source "package/libdvdnav/Config.in"
- 	source "package/libdvdread/Config.in"
-diff --git a/package/libdvbcsa/Config.in b/package/libdvbcsa/Config.in
-new file mode 100644
-index 0000000..dd7dc15
---- /dev/null
-+++ b/package/libdvbcsa/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBDVBCSA
-+	bool "libdvbcsa"
-+	help
-+	  libdvbcsa is a free implementation of the DVB Common Scrambling
-+	  Algorithm - DVB/CSA - with encryption and decryption capabilities
-+
-+	  As libdvbcsa implements a standard, it is completely legal to use it.
-+
-+	  http://www.videolan.org/developers/libdvbcsa.html
-diff --git a/package/libdvbcsa/libdvbcsa.hash b/package/libdvbcsa/libdvbcsa.hash
-new file mode 100644
-index 0000000..d8360e6
---- /dev/null
-+++ b/package/libdvbcsa/libdvbcsa.hash
-@@ -0,0 +1,4 @@
-+# From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.sha256
-+sha256	4db78af5cdb2641dfb1136fe3531960a477c9e3e3b6ba19a2754d046af3f456d	libdvbcsa-1.1.0.tar.gz
-+# From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.sha1
-+sha1	5f4640a7e93ae6494f24a881414e5c343f803365				libdvbcsa-1.1.0.tar.gz
-diff --git a/package/libdvbcsa/libdvbcsa.mk b/package/libdvbcsa/libdvbcsa.mk
-new file mode 100644
-index 0000000..ef1d957
---- /dev/null
-+++ b/package/libdvbcsa/libdvbcsa.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# libdvbcsa
-+#
-+################################################################################
-+
-+LIBDVBCSA_VERSION = 1.1.0
-+LIBDVBCSA_SITE = http://download.videolan.org/pub/videolan/libdvbcsa/$(LIBDVBCSA_VERSION)
-+LIBDVBCSA_LICENSE = GPLv2+
-+LIBDVBCSA_LICENSE_FILES = COPYING
-+LIBDVBCSA_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-+LIBDVBCSA_CONF_OPTS += --enable-mmx
-+else
-+LIBDVBCSA_CONF_OPTS += --disable-mmx
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+LIBDVBCSA_CONF_OPTS += --enable-sse2
-+else
-+LIBDVBCSA_CONF_OPTS += --disable-sse2
-+endif
-+
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-+LIBDVBCSA_CONF_OPTS += --enable-altivec
-+else
-+LIBDVBCSA_CONF_OPTS += --disable-altivec
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 99405fc..8acf6af 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = ca742e00a7717787351e1a432ca9b41f93369d60
++TVHEADEND_VERSION = 8cdaab42c5a1aa7cd646fcbfd9ba3ce9cf410b34
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 1.7.10.4
