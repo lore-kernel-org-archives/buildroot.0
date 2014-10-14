@@ -1,87 +1,115 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Oct 2014 11:08:33 +0200
-Subject: [Buildroot] [PATCH v2 2/2] randconfig: seed with
-	BR2_RAND_PRESEED_CONFIG_FILES
-In-Reply-To: <20141014073228.GB3730@free.fr>
-References: <1413134795-32050-1-git-send-email-arnout@mind.be>
- <1413138065-6138-1-git-send-email-arnout@mind.be>
- <1413138065-6138-2-git-send-email-arnout@mind.be>
- <20141014073228.GB3730@free.fr>
-Message-ID: <543CE811.7080306@mind.be>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 14 Oct 2014 11:23:47 +0200
+Subject: [Buildroot] [PATCH 2/2] Change deps between $(TARGET_DIRS) and
+	rootfs-dirs
+In-Reply-To: <1413278627-8063-1-git-send-email-jezz@sysmic.org>
+References: <1413278627-8063-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1413278627-8063-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/10/14 09:32, Yann E. MORIN wrote:
-> Arnout, All,
->
-> On 2014-10-12 20:21 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-[snip]
-> > diff --git a/Makefile b/Makefile
-> > index 5bcaa77..fb99de1 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -732,6 +732,9 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> >  randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> >      @mkdir -p $(BUILD_DIR)/buildroot-config
-> >      @rm -f $(CONFIG_DIR)/.config.nopkg
-> > +ifneq ($(BR2_RAND_PRESEED_CONFIG_FILES),)
-> > +    @cp $(BR2_RAND_PRESEED_CONFIG_FILES) $(CONFIG_DIR)/.config.nopkg
-> > +endif
->
-> I guess you meant something like:
->     @cat $(BR2_RAND_PRESEED_CONFIG_FILES) $>(CONFIG_DIR)/.config.nopkg
->
-> Here's what I get with cp:
->     $ cp foo bar buz
->     cp: target ?buz? is not a directory
+Currently dependencies are:
 
- Well spotted, thanks. I changed _FILE into _FILES at the last moment
-but never tested it.
+  rootfs-dirs <- $(TARGET_DIR) <- toolchain and everything
+        |             ^
+         `------------'
 
+This patch fix dependencies:
 
+  $(TARGET_DIR) <- rootfs-dirs <- toolchain <- everything else
 
->
-> >      @grep '^config ' Config.in.legacy | \
-> >          while read config pkg; do \
-> >          echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
-> > @@ -758,6 +761,9 @@ allnoconfig: $(BUILD_DIR)/buildroot-config/conf
-> outputmakefile
-> >  randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> >      @mkdir -p $(BUILD_DIR)/buildroot-config
-> >      @grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
-> > +ifneq ($(BR2_RAND_PRESEED_CONFIG_FILES),)
-> > +    @grep BR2_PACKAGE_ $(BR2_RAND_PRESEED_CONFIG_FILES) >>
-> $(CONFIG_DIR)/.config.nopkg
-> > +endif
->
-> Why do you explicitly grep for packages here?
+There is no more special handling for $(TARGET_DIR) in "dirs" target.
 
- .config.nopkg will already contain the config of everything else (cfr.
-the line above). So if you keep the full preseed file, you'll get duplicate
-definitions in the .config.nopkg.
+Test cases:
 
- Of course, if you do
+$ make clean && make rootfs-dirs
+ -> OK
 
-cp foo .config
-make randpackageconfig BR2_RAND_PRESEED_CONFIG_FILES=bar
+$ make clean && make rootfs-dirs-build
+ -> OK
 
-then the .config only contains whatever you had in foo, which is presumably
-a toolchain config fragment. But that use case is better handled with
+$ make clean && make toolchain
+ -> OK
 
-make randconfig BR2_RAND_PRESEED_CONFIG_FILES="foo bar"
+$ make rootfs-dirs-rebuild
+ -> OK
 
+$ rm output/build/rootfs-dirs-undefined/.stamp_target_installed && make toolchain
+rootfs-dirs is reinstalled, but toolchain isn't
 
- Regards,
- Arnout
+$ rm -r target && make toolchain
+Do nothing
 
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ Makefile                                             | 4 +---
+ system/rootfs-dirs/rootfs-dirs.mk                    | 1 -
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk | 2 +-
+ toolchain/toolchain-external/toolchain-external.mk   | 2 ++
+ 4 files changed, 4 insertions(+), 5 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 828981c..da5f413 100644
+--- a/Makefile
++++ b/Makefile
+@@ -439,7 +439,7 @@ world: target-post-image
+ # dependencies anywhere else
+ #
+ ################################################################################
+-$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(HOST_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+ # We make a symlink lib32->lib or lib64->lib as appropriate
+@@ -464,8 +464,6 @@ RSYNC_VCS_EXCLUSIONS = \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+ 	--exclude CVS
+ 
+-$(TARGET_DIR): rootfs-dirs
+-
+ STRIP_FIND_CMD = find $(TARGET_DIR)
+ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+ STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+diff --git a/system/rootfs-dirs/rootfs-dirs.mk b/system/rootfs-dirs/rootfs-dirs.mk
+index 4a85dff..98f4606 100644
+--- a/system/rootfs-dirs/rootfs-dirs.mk
++++ b/system/rootfs-dirs/rootfs-dirs.mk
+@@ -18,7 +18,6 @@ endif
+ TARGET_DIR_WARNING_FILE=$(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+ 
+ define ROOTFS_DIRS_INSTALL_ROOTFS_DIRS
+-	@mkdir -p $(TARGET_DIR)
+ 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+ 	   --chmod=Du+w --exclude .empty --exclude '*~' \
+ 	   $(TARGET_ROOTFS_DIRS)/ $(TARGET_DIR)/
+diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+index b30cc33..2984e91 100644
+--- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+@@ -10,7 +10,7 @@ BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+ # build of binutils, uClibc, kernel headers and all the intermediate
+ # gcc steps.
+ 
+-TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
++TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final tootfs-dirs
+ 
+ TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index b7a0e60..ec3cb99 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -407,6 +407,8 @@ endif
+ 
+ TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
++TOOLCHAIN_EXTERNAL_DEPENDENCIES = rootfs-dirs
++
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
