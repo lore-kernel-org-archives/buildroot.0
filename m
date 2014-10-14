@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Oct 2014 23:58:05 +0200
-Subject: [Buildroot] [PATCH] Add pyside + shiboken packages
-In-Reply-To: <543CF12B.9050503@wanadoo.fr>
-References: <523ACBFA.2070401@wanadoo.fr>
- <20141012104430.791c35d7@free-electrons.com>
- <543CF12B.9050503@wanadoo.fr>
-Message-ID: <20141014235805.7928c33e@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 15 Oct 2014 02:01:02 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-13
+In-Reply-To: <20141014063014.67756100ECC@stock.ovh.net>
+References: <20141014063014.67756100ECC@stock.ovh.net>
+Message-ID: <CAMo8BfJKAS3HJcb1M4wXWGkUMigGk4rQbzShGwQXWus0yFoowQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+On Tue, Oct 14, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-10-13
+>       xtensa | flann-d0c04f4d290ebc3aa9411... | NOK | http://autobuild.buildroot.net/results/d3ac726110f98d87042ff883b2bc4366a2b45ff2/
 
-On Tue, 14 Oct 2014 11:47:23 +0200, Thierry Bultel wrote:
+Mysterious failure:
 
-> thanks for your reminding me.
-> Unfortunately, I currently do not have the bandwidth to
-> work on that thread, and rework the patch by taking all your comments in 
-> account.
-> I will do so, as soon as I can.
+[ 85%] Building C object src/cpp/CMakeFiles/flann_s.dir/flann/ext/lz4hc.c.o
+{standard input}: Assembler messages:
+{standard input}:516330: Warning: partial line at end of file ignored
+xtensa-buildroot-linux-uclibc-g++: internal compiler error: Killed
+(program cc1plus)
 
-Great, thanks! There is for sure no hurry, but we would be definitely
-interested in having those packages: if they were of interest to you,
-they might very well be of interest to other users as well.
+couldn't reproduce locally.
 
-Thanks for your contribution!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
