@@ -1,135 +1,105 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Oct 2014 18:14:40 +0200
-Subject: [Buildroot] [PATCH] set simple network setup via the system
- configuration submenu
-In-Reply-To: <713198091.26528967.1413214443914.JavaMail.root@openwide.fr>
-References: <713198091.26528967.1413214443914.JavaMail.root@openwide.fr>
-Message-ID: <543D4BF0.90709@openwide.fr>
+Date: Tue, 14 Oct 2014 18:29:04 +0200
+Subject: [Buildroot] [PATCH 1/1] cppunit: Added package
+In-Reply-To: <1412279910-12645-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+References: <1412279910-12645-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <543D4F50.8090208@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?my,
->>> With regards to systemd, as far as I could figure it still uses
->>> /etc/network/interfaces but with different names. AFAIU there is no
->>> sane
->>> default to replace the "eth0" name so I did not put a different
->>> default
->>> when systemd is used
->> I checked on my Fedora machine that use systemd and there is no
->> directory /etc/network.
->> Instead there is a /etc/networks file.
->> But I don't know systemd so much...
->
-> * systemv init
->
-> configuration is done by net-utils (or busybox) via /etc/network/*
->
-> inittab calls /etc/rc.d/S40network which calls ifup -a
->
-> (this file is part of skeleton/ so is always here)
->
-> this is the well known configuration infrastructure we all know and
-> love.
->
->
-> * systemd without networkd
->
-> buildroot will automatically add a network.service which will do
-> the equivalent of S40network (i.e : call "ifup -a") The same
-> infrastructue is used, so the script still works
->
-> * systemd with networkd
->
-> systemd-networkd is in charge of setting up the network using
-> systemd rules it will find throughout the filesystem
-> (/etc/systemd/network /usr/lib/systemd/network)
->
-> I don't generate a networkd rule in this case. I don't know if
-> this is a wanted feature. I'll have a look at how complicated
-> this is...
-ok
->>> ---
->>>    Makefile                               |  1 +
->>>    support/scripts/generate-interfaces.sh | 75
->>>    ++++++++++++++++++++++++++++++++
->>>    system/Config.in                       | 78
->>>    ++++++++++++++++++++++++++++++++++
->>>    3 files changed, 154 insertions(+)
->>>    create mode 100755 support/scripts/generate-interfaces.sh
->>>
->>> diff --git a/Makefile b/Makefile
->>> index e788f1b..71cad7d 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -477,6 +477,7 @@ $(BUILD_DIR)/.root:
->>>    	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
->>>    	@mkdir -p $(TARGET_DIR)/usr
->>>    	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
->>> +	./support/scripts/generate-interfaces.sh $(TARGET_DIR)
->> generate-interfaces.sh is only called when the target directory is
->> created.
->> What happen if the Buildroot's configuration is modified ?
->> What's about calling this script from target-finalize ?
->>
->> If unlikely another interfaces file exist on the overlay directory
->> which
->> network configuration must be used ?
->>
-> I have moved this to system/system.mk which is where most of
-> the system submenu stuff is added. These are all added to
-> TARGET_FINALIZE which works for me. If a user adds an
-> overlay, the overlay is applied after TARGET_FINALIZE so
-> the user's version of the file would be use, which seems to
-> me like the correct behaviour
-I'm agree with you.
->> Also, $(TOPDIR) must be used here instead of '.'
-> fixed, will respin
-[snip]
->>> +
->>> +config BR2_SIMPLE_NETWORK_1_IPV4_MANUAL
->>> +	bool "IPv4 with parameters manually specified"
->>> +	help
->>> +	   Configure IPv4 by specifying each parameter separately
->>> +endchoice
->>> +
->>> +if BR2_SIMPLE_NETWORK_1_IPV4_MANUAL
->>> +config BR2_SIMPLE_NETWORK_1_IPV4_ADDRESS
->>> +	string "IP Address of the first network interface"
->>> +
->>> +config BR2_SIMPLE_NETWORK_1_IPV4_NETMASK
->>> +	string "Netmask of the first network interface"
->>> +
->>> +config BR2_SIMPLE_NETWORK_1_IPV4_BROADCAST
->>> +	string "Broadcast Address of the first network interface"
->>> +
->>> +config BR2_SIMPLE_NETWORK_1_IPV4_GATEWAY
->>> +	string "Address of the gateway for the first network interface"
->>> +endif
->> These configs settings needs a default value (like for the interface
->> name)
->> otherwise the script generate-interface will fail if only
->> BR2_SIMPLE_NETWORK_1_IPV4_MANUAL has been selected.
-> Yes, that's on purpose... There is no sane default afaik for IP
-> address when nothing is known on about the intranet topology...
-I understand but I'm thinking about autobuilders here.
-The autobuilder will randomly enable BR2_SIMPLE_NETWORK_1_IPV4_MANUAL in the
-configuration without set any value in other BR2_SIMPLE_NETWORK_1_IPV4_.
+Hi Sebastien,
 
-> I am opened to any suggestion on default values but I think it's
-> safer to consider this an incorrect setup and refuse to build
-An exception may be added in autobuilders to prevent to build with
-BR2_SIMPLE_NETWORK_1_IPV4_MANUAL set ? Through ?
+Le 02/10/2014 21:58, Sebastien Bourdelin a ?crit :
+> CppUnit is the C++ port of the famous JUnit framework for unit testing.
+> Test output is in XML or text format for automatic testing and GUI
+> based for supervised tests.
+>
+> http://www.freedesktop.org/wiki/Software/cppunit/
+> Signed-off-by: Sebastien Bourdelin<sebastien.bourdelin@savoirfairelinux.com>
+> ---
+>   package/Config.in          |  1 +
+>   package/cppunit/Config.in  | 12 ++++++++++++
+>   package/cppunit/cppunit.mk | 27 +++++++++++++++++++++++++++
+>   3 files changed, 40 insertions(+)
+>   create mode 100644 package/cppunit/Config.in
+>   create mode 100644 package/cppunit/cppunit.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 2ad72bc..5cde341 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -831,6 +831,7 @@ menu "Other"
+>   	source "package/clapack/Config.in"
+>   	source "package/classpath/Config.in"
+>   	source "package/cppcms/Config.in"
+> +	source "package/cppunit/Config.in"
+>   	source "package/eigen/Config.in"
+>   	source "package/elfutils/Config.in"
+>   	source "package/fftw/Config.in"
+> diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
+> new file mode 100644
+> index 0000000..91700b8
+> --- /dev/null
+> +++ b/package/cppunit/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_CPPUNIT
+> +	bool "cppunit"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
+> +	  Test output is in XML or text format for automatic testing and GUI
+> +	  based for supervised tests.
+> +
+> +	http://www.freedesktop.org/wiki/Software/cppunit/
+> +
+> +comment "cppunit needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
+> new file mode 100644
+> index 0000000..47d27be
+> --- /dev/null
+> +++ b/package/cppunit/cppunit.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# cppunit
+> +#
+> +################################################################################
+> +
+> +CPPUNIT_VERSION = cppunit-1.13.2
+> +CPPUNIT_SITE = git://anongit.freedesktop.org/git/libreoffice/cppunit/
+> +CPPUNIT_INSTALL_STAGING = YES
+> +CPPUNIT_LICENSE = GPLv2
+> +CPPUNIT_LICENSE_FILES = COPYING
+> +
+> +define CPPUNIT_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +CPPUNIT_PRE_CONFIGURE_HOOKS += CPPUNIT_RUN_AUTOGEN
 
->
->
-> At this point i'll wait a couple of days for extra comments and i'll
-> look into networkd generation.
->
-> After that I will respin the patch...
-Ok, thanks.
+Why not using CPPUNIT_AUTORECONF = YES here ?
+It seems that autoreconf mechanism works.
+
+> +
+> +define CPPUNIT_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		./configure \
+> +		--host=$(GNU_TARGET_NAME) \
+> +		--prefix=/usr \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +	)
+> +endef
+
+It's already done in pkg-autotools.mk, so you can remove this.
+
+> +
+> +$(eval $(autotools-package))
+
+Have you tested cppunit over several toolchain configuration ?
+Otherwise, looks good.
 
 Best regards,
-Romain
+Romain Naour
