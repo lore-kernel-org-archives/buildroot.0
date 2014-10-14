@@ -1,177 +1,114 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Tue, 14 Oct 2014 13:16:32 +0200
-Subject: [Buildroot] [PATCH v2] linux-headers: allow use of headers from
- kernel "package" selected
-In-Reply-To: <1413132543-7148-1-git-send-email-abrodkin@synopsys.com>
-References: <1413132543-7148-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <CABbD_XBjo-UJf95vFi5innY4db=CzKDLeKqgXSsmEsf7eWw5yw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Oct 2014 14:18:40 +0200
+Subject: [Buildroot] using BR2 variables to find a specific header file
+In-Reply-To: <543D01E8.80401@green-communications.fr>
+References: <543C0775.3090701@green-communications.fr>
+ <CAHXCMMJ-Ke78qFEHjddfUtbinML-pwHWX58DfPU7+L3VZdF=1Q@mail.gmail.com>
+ <543D01E8.80401@green-communications.fr>
+Message-ID: <CAHXCMMJmEDLLzL6t8gqzvMBhtXu7WiD-eW-XJqMgP31SRT4EUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, Oct 14, 2014 at 12:58 PM, Sylvain Raybaud
+<sylvain.raybaud@green-communications.fr> wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA1
+>
+> Mike, Samuel, all,
+>
+> On 13/10/2014 21:42, Samuel Martin wrote:
+>> Hi Sylvain,
+>>
+>> On Mon, Oct 13, 2014 at 7:10 PM, Sylvain Raybaud
+>> <sylvain.raybaud@green-communications.fr> wrote:
+> [...]
+>>> During cross-compile these tests cannot be run therefore the
+>>> package expects -DSTACK_DIRECTION=+/-1 to be passed to cmake. Of
+>>> course you cannot do it in buildroot.
+>>
+>> Why do you say that? Of course, Buildroot does support adding cmake
+>> configure options [1]. You can also check some cmake-based packages
+>> already integrated (e.g.: [2]).
+>
+> I mean I can pass arguments to cmake but if I hardcode a value I break
+> compatibility with any platform that would require the other value.
+> However...
 
-I tested this patch, found a minor issue:
-You can select a kernel, then select "Use Linux kernel specified for
-target" for toolchain headers, then go back to kernel and choose "Same as
-toolchain kernel headers" option. This makes
-BR2_KERNEL_HEADERS_SAME_AS_KERNEL=y
-BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
-selected together.
-This produces this error:
+What I mean is something like this:
+in the *.mk:
+---
+ifeq ($(BR2_arm)$(BR2_some_arch_with_stack_growing_downward),y)
+FOO_CONF_OPTS += -DSTACK_DIRECTION=-1
+endif
+ifeq ($(BR2_some_other_arch_with_stack_growing_upward),y)
+FOO_CONF_OPTS += -DSTACK_DIRECTION=+1
+endif
+---
 
----------------------------------------------------------------------------
->>> linux-headers  Downloading
---2014-10-14 12:10:52--
-https://www.kernel.org/pub/linux/kernel/v3.x/linux-.tar.xz
-Resolving www.kernel.org (www.kernel.org)... 198.145.20.140, 149.20.4.69,
-199.204.44.194, ...
-Connecting to www.kernel.org (www.kernel.org)|198.145.20.140|:443...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-10-14 12:10:54 ERROR 404: Not Found.
+This way you'll support all architectures (at least the one you know
+how the stack grows).
 
---2014-10-14 12:10:54--  http://sources.buildroot.net/linux-.tar.xz
-Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-10-14 12:10:54 ERROR 404: Not Found.
+>
+>>
+>> If you know beforehand how grow the stack, I would suggest to set
+>> it in the *_CONF_OPTS variables. This may depends on the target
+>> architecture.
+>>
+>>> It seems to be possible to access this information in another
+>>> way since STACK_GROWS_DOWNWARD is defined in some headers.
+> [...]
+>>
+>> This does not look right :-/ because: - it search in something not
+>> in the sysroot; - it is only valid when using the
+>> buildroot-toolchain backend.
+>>
+>> Indeed, it seems the STACK_GROWS_DOWNWARD definition is only
+>> available in the compiler sources, not in the preprocessor output
+>> for the target :-/
+>>
+>>> [...]
+>>
+>> Instead of checking the compiler sources, I prefer you set the
+>> stack growing direction through the CMake args.
+>>
+>> Regards,
+>
+> Mark's reply and yours strongly suggest that it's a better idea to
+> hardcode the correct value. I shall do so!
+>
+> Thanks a lot!
+>
+> Cheers,
+>
+> - --
+> Sylvain Raybaud
+> www.green-communications.fr
+> -----BEGIN PGP SIGNATURE-----
+> Version: GnuPG v1
+>
+> iQIcBAEBAgAGBQJUPQHnAAoJEEkkwl4JtJ9y8SEQAKFGepXykyQ/IdW5Y4oyOC1P
+> C1Qxjkve4/JlGQlhn14zeUFSbBoNGoZrpEwaER/ygfiTUZtITdRwvW6SyZhdXGPs
+> m4DkznR1+/ZCOCQdEglyON54VHGQU4l5caC0vbXENhjcMyLivCv1Ue8tGNO0yP4y
+> HfxXqPBQHe79cHeIJwpiYn6wFlDxLTZmhOs9BxfxTCVCQr1nWPW7SqOKnHfaj5Us
+> SdHZ2OPVI9M7IuNWDHdHayQoXcbiOHveb7Bh1FJY8GpK8F3CbVXZ/E/l+yxWU8mc
+> CoZhQy3sJG0IAUZ+JerkTN1h15RsSyHJb6lKhE7zQ+LIhiuhj2dJNntwQ0eJCRRV
+> G3h2NQti0T6ez8IuNmNJ58UEUQ72y26Ys1oU8LQfX2ZkJNmMeQlzlFGcESWkvW5B
+> 4E059eSSHIhBH5j2slpYDe/622dIy8s/Wd5E6ww55lCwxFJJ4RmHKwC3u1YcXZO+
+> z/nB4I9Qmukfq1IXrUxCPgM4v95Z6eCjROFIb/n7/OSCJ5J2f0vi6WBczfonzoyK
+> tG0sOsub9ZQjUzAI1C8iqUn+W8eEeed7V1jVuLswP3Zvx2yByaNidcjHB2CM6UUk
+> j6GcXOTqMAS5L7Bv/95akn8EJ1w0nyZnmuy1gBU0sGekNWE/uooTHPfoFAgivKnE
+> CetDbXUvZLStUnYcL3yw
+> =dO+1
+> -----END PGP SIGNATURE-----
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-make: ***
-[/home/scythe/buildroot/output/build/linux-headers-/.stamp_downloaded]
-Error 1
----------------------------------------------------------------------------
-
-This can be prevented by making a change in package/linux-headers/
-Config.in.host:
-...
-+       config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
-+               bool "Use Linux kernel specified for target"
-+               depends on BR2_LINUX_KERNEL
-+               depends on !BR2_LINUX_KERNEL_SAME_AS_HEADERS
-...
-
-Regards,
-Karoly
-
-
-
-On Sun, Oct 12, 2014 at 6:49 PM, Alexey Brodkin <alexey.brodkin@gmail.com>
-wrote:
-
-> From: Karoly Kasza <kaszak@gmail.com>
->
-> This is a re-work of http://patchwork.ozlabs.org/patch/346823/
->
-> In buildroot kernel headers used for building toolchain come from upstream
-> kernel sources (even though user may specify version, but not origin).
->
-> This change makes it possible to use exactly the same sources for both
-> headers during toolchain building and for kernel building itself.
->
-> Moreover if "kernel" is selected to be built by defaut its sources will
-> be used for kernel headers on toolchain build.
->
-> That way user might be sure that ABI mismatch won't happen between
-> toolchain
-> and kernel.
->
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
->
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
-> Changes v1 -> v2:
->  * Make sure "Custom kernel headers series" is selected so
->    BR2_TOOLCHAIN_HEADERS_AT_LEAST is properly set.
-> ---
->  package/linux-headers/Config.in.host   | 14 ++++++++++++--
->  package/linux-headers/linux-headers.mk |  7 +++++++
->  2 files changed, 19 insertions(+), 2 deletions(-)
->
-> diff --git a/package/linux-headers/Config.in.host
-> b/package/linux-headers/Config.in.host
-> index 101136a..4551daf 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -5,6 +5,7 @@ comment "Kernel Header Options"
->
->  choice
->         prompt "Kernel Headers"
-> +       default BR2_KERNEL_HEADERS_SAME_AS_KERNEL if BR2_LINUX_KERNEL
->         default BR2_KERNEL_HEADERS_3_17
->         help
->           Select the version of kernel header files you wish to use.
-> @@ -69,6 +70,13 @@ choice
->
->         config BR2_KERNEL_HEADERS_VERSION
->                 bool "Manually specified Linux version"
-> +
-> +       config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
-> +               bool "Use Linux kernel specified for target"
-> +               depends on BR2_LINUX_KERNEL
-> +               help
-> +                 Use the Linux kernel specified for the target in
-> +                 the Kernel menu.
->  endchoice
->
->  config BR2_DEFAULT_KERNEL_VERSION
-> @@ -80,10 +88,12 @@ config BR2_DEFAULT_KERNEL_VERSION
->
->  choice
->         bool "Custom kernel headers series"
-> -       depends on BR2_KERNEL_HEADERS_VERSION
-> +       depends on BR2_KERNEL_HEADERS_VERSION ||
-> BR2_KERNEL_HEADERS_SAME_AS_KERNEL
->         default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
->         help
-> -         Set to the kernel headers series you manually set above.
-> +         Set to the kernel headers series you manually entered in
-> +         "linux version" field or matching version of specific kernel
-> selected
-> +         for building in "kernel" section.
->
->           This is used to hide/show some packages that have strict
->           requirements on the version of kernel headers.
-> diff --git a/package/linux-headers/linux-headers.mk
-> b/package/linux-headers/linux-headers.mk
-> index d770927..29a9b38 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -7,6 +7,12 @@
->  # This package is used to provide Linux kernel headers for the
->  # internal toolchain backend.
->
-> +ifeq ($(BR2_KERNEL_HEADERS_SAME_AS_KERNEL),y)
-> +LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-> +LINUX_HEADERS_SOURCE = $(LINUX_SOURCE)
-> +LINUX_HEADERS_SITE = $(LINUX_SITE)
-> +LINUX_HEADERS_SITE_METHOD = $(LINUX_SITE_METHOD)
-> +else
->  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
->  ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
->  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-> @@ -14,6 +20,7 @@ else
->  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
->  endif
->  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-> +endif
->
->  LINUX_HEADERS_INSTALL_STAGING = YES
->
-> --
-> 1.9.3
->
->
 
 
 -- 
-
-?dv,
-KK
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141014/e5e55908/attachment.html>
+Samuel
