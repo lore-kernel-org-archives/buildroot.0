@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Oct 2014 10:20:52 +0200
-Subject: [Buildroot] [PATCH 1/8] package/libdvbcsa: New package
-In-Reply-To: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 14 Oct 2014 10:21:43 +0200
+Subject: [Buildroot] [PATCH 2/8] package/ffmpeg: Enable support for
+ libavresample
+In-Reply-To: <1413137610-21887-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141014082052.GE3730@free.fr>
+ <1413137610-21887-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141014082142.GF3730@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,102 +18,49 @@ On 2014-10-12 20:13 +0200, Bernd Kuhls spake thusly:
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Hashes match. However, I wonder how interesting it is to have md5,
-especially since we have sha1 and sha256. I'd just remove it.
-
-Otherwise:
-
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/Config.in                |    1 +
->  package/libdvbcsa/Config.in      |    9 +++++++++
->  package/libdvbcsa/libdvbcsa.hash |    6 ++++++
->  package/libdvbcsa/libdvbcsa.mk   |   31 +++++++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/libdvbcsa/Config.in
->  create mode 100644 package/libdvbcsa/libdvbcsa.hash
->  create mode 100644 package/libdvbcsa/libdvbcsa.mk
+>  package/ffmpeg/Config.in |    5 +++++
+>  package/ffmpeg/ffmpeg.mk |    6 ++++++
+>  2 files changed, 11 insertions(+)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 186ffea..da059d8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -745,6 +745,7 @@ endmenu
->  menu "Multimedia"
->  	source "package/libass/Config.in"
->  	source "package/libbluray/Config.in"
-> +	source "package/libdvbcsa/Config.in"
->  	source "package/libdvbsi/Config.in"
->  	source "package/libdvdnav/Config.in"
->  	source "package/libdvdread/Config.in"
-> diff --git a/package/libdvbcsa/Config.in b/package/libdvbcsa/Config.in
-> new file mode 100644
-> index 0000000..dd7dc15
-> --- /dev/null
-> +++ b/package/libdvbcsa/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBDVBCSA
-> +	bool "libdvbcsa"
+> diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+> index 20d5231..6fde46e 100644
+> --- a/package/ffmpeg/Config.in
+> +++ b/package/ffmpeg/Config.in
+> @@ -49,6 +49,11 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
+>  	help
+>  	  FFserver is a streaming server for both audio and video.
+>  
+> +config BR2_PACKAGE_FFMPEG_AVRESAMPLE
+> +	bool "Build libavresample"
 > +	help
-> +	  libdvbcsa is a free implementation of the DVB Common Scrambling
-> +	  Algorithm - DVB/CSA - with encryption and decryption capabilities
+> +	  Avresample is a audio conversion library for compatibility.
 > +
-> +	  As libdvbcsa implements a standard, it is completely legal to use it.
-> +
-> +	  http://www.videolan.org/developers/libdvbcsa.html
-> diff --git a/package/libdvbcsa/libdvbcsa.hash b/package/libdvbcsa/libdvbcsa.hash
-> new file mode 100644
-> index 0000000..5b3fa4c
-> --- /dev/null
-> +++ b/package/libdvbcsa/libdvbcsa.hash
-> @@ -0,0 +1,6 @@
-> +# From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.sha256
-> +sha256	4db78af5cdb2641dfb1136fe3531960a477c9e3e3b6ba19a2754d046af3f456d	libdvbcsa-1.1.0.tar.gz
-> +# From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.sha1
-> +sha1	5f4640a7e93ae6494f24a881414e5c343f803365				libdvbcsa-1.1.0.tar.gz
-> +# From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.md5
-> +md5	478ab1ca56ca58d2667da6ce22f74e39					libdvbcsa-1.1.0.tar.gz
-> diff --git a/package/libdvbcsa/libdvbcsa.mk b/package/libdvbcsa/libdvbcsa.mk
-> new file mode 100644
-> index 0000000..ef1d957
-> --- /dev/null
-> +++ b/package/libdvbcsa/libdvbcsa.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# libdvbcsa
-> +#
-> +################################################################################
-> +
-> +LIBDVBCSA_VERSION = 1.1.0
-> +LIBDVBCSA_SITE = http://download.videolan.org/pub/videolan/libdvbcsa/$(LIBDVBCSA_VERSION)
-> +LIBDVBCSA_LICENSE = GPLv2+
-> +LIBDVBCSA_LICENSE_FILES = COPYING
-> +LIBDVBCSA_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-> +LIBDVBCSA_CONF_OPTS += --enable-mmx
+>  config BR2_PACKAGE_FFMPEG_POSTPROC
+>  	bool "Build libpostproc"
+>  	depends on BR2_PACKAGE_FFMPEG_GPL
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index af4e1f6..0493385 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -104,6 +104,12 @@ else
+>  FFMPEG_CONF_OPTS += --disable-ffserver
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
+> +FFMPEG_CONF_OPTS += --enable-avresample
 > +else
-> +LIBDVBCSA_CONF_OPTS += --disable-mmx
+> +FFMPEG_CONF_OPTS += --disable-avresample
 > +endif
 > +
-> +ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-> +LIBDVBCSA_CONF_OPTS += --enable-sse2
-> +else
-> +LIBDVBCSA_CONF_OPTS += --disable-sse2
-> +endif
-> +
-> +ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-> +LIBDVBCSA_CONF_OPTS += --enable-altivec
-> +else
-> +LIBDVBCSA_CONF_OPTS += --disable-altivec
-> +endif
-> +
-> +$(eval $(autotools-package))
+>  ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+>  FFMPEG_CONF_OPTS += --enable-postproc
+>  else
 > -- 
 > 1.7.10.4
 > 
@@ -127,10 +76,3 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141014/182bd418/attachment.asc>
