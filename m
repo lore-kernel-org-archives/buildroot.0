@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 14 Oct 2014 17:27:46 +0200
-Subject: [Buildroot] [git commit] libcdio: bump to version 0.93
-Message-ID: <20141015125351.BB64EB2DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libnss: bump to version 3.17.2
+Message-ID: <20141015125351.C3ABEB2DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6184fbac83fcfb789fd939985507945ebb6d203a
+commit: http://git.buildroot.net/buildroot/commit/?id=e5ca8de85ec4b4e453aef63831c536bdbbb30116
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcdio/libcdio.hash |    2 ++
- package/libcdio/libcdio.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/libnss/libnss.hash |    5 ++---
+ package/libnss/libnss.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
-new file mode 100644
-index 0000000..cc87ffb
---- /dev/null
-+++ b/package/libcdio/libcdio.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking signature
-+sha256	4972cd22fd8d0e8bff922d35c7a645be0db0ab0e7b3dfaecc9cd8272429d6975	libcdio-0.93.tar.gz
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
-index 10559a7..03e6002 100644
---- a/package/libcdio/libcdio.mk
-+++ b/package/libcdio/libcdio.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 8c9420c..916aade 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,3 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_1_RTM/src/
+-sha1	32347d8b476efa5c7a4cfa21f8e5a1d0d89942ea	nss-3.17.1.tar.gz
+-sha256	0e210afba7cd1e033a08f61fcd1f466639649fc413e72aa050f3d52c19376e5f	nss-3.17.1.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_2_RTM/src/
++sha256	134929e44e44b968a4883f4ee513a71ae45d55b486cee41ee8e26c3cc84dab8b	nss-3.17.2.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 066606f..e7b92e4 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCDIO_VERSION = 0.92
-+LIBCDIO_VERSION = 0.93
- LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
- LIBCDIO_INSTALL_STAGING = YES
- LIBCDIO_LICENSE = GPLv3+
+-LIBNSS_VERSION = 3.17.1
++LIBNSS_VERSION = 3.17.2
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
