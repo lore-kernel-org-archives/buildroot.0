@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Oct 2014 20:25:44 -0300
-Subject: [Buildroot] [PATCH 07/16] pptp-linux: add hash file
+Date: Tue, 14 Oct 2014 20:25:45 -0300
+Subject: [Buildroot] [PATCH 08/16] usbutils: add hash file
 In-Reply-To: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1413329153-25453-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1413329153-25453-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pptp-linux/pptp-linux.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/pptp-linux/pptp-linux.hash
+ package/usbutils/usbutils.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/usbutils/usbutils.hash
 
-diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
+diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
 new file mode 100644
-index 0000000..839d0bf
+index 0000000..6023f39
 --- /dev/null
-+++ b/package/pptp-linux/pptp-linux.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.8.0/
-+md5	4efce9f263e2c3f38d79d9df222476de	pptp-1.8.0.tar.gz
-+sha1	6289953812ac986c7234e83aefb10b5e279dc613	pptp-1.8.0.tar.gz
++++ b/package/usbutils/usbutils.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
++sha256	7593a01724bbc0fd9fe48e62bc721ceb61c76654f1d7b231b3c65f6dfbbaefa4	usbutils-007.tar.xz
 -- 
 2.0.4
