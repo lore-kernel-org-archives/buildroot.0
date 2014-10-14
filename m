@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Oct 2014 10:29:03 +0200
-Subject: [Buildroot] [PATCH 7/8] package/tvheadend: Bump version to
- current git master
-In-Reply-To: <1413137610-21887-7-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 14 Oct 2014 10:29:44 +0200
+Subject: [Buildroot] [PATCH 8/8] package/tvheadend: Add transcoding
+ support by ffmpeg
+In-Reply-To: <1413137610-21887-8-git-send-email-bernd.kuhls@t-online.de>
 References: <1413137610-21887-1-git-send-email-bernd.kuhls@t-online.de>
- <1413137610-21887-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141014082903.GJ3730@free.fr>
+ <1413137610-21887-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141014082943.GK3730@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,22 +24,27 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/tvheadend/tvheadend.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/tvheadend/tvheadend.mk |    7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
 > diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index c152717..7d27edc 100644
+> index 7d27edc..5267a10 100644
 > --- a/package/tvheadend/tvheadend.mk
 > +++ b/package/tvheadend/tvheadend.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> @@ -14,6 +14,13 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+>  TVHEADEND_DEPENDENCIES += avahi
+>  endif
 >  
-> -TVHEADEND_VERSION = ca742e00a7717787351e1a432ca9b41f93369d60
-> +TVHEADEND_VERSION = 4c19cc8526b922d10b4d39bd5a25cb89e27d7ce8
->  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
->  TVHEADEND_LICENSE = GPLv3+
->  TVHEADEND_LICENSE_FILES = LICENSE.md
+> +ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE),yy)
+> +TVHEADEND_DEPENDENCIES += ffmpeg
+> +TVHEADEND_CONF_OPTS += --enable-libav
+> +else
+> +TVHEADEND_CONF_OPTS += --disable-libav
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+>  TVHEADEND_DEPENDENCIES += libdvbcsa
+>  TVHEADEND_CONF_OPTS += --enable-dvbcsa
 > -- 
 > 1.7.10.4
 > 
