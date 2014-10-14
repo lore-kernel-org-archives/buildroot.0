@@ -1,51 +1,94 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 14 Oct 2014 10:16:33 -0700
-Subject: [Buildroot] [PATCH] gst1-plugins-imx: add package
-In-Reply-To: <543D33DF.8070005@mind.be>
-References: <1412545628-12153-1-git-send-email-bisson.gary@gmail.com>
- <543A9384.8050803@lucaceresoli.net> <543B52A0.6060007@gmail.com>
- <543BC031.60606@lucaceresoli.net> <543D33DF.8070005@mind.be>
-Message-ID: <CADCpmyO_-VD52UDJf5MpZGDnTtzJwxyXcOONYwG-rsd4K_7DLQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 14 Oct 2014 19:29:16 +0200
+Subject: [Buildroot] [PATCH] spidev_test: new package
+In-Reply-To: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5f5516c3-f0eb-478e-ae83-be53e797f4af@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+Gustavo Zacarias <gustavo@zacarias.com.ar> schreef:
+>Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>---
+> package/Config.in                  |  1 +
+> package/spidev_test/Config.in      | 15 +++++++++++++++
+> package/spidev_test/spidev_test.mk | 22 ++++++++++++++++++++++
+> 3 files changed, 38 insertions(+)
+> create mode 100644 package/spidev_test/Config.in
+> create mode 100644 package/spidev_test/spidev_test.mk
+>
+>diff --git a/package/Config.in b/package/Config.in
+>index dda7716..fb8e93d 100644
+>--- a/package/Config.in
+>+++ b/package/Config.in
+>@@ -84,6 +84,7 @@ endif
+> 	source "package/ramsmp/Config.in"
+> 	source "package/ramspeed/Config.in"
+> 	source "package/rt-tests/Config.in"
+>+	source "package/spidev_test/Config.in"
+> 	source "package/strace/Config.in"
+> 	source "package/stress/Config.in"
+> 	source "package/sysprof/Config.in"
+>diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+>new file mode 100644
+>index 0000000..c0ed9ef
+>--- /dev/null
+>+++ b/package/spidev_test/Config.in
+>@@ -0,0 +1,15 @@
+>+config BR2_PACKAGE_SPIDEV_TEST
+>+	bool "spidev_test"
+>+	depends on BR2_LINUX_KERNEL
+>+	help
+>+	  SPI testing utility (using spidev driver).
+>+
+>+	  This package builds and installs the userspace 'spidev_test'
+>+	  command. It is up to the user to ensure that the kernel
+>+	  configuration has all the suitable options enabled to allow a
+>+	  proper operation of 'spidev_test'.
+>+
+>+	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
+>+
+>+comment "spidev_test needs Linux kernel to be built"
 
-On Tue, Oct 14, 2014 at 7:31 AM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
+This should be '... needs a Linux ...'
 
-> [snip]
-> > # Required by gpu-viv-bin-mx6q
-> > comment "gst1-plugins-imx needs an (e)glibc toolchain"
-> >     depends on BR2_arm
-> >     depends on !BR2_TOOLCHAIN_USES_GLIBC
->
->  That's not the right place for pointing to gpu-viv-bin-mx6q. It should be
-> something like:
->
-> config BR2_PACKAGE_GST1_PLUGINS_IMX
->         bool "gst1-plugins-imx"
->         depends on BR2_LINUX_KERNEL
->         depends on BR2_arm # Only relevant for i.MX
->         depends on BR2_TOOLCHAIN_USES_GLIBC # gpu-viv-bin-mx6q
->         select BR2_PACKAGE_GPU_VIV_BIN_MX6Q
->         # Cannot select libfslvpuwrap because user must select the CPU
->         depends on BR2_PACKAGE_LIBFSLVPUWRAP
->
-> (I added that thing about libfslvpuwrap but I'm not sure of it...)
->
->
-That is actually what I said in the first e-mail, I am not proud of all
-those dependencies but I couldn't find a way to select GPU_VIV_MX6Q as it
-is only selectable if  FREESCALE_IMX_PLATFORM is set
-to FREESCALE_IMX_PLATFORM_IMX6Q. A select like above would give an error
-but I'm open to any other solution.
+>+	depends on !BR2_LINUX_KERNEL
+>diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+>new file mode 100644
+>index 0000000..24c0f89
+>--- /dev/null
+>+++ b/package/spidev_test/spidev_test.mk
+>@@ -0,0 +1,22 @@
+>+################################################################################
+>+#
+>+# spidev_test
+>+#
+>+################################################################################
+>+
+>+# Source taken from the Linux kernel tree
+>+SPIDEV_TEST_SOURCE =
+>+SPIDEV_TEST_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+>+SPIDEV_TEST_DEPENDENCIES = linux
 
-Thanks,
-Gary
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141014/98b98695/attachment.html>
+Here I think we should define the license and if possible license files, if needed using a hook to copy the license from the kernel...
+
+>+
+>+define SPIDEV_TEST_BUILD_CMDS
+>+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/spidev_test \
+>+		$(LINUX_DIR)/Documentation/spi/spidev_test.c
+>+endef
+>+
+>+define SPIDEV_TEST_INSTALL_TARGET_CMDS
+>+	$(INSTALL) -D -m 755 $(@D)/spidev_test \
+>+		$(TARGET_DIR)/usr/sbin/spidev_test
+>+endef
+>+
+>+$(eval $(generic-package))
+
+Good idea to make this a package. We once copied this test to our own test repo, but this makes more sense.
+
+Best regards,
+Thomas
