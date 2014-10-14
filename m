@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Oct 2014 07:54:01 -0300
-Subject: [Buildroot] [PATCH 3/6] make: bump to version 4.1
+Date: Tue, 14 Oct 2014 07:54:02 -0300
+Subject: [Buildroot] [PATCH 4/6] libcdio: bump to version 0.93
 In-Reply-To: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1413284044-20381-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1413284044-20381-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1413284044-20381-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,31 @@ Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/make/make.hash | 2 ++
- package/make/make.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
- create mode 100644 package/make/make.hash
+ package/libcdio/libcdio.hash | 2 ++
+ package/libcdio/libcdio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/libcdio/libcdio.hash
 
-diff --git a/package/make/make.hash b/package/make/make.hash
+diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
 new file mode 100644
-index 0000000..db95c60
+index 0000000..cc87ffb
 --- /dev/null
-+++ b/package/make/make.hash
++++ b/package/libcdio/libcdio.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated after checking signature
-+sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 803595f..20469ba 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -4,12 +4,11 @@
++sha256	4972cd22fd8d0e8bff922d35c7a645be0db0ab0e7b3dfaecc9cd8272429d6975	libcdio-0.93.tar.gz
+diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
+index 10559a7..03e6002 100644
+--- a/package/libcdio/libcdio.mk
++++ b/package/libcdio/libcdio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MAKE_VERSION = 4.0
-+MAKE_VERSION = 4.1
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
-+MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- MAKE_LICENSE = GPLv3+
- MAKE_LICENSE_FILES = COPYING
- 
--MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--
- $(eval $(autotools-package))
+-LIBCDIO_VERSION = 0.92
++LIBCDIO_VERSION = 0.93
+ LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
+ LIBCDIO_INSTALL_STAGING = YES
+ LIBCDIO_LICENSE = GPLv3+
 -- 
 2.0.4
