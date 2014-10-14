@@ -1,65 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Oct 2014 20:28:27 +0200
-Subject: [Buildroot] [PATCH v3 5/7] package/tvheadend: Enable bundled build
-In-Reply-To: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413311309-30811-5-git-send-email-bernd.kuhls@t-online.de>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 14 Oct 2014 20:52:02 +0200
+Subject: [Buildroot] perl 'custom module selection'
+In-Reply-To: <CAKat-EZeif-fK5Zq9bB=00hGrVRu2bbOH9ax5xA7Lk7nRfh-Ag@mail.gmail.com>
+References: <CAKat-EZeif-fK5Zq9bB=00hGrVRu2bbOH9ax5xA7Lk7nRfh-Ag@mail.gmail.com>
+Message-ID: <CAB0FRssmh_aFzmVG2_Avs5oijjR9085HyQa2f+QOqSgLjW_3Tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-python is needed to create a bundled version of the tvheadend binary which
-includes all files used by the web UI.
+t
 
-Having host-python alone as dependency is not enough, we need to add
---enable-bundle to enable this functionality.
+2014-10-13 11:42 GMT+02:00 Ray Zin <rayzinpwr@gmail.com>:
+> Hello,
+>
+> I've selected perl and configured the 'custom module selection' like this:
+>
+> Cwd File/Basename File/Temp Getopt/Long Carp FindBin Scalar/Util
+>
+> But I don't get Cwd or Scalar/Util (everything else, ok).
+>
+> Under my build, normally these would be under i686-linux. So I also tried:
+>
+> i686-linux/Cwd File/Basename File/Temp Getopt/Long Carp FindBin
+> i686-linux/Scalar/Util
+>
+> Still no Cwd or Scalar/Util. Suggestions?
+>Cwd File/Basename File/Temp Getopt/Long Carp FindBin Scalar/Util
 
-Also remove the now bundled webinterface files from /usr/share/tvheadend/
+The field 'custom module selection' allows to select some Perl core
+modules, when you don't want all core modules.
+If you set the field with:
+    Cwd File/Basename File/Temp Getopt/Long Carp FindBin Scalar/Util
+you could see theses lines during the Perl configure step:
+    Static modules:
+    Non-XS modules: cpan/File-Temp cpan/Getopt-Long dist/Carp
+    Dynamic modules: dist/Cwd
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: no changes
-v2: added hook to remove webinterface files, they are bundled now
+The module FindBin and File/Basename are always included because there
+are in the 'lib' directory (and not in 'cpan' or 'dist').
 
- package/tvheadend/tvheadend.mk |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Finally, Scalar::Util is not a core module, but a part of Scalar-List-Utils.
+You could create the corresponding packages with the command:
+   $ support/script/scancpan Scalar-List-Utils
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 54112a6..99405fc 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -37,6 +37,7 @@ define TVHEADEND_CONFIGURE_CMDS
- 	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
- 	 --python="$(HOST_DIR)/usr/bin/python"	\
- 	 --disable-dvbscan			\
-+	 --enable-bundle			\
- 	 $(TVHEADEND_CONF_OPTS)			\
- 	)
- endef
-@@ -49,6 +50,13 @@ define TVHEADEND_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
- endef
- 
-+define TVHEADEND_CLEAN_SHARE
-+	rm -rf "$(TARGET_DIR)/usr/share/tvheadend/docs"
-+	rm -rf "$(TARGET_DIR)/usr/share/tvheadend/src"
-+endef
-+
-+TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_CLEAN_SHARE
-+
- #----------------------------------------------------------------------------
- # To run tvheadend, we need:
- #  - a startup script, and its config file
-@@ -59,7 +67,7 @@ define TVHEADEND_INSTALL_DB
- 	              $(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
- 	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
- endef
--TVHEADEND_POST_INSTALL_TARGET_HOOKS = TVHEADEND_INSTALL_DB
-+TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_INSTALL_DB
- 
- define TVHEADEND_INSTALL_INIT_SYSV
- 	$(INSTALL) -D package/tvheadend/etc.default.tvheadend $(TARGET_DIR)/etc/default/tvheadend
--- 
-1.7.10.4
+And after select it in the ''Perl libraries/modules" list.
+
+Scalar-Util is a XS module, not a pure Perl module. So, you couldn't
+use the option BR2_PREFER_STATIC_LIB.
+
+If you don't have a strong footprint constraint, let empty the field
+'custom module selection' and embeds all core modules.
+
+Fran?ois
+
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
