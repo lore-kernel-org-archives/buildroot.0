@@ -1,82 +1,135 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Oct 2014 12:45:53 -0300
-Subject: [Buildroot] [PATCH] spidev_test: new package
-Message-ID: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 14 Oct 2014 18:14:40 +0200
+Subject: [Buildroot] [PATCH] set simple network setup via the system
+ configuration submenu
+In-Reply-To: <713198091.26528967.1413214443914.JavaMail.root@openwide.fr>
+References: <713198091.26528967.1413214443914.JavaMail.root@openwide.fr>
+Message-ID: <543D4BF0.90709@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                  |  1 +
- package/spidev_test/Config.in      | 15 +++++++++++++++
- package/spidev_test/spidev_test.mk | 22 ++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/spidev_test/Config.in
- create mode 100644 package/spidev_test/spidev_test.mk
+Hi J?r?my,
+>>> With regards to systemd, as far as I could figure it still uses
+>>> /etc/network/interfaces but with different names. AFAIU there is no
+>>> sane
+>>> default to replace the "eth0" name so I did not put a different
+>>> default
+>>> when systemd is used
+>> I checked on my Fedora machine that use systemd and there is no
+>> directory /etc/network.
+>> Instead there is a /etc/networks file.
+>> But I don't know systemd so much...
+>
+> * systemv init
+>
+> configuration is done by net-utils (or busybox) via /etc/network/*
+>
+> inittab calls /etc/rc.d/S40network which calls ifup -a
+>
+> (this file is part of skeleton/ so is always here)
+>
+> this is the well known configuration infrastructure we all know and
+> love.
+>
+>
+> * systemd without networkd
+>
+> buildroot will automatically add a network.service which will do
+> the equivalent of S40network (i.e : call "ifup -a") The same
+> infrastructue is used, so the script still works
+>
+> * systemd with networkd
+>
+> systemd-networkd is in charge of setting up the network using
+> systemd rules it will find throughout the filesystem
+> (/etc/systemd/network /usr/lib/systemd/network)
+>
+> I don't generate a networkd rule in this case. I don't know if
+> this is a wanted feature. I'll have a look at how complicated
+> this is...
+ok
+>>> ---
+>>>    Makefile                               |  1 +
+>>>    support/scripts/generate-interfaces.sh | 75
+>>>    ++++++++++++++++++++++++++++++++
+>>>    system/Config.in                       | 78
+>>>    ++++++++++++++++++++++++++++++++++
+>>>    3 files changed, 154 insertions(+)
+>>>    create mode 100755 support/scripts/generate-interfaces.sh
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index e788f1b..71cad7d 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -477,6 +477,7 @@ $(BUILD_DIR)/.root:
+>>>    	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+>>>    	@mkdir -p $(TARGET_DIR)/usr
+>>>    	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+>>> +	./support/scripts/generate-interfaces.sh $(TARGET_DIR)
+>> generate-interfaces.sh is only called when the target directory is
+>> created.
+>> What happen if the Buildroot's configuration is modified ?
+>> What's about calling this script from target-finalize ?
+>>
+>> If unlikely another interfaces file exist on the overlay directory
+>> which
+>> network configuration must be used ?
+>>
+> I have moved this to system/system.mk which is where most of
+> the system submenu stuff is added. These are all added to
+> TARGET_FINALIZE which works for me. If a user adds an
+> overlay, the overlay is applied after TARGET_FINALIZE so
+> the user's version of the file would be use, which seems to
+> me like the correct behaviour
+I'm agree with you.
+>> Also, $(TOPDIR) must be used here instead of '.'
+> fixed, will respin
+[snip]
+>>> +
+>>> +config BR2_SIMPLE_NETWORK_1_IPV4_MANUAL
+>>> +	bool "IPv4 with parameters manually specified"
+>>> +	help
+>>> +	   Configure IPv4 by specifying each parameter separately
+>>> +endchoice
+>>> +
+>>> +if BR2_SIMPLE_NETWORK_1_IPV4_MANUAL
+>>> +config BR2_SIMPLE_NETWORK_1_IPV4_ADDRESS
+>>> +	string "IP Address of the first network interface"
+>>> +
+>>> +config BR2_SIMPLE_NETWORK_1_IPV4_NETMASK
+>>> +	string "Netmask of the first network interface"
+>>> +
+>>> +config BR2_SIMPLE_NETWORK_1_IPV4_BROADCAST
+>>> +	string "Broadcast Address of the first network interface"
+>>> +
+>>> +config BR2_SIMPLE_NETWORK_1_IPV4_GATEWAY
+>>> +	string "Address of the gateway for the first network interface"
+>>> +endif
+>> These configs settings needs a default value (like for the interface
+>> name)
+>> otherwise the script generate-interface will fail if only
+>> BR2_SIMPLE_NETWORK_1_IPV4_MANUAL has been selected.
+> Yes, that's on purpose... There is no sane default afaik for IP
+> address when nothing is known on about the intranet topology...
+I understand but I'm thinking about autobuilders here.
+The autobuilder will randomly enable BR2_SIMPLE_NETWORK_1_IPV4_MANUAL in the
+configuration without set any value in other BR2_SIMPLE_NETWORK_1_IPV4_.
 
-diff --git a/package/Config.in b/package/Config.in
-index dda7716..fb8e93d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -84,6 +84,7 @@ endif
- 	source "package/ramsmp/Config.in"
- 	source "package/ramspeed/Config.in"
- 	source "package/rt-tests/Config.in"
-+	source "package/spidev_test/Config.in"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/sysprof/Config.in"
-diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-new file mode 100644
-index 0000000..c0ed9ef
---- /dev/null
-+++ b/package/spidev_test/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_SPIDEV_TEST
-+	bool "spidev_test"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  SPI testing utility (using spidev driver).
-+
-+	  This package builds and installs the userspace 'spidev_test'
-+	  command. It is up to the user to ensure that the kernel
-+	  configuration has all the suitable options enabled to allow a
-+	  proper operation of 'spidev_test'.
-+
-+	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
-+
-+comment "spidev_test needs Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-new file mode 100644
-index 0000000..24c0f89
---- /dev/null
-+++ b/package/spidev_test/spidev_test.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# spidev_test
-+#
-+################################################################################
-+
-+# Source taken from the Linux kernel tree
-+SPIDEV_TEST_SOURCE =
-+SPIDEV_TEST_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+SPIDEV_TEST_DEPENDENCIES = linux
-+
-+define SPIDEV_TEST_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/spidev_test \
-+		$(LINUX_DIR)/Documentation/spi/spidev_test.c
-+endef
-+
-+define SPIDEV_TEST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/spidev_test \
-+		$(TARGET_DIR)/usr/sbin/spidev_test
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.0.4
+> I am opened to any suggestion on default values but I think it's
+> safer to consider this an incorrect setup and refuse to build
+An exception may be added in autobuilders to prevent to build with
+BR2_SIMPLE_NETWORK_1_IPV4_MANUAL set ? Through ?
+
+>
+>
+> At this point i'll wait a couple of days for extra comments and i'll
+> look into networkd generation.
+>
+> After that I will respin the patch...
+Ok, thanks.
+
+Best regards,
+Romain
