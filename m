@@ -1,81 +1,87 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Oct 2014 11:00:05 +0200
-Subject: [Buildroot] [PATCH 1/2] skeleton: ld.so.conf include
-	ld.so.conf.d/*.conf
-In-Reply-To: <1496567.mjGe8T9Pom@sagittea>
-References: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
- <1576075.c3zeF5Hlnx@sagittea>
- <CAHXCMMLnGmthd4HwEsGGvxjfgfNs_RZHE-ZBWb9-1mBF1_VTXg@mail.gmail.com>
- <1496567.mjGe8T9Pom@sagittea>
-Message-ID: <CAHXCMM+C51kRYrfr5sYBaC3c2H484b47pLBJfSpDLa33G=O+fg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Oct 2014 11:08:33 +0200
+Subject: [Buildroot] [PATCH v2 2/2] randconfig: seed with
+	BR2_RAND_PRESEED_CONFIG_FILES
+In-Reply-To: <20141014073228.GB3730@free.fr>
+References: <1413134795-32050-1-git-send-email-arnout@mind.be>
+ <1413138065-6138-1-git-send-email-arnout@mind.be>
+ <1413138065-6138-2-git-send-email-arnout@mind.be>
+ <20141014073228.GB3730@free.fr>
+Message-ID: <543CE811.7080306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 14, 2014 at 10:52 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> On Tuesday 14 October 2014 10:44:48 Samuel Martin wrote:
->> On Tue, Oct 14, 2014 at 10:40 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
->> > On Tuesday 14 October 2014 10:33:16 Samuel Martin wrote:
->> >> On Tue, Oct 14, 2014 at 10:24 AM, J?r?me Pouiller <jezz@sysmic.org>
-> wrote:
->> >> > On Tuesday 14 October 2014 10:03:41 Yann E. MORIN wrote:
->> >> >> J?r?me, All,
->> >> >>
->> >> >> On 2014-10-13 09:55 +0200, J?r?me Pouiller spake thusly:
->> >> >> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
->> >> >> > ---
->> >> >> >
->> >> >> >  system/skeleton/etc/ld.so.conf | 1 +
->> >> >> >  1 file changed, 1 insertion(+)
->> >> >> >  create mode 100644 system/skeleton/etc/ld.so.conf
->> >> >> >
->> >> >> > diff --git a/system/skeleton/etc/ld.so.conf
->> >> >> > b/system/skeleton/etc/ld.so.conf new file mode 100644
->> >> >> > index 0000000..83327c0
->> >> >> > --- /dev/null
->> >> >> > +++ b/system/skeleton/etc/ld.so.conf
->> >> >> > @@ -0,0 +1 @@
->> >> >> > +include /etc/ld.so.conf.d/*.conf
->> >> >>
->> >> >> Are you sure this works with uClibc? Looking at the code of ldconfig
->> >> >> from uClibc seems to imply it does not support including files.
->> >> >
->> >> > I admit I have not tested with uclibc.
->> >> >
->> >> > hmm... Suddenly, it is more complex to implement. I see two options:
->> >> >   * Provide /etc/ld.so.conf during toolchain build depending of libc.
->> >> >   * Add extra library paths directly in /etc/ld.so.conf instead of
->> >> >   adding
->> >> >   a
->> >> >
->> >> > file in /etc/ld.so.conf.d. However, modifying files during install step
->> >> > is
->> >> > error prone.
->> >>
->> >> or add a post-build hook for uclibc, which does:
->> >> cat <target>/etc/ld.conf.d/* >> <target>/etc/ld.conf
->> >
->> > This will not been executed if an external toolchain is used.
->>
->> Why not?
->> In case of external toolchain, we have to select what libc is used in
->> the toolchain; so it should be ok.
-> Ok. I understood a "package post build hook", but you mean a "target finalize
-> hook".
+On 14/10/14 09:32, Yann E. MORIN wrote:
+> Arnout, All,
+>
+> On 2014-10-12 20:21 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+[snip]
+> > diff --git a/Makefile b/Makefile
+> > index 5bcaa77..fb99de1 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -732,6 +732,9 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+> >  randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+> >      @mkdir -p $(BUILD_DIR)/buildroot-config
+> >      @rm -f $(CONFIG_DIR)/.config.nopkg
+> > +ifneq ($(BR2_RAND_PRESEED_CONFIG_FILES),)
+> > +    @cp $(BR2_RAND_PRESEED_CONFIG_FILES) $(CONFIG_DIR)/.config.nopkg
+> > +endif
+>
+> I guess you meant something like:
+>     @cat $(BR2_RAND_PRESEED_CONFIG_FILES) $>(CONFIG_DIR)/.config.nopkg
+>
+> Here's what I get with cp:
+>     $ cp foo bar buz
+>     cp: target ?buz? is not a directory
 
-Yes exactly.
-Sorry for the confusion.
+ Well spotted, thanks. I changed _FILE into _FILES at the last moment
+but never tested it.
+
+
 
 >
+> >      @grep '^config ' Config.in.legacy | \
+> >          while read config pkg; do \
+> >          echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
+> > @@ -758,6 +761,9 @@ allnoconfig: $(BUILD_DIR)/buildroot-config/conf
+> outputmakefile
+> >  randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+> >      @mkdir -p $(BUILD_DIR)/buildroot-config
+> >      @grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+> > +ifneq ($(BR2_RAND_PRESEED_CONFIG_FILES),)
+> > +    @grep BR2_PACKAGE_ $(BR2_RAND_PRESEED_CONFIG_FILES) >>
+> $(CONFIG_DIR)/.config.nopkg
+> > +endif
 >
-> --
-> J?r?me Pouiller, Sysmic
-> Embedded Linux specialist
-> http://www.sysmic.fr
+> Why do you explicitly grep for packages here?
 
+ .config.nopkg will already contain the config of everything else (cfr.
+the line above). So if you keep the full preseed file, you'll get duplicate
+definitions in the .config.nopkg.
+
+ Of course, if you do
+
+cp foo .config
+make randpackageconfig BR2_RAND_PRESEED_CONFIG_FILES=bar
+
+then the .config only contains whatever you had in foo, which is presumably
+a toolchain config fragment. But that use case is better handled with
+
+make randconfig BR2_RAND_PRESEED_CONFIG_FILES="foo bar"
+
+
+ Regards,
+ Arnout
 
 
 -- 
-Samuel
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
