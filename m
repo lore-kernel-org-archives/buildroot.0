@@ -1,43 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 14 Oct 2014 17:27:45 +0200
-Subject: [Buildroot] [git commit] radvd: bump to version 2.8
-Message-ID: <20141015125351.9F2D7B2E04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] binutils: drop stray patch
+Message-ID: <20141015125351.93953B2CDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6546080fb168d186c5b2f4484c846ce1991ab4a4
+commit: http://git.buildroot.net/buildroot/commit/?id=36535812ebdd64b4b70ac73bb9026f7fbe51c2f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/radvd/radvd.hash |    2 ++
- package/radvd/radvd.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ .../001-fix-enable-install-libiberty-flag.patch    |   46 --------------------
+ 1 files changed, 0 insertions(+), 46 deletions(-)
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-new file mode 100644
-index 0000000..3ae4b69
---- /dev/null
-+++ b/package/radvd/radvd.hash
-@@ -0,0 +1,2 @@
-+# From http://www.litech.org/radvd/dist/radvd-2.8.tar.gz.sha256
-+sha256	0a1041b2044dafa45882b9fc30badadb7abed76c1a20f6332fecaa53c8440df9	radvd-2.8.tar.xz
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index f99ac6c..e0d4f69 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RADVD_VERSION = 2.7
-+RADVD_VERSION = 2.8
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+diff --git a/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch b/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
+deleted file mode 100644
+index e408401..0000000
+--- a/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 369be6981b26787b2685e3b8c6da779dae8ce35f Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Mon, 6 Jan 2014 18:15:31 +0000
+-Subject: [PATCH] libiberty: fix --enable-install-libiberty flag [PR 56780]
+-
+-Commit 199570 fixed the --disable-install-libiberty behavior, but it also
+-added a bug where the enable path never works because the initial clear
+-of target_header_dir wasn't deleted.  So we end up initializing properly
+-at the top only to reset it at the end all the time.
+-
+-[Arnout: adapt to match 2.24 tarball]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+-
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
+----
+- libiberty/configure    |    1 -
+- libiberty/configure.ac |    1 -
+- 3 files changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/libiberty/configure b/libiberty/configure
+-index 8ea54da..7bde9b3 100755
+---- a/libiberty/configure
+-+++ b/libiberty/configure
+-@@ -5507,7 +5507,6 @@ fi
+- 
+- setobjs=
+- CHECK=
+--target_header_dir=
+- if test -n "${with_target_subdir}"; then
+- 
+-   # We are being configured as a target library.  AC_REPLACE_FUNCS
+-diff --git a/libiberty/configure.ac b/libiberty/configure.ac
+-index 4ad88a9..d6180bc 100644
+---- a/libiberty/configure.ac
+-+++ b/libiberty/configure.ac
+-@@ -405,7 +405,6 @@ fi
+- 
+- setobjs=
+- CHECK=
+--target_header_dir=
+- if test -n "${with_target_subdir}"; then
+- 
+-   # We are being configured as a target library.  AC_REPLACE_FUNCS
+--- 
+-1.7.1
+-
