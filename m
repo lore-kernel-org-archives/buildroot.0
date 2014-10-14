@@ -1,113 +1,82 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Tue, 14 Oct 2014 15:54:48 -0400
-Subject: [Buildroot] [PATCH 1/1] cppunit: Added package
-In-Reply-To: <543D4F50.8090208@openwide.fr>
-References: <1412279910-12645-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <543D4F50.8090208@openwide.fr>
-Message-ID: <543D7F88.1010005@savoirfairelinux.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Oct 2014 22:54:11 +0300
+Subject: [Buildroot] [PATCH] spidev_test: new package
+In-Reply-To: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141014195411.GI3500@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Hi Gustavo,
 
-On 10/14/2014 12:29 PM, Romain Naour wrote:
-> Hi Sebastien,
->
-> Le 02/10/2014 21:58, Sebastien Bourdelin a ?crit :
->> CppUnit is the C++ port of the famous JUnit framework for unit testing.
->> Test output is in XML or text format for automatic testing and GUI
->> based for supervised tests.
->>
->> http://www.freedesktop.org/wiki/Software/cppunit/
->> Signed-off-by: Sebastien Bourdelin<sebastien.bourdelin@savoirfairelinux.com>
->> ---
->>   package/Config.in          |  1 +
->>   package/cppunit/Config.in  | 12 ++++++++++++
->>   package/cppunit/cppunit.mk | 27 +++++++++++++++++++++++++++
->>   3 files changed, 40 insertions(+)
->>   create mode 100644 package/cppunit/Config.in
->>   create mode 100644 package/cppunit/cppunit.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 2ad72bc..5cde341 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -831,6 +831,7 @@ menu "Other"
->>   	source "package/clapack/Config.in"
->>   	source "package/classpath/Config.in"
->>   	source "package/cppcms/Config.in"
->> +	source "package/cppunit/Config.in"
->>   	source "package/eigen/Config.in"
->>   	source "package/elfutils/Config.in"
->>   	source "package/fftw/Config.in"
->> diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
->> new file mode 100644
->> index 0000000..91700b8
->> --- /dev/null
->> +++ b/package/cppunit/Config.in
->> @@ -0,0 +1,12 @@
->> +config BR2_PACKAGE_CPPUNIT
->> +	bool "cppunit"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	help
->> +	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
->> +	  Test output is in XML or text format for automatic testing and GUI
->> +	  based for supervised tests.
->> +
->> +	http://www.freedesktop.org/wiki/Software/cppunit/
->> +
->> +comment "cppunit needs a toolchain w/ C++"
->> +	depends on !BR2_INSTALL_LIBSTDCPP
->> diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
->> new file mode 100644
->> index 0000000..47d27be
->> --- /dev/null
->> +++ b/package/cppunit/cppunit.mk
->> @@ -0,0 +1,27 @@
->> +################################################################################
->> +#
->> +# cppunit
->> +#
->> +################################################################################
->> +
->> +CPPUNIT_VERSION = cppunit-1.13.2
->> +CPPUNIT_SITE = git://anongit.freedesktop.org/git/libreoffice/cppunit/
->> +CPPUNIT_INSTALL_STAGING = YES
->> +CPPUNIT_LICENSE = GPLv2
->> +CPPUNIT_LICENSE_FILES = COPYING
->> +
->> +define CPPUNIT_RUN_AUTOGEN
->> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
->> +endef
->> +CPPUNIT_PRE_CONFIGURE_HOOKS += CPPUNIT_RUN_AUTOGEN
-> Why not using CPPUNIT_AUTORECONF = YES here ?
-> It seems that autoreconf mechanism works.
-I missed that option. Thanks!
->> +
->> +define CPPUNIT_CONFIGURE_CMDS
->> +	(cd $(@D); \
->> +		./configure \
->> +		--host=$(GNU_TARGET_NAME) \
->> +		--prefix=/usr \
->> +		$(TARGET_CONFIGURE_OPTS) \
->> +	)
->> +endef
-> It's already done in pkg-autotools.mk, so you can remove this.
-Ok.
->> +
->> +$(eval $(autotools-package))
-> Have you tested cppunit over several toolchain configuration ?
-> Otherwise, looks good.
-Tested with an external toolchain and Buildroot toolchain with no other
-options that C++ support (e.g: without Large file / Wchar / etc...)
-I didn't try a toolchain without thread support but cppunit doesn't
-seems to need it.
-> Best regards,
-> Romain Naour
-I will send a new patch with your suggestions.
+On Tue, Oct 14, 2014 at 12:45:53PM -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Best regards,
-Sebastien Bourdelin.
+[snip]
+
+> diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+> new file mode 100644
+> index 0000000..c0ed9ef
+> --- /dev/null
+> +++ b/package/spidev_test/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_SPIDEV_TEST
+> +	bool "spidev_test"
+> +	depends on BR2_LINUX_KERNEL
+
+That is a heavy dependency. As you noted in another message, it also make the 
+autobuilder skip this package. I suggest to download just spidev_test.c from 
+http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION), 
+and make it depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 (as of v3.17). This 
+solves both the autobuilder issue, and the toolchain headers dependency.
+
+baruch
+
+> +	help
+> +	  SPI testing utility (using spidev driver).
+> +
+> +	  This package builds and installs the userspace 'spidev_test'
+> +	  command. It is up to the user to ensure that the kernel
+> +	  configuration has all the suitable options enabled to allow a
+> +	  proper operation of 'spidev_test'.
+> +
+> +	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
+> +
+> +comment "spidev_test needs Linux kernel to be built"
+> +	depends on !BR2_LINUX_KERNEL
+> diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+> new file mode 100644
+> index 0000000..24c0f89
+> --- /dev/null
+> +++ b/package/spidev_test/spidev_test.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# spidev_test
+> +#
+> +################################################################################
+> +
+> +# Source taken from the Linux kernel tree
+> +SPIDEV_TEST_SOURCE =
+> +SPIDEV_TEST_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+> +SPIDEV_TEST_DEPENDENCIES = linux
+> +
+> +define SPIDEV_TEST_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/spidev_test \
+> +		$(LINUX_DIR)/Documentation/spi/spidev_test.c
+> +endef
+> +
+> +define SPIDEV_TEST_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(@D)/spidev_test \
+> +		$(TARGET_DIR)/usr/sbin/spidev_test
+> +endef
+> +
+> +$(eval $(generic-package))
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
