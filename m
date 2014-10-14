@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Oct 2014 12:53:04 +0200
-Subject: [Buildroot] [git commit] openssh: place configuration files in
-	/etc/ssh
-Message-ID: <20141014074530.EF791B2C4B@busybox.osuosl.org>
+Date: Tue, 14 Oct 2014 09:37:36 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: Bump version to 10.3.1
+Message-ID: <20141014074531.06379B2CE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8ae6a3b2f0c8f8d8c7d0ae1432fa0243757f41e
+commit: http://git.buildroot.net/buildroot/commit/?id=d2bb10e322bc0629e39b7aec3b3d7858c74ea32f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pkg-autotools.mk fix --sysconfdir to "/etc". This patch restore
---sysconfdir to its default value (/etc/ssh)
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mesa3d/mesa3d.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 17097d5..e2f2663 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -9,7 +9,7 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
--OPENSSH_CONF_OPTS = --disable-lastlog --disable-utmp \
-+OPENSSH_CONF_OPTS = --sysconfdir=/etc/ssh --disable-lastlog --disable-utmp \
- 		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 844884b..b647f36 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # uClibc toolchain for ARC doesn't support PIE at the moment
+-MESA3D_VERSION = 10.3.0
++MESA3D_VERSION = 10.3.1
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+-MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/10.3
++MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+ MESA3D_AUTORECONF = YES
