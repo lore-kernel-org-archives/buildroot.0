@@ -1,152 +1,64 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 14 Oct 2014 11:23:46 +0200
-Subject: [Buildroot] [PATCH 1/2] Use package framework to manage skeleton
-Message-ID: <1413278627-8063-1-git-send-email-jezz@sysmic.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 14 Oct 2014 11:23:47 +0200
+Subject: [Buildroot] [PATCH] pkg-utils: describe the case conversion macros
+	in more detail.
+Message-ID: <1413278627-8504-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove usage of build/.root stamp files and replace it with a package
-called rootfs-dirs.
+After the refactoring of the case conversion macros in dd5e620ac, the
+macro became even harder to understand. Improve this explanation a
+little so future generations can make sense of what we're doing here.
 
-Test cases:
-
-$ make clean && make rootfs-dirs
-make: Circular /home/jezz/buildroot/test/target <- rootfs-dirs dependency dropped.
-[...]
- -> OK
-
-$ make clean && make rootfs-dirs-build
-touch: cannot touch ?/home/jezz/buildroot/test/build/rootfs-dirs-undefined/.stamp_target_installed?: No such file or directory
- -> KO
-
-$ make clean && make toolchain
-make: Circular /home/jezz/buildroot/test/build/rootfs-dirs-undefined/.stamp_downloaded <- dirs dependency dropped.
-[...]
- -> OK
-
-$ make rootfs-dirs-rebuild
-make: Circular /home/jezz/buildroot/test/target <- rootfs-dirs dependency dropped.
- -> OK
-
-$ rm output/build/rootfs-dirs-undefined/.stamp_target_installed && make toolchain
-make: Circular /home/jezz/buildroot/test/build/rootfs-dirs-undefined/.stamp_downloaded <- dirs dependency dropped.
-rootfs-dirs is reinstalled, but toolchain isn't
-
-$ rm -r target && make toolchain
-Do nothing
-
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
-In this version:
-  - Rebase on lastest master
-  - Retitle patch
-  - Add test-cases results in commit message
-  - Try to keep it simple in order to make review process easier. Plenty of
-    improvements may be examined: same mecanism for staging directory, moving 
-    out sysvinit stuff, merging system.mk with rootfs-dirs.mk, moving system/ to 
-    packages/system/, support for "rm -r target && make", etc...
+Very old patch that I forgot to push
 
- Makefile                          | 24 ++----------------------
- system/rootfs-dirs/rootfs-dirs.mk | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+), 22 deletions(-)
- create mode 100644 system/rootfs-dirs/rootfs-dirs.mk
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-utils.mk | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 907a0fc..828981c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -332,12 +332,6 @@ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
- # Quotes are needed for spaces and all in the original PATH content.
- BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index ce39197..7eddc47 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -5,14 +5,24 @@
+ #
+ ################################################################################
  
--TARGET_SKELETON = $(TOPDIR)/system/skeleton
+-# UPPERCASE Macro -- transform its argument to uppercase and replace dots and
+-# hyphens to underscores
 -
--# Location of a file giving a big fat warning that output/target
--# should not be used as the root filesystem.
--TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
--
- ifeq ($(BR2_CCACHE),y)
- CCACHE := $(HOST_DIR)/usr/bin/ccache
- BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
-@@ -391,6 +385,7 @@ include $(sort $(wildcard package/*/*.mk))
- include boot/common.mk
- include linux/linux.mk
- include system/system.mk
-+include system/rootfs-dirs/rootfs-dirs.mk
- include fs/common.mk
- 
- include $(BR2_EXTERNAL)/external.mk
-@@ -465,26 +460,11 @@ $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)/usr/bin
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
- 
--ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
--TARGET_SKELETON = $(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
--endif
--
- RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
- 	--exclude CVS
- 
--$(BUILD_DIR)/.root:
--	mkdir -p $(TARGET_DIR)
--	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=Du+w --exclude .empty --exclude '*~' \
--		$(TARGET_SKELETON)/ $(TARGET_DIR)/
--	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
--	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
--	@mkdir -p $(TARGET_DIR)/usr
--	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
--	touch $@
--
--$(TARGET_DIR): $(BUILD_DIR)/.root
-+$(TARGET_DIR): rootfs-dirs
- 
- STRIP_FIND_CMD = find $(TARGET_DIR)
- ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-diff --git a/system/rootfs-dirs/rootfs-dirs.mk b/system/rootfs-dirs/rootfs-dirs.mk
-new file mode 100644
-index 0000000..4a85dff
---- /dev/null
-+++ b/system/rootfs-dirs/rootfs-dirs.mk
-@@ -0,0 +1,35 @@
-+################################################################################
+-# Heavily inspired by the up macro from gmsl (http://gmsl.sf.net)
+-# This is approx 5 times faster than forking a shell and tr, and
+-# as this macro is used a lot it matters
+-# This works by creating translation character pairs (E.G. a:A b:B)
+-# and then looping though all of them running $(subst from,to,text)
++# Case conversion macros. This is inspired by the 'up' macro from gmsl
++# (http://gmsl.sf.net). It is optimised very heavily because these macros
++# are used a lot. It is about 5 times faster than forking a shell and tr.
 +#
-+# rootfs-dirs
++# The caseconvert-helper creates a definition of the case conversion macro.
++# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
++# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
++# In other words, every letter is substituted one by one.
 +#
-+################################################################################
++# The caseconvert-helper allows us to create this definition out of the
++# [FROM] and [TO] lists, so we don't need to write down every substition
++# manually. The uses of $ and $$ quoting are chosen in order to do as
++# much expansion as possible up-front.
++#
++# Note that it would be possible to conceive a slightly more optimal
++# implementation that avoids the use of __tmp, but that would be even
++# more unreadable and is not worth the effort.
 +
-+ROOTFS_DIRS_SOURCE =
-+ROOTFS_DIRS_ADD_TOOLCHAIN_DEPENDENCY = NO
-+
-+ifeq ($(BR2_ROOTFS_ROOTFS_DIRS_CUSTOM),y)
-+TARGET_ROOTFS_DIRS = $(BR2_ROOTFS_ROOTFS_DIRS_CUSTOM_PATH)
-+else
-+TARGET_ROOTFS_DIRS = system/skeleton
-+endif
-+
-+# Location of a file giving a big fat warning that output/target
-+# should not be used as the root filesystem.
-+TARGET_DIR_WARNING_FILE=$(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-+
-+define ROOTFS_DIRS_INSTALL_ROOTFS_DIRS
-+	@mkdir -p $(TARGET_DIR)
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+	   --chmod=Du+w --exclude .empty --exclude '*~' \
-+	   $(TARGET_ROOTFS_DIRS)/ $(TARGET_DIR)/
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-+	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-+	@mkdir -p $(TARGET_DIR)/usr
-+	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
-+endef
-+
-+define ROOTFS_DIRS_INSTALL_TARGET_CMDS
-+	$(ROOTFS_DIRS_INSTALL_ROOTFS_DIRS)
-+endef
-+
-+$(eval $(generic-package))
+ [FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
+ [TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+ 
 -- 
-1.9.1
+2.1.1
