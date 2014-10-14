@@ -1,70 +1,65 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 14 Oct 2014 10:52:54 +0200
-Subject: [Buildroot] [PATCH 1/2] skeleton: ld.so.conf include
-	ld.so.conf.d/*.conf
-In-Reply-To: <CAHXCMMLnGmthd4HwEsGGvxjfgfNs_RZHE-ZBWb9-1mBF1_VTXg@mail.gmail.com>
-References: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
- <1576075.c3zeF5Hlnx@sagittea>
- <CAHXCMMLnGmthd4HwEsGGvxjfgfNs_RZHE-ZBWb9-1mBF1_VTXg@mail.gmail.com>
-Message-ID: <1496567.mjGe8T9Pom@sagittea>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 14 Oct 2014 10:59:43 +0200
+Subject: [Buildroot] [PATCH v3 2/3] gst-ffmpeg: add --pkg-config to
+ internal libav configure options
+In-Reply-To: <CANxTyt4jq7EE-99rWsGiFgCjAKptaGWHyMpaEtgKxyZPhBG3Jg@mail.gmail.com>
+References: <1413142206-30581-1-git-send-email-danomimanchego123@gmail.com>
+ <1413142206-30581-2-git-send-email-danomimanchego123@gmail.com>
+ <543BD5B5.4000602@lucaceresoli.net>
+ <CANxTyt4jq7EE-99rWsGiFgCjAKptaGWHyMpaEtgKxyZPhBG3Jg@mail.gmail.com>
+Message-ID: <543CE5FF.9000307@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 14 October 2014 10:44:48 Samuel Martin wrote:
-> On Tue, Oct 14, 2014 at 10:40 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> > On Tuesday 14 October 2014 10:33:16 Samuel Martin wrote:
-> >> On Tue, Oct 14, 2014 at 10:24 AM, J?r?me Pouiller <jezz@sysmic.org> 
-wrote:
-> >> > On Tuesday 14 October 2014 10:03:41 Yann E. MORIN wrote:
-> >> >> J?r?me, All,
-> >> >> 
-> >> >> On 2014-10-13 09:55 +0200, J?r?me Pouiller spake thusly:
-> >> >> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> >> >> > ---
-> >> >> > 
-> >> >> >  system/skeleton/etc/ld.so.conf | 1 +
-> >> >> >  1 file changed, 1 insertion(+)
-> >> >> >  create mode 100644 system/skeleton/etc/ld.so.conf
-> >> >> > 
-> >> >> > diff --git a/system/skeleton/etc/ld.so.conf
-> >> >> > b/system/skeleton/etc/ld.so.conf new file mode 100644
-> >> >> > index 0000000..83327c0
-> >> >> > --- /dev/null
-> >> >> > +++ b/system/skeleton/etc/ld.so.conf
-> >> >> > @@ -0,0 +1 @@
-> >> >> > +include /etc/ld.so.conf.d/*.conf
-> >> >> 
-> >> >> Are you sure this works with uClibc? Looking at the code of ldconfig
-> >> >> from uClibc seems to imply it does not support including files.
-> >> > 
-> >> > I admit I have not tested with uclibc.
-> >> > 
-> >> > hmm... Suddenly, it is more complex to implement. I see two options:
-> >> >   * Provide /etc/ld.so.conf during toolchain build depending of libc.
-> >> >   * Add extra library paths directly in /etc/ld.so.conf instead of
-> >> >   adding
-> >> >   a
-> >> > 
-> >> > file in /etc/ld.so.conf.d. However, modifying files during install step
-> >> > is
-> >> > error prone.
-> >> 
-> >> or add a post-build hook for uclibc, which does:
-> >> cat <target>/etc/ld.conf.d/* >> <target>/etc/ld.conf
-> > 
-> > This will not been executed if an external toolchain is used.
-> 
-> Why not?
-> In case of external toolchain, we have to select what libc is used in
-> the toolchain; so it should be ok.
-Ok. I understood a "package post build hook", but you mean a "target finalize 
-hook".
+Dear Danomi,
 
+Danomi Manchego wrote:
+> Luca,
+>
+> On Mon, Oct 13, 2014 at 9:37 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>> Dear Danomi,
+>>
+>> Danomi Manchego wrote:
+>>>
+>>> The internal copy of libav in gst-ffmpeg does not understand the
+>>> PKG_CONFIG env variable, so it throws a line like this at the end
+>>> of its configuration:
+>>>
+>>> WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found,
+>>> library detection may fail.
+>>
+>>
+>> I tried to reproduce the issue, but the message didn't show up.
+>> Can you chare a defconfig to reproduce the issue?
+>
+> I've seen this in a few different configurations, so I didn't think
+> that you needed anything special.  But anyway, here is one possible
+> defconfig:
+>
+>      BR2_arm=y
+>      BR2_cortex_a8=y
+>      BR2_ARM_FPU_NEON=y
+>      BR2_ENABLE_DEBUG=y
+>      BR2_TOOLCHAIN_EXTERNAL=y
+>      BR2_PACKAGE_GSTREAMER=y
+>      BR2_PACKAGE_GST_FFMPEG=y
+>      # BR2_TARGET_ROOTFS_TAR is not set
+>
+> Look at the very end of the configure step, just before the build step:
+>
+>      License: GPL version 2 or later
+>      Creating config.mak and config.h...
+>
+>      WARNING: xxxx/output/host/usr/bin/arm-none-linux-gnueabi-pkg-config
+> not found, library detection may fail.
+
+Reproduced with this config, and disappeared applying your patch.
+
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Luca
