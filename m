@@ -1,54 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Oct 2014 13:56:02 +0300
-Subject: [Buildroot] [PATCH 2/8] package/mpd: sort plugins by type in
- Config.in
-In-Reply-To: <1413369564-22124-2-git-send-email-jkrause@posteo.de>
-References: <1413369564-22124-1-git-send-email-jkrause@posteo.de>
- <1413369564-22124-2-git-send-email-jkrause@posteo.de>
-Message-ID: <20141015105602.GM3500@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 15 Oct 2014 13:57:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnfs: bump to version 1.9.5
+In-Reply-To: <543E3B42.7030309@posteo.de>
+References: <1413357933-10973-1-git-send-email-jkrause@posteo.de>
+ <543E2EC6.1000205@trzebnica.net> <543E3B42.7030309@posteo.de>
+Message-ID: <543E613E.5030806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
-
-On Wed, Oct 15, 2014 at 12:39:18PM +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/mpd/Config.in | 218 ++++++++++++++++++++++++++------------------------
->  1 file changed, 115 insertions(+), 103 deletions(-)
+On 15/10/14 11:15, J?rg Krause wrote:
+> Hi Jerzy,
 > 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index cd7bbfd..e170b26 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -1,7 +1,6 @@
->  menuconfig BR2_PACKAGE_MPD
->  	bool "mpd"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_LARGEFILE # boost
+> On 10/15/2014 10:22 AM, Jerzy Grzegorek wrote:
+>> Hi J?rg,
+>>
+>>> * bump to version 1.9.5
+>>> * fix version and site symbol
+>>>
+>>> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+>>> ---
+>>>   package/libnfs/libnfs.mk | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+>>> index a17d8c3..f2d7938 100644
+>>> --- a/package/libnfs/libnfs.mk
+>>> +++ b/package/libnfs/libnfs.mk
+>>> @@ -4,8 +4,8 @@
+>>>   #
+>>>  
+>>> ################################################################################
+>>>   -LIBNFS_VERSION = libnfs-1.8.0
+>>> -LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+>>> +LIBNFS_VERSION = 1.9.5
+>>> +LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
+>>
+>> Since the tag of libnfs version 1.9.5 is libnfs-1.9.5
+>> so this should be:
+>>
+>> +LIBNFS_VERSION = libnfs-1.9.5
+>> +LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+>>
+> 
+> You're right, the tag is libnfs-1.9.5. I didn't liked that libnfs was build in
+> libnfs-libnfs-1.9.5 (now it builds in libnfs-1.9.5). But I've seen in the manual
+> that version should be a tag or a commit. I will fix this.
 
-You have just added this line in the previous patch. Why do you remove it now?
+ A patch that clarifies this in the manual would certainly be very welcome!
 
-[snip]
+ Regards,
+ Arnout
 
->  	depends on BR2_USE_WCHAR # libglib2, flac
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->  	depends on BR2_USE_MMU # libglib2
->  comment "mpd needs a toolchain w/ C++, threads, wchar"
->  	depends on BR2_USE_MMU
->  	depends on !(BR2_avr32 || BR2_sparc)
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-> +		!BR2_TOOLCHAIN_HAS_THREADS
-
-Same here.
-
-baruch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
