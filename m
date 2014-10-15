@@ -1,59 +1,90 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 15 Oct 2014 15:37:55 -0500
-Subject: [Buildroot] [PATCH 2/2] ntp: Adding pps support to ntpd
-In-Reply-To: <1413405475-5179-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1413405475-5179-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1413405475-5179-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Wed, 15 Oct 2014 16:47:33 -0400
+Subject: [Buildroot] [PATCH 1/1] yaml-cpp: Added package
+Message-ID: <1413406053-22668-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+yaml-cpp is a YAML parser and emitter in C++ matching
+the YAML 1.2 spec.
 
-Added an option for the ntpd application to support pps inputs.
-
-Signed-off-by: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+https://code.google.com/p/yaml-cpp/
+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 ---
- package/ntp/Config.in | 7 +++++++
- package/ntp/ntp.mk    | 5 +++++
- 2 files changed, 12 insertions(+)
+ package/Config.in              |  1 +
+ package/yaml-cpp/Config.in     | 14 ++++++++++++++
+ package/yaml-cpp/yaml-cpp.hash |  5 +++++
+ package/yaml-cpp/yaml-cpp.mk   | 14 ++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/yaml-cpp/Config.in
+ create mode 100644 package/yaml-cpp/yaml-cpp.hash
+ create mode 100644 package/yaml-cpp/yaml-cpp.mk
 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index 858a9ad..7722757 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -34,6 +34,13 @@ config BR2_PACKAGE_NTP_NTPD
- 	  system date and time in sync and optionally serving time and date
- 	  information on the network via the NTP protocol.
+diff --git a/package/Config.in b/package/Config.in
+index 93e148d..40a1b1c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -898,6 +898,7 @@ menu "Other"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/yaml-cpp/Config.in"
+ endmenu
  
-+config BR2_PACKAGE_NTP_NTPD_ATOM_PPS
-+	bool "ntpd-pps"
-+	depends on BR2_PACKAGE_NTP_NTPD
-+	select BR2_PACKAGE_PPS_TOOLS
+ menu "Security"
+diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
+new file mode 100644
+index 0000000..fcfd60f
+--- /dev/null
++++ b/package/yaml-cpp/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_YAML_CPP
++	bool "yaml-cpp"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_BOOST
 +	help
-+	  Compile ntpd with the ability to use an ATOM PPS source.
++	  yaml-cpp is a YAML parser and emitter in C++ matching
++	  the YAML 1.2 spec.
 +
- config BR2_PACKAGE_NTP_NTPDATE
- 	bool "ntpdate"
- 	help
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 7c2cb8e..51598ba 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -34,6 +34,11 @@ else
- 	NTP_CONF_OPTS += --without-ntpsnmpd
- endif
- 
-+ifeq ($(BR2_PACKAGE_NTP_NTPD_ATOM_PPS),y)
-+	NTP_CONF_OPTS += --enable-ATOM
-+	NTP_DEPENDENCIES += pps-tools
-+endif
++	  https://code.google.com/p/yaml-cpp/
 +
- define NTP_PATCH_FIXUPS
- 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
- 	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
++comment "yaml-cpp needs a toolchain w/ C++, largefile, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/yaml-cpp/yaml-cpp.hash b/package/yaml-cpp/yaml-cpp.hash
+new file mode 100644
+index 0000000..391e317
+--- /dev/null
++++ b/package/yaml-cpp/yaml-cpp.hash
+@@ -0,0 +1,5 @@
++# hash from: https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz:
++sha1 9c5414b4090491e96d1b808fe8628b31e625fdaa  yaml-cpp-0.5.1.tar.gz
++
++# Locally calculated:
++sha256 3e7c9052b43d987d41819a203d97fc45de4eed3ec67e0fdb14265c3d11046f06  yaml-cpp-0.5.1.tar.gz
+diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
+new file mode 100644
+index 0000000..324ea58
+--- /dev/null
++++ b/package/yaml-cpp/yaml-cpp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# yaml-cpp
++#
++################################################################################
++
++YAML_CPP_VERSION = yaml-cpp-0.5.1
++YAML_CPP_SOURCE = $(YAML_CPP_VERSION).tar.gz
++YAML_CPP_SITE = https://yaml-cpp.googlecode.com/files
++YAML_CPP_INSTALL_STAGING = YES
++YAML_CPP_LICENSE = MIT
++YAML_CPP_LICENSE_FILES = license.txt
++
++$(eval $(cmake-package))
 -- 
-1.9.1
+1.8.3.4
