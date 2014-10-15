@@ -1,70 +1,39 @@
-From: Alexey Mednyy <swexru@gmail.com>
-Date: Wed, 15 Oct 2014 16:05:06 +0400
-Subject: [Buildroot] [PATCH 1/1 v3] ubus: new package
-In-Reply-To: <CAHXCMMKOZ16ePJpq-pvzRTht1RsuTmqpMXSuLTgO7WamP9-GAQ@mail.gmail.com>
-References: <1413280007-16819-1-git-send-email-swexru@gmail.com>
- <CAHXCMMKOZ16ePJpq-pvzRTht1RsuTmqpMXSuLTgO7WamP9-GAQ@mail.gmail.com>
-Message-ID: <543E62F2.3010608@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 15 Oct 2014 14:05:18 +0200
+Subject: [Buildroot] qemu compiling error
+In-Reply-To: <543E3CBC.5080901@free.fr>
+References: <543E3CBC.5080901@free.fr>
+Message-ID: <543E62FE.4040803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for reviews!
+On 15/10/14 11:22, St?phane ANCELOT wrote:
+> git compiling I have got target list unknown error
 
-On 10/14/2014 11:22 PM, Samuel Martin wrote:
->> ++
->> + ADD_EXECUTABLE(cli cli.c)
->> + SET_TARGET_PROPERTIES(cli PROPERTIES OUTPUT_NAME ubus)
->> +-TARGET_LINK_LIBRARIES(cli ubus ubox blobmsg_json ${json})
->> ++TARGET_LINK_LIBRARIES(cli ubus ubox blobmsg_json)
-> I didn't check in the previous review, but blobmsg_json is provided by
-> another project, so either it is a required dependency that should be
-> integrated in Buildroot too, or this is an optional dependency and you
-> should disable it (something similar to what you've done for json-c,
-> but always forcing its option to OFF in the _CONF_OPTS).
->
-No, blobmsg_json provided by libubox which already in Buildroot.
->> ++IF(JSONC_FOUND)
->> ++  TARGET_LINK_LIBRARIES(cli ${JSONC_LIBRARIES})
->> ++ENDIF()
-> Same here (no if/endif lines). So, ${JSONC_LIBRARIES} can go back with
-> the others libs (in the first targte_link_library call.
->
->> +
->> + ADD_SUBDIRECTORY(lua)
->> + ADD_SUBDIRECTORY(examples)
-> Also, while checking the upstream project, I noticed that:
-> - "-Werror" is added to the cflags.
->   Please remove it, otherwise it may/will fail in a number of build
-> configuration.
->   Usually, -Werror is good during the development but bad/PITA for integration.
-> - BUILD_EXAMPLES is ON by default, consider disabling it or add an
-> option driving it.
->
->> diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
->> new file mode 100644
->> index 0000000..652ab48
->> --- /dev/null
->> +++ b/package/ubus/ubus.mk
->> @@ -0,0 +1,28 @@
->> +################################################################################
->> +#
->> +# UBUS
->> +#
->> +################################################################################
->> +
->> +UBUS_VERSION = 4c4f35cf2230d70b9ddd87638ca911e8a563f2f3
->> +UBUS_SITE = git://nbd.name/luci2/ubus.git
->> +UBUS_LICENSE = LGPLv2.1
->> +UBUS_DEPENDENCIES = json-c libubox
->> +
->> +ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
-> Why BR2_USE_MMU?
-Not sure, just took it from libubox.mk which is mandatory dependency.. I
-think I must disable it. There is no such requirement.
+ Please read the section in the manual about submitting bug reports: you should
+give us the result of 'make savedefconfig' and which buildroot version you're using.
+
+ However, in this case it happens to be obvious from the output, because the
+error message is right there:
+
+[snip]
+> ERROR: Unknown target name 'i386-softmmu'
+
+ You gave i386-softmmu as the target name (configuration variable
+BR2_PACKAGE_QEMU_CUSTOM_TARGETS) but that doesn't exist. You probably want to
+set it to i386.
+
+ Regards,
+ Arnout
+
 
 -- 
-_________________________________
-Best regards, Mednyy Alexey.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
