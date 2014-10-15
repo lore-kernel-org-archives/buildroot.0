@@ -1,30 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 15 Oct 2014 16:53:49 +0200
+From: Will Wagner <will_wagner@carallon.com>
+Date: Wed, 15 Oct 2014 17:02:37 +0100
 Subject: [Buildroot] google-breakpad experiences?
-Message-ID: <CAAXf6LWEBuVmnXosLpkjw0O9aVvGCBE2s=9e1PN6W5S7pK98+g@mail.gmail.com>
+In-Reply-To: <CAAXf6LWEBuVmnXosLpkjw0O9aVvGCBE2s=9e1PN6W5S7pK98+g@mail.gmail.com>
+References: <CAAXf6LWEBuVmnXosLpkjw0O9aVvGCBE2s=9e1PN6W5S7pK98+g@mail.gmail.com>
+Message-ID: <543E9A9D.2010104@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 15/10/2014 15:53, Thomas De Schampheleire wrote:
+> Hi,
 
-Has anyone successfully used google-breakpad on MIPS64 and/or PowerPC targets?
+<snip>
 
-For MIPS64/n32 ABI I had to make a few compilation fixes, but a simple
-test program (copied from their wiki) does not provide any dump.
+>
+> Did any of you succeed in using google-breakpad on embedded targets?
 
-For PowerPC I added some code to make it compile, and although the
-support I added is not yet complete, I could build it but it does not
-produce any dump either.
+Hi Thomas,
 
-On the MIPS version I did some debugging and found that the dumper
-child was created but did not seem to run, and thus no dump was taken.
+We have successfully been using google-breakpad for a few years. However 
+it is only on x86 and arm targets and we have our own internal package 
+(it pre-dates the one now upstream but is broadly similar, we have a 
+number of custom patches as well).
 
-When building for x86_64 (qemu) things worked fine.
+Are you trying to generate dumps within the crashed process or are you 
+running the crash server? We have found the latter to be much more reliable.
 
-Did any of you succeed in using google-breakpad on embedded targets?
+Regards
+Will
 
-Thanks,
-Thomas
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
