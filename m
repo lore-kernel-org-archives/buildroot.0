@@ -1,74 +1,41 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Wed, 15 Oct 2014 12:39:17 +0200
-Subject: [Buildroot] [PATCH 1/8] package/mpd: bump to version 0.19
-Message-ID: <1413369564-22124-1-git-send-email-jkrause@posteo.de>
+Date: Wed, 15 Oct 2014 12:39:24 +0200
+Subject: [Buildroot] [PATCH 8/8] package/mpd: fix zeroconf support
+In-Reply-To: <1413369564-22124-1-git-send-email-jkrause@posteo.de>
+References: <1413369564-22124-1-git-send-email-jkrause@posteo.de>
+Message-ID: <1413369564-22124-8-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Bump to version 0.19
-* Add boost as dependency
-* Add support for libicu
+Support for zeroconf depends on libdns_sd from avahi. This library is build 
+by avahi if avahi-daemon is enabled and dbus is selected.
+
+Checking for symbol BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY instead of 
+BR2_PACKAGE_AVAHI_DAEMON ensures that dbus has been selected and therefore 
+libdns_sd has been built.
 
 Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
- package/mpd/Config.in |  3 ++-
- package/mpd/mpd.mk    | 14 +++++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ package/mpd/mpd.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 8884464..cd7bbfd 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_MPD
- 	bool "mpd"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE # boost
- 	depends on BR2_USE_WCHAR # libglib2, flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-@@ -211,4 +212,4 @@ comment "mpd needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on !(BR2_avr32 || BR2_sparc)
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 932df08..1542338 100644
+index 3370bc7..a0d582c 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--MPD_VERSION_MAJOR = 0.18
--MPD_VERSION = $(MPD_VERSION_MAJOR).16
-+MPD_VERSION_MAJOR = 0.19
-+MPD_VERSION = $(MPD_VERSION_MAJOR)
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
--MPD_DEPENDENCIES = host-pkgconf libglib2
-+MPD_DEPENDENCIES = host-pkgconf boost libglib2
- MPD_LICENSE = GPLv2+
+@@ -13,7 +13,9 @@ MPD_LICENSE = GPLv2+
  MPD_LICENSE_FILES = COPYING
  
-@@ -19,6 +19,14 @@ else
- MPD_CONF_OPTS += --with-zeroconf=no
- endif
- 
-+# MPD prefers libicu for utf8 collation instead of libglib2.
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+MPD_DEPENDENCIES += icu
-+MPD_CONF_OPTS += --enable-icu
-+else
-+MPD_CONF_OPTS += --disable-icu
-+endif
+ # Some options need an explicit --disable or --enable
+-ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
 +
- ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
- MPD_DEPENDENCIES += alsa-lib
- MPD_CONF_OPTS += --enable-alsa
++# Zeroconf support depends on libdns_sd from avahi.
++ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
+ MPD_DEPENDENCIES += avahi
+ else
+ MPD_CONF_OPTS += --with-zeroconf=no
 -- 
 2.1.2
