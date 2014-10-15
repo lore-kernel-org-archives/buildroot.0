@@ -1,28 +1,48 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Wed, 15 Oct 2014 23:23:51 +0200
-Subject: [Buildroot] [PATCH 4/4] package/libvorbis: add hash file
-In-Reply-To: <1413408231-31696-1-git-send-email-jkrause@posteo.de>
-References: <1413408231-31696-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1413408231-31696-4-git-send-email-jkrause@posteo.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 Oct 2014 00:33:05 +0200
+Subject: [Buildroot] [PATCH 2/4] pciutils: add hash file
+In-Reply-To: <1413329080-25292-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 14 Oct 2014 20:24:38 -0300")
+References: <1413329080-25292-1-git-send-email-gustavo@zacarias.com.ar>
+ <1413329080-25292-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878ukhotem.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/libvorbis/libvorbis.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/libvorbis/libvorbis.hash
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/libvorbis/libvorbis.hash b/package/libvorbis/libvorbis.hash
-new file mode 100644
-index 0000000..3b997ba
---- /dev/null
-+++ b/package/libvorbis/libvorbis.hash
-@@ -0,0 +1,2 @@
-+# From http://www.xiph.org/downloads/
-+sha256 2f05497d29195dc23ee952a24ee3973a74e6277569c4c2eca0ec5968e541f372 libvorbis-1.3.4.tar.xz
+ > And switch to kernel.org mirror because of inconsistency with it.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+
+ > ---
+ >  package/pciutils/pciutils.hash | 2 ++
+ >  package/pciutils/pciutils.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/pciutils/pciutils.hash
+
+ > diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+ > new file mode 100644
+ > index 0000000..07b9ed6
+ > --- /dev/null
+ > +++ b/package/pciutils/pciutils.hash
+ > @@ -0,0 +1,2 @@
+ > +# From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+ > +sha256	9c1ad30d1e40e353ea78b0c7ca41487cc0923d91e560a6e07072c93bcf520c02	pciutils-3.2.1.tar.gz
+
+While this checksum matches the .asc file, it is different than what
+was on the old server (and on sources.buildroot.org, autobuilders and
+whatnot) - And as pciutils hasn't been bumped since Nov 2013 people are
+quite likely to already have it in their dl/.
+
+As pciutils isn't really such a security sensitive package, I think we
+should wait with this until the version is bumped next time.
+
+ > -PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
+ > +PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
+
 -- 
-2.1.2
+Bye, Peter Korsgaard
