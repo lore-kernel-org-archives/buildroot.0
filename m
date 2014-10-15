@@ -1,101 +1,86 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Wed, 15 Oct 2014 16:22:45 -0400
-Subject: [Buildroot] [PATCH v3] cppunit: Added package
-Message-ID: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 15 Oct 2014 15:37:54 -0500
+Subject: [Buildroot] [PATCH 1/2] pps-tools: new package
+Message-ID: <1413405475-5179-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CppUnit is the C++ port of the famous JUnit framework for unit testing.
-Test output is in XML or text format for automatic testing and GUI
-based for supervised tests.
+From: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
 
-http://www.freedesktop.org/wiki/Software/cppunit/
+Added pps-tools package to add support to the ntpd for a
+pps source (requires timepps.h from pps-tools as part of ntpd
+build).
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes v2 -> v3:
- - use the release tarball instead of the git repository (suggested by
-		 arnout at mind.be)
- - fix the Licence (suggested by arnout at mind.be)
- - add upstream and locally compute .hash (suggested by
-		 arnout at mind.be)
----
-Changes v1 -> v2:
- - used AUTORECONF option (suggested by romain.naour at openwide.fr)
- - removed useless CONFIGURE_CMDS (suggested by romain.naour at openwide.fr)
----
- package/Config.in            |  1 +
- package/cppunit/Config.in    | 12 ++++++++++++
- package/cppunit/cppunit.hash |  5 +++++
- package/cppunit/cppunit.mk   | 14 ++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/cppunit/Config.in
- create mode 100644 package/cppunit/cppunit.hash
- create mode 100644 package/cppunit/cppunit.mk
+ package/Config.in              |  1 +
+ package/pps-tools/Config.in    |  6 ++++++
+ package/pps-tools/pps-tools.mk | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/pps-tools/Config.in
+ create mode 100644 package/pps-tools/pps-tools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 93e148d..8d6e047 100644
+index 93e148d..8c109a5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -840,6 +840,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-+	source "package/cppunit/Config.in"
- 	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
-diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
+@@ -351,6 +351,7 @@ endif
+ 	source "package/parted/Config.in"
+ 	source "package/pciutils/Config.in"
+ 	source "package/picocom/Config.in"
++	source "package/pps-tools/Config.in"
+ 	source "package/pifmrds/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+diff --git a/package/pps-tools/Config.in b/package/pps-tools/Config.in
 new file mode 100644
-index 0000000..91700b8
+index 0000000..83308f4
 --- /dev/null
-+++ b/package/cppunit/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_CPPUNIT
-+	bool "cppunit"
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/pps-tools/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PPS_TOOLS
++	bool "pps-tools"
 +	help
-+	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
-+	  Test output is in XML or text format for automatic testing and GUI
-+	  based for supervised tests.
++	  Pulse per second tools. Provides timepps.h and other PPS utilities.
 +
-+	  http://www.freedesktop.org/wiki/Software/cppunit/
-+
-+comment "cppunit needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cppunit/cppunit.hash b/package/cppunit/cppunit.hash
++	  https://github.com/ago/pps-tools/
+diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
 new file mode 100644
-index 0000000..ad45455
+index 0000000..4ebfb1e
 --- /dev/null
-+++ b/package/cppunit/cppunit.hash
-@@ -0,0 +1,5 @@
-+# hash from: http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz:
-+md5	d1c6bdd5a76c66d2c38331e2d287bc01  cppunit-1.13.2.tar.gz
-+
-+# no upstream hash for the following:
-+sha512	8f4be569f321d577cec31931f49f4df143bc94e283605509b6ea50c60690aa91a2aed940e7eebd4b2413a4218f9a6c3978d312d8e587eab040283c6563846ecd  cppunit-1.13.2.tar.gz
-diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
-new file mode 100644
-index 0000000..89268b7
---- /dev/null
-+++ b/package/cppunit/cppunit.mk
-@@ -0,0 +1,14 @@
++++ b/package/pps-tools/pps-tools.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# cppunit
++# pps-tools
 +#
 +################################################################################
++PPS_TOOLS_VERSION = 0deb9c7e135e9380a6d09e9d2e938a146bb698c8
++PPS_TOOLS_SITE = https://github.com/ago/pps-tools.git
++PPS_TOOLS_SITE_METHOD = git
++PPS_TOOLS_INSTALL_STAGING = YES
++PPS_TOOLS_LICENSE = GPLv2
++PPS_TOOLS_LICENSE_FILES = COPYING
 +
-+CPPUNIT_VERSION = cppunit-1.13.2
-+CPPUNIT_SOURCE = $(CPPUNIT_VERSION).tar.gz
-+CPPUNIT_SITE = http://dev-www.libreoffice.org/src
-+CPPUNIT_INSTALL_STAGING = YES
-+CPPUNIT_LICENSE = LGPLv2.1+
-+CPPUNIT_LICENSE_FILES = COPYING
++define PPS_TOOLS_BUILD_CMDS
++	$(MAKE) CC=$(TARGET_CC) -C $(@D) all
++endef
 +
-+$(eval $(autotools-package))
++define PPS_TOOLS_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/timepps.h $(STAGING_DIR)/usr/include/timepps.h
++endef
++
++define PPS_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ppsctl $(TARGET_DIR)/usr/bin/ppsctl
++	$(INSTALL) -D -m 0755 $(@D)/ppsfind $(TARGET_DIR)/usr/bin/ppsfind
++	$(INSTALL) -D -m 0755 $(@D)/ppstest $(TARGET_DIR)/usr/bin/ppstest
++	$(INSTALL) -D -m 0755 $(@D)/ppswatch $(TARGET_DIR)/usr/bin/ppswatch
++endef
++
++$(eval $(generic-package))
 -- 
-1.8.3.4
+1.9.1
