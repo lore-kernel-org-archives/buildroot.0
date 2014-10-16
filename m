@@ -1,58 +1,50 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Thu, 16 Oct 2014 14:38:12 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <20141011162152.GA4254@free.fr>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20141011162152.GA4254@free.fr>
-Message-ID: <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 09:57:47 -0300
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1j
+Message-ID: <1413464267-4698-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Fixes:
+CVE-2014-3513 - SRTP memory leak
+CVE-2014-3567 - Session ticket memory leak
+CVE-2014-3568 - Build option no-ssl3 is incomplete
+And adds SSL3 fallback protection against POODLE.
 
-On Sat, Oct 11, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> We've been discussing this ejabberd patch during the current Developpers
-> Day in D?sseldorf.
->
-> Given the current issues that ewre noticed with building ejabberd, we
-> decided to mark the patch as Rejected in patchwork.
->
-> This means that we rejected that very specific patch, *not* that we
-> decided not to have ejabberd. But before it gets included, all the
-> issues must be fixed first, especially the build-time downloading of
-> dependencies, as well as all the remarks that were made by Thomas and I.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssl/openssl.hash | 8 ++++----
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Sure, it makes sense to me as well. As I said in a previous mail, I
-did fix my patch to include your remarks, but two:
-1. Fix ejabberd build system to not download dependencies at build time.
-2. Avoid to use a fix UID and GID for ejabberd user.
-
-I don't know if I should republish the patch before fixing these two issues.
-I'd like your help on both of them.
-
-** Fix ejabberd build system
-** ===================
-The only solution i see is to create a buildroot package for every
-ejabberd dependency, listed in rebar.config.script :
-esip, goldrush, lager, p1_cache_tab, p1_iconv, p1_stringprep, p1_stun,
-p1_tls, p1_utils, p1_xml, p1_yaml, p1_zlib, xmlrpc
-Then, modify ejabberd package to not use rebar at all, or at least to
-not call rebar get-deps. Thus, if I remove deps from the `all'
-makefile rule and deps/.build from the `src' rule dependency, it might
-work.
-
-Do you have a better idea?
-
-** Avoid to use a fix UID and GID for ejabberd user
-** ===================================
-
-I still don't know how I could set the correct permissions to ejabberd
-files in <PKG>_PERMISSIONS if I set -1 for UID and GID in <PKG>_USERS
-
-Best regards,
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index aa45a76..22b1529 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.sha1
+-md5	c8dc151a671b9b92ff3e4c118b174972	openssl-1.0.1i.tar.gz
+-sha1	74eed314fa2c93006df8d26cd9fc630a101abd76	openssl-1.0.1i.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.sha1
++md5	f7175c9cd3c39bb1907ac8bba9df8ed3	openssl-1.0.1j.tar.gz
++sha1	cff86857507624f0ad42d922bb6f77c4f1c2b819	openssl-1.0.1j.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 4911034..7c1c7f0 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.1i
++OPENSSL_VERSION = 1.0.1j
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-Johan
+2.0.4
