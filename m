@@ -1,54 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Oct 2014 16:02:40 -0300
-Subject: [Buildroot] [PATCH] libxml2: security bump to version 2.9.2
-Message-ID: <1413486160-7541-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 16 Oct 2014 21:15:57 +0200
+Subject: [Buildroot] [PATCH buildroot-test 1/8] autobuild-run:
+	check-requirements does not need to know the login details
+Message-ID: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-3660 - billion laugh variant
-CVE-2014-0191 - Do not fetch external parameter entities
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Also add hash file.
+check-requirements simply has to know if the results have to be sent, so
+it can check on some extra requirements. The username and password are
+irrelevant here.
+This commit introduces a boolean variable do_send_results to hide these
+details.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/libxml2/libxml2.hash | 2 ++
- package/libxml2/libxml2.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/libxml2/libxml2.hash
+ scripts/autobuild-run | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-new file mode 100644
-index 0000000..69f4fdc
---- /dev/null
-+++ b/package/libxml2/libxml2.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	5178c30b151d044aefb1b08bf54c3003a0ac55c59c866763997529d60770d5bc	libxml2-2.9.2.tar.gz
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index f27c993..4e296fa 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 7497001..2ead1f2 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -85,12 +85,12 @@ def check_version():
+         print "ERROR: script version too old, please upgrade."
+         sys.exit(1)
  
--LIBXML2_VERSION = 2.9.1
-+LIBXML2_VERSION = 2.9.2
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_AUTORECONF = YES
-@@ -19,6 +19,7 @@ endif
- LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
+-def check_requirements(http_login, http_password):
++def check_requirements(do_send_results=False):
+     devnull = open(os.devnull, "w")
+     needed_progs = ["make", "git", "gcc", "timeout"]
+     missing_requirements = False
  
- HOST_LIBXML2_DEPENDENCIES = host-pkgconf
-+LIBXML2_DEPENDENCIES = host-pkgconf
+-    if http_login and http_password:
++    if do_send_results:
+         needed_progs.append("curl")
  
- HOST_LIBXML2_CONF_OPTS = --without-zlib --without-lzma --without-python
- 
+     for prog in needed_progs:
+@@ -553,8 +553,9 @@ if __name__ == '__main__':
+     check_version()
+     sysinfo = SystemInfo()
+     (ninstances, njobs, http_login, http_password, submitter) = config_get()
+-    check_requirements(http_login, http_password)
+-    if http_login is None or http_password is None:
++    do_send_results = http_login and http_password
++    check_requirements(do_send_results)
++    if not do_send_results:
+         print "WARN: due to the lack of http login/password details, results will not be submitted"
+         print "WARN: tarballs of results will be kept locally only"
+     def sigterm_handler(signum, frame):
 -- 
-2.0.4
+1.8.5.1
