@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 11:50:03 +0200
-Subject: [Buildroot] [PATCH v2 8/8] package/mpd: fix zeroconf support
-In-Reply-To: <1413379134-28918-8-git-send-email-jkrause@posteo.de>
-References: <1413379134-28918-1-git-send-email-jkrause@posteo.de>
- <1413379134-28918-8-git-send-email-jkrause@posteo.de>
-Message-ID: <20141016115003.43eceeab@free-electrons.com>
+Date: Thu, 16 Oct 2014 11:53:40 +0200
+Subject: [Buildroot] [PATCH v3] cppunit: Added package
+In-Reply-To: <543F9315.3010104@mind.be>
+References: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <543F8710.4010708@mind.be>
+ <20141016110834.0410d5ce@free-electrons.com>
+ <543F9315.3010104@mind.be>
+Message-ID: <20141016115340.26569604@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Arnout Vandecappelle,
 
-On Wed, 15 Oct 2014 15:18:54 +0200, J?rg Krause wrote:
+On Thu, 16 Oct 2014 11:42:45 +0200, Arnout Vandecappelle wrote:
 
->  # Some options need an explicit --disable or --enable
-> -ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-> +
-> +# Zeroconf support depends on libdns_sd from avahi.
-> +ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
->  MPD_DEPENDENCIES += avahi
->  else
->  MPD_CONF_OPTS += --with-zeroconf=no
+> > No: if it's really related to shared libraries, then it should be a
+> > depends on !BR2_PREFER_STATIC_LIB.
+> 
+>  Yeah, you're probably right. It does build with PREFER_STATIC on other
+> architectures, but that's just because there still is a dlopen in staging so it
+> still sets CPPUNIT_HAVE_LIBDL and then it builds "correctly". But we most likely
+> have many many packages that seem to build correctly with STATIC but actually
+> still use shared libraries or dlopen. We probably should remove ld.so and
+> libdl.* from staging when building static.
 
-It doesn't seem really obvious for the user that
-BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY should be enabled to get avahi
-support in mpd. So, in such situations, I would suggest to add a
-Config.in option to explicitly enable the Avahi support in mpd:
+Well, for packages that do build on noMMU platforms, we do catch such
+issues thanks to the bfin-uclinux toolchain configuration that is used
+on the autobuilders. But for those other packages that don't build on
+noMMU, we indeed don't check properly if we're able to do a pure static
+build.
 
-config BR2_PACKAGE_MPD_AVAHI_SUPPORT
-	bool "avahi support"
-	depends on ... # all the dependencies of avahi
-	select BR2_PACKAGE_AVAHI
-	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
-	help
-	  Some help text
-
-Best regards,
+Alexey has sent a patch to remove HAVE_SHARED from the uClibc
+configuration when BR2_PREFER_STATIC_LIB is enabled. Maybe this will
+get rid of ld.so, libdl and so on? I haven't tested yet.
 
 Thomas
 -- 
