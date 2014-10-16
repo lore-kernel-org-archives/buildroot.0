@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 11:24:21 +0200
-Subject: [Buildroot] [PATCH 1/2] pps-tools: new package
-In-Reply-To: <1413405475-5179-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 16 Oct 2014 11:30:02 +0200
+Subject: [Buildroot] [PATCH 2/2] ntp: Adding pps support to ntpd
+In-Reply-To: <1413405475-5179-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1413405475-5179-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20141016112421.09891a19@free-electrons.com>
+ <1413405475-5179-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20141016113002.37bd449f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,70 +13,47 @@ To: buildroot@busybox.net
 
 Dear Matt Weber,
 
-On Wed, 15 Oct 2014 15:37:54 -0500, Matt Weber wrote:
+On Wed, 15 Oct 2014 15:37:55 -0500, Matt Weber wrote:
 
-> diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
-> new file mode 100644
-> index 0000000..4ebfb1e
-> --- /dev/null
-> +++ b/package/pps-tools/pps-tools.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# pps-tools
-> +#
-> +################################################################################
+> +config BR2_PACKAGE_NTP_NTPD_ATOM_PPS
+> +	bool "ntpd-pps"
 
-One empty new line needed here.
+I'd use "PPS support" here instead.
 
-> +PPS_TOOLS_VERSION = 0deb9c7e135e9380a6d09e9d2e938a146bb698c8
-> +PPS_TOOLS_SITE = https://github.com/ago/pps-tools.git
-> +PPS_TOOLS_SITE_METHOD = git
-> +PPS_TOOLS_INSTALL_STAGING = YES
-> +PPS_TOOLS_LICENSE = GPLv2
-
-License is GPLv2+.
-
-> +PPS_TOOLS_LICENSE_FILES = COPYING
+> +	depends on BR2_PACKAGE_NTP_NTPD
+> +	select BR2_PACKAGE_PPS_TOOLS
+> +	help
+> +	  Compile ntpd with the ability to use an ATOM PPS source.
 > +
-> +define PPS_TOOLS_BUILD_CMDS
-> +	$(MAKE) CC=$(TARGET_CC) -C $(@D) all
+>  config BR2_PACKAGE_NTP_NTPDATE
+>  	bool "ntpdate"
+>  	help
+> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+> index 7c2cb8e..51598ba 100644
+> --- a/package/ntp/ntp.mk
+> +++ b/package/ntp/ntp.mk
+> @@ -34,6 +34,11 @@ else
+>  	NTP_CONF_OPTS += --without-ntpsnmpd
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_NTP_NTPD_ATOM_PPS),y)
+> +	NTP_CONF_OPTS += --enable-ATOM
+> +	NTP_DEPENDENCIES += pps-tools
+> +endif
 
-Use $(TARGET_CONFIGURE_OPTS) instead of CC=$(TARGET_CC), so that CFLAGS
-and al. are also passed.
+Can you add the corresponding:
 
-> +endef
-> +
-> +define PPS_TOOLS_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/timepps.h $(STAGING_DIR)/usr/include/timepps.h
-> +endef
-> +
-> +define PPS_TOOLS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/ppsctl $(TARGET_DIR)/usr/bin/ppsctl
-> +	$(INSTALL) -D -m 0755 $(@D)/ppsfind $(TARGET_DIR)/usr/bin/ppsfind
-> +	$(INSTALL) -D -m 0755 $(@D)/ppstest $(TARGET_DIR)/usr/bin/ppstest
-> +	$(INSTALL) -D -m 0755 $(@D)/ppswatch $(TARGET_DIR)/usr/bin/ppswatch
-> +endef
+else
+	NTP_CONF_OPTS += --disable-ATOM
+endif
 
-Use the "make install" target of the pps-tools Makefile instead. There
-is just one issue with it in that it doesn't create the destination
-directories where it copies the header file and the executable. Fix
-this either by adding a patch (which should be submitted upstream),
-or doing something like:
+We like to be explicit about configuration options when possible.
 
-	mkdir -p $(TARGET_DIR)/usr/include/sys $(TARGET_DIR)/usr/bin
+With that fixed, you can resend this patch with my:
 
-before doing the make install. And ditto for the staging installation,
-of course.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-We prefer to use the package built-in "make install" logic so that if
-we bump the package version later, we won't forget to install other new
-things that the package should now install.
-
-Other than that, I've built-tested your patch with a minimal ARM
-configuration, and it worked fine.
-
-Can you fix those issues and resubmit?
+(I did built test this).
 
 Thanks,
 
