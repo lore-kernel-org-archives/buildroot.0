@@ -1,36 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 19:06:13 +0200
-Subject: [Buildroot] [PATCH] manual: Add note about uses of github helper
-In-Reply-To: <1413375860-28253-1-git-send-email-arnout@mind.be>
-References: <1413375860-28253-1-git-send-email-arnout@mind.be>
-Message-ID: <20141016190613.4d676fba@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 14:06:05 -0300
+Subject: [Buildroot] [PATCHv2] inadyn: bump to version 1.99.11
+Message-ID: <1413479165-20184-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Update initscript for the /usr/sbin -> /usr/bin change which is the
+default installation directory now that it's using autotools infra.
+Also add hash file.
+Make the initscript use tabs instead of spaces.
+Make the config file installation conditional.
+Now with optional gnutls support for HTTPS.
 
-On Wed, 15 Oct 2014 14:24:20 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> Add a little comment regarding the uses of the github helper for the releases.
-> 
-> [Arnout: extend the comment a little]
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  docs/manual/adding-packages-tips.txt | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/inadyn/S70inadyn   | 35 ++++++++++++++++++-----------------
+ package/inadyn/inadyn.hash |  2 ++
+ package/inadyn/inadyn.mk   | 26 ++++++++++++--------------
+ 3 files changed, 32 insertions(+), 31 deletions(-)
+ create mode 100644 package/inadyn/inadyn.hash
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index 24d0813..b5d7eed 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -13,23 +13,24 @@ VR_INADYN=/var/run/inadyn
+ [ ! -d $VR_INADYN ] && mkdir -p $VR_INADYN
+ 
+ case "$1" in
+-        start)
+-                echo "Starting inadyn."
+-                start-stop-daemon -S -x /usr/sbin/inadyn
+-                ;;
+-        stop)
+-                echo  "Stopping inadyn."
+-                start-stop-daemon -q -K -x /usr/sbin/inadyn
+-                rm -f /var/run/inadyn/inadyn.pid
+-                ;;
+-        restart)
+-                "$0" stop
+-                "$0" start
+-                ;;
+-        *)
+-                echo $"Usage: $0 {start|stop|restart}"
+-                exit 1
++	start)
++		echo "Starting inadyn: "
++		start-stop-daemon -S -x /usr/bin/inadyn
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo  "Stopping inadyn: "
++		start-stop-daemon -q -K -x /usr/bin/inadyn
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		rm -f /var/run/inadyn/inadyn.pid
++		;;
++	restart)
++		"$0" stop
++		"$0" start
++		;;
++		*)
++		echo $"Usage: $0 {start|stop|restart}"
++		exit 1
+ esac
+ 
+ exit $?
+-
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+new file mode 100644
+index 0000000..e69feb2
+--- /dev/null
++++ b/package/inadyn/inadyn.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	7e2bfc5df32848abd814548c87bf1d2731ffcf34ad180d8204d94239cb7ad590	inadyn-1.99.11.tar.gz
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 21e983e..74bb679 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,33 +4,31 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.9
++INADYN_VERSION = 1.99.11
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
++INADYN_CONF_OPTS += --enable-openssl
+ INADYN_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++INADYN_DEPENDENCIES += gnutls
+ else
+-define INADYN_DISABLE_OPENSSL
+-	$(SED) '/ssl/Id' $(@D)/config.mk
+-endef
++INADYN_CONF_OPTS += --disable-ssl
+ endif
+-INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
+-
+-define INADYN_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+ 
+-define INADYN_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
+-	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+-		$(TARGET_DIR)/etc/inadyn.conf
++define INADYN_INSTALL_SAMPLE_CONFIG
++	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
++		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
++			$(TARGET_DIR)/etc/inadyn.conf; \
++	fi
+ endef
++INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
+ 
+ define INADYN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
