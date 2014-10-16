@@ -1,203 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Oct 2014 15:06:00 +0200
-Subject: [Buildroot] [git commit] musl: bump to version 1.1.5
-Message-ID: <20141016060905.6A556B2F91@busybox.osuosl.org>
+Date: Thu, 16 Oct 2014 08:05:06 +0200
+Subject: [Buildroot] [git commit] bzip2: add hash file
+Message-ID: <20141016060905.9A7CF9D858@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac27f81547242823b6309ce2122a066e49095178
+commit: http://git.buildroot.net/buildroot/commit/?id=6d4b814c84fdc5f0ed69508c0178385d499e2ba9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Patch upstream, add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl-0001-add-max_align_t.patch |  153 --------------------------
- package/musl/musl.hash                       |    2 +
- package/musl/musl.mk                         |    2 +-
- 3 files changed, 3 insertions(+), 154 deletions(-)
+ package/bzip2/bzip2.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/musl/musl-0001-add-max_align_t.patch b/package/musl/musl-0001-add-max_align_t.patch
-deleted file mode 100644
-index 6423337..0000000
---- a/package/musl/musl-0001-add-max_align_t.patch
-+++ /dev/null
-@@ -1,153 +0,0 @@
--From 321f4fa9067185aa6bb47403dfba46e8cfe917d3 Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Wed, 20 Aug 2014 21:20:14 +0000
--Subject: add max_align_t definition for C11 and C++11
--
--unfortunately this needs to be able to vary by arch, because of a huge
--mess GCC made: the GCC definition, which became the ABI, depends on
--quirks in GCC's definition of __alignof__, which does not match the
--formal alignment of the type.
--
--GCC's __alignof__ unexpectedly exposes the an implementation detail,
--its "preferred alignment" for the type, rather than the formal/ABI
--alignment of the type, which it only actually uses in structures. on
--most archs the two values are the same, but on some (at least i386)
--the preferred alignment is greater than the ABI alignment.
--
--I considered using _Alignas(8) unconditionally, but on at least one
--arch (or1k), the alignment of max_align_t with GCC's definition is
--only 4 (even the "preferred alignment" for these types is only 4).
-----
--diff --git a/arch/arm/bits/alltypes.h.in b/arch/arm/bits/alltypes.h.in
--index 0d750cc..183c4c4 100644
----- a/arch/arm/bits/alltypes.h.in
--+++ b/arch/arm/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/i386/bits/alltypes.h.in b/arch/i386/bits/alltypes.h.in
--index 502c882..8ba8f6f 100644
----- a/arch/i386/bits/alltypes.h.in
--+++ b/arch/i386/bits/alltypes.h.in
--@@ -27,6 +27,8 @@ TYPEDEF long double float_t;
-- TYPEDEF long double double_t;
-- #endif
-- 
--+TYPEDEF struct { _Alignas(8) long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/microblaze/bits/alltypes.h.in b/arch/microblaze/bits/alltypes.h.in
--index 4657d14..a03e1b8 100644
----- a/arch/microblaze/bits/alltypes.h.in
--+++ b/arch/microblaze/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/mips/bits/alltypes.h.in b/arch/mips/bits/alltypes.h.in
--index 4657d14..a03e1b8 100644
----- a/arch/mips/bits/alltypes.h.in
--+++ b/arch/mips/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/or1k/bits/alltypes.h.in b/arch/or1k/bits/alltypes.h.in
--index 0d750cc..183c4c4 100644
----- a/arch/or1k/bits/alltypes.h.in
--+++ b/arch/or1k/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/powerpc/bits/alltypes.h.in b/arch/powerpc/bits/alltypes.h.in
--index 378124c..ee7f137 100644
----- a/arch/powerpc/bits/alltypes.h.in
--+++ b/arch/powerpc/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/sh/bits/alltypes.h.in b/arch/sh/bits/alltypes.h.in
--index 378124c..ee7f137 100644
----- a/arch/sh/bits/alltypes.h.in
--+++ b/arch/sh/bits/alltypes.h.in
--@@ -13,6 +13,8 @@ TYPEDEF unsigned wint_t;
-- TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/arch/x32/bits/alltypes.h.in b/arch/x32/bits/alltypes.h.in
--index 8930efa..8e396c9 100644
----- a/arch/x32/bits/alltypes.h.in
--+++ b/arch/x32/bits/alltypes.h.in
--@@ -18,6 +18,8 @@ TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- #endif
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long long time_t;
-- TYPEDEF long long suseconds_t;
-- 
--diff --git a/arch/x86_64/bits/alltypes.h.in b/arch/x86_64/bits/alltypes.h.in
--index 34b7d6a..7b4f3e7 100644
----- a/arch/x86_64/bits/alltypes.h.in
--+++ b/arch/x86_64/bits/alltypes.h.in
--@@ -18,6 +18,8 @@ TYPEDEF float float_t;
-- TYPEDEF double double_t;
-- #endif
-- 
--+TYPEDEF struct { long long __ll; long double __ld; } max_align_t;
--+
-- TYPEDEF long time_t;
-- TYPEDEF long suseconds_t;
-- 
--diff --git a/include/stddef.h b/include/stddef.h
--index 0a32919..bd75385 100644
----- a/include/stddef.h
--+++ b/include/stddef.h
--@@ -10,6 +10,9 @@
-- #define __NEED_ptrdiff_t
-- #define __NEED_size_t
-- #define __NEED_wchar_t
--+#if __STDC_VERSION__ >= 201112L || __cplusplus >= 201103L
--+#define __NEED_max_align_t
--+#endif
-- 
-- #include <bits/alltypes.h>
-- 
----
--cgit v0.9.0.3-65-g4555
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
 new file mode 100644
-index 0000000..caea71a
+index 0000000..60b0a19
 --- /dev/null
-+++ b/package/musl/musl.hash
++++ b/package/bzip2/bzip2.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	352362b1724cc9740f4c3ce0fe02aae45e4de9809ea4ac961f31aedc11b87393	musl-1.1.5.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2b366cf..fb4327d 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.4
-+MUSL_VERSION = 1.1.5
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
++# From http://www.bzip.org/downloads.html
++md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
