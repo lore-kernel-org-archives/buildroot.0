@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 16 Oct 2014 21:16:01 +0200
-Subject: [Buildroot] [PATCH buildroot-test 5/8] autobuild-run: add option
-	--make-opts for custom Buildroot options
+Date: Thu, 16 Oct 2014 21:16:00 +0200
+Subject: [Buildroot] [PATCH buildroot-test 4/8] autobuild-run: convert
+	regular function comments into docstrings
 In-Reply-To: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413486964-5183-5-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1413486964-5183-4-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +13,157 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-In some environments, the Buildroot configuration may need minor
-tweaking. For example, in corporate environments behind a firewall,
-direct git access (as required by some packages) may not be possible. A
-git wrapper may be needed, which is normally configured through the
-BR2_GIT configuration option.
-
-Since these tweaks are very environment-specific, they should not be
-part of the configuration file itself. Otherwise, other people trying to
-reproduce the build in another environment will see builds failing due
-to other reasons, for example the git wrapper not being found.
-
-This commit provides a new configuration option 'make-opts', passable as
-argument or in the config file, that accepts a string of make options to
-pass to the Buildroot make command. For example:
-    --make-opts="BR2_GIT=git-wrapper BR2_svn=svn-wrapper"
+Documenting a function in Python is done with docstrings, rather than
+with comments above the function. The conventions are described in
+PEP257: http://legacy.python.org/dev/peps/pep-0257/
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- scripts/autobuild-run | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ scripts/autobuild-run | 75 +++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 49 insertions(+), 26 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 170cfe3..57654de 100755
+index 8c1918c..170cfe3 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -72,6 +72,8 @@ Options:
-                                  reasons it is recommended to define this in the
-                                  config file instead, with user-read permissions
-                                  only)
-+  --make-opts OPTSTRING          string of extra options to pass to Buildroot
-+                                 make, such as specific command wrappers
-   -c, --config CONFIG            path to configuration file
+@@ -156,13 +156,16 @@ class SystemInfo:
+         self.has_jar = \
+           subprocess.call(["which", "jar"], stdout=devnull, stderr=devnull) == 0
  
- Format of the configuration file:
-@@ -406,7 +408,7 @@ def gen_config(instance, log, sysinfo):
+-# This function fetches the possible toolchain configurations, and
+-# returns an array of dictionaries, with for each toolchain:
+-#  - url: the URL of the toolchain defconfig
+-#  - libc: the C library used by the toolchain
+-#  - hostarch: the host architecture for which the toolchain is built
+-#  - contents: an array of lines of the defconfig
+ def get_toolchain_configs():
++    """Fetch and return the possible toolchain configurations
++
++    This function returns an array of dictionaries, with for each toolchain:
++        - url: the URL of the toolchain defconfig
++        - libc: the C library used by the toolchain
++        - hostarch: the host architecture for which the toolchain is built
++        - contents: an array of lines of the defconfig
++    """
++
+     r = urllib2.urlopen('http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv')
+     l = r.readlines()
+     configs = []
+@@ -183,10 +186,14 @@ def get_toolchain_configs():
+         configs.append(config)
+     return configs
+ 
+-# This function prepares the build by making sure all the needed
+-# directories are created, cloning or updating the Buildroot source
+-# code, and cleaning up remaining stuff from previous builds.
+ def prepare_build(instance, log):
++    """Prepare for the next build of the specified instance
++
++    This function prepares the build by making sure all the needed
++    directories are created, cloning or updating the Buildroot source
++    code, and cleaning up remaining stuff from previous builds.
++    """
++
+     idir = "instance-%d" % instance
+ 
+     log_write(log, "INFO: preparing a new build")
+@@ -236,14 +243,15 @@ def prepare_build(instance, log):
  
      return 0
  
--def do_build(instance, njobs, log):
-+def do_build(instance, njobs, log, make_opts):
-     """Run the build itself"""
- 
+-# This function makes adjustments to the configuration, as well as
+-# additional validation to avoid cases that are known not to work.
+-#
+-# This function returns 'True' when the configuration has been
+-# accepted, and 'False' when the configuration has not been accepted
+-# (in which case another random configuration will be generated).
+-
+ def fixup_config(instance, sysinfo):
++    """Finalize the configuration and reject any problematic combinations
++
++    This function returns 'True' when the configuration has been
++    accepted, and 'False' when the configuration has not been accepted because
++    it is known to fail (in which case another random configuration will be
++    generated).
++    """
++
      idir = "instance-%d" % instance
-@@ -419,8 +421,10 @@ def do_build(instance, njobs, log):
+     outputdir = os.path.join(idir, "output")
+ 
+@@ -322,10 +330,14 @@ def fixup_config(instance, sysinfo):
+ 
+     return True
+ 
+-# This function generates the configuration, by choosing a random
+-# toolchain configuration and then generating a random selection of
+-# packages.
+ def gen_config(instance, log, sysinfo):
++    """Generate a new random configuration
++
++    This function generates the configuration, by choosing a random
++    toolchain configuration and then generating a random selection of
++    packages.
++    """
++
+     idir = "instance-%d" % instance
+     dldir = os.path.join(idir, "dl")
+     # We need the absolute path to use with O=, because the relative
+@@ -394,8 +406,9 @@ def gen_config(instance, log, sysinfo):
+ 
+     return 0
+ 
+-# Run the build itself
+ def do_build(instance, njobs, log):
++    """Run the build itself"""
++
+     idir = "instance-%d" % instance
+     # We need the absolute path to use with O=, because the relative
+     # path to the output directory here is not relative to the
+@@ -423,10 +436,14 @@ def do_build(instance, njobs, log):
+     log_write(log, "INFO: build successful")
+     return 0
+ 
+-# This function prepares the tarball with the results, and either
+-# submits them to the official server (if the appropriate credentials
+-# are available) or stores them locally as tarballs.
+ def send_results(instance, http_login, http_password, submitter, log, result):
++    """Prepare and store/send tarball with results
++
++    This function prepares the tarball with the results, and either
++    submits them to the official server (if the appropriate credentials
++    are available) or stores them locally as tarballs.
++    """
++
+     idir = "instance-%d" % instance
+     outputdir = os.path.abspath(os.path.join(idir, "output"))
      srcdir = os.path.join(idir, "buildroot")
-     f = open(os.path.join(outputdir, "logfile"), "w+")
-     log_write(log, "INFO: build started")
--    ret = subprocess.call(["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir, "-C", srcdir,
--                           "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs], stdout=f, stderr=f)
-+    cmd = ["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir,
-+            "-C", srcdir, "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs] \
-+          + make_opts.split()
-+    ret = subprocess.call(cmd, stdout=f, stderr=f)
-     # 124 is a special error code that indicates we have reached the
-     # timeout
-     if ret == 124:
-@@ -511,7 +515,8 @@ def send_results(instance, http_login, http_password, submitter, log, result):
+@@ -494,10 +511,13 @@ def send_results(instance, http_login, http_password, submitter, log, result):
          os.rename(os.path.join(outputdir, "results.tar.bz2"), resultfilename)
          log_write(log, "INFO: results saved as %s" % resultfilename)
  
--def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo):
-+def run_instance(instance, njobs, http_login, http_password, submitter,
-+                 make_opts, sysinfo):
-     """Main per-instance loop
+-# This function implements the main per-instance loop, which prepares
+-# the build, generate a configuration, runs the build, and submits the
+-# results.
+ def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo):
++    """Main per-instance loop
++
++    Prepare the build, generate a configuration, run the build, and submit the
++    results.
++    """
++
+     idir = "instance-%d" % instance
  
-     Prepare the build, generate a configuration, run the build, and submit the
-@@ -537,7 +542,7 @@ def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo)
-         if ret != 0:
-             continue
- 
--        ret = do_build(instance, njobs, instance_log)
-+        ret = do_build(instance, njobs, instance_log, make_opts)
-         send_results(instance, http_login, http_password, submitter, instance_log, ret)
+     # If it doesn't exist, create the instance directory
+@@ -522,7 +542,10 @@ def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo)
  
  # args / config file merging inspired by:
-@@ -593,7 +598,7 @@ if __name__ == '__main__':
-     for i in range(0, int(args['--ninstances'])):
-         p = Process(target=run_instance, args=(i, int(args['--njobs']),
-                 args['--http-login'], args['--http-password'],
--                args['--submitter'], sysinfo))
-+                args['--submitter'], args['--make-opts'], sysinfo))
-         p.start()
-         processes.append(p)
-     signal.signal(signal.SIGTERM, sigterm_handler)
+ # https://github.com/docopt/docopt/blob/master/examples/config_file_example.py
++
+ def load_ini_config(configfile):
++    """Load configuration from file, returning a docopt-like dictionary"""
++
+     if not os.path.exists(configfile):
+         print "ERROR: configuration file %s does not exist" % configfile
+         sys.exit(1)
 -- 
 1.8.5.1
