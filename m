@@ -1,30 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 19:10:11 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libnfs: bump to version 1.9.5
-In-Reply-To: <1413364800-15371-1-git-send-email-jkrause@posteo.de>
-References: <1413364800-15371-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141016191011.16747678@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 14:16:58 -0300
+Subject: [Buildroot] [PATCH] stunnel: security bump to version 5.06
+Message-ID: <1413479818-22351-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Disables SSLv2 & SSLv3 by default to mitigate poodle.
+Also add hash file.
 
-On Wed, 15 Oct 2014 11:20:00 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
-> Changes v1 -> v2:
->   - use github tag as version
-> ---
->  package/libnfs/libnfs.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/stunnel/stunnel.hash | 2 ++
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/stunnel/stunnel.hash
 
-After build testing on ARM, I've applied this patch. Thanks.
-
-Thomas
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+new file mode 100644
+index 0000000..89af571
+--- /dev/null
++++ b/package/stunnel/stunnel.hash
+@@ -0,0 +1,2 @@
++# From http://www.stunnel.org/pipermail/stunnel-announce/2014-October/000084.html
++sha256	098c2b6db0793ea4fa5b6767ce6ef1853e9f6cc2f32133024be55f6a460b1a40	stunnel-5.06.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 26c7dac..7be0cc7 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STUNNEL_VERSION = 5.03
++STUNNEL_VERSION = 5.06
+ STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
