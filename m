@@ -1,27 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Oct 2014 15:08:25 +0200
-Subject: [Buildroot] [git commit] tftpd: add hash file
-Message-ID: <20141016060905.73DD59D858@busybox.osuosl.org>
+Date: Thu, 16 Oct 2014 08:04:24 +0200
+Subject: [Buildroot] [git commit] samba: fix config symbols
+Message-ID: <20141016060905.8D073BD460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afb566e264a4c4b524a826937cf944b8a93d39cc
+commit: http://git.buildroot.net/buildroot/commit/?id=1f7bef035f772ba56d510c246c21482b21487183
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some of the configure cache symbols changed name because some routines
+were moved to libreplace instead of samba itself.
+So change the naming for those affected so that samba can work nicely
+again with some configuration directives (like interfaces = X).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tftpd/tftpd.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/samba/samba.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-new file mode 100644
-index 0000000..247b757
---- /dev/null
-+++ b/package/tftpd/tftpd.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
-+sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 03b901e..5472edd 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -19,13 +19,14 @@ SAMBA_DEPENDENCIES = popt \
+ 
+ SAMBA_CONF_ENV = \
+ 	ac_cv_file__proc_sys_kernel_core_pattern=yes \
+-	samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
++	libreplace_cv_HAVE_GETTIMEOFDAY_TZ=yes \
+ 	samba_cv_USE_SETREUID=yes \
+ 	samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
+-	samba_cv_HAVE_IFACE_IFCONF=yes \
+-	samba_cv_HAVE_MMAP=yes \
++	libreplace_cv_HAVE_IFACE_GETIFADDRS=yes \
++	libreplace_cv_HAVE_IFACE_IFCONF=yes \
++	libreplace_cv_HAVE_MMAP=yes \
+ 	samba_cv_HAVE_FCNTL_LOCK=yes \
+-	samba_cv_HAVE_SECURE_MKSTEMP=yes \
++	libreplace_cv_HAVE_SECURE_MKSTEMP=yes \
+ 	samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
+ 	samba_cv_fpie=no \
+ 	libreplace_cv_HAVE_IPV6=$(if $(BR2_INET_IPV6),yes,no) \
