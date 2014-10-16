@@ -1,50 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Oct 2014 09:57:47 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1j
-Message-ID: <1413464267-4698-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 10:12:42 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{17, 16, 14,
+	10}.x series
+Message-ID: <1413465163-23251-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-3513 - SRTP memory leak
-CVE-2014-3567 - Session ticket memory leak
-CVE-2014-3568 - Build option no-ssl3 is incomplete
-And adds SSL3 fallback protection against POODLE.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssl/openssl.hash | 8 ++++----
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index aa45a76..22b1529 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.sha1
--md5	c8dc151a671b9b92ff3e4c118b174972	openssl-1.0.1i.tar.gz
--sha1	74eed314fa2c93006df8d26cd9fc630a101abd76	openssl-1.0.1i.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.sha1
-+md5	f7175c9cd3c39bb1907ac8bba9df8ed3	openssl-1.0.1j.tar.gz
-+sha1	cff86857507624f0ad42d922bb6f77c4f1c2b819	openssl-1.0.1j.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 4911034..7c1c7f0 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.1i
-+OPENSSL_VERSION = 1.0.1j
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 101136a..b494885 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -171,12 +171,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.57"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.58"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.30"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.21"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.22"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+-	default "3.16.5"	if BR2_KERNEL_HEADERS_3_16
+-	default "3.17"		if BR2_KERNEL_HEADERS_3_17
++	default "3.16.6"	if BR2_KERNEL_HEADERS_3_16
++	default "3.17.1"	if BR2_KERNEL_HEADERS_3_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.0.4
