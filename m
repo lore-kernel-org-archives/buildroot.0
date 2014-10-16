@@ -1,45 +1,36 @@
-From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
-Date: Thu, 16 Oct 2014 12:57:54 +0200
-Subject: [Buildroot] [PATCH v2 8/8] package/mpd: fix zeroconf support
-In-Reply-To: <20141016115003.43eceeab@free-electrons.com>
-References: <1413379134-28918-1-git-send-email-jkrause@posteo.de>	<1413379134-28918-8-git-send-email-jkrause@posteo.de>
- <20141016115003.43eceeab@free-electrons.com>
-Message-ID: <543FA4B2.5030102@posteo.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Oct 2014 13:42:21 +0200
+Subject: [Buildroot] [git commit] libgtk3: ensure cups-config can be found
+Message-ID: <20141016114246.C4F56BD4A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+commit: http://git.buildroot.net/buildroot/commit/?id=a9c30099aaac4c51c7af42d0a9853797f06137d6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 10/16/2014 11:50 AM, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
->
-> On Wed, 15 Oct 2014 15:18:54 +0200, J?rg Krause wrote:
->
->>   # Some options need an explicit --disable or --enable
->> -ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
->> +
->> +# Zeroconf support depends on libdns_sd from avahi.
->> +ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
->>   MPD_DEPENDENCIES += avahi
->>   else
->>   MPD_CONF_OPTS += --with-zeroconf=no
-> It doesn't seem really obvious for the user that
-> BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY should be enabled to get avahi
-> support in mpd. So, in such situations, I would suggest to add a
-> Config.in option to explicitly enable the Avahi support in mpd:
->
-> config BR2_PACKAGE_MPD_AVAHI_SUPPORT
-> 	bool "avahi support"
-> 	depends on ... # all the dependencies of avahi
-> 	select BR2_PACKAGE_AVAHI
-> 	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
-> 	help
-> 	  Some help text
+Fixes:
 
-Looks good!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141016/a1d76809/attachment-0001.html>
+http://autobuild.buildroot.net/results/db6/db6cd8922444490056bf5157fc0c9349e9bf383b/
+http://autobuild.buildroot.net/results/4bd/4bdcd642eaa880dbbfbed8f4ed5ffac0c52edaa8/
+http://autobuild.buildroot.net/results/8d3/8d30687f92178de15d7697a7b8a1b7e2d6e93deb/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgtk3/libgtk3.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 31aa1b3..a9a681d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -96,6 +96,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ LIBGTK3_CONF_OPTS += --enable-cups
++LIBGTK3_CONF_ENV += ac_cv_path_CUPS_CONFIG=$(STAGING_DIR)/usr/bin/cups-config
+ LIBGTK3_DEPENDENCIES += cups
+ else
+ LIBGTK3_CONF_OPTS += --disable-cups
