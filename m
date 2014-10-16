@@ -1,10 +1,9 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Fri, 17 Oct 2014 00:29:00 +0200
-Subject: [Buildroot] [PATCH v3 5/8] package/mpd: enable support for
-	libsmbclient
+Date: Fri, 17 Oct 2014 00:29:02 +0200
+Subject: [Buildroot] [PATCH v3 7/8] package/mpd: enable support for dsd
 In-Reply-To: <1413498543-643-1-git-send-email-jkrause@posteo.de>
 References: <1413498543-643-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1413498543-643-5-git-send-email-jkrause@posteo.de>
+Message-ID: <1413498543-643-7-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,46 +17,43 @@ Changes v2 -> v3:
 Changes v1 -> v2:
   - none
 ---
- package/mpd/Config.in | 8 ++++++++
- package/mpd/mpd.mk    | 7 +++++++
- 2 files changed, 15 insertions(+)
+ package/mpd/Config.in | 6 ++++++
+ package/mpd/mpd.mk    | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index e62a37d..09df556 100644
+index 4294daf..73bfaf7 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -182,6 +182,14 @@ config BR2_PACKAGE_MPD_CURL
- 	help
- 	  Enable curl streaming (http) support.
+@@ -62,6 +62,12 @@ config BR2_PACKAGE_MPD_AUDIOFILE
+ 	  Enable audiofile input/streaming support.
+ 	  Select this if you want to play back WAV files.
  
-+config BR2_PACKAGE_MPD_LIBSMBCLIENT
-+	bool "samba"
-+	depends on !BR2_nios2 # samba
-+	select BR2_PACKAGE_SAMBA
-+	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
++config BR2_PACKAGE_MPD_DSD
++	bool "dsd"
 +	help
-+	  Enable Samba support.
++	  Enable Digital Speech Decoder (DSD) support to play audio files encoded
++	  in a digital speech format.
 +
- config BR2_PACKAGE_MPD_SOUNDCLOUD
- 	bool "soundcloud"
- 	select BR2_PACKAGE_YAJL
+ config BR2_PACKAGE_MPD_FAAD2
+ 	bool "faad2"
+ 	select BR2_PACKAGE_FAAD2
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 92d7292..ecd2a77 100644
+index ef89f3d..4eca183 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -90,6 +90,13 @@ else
- MPD_CONF_OPTS += --disable-lame-encoder
+@@ -62,6 +62,12 @@ else
+ MPD_CONF_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_LIBSMBCLIENT),y)
-+MPD_DEPENDENCIES += samba
-+MPD_CONF_OPTS += --enable-smbclient
++ifeq ($(BR2_PACKAGE_MPD_DSD),y)
++MPD_CONF_OPTS += --enable-dsd
 +else
-+MPD_CONF_OPTS += --disable-smbclient
++MPD_CONF_OPTS += --disable-dsd
 +endif
 +
- ifeq ($(BR2_PACKAGE_MPD_LIBSAMPLERATE),y)
- MPD_DEPENDENCIES += libsamplerate
- MPD_CONF_OPTS += --enable-lsr
+ ifeq ($(BR2_PACKAGE_MPD_FAAD2),y)
+ MPD_DEPENDENCIES += faad2
+ MPD_CONF_OPTS += --enable-aac
 -- 
 2.1.2
