@@ -1,43 +1,96 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Oct 2014 14:16:58 -0300
-Subject: [Buildroot] [PATCH] stunnel: security bump to version 5.06
-Message-ID: <1413479818-22351-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 16 Oct 2014 12:30:53 -0500
+Subject: [Buildroot] [PATCH v3 1/2] pps-tools: new package
+Message-ID: <1413480654-59217-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disables SSLv2 & SSLv3 by default to mitigate poodle.
-Also add hash file.
+From: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Added pps-tools package to add support to the ntpd for a
+pps source (requires timepps.h from pps-tools as part of ntpd
+build).
+
+Signed-off-by: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
 ---
- package/stunnel/stunnel.hash | 2 ++
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/stunnel/stunnel.hash
+Changes v2 -> v3
+ - Cleaned up make env/opts (Suggested Thomas P)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+Changes v1 -> v2
+ - Adjusted newlines (Suggested Thomas P)
+ - Updated license to GPLv2+ (Suggested Thomas P)
+ - Build cmd to use config opts env (Suggested Thomas P)
+ - Install step to use pkg install (Suggested Thomas P)
+ - Github helper for download (Suggested Ryan B)
+
+ package/Config.in              |  1 +
+ package/pps-tools/Config.in    |  6 ++++++
+ package/pps-tools/pps-tools.mk | 27 +++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/pps-tools/Config.in
+ create mode 100644 package/pps-tools/pps-tools.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 93e148d..8c109a5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -351,6 +351,7 @@ endif
+ 	source "package/parted/Config.in"
+ 	source "package/pciutils/Config.in"
+ 	source "package/picocom/Config.in"
++	source "package/pps-tools/Config.in"
+ 	source "package/pifmrds/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+diff --git a/package/pps-tools/Config.in b/package/pps-tools/Config.in
 new file mode 100644
-index 0000000..89af571
+index 0000000..83308f4
 --- /dev/null
-+++ b/package/stunnel/stunnel.hash
-@@ -0,0 +1,2 @@
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2014-October/000084.html
-+sha256	098c2b6db0793ea4fa5b6767ce6ef1853e9f6cc2f32133024be55f6a460b1a40	stunnel-5.06.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 26c7dac..7be0cc7 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STUNNEL_VERSION = 5.03
-+STUNNEL_VERSION = 5.06
- STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
++++ b/package/pps-tools/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PPS_TOOLS
++	bool "pps-tools"
++	help
++	  Pulse per second tools. Provides timepps.h and other PPS utilities.
++
++	  https://github.com/ago/pps-tools/
+diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
+new file mode 100644
+index 0000000..7c09e6a
+--- /dev/null
++++ b/package/pps-tools/pps-tools.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# pps-tools
++#
++################################################################################
++
++PPS_TOOLS_VERSION = 0deb9c7e135e9380a6d09e9d2e938a146bb698c8
++PPS_TOOLS_SITE = $(call github,ago,pps-tools,$(PPS_TOOLS_VERSION))
++PPS_TOOLS_INSTALL_STAGING = YES
++PPS_TOOLS_LICENSE = GPLv2+
++PPS_TOOLS_LICENSE_FILES = COPYING
++
++define PPS_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
++
++define PPS_TOOLS_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/sys $(STAGING_DIR)/usr/bin
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
++endef
++
++define PPS_TOOLS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/include/sys $(TARGET_DIR)/usr/bin
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
-2.0.4
+1.9.1
