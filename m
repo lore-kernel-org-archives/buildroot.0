@@ -1,116 +1,105 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 16 Oct 2014 11:46:35 -0400
-Subject: [Buildroot] [PATCH v4] cppunit: new package
-Message-ID: <1413474395-20165-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 13:25:33 -0300
+Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.11
+Message-ID: <1413476733-3580-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CppUnit is the C++ port of the famous JUnit framework for unit testing.
-Test output is in XML or text format for automatic testing and GUI
-based for supervised tests.
+Update initscript for the /usr/sbin -> /usr/bin change which is the
+default installation directory now that it's using autotools infra.
+Also add hash file.
 
-http://www.freedesktop.org/wiki/Software/cppunit/
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/inadyn/S70inadyn   | 10 ++++++----
+ package/inadyn/inadyn.hash |  2 ++
+ package/inadyn/inadyn.mk   | 26 ++++++++++++--------------
+ 3 files changed, 20 insertions(+), 18 deletions(-)
+ create mode 100644 package/inadyn/inadyn.hash
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
----
-Changes v3 -> v4:
-  - move the package from "Librairies" > "Others" to "Development tools"
-		 (suggested by arnout at mind.be)
-  - change the CPPUNIT_VERSION and remove the useless CPPUNIT_SOURCE
-		 (suggested by jerzy.grzegorek at trzebnica.net and
-		 arnout at mind.be)
-  - change the link which refer to the md5 hash (suggested by
-		 arnout at mind.be)
-  - change the comment for the locally calculated hash in the .hash file
-  - change the commit title
-  - add a dependency to a toolchain with dynamic library supported
-  since the static situation is not correctly detected (suggested by
-		 arnout at mind.be and thomas.petazzoni at free-electrons.com)
----
-Changes v2 -> v3:
- - use the release tarball instead of the git repository (suggested by
-		 arnout at mind.be)
- - fix the Licence (suggested by arnout at mind.be)
- - add upstream and locally compute .hash (suggested by
-		 arnout at mind.be)
----
-Changes v1 -> v2:
- - used AUTORECONF option (suggested by romain.naour at openwide.fr)
- - removed useless CONFIGURE_CMDS (suggested by romain.naour at openwide.fr)
----
- package/Config.in            |  1 +
- package/cppunit/Config.in    | 14 ++++++++++++++
- package/cppunit/cppunit.hash |  5 +++++
- package/cppunit/cppunit.mk   | 13 +++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/cppunit/Config.in
- create mode 100644 package/cppunit/cppunit.hash
- create mode 100644 package/cppunit/cppunit.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 93e148d..619d136 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -98,6 +98,7 @@ menu "Development tools"
- 	source "package/bison/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-+	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/diffutils/Config.in"
-diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index 24d0813..02a4c0d 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -14,12 +14,14 @@ VR_INADYN=/var/run/inadyn
+ 
+ case "$1" in
+         start)
+-                echo "Starting inadyn."
+-                start-stop-daemon -S -x /usr/sbin/inadyn
++                echo "Starting inadyn: "
++                start-stop-daemon -S -x /usr/bin/inadyn
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
+                 ;;
+         stop)
+-                echo  "Stopping inadyn."
+-                start-stop-daemon -q -K -x /usr/sbin/inadyn
++                echo  "Stopping inadyn: "
++                start-stop-daemon -q -K -x /usr/bin/inadyn
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
+                 rm -f /var/run/inadyn/inadyn.pid
+                 ;;
+         restart)
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
 new file mode 100644
-index 0000000..71e791c
+index 0000000..e69feb2
 --- /dev/null
-+++ b/package/cppunit/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CPPUNIT
-+	bool "cppunit"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PREFER_STATIC_LIB # currently the static situation
-+					  # is not correctly detected.
-+	help
-+	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
-+	  Test output is in XML or text format for automatic testing and GUI
-+	  based for supervised tests.
-+
-+	  http://www.freedesktop.org/wiki/Software/cppunit/
-+
-+comment "cppunit needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
-diff --git a/package/cppunit/cppunit.hash b/package/cppunit/cppunit.hash
-new file mode 100644
-index 0000000..a097e32
---- /dev/null
-+++ b/package/cppunit/cppunit.hash
-@@ -0,0 +1,5 @@
-+# hash from: http://www.freedesktop.org/wiki/Software/cppunit/:
-+md5	d1c6bdd5a76c66d2c38331e2d287bc01  cppunit-1.13.2.tar.gz
-+
-+# Locally calculated:
-+sha512	8f4be569f321d577cec31931f49f4df143bc94e283605509b6ea50c60690aa91a2aed940e7eebd4b2413a4218f9a6c3978d312d8e587eab040283c6563846ecd  cppunit-1.13.2.tar.gz
-diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
-new file mode 100644
-index 0000000..ab370f3
---- /dev/null
-+++ b/package/cppunit/cppunit.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# cppunit
-+#
-+################################################################################
-+
-+CPPUNIT_VERSION = 1.13.2
-+CPPUNIT_SITE = http://dev-www.libreoffice.org/src
-+CPPUNIT_INSTALL_STAGING = YES
-+CPPUNIT_LICENSE = LGPLv2.1+
-+CPPUNIT_LICENSE_FILES = COPYING
-+
++++ b/package/inadyn/inadyn.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	7e2bfc5df32848abd814548c87bf1d2731ffcf34ad180d8204d94239cb7ad590	inadyn-1.99.11.tar.gz
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 21e983e..74bb679 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,33 +4,31 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.9
++INADYN_VERSION = 1.99.11
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
++INADYN_CONF_OPTS += --enable-openssl
+ INADYN_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++INADYN_DEPENDENCIES += gnutls
+ else
+-define INADYN_DISABLE_OPENSSL
+-	$(SED) '/ssl/Id' $(@D)/config.mk
+-endef
++INADYN_CONF_OPTS += --disable-ssl
+ endif
+-INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
+-
+-define INADYN_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+ 
+-define INADYN_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
+-	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+-		$(TARGET_DIR)/etc/inadyn.conf
++define INADYN_INSTALL_SAMPLE_CONFIG
++	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
++		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
++			$(TARGET_DIR)/etc/inadyn.conf; \
++	fi
+ endef
++INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
+ 
+ define INADYN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
+ endef
+ 
+-$(eval $(generic-package))
 +$(eval $(autotools-package))
 -- 
-1.8.3.4
+2.0.4
