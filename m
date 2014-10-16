@@ -1,55 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Oct 2014 10:53:26 -0300
-Subject: [Buildroot] [PATCH 1/3] qemu-system: new package
-In-Reply-To: <543EA87A.2050204@mind.be>
-References: <1399148415-27648-1-git-send-email-gustavo@zacarias.com.ar>
- <20141012171752.29414e94@free-electrons.com>
- <543AD090.3000107@zacarias.com.ar> <543EA87A.2050204@mind.be>
-Message-ID: <543FCDD6.9070104@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 11:06:15 -0300
+Subject: [Buildroot] [PATCH 2/4] pciutils: add hash file
+In-Reply-To: <878ukhotem.fsf@dell.be.48ers.dk>
+References: <1413329080-25292-1-git-send-email-gustavo@zacarias.com.ar>	<1413329080-25292-2-git-send-email-gustavo@zacarias.com.ar>
+ <878ukhotem.fsf@dell.be.48ers.dk>
+Message-ID: <543FD0D7.2010307@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/15/2014 02:01 PM, Arnout Vandecappelle wrote:
+On 10/15/2014 07:33 PM, Peter Korsgaard wrote:
 
->  Can you explain why not?
+> While this checksum matches the .asc file, it is different than what
+> was on the old server (and on sources.buildroot.org, autobuilders and
+> whatnot) - And as pciutils hasn't been bumped since Nov 2013 people are
+> quite likely to already have it in their dl/.
 > 
->  You cannot use different versions for qemu-user and qemu-system in a clean way
-> if they're not different packages. But host and target versions don't need to be
-> the same. At least, I see code in pkg-generic.mk to handle that.
+> As pciutils isn't really such a security sensitive package, I think we
+> should wait with this until the version is bumped next time.
 
-Well, not really, for example try modifying package/e2fsprogs.mk:
-HOST_E2FSPROGS_VERSION = 1.42.13
-
-And build both, see what happens.
-Even try a make source with that.
-
->  And I do think we want to keep qemu-user and qemu-system at the same version,
-> right? Or does it happen that you need different versions for these as well?
-> 
->  The real question is how to make the version depend on the values in
-> BR2_PACKAGE_QEMU_CUSTOM_TARGETS. But that is not the concern of your patch.
-
-No, that's a wrong assumption.
-For example qemu_mpc8544ds_defconfig doesn't work with the latest 2.1.2
-qemu, however other qemu ppc sample defconfigs do (in fact no 2.1.x
-version).
-And the qemu config should dictate what's the best version for each -
-not necessarily the latest, you can't make host-qemu-user depend on that
-since it's a platform decision, not an arch one.
-If you want to stick with "the one that works for everything" you
-potentially miss the opportunity for new arch and/or platform support.
-So even if target != host version is fixed/possible you'll still clash
-on host-qemu (user) vs. host-qemu (system) versions since you might want
-to do the perl module dance (original purpose of host-qemu) vs. platform
-emulation.
-It's nice to keep everything in one package, but it's not feasible to do
-so in a coherent way for this case in particular.
-If you can't get the leash out of the qemu version there's no point in
-building so for the emulation, sometimes you'll ship every single qemu
-config working, sometimes you wont - and that's my quarrel, everyone is
-perfect-this perfect-that but all of the sudden this would be acceptable?
-Like i said it would be the same as $RANDOM distro qemu.
+That shouldn't be a decisive factor, you're looking for consistency
+besides security and it shouldn't reduce the effort in doing so.
+I can argue that the security factor is indeed important, if you run
+things as root (lspci, setpci) - which is common in embedded targets -
+and the tarball installs a nifty backdoor then you probably wouldn't be
+too happy about it.
+I know it would be odd to use those tools outside development.
+So compromise solution: switch to a new tarball format, that one isn't
+cached anywhere.
 Regards.
