@@ -1,33 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Oct 2014 11:06:15 -0300
-Subject: [Buildroot] [PATCH 2/4] pciutils: add hash file
-In-Reply-To: <878ukhotem.fsf@dell.be.48ers.dk>
-References: <1413329080-25292-1-git-send-email-gustavo@zacarias.com.ar>	<1413329080-25292-2-git-send-email-gustavo@zacarias.com.ar>
- <878ukhotem.fsf@dell.be.48ers.dk>
-Message-ID: <543FD0D7.2010307@zacarias.com.ar>
+Date: Thu, 16 Oct 2014 11:06:19 -0300
+Subject: [Buildroot] [PATCHv2] pciutils: add hash file
+Message-ID: <1413468379-2055-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/15/2014 07:33 PM, Peter Korsgaard wrote:
+Also switch to xz tarball to avoid cached tarball hash conflict.
 
-> While this checksum matches the .asc file, it is different than what
-> was on the old server (and on sources.buildroot.org, autobuilders and
-> whatnot) - And as pciutils hasn't been bumped since Nov 2013 people are
-> quite likely to already have it in their dl/.
-> 
-> As pciutils isn't really such a security sensitive package, I think we
-> should wait with this until the version is bumped next time.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/pciutils/pciutils.hash | 2 ++
+ package/pciutils/pciutils.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/pciutils/pciutils.hash
 
-That shouldn't be a decisive factor, you're looking for consistency
-besides security and it shouldn't reduce the effort in doing so.
-I can argue that the security factor is indeed important, if you run
-things as root (lspci, setpci) - which is common in embedded targets -
-and the tarball installs a nifty backdoor then you probably wouldn't be
-too happy about it.
-I know it would be odd to use those tools outside development.
-So compromise solution: switch to a new tarball format, that one isn't
-cached anywhere.
-Regards.
+diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+new file mode 100644
+index 0000000..b5892b6
+--- /dev/null
++++ b/package/pciutils/pciutils.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
++sha256	8d62f84fe7a7401af2ed62d6303255a0cf7333f606c136927f0ba9110ab6824a	pciutils-3.2.1.tar.xz
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 819d6a4..54dc1d9 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ PCIUTILS_VERSION = 3.2.1
+-PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
++PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
++PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
+ PCIUTILS_INSTALL_STAGING = YES
+ PCIUTILS_LICENSE = GPLv2+
+ PCIUTILS_LICENSE_FILES = COPYING
+-- 
+2.0.4
