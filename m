@@ -1,31 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 11:08:34 +0200
-Subject: [Buildroot] [PATCH v3] cppunit: Added package
-In-Reply-To: <543F8710.4010708@mind.be>
-References: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <543F8710.4010708@mind.be>
-Message-ID: <20141016110834.0410d5ce@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Oct 2014 11:01:45 +0200
+Subject: [Buildroot] [git commit] getent: look for glibc's getent in more
+	places
+Message-ID: <20141016091303.1354DB7801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=7f971ecf722e19a3f1ac9db4c3391097d189f4df
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Oct 2014 10:51:28 +0200, Arnout Vandecappelle wrote:
+External toolchains don't always install the executable in /usr/bin -
+God knows why. So check in a few more places.
 
->  Unfortunately, it fails to build for platforms without shared libraries (e.g.
-> blackfin FLAT). Probably easy to fix (seems to be a case of some forgotten
-> #ifdef's), but it's easier to just add
-> 
-> 	depends on !BR2_BINFMT_FLAT
+We can use make's $(wildcard ...) here, because the variable only gets
+expanded when the install step is executed, and by that time the
+STAGING_DIR has already been installed.
 
-No: if it's really related to shared libraries, then it should be a
-depends on !BR2_PREFER_STATIC_LIB.
+Probably fixes most getent autobuilder errors, at least if fixes
+http://autobuild.buildroot.net/results/615b9d17f713b4a53192efb00188560a76b9efa3/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/getent/getent.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/package/getent/getent.mk b/package/getent/getent.mk
+index dd08478..18f0991 100644
+--- a/package/getent/getent.mk
++++ b/package/getent/getent.mk
+@@ -14,7 +14,11 @@ GETENT_LICENSE = LGPLv2.1+
+ # the C library. For other toolchains, we use the wrapper script
+ # included in this package.
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+-GETENT_LOCATION = $(STAGING_DIR)/usr/bin/getent
++# Sourcery toolchains install it in sysroot/usr/lib/bin
++# Buildroot toolchains install it in sysroot/usr/bin
++GETENT_LOCATION = $(firstword $(wildcard \
++	$(STAGING_DIR)/usr/bin/getent \
++	$(STAGING_DIR)/usr/lib/bin/getent))
+ else
+ GETENT_LOCATION = package/getent/getent
+ endif
