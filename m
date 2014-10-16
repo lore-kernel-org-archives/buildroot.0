@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Oct 2014 11:05:12 +0200
-Subject: [Buildroot] [PATCH] getent: look for glibc's getent in more
-	places
-In-Reply-To: <1413375322-27938-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 15 Oct 2014 14:15:22 +0200")
-References: <1413375322-27938-1-git-send-email-arnout@mind.be>
-Message-ID: <87wq80fkqf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Oct 2014 11:08:34 +0200
+Subject: [Buildroot] [PATCH v3] cppunit: Added package
+In-Reply-To: <543F8710.4010708@mind.be>
+References: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <543F8710.4010708@mind.be>
+Message-ID: <20141016110834.0410d5ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Dear Arnout Vandecappelle,
 
- > External toolchains don't always install the executable in /usr/bin -
- > God knows why. So check in a few more places.
+On Thu, 16 Oct 2014 10:51:28 +0200, Arnout Vandecappelle wrote:
 
- > We can use make's $(wildcard ...) here, because the variable only gets
- > expanded when the install step is executed, and by that time the
- > STAGING_DIR has already been installed.
+>  Unfortunately, it fails to build for platforms without shared libraries (e.g.
+> blackfin FLAT). Probably easy to fix (seems to be a case of some forgotten
+> #ifdef's), but it's easier to just add
+> 
+> 	depends on !BR2_BINFMT_FLAT
 
- > Probably fixes most getent autobuilder errors, at least if fixes
- > http://autobuild.buildroot.net/results/615b9d17f713b4a53192efb00188560a76b9efa3/
+No: if it's really related to shared libraries, then it should be a
+depends on !BR2_PREFER_STATIC_LIB.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > Someone should check the Linaro, Arago, Xilinx, and crosstool-NG
- > toolchains... Or we just wait for the autobuilders :-)
-
-Yeah, lets see what it gives.
-
-Committed, thanks. If we end up with external glibc toolchains that
-really don't have a getent binary we might consider extending the
-wildcard logic to fall back to our uclibc emulation - But lets wait and
-see.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
