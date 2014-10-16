@@ -1,44 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Oct 2014 13:52:57 +0200
-Subject: [Buildroot] [git commit] libgtk3: ensure host version of pkg-config
-	is used for native compilation
-Message-ID: <20141016115711.2570CB3057@busybox.osuosl.org>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Thu, 16 Oct 2014 14:38:12 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20141011162152.GA4254@free.fr>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20141011162152.GA4254@free.fr>
+Message-ID: <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=307df2883ed6f0ca583f8d6c9b87a9789d122507
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, all,
 
-This already was in Eric's submission, but I removed it when committing
-while cleaning up.  The package infrastructure already passes the correct
-pkg-config to use for cross compilation, but NOT for building native tools,
-so we ended up using the target variant and got wrong libraries/headers.
+On Sat, Oct 11, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> We've been discussing this ejabberd patch during the current Developpers
+> Day in D?sseldorf.
+>
+> Given the current issues that ewre noticed with building ejabberd, we
+> decided to mark the patch as Rejected in patchwork.
+>
+> This means that we rejected that very specific patch, *not* that we
+> decided not to have ejabberd. But before it gets included, all the
+> issues must be fixed first, especially the build-time downloading of
+> dependencies, as well as all the remarks that were made by Thomas and I.
 
-Fixes:
+Sure, it makes sense to me as well. As I said in a previous mail, I
+did fix my patch to include your remarks, but two:
+1. Fix ejabberd build system to not download dependencies at build time.
+2. Avoid to use a fix UID and GID for ejabberd user.
 
-http://autobuild.buildroot.net/results/e0c/e0c2623e2d400ce66963eae23f136c0158556b36/
-http://autobuild.buildroot.net/results/5bf/5bf66b8d16a3ddded24827bf278ad24b55ded6e7/
-http://autobuild.buildroot.net/results/75f/75f93cea8ab59f052ddefa51c0bfc14c3df47a60/
+I don't know if I should republish the patch before fixing these two issues.
+I'd like your help on both of them.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgtk3/libgtk3.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+** Fix ejabberd build system
+** ===================
+The only solution i see is to create a buildroot package for every
+ejabberd dependency, listed in rebar.config.script :
+esip, goldrush, lager, p1_cache_tab, p1_iconv, p1_stringprep, p1_stun,
+p1_tls, p1_utils, p1_xml, p1_yaml, p1_zlib, xmlrpc
+Then, modify ejabberd package to not use rebar at all, or at least to
+not call rebar get-deps. Thus, if I remove deps from the `all'
+makefile rule and deps/.build from the `src' rule dependency, it might
+work.
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index a9a681d..73b3e17 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -15,7 +15,8 @@ LIBGTK3_AUTORECONF = YES
- 
- LIBGTK3_CONF_ENV = \
- 	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
--	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource
-+	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
-+	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/usr/bin/pkgconf
- 
- LIBGTK3_CONF_OPTS = --disable-glibtest \
- 	--enable-explicit-deps=no \
+Do you have a better idea?
+
+** Avoid to use a fix UID and GID for ejabberd user
+** ===================================
+
+I still don't know how I could set the correct permissions to ejabberd
+files in <PKG>_PERMISSIONS if I set -1 for UID and GID in <PKG>_USERS
+
+Best regards,
+-- 
+Johan
