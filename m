@@ -1,44 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 11:53:40 +0200
-Subject: [Buildroot] [PATCH v3] cppunit: Added package
-In-Reply-To: <543F9315.3010104@mind.be>
-References: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <543F8710.4010708@mind.be>
- <20141016110834.0410d5ce@free-electrons.com>
- <543F9315.3010104@mind.be>
-Message-ID: <20141016115340.26569604@free-electrons.com>
+From: =?UTF-8?B?R3VpbGxhdW1lIEdBUkRFVCAtIE9saXPDqW8=?= <guillaume.gardet@oliseo.fr>
+Date: Thu, 16 Oct 2014 11:52:19 +0200
+Subject: [Buildroot] [PATCH 1/3] package/squid: enable ICAP server
+ support in squid and define logdir, pidfile and swapdir
+In-Reply-To: <54359D66.3000608@zacarias.com.ar>
+References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <1411032426-11463-2-git-send-email-guillaume.gardet@oliseo.fr>
+ <20141005235232.66d3c09c@free-electrons.com> <5435988F.70209@oliseo.fr>
+ <20141008221807.3b9e147d@free-electrons.com>
+ <54359D66.3000608@zacarias.com.ar>
+Message-ID: <543F9553.1000204@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Le 08/10/2014 22:24, Gustavo Zacarias a ?crit :
+> On 10/08/2014 05:18 PM, Thomas Petazzoni wrote:
+>
+>>> Without: 2.7 MB,and with c-icap: 3.0 MB
+>>>
+>>> Should I make it optionnal?
+>> I would tend to say yes. Making it optional not only saves space, but
+>> it also makes it explicit that our Squid build can support the ICAP
+>> client functionality.
+> I wouldn't mind keeping it as is, squid is a big RAM and storage
+> sinkhole so it's a no-go for memory-constrained targets in general,
+> after all it's a caching (in disk) proxy with the RAM usage for keeping
+> indexes at hand.
+> Regards.
+>
+>
 
-On Thu, 16 Oct 2014 11:42:45 +0200, Arnout Vandecappelle wrote:
+Then, should I make it optionnal or not? I think it should be ok to keep it included as it will never be used on underpowered SoC.
 
-> > No: if it's really related to shared libraries, then it should be a
-> > depends on !BR2_PREFER_STATIC_LIB.
-> 
->  Yeah, you're probably right. It does build with PREFER_STATIC on other
-> architectures, but that's just because there still is a dlopen in staging so it
-> still sets CPPUNIT_HAVE_LIBDL and then it builds "correctly". But we most likely
-> have many many packages that seem to build correctly with STATIC but actually
-> still use shared libraries or dlopen. We probably should remove ld.so and
-> libdl.* from staging when building static.
+Thomas, would you be ok with that?
 
-Well, for packages that do build on noMMU platforms, we do catch such
-issues thanks to the bfin-uclinux toolchain configuration that is used
-on the autobuilders. But for those other packages that don't build on
-noMMU, we indeed don't check properly if we're able to do a pure static
-build.
-
-Alexey has sent a patch to remove HAVE_SHARED from the uClibc
-configuration when BR2_PREFER_STATIC_LIB is enabled. Maybe this will
-get rid of ld.so, libdl and so on? I haven't tested yet.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Guillaume
