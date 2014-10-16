@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 19:08:35 +0200
-Subject: [Buildroot] [git commit] package/libnfs: bump to version 1.9.5
-Message-ID: <20141016170848.C5CDCB30B3@busybox.osuosl.org>
+Date: Thu, 16 Oct 2014 19:10:11 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libnfs: bump to version 1.9.5
+In-Reply-To: <1413364800-15371-1-git-send-email-jkrause@posteo.de>
+References: <1413364800-15371-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20141016191011.16747678@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28b163f3162c91afaed1e5c5c59d10d18cfa7dbc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnfs/libnfs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, 15 Oct 2014 11:20:00 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> ---
+> Changes v1 -> v2:
+>   - use github tag as version
+> ---
+>  package/libnfs/libnfs.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index a17d8c3..0c8c4f5 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNFS_VERSION = libnfs-1.8.0
-+LIBNFS_VERSION = libnfs-1.9.5
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
+After build testing on ARM, I've applied this patch. Thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
