@@ -1,110 +1,148 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Oct 2014 10:50:05 +0200
-Subject: [Buildroot] [PATCH 1/1] yaml-cpp: Added package
-In-Reply-To: <1413406053-22668-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1413406053-22668-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <20141016105005.5e3fffbd@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 16 Oct 2014 10:51:28 +0200
+Subject: [Buildroot] [PATCH v3] cppunit: Added package
+In-Reply-To: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+References: <1413404565-16362-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <543F8710.4010708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sebastien Bourdelin,
+ Sorry, still a few details :-)
 
-Title should rather be "yaml-cpp: new package", as per the convention
-we use for most commits introducing new packages.
-
-On Wed, 15 Oct 2014 16:47:33 -0400, Sebastien Bourdelin wrote:
-> yaml-cpp is a YAML parser and emitter in C++ matching
-> the YAML 1.2 spec.
+On 15/10/14 22:22, Sebastien Bourdelin wrote:
+> CppUnit is the C++ port of the famous JUnit framework for unit testing.
+> Test output is in XML or text format for automatic testing and GUI
+> based for supervised tests.
 > 
-> https://code.google.com/p/yaml-cpp/
+> http://www.freedesktop.org/wiki/Software/cppunit/
+> 
 > Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+> ---
+> Changes v2 -> v3:
+>  - use the release tarball instead of the git repository (suggested by
+> 		 arnout at mind.be)
+>  - fix the Licence (suggested by arnout at mind.be)
+>  - add upstream and locally compute .hash (suggested by
+> 		 arnout at mind.be)
+> ---
+> Changes v1 -> v2:
+>  - used AUTORECONF option (suggested by romain.naour at openwide.fr)
+>  - removed useless CONFIGURE_CMDS (suggested by romain.naour at openwide.fr)
 
-There should be an empty new line before the SoB line.
+ Excellent changelog BTW!
 
+> ---
+>  package/Config.in            |  1 +
+>  package/cppunit/Config.in    | 12 ++++++++++++
+>  package/cppunit/cppunit.hash |  5 +++++
+>  package/cppunit/cppunit.mk   | 14 ++++++++++++++
+>  4 files changed, 32 insertions(+)
+>  create mode 100644 package/cppunit/Config.in
+>  create mode 100644 package/cppunit/cppunit.hash
+>  create mode 100644 package/cppunit/cppunit.mk
+> 
 > diff --git a/package/Config.in b/package/Config.in
-> index 93e148d..40a1b1c 100644
+> index 93e148d..8d6e047 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -898,6 +898,7 @@ menu "Other"
->  	source "package/startup-notification/Config.in"
->  	source "package/tz/Config.in"
->  	source "package/tzdata/Config.in"
-> +	source "package/yaml-cpp/Config.in"
+> @@ -840,6 +840,7 @@ menu "Other"
+>  	source "package/clapack/Config.in"
+>  	source "package/classpath/Config.in"
+>  	source "package/cppcms/Config.in"
+> +	source "package/cppunit/Config.in"
 
-I don't think it's the right place for this. It should be in
-"Libraries" -> "XML/JSON", because this is where the libyaml package
-is. Of course, yaml is technically not XML or JSON, but still.
+ I didn't look at this before, but:
 
-> diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
+ I think this fits better in the Development tools menu, even though it's a
+library. I'm not 100% sure, though, so it's up to you.
+
+>  	source "package/eigen/Config.in"
+>  	source "package/elfutils/Config.in"
+>  	source "package/fftw/Config.in"
+> diff --git a/package/cppunit/Config.in b/package/cppunit/Config.in
 > new file mode 100644
-> index 0000000..fcfd60f
+> index 0000000..91700b8
 > --- /dev/null
-> +++ b/package/yaml-cpp/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_YAML_CPP
-> +	bool "yaml-cpp"
+> +++ b/package/cppunit/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_CPPUNIT
+> +	bool "cppunit"
 > +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_BOOST
 > +	help
-> +	  yaml-cpp is a YAML parser and emitter in C++ matching
-> +	  the YAML 1.2 spec.
+> +	  CppUnit is the C++ port of the famous JUnit framework for unit testing.
+> +	  Test output is in XML or text format for automatic testing and GUI
+> +	  based for supervised tests.
 > +
-> +	  https://code.google.com/p/yaml-cpp/
+> +	  http://www.freedesktop.org/wiki/Software/cppunit/
 > +
-> +comment "yaml-cpp needs a toolchain w/ C++, largefile, threads"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/yaml-cpp/yaml-cpp.hash b/package/yaml-cpp/yaml-cpp.hash
+> +comment "cppunit needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/cppunit/cppunit.hash b/package/cppunit/cppunit.hash
 > new file mode 100644
-> index 0000000..391e317
+> index 0000000..ad45455
 > --- /dev/null
-> +++ b/package/yaml-cpp/yaml-cpp.hash
+> +++ b/package/cppunit/cppunit.hash
 > @@ -0,0 +1,5 @@
-> +# hash from: https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz:
-> +sha1 9c5414b4090491e96d1b808fe8628b31e625fdaa  yaml-cpp-0.5.1.tar.gz
+> +# hash from: http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz:
+
+ We already know where the source comes from; instead, you should refer to the
+URL that gives the hash:
+http://www.freedesktop.org/wiki/Software/cppunit/
+
+> +md5	d1c6bdd5a76c66d2c38331e2d287bc01  cppunit-1.13.2.tar.gz
+
+ I verified that this is correct.
+
 > +
-> +# Locally calculated:
-> +sha256 3e7c9052b43d987d41819a203d97fc45de4eed3ec67e0fdb14265c3d11046f06  yaml-cpp-0.5.1.tar.gz
-> diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
+> +# no upstream hash for the following:
+> +sha512	8f4be569f321d577cec31931f49f4df143bc94e283605509b6ea50c60690aa91a2aed940e7eebd4b2413a4218f9a6c3978d312d8e587eab040283c6563846ecd  cppunit-1.13.2.tar.gz
+> diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
 > new file mode 100644
-> index 0000000..324ea58
+> index 0000000..89268b7
 > --- /dev/null
-> +++ b/package/yaml-cpp/yaml-cpp.mk
+> +++ b/package/cppunit/cppunit.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# yaml-cpp
+> +# cppunit
 > +#
 > +################################################################################
 > +
-> +YAML_CPP_VERSION = yaml-cpp-0.5.1
-> +YAML_CPP_SOURCE = $(YAML_CPP_VERSION).tar.gz
+> +CPPUNIT_VERSION = cppunit-1.13.2
 
-You should rather do:
+ No, the version is 1.13.2
 
-YAML_CPP_VERSION = 0.5.1
+> +CPPUNIT_SOURCE = $(CPPUNIT_VERSION).tar.gz
 
-and not specify any YAML_CPP_SOURCE at all.
+ Once the VERSION has been corrected, this is the default so it's not needed to
+give the CPPUNIT_SOURCE.
 
-> +YAML_CPP_SITE = https://yaml-cpp.googlecode.com/files
-> +YAML_CPP_INSTALL_STAGING = YES
-> +YAML_CPP_LICENSE = MIT
-> +YAML_CPP_LICENSE_FILES = license.txt
-
-The license information looks ok.
-
+> +CPPUNIT_SITE = http://dev-www.libreoffice.org/src
+> +CPPUNIT_INSTALL_STAGING = YES
+> +CPPUNIT_LICENSE = LGPLv2.1+
+> +CPPUNIT_LICENSE_FILES = COPYING
 > +
-> +$(eval $(cmake-package))
+> +$(eval $(autotools-package))
 
-Could you submit an updated version with those minor changes taken into
-account? Other than those comments, I believe the package is good to go!
 
-Thomas
+ Unfortunately, it fails to build for platforms without shared libraries (e.g.
+blackfin FLAT). Probably easy to fix (seems to be a case of some forgotten
+#ifdef's), but it's easier to just add
+
+	depends on !BR2_BINFMT_FLAT
+
+
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
