@@ -1,131 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Oct 2014 22:18:25 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20141011162152.GA4254@free.fr>
- <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
-Message-ID: <20141017201824.GC3971@free.fr>
+Date: Fri, 17 Oct 2014 22:31:37 +0200
+Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
+	compile fixes
+In-Reply-To: <1413561468-27240-1-git-send-email-maarten@treewalker.org>
+References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
+ <1413561468-27240-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20141017203137.GD3971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Maarten, All,
 
-On 2014-10-16 14:38 +0200, Johan Oudinet spake thusly:
-> On Sat, Oct 11, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > We've been discussing this ejabberd patch during the current Developpers
-> > Day in D?sseldorf.
-> >
-> > Given the current issues that ewre noticed with building ejabberd, we
-> > decided to mark the patch as Rejected in patchwork.
-> >
-> > This means that we rejected that very specific patch, *not* that we
-> > decided not to have ejabberd. But before it gets included, all the
-> > issues must be fixed first, especially the build-time downloading of
-> > dependencies, as well as all the remarks that were made by Thomas and I.
+On 2014-10-17 17:57 +0200, Maarten ter Huurne spake thusly:
+> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+> ---
+> The second version of this patch was missing the "v2" label; this is
+> the third version.
 > 
-> Sure, it makes sense to me as well. As I said in a previous mail, I
-> did fix my patch to include your remarks, but two:
-> 1. Fix ejabberd build system to not download dependencies at build time.
-> 2. Avoid to use a fix UID and GID for ejabberd user.
+> The changes from v2, plus an additional change I made later were merged
+> upstream. This patch bumps the git revision to the merge commit.
 > 
-> I don't know if I should republish the patch before fixing these two issues.
-> I'd like your help on both of them.
-> 
-> ** Fix ejabberd build system
-> ** ===================
-> The only solution i see is to create a buildroot package for every
-> ejabberd dependency, listed in rebar.config.script :
-> esip, goldrush, lager, p1_cache_tab, p1_iconv, p1_stringprep, p1_stun,
-> p1_tls, p1_utils, p1_xml, p1_yaml, p1_zlib, xmlrpc
-> Then, modify ejabberd package to not use rebar at all, or at least to
-> not call rebar get-deps. Thus, if I remove deps from the `all'
-> makefile rule and deps/.build from the `src' rule dependency, it might
-> work.
-> 
-> Do you have a better idea?
+> rpi-userland-002-remove-faulty-assert.patch had to be updated to match
+> other changes in the code that are pulled in by the version bump.
+> I checked that the updated patch compiles fine, but I have no idea
+> whether it is still needed to fix or work around a runtime problem.
 
-No, I have no better idea. I don't know how rebar works, but we indeed
-need to have one package for each dependency. Having ejabberd (rebar, in
-fact) do the download at configure/build time is not acceptable.
+I have a way to test it, so I'll report whether it is still needed.
+Basically, running weston was segfaulting always, at the very start.
+So I'll try to reproduce; if it still segfaults without the patch, we'll
+keep it, otherwise we'll drop it.
 
-Howeever, I can see where that brings us:
+From what I read in the new code, it seems the assert makes much more
+sense now than it did before...
 
-  - there are so far 14 identified such dependencies;
+I'll mark http://patchwork.ozlabs.org/patch/388745/ as superseded.
 
-  - maybe (probably?) each of those dependencies mya in turn have more
-    dependencies, which add up to the list;
-
-  - I have absolutely no idea how rebar (or the whole erlang ecosystem)
-    behaves for corss-compilation (hint: probably badly), which would
-    make for very tricky package recipes;
-
-  - thus, we'd highly benefit from a specialised package infrastructure,
-    like we have for perl, python or lua packages, though I'm afraid
-    that would not be a piece of cake to add such an infra.
-
-So, I really don;t know where to go from there... :-(
-
-If you were inclined into looking into this, then I think the best
-course of actions for you would be somelthing along those lines:
-
-  (1) create a new package for the simplest, leaf-most dependency; this
-      will allow you to assess how complex it is to cross-build a single,
-      simple erlang package;
-
-  (2) add a new package that depends directly on, and only on the one
-      above; this will allow you to assess how complex it is to express
-      erlang dependencies in cross-compilation;
-
-  (3) progress with a few more packages (say, up to 3-5 packages); this
-      will allow you to have a global understanding about the
-      comonalities and specifities of erlang packages;
-
-  (4) see how to turn that into a specific package infrastructure;
-
-  (5) post your results to the list, so we can all agree on that new
-      infra; this will allow all of us to get to solve issues in a clean
-      and sane way;
-
-  (6) introduce that new infra, and convert the existing packages over
-      to that new infra;
-
-  (7) add every missing ejabberd dependencies one after the other,
-      adapting the new infra in case it is needed, until you eventually
-      reach to packaging ejabberd;
-
-  (8) rejoice! ;-)
-
-Note that this will probably be a lot of work, and I do not expect it to
-be easy at all. I'm willing to participate in this effort, if you want.
-
-> ** Avoid to use a fix UID and GID for ejabberd user
-> ** ===================================
-> 
-> I still don't know how I could set the correct permissions to ejabberd
-> files [...]
-
-A quick solution to that would be to have all of ejabberd's files in a
-specific directory, like /var/ejabberd (find a better location1), add
-the necessary symlinks to point to that location, and use that location
-in EJABBERD_USERS:
-
-    ejabberd -1 ejabberd -1 * /var/ejabberd - - ejabberd daemon
-
-> [...] in <PKG>_PERMISSIONS if I set -1 for UID and GID in <PKG>_USERS
-
-Indeed, there is no provision for using UIDs/GIDs from the _USERS variable,
-from the _PERMISSIONS.
-
-I'll look into that...
+Thanks for the detailed explanations, that helped me catch it! :-)
+I'll report back later tonight, so I hold my ack until then.
 
 Regards,
 Yann E. MORIN.
 
+>  .../rpi-userland-002-remove-faulty-assert.patch    | 25 ++++++++++++----------
+>  package/rpi-userland/rpi-userland.mk               |  2 +-
+>  2 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
+> index c23c43a..450f287 100644
+> --- a/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
+> +++ b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
+> @@ -3,19 +3,22 @@ interface: remove faulty assert() to make weston happy at runtime
+>  This was removed after a discussion on IRC with the weston guys
+>  ('daniels' on irc.freenode.net/#wayland).
+>  
+> +Rebased on 4333d6d by Maarten ter Huurne <maarten@treewalker.org>.
+> +
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  ---
+>  Upstream status: no, will be pushed by weston guys later.
+>  If not, I'll do it.
+>  
+> -diff -durN rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c
+> ---- rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-04 17:43:44.000000000 +0200
+> -+++ rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-08 22:28:51.611433539 +0200
+> -@@ -1187,7 +1187,6 @@
+> -          continue;
+> -    
+> -       if(dispmanx_client.update_callback ) {
+> --         vcos_assert( dispmanx_client.pending_update_handle == (DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1]);
+> -          dispmanx_client.update_callback((DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1], dispmanx_client.update_callback_param);
+> -       }
+> -    }
+> +diff --git a/interface/vmcs_host/vc_vchi_dispmanx.c b/interface/vmcs_host/vc_vchi_dispmanx.c
+> +index 85b373c..59a01f8 100755
+> +--- a/interface/vmcs_host/vc_vchi_dispmanx.c
+> ++++ b/interface/vmcs_host/vc_vchi_dispmanx.c
+> +@@ -1296,7 +1296,6 @@ static void *dispmanx_notify_func( void *arg ) {
+> +          // Decrement the use count - the corresponding "use" is in vc_dispmanx_update_submit.
+> +          vchi_service_release(dispmanx_client.notify_handle[0]);
+> +          if (dispmanx_client.update_callback ) {
+> +-            vcos_assert( dispmanx_client.pending_update_handle == handle);
+> +             dispmanx_client.update_callback(handle, dispmanx_client.update_callback_param);
+> +          }
+> +       } else {
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index c738b62..8a71f93 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RPI_USERLAND_VERSION = ffcc4bd7c4875b71376c4240116e251652c9bec0
+> +RPI_USERLAND_VERSION = 4333d6d023a1f0dcc763d0706a1fe6523f9b6005
+>  RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+>  RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+> -- 
+> 1.8.4.5
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
