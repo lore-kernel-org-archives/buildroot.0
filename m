@@ -1,47 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Oct 2014 00:46:30 +0200
-Subject: [Buildroot] [PATCH v3 2/3] gst-ffmpeg: add --pkg-config to
- internal libav configure options
-In-Reply-To: <XnsA3C9F0AB8CD30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1413142206-30581-1-git-send-email-danomimanchego123@gmail.com>
- <1413142206-30581-2-git-send-email-danomimanchego123@gmail.com>
- <20141017212453.GI3971@free.fr>
- <XnsA3C9F0AB8CD30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141017224630.GE7944@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Oct 2014 00:15:17 +0200
+Subject: [Buildroot] [PATCH v2 6/8] package/mpd: enable support for
+	libnfs
+In-Reply-To: <543FA48C.8040601@posteo.de>
+References: <1413379134-28918-1-git-send-email-jkrause@posteo.de>	<1413379134-28918-6-git-send-email-jkrause@posteo.de>
+ <20141016114439.6e09d052@free-electrons.com> <543FA48C.8040601@posteo.de>
+Message-ID: <544194F5.3090001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
-
-On 2014-10-17 23:39 +0200, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:20141017212453.GI3971 at free.fr:
+On 16/10/14 12:57, J?rg Krause wrote:
+> Dear Thomas Petazzoni,
 > 
-> > Instead of fixing just that one package, shouldn't we provide a symlink:
-> >     TUPLE-pkg-config  ->  pkg-config
-> > 
-> > This way, all packages that expect a cross-pkg-config will work without
-> > customisation.
-> > 
-> > Thomas, thoughts?
+> On 10/16/2014 11:44 AM, Thomas Petazzoni wrote:
+>> Dear J?rg Krause,
+[snip]
+>>  *) $(STAGING_DIR)/usr/lib/pkgconfig is already the default search path
+>>     for our pkg-config, so there should be no need to make this tuning.
+>>     Which problem have you seen?
 > 
-> Hi,
+> Without this mpd configuration check does not find libnfs although it is build
+> successfully.
 > 
-> I had the same idea back in January, but Thomas did not like it ;)
-> http://patchwork.ozlabs.org/patch/312273/
+>     checking for NFS... no
+>     configure: error: NFS input plugin: libnfs not found
 
-Damned! :-)
+ Actually, we set PKG_CONFIG_LIBDIR to this directory, and PKG_CONFIG_PATH takes
+precedence over PKG_CONFIG_LIBDIR. I have no idea why we do it that way... But
+it means that if the package sets PKG_CONFIG_PATH to /usr/lib/pkg-config, it
+will override our setting.
 
-Regards,
-Yann E. MORIN.
+> 
+> Maybe I should do this?:
+>     MPD_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+
+ That looks better, indeed. Except, it should probably be MPD_CONF_ENV.
+
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
