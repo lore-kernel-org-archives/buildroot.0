@@ -1,59 +1,62 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Fri, 17 Oct 2014 00:29:02 +0200
-Subject: [Buildroot] [PATCH v3 7/8] package/mpd: enable support for dsd
-In-Reply-To: <1413498543-643-1-git-send-email-jkrause@posteo.de>
-References: <1413498543-643-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1413498543-643-7-git-send-email-jkrause@posteo.de>
+From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
+Date: Fri, 17 Oct 2014 02:21:29 +0200
+Subject: [Buildroot] libdaemons localstatedir /usr/var
+In-Reply-To: <543A7D79.7010008@mind.be>
+References: <5439D19D.2030706@posteo.de>
+ <20141012091818.04db85ae@free-electrons.com> <543A4928.5080901@posteo.de>
+ <543A7D79.7010008@mind.be>
+Message-ID: <54406109.4050202@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
-Changes v2 -> v3:
-  - fix indentation of help text
-Changes v1 -> v2:
-  - none
----
- package/mpd/Config.in | 6 ++++++
- package/mpd/mpd.mk    | 6 ++++++
- 2 files changed, 12 insertions(+)
+Dear Thomas Petazzoni,
+Dear Arnout Vandecappelle,
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 4294daf..73bfaf7 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -62,6 +62,12 @@ config BR2_PACKAGE_MPD_AUDIOFILE
- 	  Enable audiofile input/streaming support.
- 	  Select this if you want to play back WAV files.
- 
-+config BR2_PACKAGE_MPD_DSD
-+	bool "dsd"
-+	help
-+	  Enable Digital Speech Decoder (DSD) support to play audio files encoded
-+	  in a digital speech format.
-+
- config BR2_PACKAGE_MPD_FAAD2
- 	bool "faad2"
- 	select BR2_PACKAGE_FAAD2
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index ef89f3d..4eca183 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -62,6 +62,12 @@ else
- MPD_CONF_OPTS += --disable-curl
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_DSD),y)
-+MPD_CONF_OPTS += --enable-dsd
-+else
-+MPD_CONF_OPTS += --disable-dsd
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_FAAD2),y)
- MPD_DEPENDENCIES += faad2
- MPD_CONF_OPTS += --enable-aac
--- 
-2.1.2
+On 10/12/2014 03:09 PM, Arnout Vandecappelle wrote:
+> On 12/10/14 11:26, J?rg Krause wrote:
+>>> >>Isn't --localstatedir a common autoconf variable ? I see 26 packages
+>>> >>passing --localstatedir=/var in Buildroot. Maybe it's time to move as a
+>>> >>common definition, like --prefix=/usr ?
+>> >
+>> >Yes, it is. There was a discussion on the mailing list long time ago:
+>> >
+>> >     Making --localstatedir=/var global?
+>> >     (http://lists.busybox.net/pipermail/buildroot/2011-April/042918.html.)
+>> >
+>> >And also this one:
+>> >
+>> >     Bizarre things on the allyespackageconfig build
+>> >     (http://lists.busybox.net/pipermail/buildroot/2013-May/071856.html)
+>   +1 to making it a global pkg-autotools option. J?rg, care to prepare a patch
+> for that? Removing the existing --localstatedir should be a separate patch then.
+
+I started with setting --localstatedir=/var globally. There are three 
+packages which set localstatedir to another directory as /var:
+
+* dhcp: It's save to remove local localstatedir here. Is it used for 
+setting leases and pid files. All leases and pid files are set as config 
+options in the dhcp.mk.
+* proftpd: Uses localstatedir to set the location of the pid file:
+
+    AC_DEFINE_UNQUOTED(PR_RUN_DIR, "`eval echo "${localstatedir}"`")
+    AC_DEFINE_UNQUOTED(PR_PID_FILE_PATH, "`eval echo
+    "${localstatedir}/proftpd.pid"`")
+
+Maybe a patch should set it to?:
+
+    AC_DEFINE_UNQUOTED(PR_RUN_DIR, "`eval echo "${localstatedir}/run"`")
+    AC_DEFINE_UNQUOTED(PR_PID_FILE_PATH, "`eval echo
+    "${localstatedir}/run/proftpd.pid"`")
+
+* mysql: localstatedir sets the location for database directories and 
+other files. Not sure how to handle this.
+
+Do you have any suggestions?
+
+J?rg
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141017/1dcc90c1/attachment.html>
