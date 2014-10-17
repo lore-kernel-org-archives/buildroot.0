@@ -1,93 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 00:47:56 +0200
-Subject: [Buildroot] [PATCH 1/3] qemu-system: new package
-In-Reply-To: <543FCDD6.9070104@zacarias.com.ar>
-References: <1399148415-27648-1-git-send-email-gustavo@zacarias.com.ar>
- <20141012171752.29414e94@free-electrons.com>
- <543AD090.3000107@zacarias.com.ar> <543EA87A.2050204@mind.be>
- <543FCDD6.9070104@zacarias.com.ar>
-Message-ID: <54419C9C.7050705@mind.be>
+From: =?windows-1252?Q?J=F6rg_Krause?= <jkrause@posteo.de>
+Date: Sat, 18 Oct 2014 01:02:52 +0200
+Subject: [Buildroot] [PATCH v2 6/8] package/mpd: enable support for
+	libnfs
+In-Reply-To: <544194F5.3090001@mind.be>
+References: <1413379134-28918-1-git-send-email-jkrause@posteo.de>	<1413379134-28918-6-git-send-email-jkrause@posteo.de>
+ <20141016114439.6e09d052@free-electrons.com> <543FA48C.8040601@posteo.de>
+ <544194F5.3090001@mind.be>
+Message-ID: <5441A01C.8080004@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/14 15:53, Gustavo Zacarias wrote:
-> On 10/15/2014 02:01 PM, Arnout Vandecappelle wrote:
-> 
->>  Can you explain why not?
+
+On 10/18/2014 12:15 AM, Arnout Vandecappelle wrote:
+> On 16/10/14 12:57, J?rg Krause wrote:
+>> Dear Thomas Petazzoni,
 >>
->>  You cannot use different versions for qemu-user and qemu-system in a clean way
->> if they're not different packages. But host and target versions don't need to be
->> the same. At least, I see code in pkg-generic.mk to handle that.
-> 
-> Well, not really, for example try modifying package/e2fsprogs.mk:
-> HOST_E2FSPROGS_VERSION = 1.42.13
-> 
-> And build both, see what happens.
-> Even try a make source with that.
-
- Yeah, OK, you have to set the HOST_FOO_SOURCE explicitly as well due to a
-little shortcoming in the infrastructure, but I don't think that should be a
-showstopper.
-
-> 
->>  And I do think we want to keep qemu-user and qemu-system at the same version,
->> right? Or does it happen that you need different versions for these as well?
+>> On 10/16/2014 11:44 AM, Thomas Petazzoni wrote:
+>>> Dear J?rg Krause,
+> [snip]
+>>>   *) $(STAGING_DIR)/usr/lib/pkgconfig is already the default search path
+>>>      for our pkg-config, so there should be no need to make this tuning.
+>>>      Which problem have you seen?
+>> Without this mpd configuration check does not find libnfs although it is build
+>> successfully.
 >>
->>  The real question is how to make the version depend on the values in
->> BR2_PACKAGE_QEMU_CUSTOM_TARGETS. But that is not the concern of your patch.
-> 
-> No, that's a wrong assumption.
-> For example qemu_mpc8544ds_defconfig doesn't work with the latest 2.1.2
-> qemu, however other qemu ppc sample defconfigs do (in fact no 2.1.x
-> version).
+>>      checking for NFS... no
+>>      configure: error: NFS input plugin: libnfs not found
+>   Actually, we set PKG_CONFIG_LIBDIR to this directory, and PKG_CONFIG_PATH takes
+> precedence over PKG_CONFIG_LIBDIR. I have no idea why we do it that way... But
+> it means that if the package sets PKG_CONFIG_PATH to /usr/lib/pkg-config, it
+> will override our setting.
 
- Yes, you're right, the host-qemu version should be dictated by a config option,
-not derived automatically.
+You're right! The problem is that in version 1.8.0 of libnfs the 
+following is set in libnfs.pc.in:
 
+    -Requires.private: @LIBNFS_PC_REQ_PRIVATE@
 
-> And the qemu config should dictate what's the best version for each -
-> not necessarily the latest, you can't make host-qemu-user depend on that
-> since it's a platform decision, not an arch one.
-> If you want to stick with "the one that works for everything" you
+This is fixed by an upstream patch after the release 1.8.0:
+https://github.com/sahlberg/libnfs/commit/d47c989d886e5398143d43d3b6d25fdf7210cb11
 
- AFAIK nobody claims that there should be one version that works for everything
-- possibly there should even be some version config option for the target qemu.
-The only problem we see is to have a separate qemu-system and qemu-user package.
+>> Maybe I should do this?:
+>>      MPD_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+>   That looks better, indeed. Except, it should probably be MPD_CONF_ENV.
+>
 
+Not necessary anymore, bumping to version 1.9.5 solved this issue:
+http://git.buildroot.net/buildroot/commit/?id=28b163f3162c91afaed1e5c5c59d10d18cfa7dbc
 
-> potentially miss the opportunity for new arch and/or platform support.
-> So even if target != host version is fixed/possible you'll still clash
-> on host-qemu (user) vs. host-qemu (system) versions since you might want
-> to do the perl module dance (original purpose of host-qemu) vs. platform
-> emulation.
-
- This one I don't understand. If you need version 2.0.2 for host-qemu-system,
-then surely you also need this version for host-qemu-user? So what is the point
-of treating them as separate packages? Isn't it much easier to build qemu-user
-and qemu-system in one shot (like how it's done for the target qemu)?
-
-
- Regards,
- Arnout
-
-
-> It's nice to keep everything in one package, but it's not feasible to do
-> so in a coherent way for this case in particular.
-> If you can't get the leash out of the qemu version there's no point in
-> building so for the emulation, sometimes you'll ship every single qemu
-> config working, sometimes you wont - and that's my quarrel, everyone is
-> perfect-this perfect-that but all of the sudden this would be acceptable?
-> Like i said it would be the same as $RANDOM distro qemu.
-> Regards.
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards
+J?rg Krause
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141018/e2f9e97a/attachment.html>
