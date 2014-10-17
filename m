@@ -1,22 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Oct 2014 11:34:15 +0200
-Subject: [Buildroot] [PATCHv2] pciutils: add hash file
-In-Reply-To: <1413468379-2055-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 16 Oct 2014 11:06:19 -0300")
-References: <1413468379-2055-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878ukff3ag.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Oct 2014 11:49:42 +0200
+Subject: [Buildroot] [V2 0/4] host-perl
+In-Reply-To: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Sat, 11 Oct 2014 08:36:41 +0200")
+References: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <874mv3f2kp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Also switch to xz tarball to avoid cached tarball hash conflict.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > perl infrastructure using a host-perl instead of the system perl
+ > V1 -> V2:
+ >   - rebase the serie
+ >   - XML-Parser doesn't use the infrastructure
 
-Committed, thanks.
+ > Note: no test done for metacity
+
+ > Francois Perrad (4):
+ >   libxml-parser-perl: restore it like before perl infra
+ >   perl: add host variant
+ >   pkg-perl: refactor with host-perl
+ >   perl: remove useless hacks
+
+Committed series, thanks. I cannot say that I fully understand all the
+perl stuff, but as you're the expert.. ;)
 
 -- 
 Bye, Peter Korsgaard
