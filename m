@@ -1,85 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Oct 2014 16:14:08 +0200
-Subject: [Buildroot] [git commit] libshout: new package
-Message-ID: <20141017142530.583A0B328B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 17 Oct 2014 11:25:54 -0300
+Subject: [Buildroot] [PATCH] cppdb: enable postgresql support
+Message-ID: <1413555954-30435-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=798f725cc5e16aa7b2253f608a8aff5a74498d7e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also:
+Fix mysql support.
+Add hash file.
+Forcibly disable automatic db support when it's not selected.
 
-[Peter: fix Config.in indentation, license, needs host-pkgconf, optionally
- use libtheora and speex]
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in            |    1 +
- package/libshout/Config.in   |   10 ++++++++++
- package/libshout/libshout.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 0 deletions(-)
+ package/cppdb/Config.in                            |  4 ++--
+ .../cppdb/cppdb-0001-mysql-library-suffix.patch    | 23 ++++++++++++++++++++++
+ package/cppdb/cppdb.hash                           |  3 +++
+ package/cppdb/cppdb.mk                             | 13 +++++++++++-
+ 4 files changed, 40 insertions(+), 3 deletions(-)
+ create mode 100644 package/cppdb/cppdb-0001-mysql-library-suffix.patch
+ create mode 100644 package/cppdb/cppdb.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 93e148d..4c6685a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -807,6 +807,7 @@ menu "Networking"
- 	source "package/librsync/Config.in"
- 	source "package/libsocketcan/Config.in"
- 	source "package/libshairplay/Config.in"
-+	source "package/libshout/Config.in"
- 	source "package/libsoup/Config.in"
- 	source "package/libstrophe/Config.in"
- 	source "package/libtirpc/Config.in"
-diff --git a/package/libshout/Config.in b/package/libshout/Config.in
+diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
+index 120598a..19c9419 100644
+--- a/package/cppdb/Config.in
++++ b/package/cppdb/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CPPDB
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# Can be built without them but it's useless
+-	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_SQLITE
++	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
+ 	help
+ 	  CppDB is an SQL connectivity library that is designed to provide
+ 	  platform and Database independent connectivity API similarly
+@@ -14,6 +14,6 @@ config BR2_PACKAGE_CPPDB
+ 	  http://cppcms.com/sql/cppdb/
+ 
+ comment "cppdb needs a toolchain w/ C++, threads, dynamic library"
+-	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_SQLITE
++	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_PREFER_STATIC_LIB
+diff --git a/package/cppdb/cppdb-0001-mysql-library-suffix.patch b/package/cppdb/cppdb-0001-mysql-library-suffix.patch
 new file mode 100644
-index 0000000..9029342
+index 0000000..e65e3e2
 --- /dev/null
-+++ b/package/libshout/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBSHOUT
-+	bool "libshout"
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
-+	help
-+	  Libshout is a library for communicating with and sending data to an
-+	  icecast server.  It handles the socket connection, the timing of the
-+	  data, and prevents bad data from getting to the icecast server.
++++ b/package/cppdb/cppdb-0001-mysql-library-suffix.patch
+@@ -0,0 +1,23 @@
++Add mysql/ to PATH_SUFFIXES for the library search for mysql.
 +
-+	  http://icecast.org/download/
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
++On common distros libmysqlclient* is installed and/or symlinked
++into /usr/lib.
++Since we install the libraries into /usr/lib/mysql alone cppdb
++fails to properly link to it giving runtime errors.
++
++Status: https://sourceforge.net/p/cppcms/bugs/135/
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura cppdb-0.3.1.orig/CMakeLists.txt cppdb-0.3.1/CMakeLists.txt
++--- cppdb-0.3.1.orig/CMakeLists.txt	2014-10-17 11:05:57.875429748 -0300
+++++ cppdb-0.3.1/CMakeLists.txt	2014-10-17 11:12:57.486775484 -0300
++@@ -196,7 +196,7 @@
++ endif()
++ 
++ if(NOT DISABLE_MYSQL)
++-	find_library(MYSQL_LIB mysqlclient)
+++	find_library(MYSQL_LIB mysqlclient PATH_SUFFIXES mysql)
++ 	find_path(MYSQL_PATH mysql.h PATH_SUFFIXES mysql)
++ 	if(MYSQL_LIB AND MYSQL_PATH)
++ 		include_directories(${MYSQL_PATH})
+diff --git a/package/cppdb/cppdb.hash b/package/cppdb/cppdb.hash
 new file mode 100644
-index 0000000..1166f58
+index 0000000..efc0eac
 --- /dev/null
-+++ b/package/libshout/libshout.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libshout
-+#
-+################################################################################
-+
-+LIBSHOUT_VERSION = 2.3.1
-+LIBSHOUT_SITE = http://downloads.xiph.org/releases/libshout
-+LIBSHOUT_LICENSE = LGPLv2+
-+LIBSHOUT_LICENSE_FILES = COPYING
-+LIBSHOUT_INSTALL_STAGING = YES
-+LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
-+
-+ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
-+LIBSHOUT_CONF_OPTS += --enable-theora
-+LIBSHOUT_DEPENDENCIES += libtheora
++++ b/package/cppdb/cppdb.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/cppcms/files/cppdb/0.3.1/
++md5	129f1d75f46114b79160b93807d5223f	cppdb-0.3.1.tar.bz2
++sha1	c0410dcc482d71696ac9206044b3a3ac03d31f96	cppdb-0.3.1.tar.bz2
+diff --git a/package/cppdb/cppdb.mk b/package/cppdb/cppdb.mk
+index f7f837e..2c26c90 100644
+--- a/package/cppdb/cppdb.mk
++++ b/package/cppdb/cppdb.mk
+@@ -14,7 +14,18 @@ CPPDB_LICENSE_FILES = LICENSE_1_0.txt MIT.txt
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ CPPDB_DEPENDENCIES += mysql
+-CPPDB_CONF_OPTS += -DMYSQL_LIB=$(STAGING_DIR)/usr/lib/mysql
 +else
-+LIBSHOUT_CONF_OPTS += --disable-theora
++CPPDB_CONF_OPTS += -DDISABLE_MYSQL=ON
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SPEEX),y)
-+LIBSHOUT_CONF_OPT += --enable-speex
-+LIBSHOUT_DEPENDENCIES += speex
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++CPPDB_DEPENDENCIES += postgresql
 +else
-+LIBSHOUT_CONF_OPTS += --disable-speex
++CPPDB_CONF_OPTS += -DDISABLE_PQ=ON
 +endif
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_SQLITE),)
++CPPDB_CONF_OPTS += -DDISABLE_SQLITE=ON
+ endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.0.4
