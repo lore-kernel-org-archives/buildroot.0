@@ -1,42 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 17 Oct 2014 14:17:48 +0200
-Subject: [Buildroot] [git commit] whois: bump to version 5.2.1
-Message-ID: <20141017121828.DFB26B328C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libxml2: security bump to version 2.9.2
+Message-ID: <20141017121829.1AC12B328C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20cff9643c603c11ee3f0247b26c184b56ca3228
+commit: http://git.buildroot.net/buildroot/commit/?id=841c63ce669d67481450b57f0f99b44c736d97dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+CVE-2014-3660 - billion laugh variant
+CVE-2014-0191 - Do not fetch external parameter entities
+
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/whois/whois.hash |    4 ++--
- package/whois/whois.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libxml2/libxml2.hash |    2 ++
+ package/libxml2/libxml2.mk   |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 368beea..13efa14 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.0.dsc
--sha256	f487bba00fc506b18b519d913509d9e050cba0b6f025e26a50b29b3e6322530b	whois_5.2.0.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.1.dsc
-+sha256	54e6b64f16e10bfaf14ac40025b4272090298f0d9d3e62cbadabf946051515e6	whois_5.2.1.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index a9f74d1..193aafe 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+new file mode 100644
+index 0000000..69f4fdc
+--- /dev/null
++++ b/package/libxml2/libxml2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	5178c30b151d044aefb1b08bf54c3003a0ac55c59c866763997529d60770d5bc	libxml2-2.9.2.tar.gz
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index f27c993..4e296fa 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WHOIS_VERSION = 5.2.0
-+WHOIS_VERSION = 5.2.1
- WHOIS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
+-LIBXML2_VERSION = 2.9.1
++LIBXML2_VERSION = 2.9.2
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_AUTORECONF = YES
+@@ -19,6 +19,7 @@ endif
+ LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
++LIBXML2_DEPENDENCIES = host-pkgconf
+ 
+ HOST_LIBXML2_CONF_OPTS = --without-zlib --without-lzma --without-python
+ 
