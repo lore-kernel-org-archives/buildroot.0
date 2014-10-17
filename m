@@ -1,55 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Oct 2014 16:47:37 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libva-intel-driver: Do not
-	depend on xorg
-In-Reply-To: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413557257-25254-2-git-send-email-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri, 17 Oct 2014 16:52:04 +0200
+Subject: [Buildroot] [PATCH] libshout: fix typo
+Message-ID: <1413557524-28370-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch reverts
-http://git.buildroot.net/buildroot/commit/package/libva-intel-driver/Config.in?id=062bacfa67688b2747412a30ddeb996449d1c6df
+Fix error:
+  package/libshout/libshout.mk:28: *** Package error: use LIBSHOUT_CONF_OPTS instead of LIBSHOUT_CONF_OPT. Please fix your .mk file.  Stop.
 
-By removing the xorg dependency of libpciaccess the libdrm package, and
-therefore also libva-intel-driver, does not depend on xorg any longer.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
-v2: no changes
+ package/libshout/libshout.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/libva-intel-driver/Config.in |   11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index cac2fed..a0f397b 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -3,11 +3,10 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	select BR2_PACKAGE_LIBVA
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
- 	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_PACKAGE_XORG7 # libdrm intel
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
- 	depends on BR2_LARGEFILE # libdrm
- 	depends on !BR2_PREFER_STATIC_LIB # libva
-@@ -20,7 +19,3 @@ comment "libva intel driver needs a toolchain w/ largefile, threads, dynamic lib
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_PREFER_STATIC_LIB
- 	depends on BR2_i386 || BR2_x86_64
--
--comment "libva intel driver needs X.org"
--	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 1166f58..faee3eb 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -19,7 +19,7 @@ LIBSHOUT_CONF_OPTS += --disable-theora
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SPEEX),y)
+-LIBSHOUT_CONF_OPT += --enable-speex
++LIBSHOUT_CONF_OPTS += --enable-speex
+ LIBSHOUT_DEPENDENCIES += speex
+ else
+ LIBSHOUT_CONF_OPTS += --disable-speex
 -- 
-1.7.10.4
+1.9.1
