@@ -1,47 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Oct 2014 23:41:36 +0200
-Subject: [Buildroot] [PATCH] imx-vpu: add VPU firmware selection
-In-Reply-To: <1412546998-16238-1-git-send-email-bisson.gary@gmail.com>
-References: <1412546998-16238-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <20141017214136.GL3971@free.fr>
+Date: Fri, 17 Oct 2014 23:55:39 +0200
+Subject: [Buildroot] [PATCH] spidev_test: new package
+In-Reply-To: <20141014195411.GI3500@tarshish>
+References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141014195411.GI3500@tarshish>
+Message-ID: <20141017215539.GM3971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+Baruch, All,
 
-On 2014-10-05 15:09 -0700, Gary Bisson spake thusly:
-> As the imx-vpu package needs the firmware to be loaded into the VPU it
-> makes sense to have the latter package selected by default.
+On 2014-10-14 22:54 +0300, Baruch Siach spake thusly:
+> On Tue, Oct 14, 2014 at 12:45:53PM -0300, Gustavo Zacarias wrote:
+> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > 
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> [snip]
+> 
+> > diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+> > new file mode 100644
+> > index 0000000..c0ed9ef
+> > --- /dev/null
+> > +++ b/package/spidev_test/Config.in
+> > @@ -0,0 +1,15 @@
+> > +config BR2_PACKAGE_SPIDEV_TEST
+> > +	bool "spidev_test"
+> > +	depends on BR2_LINUX_KERNEL
+> 
+> That is a heavy dependency. As you noted in another message, it also make the 
+> autobuilder skip this package. I suggest to download just spidev_test.c from 
+> http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION), 
+> and make it depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 (as of v3.17). This 
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+What about directly getting the appropriate one, something like:
+
+    ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+    SPIDEV_TEST_VERSION = v3.15
+    else
+    SPIDEV_TEST_VERSION = v3.14
+    endif
+
+    SPIDEV_TEST_SOURCE =
+    SPIDEV_TEST_EXTRA_DOWNLOADS = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+
+Since, without the proper kernel headers, it is not possible to build
+the quad-pump blabla, we can directly get the spidev_test that will
+indeed compile with our toolchain, no?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/freescale-imx/imx-vpu/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/freescale-imx/imx-vpu/Config.in b/package/freescale-imx/imx-vpu/Config.in
-> index cf5ab5f..8a95416 100644
-> --- a/package/freescale-imx/imx-vpu/Config.in
-> +++ b/package/freescale-imx/imx-vpu/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_IMX_VPU
->  	bool "imx-vpu"
->  	depends on BR2_LINUX_KERNEL
->  	depends on BR2_arm # Only relevant for i.MX
-> +	select BR2_PACKAGE_FIRMWARE_IMX
->  	help
->  	  Library of userspace helpers specific for the Freescale i.MX
->  	  platform. It wraps the kernel interfaces for the i.MX platform
-> -- 
-> 2.1.1
-> 
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
