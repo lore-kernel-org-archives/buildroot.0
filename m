@@ -1,45 +1,27 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 17 Oct 2014 15:57:54 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/mono: new package
-In-Reply-To: <20141013224903.0bfe6d76@free-electrons.com>
-References: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141013224903.0bfe6d76@free-electrons.com>
-Message-ID: <CA+TH9Vm_UAG0fgqLX87Bom8haPXNnpYUAUxVov2+bBNEr1aOdg@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 17 Oct 2014 16:00:02 +0200
+Subject: [Buildroot] [PATCH] pkg-stats: add statistics about hash files
+In-Reply-To: <1413552852-28279-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413552852-28279-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGduivyR-_L6GZE2RpQ7M=EqQdiV8UnjnDaR26XimdHoJs0JrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas, all
 
-Sorry for all the confusion I infused in the patch.
-
-> There's still on things that bothers me a bit: those options
-> (BR2_PACKAGE_MONO_{20,40,45}) are target options, but they are in fact
-> used when building host-mono, which isn't very clean. I assume it's not
-> possible to have the target mono package build the runtime libraries
-> using the compiler built by the host-mono package, right?
-
-Nope. To compile mono runtime without the host I should run mono inside qemu.
-Probably it's feasible, but I really don't know if it's a raccomanded way to do.
-
-> If not, then keep things as they are today, but put a comment above the
-> place where BR2_PAKCAGE_MONO_{20,40,45} is used in the .mk file
-> explaining why we're using those target options for a host package.
-
-I did it in the new patch I sent.
-
-Thank you again for your time!
-
+On Fri, Oct 17, 2014 at 3:34 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> As discussed during the Buildroot meeting, this commit extends the
+> pkg-stats script to include statistics about the number of packages
+> having vs. not having the hash file.
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+> As of today, we have 104 packages with the hash file, and 1274
+> packages without.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+As information, I have started reworking this patch:
+http://patchwork.ozlabs.org/patch/337267/
+I'll make sure to take your current patch into account.
