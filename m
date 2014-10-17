@@ -1,114 +1,119 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 17 Oct 2014 14:17:48 +0200
-Subject: [Buildroot] [git commit] perl: remove useless hacks
-Message-ID: <20141017121829.4134CB328C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libxml-parser-perl: restore it like before
+	perl infra
+Message-ID: <20141017121829.24008B328C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfb40e94460d9f97da68b81c359688747b6c8c7d
+commit: http://git.buildroot.net/buildroot/commit/?id=8e716d659b08635bba703d9ae0867d8590f6b083
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+intltool uses this package,
+and we don't want that it depends on host-perl,
+but on system perl
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-gd/Config.in                          |    2 -
- package/perl-gdgraph/Config.in                     |    1 -
- .../perl-gdgraph-01-fix-Makefile-PL.patch          |   24 ------------------
- package/perl/perl.mk                               |   26 --------------------
- 4 files changed, 0 insertions(+), 53 deletions(-)
+ package/intltool/intltool.mk                     |    5 ++-
+ package/libxml-parser-perl/libxml-parser-perl.mk |   34 ++++++++++++++++++++++
+ package/metacity/metacity.mk                     |    2 +-
+ package/perl-xml-parser/perl-xml-parser.mk       |   17 -----------
+ 4 files changed, 39 insertions(+), 19 deletions(-)
 
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-index 3434507..7c85cfc 100644
---- a/package/perl-gd/Config.in
-+++ b/package/perl-gd/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_PERL_GD
- 	bool "perl-gd"
- 	depends on !BR2_PREFER_STATIC_LIB
--	# Does not build on machines having a old host perl
--	depends on BR2_BROKEN
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
-index 972a5c5..e722c06 100644
---- a/package/perl-gdgraph/Config.in
-+++ b/package/perl-gdgraph/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PERL_GDGRAPH
- 	bool "perl-gdgraph"
- 	depends on !BR2_PREFER_STATIC_LIB
--	depends on BR2_BROKEN # perl-gd
- 	select BR2_PACKAGE_PERL_GD
- 	select BR2_PACKAGE_PERL_GDTEXTUTIL
- 	help
-diff --git a/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch b/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
-deleted file mode 100644
-index e95a64e..0000000
---- a/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--partial revert to 1.47 in order to work with an old perl 5.10.1
--
--With old ExtUtils::MakeMaker, AUTHOR takes a string/number not a ARRAY reference.
--See http://api.metacpan.org/source/RUZ/GDGraph-1.48/CHANGES
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/Makefile.PL
--===================================================================
----- a/Makefile.PL
--+++ b/Makefile.PL
--@@ -19,11 +19,7 @@
-- 
--         ($] >= 5.005 ?
--             ('ABSTRACT'	    => 'Produces charts with GD',
---             'AUTHOR'       => [
---                 'Martien Verbruggen <mgjv@tradingpost.com.au>',
---                 'Benjamin Warfield <bwarfield@cpan.org>',
---                 'Ruslan Zakirov <Ruslan.Zakirov@gmail.com>',
---            ]
--+             'AUTHOR'	    => 'Martien Verbruggen <mgjv@tradingpost.com.au>',
--             ):()
--         ),
-- 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 16a8d68..3ce55a8 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -100,32 +100,6 @@ define PERL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
- endef
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 5c2dca8..a7afe0d 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -9,7 +9,10 @@ INTLTOOL_SITE = https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+downlo
+ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
  
--# perl infra: fix for Perl XS packages configured by Makefile.PL
+-HOST_INTLTOOL_DEPENDENCIES = host-gettext host-perl-xml-parser
++HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
++HOST_INTLTOOL_CONF_OPTS = \
++	PERL=`which perl` \
++	PERL5LIB=$(HOST_DIR)/usr/lib/perl
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+new file mode 100644
+index 0000000..a07f0a0
+--- /dev/null
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# libxml-parser-perl
++#
++################################################################################
++
++LIBXML_PARSER_PERL_VERSION = 2.41
++LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
++LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
++LIBXML_PARSER_PERL_DEPENDENCIES = expat
++LIBXML_PARSER_PERL_LICENSE = Artistic or GPLv1+
++LIBXML_PARSER_PERL_RUN_PERL = `which perl`
++
++define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
++ (cd $(@D) ; \
++   $(HOST_CONFIGURE_OPTS) $(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
++        PREFIX=$(HOST_DIR)/usr \
++        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
++        EXPATINCPATH=$(HOST_DIR)/usr/include \
++        INSTALLDIRS=site \
++        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
++        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
++ )
++endef
++
++define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(host-generic-package))
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index f7e8b92..1d3e143 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -19,7 +19,7 @@ METACITY_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 
+ METACITY_DEPENDENCIES = libgtk2 \
+ 	xlib_libX11 \
+-	host-perl-xml-parser \
++	host-libxml-parser-perl \
+ 	xlib_libXcomposite \
+ 	xlib_libXfixes \
+ 	xlib_libXrender \
+diff --git a/package/perl-xml-parser/perl-xml-parser.mk b/package/perl-xml-parser/perl-xml-parser.mk
+deleted file mode 100644
+index 21c9162..0000000
+--- a/package/perl-xml-parser/perl-xml-parser.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
 -#
--# ExtUtils::MakeMaker adds all the header files used by the perl as
--# dependencies to the generated Makefile. This means that the generated
--# Makefile will depend on the system's header files.
+-# perl-xml-parser
 -#
--# Usually this is not a problem, because when building the target package,
--# these header files will indeed be found in $(STAGING_DIR). However, some
--# distro's add an extra header file to the system's perl. This header is
--# also included in the generated Makefile, which makes the build fail
--# because it doesn't exist in $(STAGING_DIR).
--#
--# As a work-around, explicitly create this header file in $(STAGING_DIR).
--# It doesn't hurt to create it even if the system perl doesn't need it.
--#
--define PERL_ADD_CORE_H
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-gentoo.h
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/cc_runtime.h
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/fakethr.h
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/perlsfio.h
--	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/vutil.h
--endef
+-################################################################################
 -
--PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_CORE_H
+-PERL_XML_PARSER_VERSION = 2.41
+-PERL_XML_PARSER_SOURCE = XML-Parser-$(PERL_XML_PARSER_VERSION).tar.gz
+-PERL_XML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+-PERL_XML_PARSER_DEPENDENCIES = expat
+-PERL_XML_PARSER_LICENSE = Artistic or GPLv1+
 -
- HOST_PERL_CONF_OPTS = \
- 	-des \
- 	-Dprefix="$(HOST_DIR)/usr" \
+-HOST_PERL_XML_PARSER_CONF_OPTS = \
+-	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+-	EXPATINCPATH=$(HOST_DIR)/usr/include
+-
+-$(eval $(host-perl-package))
