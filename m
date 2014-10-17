@@ -1,58 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Oct 2014 23:55:39 +0200
-Subject: [Buildroot] [PATCH] spidev_test: new package
-In-Reply-To: <20141014195411.GI3500@tarshish>
-References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
- <20141014195411.GI3500@tarshish>
-Message-ID: <20141017215539.GM3971@free.fr>
+Date: Sat, 18 Oct 2014 00:01:58 +0200
+Subject: [Buildroot] qemu compiling error
+In-Reply-To: <543E3CBC.5080901@free.fr>
+References: <543E3CBC.5080901@free.fr>
+Message-ID: <20141017220158.GN3971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+St?phane, All,
 
-On 2014-10-14 22:54 +0300, Baruch Siach spake thusly:
-> On Tue, Oct 14, 2014 at 12:45:53PM -0300, Gustavo Zacarias wrote:
-> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 2014-10-15 11:22 +0200, St?phane ANCELOT spake thusly:
+> git compiling I have got target list unknown error
 > 
-> [snip]
 > 
-> > diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-> > new file mode 100644
-> > index 0000000..c0ed9ef
-> > --- /dev/null
-> > +++ b/package/spidev_test/Config.in
-> > @@ -0,0 +1,15 @@
-> > +config BR2_PACKAGE_SPIDEV_TEST
-> > +	bool "spidev_test"
-> > +	depends on BR2_LINUX_KERNEL
+> >>> qemu 2.1.2 Patching
+> >>> qemu 2.1.2 Configuring
+> ( cd /nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/build/qemu-2.1.2;
+> LIBS='-lrt -lm' PATH="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/bin:/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/sbin:/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin:/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/sbin:/home/sancelot/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" AR="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-ar" AS="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-as" LD="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-ld" NM="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-nm" CC="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc" GCC="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc" CPP="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-cpp" CXX="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-g++" FC="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gfortran" RANLIB="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-ranlib" READELF="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-readelf" STRIP="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-strip" OBJCOPY="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-objcopy" OBJDUMP="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-objdump"
+> AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+> CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
+> CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld"
+> LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/include"
+> CFLAGS_FOR_BUILD="-O2 -I/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/include"
+> CXXFLAGS_FOR_BUILD="-O2 -I/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/include" LDFLAGS_FOR_BUILD="-L/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/lib -L/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/lib -Wl,-rpath,/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/lib"
+> FCFLAGS_FOR_BUILD="" DEFAULT_ASSEMBLER="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-as" DEFAULT_LINKER="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-ld"
+> CPPFLAGS="" CFLAGS="  -pipe -Os " CXXFLAGS="  -pipe -Os " LDFLAGS=""
+> FCFLAGS="" PKG_CONFIG="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/pkg-config" STAGING_DIR="/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/i586-buildroot-linux-uclibc/sysroot"
+> CXX=false ac_cv_lbl_unaligned_fail=no ac_cv_func_mmap_fixed_mapped=yes
+> ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes
+> gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes
+> ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
+> lt_cv_sys_lib_search_path_spec="" ac_cv_c_bigendian=no LIBTOOL=/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/libtool PYTHON=/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/python PYTHONPATH=/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/target/usr/lib/python2.7/site-packages
+> ./configure --prefix=/usr --cross-prefix=/nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-
+> --with-system-pixman --audio-drv-list= --enable-kvm --enable-attr
+> --enable-vhost-net --disable-bsd-user --disable-xen --disable-slirp
+> --disable-vnc --disable-virtfs --disable-brlapi --disable-curses
+> --disable-curl --disable-fdt --disable-bluez --disable-guest-base
+> --disable-uuid --disable-vde --disable-linux-aio --disable-cap-ng
+> --disable-docs --disable-spice --disable-rbd --disable-libiscsi
+> --disable-usb-redir --disable-smartcard-nss --disable-strip
+> --disable-seccomp --disable-sparse --disable-tools  --disable-system
+> --disable-linux-user --target-list="i386-softmmu" --disable-sdl )
+> C++ compiler false does not work with C compiler /nfs/solaris/AFFAIRES_ECLIPSE/DEVELOPPEMENTS_RD/BUILDROOT/sancelot/buildrootgit/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
+> Disabling C++ specific optional code
 > 
-> That is a heavy dependency. As you noted in another message, it also make the 
-> autobuilder skip this package. I suggest to download just spidev_test.c from 
-> http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION), 
-> and make it depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 (as of v3.17). This 
+> ERROR: Unknown target name 'i386-softmmu'
 
-What about directly getting the appropriate one, something like:
+Known error. QEMU on the target is stil very new, and it is known to not
+build at all for now if you specify a list of custom targets.
 
-    ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
-    SPIDEV_TEST_VERSION = v3.15
-    else
-    SPIDEV_TEST_VERSION = v3.14
-    endif
-
-    SPIDEV_TEST_SOURCE =
-    SPIDEV_TEST_EXTRA_DOWNLOADS = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION)
-
-Since, without the proper kernel headers, it is not possible to build
-the quad-pump blabla, we can directly get the spidev_test that will
-indeed compile with our toolchain, no?
+I already have the fix locally, but it has not been submitted yet (I've
+been busy this week).
 
 Regards,
 Yann E. MORIN.
-
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
