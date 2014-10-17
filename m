@@ -1,42 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 17 Oct 2014 10:48:03 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.7
-Message-ID: <1413553683-17838-1-git-send-email-gustavo@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 17 Oct 2014 15:57:54 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package/mono: new package
+In-Reply-To: <20141013224903.0bfe6d76@free-electrons.com>
+References: <1413209030-8187-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141013224903.0bfe6d76@free-electrons.com>
+Message-ID: <CA+TH9Vm_UAG0fgqLX87Bom8haPXNnpYUAUxVov2+bBNEr1aOdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 2 ++
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/sqlite/sqlite.hash
+Sorry for all the confusion I infused in the patch.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-new file mode 100644
-index 0000000..e2a0f91
---- /dev/null
-+++ b/package/sqlite/sqlite.hash
-@@ -0,0 +1,2 @@
-+# From http://www.sqlite.org/download.html
-+sha1	8b773b006db46f3ffcbabe065e927823d13bf5c0	sqlite-autoconf-3080700.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index ebf60a8..e07ffb8 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080600
-+SQLITE_VERSION = 3080700
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+> There's still on things that bothers me a bit: those options
+> (BR2_PACKAGE_MONO_{20,40,45}) are target options, but they are in fact
+> used when building host-mono, which isn't very clean. I assume it's not
+> possible to have the target mono package build the runtime libraries
+> using the compiler built by the host-mono package, right?
+
+Nope. To compile mono runtime without the host I should run mono inside qemu.
+Probably it's feasible, but I really don't know if it's a raccomanded way to do.
+
+> If not, then keep things as they are today, but put a comment above the
+> place where BR2_PAKCAGE_MONO_{20,40,45} is used in the .mk file
+> explaining why we're using those target options for a host package.
+
+I did it in the new patch I sent.
+
+Thank you again for your time!
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.0.4
+Profile: http://it.linkedin.com/in/compagnucciangelo
