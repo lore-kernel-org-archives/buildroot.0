@@ -1,52 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 17 Oct 2014 14:17:48 +0200
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.1j
-Message-ID: <20141017121828.E8F64B328C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] pkg-perl: refactor with host-perl
+Message-ID: <20141017121829.3840CB328C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=326781940f5d399ba54c6f312a14b46b7201624d
+commit: http://git.buildroot.net/buildroot/commit/?id=fad24172f111978f2664a6eaffe86ac690403e2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2014-3513 - SRTP memory leak
-CVE-2014-3567 - Session ticket memory leak
-CVE-2014-3568 - Build option no-ssl3 is incomplete
-And adds SSL3 fallback protection against POODLE.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.hash |    8 ++++----
- package/openssl/openssl.mk   |    2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/Makefile.in |    3 ---
+ package/pkg-perl.mk |   23 +++++++++++------------
+ 2 files changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index aa45a76..22b1529 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.1i.tar.gz.sha1
--md5	c8dc151a671b9b92ff3e4c118b174972	openssl-1.0.1i.tar.gz
--sha1	74eed314fa2c93006df8d26cd9fc630a101abd76	openssl-1.0.1i.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.sha1
-+md5	f7175c9cd3c39bb1907ac8bba9df8ed3	openssl-1.0.1j.tar.gz
-+sha1	cff86857507624f0ad42d922bb6f77c4f1c2b819	openssl-1.0.1j.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 4911034..7c1c7f0 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 28a5bfd..ab59b54 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -232,9 +232,6 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/
+ HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+ 
+-HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
+-export PERL5LIB := $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
+-
+ TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 808d2ce..f41a2f9 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -20,6 +20,7 @@
  ################################################################################
  
--OPENSSL_VERSION = 1.0.1i
-+OPENSSL_VERSION = 1.0.1j
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+ PERL_ARCHNAME = $(ARCH)-linux
++PERL_RUN = $(HOST_DIR)/usr/bin/perl
+ 
+ ################################################################################
+ # inner-perl-package -- defines how the configuration, compilation and
+@@ -38,6 +39,8 @@ PERL_ARCHNAME = $(ARCH)-linux
+ 
+ define inner-perl-package
+ 
++$(2)_DEPENDENCIES += host-perl
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
+@@ -51,7 +54,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+-		perl Build.PL \
++		$$(PERL_RUN) Build.PL \
+ 			--config ar="$$(TARGET_AR)" \
+ 			--config full_ar="$$(TARGET_AR)" \
+ 			--config cc="$$(TARGET_CC)" \
+@@ -74,7 +77,7 @@ define $(2)_CONFIGURE_CMDS
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+-		perl Makefile.PL \
++		$$(PERL_RUN) Makefile.PL \
+ 			AR="$$(TARGET_AR)" \
+ 			FULL_AR="$$(TARGET_AR)" \
+ 			CC="$$(TARGET_CC)" \
+@@ -101,17 +104,13 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+-		perl Build.PL \
+-			--install_base $$(HOST_DIR)/usr \
+-			--installdirs vendor \
++		$$(PERL_RUN) Build.PL \
+ 			$$($(2)_CONF_OPTS); \
+ 	else \
+ 		$$($(2)_CONF_ENV) \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+-		perl Makefile.PL \
+-			INSTALL_BASE=$$(HOST_DIR)/usr \
+-			INSTALLDIRS=vendor \
++		$$(PERL_RUN) Makefile.PL \
+ 			$$($(2)_CONF_OPTS); \
+ 	fi
+ endef
+@@ -129,7 +128,7 @@ ifeq ($(4),target)
+ # Build package for target
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_BUILD_OPTS) build; \
++		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
+ 	else \
+ 		$$(MAKE1) \
+ 			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
+@@ -141,7 +140,7 @@ else
+ # Build package for host
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_BUILD_OPTS) build; \
++		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_BUILD_OPTS) pure_all; \
+ 	fi
+@@ -156,7 +155,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_INSTALL_TARGET_OPTS) install; \
++		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
+ 	fi
+@@ -170,7 +169,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+-		perl Build $$($(2)_INSTALL_TARGET_OPTS) install; \
++		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
+ 	else \
+ 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
+ 	fi
