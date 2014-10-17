@@ -1,42 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Oct 2014 00:03:52 +0200
+Date: Sat, 18 Oct 2014 00:06:57 +0200
 Subject: [Buildroot] qemu compiling error
-In-Reply-To: <543E62FE.4040803@mind.be>
+In-Reply-To: <543F6BBE.3070000@free.fr>
 References: <543E3CBC.5080901@free.fr>
- <543E62FE.4040803@mind.be>
-Message-ID: <20141017220352.GO3971@free.fr>
+ <543F6BBE.3070000@free.fr>
+Message-ID: <20141017220657.GP3971@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+St?phane, All,
 
-On 2014-10-15 14:05 +0200, Arnout Vandecappelle spake thusly:
-> On 15/10/14 11:22, St?phane ANCELOT wrote:
-> > git compiling I have got target list unknown error
-> 
->  Please read the section in the manual about submitting bug reports: you should
-> give us the result of 'make savedefconfig' and which buildroot version you're using.
-> 
->  However, in this case it happens to be obvious from the output, because the
-> error message is right there:
-> 
-> [snip]
-> > ERROR: Unknown target name 'i386-softmmu'
-> 
->  You gave i386-softmmu as the target name (configuration variable
-> BR2_PACKAGE_QEMU_CUSTOM_TARGETS) but that doesn't exist. You probably want to
-> set it to i386.
+On 2014-10-16 08:54 +0200, St?phane ANCELOT spake thusly:
+> I want being able to emulate an x86 32 bits platform from a 64 bits os with
+> qemu launched in buildroot.
 
-Nope, i386-softmmu is the correct setting. It;s just a bug in the
-package I submitted. I already talked to Peter about this, and the fact
-that it used to work in the past (series is roughly 2.5 years old now),
-but I only comnfigured it with all emulations now, so did not notice
-this breakage.
+I am not sure to understand that. It seems you want host-qemu.
+What you have selected is QEMU *on* the target.
 
-Fix done, pending, ETA: this week-end.
+> The build fails because --disable-system option is enabled and thus inhibits
+> selection target-list i386soft-mmu to build.
+> removing --disable-system this option will permit to build it.
+
+As said, this is known.
+
+> Please correct it.
+
+Grr... I do not like being told what I should do on my spare time,
+especially in such an aggressive tone... :-(
+
+This is a community effort, we are all volunteers. You can not ask such
+things in that manner.
+
+Just because of that, you just demotivate people from actually doing
+the work... :-(
 
 Regards,
 Yann E. MORIN.
