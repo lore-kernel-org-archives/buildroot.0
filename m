@@ -1,110 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 17 Oct 2014 11:25:54 -0300
-Subject: [Buildroot] [PATCH] cppdb: enable postgresql support
-Message-ID: <1413555954-30435-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Oct 2014 16:27:53 +0200
+Subject: [Buildroot] [V2 0/4] host-perl
+In-Reply-To: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Sat, 11 Oct 2014 08:36:41 +0200")
+References: <1413009405-13870-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87siimdb4m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also:
-Fix mysql support.
-Add hash file.
-Forcibly disable automatic db support when it's not selected.
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cppdb/Config.in                            |  4 ++--
- .../cppdb/cppdb-0001-mysql-library-suffix.patch    | 23 ++++++++++++++++++++++
- package/cppdb/cppdb.hash                           |  3 +++
- package/cppdb/cppdb.mk                             | 13 +++++++++++-
- 4 files changed, 40 insertions(+), 3 deletions(-)
- create mode 100644 package/cppdb/cppdb-0001-mysql-library-suffix.patch
- create mode 100644 package/cppdb/cppdb.hash
+ > perl infrastructure using a host-perl instead of the system perl
+ > V1 -> V2:
+ >   - rebase the serie
+ >   - XML-Parser doesn't use the infrastructure
 
-diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
-index 120598a..19c9419 100644
---- a/package/cppdb/Config.in
-+++ b/package/cppdb/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_CPPDB
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# Can be built without them but it's useless
--	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_SQLITE
-+	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
- 	help
- 	  CppDB is an SQL connectivity library that is designed to provide
- 	  platform and Database independent connectivity API similarly
-@@ -14,6 +14,6 @@ config BR2_PACKAGE_CPPDB
- 	  http://cppcms.com/sql/cppdb/
- 
- comment "cppdb needs a toolchain w/ C++, threads, dynamic library"
--	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_SQLITE
-+	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_PREFER_STATIC_LIB
-diff --git a/package/cppdb/cppdb-0001-mysql-library-suffix.patch b/package/cppdb/cppdb-0001-mysql-library-suffix.patch
-new file mode 100644
-index 0000000..e65e3e2
---- /dev/null
-+++ b/package/cppdb/cppdb-0001-mysql-library-suffix.patch
-@@ -0,0 +1,23 @@
-+Add mysql/ to PATH_SUFFIXES for the library search for mysql.
-+
-+On common distros libmysqlclient* is installed and/or symlinked
-+into /usr/lib.
-+Since we install the libraries into /usr/lib/mysql alone cppdb
-+fails to properly link to it giving runtime errors.
-+
-+Status: https://sourceforge.net/p/cppcms/bugs/135/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura cppdb-0.3.1.orig/CMakeLists.txt cppdb-0.3.1/CMakeLists.txt
-+--- cppdb-0.3.1.orig/CMakeLists.txt	2014-10-17 11:05:57.875429748 -0300
-++++ cppdb-0.3.1/CMakeLists.txt	2014-10-17 11:12:57.486775484 -0300
-+@@ -196,7 +196,7 @@
-+ endif()
-+ 
-+ if(NOT DISABLE_MYSQL)
-+-	find_library(MYSQL_LIB mysqlclient)
-++	find_library(MYSQL_LIB mysqlclient PATH_SUFFIXES mysql)
-+ 	find_path(MYSQL_PATH mysql.h PATH_SUFFIXES mysql)
-+ 	if(MYSQL_LIB AND MYSQL_PATH)
-+ 		include_directories(${MYSQL_PATH})
-diff --git a/package/cppdb/cppdb.hash b/package/cppdb/cppdb.hash
-new file mode 100644
-index 0000000..efc0eac
---- /dev/null
-+++ b/package/cppdb/cppdb.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/cppcms/files/cppdb/0.3.1/
-+md5	129f1d75f46114b79160b93807d5223f	cppdb-0.3.1.tar.bz2
-+sha1	c0410dcc482d71696ac9206044b3a3ac03d31f96	cppdb-0.3.1.tar.bz2
-diff --git a/package/cppdb/cppdb.mk b/package/cppdb/cppdb.mk
-index f7f837e..2c26c90 100644
---- a/package/cppdb/cppdb.mk
-+++ b/package/cppdb/cppdb.mk
-@@ -14,7 +14,18 @@ CPPDB_LICENSE_FILES = LICENSE_1_0.txt MIT.txt
- 
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- CPPDB_DEPENDENCIES += mysql
--CPPDB_CONF_OPTS += -DMYSQL_LIB=$(STAGING_DIR)/usr/lib/mysql
-+else
-+CPPDB_CONF_OPTS += -DDISABLE_MYSQL=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
-+CPPDB_DEPENDENCIES += postgresql
-+else
-+CPPDB_CONF_OPTS += -DDISABLE_PQ=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE),)
-+CPPDB_CONF_OPTS += -DDISABLE_SQLITE=ON
- endif
- 
- $(eval $(cmake-package))
+ > Note: no test done for metacity
+
+ > Francois Perrad (4):
+ >   libxml-parser-perl: restore it like before perl infra
+ >   perl: add host variant
+ >   pkg-perl: refactor with host-perl
+ >   perl: remove useless hacks
+
+It seems to cause a number of autobuild failures, could you take a look please?
+
+http://autobuild.buildroot.net/results/688/6881a8f6366085f89bea0d8b3a77fa23af26f3b7/build-end.log
+http://autobuild.buildroot.net/results/d68/d68143ec7745854c97df6c5221b03ff586dec1b1/build-end.log
+http://autobuild.buildroot.net/results/aaf/aaf91380953ebb84c582b38b46cfb180ff6862cb/build-end.log
+
 -- 
-2.0.4
+Bye, Peter Korsgaard
