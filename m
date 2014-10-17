@@ -1,45 +1,90 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Fri, 17 Oct 2014 20:25:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-autotools.mk: add host-m4
-	dependency
-Message-ID: <1413570319-55465-1-git-send-email-kaszak@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 17 Oct 2014 20:48:01 +0200
+Subject: [Buildroot] [PATCH] intltool: fix build
+Message-ID: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-autoconf depends on host-m4, which is not reflected in
-package/pkg-autotools.mk. This obstructs "make source" from running
-host-m4-source, making offline builds fail while trying to download
-it before building host-autoconf.
+fix various build failures caused by host-perl serie
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Currently, the variables PERL & PERL2LIB are available
+only during the configure step of host-intltool.
+There are also needed when running host-intltool,
+in all package which depends on host-intltool.
+
+So, there are now global, but in the perl infrastructure,
+we cannot use them.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/pkg-autotools.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/Makefile.in          | 9 +++++++--
+ package/intltool/intltool.mk | 3 ---
+ package/pkg-perl.mk          | 2 +-
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 2c93dd9..77bf696 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -248,7 +248,7 @@ endef
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
- # and _GETTEXTIZE away from the non-host rule
- ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
-+$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool host-m4 \
- 				host-gettext host-toolchain $(1),\
-     $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
- endif
-@@ -260,7 +260,7 @@ $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
- $(2)_DEPENDENCIES += host-gettext
- endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
--$(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
-+$(2)_DEPENDENCIES += host-automake host-autoconf host-libtool host-m4
- endif
+diff --git a/package/Makefile.in b/package/Makefile.in
+index ab59b54..b5d407c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -232,6 +232,9 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/
+ HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
  
- #
++export PERL=$(shell which perl)
++export PERL5LIB=$(HOST_DIR)/usr/lib/perl
++
+ TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+@@ -267,7 +270,8 @@ TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		FCFLAGS="$(TARGET_FCFLAGS)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		STAGING_DIR="$(STAGING_DIR)"
++		STAGING_DIR="$(STAGING_DIR)" \
++		INTLTOOL_PERL=$(PERL)
+ 
+ TARGET_MAKE_ENV = PATH=$(BR_PATH)
+ 
+@@ -292,7 +296,8 @@ HOST_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+-		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
++		INTLTOOL_PERL=$(PERL)
+ 
+ HOST_MAKE_ENV = PATH=$(BR_PATH) \
+ 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index a7afe0d..549cb3b 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -10,9 +10,6 @@ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
+ 
+ HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
+-HOST_INTLTOOL_CONF_OPTS = \
+-	PERL=`which perl` \
+-	PERL5LIB=$(HOST_DIR)/usr/lib/perl
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index f41a2f9..6577588 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -20,7 +20,7 @@
+ ################################################################################
+ 
+ PERL_ARCHNAME = $(ARCH)-linux
+-PERL_RUN = $(HOST_DIR)/usr/bin/perl
++PERL_RUN = PERL5LIB= $(HOST_DIR)/usr/bin/perl
+ 
+ ################################################################################
+ # inner-perl-package -- defines how the configuration, compilation and
 -- 
-1.7.10.4
+1.9.1
