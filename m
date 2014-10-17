@@ -1,90 +1,113 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 17 Oct 2014 20:48:01 +0200
-Subject: [Buildroot] [PATCH] intltool: fix build
-Message-ID: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
+From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
+Date: Fri, 17 Oct 2014 21:10:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: use upstream-provided
+	systemd files
+Message-ID: <1413573042-6638-1-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix various build failures caused by host-perl serie
+When using the buildroot-provided avahi-daemon.service file, bootup never
+finishes, because multi-user.target is waiting for avahi-daemon to exit,
+which is caused by "Type=oneshot" (in avahi-daemon.service).
 
-Currently, the variables PERL & PERL2LIB are available
-only during the configure step of host-intltool.
-There are also needed when running host-intltool,
-in all package which depends on host-intltool.
+Upstream's systemd files get already installed to /lib/systemd.
+They're not an exact copy of S50avahi-daemon, but work flawlessly,
+so use these units:
 
-So, there are now global, but in the perl infrastructure,
-we cannot use them.
+* avahi-daemon.service, auto-enabled (ln -fs in AVAHI_INSTALL_INIT_SYSTEMD)
+* avahi-daemon.socket,
+  not auto-enabled, but a dependency of avahi-daemon.service
+* avahi-dnsconfd.service, auto-enabled
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- package/Makefile.in          | 9 +++++++--
- package/intltool/intltool.mk | 3 ---
- package/pkg-perl.mk          | 2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+With "Type=oneshot", systemd waits for avahi-daemon to exit,
+which does not happen (unless killed):
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index ab59b54..b5d407c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -232,6 +232,9 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/
- HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
- 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+$ systemctl --no-pager status avahi-daemon.service
+* avahi-daemon.service - Avahi daemon
+   Loaded: loaded (/etc/systemd/system/avahi-daemon.service; enabled)
+   Active: activating (start) since Wed 2014-10-15 21:26:49 CEST; 56s ago
+ Main PID: 190 (avahi-daemon)
+   CGroup: /system.slice/avahi-daemon.service
+           |-190 avahi-daemon: running [buildroot.local]
+           |-192 avahi-daemon: chroot helper
+
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Network interface enumeration completed.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering HINFO record with values 'X86_64'/'LINUX'.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Server startup complete. Host name is buildroot.local. Local service c...3347.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/ssh.service) successfully established.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/sftp-ssh.service) successfully established.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Joining mDNS multicast group on interface br0.IPv4 with address 192.168.3.114.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: New relevant interface br0.IPv4 for mDNS.
+Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering new address record for 192.168.3.114 on br0.IPv4.
+Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::5054:ff:feb1:f19a on eth0.*.
+Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::bcbb:86ff:fe4a:14d6 on br0.*.
+Hint: Some lines were ellipsized, use -l to show in full.
+(EOF)
+
+
+The result is that the boot process never reaches "multi-user.target":
+
+$ systemctl --no-pager list-jobs
+JOB UNIT                 TYPE  STATE
+  1 multi-user.target    start waiting
+ 57 avahi-daemon.service start running
+
+2 jobs listed.
+(EOF)
+---
+ package/avahi/avahi-daemon.service | 15 ---------------
+ package/avahi/avahi.mk             |  8 ++++----
+ 2 files changed, 4 insertions(+), 19 deletions(-)
+ delete mode 100644 package/avahi/avahi-daemon.service
+
+diff --git a/package/avahi/avahi-daemon.service b/package/avahi/avahi-daemon.service
+deleted file mode 100644
+index c9b7b1f..0000000
+--- a/package/avahi/avahi-daemon.service
++++ /dev/null
+@@ -1,15 +0,0 @@
+-[Unit]
+-Description=Avahi daemon
+-Requires=dbus.target
+-After=syslog.target network.target auditd.service
+-
+-[Service]
+-Type=oneshot
+-RemainAfterExit=ye
+-ExecStart=/usr/sbin/avahi-daemon -s
+-ExecReload=/usr/sbin/avahi-daemon -r
+-ExecStop=/usr/sbin/avahi-daemon -k
+-Restart=restart-always
+-
+-[Install]
+-WantedBy=multi-user.target
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 706561f..609d89c 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -164,14 +164,14 @@ endif
+ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
  
-+export PERL=$(shell which perl)
-+export PERL5LIB=$(HOST_DIR)/usr/lib/perl
+ define AVAHI_INSTALL_INIT_SYSTEMD
+-  $(INSTALL) -D -m 644 package/avahi/avahi-daemon.service \
+-    $(TARGET_DIR)/etc/systemd/system/avahi-daemon.service
+-
+   mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 
+-  ln -fs ../avahi-daemon.service \
++  ln -fs ../../../../lib/systemd/system/avahi-daemon.service \
+     $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
+ 
++  ln -fs ../../../../lib/systemd/system/avahi-dnsconfd.service \
++    $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
 +
- TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
- 		AR="$(TARGET_AR)" \
- 		AS="$(TARGET_AS)" \
-@@ -267,7 +270,8 @@ TARGET_CONFIGURE_OPTS = PATH=$(BR_PATH) \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		FCFLAGS="$(TARGET_FCFLAGS)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		STAGING_DIR="$(STAGING_DIR)"
-+		STAGING_DIR="$(STAGING_DIR)" \
-+		INTLTOOL_PERL=$(PERL)
+   mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
  
- TARGET_MAKE_ENV = PATH=$(BR_PATH)
- 
-@@ -292,7 +296,8 @@ HOST_CONFIGURE_OPTS = PATH=$(BR_PATH) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_SYSROOT_DIR="/" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
--		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-+		INTLTOOL_PERL=$(PERL)
- 
- HOST_MAKE_ENV = PATH=$(BR_PATH) \
- 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
-index a7afe0d..549cb3b 100644
---- a/package/intltool/intltool.mk
-+++ b/package/intltool/intltool.mk
-@@ -10,9 +10,6 @@ INTLTOOL_LICENSE = GPLv2+
- INTLTOOL_LICENSE_FILES = COPYING
- 
- HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
--HOST_INTLTOOL_CONF_OPTS = \
--	PERL=`which perl` \
--	PERL5LIB=$(HOST_DIR)/usr/lib/perl
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-index f41a2f9..6577588 100644
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -20,7 +20,7 @@
- ################################################################################
- 
- PERL_ARCHNAME = $(ARCH)-linux
--PERL_RUN = $(HOST_DIR)/usr/bin/perl
-+PERL_RUN = PERL5LIB= $(HOST_DIR)/usr/bin/perl
- 
- ################################################################################
- # inner-perl-package -- defines how the configuration, compilation and
+   $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
 -- 
-1.9.1
+2.1.2
