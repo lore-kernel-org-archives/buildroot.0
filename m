@@ -1,61 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 00:44:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libplist: Bump version to 1.12
-In-Reply-To: <1413659138-11363-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413659138-11363-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141018224412.GC14899@free.fr>
+Date: Sun, 19 Oct 2014 00:47:22 +0200
+Subject: [Buildroot] [PATCH] packages/*.mk: Remove duplicate options
+In-Reply-To: <1413656413-22546-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413656413-22546-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141018224722.GD14899@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Maxime, All,
 
-On 2014-10-18 21:05 +0200, Bernd Kuhls spake thusly:
-> Quoting http://cgit.sukimashita.com/libplist.git/tree/NEWS
-> "  * Fix parallel build for autotools"
+On 2014-10-18 20:20 +0200, Maxime Hadjinlian spake thusly:
+> These flags are already defined in pkg-autotools.mk.
+> There is no need to have them twice.
 > 
-> Therefore removed MAKE1, tested with -j90
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[--SNIP--]
+> diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+> index 04ffa57..c8ba5c6 100644
+> --- a/package/opus/opus.mk
+> +++ b/package/opus/opus.mk
+> @@ -9,11 +9,10 @@ OPUS_SITE = http://downloads.xiph.org/releases/opus
+>  OPUS_LICENSE = BSD-3c
+>  OPUS_LICENSE_FILES = COPYING
+>  OPUS_INSTALL_STAGING = YES
+> -OPUS_CONF_OPTS = --disable-doc
+>  OPUS_AUTORECONF = YES
+>  
+>  ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+> -OPUS_CONF_OPTS += --enable-fixed-point
+> +OPUS_CONF_OPTS = --enable-fixed-point
 
--j90, woot! :-)
+Although technically correct, I would not mind the += to stick.
+Variables are always initialised to empty, so it is safe to just append
+to them.
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Anyway:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/libplist/libplist.mk |    5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-> index 1185370..b87c5ba 100644
-> --- a/package/libplist/libplist.mk
-> +++ b/package/libplist/libplist.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  endif
 >  
-> -LIBPLIST_VERSION = 1.11
-> +LIBPLIST_VERSION = 1.12
->  LIBPLIST_SITE = http://cgit.sukimashita.com/libplist.git/snapshot
->  LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
->  LIBPLIST_INSTALL_STAGING = YES
-> @@ -14,9 +14,6 @@ LIBPLIST_LICENSE_FILES = COPYING
->  # Straight out of the git tree:
->  LIBPLIST_AUTORECONF = YES
+>  $(eval $(autotools-package))
+> diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+> index cf6ec2b..ac8684e 100644
+> --- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+> +++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+> @@ -11,6 +11,5 @@ XLIB_LIBXAW_LICENSE = MIT
+>  XLIB_LIBXAW_LICENSE_FILES = COPYING
+>  XLIB_LIBXAW_INSTALL_STAGING = YES
+>  XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xproto_xproto
+> -XLIB_LIBXAW_CONF_OPTS = --disable-docs
 >  
-> -# Does not build in parallel
-> -LIBPLIST_MAKE = $(MAKE1)
-> -
->  # Disable building Python bindings, because it requires host-cython, which
->  # is not packaged in Buildroot at all.
->  LIBPLIST_CONF_OPTS = --without-cython
+>  $(eval $(autotools-package))
 > -- 
-> 1.7.10.4
+> 2.1.1
 > 
 > _______________________________________________
 > buildroot mailing list
