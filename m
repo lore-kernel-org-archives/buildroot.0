@@ -1,49 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 15:14:17 +0200
-Subject: [Buildroot] [PATCH v3 2/3] gst-ffmpeg: add --pkg-config to
- internal libav configure options
-In-Reply-To: <20141018135102.4b4d86df@free-electrons.com>
-References: <1413142206-30581-1-git-send-email-danomimanchego123@gmail.com>
- <1413142206-30581-2-git-send-email-danomimanchego123@gmail.com>
- <20141017212453.GI3971@free.fr> <20141018135102.4b4d86df@free-electrons.com>
-Message-ID: <544267A9.9080509@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 15:19:38 +0200
+Subject: [Buildroot] [PATCH] tinyalsa: new package
+In-Reply-To: <20141018150220.06b209c5@free-electrons.com>
+References: <1412531488-8849-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20141006211545.025b58c5@free-electrons.com> <471202899.FpAt3MTFiF@hyperion>
+ <20141018150220.06b209c5@free-electrons.com>
+Message-ID: <CAGduivxKHiqyFBZq3Pb63r9_vvpsMmgFvLbJ_Bo41wpOSU2jVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/14 13:51, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
-> 
-> On Fri, 17 Oct 2014 23:24:53 +0200, Yann E. MORIN wrote:
-> 
->>> WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found, library detection may fail.
+On Sat, Oct 18, 2014 at 3:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Maarten ter Huurne,
+>
+> On Sat, 18 Oct 2014 02:42:45 +0200, Maarten ter Huurne wrote:
+>
+>> > +++ b/package/tinyalsa/tinyalsa.mk
+>> > [snip]
+>> > +       $(INSTALL) -D -m 0644 $(@D)/include/sound/asound.h \
+>> > +                       $(STAGING_DIR)/usr/include/sound/asound.h
 >>
->> Instead of fixing just that one package, shouldn't we provide a symlink:
->>     TUPLE-pkg-config  ->  pkg-config
->>
->> This way, all packages that expect a cross-pkg-config will work without
->> customisation.
->>
->> Thomas, thoughts?
-> 
-> I don't have a very strong opinion here. How many packages expect
-> TUPLE-pkg-config instead of pkg-config? I'm not sure it's really the
-> majority, and if it's not, I prefer to keep handling this on a
-> per-package basis rather than adding a symlink.
-
- Actually, even if it is just two packages that use it, I think it is worthwhile
-to add the symlink. It is one less thing to solve when adding a package.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>> This will overwrite the pre-existing (from libc or kernel headers) version
+>> of <sound/asound.h> with the Android-style stripped version from tinyalsa.
+>> I think it would be better to keep the pre-existing version of this header,
+>> do you agree?
+>
+> Yes, overwriting this header file indeed looks brutal. Is the original
+> asound.h a superset of the tinyalsa asound.h ? If that's the case, then
+> we can simply keep the original asound.h and that's it.
+Indeed, I originally though they were different headers, after doing a
+diff between the two, the one of tinyalsa is simply a subset. I'll
+submit a patch to remove the install.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
