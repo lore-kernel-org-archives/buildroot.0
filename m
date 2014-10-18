@@ -1,38 +1,68 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 18 Oct 2014 15:21:14 +0200
-Subject: [Buildroot] [PATCH] tinyalsa: Fix overwrite of asound.h
-Message-ID: <1413638474-7242-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 15:24:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-autotools.mk: add host-m4
+	dependency
+In-Reply-To: <1413570319-55465-1-git-send-email-kaszak@gmail.com>
+References: <1413570319-55465-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20141018152443.5103c180@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated by Maarten ter Huurne on the mailing list, the install of the
-asound.h headers overwrite the one from the toolchains or kernel
-headers.
-Since tinyals's header is only a subset of the 'real' asound.h, there is
-no need to overwrite it.
+Dear Karoly Kasza,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Maarten ter Huurne <maarten@treewalker.org>
-Cc: Thomas Petazzoni  <thomas.petazzoni@free-electrons.com>
----
- package/tinyalsa/tinyalsa.mk | 2 --
- 1 file changed, 2 deletions(-)
+On Fri, 17 Oct 2014 20:25:19 +0200, Karoly Kasza wrote:
+> host-autoconf depends on host-m4, which is not reflected in
+> package/pkg-autotools.mk. This obstructs "make source" from running
+> host-m4-source, making offline builds fail while trying to download
+> it before building host-autoconf.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  package/pkg-autotools.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
-index b287e78..48288f1 100644
---- a/package/tinyalsa/tinyalsa.mk
-+++ b/package/tinyalsa/tinyalsa.mk
-@@ -16,8 +16,6 @@ endef
- define TINYALSA_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libtinyalsa.so \
- 			$(STAGING_DIR)/usr/lib/libtinyalsa.so
--	$(INSTALL) -D -m 0644 $(@D)/include/sound/asound.h \
--			$(STAGING_DIR)/usr/include/sound/asound.h
- 	$(INSTALL) -D -m 0644 $(@D)/include/tinyalsa/asoundlib.h \
- 			$(STAGING_DIR)/usr/include/tinyalsa/asoundlib.h
- endef
+The host-autoconf package already has a dependency on host-m4. See
+package/autoconf/autoconf.mk:
+
+HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+
+Maybe the problem you're seeing is that we're not expanding completely
+the host dependencies:
+
+# host-* dependencies have to be handled specially, as those aren't
+# visible in Kconfig and hence not added to a variable like TARGETS.
+# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
+# variable for each enabled target.
+# Notice: this only works for newstyle gentargets/autotargets packages
+TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+                $(addsuffix _DEPENDENCIES,\
+                        $(call UPPERCASE,$(TARGETS) $(TARGETS_ROOTFS))),\
+                $($(dep)))))
+# Host packages can in turn have their own dependencies. Likewise find
+# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+# host package found above. Ideally this should be done recursively until
+# no more packages are found, but that's hard to do in make, so limit to
+# 1 level for now.
+HOST_DEPS = $(sort $(foreach dep,\
+                $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
+                $($(dep))))
+HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+
+I once drafted a solution for this, but never gotten around to
+finishing it and submitting the patch. Something I (or someone) need to
+work on at some point.
+
+But in the mean time, the patch you're proposing is not correct, as
+it's only work-arounding the problem, and fixes it only for on specific
+use case.
+
+Best regards,
+
+Thomas
 -- 
-2.1.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
