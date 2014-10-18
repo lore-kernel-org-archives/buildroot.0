@@ -1,75 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 00:47:22 +0200
-Subject: [Buildroot] [PATCH] packages/*.mk: Remove duplicate options
-In-Reply-To: <1413656413-22546-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413656413-22546-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141018224722.GD14899@free.fr>
+From: Maarten ter Huurne <maarten@treewalker.org>
+Date: Sun, 19 Oct 2014 01:28:04 +0200
+Subject: [Buildroot] [PATCH v2] modplugtools: Added package
+In-Reply-To: <20141018215748.GF31723@free.fr>
+References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
+ <1413662640-16030-1-git-send-email-maarten@treewalker.org>
+ <20141018215748.GF31723@free.fr>
+Message-ID: <108749465.hOBsSJgTxk@hyperion>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+Hi all,
 
-On 2014-10-18 20:20 +0200, Maxime Hadjinlian spake thusly:
-> These flags are already defined in pkg-autotools.mk.
-> There is no need to have them twice.
+It seems I copy-pasted the wrong message ID for In-Reply-To, so threading is 
+a bit messed up. Sorry about that.
+
+On Saturday 18 October 2014 23:57:48 Yann E. MORIN wrote:
+> On 2014-10-18 22:04 +0200, Maarten ter Huurne spake thusly:
+> > diff --git a/package/modplugtools/Config.in
+> > b/package/modplugtools/Config.in new file mode 100644
+> > index 0000000..20009b6
+> > --- /dev/null
+> > +++ b/package/modplugtools/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_MODPLUGTOOLS
+> > +	bool "modplugtools"
+> > +	select BR2_PACKAGE_LIBAO
+> > +	select BR2_PACKAGE_LIBMODPLUG
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[--SNIP--]
-> diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-> index 04ffa57..c8ba5c6 100644
-> --- a/package/opus/opus.mk
-> +++ b/package/opus/opus.mk
-> @@ -9,11 +9,10 @@ OPUS_SITE = http://downloads.xiph.org/releases/opus
->  OPUS_LICENSE = BSD-3c
->  OPUS_LICENSE_FILES = COPYING
->  OPUS_INSTALL_STAGING = YES
-> -OPUS_CONF_OPTS = --disable-doc
->  OPUS_AUTORECONF = YES
->  
->  ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
-> -OPUS_CONF_OPTS += --enable-fixed-point
-> +OPUS_CONF_OPTS = --enable-fixed-point
-
-Although technically correct, I would not mind the += to stick.
-Variables are always initialised to empty, so it is safe to just append
-to them.
-
-Anyway:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->  endif
->  
->  $(eval $(autotools-package))
-> diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-> index cf6ec2b..ac8684e 100644
-> --- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-> +++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-> @@ -11,6 +11,5 @@ XLIB_LIBXAW_LICENSE = MIT
->  XLIB_LIBXAW_LICENSE_FILES = COPYING
->  XLIB_LIBXAW_INSTALL_STAGING = YES
->  XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xproto_xproto
-> -XLIB_LIBXAW_CONF_OPTS = --disable-docs
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.1.1
+> modplugtools should inherit the dependencies from libmodplug, namely
+> C++:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>     config BR2_PACKAGE_MODPLUGTOOLS
+>         bool "modplugtools"
+>         depends on BR2_INSTALL_LIBSTDCPP # libmodplug
+>         select BR2_PACKAGE_LIBMODPLUG
+>         select BR2_PACKAGE_LIBAO
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hmm, I didn't expect to have to propagate dependencies manually. On the 
+other hand, if Kconfig tried to do this automatically, including supporting 
+conditional dependencies, it might end up as a full Prolog interpreter. ;)
+
+> > +	help
+> > +	  This installs the 'modplug123' command line tool to play tracker
+> > music +	  files (MOD, S3M, XM etc.) using libmodplug.
+> 
+> Since the comments in the .mk file are not directly visible to the user,
+> it would be nice to put a little blurb about OSS vs. ALSA, something like:
+> 
+>     modplugplay uses libao to play MOD files, so can output
+>     via either ALSA or OSS.
+
+The libao source supports about a dozen different backends, but only ALSA 
+and OSS are supported in Buildroot at the moment. That could change in the 
+future though (maybe someone wants to build the PulseAudio backend too), so 
+I'd rather not duplicate information that might become outdated through 
+changes in a different package.
+
+However, I could mention that libao is used for playing.
+
+> > +	  http://modplug-xmms.sourceforge.net/
+> > diff --git a/package/modplugtools/modplugtools.mk
+> > b/package/modplugtools/modplugtools.mk new file mode 100644
+> > index 0000000..186d4a7
+> > --- /dev/null
+> > +++ b/package/modplugtools/modplugtools.mk
+> > @@ -0,0 +1,23 @@
+> > +#######################################################################
+> > ######### +#
+> > +# modplugtools
+> > +#
+> > +#######################################################################
+> > ######### +
+> > +MODPLUGTOOLS_VERSION = 0.5.3
+> > +MODPLUGTOOLS_SITE =
+> > http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
+> > +MODPLUGTOOLS_LICENSE = GPLv3
+> > +MODPLUGTOOLS_LICENSE_FILES = COPYING
+> > +
+> > +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
+> > +
+> > +# The modplugtools package can build two players: modplugplay that
+> > plays
+> > +# directly via OSS and modplug123 that plays via libao. Since
+> > modplugplay +# won't work without OSS support and modern kernels are
+> > likely to have no +# OSS or OSS emulation, we build only modplug123.
+> > +# If you have a system without ALSA support for some reason, you can
+> > still +# use modplug123 to play over OSS via libao.
+> 
+> This comment should instead be part of the commit log, and a simpler
+> comment should be added instead here:
+> 
+>     # Only build the mp123 subdir, which contains 'modplug123', since
+>     # we do not want to build 'modplugplay', as it requires legacy OSS
+>     # and 'modplug123' can output via either ALSA or OSS.
+
+OK.
+
+> Also, if the options of modplugplay and modplug123 are the same, then
+> you could just install a symlink modplugplay -> modplug123 .
+
+I don't see what problem that would solve; "modplug123" on its own will do 
+just fine.
+
+Bye,
+		Maarten
