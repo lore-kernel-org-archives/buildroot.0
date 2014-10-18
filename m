@@ -1,60 +1,109 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 18 Oct 2014 16:47:01 +0200
-Subject: [Buildroot] [PATCH 2/5] busybox: Install scripts only when needed
+Date: Sat, 18 Oct 2014 16:47:02 +0200
+Subject: [Buildroot] [PATCH 3/5] infra: Add automatic install of init scripts
 In-Reply-To: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1413643624-14757-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1413643624-14757-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Init scripts are only usefull with init system that supports them, it
-means that we don't want init scripts files unless Busybox or SysV has
-been chosen as the init.
+Instead of copy pasting the install code over all our packages, you may
+now define variables to specify where to take the init script files.
+Each file will be installed in the default folder of the relevant init
+system.
+
+For systemd, instead of installing the files into
+$(TARGET_DIR)/etc/systemd/system, the file are now installed in
+$(TARGET_DIR)/lib/systemd/system which appears to be the right things to
+do.
+
+If you have specific operations to perform in order to install your init
+scripts or any other file relevant to the init system (tmpfiles for
+systemd), you can still define the usual FOO_INSTALL_INIT_SYSTEMD for
+your specific actions.
+
+Also add the documentation explaining the mechanism.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/busybox/busybox.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ docs/manual/adding-packages-generic.txt | 17 +++++++++++++++++
+ package/pkg-generic.mk                  | 26 ++++++++++++++++++++++----
+ 2 files changed, 39 insertions(+), 4 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 422a95d..a8b4b24 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -167,6 +167,7 @@ define BUSYBOX_SET_INIT
- endef
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 67a7453..a0e51f2 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -368,6 +368,23 @@ information is (assuming the package name is +libfoo+) :
+   FLAT binary format is only 4k bytes. If the application consumes more stack,
+   append the required number here.
  
-+ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX), y)
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
-@@ -174,11 +175,16 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 				$(TARGET_DIR)/etc/init.d/S01logging; \
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
- endef
-+endif
- 
- ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
- define BUSYBOX_SET_WATCHDOG
-         $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
- endef
-+endif
++* +LIBFOO_INIT_SYSV_FILES+ and +LIBFOO_INIT_SYSTEMD_FILES+ are
++  a space-separated list of init scripts path. Respectively, for
++  the systemV-like init systems (busybox, sysvinit, etc.) and for
++  systemd.
++  Theses init scripts files will only be installed when the relevant
++  init system is installed (i.e. if systemd is selected as the init
++  system in the configuration, only +LIBFOO_INIT_SYSTEMD_FILES+ will be
++  installed).
++  Each scripts will be installed in the default folder of the relevant
++  init system.
++  Note: This doesn't forbid you from defining +LIBFOO_INSTALL_INIT_SYSV+ and
++  +LIBFOO_INSTALL_INIT_SYSTEMD+ if you need to perform specific actions.
++  Theses variables are optionnal.
++  Examples: +
++    +LIBFOO_INSTALL_INIT_SYSV=package/libfoo/S99libfoo +
++    +LIBFOO_INSTALL_INIT_SYSV=$(@D)/S99libfoo +
 +
-+ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-+ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX), y)
- define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
- 	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
- 		$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
-@@ -187,6 +193,7 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
- 			$(TARGET_DIR)/etc/init.d/S15watchdog
- endef
- endif
-+endif
+ The recommended way to define these variables is to use the following
+ syntax:
  
- # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
- # full-blown versions of apps installed by other packages with sym/hard links.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 259ee02..1d90ae9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -229,10 +229,27 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call MESSAGE,"Installing to target")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_TARGET_CMDS)
+-	$(if $(BR2_INIT_SYSTEMD),\
+-		$($(PKG)_INSTALL_INIT_SYSTEMD))
+-	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+-		$($(PKG)_INSTALL_INIT_SYSV))
++ifeq ($(BR2_INIT_SYSTEMD),y)
++	$(Q)if test -n "$($(PKG)_INIT_SYSTEMD_FILES)" ; then \
++		mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants ; \
++		for s in $($(PKG)_INIT_SYSTEMD_FILES); do \
++			f=$$(basename $${s}); \
++			$(INSTALL) -D -m 644 $${s} $(TARGET_DIR)/lib/systemd/system/$${f} ; \
++			ln -fs /lib/systemd/system/$${f} \
++				$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$${f} ; \
++		done ; \
++	fi
++	$($(PKG)_INSTALL_INIT_SYSTEMD)
++endif
++ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),y)
++	$(Q)if test -n "$($(PKG)_INIT_SYSV_FILES)" ; then \
++		for s in $($(PKG)_INIT_SYSV_FILES); do \
++			   f=$$(basename $${s}) ; \
++			   $(INSTALL) -D -m 0755 $${s} $(TARGET_DIR)/etc/init.d/$${f} ; \
++		done ; \
++	fi
++	$($(PKG)_INSTALL_INIT_SYSV)
++endif
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+@@ -592,6 +609,7 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
++$$($(2)_TARGET_INSTALL_TARGET):		PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
+ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
 -- 
 2.1.1
