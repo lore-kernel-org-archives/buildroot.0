@@ -1,50 +1,48 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Sat, 18 Oct 2014 12:31:14 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <20141018100040.GA3858@free.fr>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20141011162152.GA4254@free.fr>
- <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
- <5441A0DF.20309@mind.be> <20141018100040.GA3858@free.fr>
-Message-ID: <CAJtjsKYZQabHeU5OwSm5sjfA3dpTg33uhkOX7M1Drv6scAkOTA@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 12:31:11 +0200
+Subject: [Buildroot] [PATCH] fs/iso9660: add dependencies for make source
+In-Reply-To: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
+References: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
+Message-ID: <CAGduivwDurQn5c5Qovk+K6ZUg86cneLCjq7dpEmPJ9x-9ak=Eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Arnout, All,
-Le 18 oct. 2014 12:00, "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> On 2014-10-18 01:06 +0200, Arnout Vandecappelle spake thusly:
-> > On 16/10/14 14:38, Johan Oudinet wrote:
-> > > ** Fix ejabberd build system
-> > > ** ===================
-> > > The only solution i see is to create a buildroot package for every
-> > > ejabberd dependency, listed in rebar.config.script :
-> > > esip, goldrush, lager, p1_cache_tab, p1_iconv, p1_stringprep, p1_stun,
-> > > p1_tls, p1_utils, p1_xml, p1_yaml, p1_zlib, xmlrpc
-> > > Then, modify ejabberd package to not use rebar at all, or at least to
-> > > not call rebar get-deps. Thus, if I remove deps from the `all'
-> > > makefile rule and deps/.build from the `src' rule dependency, it might
-> > > work.
-> > >
-> > > Do you have a better idea?
-> >
-> >  Perhaps it's an option to run rebar in download-only mode in the
-download step?
->
-> The problem is that rebar is an executable bundled in the ejabberd
-> archive, so, we can't run it before we extract ejabberd... :-(
->
-> Unless we can switch to using an external rebar. Johan?
+Hi Karoly, all
 
-Well, we could package the rebar project and use it instead of the binary
-included in ejabberd but I don't think it's a good idea.
-Actually, I've looked at how Debian has packaged ejabberd and they did
-patch it to get rid of the get-deps rule and packages every dependency
-separately.
-I'm going to have a look how perl is integrated in buildroot.
-Thanks.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141018/e2704eb2/attachment.html>
+On Fri, Oct 17, 2014 at 11:16 PM, Karoly Kasza <kaszak@gmail.com> wrote:
+> The "iso image" rootfs target is a special one, as it does not use the
+> ROOTFS_TARGET infrastructure. The absence of ROOTFS_*_DEPENDENCIES
+> variable makes "make source" to skip this target's dependencies
+> (namely host-cdrkit and it's children) obstructing an offline build.
+>
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  fs/iso9660/iso9660.mk |    2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index b0e755d..5137026 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -10,6 +10,8 @@
+>  ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+>  ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+>
+> +ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux rootfs-cpio grub
+> +
+>  $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+>         @$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+>         mkdir -p $(ISO9660_TARGET_DIR)
+> --
+> 1.7.10.4
+How about putting the dependencies variables on the top ?
+Also, please keep the dependencies alphabetically sorted.
+I know they are not ordered the line below, but it would be nice.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
