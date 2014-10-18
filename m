@@ -1,38 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Oct 2014 15:00:47 +0200
-Subject: [Buildroot] [PATCH buildroot-test 8/8] autobuild-run: add
- support for custom git wrapper
-In-Reply-To: <20141017223023.GA7944@free.fr>
-References: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
- <1413486964-5183-8-git-send-email-patrickdepinguin@gmail.com>
- <20141017223023.GA7944@free.fr>
-Message-ID: <20141018150047.1098f07a@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 15:01:38 +0200
+Subject: [Buildroot] [PATCH] tinyalsa: new package
+In-Reply-To: <471202899.FpAt3MTFiF@hyperion>
+References: <1412531488-8849-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20141006211545.025b58c5@free-electrons.com> <471202899.FpAt3MTFiF@hyperion>
+Message-ID: <CAGduivx=CUaCb=afZEyGzhobpYmah+tOotiwedWEK5Dn_rT-JQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Maarten, all
 
-On Sat, 18 Oct 2014 00:30:23 +0200, Yann E. MORIN wrote:
-
-> You know you can make this stick, right?
-> 
->     git config --global --add core.gitproxy /path/to/git-proxy-command
-> 
-> And then you're done once and for all. ;-)
-
-Yes, I was also wondering why a change to each and every git invocation
-was needed: surely like wget there should be a way to configure git to
-use a proxy.
-
-With what Yann has given, Thomas, do you still need this patch?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Sat, Oct 18, 2014 at 2:42 AM, Maarten ter Huurne
+<maarten@treewalker.org> wrote:
+> Hi Maxime and Thomas,
+>
+>> +++ b/package/tinyalsa/tinyalsa.mk
+>> [snip]
+>> +       $(INSTALL) -D -m 0644 $(@D)/include/sound/asound.h \
+>> +                       $(STAGING_DIR)/usr/include/sound/asound.h
+>
+> This will overwrite the pre-existing (from libc or kernel headers) version
+> of <sound/asound.h> with the Android-style stripped version from tinyalsa.
+> I think it would be better to keep the pre-existing version of this header,
+> do you agree?
+IMHO, it's the benefit of using tinyalsa, is not in the tools it
+provides, but mainly because of these stripped library and headers
+that you want to use in your applications.
+Otherwise, you don't really need the tinyalsa package at all.
+>
+> Bye,
+>                 Maarten
+>
