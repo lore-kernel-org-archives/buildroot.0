@@ -1,107 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Oct 2014 15:02:48 +0200
-Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
- compile fixes
-In-Reply-To: <1491715.MQnf8L3yFy@hyperion>
-References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
- <20141018110508.GC3858@free.fr> <20141018113446.GA31723@free.fr>
- <1491715.MQnf8L3yFy@hyperion>
-Message-ID: <20141018130248.GB31723@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Oct 2014 15:03:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pkg-autotools.mk: set
+ --localstatedir=/var by default
+In-Reply-To: <1413585393-8349-1-git-send-email-jkrause@posteo.de>
+References: <1413585393-8349-1-git-send-email-jkrause@posteo.de>
+Message-ID: <5442650D.1010207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maarten, All,
-
-On 2014-10-18 14:15 +0200, Maarten ter Huurne spake thusly:
-> On Saturday 18 October 2014 13:34:46 Yann E. MORIN wrote:
-> > Maarten, All,
-> > 
-> > On 2014-10-18 13:05 +0200, Yann E. MORIN spake thusly:
-> > > On 2014-10-17 17:57 +0200, Maarten ter Huurne spake thusly:
-> > > > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-> > > > ---
-> > > > The second version of this patch was missing the "v2" label; this is
-> > > > the third version.
-> > > > 
-> > > > The changes from v2, plus an additional change I made later were
-> > > > merged
-> > > > upstream. This patch bumps the git revision to the merge commit.
-> > > > 
-> > > > rpi-userland-002-remove-faulty-assert.patch had to be updated to match
-> > > > other changes in the code that are pulled in by the version bump.
-> > > > I checked that the updated patch compiles fine, but I have no idea
-> > > > whether it is still needed to fix or work around a runtime problem.
-> > > 
-> > > So, I have tested this bump: weston on the rpi no longer works, with or
-> > > without the asser patch.
-> > > 
-> > > So, I NAK this bump for now.
-> > > 
-> > > I'll see to bisect rpi-userland to see where it breaks.
-> > 
-> > The culprit is:
-> >     66338d3 vc_dispmanx: Fix vsync service use counting
-> > 
-> > Unfortunately, weston has yet no fix for that, and I could not spot any
-> > fix for rpi-userland either... :-/
+On 18/10/14 00:36, J?rg Krause wrote:
+> `localstatedir` is a common autoconf variable like prefix and sysconfdir. At 
+> this time 25 autotools and one generic package uses this Makefile variable. 22 
+> of the autotools packages use --localstatedir=/var, the remaining use custom 
+> settings.
 > 
-> That commit is less than a week old; rpi-userland might not be aware of the 
-> problem. Will you or the Weston devs file a bug for it or alert the author?
-
-I've asked on #wayland to see if they are aware of the issue.
-I'll probably fill a bug in either project depending on how the wayland
-guys reply.
-
-> By the way, 66338d3 is the commit that gives a NULL handle a special 
-> meaning. If the assert no longer triggers, perhaps the assert used to 
-> trigger on the handle being NULL by accident?
-
-Yes, the assert fired because of a NULL pointer dereference (IIRC).
-
-> > So, still NAK for this bump. We can still bump it up to ba753c1 as this
-> > still works, but is not enough to get the musl fixes.
-> > 
-> > Maybe we could just hide it for musl for now?
+> Setting `localstatedir` to /var is consistent with the Filesystem Hierarchy 
+> Standard (FHS). So it's time to move it as a common definition in the 
+> autotools infrastructure. 
 > 
-> I think it would be a pity to hide it when we have a fix for the musl 
-> compile problem.
-> 
-> The only differences between the the proposed bump (4333d6d) and the last 
-> working version (ba753c1) are the commit that breaks Weston (66338d3) and 
-> the musl compile fixes. So I could create a v4 patch which bumps the version 
-> to 4333d6d and contains a patch to revert 66338d3.
-> 
-> Alternatively, I could create a v4 patch which bumps the version to ba753c1 
-> and adds the musl compile fixes as separate patches. While the number of 
-> patches would be greater (5 vs 1), the number of changed lines would be 
-> smaller, since most of the compile fixes change one line each.
-> 
-> Or I could create a v4 patch which bumps the version to ba753c1 and adds the 
-> musl compile fixes as a single patch. Since we know they have been accepted 
-> upstream in the same merge commit (4333d6d), we can drop all of them at the 
-> same time once we can safely bump beyond that merge commit.
-> 
-> At the moment I prefer bumping to ba753c1 + squashed musl compile fixes, but 
-> I'd like a second opinion.
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-Well, I do not want to have weston break. weston is, as far as I can
-see, the only package in Buildroot that can make use of rpi-userland.
-Breaking it is out of the equation.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-If the backport on-top of ba753c1 is easy, then that's OK for me. The
-patches are upstream, so it's OK to bundle them until either
-rpi-userland or/and weston upstream fix the issue.
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
+
+> ---
+>  package/pkg-autotools.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 2c93dd9..3c5430f 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -134,6 +134,7 @@ define $(2)_CONFIGURE_CMDS
+>  		--prefix=/usr \
+>  		--exec-prefix=/usr \
+>  		--sysconfdir=/etc \
+> +		--localstatedir=/var \
+>  		--program-prefix="" \
+>  		--disable-gtk-doc \
+>  		--disable-doc \
+> @@ -165,6 +166,7 @@ define $(2)_CONFIGURE_CMDS
+>  		./configure \
+>  		--prefix="$$(HOST_DIR)/usr" \
+>  		--sysconfdir="$$(HOST_DIR)/etc" \
+> +		--localstatedir="$$(HOST_DIR)/var" \
+>  		--enable-shared --disable-static \
+>  		--disable-gtk-doc \
+>  		--disable-doc \
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
