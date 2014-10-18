@@ -1,79 +1,55 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 18 Oct 2014 15:52:41 +0200
-Subject: [Buildroot] [PATCH buildroot-test 1/8] autobuild-run:
- check-requirements does not need to know the login details
-In-Reply-To: <54426D4A.8050802@mind.be>
-References: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
- <20141017222009.GQ3971@free.fr> <54426D4A.8050802@mind.be>
-Message-ID: <CAGduivxXvJcnD-x9MBfVApkL3V0yFwiM-Ei3oHqnPsGAoFq=mg@mail.gmail.com>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Sat, 18 Oct 2014 16:17:46 +0200
+Subject: [Buildroot] [PATCH] fs/iso9660: add dependencies for make source
+In-Reply-To: <54426BB5.6030903@mind.be>
+References: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
+ <CAGduivwDurQn5c5Qovk+K6ZUg86cneLCjq7dpEmPJ9x-9ak=Eg@mail.gmail.com>
+ <54426BB5.6030903@mind.be>
+Message-ID: <CABbD_XBSjcCmHwiVAwA7Ac+H_tFuv_DP9Jp8mfd5KfbuV21pYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 18, 2014 at 3:38 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 18/10/14 00:20, Yann E. MORIN wrote:
->> Thomas, All,
+Hi,
+
 >>
->> On 2014-10-16 21:15 +0200, Thomas De Schampheleire spake thusly:
-> [snip]
->>> @@ -553,8 +553,9 @@ if __name__ == '__main__':
->>>      check_version()
->>>      sysinfo = SystemInfo()
->>>      (ninstances, njobs, http_login, http_password, submitter) = config_get()
->>> -    check_requirements(http_login, http_password)
->>> -    if http_login is None or http_password is None:
->>> +    do_send_results = http_login and http_password
->>
->> I was told that we should no treat 'None' as 'False', or a non-empty
->> string as 'True'. This should be something like:
->>
->>     do_send_results = (not http_login is None) and (not http_password is None)
-Just for the sake of it:
-do_send_results = (http_login is not None) and (http_password is not None)
+> >> +ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux
+> rootfs-cpio grub
+> >> +
+> >>  $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux
+> rootfs-cpio grub
 >
->  I'm with Yann (not Maxime) on this one: if you would have an autobuild server
-> that doesn't need a username or password, then there would be no distinction
-> between sending or not sending results. with 'http_login is not None and
-> http_password is not None' you can set them to the empty string to force sending.
-Very true, I did not think about that case.
-And as bonus point, like Yann said previously, it's more explicit.
->
->  In practice, of course, it doesn't matter because we have only one autobuild
-> server and it does require a non-empty username and password.
+>  You should use $(ROOTFS_ISO9660_DEPENDENCIES) here.
 >
 >
->  Regards,
->  Arnout
+Why? Non of the other rootfs target makefiles use that (fs/*/*.mk).
+
+
+> > How about putting the dependencies variables on the top ?
+> > Also, please keep the dependencies alphabetically sorted.
+> > I know they are not ordered the line below, but it would be nice.
 >
->>
->> Regards,
->> Yann E. MORIN.
->>
->>> +    check_requirements(do_send_results)
->>> +    if not do_send_results:
->>>          print "WARN: due to the lack of http login/password details, results will not be submitted"
->>>          print "WARN: tarballs of results will be kept locally only"
->>>      def sigterm_handler(signum, frame):
->>> --
->>> 1.8.5.1
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
+>  Well, now they're ordered according to how they appear in the makefiles,
+> i.e.
+> first the real packages, then the kernel, then the rootfs, then the
+> bootloader.
 >
+>  Hm, actually, the bootloader should come before the kernel in that
+> reasoning...
 >
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  So alphabetically is probably better :-)
+>
+
+Technically, the dependencies variable is already at the top, before the
+first make target.
+Also, it's not on the exact top of the file in any other rootfs target
+makefiles.
+Regarding the order: I don't really think that matters.
+
+Regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141018/89f7f1cc/attachment.html>
