@@ -1,72 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 16:24:03 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libva-intel-driver: Do not
- depend on xorg
-In-Reply-To: <1413557257-25254-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
- <1413557257-25254-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <54427803.60005@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 19:06:28 +0200
+Subject: [Buildroot] [PATCH 3/5] infra: Add automatic install of init
+ scripts
+In-Reply-To: <CAGduivwJMVzpd+uc6Ng_CMivXP1i3pNBtFVjd0ara70oZ5UKYA@mail.gmail.com>
+References: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1413643624-14757-4-git-send-email-maxime.hadjinlian@gmail.com>
+ <20141018185601.1a8e732c@free-electrons.com>
+ <CAGduivwJMVzpd+uc6Ng_CMivXP1i3pNBtFVjd0ara70oZ5UKYA@mail.gmail.com>
+Message-ID: <20141018190628.67c1516c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/10/14 16:47, Bernd Kuhls wrote:
-> This patch reverts
-> http://git.buildroot.net/buildroot/commit/package/libva-intel-driver/Config.in?id=062bacfa67688b2747412a30ddeb996449d1c6df
-> 
-> By removing the xorg dependency of libpciaccess the libdrm package, and
-> therefore also libva-intel-driver, does not depend on xorg any longer.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Dear Maxime Hadjinlian,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Sat, 18 Oct 2014 18:59:03 +0200, Maxime Hadjinlian wrote:
 
+> > Why is an explicit variable necessary ? Why not simply install all the
+> > S* and K* files from the package directory for sysvinit/busybox and all
+> > the .service (or some extension) of the package directory for systemd ?
+> > I think we discussed this at the meeting, no?
+> Indeed, but as stated in the cover letter, we need to have a variable,
+> because, some packages only install their init scripts conditionally
+> (take ntpd for example).
 
- Regards,
- Arnout
+Well, we could by default install S* and K* files, except if the
+<pkg>_INIT_SYSV_FILES variable is defined, in which case we only
+install the ones that are mentioned. Maybe it's making the logic too
+complicated, I don't know.
 
-> ---
-> v2: no changes
-> 
->  package/libva-intel-driver/Config.in |   11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-> index cac2fed..a0f397b 100644
-> --- a/package/libva-intel-driver/Config.in
-> +++ b/package/libva-intel-driver/Config.in
-> @@ -3,11 +3,10 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
->  	select BR2_PACKAGE_LIBVA
->  	select BR2_PACKAGE_LIBDRM
->  	select BR2_PACKAGE_LIBDRM_INTEL
-> -	select BR2_PACKAGE_XLIB_LIBX11
-> -	select BR2_PACKAGE_XLIB_LIBXEXT
-> -	select BR2_PACKAGE_XLIB_LIBXFIXES
-> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
->  	depends on BR2_i386 || BR2_x86_64
-> -	depends on BR2_PACKAGE_XORG7 # libdrm intel
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
->  	depends on BR2_LARGEFILE # libdrm
->  	depends on !BR2_PREFER_STATIC_LIB # libva
-> @@ -20,7 +19,3 @@ comment "libva intel driver needs a toolchain w/ largefile, threads, dynamic lib
->  	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		BR2_PREFER_STATIC_LIB
->  	depends on BR2_i386 || BR2_x86_64
-> -
-> -comment "libva intel driver needs X.org"
-> -	depends on BR2_i386 || BR2_x86_64
-> -	depends on !BR2_PACKAGE_XORG7
-> 
+> So you can't blindly install files only by maching their names.
+> Also, the current trend is that applications have their init scripts
+> in the sources, and we don't want to keep a copy if in our packages,
+> we want to take it straight from the sources, having such a variable
+> enable that.
 
+For systemd, I would expect the package build system to install the
+unit files by itself, no?
 
+And for init scripts, we generally don't use the init scripts provided
+by the package itself, because they're often too complicated / not
+compatible with the simple Busybox init.
+
+But, well, maybe you're right and making things explicit is better.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
