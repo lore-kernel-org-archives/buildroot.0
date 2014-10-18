@@ -1,70 +1,61 @@
-From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Sat, 18 Oct 2014 18:46:51 +0200
-Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
-	compile fixes
-In-Reply-To: <20141018130248.GB31723@free.fr>
-References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
- <1491715.MQnf8L3yFy@hyperion> <20141018130248.GB31723@free.fr>
-Message-ID: <1739784.babPHSSYPS@hyperion>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 18:47:17 +0200
+Subject: [Buildroot] [PATCH] fs/iso9660: add dependencies for make source
+In-Reply-To: <CABbD_XBSjcCmHwiVAwA7Ac+H_tFuv_DP9Jp8mfd5KfbuV21pYw@mail.gmail.com>
+References: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
+ <CAGduivwDurQn5c5Qovk+K6ZUg86cneLCjq7dpEmPJ9x-9ak=Eg@mail.gmail.com>
+ <54426BB5.6030903@mind.be>
+ <CABbD_XBSjcCmHwiVAwA7Ac+H_tFuv_DP9Jp8mfd5KfbuV21pYw@mail.gmail.com>
+Message-ID: <20141018184717.229346e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 18 October 2014 15:02:48 Yann E. MORIN wrote:
-> Maarten, All,
-> 
-> On 2014-10-18 14:15 +0200, Maarten ter Huurne spake thusly:
-> > On Saturday 18 October 2014 13:34:46 Yann E. MORIN wrote:
-> > > So, still NAK for this bump. We can still bump it up to ba753c1 as
-> > > this
-> > > still works, but is not enough to get the musl fixes.
-> > > 
-> > > Maybe we could just hide it for musl for now?
-> > 
-> > I think it would be a pity to hide it when we have a fix for the musl
-> > compile problem.
-> > 
-> > The only differences between the the proposed bump (4333d6d) and the
-> > last
-> > working version (ba753c1) are the commit that breaks Weston (66338d3)
-> > and
-> > the musl compile fixes. So I could create a v4 patch which bumps the
-> > version to 4333d6d and contains a patch to revert 66338d3.
-> > 
-> > Alternatively, I could create a v4 patch which bumps the version to
-> > ba753c1 and adds the musl compile fixes as separate patches. While the
-> > number of patches would be greater (5 vs 1), the number of changed
-> > lines would be smaller, since most of the compile fixes change one line
-> > each.
-> > 
-> > Or I could create a v4 patch which bumps the version to ba753c1 and adds
-> > the musl compile fixes as a single patch. Since we know they have been
-> > accepted upstream in the same merge commit (4333d6d), we can drop all
-> > of them at the same time once we can safely bump beyond that merge
-> > commit.
-> > 
-> > At the moment I prefer bumping to ba753c1 + squashed musl compile fixes,
-> > but I'd like a second opinion.
-> 
-> Well, I do not want to have weston break. weston is, as far as I can
-> see, the only package in Buildroot that can make use of rpi-userland.
-> Breaking it is out of the equation.
+Dear K?roly Kasza,
 
-rpi-userland provides GL ES (BR2_PACKAGE_HAS_LIBGLES) among other features, 
-so there are several more packages that depend on it. I needed it as a 
-dependency for SDL2 (not in Buildroot yet).
+On Sat, 18 Oct 2014 16:17:46 +0200, K?roly Kasza wrote:
 
-But I agree that breaking one package to fix another is not progress.
+> >  You should use $(ROOTFS_ISO9660_DEPENDENCIES) here.
+> >
+> Why? Non of the other rootfs target makefiles use that (fs/*/*.mk).
 
-> If the backport on-top of ba753c1 is easy, then that's OK for me. The
-> patches are upstream, so it's OK to bundle them until either
-> rpi-userland or/and weston upstream fix the issue.
+All the other rootfs target makefiles use <foo>_DEPENDENCIES. Except
+that it's taken into account directly by the common filesystem logic in
+fs/common.mk. However, iso9660 is special, and therefore we handle the
+dependencies manually. But still, there's no need to repeat them twice.
+So, in your patch, change:
 
-I have a git clone of rpi-userland set up already to be able to submit the 
-patches upstream, so creating a combined patch is not much work. I'll do 
-that.
+ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux rootfs-cpio grub
 
-Bye,
-		Maarten
+$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+
+To:
+
+ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux rootfs-cpio grub
+
+$(BINARIES_DIR)/rootfs.iso9660: $(ROOTFS_ISO9660_DEPENDENCIES)
+
+> Technically, the dependencies variable is already at the top, before the
+> first make target.
+
+Agreed.
+
+> Regarding the order: I don't really think that matters.
+
+Well, it's indeed just a subjective thing, like most coding style
+things. Still, when a core Buildroot contributor such as Arnout
+suggests coding style changes, it's usually a good idea to follow suit
+to get the patch merged quickly :)
+
+That being said, I agree that we don't enforce any particular order for
+the dependencies in the other packages.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
