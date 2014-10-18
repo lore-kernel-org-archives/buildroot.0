@@ -1,137 +1,137 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 18 Oct 2014 08:34:53 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17
-Message-ID: <1413632093-16706-1-git-send-email-gustavo@zacarias.com.ar>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 13:39:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: use upstream-provided
+ systemd files
+In-Reply-To: <20141017224043.GD7944@free.fr>
+References: <1413573042-6638-1-git-send-email-dywi@mailerd.de>
+ <20141017224043.GD7944@free.fr>
+Message-ID: <CAGduivw9Gmz_8uWxHq59N8Di5uCzvHvP98sV7_V+pDP8m=7gWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch now silently upstream.
+Hi Yann, Andr?, all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...001-add-option-to-disable-backtrace-usage.patch | 88 ----------------------
- package/btrfs-progs/btrfs-progs.hash               |  2 +-
- package/btrfs-progs/btrfs-progs.mk                 |  2 +-
- 3 files changed, 2 insertions(+), 90 deletions(-)
- delete mode 100644 package/btrfs-progs/btrfs-progs-0001-add-option-to-disable-backtrace-usage.patch
-
-diff --git a/package/btrfs-progs/btrfs-progs-0001-add-option-to-disable-backtrace-usage.patch b/package/btrfs-progs/btrfs-progs-0001-add-option-to-disable-backtrace-usage.patch
-deleted file mode 100644
-index bcc19b6..0000000
---- a/package/btrfs-progs/btrfs-progs-0001-add-option-to-disable-backtrace-usage.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From eb8d1bbdfea80a50ce9fbf3238062a543036f855 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 7 Oct 2014 11:03:03 -0300
--Subject: [PATCH] btrfs-progs: add option to disable backtrace usage
--
--This commit adds the support for a make variable named
--"DISABLE_BACKTRACE" which allows to disable the support for backtrace()
--usage on ASSERT(), BUG() and BUG_ON() calls.
--This is useful because some alternative C libraries like uClibc have
--optional support for backtrace() which is rarely built when debugging
--isn't taking place.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- Makefile     |  4 ++++
-- kerncompat.h | 15 +++++++++++++++
-- 2 files changed, 19 insertions(+)
--
--diff --git a/Makefile b/Makefile
--index 7cc7783..03a4779 100644
----- a/Makefile
--+++ b/Makefile
--@@ -63,6 +63,10 @@ BUILDDIRS = $(patsubst %,build-%,$(SUBDIRS))
-- INSTALLDIRS = $(patsubst %,install-%,$(SUBDIRS))
-- CLEANDIRS = $(patsubst %,clean-%,$(SUBDIRS))
-- 
--+ifeq ($(DISABLE_BACKTRACE),1)
--+AM_CFLAGS += -DBTRFS_DISABLE_BACKTRACE
--+endif
--+
-- ifneq ($(DISABLE_DOCUMENTATION),1)
-- BUILDDIRS += build-Documentation
-- INSTALLDIRS += install-Documentation
--diff --git a/kerncompat.h b/kerncompat.h
--index 19c7fa5..889d94c 100644
----- a/kerncompat.h
--+++ b/kerncompat.h
--@@ -29,7 +29,9 @@
-- #include <stddef.h>
-- #include <linux/types.h>
-- #include <stdint.h>
--+#ifndef BTRFS_DISABLE_BACKTRACE
-- #include <execinfo.h>
--+#endif
-- 
-- #define ptr_to_u64(x)	((u64)(uintptr_t)x)
-- #define u64_to_ptr(x)	((void *)(uintptr_t)x)
--@@ -55,6 +57,7 @@
-- #define ULONG_MAX       (~0UL)
-- #endif
-- 
--+#ifndef BTRFS_DISABLE_BACKTRACE
-- #define MAX_BACKTRACE	16
-- static inline void print_trace(void)
-- {
--@@ -81,6 +84,9 @@ static inline void assert_trace(const char *assertion, const char *filename,
-- }
-- 
-- #define BUG() assert_trace(NULL, __FILE__, __func__, __LINE__, 0)
--+#else
--+#define BUG() assert(0)
--+#endif
-- 
-- #ifdef __CHECKER__
-- #define __force    __attribute__((force))
--@@ -264,10 +270,19 @@ static inline long IS_ERR(const void *ptr)
-- #define kstrdup(x, y) strdup(x)
-- #define kfree(x) free(x)
-- 
--+#ifndef BTRFS_DISABLE_BACKTRACE
-- #define BUG_ON(c) assert_trace(#c, __FILE__, __func__, __LINE__, !(c))
--+#else
--+#define BUG_ON(c) assert(!(c))
--+#endif
-- 
-- #define WARN_ON(c) BUG_ON(c)
--+
--+#ifndef BTRFS_DISABLE_BACKTRACE
-- #define	ASSERT(c) assert_trace(#c, __FILE__, __func__, __LINE__, (c))
--+#else
--+#define ASSERT(c) assert(c)
--+#endif
-- 
-- #define container_of(ptr, type, member) ({                      \
--         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
---- 
--2.0.4
--
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index af4c9cd..497f142 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	d4d62abe0c2b8e86888f96e4bd21ca7e25c2d53120a3b9e8c6f987344147732b	btrfs-progs-v3.16.2.tar.xz
-+sha256	ecafbf71e729c7e907dac488c2e0c94983dd38420f56dce85e2a4310a06bf0a0	btrfs-progs-v3.17.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index d0b56cd..67d2e37 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 3.16.2
-+BTRFS_PROGS_VERSION = 3.17
- BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
--- 
-2.0.4
+On Sat, Oct 18, 2014 at 12:40 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Andr?, All,
+>
+> On 2014-10-17 21:10 +0200, Andr? Erdmann spake thusly:
+>> When using the buildroot-provided avahi-daemon.service file, bootup never
+>> finishes, because multi-user.target is waiting for avahi-daemon to exit,
+>> which is caused by "Type=oneshot" (in avahi-daemon.service).
+>>
+>> Upstream's systemd files get already installed to /lib/systemd.
+>> They're not an exact copy of S50avahi-daemon, but work flawlessly,
+>> so use these units:
+>>
+>> * avahi-daemon.service, auto-enabled (ln -fs in AVAHI_INSTALL_INIT_SYSTEMD)
+>> * avahi-daemon.socket,
+>>   not auto-enabled, but a dependency of avahi-daemon.service
+>> * avahi-dnsconfd.service, auto-enabled
+>>
+>> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+>
+> Looks like the sane thing to do, indeed.
+>
+> I'm no systemd expert, so copying Eric, which will probably be able to
+> confirm my:
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>> With "Type=oneshot", systemd waits for avahi-daemon to exit,
+>> which does not happen (unless killed):
+>>
+>> $ systemctl --no-pager status avahi-daemon.service
+>> * avahi-daemon.service - Avahi daemon
+>>    Loaded: loaded (/etc/systemd/system/avahi-daemon.service; enabled)
+>>    Active: activating (start) since Wed 2014-10-15 21:26:49 CEST; 56s ago
+>>  Main PID: 190 (avahi-daemon)
+>>    CGroup: /system.slice/avahi-daemon.service
+>>            |-190 avahi-daemon: running [buildroot.local]
+>>            |-192 avahi-daemon: chroot helper
+>>
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Network interface enumeration completed.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering HINFO record with values 'X86_64'/'LINUX'.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Server startup complete. Host name is buildroot.local. Local service c...3347.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/ssh.service) successfully established.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/sftp-ssh.service) successfully established.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Joining mDNS multicast group on interface br0.IPv4 with address 192.168.3.114.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: New relevant interface br0.IPv4 for mDNS.
+>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering new address record for 192.168.3.114 on br0.IPv4.
+>> Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::5054:ff:feb1:f19a on eth0.*.
+>> Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::bcbb:86ff:fe4a:14d6 on br0.*.
+>> Hint: Some lines were ellipsized, use -l to show in full.
+>> (EOF)
+>>
+>>
+>> The result is that the boot process never reaches "multi-user.target":
+>>
+>> $ systemctl --no-pager list-jobs
+>> JOB UNIT                 TYPE  STATE
+>>   1 multi-user.target    start waiting
+>>  57 avahi-daemon.service start running
+>>
+>> 2 jobs listed.
+>> (EOF)
+>> ---
+>>  package/avahi/avahi-daemon.service | 15 ---------------
+>>  package/avahi/avahi.mk             |  8 ++++----
+>>  2 files changed, 4 insertions(+), 19 deletions(-)
+>>  delete mode 100644 package/avahi/avahi-daemon.service
+>>
+>> diff --git a/package/avahi/avahi-daemon.service b/package/avahi/avahi-daemon.service
+>> deleted file mode 100644
+>> index c9b7b1f..0000000
+>> --- a/package/avahi/avahi-daemon.service
+>> +++ /dev/null
+>> @@ -1,15 +0,0 @@
+>> -[Unit]
+>> -Description=Avahi daemon
+>> -Requires=dbus.target
+>> -After=syslog.target network.target auditd.service
+>> -
+>> -[Service]
+>> -Type=oneshot
+>> -RemainAfterExit=ye
+>> -ExecStart=/usr/sbin/avahi-daemon -s
+>> -ExecReload=/usr/sbin/avahi-daemon -r
+>> -ExecStop=/usr/sbin/avahi-daemon -k
+>> -Restart=restart-always
+>> -
+>> -[Install]
+>> -WantedBy=multi-user.target
+>> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+>> index 706561f..609d89c 100644
+>> --- a/package/avahi/avahi.mk
+>> +++ b/package/avahi/avahi.mk
+>> @@ -164,14 +164,14 @@ endif
+>>  ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
+>>
+>>  define AVAHI_INSTALL_INIT_SYSTEMD
+>> -  $(INSTALL) -D -m 644 package/avahi/avahi-daemon.service \
+>> -    $(TARGET_DIR)/etc/systemd/system/avahi-daemon.service
+>> -
+>>    mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>>
+>> -  ln -fs ../avahi-daemon.service \
+>> +  ln -fs ../../../../lib/systemd/system/avahi-daemon.service \
+Just an idea, how about doing:
+ln -fs /lib/systemd/system/avahi-daemon.service \
+Instead of all the ../ ?
+>>      $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
+>>
+>> +  ln -fs ../../../../lib/systemd/system/avahi-dnsconfd.service \
+Same here.
+>> +    $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
+>> +
+>>    mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+>>
+>>    $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
+>> --
+>> 2.1.2
