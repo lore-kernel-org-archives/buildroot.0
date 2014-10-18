@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Oct 2014 21:44:57 +0200
-Subject: [Buildroot] [RFC/PATCH v3 05/11] xbmc-pvr-addons: Bump version for
-	Helix-compatibility
+Date: Sat, 18 Oct 2014 21:44:58 +0200
+Subject: [Buildroot] [RFC/PATCH v3 06/11] package/xbmc-addon-xvdr: Bump
+	version for Helix-compatibility
 In-Reply-To: <1413661503-5382-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413661503-5382-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413661503-5382-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413661503-5382-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index 4410153..748cc75 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+index 16f3a0d..7e6ca4b 100644
+--- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
++++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--# This cset is on the branch 'gotham'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
-+# This cset is on the branch 'master'
-+# When Kodi is released, then this should be updated to the corresponding branch
-+XBMC_PVR_ADDONS_VERSION = 79ca634891d09b5bb6cf4256389dc681a1041903
- XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
- XBMC_PVR_ADDONS_LICENSE = GPLv3+
- XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+-# This cset is on master. When a Gotham branch is made, we should
++# This cset is on master. When a Helix branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
++XBMC_ADDON_XVDR_VERSION = 2bf2563c801684e0ee2d08ba4ea57acbdbea5750
+ XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
+ XBMC_ADDON_XVDR_LICENSE = GPLv2+
+ XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
