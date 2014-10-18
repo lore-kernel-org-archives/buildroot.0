@@ -1,66 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 18 Oct 2014 23:08:26 +0300
-Subject: [Buildroot] [PATCH] spidev_test: new package
-In-Reply-To: <20141017215539.GM3971@free.fr>
-References: <1413301553-1592-1-git-send-email-gustavo@zacarias.com.ar>
- <20141014195411.GI3500@tarshish> <20141017215539.GM3971@free.fr>
-Message-ID: <20141018200826.GA2220@tarshish>
+From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
+Date: Sat, 18 Oct 2014 22:05:44 +0200
+Subject: [Buildroot] [PATCH] mx53loco_defconfig: refresh
+In-Reply-To: <20141018183534.0fa51566@free-electrons.com>
+References: <1413558308-30081-1-git-send-email-vincent.stehle@freescale.com>
+ <20141018183534.0fa51566@free-electrons.com>
+Message-ID: <20141018220544.7046401e@e6520eb.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Thomas, Hi Vincent,
 
-On Fri, Oct 17, 2014 at 11:55:39PM +0200, Yann E. MORIN wrote:
-> On 2014-10-14 22:54 +0300, Baruch Siach spake thusly:
-> > On Tue, Oct 14, 2014 at 12:45:53PM -0300, Gustavo Zacarias wrote:
-> > > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Le Sat, 18 Oct 2014 18:35:34 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+
+> On Fri, 17 Oct 2014 17:05:08 +0200, Vincent Stehl? wrote:
+> > Force gcc to version 4.5, as versions 4.7 and 4.8 break the boot.
 > > 
-> > [snip]
-> > 
-> > > diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-> > > new file mode 100644
-> > > index 0000000..c0ed9ef
-> > > --- /dev/null
-> > > +++ b/package/spidev_test/Config.in
-> > > @@ -0,0 +1,15 @@
-> > > +config BR2_PACKAGE_SPIDEV_TEST
-> > > +	bool "spidev_test"
-> > > +	depends on BR2_LINUX_KERNEL
-> > 
-> > That is a heavy dependency. As you noted in another message, it also make the 
-> > autobuilder skip this package. I suggest to download just spidev_test.c from 
-> > http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION), 
-> > and make it depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 (as of v3.17). This 
+> > Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
 > 
-> What about directly getting the appropriate one, something like:
+> This is quite worrying. Gcc 4.5 is very old now, and we would like to
+> get rid of it in Buildroot rather than adding more defconfig that use
+> it.
 > 
->     ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
->     SPIDEV_TEST_VERSION = v3.15
->     else
->     SPIDEV_TEST_VERSION = v3.14
->     endif
+> Is there some hope to get a fix in a more recent gcc such as 4.9.x ?
+> Has the specific gcc bug been identified and reported ?
 > 
->     SPIDEV_TEST_SOURCE =
->     SPIDEV_TEST_EXTRA_DOWNLOADS = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi/spidev_test.c?id=$(SPIDEV_TEST_VERSION)
-> 
-> Since, without the proper kernel headers, it is not possible to build
-> the quad-pump blabla, we can directly get the spidev_test that will
-> indeed compile with our toolchain, no?
+if you switch to imx_2.6.35_maintain branch instead of older
+rel_imx_2.6.35_11.09.01 actually used in the defconfig, you will get
+(among other fixes) these patches :
+http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/commit/?h=imx_2.6.35_maintain&id=96a7591a6f72db6d7bb337e78d61c53f670d9793
+http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/commit/?h=imx_2.6.35_maintain&id=a0de0f94dd9868d2280aa8cdb8295231e00d5ef6
+and I believe the kernel built with recent gcc will run as it runs fine
+on i.MX53 when built with Yocto.
 
-As Gustavo mentioned in another message in this thread, the newer spidev_test 
-is also run-time dependent on kernel v3.15 or newer. An automatic spidev_test 
-version choice would produce a broken binary for users of newer toolchains 
-with pre v3.15 kernels. We should use BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 to 
-disable build of v3.15 spidev_test, as this would break the build. But I don't 
-think we want to force v3.15 spidev_test just because the toolchain kernel 
-headers are post v3.15.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards,
+Eric
