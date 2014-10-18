@@ -1,55 +1,72 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 18 Oct 2014 16:17:46 +0200
-Subject: [Buildroot] [PATCH] fs/iso9660: add dependencies for make source
-In-Reply-To: <54426BB5.6030903@mind.be>
-References: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
- <CAGduivwDurQn5c5Qovk+K6ZUg86cneLCjq7dpEmPJ9x-9ak=Eg@mail.gmail.com>
- <54426BB5.6030903@mind.be>
-Message-ID: <CABbD_XBSjcCmHwiVAwA7Ac+H_tFuv_DP9Jp8mfd5KfbuV21pYw@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 16:46:59 +0200
+Subject: [Buildroot] [PATCH 0/5] Various init scripts modification
+Message-ID: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello All !
 
->>
-> >> +ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux
-> rootfs-cpio grub
-> >> +
-> >>  $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux
-> rootfs-cpio grub
->
->  You should use $(ROOTFS_ISO9660_DEPENDENCIES) here.
->
->
-Why? Non of the other rootfs target makefiles use that (fs/*/*.mk).
+This is a short series which does the following: (the indexes match the
+patches)
 
+   1 Extract the init.d folder into its own package
+   1 Make Busybox and SysV depends on it
+   2 Change busybox a little bit to not install scripts if it's not the
+   init
+   3 Add a generic way to install startup scripts for the relevant init
+   systems. This is mainly done to avoid duplicated code everywhere.
+   For this to work, you need to have a variable and tell where are the
+   init scripts files. This is done that way for two main reasons:
+      - Many packages have/will have their init scripts packaged in
+      	their sources. We don't want to keep them in the packages, so
+      	you are able to specify something along the line "$(@D)/src/S99foo"
+      - If you want to install init scripts conditionnaly (if there's a
+      	daemon), you are able to do it.
+   If a package requires customs actions, you can use the current
+   LIBFOO_INSTALL_INIT_* or even mix the two together (which would be
+   usefull for avahi for example)
+   4-5 Two patches only to show, what the modification leads to. Theses
+   two patches should not be applied as is, see question below.
 
-> > How about putting the dependencies variables on the top ?
-> > Also, please keep the dependencies alphabetically sorted.
-> > I know they are not ordered the line below, but it would be nice.
->
->  Well, now they're ordered according to how they appear in the makefiles,
-> i.e.
-> first the real packages, then the kernel, then the rootfs, then the
-> bootloader.
->
->  Hm, actually, the bootloader should come before the kernel in that
-> reasoning...
->
->  So alphabetically is probably better :-)
->
+Also, should the modification of each packages be done in one huge patch
+or in multilple patches ?
+Since it's a custom modification and not mechanical for each packages, I
+would go for a patch per package.
 
-Technically, the dependencies variable is already at the top, before the
-first make target.
-Also, it's not on the exact top of the file in any other rootfs target
-makefiles.
-Regarding the order: I don't really think that matters.
+Looking forward for comments.
 
-Regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141018/89f7f1cc/attachment.html>
+Maxime Hadjinlian (5):
+  initscripts: new package
+  busybox: Install scripts only when needed
+  infra: Add automatic install of init scripts
+  acpid: Use new FOO_INIT_SYSV_FILES variable
+  am33x-cm3: Use new FOO_INIT_SYSV_FILES variable
+
+ docs/manual/adding-packages-generic.txt            | 17 +++++++++++++
+ package/acpid/acpid.mk                             |  6 +----
+ package/am33x-cm3/am33x-cm3.mk                     |  6 +----
+ package/busybox/busybox.mk                         | 11 +++++++++
+ .../inittab => package/initscripts/busybox_inittab |  0
+ .../etc => package/initscripts}/init.d/S20urandom  |  0
+ .../etc => package/initscripts}/init.d/S40network  |  0
+ .../etc => package/initscripts}/init.d/rcK         |  0
+ .../etc => package/initscripts}/init.d/rcS         |  0
+ package/initscripts/initscripts.mk                 | 28 ++++++++++++++++++++++
+ .../inittab => initscripts/sysvinit_inittab}       |  0
+ package/pkg-generic.mk                             | 26 ++++++++++++++++----
+ package/sysvinit/sysvinit.mk                       | 11 +++++----
+ 13 files changed, 86 insertions(+), 19 deletions(-)
+ rename system/skeleton/etc/inittab => package/initscripts/busybox_inittab (100%)
+ rename {system/skeleton/etc => package/initscripts}/init.d/S20urandom (100%)
+ rename {system/skeleton/etc => package/initscripts}/init.d/S40network (100%)
+ rename {system/skeleton/etc => package/initscripts}/init.d/rcK (100%)
+ rename {system/skeleton/etc => package/initscripts}/init.d/rcS (100%)
+ create mode 100644 package/initscripts/initscripts.mk
+ rename package/{sysvinit/inittab => initscripts/sysvinit_inittab} (100%)
+
+--
+2.1.1
