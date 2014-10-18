@@ -1,66 +1,45 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 18 Oct 2014 19:13:11 +0200
-Subject: [Buildroot] [PATCH] fs/iso9660: add dependencies for make source
-In-Reply-To: <20141018184717.229346e1@free-electrons.com>
-References: <1413580605-57289-1-git-send-email-kaszak@gmail.com>
- <CAGduivwDurQn5c5Qovk+K6ZUg86cneLCjq7dpEmPJ9x-9ak=Eg@mail.gmail.com>
- <54426BB5.6030903@mind.be>
- <CABbD_XBSjcCmHwiVAwA7Ac+H_tFuv_DP9Jp8mfd5KfbuV21pYw@mail.gmail.com>
- <20141018184717.229346e1@free-electrons.com>
-Message-ID: <CABbD_XAJ28-rB30H_fjZF6Xn-BTYzU2s+5bODKBP9kvrG0=ByQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Oct 2014 19:16:05 +0200
+Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
+ compile fixes
+In-Reply-To: <1739784.babPHSSYPS@hyperion>
+References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
+ <1491715.MQnf8L3yFy@hyperion> <20141018130248.GB31723@free.fr>
+ <1739784.babPHSSYPS@hyperion>
+Message-ID: <20141018171605.GC31723@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->
-> > >  You should use $(ROOTFS_ISO9660_DEPENDENCIES) here.
-> > >
-> > Why? Non of the other rootfs target makefiles use that (fs/*/*.mk).
->
-> All the other rootfs target makefiles use <foo>_DEPENDENCIES. Except
-> that it's taken into account directly by the common filesystem logic in
-> fs/common.mk. However, iso9660 is special, and therefore we handle the
-> dependencies manually. But still, there's no need to repeat them twice.
-> So, in your patch, change:
->
-> ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux rootfs-cpio
-> grub
->
-> $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux
-> rootfs-cpio grub
->
-> To:
->
-> ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux rootfs-cpio
-> grub
->
-> $(BINARIES_DIR)/rootfs.iso9660: $(ROOTFS_ISO9660_DEPENDENCIES)
->
-> Oh, that's correct. I misunderstood the first proposal of Arnout.
+Maarten, All,
 
-> Regarding the order: I don't really think that matters.
->
-> Well, it's indeed just a subjective thing, like most coding style
-> things. Still, when a core Buildroot contributor such as Arnout
-> suggests coding style changes, it's usually a good idea to follow suit
-> to get the patch merged quickly :)
->
-> That being said, I agree that we don't enforce any particular order for
-> the dependencies in the other packages.
->
+On 2014-10-18 18:46 +0200, Maarten ter Huurne spake thusly:
+> On Saturday 18 October 2014 15:02:48 Yann E. MORIN wrote:
+> > Well, I do not want to have weston break. weston is, as far as I can
+> > see, the only package in Buildroot that can make use of rpi-userland.
+> > Breaking it is out of the equation.
+> 
+> rpi-userland provides GL ES (BR2_PACKAGE_HAS_LIBGLES) among other features, 
+> so there are several more packages that depend on it.
 
-OK, but this means the changing of the order of dependencies is not at all
-connected with
-the original purpose of this patch, also everywhere else it should be
-changed I guess.
+Right, I forgot about that...
 
-I'll send a V2.
+[--SNIP--[
+> I have a git clone of rpi-userland set up already to be able to submit the 
+> patches upstream, so creating a combined patch is not much work. I'll do 
+> that.
 
-Best regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141018/c653e863/attachment.html>
+So, I take it you have a fix for this issue?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
