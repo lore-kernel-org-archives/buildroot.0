@@ -1,45 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Oct 2014 19:16:05 +0200
-Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
- compile fixes
-In-Reply-To: <1739784.babPHSSYPS@hyperion>
-References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
- <1491715.MQnf8L3yFy@hyperion> <20141018130248.GB31723@free.fr>
- <1739784.babPHSSYPS@hyperion>
-Message-ID: <20141018171605.GC31723@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 19:17:07 +0200
+Subject: [Buildroot] [git commit] tinyalsa: Fix overwrite of asound.h
+Message-ID: <20141018171715.0F501B384B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maarten, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=debf12f43e908f555d12d0fbbe2cbbcb42617fd0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-10-18 18:46 +0200, Maarten ter Huurne spake thusly:
-> On Saturday 18 October 2014 15:02:48 Yann E. MORIN wrote:
-> > Well, I do not want to have weston break. weston is, as far as I can
-> > see, the only package in Buildroot that can make use of rpi-userland.
-> > Breaking it is out of the equation.
-> 
-> rpi-userland provides GL ES (BR2_PACKAGE_HAS_LIBGLES) among other features, 
-> so there are several more packages that depend on it.
+As stated by Maarten ter Huurne on the mailing list, the install of the
+asound.h headers overwrite the one from the toolchains or kernel
+headers.
+Since tinyals's header is only a subset of the 'real' asound.h, there is
+no need to overwrite it.
 
-Right, I forgot about that...
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Maarten ter Huurne <maarten@treewalker.org>
+Cc: Thomas Petazzoni  <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tinyalsa/tinyalsa.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-[--SNIP--[
-> I have a git clone of rpi-userland set up already to be able to submit the 
-> patches upstream, so creating a combined patch is not much work. I'll do 
-> that.
-
-So, I take it you have a fix for this issue?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
+index b287e78..48288f1 100644
+--- a/package/tinyalsa/tinyalsa.mk
++++ b/package/tinyalsa/tinyalsa.mk
+@@ -16,8 +16,6 @@ endef
+ define TINYALSA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libtinyalsa.so \
+ 			$(STAGING_DIR)/usr/lib/libtinyalsa.so
+-	$(INSTALL) -D -m 0644 $(@D)/include/sound/asound.h \
+-			$(STAGING_DIR)/usr/include/sound/asound.h
+ 	$(INSTALL) -D -m 0644 $(@D)/include/tinyalsa/asoundlib.h \
+ 			$(STAGING_DIR)/usr/include/tinyalsa/asoundlib.h
+ endef
