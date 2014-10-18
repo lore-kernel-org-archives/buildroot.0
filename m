@@ -1,73 +1,38 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 18 Oct 2014 14:48:42 +0200
-Subject: [Buildroot] [PATCH] freetype: Add config option for bzip2
- compressed font support
-In-Reply-To: <1413599958-24524-1-git-send-email-maarten@treewalker.org>
-References: <1413599958-24524-1-git-send-email-maarten@treewalker.org>
-Message-ID: <CAGduivwf9taPGbLdp31oBrmhB+pRtFvZQPzCXA76qBexPP=S=w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 15:00:47 +0200
+Subject: [Buildroot] [PATCH buildroot-test 8/8] autobuild-run: add
+ support for custom git wrapper
+In-Reply-To: <20141017223023.GA7944@free.fr>
+References: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
+ <1413486964-5183-8-git-send-email-patrickdepinguin@gmail.com>
+ <20141017223023.GA7944@free.fr>
+Message-ID: <20141018150047.1098f07a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maarten, all
+Dear Yann E. MORIN,
 
-On Sat, Oct 18, 2014 at 4:39 AM, Maarten ter Huurne
-<maarten@treewalker.org> wrote:
-> If bzip2 is available, it might still be preferable to not include
-> support for bzip2 compressed fonts, for example to reduce the number
-> of libraries loaded when running a GUI application.
->
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-> ---
->  package/freetype/Config.in   | 9 +++++++++
->  package/freetype/freetype.mk | 2 +-
->  2 files changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/package/freetype/Config.in b/package/freetype/Config.in
-> index ded8738..f245b14 100644
-> --- a/package/freetype/Config.in
-> +++ b/package/freetype/Config.in
-> @@ -4,3 +4,12 @@ config BR2_PACKAGE_FREETYPE
->           a free, high-quality and portable font engine.
->
->           http://www.freetype.org/
-> +
-> +if BR2_PACKAGE_FREETYPE
-> +
-> +config BR2_PACKAGE_FREETYPE_BZIP2
-> +       bool "support bzip2 compressed fonts"
-I would have had something like:
-bool "Enable compressed fonts"
-help
-  Enable supports for bzip2 compressed fonts
+On Sat, 18 Oct 2014 00:30:23 +0200, Yann E. MORIN wrote:
 
-> +       depends on BR2_PACKAGE_BZIP2
-> +       default y
-Why would we want this to 'default y' ? It kind of goes against what
-you state in the commit log, you don't want to have compressed fonts
-by default even if bzip2 is selected, right ?
-Also, if the users selects this options, it should select the package bzip2
-> +
-> +endif
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> index b85d0ec..b2d999f 100644
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -37,7 +37,7 @@ else
->  FREETYPE_CONF_OPTS += --without-zlib
->  endif
->
-> -ifeq ($(BR2_PACKAGE_BZIP2),y)
-> +ifeq ($(BR2_PACKAGE_FREETYPE_BZIP2),y)
->  FREETYPE_DEPENDENCIES += bzip2
->  FREETYPE_CONF_OPTS += --with-bzip2
->  else
-> --
-> 1.8.4.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> You know you can make this stick, right?
+> 
+>     git config --global --add core.gitproxy /path/to/git-proxy-command
+> 
+> And then you're done once and for all. ;-)
+
+Yes, I was also wondering why a change to each and every git invocation
+was needed: surely like wget there should be a way to configure git to
+use a proxy.
+
+With what Yann has given, Thomas, do you still need this patch?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
