@@ -1,103 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Oct 2014 23:57:48 +0200
-Subject: [Buildroot] [PATCH v2] modplugtools: Added package
-In-Reply-To: <1413662640-16030-1-git-send-email-maarten@treewalker.org>
-References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
- <1413662640-16030-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20141018215748.GF31723@free.fr>
+Date: Sun, 19 Oct 2014 00:37:54 +0200
+Subject: [Buildroot] [RFC/PATCH v3 07/11] package/kodi: Enable install
+ to STAGING_DIR, needed for audioencoder addons
+In-Reply-To: <1413661503-5382-8-git-send-email-bernd.kuhls@t-online.de>
+References: <1413661503-5382-1-git-send-email-bernd.kuhls@t-online.de>
+ <1413661503-5382-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141018223754.GA14899@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maarten, All,
+Bernd, All,
 
-On 2014-10-18 22:04 +0200, Maarten ter Huurne spake thusly:
-> This installs the 'modplug123' command line tool to play tracker music
-> files (MOD, S3M, XM etc.) using libmodplug.
+On 2014-10-18 21:44 +0200, Bernd Kuhls spake thusly:
 > 
-> http://modplug-xmms.sourceforge.net/
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/kodi.mk |    2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-[--SNIP--]
-> diff --git a/package/modplugtools/Config.in b/package/modplugtools/Config.in
-> new file mode 100644
-> index 0000000..20009b6
-> --- /dev/null
-> +++ b/package/modplugtools/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_MODPLUGTOOLS
-> +	bool "modplugtools"
-> +	select BR2_PACKAGE_LIBAO
-> +	select BR2_PACKAGE_LIBMODPLUG
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index fc24c4d..57baeed 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -9,6 +9,8 @@ KODI_SOURCE = $(KODI_VERSION).tar.gz
+>  KODI_SITE = https://github.com/xbmc/xbmc/archive
+>  KODI_LICENSE = GPLv2
+>  KODI_LICENSE_FILES = LICENSE.GPL
+> +# needed for audioencoder addons
+> +KODI_INSTALL_STAGING = YES
 
-modplugtools should inherit the dependencies from libmodplug, namely
-C++:
+I'm not sure I understand why you need Kodi in staging.
 
-    config BR2_PACKAGE_MODPLUGTOOLS
-        bool "modplugtools"
-        depends on BR2_INSTALL_LIBSTDCPP # libmodplug
-        select BR2_PACKAGE_LIBMODPLUG
-        select BR2_PACKAGE_LIBAO
+In this patch, you state that audioencoder addons need it at build time,
+but in each such audioencoder addons, you state the dependency is only a
+runtime dependency.
 
-> +	help
-> +	  This installs the 'modplug123' command line tool to play tracker music
-> +	  files (MOD, S3M, XM etc.) using libmodplug.
-
-Since the comments in the .mk file are not directly visible to the user,
-it would be nice to put a little blurb about OSS vs. ALSA, something like:
-
-    modplugplay uses libao to play MOD files, so can output
-    via either ALSA or OSS.
-
-> +	  http://modplug-xmms.sourceforge.net/
-> diff --git a/package/modplugtools/modplugtools.mk b/package/modplugtools/modplugtools.mk
-> new file mode 100644
-> index 0000000..186d4a7
-> --- /dev/null
-> +++ b/package/modplugtools/modplugtools.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# modplugtools
-> +#
-> +################################################################################
-> +
-> +MODPLUGTOOLS_VERSION = 0.5.3
-> +MODPLUGTOOLS_SITE = http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
-> +MODPLUGTOOLS_LICENSE = GPLv3
-> +MODPLUGTOOLS_LICENSE_FILES = COPYING
-> +
-> +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
-> +
-> +# The modplugtools package can build two players: modplugplay that plays
-> +# directly via OSS and modplug123 that plays via libao. Since modplugplay
-> +# won't work without OSS support and modern kernels are likely to have no
-> +# OSS or OSS emulation, we build only modplug123.
-> +# If you have a system without ALSA support for some reason, you can still
-> +# use modplug123 to play over OSS via libao.
-
-This comment should instead be part of the commit log, and a simpler
-comment should be added instead here:
-
-    # Only build the mp123 subdir, which contains 'modplug123', since
-    # we do not want to build 'modplugplay', as it requires legacy OSS
-    # and 'modplug123' can output via either ALSA or OSS.
-
-Also, if the options of modplugplay and modplug123 are the same, then
-you could just install a symlink modplugplay -> modplug123 .
+Care to expand a bit on this, please?
 
 Regards,
 Yann E. MORIN.
 
-> +MODPLUGTOOLS_MAKE_OPTS = SUBDIRS=mp123
-> +MODPLUGTOOLS_INSTALL_TARGET_OPTS = SUBDIRS=mp123 DESTDIR=$(TARGET_DIR) install
-> +
-> +$(eval $(autotools-package))
+>  # Kodi needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+>  # called TexturePacker. It is responsible to take all the images used in the
+>  # GUI and pack them in a blob.
 > -- 
-> 1.8.4.5
+> 1.7.10.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
