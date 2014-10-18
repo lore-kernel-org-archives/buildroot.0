@@ -1,58 +1,26 @@
 From: Maarten ter Huurne <maarten@treewalker.org>
-Date: Sat, 18 Oct 2014 19:19:46 +0200
-Subject: [Buildroot] [PATCH] modplugtools: Added package
-In-Reply-To: <54427584.5060903@mind.be>
-References: <1413565811-7196-1-git-send-email-maarten@treewalker.org>
- <54427584.5060903@mind.be>
-Message-ID: <5202496.NH7UHFfB86@hyperion>
+Date: Sat, 18 Oct 2014 19:22:15 +0200
+Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
+	compile fixes
+In-Reply-To: <20141018171605.GC31723@free.fr>
+References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
+ <1739784.babPHSSYPS@hyperion> <20141018171605.GC31723@free.fr>
+Message-ID: <1931201.xAqcQ2kWmu@hyperion>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 18 October 2014 16:13:24 Arnout Vandecappelle wrote:
-> On 17/10/14 19:10, Maarten ter Huurne wrote:
-> > diff --git a/package/modplugtools/Config.in
-> > b/package/modplugtools/Config.in new file mode 100644
-> > index 0000000..53e9672
-> > --- /dev/null
-> > +++ b/package/modplugtools/Config.in
-> > @@ -0,0 +1,9 @@
-> > +config BR2_PACKAGE_MODPLUGTOOLS
-> > +	bool "modplugtools"
-> > +	select BR2_PACKAGE_LIBAO
-> > +	select BR2_PACKAGE_LIBMODPLUG
-> > +	help
-> > +	  This installs the 'modplug123' command line tool to play music 
-files
-> > +	  using libmodplug.
+On Saturday 18 October 2014 19:16:05 Yann E. MORIN wrote:
+> On 2014-10-18 18:46 +0200, Maarten ter Huurne spake thusly:
+> > I have a git clone of rpi-userland set up already to be able to submit
+> > the patches upstream, so creating a combined patch is not much work.
+> > I'll do that.
 > 
->  Small nit: I'd say "MOD files" rather than "music files". Or does it play
-> other formats as well?
+> So, I take it you have a fix for this issue?
 
-It plays various tracker formats. I tested it with S3M files, for example. I 
-considered "tracker songs" instead of "music files", but I wasn't sure 
-whether "tracker" is still a commonly understood term.
-
-> > +
-> > +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
-> > +
-> > +# Only play through libao: some platforms don't have OSS support and
-> > for those +# that do, playing through libao is still going to be
-> > sufficient. +define MODPLUGTOOLS_REMOVE_MODPLUGPLAY
-> > +	rm $(TARGET_DIR)/usr/bin/modplugplay
-> 
->  I don't understand this. The executable is really small, and it builds
-> correctly (otherwise you wouldn't even get this far), so why bother with
-> removing it? Someone who cares that much about their rootfs size will have
-> to remove a bunch of other stuff from the installed system anyway.
-
-It wouldn't execute correctly on target systems that don't have OSS support. 
-Since OSS has been deprecated in the kernel for many years (*), my hope is 
-that most embedded kernels today don't have OSS support.
-
-(*) I tried to look up how long, but it predates the move to Git in 2005.
+I have a fix for the musl compile problems, not for the Weston problem.
 
 Bye,
 		Maarten
