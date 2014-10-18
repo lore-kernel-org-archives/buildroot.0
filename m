@@ -1,40 +1,108 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Sat, 18 Oct 2014 22:05:44 +0200
-Subject: [Buildroot] [PATCH] mx53loco_defconfig: refresh
-In-Reply-To: <20141018183534.0fa51566@free-electrons.com>
-References: <1413558308-30081-1-git-send-email-vincent.stehle@freescale.com>
- <20141018183534.0fa51566@free-electrons.com>
-Message-ID: <20141018220544.7046401e@e6520eb.localdomain>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Oct 2014 23:57:48 +0200
+Subject: [Buildroot] [PATCH v2] modplugtools: Added package
+In-Reply-To: <1413662640-16030-1-git-send-email-maarten@treewalker.org>
+References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
+ <1413662640-16030-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20141018215748.GF31723@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Hi Vincent,
+Maarten, All,
 
-Le Sat, 18 Oct 2014 18:35:34 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+On 2014-10-18 22:04 +0200, Maarten ter Huurne spake thusly:
+> This installs the 'modplug123' command line tool to play tracker music
+> files (MOD, S3M, XM etc.) using libmodplug.
+> 
+> http://modplug-xmms.sourceforge.net/
+> 
+> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+[--SNIP--]
+> diff --git a/package/modplugtools/Config.in b/package/modplugtools/Config.in
+> new file mode 100644
+> index 0000000..20009b6
+> --- /dev/null
+> +++ b/package/modplugtools/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_MODPLUGTOOLS
+> +	bool "modplugtools"
+> +	select BR2_PACKAGE_LIBAO
+> +	select BR2_PACKAGE_LIBMODPLUG
 
-> On Fri, 17 Oct 2014 17:05:08 +0200, Vincent Stehl? wrote:
-> > Force gcc to version 4.5, as versions 4.7 and 4.8 break the boot.
-> > 
-> > Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
-> 
-> This is quite worrying. Gcc 4.5 is very old now, and we would like to
-> get rid of it in Buildroot rather than adding more defconfig that use
-> it.
-> 
-> Is there some hope to get a fix in a more recent gcc such as 4.9.x ?
-> Has the specific gcc bug been identified and reported ?
-> 
-if you switch to imx_2.6.35_maintain branch instead of older
-rel_imx_2.6.35_11.09.01 actually used in the defconfig, you will get
-(among other fixes) these patches :
-http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/commit/?h=imx_2.6.35_maintain&id=96a7591a6f72db6d7bb337e78d61c53f670d9793
-http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/commit/?h=imx_2.6.35_maintain&id=a0de0f94dd9868d2280aa8cdb8295231e00d5ef6
-and I believe the kernel built with recent gcc will run as it runs fine
-on i.MX53 when built with Yocto.
+modplugtools should inherit the dependencies from libmodplug, namely
+C++:
 
-Best regards,
-Eric
+    config BR2_PACKAGE_MODPLUGTOOLS
+        bool "modplugtools"
+        depends on BR2_INSTALL_LIBSTDCPP # libmodplug
+        select BR2_PACKAGE_LIBMODPLUG
+        select BR2_PACKAGE_LIBAO
+
+> +	help
+> +	  This installs the 'modplug123' command line tool to play tracker music
+> +	  files (MOD, S3M, XM etc.) using libmodplug.
+
+Since the comments in the .mk file are not directly visible to the user,
+it would be nice to put a little blurb about OSS vs. ALSA, something like:
+
+    modplugplay uses libao to play MOD files, so can output
+    via either ALSA or OSS.
+
+> +	  http://modplug-xmms.sourceforge.net/
+> diff --git a/package/modplugtools/modplugtools.mk b/package/modplugtools/modplugtools.mk
+> new file mode 100644
+> index 0000000..186d4a7
+> --- /dev/null
+> +++ b/package/modplugtools/modplugtools.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# modplugtools
+> +#
+> +################################################################################
+> +
+> +MODPLUGTOOLS_VERSION = 0.5.3
+> +MODPLUGTOOLS_SITE = http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
+> +MODPLUGTOOLS_LICENSE = GPLv3
+> +MODPLUGTOOLS_LICENSE_FILES = COPYING
+> +
+> +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
+> +
+> +# The modplugtools package can build two players: modplugplay that plays
+> +# directly via OSS and modplug123 that plays via libao. Since modplugplay
+> +# won't work without OSS support and modern kernels are likely to have no
+> +# OSS or OSS emulation, we build only modplug123.
+> +# If you have a system without ALSA support for some reason, you can still
+> +# use modplug123 to play over OSS via libao.
+
+This comment should instead be part of the commit log, and a simpler
+comment should be added instead here:
+
+    # Only build the mp123 subdir, which contains 'modplug123', since
+    # we do not want to build 'modplugplay', as it requires legacy OSS
+    # and 'modplug123' can output via either ALSA or OSS.
+
+Also, if the options of modplugplay and modplug123 are the same, then
+you could just install a symlink modplugplay -> modplug123 .
+
+Regards,
+Yann E. MORIN.
+
+> +MODPLUGTOOLS_MAKE_OPTS = SUBDIRS=mp123
+> +MODPLUGTOOLS_INSTALL_TARGET_OPTS = SUBDIRS=mp123 DESTDIR=$(TARGET_DIR) install
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.8.4.5
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
