@@ -1,106 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 16:13:24 +0200
-Subject: [Buildroot] [PATCH] modplugtools: Added package
-In-Reply-To: <1413565811-7196-1-git-send-email-maarten@treewalker.org>
-References: <1413565811-7196-1-git-send-email-maarten@treewalker.org>
-Message-ID: <54427584.5060903@mind.be>
+Date: Sat, 18 Oct 2014 16:21:50 +0200
+Subject: [Buildroot] [PATCH v2 1/2] xlib_libpciaccess: Rename package to
+ libpciaccess
+In-Reply-To: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <5442777E.9060606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/10/14 19:10, Maarten ter Huurne wrote:
-> This installs the 'modplug123' command line tool to play music files
-> using libmodplug.
+On 17/10/14 16:47, Bernd Kuhls wrote:
+> While libpciaccess is part of the X libraries, it does not
+> depend upon X11 or any other X library.
 > 
-> http://modplug-xmms.sourceforge.net/
-> 
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> The command line tool is about 10 kB in size and is useful to test
-> libmodplug and/or audio playback in general.
-> 
->  package/Config.in                    |  1 +
->  package/modplugtools/Config.in       |  9 +++++++++
->  package/modplugtools/modplugtools.mk | 21 +++++++++++++++++++++
->  3 files changed, 31 insertions(+)
->  create mode 100644 package/modplugtools/Config.in
->  create mode 100644 package/modplugtools/modplugtools.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 76fd1a0..03c7074 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -18,6 +18,7 @@ menu "Audio and video applications"
->  	source "package/lame/Config.in"
->  	source "package/libvpx/Config.in"
->  	source "package/madplay/Config.in"
-> +	source "package/modplugtools/Config.in"
->  	source "package/mpd/Config.in"
->  	source "package/mpg123/Config.in"
->  	source "package/mplayer/Config.in"
-> diff --git a/package/modplugtools/Config.in b/package/modplugtools/Config.in
-> new file mode 100644
-> index 0000000..53e9672
-> --- /dev/null
-> +++ b/package/modplugtools/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_MODPLUGTOOLS
-> +	bool "modplugtools"
-> +	select BR2_PACKAGE_LIBAO
-> +	select BR2_PACKAGE_LIBMODPLUG
-> +	help
-> +	  This installs the 'modplug123' command line tool to play music files
-> +	  using libmodplug.
+> v2: fixed stupid typo in package/Config.in
 
- Small nit: I'd say "MOD files" rather than "music files". Or does it play other
-formats as well?
+ One more stupid mistake...
 
-> +
-> +	  http://modplug-xmms.sourceforge.net/
-> diff --git a/package/modplugtools/modplugtools.mk b/package/modplugtools/modplugtools.mk
-> new file mode 100644
-> index 0000000..392f0f2
-> --- /dev/null
-> +++ b/package/modplugtools/modplugtools.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# modplugtools
-> +#
-> +################################################################################
-> +
-> +MODPLUGTOOLS_VERSION = 0.5.3
-> +MODPLUGTOOLS_SITE = http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
-> +MODPLUGTOOLS_LICENSE = GPLv3
-> +MODPLUGTOOLS_LICENSE_FILES = COPYING
+[snip]
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index e191dce..4b90f3c 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -4,12 +4,12 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+>  	# We need a SHA1 implementation. If either openssl or
+>  	# libgcrypt are already part of the build, we'll use one of
+>  	# them, otherwise, use the small libsha1 library.
+> +	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+>  	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
 
- It's indeed v3 only (cfr. AUTHORS).
+ You put the libpciaccess between the comment about libsha1 and its select
+line... Probably better to put it above the comment.
 
-> +
-> +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
-> +
-> +# Only play through libao: some platforms don't have OSS support and for those
-> +# that do, playing through libao is still going to be sufficient.
-> +define MODPLUGTOOLS_REMOVE_MODPLUGPLAY
-> +	rm $(TARGET_DIR)/usr/bin/modplugplay
+ With that, it gets my
 
- I don't understand this. The executable is really small, and it builds
-correctly (otherwise you wouldn't even get this far), so why bother with
-removing it? Someone who cares that much about their rootfs size will have to
-remove a bunch of other stuff from the installed system anyway.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-> +endef
-> +MODPLUGTOOLS_POST_INSTALL_TARGET_HOOKS += MODPLUGTOOLS_REMOVE_MODPLUGPLAY
-> +
-> +$(eval $(autotools-package))
-> 
-
+>  	select BR2_PACKAGE_PIXMAN
+>  	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+>  	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+>  	select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+> -	select BR2_PACKAGE_XLIB_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+>  	select BR2_PACKAGE_XLIB_LIBX11
+>  	select BR2_PACKAGE_XLIB_LIBXAU
+>  	select BR2_PACKAGE_XLIB_LIBXCURSOR
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
