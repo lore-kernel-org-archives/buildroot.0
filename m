@@ -1,37 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Oct 2014 15:02:20 +0200
-Subject: [Buildroot] [PATCH] tinyalsa: new package
-In-Reply-To: <471202899.FpAt3MTFiF@hyperion>
-References: <1412531488-8849-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20141006211545.025b58c5@free-electrons.com>
- <471202899.FpAt3MTFiF@hyperion>
-Message-ID: <20141018150220.06b209c5@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Oct 2014 15:02:48 +0200
+Subject: [Buildroot] [PATCH v3] rpi-userland: bump revision for musl
+ compile fixes
+In-Reply-To: <1491715.MQnf8L3yFy@hyperion>
+References: <1410541269-32529-1-git-send-email-maarten@treewalker.org>
+ <20141018110508.GC3858@free.fr> <20141018113446.GA31723@free.fr>
+ <1491715.MQnf8L3yFy@hyperion>
+Message-ID: <20141018130248.GB31723@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+Maarten, All,
 
-On Sat, 18 Oct 2014 02:42:45 +0200, Maarten ter Huurne wrote:
-
-> > +++ b/package/tinyalsa/tinyalsa.mk
-> > [snip]
-> > +       $(INSTALL) -D -m 0644 $(@D)/include/sound/asound.h \
-> > +                       $(STAGING_DIR)/usr/include/sound/asound.h
+On 2014-10-18 14:15 +0200, Maarten ter Huurne spake thusly:
+> On Saturday 18 October 2014 13:34:46 Yann E. MORIN wrote:
+> > Maarten, All,
+> > 
+> > On 2014-10-18 13:05 +0200, Yann E. MORIN spake thusly:
+> > > On 2014-10-17 17:57 +0200, Maarten ter Huurne spake thusly:
+> > > > Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+> > > > ---
+> > > > The second version of this patch was missing the "v2" label; this is
+> > > > the third version.
+> > > > 
+> > > > The changes from v2, plus an additional change I made later were
+> > > > merged
+> > > > upstream. This patch bumps the git revision to the merge commit.
+> > > > 
+> > > > rpi-userland-002-remove-faulty-assert.patch had to be updated to match
+> > > > other changes in the code that are pulled in by the version bump.
+> > > > I checked that the updated patch compiles fine, but I have no idea
+> > > > whether it is still needed to fix or work around a runtime problem.
+> > > 
+> > > So, I have tested this bump: weston on the rpi no longer works, with or
+> > > without the asser patch.
+> > > 
+> > > So, I NAK this bump for now.
+> > > 
+> > > I'll see to bisect rpi-userland to see where it breaks.
+> > 
+> > The culprit is:
+> >     66338d3 vc_dispmanx: Fix vsync service use counting
+> > 
+> > Unfortunately, weston has yet no fix for that, and I could not spot any
+> > fix for rpi-userland either... :-/
 > 
-> This will overwrite the pre-existing (from libc or kernel headers) version 
-> of <sound/asound.h> with the Android-style stripped version from tinyalsa.
-> I think it would be better to keep the pre-existing version of this header, 
-> do you agree?
+> That commit is less than a week old; rpi-userland might not be aware of the 
+> problem. Will you or the Weston devs file a bug for it or alert the author?
 
-Yes, overwriting this header file indeed looks brutal. Is the original
-asound.h a superset of the tinyalsa asound.h ? If that's the case, then
-we can simply keep the original asound.h and that's it.
+I've asked on #wayland to see if they are aware of the issue.
+I'll probably fill a bug in either project depending on how the wayland
+guys reply.
 
-Thomas
+> By the way, 66338d3 is the commit that gives a NULL handle a special 
+> meaning. If the assert no longer triggers, perhaps the assert used to 
+> trigger on the handle being NULL by accident?
+
+Yes, the assert fired because of a NULL pointer dereference (IIRC).
+
+> > So, still NAK for this bump. We can still bump it up to ba753c1 as this
+> > still works, but is not enough to get the musl fixes.
+> > 
+> > Maybe we could just hide it for musl for now?
+> 
+> I think it would be a pity to hide it when we have a fix for the musl 
+> compile problem.
+> 
+> The only differences between the the proposed bump (4333d6d) and the last 
+> working version (ba753c1) are the commit that breaks Weston (66338d3) and 
+> the musl compile fixes. So I could create a v4 patch which bumps the version 
+> to 4333d6d and contains a patch to revert 66338d3.
+> 
+> Alternatively, I could create a v4 patch which bumps the version to ba753c1 
+> and adds the musl compile fixes as separate patches. While the number of 
+> patches would be greater (5 vs 1), the number of changed lines would be 
+> smaller, since most of the compile fixes change one line each.
+> 
+> Or I could create a v4 patch which bumps the version to ba753c1 and adds the 
+> musl compile fixes as a single patch. Since we know they have been accepted 
+> upstream in the same merge commit (4333d6d), we can drop all of them at the 
+> same time once we can safely bump beyond that merge commit.
+> 
+> At the moment I prefer bumping to ba753c1 + squashed musl compile fixes, but 
+> I'd like a second opinion.
+
+Well, I do not want to have weston break. weston is, as far as I can
+see, the only package in Buildroot that can make use of rpi-userland.
+Breaking it is out of the equation.
+
+If the backport on-top of ba753c1 is easy, then that's OK for me. The
+patches are upstream, so it's OK to bundle them until either
+rpi-userland or/and weston upstream fix the issue.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
