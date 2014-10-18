@@ -1,142 +1,125 @@
 From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
-Date: Sat, 18 Oct 2014 20:37:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: use upstream-provided
- systemd files
-In-Reply-To: <CAGduivw9Gmz_8uWxHq59N8Di5uCzvHvP98sV7_V+pDP8m=7gWw@mail.gmail.com>
-References: <1413573042-6638-1-git-send-email-dywi@mailerd.de>
- <20141017224043.GD7944@free.fr>
- <CAGduivw9Gmz_8uWxHq59N8Di5uCzvHvP98sV7_V+pDP8m=7gWw@mail.gmail.com>
-Message-ID: <CAGrucu1b86MXNTFakdZ=rubdaP4SR7RiPm1pv0RiZtXO95yp7g@mail.gmail.com>
+Date: Sat, 18 Oct 2014 20:52:09 +0200
+Subject: [Buildroot] [PATCH 3/5] infra: Add automatic install of init
+	scripts
+In-Reply-To: <1413643624-14757-4-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1413643624-14757-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAGrucu3Rp58dC=SyLH9tp=jp+86mww9ndqXg2uHLR8NiSCmobw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-10-18 13:39 GMT+02:00 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
-> Hi Yann, Andr?, all,
+Hi,
+
+2014-10-18 16:47 GMT+02:00 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
+> Instead of copy pasting the install code over all our packages, you may
+> now define variables to specify where to take the init script files.
+> Each file will be installed in the default folder of the relevant init
+> system.
 >
-> On Sat, Oct 18, 2014 at 12:40 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Andr?, All,
->>
->> On 2014-10-17 21:10 +0200, Andr? Erdmann spake thusly:
->>> When using the buildroot-provided avahi-daemon.service file, bootup never
->>> finishes, because multi-user.target is waiting for avahi-daemon to exit,
->>> which is caused by "Type=oneshot" (in avahi-daemon.service).
->>>
->>> Upstream's systemd files get already installed to /lib/systemd.
->>> They're not an exact copy of S50avahi-daemon, but work flawlessly,
->>> so use these units:
->>>
->>> * avahi-daemon.service, auto-enabled (ln -fs in AVAHI_INSTALL_INIT_SYSTEMD)
->>> * avahi-daemon.socket,
->>>   not auto-enabled, but a dependency of avahi-daemon.service
->>> * avahi-dnsconfd.service, auto-enabled
->>>
->>> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
->>
->> Looks like the sane thing to do, indeed.
->>
->> I'm no systemd expert, so copying Eric, which will probably be able to
->> confirm my:
->>
->> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->> Regards,
->> Yann E. MORIN.
->>
->>> ---
->>> With "Type=oneshot", systemd waits for avahi-daemon to exit,
->>> which does not happen (unless killed):
->>>
->>> $ systemctl --no-pager status avahi-daemon.service
->>> * avahi-daemon.service - Avahi daemon
->>>    Loaded: loaded (/etc/systemd/system/avahi-daemon.service; enabled)
->>>    Active: activating (start) since Wed 2014-10-15 21:26:49 CEST; 56s ago
->>>  Main PID: 190 (avahi-daemon)
->>>    CGroup: /system.slice/avahi-daemon.service
->>>            |-190 avahi-daemon: running [buildroot.local]
->>>            |-192 avahi-daemon: chroot helper
->>>
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Network interface enumeration completed.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering HINFO record with values 'X86_64'/'LINUX'.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Server startup complete. Host name is buildroot.local. Local service c...3347.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/ssh.service) successfully established.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Service "buildroot" (/services/sftp-ssh.service) successfully established.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Joining mDNS multicast group on interface br0.IPv4 with address 192.168.3.114.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: New relevant interface br0.IPv4 for mDNS.
->>> Oct 15 21:26:49 buildroot avahi-daemon[190]: Registering new address record for 192.168.3.114 on br0.IPv4.
->>> Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::5054:ff:feb1:f19a on eth0.*.
->>> Oct 15 21:26:50 buildroot avahi-daemon[190]: Registering new address record for fe80::bcbb:86ff:fe4a:14d6 on br0.*.
->>> Hint: Some lines were ellipsized, use -l to show in full.
->>> (EOF)
->>>
->>>
->>> The result is that the boot process never reaches "multi-user.target":
->>>
->>> $ systemctl --no-pager list-jobs
->>> JOB UNIT                 TYPE  STATE
->>>   1 multi-user.target    start waiting
->>>  57 avahi-daemon.service start running
->>>
->>> 2 jobs listed.
->>> (EOF)
->>> ---
->>>  package/avahi/avahi-daemon.service | 15 ---------------
->>>  package/avahi/avahi.mk             |  8 ++++----
->>>  2 files changed, 4 insertions(+), 19 deletions(-)
->>>  delete mode 100644 package/avahi/avahi-daemon.service
->>>
->>> diff --git a/package/avahi/avahi-daemon.service b/package/avahi/avahi-daemon.service
->>> deleted file mode 100644
->>> index c9b7b1f..0000000
->>> --- a/package/avahi/avahi-daemon.service
->>> +++ /dev/null
->>> @@ -1,15 +0,0 @@
->>> -[Unit]
->>> -Description=Avahi daemon
->>> -Requires=dbus.target
->>> -After=syslog.target network.target auditd.service
->>> -
->>> -[Service]
->>> -Type=oneshot
->>> -RemainAfterExit=ye
->>> -ExecStart=/usr/sbin/avahi-daemon -s
->>> -ExecReload=/usr/sbin/avahi-daemon -r
->>> -ExecStop=/usr/sbin/avahi-daemon -k
->>> -Restart=restart-always
->>> -
->>> -[Install]
->>> -WantedBy=multi-user.target
->>> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
->>> index 706561f..609d89c 100644
->>> --- a/package/avahi/avahi.mk
->>> +++ b/package/avahi/avahi.mk
->>> @@ -164,14 +164,14 @@ endif
->>>  ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
->>>
->>>  define AVAHI_INSTALL_INIT_SYSTEMD
->>> -  $(INSTALL) -D -m 644 package/avahi/avahi-daemon.service \
->>> -    $(TARGET_DIR)/etc/systemd/system/avahi-daemon.service
->>> -
->>>    mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->>>
->>> -  ln -fs ../avahi-daemon.service \
->>> +  ln -fs ../../../../lib/systemd/system/avahi-daemon.service \
-> Just an idea, how about doing:
-> ln -fs /lib/systemd/system/avahi-daemon.service \
-> Instead of all the ../ ?
+> For systemd, instead of installing the files into
+> $(TARGET_DIR)/etc/systemd/system, the file are now installed in
+> $(TARGET_DIR)/lib/systemd/system which appears to be the right things to
+> do.
+>
+> If you have specific operations to perform in order to install your init
+> scripts or any other file relevant to the init system (tmpfiles for
+> systemd), you can still define the usual FOO_INSTALL_INIT_SYSTEMD for
+> your specific actions.
+>
+> Also add the documentation explaining the mechanism.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  docs/manual/adding-packages-generic.txt | 17 +++++++++++++++++
+>  package/pkg-generic.mk                  | 26 ++++++++++++++++++++++----
+>  2 files changed, 39 insertions(+), 4 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 67a7453..a0e51f2 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -368,6 +368,23 @@ information is (assuming the package name is +libfoo+) :
+>    FLAT binary format is only 4k bytes. If the application consumes more stack,
+>    append the required number here.
+>
+> +* +LIBFOO_INIT_SYSV_FILES+ and +LIBFOO_INIT_SYSTEMD_FILES+ are
+> +  a space-separated list of init scripts path. Respectively, for
+> +  the systemV-like init systems (busybox, sysvinit, etc.) and for
+> +  systemd.
+> +  Theses init scripts files will only be installed when the relevant
+> +  init system is installed (i.e. if systemd is selected as the init
+> +  system in the configuration, only +LIBFOO_INIT_SYSTEMD_FILES+ will be
+> +  installed).
+> +  Each scripts will be installed in the default folder of the relevant
+> +  init system.
+> +  Note: This doesn't forbid you from defining +LIBFOO_INSTALL_INIT_SYSV+ and
+> +  +LIBFOO_INSTALL_INIT_SYSTEMD+ if you need to perform specific actions.
+> +  Theses variables are optionnal.
+> +  Examples: +
+> +    +LIBFOO_INSTALL_INIT_SYSV=package/libfoo/S99libfoo +
+> +    +LIBFOO_INSTALL_INIT_SYSV=$(@D)/S99libfoo +
+> +
+>  The recommended way to define these variables is to use the following
+>  syntax:
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 259ee02..1d90ae9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -229,10 +229,27 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+>         @$(call MESSAGE,"Installing to target")
+>         $(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+>         +$($(PKG)_INSTALL_TARGET_CMDS)
+> -       $(if $(BR2_INIT_SYSTEMD),\
+> -               $($(PKG)_INSTALL_INIT_SYSTEMD))
+> -       $(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+> -               $($(PKG)_INSTALL_INIT_SYSV))
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +       $(Q)if test -n "$($(PKG)_INIT_SYSTEMD_FILES)" ; then \
+> +               mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants ; \
 
-+1, I simply had the impression that relative paths were preferred.
+A "set -e" or some "|| exit"s might be missing here.
 
->>>      $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
->>>
->>> +  ln -fs ../../../../lib/systemd/system/avahi-dnsconfd.service \
-> Same here.
->>> +    $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
->>> +
->>>    mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
->>>
->>>    $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
->>> --
->>> 2.1.2
+> +               for s in $($(PKG)_INIT_SYSTEMD_FILES); do \
+> +                       f=$$(basename $${s}); \
+> +                       $(INSTALL) -D -m 644 $${s} $(TARGET_DIR)/lib/systemd/system/$${f} ; \
+> +                       ln -fs /lib/systemd/system/$${f} \
+> +                               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$${f} ; \
+> +               done ; \
+> +       fi
+> +       $($(PKG)_INSTALL_INIT_SYSTEMD)
+> +endif
+> +ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),y)
+> +       $(Q)if test -n "$($(PKG)_INIT_SYSV_FILES)" ; then \
+
+And here.
+
+> +               for s in $($(PKG)_INIT_SYSV_FILES); do \
+> +                          f=$$(basename $${s}) ; \
+> +                          $(INSTALL) -D -m 0755 $${s} $(TARGET_DIR)/etc/init.d/$${f} ; \
+> +               done ; \
+> +       fi
+> +       $($(PKG)_INSTALL_INIT_SYSV)
+> +endif
+>         $(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+>         $(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+>                 $(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+> @@ -592,6 +609,7 @@ $(1)-reconfigure:   $(1)-clean-for-reconfigure $(1)
+>  # define the PKG variable for all targets, containing the
+>  # uppercase package variable prefix
+>  $$($(2)_TARGET_INSTALL_TARGET):                PKG=$(2)
+> +$$($(2)_TARGET_INSTALL_TARGET):                PKGDIR=$(pkgdir)
+>  $$($(2)_TARGET_INSTALL_STAGING):       PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_IMAGES):                PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+> --
+> 2.1.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
