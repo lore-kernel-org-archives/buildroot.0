@@ -1,89 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 11:25:24 +0200
-Subject: [Buildroot] [PATCH v3] modplugtools: Added package
-In-Reply-To: <1413676846-23424-1-git-send-email-maarten@treewalker.org>
-References: <1413662640-16030-1-git-send-email-maarten@treewalker.org>
- <1413676846-23424-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20141019092524.GJ4072@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Oct 2014 19:27:28 +0200
+Subject: [Buildroot] [git commit] package/pkg-autotools.mk: set
+	--localstatedir=/var by default
+Message-ID: <20141019093617.B4DD7B3DC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maarten, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=b3ed7c2d6898e643dd399d926d0f94295b15a35c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-10-19 02:00 +0200, Maarten ter Huurne spake thusly:
-> This installs the 'modplug123' command line tool to play tracker music
-> files (MOD, S3M, XM etc.) using libmodplug.
-> 
-> The modplugtools package can build two players: modplugplay that plays
-> directly via OSS and modplug123 that plays via libao. Since modplugplay
-> won't work without OSS support and modern kernels are likely to have no
-> OSS or OSS emulation, we build only modplug123.
-> 
-> If you have a system without ALSA support for some reason, you can
-> still use modplug123 to play over OSS via libao.
-> 
-> http://modplug-xmms.sourceforge.net/
-> 
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+`localstatedir` is a common autoconf variable like prefix and sysconfdir. At
+this time 25 autotools and one generic package uses this Makefile variable. 22
+of the autotools packages use --localstatedir=/var, the remaining use custom
+settings.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Setting `localstatedir` to /var is consistent with the Filesystem Hierarchy
+Standard (FHS). So it's time to move it as a common definition in the
+autotools infrastructure.
 
-See below...
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-autotools.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-[--SNIP--]
-> diff --git a/package/modplugtools/modplugtools.mk b/package/modplugtools/modplugtools.mk
-> new file mode 100644
-> index 0000000..e8d73af
-> --- /dev/null
-> +++ b/package/modplugtools/modplugtools.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# modplugtools
-> +#
-> +################################################################################
-> +
-> +MODPLUGTOOLS_VERSION = 0.5.3
-> +MODPLUGTOOLS_SITE = http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
-> +MODPLUGTOOLS_LICENSE = GPLv3
-> +MODPLUGTOOLS_LICENSE_FILES = COPYING
-
-This is indeed GPLv3 and no 'or later'.
-
-To be noted: their upstream repo is weird. They do have a COPYING file
-in their git tree, but it is a simlink to /usr/share/automake-1.11/COPYING.
-In the archive, it is a real file (not a symlink) with the text of the
-GPLv3, and the source files have no 'or later' indication.
-
-So the license is dependant on the host system of the person doing the
-release tarball. Sigh... :-(
-
-I'll report the issue upstream.
-
-Regards,
-Yann E. MORIN.
-
-> +
-> +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
-> +
-> +# Only build the 'mp123' subdir, which contains 'modplug123' that plays through
-> +# various backends via libao. This excludes the 'mpplay' subdir, which contains
-> +# 'modplugplay' that can play only through the deprecated OSS interface.
-> +MODPLUGTOOLS_MAKE_OPTS = SUBDIRS=mp123
-> +MODPLUGTOOLS_INSTALL_TARGET_OPTS = SUBDIRS=mp123 DESTDIR=$(TARGET_DIR) install
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 1.8.4.5
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 2c93dd9..3c5430f 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -134,6 +134,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--exec-prefix=/usr \
+ 		--sysconfdir=/etc \
++		--localstatedir=/var \
+ 		--program-prefix="" \
+ 		--disable-gtk-doc \
+ 		--disable-doc \
+@@ -165,6 +166,7 @@ define $(2)_CONFIGURE_CMDS
+ 		./configure \
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
++		--localstatedir="$$(HOST_DIR)/var" \
+ 		--enable-shared --disable-static \
+ 		--disable-gtk-doc \
+ 		--disable-doc \
