@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Oct 2014 21:45:00 +0200
-Subject: [Buildroot] [RFC/PATCH v3 08/11] kodi-audioencoder-flac: New package
+Date: Sat, 18 Oct 2014 21:44:57 +0200
+Subject: [Buildroot] [RFC/PATCH v3 05/11] xbmc-pvr-addons: Bump version for
+	Helix-compatibility
 In-Reply-To: <1413661503-5382-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413661503-5382-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413661503-5382-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413661503-5382-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +14,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/Config.in           |    8 +++++++
- .../kodi-audioencoder-flac.mk                      |   23 ++++++++++++++++++++
- package/kodi/Config.in                             |    6 ++++-
- 3 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 package/kodi-audioencoder-flac/Config.in
- create mode 100644 package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
-new file mode 100644
-index 0000000..a6cf2d8
---- /dev/null
-+++ b/package/kodi-audioencoder-flac/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
-+	bool "kodi-audioencoder-flac"
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_LIBOGG
-+	help
-+	  An audioencoder addon for XBMC
-+
-+	  https://github.com/xbmc/audioencoder.flac
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-new file mode 100644
-index 0000000..92cbe3b
---- /dev/null
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# kodi-audioencoder-flac
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_FLAC_VERSION = 84bdf32418df4611aac8b2f48ca205153ded239f
-+KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
-+KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
-+
-+KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac libogg
-+# This really is a runtime dependency, but we need Kodi to be installed
-+# first, since we'll install files in Kodi's directories _after_ Kodi has
-+# installed its own files
-+KODI_AUDIOENCODER_FLAC_DEPENDENCIES += kodi
-+
-+KODI_AUDIOENCODER_FLAC_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(TARGET_DIR)/usr/lib/xbmc \
-+	-DFLAC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2dcd8b3..a2dc0d4 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -235,7 +235,11 @@ config BR2_PACKAGE_KODI_WAVPACK
- 	  Enable WAV input support.
- 	  Select this if you want to play back WV files.
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+index 4410153..748cc75 100644
+--- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--comment "Kodi addons"
-+comment "Kodi audioencoder addons"
-+
-+source "package/kodi-audioencoder-flac/Config.in"
-+
-+comment "Kodi PVR addons"
- 
- source "package/xbmc-addon-xvdr/Config.in"
- source "package/xbmc-pvr-addons/Config.in"
+-# This cset is on the branch 'gotham'
+-# When XBMC is updated, then this should be updated to the corresponding branch
+-XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
++# This cset is on the branch 'master'
++# When Kodi is released, then this should be updated to the corresponding branch
++XBMC_PVR_ADDONS_VERSION = 79ca634891d09b5bb6cf4256389dc681a1041903
+ XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+ XBMC_PVR_ADDONS_LICENSE = GPLv3+
+ XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
