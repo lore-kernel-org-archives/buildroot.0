@@ -1,94 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 15:42:43 +0200
-Subject: [Buildroot] [PATCH] sdl_mixer: Enable support for libmodplug
-In-Reply-To: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
-References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
-Message-ID: <54426E53.9030407@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 18 Oct 2014 15:52:41 +0200
+Subject: [Buildroot] [PATCH buildroot-test 1/8] autobuild-run:
+ check-requirements does not need to know the login details
+In-Reply-To: <54426D4A.8050802@mind.be>
+References: <1413486964-5183-1-git-send-email-patrickdepinguin@gmail.com>
+ <20141017222009.GQ3971@free.fr> <54426D4A.8050802@mind.be>
+Message-ID: <CAGduivxXvJcnD-x9MBfVApkL3V0yFwiM-Ei3oHqnPsGAoFq=mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/14 05:19, Maarten ter Huurne wrote:
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
->  .../sdl_mixer/sdl_mixer-0001-modplug-include.patch | 33 ++++++++++++++++++++++
->  package/sdl_mixer/sdl_mixer.mk                     |  7 +++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/sdl_mixer/sdl_mixer-0001-modplug-include.patch
-> 
-> diff --git a/package/sdl_mixer/sdl_mixer-0001-modplug-include.patch b/package/sdl_mixer/sdl_mixer-0001-modplug-include.patch
-> new file mode 100644
-> index 0000000..20a475f
-> --- /dev/null
-> +++ b/package/sdl_mixer/sdl_mixer-0001-modplug-include.patch
-> @@ -0,0 +1,33 @@
-> +Fix the modplug include path
-> +
-> +Since libmodplug 0.8.8.5, the cflags reported by pkg-config no longer
-> +add the "libmodplug" dir, so the #include directive must contain that
-> +path instead.
-> +
-> +Upstream status: the SDL-1.2 branch seems to be unmaintained
-> +
-> +Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-> +
-> +diff -ru SDL_mixer-1.2.12.org/configure.in sdl_mixer-1.2.12/configure.in
-> +--- SDL_mixer-1.2.12.org/configure.in	2012-01-15 23:01:05.000000000 +0100
-> ++++ sdl_mixer-1.2.12/configure.in	2014-07-03 05:25:44.761854572 +0200
-> +@@ -315,7 +315,7 @@
-> + 	EXTRA_CFLAGS="$EXTRA_CFLAGS -DMODPLUG_MUSIC  $MODPLUG_CFLAGS"
-> + 	EXTRA_LDFLAGS="$EXTRA_LDFLAGS $MODPLUG_LIBS"
-> + dnl	AC_TRY_COMPILE([
-> +-dnl     #include "modplug.h"
-> ++dnl     #include "libmodplug/modplug.h"
-> + dnl    ],[
-> + dnl    ],[
-> +     have_libmodplug=yes
-> +diff -ru SDL_mixer-1.2.12.org/music_modplug.h sdl_mixer-1.2.12/music_modplug.h
-> +--- SDL_mixer-1.2.12.org/music_modplug.h	2012-01-15 23:01:05.000000000 +0100
-> ++++ sdl_mixer-1.2.12/music_modplug.h	2014-07-03 05:26:03.919219618 +0200
-> +@@ -1,6 +1,6 @@
-> + #ifdef MODPLUG_MUSIC
-> + 
-> +-#include "modplug.h"
-> ++#include "libmodplug/modplug.h"
-> + #include "SDL_rwops.h"
-> + #include "SDL_audio.h"
-> + #include "SDL_mixer.h"
-> diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-> index a602b6e..45ee6b6 100644
-> --- a/package/sdl_mixer/sdl_mixer.mk
-> +++ b/package/sdl_mixer/sdl_mixer.mk
-> @@ -20,6 +20,13 @@ SDL_MIXER_CONF_OPTS = \
->  	--disable-music-mp3 \
->  	--disable-music-flac # configure script fails when cross compiling
->  
-> +ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
-> +SDL_MIXER_CONF_OPTS += --enable-music-mod-modplug
-> +SDL_MIXER_DEPENDENCIES += libmodplug
-> +else
-> +SDL_MIXER_CONF_OPTS += --disable-music-mod-modplug
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBMAD),y)
->  SDL_MIXER_CONF_OPTS += --enable-music-mp3-mad-gpl
->  SDL_MIXER_DEPENDENCIES += libmad
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+On Sat, Oct 18, 2014 at 3:38 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 18/10/14 00:20, Yann E. MORIN wrote:
+>> Thomas, All,
+>>
+>> On 2014-10-16 21:15 +0200, Thomas De Schampheleire spake thusly:
+> [snip]
+>>> @@ -553,8 +553,9 @@ if __name__ == '__main__':
+>>>      check_version()
+>>>      sysinfo = SystemInfo()
+>>>      (ninstances, njobs, http_login, http_password, submitter) = config_get()
+>>> -    check_requirements(http_login, http_password)
+>>> -    if http_login is None or http_password is None:
+>>> +    do_send_results = http_login and http_password
+>>
+>> I was told that we should no treat 'None' as 'False', or a non-empty
+>> string as 'True'. This should be something like:
+>>
+>>     do_send_results = (not http_login is None) and (not http_password is None)
+Just for the sake of it:
+do_send_results = (http_login is not None) and (http_password is not None)
+>
+>  I'm with Yann (not Maxime) on this one: if you would have an autobuild server
+> that doesn't need a username or password, then there would be no distinction
+> between sending or not sending results. with 'http_login is not None and
+> http_password is not None' you can set them to the empty string to force sending.
+Very true, I did not think about that case.
+And as bonus point, like Yann said previously, it's more explicit.
+>
+>  In practice, of course, it doesn't matter because we have only one autobuild
+> server and it does require a non-empty username and password.
+>
+>
+>  Regards,
+>  Arnout
+>
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
+>>> +    check_requirements(do_send_results)
+>>> +    if not do_send_results:
+>>>          print "WARN: due to the lack of http login/password details, results will not be submitted"
+>>>          print "WARN: tarballs of results will be kept locally only"
+>>>      def sigterm_handler(signum, frame):
+>>> --
+>>> 1.8.5.1
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
