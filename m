@@ -1,77 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Oct 2014 15:12:11 +0200
-Subject: [Buildroot] [PATCH] freetype: Add config option for bzip2
- compressed font support
-In-Reply-To: <1413599958-24524-1-git-send-email-maarten@treewalker.org>
-References: <1413599958-24524-1-git-send-email-maarten@treewalker.org>
-Message-ID: <5442672B.1000500@mind.be>
+Date: Sat, 18 Oct 2014 15:14:17 +0200
+Subject: [Buildroot] [PATCH v3 2/3] gst-ffmpeg: add --pkg-config to
+ internal libav configure options
+In-Reply-To: <20141018135102.4b4d86df@free-electrons.com>
+References: <1413142206-30581-1-git-send-email-danomimanchego123@gmail.com>
+ <1413142206-30581-2-git-send-email-danomimanchego123@gmail.com>
+ <20141017212453.GI3971@free.fr> <20141018135102.4b4d86df@free-electrons.com>
+Message-ID: <544267A9.9080509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/14 04:39, Maarten ter Huurne wrote:
-> If bzip2 is available, it might still be preferable to not include
-> support for bzip2 compressed fonts, for example to reduce the number
-> of libraries loaded when running a GUI application.
-
- I don't agree with this. The impact will be really small, both for memory size
-and for load time - especially because any application using freetype will most
-likely load much larger GUI libraries. If you're working at such details, you'll
-unavoidably have to do some manual hacks to get it even better. So I don't think
-it makes sense to add a config option for it - we try to keep the number of
-config options in check.
-
- So unless you can show me a use case where it makes a real impact, it's a NACK.
-
-
+On 18/10/14 13:51, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-> ---
->  package/freetype/Config.in   | 9 +++++++++
->  package/freetype/freetype.mk | 2 +-
->  2 files changed, 10 insertions(+), 1 deletion(-)
+> On Fri, 17 Oct 2014 23:24:53 +0200, Yann E. MORIN wrote:
 > 
-> diff --git a/package/freetype/Config.in b/package/freetype/Config.in
-> index ded8738..f245b14 100644
-> --- a/package/freetype/Config.in
-> +++ b/package/freetype/Config.in
-> @@ -4,3 +4,12 @@ config BR2_PACKAGE_FREETYPE
->  	  a free, high-quality and portable font engine.
->  
->  	  http://www.freetype.org/
-> +
-> +if BR2_PACKAGE_FREETYPE
-> +
-> +config BR2_PACKAGE_FREETYPE_BZIP2
-> +	bool "support bzip2 compressed fonts"
-> +	depends on BR2_PACKAGE_BZIP2
-> +	default y
+>>> WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found, library detection may fail.
+>>
+>> Instead of fixing just that one package, shouldn't we provide a symlink:
+>>     TUPLE-pkg-config  ->  pkg-config
+>>
+>> This way, all packages that expect a cross-pkg-config will work without
+>> customisation.
+>>
+>> Thomas, thoughts?
+> 
+> I don't have a very strong opinion here. How many packages expect
+> TUPLE-pkg-config instead of pkg-config? I'm not sure it's really the
+> majority, and if it's not, I prefer to keep handling this on a
+> per-package basis rather than adding a symlink.
 
- In reply to Maxime's comment: it should indeed default to yes, so the default
-keeps the behaviour we had up to now.
-
+ Actually, even if it is just two packages that use it, I think it is worthwhile
+to add the symlink. It is one less thing to solve when adding a package.
 
  Regards,
  Arnout
-
-> +
-> +endif
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> index b85d0ec..b2d999f 100644
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -37,7 +37,7 @@ else
->  FREETYPE_CONF_OPTS += --without-zlib
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_BZIP2),y)
-> +ifeq ($(BR2_PACKAGE_FREETYPE_BZIP2),y)
->  FREETYPE_DEPENDENCIES += bzip2
->  FREETYPE_CONF_OPTS += --with-bzip2
->  else
-> 
 
 
 -- 
