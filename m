@@ -1,64 +1,73 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 18:54:31 +0200
-Subject: [Buildroot] [RFC/PATCH v4 07/12] package/kodi: New option to enable
-	support for optical drives
+Date: Sun, 19 Oct 2014 18:54:34 +0200
+Subject: [Buildroot] [RFC/PATCH v4 10/12] package/kodi-audioencoder-lame:
+	New package
 In-Reply-To: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413737676-25455-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413737676-25455-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This also enables dvdcss support, provided by an internal library.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in |    5 +++++
- package/kodi/kodi.mk   |    7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/kodi-audioencoder-lame/Config.in               |    8 ++++++++
+ .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk   |   16 ++++++++++++++++
+ package/kodi/Config.in                                 |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audioencoder-lame/Config.in
+ create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
 
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
+new file mode 100644
+index 0000000..78ec136
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
++	bool "kodi-audioencoder-lame"
++	select BR2_PACKAGE_LAME
++	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
++	help
++	  An audioencoder addon for Kodi
++
++	  https://github.com/xbmc/audioencoder.lame
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+new file mode 100644
+index 0000000..94a40bc
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# kodi-audioencoder-lame
++#
++################################################################################
++
++KODI_AUDIOENCODER_LAME_VERSION = 90fb99b8f3c876b5f3d8ecd4ea29aa1ef2dabc89
++KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
++KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
++KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
++KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
++KODI_AUDIOENCODER_LAME_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(TARGET_DIR)/usr/lib/xbmc \
++	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++
++$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2dcd8b3..ececca4 100644
+index 9c37765..11b88a5 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -235,6 +235,11 @@ config BR2_PACKAGE_KODI_WAVPACK
- 	  Enable WAV input support.
- 	  Select this if you want to play back WV files.
+@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
+ comment "Kodi audioencoder addons"
  
-+config BR2_PACKAGE_KODI_OPTICALDRIVE
-+	bool "optical drive"
-+	help
-+	  Enable support for optical drives
-+
- comment "Kodi addons"
+ source "package/kodi-audioencoder-flac/Config.in"
++source "package/kodi-audioencoder-lame/Config.in"
  
- source "package/xbmc-addon-xvdr/Config.in"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 2ca98c4..014b1a9 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -38,7 +38,6 @@ KODI_CONF_OPTS +=  \
- 	--disable-joystick \
- 	--disable-mysql \
- 	--disable-openmax \
--	--disable-optical-drive \
- 	--disable-projectm \
- 	--disable-pulse \
- 	--disable-ssh \
-@@ -183,6 +182,12 @@ else
- KODI_CONF_OPTS += --disable-vaapi
- endif
+ endif # BR2_PACKAGE_KODI_OPTICALDRIVE
  
-+ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
-+KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
-+else
-+KODI_CONF_OPTS += --disable-optical-drive --disable-dvdcss
-+endif
-+
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define KODI_BOOTSTRAP
- 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
 -- 
 1.7.10.4
