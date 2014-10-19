@@ -1,73 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 18:54:34 +0200
-Subject: [Buildroot] [RFC/PATCH v4 10/12] package/kodi-audioencoder-lame:
-	New package
-In-Reply-To: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413737676-25455-11-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Oct 2014 18:54:24 +0200
+Subject: [Buildroot] [RFC/PATCH v4 00/12] package/kodi: Bump version to
+	14.0a4-Helix
+Message-ID: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+this patchset is a RFC and not meant to be committed to buildroot git yet.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-audioencoder-lame/Config.in               |    8 ++++++++
- .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk   |   16 ++++++++++++++++
- package/kodi/Config.in                                 |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audioencoder-lame/Config.in
- create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+The follow-up version of XBMC 13.x-Gotham will be called Kodi, its alpha4 was
+released October 3rd: http://xbmc.org/kodi-14-0-helix-alpha-4
 
-diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
-new file mode 100644
-index 0000000..78ec136
---- /dev/null
-+++ b/package/kodi-audioencoder-lame/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
-+	bool "kodi-audioencoder-lame"
-+	select BR2_PACKAGE_LAME
-+	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
-+	help
-+	  An audioencoder addon for Kodi
-+
-+	  https://github.com/xbmc/audioencoder.lame
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-new file mode 100644
-index 0000000..94a40bc
---- /dev/null
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# kodi-audioencoder-lame
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_LAME_VERSION = 90fb99b8f3c876b5f3d8ecd4ea29aa1ef2dabc89
-+KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
-+KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
-+KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
-+KODI_AUDIOENCODER_LAME_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(TARGET_DIR)/usr/lib/xbmc \
-+	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 9c37765..11b88a5 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
- comment "Kodi audioencoder addons"
- 
- source "package/kodi-audioencoder-flac/Config.in"
-+source "package/kodi-audioencoder-lame/Config.in"
- 
- endif # BR2_PACKAGE_KODI_OPTICALDRIVE
- 
+In order to prepare this version bump I am sharing my patchset as an RFC, two
+preparatory patches to rename the package, splitted for easier review, and one
+patch for the real version bump.
+
+Regards, Bernd
+
+v4: - rebased
+    - renamed package/kodi-audioencoder-wav/kodi-audioencoder-flac.mk to
+      package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+    - added option BR2_PACKAGE_KODI_OPTICALDRIVE to enable support for optical
+      drives
+    - audioencoder addons depend in BR2_PACKAGE_KODI_OPTICALDRIVE, see
+      https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/virtual/mediacenter/package.mk#L46
+
+v3: - rebased
+    - added audioenconder addons, Kodi now needs to be installed to STAGING_DIR
+    - kodi: removed dependency to flac, backported from upstream master
+    - bumped xbmc-pvr-addons
+    - bumped xbmc-addon-xvdr
+    - note: kodi specific ffmpeg-patches no longer depend on
+            http://patchwork.ozlabs.org/patch/396911/
+            patch was committed to buildroot
+
+v2: - rebased: - _CONF_OPT -> _CONF_OPTS
+    - added notes to "Rename XBMC to Kodi"-patches, they are meant to be committed
+      together (Yann)
+    - kodi specific ffmpeg-patches are now a seperate commit (Yann),
+      depends on http://patchwork.ozlabs.org/patch/396911/
+    - ffmpeg is now compiled dynamically, ported from
+      https://github.com/OpenELEC/OpenELEC.tv/commit/ba586280
+
+
+*** BLURB HERE ***
+
+Bernd Kuhls (12):
+  package/ffmpeg: Add Kodi patchset
+  Rename XBMC to Kodi - part I - move files
+  Rename XBMC to Kodi - part II - rename variables
+  package/kodi: Bump version to 14.0a4-Helix
+  xbmc-pvr-addons: Bump version for Helix-compatibility
+  package/xbmc-addon-xvdr: Bump version for Helix-compatibility
+  package/kodi: New option to enable support for optical drives
+  package/kodi: Enable install to STAGING_DIR, needed for audioencoder
+    addons
+  package/kodi-audioencoder-flac: New package
+  package/kodi-audioencoder-lame: New package
+  package/kodi-audioencoder-vorbis: New package
+  package/kodi-audioencoder-wav: New package
+
+ package/ffmpeg/ffmpeg-0001-fminf.patch          |   47 +++++++++
+ package/openssl/openssl.mk                      |    2 -
+ package/uclibc/0.9.33.2/uclibc-0063-fminf.patch |  127 -----------------------
+ 3 files changed, 47 insertions(+), 129 deletions(-)
+ create mode 100644 package/ffmpeg/ffmpeg-0001-fminf.patch
+ delete mode 100644 package/uclibc/0.9.33.2/uclibc-0063-fminf.patch
+
 -- 
 1.7.10.4
