@@ -1,36 +1,35 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 19 Oct 2014 20:04:38 +0200
-Subject: [Buildroot] [PATCH 02/15] package/pkg-cmake.mk: disable colouring
-	the output
+Date: Sun, 19 Oct 2014 20:04:39 +0200
+Subject: [Buildroot] [PATCH 03/15] package/clapack: cleanup configure options
 In-Reply-To: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
 References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1413741891-30113-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1413741891-30113-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because cmake was the only build-system supporting this feature, it has been
-disabled for the target packages.
-For consistency, this patch does the same for host package too.
+Remove the BUILD_TESTING configure option (note the typo in its existing
+name), which is already set to the same value by the cmake
+infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/pkg-cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/clapack/clapack.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 3c5d4fe..c8735ef 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -95,6 +95,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
-+		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
- 		-DBUILD_DOCS=OFF \
- 		-DBUILD_EXAMPLE=OFF \
+diff --git a/package/clapack/clapack.mk b/package/clapack/clapack.mk
+index 99de35d..c3841f2 100644
+--- a/package/clapack/clapack.mk
++++ b/package/clapack/clapack.mk
+@@ -14,7 +14,6 @@ CLAPACK_LICENSE = HPND (libf2c), BSD-3c (libblas and liblapack)
+ CLAPACK_LICENSE_FILES = F2CLIBS/libf2c/Notice COPYING
+ CLAPACK_SITE = http://www.netlib.org/clapack
+ CLAPACK_INSTALL_STAGING = YES
+-CLAPACK_CONF_OPTS = -DBUILDTESTING=OFF
+ 
+ ifneq ($(BR2_PACKAGE_CLAPACK_ARITH_H),)
+ CLAPACK_CONF_OPTS += -DARITH_H=$(BR2_PACKAGE_CLAPACK_ARITH_H)
 -- 
 2.1.2
