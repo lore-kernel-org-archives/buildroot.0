@@ -1,148 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:37 +0200
-Subject: [Buildroot] [PATCH 03/31] arch/arm: add blind options to know the
-	ARM architecture
+Date: Sun, 19 Oct 2014 22:07:42 +0200
+Subject: [Buildroot] [PATCH 08/31] gst1-libav: allow usage of ARMv6
+	optimizations on ARMv7 platforms
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation to the removal of BR2_GCC_TARGET_ARCH for ARM, this
-commit introduces a number of blind options for each ARM architecture,
-so that packages/toolchains that had dependencies using
-BR2_GCC_TARGET_ARCH can continue to express their dependencies. It can
-also be used to simplify package dependencies that were using the
-individual ARM core options.
+Contrary to the ffmpeg package, the gst1-libav package was only
+allowing ARMv6 optimizations on ARMv6 platforms. This commit also
+allows ARMv6 optimizations on ARMv7 platforms, like the ffmpeg package
+does.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/gstreamer1/gst1-libav/gst1-libav.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 201ff1d..d2ba924 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -37,6 +37,27 @@ config BR2_ARM_CPU_HAS_THUMB
- config BR2_ARM_CPU_HAS_THUMB2
- 	bool
- 
-+config BR2_ARM_CPU_ARMV4
-+	bool
-+
-+config BR2_ARM_CPU_ARMV4T
-+	bool
-+
-+config BR2_ARM_CPU_ARMV5TE
-+	bool
-+
-+config BR2_ARM_CPU_ARMV5TEJ
-+	bool
-+
-+config BR2_ARM_CPU_ARMV6J
-+	bool
-+
-+config BR2_ARM_CPU_ARMV6ZK
-+	bool
-+
-+config BR2_ARM_CPU_ARMV7A
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_arm || BR2_armeb
-@@ -47,70 +68,88 @@ choice
- config BR2_arm920t
- 	bool "arm920t"
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV4T
- config BR2_arm922t
- 	bool "arm922t"
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV4T
- config BR2_arm926t
- 	bool "arm926t"
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV5TEJ
- config BR2_arm1136jf_s_r0
- 	bool "arm1136jf_s rev0"
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6J
- config BR2_arm1136jf_s_r1
- 	bool "arm1136jf_s rev1"
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6J
- config BR2_arm1176jz_s
- 	bool "arm1176jz-s"
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6ZK
- config BR2_arm1176jzf_s
- 	bool "arm1176jzf-s"
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV6ZK
- config BR2_cortex_a5
- 	bool "cortex-A5"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_cortex_a7
- 	bool "cortex-A7"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_cortex_a8
- 	bool "cortex-A8"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_cortex_a9
- 	bool "cortex-A9"
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_cortex_a12
- 	bool "cortex-A12"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_NEON
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_fa526
- 	bool "fa526/626"
-+	select BR2_ARM_CPU_ARMV4
- config BR2_pj4
- 	bool "pj4"
- 	select BR2_ARM_CPU_HAS_VFPV3
-+	select BR2_ARM_CPU_ARMV7A
- config BR2_strongarm
- 	bool "strongarm sa110/sa1100"
-+	select BR2_ARM_CPU_ARMV4
- config BR2_xscale
- 	bool "xscale"
- 	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_ARMV5TE
- config BR2_iwmmxt
- 	bool "iwmmxt"
-+	select BR2_ARM_CPU_ARMV5TE
- endchoice
- 
- config BR2_arm1136jf_s
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index db12483..96613ba 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -52,7 +52,7 @@ endif
+ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV4T),y)
+ GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv5te
+ endif
+-ifeq ($(BR2_ARM_CPU_ARMV6J)$(BR2_ARM_CPU_ARMV6ZK),y)
++ifeq ($(BR2_ARM_CPU_ARMV6J)$(BR2_ARM_CPU_ARMV6ZK)$(BR2_ARM_CPU_ARMV7A),y)
+ GST1_LIBAV_CONF_EXTRA_OPTS += --enable-armv6
+ else
+ GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
 -- 
 2.0.0
