@@ -1,64 +1,69 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 19 Oct 2014 13:22:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: use upstream-provided
- systemd files
-In-Reply-To: <20141019131552.239fe12f@free-electrons.com>
-References: <1413573042-6638-1-git-send-email-dywi@mailerd.de>
- <20141019131552.239fe12f@free-electrons.com>
-Message-ID: <CAGduivz_LYa13bVhHh_-cUZp=jt+HapK8xq0LQoez-jpjT8e5w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 13:22:46 +0200
+Subject: [Buildroot] [git commit] bandwidthd: Version bump to handle
+	indirect deps properly
+Message-ID: <20141019112323.8F848AF2B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all
+commit: http://git.buildroot.net/buildroot/commit/?id=aa500a49526a0d7e78fa8331b8bfaa4bac68e707
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Oct 19, 2014 at 1:15 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Andr? Erdmann,
->
-> On Fri, 17 Oct 2014 21:10:42 +0200, Andr? Erdmann wrote:
->> When using the buildroot-provided avahi-daemon.service file, bootup never
->> finishes, because multi-user.target is waiting for avahi-daemon to exit,
->> which is caused by "Type=oneshot" (in avahi-daemon.service).
->>
->> Upstream's systemd files get already installed to /lib/systemd.
->> They're not an exact copy of S50avahi-daemon, but work flawlessly,
->> so use these units:
->>
->> * avahi-daemon.service, auto-enabled (ln -fs in AVAHI_INSTALL_INIT_SYSTEMD)
->> * avahi-daemon.socket,
->>   not auto-enabled, but a dependency of avahi-daemon.service
->> * avahi-dnsconfd.service, auto-enabled
->>
->> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
->
-> Thanks, applied, after changing the symbolic links to use absolute
-> paths instead of relative paths.
->
-> Also, I pushed a number of followup commits:
->
-> 3b4ec0c6a82fc853b00b2a720d0b945dcb2ea67e avahi: do not install S05avahi-setup.sh in systemd setup
-> 6c947771424b139199fc56bb7fff47755a17c6a9 avahi: remove useless 'mkdir -p' in AVAHI_INSTALL_INIT_SYSTEMD
-> d2fd9ef86ee096784c9b326004ba928a16d035ae avahi: fix indentation in AVAHI_INSTALL_INIT_SYSTEMD
->
-> In the last commit (first in the list), I raise the following question:
->
->     Note: in a systemd configuration, there is no provision to do what
->     S05avahi-setup.sh is doing for sysv init configurations. Maybe this is
->     something that our systemd people should have a look at.
->
-> Someone to look into this?
-It's already done, look at the avahi_tmpfiles.conf, it's made
-explicitly for that.
-Note that others daemon could benefit for it, like dropbear, I might
-have some patch about that somewhere.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thanks to Romain Naour, Baruch Siach and Thomas Petazzoni, I've
+solved the build issues in certain cases for bandwidthd.
+
+The issue was that libpcap and libpng would depend on other libraries
+and upon testing for pcap/libpng the tests would fail due to not
+being able to find the other libraries.
+
+Bandwidthd's configure script now uses pkg-config for libpng
+and pcap-config for libpcap. pcap-config's path is specified
+in configure's arguments.
+
+Some other tweaks have been made including the layout and flow
+of configure.ac is a bit more logical, and the handling of postgres
+and sqlite has been tweaked. Finally, the test for X.Org has been
+removed.
+
+[Thomas: re-add Nathaniel SoB line, which was misplaced in the commit
+log, and therefore dropped when applying the patch.]
+
+Fixes: http://autobuild.buildroot.org/results/eb4/eb48acec37a7fd1714b267b105816bf0053d40e9/build-end.log
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bandwidthd/bandwidthd.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+index 7a2975f..ca991f9 100644
+--- a/package/bandwidthd/bandwidthd.mk
++++ b/package/bandwidthd/bandwidthd.mk
+@@ -4,18 +4,18 @@
+ #
+ ################################################################################
+ 
+-BANDWIDTHD_VERSION = v2.0.1-auto-r08
++BANDWIDTHD_VERSION = v2.0.1-auto-r11
+ BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
+ 
+ # Specified as "any version of the GPL that is current as of your
+ # download" by upstream.
+ BANDWIDTHD_LICENSE = GPL
+ 
+-BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
++BANDWIDTHD_DEPENDENCIES = gd libpng libpcap host-pkgconf
+ 
+ BANDWIDTHD_AUTORECONF = YES
+ 
+-BANDWIDTHD_CONF_OPTS += --without-x
++BANDWIDTHD_CONF_OPTS += --with-pcap-config=$(STAGING_DIR)/usr/bin/pcap-config
+ 
+ ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
+ BANDWIDTHD_DEPENDENCIES += postgresql
