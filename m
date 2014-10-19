@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 19:24:33 +0200
-Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: add hash
-In-Reply-To: <1413284160-20587-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1413284160-20587-1-git-send-email-gustavo@zacarias.com.ar>
- <1413284160-20587-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019192433.19c1e3f7@free-electrons.com>
+Date: Sun, 19 Oct 2014 19:25:08 +0200
+Subject: [Buildroot] [git commit] pppd: add hash file
+Message-ID: <20141019172550.8CA2CAFD63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=e106030afb293786ef265df6f87e1405b1d3ca5e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Oct 2014 07:56:00 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/wpa_supplicant/wpa_supplicant.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/wpa_supplicant/wpa_supplicant.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pppd/pppd.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
+new file mode 100644
+index 0000000..2bc248d
+--- /dev/null
++++ b/package/pppd/pppd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	02e0a3dd3e4799e33103f70ec7df75348c8540966ee7c948e4ed8a42bbccfb30	ppp-2.4.7.tar.gz
