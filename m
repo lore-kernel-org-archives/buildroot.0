@@ -1,66 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Oct 2014 22:48:01 +0200
-Subject: [Buildroot] [PATCH v2] libevent: Use github call & fix patch
-In-Reply-To: <1413135162-16654-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413135162-16654-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <54442381.3070502@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 22:49:55 +0200
+Subject: [Buildroot] [PATCH 2/2] package/liblog4c-localtime: Fix build
+ with BR2_ENABLE_DEBUG=yes
+In-Reply-To: <1413748165-2732-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1413748165-2732-1-git-send-email-bernd.kuhls@t-online.de>
+ <1413748165-2732-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141019224955.172648e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/10/14 19:32, Maxime Hadjinlian wrote:
-> We want to uses the github helper since we download a generated tarball
-> from the tag anyway.
-> 
-> We also need to uses AUTORECONF as theses releases don't contains
-> 'configure' and such.
-> 
-> The patchs that was already present is updated to apply against
-> Makefile.am instead of Makefile.in
-> 
-> The seconds patchs is backported from upstream to remove the usage of
-> $(top_src_dirs) which makes current autotools error.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v1 -> v2:
->    - Fix the added patches so they have correct SoB (Thomas Petazzoni)
->    - Add SoB (Thomas Petazzoni)
->    - Add comment for autoreconf (Yann E. Morin)
-[snip]
->  LIBEVENT_VERSION = 2.0.21
-> -LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
-> -LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
-> +LIBEVENT_SITE = $(call github,libevent,libevent,release-$(LIBEVENT_VERSION)-stable)
+Dear Bernd Kuhls,
 
- Like the addition to the manual that you created a few days ago points out:
-this is wrong, because you're replacing a release tarball with a git tag...
+On Sun, 19 Oct 2014 21:49:25 +0200, Bernd Kuhls wrote:
 
->  LIBEVENT_INSTALL_STAGING = YES
->  LIBEVENT_LICENSE = BSD-3c, OpenBSD
->  LIBEVENT_LICENSE_FILES = LICENSE
-> +# Straight from the repository, need to generate autotools files
-> +LIBEVENT_AUTORECONF = YES
+> diff --git a/package/liblog4c-localtime/liblog4c-0003-debug.patch b/package/liblog4c-localtime/liblog4c-0003-debug.patch
+> new file mode 100644
+> index 0000000..80b00cf
+> --- /dev/null
+> +++ b/package/liblog4c-localtime/liblog4c-0003-debug.patch
+> @@ -0,0 +1,37 @@
+> +Fix build with BR2_ENABLE_DEBUG=yes
+> +
+> +Fixes
+> +init.c:39:20: fatal error: mcheck.h: No such file or directory
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-... which would also make this redundant. And probably the patch changes as
-well. So perhaps this one should be rejected.
+Same comment as for the other package: using
+AC_CHECK_HEADER([mcheck.h]) and then HAVE_MCHECK_H is a much better
+solution.
 
+Do you think you can push upstream this patch as well as the other
+patches that we have?
 
- Regards,
- Arnout
+Thanks,
 
->  
->  define LIBEVENT_REMOVE_PYSCRIPT
->  	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
