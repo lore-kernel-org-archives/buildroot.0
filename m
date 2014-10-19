@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 17:35:48 +0200
-Subject: [Buildroot] [git commit] cifs-utils: add hash
-Message-ID: <20141019153637.95336AF9BF@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 17:36:05 +0200
+Subject: [Buildroot] [git commit] bridge-utils: add hash file
+Message-ID: <20141019153637.AE4D0AFC93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=696d63b461e968a30ffcf3763fcd4b6634cfdeb7
+commit: http://git.buildroot.net/buildroot/commit/?id=f306e8781c0127823350d69e200e327b10562011
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cifs-utils/cifs-utils.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/bridge-utils/bridge-utils.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
 new file mode 100644
-index 0000000..9255179
+index 0000000..c85fd04
 --- /dev/null
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	38fc63926af435dae4ebcf4406275580a692d9fb9ee3e32170317cf2ba68e6e3	cifs-utils-6.4.tar.bz2
++++ b/package/bridge-utils/bridge-utils.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/bridge/files/bridge/
++md5	ec7b381160b340648dede58c31bb2238	bridge-utils-1.5.tar.gz
++sha1	19d2a58cd3a70f971aa931b40256174a847e60d6	bridge-utils-1.5.tar.gz
