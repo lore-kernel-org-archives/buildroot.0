@@ -1,53 +1,44 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun, 19 Oct 2014 17:59:20 +0800
-Subject: [Buildroot] [PATCH 1/1] bandwidthd: Version bump to handle
- indirect deps properly
-In-Reply-To: <20141019094144.GL4072@free.fr>
-References: <1413708943-13566-1-git-send-email-nroach44@gmail.com>
- <20141019094144.GL4072@free.fr>
-Message-ID: <54438B78.1070805@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 12:07:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] fs/iso9660: add dependencies for
+ make source
+In-Reply-To: <1413656639-3314-1-git-send-email-kaszak@gmail.com>
+References: <1413656639-3314-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20141019120708.6c44ece6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/14 17:41, Yann E. MORIN wrote:
-> Nathaniel, All,
-> 
-> On 2014-10-19 16:55 +0800, Nathaniel Roach spake thusly:
->> Thanks to Romain Naor, Baruch Siach and Thomas Petazzoni, I've
-> 
-> Romain Naour, I believe... ;-)
+Dear Karoly Kasza,
 
-Damn it...
+On Sat, 18 Oct 2014 20:23:59 +0200, Karoly Kasza wrote:
+> The "iso image" rootfs target is a special one, as it does not use the
+> ROOTFS_TARGET infrastructure. The absence of ROOTFS_*_DEPENDENCIES
+> variable makes "make source" to skip this target's dependencies
+> (namely host-cdrkit and it's children) obstructing an offline build.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 
-> 
->> solved the build issues in certain cases for bandwidthd.
->>
->> The issue was that libpcap and libpng would depend on other libraries
->> and upon testing for pcap/libpng the tests would fail due to not
->> being able to find the other libraries.
->>
->> Bandwidthd's configure script now uses pkg-config for libpng
->> and pcap-config for libpcap. pcap-config's path is specified
->> in configure's arguments.
->>
->> Some other tweaks have been made including the layout and flow
->> of configure.ac is a bit more logical, and the handling of postgres
->> and sqlite has been tweaked. Finally, the test for X.Org has been
->> removed.
->>
->> Fixes: http://autobuild.buildroot.org/results/eb4/eb48acec37a7fd1714b267b105816bf0053d40e9/build-end.log
->> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-> 
-> Usually, when some people helped with the patch, it is customary (but
-> not mandatory) to add them in Cc: lines below the SoB line. ;-)
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Thanks applied. Two notes:
 
-I'll send a fixed one through shortly.
+ * I've added a rootfs-iso9660-show-depends target, otherwise 'make
+   graph-depends' was failing when iso9660 was selected.
+
+ * The solution you've used, to add the ROOTFS_ISO9660_DEPENDENCIES
+   really only works because of the way the main Makefile gets the
+   dependencies for host packages. But as we've discussed in a separate
+   way, this mechanism is broken, and should be replaced by a
+   mechanism that relies on the package infrastructure. And when that
+   will be done, iso9660 will break again. We should probably at some
+   point figure out a way of getting the iso9660 support properly
+   integrated as a normal filesystem type.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
