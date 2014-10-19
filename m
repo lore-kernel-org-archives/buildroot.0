@@ -1,90 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 13:13:57 +0200
-Subject: [Buildroot] [git commit] avahi: do not install S05avahi-setup.sh in
-	systemd setup
-Message-ID: <20141019111437.B8104AF20E@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 12:45:32 +0200
+Subject: [Buildroot] [git commit] package/avahi: use upstream-provided
+	systemd files
+Message-ID: <20141019111437.99C7AAF1F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b4ec0c6a82fc853b00b2a720d0b945dcb2ea67e
+commit: http://git.buildroot.net/buildroot/commit/?id=9b41c827a25de45f69cf302914d4c39b5e2ce7a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The AVAHI_INSTALL_AUTOIPD was unconditionally installing
-S05avahi-setup.sh to /etc/init.d/, even in systemd
-configurations. Therefore, this commit:
+When using the buildroot-provided avahi-daemon.service file, bootup never
+finishes, because multi-user.target is waiting for avahi-daemon to exit,
+which is caused by "Type=oneshot" (in avahi-daemon.service).
 
- * Moves the installation of S05avahi-setup.sh to a separate variable
-   called AVAHI_INSTALL_AUTOIPD_INIT_SYSV.
+Upstream's systemd files get already installed to /lib/systemd.
+They're not an exact copy of S50avahi-daemon, but work flawlessly,
+so use these units:
 
- * Makes sure to use 'install -D' and a full destination path when
-   installing S05avahi-setup.sh.
+* avahi-daemon.service, auto-enabled (ln -fs in AVAHI_INSTALL_INIT_SYSTEMD)
+* avahi-daemon.socket,
+  not auto-enabled, but a dependency of avahi-daemon.service
+* avahi-dnsconfd.service, auto-enabled
 
- * Moves the definition of AVAHI_INSTALL_AUTOIPD inside the
-   BR2_PACKAGE_AVAHI_AUTOIPD conditional, so that both the variable
-   definition and its addition to AVAHI_POST_INSTALL_TARGET_HOOKS are
-   enclosed in the conditional.
+[Thomas: use simpler absolute paths for the symbolic links instead of
+relative paths. Suggested by Maxime Hadjinlian.]
 
- * Moves the S50avahi-daemon installation from AVAHI_INSTALL_INIT_SYSV
-   to AVAHI_INSTALL_DAEMON_INIT_SYSV.
-
- * Uses 'install -D' to install S50avahi-daemon.
-
- * Adds a AVAHI_INSTALL_INIT_SYSV definition which calls both
-   AVAHI_INSTALL_AUTOIPD_INIT_SYSV and AVAHI_INSTALL_DAEMON_INIT_SYSV.
-
-Note: in a systemd configuration, there is no provision to do what
-S05avahi-setup.sh is doing for sysv init configurations. Maybe this is
-something that our systemd people should have a look at.
-
+Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/avahi/avahi.mk |   16 ++++++++++++----
- 1 files changed, 12 insertions(+), 4 deletions(-)
+ package/avahi/avahi-daemon.service |   15 ---------------
+ package/avahi/avahi.mk             |    8 ++++----
+ 2 files changed, 4 insertions(+), 19 deletions(-)
 
+diff --git a/package/avahi/avahi-daemon.service b/package/avahi/avahi-daemon.service
+deleted file mode 100644
+index c9b7b1f..0000000
+--- a/package/avahi/avahi-daemon.service
++++ /dev/null
+@@ -1,15 +0,0 @@
+-[Unit]
+-Description=Avahi daemon
+-Requires=dbus.target
+-After=syslog.target network.target auditd.service
+-
+-[Service]
+-Type=oneshot
+-RemainAfterExit=ye
+-ExecStart=/usr/sbin/avahi-daemon -s
+-ExecReload=/usr/sbin/avahi-daemon -r
+-ExecStop=/usr/sbin/avahi-daemon -k
+-Restart=restart-always
+-
+-[Install]
+-WantedBy=multi-user.target
 diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b684ab7..3b9ac63 100644
+index 93d093c..3508002 100644
 --- a/package/avahi/avahi.mk
 +++ b/package/avahi/avahi.mk
-@@ -150,14 +150,17 @@ endef
+@@ -164,14 +164,14 @@ endif
+ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
  
- AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_INITSCRIPT
+ define AVAHI_INSTALL_INIT_SYSTEMD
+-  $(INSTALL) -D -m 644 package/avahi/avahi-daemon.service \
+-    $(TARGET_DIR)/etc/systemd/system/avahi-daemon.service
+-
+   mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
  
-+ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
- define AVAHI_INSTALL_AUTOIPD
--	$(INSTALL) -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/
- 	rm -f $(TARGET_DIR)/var/lib/avahi-autoipd
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/lib
- 	ln -sf /tmp/avahi-autoipd $(TARGET_DIR)/var/lib/avahi-autoipd
- endef
+-  ln -fs ../avahi-daemon.service \
++  ln -fs /lib/systemd/system/avahi-daemon.service \
+     $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
  
--ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
-+define AVAHI_INSTALL_AUTOIPD_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/S05avahi-setup.sh
-+endef
++  ln -fs /lib/systemd/system/avahi-dnsconfd.service \
++    $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
 +
- AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_AUTOIPD
- endif
+   mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
  
-@@ -176,12 +179,17 @@ define AVAHI_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/tmpfiles.d/avahi.conf
- endef
- 
--define AVAHI_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/
-+define AVAHI_INSTALL_DAEMON_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/S50avahi-daemon
- endef
- 
- endif
- 
-+define AVAHI_INSTALL_INIT_SYSV
-+	$(AVAHI_INSTALL_AUTOIPD_INIT_SYSV)
-+	$(AVAHI_INSTALL_DAEMON_INIT_SYSV)
-+endef
-+
- # applications expects to be able to #include <dns_sd.h>
- define AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
- 	ln -sf avahi-compat-libdns_sd/dns_sd.h \
+   $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
