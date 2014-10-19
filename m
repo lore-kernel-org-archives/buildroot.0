@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:08:01 +0200
-Subject: [Buildroot] [PATCH 27/31] arch/powerpc: get rid of
-	BR2_GCC_TARGET_TUNE
+Date: Sun, 19 Oct 2014 22:08:02 +0200
+Subject: [Buildroot] [PATCH 28/31] arch/m68k: get rid of BR2_GCC_TARGET_TUNE
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-28-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-29-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the gcc documentation for PowerPC options:
-
-'-mtune=CPU_TYPE'
-     Set the instruction scheduling parameters for machine type
-     CPU_TYPE, but do not set the architecture type, register usage, or
-     choice of mnemonics, as '-mcpu=CPU_TYPE' would.  The same values
-     for CPU_TYPE are used for '-mtune' as for '-mcpu'.  If both are
-     specified, the code generated will use the architecture, registers,
-     and mnemonics set by '-mcpu', but the scheduling parameters set by
-     '-mtune'.
-
-In the case of Buildroot where we only target a specific system, using
--mtune therefore doesn't make much sense, and using -mcpu would be
-more appropriate. As a consequence, this patch makes PowerPC use
-BR2_GCC_TARGET_CPU instead of BR2_GCC_TARGET_TUNE.
+On m68k, we are passing the exact same values of BR2_GCC_TARGET_ARCH
+and BR2_GCC_TARGET_TUNE, which is redundant. Therefore, this commit
+removes the usage of BR2_GCC_TARGET_TUNE on m68k.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.powerpc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.m68k | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 239f5dc..fabee9f 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -160,7 +160,7 @@ config BR2_ENDIAN
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 6b79307..6b868a1 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -7,14 +7,6 @@ config BR2_ENDIAN
  config BR2_ARCH_HAS_ATOMICS
  	default y
  
 -config BR2_GCC_TARGET_TUNE
-+config BR2_GCC_TARGET_CPU
- 	default "401"		if BR2_powerpc_401
- 	default "403"		if BR2_powerpc_403
- 	default "405"		if BR2_powerpc_405
+-	default "68000"		if BR2_m68k_68000
+-	default "68010"		if BR2_m68k_68010
+-	default "68020"		if BR2_m68k_68020
+-	default "68030"		if BR2_m68k_68030
+-	default "68040"		if BR2_m68k_68040
+-	default "68060"		if BR2_m68k_68060
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "68000"		if BR2_m68k_68000
+ 	default "68010"		if BR2_m68k_68010
 -- 
 2.0.0
