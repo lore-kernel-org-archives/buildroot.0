@@ -1,38 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 18:54:29 +0200
-Subject: [Buildroot] [RFC/PATCH v4 05/12] xbmc-pvr-addons: Bump version for
-	Helix-compatibility
-In-Reply-To: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413737676-25455-6-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Oct 2014 19:05:56 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.7
+Message-ID: <20141019170631.3F7CDAF5BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=76b55eae7ff5903a12495b5e8dd1d53d207bab7c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also add hash file.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/sqlite/sqlite.hash |    2 ++
+ package/sqlite/sqlite.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index 4410153..748cc75 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+new file mode 100644
+index 0000000..e2a0f91
+--- /dev/null
++++ b/package/sqlite/sqlite.hash
+@@ -0,0 +1,2 @@
++# From http://www.sqlite.org/download.html
++sha1	8b773b006db46f3ffcbabe065e927823d13bf5c0	sqlite-autoconf-3080700.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index e579ae8..19bde83 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'gotham'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
-+# This cset is on the branch 'master'
-+# When Kodi is released, then this should be updated to the corresponding branch
-+XBMC_PVR_ADDONS_VERSION = 79ca634891d09b5bb6cf4256389dc681a1041903
- XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
- XBMC_PVR_ADDONS_LICENSE = GPLv3+
- XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
--- 
-1.7.10.4
+-SQLITE_VERSION = 3080600
++SQLITE_VERSION = 3080700
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2014
+ SQLITE_LICENSE = Public domain
