@@ -1,59 +1,213 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 12:13:06 +0200
-Subject: [Buildroot] [PATCH v2 1/2] xlib_libpciaccess: Rename package to
- libpciaccess
-In-Reply-To: <20141019121141.5098a140@free-electrons.com>
-References: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
- <20141019121141.5098a140@free-electrons.com>
-Message-ID: <20141019121306.1a916f91@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 19 Oct 2014 12:16:29 +0200
+Subject: [Buildroot] [PATCH v3] libevent: Use github call & fix patch
+Message-ID: <1413713789-28767-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+We want to use the github helper since we download a generated tarball
+from the tag anyway.
 
-Of course, I applied version 3, not version 2. I only replied to the
-version 2 patch by mistake.
+We also need to use AUTORECONF as those releases do not contains
+'configure' and such.
 
-Thomas
+The patch that was already present is updated to apply against
+Makefile.am instead of Makefile.in
 
-On Sun, 19 Oct 2014 12:11:41 +0200, Thomas Petazzoni wrote:
-> Dear Bernd Kuhls,
-> 
-> On Fri, 17 Oct 2014 16:47:36 +0200, Bernd Kuhls wrote:
-> > While libpciaccess is part of the X libraries, it does not
-> > depend upon X11 or any other X library.
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> > v2: fixed stupid typo in package/Config.in
-> 
-> Patch applied. I just have one comment/question below.
-> 
-> > -$(eval $(autotools-package))
-> > diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-> > index e191dce..4b90f3c 100644
-> > --- a/package/x11r7/xserver_xorg-server/Config.in
-> > +++ b/package/x11r7/xserver_xorg-server/Config.in
-> > @@ -4,12 +4,12 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
-> >  	# We need a SHA1 implementation. If either openssl or
-> >  	# libgcrypt are already part of the build, we'll use one of
-> >  	# them, otherwise, use the small libsha1 library.
-> > +	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
-> 
-> I know it's not a change you've made, but why do we need libpciaccess
-> whenever the X.org modular server is enabled? I can imagine using the
-> X.org modular server on ARM platforms that don't have any PCI hardware.
-> 
-> Thanks,
-> 
-> Thomas
+The second patch is backported from upstream to remove the use of
+$(top_src_dirs) which makes current autotools error out.
 
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v2 -> v3:
+   - Fix grammar in commit log (Yann E. Morin)
+   - Change version to reflect the whole tag name (Yann E. Morin)
+v1 -> v2:
+   - Fix the added patches so they have correct SoB (Thomas Petazzoni)
+   - Add SoB (Thomas Petazzoni)
+   - Add comment for autoreconf (Yann E. Morin)
+---
+ .../0001-Disable-building-test-programs.patch      | 30 +++++++++
+ .../0002-Avoid-using-top_srcdir-in-TESTS.patch     | 71 ++++++++++++++++++++++
+ .../libevent-disable-building-test-programs.patch  | 30 ---------
+ package/libevent/libevent.mk                       |  7 ++-
+ 4 files changed, 105 insertions(+), 33 deletions(-)
+ create mode 100644 package/libevent/0001-Disable-building-test-programs.patch
+ create mode 100644 package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
+ delete mode 100644 package/libevent/libevent-disable-building-test-programs.patch
 
-
+diff --git a/package/libevent/0001-Disable-building-test-programs.patch b/package/libevent/0001-Disable-building-test-programs.patch
+new file mode 100644
+index 0000000..eb1acfd
+--- /dev/null
++++ b/package/libevent/0001-Disable-building-test-programs.patch
+@@ -0,0 +1,30 @@
++From 4b5a135fa681e85eb6988a379f59f3c7a41cc48c Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Fri, 21 Jun 2013 15:25:11 -0700
++Subject: [PATCH 1/2] Disable building test programs
++
++We are not really interested in building test programs.
++Moreover, these programs use fork() function that is
++not available on MMU-less architectures.
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 42879a3..dc90359 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -126,7 +126,7 @@ else
++ noinst_LTLIBRARIES =  $(LIBEVENT_LIBS_LA)
++ endif
++ 
++-SUBDIRS = . include sample test
+++SUBDIRS = . include sample
++ 
++ if BUILD_WIN32
++ 
++-- 
++2.1.1
++
+diff --git a/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch b/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
+new file mode 100644
+index 0000000..54f03cc
+--- /dev/null
++++ b/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
+@@ -0,0 +1,71 @@
++From 366165fc19e862d08ff51ee2bbbff253fc234dd1 Mon Sep 17 00:00:00 2001
++From: Nick Mathewson <nickm@torproject.org>
++Date: Fri, 8 Feb 2013 22:10:05 -0500
++Subject: [PATCH 2/2] Avoid using $(top_srcdir) in TESTS.
++
++Newer automakes don't like this.
++
++Signed-off-by: Nick Mathewson <nickm@torproject.org>
++----
++Patch backported from upstream:
++https://github.com/libevent/libevent/commit/2863c837007c9f28ae542663a6098c91e704b3ca.patch
++
++Slight modifications to test/Makefile.am
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++---
++ Makefile.am      |  4 +++-
++ test/Makefile.am | 10 +++++++++-
++ 2 files changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index dc90359..c34576d 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -128,6 +128,8 @@ endif
++ 
++ SUBDIRS = . include sample
++ 
+++DISTCLEANFILES=
+++
++ if BUILD_WIN32
++ 
++ SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
++@@ -239,5 +241,5 @@ doxygen: FORCE
++ 	doxygen $(srcdir)/Doxyfile
++ FORCE:
++ 
++-DISTCLEANFILES = *~ libevent.pc ./include/event2/event-config.h
+++DISTCLEANFILES += *~ libevent.pc ./include/event2/event-config.h
++ 
++diff --git a/test/Makefile.am b/test/Makefile.am
++index b10c41a..e2f4f4e 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -5,6 +5,7 @@
++ # See LICENSE for copying information.
++ 
++ AUTOMAKE_OPTIONS = foreign
+++DISTCLEANFILES=
++ 
++ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/compat -I$(top_srcdir)/include -I../include -DTINYTEST_LOCAL
++ 
++@@ -19,7 +20,14 @@ endif
++ EXTRA_PROGRAMS = regress
++ noinst_HEADERS = tinytest.h tinytest_macros.h regress.h tinytest_local.h
++ 
++-TESTS = $(top_srcdir)/test/test.sh
+++# We need to copy this file, since automake doesn't want us to use top_srcdir
+++# in TESTS.
+++TESTS = test/test-script.sh
+++
+++test/test-script.sh: test/test.sh
+++ cp $< $@
+++
+++DISTCLEANFILES += test/test-script.s
++ 
++ BUILT_SOURCES =
++ if BUILD_REGRESS
++-- 
++2.1.1
++
+diff --git a/package/libevent/libevent-disable-building-test-programs.patch b/package/libevent/libevent-disable-building-test-programs.patch
+deleted file mode 100644
+index 4b0f0d9..0000000
+--- a/package/libevent/libevent-disable-building-test-programs.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e932c8864e1bb8b6a7901d4b049a1100c4becba5 Mon Sep 17 00:00:00 2001
+-From: Gilles Talis <gilles.talis@gmail.com>
+-Date: Fri, 21 Jun 2013 15:25:11 -0700
+-Subject: [PATCH] Disable building test programs
+-
+-We are not really interested in building test programs.
+-Moreover, these programs use fork() function that is
+-not available on MMU-less architectures.
+-
+-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+----
+- Makefile.in |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 2ebefa2..4fba1ff 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -487,7 +487,7 @@ LIBEVENT_LIBS_LA = libevent.la libevent_core.la libevent_extra.la \
+- @INSTALL_LIBEVENT_TRUE at lib_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
+- @INSTALL_LIBEVENT_TRUE at pkgconfig_DATA = $(LIBEVENT_PKGCONFIG)
+- @INSTALL_LIBEVENT_FALSE at noinst_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
+--SUBDIRS = . include sample test
+-+SUBDIRS = . include sample
+- @BUILD_WIN32_FALSE at SYS_LIBS = 
+- @BUILD_WIN32_TRUE at SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
+- @BUILD_WIN32_FALSE at SYS_SRC = $(am__append_5) $(am__append_6) \
+--- 
+-1.7.4.1
+-
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 73be502..607b7b2 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION = 2.0.21
+-LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+-LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
++LIBEVENT_VERSION = release-2.0.21-stable
++LIBEVENT_SITE = $(call github,libevent,libevent,$(LIBEVENT_VERSION))
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3c, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
++# Straight from the repository, need to generate autotools files
++LIBEVENT_AUTORECONF = YES
+ 
+ define LIBEVENT_REMOVE_PYSCRIPT
+ 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
