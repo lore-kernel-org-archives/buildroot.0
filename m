@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:50 +0200
-Subject: [Buildroot] [PATCH 16/31] webkit: use BR2_ARM_CPU_ARM* options
+Date: Sun, 19 Oct 2014 22:07:55 +0200
+Subject: [Buildroot] [PATCH 21/31] dhcpcd: do not pass --target option
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-22-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The webkit package is not available on ARM < v5, so this commit
-switches to using the newly introduced BR2_ARM_CPU_ARM* options
-instead of per ARM core options.
+dhcpcd is using $(BR2_GCC_TARGET_ARCH) as the value of its --target
+option. However, depending on the architecture, this value might be
+empty.
+
+After inspecting the dhcpcd configure script, it turns out that in
+fact the --target option has the following semantic:
+
+  --target=TARGET   configure for building compilers for TARGET [HOST]
+
+So it is very much like the --target option of regular,
+autoconf-based, configure scripts. Since dhcpcd is not a compiler,
+passing --target is pointless. Moreover, as long as --os=linux is
+passed, passing --host or --target is completely ignored by the
+configure script.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dhcpcd/dhcpcd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index d1bc1d5..054b818 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	bool
- 	# ARM needs BLX, so v5t+
- 	default y if (BR2_arm || BR2_armeb) && \
--		!(BR2_arm920t || BR2_arm922t || BR2_fa526)
-+		!BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV4T
- 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
- 		BR2_sparc || BR2_x86_64
- 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index f4b821a..3bb7a13 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -25,7 +25,6 @@ endif
+ define DHCPCD_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 	$(TARGET_CONFIGURE_OPTS) ./configure \
+-		--target=$(BR2_GCC_TARGET_ARCH) \
+ 		--os=linux \
+ 		$(DHCPCD_CONFIG_OPTS) )
+ endef
 -- 
 2.0.0
