@@ -1,37 +1,35 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 19 Oct 2014 20:04:48 +0200
-Subject: [Buildroot] [PATCH 12/15] package/ne10: cleanup configure options
+Date: Sun, 19 Oct 2014 20:04:49 +0200
+Subject: [Buildroot] [PATCH 13/15] package/opencv: cleanup configure options
 In-Reply-To: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
 References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1413741891-30113-13-git-send-email-s.martin49@gmail.com>
+Message-ID: <1413741891-30113-14-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BUILD_SHARED_LIBS is already driven by the cmake-package infrastructure.
+Disabling doc and example build is already done by the cmake-package
+infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/ne10/ne10.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/opencv/opencv.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index cb635e4..49e0704 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -11,11 +11,6 @@ NE10_LICENSE_FILES = doc/LICENSE
- 
- NE10_CONF_OPTS = -DGNULINUX_PLATFORM=ON
- 
--ifeq ($(BR2_PREFER_STATIC_LIB),)
--NE10_CONF_OPTS += \
--	-DNE10_BUILD_SHARED=ON
--endif
--
- # The package does not have any install target, so have to provide
- # INSTALL_STAGING_CMDS and INSTALL_TARGET_CMDS.
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 5fc7387..61f529e 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -13,8 +13,6 @@ OPENCV_LICENSE_FILES = LICENSE
+ # OpenCV component options
+ OPENCV_CONF_OPTS += \
+ 	-DBUILD_WITH_DEBUG_INFO=OFF \
+-	-DBUILD_DOCS=OFF            \
+-	-DBUILD_EXAMPLES=OFF        \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_PERF_TESTS),ON,OFF) \
+ 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_TESTS),ON,OFF)
  
 -- 
 2.1.2
