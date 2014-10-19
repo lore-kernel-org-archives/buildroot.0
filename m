@@ -1,32 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 13:29:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: use upstream-provided
- systemd files
-In-Reply-To: <CAGduivz_LYa13bVhHh_-cUZp=jt+HapK8xq0LQoez-jpjT8e5w@mail.gmail.com>
-References: <1413573042-6638-1-git-send-email-dywi@mailerd.de>
- <20141019131552.239fe12f@free-electrons.com>
- <CAGduivz_LYa13bVhHh_-cUZp=jt+HapK8xq0LQoez-jpjT8e5w@mail.gmail.com>
-Message-ID: <20141019132909.1846f3ef@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Oct 2014 13:31:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/alsa-utils: Switch ALSA_UTILS_SITE
+	to official site
+Message-ID: <1413718314-15535-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
 
-On Sun, 19 Oct 2014 13:22:10 +0200, Maxime Hadjinlian wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/alsa-utils/alsa-utils.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Someone to look into this?
-> It's already done, look at the avahi_tmpfiles.conf, it's made
-> explicitly for that.
-
-Aaah, ok. Not easy to spot when you're not a systemd guy :)
-
-Thanks,
-
-Thomas
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 7079361..5eba337 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -6,7 +6,7 @@
+ 
+ ALSA_UTILS_VERSION = 1.0.28
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+-ALSA_UTILS_SITE = http://alsa.cybermirror.org/utils
++ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPLv2
+ ALSA_UTILS_LICENSE_FILES = COPYING
+ ALSA_UTILS_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
