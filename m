@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 17:36:09 +0200
-Subject: [Buildroot] [git commit] mdadm: add hash file
-Message-ID: <20141019153637.B79B4AFC93@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 17:35:30 +0200
+Subject: [Buildroot] [git commit] pptp-linux: add hash file
+Message-ID: <20141019153637.7CA87AF9BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=957c36438161234d5071c8e500f6c1afb9b9a10f
+commit: http://git.buildroot.net/buildroot/commit/?id=a32fad913853b6952a2ea32be487d3609b2a39af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mdadm/mdadm.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/pptp-linux/pptp-linux.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
 new file mode 100644
-index 0000000..45b79dd
+index 0000000..839d0bf
 --- /dev/null
-+++ b/package/mdadm/mdadm.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
-+sha256	0f3a7e1a76b13892b79f9fceaf99ecb23513260389a768ac644ffa3ae06e5b8c	mdadm-3.3.2.tar.xz
++++ b/package/pptp-linux/pptp-linux.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.8.0/
++md5	4efce9f263e2c3f38d79d9df222476de	pptp-1.8.0.tar.gz
++sha1	6289953812ac986c7234e83aefb10b5e279dc613	pptp-1.8.0.tar.gz
