@@ -1,34 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 19 Oct 2014 20:04:50 +0200
-Subject: [Buildroot] [PATCH 14/15] package/polarssl: cleanup configure
-	options
+Date: Sun, 19 Oct 2014 20:04:51 +0200
+Subject: [Buildroot] [PATCH 15/15] docs/manual: update cmake-package
+	infrastructure section
 In-Reply-To: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
 References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1413741891-30113-15-git-send-email-s.martin49@gmail.com>
+Message-ID: <1413741891-30113-16-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Test build is already disabled by the cmake-package infrastructure.
+This patch documents the CMake options preset by the cmake-package
+infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/polarssl/polarssl.mk | 1 -
- 1 file changed, 1 deletion(-)
+ docs/manual/adding-packages-cmake.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 98dd5bc..21bf160 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -8,7 +8,6 @@ POLARSSL_SITE = https://polarssl.org/code/releases
- POLARSSL_VERSION = 1.2.11
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPTS = \
--	-DBUILD_TESTS=OFF \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index d5a7029..0f36c7d 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -96,6 +96,16 @@ typical packages will therefore only use a few of them.
  
- POLARSSL_INSTALL_STAGING = YES
+ * +LIBFOO_CONF_OPTS+, to specify additional configure options to pass
+   to CMake. By default, empty.
++  A number of common CMake options are set by the +cmake-package+
++  infrastructure; so it should not be necessary to set them in the
++  package's +*.mk+ file unless you want to override them:
++
++** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
++** +CMAKE_INSTALL_PREFIX+;
++** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIBS+;
++** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
++** +BUILD_EXAMPLE+, +BUILD_EXAMPLES+ are disabled;
++** +BUILD_TEST+, +BUILD_TESTS+, +BUILD_TESTING+ are disabled.
+ 
+ * +LIBFOO_MAKE+, to specify an alternate +make+ command. This is
+   typically useful when parallel make is enabled in the configuration
 -- 
 2.1.2
