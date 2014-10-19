@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Oct 2014 00:13:51 +0200
-Subject: [Buildroot] [PATCH 26/31] arch/sparc: get rid of
+Date: Mon, 20 Oct 2014 00:17:14 +0200
+Subject: [Buildroot] [PATCH 27/31] arch/powerpc: get rid of
  BR2_GCC_TARGET_TUNE
-In-Reply-To: <1413749285-1108-27-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1413749285-1108-28-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413749285-1108-27-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141019221351.GG12247@free.fr>
+ <1413749285-1108-28-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141019221714.GH12247@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,11 +15,21 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-10-19 22:08 +0200, Thomas Petazzoni spake thusly:
-> On SPARC, BR2_GCC_TARGET_TUNE was only used for one specific case, the
-> BR2_sparc_v8. There is actually no reason to not use
-> BR2_GCC_TARGET_CPU instead for this, as all values supported for
-> -mtune are also supported for -mcpu. Therefore, the only
-> BR2_GCC_TARGET_TUNE case is moved as a BR2_GCC_TARGET_CPU case.
+> According to the gcc documentation for PowerPC options:
+> 
+> '-mtune=CPU_TYPE'
+>      Set the instruction scheduling parameters for machine type
+>      CPU_TYPE, but do not set the architecture type, register usage, or
+>      choice of mnemonics, as '-mcpu=CPU_TYPE' would.  The same values
+>      for CPU_TYPE are used for '-mtune' as for '-mcpu'.  If both are
+>      specified, the code generated will use the architecture, registers,
+>      and mnemonics set by '-mcpu', but the scheduling parameters set by
+>      '-mtune'.
+> 
+> In the case of Buildroot where we only target a specific system, using
+> -mtune therefore doesn't make much sense, and using -mcpu would be
+> more appropriate. As a consequence, this patch makes PowerPC use
+> BR2_GCC_TARGET_CPU instead of BR2_GCC_TARGET_TUNE.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
@@ -29,25 +39,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  arch/Config.in.sparc | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  arch/Config.in.powerpc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-> index 657c825..19907b9 100644
-> --- a/arch/Config.in.sparc
-> +++ b/arch/Config.in.sparc
-> @@ -26,10 +26,8 @@ config BR2_ENDIAN
+> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+> index 239f5dc..fabee9f 100644
+> --- a/arch/Config.in.powerpc
+> +++ b/arch/Config.in.powerpc
+> @@ -160,7 +160,7 @@ config BR2_ENDIAN
 >  config BR2_ARCH_HAS_ATOMICS
 >  	default y
 >  
 > -config BR2_GCC_TARGET_TUNE
-> -	default "v8"		if BR2_sparc_v8
-> -
->  config BR2_GCC_TARGET_CPU
-> +	default "v8"		if BR2_sparc_v8
->  	default "sparchfleon"	if BR2_sparc_sparchfleon
->  	default "sparchfleonv8"	if BR2_sparc_sparchfleonv8
->  	default "sparcsfleon"	if BR2_sparc_sparcsfleon
+> +config BR2_GCC_TARGET_CPU
+>  	default "401"		if BR2_powerpc_401
+>  	default "403"		if BR2_powerpc_403
+>  	default "405"		if BR2_powerpc_405
 > -- 
 > 2.0.0
 > 
