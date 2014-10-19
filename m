@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 11:11:54 +0200
-Subject: [Buildroot] [PATCH v2] modplugtools: Added package
-In-Reply-To: <108749465.hOBsSJgTxk@hyperion>
-References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
- <1413662640-16030-1-git-send-email-maarten@treewalker.org>
- <20141018215748.GF31723@free.fr> <108749465.hOBsSJgTxk@hyperion>
-Message-ID: <20141019091154.GI4072@free.fr>
+Date: Sun, 19 Oct 2014 11:25:24 +0200
+Subject: [Buildroot] [PATCH v3] modplugtools: Added package
+In-Reply-To: <1413676846-23424-1-git-send-email-maarten@treewalker.org>
+References: <1413662640-16030-1-git-send-email-maarten@treewalker.org>
+ <1413676846-23424-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20141019092524.GJ4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +13,72 @@ To: buildroot@busybox.net
 
 Maarten, All,
 
-On 2014-10-19 01:28 +0200, Maarten ter Huurne spake thusly:
-> On Saturday 18 October 2014 23:57:48 Yann E. MORIN wrote:
-> > On 2014-10-18 22:04 +0200, Maarten ter Huurne spake thusly:
-> > > diff --git a/package/modplugtools/Config.in
-> > > b/package/modplugtools/Config.in new file mode 100644
-> > > index 0000000..20009b6
-> > > --- /dev/null
-> > > +++ b/package/modplugtools/Config.in
-> > > @@ -0,0 +1,9 @@
-> > > +config BR2_PACKAGE_MODPLUGTOOLS
-> > > +	bool "modplugtools"
-> > > +	select BR2_PACKAGE_LIBAO
-> > > +	select BR2_PACKAGE_LIBMODPLUG
-> > 
-> > modplugtools should inherit the dependencies from libmodplug, namely
-> > C++:
-> > 
-> >     config BR2_PACKAGE_MODPLUGTOOLS
-> >         bool "modplugtools"
-> >         depends on BR2_INSTALL_LIBSTDCPP # libmodplug
-> >         select BR2_PACKAGE_LIBMODPLUG
-> >         select BR2_PACKAGE_LIBAO
+On 2014-10-19 02:00 +0200, Maarten ter Huurne spake thusly:
+> This installs the 'modplug123' command line tool to play tracker music
+> files (MOD, S3M, XM etc.) using libmodplug.
 > 
-> Hmm, I didn't expect to have to propagate dependencies manually.
+> The modplugtools package can build two players: modplugplay that plays
+> directly via OSS and modplug123 that plays via libao. Since modplugplay
+> won't work without OSS support and modern kernels are likely to have no
+> OSS or OSS emulation, we build only modplug123.
+> 
+> If you have a system without ALSA support for some reason, you can
+> still use modplug123 to play over OSS via libao.
+> 
+> http://modplug-xmms.sourceforge.net/
+> 
+> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
 
-Yes, see chapter 16.2.1, 'Choosing depends on or select' in the manual:
-    http://buildroot.net/downloads/manual/manual.html#_literal_config_in_literal_file
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Quoting:
-    Note. The current problem with the kconfig language is that these
-    two dependency semantics are not internally linked. Therefore, it may be
-    possible to select a package, whom one of its dependencies/requirement
-    is not met.
+See below...
 
-> On the 
-> other hand, if Kconfig tried to do this automatically, including supporting 
-> conditional dependencies, it might end up as a full Prolog interpreter. ;)
+[--SNIP--]
+> diff --git a/package/modplugtools/modplugtools.mk b/package/modplugtools/modplugtools.mk
+> new file mode 100644
+> index 0000000..e8d73af
+> --- /dev/null
+> +++ b/package/modplugtools/modplugtools.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# modplugtools
+> +#
+> +################################################################################
+> +
+> +MODPLUGTOOLS_VERSION = 0.5.3
+> +MODPLUGTOOLS_SITE = http://downloads.sourceforge.net/project/modplug-xmms/modplug-tools
+> +MODPLUGTOOLS_LICENSE = GPLv3
+> +MODPLUGTOOLS_LICENSE_FILES = COPYING
 
-He! :-)
+This is indeed GPLv3 and no 'or later'.
+
+To be noted: their upstream repo is weird. They do have a COPYING file
+in their git tree, but it is a simlink to /usr/share/automake-1.11/COPYING.
+In the archive, it is a real file (not a symlink) with the text of the
+GPLv3, and the source files have no 'or later' indication.
+
+So the license is dependant on the host system of the person doing the
+release tarball. Sigh... :-(
+
+I'll report the issue upstream.
 
 Regards,
 Yann E. MORIN.
+
+> +
+> +MODPLUGTOOLS_DEPENDENCIES = libao libmodplug
+> +
+> +# Only build the 'mp123' subdir, which contains 'modplug123' that plays through
+> +# various backends via libao. This excludes the 'mpplay' subdir, which contains
+> +# 'modplugplay' that can play only through the deprecated OSS interface.
+> +MODPLUGTOOLS_MAKE_OPTS = SUBDIRS=mp123
+> +MODPLUGTOOLS_INSTALL_TARGET_OPTS = SUBDIRS=mp123 DESTDIR=$(TARGET_DIR) install
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.8.4.5
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
