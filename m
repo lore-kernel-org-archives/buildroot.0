@@ -1,69 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 13:22:46 +0200
-Subject: [Buildroot] [git commit] bandwidthd: Version bump to handle
-	indirect deps properly
-Message-ID: <20141019112323.8F848AF2B8@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 13:27:59 +0200
+Subject: [Buildroot] [PATCH v2 1/2] xlib_libpciaccess: Rename package to
+ libpciaccess
+In-Reply-To: <E1XfoKe-0003Xk-Sb@fli4l.lan.fli4l>
+References: <1413557257-25254-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141019121141.5098a140@free-electrons.com>
+ <E1XfoKe-0003Xk-Sb@fli4l.lan.fli4l>
+Message-ID: <20141019132759.16485d9c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa500a49526a0d7e78fa8331b8bfaa4bac68e707
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Thanks to Romain Naour, Baruch Siach and Thomas Petazzoni, I've
-solved the build issues in certain cases for bandwidthd.
+Not sure why you're replying to me with a weird gmane address. I'm
+replying with the Buildroot list Cc'ed instead.
 
-The issue was that libpcap and libpng would depend on other libraries
-and upon testing for pcap/libpng the tests would fail due to not
-being able to find the other libraries.
+On Sun, 19 Oct 2014 13:07:28 +0200, Bernd Kuhls wrote:
 
-Bandwidthd's configure script now uses pkg-config for libpng
-and pcap-config for libpcap. pcap-config's path is specified
-in configure's arguments.
+> > I know it's not a change you've made, but why do we need libpciaccess
+> > whenever the X.org modular server is enabled? I can imagine using the
+> > X.org modular server on ARM platforms that don't have any PCI hardware.
+> 
+> ARM and PCI do not exclude each other, I found this after a short search: 
+> http://www.embeddedarm.com/products/arm-sbc.php#ts-7800-500mhz-series
 
-Some other tweaks have been made including the layout and flow
-of configure.ac is a bit more logical, and the handling of postgres
-and sqlite has been tweaked. Finally, the test for X.Org has been
-removed.
+I certainly now that ARM and PCI do not exclude each other, as I've
+myself written the PCIe support for one ARM platform, and I'm the
+maintainer of it in the Linux kernel:
 
-[Thomas: re-add Nathaniel SoB line, which was misplaced in the commit
-log, and therefore dropped when applying the patch.]
+  http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/MAINTAINERS#n7003
 
-Fixes: http://autobuild.buildroot.org/results/eb4/eb48acec37a7fd1714b267b105816bf0053d40e9/build-end.log
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bandwidthd/bandwidthd.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+But while *some* ARM platforms do have PCI, a number of them don't have
+access to it.
 
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index 7a2975f..ca991f9 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--BANDWIDTHD_VERSION = v2.0.1-auto-r08
-+BANDWIDTHD_VERSION = v2.0.1-auto-r11
- BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
- 
- # Specified as "any version of the GPL that is current as of your
- # download" by upstream.
- BANDWIDTHD_LICENSE = GPL
- 
--BANDWIDTHD_DEPENDENCIES = gd libpng libpcap
-+BANDWIDTHD_DEPENDENCIES = gd libpng libpcap host-pkgconf
- 
- BANDWIDTHD_AUTORECONF = YES
- 
--BANDWIDTHD_CONF_OPTS += --without-x
-+BANDWIDTHD_CONF_OPTS += --with-pcap-config=$(STAGING_DIR)/usr/bin/pcap-config
- 
- ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
- BANDWIDTHD_DEPENDENCIES += postgresql
+> The X.org modular server can be build without libpciaccess in certain 
+> configurations, but it is a hard dependency in other cases, see until line 
+> 1911: http://cgit.freedesktop.org/xorg/xserver/tree/configure.ac#n1906
+> 
+> Since libpciaccess seems not to have any hardware-related dependencies I 
+> would to keep its dependency in xserver_xorg-server for simplicity.
+
+Ok, fair enough, makes sense.
+
+> Btw, how often do the autobuilder build the X.org modular server since
+> BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE is the default value for
+> BR2_PACKAGE_XSERVER_XORG_SERVER?
+
+Basically: never, because choices are not randomized.
+
+However, with the "preseed" stuff that Yann and Arnout have posted, we
+might be able to preseed the random package select with certain
+options, and therefore the autobuild-run script could be improved to
+sometimes select the modular variant of the X.org server. I've added
+Yann and Arnout in Cc so that they can comment on this.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
