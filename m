@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 16:43:33 +0200
-Subject: [Buildroot] [PATCH 02/16] zlib: add hash file
-In-Reply-To: <1413329153-25453-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 19 Oct 2014 16:43:52 +0200
+Subject: [Buildroot] [PATCH 03/16] nettle: add hash file
+In-Reply-To: <1413329153-25453-3-git-send-email-gustavo@zacarias.com.ar>
 References: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
- <1413329153-25453-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019144333.GH4072@free.fr>
+ <1413329153-25453-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141019144352.GI4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,18 +24,18 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/zlib/zlib.hash | 2 ++
+>  package/nettle/nettle.hash | 2 ++
 >  1 file changed, 2 insertions(+)
->  create mode 100644 package/zlib/zlib.hash
+>  create mode 100644 package/nettle/nettle.hash
 > 
-> diff --git a/package/zlib/zlib.hash b/package/zlib/zlib.hash
+> diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
 > new file mode 100644
-> index 0000000..d6382f8
+> index 0000000..34c3862
 > --- /dev/null
-> +++ b/package/zlib/zlib.hash
+> +++ b/package/nettle/nettle.hash
 > @@ -0,0 +1,2 @@
-> +# From http://www.zlib.net/
-> +md5	28f1205d8dd2001f26fec1e8c2cebe37	zlib-1.2.8.tar.xz
+> +# Locally calculated after checking pgp signature
+> +sha256	bc71ebd43435537d767799e414fce88e521b7278d48c860651216e1fc6555b40	nettle-2.7.1.tar.gz
 > -- 
 > 2.0.4
 > 
@@ -57,4 +57,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/849ad74f/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/3bcf5811/attachment.asc>
