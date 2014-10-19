@@ -1,40 +1,30 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 19 Oct 2014 21:44:19 +0200
-Subject: [Buildroot] [PATCHv2 buildroot-test 10/11] autobuild-run: save
- config.log files for failed package
-In-Reply-To: <1413747007-24990-11-git-send-email-patrickdepinguin@gmail.com>
-References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
- <1413747007-24990-11-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAHXCMM+z62GAsyaAmzpv7VpK88+B0A3nVZz64-ggkQOkCufgoA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Oct 2014 21:49:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/liblog4c-localtime: use numbered
+	patches
+Message-ID: <1413748165-2732-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On Sun, Oct 19, 2014 at 9:30 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> This patch will save all config.log files of the failed package in the
-> result tarball, to help problem analysis. This is typically useful for
-> autotools packages, although the added logic does not check that
-> explicitly (i.e. any failing package that has a config.log file in the
-> output directory will see this file saved).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...d-path.patch => liblog4c-0001-localtime-fix-underquoted-path.patch} |    0
+ ...localtime-nothread.patch => liblog4c-0002-localtime-nothread.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/liblog4c-localtime/{liblog4c-localtime-fix-underquoted-path.patch => liblog4c-0001-localtime-fix-underquoted-path.patch} (100%)
+ rename package/liblog4c-localtime/{liblog4c-localtime-nothread.patch => liblog4c-0002-localtime-nothread.patch} (100%)
 
-Could you add the same mechanism for CMakeCache.txt files (which are
-kind of equivalent of config.log, but for CMake-based packages)?
-
->
-> The saving of config.log files happens recursively, the directory
-> structure is preserved in the result directory.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-
-Regards,
-
+diff --git a/package/liblog4c-localtime/liblog4c-localtime-fix-underquoted-path.patch b/package/liblog4c-localtime/liblog4c-0001-localtime-fix-underquoted-path.patch
+similarity index 100%
+rename from package/liblog4c-localtime/liblog4c-localtime-fix-underquoted-path.patch
+rename to package/liblog4c-localtime/liblog4c-0001-localtime-fix-underquoted-path.patch
+diff --git a/package/liblog4c-localtime/liblog4c-localtime-nothread.patch b/package/liblog4c-localtime/liblog4c-0002-localtime-nothread.patch
+similarity index 100%
+rename from package/liblog4c-localtime/liblog4c-localtime-nothread.patch
+rename to package/liblog4c-localtime/liblog4c-0002-localtime-nothread.patch
 -- 
-Samuel
+1.7.10.4
