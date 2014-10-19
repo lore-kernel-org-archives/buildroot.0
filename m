@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:08:03 +0200
-Subject: [Buildroot] [PATCH 29/31] gcc: do not use BR2_GCC_TARGET_TUNE
-	anymore
-In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-30-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 22:10:13 +0200
+Subject: [Buildroot] [PATCH 01/15] package/pkg-cmake.mk: globally
+ disable doc, examples and tests
+In-Reply-To: <1413741891-30113-2-git-send-email-s.martin49@gmail.com>
+References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
+ <1413741891-30113-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20141019221013.090eb47d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the BR2_GCC_TARGET_TUNE value is always empty now, there is no
-longer a point in using it in the gcc package.
+Dear Samuel Martin,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc.mk | 3 ---
- 1 file changed, 3 deletions(-)
+On Sun, 19 Oct 2014 20:04:37 +0200, Samuel Martin wrote:
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 7bed159..f5ec96a 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -174,9 +174,6 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
- endif
--ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
--HOST_GCC_COMMON_CONF_OPTS += --with-tune=$(BR2_GCC_TARGET_TUNE)
--endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
+> +		-DBUILD_DOC=OFF \
+> +		-DBUILD_DOCS=OFF \
+> +		-DBUILD_EXAMPLE=OFF \
+> +		-DBUILD_EXAMPLES=OFF \
+> +		-DBUILD_TEST=OFF \
+> +		-DBUILD_TESTS=OFF \
+
+Are these options standardized by CMake, or are they just "generally"
+used by a number of packages?
+
+If not, I don't see why they should be passed by the
+CMake infrastructure.
+
+Thanks,
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
