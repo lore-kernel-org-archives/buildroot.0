@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 18:54:35 +0200
-Subject: [Buildroot] [RFC/PATCH v4 11/12] package/kodi-audioencoder-vorbis:
-	New package
+Date: Sun, 19 Oct 2014 18:54:36 +0200
+Subject: [Buildroot] [RFC/PATCH v4 12/12] package/kodi-audioencoder-wav: New
+	package
 In-Reply-To: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1413737676-25455-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413737676-25455-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1413737676-25455-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-vorbis/Config.in           |    9 +++++++++
- .../kodi-audioencoder-vorbis.mk                      |   18 ++++++++++++++++++
- package/kodi/Config.in                               |    1 +
- 3 files changed, 28 insertions(+)
- create mode 100644 package/kodi-audioencoder-vorbis/Config.in
- create mode 100644 package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+ package/kodi-audioencoder-wav/Config.in                |    7 +++++++
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk |   15 +++++++++++++++
+ package/kodi/Config.in                                 |    1 +
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/kodi-audioencoder-wav/Config.in
+ create mode 100644 package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
 
-diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
+diff --git a/package/kodi-audioencoder-wav/Config.in b/package/kodi-audioencoder-wav/Config.in
 new file mode 100644
-index 0000000..7a78e35
+index 0000000..d7d6d7d
 --- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
-+	bool "kodi-audioencoder-vorbis"
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
++++ b/package/kodi-audioencoder-wav/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_WAV
++	bool "kodi-audioencoder-wav"
 +	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
 +	help
 +	  An audioencoder addon for XBMC
 +
-+	  https://github.com/xbmc/audioencoder.vorbis
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++	  https://github.com/xbmc/audioencoder.wav
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
 new file mode 100644
-index 0000000..160d909
+index 0000000..954b90f
 --- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -0,0 +1,18 @@
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# kodi-audioencoder-vorbis
++# kodi-audioencoder-wav
 +#
 +################################################################################
 +
-+KODI_AUDIOENCODER_VORBIS_VERSION = a73ef7e2b889d3d60d13175bc4ca44c36546d695
-+KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
-+KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
-+KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis
-+KODI_AUDIOENCODER_VORBIS_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(TARGET_DIR)/usr/lib/xbmc \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBIS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBISENC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++KODI_AUDIOENCODER_WAV_VERSION = b28ab95a89f6b2d7332692d4cf3653731342620f
++KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
++KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
++KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
++KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
++KODI_AUDIOENCODER_WAV_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(TARGET_DIR)/usr/lib/xbmc
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 11b88a5..3111f4e 100644
+index 3111f4e..8f05593 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -246,6 +246,7 @@ comment "Kodi audioencoder addons"
- 
+@@ -247,6 +247,7 @@ comment "Kodi audioencoder addons"
  source "package/kodi-audioencoder-flac/Config.in"
  source "package/kodi-audioencoder-lame/Config.in"
-+source "package/kodi-audioencoder-vorbis/Config.in"
+ source "package/kodi-audioencoder-vorbis/Config.in"
++source "package/kodi-audioencoder-wav/Config.in"
  
  endif # BR2_PACKAGE_KODI_OPTICALDRIVE
  
