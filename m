@@ -1,68 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:57 +0200
-Subject: [Buildroot] [PATCH 23/31] arch/arm: remove BR2_GCC_TARGET_ARCH
-	definitions on ARM
+Date: Sun, 19 Oct 2014 22:07:58 +0200
+Subject: [Buildroot] [PATCH 24/31] ffmpeg: use arch and cpu instead of tune
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-24-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-25-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ARM, we were defining both the CPU type and the architecture
-variant. However, depending on the version of gcc, a given combination
-of (CPU, architecture) may not be the same. Since the architecture
-variant is implied by the CPU type, given the former is not necessary,
-and we can simply specify the latter.
+ffmpeg currently uses BR2_GCC_TARGET_TUNE as the --cpu option
+value. However, there are multiple architectures for which
+BR2_GCC_TARGET_TUNE is not used. After inspecting the ffmpeg configure
+script, we concluded that using the BR2_GCC_TARGET_CPU value if
+available, or the BR2_GCC_TARGET_ARCH value as a fallback was the
+appropriate behavior.
 
-From the gcc documentation:
-
-  This specifies the name of the target ARM processor. GCC uses this
-  name to derive the name of the target ARM architecture (as if
-  specified by -march) and the ARM processor type for which to tune
-  for performance (as if specified by -mtune). Where this option is
-  used in conjunction with -march or -mtune, those options take
-  precedence over the appropriate part of this option.
-
-Note that we verified that for all BR2_GCC_TARGET_ARCH value that
-existed, a proper BR2_GCC_TARGET_CPU value is defined.
+This allows to remove the reference to BR2_GCC_TARGET_TUNE, which is
+one step towards the removal of this option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 19 -------------------
- 1 file changed, 19 deletions(-)
+ package/ffmpeg/ffmpeg.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 96c4bc0..385ce77 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -389,25 +389,6 @@ config BR2_GCC_TARGET_CPU
- 	default "xscale"	if BR2_xscale
- 	default "iwmmxt"	if BR2_iwmmxt
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a3865f3..6c8b899 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -334,6 +334,12 @@ endif
  
--config BR2_GCC_TARGET_ARCH
--	default "armv4t"	if BR2_arm920t
--	default "armv4t"	if BR2_arm922t
--	default "armv5te"	if BR2_arm926t
--	default "armv6j"	if BR2_arm1136jf_s
--	default "armv6zk"	if BR2_arm1176jz_s
--	default "armv6zk"	if BR2_arm1176jzf_s
--	default "armv7-a"	if BR2_cortex_a5
--	default "armv7-a"	if BR2_cortex_a7
--	default "armv7-a"	if BR2_cortex_a8
--	default "armv7-a"	if BR2_cortex_a9
--	default "armv7-a"	if BR2_cortex_a12
--	default "armv7-a"	if BR2_cortex_a15
--	default "armv4"		if BR2_fa526
--	default "armv7-a"	if BR2_pj4
--	default "armv4"		if BR2_strongarm
--	default "armv5te"	if BR2_xscale
--	default "iwmmxt"	if BR2_iwmmxt
--
- config BR2_GCC_TARGET_ABI
- 	default "aapcs-linux"
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
  
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
++FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
++else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH),)
++FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
++endif
++
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ define FFMPEG_CONFIGURE_CMDS
+ 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+@@ -349,7 +355,6 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--target-os="linux" \
+ 		--disable-stripping \
+ 		--pkg-config="$(PKG_CONFIG_HOST_BINARY)" \
+-		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(FFMPEG_CONF_OPTS) \
+ 	)
 -- 
 2.0.0
