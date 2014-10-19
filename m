@@ -1,34 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 13:31:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/alsa-lib: Switch ALSA_LIB_SITE to
-	official site
-In-Reply-To: <1413718314-15535-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413718314-15535-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413718314-15535-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Oct 2014 13:49:47 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libpciaccess: Add optional
+ support for zlib
+In-Reply-To: <1413716896-15085-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1413716896-15085-1-git-send-email-bernd.kuhls@t-online.de>
+ <1413716896-15085-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141019114947.GT4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bernd, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/alsa-lib/alsa-lib.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2014-10-19 13:08 +0200, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 1f2b60c..0b329cd 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -6,7 +6,7 @@
- 
- ALSA_LIB_VERSION = 1.0.28
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
--ALSA_LIB_SITE = http://alsa.cybermirror.org/lib
-+ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+
- ALSA_LIB_LICENSE_FILES = COPYING
- ALSA_LIB_INSTALL_STAGING = YES
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libpciaccess/libpciaccess.mk |    7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
+> index 010707e..f27925d 100644
+> --- a/package/libpciaccess/libpciaccess.mk
+> +++ b/package/libpciaccess/libpciaccess.mk
+> @@ -11,4 +11,11 @@ LIBPCIACCESS_LICENSE = MIT
+>  LIBPCIACCESS_LICENSE_FILES = COPYING
+>  LIBPCIACCESS_INSTALL_STAGING = YES
+>  
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +LIBPCIACCESS_CONF_OPTS += --with-zlib
+> +LIBPCIACCESS_DEPENDENCIES += zlib
+> +else
+> +LIBPCIACCESS_CONF_OPTS += --without-zlib
+> +endif
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
