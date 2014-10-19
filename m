@@ -1,60 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Oct 2014 00:18:54 +0200
-Subject: [Buildroot] [PATCH 29/31] gcc: do not use BR2_GCC_TARGET_TUNE
- anymore
-In-Reply-To: <1413749285-1108-30-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413749285-1108-30-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141019221854.GJ12247@free.fr>
+From: Pedro Aguilar <paguilar@paguilar.org>
+Date: Mon, 20 Oct 2014 00:36:53 +0200
+Subject: [Buildroot] [PATCH 1/1] Add library libunistring that is used for
+	advanced text processing.
+Message-ID: <1413758213-30044-1-git-send-email-paguilar@paguilar.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+---
+ package/Config.in                    |  1 +
+ package/libunistring/Config.in       | 12 ++++++++++++
+ package/libunistring/libunistring.mk | 14 ++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/libunistring/Config.in
+ create mode 100644 package/libunistring/libunistring.mk
 
-On 2014-10-19 22:08 +0200, Thomas Petazzoni spake thusly:
-> Since the BR2_GCC_TARGET_TUNE value is always empty now, there is no
-> longer a point in using it in the gcc package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/gcc/gcc.mk | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 7bed159..f5ec96a 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -174,9 +174,6 @@ endif
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
->  HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
->  endif
-> -ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
-> -HOST_GCC_COMMON_CONF_OPTS += --with-tune=$(BR2_GCC_TARGET_TUNE)
-> -endif
->  ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
->  HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
->  endif
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 89b46dc..5a9c598 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -902,6 +902,7 @@ menu "Other"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/libunistring/Config.in"
+ endmenu
+ 
+ menu "Security"
+diff --git a/package/libunistring/Config.in b/package/libunistring/Config.in
+new file mode 100644
+index 0000000..e0f524b
+--- /dev/null
++++ b/package/libunistring/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBUNISTRING
++	bool "libunistring"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The libunistring library provides functions for manipulating 
++	  Unicode strings and for manipulating C strings according to 
++	  the Unicode standard.
++
++	  http://www.gnu.org/software/libunistring/
++
++comment "libunistring needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+new file mode 100644
+index 0000000..5bf75fe
+--- /dev/null
++++ b/package/libunistring/libunistring.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libunistring
++#
++################################################################################
++
++LIBUNISTRING_VERSION = 0.9.4
++LIBUNISTRING_SOURCE  = libunistring-$(LIBUNISTRING_VERSION).tar.gz
++LIBUNISTRING_SITE    = http://ftp.gnu.org/gnu/libunistring
++LIBUNISTRING_INSTALL_STAGING = YES
++LIBUNISTRING_LICENSE = LGPLv2
++LIBUNISTRING_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
