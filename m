@@ -1,17 +1,17 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 16:41:50 +0200
-Subject: [Buildroot] [PATCH 4/5] gmp: add hash file
-In-Reply-To: <1413284223-20630-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 19 Oct 2014 16:42:04 +0200
+Subject: [Buildroot] [PATCH 5/5] mpc: add hash file
+In-Reply-To: <1413284223-20630-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1413284223-20630-1-git-send-email-gustavo@zacarias.com.ar>
- <1413284223-20630-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019144150.GD4072@free.fr>
+ <1413284223-20630-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141019144204.GE4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gustavo, All,
+Gustavo, All,
 
 On 2014-10-14 07:57 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -24,18 +24,18 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/gmp/gmp.hash | 2 ++
+>  package/mpc/mpc.hash | 2 ++
 >  1 file changed, 2 insertions(+)
->  create mode 100644 package/gmp/gmp.hash
+>  create mode 100644 package/mpc/mpc.hash
 > 
-> diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
+> diff --git a/package/mpc/mpc.hash b/package/mpc/mpc.hash
 > new file mode 100644
-> index 0000000..9fe6344
+> index 0000000..bee59fe
 > --- /dev/null
-> +++ b/package/gmp/gmp.hash
+> +++ b/package/mpc/mpc.hash
 > @@ -0,0 +1,2 @@
-> +# Locally calculated after checking pgp signature
-> +sha256	9156d32edac6955bc53b0218f5f3763facb890b73a835d5e1b901dcf8eb8b764	gmp-6.0.0a.tar.xz
+> +# From http://www.multiprecision.org/index.php?prog=mpc&page=download
+> +sha1	5072d82ab50ec36cc8c0e320b5c377adb48abe70	mpc-1.0.2.tar.gz
 > -- 
 > 2.0.4
 > 
@@ -57,4 +57,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/bc242496/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/65cb57d3/attachment.asc>
