@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 16:37:37 +0200
-Subject: [Buildroot] [PATCH v4] rpi-userland: bump revision and add
- patch to fix compile with musl
-In-Reply-To: <1413655117-28464-1-git-send-email-maarten@treewalker.org>
-References: <1739784.babPHSSYPS@hyperion>
- <1413655117-28464-1-git-send-email-maarten@treewalker.org>
-Message-ID: <20141019163737.0b2ece7e@free-electrons.com>
+Date: Sun, 19 Oct 2014 16:39:52 +0200
+Subject: [Buildroot] [PATCH] mx53loco_defconfig: refresh
+In-Reply-To: <1413558308-30081-1-git-send-email-vincent.stehle@freescale.com>
+References: <1413558308-30081-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <20141019163952.19c7c080@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+Dear Vincent Stehl?,
 
-On Sat, 18 Oct 2014 19:58:37 +0200, Maarten ter Huurne wrote:
-> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+On Fri, 17 Oct 2014 17:05:08 +0200, Vincent Stehl? wrote:
+> Force gcc to version 4.5, as versions 4.7 and 4.8 break the boot.
+> 
+> Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@sunsite.dk>
 > ---
->  .../rpi-userland-003-fix-musl-compile.patch        | 113 +++++++++++++++++++++
->  package/rpi-userland/rpi-userland.mk               |   2 +-
->  2 files changed, 114 insertions(+), 1 deletion(-)
->  create mode 100644 package/rpi-userland/rpi-userland-003-fix-musl-compile.patch
+>  configs/mx53loco_defconfig | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Thanks, applied, after adjusting the commit log as suggested by Yann.
+Can you update the patch according to Eric Benard's comment?
+
+In the mean time, I'll mark your patch as "Changes Requested" in our
+patch tracking system.
+
+Thanks!
 
 Thomas
 -- 
