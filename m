@@ -1,69 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 12:19:41 +0200
-Subject: [Buildroot] [PATCH 1/1] bandwidthd: Version bump to handle
- indirect deps properly
-In-Reply-To: <54438B78.1070805@gmail.com>
-References: <1413708943-13566-1-git-send-email-nroach44@gmail.com>
- <20141019094144.GL4072@free.fr> <54438B78.1070805@gmail.com>
-Message-ID: <20141019101941.GN4072@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 12:22:24 +0200
+Subject: [Buildroot] [PATCH] sdl_mixer: Enable support for libmodplug
+In-Reply-To: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
+References: <1413602358-7476-1-git-send-email-maarten@treewalker.org>
+Message-ID: <20141019122224.723a9157@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathaniel, All,
+Dear Maarten ter Huurne,
 
-On 2014-10-19 17:59 +0800, Nathaniel Roach spake thusly:
-> On 19/10/14 17:41, Yann E. MORIN wrote:
-> > Nathaniel, All,
-> > 
-> > On 2014-10-19 16:55 +0800, Nathaniel Roach spake thusly:
-> >> Thanks to Romain Naor, Baruch Siach and Thomas Petazzoni, I've
-> > 
-> > Romain Naour, I believe... ;-)
-> 
-> Damn it...
-> 
-> > 
-> >> solved the build issues in certain cases for bandwidthd.
-> >>
-> >> The issue was that libpcap and libpng would depend on other libraries
-> >> and upon testing for pcap/libpng the tests would fail due to not
-> >> being able to find the other libraries.
-> >>
-> >> Bandwidthd's configure script now uses pkg-config for libpng
-> >> and pcap-config for libpcap. pcap-config's path is specified
-> >> in configure's arguments.
-> >>
-> >> Some other tweaks have been made including the layout and flow
-> >> of configure.ac is a bit more logical, and the handling of postgres
-> >> and sqlite has been tweaked. Finally, the test for X.Org has been
-> >> removed.
-> >>
-> >> Fixes: http://autobuild.buildroot.org/results/eb4/eb48acec37a7fd1714b267b105816bf0053d40e9/build-end.log
-> >> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-> > 
-> > Usually, when some people helped with the patch, it is customary (but
-> > not mandatory) to add them in Cc: lines below the SoB line. ;-)
-> > 
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> 
-> I'll send a fixed one through shortly.
+On Sat, 18 Oct 2014 05:19:18 +0200, Maarten ter Huurne wrote:
+> Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+> ---
+>  .../sdl_mixer/sdl_mixer-0001-modplug-include.patch | 33 ++++++++++++++++++++++
+>  package/sdl_mixer/sdl_mixer.mk                     |  7 +++++
+>  2 files changed, 40 insertions(+)
+>  create mode 100644 package/sdl_mixer/sdl_mixer-0001-modplug-include.patch
 
-No need I guess, the typo can be fixed by whoever applies the patch.
+Unfortunately, this doesn't build here:
 
-Regards,
-Yann E. MORIN.
+checking for MODPLUG... configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
+Alternatively, you may set the environment variables MODPLUG_CFLAGS
+and MODPLUG_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See `config.log' for more details.
+make: *** [/home/thomas/projets/buildroot/output/build/sdl_mixer-1.2.12/.stamp_configured] Erreur 1
+
+Seems like there is a missing dependency on host-pkgconf. The failing
+defconfig was:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.08.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_SDL=y
+BR2_PACKAGE_SDL_MIXER=y
+BR2_PACKAGE_LIBMODPLUG=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+However, since you're patching configure.in, the sdl-mixer package
+should have SDL_MIXER_AUTORECONF = YES. But when I add this, I get:
+
+configure.in:569: warning: macro 'AM_PATH_SMPEG' not found in library
+configure.in:570: error: possibly undefined macro: AM_PATH_SMPEG
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+
+Can you look into these issues and resend? In the mean time, I've
+marked your patch as "Changes Requested".
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
