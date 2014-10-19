@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:50:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/liblog4c-localtime: use
- numbered patches
-In-Reply-To: <1413748165-2732-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413748165-2732-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141019225044.5289e559@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Oct 2014 22:51:04 +0200
+Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Change default to
+	X.org modular server on supported platforms
+References: <1413744694-27659-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141019224639.2a61c29a@free-electrons.com>
+Message-ID: <XnsA3CBE87438ACDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141019224639.2a61c29a at free-electrons.com:
 
-On Sun, 19 Oct 2014 21:49:24 +0200, Bernd Kuhls wrote:
+>> +     default BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR if (BR2_LARGEFILE && 
+BR2_INSTALL_LIBSTDCPP)
+>>       default BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...d-path.patch => liblog4c-0001-localtime-fix-underquoted-path.patch} |    0
->  ...localtime-nothread.patch => liblog4c-0002-localtime-nothread.patch} |    0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/liblog4c-localtime/{liblog4c-localtime-fix-underquoted-path.patch => liblog4c-0001-localtime-fix-underquoted-path.patch} (100%)
->  rename package/liblog4c-localtime/{liblog4c-localtime-nothread.patch => liblog4c-0002-localtime-nothread.patch} (100%)
+> While I don't object to changing to the modular server by default, I
+> find it weird to have a default that is different depending on the
+> toolchain configuration.
 
-Applied, thanks.
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+the modular server depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP, so I 
+thought changing the default should be done only on supported archs. Is there 
+a different possibility supported by Kconfig?
+
+Regards, Bernd
