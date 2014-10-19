@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 17:36:05 +0200
-Subject: [Buildroot] [git commit] bridge-utils: add hash file
-Message-ID: <20141019153637.AE4D0AFC93@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 17:36:09 +0200
+Subject: [Buildroot] [git commit] mdadm: add hash file
+Message-ID: <20141019153637.B79B4AFC93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f306e8781c0127823350d69e200e327b10562011
+commit: http://git.buildroot.net/buildroot/commit/?id=957c36438161234d5071c8e500f6c1afb9b9a10f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bridge-utils/bridge-utils.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/mdadm/mdadm.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
 new file mode 100644
-index 0000000..c85fd04
+index 0000000..45b79dd
 --- /dev/null
-+++ b/package/bridge-utils/bridge-utils.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/bridge/files/bridge/
-+md5	ec7b381160b340648dede58c31bb2238	bridge-utils-1.5.tar.gz
-+sha1	19d2a58cd3a70f971aa931b40256174a847e60d6	bridge-utils-1.5.tar.gz
++++ b/package/mdadm/mdadm.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
++sha256	0f3a7e1a76b13892b79f9fceaf99ecb23513260389a768ac644ffa3ae06e5b8c	mdadm-3.3.2.tar.xz
