@@ -1,80 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 16:49:10 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/alsa-utils: Fix gettext related
-	build error
-Message-ID: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Oct 2014 16:52:40 +0200
+Subject: [Buildroot] [PATCH 15/16] openvpn: add hash file
+In-Reply-To: <1413329153-25453-15-git-send-email-gustavo@zacarias.com.ar>
+References: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
+ <1413329153-25453-15-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141019145240.GU4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ALSA_UTILS_GETTEXTIZE = YES
+Gustavo, All,
 
-is also needed to fix
+On 2014-10-14 20:25 -0300, Gustavo Zacarias spake thusly:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-*** error: gettext infrastructure mismatch: using a Makefile.in.in from
-gettext version 0.18 but the autoconf macros are from gettext version 0.19
+This one is already covered by a previous patch of yours, which I acked.
 
-To reproduce the build error make sure gettext is build before alsa-utils
-by also applying this patch: http://patchwork.ozlabs.org/patch/400779/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: - english error message (Baruch, Yann)
-    - add comment why _AUTORECONF/_GETTEXTIZE are needed (Baruch, Yann)
-    - point out that gettext has to be built before alsa-utils to reproduce the
-      bug
+> ---
+>  package/openvpn/openvpn.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/openvpn/openvpn.hash
+> 
+> diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+> new file mode 100644
+> index 0000000..d13258d
+> --- /dev/null
+> +++ b/package/openvpn/openvpn.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated after checking pgp signature
+> +sha256	1ccd72c99e5c5627a7f7eb826489027dad35ce260b925b49dfc1f90bd24719ee	openvpn-2.3.4.tar.xz
+> -- 
+> 2.0.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- package/alsa-utils/alsa-utils-0001-libintl.patch |   23 ++++++++++++++++++++++
- package/alsa-utils/alsa-utils.mk                 |    5 +++++
- 2 files changed, 28 insertions(+)
- create mode 100644 package/alsa-utils/alsa-utils-0001-libintl.patch
-
-diff --git a/package/alsa-utils/alsa-utils-0001-libintl.patch b/package/alsa-utils/alsa-utils-0001-libintl.patch
-new file mode 100644
-index 0000000..0562ce8
---- /dev/null
-+++ b/package/alsa-utils/alsa-utils-0001-libintl.patch
-@@ -0,0 +1,23 @@
-+Link against libintl if needed
-+
-+When built against a C library that has locale support, but for which
-+intl support is provided by an external libintl library, alsamixer
-+forgets to link against this library, even though the configure script
-+properly checks that.
-+
-+This patch therefore ensure that we link against libintl when needed,
-+thanks to the @LIBINTL@ variable provided by the configure script.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+diff -uNr alsa-utils-1.0.28.org/alsamixer/Makefile.am alsa-utils-1.0.28/alsamixer/Makefile.am
-+--- alsa-utils-1.0.28.org/alsamixer/Makefile.am	2014-06-13 19:21:05.000000000 +0200
-++++ alsa-utils-1.0.28/alsamixer/Makefile.am	2014-10-19 13:13:09.333149017 +0200
-+@@ -1,5 +1,5 @@
-+ AM_CFLAGS = @CURSES_CFLAGS@ -DCURSESINC="@CURSESINC@"
-+-LDADD = @CURSESLIB@
-++LDADD = @CURSESLIB@ @LIBINTL@
-+ 
-+ bin_PROGRAMS = alsamixer
-+ alsamixer_SOURCES = card_select.c card_select.h \
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index d42d06f..746e36a 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -10,6 +10,11 @@ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPLv2
- ALSA_UTILS_LICENSE_FILES = COPYING
- ALSA_UTILS_INSTALL_STAGING = YES
-+
-+# alsa-utils-0001-libintl.patch patches alsamixer/Makefile.am
-+ALSA_UTILS_AUTORECONF = YES
-+ALSA_UTILS_GETTEXTIZE = YES
-+
- ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
- 
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
