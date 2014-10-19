@@ -1,82 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 10:43:54 +0200
-Subject: [Buildroot] [PATCH 3/3] Apply --disable-gtk-doc-html to all
- packages
-In-Reply-To: <1413706270-27411-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1413706270-27411-1-git-send-email-bernd.kuhls@t-online.de>
- <1413706270-27411-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141019084354.GC4072@free.fr>
+Date: Sun, 19 Oct 2014 10:50:13 +0200
+Subject: [Buildroot] [PATCH v2] libevent: Use github call & fix patch
+In-Reply-To: <1413135162-16654-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413135162-16654-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141019085013.GD4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Maxime, All,
 
-On 2014-10-19 10:11 +0200, Bernd Kuhls spake thusly:
-> Move this option to package/pkg-autotools.mk so it applies to all packages.
+On 2014-10-12 19:32 +0200, Maxime Hadjinlian spake thusly:
+> We want to uses the github helper since we download a generated tarball
+
+... to use ...
+
+> from the tag anyway.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> We also need to uses AUTORECONF as theses releases don't contains
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+... to use ... those releases ... do not contain ...
+
+> 'configure' and such.
+> 
+> The patchs that was already present is updated to apply against
+
+The patch ...
+
+> Makefile.am instead of Makefile.in
+> 
+> The seconds patchs is backported from upstream to remove the usage of
+
+The second patch ... the use of ...
+
+> $(top_src_dirs) which makes current autotools error.
+
+... error out.
+
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[--SNIP--]
+> diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+> index 73be502..8d325da 100644
+> --- a/package/libevent/libevent.mk
+> +++ b/package/libevent/libevent.mk
+> @@ -5,11 +5,12 @@
+>  ################################################################################
+>  
+>  LIBEVENT_VERSION = 2.0.21
+> -LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+> -LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
+> +LIBEVENT_SITE = $(call github,libevent,libevent,release-$(LIBEVENT_VERSION)-stable)
+
+This should be:
+
+    LIBEVENT_VERSION = release-2.0.21-stable
+    LIBEVENT_SITE = $(call github,libevent,libevent,$(LIBEVENT_VERSION))
+
+I think we already talked about this in the past few days (for another
+such change), where we said that the version should be the tag used by
+upstream.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/pango/pango.mk   |    2 +-
->  package/pkg-autotools.mk |    2 ++
->  package/webkit/webkit.mk |    1 -
->  3 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-> index 46490c1..a18a49d 100644
-> --- a/package/pango/pango.mk
-> +++ b/package/pango/pango.mk
-> @@ -40,7 +40,7 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
->  		ac_use_included_regex=no gl_cv_c_restrict=no \
->  		ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
+>  LIBEVENT_INSTALL_STAGING = YES
+>  LIBEVENT_LICENSE = BSD-3c, OpenBSD
+>  LIBEVENT_LICENSE_FILES = LICENSE
+> +# Straight from the repository, need to generate autotools files
+> +LIBEVENT_AUTORECONF = YES
 >  
-> -PANGO_CONF_OPTS = --enable-explicit-deps=no --disable-gtk-doc-html
-> +PANGO_CONF_OPTS = --enable-explicit-deps=no
->  
->  PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
->  	host-pkgconf \
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index fcca9e9..d93c759 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -136,6 +136,7 @@ define $(2)_CONFIGURE_CMDS
->  		--sysconfdir=/etc \
->  		--program-prefix="" \
->  		--disable-gtk-doc \
-> +		--disable-gtk-doc-html \
->  		--disable-doc \
->  		--disable-docs \
->  		--disable-documentation \
-> @@ -168,6 +169,7 @@ define $(2)_CONFIGURE_CMDS
->  		--sysconfdir="$$(HOST_DIR)/etc" \
->  		--enable-shared --disable-static \
->  		--disable-gtk-doc \
-> +		--disable-gtk-doc-html \
->  		--disable-doc \
->  		--disable-docs \
->  		--disable-documentation \
-> diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-> index 77b533a..0694a5b 100644
-> --- a/package/webkit/webkit.mk
-> +++ b/package/webkit/webkit.mk
-> @@ -45,7 +45,6 @@ WEBKIT_CONF_OPTS += \
->  	--disable-webkit2 \
->  	--disable-glibtest \
->  	--disable-video \
-> -	--disable-gtk-doc-html \
->  	--disable-tests
->  
->  # Xorg Dependencies
+>  define LIBEVENT_REMOVE_PYSCRIPT
+>  	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
 > -- 
-> 1.7.10.4
+> 2.1.1
 > 
 > _______________________________________________
 > buildroot mailing list
