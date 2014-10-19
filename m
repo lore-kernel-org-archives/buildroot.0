@@ -1,31 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 13:08:15 +0200
-Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: Bump version to 1.16.1
-Message-ID: <1413716896-15085-1-git-send-email-bernd.kuhls@t-online.de>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 19 Oct 2014 13:09:27 +0200
+Subject: [Buildroot] [PATCH 2/2] geoip: Remove useless variable
+In-Reply-To: <1413715784-17421-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413715784-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1413715784-17421-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAGduivzvXgryGEqGa_Zb=iAgFXEq3RAK8M-KW+biM40D+SuMsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is a NAK, needs some more work since the packages has been bumped
+and there is a release file.
+Will come back with a new patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 6cbec15..9ea2e1d 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.16.0
-+XSERVER_XORG_SERVER_VERSION = 1.16.1
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
--- 
-1.7.10.4
+On Sun, Oct 19, 2014 at 12:49 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/geoip/geoip.mk | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+> index 869cc5e..0a0dad0 100644
+> --- a/package/geoip/geoip.mk
+> +++ b/package/geoip/geoip.mk
+> @@ -5,7 +5,6 @@
+>  ################################################################################
+>
+>  GEOIP_VERSION = v1.6.0
+> -GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
+>  GEOIP_SITE = $(call github,maxmind,geoip-api-c,$(GEOIP_VERSION))
+>  GEOIP_AUTORECONF = YES
+>  GEOIP_INSTALL_STAGING = YES
+> --
+> 2.1.1
+>
