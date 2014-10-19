@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 13:08:16 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libpciaccess: Add optional support
-	for zlib
-In-Reply-To: <1413716896-15085-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413716896-15085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413716896-15085-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Oct 2014 13:08:15 +0200
+Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: Bump version to 1.16.1
+Message-ID: <1413716896-15085-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +11,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libpciaccess/libpciaccess.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
-index 010707e..f27925d 100644
---- a/package/libpciaccess/libpciaccess.mk
-+++ b/package/libpciaccess/libpciaccess.mk
-@@ -11,4 +11,11 @@ LIBPCIACCESS_LICENSE = MIT
- LIBPCIACCESS_LICENSE_FILES = COPYING
- LIBPCIACCESS_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 6cbec15..9ea2e1d 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBPCIACCESS_CONF_OPTS += --with-zlib
-+LIBPCIACCESS_DEPENDENCIES += zlib
-+else
-+LIBPCIACCESS_CONF_OPTS += --without-zlib
-+endif
-+
- $(eval $(autotools-package))
+-XSERVER_XORG_SERVER_VERSION = 1.16.0
++XSERVER_XORG_SERVER_VERSION = 1.16.1
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 -- 
 1.7.10.4
