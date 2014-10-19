@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 17:34:09 +0200
-Subject: [Buildroot] [git commit] uclibc: add hash file
-Message-ID: <20141019153637.2F265AFC91@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 17:35:22 +0200
+Subject: [Buildroot] [git commit] libidn: add hash file
+Message-ID: <20141019153637.6BE41AF9BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c53268c5a6f75baeceeb68253e77f4bf154a738
+commit: http://git.buildroot.net/buildroot/commit/?id=fb35656000427f38e3348d9f44a805c1019d640b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/uclibc.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libidn/libidn.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
 new file mode 100644
-index 0000000..0fba41a
+index 0000000..f486626
 --- /dev/null
-+++ b/package/uclibc/uclibc.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated after checking pgp signature (vanilla)
-+# Locally calculated (ARC)
-+sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
-+sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-arc-2014.08.tar.gz
++++ b/package/libidn/libidn.hash
+@@ -0,0 +1,2 @@
++# From https://lists.gnu.org/archive/html/info-gnu/2014-08/msg00006.html
++sha256	fb82747dbbf9b36f703ed27293317d818d7e851d4f5773dedf3efa4db32a7c7c	libidn-1.29.tar.gz
