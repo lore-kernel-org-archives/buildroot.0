@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 12:24:45 +0200
-Subject: [Buildroot] [git commit] ncurses: fix typo 'target'
-Message-ID: <20141019102453.F14A6AE963@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 12:25:02 +0200
+Subject: [Buildroot] [PATCH] ncurses: fix typo 'target'
+In-Reply-To: <1413558747-31850-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+References: <1413558747-31850-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <20141019122502.542509d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbd2948c988f908c6c4597646c1adb0f5422d382
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Sebastien Bourdelin,
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ncurses/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 17 Oct 2014 11:12:27 -0400, Sebastien Bourdelin wrote:
+> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+> ---
+>  package/ncurses/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index 3cc0a37..44713f9 100644
---- a/package/ncurses/Config.in
-+++ b/package/ncurses/Config.in
-@@ -36,6 +36,6 @@ config BR2_PACKAGE_NCURSES_TARGET_MENU
- config BR2_PACKAGE_NCURSES_TARGET_PROGS
- 	bool "ncurses programs"
- 	help
--	  Include ncurses programs in traget (clear, reset, tput, ...)
-+	  Include ncurses programs in target (clear, reset, tput, ...)
- 
- endif
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
