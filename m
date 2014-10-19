@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 10:57:28 +0200
-Subject: [Buildroot] [PATCH] xbmc: use github call
-In-Reply-To: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141019085728.GF4072@free.fr>
+Date: Sun, 19 Oct 2014 10:58:46 +0200
+Subject: [Buildroot] [PATCH v3] mongrel2: Add comments to avoid use of
+ github call
+In-Reply-To: <1413142758-3356-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413142758-3356-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141019085846.GG4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +13,11 @@ To: buildroot@busybox.net
 
 Maxime, All,
 
-On 2014-10-12 20:21 +0200, Maxime Hadjinlian spake thusly:
+On 2014-10-12 21:39 +0200, Maxime Hadjinlian spake thusly:
+> As the comment says, we don't want to uses the github helper, as we
+> would end up with a generated tarball, which is not the same one as the
+> one linked with the releases.
+> 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -21,23 +26,27 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/xbmc/xbmc.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> v2 -> v3:
+>    - fix typo
+> v1 -> v2:
+>    - Do not change the URL but add a comments instead
+> ---
+>  package/mongrel2/mongrel2.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index 0101ad7..966dbb3 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -5,8 +5,7 @@
+> diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+> index 14e3a80..23cec50 100644
+> --- a/package/mongrel2/mongrel2.mk
+> +++ b/package/mongrel2/mongrel2.mk
+> @@ -5,6 +5,8 @@
 >  ################################################################################
 >  
->  XBMC_VERSION = 13.2-Gotham
-> -XBMC_SOURCE = $(XBMC_VERSION).tar.gz
-> -XBMC_SITE = https://github.com/xbmc/xbmc/archive
-> +XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
->  XBMC_LICENSE = GPLv2
->  XBMC_LICENSE_FILES = LICENSE.GPL
->  # XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+>  MONGREL2_VERSION = v1.9.1
+> +# Do not use the github helper here, the generated tarball is *NOT* the same
+> +# as the one uploaded by upstream for the release.
+>  MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
+>  MONGREL2_LICENSE = BSD-3c
+>  MONGREL2_LICENSE_FILES = LICENSE
 > -- 
 > 2.1.1
 > 
