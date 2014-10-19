@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 19 Oct 2014 21:30:03 +0200
-Subject: [Buildroot] [PATCHv2 buildroot-test 07/11] autobuild-run: use
-	**kwargs to avoid explicit parameter passthroughs
+Date: Sun, 19 Oct 2014 21:30:05 +0200
+Subject: [Buildroot] [PATCHv2 buildroot-test 09/11] autobuild-run: improve
+	the logic to generate build-end.log
 In-Reply-To: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413747007-24990-8-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1413747007-24990-10-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,241 +13,104 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-The current version of autobuild-run has some extensive explicit
-parameter passing, for example:
+This patch makes the generation of build-end.log more intelligent, by
+not simply adding the 500 last lines, but instead capture the entire
+output of the failed package.
 
-- fixup_config needs sysinfo, passed via gen_config, in turn via
-  run_instance, in turn via main.
-- send_results needs username/password settings, passed via
-  run_instance, in turn via main.
+If no failure reason can be found (possibly a good run) or the start for
+that package cannot be found, use the 500 last lines as fallback.
 
-Everytime a leaf function needs an extra parameter (for example coming
-from the arguments or config file), the entire call chain needs to be
-adapted to pass along that parameter.
+The logic to find the failed package is taken from the result import
+script web/import.inc.php. If needed, the search range of the last 3
+lines could be extended.
 
-This patch introduces the **kwargs dictionary principle, that allows
-implicit parameter passing. A function can accept this dictionary and
-extract parameters from it by name. The dictionary can be passed as a
-whole to a child function, without explicitly enumerating which entries
-in the dictionary are needed in the child.
+Note that the package-version string extracted from the build log is
+split on the last hyphen into a tuple (package, version). This is
+needed to find back the beginning of that package's build (where the
+package name is separated from the version with a space, not a hyphen).
+However, this logic will fail to work when the version also contains a
+hyphen, for example lmbench-3.0-a9. In this case, the resulting tuple
+will be (lmbench-3.0,a9) and the text searched in the build log
+'>>> lmbench-3.0 a9' (which will not be found). In this case, the
+fallback of the last 500 lines will be used.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-v2: fix missing conversion of 'instance' to kwargs['instance']
+v2: new patch
 
- scripts/autobuild-run | 73 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 43 insertions(+), 30 deletions(-)
+ scripts/autobuild-run | 53 ++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 46 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 40bcaa0..2f83696 100755
+index c3abe62..1960f53 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -189,7 +189,7 @@ def get_toolchain_configs():
-         configs.append(config)
-     return configs
- 
--def prepare_build(instance, log):
-+def prepare_build(**kwargs):
-     """Prepare for the next build of the specified instance
- 
-     This function prepares the build by making sure all the needed
-@@ -197,7 +197,8 @@ def prepare_build(instance, log):
-     code, and cleaning up remaining stuff from previous builds.
-     """
- 
--    idir = "instance-%d" % instance
-+    idir = "instance-%d" % kwargs['instance']
-+    log = kwargs['log']
- 
-     log_write(log, "INFO: preparing a new build")
- 
-@@ -246,7 +247,7 @@ def prepare_build(instance, log):
- 
-     return 0
- 
--def fixup_config(instance, sysinfo):
-+def fixup_config(**kwargs):
-     """Finalize the configuration and reject any problematic combinations
- 
-     This function returns 'True' when the configuration has been
-@@ -255,9 +256,10 @@ def fixup_config(instance, sysinfo):
-     generated).
-     """
- 
--    idir = "instance-%d" % instance
--    outputdir = os.path.join(idir, "output")
-+    idir = "instance-%d" % kwargs['instance']
-+    sysinfo = kwargs['sysinfo']
- 
-+    outputdir = os.path.join(idir, "output")
-     with open(os.path.join(outputdir, ".config")) as configf:
-         configlines = configf.readlines()
- 
-@@ -333,7 +335,7 @@ def fixup_config(instance, sysinfo):
- 
-     return True
- 
--def gen_config(instance, log, sysinfo):
-+def gen_config(**kwargs):
-     """Generate a new random configuration
- 
-     This function generates the configuration, by choosing a random
-@@ -341,7 +343,9 @@ def gen_config(instance, log, sysinfo):
-     packages.
-     """
- 
--    idir = "instance-%d" % instance
-+    idir = "instance-%d" % kwargs['instance']
-+    log = kwargs['log']
+@@ -44,10 +44,6 @@
+ #
+ # TODO:
+ #
+-# - Improve the logic that generates the 'build-end.log' file. Instead
+-#   of just using the last 500 lines of the build log, search the
+-#   start of the build of the failing package.
+-#
+ # - Include the config.log file (when it exists) in the tarball for
+ #   failed builds when the failure occurs on an autotools package.
+ #
+@@ -477,9 +473,52 @@ def send_results(result, **kwargs):
+     subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
+                      os.path.join(resultdir, "gitid")],
+                     shell=True, cwd=srcdir)
+-    subprocess.call(["tail -500 %s > %s" % \
+-                     (os.path.join(outputdir, "logfile"), os.path.join(resultdir, "build-end.log"))],
+-                    shell=True)
 +
-     dldir = os.path.join(idir, "dl")
-     # We need the absolute path to use with O=, because the relative
-     # path to the output directory here is not relative to the
-@@ -392,7 +396,7 @@ def gen_config(instance, log, sysinfo):
-         if ret != 0:
-             log_write(log, "ERROR: cannot generate random configuration")
-             return -1
--        if fixup_config(instance, sysinfo):
-+        if fixup_config(**kwargs):
-             break
- 
-     ret = subprocess.call(["yes '' 2>/dev/null| make O=%s -C %s oldconfig" % \
-@@ -409,10 +413,12 @@ def gen_config(instance, log, sysinfo):
- 
-     return 0
- 
--def do_build(instance, njobs, log, make_opts):
-+def do_build(**kwargs):
-     """Run the build itself"""
- 
--    idir = "instance-%d" % instance
-+    idir = "instance-%d" % kwargs['instance']
-+    log = kwargs['log']
++    def get_failure_reason():
++        # Output is a tuple (package, version), or None.
 +
-     # We need the absolute path to use with O=, because the relative
-     # path to the output directory here is not relative to the
-     # Buildroot sources, but to the location of the autobuilder
-@@ -423,8 +429,9 @@ def do_build(instance, njobs, log, make_opts):
-     f = open(os.path.join(outputdir, "logfile"), "w+")
-     log_write(log, "INFO: build started")
-     cmd = ["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir,
--            "-C", srcdir, "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs] \
--          + make_opts.split()
-+            "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
-+            "BR2_JLEVEL=%s" % kwargs['njobs']] \
-+          + kwargs['make_opts'].split()
-     ret = subprocess.call(cmd, stdout=f, stderr=f)
-     # 124 is a special error code that indicates we have reached the
-     # timeout
-@@ -441,7 +448,7 @@ def do_build(instance, njobs, log, make_opts):
-     log_write(log, "INFO: build successful")
-     return 0
- 
--def send_results(instance, http_login, http_password, submitter, log, result):
-+def send_results(result, **kwargs):
-     """Prepare and store/send tarball with results
- 
-     This function prepares the tarball with the results, and either
-@@ -449,7 +456,9 @@ def send_results(instance, http_login, http_password, submitter, log, result):
-     are available) or stores them locally as tarballs.
-     """
- 
--    idir = "instance-%d" % instance
-+    idir = "instance-%d" % kwargs['instance']
-+    log = kwargs['log']
++        lastlines = subprocess.check_output(["tail", "-n", "3",
++                        os.path.join(outputdir, "logfile")]).splitlines()
 +
-     outputdir = os.path.abspath(os.path.join(idir, "output"))
-     srcdir = os.path.join(idir, "buildroot")
-     resultdir = os.path.join(outputdir, "results")
-@@ -484,7 +493,7 @@ def send_results(instance, http_login, http_password, submitter, log, result):
-     resultf.close()
- 
-     with open(os.path.join(resultdir, "submitter"), "w+") as submitterf:
--        submitterf.write(submitter)
-+        submitterf.write(kwargs['submitter'])
- 
-     # Yes, shutil.make_archive() would be nice, but it doesn't exist
-     # in Python 2.6.
-@@ -494,11 +503,12 @@ def send_results(instance, http_login, http_password, submitter, log, result):
-         log_write(log, "ERROR: could not make results tarball")
-         sys.exit(1)
- 
--    if http_login and http_password:
-+    if kwargs['http_login'] and kwargs['http_password']:
-         # Submit results. Yes, Python has some HTTP libraries, but
-         # none of the ones that are part of the standard library can
-         # upload a file without writing dozens of lines of code.
--        ret = subprocess.call(["curl", "-u", "%s:%s" % (http_login, http_password),
-+        ret = subprocess.call(["curl", "-u",
-+                               "%s:%s" % (kwargs['http_login'], kwargs['http_password']),
-                                "-H", "Expect:",
-                                "-F", "uploadedfile=@%s" % os.path.join(outputdir, "results.tar.bz2"),
-                                "-F", "uploadsubmit=1",
-@@ -512,39 +522,40 @@ def send_results(instance, http_login, http_password, submitter, log, result):
-         # No http login/password, keep tarballs locally
-         with open(os.path.join(outputdir, "results.tar.bz2"), 'rb') as f:
-             sha1 = hashlib.sha1(f.read()).hexdigest()
--        resultfilename = "instance-%d-%s.tar.bz2" % (instance, sha1)
-+        resultfilename = "instance-%d-%s.tar.bz2" % (kwargs['instance'], sha1)
-         os.rename(os.path.join(outputdir, "results.tar.bz2"), resultfilename)
-         log_write(log, "INFO: results saved as %s" % resultfilename)
- 
--def run_instance(instance, njobs, http_login, http_password, submitter,
--                 make_opts, sysinfo):
-+def run_instance(**kwargs):
-     """Main per-instance loop
- 
-     Prepare the build, generate a configuration, run the build, and submit the
-     results.
-     """
- 
--    idir = "instance-%d" % instance
-+    idir = "instance-%d" % kwargs['instance']
- 
-     # If it doesn't exist, create the instance directory
-     if not os.path.exists(idir):
-         os.mkdir(idir)
- 
--    instance_log = open(os.path.join(idir, "instance.log"), "a+")
--    log_write(instance_log, "INFO: instance started")
-+    kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
-+    log_write(kwargs['log'], "INFO: instance started")
++        import re
++        regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
++        for line in lastlines:
++            m = regexp.search(line)
++            if m:
++                return m.group(1).rsplit('-', 1)
 +
-     while True:
-         check_version()
- 
--        ret = prepare_build(instance, instance_log)
-+        ret = prepare_build(**kwargs)
-         if ret != 0:
-             continue
- 
--        ret = gen_config(instance, instance_log, sysinfo)
-+        ret = gen_config(**kwargs)
-         if ret != 0:
-             continue
- 
--        ret = do_build(instance, njobs, instance_log, make_opts)
--        send_results(instance, http_login, http_password, submitter, instance_log, ret)
-+        ret = do_build(**kwargs)
++        # not found
++        return None
 +
-+        send_results(ret, **kwargs)
++    def extract_end_log(resultfile):
++        """Save the last part of the build log, starting from the failed package"""
++
++        def extract_last_500_lines():
++            subprocess.call(["tail -500 %s > %s" % \
++                             (os.path.join(outputdir, "logfile"), resultfile)],
++                            shell=True)
++
++        reason = get_failure_reason()
++        if not reason:
++            extract_last_500_lines()
++        else:
++            import mmap
++            f = open(os.path.join(outputdir, "logfile"), 'r')
++            mf = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
++            mf.seek(0)
++            # Search for first action on the failed package
++            offset = mf.find('>>> %s' % ' '.join(reason))
++            if offset != -1:
++                with open(resultfile, "w") as endlog:
++                    endlog.write(mf[offset:])
++            else:
++                # not found, use last 500 lines as fallback
++                extract_last_500_lines()
++
++            mf.close()
++            f.close()
++
++    extract_end_log(os.path.join(resultdir, "build-end.log"))
  
- # args / config file merging inspired by:
- # https://github.com/docopt/docopt/blob/master/examples/config_file_example.py
-@@ -601,9 +612,11 @@ def main():
-         sys.exit(1)
-     processes = []
-     for i in range(0, int(args['--ninstances'])):
--        p = Process(target=run_instance, args=(i, int(args['--njobs']),
--                args['--http-login'], args['--http-password'],
--                args['--submitter'], args['--make-opts'], sysinfo))
-+        p = Process(target=run_instance, kwargs={
-+            'instance': i, 'njobs': args['--njobs'], 'sysinfo': sysinfo,
-+            'http_login': args['--http-login'],
-+            'http_password': args['--http-password'],
-+            'submitter': args['--submitter'], 'make_opts': args['--make-opts']})
-         p.start()
-         processes.append(p)
-     signal.signal(signal.SIGTERM, sigterm_handler)
+     resultf = open(os.path.join(resultdir, "status"), "w+")
+     if result == 0:
 -- 
 1.8.5.1
