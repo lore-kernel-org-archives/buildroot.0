@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 16:44:26 +0200
-Subject: [Buildroot] [PATCH 05/16] libidn: add hash file
-In-Reply-To: <1413329153-25453-5-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 19 Oct 2014 16:44:44 +0200
+Subject: [Buildroot] [PATCH 06/16] rsync: add hash file
+In-Reply-To: <1413329153-25453-6-git-send-email-gustavo@zacarias.com.ar>
 References: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
- <1413329153-25453-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019144426.GK4072@free.fr>
+ <1413329153-25453-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141019144444.GL4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,18 +24,18 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libidn/libidn.hash | 2 ++
+>  package/rsync/rsync.hash | 2 ++
 >  1 file changed, 2 insertions(+)
->  create mode 100644 package/libidn/libidn.hash
+>  create mode 100644 package/rsync/rsync.hash
 > 
-> diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+> diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
 > new file mode 100644
-> index 0000000..f486626
+> index 0000000..032047d
 > --- /dev/null
-> +++ b/package/libidn/libidn.hash
+> +++ b/package/rsync/rsync.hash
 > @@ -0,0 +1,2 @@
-> +# From https://lists.gnu.org/archive/html/info-gnu/2014-08/msg00006.html
-> +sha256	fb82747dbbf9b36f703ed27293317d818d7e851d4f5773dedf3efa4db32a7c7c	libidn-1.29.tar.gz
+> +# Locally calculated after checking pgp signature
+> +sha256	7de4364fcf5fe42f3bdb514417f1c40d10bbca896abe7e7f2c581c6ea08a2621	rsync-3.1.1.tar.gz
 > -- 
 > 2.0.4
 > 
@@ -57,4 +57,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/0123cff6/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/f20e60d4/attachment.asc>
