@@ -1,60 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 17:23:31 +0200
-Subject: [Buildroot] [git commit] ntp: Adding pps support to ntpd
-Message-ID: <20141019152824.BA0AEAF9C9@busybox.osuosl.org>
+Date: Sun, 19 Oct 2014 17:29:10 +0200
+Subject: [Buildroot] [PATCH v3 1/2] pps-tools: new package
+In-Reply-To: <1413480654-59217-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1413480654-59217-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20141019172910.6dc8cba9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7cfaff261136880fbc93f92179d5c46e1f7d4232
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Matt Weber,
 
-Added an option for the ntpd application to support pps inputs.
+On Thu, 16 Oct 2014 12:30:53 -0500, Matt Weber wrote:
+> From: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+> 
+> Added pps-tools package to add support to the ntpd for a
+> pps source (requires timepps.h from pps-tools as part of ntpd
+> build).
+> 
+> Signed-off-by: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ntp/Config.in |    7 +++++++
- package/ntp/ntp.mk    |    7 +++++++
- 2 files changed, 14 insertions(+), 0 deletions(-)
+Both patches applied. On this first patch, I've fixed the alphabetic
+ordering as noticed by Jerzy, and I've added $(TARGET_MAKE_ENV) to the
+$(MAKE) invocations in the install commands.
 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index 858a9ad..c92ae93 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -34,6 +34,13 @@ config BR2_PACKAGE_NTP_NTPD
- 	  system date and time in sync and optionally serving time and date
- 	  information on the network via the NTP protocol.
- 
-+config BR2_PACKAGE_NTP_NTPD_ATOM_PPS
-+	bool "PPS support"
-+	depends on BR2_PACKAGE_NTP_NTPD
-+	select BR2_PACKAGE_PPS_TOOLS
-+	help
-+	  Compile ntpd with the ability to use an ATOM PPS source.
-+
- config BR2_PACKAGE_NTP_NTPDATE
- 	bool "ntpdate"
- 	help
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 7c2cb8e..bb950a1 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -34,6 +34,13 @@ else
- 	NTP_CONF_OPTS += --without-ntpsnmpd
- endif
- 
-+ifeq ($(BR2_PACKAGE_NTP_NTPD_ATOM_PPS),y)
-+	NTP_CONF_OPTS += --enable-ATOM
-+	NTP_DEPENDENCIES += pps-tools
-+else
-+	NTP_CONF_OPTS += --disable-ATOM
-+endif
-+
- define NTP_PATCH_FIXUPS
- 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
- 	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
