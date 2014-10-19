@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 19 Oct 2014 21:30:02 +0200
-Subject: [Buildroot] [PATCHv2 buildroot-test 06/11] autobuild-run: add
-	option --make-opts for custom Buildroot options
+Date: Sun, 19 Oct 2014 21:30:06 +0200
+Subject: [Buildroot] [PATCHv2 buildroot-test 10/11] autobuild-run: save
+	config.log files for failed package
 In-Reply-To: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413747007-24990-7-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1413747007-24990-11-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,92 +13,62 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-In some environments, the Buildroot configuration may need minor
-tweaking. For example, in corporate environments behind a firewall,
-version control commands like git, svn, ... may actually need wrappers.
-Such wrappers could be configured using the corresponding BR2_<CMD>
-configuration options.
+This patch will save all config.log files of the failed package in the
+result tarball, to help problem analysis. This is typically useful for
+autotools packages, although the added logic does not check that
+explicitly (i.e. any failing package that has a config.log file in the
+output directory will see this file saved).
 
-Since these tweaks are very environment-specific, they should not be
-part of the configuration file itself. Otherwise, other people trying to
-reproduce the build in another environment will see builds failing due
-to other reasons, for example the wrapper not being found.
-
-This commit provides a new configuration option 'make-opts', passable as
-argument or in the config file, that accepts a string of make options to
-pass to the Buildroot make command. For example:
-    --make-opts="BR2_GIT=git-wrapper BR2_svn=svn-wrapper"
+The saving of config.log files happens recursively, the directory
+structure is preserved in the result directory.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-v2: rebase after reordering
+v2: new patch
 
- scripts/autobuild-run | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ scripts/autobuild-run | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 061ae31..40bcaa0 100755
+index 1960f53..4803fa1 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -72,6 +72,9 @@ Options:
-                                  reasons it is recommended to define this in the
-                                  config file instead, with user-read permissions
-                                  only)
-+  --make-opts OPTSTRING          string of extra options to pass to Buildroot
-+                                 make, such as specific command wrappers
-+                                 [default: ]
-   -c, --config CONFIG            path to configuration file
+@@ -44,9 +44,6 @@
+ #
+ # TODO:
+ #
+-# - Include the config.log file (when it exists) in the tarball for
+-#   failed builds when the failure occurs on an autotools package.
+-#
+ # - Instead of excluding all configurations that have
+ #   BR2_PACKAGE_CLASSPATH=y, improve the script to detect whether the
+ #   necessary host machine requirements are there to build classpath.
+@@ -520,6 +517,26 @@ def send_results(result, **kwargs):
  
- Format of the configuration file:
-@@ -406,7 +409,7 @@ def gen_config(instance, log, sysinfo):
+     extract_end_log(os.path.join(resultdir, "build-end.log"))
  
-     return 0
- 
--def do_build(instance, njobs, log):
-+def do_build(instance, njobs, log, make_opts):
-     """Run the build itself"""
- 
-     idir = "instance-%d" % instance
-@@ -419,8 +422,10 @@ def do_build(instance, njobs, log):
-     srcdir = os.path.join(idir, "buildroot")
-     f = open(os.path.join(outputdir, "logfile"), "w+")
-     log_write(log, "INFO: build started")
--    ret = subprocess.call(["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir, "-C", srcdir,
--                           "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs], stdout=f, stderr=f)
-+    cmd = ["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir,
-+            "-C", srcdir, "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs] \
-+          + make_opts.split()
-+    ret = subprocess.call(cmd, stdout=f, stderr=f)
-     # 124 is a special error code that indicates we have reached the
-     # timeout
-     if ret == 124:
-@@ -511,7 +516,8 @@ def send_results(instance, http_login, http_password, submitter, log, result):
-         os.rename(os.path.join(outputdir, "results.tar.bz2"), resultfilename)
-         log_write(log, "INFO: results saved as %s" % resultfilename)
- 
--def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo):
-+def run_instance(instance, njobs, http_login, http_password, submitter,
-+                 make_opts, sysinfo):
-     """Main per-instance loop
- 
-     Prepare the build, generate a configuration, run the build, and submit the
-@@ -537,7 +543,7 @@ def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo)
-         if ret != 0:
-             continue
- 
--        ret = do_build(instance, njobs, instance_log)
-+        ret = do_build(instance, njobs, instance_log, make_opts)
-         send_results(instance, http_login, http_password, submitter, instance_log, ret)
- 
- # args / config file merging inspired by:
-@@ -597,7 +603,7 @@ def main():
-     for i in range(0, int(args['--ninstances'])):
-         p = Process(target=run_instance, args=(i, int(args['--njobs']),
-                 args['--http-login'], args['--http-password'],
--                args['--submitter'], sysinfo))
-+                args['--submitter'], args['--make-opts'], sysinfo))
-         p.start()
-         processes.append(p)
-     signal.signal(signal.SIGTERM, sigterm_handler)
++    def copy_config_log_files():
++        """Recursively copy any config.log files from the failing package"""
++
++        reason = get_failure_reason()
++        if not reason:
++            return
++
++        srcroot = os.path.join(outputdir, "build", '-'.join(reason))
++        destroot = os.path.join(resultdir, '-'.join(reason))
++
++        for root, dirs, files in os.walk(srcroot):
++            dest = os.path.join(destroot, os.path.relpath(root, srcroot))
++
++            for file in files:
++                if file == 'config.log':
++                    os.makedirs(dest)
++                    shutil.copy(os.path.join(root, file), os.path.join(dest, file))
++
++    copy_config_log_files()
++
+     resultf = open(os.path.join(resultdir, "status"), "w+")
+     if result == 0:
+         resultf.write("OK")
 -- 
 1.8.5.1
