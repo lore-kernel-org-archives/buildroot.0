@@ -1,41 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:39 +0200
-Subject: [Buildroot] [PATCH 05/31] gst-ffmpeg: use the new BR2_ARM_CPU_ARM*
-	options
+Date: Sun, 19 Oct 2014 22:07:37 +0200
+Subject: [Buildroot] [PATCH 03/31] arch/arm: add blind options to know the
+	ARM architecture
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of using the Config.in options for each individual ARM core,
-use the newly introduced BR2_ARM_CPU_ARM* options, which exist per ARM
-architecture.
+In preparation to the removal of BR2_GCC_TARGET_ARCH for ARM, this
+commit introduces a number of blind options for each ARM architecture,
+so that packages/toolchains that had dependencies using
+BR2_GCC_TARGET_ARCH can continue to express their dependencies. It can
+also be used to simplify package dependencies that were using the
+individual ARM core options.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/Config.in.arm | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index b94fb0f..df10c33 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -51,10 +51,10 @@ endif
- # Explicitly disable everything that doesn't match for ARM
- # FFMPEG "autodetects" by compiling an extended instruction via AS
- # This works on compilers that aren't built for generic by default
--ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-+ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV4T),y)
- GST_FFMPEG_CONF_EXTRA_OPTS += --disable-armv5te
- endif
--ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s),y)
-+ifeq ($(BR2_ARM_CPU_ARMV6J)$(BR2_ARM_CPU_ARMV6ZK),y)
- GST_FFMPEG_CONF_EXTRA_OPTS += --enable-armv6
- else
- GST_FFMPEG_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 201ff1d..d2ba924 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -37,6 +37,27 @@ config BR2_ARM_CPU_HAS_THUMB
+ config BR2_ARM_CPU_HAS_THUMB2
+ 	bool
+ 
++config BR2_ARM_CPU_ARMV4
++	bool
++
++config BR2_ARM_CPU_ARMV4T
++	bool
++
++config BR2_ARM_CPU_ARMV5TE
++	bool
++
++config BR2_ARM_CPU_ARMV5TEJ
++	bool
++
++config BR2_ARM_CPU_ARMV6J
++	bool
++
++config BR2_ARM_CPU_ARMV6ZK
++	bool
++
++config BR2_ARM_CPU_ARMV7A
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_arm || BR2_armeb
+@@ -47,70 +68,88 @@ choice
+ config BR2_arm920t
+ 	bool "arm920t"
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV4T
+ config BR2_arm922t
+ 	bool "arm922t"
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV4T
+ config BR2_arm926t
+ 	bool "arm926t"
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV5TEJ
+ config BR2_arm1136jf_s_r0
+ 	bool "arm1136jf_s rev0"
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6J
+ config BR2_arm1136jf_s_r1
+ 	bool "arm1136jf_s rev1"
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6J
+ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6ZK
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6ZK
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_MAYBE_HAS_NEON
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_cortex_a7
+ 	bool "cortex-A7"
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_cortex_a9
+ 	bool "cortex-A9"
+ 	select BR2_ARM_CPU_MAYBE_HAS_NEON
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_cortex_a12
+ 	bool "cortex-A12"
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_cortex_a15
+ 	bool "cortex-A15"
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_fa526
+ 	bool "fa526/626"
++	select BR2_ARM_CPU_ARMV4
+ config BR2_pj4
+ 	bool "pj4"
+ 	select BR2_ARM_CPU_HAS_VFPV3
++	select BR2_ARM_CPU_ARMV7A
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
++	select BR2_ARM_CPU_ARMV4
+ config BR2_xscale
+ 	bool "xscale"
+ 	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV5TE
+ config BR2_iwmmxt
+ 	bool "iwmmxt"
++	select BR2_ARM_CPU_ARMV5TE
+ endchoice
+ 
+ config BR2_arm1136jf_s
 -- 
 2.0.0
