@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:45 +0200
-Subject: [Buildroot] [PATCH 11/31] nettle: use the BR2_ARM_CPU_ARM* options
+Date: Sun, 19 Oct 2014 22:07:46 +0200
+Subject: [Buildroot] [PATCH 12/31] nodejs: use BR2_ARM_CPU_ARM* options
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust the nettle package to use the BR2_ARM_CPU_ARM* option to
-disable the usage of assembly code on ARMv4 and ARMv5.
+Adjust the nodejs Config.in dependencies to use the per ARM
+architecture BR2_ARM_CPU_ARM* options instead of the per ARM core
+options.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nettle/nettle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nodejs/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index e73a718..934d7b3 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -15,7 +15,7 @@ NETTLE_LICENSE_FILES = COPYING.LIB
- NETTLE_CONF_OPTS = --disable-openssl
- 
- # ARM assembly requires v6+ ISA
--ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_arm926t)$(BR2_fa526)$(BR2_strongarm)$(BR2_xscale)$(BR2_iwmmxt),y)
-+ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV4T)$(BR2_ARM_CPU_ARMV5TE)$(BR2_ARM_CPU_ARMV5TEJ),y)
- NETTLE_CONF_OPTS += --disable-assembler
- endif
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 077a043..cb8fb47 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_NODEJS
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
+ 	depends on !BR2_MIPS_SOFT_FLOAT
+ 	# ARM needs BLX, so v5t+
+-	depends on !(BR2_arm920t || BR2_arm922t || BR2_fa526)
++	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV4T
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_ZLIB
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_NODEJS
+ comment "nodejs needs a toolchain w/ C++, IPv6, largefile, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
+-	depends on !(BR2_arm920t || BR2_arm922t || BR2_fa526)
++	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV4T
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
  
 -- 
 2.0.0
