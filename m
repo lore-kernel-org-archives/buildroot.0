@@ -1,52 +1,112 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 17:15:12 +0200
-Subject: [Buildroot] [PATCH v2 1/3] infra: Move --enable/--disable-debug
- to package/Makefile.in
-In-Reply-To: <20141019170930.6cfe86d0@free-electrons.com>
-References: <1413712743-21832-1-git-send-email-bernd.kuhls@t-online.de>
- <20141019170930.6cfe86d0@free-electrons.com>
-Message-ID: <20141019151512.GW4072@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Oct 2014 17:17:29 +0200
+Subject: [Buildroot] [git commit] tar: bump to version 1.28
+Message-ID: <20141019151802.17644AF95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=d6548119c9039e87bc60b94dd3c5e05616178adc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-10-19 17:09 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 19 Oct 2014 11:59:01 +0200, Bernd Kuhls wrote:
-> > A lot of packages ignored BR2_ENABLE_DEBUG. This patch simplifies the handling of
-> > this option by adding the corresponding configure option to the global Makefile
-> > for target packages.
-> > 
-> > For host packages --disable-debug is added to the global Makefile.
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> Patches 1 and 2 applied. For patch 3, I'm a bit hesitant: there are
-> only two packages using --disable-gtk-doc-html. Does it really make
-> sense to factorize that in the package infrastructure?
-> 
-> Cc'ing Yann to get his input, since he Reviewed-by the patc in question.
+Also add hash file and set eprefix to / otherwise when busybox is around
+we've got duplicate tar applications (/bin/tar for busybox, /usr/bin/tar
+for full-blown) normally making busybox still win in directory search.
 
-Well, my Reviewed-by means just that: I reviewed it, and found it was
-correct. It does not mean I think it should go in.
+[Thomas: slightly improve the comment that explains why we pass
+--exec-prefix.]
 
-However, I do believe it should go in. The more generic stuff we move
-into the infra, the easier it will get to review packages.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tar/tar-0001-fix-build-failure.patch |   52 ++++++++++++++++++++++++++
+ package/tar/tar.hash                         |    2 +
+ package/tar/tar.mk                           |    5 ++-
+ 3 files changed, 58 insertions(+), 1 deletions(-)
 
-And since we already have four documentation-rleated switches, it makes
-sense to add another one. Further more, we do have --disable-gtk-doc, so
-adding --disable-gtk-doc-html really makes sense, for consistency.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/tar/tar-0001-fix-build-failure.patch b/package/tar/tar-0001-fix-build-failure.patch
+new file mode 100644
+index 0000000..8550a3e
+--- /dev/null
++++ b/package/tar/tar-0001-fix-build-failure.patch
+@@ -0,0 +1,52 @@
++Status: upstream
++http://git.savannah.gnu.org/cgit/tar.git/commit/?id=e9ddc08da0982f36581ae5a8c7763453ff41cfe8
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++From e9ddc08da0982f36581ae5a8c7763453ff41cfe8 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Wed, 24 Sep 2014 21:22:16 +0000
++Subject: Bugfixes.
++
++* doc/tar.1: Fix typo in font spec.
++* src/tar.c (sort_mode_arg, sort_mode_flag): Protect "inode"
++(SAVEDIR_SORT_INODE) with D_INO_IN_DIRENT
++---
++diff --git a/doc/tar.1 b/doc/tar.1
++index 9000627..b91de63 100644
++--- a/doc/tar.1
+++++ b/doc/tar.1
++@@ -879,7 +879,7 @@ Exclude files matching patterns listed in FILE.
++ \fB\-\-strip\-components\fR=\fINUMBER\fR
++ Strip \fINUMBER\fR leading components from file names on extraction.
++ .TP
++-\fB\-\-transform\fR=\fIEXPRESSION\dR, \fB\-\-xform\fR=\fIEXPRESSION\fR
+++\fB\-\-transform\fR=\fIEXPRESSION\fR, \fB\-\-xform\fR=\fIEXPRESSION\fR
++ Use sed replace \fIEXPRESSION\fR to transform file names.
++ .SS File name matching options
++ These options affect both exclude and include patterns.
++diff --git a/src/tar.c b/src/tar.c
++index 225c624..f8102e0 100644
++--- a/src/tar.c
+++++ b/src/tar.c
++@@ -1341,14 +1341,18 @@ static char filename_terminator;
++ static char const *const sort_mode_arg[] = {
++   "none",
++   "name",
+++#if D_INO_IN_DIRENT
++   "inode",
+++#endif
++   NULL
++ };
++ 
++ static int sort_mode_flag[] = {
++     SAVEDIR_SORT_NONE,
++     SAVEDIR_SORT_NAME,
+++#if D_INO_IN_DIRENT
++     SAVEDIR_SORT_INODE
+++#endif
++ };
++ 
++ ARGMATCH_VERIFY (sort_mode_arg, sort_mode_flag);
++--
++cgit v0.9.0.2
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+new file mode 100644
+index 0000000..ffad2d2
+--- /dev/null
++++ b/package/tar/tar.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking signature
++sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 369dc9d..caaa5ad 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,9 +4,12 @@
+ #
+ ################################################################################
+ 
+-TAR_VERSION = 1.27.1
++TAR_VERSION = 1.28
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
++# busybox installs in /bin, so we need tar to install as well in /bin
++# so that it overrides the Busybox symlinks.
++TAR_CONF_OPTS = --exec-prefix=/
+ TAR_LICENSE = GPLv3+
+ TAR_LICENSE_FILES = COPYING
+ 
