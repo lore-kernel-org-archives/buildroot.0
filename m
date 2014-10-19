@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Oct 2014 16:41:34 +0200
-Subject: [Buildroot] [PATCH 3/5] mpfr: add hash file
-In-Reply-To: <1413284223-20630-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 19 Oct 2014 16:41:50 +0200
+Subject: [Buildroot] [PATCH 4/5] gmp: add hash file
+In-Reply-To: <1413284223-20630-4-git-send-email-gustavo@zacarias.com.ar>
 References: <1413284223-20630-1-git-send-email-gustavo@zacarias.com.ar>
- <1413284223-20630-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019144134.GC4072@free.fr>
+ <1413284223-20630-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141019144150.GD4072@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,18 +24,18 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/mpfr/mpfr.hash | 2 ++
+>  package/gmp/gmp.hash | 2 ++
 >  1 file changed, 2 insertions(+)
->  create mode 100644 package/mpfr/mpfr.hash
+>  create mode 100644 package/gmp/gmp.hash
 > 
-> diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
+> diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
 > new file mode 100644
-> index 0000000..ea18780
+> index 0000000..9fe6344
 > --- /dev/null
-> +++ b/package/mpfr/mpfr.hash
+> +++ b/package/gmp/gmp.hash
 > @@ -0,0 +1,2 @@
 > +# Locally calculated after checking pgp signature
-> +sha256	399d0f47ef6608cc01d29ed1b99c7faff36d9994c45f36f41ba250147100453b	mpfr-3.1.2.tar.xz
+> +sha256	9156d32edac6955bc53b0218f5f3763facb890b73a835d5e1b901dcf8eb8b764	gmp-6.0.0a.tar.xz
 > -- 
 > 2.0.4
 > 
@@ -57,4 +57,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/c9980751/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141019/bc242496/attachment.asc>
