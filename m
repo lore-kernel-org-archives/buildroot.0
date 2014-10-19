@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:07:55 +0200
-Subject: [Buildroot] [PATCH 21/31] dhcpcd: do not pass --target option
+Date: Sun, 19 Oct 2014 22:07:53 +0200
+Subject: [Buildroot] [PATCH 19/31] libnspr: use the BR2_ARM_CPU_ARMV7A option
 In-Reply-To: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413749285-1108-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413749285-1108-20-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dhcpcd is using $(BR2_GCC_TARGET_ARCH) as the value of its --target
-option. However, depending on the architecture, this value might be
-empty.
-
-After inspecting the dhcpcd configure script, it turns out that in
-fact the --target option has the following semantic:
-
-  --target=TARGET   configure for building compilers for TARGET [HOST]
-
-So it is very much like the --target option of regular,
-autoconf-based, configure scripts. Since dhcpcd is not a compiler,
-passing --target is pointless. Moreover, as long as --os=linux is
-passed, passing --host or --target is completely ignored by the
-configure script.
+The libnspr --enable-thumb2 option was only enabled on Cortex-A8 and
+Cortex-A9. This commit switches ot using BR2_ARM_CPU_ARMV7A instead,
+which will allow using Thumb2 for this package even with the other
+Cortex-A cores.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcpcd/dhcpcd.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libnspr/libnspr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index f4b821a..3bb7a13 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -25,7 +25,6 @@ endif
- define DHCPCD_CONFIGURE_CMDS
- 	(cd $(@D); \
- 	$(TARGET_CONFIGURE_OPTS) ./configure \
--		--target=$(BR2_GCC_TARGET_ARCH) \
- 		--os=linux \
- 		$(DHCPCD_CONFIG_OPTS) )
- endef
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index eaa6eb7..537caa6 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -22,7 +22,7 @@ LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
+ LIBNSPR_CONF_OPTS += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
+ 
+ ifeq ($(BR2_arm),y)
+-ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ LIBNSPR_CONF_OPTS += --enable-thumb2
+ else
+ LIBNSPR_CONF_OPTS += --disable-thumb2
 -- 
 2.0.0
