@@ -1,29 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 22:52:23 +0200
-Subject: [Buildroot] [PATCH 14/16] eglibc/glibc: add hash file
-In-Reply-To: <1413329153-25453-14-git-send-email-gustavo@zacarias.com.ar>
-References: <1413329153-25453-1-git-send-email-gustavo@zacarias.com.ar>
- <1413329153-25453-14-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141019225223.08e0475c@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 19 Oct 2014 22:53:36 +0200
+Subject: [Buildroot] [PATCH v2] libevent: Use github call & fix patch
+In-Reply-To: <CAGduivx9wmYM=mi9csvTtkHnkr11RJ0k==4DGiz6X2U6f87RQQ@mail.gmail.com>
+References: <1413135162-16654-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <54442381.3070502@mind.be>
+ <CAGduivx9wmYM=mi9csvTtkHnkr11RJ0k==4DGiz6X2U6f87RQQ@mail.gmail.com>
+Message-ID: <544424D0.3070100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 19/10/14 22:49, Maxime Hadjinlian wrote:
+>> > ... which would also make this redundant. And probably the patch changes as
+>> > well. So perhaps this one should be rejected.
+> Please look at the commit log of the v4 of this patch, I edited it so
+> the need for this patch is clearer.
 
-On Tue, 14 Oct 2014 20:25:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/glibc/glibc.hash | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 package/glibc/glibc.hash
+ Sorry, FIFO mail reading... I should have checked for a v4.
 
-Applied, thanks.
+ Regards,
+ Arnout
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
