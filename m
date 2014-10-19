@@ -1,44 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Oct 2014 00:02:07 +0200
-Subject: [Buildroot] [git commit] connman: bump to version 1.26
-Message-ID: <20141019220305.DFF74AFE40@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Oct 2014 00:09:00 +0200
+Subject: [Buildroot] [PATCH 24/31] ffmpeg: use arch and cpu instead of
+ tune
+In-Reply-To: <1413749285-1108-25-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413749285-1108-25-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141019220900.GE12247@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8feb5adaa2377a0268459ffaa1497acb68371d52
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Also add hash file.
+On 2014-10-19 22:07 +0200, Thomas Petazzoni spake thusly:
+> ffmpeg currently uses BR2_GCC_TARGET_TUNE as the --cpu option
+> value. However, there are multiple architectures for which
+> BR2_GCC_TARGET_TUNE is not used. After inspecting the ffmpeg configure
+> script, we concluded that using the BR2_GCC_TARGET_CPU value if
+> available, or the BR2_GCC_TARGET_ARCH value as a fallback was the
+> appropriate behavior.
+> 
+> This allows to remove the reference to BR2_GCC_TARGET_TUNE, which is
+> one step towards the removal of this option.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.hash |    2 ++
- package/connman/connman.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-new file mode 100644
-index 0000000..58f74b3
---- /dev/null
-+++ b/package/connman/connman.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
-+sha256	7184e4b6d954449ee00a30e188924b3e37a20ad2fd9a0b76a2bdd82c863dcf8a	connman-1.26.tar.xz
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 8efc010..3ca049a 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.25
-+CONNMAN_VERSION = 1.26
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/ffmpeg/ffmpeg.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index a3865f3..6c8b899 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -334,6 +334,12 @@ endif
+>  
+>  FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+>  
+> +ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+> +FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
+> +else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH),)
+> +FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+> +endif
+> +
+>  # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+>  define FFMPEG_CONFIGURE_CMDS
+>  	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+> @@ -349,7 +355,6 @@ define FFMPEG_CONFIGURE_CMDS
+>  		--target-os="linux" \
+>  		--disable-stripping \
+>  		--pkg-config="$(PKG_CONFIG_HOST_BINARY)" \
+> -		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+>  		$(SHARED_STATIC_LIBS_OPTS) \
+>  		$(FFMPEG_CONF_OPTS) \
+>  	)
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
