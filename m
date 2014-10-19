@@ -1,64 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 23:26:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qdecoder: Fix build error
-Message-ID: <1413754004-4439-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Oct 2014 23:34:06 +0200
+Subject: [Buildroot] [PATCH 01/31] ffmpeg: remove dangling reference to
+ BR2_arm10
+In-Reply-To: <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141019213406.GB12247@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Error occured with an allyespackageconfig setup:
+Thomas, All,
 
-qcgireq.c: In function '_parse_multipart_value_into_disk':
-qcgireq.c:738:60: error: 'errno' undeclared (first use in this function)
-         DEBUG("I/O error. (errno=%d)", (ioerror == true) ? errno : 0);
+On 2014-10-19 22:07 +0200, Thomas Petazzoni spake thusly:
+> BR2_arm10 has been removed in commit
+> d60489a6e5e733a20d18b128646088981da57867 ("arch: remove BR2_arm10t"),
+> so there is no point in keeping a reference to it in the ffmpeg
+> package.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/qdecoder/qdecoder-0003-errno.patch |   34 ++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/qdecoder/qdecoder-0003-errno.patch
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/qdecoder/qdecoder-0003-errno.patch b/package/qdecoder/qdecoder-0003-errno.patch
-new file mode 100644
-index 0000000..71d5cfd
---- /dev/null
-+++ b/package/qdecoder/qdecoder-0003-errno.patch
-@@ -0,0 +1,34 @@
-+Fixes build error
-+
-+qcgireq.c: In function '_parse_multipart_value_into_disk':
-+qcgireq.c:738:60: error: 'errno' undeclared (first use in this function)
-+         DEBUG("I/O error. (errno=%d)", (ioerror == true) ? errno : 0);
-+
-+Patch downloaded from upstream repo:
-+https://github.com/wolkykim/qdecoder/commit/574f0216a51e3e852cd94e2a0a3b52dc64e74548
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 574f0216a51e3e852cd94e2a0a3b52dc64e74548 Mon Sep 17 00:00:00 2001
-+From: nyov <nyov@nexnode.net>
-+Date: Fri, 5 Sep 2014 18:41:10 +0000
-+Subject: [PATCH] add missing header include
-+
-+fixes #7
-+---
-+ src/qcgireq.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/qcgireq.c b/src/qcgireq.c
-+index dcb8c57..d34ff83 100644
-+--- a/src/qcgireq.c
-++++ b/src/qcgireq.c
-+@@ -139,6 +139,7 @@
-+ #ifndef _WIN32
-+ #include <dirent.h>
-+ #endif
-++#include <errno.h>
-+ #include "qdecoder.h"
-+ #include "internal.h"
-+ 
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/ffmpeg/ffmpeg.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 166b5ce..21ec1c9 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -285,7 +285,7 @@ FFMPEG_CONF_OPTS += --enable-armv6
+>  else
+>  FFMPEG_CONF_OPTS += --disable-armv6 --disable-armv6t2
+>  endif
+> -ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
+> +ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
+>  FFMPEG_CONF_OPTS += --enable-vfp
+>  else
+>  FFMPEG_CONF_OPTS += --disable-vfp
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
