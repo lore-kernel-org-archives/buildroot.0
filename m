@@ -1,61 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Oct 2014 11:59:02 +0200
-Subject: [Buildroot] [PATCH v2 2/3] Remove --disable-gtk-doc from packages,
-	already defined in pkg-autotools.mk
-In-Reply-To: <1413712743-21832-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413712743-21832-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1413712743-21832-2-git-send-email-bernd.kuhls@t-online.de>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Sun, 19 Oct 2014 17:59:20 +0800
+Subject: [Buildroot] [PATCH 1/1] bandwidthd: Version bump to handle
+ indirect deps properly
+In-Reply-To: <20141019094144.GL4072@free.fr>
+References: <1413708943-13566-1-git-send-email-nroach44@gmail.com>
+ <20141019094144.GL4072@free.fr>
+Message-ID: <54438B78.1070805@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 19/10/14 17:41, Yann E. MORIN wrote:
+> Nathaniel, All,
+> 
+> On 2014-10-19 16:55 +0800, Nathaniel Roach spake thusly:
+>> Thanks to Romain Naor, Baruch Siach and Thomas Petazzoni, I've
+> 
+> Romain Naour, I believe... ;-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: rebased
+Damn it...
 
- package/libglib2/libglib2.mk               |    1 -
- package/network-manager/network-manager.mk |    1 -
- package/systemd/systemd.mk                 |    1 -
- 3 files changed, 3 deletions(-)
+> 
+>> solved the build issues in certain cases for bandwidthd.
+>>
+>> The issue was that libpcap and libpng would depend on other libraries
+>> and upon testing for pcap/libpng the tests would fail due to not
+>> being able to find the other libraries.
+>>
+>> Bandwidthd's configure script now uses pkg-config for libpng
+>> and pcap-config for libpcap. pcap-config's path is specified
+>> in configure's arguments.
+>>
+>> Some other tweaks have been made including the layout and flow
+>> of configure.ac is a bit more logical, and the handling of postgres
+>> and sqlite has been tweaked. Finally, the test for X.Org has been
+>> removed.
+>>
+>> Fixes: http://autobuild.buildroot.org/results/eb4/eb48acec37a7fd1714b267b105816bf0053d40e9/build-end.log
+>> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+> 
+> Usually, when some people helped with the patch, it is customary (but
+> not mandatory) to add them in Cc: lines below the SoB line. ;-)
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d7836a5..a64ef39 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -62,7 +62,6 @@ LIBGLIB2_CONF_ENV += ac_cv_header_sys_inotify_h=no
- endif
- 
- HOST_LIBGLIB2_CONF_OPTS = \
--		--disable-gtk-doc \
- 		--disable-dtrace \
- 		--disable-systemtap \
- 		--disable-gcov \
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index b217781..7944254 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -29,7 +29,6 @@ NETWORK_MANAGER_CONF_OPTS = \
- 		--disable-qt \
- 		--disable-more-warnings \
- 		--without-docs \
--		--disable-gtk-doc \
- 		--with-crypto=gnutls \
- 		--with-iptables=/usr/sbin/iptables \
- 		--disable-ifupdown \
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1ca3fd8..fd19bff 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -34,7 +34,6 @@ SYSTEMD_CONF_OPTS += \
- 	--disable-selinux \
- 	--disable-pam \
- 	--disable-libcryptsetup \
--	--disable-gtk-doc \
- 	--with-dbuspolicydir=/etc/dbus-1/system.d \
- 	--with-dbussessionservicedir=/usr/share/dbus-1/services \
- 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
--- 
-1.7.10.4
+I'll send a fixed one through shortly.
