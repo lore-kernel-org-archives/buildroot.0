@@ -1,44 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Oct 2014 12:07:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] fs/iso9660: add dependencies for
- make source
-In-Reply-To: <1413656639-3314-1-git-send-email-kaszak@gmail.com>
-References: <1413656639-3314-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20141019120708.6c44ece6@free-electrons.com>
+Date: Sun, 19 Oct 2014 12:10:03 +0200
+Subject: [Buildroot] [git commit] package/libva-intel-driver: Do not depend
+	on xorg
+Message-ID: <20141019101010.2A01AADFEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+commit: http://git.buildroot.net/buildroot/commit/?id=14387bb1d049b1190719b3b38ba79e9afcf0d925
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 18 Oct 2014 20:23:59 +0200, Karoly Kasza wrote:
-> The "iso image" rootfs target is a special one, as it does not use the
-> ROOTFS_TARGET infrastructure. The absence of ROOTFS_*_DEPENDENCIES
-> variable makes "make source" to skip this target's dependencies
-> (namely host-cdrkit and it's children) obstructing an offline build.
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+This patch reverts
+http://git.buildroot.net/buildroot/commit/package/libva-intel-driver/Config.in?id=062bacfa67688b2747412a30ddeb996449d1c6df
 
-Thanks applied. Two notes:
+By removing the xorg dependency of libpciaccess the libdrm package, and
+therefore also libva-intel-driver, does not depend on xorg any longer.
 
- * I've added a rootfs-iso9660-show-depends target, otherwise 'make
-   graph-depends' was failing when iso9660 was selected.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libva-intel-driver/Config.in |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
 
- * The solution you've used, to add the ROOTFS_ISO9660_DEPENDENCIES
-   really only works because of the way the main Makefile gets the
-   dependencies for host packages. But as we've discussed in a separate
-   way, this mechanism is broken, and should be replaced by a
-   mechanism that relies on the package infrastructure. And when that
-   will be done, iso9660 will break again. We should probably at some
-   point figure out a way of getting the iso9660 support properly
-   integrated as a normal filesystem type.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
+index cac2fed..a0f397b 100644
+--- a/package/libva-intel-driver/Config.in
++++ b/package/libva-intel-driver/Config.in
+@@ -3,11 +3,10 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
+ 	select BR2_PACKAGE_LIBVA
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_PACKAGE_XORG7 # libdrm intel
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
+ 	depends on BR2_LARGEFILE # libdrm
+ 	depends on !BR2_PREFER_STATIC_LIB # libva
+@@ -20,7 +19,3 @@ comment "libva intel driver needs a toolchain w/ largefile, threads, dynamic lib
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_PREFER_STATIC_LIB
+ 	depends on BR2_i386 || BR2_x86_64
+-
+-comment "libva intel driver needs X.org"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_XORG7
