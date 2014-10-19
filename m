@@ -1,116 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 19 Oct 2014 21:30:05 +0200
-Subject: [Buildroot] [PATCHv2 buildroot-test 09/11] autobuild-run: improve
-	the logic to generate build-end.log
-In-Reply-To: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413747007-24990-10-git-send-email-patrickdepinguin@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 19 Oct 2014 15:33:20 -0400
+Subject: [Buildroot] [PATCH v4 2/4] gst-ffmpeg: add --pkg-config to internal
+	libav configure options
+In-Reply-To: <1413747202-8919-1-git-send-email-danomimanchego123@gmail.com>
+References: <1413747202-8919-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1413747202-8919-2-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+The internal copy of libav in gst-ffmpeg does not understand the
+PKG_CONFIG env variable, so it throws a line like this at the end
+of its configuration:
 
-This patch makes the generation of build-end.log more intelligent, by
-not simply adding the 500 last lines, but instead capture the entire
-output of the failed package.
+WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found, library detection may fail.
 
-If no failure reason can be found (possibly a good run) or the start for
-that package cannot be found, use the 500 last lines as fallback.
+This patch adds the --pkg-config to let libav know where it is.
 
-The logic to find the failed package is taken from the result import
-script web/import.inc.php. If needed, the search range of the last 3
-lines could be extended.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Note that the package-version string extracted from the build log is
-split on the last hyphen into a tuple (package, version). This is
-needed to find back the beginning of that package's build (where the
-package name is separated from the version with a space, not a hyphen).
-However, this logic will fail to work when the version also contains a
-hyphen, for example lmbench-3.0-a9. In this case, the resulting tuple
-will be (lmbench-3.0,a9) and the text searched in the build log
-'>>> lmbench-3.0 a9' (which will not be found). In this case, the
-fallback of the last 500 lines will be used.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-v2: new patch
 
- scripts/autobuild-run | 53 ++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 46 insertions(+), 7 deletions(-)
+This is basically the same problem suffered by ffmpeg, fixed in
+commit a9a5a8159937cbc5e472cbd0b144d596b85a3386.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index c3abe62..1960f53 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -44,10 +44,6 @@
- #
- # TODO:
- #
--# - Improve the logic that generates the 'build-end.log' file. Instead
--#   of just using the last 500 lines of the build log, search the
--#   start of the build of the failing package.
--#
- # - Include the config.log file (when it exists) in the tarball for
- #   failed builds when the failure occurs on an autotools package.
- #
-@@ -477,9 +473,52 @@ def send_results(result, **kwargs):
-     subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
-                      os.path.join(resultdir, "gitid")],
-                     shell=True, cwd=srcdir)
--    subprocess.call(["tail -500 %s > %s" % \
--                     (os.path.join(outputdir, "logfile"), os.path.join(resultdir, "build-end.log"))],
--                    shell=True)
-+
-+    def get_failure_reason():
-+        # Output is a tuple (package, version), or None.
-+
-+        lastlines = subprocess.check_output(["tail", "-n", "3",
-+                        os.path.join(outputdir, "logfile")]).splitlines()
-+
-+        import re
-+        regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-+        for line in lastlines:
-+            m = regexp.search(line)
-+            if m:
-+                return m.group(1).rsplit('-', 1)
-+
-+        # not found
-+        return None
-+
-+    def extract_end_log(resultfile):
-+        """Save the last part of the build log, starting from the failed package"""
-+
-+        def extract_last_500_lines():
-+            subprocess.call(["tail -500 %s > %s" % \
-+                             (os.path.join(outputdir, "logfile"), resultfile)],
-+                            shell=True)
-+
-+        reason = get_failure_reason()
-+        if not reason:
-+            extract_last_500_lines()
-+        else:
-+            import mmap
-+            f = open(os.path.join(outputdir, "logfile"), 'r')
-+            mf = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-+            mf.seek(0)
-+            # Search for first action on the failed package
-+            offset = mf.find('>>> %s' % ' '.join(reason))
-+            if offset != -1:
-+                with open(resultfile, "w") as endlog:
-+                    endlog.write(mf[offset:])
-+            else:
-+                # not found, use last 500 lines as fallback
-+                extract_last_500_lines()
-+
-+            mf.close()
-+            f.close()
-+
-+    extract_end_log(os.path.join(resultdir, "build-end.log"))
+v3 -> v4:
+ - Add Luca Ceresoli's Tested-by and Reviewed-by.
+---
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index 2db0f15..e8c6d61 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -22,7 +22,8 @@ endif
  
-     resultf = open(os.path.join(resultdir, "status"), "w+")
-     if result == 0:
+ GST_FFMPEG_CONF_EXTRA_OPTS = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+-		--target-os=linux
++		--target-os=linux \
++		--pkg-config='$(PKG_CONFIG_HOST_BINARY)'
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GST_FFMPEG_CONF_EXTRA_OPTS += --enable-zlib
 -- 
-1.8.5.1
+1.9.1
