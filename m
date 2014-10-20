@@ -1,54 +1,70 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Oct 2014 21:57:10 +0200
-Subject: [Buildroot] [PATCH 01/15] package/pkg-cmake.mk: globally
- disable doc, examples and tests
-In-Reply-To: <20141019225649.2f16bd37@free-electrons.com>
-References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
- <1413741891-30113-2-git-send-email-s.martin49@gmail.com>
- <20141019221013.090eb47d@free-electrons.com>
- <CAHXCMMKCj2PoOrL0xGPRfp=FOhZm4=tN2RdPJR9J-J=_3ro_3w@mail.gmail.com>
- <20141019225649.2f16bd37@free-electrons.com>
-Message-ID: <54456916.6010407@mind.be>
+Date: Mon, 20 Oct 2014 22:03:39 +0200
+Subject: [Buildroot] [PATCH 03/31] arch/arm: add blind options to know
+ the ARM architecture
+In-Reply-To: <20141019215528.GD12247@free.fr>
+References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413749285-1108-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141019215528.GD12247@free.fr>
+Message-ID: <54456A9B.4020704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/14 22:56, Thomas Petazzoni wrote:
-> Dear Samuel Martin,
+On 19/10/14 23:55, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On Sun, 19 Oct 2014 22:28:18 +0200, Samuel Martin wrote:
-
-[snip]
-
->> Since we don't really care about these things, and don't want to be
->> bothered by failure because of these features, I think it's a way to
->> enforce disabling them.
+> On 2014-10-19 22:07 +0200, Thomas Petazzoni spake thusly:
+>> In preparation to the removal of BR2_GCC_TARGET_ARCH for ARM, this
+>> commit introduces a number of blind options for each ARM architecture,
+>> so that packages/toolchains that had dependencies using
+>> BR2_GCC_TARGET_ARCH can continue to express their dependencies. It can
+>> also be used to simplify package dependencies that were using the
+>> individual ARM core options.
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+>>  arch/Config.in.arm | 39 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 39 insertions(+)
+>>
+>> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+>> index 201ff1d..d2ba924 100644
+>> --- a/arch/Config.in.arm
+>> +++ b/arch/Config.in.arm
+>> @@ -37,6 +37,27 @@ config BR2_ARM_CPU_HAS_THUMB
+>>  config BR2_ARM_CPU_HAS_THUMB2
+>>  	bool
 > 
-> And so, we will keep adding more and more options that are not CMake
-> standard options to the core CMake infrastructure?
+> Indirectly related to your patch: HAS_THUMB2 should select HAS_THUMB,
+> since Thumb-2 is a superset of Thumb.
 > 
-> I know we've done that for pkg-autotools, but I'm not sure it was such
-> a great idea. Especially, I'd like to understand where we will stop:
-> will we, when two packages have common options, move them to the common
-> infrastructure, even if those options are not CMake standard at all?
+> Then, you could just have (for example) BR2_ARM_CPU_ARMV4 and ditch
+> BR2_ARM_CPU_ARMV4T since it can be reconstructed from BR2_ARM_CPU_ARMV4
+> && HAS_THUMB.
 > 
-> At least, I'd like to see what is our "policy" about this, and get some
-> feedback from other Buildroot developers on this.
+> The reasonning is that few package actually require knowing the exact
+> variant, but rather the instruction set generation. Thus knowing about
+> armv4t is equivalent to knowing about armv4 for most. Those few that
+> actuallt require the Thumb isns would need to use the HAS_THUMB option,
+> which very purpose is just that, telling whether thumb is supported or
+> not (or HAS_THUMB2 for Thumb-2).
 
- I prefer to have these things in the common package infrastructure. It makes it
-easier for package contributors to get things right. It doesn't really hurt to
-add redundant options to configure or cmake (except for the warning, but the
-warning message is clear enough to see when it is or isn't problematic). And
-it's extremely unlikely that the options we provide in the infrastructure will
-ever by wrong.
-
- So for me, ease of development takes precedence over cleanliness.
+ +1 to this. I made the same reasoning.
 
 
  Regards,
  Arnout
+
+
+> As for the J version, I wonder if we need to introduce a HAS_JAZELLE
+> option. For armv6zk (Wikpedia refer to it as armv6kz), I also doubt we
+> need to introduce a HAS_TRUSTZONE option either. For armv7a, I think we
+> can just use armv7, since we will probably never support the R and M
+> profiles in Buildroot.
+
+[snip]
 
 
 -- 
