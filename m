@@ -1,32 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Oct 2014 08:49:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sdl_sound: Fix build with
-	BR2_ENABLE_DEBUG=yes
-In-Reply-To: <1413781229-23932-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 20 Oct 2014 07:00:29 +0200")
-References: <1413781229-23932-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87bnp7ck1d.fsf@dell.be.48ers.dk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 20 Oct 2014 09:29:07 +0200
+Subject: [Buildroot] [PATCH] host-perl: fix dependencies
+Message-ID: <1413790147-21736-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+see autobuilder
+http://autobuild.buildroot.net/results/5557b262bfc344700ed04563a40f10bc2a23eb31/
+http://autobuild.buildroot.net/results/8b22b950ba9d1635991a97e477ad5268f08b4004/
 
- > Fixes
- > speex.c: In function 'process_header':
- > speex.c:140:10: error: assignment discards 'const' qualifier from pointer target type [-Werror]
- >      mode = speex_mode_list[header.mode];
- >           ^
- > cc1: all warnings being treated as errors
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Thanks, but it would be nice to use something upstreamable
-instead. Either fix the constness (speex_mode_list has afaik returned a
-const for a very long time) or discuss with upstream about disabling
--Werror in configure.in.
-
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 723dc12..a8ed49f 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -99,6 +99,10 @@ define PERL_INSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+ endef
+ 
++# We never want to have host-berkeleydb or host-gdbm as dependencies
++# of host-perl.
++HOST_PERL_DEPENDENCIES =
++
+ HOST_PERL_CONF_OPTS = \
+ 	-des \
+ 	-Dprefix="$(HOST_DIR)/usr" \
 -- 
-Bye, Peter Korsgaard
+1.9.1
