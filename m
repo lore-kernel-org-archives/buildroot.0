@@ -1,56 +1,32 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 20 Oct 2014 10:45:10 +0200
-Subject: [Buildroot] systemd not working properly?
-In-Reply-To: <20141019124525.01fe9653@free-electrons.com>
-References: <20141019124525.01fe9653@free-electrons.com>
-Message-ID: <CAGduivx-ZzNLFbvEkTGwEwDyucGKqL0UmLb7s3F5AAxno5_ECQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Oct 2014 10:41:37 +0200
+Subject: [Buildroot] [PATCH 1/2] mx53loco: update support
+In-Reply-To: <1413790693-8281-1-git-send-email-eric@eukrea.com>
+References: <1413790693-8281-1-git-send-email-eric@eukrea.com>
+Message-ID: <20141020104137.768ab68f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas ,all
+Dear Eric B?nard,
 
-On Sun, Oct 19, 2014 at 12:45 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear systemd/Buildroot users,
->
-> I don't use systemd much, but every time I need to test a config with
-> systemd enabled, there are quite a few errors at boot time, and more
-> precisely, it doesn't even boot completely. Here are the errors I get:
->
-> [FAILED] Failed to start Remount Root and Kernel File Systems.
-> See 'systemctl status systemd-remount-fs.service' for details.
-> ...
->
-> Then a *very* long delay because of dev-ttyAMA0.device., that finally
-> ends up with:
->
-> [ TIME ] Timed out waiting for device dev-ttyAMA0.device.
-> [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
->
-> And finally, I get no getty at all.
-So this particular issues, is due to the fact that for some reason,
-systemd doesn't like the fact that ttyAMA0 is a serial-link. If you
-delete the link in /etc/systemd/system/multi-user.target.wants/ and
-recreate it to point to getty at .service instead of
-serial-getty at .service, it will boot up fine.
-I am still looking into why it doesn't work. I am exploring some idea.
->
-> Defconfig being used:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_SYSTEMD=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> BR2_PACKAGE_AVAHI=y
-> BR2_PACKAGE_AVAHI_DAEMON=y
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+On Mon, 20 Oct 2014 09:38:12 +0200, Eric B?nard wrote:
+
+> -# Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_2.6.35_11.09.01"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_2.6.35_maintain"
+
+Since we're using 2.6.35, the kernel headers of the toolchain should
+also be fixed to 2.6.35, otherwise we're using 3.17 by default which
+may cause some issues.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
