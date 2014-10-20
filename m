@@ -1,32 +1,55 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 21 Oct 2014 00:24:12 +0200
-Subject: [Buildroot] [PATCH 2/2 v5] package/mono: new package
-Message-ID: <54458B8C.4020505@crapouillou.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Oct 2014 22:43:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
+ due to missing header files in include path
+In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
+References: <bug-7478-163@https.bugs.busybox.net/>
+Message-ID: <20141020224318.C0372AFFBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In-Reply-To: 1413814528-26904-3-git-send-email-angelo.compagnucci at gmail.com
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
-Hi Angelo,
+--- Comment #9 from Christian Abegg <cma@vtxnet.ch> 2014-10-20 22:43:18 UTC ---
+Hi Thomas,
 
-Your package does not work here, host-mono fails to build.
-I attached the log file.
+thanks for the hints and sorry for the delay.
 
-Could the DLL files be downloaded instead of rebuilt? They should be
-arch-independent, so it may be easier and faster to just download them.
-Then only the runtime would need to be built.
+I adapted my config file with your options and still got the same errors. I
+also tried glibc and uclib and gcc4.8/4.9 but the sqlite extension is still not
+built. As soon as I switch to an external toolchain, it works correctly.
 
-Regards,
+For the include paths, I added some print statements in the
+Lib/distutils/command/build_ext.py and the setup.py file (see
+br-python-2.7.8-setup-py.patch attachment). As seen below, the sysroot include
+dir isn't received by the python setup script (setup.py):
 
-Paul
+# With buildroot internal toolchain
+inc_dirs =  ['.', 'Include', './Include',
+'/tmp/buildroot-internal/output/build/python-2.7.8/Include',
+'/tmp/buildroot-internal/output/build/python-2.7.8']
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: mono.log
-Type: text/x-log
-Size: 30232 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141021/06b14610/attachment-0001.bin>
+# Using an external toolchain
+inc_dirs =  ['.', 'Include', './Include',
+'/tmp/buildroot-external/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include',
+'/tmp/buildroot-external/output/build/python-2.7.8/Include',
+'/tmp/buildroot-external/output/build/python-2.7.8']
+and from the build_ext.py file:
+ext.include_dirs = ['Modules/_sqlite',
+'/tmp/buildroot-external/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include']
+
+So somehow the required include dir
+('/tmp/buildroot-external/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/include')
+isn't forwarded to the python setup.py script who builds the extensions.
+
+From that point, I'm a bit clueless why the sysroot include dir isn't in the
+dir list when an internal toolchain is used. Where is the next place to look ?
+Maybe something with the python configure options ?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
