@@ -1,41 +1,34 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 20 Oct 2014 15:08:22 +0200
-Subject: [Buildroot] [PATCH 2/2 v4] package/mono: new package
-In-Reply-To: <20141020145938.631151a9@free-electrons.com>
-References: <1413799646-14332-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141020145938.631151a9@free-electrons.com>
-Message-ID: <CA+TH9VmzXk=Ls-Pw7HQW8Sji71+-JQjZpuag9GuK8tmjgvgWPQ@mail.gmail.com>
+Date: Mon, 20 Oct 2014 15:17:06 +0200
+Subject: [Buildroot] Firmware update for Buildroot
+Message-ID: <CA+TH9VnM21MSTZ0HnWM_u+uSgLSzUj1=PhYfOFTfn6H7aMK_oQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hello List,
 
-> When you post new versions of the Mono patches, please post *all*
-> patches, i.e both monolite and mono. Otherwise, we don't understand
-> which version of which patch should be applied, and we don't understand
-> why we receive a single patch titled PATCH 2/2 (where is PATCH 1/2 ?).
+I'm looking for the best tool to prepare and apply firmware images
+based on Buildroot. I know that is a complex matter, but what I'm
+asking here is an advice.
 
-Monolite patch is not changed, should I resend all the patches also if
-not changed? It's not toot much confusion?
+After several hours of searching, I finally found what seems a good
+piece of software:
 
-Monolite patch is here http://patchwork.ozlabs.org/patch/398905/ (1/2)
-Latest mono patch is here: http://patchwork.ozlabs.org/patch/401051/ (2/2 v4)
+https://github.com/fhunleth/fwup
+
+It's maintained and it has a  good integration with Buildroot.
+I know that Thomas Petazzoni wrote this one:
+
+https://www.gitorious.org/embedded-linux-firmware-upgrade-tool
+
+But It seems not maintained anymore.
+
+Any advice on this matter?
 
 Thank you for your time!
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
 
 -- 
 Profile: http://it.linkedin.com/in/compagnucciangelo
