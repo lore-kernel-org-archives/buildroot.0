@@ -1,102 +1,52 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Mon, 20 Oct 2014 11:11:18 -0400
-Subject: [Buildroot] [PATCH v3] yaml-cpp: new package
-Message-ID: <1413817878-26953-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 20 Oct 2014 16:52:56 +0100
+Subject: [Buildroot] [PATCH] qt5connectivity: propagate bluez-utils
+	dependencies
+Message-ID: <1413820376-11771-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-yaml-cpp is a YAML parser and emitter in C++ matching
-the YAML 1.2 spec.
+qt5connectivity selects the bluez-utils package but the dependencies are
+not fully propagated so someone could do a static build, then select the
+qt5connectivity package causing bluez-utils being auto-selected, which
+is disabled for static builds, and then obtain a build failure like this
+one:
 
-https://code.google.com/p/yaml-cpp/
+checking for dlopen in -ldl... no
+configure: error: dynamic linking loader is required
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
----
-Changes v2 -> v3:
-  - added comments to explain the dependencies inherited from boost
-		  (suggested by yann.morin.1998 at free.fr)
----
-Changes v1 -> v2:
-  - rename the commit title (suggested by
-		  thomas.petazzoni at free-electrons.com)
-  - change package place to Librairies > XML/JSON (suggested by
-		  thomas.petazzoni at free-electrons.com)
-  - change the YAML_CPP_VERSION and remove the useless YAML_CPP_SOURCE
-		  (suggested by thomas.petazzoni at free-electrons.com)
----
- package/Config.in              |  1 +
- package/yaml-cpp/Config.in     | 14 ++++++++++++++
- package/yaml-cpp/yaml-cpp.hash |  5 +++++
- package/yaml-cpp/yaml-cpp.mk   | 13 +++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/yaml-cpp/Config.in
- create mode 100644 package/yaml-cpp/yaml-cpp.hash
- create mode 100644 package/yaml-cpp/yaml-cpp.mk
+Fixes:
+	http://autobuild.buildroot.net/results/96d/96d8297be0b731da138b1e2aafb851061aee3c40/
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b46dc..7ff953e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -737,6 +737,7 @@ menu "JSON/XML"
- 	source "package/tinyxml/Config.in"
- 	source "package/xerces/Config.in"
- 	source "package/yajl/Config.in"
-+	source "package/yaml-cpp/Config.in"
- endmenu
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/qt5/qt5connectivity/Config.in |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
+index c9f36ef..20778dc 100644
+--- a/package/qt5/qt5connectivity/Config.in
++++ b/package/qt5/qt5connectivity/Config.in
+@@ -5,6 +5,9 @@ config BR2_PACKAGE_QT5CONNECTIVITY
+ 	select BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	select BR2_PACKAGE_QT5BASE_DBUS
+ 	depends on !BR2_avr32 # bluez_utils
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
++	depends on BR2_USE_WCHAR # bluez_utils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils
+ 	depends on BR2_USE_MMU # bluez_utils
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+@@ -13,3 +16,7 @@ config BR2_PACKAGE_QT5CONNECTIVITY
+ 	  This package corresponds to the qt5connectivity module.
  
- menu "Logging"
-diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
-new file mode 100644
-index 0000000..d6afdac
---- /dev/null
-+++ b/package/yaml-cpp/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_YAML_CPP
-+	bool "yaml-cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE # boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-+	select BR2_PACKAGE_BOOST
-+	help
-+	  yaml-cpp is a YAML parser and emitter in C++ matching
-+	  the YAML 1.2 spec.
+ 	  http://qt-project.org
 +
-+	  https://code.google.com/p/yaml-cpp/
-+
-+comment "yaml-cpp needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/yaml-cpp/yaml-cpp.hash b/package/yaml-cpp/yaml-cpp.hash
-new file mode 100644
-index 0000000..391e317
---- /dev/null
-+++ b/package/yaml-cpp/yaml-cpp.hash
-@@ -0,0 +1,5 @@
-+# hash from: https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz:
-+sha1 9c5414b4090491e96d1b808fe8628b31e625fdaa  yaml-cpp-0.5.1.tar.gz
-+
-+# Locally calculated:
-+sha256 3e7c9052b43d987d41819a203d97fc45de4eed3ec67e0fdb14265c3d11046f06  yaml-cpp-0.5.1.tar.gz
-diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
-new file mode 100644
-index 0000000..5ebdb23
---- /dev/null
-+++ b/package/yaml-cpp/yaml-cpp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# yaml-cpp
-+#
-+################################################################################
-+
-+YAML_CPP_VERSION = 0.5.1
-+YAML_CPP_SITE = https://yaml-cpp.googlecode.com/files
-+YAML_CPP_INSTALL_STAGING = YES
-+YAML_CPP_LICENSE = MIT
-+YAML_CPP_LICENSE_FILES = license.txt
-+
-+$(eval $(cmake-package))
++comment "qt5connectivity needs a toolchain w/ wchar, threads, dynamic library"
++	depends on !BR2_avr32 && BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
 -- 
-1.8.3.4
+1.7.1
