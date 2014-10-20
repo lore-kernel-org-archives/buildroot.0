@@ -1,102 +1,67 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon, 20 Oct 2014 10:16:59 +0200
-Subject: [Buildroot] [PATCH v2 1/1] mp4v2: new package
-Message-ID: <1413793019-17632-1-git-send-email-jkrause@posteo.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 20 Oct 2014 10:34:19 +0200
+Subject: [Buildroot] [PATCH 01/15] package/pkg-cmake.mk: globally
+ disable doc, examples and tests
+In-Reply-To: <20141019225649.2f16bd37@free-electrons.com>
+References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
+ <1413741891-30113-2-git-send-email-s.martin49@gmail.com>
+ <20141019221013.090eb47d@free-electrons.com>
+ <CAHXCMMKCj2PoOrL0xGPRfp=FOhZm4=tN2RdPJR9J-J=_3ro_3w@mail.gmail.com>
+ <20141019225649.2f16bd37@free-electrons.com>
+Message-ID: <CAHXCMMKR7kzESqT2syEqKkCxZSMHXLXQd_NyMHSqhs_TiAfMyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
-Changes v1 -> v2:
-  - fix indentation (tab width is 8)
-  - remove unnecessary config option --disable-debug (pkg-autotools 
-    infrastructure will handle this soon)
-  - use positive logic for BR2_PACKAGE_MP4V2_UTIL
----
- package/Config.in        |  1 +
- package/mp4v2/Config.in  | 21 +++++++++++++++++++++
- package/mp4v2/mp4v2.hash |  2 ++
- package/mp4v2/mp4v2.mk   | 20 ++++++++++++++++++++
- 4 files changed, 44 insertions(+)
- create mode 100644 package/mp4v2/Config.in
- create mode 100644 package/mp4v2/mp4v2.hash
- create mode 100644 package/mp4v2/mp4v2.mk
+On Sun, Oct 19, 2014 at 10:56 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Sun, 19 Oct 2014 22:28:18 +0200, Samuel Martin wrote:
+>
+>> > Are these options standardized by CMake, or are they just "generally"
+>> > used by a number of packages?
+>>
+>> Not standardized by CMake, just used by a number of packages.
+>>
+>> >
+>> > If not, I don't see why they should be passed by the
+>> > CMake infrastructure.
+>>
+>> Since we don't really care about these things, and don't want to be
+>> bothered by failure because of these features, I think it's a way to
+>> enforce disabling them.
+>
+> And so, we will keep adding more and more options that are not CMake
+> standard options to the core CMake infrastructure?
+>
+> I know we've done that for pkg-autotools, but I'm not sure it was such
+> a great idea. Especially, I'd like to understand where we will stop:
+> will we, when two packages have common options, move them to the common
+> infrastructure, even if those options are not CMake standard at all?
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b46dc..9db18be 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -555,6 +555,7 @@ menu "Audio/Sound"
- 	source "package/libsndfile/Config.in"
- 	source "package/libsoxr/Config.in"
- 	source "package/libvorbis/Config.in"
-+	source "package/mp4v2/Config.in"
- 	source "package/opencore-amr/Config.in"
- 	source "package/opus/Config.in"
- 	source "package/portaudio/Config.in"
-diff --git a/package/mp4v2/Config.in b/package/mp4v2/Config.in
-new file mode 100644
-index 0000000..bd8666e
---- /dev/null
-+++ b/package/mp4v2/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_MP4V2
-+	bool "mp4v2"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  The MP4v2 library provides functions to read, create, and modify mp4
-+	  files.
-+
-+	  https://code.google.com/p/mp4v2/
-+
-+if BR2_PACKAGE_MP4V2
-+
-+config BR2_PACKAGE_MP4V2_UTIL
-+	bool "Install mp4 command line tools"
-+	help
-+	  Enable to install the mp4 command line tools mp4art, mp4chaps,
-+	  mp4extract, mp4info, mp4subtitle, mp4tags, and mp4trackdump.
-+
-+endif
-+
-+comment "mp4v2 needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/mp4v2/mp4v2.hash b/package/mp4v2/mp4v2.hash
-new file mode 100644
-index 0000000..d5a49c4
---- /dev/null
-+++ b/package/mp4v2/mp4v2.hash
-@@ -0,0 +1,2 @@
-+# From https://code.google.com/p/mp4v2/downloads/detail?name=mp4v2-2.0.0.tar.bz2
-+sha1 193260cfb7201e6ec250137bcca1468d4d20e2f0 mp4v2-2.0.0.tar.bz2
-diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
-new file mode 100644
-index 0000000..74de234
---- /dev/null
-+++ b/package/mp4v2/mp4v2.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# mp4v2
-+#
-+################################################################################
-+
-+MP4V2_VERSION = 2.0.0
-+MP4V2_SOURCE = mp4v2-$(MP4V2_VERSION).tar.bz2
-+MP4V2_SITE = https://mp4v2.googlecode.com/files
-+MP4V2_INSTALL_STAGING = YES
-+MP4V2_LICENSE = MPLv1.1
-+MP4V2_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_MP4V2_UTIL),y)
-+MP4V2_CONF_OPTS += --enable-util
-+else
-+MP4V2_CONF_OPTS += --disable-util
-+endif
-+
-+$(eval $(autotools-package))
+This is a fair question.
+
+>
+> At least, I'd like to see what is our "policy" about this, and get some
+> feedback from other Buildroot developers on this.
+
+Well, the discussion is now open. ;-)
+
+BTW, this series also contains a number of fixes and cleanup unrelated
+to this particular change that go in anyway IMHO.
+
+Regards,
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
 -- 
-2.1.2
+Samuel
