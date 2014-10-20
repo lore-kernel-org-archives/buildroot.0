@@ -1,76 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Oct 2014 22:03:39 +0200
-Subject: [Buildroot] [PATCH 03/31] arch/arm: add blind options to know
- the ARM architecture
-In-Reply-To: <20141019215528.GD12247@free.fr>
-References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413749285-1108-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141019215528.GD12247@free.fr>
-Message-ID: <54456A9B.4020704@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 20 Oct 2014 22:10:49 +0200
+Subject: [Buildroot] [PATCH 1/1] autobuild-run: Include the config.log
+ file (when it exists) in the tarball
+In-Reply-To: <CAAXf6LU6iynfof4gTFWdsz_KeaW5=zg9MBgKFp7f57NiYCES0A@mail.gmail.com>
+References: <1411826377-17221-1-git-send-email-romain.naour@openwide.fr>
+ <CAAXf6LU6iynfof4gTFWdsz_KeaW5=zg9MBgKFp7f57NiYCES0A@mail.gmail.com>
+Message-ID: <54456C49.4070909@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/14 23:55, Yann E. MORIN wrote:
-> Thomas, All,
+Hi Thomas,
+
+Le 19/10/2014 21:13, Thomas De Schampheleire a ?crit :
+> Hi Romain,
 > 
-> On 2014-10-19 22:07 +0200, Thomas Petazzoni spake thusly:
->> In preparation to the removal of BR2_GCC_TARGET_ARCH for ARM, this
->> commit introduces a number of blind options for each ARM architecture,
->> so that packages/toolchains that had dependencies using
->> BR2_GCC_TARGET_ARCH can continue to express their dependencies. It can
->> also be used to simplify package dependencies that were using the
->> individual ARM core options.
+> On Sat, Sep 27, 2014 at 3:59 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+>> When a build error occurs, a line like this one is present in the log file:
+>> make: *** [full_path_to_the_last_package/.stamp_*] Error 2
 >>
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
->>  arch/Config.in.arm | 39 +++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 39 insertions(+)
+>> Simply extract the path to the package build directory and check if a file
+>> named config.log exists. If this package used autotools then the config.log
+>> file should be present.
 >>
->> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
->> index 201ff1d..d2ba924 100644
->> --- a/arch/Config.in.arm
->> +++ b/arch/Config.in.arm
->> @@ -37,6 +37,27 @@ config BR2_ARM_CPU_HAS_THUMB
->>  config BR2_ARM_CPU_HAS_THUMB2
->>  	bool
+>> Also, it's likely that the "Error" line is in the log's last lines,
+>> so read the log from the end.
+>>
+>> When the config.log file is found, it only remains to copy it to the
+>> results directory.
+>>
 > 
-> Indirectly related to your patch: HAS_THUMB2 should select HAS_THUMB,
-> since Thumb-2 is a superset of Thumb.
+> I had not seen this patch and independently handled this TODO item,
+> until Thomas Petazzoni mentioned to me that you had sent an earlier
+> patch.
 > 
-> Then, you could just have (for example) BR2_ARM_CPU_ARMV4 and ditch
-> BR2_ARM_CPU_ARMV4T since it can be reconstructed from BR2_ARM_CPU_ARMV4
-> && HAS_THUMB.
-> 
-> The reasonning is that few package actually require knowing the exact
-> variant, but rather the instruction set generation. Thus knowing about
-> armv4t is equivalent to knowing about armv4 for most. Those few that
-> actuallt require the Thumb isns would need to use the HAS_THUMB option,
-> which very purpose is just that, telling whether thumb is supported or
-> not (or HAS_THUMB2 for Thumb-2).
+> Below some comments after having written my own implementation (that
+> I'm about to send).
 
- +1 to this. I made the same reasoning.
-
-
- Regards,
- Arnout
-
-
-> As for the J version, I wonder if we need to introduce a HAS_JAZELLE
-> option. For armv6zk (Wikpedia refer to it as armv6kz), I also doubt we
-> need to introduce a HAS_TRUSTZONE option either. For armv7a, I think we
-> can just use armv7, since we will probably never support the R and M
-> profiles in Buildroot.
+Ok, no problem.
+In fact, I just tried to implement this feature with my limited skills in python...
 
 [snip]
+>>
+>> @@ -413,11 +413,25 @@ def send_results(instance, http_login, http_password, submitter, log, result):
+>>          shutil.copyfile(os.path.join(outputdir, "legal-info", "manifest.csv"),
+>>                          os.path.join(resultdir, "licenses-manifest.csv"))
+>>
+>> +    if result == -1:
+>> +        # Find the config.log file in the failing package directory
+>> +        # and copy it (when it exists) to results directory.
+>> +        f = open(logfile, "r")
+>> +        for line in reversed(f.readlines()):
+>> +            if re.match("(.*)/.stamp_(.*)", line):
+>> +                packagedir = line[line.find("[")+1:line.find("]")]
+>> +                packagedir = re.sub('\.stamp_(.*)$', '', packagedir)
+>> +                break
+> 
+> Here you are implementing a new logic to find the failure package. I
+> haven't checked the details, but it's a different logic than the one
+> used in the result importing script (web/import.inc.php).  It seems
+> logical to me to use the same kind of logic.
+> 
 
+I haven't looked at this file...
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> Note also that here you're reading the entire logfile in a buffer just
+> to read the last few lines.
+> 
+> Finally, the logfile is not closed, a construct like:
+> 
+> with open(...) as f:
+>     xxxx
+> 
+> is more pythonic and will automatically close the file at the end of the block.
+
+I haven't really been able to do what I wanted here, I do not know enough Python...
+The logfile can be huge, so loading it in a buffer is not very efficient.
+
+> 
+>> +        if os.path.isdir(packagedir):
+>> +            configfile = os.path.abspath(os.path.join(packagedir, "config.log"))
+>> +            if os.path.isfile(configfile):
+>> +                shutil.copyfile(configfile, os.path.join(resultdir, "config.log"))
+>> +
+> 
+> Here you assume that there is just one config.log file in the root of
+> the package build directory, but some more complex packages like gdb
+> actually have multiple config.log files in different directories. As
+> the information that could help problem analysis could be in any of
+> these files, they should all be copied.
+
+I haven't noticed that a package can have multiple config.log files.
+
+Ok, forget this patch ;-)
+Thanks for your review and explanation.
+
+Best regards,
+Romain Naour
