@@ -1,71 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Oct 2014 22:12:24 +0200
-Subject: [Buildroot] [PATCH 04/31] ffmpeg: use the new BR2_ARM_CPU_ARM*
- options
-In-Reply-To: <1413749285-1108-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413749285-1108-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54456CA8.7030304@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Oct 2014 22:23:36 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-kconfig: fix saving the config file
+Message-ID: <1413836616-4209-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/14 22:07, Thomas Petazzoni wrote:
-> Instead of using the Config.in options for each individual ARM core,
-> use the newly introduced BR2_ARM_CPU_ARM* options, which exist per ARM
-> architecture.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ffmpeg/ffmpeg.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 21ec1c9..a3865f3 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -277,15 +277,15 @@ endif
->  # Explicitly disable everything that doesn't match for ARM
->  # FFMPEG "autodetects" by compiling an extended instruction via AS
->  # This works on compilers that aren't built for generic by default
-> -ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV4T),y)
->  FFMPEG_CONF_OPTS += --disable-armv5te
->  endif
-> -ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV6J)$(BR2_ARM_CPU_ARMV6ZK)$(BR2_ARM_CPU_ARMV7A),y)
->  FFMPEG_CONF_OPTS += --enable-armv6
->  else
->  FFMPEG_CONF_OPTS += --disable-armv6 --disable-armv6t2
->  endif
-> -ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV6J)$(BR2_ARM_CPU_ARMV6ZK)$(BR2_ARM_CPU_ARMV7A),y)
+When saving (aka updating) the configuration file of a kconfig package,
+a subsequent call to "make" would rebuild the package, even though the
+configuration did not actually change.
 
- I think there was something wrong in the original, because arm1176jz-s doesn't
-have VFP.
+It took quite a while to understand why. But the reason is so simple and
+obvious, when you think about it:
 
- Also, there's a bunch of Cortex-A variants that were added after this selection
-was merged and they all have VFP.
+  - $(@D)/.config depends on the config file $(BUSYBOX_CONFIG_FILE)
+  - busybox-update-config then copies $(@D)/.config back to the config
+    file $(BUSYBOX_CONFIG_FILE)
+  - so the config file is newer than $(@D)/.config
 
- With that in mind, probably BR2_ARM_CPU_HAS_VFPV2 is more appropriate.
+So, in the next run, pkg-kconfig believes that it has to rebuild
+busybox. Bummer... :-/
 
+So, the fix is very trivial, and just requires asking "cp" to preserve
+timestamps, so the dependency does not kick in at the next run.
 
- Regards,
- Arnout
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
->  FFMPEG_CONF_OPTS += --enable-vfp
->  else
->  FFMPEG_CONF_OPTS += --disable-vfp
-> 
-
-
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 071153a..ec58d69 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -66,7 +66,7 @@ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_
+ 
+ # Target to copy back the configuration to the source configuration file
+ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
++	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+ 
+ endef # inner-kconfig-package
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
