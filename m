@@ -1,68 +1,157 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Oct 2014 23:30:04 +0200
-Subject: [Buildroot] [PATCH] util-linux: do not disable non existing
- directories
-In-Reply-To: <20141020231942.58fbd056@free-electrons.com>
-References: <1413834757-7996-1-git-send-email-ps.report@gmx.net>,
- <20141020231942.58fbd056@free-electrons.com>
-Message-ID: <trinity-08cd13ff-67b0-4bfb-89a6-307502e74ca7-1413840604381@3capp-gmx-bs11>
+From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
+Date: Mon, 20 Oct 2014 23:29:05 +0200
+Subject: [Buildroot] [PATCH v2] set simple network setup via the system
+ configuration submenu
+In-Reply-To: <1413814486-10716-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1413814486-10716-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <CAGrucu1VtgvJBEN7Y-RV6o91BxKU7A+h3XcfqW9xguTAhgmupA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi,
 
-> Gesendet: Montag, 20. Oktober 2014 um 23:19 Uhr
-> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net
-> Betreff: Re: [Buildroot] [PATCH] util-linux: do not disable non existing directories
+2014-10-20 16:14 GMT+02:00 J?r?my Rosen <jeremy.rosen@openwide.fr>:
+> This patch allows the setup of simple /etc/network/interfaces via the
+> configuration menus instead of using an overlay
 >
-> Dear Peter Seiderer,
-> 
-> On Mon, 20 Oct 2014 21:52:37 +0200, Peter Seiderer wrote:
-> > Legacy disabled sub directories mount-deprecated and fdisks do not
-> > longer exist in util-linux-2.25.1 source package.
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  package/util-linux/util-linux.mk | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> > index ebbab61..7586ab3 100644
-> > --- a/package/util-linux/util-linux.mk
-> > +++ b/package/util-linux/util-linux.mk
-> > @@ -102,9 +102,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
-> >  ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
-> >  define UTIL_LINUX_DISABLE_TOOLS
-> >  	$(SED) '/schedutils/d' -e '/text-utils/d' -e '/term-utils/d' \
-> > -		-e '/login-utils/d' -e '/mount-deprecated/d' \
-> > -		-e '/sys-utils/d' -e '/misc-utils/d' -e '/disk-utils/d' \
-> > -		-e '/fdisks/d' $(@D)/Makefile.am
-> > +		-e '/login-utils/d' -e '/sys-utils/d' -e '/misc-utils/d' \
-> > +		-e '/disk-utils/d' $(@D)/Makefile.am
-> >  endef
-> >  UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
-> >  endif
-> 
-> I haven't looked at the details, but can't we use
-> --disable-all-programs, like we do for the host variant of util-linux ?
+> * supports manual ipv4 configuration
+> * supports dhcp configuration
+>
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+>
+> ---
+>
+> This patch is here to avoid having to do an overlay for the most common
+> cases (ipv4 with fixed IP or DHCP)
+>
+> It can be made more complex (second network if, support ipv6) depending on
+> what people want/need, but I want to keep it simple. The point is to avoid
+> having to tweak overlays to change stuff that everybody needs to change for
+> prototyping
+>
+> When networkd is enabled, this option will be deactivated. Networkd support
+> is tricky to get right on first approximation. It can be added later if it
+> is deemed usefull
 
-Will take a look at it...., but needs some time... 
+I'm willing to add networkd support once your work has been merged ;)
 
-Regards,
-Peter
+Just for reference, my notes on what needs to be done:
+* no loopback setup, systemd does it on its own
+* creation of a ".network" file - .ini file (equivalent to
+/etc/network/interfaces), requires conversion of the netmask to cidr
+format (255.255.255.0 => 24 a.s.o.)
+* -optionally- disable "predictable" network interface renaming
+("eth0"=>"enp2s0") [0] so that one can actually rely on eth0's
+existence
+
+Did I miss something here?
 
 
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+[0] http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+
+
+> ---
+>
+> v1->v2 :
+> * moved to TARGET_FINALIZE
+> * removed support for lo. It should always be on.
+> * reworked default parameters
+> ---
+>  support/scripts/generate-interfaces-ifconfig.sh | 70 +++++++++++++++++++++++++
+>  system/Config.in                                | 66 +++++++++++++++++++++++
+>  system/system.mk                                |  5 ++
+>  3 files changed, 141 insertions(+)
+>  create mode 100755 support/scripts/generate-interfaces-ifconfig.sh
+>
+> diff --git a/support/scripts/generate-interfaces-ifconfig.sh b/support/scripts/generate-interfaces-ifconfig.sh
+> new file mode 100755
+> index 0000000..873e824
+> --- /dev/null
+> +++ b/support/scripts/generate-interfaces-ifconfig.sh
+> @@ -0,0 +1,70 @@
+> +#!/bin/sh
+> +
+> [...]
+> +
+> +function do_generate_interfaces
+
+That's a "bashism", which breaks the script when /bin/sh is linked to
+ash,dash,.... Either set the hashbang to "#!/bin/bash" or use
+"do_generate_interfaces ()" instead of "function
+do_generate_interfaces".
+
+> +{
+> +       echo "# interface file auto-generated by buildroot"
+> +       echo
+> +       echo "auto lo"
+> +       echo "iface lo inet loopback"
+> +       echo
+> +
+> +       if [ $BR2_SIMPLE_NETWORK ] ; then
+> +               if [ -z $BR2_SIMPLE_NETWORK_NAME ] ; then
+
+It's been already discussed a bit in the v1 thread, but I'd recommend
+to quote variables that are string-type in kconfig.
+
+The shell expands the expression here (word-splitting, globbing) and
+the effective command might be unexpected. It'd usually be caused by
+misconfiguration (*), which I wouldn't care about in this script, but
+why let the shell expand a value that you want to use as-is?
+
+(*): Example: BR2_SIMPLE_NETWORK_NAME="-a 2" => "[ -z -a 2 ]", returns
+0 in bash, but 2 in [d]ash...
+
+As a not-so-simple corner case, for systemd-networkd, it would be
+legal to set BR2_SIMPLE_NETWORK_NAME="eth*", which is just a matter of
+finding the right directory to break the "[]"-statement. Just talking
+about the "[]" here, overall it would still work in your script,
+because "[ -z ... ]" returns nonzero on syntax error (and screams to
+stderr!) and you're checking for 0.
+
+> +                       echo ERROR no name specified for first network interface
+> +                       exit 1
+> +               fi
+> +               echo "auto  $BR2_SIMPLE_NETWORK_NAME"
+> +               if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
+> +                       echo "iface $BR2_SIMPLE_NETWORK_NAME inet dhcp"
+> +               elif [ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] ; then
+> +                       echo "iface $BR2_SIMPLE_NETWORK_NAME inet static"
+> +
+> +                       if [ -z $BR2_SIMPLE_NETWORK_IPV4_ADDRESS ] ; then
+> +                               echo ERROR BR2_SIMPLE_NETWORK_IPV4_ADDRESS not set 1>&2
+> +                               exit 1
+> +                       fi
+> +                       echo "  address $BR2_SIMPLE_NETWORK_IPV4_ADDRESS"
+> +
+> +
+> +                       if [ -z $BR2_SIMPLE_NETWORK_IPV4_NETMASK ] ; then
+> +                               echo ERROR BR2_SIMPLE_NETWORK_IPV4_NETMASK not set 1>&2
+> +                               exit 1
+> +                       fi
+> +                       echo "  netmask $BR2_SIMPLE_NETWORK_IPV4_NETMASK"
+> +
+> +                       if [ $BR2_SIMPLE_NETWORK_IPV4_BROADCAST ] ; then
+> +                               echo "  broadcast $BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+> +                       fi
+> +                       if [ $BR2_SIMPLE_NETWORK_IPV4_GATEWAY ] ; then
+> +                               echo "  gateway $BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+> +                       fi
+> +               fi
+> +       fi
+> +}
+
+Please consider splitting up data validation (basically everything
+that leads to "exit 1") and output generation. It adds a few
+duplicated checks, but it'll be easier to add support for networkd.
+
+> +
+> +mkdir -p $TARGET_DIR/etc/network/
+> +do_generate_interfaces > $TARGET_DIR/etc/network/interfaces
+>
+> [snip]
+
+-- 
+Andr?
