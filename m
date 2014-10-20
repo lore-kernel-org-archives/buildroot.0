@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Oct 2014 19:31:37 +0200
-Subject: [Buildroot] [PATCH 1/1] shairplay-sync: new package
-In-Reply-To: <1413811309-16019-1-git-send-email-jkrause@posteo.de>
-References: <1413811309-16019-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141020173137.GF3742@free.fr>
+Date: Mon, 20 Oct 2014 19:43:27 +0200
+Subject: [Buildroot] [PATCH 1/2] libupnpp: new package
+In-Reply-To: <1413813009-20149-1-git-send-email-jkrause@posteo.de>
+References: <1413813009-20149-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20141020174327.GG3742@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,101 +12,75 @@ To: buildroot@busybox.net
 
 J?rg, All,
 
-On 2014-10-20 15:21 +0200, J?rg Krause spake thusly:
+On 2014-10-20 15:50 +0200, J?rg Krause spake thusly:
 > Signed-off-by: J?rg Krause <jkrause@posteo.de>
 [--SNIP--]
-> diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+> diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
 > new file mode 100644
-> index 0000000..2eab88d
+> index 0000000..5a79452
 > --- /dev/null
-> +++ b/package/shairport-sync/Config.in
-> @@ -0,0 +1,72 @@
-> +config BR2_PACKAGE_SHAIRPORT_SYNC
-> +	bool "shairport-sync"
-> +	depends on BR2_USE_MMU # libdaemon
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_LIBDAEMON
-> +	select BR2_PACKAGE_POPT
+> +++ b/package/libupnpp/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_LIBUPNPP
+> +	bool "libupnpp"
+> +	select BR2_PACKAGE_EXPAT
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_LIBUPNP
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_LARGEFILE # libupnp
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+
+Nice! It proves you did quite some testing! :-)
+
 > +	help
-> +	  Shairport Sync emulates an AirPort Express for the purpose of
-> +	  streaming audio from iTunes, iPods, iPhones, iPads and AppleTVs.
-> +	  Audio played by a Shairport Sync-powered device stays in synchrony
-> +	  with the source and thus with other devices that are playing the same
-> +	  source synchronously. Thus, for example, synchronised multi-room
-> +	  audio is possible without difficulty.
+> +	  The libupnpp C++ library wraps libupnp for easier use by upmpdcli and
+> +	  upplay.
 > +
-> +	  https://github.com/mikebrady/shairport-sync
+> +	  http://www.lesbonscomptes.com/upmpdcli/
 > +
-> +if BR2_PACKAGE_SHAIRPORT_SYNC
-> +
-> +choice
-> +	prompt "Choose SSL encryption backend"
-> +	default BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
-> +
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
-> +	bool "OpenSSL"
-> +	select BR2_PACKAGE_OPENSSL
-> +
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_POLARSSL
-> +	bool "PolarSSL"
-> +	select BR2_PACKAGE_POLARSSL
-> +endchoice
+> +comment "upmpdcli needs a toolchain w/ C++, largefile, threads"
 
-Since this is a choice, either one is selected. Which means SSL support
-seems to be not optional.
+'upmpdcli', really?
 
-In that case I would prefer we use something like:
+Otherwise, looks good. With the above mishap fixed, you can add my:
 
-    config BR2_PACKAGE_SHAIRPORT_SYNC
-        bool "shairport-sync"
-        # Dependencies and selects as above
-        select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
-
-This way, we ensure at least one SSL implementation is available, and do
-not bother the user with a useless prompt.
-
-> +choice
-> +	prompt "Choose mDNS backend"
-> +	default BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
-> +
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
-> +	bool "Avahi"
-> +	depends on BR2_USE_WCHAR # avahi -> gettext
-> +	depends on !BR2_PREFER_STATIC_LIB
-> +	select BR2_PACKAGE_AVAHI
-> +	select BR2_PACKAGE_AVAHI_DAEMON
-> +	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
-> +
-> +comment "Avahi support needs a toolchain w/ wchar, dynamic library"
-> +	depends on !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
-> +
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_TINYSVCMDNS
-> +	bool "tinysvcmdns"
-> +	help
-> +	  tinysvcmdns is a tiny mDNS responder which is only concerned with
-> +	  publishing services, without a system-wide daemon like Bonjour or
-> +	  Avahi. Its other goal is to be extremely small, embeddable, and have
-> +	  no external dependencies.
-> +endchoice
-
-There is no tinysvcmdns packaged in Buildroot. Does shairport-sync
-bundles its own version? Otherwise, I've seen there is a tinysvcmdns
-package on bitbucket: https://bitbucket.org/geekman/tinysvcmdns
-Maybe it would be interesting to package it in Buildroot?
-
-If so, I would just remove the choice altogether, and just use
-tinysvcmdns if avahi is not enabled.
-
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
-> +	bool "libsoxr support"
-
-There, you need to select BR2_PACKAGE_LIBSOXR.
-
-Obviously, adapt the .mk to the above comments.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+> new file mode 100644
+> index 0000000..d46de14
+> --- /dev/null
+> +++ b/package/libupnpp/libupnpp.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# libupnpp
+> +#
+> +################################################################################
+> +
+> +LIBUPNPP_VERSION = 0.8.5
+> +LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+> +LIBUPNPP_LICENSE = GPLv2+
+> +LIBUPNPP_LICENSE_FILES = COPYING
+> +LIBUPNPP_INSTALL_STAGING = YES
+> +LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.1.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
