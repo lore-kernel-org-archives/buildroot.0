@@ -1,61 +1,105 @@
-From: =?UTF-8?q?Eric=20B=C3=A9nard?= <eric@eukrea.com>
-Date: Mon, 20 Oct 2014 12:12:52 +0200
-Subject: [Buildroot] [PATCH v2 2/2] imx6sabresd/create-boot-sd.sh: allow
-	usage for i.MX53
-In-Reply-To: <1413799972-4281-1-git-send-email-eric@eukrea.com>
-References: <1413799972-4281-1-git-send-email-eric@eukrea.com>
-Message-ID: <1413799972-4281-2-git-send-email-eric@eukrea.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 20 Oct 2014 11:13:49 +0100
+Subject: [Buildroot] [PATCH v4] package/trinity: New package
+In-Reply-To: <CAHXCMML2_6s4Wn6PEVoOK396vPr+M5jbf+258Q02oLmsNvGdFg@mail.gmail.com>
+References: <1412867742-53521-1-git-send-email-Vincent.Riera@imgtec.com>
+ <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
+ <38121FAB319C3344930C920E7B51831320FD3A02@LEMAIL01.le.imgtec.org>
+ <CAHXCMML3v10VLchF0dknLiQmpi-y_nj3bEqC6mJHu=GVG4Z8Qg@mail.gmail.com>
+ <38121FAB319C3344930C920E7B51831320FD3B9E@LEMAIL01.le.imgtec.org>
+ <CAHXCMML2_6s4Wn6PEVoOK396vPr+M5jbf+258Q02oLmsNvGdFg@mail.gmail.com>
+Message-ID: <5444E05D.5070008@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this script permits the generation of an sdcard that will boot on
-and i.MX53 QSB with a recent bootloader (now supported by buildroot).
+Dear Samuel Martin,
 
-Tested on an i.MX53 QSB and an i.MX53 QSB-R
+On 10/11/2014 04:47 PM, Samuel Martin wrote:
+> On Sat, Oct 11, 2014 at 4:03 PM, Vincent Olivert Riera
+> <Vincent.Riera@imgtec.com> wrote:
+>> Dear Samuel Martin,
+>>
+>> it's very weird. I just used your defconfig and everything was fine. Look:
+>>
+>> [...]
+>> /usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/peratu/downloads/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>> $ make savedefconfig && cat defconfig
+>> BR2_arm=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2014.08.tar.bz2"
+>> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+>> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>> BR2_PACKAGE_TRINITY=y
+>>
+>
+> Humm... indeed weird! :-|
+>
+> For the record, the gen-versionh.sh trace:
+> http://code.bulix.org/kn3whb-87181/?raw
+> I got this doing:
+> $ make trinity-dirclean
+> $ make trinity-configure
+> # add 'set -x' right after /bin/bash in
+> <output>/build/trinity-780d879c71979f54dfc9ec0a26e6f1e0d5e361e1/scripts/gen-versionh.sh
+> $ make trinity
+>
+> Maybe you'll be able to find something.
+>
+> Regards,
+>
+>> Regards,
+>>
+>> --
+>> Vincent
+>> ________________________________________
+>> From: Samuel Martin [s.martin49 at gmail.com]
+>> Sent: 11 October 2014 14:40
+>> To: Vincent Olivert Riera
+>> Cc: buildroot
+>> Subject: Re: [Buildroot] [PATCH v4] package/trinity: New package
+>>
+>> Hi Vicente,
+>>
+>> On Sat, Oct 11, 2014 at 2:57 PM, Vincent Olivert Riera
+>> <Vincent.Riera@imgtec.com> wrote:
+>>> Dear Samuel Martin,
+>>>
+>>> can you provide a defconfig which fails? I have built it twice few minutes ago.
+>>
+>> Here it is: http://code.bulix.org/4oyy7r-87179/?raw
+>>
+>> And here the build error: http://code.bulix.org/j2n1a8-87180/?raw
+>>
+>> (I've just apply the patch from patchwork on top of master).
+>>
+>>>
+>>> Also, it will be faster if you send an email directly to the maintainer instead of a pull request, as it's said in the "Downloads:" section of trinity's website.
+>>
+>> Oops, forgot to check that :-s
+>> I will send a mail.
+>>
+>> Regards,
+>>
+>>
+>> --
+>> Samuel
+>
+>
+>
 
-Signed-off-by: Eric B?nard <eric@eukrea.com>
----
- board/freescale/imx53loco/create-boot-sd.sh   | 1 +
- board/freescale/imx6sabresd/create-boot-sd.sh | 8 +++-----
- 2 files changed, 4 insertions(+), 5 deletions(-)
- create mode 120000 board/freescale/imx53loco/create-boot-sd.sh
+Your patches have been merged upstream. I will send a v5 patch and I 
+would like you test it, please.
 
-diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
-new file mode 120000
-index 0000000..3083fd2
---- /dev/null
-+++ b/board/freescale/imx53loco/create-boot-sd.sh
-@@ -0,0 +1 @@
-+../imx6sabresd/create-boot-sd.sh
-\ No newline at end of file
-diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/imx6sabresd/create-boot-sd.sh
-index 9930b1e..af45115 100755
---- a/board/freescale/imx6sabresd/create-boot-sd.sh
-+++ b/board/freescale/imx6sabresd/create-boot-sd.sh
-@@ -7,9 +7,7 @@ PROGNAME=$(basename $0)
- 
- usage()
- {
--    echo "Create an SD card that boots on an i.MX6DL SABRESD board."
--    echo "It is supposed to work also for the i.MX6Q SABRESD board, but"
--    echo "it this is not tested."
-+    echo "Create an SD card that boots on an i.MX53/6 board."
-     echo
-     echo "Note: all data on the the card will be completely deleted!"
-     echo "Use with care!"
-@@ -77,8 +75,8 @@ TMPDIR=$(mktemp -d)
- # FAT partition: kernel and DTBs
- mkfs.vfat ${PART1}
- mount ${PART1} ${TMPDIR}
--cp output/images/uImage ${TMPDIR}/
--cp output/images/*.dtb  ${TMPDIR}/
-+cp output/images/*Image ${TMPDIR}/
-+cp output/images/*.dtb  ${TMPDIR}/ || true
- sync
- umount ${TMPDIR}
- 
+Best regards,
+
 -- 
-2.1.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
