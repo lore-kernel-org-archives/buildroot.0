@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Oct 2014 21:39:24 +0200
-Subject: [Buildroot] [PATCHv3 buildroot-test 5/9] autobuild-run:
-	check-requirements does not need to know the login details
+Date: Mon, 20 Oct 2014 21:39:21 +0200
+Subject: [Buildroot] [PATCHv3 buildroot-test 2/9] autobuild-run: use docopt
+	for argument parsing
 In-Reply-To: <1413833968-11808-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1413833968-11808-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413833968-11808-6-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1413833968-11808-3-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,70 +13,193 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-check-requirements simply has to know if the results have to be sent, so
-it can check on some extra requirements. The username and password are
-irrelevant here.
-This commit introduces a boolean variable do_send_results to hide these
-details.
+Using docopt, argument parsing becomes trivial. Adding a new argument is
+a matter of updating the usage text.
+This commit removes the original cumbersome argument handling and uses
+docopt instead. A method is added to import the settings from the
+configuration file in a similar dictionary as the one created by docopt,
+so that both can be merged (giving priority to the configuration file,
+as before).
+
+With these changes, each option can be passed as argument and in the
+configuration file. This means that http-user and http-password can now
+also be added as argument (even though passing the password on the
+command-line is not recommended).
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- scripts/autobuild-run | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ scripts/autobuild-run | 134 +++++++++++++++++++++++++++-----------------------
+ 1 file changed, 72 insertions(+), 62 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index d500824..e2d2eb5 100755
+index c311ebf..835ca58 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -120,12 +120,12 @@ def check_version():
-         print "ERROR: script version too old, please upgrade."
-         sys.exit(1)
+@@ -57,6 +57,37 @@
+ #   BR2_PACKAGE_CLASSPATH=y, improve the script to detect whether the
+ #   necessary host machine requirements are there to build classpath.
  
--def check_requirements(http_login, http_password):
-+def check_requirements(do_send_results=False):
-     devnull = open(os.devnull, "w")
-     needed_progs = ["make", "git", "gcc", "timeout"]
-     missing_requirements = False
++"""autobuild-run - run Buildroot autobuilder
++
++Usage: autobuild-run [options]
++
++Options:
++  -h, --help                     show this help message and exit
++  -V, --version                  show version
++  -n, --ninstances NINSTANCES    number of parallel instances [default: 1]
++  -j, --njobs NJOBS              number of parallel jobs [default: 1]
++  -s, --submitter SUBMITTER      name/machine of submitter [default: N/A]
++  --http-login LOGIN             username to send results with
++  --http-password PASSWORD       password to send results with (for security
++                                 reasons it is recommended to define this in the
++                                 config file instead, with user-read permissions
++                                 only)
++  -c, --config CONFIG            path to configuration file
++
++Format of the configuration file:
++
++  All arguments can also be specified in the configuration file specified with
++  --config, using 'key = value' format (not including the leading --
++  characters). For example:
++
++   [main]
++   ninstances = <value>
++   njobs = <value>
++   http-login = <value>
++   http-password = <value>
++   submitter = <value>
++"""
++
+ import urllib2
+ import csv
+ from random import randint
+@@ -70,6 +101,7 @@ import sys
+ import hashlib
+ import argparse
+ import ConfigParser
++import docopt
  
--    if http_login and http_password:
-+    if do_send_results:
-         needed_progs.append("curl")
+ MAX_DURATION = 60 * 60 * 4
+ VERSION = 1
+@@ -516,81 +548,59 @@ def run_instance(instance, njobs, http_login, http_password, submitter, sysinfo)
+         ret = do_build(instance, njobs, instance_log)
+         send_results(instance, http_login, http_password, submitter, instance_log, ret)
  
-     for prog in needed_progs:
-@@ -511,7 +511,7 @@ def send_results(result, **kwargs):
-         log_write(log, "ERROR: could not make results tarball")
-         sys.exit(1)
+-def config_get():
+-    """Get configuration parameters, either from the command line or the config file"""
++# args / config file merging inspired by:
++# https://github.com/docopt/docopt/blob/master/examples/config_file_example.py
  
--    if kwargs['http_login'] and kwargs['http_password']:
-+    if kwargs['do_send_results']:
-         # Submit results. Yes, Python has some HTTP libraries, but
-         # none of the ones that are part of the standard library can
-         # upload a file without writing dozens of lines of code.
-@@ -606,10 +606,15 @@ def main():
-         # merge config/args, priority given to config
-         args = merge(ini_config, args)
+-    epilog_text = """
+-Format of the configuration file:
++def load_ini_config(configfile):
++    """Load configuration from file, returning a docopt-like dictionary"""
  
--    check_requirements(args['--http-login'], args['--http-password'])
--    if args['--http-login'] is None or args['--http-password'] is None:
-+    # http_login/password could theoretically be allowed as empty, so check
-+    # explicitly on None.
-+    do_send_results = (args['--http-login'] is not None) \
-+                        and (args['--http-password'] is not None)
-+    check_requirements(do_send_results)
-+    if not do_send_results:
+-   [main]
+-   ninstances = <value>
+-   njobs = <value>
+-   http-login = <value>
+-   http-password = <value>
+-   submitter = <value>
+-"""
++    if not os.path.exists(configfile):
++        print "ERROR: configuration file %s does not exist" % configfile
++        sys.exit(1)
++
++    config = ConfigParser.RawConfigParser()
++    if not config.read(configfile):
++        print "ERROR: cannot parse configuration file %s" % configfile
++        sys.exit(1)
++
++    # Prepend '--' to options specified in the config file, so they can be
++    # merged with those given on the command-line
++    return dict(('--%s' % key, value) for key, value in config.items('main'))
+ 
+-    parser = argparse.ArgumentParser(description='Run Buildroot autobuilder',
+-                                     formatter_class=argparse.RawDescriptionHelpFormatter,
+-                                     epilog=epilog_text)
+-    parser.add_argument("--ninstances", '-n', metavar="NINSTANCES",
+-                        help="Number of parallel instances", default=None)
+-    parser.add_argument("--njobs", '-j', metavar="NJOBS",
+-                        help="Number of parallel jobs", default=None)
+-    parser.add_argument("--submitter", '-s', metavar="SUBMITTER",
+-                        help="Name/machine of submitter")
+-    parser.add_argument("--config", '-c', metavar="CONFIG",
+-                        help="Path to configuration file")
+-    args = parser.parse_args()
+-
+-    ninstances = 1
+-    njobs = 1
+-    http_login = None
+-    http_password = None
+-    submitter = "N/A"
+-
+-    if args.config:
+-        if not os.path.exists(args.config):
+-            print "ERROR: configuration file %s does not exist" % args.config
+-            sys.exit(1)
+-        parser = ConfigParser.RawConfigParser()
+-        if not parser.read([args.config]):
+-            print "ERROR: cannot parse configuration file %s" % args.config
+-            sys.exit(1)
+-        if parser.has_option('main', 'ninstances'):
+-            ninstances = parser.getint('main', 'ninstances')
+-        if parser.has_option('main', 'njobs'):
+-            njobs = parser.getint('main', 'njobs')
+-        if parser.has_option('main', 'http-login'):
+-            http_login = parser.get('main', 'http-login')
+-        if parser.has_option('main', 'http-password'):
+-            http_password = parser.get('main', 'http-password')
+-        if parser.has_option('main', 'submitter'):
+-            submitter = parser.get('main', 'submitter')
+-
+-    if args.njobs:
+-        njobs = int(args.njobs)
+-    if args.ninstances:
+-        ninstances = int(args.ninstances)
+-    if args.submitter:
+-        submitter = args.submitter
+-
+-    return (ninstances, njobs, http_login, http_password, submitter)
++
++def merge(dict_1, dict_2):
++    """Merge two dictionaries.
++
++    Values that evaluate to true take priority over falsy values.
++    `dict_1` takes priority over `dict_2`.
++
++    """
++    return dict((str(key), dict_1.get(key) or dict_2.get(key))
++                for key in set(dict_2) | set(dict_1))
+ 
+ def main():
+     check_version()
+     sysinfo = SystemInfo()
+-    (ninstances, njobs, http_login, http_password, submitter) = config_get()
+-    check_requirements(http_login, http_password)
+-    if http_login is None or http_password is None:
++
++    args = docopt.docopt(__doc__, version=VERSION)
++
++    if args['--config']:
++        ini_config = load_ini_config(args['--config'])
++        # merge config/args, priority given to config
++        args = merge(ini_config, args)
++
++    check_requirements(args['--http-login'], args['--http-password'])
++    if args['--http-login'] is None or args['--http-password'] is None:
          print "WARN: due to the lack of http login/password details, results will not be submitted"
          print "WARN: tarballs of results will be kept locally only"
-+
      def sigterm_handler(signum, frame):
          os.killpg(os.getpgid(os.getpid()), signal.SIGTERM)
          sys.exit(1)
-@@ -619,7 +624,8 @@ def main():
-             'instance': i, 'njobs': args['--njobs'], 'sysinfo': sysinfo,
-             'http_login': args['--http-login'],
-             'http_password': args['--http-password'],
--            'submitter': args['--submitter'], 'make_opts': args['--make-opts']})
-+            'submitter': args['--submitter'], 'make_opts': args['--make-opts'],
-+            'do_send_results': do_send_results})
+     processes = []
+-    for i in range(0, ninstances):
+-        p = Process(target=run_instance, args=(i, njobs, http_login, http_password, submitter, sysinfo))
++    for i in range(0, int(args['--ninstances'])):
++        p = Process(target=run_instance, args=(i, int(args['--njobs']),
++                args['--http-login'], args['--http-password'],
++                args['--submitter'], sysinfo))
          p.start()
          processes.append(p)
      signal.signal(signal.SIGTERM, sigterm_handler)
