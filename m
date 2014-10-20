@@ -1,54 +1,56 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 20 Oct 2014 10:35:54 +0200
-Subject: [Buildroot] [PATCH 01/31] ffmpeg: remove dangling reference to
-	BR2_arm10
-In-Reply-To: <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMM+ucmLZOUfsH7Weq7hAHAghQJAwSLkxvML--S+gDBi89w@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 20 Oct 2014 10:45:10 +0200
+Subject: [Buildroot] systemd not working properly?
+In-Reply-To: <20141019124525.01fe9653@free-electrons.com>
+References: <20141019124525.01fe9653@free-electrons.com>
+Message-ID: <CAGduivx-ZzNLFbvEkTGwEwDyucGKqL0UmLb7s3F5AAxno5_ECQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 19, 2014 at 10:07 PM, Thomas Petazzoni
+Hi Thomas ,all
+
+On Sun, Oct 19, 2014 at 12:45 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> BR2_arm10 has been removed in commit
-> d60489a6e5e733a20d18b128646088981da57867 ("arch: remove BR2_arm10t"),
-> so there is no point in keeping a reference to it in the ffmpeg
-> package.
+> Dear systemd/Buildroot users,
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-
-> ---
->  package/ffmpeg/ffmpeg.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I don't use systemd much, but every time I need to test a config with
+> systemd enabled, there are quite a few errors at boot time, and more
+> precisely, it doesn't even boot completely. Here are the errors I get:
 >
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 166b5ce..21ec1c9 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -285,7 +285,7 @@ FFMPEG_CONF_OPTS += --enable-armv6
->  else
->  FFMPEG_CONF_OPTS += --disable-armv6 --disable-armv6t2
->  endif
-> -ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-> +ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
->  FFMPEG_CONF_OPTS += --enable-vfp
->  else
->  FFMPEG_CONF_OPTS += --disable-vfp
+> [FAILED] Failed to start Remount Root and Kernel File Systems.
+> See 'systemctl status systemd-remount-fs.service' for details.
+> ...
+>
+> Then a *very* long delay because of dev-ttyAMA0.device., that finally
+> ends up with:
+>
+> [ TIME ] Timed out waiting for device dev-ttyAMA0.device.
+> [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
+>
+> And finally, I get no getty at all.
+So this particular issues, is due to the fact that for some reason,
+systemd doesn't like the fact that ttyAMA0 is a serial-link. If you
+delete the link in /etc/systemd/system/multi-user.target.wants/ and
+recreate it to point to getty at .service instead of
+serial-getty at .service, it will boot up fine.
+I am still looking into why it doesn't work. I am exploring some idea.
+>
+> Defconfig being used:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_SYSTEMD=y
+> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> BR2_PACKAGE_AVAHI=y
+> BR2_PACKAGE_AVAHI_DAEMON=y
+>
+> Best regards,
+>
+> Thomas
 > --
-> 2.0.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Samuel
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
