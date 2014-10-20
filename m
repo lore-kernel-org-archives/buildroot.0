@@ -1,40 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 20 Oct 2014 15:26:52 -0300
-Subject: [Buildroot] [PATCHv2] package/eudev: tweak initscript
-Message-ID: <1413829612-12373-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Oct 2014 19:02:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 7088] elfutils on Blackfin doesn't build
+In-Reply-To: <bug-7088-163@https.bugs.busybox.net/>
+References: <bug-7088-163@https.bugs.busybox.net/>
+Message-ID: <20141020190241.2E6E6AFDCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the udev initscript trigger in a coherent way, i.e. first set
-subsystems, then device and then let the whole thing settle.
-Otherwise for usb_modeswitch udev rules they never kick in since the
-storage aspect (device) gets claimed first and the switch ignored.
-Also set the settle timeout to a smaller value than the default
-120 seconds to avoid stalling too much.
+https://bugs.busybox.net/show_bug.cgi?id=7088
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/eudev/S10udev | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-10-20 19:02:40 UTC ---
+(In reply to comment #3)
+> there is no Blackfin backend in elfutils, so it isn't terribly useful ...
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 107dfd5..c3eafce 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -30,8 +30,9 @@ case "$1" in
-         printf "Populating ${udev_root:-/dev} using udev: "
-         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || (echo "FAIL" && exit 1)
--        udevadm trigger --action=add
--        udevadm settle
-+        udevadm trigger --type=subsystems --action=add
-+        udevadm trigger --type=devices --action=add
-+        udevadm settle --timeout=30 || echo "udevadm settle failed"
-         echo "done"
-         ;;
-     stop)
+This seems a true statement: 
+https://git.fedorahosted.org/cgit/elfutils.git/tree/backends
+
+So maybe it's better to reject this bug?
+
+Thomas Petazzoni, since you opened the bug, what is your opinion?
+
 -- 
-2.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
