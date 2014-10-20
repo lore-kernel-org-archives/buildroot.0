@@ -1,105 +1,88 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 20 Oct 2014 11:13:49 +0100
-Subject: [Buildroot] [PATCH v4] package/trinity: New package
-In-Reply-To: <CAHXCMML2_6s4Wn6PEVoOK396vPr+M5jbf+258Q02oLmsNvGdFg@mail.gmail.com>
-References: <1412867742-53521-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMMKe4BiNxg5j6WuH195fH3+konYpCk+vNBSaNNNRnb8ECQ@mail.gmail.com>
- <38121FAB319C3344930C920E7B51831320FD3A02@LEMAIL01.le.imgtec.org>
- <CAHXCMML3v10VLchF0dknLiQmpi-y_nj3bEqC6mJHu=GVG4Z8Qg@mail.gmail.com>
- <38121FAB319C3344930C920E7B51831320FD3B9E@LEMAIL01.le.imgtec.org>
- <CAHXCMML2_6s4Wn6PEVoOK396vPr+M5jbf+258Q02oLmsNvGdFg@mail.gmail.com>
-Message-ID: <5444E05D.5070008@imgtec.com>
+Date: Mon, 20 Oct 2014 11:14:51 +0100
+Subject: [Buildroot] [PATCH v5] package/trinity: New package
+Message-ID: <1413800091-51317-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Adding the Trinity Linux System call fuzz tester.
 
-On 10/11/2014 04:47 PM, Samuel Martin wrote:
-> On Sat, Oct 11, 2014 at 4:03 PM, Vincent Olivert Riera
-> <Vincent.Riera@imgtec.com> wrote:
->> Dear Samuel Martin,
->>
->> it's very weird. I just used your defconfig and everything was fine. Look:
->>
->> [...]
->> /usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/peratu/downloads/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
->> $ make savedefconfig && cat defconfig
->> BR2_arm=y
->> BR2_TOOLCHAIN_EXTERNAL=y
->> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
->> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
->> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2014.08.tar.bz2"
->> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
->> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
->> BR2_PACKAGE_TRINITY=y
->>
->
-> Humm... indeed weird! :-|
->
-> For the record, the gen-versionh.sh trace:
-> http://code.bulix.org/kn3whb-87181/?raw
-> I got this doing:
-> $ make trinity-dirclean
-> $ make trinity-configure
-> # add 'set -x' right after /bin/bash in
-> <output>/build/trinity-780d879c71979f54dfc9ec0a26e6f1e0d5e361e1/scripts/gen-versionh.sh
-> $ make trinity
->
-> Maybe you'll be able to find something.
->
-> Regards,
->
->> Regards,
->>
->> --
->> Vincent
->> ________________________________________
->> From: Samuel Martin [s.martin49 at gmail.com]
->> Sent: 11 October 2014 14:40
->> To: Vincent Olivert Riera
->> Cc: buildroot
->> Subject: Re: [Buildroot] [PATCH v4] package/trinity: New package
->>
->> Hi Vicente,
->>
->> On Sat, Oct 11, 2014 at 2:57 PM, Vincent Olivert Riera
->> <Vincent.Riera@imgtec.com> wrote:
->>> Dear Samuel Martin,
->>>
->>> can you provide a defconfig which fails? I have built it twice few minutes ago.
->>
->> Here it is: http://code.bulix.org/4oyy7r-87179/?raw
->>
->> And here the build error: http://code.bulix.org/j2n1a8-87180/?raw
->>
->> (I've just apply the patch from patchwork on top of master).
->>
->>>
->>> Also, it will be faster if you send an email directly to the maintainer instead of a pull request, as it's said in the "Downloads:" section of trinity's website.
->>
->> Oops, forgot to check that :-s
->> I will send a mail.
->>
->> Regards,
->>
->>
->> --
->> Samuel
->
->
->
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/Config.in          |    1 +
+ package/trinity/Config.in  |    6 ++++++
+ package/trinity/trinity.mk |   35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
+ create mode 100644 package/trinity/Config.in
+ create mode 100644 package/trinity/trinity.mk
 
-Your patches have been merged upstream. I will send a v5 patch and I 
-would like you test it, please.
-
-Best regards,
-
+diff --git a/package/Config.in b/package/Config.in
+index 89b46dc..beb4daf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -90,6 +90,7 @@ endif
+ 	source "package/sysprof/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
++	source "package/trinity/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+new file mode 100644
+index 0000000..de9c467
+--- /dev/null
++++ b/package/trinity/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TRINITY
++	bool "trinity"
++	help
++	  A Linux System call fuzz tester
++
++	  http://codemonkey.org.uk/projects/trinity/
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+new file mode 100644
+index 0000000..8415141
+--- /dev/null
++++ b/package/trinity/trinity.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# trinity
++#
++################################################################################
++
++TRINITY_VERSION = d68d1f7b9ab6c65a379ea990a263ee6b4f234bbd
++TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
++TRINITY_LICENSE = GPLv2
++TRINITY_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_INET_IPV6),)
++TARGET_CONFIGURE_OPTS += IPV6=no
++endif
++
++define TRINITY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
++endef
++
++define TRINITY_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define TRINITY_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
++endef
++
++# Install helper scripts
++define TRINITY_INSTALL_HELPER_SCRIPTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/trinity
++	cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
++endef
++TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
++
++$(eval $(generic-package))
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+1.7.1
