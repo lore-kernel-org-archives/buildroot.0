@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Oct 2014 16:28:11 +0200
-Subject: [Buildroot] [PATCH 1/2] system/skeleton: make nsswitch install
- conditional
-In-Reply-To: <5445185C.6020604@zacarias.com.ar>
-References: <1413808086-12177-1-git-send-email-gustavo@zacarias.com.ar>
- <20141020150209.5f8b45a5@free-electrons.com>
- <54450BF5.4000202@zacarias.com.ar>
- <20141020152759.4f438890@free-electrons.com>
- <54450F51.5050801@zacarias.com.ar>
- <20141020153719.034df3be@free-electrons.com>
- <54451174.5060309@zacarias.com.ar>
- <20141020155447.21c7c7ff@free-electrons.com>
- <5445185C.6020604@zacarias.com.ar>
-Message-ID: <20141020162811.4c3e2ce5@free-electrons.com>
+Date: Mon, 20 Oct 2014 16:30:51 +0200
+Subject: [Buildroot] Firmware update for Buildroot
+In-Reply-To: <CA+TH9VnM21MSTZ0HnWM_u+uSgLSzUj1=PhYfOFTfn6H7aMK_oQ@mail.gmail.com>
+References: <CA+TH9VnM21MSTZ0HnWM_u+uSgLSzUj1=PhYfOFTfn6H7aMK_oQ@mail.gmail.com>
+Message-ID: <20141020163051.1f4b05eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Angelo Compagnucci,
 
-On Mon, 20 Oct 2014 11:12:44 -0300, Gustavo Zacarias wrote:
+On Mon, 20 Oct 2014 15:17:06 +0200, Angelo Compagnucci wrote:
 
-> Not at all, already done in private initscript revamp, but not in an
-> upstreamable/generic way since it's not finished, part of my
-> configurable sysv initscripts (i think i've mentioned the idea on the ML
-> and/or IRC).
-> I dunno if Maxime or someone else is working on anything similar since
-> i'm somewhat outside the loop, and my motivation is pretty low as i've
-> already said.
+> I'm looking for the best tool to prepare and apply firmware images
+> based on Buildroot. I know that is a complex matter, but what I'm
+> asking here is an advice.
+> 
+> After several hours of searching, I finally found what seems a good
+> piece of software:
+> 
+> https://github.com/fhunleth/fwup
+> 
+> It's maintained and it has a  good integration with Buildroot.
+> I know that Thomas Petazzoni wrote this one:
+> 
+> https://www.gitorious.org/embedded-linux-firmware-upgrade-tool
+> 
+> But It seems not maintained anymore.
+> 
+> Any advice on this matter?
 
-Well, Maxime is still pushing his initscripts package to make sure a
-root filesystem with systemd is not cluttered with an /etc/init.d/
-directory. I don't know if he intends to go further than that.
+There is also https://github.com/sbabic/swupdate, which was presented
+last week at ELCE, see
+http://events.linuxfoundation.org/sites/events/files/slides/SoftwareUpdateForEmbedded.pdf.
 
 Thomas
 -- 
