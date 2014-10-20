@@ -1,46 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Oct 2014 21:39:28 +0200
-Subject: [Buildroot] [PATCHv3 buildroot-test 9/9] autobuild-run: extend TODO
-	list
-In-Reply-To: <1413833968-11808-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1413833968-11808-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1413833968-11808-10-git-send-email-patrickdepinguin@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Oct 2014 21:41:34 +0200
+Subject: [Buildroot] [PATCH 1/3] qemu-system: new package
+In-Reply-To: <54446B1B.2090201@zacarias.com.ar>
+References: <1399148415-27648-1-git-send-email-gustavo@zacarias.com.ar>	<20141012171752.29414e94@free-electrons.com>	<543AD090.3000107@zacarias.com.ar>	<543EA87A.2050204@mind.be>	<543FCDD6.9070104@zacarias.com.ar>	<54419C9C.7050705@mind.be>	<5441BEDE.1000102@zacarias.com.ar>	<54441E9F.8080802@mind.be>
+ <20141019225451.3aa6176e@free-electrons.com>
+ <54446B1B.2090201@zacarias.com.ar>
+Message-ID: <5445656E.9010404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 20/10/14 03:53, Gustavo Zacarias wrote:
+[snip]
+> To me it seems the decision was taken during the dev days with one-sided
+> arguments (against), but well life is like that sometimes.
 
-Some misc. additions to the autobuild-run TODO list.
+ Well, there was nobody to provide counter-arguments. That's why I started the
+discussion on the list.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- scripts/autobuild-run | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ It's very clear that version selection is needed. It's not so clear that a
+separate version is really needed for host-qemu-system and host-qemu-user, because:
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index de38430..10e46fc 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -47,6 +47,17 @@
- # - Instead of excluding all configurations that have
- #   BR2_PACKAGE_CLASSPATH=y, improve the script to detect whether the
- #   necessary host machine requirements are there to build classpath.
-+# - Integrate method check-requirements with the SysInfo class, distinghuishing
-+#   between required and optional dependencies.
-+# - Extend required dependencies to subversion, mercurial, cpio, wget, python,
-+#   etc.
-+# - Detect selection of multiple virtual package providers and don't consider it
-+#   a failure
-+# - Properly handle kill of main script: stop all running children and do not
-+#   print out stacktraces
-+# - Fix problem in removal of output directory: sometimes this fails with
-+#   message 'directory not empty' which suggests that someone is writing to the
-+#   directory at the time of removal.
- 
- """autobuild-run - run Buildroot autobuilder
- 
+ - there's a slightly larger chance that both system and user are broken;
+ - we currently anyway don't have version selection for user;
+ - we can change it later if required.
+
+ On the other hand, it's also possible to merge the qemu-system package now and
+refactor it back into a single package later. It wouldn't even require legacy
+handling because the config symbols already start with BR2_PACKAGE_QEMU.
+
+ So I'd propose to give Yann some time to produce a unified qemu package, but if
+it doesn't come we can still merge your original patch.
+
+> The side effect is that it pushes my motivation to contribute to
+> buildroot to an all-time low (read that as you wish, in fact it may not
+> even matter).
+
+ Since you're the #1 buildroot contributor and have been for some time now, it
+really does matter!
+
+
+ Regards,
+ Arnout
 -- 
-1.8.5.1
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
