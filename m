@@ -1,61 +1,55 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon, 20 Oct 2014 15:50:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/upmpdcli: bump to version 0.8.5
-In-Reply-To: <1413813009-20149-1-git-send-email-jkrause@posteo.de>
-References: <1413813009-20149-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1413813009-20149-2-git-send-email-jkrause@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Oct 2014 15:54:47 +0200
+Subject: [Buildroot] [PATCH 1/2] system/skeleton: make nsswitch install
+ conditional
+In-Reply-To: <54451174.5060309@zacarias.com.ar>
+References: <1413808086-12177-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141020150209.5f8b45a5@free-electrons.com>
+ <54450BF5.4000202@zacarias.com.ar>
+ <20141020152759.4f438890@free-electrons.com>
+ <54450F51.5050801@zacarias.com.ar>
+ <20141020153719.034df3be@free-electrons.com>
+ <54451174.5060309@zacarias.com.ar>
+Message-ID: <20141020155447.21c7c7ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New version of upmpdcli now depends on libupnpp, which was ectracted from the
-source and now exists in its own package.
+Dear Gustavo Zacarias,
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/upmpdcli/Config.in   | 8 +++-----
- package/upmpdcli/upmpdcli.mk | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+On Mon, 20 Oct 2014 10:43:16 -0300, Gustavo Zacarias wrote:
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index f28c775..84649d2 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -1,12 +1,10 @@
- config BR2_PACKAGE_UPMPDCLI
- 	bool "upmpdcli"
--	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBUPNP
- 	select BR2_PACKAGE_LIBMPDCLIENT
-+	select BR2_PACKAGE_LIBUPNPP
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_LARGEFILE # libupnp
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	depends on BR2_LARGEFILE # libupnpp -> libupnp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp -> libupnp
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 547752a..a47c456 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 0.8.3
-+UPMPDCLI_VERSION = 0.8.5
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
--UPMPDCLI_DEPENDENCIES = expat libcurl libupnp libmpdclient
-+UPMPDCLI_DEPENDENCIES = libmpdclient libupnpp
- 
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
+> >> gustavoz at asgard ~/git/buildroot/package $ find . -name \*.mk -exec grep
+> >> --with-filename TARGET_FINALIZE {} \;
+> >> ./perl/perl.mk:TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
+> > 
+> > Only removes stuff.
+> 
+> But it will alter your package size measurments outside of package
+> scope, you need to account for those.
+
+Yes, this is already taken care of in my script. There are lots of
+other files that get removed (header files, static libraries, etc.).
+
+> > The skeleton can be made a package of its own.
+> > 
+> > See, I'm not too far away :-)
+> 
+> Yes, it's called baselayout in gentoo, base-files in some other distros
+> and so on, you probably already know them.
+
+Yep.
+
+> But nobody made it yet.
+
+Indeed, but it wouldn't be too hard to do I believe.
+
+Best regards,
+
+Thomas
 -- 
-2.1.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
