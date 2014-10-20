@@ -1,94 +1,117 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 20 Oct 2014 19:29:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-19
-In-Reply-To: <CAGduivxvwBqVUy9XFNQoWoZ-W_MdHw_pt5DPB7Q=qA61ONZ3dg@mail.gmail.com>
-References: <20141020063015.87BD21017EC@stock.ovh.net>
- <54450BD8.1020206@imgtec.com> <54450D12.4020807@imgtec.com>
- <CAGduivxvwBqVUy9XFNQoWoZ-W_MdHw_pt5DPB7Q=qA61ONZ3dg@mail.gmail.com>
-Message-ID: <CAB0FRssYsTO=yYjzNwFaF4c+rxcn5Xz5JGcphB9CB8p60Pb6fA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Oct 2014 19:31:37 +0200
+Subject: [Buildroot] [PATCH 1/1] shairplay-sync: new package
+In-Reply-To: <1413811309-16019-1-git-send-email-jkrause@posteo.de>
+References: <1413811309-16019-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20141020173137.GF3742@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-10-20 15:43 GMT+02:00 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
-> Hi all,
->
-> On Mon, Oct 20, 2014 at 3:24 PM, Vicente Olivert Riera
-> <Vincent.Riera@imgtec.com> wrote:
->> On 10/20/2014 02:19 PM, Vicente Olivert Riera wrote:
->>>
->>> Dear all,
->>>
->>> On 10/20/2014 07:30 AM, Thomas Petazzoni wrote:
->>>>
->>>> Build statistics for 2014-10-19
->>>> ===============================
->>>>
->>>>          mips |            modem-manager-1.4.0 | NOK |
->>>>
->>>> http://autobuild.buildroot.net/results/39e437786cdeec0c3d41c1ff6201cc4f907d0f73/
->>>>
->>>
->>> this fails to build because Perl-XML-Parser is not installed in the
->>> autobuilder host...
->>>
->>> checking for XML::Parser... configure: error: XML::Parser perl module is
->>> required for intltool
->>>
->>> ...which is weird because Perl-XML-Parser is a direct dependency of
->>> intltool, and intltool seems to be present in the autobuilder host...
->>>
->>> checking for intltool >= 0.40.0... 0.50.2 found
->>>
->>> Anyway..., should we add host-intltool to MODEM_MANAGER_DEPENDENCIES?
-> Avahi fails too because of this dependencies, and I have no idea at
-> how Perl works, but from the output of the configure of intltool, it's
-> using the perl binary of my host system. I'm not sure that was the
-> idea. And as such, if you have libxml-parser-expat in your system, it
-> works, otherwise, you're screwed.
->
-> Also, from what I've seen so far, if I force inttool to uses the perl
-> binary that buildroot compiled and installed in the host directory, it
-> won't find XML::Parser. I tried forcing it's install somewhere else
-> but to no success. Eventually, it finds it, but fails with the
-> following message:
-> output/host/usr/lib/perl5/5.20.1/XML/Parser.pm line 18. BEGIN
-> failed--compilation aborted at
-> [...]/host/usr/lib/perl5/5.20.1/XML/Parser.pm line 22. Compilation
-> failed in require at -e line 1.
-> Francois ?
+J?rg, All,
 
-Well, I know since friday
-(http://lists.busybox.net/pipermail/buildroot/2014-October/109247.html)
-that I broke all package which depends on host-intltool.
-I've already sent a patch : http://patchwork.ozlabs.org/patch/400614/
-Please, try it.
+On 2014-10-20 15:21 +0200, J?rg Krause spake thusly:
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+[--SNIP--]
+> diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+> new file mode 100644
+> index 0000000..2eab88d
+> --- /dev/null
+> +++ b/package/shairport-sync/Config.in
+> @@ -0,0 +1,72 @@
+> +config BR2_PACKAGE_SHAIRPORT_SYNC
+> +	bool "shairport-sync"
+> +	depends on BR2_USE_MMU # libdaemon
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_LIBDAEMON
+> +	select BR2_PACKAGE_POPT
+> +	help
+> +	  Shairport Sync emulates an AirPort Express for the purpose of
+> +	  streaming audio from iTunes, iPods, iPhones, iPads and AppleTVs.
+> +	  Audio played by a Shairport Sync-powered device stays in synchrony
+> +	  with the source and thus with other devices that are playing the same
+> +	  source synchronously. Thus, for example, synchronised multi-room
+> +	  audio is possible without difficulty.
+> +
+> +	  https://github.com/mikebrady/shairport-sync
+> +
+> +if BR2_PACKAGE_SHAIRPORT_SYNC
+> +
+> +choice
+> +	prompt "Choose SSL encryption backend"
+> +	default BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
+> +
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
+> +	bool "OpenSSL"
+> +	select BR2_PACKAGE_OPENSSL
+> +
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_POLARSSL
+> +	bool "PolarSSL"
+> +	select BR2_PACKAGE_POLARSSL
+> +endchoice
 
-Fran?ois.
+Since this is a choice, either one is selected. Which means SSL support
+seems to be not optional.
 
->>>
->>> Best regards,
->>
->>
->> Ok, I didn't realized that modem-manager already has host-intltool in its
->> the dependencies, and that makes host-libxml-parser-perl to be installed. So
->> now I don't understand why the autobuilder fails :/
->>
->>
->> --
->> Vicente Olivert Riera
->> Graduate Software Engineer, MIPS Processor IP
->> Imagination Technologies Limited
->> t: +44 (0)113 2429814
->> www.imgtec.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+In that case I would prefer we use something like:
+
+    config BR2_PACKAGE_SHAIRPORT_SYNC
+        bool "shairport-sync"
+        # Dependencies and selects as above
+        select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
+
+This way, we ensure at least one SSL implementation is available, and do
+not bother the user with a useless prompt.
+
+> +choice
+> +	prompt "Choose mDNS backend"
+> +	default BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
+> +
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
+> +	bool "Avahi"
+> +	depends on BR2_USE_WCHAR # avahi -> gettext
+> +	depends on !BR2_PREFER_STATIC_LIB
+> +	select BR2_PACKAGE_AVAHI
+> +	select BR2_PACKAGE_AVAHI_DAEMON
+> +	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
+> +
+> +comment "Avahi support needs a toolchain w/ wchar, dynamic library"
+> +	depends on !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+> +
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_TINYSVCMDNS
+> +	bool "tinysvcmdns"
+> +	help
+> +	  tinysvcmdns is a tiny mDNS responder which is only concerned with
+> +	  publishing services, without a system-wide daemon like Bonjour or
+> +	  Avahi. Its other goal is to be extremely small, embeddable, and have
+> +	  no external dependencies.
+> +endchoice
+
+There is no tinysvcmdns packaged in Buildroot. Does shairport-sync
+bundles its own version? Otherwise, I've seen there is a tinysvcmdns
+package on bitbucket: https://bitbucket.org/geekman/tinysvcmdns
+Maybe it would be interesting to package it in Buildroot?
+
+If so, I would just remove the choice altogether, and just use
+tinysvcmdns if avahi is not enabled.
+
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
+> +	bool "libsoxr support"
+
+There, you need to select BR2_PACKAGE_LIBSOXR.
+
+Obviously, adapt the .mk to the above comments.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
