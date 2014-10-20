@@ -1,66 +1,49 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 20 Oct 2014 10:34:19 +0200
-Subject: [Buildroot] [PATCH 01/15] package/pkg-cmake.mk: globally
- disable doc, examples and tests
-In-Reply-To: <20141019225649.2f16bd37@free-electrons.com>
-References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
- <1413741891-30113-2-git-send-email-s.martin49@gmail.com>
- <20141019221013.090eb47d@free-electrons.com>
- <CAHXCMMKCj2PoOrL0xGPRfp=FOhZm4=tN2RdPJR9J-J=_3ro_3w@mail.gmail.com>
- <20141019225649.2f16bd37@free-electrons.com>
-Message-ID: <CAHXCMMKR7kzESqT2syEqKkCxZSMHXLXQd_NyMHSqhs_TiAfMyQ@mail.gmail.com>
+Date: Mon, 20 Oct 2014 10:35:44 +0200
+Subject: [Buildroot] [PATCH 02/31] libplayer: fix typo on BR2_nios2
+In-Reply-To: <1413749285-1108-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413749285-1108-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMKHn0Rf6YMoU5+E2YWKncBgOpWiHuDMozuLb668mVQzjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 19, 2014 at 10:56 PM, Thomas Petazzoni
+On Sun, Oct 19, 2014 at 10:07 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Dear Samuel Martin,
+> libplayer is using BR2_nios, but it should be BR2_nios2.
 >
-> On Sun, 19 Oct 2014 22:28:18 +0200, Samuel Martin wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+
+> ---
+>  package/libplayer/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->> > Are these options standardized by CMake, or are they just "generally"
->> > used by a number of packages?
->>
->> Not standardized by CMake, just used by a number of packages.
->>
->> >
->> > If not, I don't see why they should be passed by the
->> > CMake infrastructure.
->>
->> Since we don't really care about these things, and don't want to be
->> bothered by failure because of these features, I think it's a way to
->> enforce disabling them.
->
-> And so, we will keep adding more and more options that are not CMake
-> standard options to the core CMake infrastructure?
->
-> I know we've done that for pkg-autotools, but I'm not sure it was such
-> a great idea. Especially, I'd like to understand where we will stop:
-> will we, when two packages have common options, move them to the common
-> infrastructure, even if those options are not CMake standard at all?
-
-This is a fair question.
-
->
-> At least, I'd like to see what is our "policy" about this, and get some
-> feedback from other Buildroot developers on this.
-
-Well, the discussion is now open. ;-)
-
-BTW, this series also contains a number of fixes and cleanup unrelated
-to this particular change that go in anyway IMHO.
-
-Regards,
-
->
-> Thomas
+> diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+> index 4f5404c..703b96d 100644
+> --- a/package/libplayer/Config.in
+> +++ b/package/libplayer/Config.in
+> @@ -14,7 +14,7 @@ config BR2_PACKAGE_LIBPLAYER_MPLAYER
+>         bool "mplayer backend"
+>         # mplayer
+>         depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb || \
+> -                  BR2_microblaze || BR2_aarch64 || BR2_nios)
+> +                  BR2_microblaze || BR2_aarch64 || BR2_nios2)
+>         # mplayer
+>         depends on BR2_LARGEFILE
+>         # mplayer
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> 2.0.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 
 -- 
