@@ -1,32 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Oct 2014 10:41:37 +0200
-Subject: [Buildroot] [PATCH 1/2] mx53loco: update support
-In-Reply-To: <1413790693-8281-1-git-send-email-eric@eukrea.com>
-References: <1413790693-8281-1-git-send-email-eric@eukrea.com>
-Message-ID: <20141020104137.768ab68f@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 20 Oct 2014 11:10:59 +0200
+Subject: [Buildroot] [PATCH 01/31] ffmpeg: remove dangling reference to
+	BR2_arm10
+In-Reply-To: <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 19 Oct 2014 22:07:35 +0200")
+References: <1413749285-1108-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413749285-1108-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vbnfayxo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric B?nard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 20 Oct 2014 09:38:12 +0200, Eric B?nard wrote:
+ > BR2_arm10 has been removed in commit
+ > d60489a6e5e733a20d18b128646088981da57867 ("arch: remove BR2_arm10t"),
+ > so there is no point in keeping a reference to it in the ffmpeg
+ > package.
 
-> -# Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_2.6.35_11.09.01"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_2.6.35_maintain"
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Since we're using 2.6.35, the kernel headers of the toolchain should
-also be fixed to 2.6.35, otherwise we're using 3.17 by default which
-may cause some issues.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
