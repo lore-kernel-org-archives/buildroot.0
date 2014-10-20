@@ -1,30 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Oct 2014 23:18:02 +0200
-Subject: [Buildroot] [PATCH] eudev: add input group
-In-Reply-To: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141020231802.204b1e27@free-electrons.com>
+Date: Mon, 20 Oct 2014 23:19:42 +0200
+Subject: [Buildroot] [PATCH] util-linux: do not disable non existing
+ directories
+In-Reply-To: <1413834757-7996-1-git-send-email-ps.report@gmx.net>
+References: <1413834757-7996-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20141020231942.58fbd056@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Peter Seiderer,
 
-On Mon, 20 Oct 2014 17:59:05 -0300, Gustavo Zacarias wrote:
-> It's used by 50-default-udev.rules for input-class devices.
+On Mon, 20 Oct 2014 21:52:37 +0200, Peter Seiderer wrote:
+> Legacy disabled sub directories mount-deprecated and fdisks do not
+> longer exist in util-linux-2.25.1 source package.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/eudev/eudev.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/util-linux/util-linux.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index ebbab61..7586ab3 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -102,9 +102,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+>  ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+>  define UTIL_LINUX_DISABLE_TOOLS
+>  	$(SED) '/schedutils/d' -e '/text-utils/d' -e '/term-utils/d' \
+> -		-e '/login-utils/d' -e '/mount-deprecated/d' \
+> -		-e '/sys-utils/d' -e '/misc-utils/d' -e '/disk-utils/d' \
+> -		-e '/fdisks/d' $(@D)/Makefile.am
+> +		-e '/login-utils/d' -e '/sys-utils/d' -e '/misc-utils/d' \
+> +		-e '/disk-utils/d' $(@D)/Makefile.am
+>  endef
+>  UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
+>  endif
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I haven't looked at the details, but can't we use
+--disable-all-programs, like we do for the host variant of util-linux ?
 
-I've seen the same issue a couple of days ago.
-
-Does systemd needs a similar fix?
+Thanks,
 
 Thomas
 -- 
