@@ -1,37 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Oct 2014 21:52:37 +0200
-Subject: [Buildroot] [PATCH] util-linux: do not disable non existing
-	directories
-Message-ID: <1413834757-7996-1-git-send-email-ps.report@gmx.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 20 Oct 2014 21:54:26 +0200
+Subject: [Buildroot] [PATCH] ngrep: update include path of libpcap so bpf.h
+	can be found
+Message-ID: <1413834866-22111-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Legacy disabled sub directories mount-deprecated and fdisks do not
-longer exist in util-linux-2.25.1 source package.
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The libpcap headers have moved from /usr/include to /usr/include/pcap,
+although /usr/include/pcap.h still exists for backwards-compatibility
+(but is a stub that simply includes pcap/pcap.h).
+The ngrep package tries to find bpf.h based on the include statements in
+pcap.h. If we point ngrep to /usr/include/pcap.h, bpf.h will not be
+found and the associated functionality will not work.
+
+The fix is to pass the new include path to the ngrep configure step.
+
+Fixes bug #7370
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=7370
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/util-linux/util-linux.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/ngrep/ngrep.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index ebbab61..7586ab3 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -102,9 +102,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
- define UTIL_LINUX_DISABLE_TOOLS
- 	$(SED) '/schedutils/d' -e '/text-utils/d' -e '/term-utils/d' \
--		-e '/login-utils/d' -e '/mount-deprecated/d' \
--		-e '/sys-utils/d' -e '/misc-utils/d' -e '/disk-utils/d' \
--		-e '/fdisks/d' $(@D)/Makefile.am
-+		-e '/login-utils/d' -e '/sys-utils/d' -e '/misc-utils/d' \
-+		-e '/disk-utils/d' $(@D)/Makefile.am
- endef
- UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
- endif
+diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
+index b7e0eb6..eb63e17 100644
+--- a/package/ngrep/ngrep.mk
++++ b/package/ngrep/ngrep.mk
+@@ -18,7 +18,7 @@ endif
+ NGREP_CONF_ENV += LIBS+="$(NGREP_LIBS)"
+ 
+ NGREP_CONF_OPTS =  \
+-	--with-pcap-includes=$(STAGING_DIR)/usr/include \
++	--with-pcap-includes=$(STAGING_DIR)/usr/include/pcap \
+ 	--enable-pcre \
+ 	--with-pcre=$(STAGING_DIR)/usr \
+ 	--disable-dropprivs
 -- 
-1.8.1.4
+1.8.5.1
