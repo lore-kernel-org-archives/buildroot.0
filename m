@@ -1,63 +1,78 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 21 Oct 2014 08:15:03 +0100
-Subject: [Buildroot] google-breakpad experiences?
-In-Reply-To: <CAAXf6LVFqiMj0H0P_Qfpkeobrkb=28Art8_d2ga_-SOd8M5Baw@mail.gmail.com>
-References: <CAAXf6LWEBuVmnXosLpkjw0O9aVvGCBE2s=9e1PN6W5S7pK98+g@mail.gmail.com>
- <543E8D2E.70404@carallon.com>
- <CAAXf6LVFqiMj0H0P_Qfpkeobrkb=28Art8_d2ga_-SOd8M5Baw@mail.gmail.com>
-Message-ID: <544607F7.9040807@carallon.com>
+From: Yannick Kiekens <yannickkiekens@gmail.com>
+Date: Tue, 21 Oct 2014 09:15:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: enable building of
+	boost_log
+In-Reply-To: <20141020170703.GE3742@free.fr>
+References: <1413811644-28525-1-git-send-email-yannickkiekens@gmail.com>
+ <20141020170223.GC3742@free.fr> <20141020170703.GE3742@free.fr>
+Message-ID: <CAEyFGJEWwhmQ0s=OC8=74P2bNyJw4kv=xEjxDyRBZRBYHfs7QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/2014 19:44, Thomas De Schampheleire wrote:
-> Hi Will,
+On Mon, Oct 20, 2014 at 7:07 PM, Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+
+> Yannick, All,
 >
-> On Wed, Oct 15, 2014 at 5:05 PM, Will Wagner <willw@carallon.com> wrote:
+> On 2014-10-20 19:02 +0200, Yann E. MORIN spake thusly:
+> > On 2014-10-20 15:27 +0200, Yannick Kiekens spake thusly:
+> [--SNIP--]
+> > > diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> > > index 46a98e8..06969b4 100644
+> > > --- a/package/boost/boost.mk
+> > > +++ b/package/boost/boost.mk
+> > > @@ -25,8 +25,7 @@ HOST_BOOST_FLAGS = --without-icu \
+> > >
+> > >  # atomic library compile only with upstream version, wait for next
+> release
+> > >  # coroutine breaks on some weak toolchains and it's new for 1.54+
+> > > -# log breaks with some toolchain combinations and it's new for 1.54+
+> >
+> > As you remove a comment that warns that log is broken in some cases, it
+> > would be nice if you were to explain why this comment no longer applies.
+> >
+> > For example, you could format your commit log as thus (reason totally
+> > made up for the sake of the example, adapt):
+> >
+> >     package/boost: enable building of boost_log
+> >
+> >     In the current version of boost, boost_log is now considered stable
+> >     and maintained. The failures caused by "some toolchain combinations"
+> >     no longer occur.
+> >
+> >     Signed-off-by: [YOU]
+> >
+> >     ---
+> >     Tested with these toolchains:
+> >       - uClibc, arm, static only
+> >       - uClibc, x86_64
+> >
+> > Note the '---' line: you can add such a line in your commit log, and it
+> > will appear as-is in the mail you send. However, git is smart enough so
+> > that when the maintainer applies the patch, git removes it.
 >
->> We have successfully been using google-breakpad for a few years. However it
->> is only on x86 and arm targets and we have our own internal package (it
->> pre-dates the one now upstream but is broadly similar, we have a number of
->> custom patches as well).
->>
->> Are you trying to generate dumps within the crashed process or are you
->> running the crash server? We have found the latter to be much more reliable.
+> Sorry, I meant:
+>     [...] git removes it, and whatever follows (but keeps the patch, of
+>     course).
 >
-> Currently I'm simply trying the test program described at:
-> https://code.google.com/p/google-breakpad/wiki/LinuxStarterGuide
+> Regards,
+> Yann E. MORIN.
 >
-> which is dumping from within the crashed process.
-
-The example works fine on our platforms.
-
 >
-> How does this crash server work? I must say the documentation of
-> google-breakpad is not very extensive.
 
-You start up another process before creating the ExceptionHandler object 
-(passing in a descriptor via server_fd). The advantage of out-of-process 
-dump generation is that you don't have to worry about a corrupted 
-environment & C library.
+?We use boost_log at work on x86_64 and armv7, we never had trouble with it.
+It is possible boost_log 1.56 still does not work on some toolchain
+combinations?, as mentioned in git
+commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037
 
-The documentation is indeed poor and help on the forums was never great 
-either. I tried to upstream our patches but never got any response on 
-them either.
+?I could reformat the patch to whitelist boost_log on known configurations
+Any opnion on that?
 
->
-> Could you also elaborate on the unreliabilities you have encountered
-> with the first method?
-
-The problem we have seen with this is that in a number of crash 
-scenarios it never produces a dump because something is wrong in the c 
-library. Also we are able to put extra functionality into the crash 
-server process so it can offer to email files, save to usb key etc.
-
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7471 9224
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Regards,
+Yannick Kiekens?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141021/5b9320a5/attachment.html>
