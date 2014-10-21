@@ -1,23 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 21 Oct 2014 05:39:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 7088] elfutils on Blackfin doesn't build
-In-Reply-To: <bug-7088-163@https.bugs.busybox.net/>
-References: <bug-7088-163@https.bugs.busybox.net/>
-Message-ID: <20141021053932.1FA1CB0016@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 21 Oct 2014 08:06:39 +0200
+Subject: [Buildroot] [PATCH 2/2 v5] package/mono: new package
+In-Reply-To: <54458B8C.4020505@crapouillou.net>
+References: <54458B8C.4020505@crapouillou.net>
+Message-ID: <CA+TH9Vm7c9BGBpRvkLziZM6ctainiTv5f-yb3Y-WxzdAkcfA3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7088
+Hi Paul,
 
---- Comment #6 from Mike Frysinger <vapier@gentoo.org> 2014-10-21 05:39:28 UTC ---
-elfutils also uses quite a bit of glibc-specific features, so it doesn't even
-compile for uClibc (the only C library Blackfin supports).  maybe the dep tree
-can depend on that instead ?
+Could you send your config and a mono.log obtained with this command?
+
+ make -j1 host-mono-reconfigure >> mono.log
+
+Thank you!
+
+2014-10-21 0:24 GMT+02:00 Paul Cercueil <paul@crapouillou.net>:
+> In-Reply-To: 1413814528-26904-3-git-send-email-angelo.compagnucci at gmail.com
+>
+> Hi Angelo,
+>
+> Your package does not work here, host-mono fails to build.
+> I attached the log file.
+>
+> Could the DLL files be downloaded instead of rebuilt? They should be
+> arch-independent, so it may be easier and faster to just download them.
+> Then only the runtime would need to be built.
+>
+> Regards,
+>
+> Paul
+>
+
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Profile: http://it.linkedin.com/in/compagnucciangelo
