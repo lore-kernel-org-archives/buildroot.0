@@ -1,52 +1,58 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 21 Oct 2014 10:50:01 +0200 (CEST)
-Subject: [Buildroot] [PATCH v2] set simple network setup via the system
- configuration submenu
-In-Reply-To: <20141021103611.7e43d2b4@free-electrons.com>
-Message-ID: <1111084647.26814618.1413881401004.JavaMail.root@openwide.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 21 Oct 2014 10:53:47 +0200
+Subject: [Buildroot] [PATCH 2/2 v5] package/mono: new package
+In-Reply-To: <20141021103339.7beae145@free-electrons.com>
+References: <54458B8C.4020505@crapouillou.net>
+ <20141021103339.7beae145@free-electrons.com>
+Message-ID: <CA+TH9VmR74=yuiq1JmPCO+tDxtYWgbY3Z6Fg=TFoXx_zw_ve0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, Paul
 
------ Mail original -----
+2014-10-21 10:33 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Paul Cercueil,
+>
+> On Tue, 21 Oct 2014 00:24:12 +0200, Paul Cercueil wrote:
+>
+>> Your package does not work here, host-mono fails to build.
+>> I attached the log file.
+>>
+>> Could the DLL files be downloaded instead of rebuilt? They should be
+>> arch-independent, so it may be easier and faster to just download them.
+>> Then only the runtime would need to be built.
+>
+> Which DLL are you talking about? host-monolite already downloads a
+> bunch of pre-built DLLs.
 
-[<snip>]
+DLLs are the ones produced by host-mono. They are cross platform and
+of cource you can copy it from you local mono installation.
+By the way, they are developed in tandem with mono, and fixed with it,
+so if you want to build the library outside mono, you should be sure
+to base it on the same mono version.
 
-> 
-> I certainly don't like to push back stuff, but I'm wondering if this
-> isn't too much complexity compared to just having people use an
-> overlay
-> containing their own /etc/network/interfaces. We will never be able
-> to
-> handle all the possible cases, with multiple network interfaces, hook
-> scripts called before/after bringing up/down interfaces, etc.
-> 
-> What is the opinion of other Buildroot developers?
-> 
+Downloading a precompiled bundle is entirely possible, but it's not
+upstreamed in any way. From my information, there is no way to have a
+precompiled and signed mono runtime distribution to download.
 
+Sincerly, Angelo
 
-just to clarify...
-
-the point of the patch is not to allow all possible configurations that
-network/interfaces can handle, but just allow to easily set an IP address
-or enable DHCP without having to add an overlay. For anything more
-complex an overlay is the way to go.
-
-I originally thought that putting more stuff in would be a good
-idea but I have revised my position on that and now I think it
-should be limited to the minimal required subset
-
-* static ipv4
-* ipv4 dhcp
-* networkd support
-
-if ipv6 becomes popular enough it could trivially be added but 
-let's keep this for a followup
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
-Regards
 
-J?r?my
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
