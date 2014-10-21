@@ -1,53 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 10:36:11 +0200
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 21 Oct 2014 10:50:01 +0200 (CEST)
 Subject: [Buildroot] [PATCH v2] set simple network setup via the system
  configuration submenu
-In-Reply-To: <1413814486-10716-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1413814486-10716-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <20141021103611.7e43d2b4@free-electrons.com>
+In-Reply-To: <20141021103611.7e43d2b4@free-electrons.com>
+Message-ID: <1111084647.26814618.1413881401004.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?my Rosen,
 
-On Mon, 20 Oct 2014 16:14:46 +0200, J?r?my Rosen wrote:
-> This patch allows the setup of simple /etc/network/interfaces via the
-> configuration menus instead of using an overlay
-> 
-> * supports manual ipv4 configuration
-> * supports dhcp configuration
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> 
-> ---
-> 
-> This patch is here to avoid having to do an overlay for the most common
-> cases (ipv4 with fixed IP or DHCP)
-> 
-> It can be made more complex (second network if, support ipv6) depending on
-> what people want/need, but I want to keep it simple. The point is to avoid
-> having to tweak overlays to change stuff that everybody needs to change for
-> prototyping
-> 
-> When networkd is enabled, this option will be deactivated. Networkd support
-> is tricky to get right on first approximation. It can be added later if it
-> is deemed usefull
+----- Mail original -----
 
-I certainly don't like to push back stuff, but I'm wondering if this
-isn't too much complexity compared to just having people use an overlay
-containing their own /etc/network/interfaces. We will never be able to
-handle all the possible cases, with multiple network interfaces, hook
-scripts called before/after bringing up/down interfaces, etc.
+[<snip>]
 
-What is the opinion of other Buildroot developers?
+> 
+> I certainly don't like to push back stuff, but I'm wondering if this
+> isn't too much complexity compared to just having people use an
+> overlay
+> containing their own /etc/network/interfaces. We will never be able
+> to
+> handle all the possible cases, with multiple network interfaces, hook
+> scripts called before/after bringing up/down interfaces, etc.
+> 
+> What is the opinion of other Buildroot developers?
+> 
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+just to clarify...
+
+the point of the patch is not to allow all possible configurations that
+network/interfaces can handle, but just allow to easily set an IP address
+or enable DHCP without having to add an overlay. For anything more
+complex an overlay is the way to go.
+
+I originally thought that putting more stuff in would be a good
+idea but I have revised my position on that and now I think it
+should be limited to the minimal required subset
+
+* static ipv4
+* ipv4 dhcp
+* networkd support
+
+if ipv6 becomes popular enough it could trivially be added but 
+let's keep this for a followup
+
+
+Regards
+
+J?r?my
