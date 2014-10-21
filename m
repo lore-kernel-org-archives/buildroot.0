@@ -1,49 +1,54 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 21 Oct 2014 16:17:18 +0100
-Subject: [Buildroot] [PATCH] autobuild-run: Do not build python3 with this
-	external toolchain
-Message-ID: <1413904638-51774-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Oct 2014 18:28:13 +0200
+Subject: [Buildroot] [PATCH] eudev: add input group
+In-Reply-To: <54465C67.1020103@zacarias.com.ar>
+References: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141020231802.204b1e27@free-electrons.com>
+ <20141021075847.GA9754@pc-eric> <54465C67.1020103@zacarias.com.ar>
+Message-ID: <20141021162813.GA3912@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It fails to build python3 with an error like this one:
+Gustavo, All,
 
-Failed to build these modules:
-_posixsubprocess
+On 2014-10-21 10:15 -0300, Gustavo Zacarias spake thusly:
+> On 10/21/2014 04:58 AM, Eric Le Bihan wrote:
+> 
+> >> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >>
+> >> I've seen the same issue a couple of days ago.
+> >>
+> >> Does systemd needs a similar fix?
+> > 
+> > Yes it does.
+> > 
+> > In my setup, I modified system/skeleton/etc/group to add "input:x:31:"
+> > 
+> > I'll send a patch similar to the eudev one.
+> 
+> Hold off on applying the patch, mkusers doesn't handle making groups
+> without users gracefully:
+> 
+> ...scripts/mkusers: line 369: [: too many arguments
+> ...scripts/mkusers: line 376: [: too many arguments
+> ...scripts/mkusers: line 400: [: input: integer expression expected
+> ...scripts/mkusers: line 408: [: input: integer expression expected
+> 
+> I can respin adding an input user to match, another option is to handle
+> the scenario in mkusers.
 
-Which comes from this previous error:
+I can look at handling this in mkusers, certainly.
 
-/br/output/build/python3-3.4.1/Modules/_posixsubprocess.c:246:33: error:
-'SYS_getdents64' undeclared (first use in this function)
+Regards,
+Yann E. MORIN.
 
-The failure is caused because this toolchain uses eglibc-2.18 which
-lacks the definition of the SYS_getdents64 macro for MIPS64 n64.
-
-Fixes:
-	http://autobuild.buildroot.net/results/8fd/8fd1fdf5f02365278a280d50adce98303fcc9a2a/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- scripts/autobuild-run |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index c311ebf..fd1ba91 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -300,6 +300,10 @@ def fixup_config(instance, sysinfo):
-     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-+    # This MIPS ctng toolchain fails to build the python3 package
-+    if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+        return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
