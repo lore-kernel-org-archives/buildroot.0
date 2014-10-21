@@ -1,39 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 21 Oct 2014 18:10:52 -0300
-Subject: [Buildroot] [PATCH 3/3] xtables-addons: enable necessary kernel
-	options
-In-Reply-To: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1413925852-12765-3-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Oct 2014 23:15:20 +0200
+Subject: [Buildroot] [PATCH v2 03/30] ffmpeg: fix ARM condition for
+ --{enable, disable}-vfp
+In-Reply-To: <1413923237-2861-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413923237-2861-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141021211520.GE23999@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable the required conntrack/netfilter options, otherwise
-xtables-addons will fail to build.
-The basic iptables options are already covered by the iptables package
-which is a required dependency anyway.
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+On 2014-10-21 22:26 +0200, Thomas Petazzoni spake thusly:
+> As noted by Arnout, not all ARMv6 have the VFP FPU, therefore instead
+> of using a condition on ARMv6 or ARMv7-A, this commit changes to use a
+> condition on BR2_ARM_CPU_HAS_VFPV2.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b9d3c8e..ee8c6a0 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -215,6 +215,9 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+Indeed, that seems sensible. :-]
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/ffmpeg/ffmpeg.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 349bac9..0990f18 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -285,7 +285,7 @@ FFMPEG_CONF_OPTS += --enable-armv6
+>  else
+>  FFMPEG_CONF_OPTS += --disable-armv6 --disable-armv6t2
+>  endif
+> -ifeq ($(BR2_ARM_CPU_ARMV6)$(BR2_ARM_CPU_ARMV7A),y)
+> +ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
+>  FFMPEG_CONF_OPTS += --enable-vfp
+>  else
+>  FFMPEG_CONF_OPTS += --disable-vfp
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
