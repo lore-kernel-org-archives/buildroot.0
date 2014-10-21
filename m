@@ -1,96 +1,183 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 21 Oct 2014 22:53:22 +0200
-Subject: [Buildroot] [PATCH v3] gst1-validate: new package
-Message-ID: <1413924802-27729-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Oct 2014 23:06:13 +0200
+Subject: [Buildroot] [PATCH v2 01/30] arch/arm: add blind options to
+ know the ARM architecture
+In-Reply-To: <1413923237-2861-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413923237-2861-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141021210613.GC23999@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Example usages can be found at [1].
+Thomas, All,
 
-[1] http://blogs.gnome.org/tsaunier/2014/04/21/gst-validate-a-suite-of-tools-to-run-integration-tests-for-gstreamer-2/
+On 2014-10-21 22:26 +0200, Thomas Petazzoni spake thusly:
+> In preparation to the removal of BR2_GCC_TARGET_ARCH for ARM, this
+> commit introduces a number of blind options for each ARM architecture,
+> so that packages/toolchains that had dependencies using
+> BR2_GCC_TARGET_ARCH can continue to express their dependencies. It can
+> also be used to simplify package dependencies that were using the
+> individual ARM core options.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  arch/Config.in.arm | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 201ff1d..5441c8d 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -37,6 +37,18 @@ config BR2_ARM_CPU_HAS_THUMB
+>  config BR2_ARM_CPU_HAS_THUMB2
+>  	bool
+>  
+> +config BR2_ARM_CPU_ARMV4
+> +	bool
+> +
+> +config BR2_ARM_CPU_ARMV5
+> +	bool
+> +
+> +config BR2_ARM_CPU_ARMV6
+> +	bool
+> +
+> +config BR2_ARM_CPU_ARMV7A
+> +	bool
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+I still believe we could go with ARMV7 only, since we only have CPUs of
+the A series for now.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- [build test on minimal internal x86_64 toolchain]
+When we add a new CPU of the M series, then we could go this route:
 
----
-Changes v2 -> v3:
-  - add disable-sphinx-doc option and Acked-by/Tested-by
-    (Arnout Vandecappelle)
+  - add a new config option stating the CPU only has Thumb-2:
 
-Changes v1 -> v2:
-  - add hash file
----
- package/gstreamer1/Config.in                        |  1 +
- package/gstreamer1/gst1-validate/Config.in          |  9 +++++++++
- package/gstreamer1/gst1-validate/gst1-validate.hash |  2 ++
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 17 +++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/gstreamer1/gst1-validate/Config.in
- create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.hash
- create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.mk
+        config BR2_ARM_CPU_HAS_THUMB2_ONLY
+            bool
 
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index fe0ad48..5f08faf 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -7,5 +7,6 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
- source "package/gstreamer1/gst1-plugins-bad/Config.in"
- source "package/gstreamer1/gst1-plugins-ugly/Config.in"
- source "package/gstreamer1/gst1-libav/Config.in"
-+source "package/gstreamer1/gst1-validate/Config.in"
- source "package/gstreamer1/gst-omx/Config.in"
- endif
-diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
-new file mode 100644
-index 0000000..ffcdd27
---- /dev/null
-+++ b/package/gstreamer1/gst1-validate/Config.in
-@@ -0,0 +1,9 @@
-+menuconfig BR2_PACKAGE_GST1_VALIDATE
-+	bool "gst1-validate"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	help
-+	  GstValidate is a tool that allows GStreamer developers to
-+	  check that the GstElements they write behave the way they
-+	  are supposed to.
-+
-+	  http://gstreamer.freedesktop.org/
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-new file mode 100644
-index 0000000..e2eb3ae
---- /dev/null
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
-@@ -0,0 +1,2 @@
-+# Hash from http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.4.0.tar.xz.sha256sum
-+sha256 ac30d1041a8cfe5d268439f5cedee7e9753ba49080fc67bff1266581198438d0 gst-validate-1.4.0.tar.xz
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-new file mode 100644
-index 0000000..3e2a008
---- /dev/null
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# gst1-validate
-+#
-+################################################################################
-+
-+GST1_VALIDATE_VERSION = 1.4.0
-+GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
-+GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
-+GST1_VALIDATE_LICENSE_FILES = COPYING
-+GST1_VALIDATE_LICENSE = LGPLv2.1+
-+
-+GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
-+
-+GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
-+
-+$(eval $(autotools-package))
+    or add another option:
+
+        config BR2_ARM_CPU_HAS_ARM
+            bool # 'y' is CPU has the ARM mode
+
+  - use it in packages that have an interest in them.
+
+  - select it from appropriate CPUs
+
+But we can rename that option later, since it is a blind option, it will
+have no incidence on defconfig or .config files. So:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  choice
+>  	prompt "Target Architecture Variant"
+>  	depends on BR2_arm || BR2_armeb
+> @@ -47,70 +59,88 @@ choice
+>  config BR2_arm920t
+>  	bool "arm920t"
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV4
+>  config BR2_arm922t
+>  	bool "arm922t"
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV4
+>  config BR2_arm926t
+>  	bool "arm926t"
+>  	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV5
+>  config BR2_arm1136jf_s_r0
+>  	bool "arm1136jf_s rev0"
+>  	select BR2_ARM_CPU_HAS_VFPV2
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV6
+>  config BR2_arm1136jf_s_r1
+>  	bool "arm1136jf_s rev1"
+>  	select BR2_ARM_CPU_HAS_VFPV2
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV6
+>  config BR2_arm1176jz_s
+>  	bool "arm1176jz-s"
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV6
+>  config BR2_arm1176jzf_s
+>  	bool "arm1176jzf-s"
+>  	select BR2_ARM_CPU_HAS_VFPV2
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV6
+>  config BR2_cortex_a5
+>  	bool "cortex-A5"
+>  	select BR2_ARM_CPU_MAYBE_HAS_NEON
+>  	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_cortex_a7
+>  	bool "cortex-A7"
+>  	select BR2_ARM_CPU_HAS_NEON
+>  	select BR2_ARM_CPU_HAS_VFPV4
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_cortex_a8
+>  	bool "cortex-A8"
+>  	select BR2_ARM_CPU_HAS_NEON
+>  	select BR2_ARM_CPU_HAS_VFPV3
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_cortex_a9
+>  	bool "cortex-A9"
+>  	select BR2_ARM_CPU_MAYBE_HAS_NEON
+>  	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_cortex_a12
+>  	bool "cortex-A12"
+>  	select BR2_ARM_CPU_HAS_NEON
+>  	select BR2_ARM_CPU_HAS_VFPV4
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_cortex_a15
+>  	bool "cortex-A15"
+>  	select BR2_ARM_CPU_HAS_NEON
+>  	select BR2_ARM_CPU_HAS_VFPV4
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_fa526
+>  	bool "fa526/626"
+> +	select BR2_ARM_CPU_ARMV4
+>  config BR2_pj4
+>  	bool "pj4"
+>  	select BR2_ARM_CPU_HAS_VFPV3
+> +	select BR2_ARM_CPU_ARMV7A
+>  config BR2_strongarm
+>  	bool "strongarm sa110/sa1100"
+> +	select BR2_ARM_CPU_ARMV4
+>  config BR2_xscale
+>  	bool "xscale"
+>  	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_ARMV5
+>  config BR2_iwmmxt
+>  	bool "iwmmxt"
+> +	select BR2_ARM_CPU_ARMV5
+>  endchoice
+>  
+>  config BR2_arm1136jf_s
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
