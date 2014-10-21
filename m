@@ -1,166 +1,138 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 22:25:27 +0200
-Subject: [Buildroot] [PATCH 1/1] Add proxy download support
-In-Reply-To: <CABbD_XC3g0Avbeydtg3Aq9v9HsP5Eh+yKnxVBVchFcNFVEQrtw@mail.gmail.com>
-References: <1413903203-33909-1-git-send-email-kaszak@gmail.com>
- <20141021164901.GF3912@free.fr>
- <CABbD_XC3g0Avbeydtg3Aq9v9HsP5Eh+yKnxVBVchFcNFVEQrtw@mail.gmail.com>
-Message-ID: <20141021202527.GA23999@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Oct 2014 22:26:47 +0200
+Subject: [Buildroot] [PATCH v2 00/30] Removal of BR2_GCC_TARGET_TUNE and
+	other arch/ updates
+Message-ID: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-K?roly, All,
+Hello,
 
-On 2014-10-21 20:23 +0200, K?roly Kasza spake thusly:
-> > NAK.
-> > This should belong to the user's envirnment.
-> >
-> OK, but then I think this should be stated in the user manual.
+As discussed during the Buildroot Developers meeting, this patch
+series implement a few changes to the handling of the
+BR2_GCC_TARGET_{ARCH,CPU,TUNE} options.
 
-This is by far not specific to Buildroot at all, but we can add a blurb
-in the manual, telling the user that Buildroot uses the user's settings.
+In sequence, this patch series:
 
-> > I once tried to handle proxy support in crosstool-NG, and after trying
-> > to handle the exponentially growing cases (http proxy, with or without
-> > authentication, socks proxy...)
-> >
-> This handles standard http proxies (hence the name) with or without auth.
-> Most proxies (and even corporate ones) fall into this category (like Squid,
-> MS Forefront, etc).
+ - PATCH 1 introduces a number of ARM architecture blind options:
+   BR2_ARM_CPU_ARMV4, BR2_ARM_CPU_ARMV5, BR2_ARM_CPU_ARMV6,
+   BR2_ARM_CPU_ARMV7A. These options will allow to simplify testing
+   against an ARM architecture (instead of using each individual ARM
+   core), and also allow to remove tests against BR2_GCC_TARGET_ARCH
+   on ARM, since we later get rid of all values for this variable on
+   ARM as part of a later patch in this series.
 
-That's just am incorrect assumption. I know first-hand of network setups
-that use much complex proxy setups...
+ - PATCH 2 to 19 make use of those new blind options to replace a
+   number of dependencies/conditions on individual ARM cores by
+   dependencies/conditions on ARM architecture levels.
 
-> > Also, this solution is not bullet proof, because it leaves alone
-> > non-http protocols: cvs, git, svn, scp...
-> >
-> Not true. Only CVS won't work, but:
-> A, There is currently no CVS based package in Buildroot
-> B, If there would, it would fall back the sources.buildroot.com, which is
-> http
+ - PATCH 20 fixes the dhcpcd package as it uses the
+   BR2_GCC_TARGET_ARCH value, which may not always exists on certain
+   architectures.
 
-The initial reason for sources.buildroot.com is to be a fallback location
-in case an upstream disapears after we cut a release, so we ensure that
-releases continue to work for the foreseeable future.
+ - PATCH 21 and 22 remove the BR2_GCC_TARGET_ARCH values from the ARM
+   architecture, since they are causing conflicts with the
+   BR2_GCC_TARGET_CPU values. We now only specify the -mcpu value
+   (through BR2_GCC_TARGET_CPU), and let gcc derive the corresponding
+   ARM architecture. This fixes a long standing bug report where
+   Buildroot would pass conflicting -march and -mcpu values for
+   certain versions of gcc.
 
-> C, I may have mislooked and CVS can be proxied - if You allow me to send a
-> V2, I will introduce that too
+ - PATCH 23 prepares ffmpeg for the removal of BR2_GCC_TARGET_TUNE by
+   using BR2_GCC_TARGET_ARCH or BR2_GCC_TARGET_CPU instead.
 
-Well, it seems it is possible to proxy cvs through an http proxy, but
-that proxy must allow the CONNECT to the CVS port, which a lot of
-enterprise proxies just disallow.
+ - PATCH 24 to 27 modifies the architecture definitions to no longer
+   use BR2_GCC_TARGET_TUNE, and instead use BR2_GCC_TARGET_CPU or
+   BR2_GCC_TARGET_ARCH as appropriate.
 
-For example, my company's proxy only allow CONNECT to the port 443, and
-blocks anything else. Which means I can not use it to connect to:
-  - a git server using the git protocol
-  - a SVN server using the svn protocol
-  - a CVS server
-  - an ssh server
+ - PATCH 28 to 30 finally get rid of BR2_GCC_TARGET_TUNE entirely
+   since it is no longer used.
 
-> All other download methods work with the distributed packages.
-> Should at least, I only downloaded a few packages from every possible type.
-> 
-> AFAIK SCP & SSH are not standard download methods in the packaging system,
-> they are added functionality for custom packages.
+Changes since v1:
 
-True, but nothing would prevent a user to add a custom package that
-fetches via scp from a remote server outside the enterprise network
-(e.g. to retrieve a package from a subsidiary network, for example).
+ * Instead of having multiple BR2_ARM_CPU_ARMV{4,4T,5TE,etc.} per
+   architecture level, use only one. All the follow-up patches have
+   been fixed up following this.
 
-> > Actually, it does take care of git, but some proxies do not allow the
-> > CONNECT to anything else than 443, so we're back to square one for the
-> > git protocol anyway.
-> 
-> Git always falls back back to https (the "instead of" directive) and the
-> standard 443, because git:// protocol simply cannot be proxied.
+ * Add a patch to take into account the bug noticed by Arnout about
+   VFP enabling in the ffmpeg package.
 
-Both assumptions are wrong. There are git servers that serves only via
-the git protocol, so there is no possible fallback to http.
+ * Remove the two patches that have been merged.
 
-And even if there were, the relative paths of the two URLs may be
-different between the two schemes, so just using http:// instead of
-git:// is not sufficient.
+ * Add Reviewed-by tags from Yann on a certain number of patches, as
+   he gave them on the list.
 
-And third, the git protocol *can* be proxified, even through an http
-proxy, but it requires that proxy to be configured to allow the CONNECT
-method to any port, not only 443.
+Note that I haven't done any modification of the Thumb / Thumb-2
+handling suggested by Yann. This is orthogonal to this series, and can
+be done in a follow-up series.
 
-> > If we were to add a proxy setting, then users would expect it to work
-> > for all kind of downloads, which is absolutely impossible to achieve.
-> >
-> It does work with all existing packages (again, I found no CVS, SCP or SSH
-> based packages in the distribution).
+Best regards,
 
-Yes, they are not used in Buildroot itself. But if we do changes to the
-download infra, all our download helpers should behave the same.
+Thomas
 
-> I can proxy scp or ssh over http, but that relies on the user's proxy
-> server - there are proxies which won't allow a CONNECT method for ssh.
+Thomas Petazzoni (30):
+  arch/arm: add blind options to know the ARM architecture
+  ffmpeg: use the new BR2_ARM_CPU_ARM* options
+  ffmpeg: fix ARM condition for --{enable,disable}-vfp
+  gst-ffmpeg: use the new BR2_ARM_CPU_ARM* options
+  gst-ffmpeg: allow usage of ARMv6 optimizations on ARMv7 platforms
+  gst1-libav: use the new BR2_ARM_CPU_ARM* options
+  gst1-libav: allow usage of ARMv6 optimizations on ARMv7 platforms
+  mplayer: use BR2_ARM_CPU_ARM* options
+  libplayer: use BR2_ARM_CPU_ARM* option
+  nettle: use the BR2_ARM_CPU_ARM* options
+  nodejs: use BR2_ARM_CPU_ARM* options
+  qt5: use the BR2_ARM_CPU_ARM* options
+  speex: use BR2_ARM_CPU_ARM* options
+  vo-aacenc: use the BR2_ARM_CPU_ARM* options
+  webkit: use BR2_ARM_CPU_ARM* options
+  valgrind: use the BR2_ARM_CPU_ARM* options
+  x264: use the BR2_ARM_CPU_ARMV7A option
+  libnspr: use the BR2_ARM_CPU_ARMV7A option
+  toolchain-external: use BR2_ARM_CPU_ARM* options
+  dhcpcd: do not pass --target option
+  arch/arm: do not distinguish revisions of ARM1136JF-S
+  arch/arm: remove BR2_GCC_TARGET_ARCH definitions on ARM
+  ffmpeg: use arch and cpu instead of tune
+  arch/x86: get rid of BR2_GCC_TARGET_TUNE
+  arch/sparc: get rid of BR2_GCC_TARGET_TUNE
+  arch/powerpc: get rid of BR2_GCC_TARGET_TUNE
+  arch/m68k: get rid of BR2_GCC_TARGET_TUNE
+  gcc: do not use BR2_GCC_TARGET_TUNE anymore
+  toolchain-external: do not use BR2_GCC_TARGET_TUNE anymore
+  arch: remove the BR2_GCC_TARGET_TUNE option
 
-Exactly, so goes for CVS and GIT.
-
-> > So, we do not have a 100% coverage, and quite some is left out.
-> >
-> Please name, I will try my best, to send a V2 covering those methods.
-> Currently it support the 5 types that are used in the packages.
-
-Well, I agree that it does cover all the methods Buildroot uses, but not
-all the methods Buildroot uses.
-
-What are we gonna explain our users that the proxy settings he put in
-the menuconfig are not being used, because a package in its BR2_EXTERNAL
-tree uses a download method that we do not know how to proxify?
-
-> > So, I prefer we not have any of this proxy settings in Buildroot at all,
-> > and just rely on the user's environment to be properly set up.
-> >
-> I think setting up all methods in the user environment is possible, but
-> sometimes can be quite complicated.
-
-Well, it is really easy:
-
-    export http-proxy='http://user:pass at proxy:port/'
-    export https_proxy="${http_proxy}"
-    export ftp_proxy="${http_proxy}"
-    . tsocks -on
-
-Et voil?, all things are proxified (one just has to edit /etc/tsocks.conf
-but that is something we really can do ourselves anyway.... Yes, I know
-we can use TSOCKS_CONF_FILE=/path/to/my/tsocks.conf)
-
-> Thank you for your opinion, could you state in which case would you accept
-> the patch?
-> I think I can add CVS support, and ssh/scp support - which means ALL 8
-> download helpers would be able to
-> use http proxies.
-> And again, this is a http proxy patch, I didn't aim to support all proxy
-> types in the world, as that would be
-> probably pointless.
-
-I still believe we should not have this in Buildroot at all. That is my
-opinion, others may disagree with me. Let them speak up! ;-)
-
-I know this can be a bit frustrating, but I can assure you I have
-already gone down this road in the past, and it is not a road I would
-like to go down again...
-
-To me, the best would be to just document that Buildroot uses whatever
-settings are set in the user's system.
-
-BTW, I should know about proxies: absolutely everything I do on my home
-machine *is* proxified via either an http or a socks proxy. Even this
-very mail will leave my home network via a proxy... ;-]
-
-Regards,
-Yann E. MORIN.
+ arch/Config.in                                     |  3 --
+ arch/Config.in.arm                                 | 61 +++++++++++-----------
+ arch/Config.in.m68k                                |  8 ---
+ arch/Config.in.powerpc                             |  2 +-
+ arch/Config.in.sparc                               |  4 +-
+ arch/Config.in.x86                                 | 32 +-----------
+ package/dhcpcd/dhcpcd.mk                           |  1 -
+ package/ffmpeg/ffmpeg.mk                           | 13 +++--
+ package/gcc/gcc.mk                                 |  3 --
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  4 +-
+ package/gstreamer1/gst1-libav/gst1-libav.mk        |  4 +-
+ package/libnspr/libnspr.mk                         |  2 +-
+ package/libplayer/Config.in                        |  3 +-
+ package/mplayer/Config.in                          |  3 +-
+ package/mplayer/mplayer.mk                         |  4 +-
+ package/nettle/nettle.mk                           |  2 +-
+ package/nodejs/Config.in                           |  4 +-
+ package/qt5/Config.in                              |  2 +-
+ package/speex/Config.in                            |  2 +-
+ package/valgrind/Config.in                         |  7 ++-
+ package/valgrind/valgrind.mk                       |  4 +-
+ package/vo-aacenc/vo-aacenc.mk                     |  2 +-
+ package/webkit/Config.in                           |  3 +-
+ package/x264/x264.mk                               |  2 +-
+ toolchain/toolchain-external/Config.in             | 14 +++--
+ .../toolchain-external/ext-toolchain-wrapper.c     | 12 ++---
+ toolchain/toolchain-external/toolchain-external.mk |  5 --
+ 27 files changed, 74 insertions(+), 132 deletions(-)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
