@@ -1,10 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 21 Oct 2014 09:58:54 +0200
-Subject: [Buildroot] [PATCH] eudev: add input group
-In-Reply-To: <20141020231802.204b1e27@free-electrons.com>
-References: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
- <20141020231802.204b1e27@free-electrons.com>
-Message-ID: <20141021075847.GA9754@pc-eric>
+Date: Tue, 21 Oct 2014 10:15:34 +0200
+Subject: [Buildroot] systemd not working properly?
+In-Reply-To: <20141019124525.01fe9653@free-electrons.com>
+References: <20141019124525.01fe9653@free-electrons.com>
+Message-ID: <20141021081533.GB9754@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +11,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi!
-
-On Mon, Oct 20, 2014 at 11:18:02PM +0200, Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
+On Sun, Oct 19, 2014 at 12:45:25PM +0200, Thomas Petazzoni wrote:
+> Dear systemd/Buildroot users,
 >
-> On Mon, 20 Oct 2014 17:59:05 -0300, Gustavo Zacarias wrote:
-> > It's used by 50-default-udev.rules for input-class devices.
-> >
-> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > ---
-> >  package/eudev/eudev.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
+> I don't use systemd much, but every time I need to test a config with
+> systemd enabled, there are quite a few errors at boot time, and more
+> precisely, it doesn't even boot completely. Here are the errors I get:
 >
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [FAILED] Failed to start Remount Root and Kernel File Systems.
+> See 'systemctl status systemd-remount-fs.service' for details.
+> ...
 >
-> I've seen the same issue a couple of days ago.
+> Then a *very* long delay because of dev-ttyAMA0.device., that finally
+> ends up with:
 >
-> Does systemd needs a similar fix?
+> [ TIME ] Timed out waiting for device dev-ttyAMA0.device.
+> [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
+>
+> And finally, I get no getty at all.
+>
+> Defconfig being used:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_SYSTEMD=y
+> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> BR2_PACKAGE_AVAHI=y
+> BR2_PACKAGE_AVAHI_DAEMON=y
 
-Yes it does.
-
-In my setup, I modified system/skeleton/etc/group to add "input:x:31:"
-
-I'll send a patch similar to the eudev one.
+I do not have a working ARM based device, I only test with QEMU/ARM and I have
+not experienced such issue with this configuration. :-(
 
 Best regards
 ELB
