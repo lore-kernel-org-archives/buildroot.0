@@ -1,89 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Oct 2014 20:49:18 +0200
-Subject: [Buildroot] [PATCH 1/2] system/skeleton: make nsswitch install
- conditional
-In-Reply-To: <20141020150209.5f8b45a5@free-electrons.com>
-References: <1413808086-12177-1-git-send-email-gustavo@zacarias.com.ar>
- <20141020150209.5f8b45a5@free-electrons.com>
-Message-ID: <5446AAAE.80604@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 Oct 2014 20:55:37 +0200
+Subject: [Buildroot] [PATCH] gst1-validate: new package
+Message-ID: <1413917737-6337-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/10/14 15:02, Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
-> 
-> On Mon, 20 Oct 2014 09:28:05 -0300, Gustavo Zacarias wrote:
->> Don't blindly install the /etc/nsswitch.conf file, it's useless for
->> toolchains that aren't (e)glibc-based and misleading.
->> Make the installation conditional on a (e)glibc toolchain.
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>  {system/skeleton/etc => package/glibc}/nsswitch.conf |  0
->>  toolchain/toolchain.mk                               | 10 ++++++++++
->>  2 files changed, 10 insertions(+)
->>  rename {system/skeleton/etc => package/glibc}/nsswitch.conf (100%)
->>
->> diff --git a/system/skeleton/etc/nsswitch.conf b/package/glibc/nsswitch.conf
->> similarity index 100%
->> rename from system/skeleton/etc/nsswitch.conf
->> rename to package/glibc/nsswitch.conf
->> diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
->> index 8fe06ff..3f3534a 100644
->> --- a/toolchain/toolchain.mk
->> +++ b/toolchain/toolchain.mk
->> @@ -3,6 +3,16 @@
->>  # TARGET_FINALIZE_HOOKS, to be applied just after all packages
->>  # have been built.
->>  
->> +# Install default nsswitch.conf file if the skeleton doesn't provide it
->> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
->> +define GLIBC_COPY_NSSWITCH_FILE
->> +	$(Q)if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
->> +		cp -a package/glibc/nsswitch.conf $(TARGET_DIR)/etc; \
-> 
-> 		$(INSTALL) -D -m 0644
-> 
-> maybe ?
-> 
->> +	fi
->> +endef
->> +TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
->> +endif
-> 
-> Also, I believe I'd prefer to see this being done in the glibc package
-> and in the toolchain-external package. I know it's a bit redundant to
-> have it twice, but I'd like to not have too many files that get
-> installed through the finalize hooks.
+Example usages can be found at [1].
 
- After reading the whole thread, I'm with gustavoz on this one.
+[1] http://blogs.gnome.org/tsaunier/2014/04/21/gst-validate-a-suite-of-tools-to-run-integration-tests-for-gstreamer-2/
 
-- If you do it in glibc + toolchain-external, you have duplication.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-- We expect a skeleton package to appear. When it exists, this and a few other
-finalize things can go there instead. In that case, you have no duplication anymore.
+---
+Changes v1 -> v2:
+  - add hash file
+---
+ package/gstreamer1/Config.in                        |  1 +
+ package/gstreamer1/gst1-validate/Config.in          |  9 +++++++++
+ package/gstreamer1/gst1-validate/gst1-validate.hash |  2 ++
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-validate/Config.in
+ create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.hash
+ create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.mk
 
-- The patch to move this from a finalize hook to the skeleton package will be a
-lot simpler than a patch that moves it out of glibc + toolchain-external. In
-addition, it's easier to forget it when it's spread out like that.
-
-- We have this patch now, we don't have a patch that puts it in glibc +
-toolchain-external.
-
- Therefore,
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index fe0ad48..5f08faf 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -7,5 +7,6 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
+ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+ source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+ source "package/gstreamer1/gst1-libav/Config.in"
++source "package/gstreamer1/gst1-validate/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+new file mode 100644
+index 0000000..ffcdd27
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -0,0 +1,9 @@
++menuconfig BR2_PACKAGE_GST1_VALIDATE
++	bool "gst1-validate"
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  GstValidate is a tool that allows GStreamer developers to
++	  check that the GstElements they write behave the way they
++	  are supposed to.
++
++	  http://gstreamer.freedesktop.org/
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+new file mode 100644
+index 0000000..e2eb3ae
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+@@ -0,0 +1,2 @@
++# Hash from http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.4.0.tar.xz.sha256sum
++sha256 ac30d1041a8cfe5d268439f5cedee7e9753ba49080fc67bff1266581198438d0 gst-validate-1.4.0.tar.xz
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+new file mode 100644
+index 0000000..62061e2
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# gst1-validate
++#
++################################################################################
++
++GST1_VALIDATE_VERSION = 1.4.0
++GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
++GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
++GST1_VALIDATE_LICENSE_FILES = COPYING
++GST1_VALIDATE_LICENSE = LGPLv2.1+
++
++GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.4
