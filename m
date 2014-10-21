@@ -1,99 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Oct 2014 22:50:11 +0200
-Subject: [Buildroot] [PATCH] bash: fix linking for static builds with
- uClibc toolchains
-In-Reply-To: <1413897705-47811-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1413897705-47811-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5446C703.7070501@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 Oct 2014 22:53:22 +0200
+Subject: [Buildroot] [PATCH v3] gst1-validate: new package
+Message-ID: <1413924802-27729-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/14 15:21, Vicente Olivert Riera wrote:
-> ...and also use configure options instead of environment variables.
-> 
-> bash fails to link for static builds with uClibc toolchains due to
-> getenv redefinitions. This is caused because bash is unable to check if
-> getenv is already defined when cross-compiling, so it defaults to 'yes':
-> 
-> configure:14438: WARNING: cannot check getenv redefinition if cross
-> compiling -- defaulting to yes
-> 
-> We can avoid this redefinition by adding bash_cv_getenv_redef=no to the
-> configure options.
-> 
-> At the same time, we use configure options instead of environment
-> variables because there is no need to pass those options to the
-> configure script as environment variables. Doing it in this way we
-> avoid the risk of environment variables leaking into places we don't
-> expect.
+Example usages can be found at [1].
 
- That change from _ENV to _OPTS should definitely be a separate patch.
-Especially because I don't see the reason to do it. The environment variables
-will leak into exactly one place: the configure script. And that script will
-just export all assignments passed on the command line into its environment. So
-the effect is exactly the same.
+[1] http://blogs.gnome.org/tsaunier/2014/04/21/gst-validate-a-suite-of-tools-to-run-integration-tests-for-gstreamer-2/
 
- If you do make this change, then it should probably be done for all packages,
-which means it should probably be done in pkg-autotools.mk.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- So you have a concrete example of where the _ENV causes trouble?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ [build test on minimal internal x86_64 toolchain]
 
-> 
-> Related:
-> 	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
-> 
-> Fixes:
-> 	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/bash/bash.mk |    5 ++++-
->  1 files changed, 4 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index 34a3a73..9a13f69 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -13,7 +13,7 @@ BASH_CONF_OPTS = --with-installed-readline
->  BASH_LICENSE = GPLv3+
->  BASH_LICENSE_FILES = COPYING
->  
-> -BASH_CONF_ENV += \
-> +BASH_CONF_OPTS += \
->  	ac_cv_rl_prefix="$(STAGING_DIR)" \
->  	ac_cv_rl_version="$(READLINE_VERSION)" \
->  	bash_cv_job_control_missing=present \
-> @@ -28,6 +28,9 @@ BASH_MAKE = $(MAKE1)
->  # The static build needs some trickery
->  ifeq ($(BR2_PREFER_STATIC_LIB),y)
->  BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +BASH_CONF_OPTS += bash_cv_getenv_redef=no
-> +endif
+---
+Changes v2 -> v3:
+  - add disable-sphinx-doc option and Acked-by/Tested-by
+    (Arnout Vandecappelle)
 
- It's probably better to also set it to yes explicitly in the else branch.
+Changes v1 -> v2:
+  - add hash file
+---
+ package/gstreamer1/Config.in                        |  1 +
+ package/gstreamer1/gst1-validate/Config.in          |  9 +++++++++
+ package/gstreamer1/gst1-validate/gst1-validate.hash |  2 ++
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 17 +++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-validate/Config.in
+ create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.hash
+ create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.mk
 
- Also, a short comment would be good.
-
- Also, does musl allow redefining getenv?
-
-
- Regards,
- Arnout
-
->  endif
->  
->  # Make /bin/sh -> bash (no other shell, better than busybox shells)
-> 
-
-
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index fe0ad48..5f08faf 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -7,5 +7,6 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
+ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+ source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+ source "package/gstreamer1/gst1-libav/Config.in"
++source "package/gstreamer1/gst1-validate/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+new file mode 100644
+index 0000000..ffcdd27
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -0,0 +1,9 @@
++menuconfig BR2_PACKAGE_GST1_VALIDATE
++	bool "gst1-validate"
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  GstValidate is a tool that allows GStreamer developers to
++	  check that the GstElements they write behave the way they
++	  are supposed to.
++
++	  http://gstreamer.freedesktop.org/
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+new file mode 100644
+index 0000000..e2eb3ae
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+@@ -0,0 +1,2 @@
++# Hash from http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.4.0.tar.xz.sha256sum
++sha256 ac30d1041a8cfe5d268439f5cedee7e9753ba49080fc67bff1266581198438d0 gst-validate-1.4.0.tar.xz
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+new file mode 100644
+index 0000000..3e2a008
+--- /dev/null
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# gst1-validate
++#
++################################################################################
++
++GST1_VALIDATE_VERSION = 1.4.0
++GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
++GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
++GST1_VALIDATE_LICENSE_FILES = COPYING
++GST1_VALIDATE_LICENSE = LGPLv2.1+
++
++GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
++
++GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.4
