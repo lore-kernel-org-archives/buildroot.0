@@ -1,49 +1,50 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 21 Oct 2014 21:06:34 +0200
-Subject: [Buildroot] [PATCH 2/2 v5] package/mono: new package
-In-Reply-To: <CA+TH9Vm7c9BGBpRvkLziZM6ctainiTv5f-yb3Y-WxzdAkcfA3g@mail.gmail.com>
-References: <54458B8C.4020505@crapouillou.net>
- <CA+TH9Vm7c9BGBpRvkLziZM6ctainiTv5f-yb3Y-WxzdAkcfA3g@mail.gmail.com>
-Message-ID: <5446AEBA.4090505@crapouillou.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 Oct 2014 21:32:36 +0200
+Subject: [Buildroot] [PATCH] util-linux: use configure option instead of
+	patching makefile
+Message-ID: <1413919956-31413-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+Use --disable-all-programs configure option instead of sed base
+patching of Makefile.am in case no util-linux binaries are selected.
 
-By the way, the package does not install /etc/mono/4.0 or 4.5. It only 
-installs /etc/mono/2.0, so some of my test apps do crash.
+Suggested by Thomas Petazzoni ([1]).
 
-Cheers
+With this patch applied the following libs are no longer build by default:
 
-Paul
+util-linux-2.25.1/.libs/libfdisk.a
+util-linux-2.25.1/.libs/libsmartcols.a
+util-linux-2.25.1/.libs/libsmartcols.so.1.1.0
 
-On 21/10/2014 08:06, Angelo Compagnucci wrote:
-> Hi Paul,
->
-> Could you send your config and a mono.log obtained with this command?
->
->   make -j1 host-mono-reconfigure >> mono.log
->
-> Thank you!
->
-> 2014-10-21 0:24 GMT+02:00 Paul Cercueil <paul@crapouillou.net>:
->> In-Reply-To: 1413814528-26904-3-git-send-email-angelo.compagnucci at gmail.com
->>
->> Hi Angelo,
->>
->> Your package does not work here, host-mono fails to build.
->> I attached the log file.
->>
->> Could the DLL files be downloaded instead of rebuilt? They should be
->> arch-independent, so it may be easier and faster to just download them.
->> Then only the runtime would need to be built.
->>
->> Regards,
->>
->> Paul
->>
->
->
+[1] http://lists.busybox.net/pipermail/buildroot/2014-October/109818.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/util-linux/util-linux.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index ebbab61..ec4158e 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -100,13 +100,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ # Avoid building the tools if they are disabled since we can't install on
+ # a per-directory basis.
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+-define UTIL_LINUX_DISABLE_TOOLS
+-	$(SED) '/schedutils/d' -e '/text-utils/d' -e '/term-utils/d' \
+-		-e '/login-utils/d' -e '/mount-deprecated/d' \
+-		-e '/sys-utils/d' -e '/misc-utils/d' -e '/disk-utils/d' \
+-		-e '/fdisks/d' $(@D)/Makefile.am
+-endef
+-UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
++UTIL_LINUX_CONF_OPTS += --disable-all-programs 
+ endif
+ 
+ # Install PAM configuration files
+-- 
+1.8.1.4
