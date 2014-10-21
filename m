@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 22:27:15 +0200
-Subject: [Buildroot] [PATCH v2 28/30] gcc: do not use BR2_GCC_TARGET_TUNE
-	anymore
+Date: Tue, 21 Oct 2014 22:27:16 +0200
+Subject: [Buildroot] [PATCH v2 29/30] toolchain-external: do not use
+	BR2_GCC_TARGET_TUNE anymore
 In-Reply-To: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413923237-2861-29-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413923237-2861-30-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,84 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Since the BR2_GCC_TARGET_TUNE value is always empty now, there is no
-longer a point in using it in the gcc package.
+longer a point in using it in the external toolchain logic.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gcc/gcc.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ toolchain/toolchain-external/ext-toolchain-wrapper.c | 12 +++---------
+ toolchain/toolchain-external/toolchain-external.mk   |  5 -----
+ 2 files changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 7bed159..f5ec96a 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -174,9 +174,6 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 8db4ac4..f459a7e 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -33,10 +33,9 @@ static char sysroot[PATH_MAX];
+  * Currently, we have:
+  * 	-mfloat-abi=
+  * 	-march=
+- * 	-mtune=
+  * 	-mcpu=
+  */
+-#define EXCLUSIVE_ARGS	4
++#define EXCLUSIVE_ARGS	3
+ 
+ static char *predef_args[] = {
+ 	path,
+@@ -154,14 +153,12 @@ int main(int argc, char **argv)
+ #endif
+ 
+ #if defined(BR_ARCH) || \
+-    defined(BR_TUNE) || \
+     defined(BR_CPU)
+-	/* Add our -march/cpu/tune/abi flags, but only if none are
++	/* Add our -march/cpu/abi flags, but only if none are
+ 	 * already specified on the commandline
+ 	 */
+ 	for (i = 1; i < argc; i++) {
+ 		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
+-		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
+ 		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
+ 			break;
+ 	}
+@@ -169,14 +166,11 @@ int main(int argc, char **argv)
+ #ifdef BR_ARCH
+ 		*cur++ = "-march=" BR_ARCH;
+ #endif
+-#ifdef BR_TUNE
+-		*cur++ = "-mtune=" BR_TUNE;
+-#endif
+ #ifdef BR_CPU
+ 		*cur++ = "-mcpu=" BR_CPU;
+ #endif
+ 	}
+-#endif /* ARCH || TUNE || CPU */
++#endif /* ARCH || CPU */
+ 
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index b7a0e60..e16fce5 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -163,7 +163,6 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
  endif
--ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
--HOST_GCC_COMMON_CONF_OPTS += --with-tune=$(BR2_GCC_TARGET_TUNE)
+ 
+-CC_TARGET_TUNE_ := $(call qstrip,$(BR2_GCC_TARGET_TUNE))
+ ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+ CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
+ else
+@@ -181,10 +180,6 @@ ifeq ($(BR2_x86_64),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
+ endif
+-ifneq ($(CC_TARGET_TUNE_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
 -endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
+ ifneq ($(CC_TARGET_ARCH_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
 -- 
 2.0.0
