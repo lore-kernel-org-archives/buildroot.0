@@ -1,80 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 20:20:42 +0200
-Subject: [Buildroot] [PATCH 1/3] qemu-system: new package
-In-Reply-To: <20141021091626.24b530be@free-electrons.com>
-References: <543FCDD6.9070104@zacarias.com.ar> <54419C9C.7050705@mind.be>
- <5441BEDE.1000102@zacarias.com.ar> <54441E9F.8080802@mind.be>
- <20141019225451.3aa6176e@free-electrons.com>
- <54446B1B.2090201@zacarias.com.ar> <5445656E.9010404@mind.be>
- <20141020231635.5e5e2cf8@free-electrons.com>
- <54459072.6060003@zacarias.com.ar>
- <20141021091626.24b530be@free-electrons.com>
-Message-ID: <20141021182042.GF30778@free.fr>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Tue, 21 Oct 2014 20:23:47 +0200
+Subject: [Buildroot] [PATCH 1/1] Add proxy download support
+In-Reply-To: <20141021164901.GF3912@free.fr>
+References: <1413903203-33909-1-git-send-email-kaszak@gmail.com>
+ <20141021164901.GF3912@free.fr>
+Message-ID: <CABbD_XC3g0Avbeydtg3Aq9v9HsP5Eh+yKnxVBVchFcNFVEQrtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+>
+>
+> NAK.
+>
+> This should belong to the user's envirnment.
+>
+> OK, but then I think this should be stated in the user manual.
 
-On 2014-10-21 09:16 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 20 Oct 2014 19:45:06 -0300, Gustavo Zacarias wrote:
-[--SNIP--]
-> > It's dissapointing to just sum up commits doing banal stuff even if
-> > they're important, to then get the cold shoulder when what i feel are
-> > interesting or progressive ideas get delayed and/or rejected.
-> > My feeling is that i'm just wasting my time if i make any serious effort
-> > to improve things, so basically i give up.
-> > At this point i would have hoped that i've earned some trust with my
-> > technical choices, but it feels like not.
-> > That doesn't mean i want a blank check on decisions, don't get that
-> > interpretation out of it.
-> 
-> You've definitely earned a *lot* of trust, at least to my eyes, and I
-> believe to many of the other Buildroot developers, Peter included.
 
-I agree with Thomas: I too highly recognise your expertise, and that
-has earned you my trust, for all the hard topics you have touched in
-Buildroot (security, toolchains, weird archs...)
+> I once tried to handle proxy support in crosstool-NG, and after trying
+> to handle the exponentially growing cases (http proxy, with or without
+> authentication, socks proxy...)
+>
+This handles standard http proxies (hence the name) with or without auth.
+Most proxies (and even corporate ones) fall into this category (like Squid,
+MS Forefront, etc).
 
-> > In the end it's not the number of commits that count, that's not an
-> > indication of who's #1, #3 or anything, it may be fun but that's it.
-> > The momentum is what makes projects great.
-> > And mine wrt buildroot has been neutralized, i'll just care about my
-> > little ranch: no autobuild fixing except what i break, no improvements
-> > except for what i care, no ACKs, no Tested-bys, no #buildroot IRC, no
-> > opinions and so on.
-> > Time will tell if i feel like getting back to that or i'll just dial
-> > down the notch on general involvement permanently (there's a saying
-> > which i think is quite universal "never say never").
-> > Sometimes you win sometimes you lose, in both the project and personal
-> > levels.
 
-I am really stunned to read that, and am really sorry you feel like
-that. :-(
+>
+> Also, this solution is not bullet proof, because it leaves alone
+> non-http protocols: cvs, git, svn, scp...
+>
+Not true. Only CVS won't work, but:
+A, There is currently no CVS based package in Buildroot
+B, If there would, it would fall back the sources.buildroot.com, which is
+http
+C, I may have mislooked and CVS can be proxied - if You allow me to send a
+V2, I will introduce that too
 
-> Wow, I must say I'm truly shocked that things have reached this level.
-> This is definitely not where I'd like things to go: your contributions
-> are very very valuable, and I very often need to refer to you for many
-> questions/opinions/feedback on various things we're doing in Buildroot.
+All other download methods work with the distributed packages.
+Should at least, I only downloaded a few packages from every possible type.
 
-I can only fully concur to what Thomas said.
+AFAIK SCP & SSH are not standard download methods in the packaging system,
+they are
+added functionality for custom packages.
 
-> Would you still be willing to have a Google Hangout at some point this
-> week to discuss this?
 
-I could try to join, but as I am on the move in the US, it will be a bit
-difficult for me. Just arrange for a day and time that suits you, and if
-I am able to, I'll join.
+>
+> Actually, it does take care of git, but some proxies do not allow the
+> CONNECT to anything else than 443, so we're back to square one for the
+> git protocol anyway.
 
-Regards,
-Yann E. MORIN.
+Git always falls back back to https (the "instead of" directive) and the
+standard 443,
+because git:// protocol simply cannot be proxied.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+> If we were to add a proxy setting, then users would expect it to work
+> for all kind of downloads, which is absolutely impossible to achieve.
+>
+It does work with all existing packages (again, I found no CVS, SCP or SSH
+based packages in the distribution).
+I can proxy scp or ssh over http, but that relies on the user's proxy
+server - there are proxies which won't allow a
+CONNECT method for ssh.
+
+
+>
+> So, we do not have a 100% coverage, and quite some is left out.
+>
+Please name, I will try my best, to send a V2 covering those methods.
+Currently it support the 5 types that
+are used in the packages.
+
+
+>
+> So, I prefer we not have any of this proxy settings in Buildroot at all,
+> and just rely on the user's environment to be properly set up.
+>
+I think setting up all methods in the user environment is possible, but
+sometimes can be quite complicated.
+
+Thank you for your opinion, could you state in which case would you accept
+the patch?
+I think I can add CVS support, and ssh/scp support - which means ALL 8
+download helpers would be able to
+use http proxies.
+And again, this is a http proxy patch, I didn't aim to support all proxy
+types in the world, as that would be
+probably pointless.
+
+Best regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141021/32f00315/attachment.html>
