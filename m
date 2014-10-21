@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 22:27:00 +0200
-Subject: [Buildroot] [PATCH v2 13/30] speex: use BR2_ARM_CPU_ARM* options
+Date: Tue, 21 Oct 2014 22:27:01 +0200
+Subject: [Buildroot] [PATCH v2 14/30] vo-aacenc: use the BR2_ARM_CPU_ARM*
+	options
 In-Reply-To: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413923237-2861-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413923237-2861-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The vo-aacenc package has an option to enable ARMv5 optimizations. It
+was enabled based on per ARM core options, but now that we have per
+ARM architecture options, this commit switches to using them.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/speex/Config.in | 2 +-
+ package/vo-aacenc/vo-aacenc.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/speex/Config.in b/package/speex/Config.in
-index ab743fe..f18e866 100644
---- a/package/speex/Config.in
-+++ b/package/speex/Config.in
-@@ -13,7 +13,7 @@ if BR2_PACKAGE_SPEEX
- config BR2_PACKAGE_SPEEX_ARM4
- 	bool
- 	default y
--	depends on BR2_arm920t || BR2_arm922t || BR2_strongarm || BR2_fa526
-+	depends on BR2_ARM_CPU_ARMV4
+diff --git a/package/vo-aacenc/vo-aacenc.mk b/package/vo-aacenc/vo-aacenc.mk
+index e35ac42..23d7e62 100644
+--- a/package/vo-aacenc/vo-aacenc.mk
++++ b/package/vo-aacenc/vo-aacenc.mk
+@@ -26,7 +26,7 @@ VO_AACENC_CFLAGS += -mfpu=neon
+ else
+ VO_AACENC_CONF_OPTS += --disable-armv7neon
  
- config BR2_PACKAGE_SPEEX_ARM5E
- 	default y
+-ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),)
++ifeq ($(BR2_ARM_CPU_ARMV4),)
+ VO_AACENC_CONF_OPTS += --enable-armv5e
+ else
+ VO_AACENC_CONF_OPTS += --disable-armv5e
 -- 
 2.0.0
