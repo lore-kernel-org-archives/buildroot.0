@@ -1,85 +1,99 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Oct 2014 21:45:34 +0200
-Subject: [Buildroot] [PATCH 1/3] qemu-system: new package
-In-Reply-To: <20141021091626.24b530be@free-electrons.com>
-References: <1399148415-27648-1-git-send-email-gustavo@zacarias.com.ar>	<20141012171752.29414e94@free-electrons.com>	<543AD090.3000107@zacarias.com.ar>	<543EA87A.2050204@mind.be>	<543FCDD6.9070104@zacarias.com.ar>	<54419C9C.7050705@mind.be>	<5441BEDE.1000102@zacarias.com.ar>	<54441E9F.8080802@mind.be>	<20141019225451.3aa6176e@free-electrons.com>	<54446B1B.2090201@zacarias.com.ar>	<5445656E.9010404@mind.be>	<20141020231635.5e5e2cf8@free-electrons.com>	<54459072.6060003@zacarias.com.ar>
- <20141021091626.24b530be@free-electrons.com>
-Message-ID: <5446B7DE.5050504@mind.be>
+Date: Tue, 21 Oct 2014 21:56:40 +0200
+Subject: [Buildroot] [PATCH] gst1-validate: new package
+In-Reply-To: <1413841040-14925-1-git-send-email-ps.report@gmx.net>
+References: <1413841040-14925-1-git-send-email-ps.report@gmx.net>
+Message-ID: <5446BA78.4040607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/14 09:16, Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
->
-> On Mon, 20 Oct 2014 19:45:06 -0300, Gustavo Zacarias wrote:
->
-> >> Yes, it clearly matters. I'm a bit sad to see that this specific story
-> >> has affected your motivation. However, on this story, you had your own
-> >> idea, and basically rejected the comments that were made. That's not
-> >> really the best way to push things forward: maybe doing a concession
-> >> sometimes helps, and thanks to this concession, you might prove at a
-> >> later point that people were wrong and you were right from the
-> >> beginning :)
-> >
-> > The same can be said the opposite way don't you think?
->
-> True in some way. But in another way, doing the concession on what gets
-> merged means reducing the "quality" of what we merge. Is this really
-> what we want? If something doesn't comply with the Buildroot coding
-> style and/or principles, should we merge it just because it has been
-> sitting there since one year?
+On 20/10/14 23:37, Peter Seiderer wrote:
+> Example usages can be found on [1].
+> 
+> [1] http://blogs.gnome.org/tsaunier/2014/04/21/gst-validate-a-suite-of-tools-to-run-integration-tests-for-gstreamer-2/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/gstreamer1/Config.in                      |  1 +
+>  package/gstreamer1/gst1-validate/Config.in        |  9 +++++++++
+>  package/gstreamer1/gst1-validate/gst1-validate.mk | 15 +++++++++++++++
+>  3 files changed, 25 insertions(+)
+>  create mode 100644 package/gstreamer1/gst1-validate/Config.in
+>  create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.mk
+> 
+> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+> index fe0ad48..5f08faf 100644
+> --- a/package/gstreamer1/Config.in
+> +++ b/package/gstreamer1/Config.in
+> @@ -7,5 +7,6 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
+>  source "package/gstreamer1/gst1-plugins-bad/Config.in"
+>  source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+>  source "package/gstreamer1/gst1-libav/Config.in"
+> +source "package/gstreamer1/gst1-validate/Config.in"
+>  source "package/gstreamer1/gst-omx/Config.in"
+>  endif
+> diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+> new file mode 100644
+> index 0000000..ffcdd27
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-validate/Config.in
+> @@ -0,0 +1,9 @@
+> +menuconfig BR2_PACKAGE_GST1_VALIDATE
+> +	bool "gst1-validate"
+> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
+> +	help
+> +	  GstValidate is a tool that allows GStreamer developers to
+> +	  check that the GstElements they write behave the way they
+> +	  are supposed to.
+> +
+> +	  http://gstreamer.freedesktop.org/
+> diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+> new file mode 100644
+> index 0000000..62061e2
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# gst1-validate
+> +#
+> +################################################################################
+> +
+> +GST1_VALIDATE_VERSION = 1.4.0
+> +GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+> +GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
+> +GST1_VALIDATE_LICENSE_FILES = COPYING
+> +GST1_VALIDATE_LICENSE = LGPLv2.1+
 
- I wouldn't say it's really a matter of quality. We (or actually, the committers)
-tend to be conservative when it comes to merging. In particular, if any controversy
-exists over a patch, it just remains sitting in the queue.
+ I had to add this:
 
- It could be debated whether this is a good thing. But it is the way we work at
-the moment.
+GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
 
- But the end result that such controversial patches stay in patchwork for a long
-time, nobody comments on them anymore, so the discussion essentially dies. And
-then comes along a patchwork cleanup rush, and things get rejected.
+because I have sphinx-build installed on my system and it fails...
 
- As you mention below w.r.t. the hashes, it's very well possible that a year later
-the original idea does suddenly get accepted...
+ With that added, it gets my
 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ [build test on minimal internal x86_64 toolchain]
 
  Regards,
  Arnout
 
->
-> > This patchset has been sitting for almost a year now with no action on
-> > the counterproposal from anyone.
-> > The likely outcome is that the feature will still be missing until the
-> > next release cycle.
->
-> I agree this isn't nice. But again, if there is a pending patch that
-> doesn't satisfy a majority of developers, should we merge it simply
-> because it has been pending for a long time? I'm sure you would agree
-> that we should not merge such a patch, even if that means leaving the
-> feature out of the tree for a while.
->
-> > I won't make a concession on this because i really don't believe it's
-> > the proper course of action, it's that simple, deal with it.
-> > It's not that i'm stubborn, i've changed opinion in many occasions, and
-> > i'm not seeking to "rub it off" - if i wanted to do so i could just say
-> > "hashes" which i've proposed years ago with the idea being very much
-> > rejected at the time - i'm not interested in that.
->
-> I don't remember if I was pro or against hashes back at the time.
-> Probably against, since when Yann proposed the patches, I was still a
-> bit hesitant about this feature.
->
-[snip]
+> +
+> +GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
+> +
+> +$(eval $(autotools-package))
+> 
 
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
