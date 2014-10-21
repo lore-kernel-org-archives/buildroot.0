@@ -1,39 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 11:56:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: enable building of
- boost_log
-In-Reply-To: <CAEyFGJEWwhmQ0s=OC8=74P2bNyJw4kv=xEjxDyRBZRBYHfs7QQ@mail.gmail.com>
-References: <1413811644-28525-1-git-send-email-yannickkiekens@gmail.com>
- <20141020170223.GC3742@free.fr> <20141020170703.GE3742@free.fr>
- <CAEyFGJEWwhmQ0s=OC8=74P2bNyJw4kv=xEjxDyRBZRBYHfs7QQ@mail.gmail.com>
-Message-ID: <20141021115658.47053b77@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Oct 2014 10:15:19 -0300
+Subject: [Buildroot] [PATCH] eudev: add input group
+In-Reply-To: <20141021075847.GA9754@pc-eric>
+References: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141020231802.204b1e27@free-electrons.com> <20141021075847.GA9754@pc-eric>
+Message-ID: <54465C67.1020103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yannick Kiekens,
+On 10/21/2014 04:58 AM, Eric Le Bihan wrote:
 
-On Tue, 21 Oct 2014 09:15:24 +0200, Yannick Kiekens wrote:
-
-> ?We use boost_log at work on x86_64 and armv7, we never had trouble with it.
-> It is possible boost_log 1.56 still does not work on some toolchain
-> combinations?, as mentioned in git
-> commit 611dfe6cb55ed72d7df3b7c102f4a723248a4037
+>> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>
+>> I've seen the same issue a couple of days ago.
+>>
+>> Does systemd needs a similar fix?
 > 
-> ?I could reformat the patch to whitelist boost_log on known configurations
-> Any opnion on that?
+> Yes it does.
+> 
+> In my setup, I modified system/skeleton/etc/group to add "input:x:31:"
+> 
+> I'll send a patch similar to the eudev one.
 
-Can you try looking at
-http://autobuild.buildroot.net/results/c26/c26498f1a4e6bcbc3a2dfce6a51fa7d21b72f21f/build-end.log,
-which is the issue reported in commit
-611dfe6cb55ed72d7df3b7c102f4a723248a4037 ?
+Hold off on applying the patch, mkusers doesn't handle making groups
+without users gracefully:
 
-Best regards,
+...scripts/mkusers: line 369: [: too many arguments
+...scripts/mkusers: line 376: [: too many arguments
+...scripts/mkusers: line 400: [: input: integer expression expected
+...scripts/mkusers: line 408: [: input: integer expression expected
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I can respin adding an input user to match, another option is to handle
+the scenario in mkusers.
+Regards.
