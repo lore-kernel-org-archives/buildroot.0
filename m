@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 18:28:13 +0200
-Subject: [Buildroot] [PATCH] eudev: add input group
-In-Reply-To: <54465C67.1020103@zacarias.com.ar>
-References: <1413838745-14008-1-git-send-email-gustavo@zacarias.com.ar>
- <20141020231802.204b1e27@free-electrons.com>
- <20141021075847.GA9754@pc-eric> <54465C67.1020103@zacarias.com.ar>
-Message-ID: <20141021162813.GA3912@free.fr>
+Date: Tue, 21 Oct 2014 18:30:44 +0200
+Subject: [Buildroot] [PATCH 1/4] scripts/mkusers: allow the creation of
+ groups alone
+In-Reply-To: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141021163044.GB3912@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,51 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2014-10-21 10:15 -0300, Gustavo Zacarias spake thusly:
-> On 10/21/2014 04:58 AM, Eric Le Bihan wrote:
-> 
-> >> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >>
-> >> I've seen the same issue a couple of days ago.
-> >>
-> >> Does systemd needs a similar fix?
-> > 
-> > Yes it does.
-> > 
-> > In my setup, I modified system/skeleton/etc/group to add "input:x:31:"
-> > 
-> > I'll send a patch similar to the eudev one.
-> 
-> Hold off on applying the patch, mkusers doesn't handle making groups
-> without users gracefully:
-> 
-> ...scripts/mkusers: line 369: [: too many arguments
-> ...scripts/mkusers: line 376: [: too many arguments
-> ...scripts/mkusers: line 400: [: input: integer expression expected
-> ...scripts/mkusers: line 408: [: input: integer expression expected
-> 
-> I can respin adding an input user to match, another option is to handle
-> the scenario in mkusers.
+On 2014-10-21 11:26 -0300, Gustavo Zacarias spake thusly:
+> Let mkusers create groups alone, useful for supplementary permissions in
+> udev/systemd for example where users can be added to later at runtime.
+> Use a magic string "-" to signal that user creation should be skipped.
 
-I can look at handling this in mkusers, certainly.
+Gah, FIFO de-queuing. You beat me to it! :-)
+
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  support/scripts/mkusers | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+> index ffd192d..5e5a5d9 100755
+> --- a/support/scripts/mkusers
+> +++ b/support/scripts/mkusers
+> @@ -397,6 +397,7 @@ main() {
+>      # Now, add users whose uid is *not* automatic
+>      while read username uid group gid passwd home shell groups comment; do
+>          [ -n "${username}" ] || continue    # Package with no user
+> +        [ "${username}" != "-" ] || continue # Magic string to skip user creation
+>          [ ${uid} -ge 0     ] || continue    # Automatic uid
+>          add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
+>                       "${home}" "${shell}" "${groups}" "${comment}"
+> @@ -405,6 +406,7 @@ main() {
+>      # Finally, add users whose uid *is* automatic
+>      while read username uid group gid passwd home shell groups comment; do
+>          [ -n "${username}" ] || continue    # Package with no user
+> +        [ "${username}" != "-" ] || continue # Magic string to skip user creation
+>          [ ${uid} -eq -1    ] || continue    # Non-automatic uid
+>          add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
+>                       "${home}" "${shell}" "${groups}" "${comment}"
+> -- 
+> 2.0.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
