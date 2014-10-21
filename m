@@ -1,67 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 19:21:23 +0200
-Subject: [Buildroot] [PATCH 3/3] skeleton/etc/profile: drop aliases
-In-Reply-To: <1413761457-25565-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1413761457-25565-1-git-send-email-gustavo@zacarias.com.ar>
- <1413761457-25565-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141021172123.GD30778@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Oct 2014 14:25:57 -0300
+Subject: [Buildroot] [PATCH] package/sysvinit: remove inline comment
+ from root remount
+In-Reply-To: <20141021171539.GA30778@free.fr>
+References: <1413832724-15564-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141021171539.GA30778@free.fr>
+Message-ID: <54469725.7030600@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+On 10/21/2014 02:15 PM, Yann E. MORIN wrote:
 
-On 2014-10-19 20:30 -0300, Gustavo Zacarias spake thusly:
-> They all depend on having a custom busybox config and/or fully featured
-> utilities which depend on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.
+> Gustavo, All,
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  system/skeleton/etc/profile | 11 -----------
->  1 file changed, 11 deletions(-)
+> On 2014-10-20 16:18 -0300, Gustavo Zacarias spake thusly:
+>> It breaks the root rw remount as explained in bug #7442.
+>> Thanks to joymarquis at hotmail.com for pointing it out.
+>>
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > 
-> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> index 640f6f1..3812dda 100644
-> --- a/system/skeleton/etc/profile
-> +++ b/system/skeleton/etc/profile
-> @@ -33,17 +33,6 @@ if [ "$PS1" ]; then
->      export INPUTRC=/etc/inputrc
->      export DMALLOC_OPTIONS=debug=0x34f47d83,inter=100,log=logfile
->  
-> -    ### Some aliases
-> -    alias ps2='ps facux '
-> -    alias ps1='ps faxo "%U %t %p %a" '
-> -    alias af='ps af'
-> -    alias cls='clear'
-> -    alias df='df -h'
-> -    alias indent='indent -bad -bap -bbo -nbc -br -brs -c33 -cd33 -ncdb -ce -ci4 -cli0 -cp33 -cs -d0 -di1 -nfc1 -nfca -hnl -i4 -ip0 -l75 -lp -npcs -npsl -nsc -nsob -nss -ts4 '
-> -    #alias bc='bc -l'
-> -    alias minicom='minicom -c on'
-> -    alias calc='calc -Cd '
-> -    alias bc='calc -Cd '
->  fi;
->  
->  # Source configuration files from /etc/profile.d
-> -- 
-> 2.0.4
+> NAK, because that's what is used to decide whether to remount root RW or
+> not (from system/system.mk ):
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>     ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+>     # Find commented line, if any, and remove leading '#'s
+>     define SYSTEM_REMOUNT_RW
+>         $(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
+>     endef
+>     else
+>     # Find uncommented line, if any, and add a leading '#'
+>     define SYSTEM_REMOUNT_RW
+>         $(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+>     endef
+>     endif
+>     TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
+> 
+> We must find another solution.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Searching for the comment isn't pretty, i'd just:
+
+rwmo::sysinit:/bin/mount -o remount,rw / (sysvinit)
+null::sysinit:/bin/mount -o remount,rw / (skeleton)
+
+And nuke them when the root must be RO by searching for "mount -o
+remount,rw /".
+
+But really well done that should all move to an initscript at the S00
+order that handles ALL of the filesystems at once in a predictable way
+via /etc/fstab, there's no excuse.
+Regards.
