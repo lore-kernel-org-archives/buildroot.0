@@ -1,77 +1,116 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 23:09:48 +0200
-Subject: [Buildroot] [PATCH v2 02/30] ffmpeg: use the new
- BR2_ARM_CPU_ARM* options
-In-Reply-To: <1413923237-2861-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413923237-2861-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141021210948.GD23999@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Oct 2014 18:10:50 -0300
+Subject: [Buildroot] [PATCH 1/3] xtables-addons: new package
+Message-ID: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The geoip "helpers" are basically scripts that download and reformat
+the geoip database in a form usable by xt_geoip.
+The netfilter (kernel & userland) sides of it are built and installed.
+Since there are many considerations to geoip databases (free, commercial
+and variants for each) it's left to the user to deal with that if they
+plan to use the extension which is only one among many.
 
-On 2014-10-21 22:26 +0200, Thomas Petazzoni spake thusly:
-> Instead of using the Config.in options for each individual ARM core,
-> use the newly introduced BR2_ARM_CPU_ARM* options, which exist per ARM
-> architecture.
-> 
-> This commit is a blind conversion from the per-core options to the
-> per-architecture. It has the benefit of enabling the ARMv6
-> optimizations on all ARMv7-A cores, not only A5, A8, A9 and
-> A15. However, it doesn't fix the condition for
-> --enable-vfp/--disable-vfp for ARMv6 cores that don't have a FPU, it
-> is fixed in a follow-up commit.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in                          |  1 +
+ package/xtables-addons/Config.in           | 22 +++++++++++++++++++++
+ package/xtables-addons/xtables-addons.hash |  3 +++
+ package/xtables-addons/xtables-addons.mk   | 31 ++++++++++++++++++++++++++++++
+ 4 files changed, 57 insertions(+)
+ create mode 100644 package/xtables-addons/Config.in
+ create mode 100644 package/xtables-addons/xtables-addons.hash
+ create mode 100644 package/xtables-addons/xtables-addons.mk
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/ffmpeg/ffmpeg.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 21ec1c9..349bac9 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -277,15 +277,15 @@ endif
->  # Explicitly disable everything that doesn't match for ARM
->  # FFMPEG "autodetects" by compiling an extended instruction via AS
->  # This works on compilers that aren't built for generic by default
-> -ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV4),y)
->  FFMPEG_CONF_OPTS += --disable-armv5te
->  endif
-> -ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV6)$(BR2_ARM_CPU_ARMV7A),y)
->  FFMPEG_CONF_OPTS += --enable-armv6
->  else
->  FFMPEG_CONF_OPTS += --disable-armv6 --disable-armv6t2
->  endif
-> -ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV6)$(BR2_ARM_CPU_ARMV7A),y)
->  FFMPEG_CONF_OPTS += --enable-vfp
->  else
->  FFMPEG_CONF_OPTS += --disable-vfp
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 989790e..97985b3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1128,6 +1128,7 @@ endif
+ 	source "package/wvdial/Config.in"
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
++	source "package/xtables-addons/Config.in"
+ 	source "package/znc/Config.in"
+ 
+ endmenu
+diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
+new file mode 100644
+index 0000000..6e3b88c
+--- /dev/null
++++ b/package/xtables-addons/Config.in
+@@ -0,0 +1,22 @@
++comment "xtables-addons needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++comment "xtables-addons needs a toolchain w/ dynamic library, largefile, threads"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_PREFER_STATIC_LIB || !BR2_LARGEFILE || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++
++config BR2_PACKAGE_XTABLES_ADDONS
++	bool "xtables-addons"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB # extensions are .so
++	select BR2_PACKAGE_IPTABLES
++	help
++	  Xtables-addons is the successor to patch-o-matic(-ng).
++	  Likewise, it contains extensions that were not, or are not yet,
++	  accepted in the main kernel/iptables packages.
++
++	  http://xtables-addons.sourceforge.net/
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+new file mode 100644
+index 0000000..d742aed
+--- /dev/null
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.6/
++md5	087835ba7e564481b6fd398692268340	xtables-addons-2.6.tar.xz
++sha1	10586961a70fd4fe4f972cb3f31962c6766b359c	xtables-addons-2.6.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+new file mode 100644
+index 0000000..2992ac6
+--- /dev/null
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# xtables-addons
++#
++################################################################################
++
++XTABLES_ADDONS_VERSION = 2.6
++XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
++XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
++XTABLES_ADDONS_CONF_OPTS = --with-kbuild="$(LINUX_DIR)" \
++	--with-xtables="$(STAGING_DIR)/usr" \
++	--with-xtlibdir="/usr/lib/xtables"
++XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
++XTABLES_ADDONS_LICENSE = GPLv2+
++XTABLES_ADDONS_LICENSE_FILES = LICENSE
++
++# geoip helpers need perl with modules and unzip so disable
++define XTABLES_DISABLE_GEOIP_HELPERS
++	$(SED) 's/ geoip//' $(@D)/Makefile.in
++endef
++XTABLES_ADDONS_POST_PATCH_HOOKS += XTABLES_DISABLE_GEOIP_HELPERS
++
++define XTABLES_ADDONS_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
++endef
++
++define XTABLES_ADDONS_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.4
