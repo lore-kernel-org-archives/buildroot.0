@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 18:33:01 +0200
-Subject: [Buildroot] [PATCH 2/4] docs/manual: document makeusers
- group-only creation
-In-Reply-To: <1413901599-27312-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 21 Oct 2014 18:33:30 +0200
+Subject: [Buildroot] [PATCH 3/4] eudev: add input group
+In-Reply-To: <1413901599-27312-3-git-send-email-gustavo@zacarias.com.ar>
 References: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
- <1413901599-27312-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141021163301.GC3912@free.fr>
+ <1413901599-27312-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141021163330.GD3912@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +14,33 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2014-10-21 11:26 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  docs/manual/makeusers-syntax.txt | 2 ++
->  1 file changed, 2 insertions(+)
+> It's used by 50-default-udev.rules for input-class devices.
 > 
-> diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
-> index 5b3f347..8e64a0e 100644
-> --- a/docs/manual/makeusers-syntax.txt
-> +++ b/docs/manual/makeusers-syntax.txt
-> @@ -51,6 +51,8 @@ There are a few restrictions on the content of each field:
->  If +home+ is not +-+, then the home directory, and all files below,
->  will belong to the user and its main group.
->  
-> +If +username+ is +-+, then just a group will be created.
-> +
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I would have preferred we add this to the existing explanations about
-the user filed, lsomething like:
-
-    - +username+ is the desired user name (aka login name) for the user.
-      It can not be +root+, and must be unique. If set to +-+, then just
-      a group will be created.
-
-But I won;t be pedantic about this, so if the maintainer wants it as-is,
-you get my:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  Examples:
+> ---
+>  package/eudev/eudev.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index fd935a7..3cd22be 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -42,4 +42,9 @@ define EUDEV_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+>  endef
 >  
->  ----
+> +# Required by default rules for input devices
+> +define EUDEV_USERS
+> +	- - input -1 * - - - Input device group
+> +endef
+> +
+>  $(eval $(autotools-package))
 > -- 
 > 2.0.4
 > 
