@@ -1,56 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Oct 2014 18:34:03 +0200
-Subject: [Buildroot] [PATCH 4/4] systemd: add input group
-In-Reply-To: <1413901599-27312-4-git-send-email-gustavo@zacarias.com.ar>
-References: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
- <1413901599-27312-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141021163403.GE3912@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Oct 2014 13:39:35 -0300
+Subject: [Buildroot] [PATCH] usb_modeswitch: adjust help
+Message-ID: <1413909575-31048-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+The phrasing is a bit off, also there are no WiFi dongles that need this
+AFAIK.
 
-On 2014-10-21 11:26 -0300, Gustavo Zacarias spake thusly:
-> It's used by 50-default-udev.rules for input-class devices.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/usb_modeswitch/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/systemd.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index fd19bff..75a32f4 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -179,6 +179,7 @@ define SYSTEMD_USERS
->  	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
->  	systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
->  	systemd-network -1 systemd-network -1 * - - - Network Manager
-> +	- - input -1 * - - - Input device group
->  endef
->  
->  define SYSTEMD_DISABLE_SERVICE_TTY1
-> -- 
-> 2.0.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+index e4c7168..f709a55 100644
+--- a/package/usb_modeswitch/Config.in
++++ b/package/usb_modeswitch/Config.in
+@@ -3,16 +3,16 @@ config BR2_PACKAGE_USB_MODESWITCH
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+-	  Some models of some USB devices such as modems and Wifi
+-	  adapters power-up in mass storage mode to provide access to
+-	  drivers for the device's application mode. usb_modeswitch
++	  Some USB devices such as 3G/4G broadband modems power-up
++	  in mass storage mode to provide access to drivers
++	  for the device's application mode. usb_modeswitch
+ 	  changes the mode of such devices from the initial power-up
+-	  mode to the application mode. Specific configuration data
+-	  for each device model is required.
++	  mode to the application mode.
++	  Specific configuration data for each device model is required.
+ 
+ 	  usb_modeswitch can be used with the usb_modeswitch_data
+-	  package and udev for automatic mode switching when devices
+-	  are connected.
++	  package and eudev/systemd for automatic mode switching
++	  when devices are connected.
+ 
+ 	  For more information search the Internet for "Virtual CD-ROM
+ 	  switching utility".
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.4
