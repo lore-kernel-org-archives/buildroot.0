@@ -1,99 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Oct 2014 21:56:40 +0200
-Subject: [Buildroot] [PATCH] gst1-validate: new package
-In-Reply-To: <1413841040-14925-1-git-send-email-ps.report@gmx.net>
-References: <1413841040-14925-1-git-send-email-ps.report@gmx.net>
-Message-ID: <5446BA78.4040607@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Tue, 21 Oct 2014 22:11:59 +0200
+Subject: [Buildroot] [PATCH v2 1/2] libupnpp: new package
+Message-ID: <1413922320-15110-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/10/14 23:37, Peter Seiderer wrote:
-> Example usages can be found on [1].
-> 
-> [1] http://blogs.gnome.org/tsaunier/2014/04/21/gst-validate-a-suite-of-tools-to-run-integration-tests-for-gstreamer-2/
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/Config.in                      |  1 +
->  package/gstreamer1/gst1-validate/Config.in        |  9 +++++++++
->  package/gstreamer1/gst1-validate/gst1-validate.mk | 15 +++++++++++++++
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-validate/Config.in
->  create mode 100644 package/gstreamer1/gst1-validate/gst1-validate.mk
-> 
-> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-> index fe0ad48..5f08faf 100644
-> --- a/package/gstreamer1/Config.in
-> +++ b/package/gstreamer1/Config.in
-> @@ -7,5 +7,6 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
->  source "package/gstreamer1/gst1-plugins-bad/Config.in"
->  source "package/gstreamer1/gst1-plugins-ugly/Config.in"
->  source "package/gstreamer1/gst1-libav/Config.in"
-> +source "package/gstreamer1/gst1-validate/Config.in"
->  source "package/gstreamer1/gst-omx/Config.in"
->  endif
-> diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
-> new file mode 100644
-> index 0000000..ffcdd27
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-validate/Config.in
-> @@ -0,0 +1,9 @@
-> +menuconfig BR2_PACKAGE_GST1_VALIDATE
-> +	bool "gst1-validate"
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
-> +	help
-> +	  GstValidate is a tool that allows GStreamer developers to
-> +	  check that the GstElements they write behave the way they
-> +	  are supposed to.
-> +
-> +	  http://gstreamer.freedesktop.org/
-> diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-> new file mode 100644
-> index 0000000..62061e2
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# gst1-validate
-> +#
-> +################################################################################
-> +
-> +GST1_VALIDATE_VERSION = 1.4.0
-> +GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
-> +GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
-> +GST1_VALIDATE_LICENSE_FILES = COPYING
-> +GST1_VALIDATE_LICENSE = LGPLv2.1+
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+Changes v1 -> v2:
+  - Fix package name in comment section
+---
+ package/Config.in            |  1 +
+ package/libupnpp/Config.in   | 20 ++++++++++++++++++++
+ package/libupnpp/libupnpp.mk | 14 ++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/libupnpp/Config.in
+ create mode 100644 package/libupnpp/libupnpp.mk
 
- I had to add this:
-
-GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
-
-because I have sphinx-build installed on my system and it fails...
-
- With that added, it gets my
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- [build test on minimal internal x86_64 toolchain]
-
- Regards,
- Arnout
-
-> +
-> +GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
-> +
-> +$(eval $(autotools-package))
-> 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 89b46dc..4626f00 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -816,6 +816,7 @@ menu "Networking"
+ 	source "package/libtirpc/Config.in"
+ 	source "package/libtorrent/Config.in"
+ 	source "package/libupnp/Config.in"
++	source "package/libupnpp/Config.in"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsockets/Config.in"
+ 	source "package/neon/Config.in"
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+new file mode 100644
+index 0000000..795998b
+--- /dev/null
++++ b/package/libupnpp/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBUPNPP
++	bool "libupnpp"
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBUPNP
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_LARGEFILE # libupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	help
++	  The libupnpp C++ library wraps libupnp for easier use by upmpdcli and
++	  upplay.
++
++	  http://www.lesbonscomptes.com/upmpdcli/
++
++comment "libupnpp needs a toolchain w/ C++, largefile, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+new file mode 100644
+index 0000000..d46de14
+--- /dev/null
++++ b/package/libupnpp/libupnpp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libupnpp
++#
++################################################################################
++
++LIBUPNPP_VERSION = 0.8.5
++LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
++LIBUPNPP_LICENSE = GPLv2+
++LIBUPNPP_LICENSE_FILES = COPYING
++LIBUPNPP_INSTALL_STAGING = YES
++LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.1.2
