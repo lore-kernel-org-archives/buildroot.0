@@ -1,46 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 22:27:07 +0200
-Subject: [Buildroot] [PATCH v2 20/30] dhcpcd: do not pass --target option
+Date: Tue, 21 Oct 2014 22:27:08 +0200
+Subject: [Buildroot] [PATCH v2 21/30] arch/arm: do not distinguish revisions
+	of ARM1136JF-S
 In-Reply-To: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413923237-2861-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413923237-2861-22-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dhcpcd is using $(BR2_GCC_TARGET_ARCH) as the value of its --target
-option. However, depending on the architecture, this value might be
-empty.
+In commit 88cf3bb91792c9c04586e14f293d89a6e0c13e1d
+("arch/Config.in.arm: Use armv6k for arm1136jf-s rev1"), Beno?t
+Th?baudeau added separate options for the revision 0 and revision 1 of
+the ARM1136JF-S processor, so that different -march values could be
+used (armv6j for revision 0, armv6k for revision 1).
 
-After inspecting the dhcpcd configure script, it turns out that in
-fact the --target option has the following semantic:
+However, this is preventing the removal of the BR2_GCC_TARGET_ARCH
+option, which we need to do to give only the CPU type to gcc, and let
+it decide the architecture variant that matches. This is because this
+story of revision 0 vs. revision 1 is the only case where -mcpu
+doesn't fully define the CPU.
 
-  --target=TARGET   configure for building compilers for TARGET [HOST]
+Moreover, a quick test with gcc shows that -march=armv6j
+-mcpu=arm1136jf-s is accepted, while -march=armv6k -mcpu=arm1136jf-s
+makes gcc complain: " warning: switch -mcpu=arm1136jf-s conflicts with
+-march=armv6k switch".
 
-So it is very much like the --target option of regular,
-autoconf-based, configure scripts. Since dhcpcd is not a compiler,
-passing --target is pointless. Moreover, as long as --os=linux is
-passed, passing --host or --target is completely ignored by the
-configure script.
+In addition, gcc 5 will apparently no longer allow to pass all of
+--with-arch, --with-cpu and --with-tune, so we will anyway have to
+rely only on one of them.
+
+As a consequence, this commit basically reverts
+88cf3bb91792c9c04586e14f293d89a6e0c13e1d and provides only one option
+for ARM1136JF-S. If the two revisions are really different, then they
+should be supported in upstream gcc with different -mcpu values.
+
+Note that the removal of the two options should not break existing
+full .config, since the hidden option BR2_arm1136jf_s becomes again a
+visible option to select the CPU.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 ---
- package/dhcpcd/dhcpcd.mk | 1 -
- 1 file changed, 1 deletion(-)
+ arch/Config.in.arm | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index f4b821a..3bb7a13 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -25,7 +25,6 @@ endif
- define DHCPCD_CONFIGURE_CMDS
- 	(cd $(@D); \
- 	$(TARGET_CONFIGURE_OPTS) ./configure \
--		--target=$(BR2_GCC_TARGET_ARCH) \
- 		--os=linux \
- 		$(DHCPCD_CONFIG_OPTS) )
- endef
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 5441c8d..9257c16 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -69,13 +69,8 @@ config BR2_arm926t
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+-config BR2_arm1136jf_s_r0
+-	bool "arm1136jf_s rev0"
+-	select BR2_ARM_CPU_HAS_VFPV2
+-	select BR2_ARM_CPU_HAS_THUMB
+-	select BR2_ARM_CPU_ARMV6
+-config BR2_arm1136jf_s_r1
+-	bool "arm1136jf_s rev1"
++config BR2_arm1136jf_s
++	bool "arm1136jf-s"
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+@@ -143,10 +138,6 @@ config BR2_iwmmxt
+ 	select BR2_ARM_CPU_ARMV5
+ endchoice
+ 
+-config BR2_arm1136jf_s
+-	bool
+-	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
+-
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_arm || BR2_armeb
+@@ -394,8 +385,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "armv4t"	if BR2_arm920t
+ 	default "armv4t"	if BR2_arm922t
+ 	default "armv5te"	if BR2_arm926t
+-	default "armv6j"	if BR2_arm1136jf_s_r0
+-	default "armv6k"	if BR2_arm1136jf_s_r1
++	default "armv6j"	if BR2_arm1136jf_s
+ 	default "armv6zk"	if BR2_arm1176jz_s
+ 	default "armv6zk"	if BR2_arm1176jzf_s
+ 	default "armv7-a"	if BR2_cortex_a5
 -- 
 2.0.0
