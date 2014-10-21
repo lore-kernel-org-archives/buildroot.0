@@ -1,92 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Oct 2014 22:27:08 +0200
-Subject: [Buildroot] [PATCH v2 21/30] arch/arm: do not distinguish revisions
-	of ARM1136JF-S
+Date: Tue, 21 Oct 2014 22:27:10 +0200
+Subject: [Buildroot] [PATCH v2 23/30] ffmpeg: use arch and cpu instead of
+	tune
 In-Reply-To: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1413923237-2861-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1413923237-2861-24-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 88cf3bb91792c9c04586e14f293d89a6e0c13e1d
-("arch/Config.in.arm: Use armv6k for arm1136jf-s rev1"), Beno?t
-Th?baudeau added separate options for the revision 0 and revision 1 of
-the ARM1136JF-S processor, so that different -march values could be
-used (armv6j for revision 0, armv6k for revision 1).
+ffmpeg currently uses BR2_GCC_TARGET_TUNE as the --cpu option
+value. However, there are multiple architectures for which
+BR2_GCC_TARGET_TUNE is not used. After inspecting the ffmpeg configure
+script, we concluded that using the BR2_GCC_TARGET_CPU value if
+available, or the BR2_GCC_TARGET_ARCH value as a fallback was the
+appropriate behavior.
 
-However, this is preventing the removal of the BR2_GCC_TARGET_ARCH
-option, which we need to do to give only the CPU type to gcc, and let
-it decide the architecture variant that matches. This is because this
-story of revision 0 vs. revision 1 is the only case where -mcpu
-doesn't fully define the CPU.
-
-Moreover, a quick test with gcc shows that -march=armv6j
--mcpu=arm1136jf-s is accepted, while -march=armv6k -mcpu=arm1136jf-s
-makes gcc complain: " warning: switch -mcpu=arm1136jf-s conflicts with
--march=armv6k switch".
-
-In addition, gcc 5 will apparently no longer allow to pass all of
---with-arch, --with-cpu and --with-tune, so we will anyway have to
-rely only on one of them.
-
-As a consequence, this commit basically reverts
-88cf3bb91792c9c04586e14f293d89a6e0c13e1d and provides only one option
-for ARM1136JF-S. If the two revisions are really different, then they
-should be supported in upstream gcc with different -mcpu values.
-
-Note that the removal of the two options should not break existing
-full .config, since the hidden option BR2_arm1136jf_s becomes again a
-visible option to select the CPU.
+This allows to remove the reference to BR2_GCC_TARGET_TUNE, which is
+one step towards the removal of this option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- arch/Config.in.arm | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ package/ffmpeg/ffmpeg.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 5441c8d..9257c16 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -69,13 +69,8 @@ config BR2_arm926t
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV5
--config BR2_arm1136jf_s_r0
--	bool "arm1136jf_s rev0"
--	select BR2_ARM_CPU_HAS_VFPV2
--	select BR2_ARM_CPU_HAS_THUMB
--	select BR2_ARM_CPU_ARMV6
--config BR2_arm1136jf_s_r1
--	bool "arm1136jf_s rev1"
-+config BR2_arm1136jf_s
-+	bool "arm1136jf-s"
- 	select BR2_ARM_CPU_HAS_VFPV2
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV6
-@@ -143,10 +138,6 @@ config BR2_iwmmxt
- 	select BR2_ARM_CPU_ARMV5
- endchoice
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 0990f18..38eaaaa 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -334,6 +334,12 @@ endif
  
--config BR2_arm1136jf_s
--	bool
--	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
--
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
-@@ -394,8 +385,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "armv4t"	if BR2_arm920t
- 	default "armv4t"	if BR2_arm922t
- 	default "armv5te"	if BR2_arm926t
--	default "armv6j"	if BR2_arm1136jf_s_r0
--	default "armv6k"	if BR2_arm1136jf_s_r1
-+	default "armv6j"	if BR2_arm1136jf_s
- 	default "armv6zk"	if BR2_arm1176jz_s
- 	default "armv6zk"	if BR2_arm1176jzf_s
- 	default "armv7-a"	if BR2_cortex_a5
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
++FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
++else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH),)
++FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
++endif
++
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ define FFMPEG_CONFIGURE_CMDS
+ 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+@@ -349,7 +355,6 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--target-os="linux" \
+ 		--disable-stripping \
+ 		--pkg-config="$(PKG_CONFIG_HOST_BINARY)" \
+-		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(FFMPEG_CONF_OPTS) \
+ 	)
 -- 
 2.0.0
