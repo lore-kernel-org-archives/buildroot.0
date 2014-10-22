@@ -1,77 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Oct 2014 16:36:18 -0300
-Subject: [Buildroot] [PATCH] system/inittab: update to fix bug #7442
-Message-ID: <1414006578-14307-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Oct 2014 21:37:53 +0200
+Subject: [Buildroot] [git commit] iptables: disable static for dynamic builds
+Message-ID: <20141022193804.6B1F3B022E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update inittabs (skeleton/busybox & sysvinit) to remove the trailing
-REMOUNT_ROOTFS_RW comment used as magic string in system/system.mk to
-enable/disable remounting the root filesystem rw or not since it affects
-sysvinit in doing so properly as reported in bug #7442.
+commit: http://git.buildroot.net/buildroot/commit/?id=9f13ddf3bab51ae762b82ce9f767ac1abcdb7b2e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead update the sed expressions to match clean non-commented strings
-by searching for "-o remount,rw /" and checking that's the end of the
-line as well to avoid affecting possibly other remounts that a user can
-have in a custom inittab.
-
-Long-term the startup block of inittab should just move to a S00sysinit
-script or similar so that rcS can pick it up directly.
+It leads to ugly runtime warnings, see:
+http://patchwork.ozlabs.org/patch/386215/
+It's also required for xtables-addons.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysvinit/inittab    | 2 +-
- system/skeleton/etc/inittab | 2 +-
- system/system.mk            | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/iptables/iptables.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index d3de4a7..fd0d2f0 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -5,7 +5,7 @@
- id:1:initdefault:
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index f059807..2ef879d 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -12,7 +12,9 @@ IPTABLES_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ IPTABLES_LICENSE = GPLv2
+ IPTABLES_LICENSE_FILES = COPYING
+-IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr
++# Building static causes ugly warnings on some plugins
++IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
++	$(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
+ # Because of iptables-01-fix-static-link.patch
+ IPTABLES_AUTORECONF = YES
  
- proc::sysinit:/bin/mount -t proc proc /proc
--rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-+rwmo::sysinit:/bin/mount -o remount,rw /
- dpts::sysinit:/bin/mkdir -p /dev/pts
- dshm::sysinit:/bin/mkdir -p /dev/shm
- moun::sysinit:/bin/mount -a
-diff --git a/system/skeleton/etc/inittab b/system/skeleton/etc/inittab
-index 85881f4..99d84e4 100644
---- a/system/skeleton/etc/inittab
-+++ b/system/skeleton/etc/inittab
-@@ -15,7 +15,7 @@
- 
- # Startup the system
- null::sysinit:/bin/mount -t proc proc /proc
--null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-+null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mkdir -p /dev/pts
- null::sysinit:/bin/mkdir -p /dev/shm
- null::sysinit:/bin/mount -a
-diff --git a/system/system.mk b/system/system.mk
-index 5802e2d..e4a3160 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -79,12 +79,12 @@ endif
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- # Find commented line, if any, and remove leading '#'s
- define SYSTEM_REMOUNT_RW
--	$(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
- endef
- else
- # Find uncommented line, if any, and add a leading '#'
- define SYSTEM_REMOUNT_RW
--	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
- endef
- endif
- TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
--- 
-2.0.4
