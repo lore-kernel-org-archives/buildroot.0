@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 22:12:57 +0200
-Subject: [Buildroot] [git commit] eudev: add input group
-Message-ID: <20141022201338.A39B5B0429@busybox.osuosl.org>
+Date: Wed, 22 Oct 2014 22:13:22 +0200
+Subject: [Buildroot] [git commit] systemd: add input group
+Message-ID: <20141022201338.ABA23B0429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ca94a0a56983fe062b8c9e857283fbf98f6fc9d
+commit: http://git.buildroot.net/buildroot/commit/?id=a9364c51a78e08768a310727ac06bdeb69d3443d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 It's used by 50-default-udev.rules for input-class devices.
@@ -17,20 +17,18 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/eudev/eudev.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/systemd/systemd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index fd935a7..3cd22be 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -42,4 +42,9 @@ define EUDEV_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index fd19bff..75a32f4 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -179,6 +179,7 @@ define SYSTEMD_USERS
+ 	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+ 	systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
+ 	systemd-network -1 systemd-network -1 * - - - Network Manager
++	- - input -1 * - - - Input device group
  endef
  
-+# Required by default rules for input devices
-+define EUDEV_USERS
-+	- - input -1 * - - - Input device group
-+endef
-+
- $(eval $(autotools-package))
+ define SYSTEMD_DISABLE_SERVICE_TTY1
