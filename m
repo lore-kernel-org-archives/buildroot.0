@@ -1,38 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 14:21:49 +0200
-Subject: [Buildroot] Setting the dates of the next Buildroot Developers
-	meeting
-Message-ID: <20141022142149.7ec8eebf@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 22 Oct 2014 14:55:58 +0200
+Subject: [Buildroot] Buildroot developer meeting report
+Message-ID: <5447A95E.2090008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+ Hi all,
 
-The last Buildroot Developers meeting has just finished last week, and
-it's already time to think about the next one. It typically takes place
-right after the FOSDEM conference in Brussels.
+ Just before ELC-E in Duesseldorf, on October 11 and 12, we had a Buildroot
+Developer Meeting (sponsored by Mind, yay!). You can find the report on the wiki:
 
-This year, the FOSDEM takes place on Saturday 31th January and Sunday
-1st February. This would mean that the Buildroot Developers Meeting
-should normally take place on Monday 2nd and Tuesday 3rd February.
+http://elinux.org/Buildroot:DeveloperDaysELCE2014#Discussion_topics_and_report
 
-Is this fine for everyone, or do we have reasons to have the meeting
-*before* FOSDEM (Thursday 29th and Friday 30th January) instead ?
 
-Let me know quickly what your preference is, so that I can arrange the
-logistics.
+ Some highlights:
 
-See the event page I've started at:
+* We mainly used this time to clean up patchwork. We didn't keep exact
+statistics, but the number of patches was reduced from roughly 350 to roughly
+250, and a significant number of patches have been reviewed and/or reposted.
 
-  http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015
+* There were a few important large series that were discussed and eventually
+applied.
 
-Thanks,
+* We have taken a decision on how to deal with atomic operations, with missing
+license files, with march/mcpu/mtune conflicts, and we have decided to leave the
+package name out of patch file names. Some of these things have been
+implemented, some are still to do.
 
-Thomas
+* We discussed the GSoC project which wasn't successful this year. We'll try
+again next year.
+
+
+ If there is any further point of discussion or a conclusion that you don't
+agree with, feel free to start a discussion here on the list or on IRC.
+
+
+ Regards,
+ Arnout
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
