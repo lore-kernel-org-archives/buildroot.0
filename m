@@ -1,51 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 22:15:11 +0200
-Subject: [Buildroot] [git commit] usb_modeswitch: adjust help
-Message-ID: <20141022201539.4CBABB043D@busybox.osuosl.org>
+From: Ray Cordova <rayzinpwr@gmail.com>
+Date: Wed, 22 Oct 2014 13:16:58 -0700
+Subject: [Buildroot] SERIOUS bug in coreutils / cut command
+In-Reply-To: <5447FC33.4060007@zacarias.com.ar>
+References: <CAKat-EbixBqGzvLhR_utUyWKTknWF3S7=TNqfJJai1JfgOohkQ@mail.gmail.com>
+ <5447FC33.4060007@zacarias.com.ar>
+Message-ID: <CAKat-EaReet=FyKzHhVZwWDbNqGFQ_y-P17sW0Sk-q7=2hkpqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b73ff8704c6fda26cb7594dc8409f0dcc8a1e583
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I started with all default configs, then tweaked and added packages. Both
+are arch i386. One kernel is i686 and the other is for a Via C3-2
+processor. I'm currently running them both on vmware. One is vmware
+workstation 9 and the other is ESXi 5.5. The toolchain is the default.
 
-The phrasing is a bit off, also there are no WiFi dongles that need this
-AFAIK.
+On Wed, Oct 22, 2014 at 11:49 AM, Gustavo Zacarias <gustavo@zacarias.com.ar>
+wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/usb_modeswitch/Config.in |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
-index e4c7168..f709a55 100644
---- a/package/usb_modeswitch/Config.in
-+++ b/package/usb_modeswitch/Config.in
-@@ -3,16 +3,16 @@ config BR2_PACKAGE_USB_MODESWITCH
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	help
--	  Some models of some USB devices such as modems and Wifi
--	  adapters power-up in mass storage mode to provide access to
--	  drivers for the device's application mode. usb_modeswitch
-+	  Some USB devices such as 3G/4G broadband modems power-up
-+	  in mass storage mode to provide access to drivers
-+	  for the device's application mode. usb_modeswitch
- 	  changes the mode of such devices from the initial power-up
--	  mode to the application mode. Specific configuration data
--	  for each device model is required.
-+	  mode to the application mode.
-+	  Specific configuration data for each device model is required.
- 
- 	  usb_modeswitch can be used with the usb_modeswitch_data
--	  package and udev for automatic mode switching when devices
--	  are connected.
-+	  package and eudev/systemd for automatic mode switching
-+	  when devices are connected.
- 
- 	  For more information search the Internet for "Virtual CD-ROM
- 	  switching utility".
+> On 10/22/2014 03:06 PM, Ray Cordova wrote:
+>
+> > Hello,
+> >
+> > echo "word1 word2 word3" | cut -d' ' -f1
+> >
+> > word1
+> >
+> > echo "word1 word2 word3" | cut -d' ' -f2
+> >
+> > wword2 <-- ??!?!??
+> >
+> > Yes, it really is 'wword2'.
+> >
+> > echo "word1 word2 word3" | cut -d' ' -f3
+> >
+> > word3
+> >
+> > This is the September 1st, 2014 release. Coreutils 8.22. Two different
+> > builds, same versions, same bug.
+>
+> Hi.
+> Works fine for me with latest git (same coreutils) using the
+> qemu-arm-versatile sample defconfig with the latest available external
+> toolchain.
+> How about a little more detail of architecture, toolchain and so on?
+> (i.e. savedefconfig defconfig)
+> Regards.
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141022/6c21e2c7/attachment.html>
