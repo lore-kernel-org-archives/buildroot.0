@@ -1,35 +1,72 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 22 Oct 2014 11:29:00 -0500
-Subject: [Buildroot] U-Boot Freescale PBL Image Format Support
-Message-ID: <CAMQcK5LR05A2h62KPckDy=LQ+DbWL4Gv_pJUDVHVDNsQSAqUww@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 22 Oct 2014 19:15:36 +0200
+Subject: [Buildroot] [PATCH] intltool: fix build
+In-Reply-To: <20141022180339.47298e90@free-electrons.com>
+References: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
+ <20141022180339.47298e90@free-electrons.com>
+Message-ID: <CAB0FRsv_6MEV1WuboQcWp9YpZgz4xvCTg9fr4t2cBy4ydfR6qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+2014-10-22 18:03 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
+>
+> On Fri, 17 Oct 2014 20:48:01 +0200, Francois Perrad wrote:
+>> fix various build failures caused by host-perl serie
+>>
+>> Currently, the variables PERL & PERL2LIB are available
+>> only during the configure step of host-intltool.
+>> There are also needed when running host-intltool,
+>> in all package which depends on host-intltool.
+>>
+>> So, there are now global, but in the perl infrastructure,
+>> we cannot use them.
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/Makefile.in          | 9 +++++++--
+>>  package/intltool/intltool.mk | 3 ---
+>>  package/pkg-perl.mk          | 2 +-
+>>  3 files changed, 8 insertions(+), 6 deletions(-)
+>
+> Can you cook an updated version of this patch that takes into account
+> the comment you have received? It would help us fix a number of Perl
+> related autobuilder issues.
+>
 
-In the meeting notes from the Buildroot Developer Days at ELCE, there
-was a note about my pending patch series to add support to U-Boot for
-the PBL image type. I still have interest in seeing these patches
-merged but my attempts to get them reviewed have failed.
+When I try to do that you suggest, I only obtain no working result.
 
-The patches are as follows:
+I think that comments from Arnout, come from a pure review but no from
+testing or experiment.
 
-[1/3] host-xxd: new package [1]
-[2/3] uboot: separate out OMAP options and definitions [2]
-[3/3] uboot: introduce u-boot.pbl format [3]
+This patch doesn't try to fix the package host-intltool, it fixes the
+packages which depend on host-intltool.
+Currently, this kind of package is broken in the configure step
+because they can not find the correct perl.
+So, the variable INTLTOOL_PERL=$(PERL) in *_CONFIGURE_OPTS is mandatory.
 
-On the first patch I have only gotten minor feedback from Thomas D and
-have not resubmitted due to patches 2 and 3 not being reviewed. If
-someone would be willing to review the other patches and provided
-feedback, I would be willing to rebase the suggestions onto the latest
-master.
+When PATH=$(BR_PATH), `which perl` find the system perl when host-perl
+is not yet installed, after it find the host-perl.
+So, it is important to save the result of `which perl` with the
+original PATH (ie. without $(HOST_DIR)/usr/bin).
 
-Thanks,
--Ryan
+The current patch stay the best that I can do (the commit message can
+always be improved).
 
-[1] - http://patchwork.ozlabs.org/patch/344795/
-[2] - http://patchwork.ozlabs.org/patch/344796/
-[3] - http://patchwork.ozlabs.org/patch/344797/
+Fran?ois
+
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
