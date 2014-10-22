@@ -1,74 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Oct 2014 18:27:30 +0200
-Subject: [Buildroot] [PATCH v4] bash: fix linking for static builds with
- uClibc toolchains
-In-Reply-To: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5447DAF2.1070504@mind.be>
+Date: Wed, 22 Oct 2014 18:14:21 +0200
+Subject: [Buildroot] [PATCH v2 04/30] gst-ffmpeg: use the new
+ BR2_ARM_CPU_ARM* options
+In-Reply-To: <20141022093400.2bc39e83@free-electrons.com>
+References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1413923237-2861-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141021211811.GF23999@free.fr> <20141022093400.2bc39e83@free-electrons.com>
+Message-ID: <5447D7DD.5090200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/10/14 11:40, Vicente Olivert Riera wrote:
-> bash fails to link for static builds with uClibc toolchains due to
-> getenv redefinitions. This is caused because bash is unable to check if
-> getenv is already defined when cross-compiling, so it defaults to 'yes':
+On 22/10/14 09:34, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> configure:14438: WARNING: cannot check getenv redefinition if cross
-> compiling -- defaulting to yes
+> On Tue, 21 Oct 2014 23:18:11 +0200, Yann E. MORIN wrote:
 > 
-> We can avoid this redefinition by passing bash_cv_getenv_redef=no to the
-> configure script.
+>>> -ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s),y)
+>>> +ifeq ($(BR2_ARM_CPU_ARMV6),y)
+>>>  GST_FFMPEG_CONF_EXTRA_OPTS += --enable-armv6
+>>>  else
+>>>  GST_FFMPEG_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
+>>
+>> armv6t2: does that hint that we can tune to use Thumb-2 ?
 > 
-> Related:
-> 	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
+> I thought Thumb-2 was only introduced with ARMv7, but it turns out it's
+> not the case. It has in fact been introduced in ARM1156, part of the
+> ARMv6 architecture.
 > 
-> Fixes:
-> 	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
+> However, this ARM1156 is not supported in Buildroot, and I have never
+> heard of it in any publicly available SoC.
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> However, this means that --enable-armv6t2 can be used for ARMv7.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Small additional remark...
-
-> ---
->  package/bash/bash.mk |   11 +++++++++++
->  1 files changed, 11 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index 34a3a73..5eec3cc 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -28,6 +28,17 @@ BASH_MAKE = $(MAKE1)
->  # The static build needs some trickery
->  ifeq ($(BR2_PREFER_STATIC_LIB),y)
->  BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
-> +# bash wants to redefine the getenv() function. To check whether this is
-> +# possible, AC_TRY_RUN is used which is not possible in
-> +# cross-compilation.
-> +# On uClibc, redefining getenv is not possible; on glibc and musl it is.
-
- I failed to notice earlier: glibc is not available on static builds so it
-doesn't make a lot of sense to mention it here.
-
+ I wouldn't want to actually use it unless tested on real hardware, however.
 
  Regards,
  Arnout
 
-> +# Related:
-> +# http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +BASH_CONF_ENV += bash_cv_getenv_redef=no
-> +else
-> +BASH_CONF_ENV += bash_cv_getenv_redef=yes
-> +endif
->  endif
->  
->  # Make /bin/sh -> bash (no other shell, better than busybox shells)
-> 
 
 
 -- 
