@@ -1,25 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Oct 2014 19:46:09 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/beecrypt: Fix build with
-	BR2_ENABLE_DEBUG=yes, no need for expert mode anymore
-References: <1413737269-24583-1-git-send-email-bernd.kuhls@t-online.de>
- <20141022180037.01930eac@free-electrons.com>
-Message-ID: <XnsA3CEC91A3C1F4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Ray Cordova <rayzinpwr@gmail.com>
+Date: Wed, 22 Oct 2014 11:06:53 -0700
+Subject: [Buildroot] SERIOUS bug in coreutils / cut command
+Message-ID: <CAKat-EbixBqGzvLhR_utUyWKTknWF3S7=TNqfJJai1JfgOohkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20141022180037.01930eac at free-electrons.com:
+echo "word1 word2 word3" | cut -d' ' -f1
 
-> What do you think can be done in terms of upstreaming?
+word1
 
-honestly I have no idea about that, sorry. The first time I ever heard about 
-beecrypt was when I saw its build error which occured after my --enable-debug 
-patch was applied last Sunday...
+echo "word1 word2 word3" | cut -d' ' -f2
 
-Regards, Bernd
+wword2 <-- ??!?!??
+
+Yes, it really is 'wword2'.
+
+echo "word1 word2 word3" | cut -d' ' -f3
+
+word3
+
+This is the September 1st, 2014 release. Coreutils 8.22. Two different
+builds, same versions, same bug.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141022/195628ad/attachment.html>
