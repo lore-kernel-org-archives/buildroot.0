@@ -1,35 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 22:14:39 +0200
-Subject: [Buildroot] [PATCH 1/4] scripts/mkusers: allow the creation of
- groups alone
-In-Reply-To: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413901599-27312-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141022221439.34ec2c5e@free-electrons.com>
+Date: Wed, 22 Oct 2014 22:15:11 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch: adjust help
+Message-ID: <20141022201539.4CBABB043D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b73ff8704c6fda26cb7594dc8409f0dcc8a1e583
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Oct 2014 11:26:36 -0300, Gustavo Zacarias wrote:
-> Let mkusers create groups alone, useful for supplementary permissions in
-> udev/systemd for example where users can be added to later at runtime.
-> Use a magic string "-" to signal that user creation should be skipped.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  support/scripts/mkusers | 2 ++
->  1 file changed, 2 insertions(+)
+The phrasing is a bit off, also there are no WiFi dongles that need this
+AFAIK.
 
-I've applied the four patches. On the documentation patch, I've taken
-into account the suggestion of Yann to slightly adjust the commit.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/usb_modeswitch/Config.in |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+index e4c7168..f709a55 100644
+--- a/package/usb_modeswitch/Config.in
++++ b/package/usb_modeswitch/Config.in
+@@ -3,16 +3,16 @@ config BR2_PACKAGE_USB_MODESWITCH
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+-	  Some models of some USB devices such as modems and Wifi
+-	  adapters power-up in mass storage mode to provide access to
+-	  drivers for the device's application mode. usb_modeswitch
++	  Some USB devices such as 3G/4G broadband modems power-up
++	  in mass storage mode to provide access to drivers
++	  for the device's application mode. usb_modeswitch
+ 	  changes the mode of such devices from the initial power-up
+-	  mode to the application mode. Specific configuration data
+-	  for each device model is required.
++	  mode to the application mode.
++	  Specific configuration data for each device model is required.
+ 
+ 	  usb_modeswitch can be used with the usb_modeswitch_data
+-	  package and udev for automatic mode switching when devices
+-	  are connected.
++	  package and eudev/systemd for automatic mode switching
++	  when devices are connected.
+ 
+ 	  For more information search the Internet for "Virtual CD-ROM
+ 	  switching utility".
