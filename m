@@ -1,22 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Oct 2014 10:35:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 7370] ngrep - requires --with-pcap-includes fully
- defined to find bpf.h
-In-Reply-To: <bug-7370-163@https.bugs.busybox.net/>
-References: <bug-7370-163@https.bugs.busybox.net/>
-Message-ID: <20141022103554.EC44CAFE40@busybox.osuosl.org>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Wed, 22 Oct 2014 11:39:11 +0100
+Subject: [Buildroot] [PATCH v4] bash: fix linking for static builds with
+ uClibc toolchains
+In-Reply-To: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5447894F.7070503@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7370
+On 10/22/2014 10:40 AM, Vicente Olivert Riera wrote:
+> bash fails to link for static builds with uClibc toolchains due to
+> getenv redefinitions. This is caused because bash is unable to check if
+> getenv is already defined when cross-compiling, so it defaults to 'yes':
+> 
+> configure:14438: WARNING: cannot check getenv redefinition if cross
+> compiling -- defaulting to yes
+> 
+> We can avoid this redefinition by passing bash_cv_getenv_redef=no to the
+> configure script.
+> 
+> Related:
+> 	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
+> 
+> Fixes:
+> 	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+It's best if you write something here ^^^ (below the ---, notes section)
+when you send a new version of the patch so we now what changed from the
+previous version, because it's not always obvious what changed between
+the different versions.
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-10-22 10:35:54 UTC ---
-Patch sent to the list: http://patchwork.ozlabs.org/patch/401242/
+For example
+
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes since v3:
+- Added foo
+
+Changes since v2:
+- Added bar
+
+Changes since v1:
+- More foobar
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+markos
