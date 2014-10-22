@@ -1,38 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Oct 2014 18:12:15 +0200
-Subject: [Buildroot] [PATCH v2] set simple network setup via the system
- configuration submenu
-In-Reply-To: <20141021103611.7e43d2b4@free-electrons.com>
-References: <1413814486-10716-1-git-send-email-jeremy.rosen@openwide.fr>
- <20141021103611.7e43d2b4@free-electrons.com>
-Message-ID: <5447D75F.90800@mind.be>
+Date: Wed, 22 Oct 2014 18:27:30 +0200
+Subject: [Buildroot] [PATCH v4] bash: fix linking for static builds with
+ uClibc toolchains
+In-Reply-To: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5447DAF2.1070504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/14 10:36, Thomas Petazzoni wrote:
-> I certainly don't like to push back stuff, but I'm wondering if this
-> isn't too much complexity compared to just having people use an overlay
-> containing their own /etc/network/interfaces. We will never be able to
-> handle all the possible cases, with multiple network interfaces, hook
-> scripts called before/after bringing up/down interfaces, etc.
+On 22/10/14 11:40, Vicente Olivert Riera wrote:
+> bash fails to link for static builds with uClibc toolchains due to
+> getenv redefinitions. This is caused because bash is unable to check if
+> getenv is already defined when cross-compiling, so it defaults to 'yes':
+> 
+> configure:14438: WARNING: cannot check getenv redefinition if cross
+> compiling -- defaulting to yes
+> 
+> We can avoid this redefinition by passing bash_cv_getenv_redef=no to the
+> configure script.
+> 
+> Related:
+> 	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
+> 
+> Fixes:
+> 	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
- Personally I think that the network interfaces is at least as relevant as the
-getty, hostname, timezone, default shell, and other system configuration.
-Similar to the getty configuration, it's good to have something that gives you a
-working system with a simple config without having to create custom files. And
-at least for the network interface, the simple configuration will often be
-sufficient. getty  on the other hand becomes irrelevant when you create a custom
-inittab (i.e. always for a real product).
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- So I'm definitely in favour of having something like this. On condition that it
-is sufficiently simple, and doesn't attempt to cover all cases.
+ Small additional remark...
+
+> ---
+>  package/bash/bash.mk |   11 +++++++++++
+>  1 files changed, 11 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index 34a3a73..5eec3cc 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -28,6 +28,17 @@ BASH_MAKE = $(MAKE1)
+>  # The static build needs some trickery
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>  BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
+> +# bash wants to redefine the getenv() function. To check whether this is
+> +# possible, AC_TRY_RUN is used which is not possible in
+> +# cross-compilation.
+> +# On uClibc, redefining getenv is not possible; on glibc and musl it is.
+
+ I failed to notice earlier: glibc is not available on static builds so it
+doesn't make a lot of sense to mention it here.
 
 
  Regards,
  Arnout
+
+> +# Related:
+> +# http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +BASH_CONF_ENV += bash_cv_getenv_redef=no
+> +else
+> +BASH_CONF_ENV += bash_cv_getenv_redef=yes
+> +endif
+>  endif
+>  
+>  # Make /bin/sh -> bash (no other shell, better than busybox shells)
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
