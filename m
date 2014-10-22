@@ -1,54 +1,89 @@
-From: Ray Cordova <rayzinpwr@gmail.com>
-Date: Wed, 22 Oct 2014 13:16:58 -0700
-Subject: [Buildroot] SERIOUS bug in coreutils / cut command
-In-Reply-To: <5447FC33.4060007@zacarias.com.ar>
-References: <CAKat-EbixBqGzvLhR_utUyWKTknWF3S7=TNqfJJai1JfgOohkQ@mail.gmail.com>
- <5447FC33.4060007@zacarias.com.ar>
-Message-ID: <CAKat-EaReet=FyKzHhVZwWDbNqGFQ_y-P17sW0Sk-q7=2hkpqw@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 22 Oct 2014 22:22:08 +0200
+Subject: [Buildroot] [PATCH v6 0/2] Mono new package
+Message-ID: <1414009330-4433-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I started with all default configs, then tweaked and added packages. Both
-are arch i386. One kernel is i686 and the other is for a Via C3-2
-processor. I'm currently running them both on vmware. One is vmware
-workstation 9 and the other is ESXi 5.5. The toolchain is the default.
+This patch adds mono and monolite packages.
 
-On Wed, Oct 22, 2014 at 11:49 AM, Gustavo Zacarias <gustavo@zacarias.com.ar>
-wrote:
+Changes v5 -> v6:
 
-> On 10/22/2014 03:06 PM, Ray Cordova wrote:
->
-> > Hello,
-> >
-> > echo "word1 word2 word3" | cut -d' ' -f1
-> >
-> > word1
-> >
-> > echo "word1 word2 word3" | cut -d' ' -f2
-> >
-> > wword2 <-- ??!?!??
-> >
-> > Yes, it really is 'wword2'.
-> >
-> > echo "word1 word2 word3" | cut -d' ' -f3
-> >
-> > word3
-> >
-> > This is the September 1st, 2014 release. Coreutils 8.22. Two different
-> > builds, same versions, same bug.
->
-> Hi.
-> Works fine for me with latest git (same coreutils) using the
-> qemu-arm-versatile sample defconfig with the latest available external
-> toolchain.
-> How about a little more detail of architecture, toolchain and so on?
-> (i.e. savedefconfig defconfig)
-> Regards.
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141022/6c21e2c7/attachment.html>
+- Fixed /etc/mono configs files installation
+
+Changes v4 -> v5:
+
+- Defaulting BR2_PACKAGE_MONO_45 now depends on select
+- Minor formatting issues
+
+[Thomas:
+
+  - Merge mono-managed and mono-native as a single package. The
+    mono-managed stuff is done by the host variant of the mono
+    package, while the mono-native stuff is done as the target variant
+    of the mono package.
+
+  - Introduce a BR2_PACKAGE_MONO_ARCH_SUPPORTS blind Config.in option
+    to make sure the IPv6 related comment is not displayed when the
+    architecture being used anyway doesn't support Mono.
+
+  - Add a patch to Mono to fix the C library path when uClibc and Musl
+    is used. This is a better approach than the
+    POST_INSTALL_TARGET_HOOKS because this approach can potentially be
+    submitted upstreamed, which ultimately allows to simplify the
+    Buildroot package.
+
+  - Depend on a 'monolite' package, and use it instead of letting Mono
+    download Monolite by itself, which circumvents Buildroot's
+    download infrastructure.
+    mono-managed stuff is done by the host variant of the mono
+    package, while the mono-native stuff is done as the target variant
+    of the mono package.
+
+  - Introduce a BR2_PACKAGE_MONO_ARCH_SUPPORTS blind Config.in option
+    to make sure the IPv6 related comment is not displayed when the
+    architecture being used anyway doesn't support Mono.
+
+  - Add a patch to Mono to fix the C library path when uClibc and Musl
+    is used. This is a better approach than the
+    POST_INSTALL_TARGET_HOOKS because this approach can potentially be
+    submitted upstreamed, which ultimately allows to simplify the
+    Buildroot package.
+
+  - Depend on a 'monolite' package, and use it instead of letting Mono
+    download Monolite by itself, which circumvents Buildroot's
+    download infrastructure.
+
+  - Move the installation of Mono libraries to the target Mono
+    package, as a POST_INSTALL_TARGET_HOOKS.]
+
+[Angelo:
+
+  - Bump to the latest Mono version 3.10.0
+
+  - Add selection for .Net runtime compilation and installation in
+    target.]
+
+
+Angelo Compagnucci (2):
+  package/monolite: new package
+  package/mono: new package
+
+ package/Config.in                               |  1 +
+ package/mono/Config.in                          | 40 +++++++++++++++
+ package/mono/mono-001-gc-fix-uclibc.patch       | 16 ++++++
+ package/mono/mono-002-support-uclibc-musl.patch | 25 ++++++++++
+ package/mono/mono.mk                            | 65 +++++++++++++++++++++++++
+ package/monolite/monolite.mk                    | 17 +++++++
+ 6 files changed, 164 insertions(+)
+ create mode 100644 package/mono/Config.in
+ create mode 100644 package/mono/mono-001-gc-fix-uclibc.patch
+ create mode 100644 package/mono/mono-002-support-uclibc-musl.patch
+ create mode 100644 package/mono/mono.mk
+ create mode 100644 package/monolite/monolite.mk
+
+-- 
+2.1.1
