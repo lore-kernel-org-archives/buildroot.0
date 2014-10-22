@@ -1,52 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 15:22:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cdrkit: standardize site URL
-In-Reply-To: <1413983659-3496-1-git-send-email-kaszak@gmail.com>
-References: <1413983659-3496-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20141022152231.1ecdf27a@free-electrons.com>
+From: Michal Sojka <sojka@merica.cz>
+Date: Wed, 22 Oct 2014 16:01:42 +0200
+Subject: [Buildroot] [PATCH] Complain loudly if BR2_GLOBAL_PATCH_DIR
+	does not exit
+In-Reply-To: <CAGduivy5cXHFqEj-ZV16XSUU8y+fEaDS2cOZu-OAJ16q=XkmTQ@mail.gmail.com>
+References: <1413880974-30138-1-git-send-email-sojka@merica.cz>
+ <20141021165817.GI3912@free.fr>
+ <CAGduivxejVSE-p42u+WRBbYqc-oMNSKdd6cEqBw4ROtuKUU5sA@mail.gmail.com>
+ <87tx2wjpob.fsf@steelpick.2x.cz>
+ <CAGduivy5cXHFqEj-ZV16XSUU8y+fEaDS2cOZu-OAJ16q=XkmTQ@mail.gmail.com>
+Message-ID: <87oat4jj95.fsf@steelpick.2x.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+On Wed, Oct 22 2014, Maxime Hadjinlian wrote:
+> On Wed, Oct 22, 2014 at 1:43 PM, Michal Sojka <sojka@merica.cz> wrote:
+>> On Wed, Oct 22 2014, Maxime Hadjinlian wrote:
+>>> Hi Michal, Yann, all
+>>>
+>>> On Tue, Oct 21, 2014 at 6:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>>> Michal, All,
+>>>>
+>>>> On 2014-10-21 10:42 +0200, Michal Sojka spake thusly:
+>>>>> If the BR2_GLOBAL_PATCH_DIR is misspelled in the .config or if somebody
+>>>>> renamed the existing directory with patches, buildroot happily builds
+>>>>> everything but without the patches. As this can lead to surprising
+>>>>> results,
+>>>>> ---
+>>>>>  package/pkg-generic.mk | 5 +++++
+>>>>>  1 file changed, 5 insertions(+)
+>>>>>
+>>>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>>>>> index 259ee02..46d92aa 100644
+>>>>> --- a/package/pkg-generic.mk
+>>>>> +++ b/package/pkg-generic.mk
+>>>>> @@ -162,6 +162,11 @@ $(BUILD_DIR)/%/.stamp_patched:
+>>>>>       $(Q)touch $@
+>>>>>       @$(call step_end,patch)
+>>>>>
+>>>>> +# Check that all directories specified in BR2_GLOBAL_PATCH_DIR exist.
+>>>>> +$(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+>>>>> +     $(if $(wildcard $(dir)),,\
+>>>>> +             $(error BR2_GLOBAL_PATCH_DIR contains nonexistent directory $(dir))))
+>>>>> +
+>>> On a small note, since we already do a '[...] test -d $${D} [...]',
+>>> why don't you simply add an else condition with the error message ?
+>>
+>> Because $(D) is in fact $(BR2_GLOBAL_PATCH_DIR)/$(RAWNAME), which is not
+>> required to exist for every package.
+> Ah yes indeed. Sorry.
+> Other question, why don't put that bit of code at the beginning of the
+> target stamp_patched ? Or at least in the target stamp_patched ?
 
-On Wed, 22 Oct 2014 15:14:19 +0200, Karoly Kasza wrote:
-> Standardize download site URL using the Debian mirror.
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->  package/cdrkit/cdrkit.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-> index 3f2b429..e1392b6 100644
-> --- a/package/cdrkit/cdrkit.mk
-> +++ b/package/cdrkit/cdrkit.mk
-> @@ -6,7 +6,7 @@
->  
->  CDRKIT_VERSION = 1.1.11
->  CDRKIT_SOURCE = cdrkit_$(CDRKIT_VERSION).orig.tar.gz
-> -CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20101018T151929Z/pool/main/c/cdrkit/
-> +CDRKIT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/c/cdrkit
->  CDRKIT_DEPENDENCIES = libcap bzip2 zlib
->  CDRKIT_LICENSE = GPLv2
->  CDRKIT_LICENSE_FILES = COPYING
+Because the same check would be performed many times for every package.
+This way, things are checked only once, while the Makefile is read.
 
-Yeah, well, actually, I believe using snapshot.debian.org is a better
-idea, since it guarantees that files won't be moved. While using
-$(BR2_DEBIAN_MIRROR) means that we point to locations where tarballs
-will disappear at some point. At least, we've seen that in the past.
-
-So maybe we should rather get rid of BR2_DEBIAN_MIRROR and make sure
-all packages downloading their source from Debian use
-snapshot.debian.org instead.
-
-Thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Michal
