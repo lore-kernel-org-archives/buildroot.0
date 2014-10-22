@@ -1,48 +1,94 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 22 Oct 2014 13:26:40 +0200
-Subject: [Buildroot] [PATCH] Complain loudly if BR2_GLOBAL_PATCH_DIR
- does not exit
-In-Reply-To: <20141021165817.GI3912@free.fr>
-References: <1413880974-30138-1-git-send-email-sojka@merica.cz>
- <20141021165817.GI3912@free.fr>
-Message-ID: <CAGduivxejVSE-p42u+WRBbYqc-oMNSKdd6cEqBw4ROtuKUU5sA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 22 Oct 2014 08:28:17 -0300
+Subject: [Buildroot] [PATCH] openswan: bump to version 2.6.42
+Message-ID: <1413977297-17768-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal, Yann, all
+Add hash file.
+Patch upstream in common Makefile.
 
-On Tue, Oct 21, 2014 at 6:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Michal, All,
->
-> On 2014-10-21 10:42 +0200, Michal Sojka spake thusly:
->> If the BR2_GLOBAL_PATCH_DIR is misspelled in the .config or if somebody
->> renamed the existing directory with patches, buildroot happily builds
->> everything but without the patches. As this can lead to surprising
->> results,
->> ---
->>  package/pkg-generic.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 259ee02..46d92aa 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -162,6 +162,11 @@ $(BUILD_DIR)/%/.stamp_patched:
->>       $(Q)touch $@
->>       @$(call step_end,patch)
->>
->> +# Check that all directories specified in BR2_GLOBAL_PATCH_DIR exist.
->> +$(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
->> +     $(if $(wildcard $(dir)),,\
->> +             $(error BR2_GLOBAL_PATCH_DIR contains nonexistent directory $(dir))))
->> +
-On a small note, since we already do a '[...] test -d $${D} [...]',
-why don't you simply add an else condition with the error message ?
->>  # Configure
->>  $(BUILD_DIR)/%/.stamp_configured:
->>       @$(call step_start,configure)
->> --
->> 2.1.1
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openswan/openswan-01-gcc-detection.patch | 43 ------------------------
+ package/openswan/openswan.hash                   |  2 ++
+ package/openswan/openswan.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 44 deletions(-)
+ delete mode 100644 package/openswan/openswan-01-gcc-detection.patch
+ create mode 100644 package/openswan/openswan.hash
+
+diff --git a/package/openswan/openswan-01-gcc-detection.patch b/package/openswan/openswan-01-gcc-detection.patch
+deleted file mode 100644
+index 2feb5c5..0000000
+--- a/package/openswan/openswan-01-gcc-detection.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From b37d4bd266ec65acdf5288e21722991d1c5ec44a Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sun, 30 Mar 2014 08:52:05 -0300
+-Subject: [PATCH] Makefile: use CC for version test instead of gcc
+-
+-Use $(CC) for the version test since that's different from gcc when
+-cross-compiling.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- lib/libopenswan/Makefile | 2 +-
+- programs/pluto/Makefile  | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/lib/libopenswan/Makefile b/lib/libopenswan/Makefile
+-index 3649fe7..06f5317 100644
+---- a/lib/libopenswan/Makefile
+-+++ b/lib/libopenswan/Makefile
+-@@ -90,7 +90,7 @@ CFLAGS+= -Wpointer-arith
+- CFLAGS+= -Wno-error=cast-qual
+- 
+- # Check if GCC's version is recent enough
+--GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+-+GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+- ifeq ($(GCC_VERSION_GE_46),true)
+- # some junk left in alg_info.c
+- CFLAGS+= -Wno-error=cpp
+-diff --git a/programs/pluto/Makefile b/programs/pluto/Makefile
+-index 8e4bc89..ed5e9dc 100644
+---- a/programs/pluto/Makefile
+-+++ b/programs/pluto/Makefile
+-@@ -48,7 +48,7 @@ CPPFLAGS = $(HDRDIRS) $(DEFINES) \
+- # must turn this off due to myid.c
+- CFLAGS+= -Wno-error=cast-qual
+- # Check if GCC's version is recent enough
+--GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+-+GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+- ifeq ($(GCC_VERSION_GE_46),true)
+- CFLAGS+= -Wno-error=cpp
+- endif
+--- 
+-1.8.3.2
+-
+diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
+new file mode 100644
+index 0000000..724a935
+--- /dev/null
++++ b/package/openswan/openswan.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	1be58b684dedd4bf00946ac5c7c6e9fbf8ac5db849feea2360c42c5e87cb565a	openswan-2.6.42.tar.gz
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index ca29daa..ba36f7c 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSWAN_VERSION = 2.6.41
++OPENSWAN_VERSION = 2.6.42
+ OPENSWAN_SITE = http://download.openswan.org/openswan
+ OPENSWAN_LICENSE = GPLv2+, BSD-3c
+ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+-- 
+2.0.4
