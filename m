@@ -1,28 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 18:01:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/beecrypt: Replace work-around
- to fix gcc-4.7 compile error
-In-Reply-To: <1413738477-4079-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413738477-4079-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141022180114.1b476c62@free-electrons.com>
+Date: Wed, 22 Oct 2014 18:03:39 +0200
+Subject: [Buildroot] [PATCH] intltool: fix build
+In-Reply-To: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
+References: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20141022180339.47298e90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Francois Perrad,
 
-On Sun, 19 Oct 2014 19:07:57 +0200, Bernd Kuhls wrote:
+On Fri, 17 Oct 2014 20:48:01 +0200, Francois Perrad wrote:
+> fix various build failures caused by host-perl serie
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Currently, the variables PERL & PERL2LIB are available
+> only during the configure step of host-intltool.
+> There are also needed when running host-intltool,
+> in all package which depends on host-intltool.
+> 
+> So, there are now global, but in the perl infrastructure,
+> we cannot use them.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/beecrypt/beecrypt-0004-gcc-4.7.patch |   19 +++++++++++++++++++
->  package/beecrypt/beecrypt.mk                 |    6 ------
->  2 files changed, 19 insertions(+), 6 deletions(-)
->  create mode 100644 package/beecrypt/beecrypt-0004-gcc-4.7.patch
+>  package/Makefile.in          | 9 +++++++--
+>  package/intltool/intltool.mk | 3 ---
+>  package/pkg-perl.mk          | 2 +-
+>  3 files changed, 8 insertions(+), 6 deletions(-)
 
-Applied, thanks.
+Can you cook an updated version of this patch that takes into account
+the comment you have received? It would help us fix a number of Perl
+related autobuilder issues.
+
+Thanks,
 
 Thomas
 -- 
