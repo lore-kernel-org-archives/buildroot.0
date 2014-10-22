@@ -1,33 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Oct 2014 18:35:23 +0200
-Subject: [Buildroot] [PATCH] Complain loudly if BR2_GLOBAL_PATCH_DIR
- does not exit
-In-Reply-To: <CAGduivy5cXHFqEj-ZV16XSUU8y+fEaDS2cOZu-OAJ16q=XkmTQ@mail.gmail.com>
-References: <1413880974-30138-1-git-send-email-sojka@merica.cz>
- <20141021165817.GI3912@free.fr>
- <CAGduivxejVSE-p42u+WRBbYqc-oMNSKdd6cEqBw4ROtuKUU5sA@mail.gmail.com>
- <87tx2wjpob.fsf@steelpick.2x.cz>
- <CAGduivy5cXHFqEj-ZV16XSUU8y+fEaDS2cOZu-OAJ16q=XkmTQ@mail.gmail.com>
-Message-ID: <5447DCCB.1030409@mind.be>
+Date: Wed, 22 Oct 2014 18:45:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cdrkit: standardize site URL
+In-Reply-To: <20141022152231.1ecdf27a@free-electrons.com>
+References: <1413983659-3496-1-git-send-email-kaszak@gmail.com>
+ <20141022152231.1ecdf27a@free-electrons.com>
+Message-ID: <5447DF1F.3040100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/10/14 13:54, Maxime Hadjinlian wrote:
-> Other question, why don't put that bit of code at the beginning of the
-> target stamp_patched ? Or at least in the target stamp_patched ?
+On 22/10/14 15:22, Thomas Petazzoni wrote:
+> Dear Karoly Kasza,
+> 
+> On Wed, 22 Oct 2014 15:14:19 +0200, Karoly Kasza wrote:
+>> Standardize download site URL using the Debian mirror.
+>>
+>> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+>> ---
+>>  package/cdrkit/cdrkit.mk |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+>> index 3f2b429..e1392b6 100644
+>> --- a/package/cdrkit/cdrkit.mk
+>> +++ b/package/cdrkit/cdrkit.mk
+>> @@ -6,7 +6,7 @@
+>>  
+>>  CDRKIT_VERSION = 1.1.11
+>>  CDRKIT_SOURCE = cdrkit_$(CDRKIT_VERSION).orig.tar.gz
+>> -CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20101018T151929Z/pool/main/c/cdrkit/
+>> +CDRKIT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/c/cdrkit
+>>  CDRKIT_DEPENDENCIES = libcap bzip2 zlib
+>>  CDRKIT_LICENSE = GPLv2
+>>  CDRKIT_LICENSE_FILES = COPYING
+> 
+> Yeah, well, actually, I believe using snapshot.debian.org is a better
+> idea, since it guarantees that files won't be moved. While using
+> $(BR2_DEBIAN_MIRROR) means that we point to locations where tarballs
+> will disappear at some point. At least, we've seen that in the past.
+> 
+> So maybe we should rather get rid of BR2_DEBIAN_MIRROR and make sure
+> all packages downloading their source from Debian use
+> snapshot.debian.org instead.
+> 
+> Thoughts?
 
- Because we prefer to have checks for the validity of the .config immediately,
-before the build is started. Even a 'make savedefconfig' or 'make graph-depends'
-will trigger the error. For this particular one it is not so important, but for
-other checks it is really useful to have it before the build begins and not
-after half an hour of building.
+ We've discussed this before and IIRC nobody was against getting rid of
+BR2_DEBIAN_MIRROR. Well, looking back through my mail archives, it looks like
+you (Thomas) said a couple of times to use snapshot instead of BR2_DEBIAN_MIRROR
+and nobody objected.
 
- Note that this is currently not always the case, e.g. dependencies.sh, external
-toolchain validity. But if possible, I prefer .config checks to be done in make.
-
+ I certainly agree that using snapshot is a better idea. We now have a mix of 17
+packages using BR2_DEBIAN_MIRROR and 10 packages using snapshot.debian.org, and
+AFAIK we never had any problem with the snapshot packages.
 
  Regards,
  Arnout
