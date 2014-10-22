@@ -1,27 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 18:10:47 +0200
-Subject: [Buildroot] [PATCH] libnl: need->needs for toolchain comment
-In-Reply-To: <1413916056-18244-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413916056-18244-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141022181047.36d35ab5@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 22 Oct 2014 18:20:09 +0200
+Subject: [Buildroot] [PATCH 0/2] apply-patches.sh: be quiet when "make -s"
+	is used
+Message-ID: <1413994811-19452-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+To reduce further the noise when "make -s" is used, silence the
+"apply-patches.sh" script.
 
-On Tue, 21 Oct 2014 15:27:36 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libnl/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+v7:
+ - rebased
+ - add review tag by Yann
+ - apply also to the recently added package "netcat-openbsd"
+v6:
+ - fix code that detect the use of the "-s" flag to be able to detect:
+   -s --warn-undefined-variables -i
+   the previous version was not able to detect correctly the use of multiple
+   short flags.
+v5:
+ - add review tag on the first patch
+ - use filter function instead of substring function on the second patch
+v4:
+ - remove use of [[...]] construct to easy up accepting this patch set
+v3:
+ - Remove the already merged patch
+ - Use double $$ inside hooks (Yann)
+ - Add patch to use [[ ]] construct
+v2:
+ - move the second patch as first to easy up merging
+ - split the first patch in two (Yann)
+ - add BR_SILENT variable (Yann)
 
-Applied, thanks.
+Fabio Porcedda (2):
+  apply-patches.sh: Use the "APPLY_PATCHES" variable to call the script
+  apply-patches.sh: don't print anything when "make -s" is used
 
-Thomas
+ Makefile                                 |  2 ++
+ boot/at91bootstrap/at91bootstrap.mk      |  2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk    |  2 +-
+ boot/barebox/barebox.mk                  |  2 +-
+ boot/uboot/uboot.mk                      |  2 +-
+ linux/linux-ext-rtai.mk                  |  4 ++--
+ linux/linux.mk                           |  6 +++---
+ package/Makefile.in                      |  2 ++
+ package/cvs/cvs.mk                       |  2 +-
+ package/gcc/gcc.mk                       |  4 ++--
+ package/input-tools/input-tools.mk       |  2 +-
+ package/mii-diag/mii-diag.mk             |  2 +-
+ package/netcat-openbsd/netcat-openbsd.mk |  2 +-
+ package/pkg-autotools.mk                 | 12 ++++++------
+ package/pkg-generic.mk                   |  6 +++---
+ package/setserial/setserial.mk           |  2 +-
+ package/sysvinit/sysvinit.mk             |  2 +-
+ package/thttpd/thttpd.mk                 |  2 +-
+ support/scripts/apply-patches.sh         | 17 ++++++++++++++---
+ 19 files changed, 45 insertions(+), 30 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
