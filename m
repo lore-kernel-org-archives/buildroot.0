@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 21:39:12 +0200
-Subject: [Buildroot] [git commit] scripts/mkusers: allow the creation of
-	groups alone
-Message-ID: <20141022201338.923E2B0429@busybox.osuosl.org>
+Date: Wed, 22 Oct 2014 22:12:57 +0200
+Subject: [Buildroot] [git commit] eudev: add input group
+Message-ID: <20141022201338.A39B5B0429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ff8f54e7930b029ea6cdf6037af7437f2cc1919
+commit: http://git.buildroot.net/buildroot/commit/?id=8ca94a0a56983fe062b8c9e857283fbf98f6fc9d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let mkusers create groups alone, useful for supplementary permissions in
-udev/systemd for example where users can be added to later at runtime.
-Use a magic string "-" to signal that user creation should be skipped.
+It's used by 50-default-udev.rules for input-class devices.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/mkusers |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/eudev/eudev.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index ffd192d..5e5a5d9 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -397,6 +397,7 @@ main() {
-     # Now, add users whose uid is *not* automatic
-     while read username uid group gid passwd home shell groups comment; do
-         [ -n "${username}" ] || continue    # Package with no user
-+        [ "${username}" != "-" ] || continue # Magic string to skip user creation
-         [ ${uid} -ge 0     ] || continue    # Automatic uid
-         add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-                      "${home}" "${shell}" "${groups}" "${comment}"
-@@ -405,6 +406,7 @@ main() {
-     # Finally, add users whose uid *is* automatic
-     while read username uid group gid passwd home shell groups comment; do
-         [ -n "${username}" ] || continue    # Package with no user
-+        [ "${username}" != "-" ] || continue # Magic string to skip user creation
-         [ ${uid} -eq -1    ] || continue    # Non-automatic uid
-         add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-                      "${home}" "${shell}" "${groups}" "${comment}"
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index fd935a7..3cd22be 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -42,4 +42,9 @@ define EUDEV_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
+ 
++# Required by default rules for input devices
++define EUDEV_USERS
++	- - input -1 * - - - Input device group
++endef
++
+ $(eval $(autotools-package))
