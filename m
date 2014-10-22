@@ -1,74 +1,117 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 22 Oct 2014 10:59:55 +0200
-Subject: [Buildroot] [PATCH 2/2 v5] package/mono: new package
-In-Reply-To: <5446AEBA.4090505@crapouillou.net>
-References: <54458B8C.4020505@crapouillou.net>
- <CA+TH9Vm7c9BGBpRvkLziZM6ctainiTv5f-yb3Y-WxzdAkcfA3g@mail.gmail.com>
- <5446AEBA.4090505@crapouillou.net>
-Message-ID: <CA+TH9Vk_tf0id+QtxMU=xdHNwdqEmyArRUKJWH32XLrd9pLyMw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 22 Oct 2014 10:17:08 +0100
+Subject: [Buildroot] [PATCH] bash: fix linking for static builds with
+ uClibc toolchains
+In-Reply-To: <5446C703.7070501@mind.be>
+References: <1413897705-47811-1-git-send-email-Vincent.Riera@imgtec.com>
+ <5446C703.7070501@mind.be>
+Message-ID: <54477614.1040209@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+Dear Arnout Vandecappelle,
 
-> By the way, the package does not install /etc/mono/4.0 or 4.5. It only
-> installs /etc/mono/2.0, so some of my test apps do crash.
-
-Thank you for spotting this, I will fix it!
-
-> However, the mono package does not. It fails because the "locale_charset" symbol is not found.
-> This might be because I don't have locale support enabled in my toolchain.
-> I patched around it by removing the inclusion of
-> "localcharset.h" in eglib/configure.ac.
-
-This is strange. localcharset.h is inside an AC_CHECK_HEADERS, so it
-should not hurt your compilation. localcharset.h it's in gettext
-package, that I've never checked in my builds. Probably you have
-something wrong with your gettext.
-I'll investigate the problem!
-
-Sincerly Angelo
-
-> Cheers
+On 10/21/2014 09:50 PM, Arnout Vandecappelle wrote:
+> On 21/10/14 15:21, Vicente Olivert Riera wrote:
+>> ...and also use configure options instead of environment variables.
+>>
+>> bash fails to link for static builds with uClibc toolchains due to
+>> getenv redefinitions. This is caused because bash is unable to check if
+>> getenv is already defined when cross-compiling, so it defaults to 'yes':
+>>
+>> configure:14438: WARNING: cannot check getenv redefinition if cross
+>> compiling -- defaulting to yes
+>>
+>> We can avoid this redefinition by adding bash_cv_getenv_redef=no to the
+>> configure options.
+>>
+>> At the same time, we use configure options instead of environment
+>> variables because there is no need to pass those options to the
+>> configure script as environment variables. Doing it in this way we
+>> avoid the risk of environment variables leaking into places we don't
+>> expect.
 >
-> Paul
+>   That change from _ENV to _OPTS should definitely be a separate patch.
+> Especially because I don't see the reason to do it. The environment variables
+> will leak into exactly one place: the configure script. And that script will
+> just export all assignments passed on the command line into its environment. So
+> the effect is exactly the same.
 >
-> On 21/10/2014 08:06, Angelo Compagnucci wrote:
+>   If you do make this change, then it should probably be done for all packages,
+> which means it should probably be done in pkg-autotools.mk.
+>
+>   So you have a concrete example of where the _ENV causes trouble?
+
+No, I haven't. I just prefer using configure options rather than 
+environment variables. Anyway..., no problem, I will send another patch 
+without that change.
+
 >>
->> Hi Paul,
+>> Related:
+>> 	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
 >>
->> Could you send your config and a mono.log obtained with this command?
+>> Fixes:
+>> 	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
 >>
->>   make -j1 host-mono-reconfigure >> mono.log
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>   package/bash/bash.mk |    5 ++++-
+>>   1 files changed, 4 insertions(+), 1 deletions(-)
 >>
->> Thank you!
+>> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+>> index 34a3a73..9a13f69 100644
+>> --- a/package/bash/bash.mk
+>> +++ b/package/bash/bash.mk
+>> @@ -13,7 +13,7 @@ BASH_CONF_OPTS = --with-installed-readline
+>>   BASH_LICENSE = GPLv3+
+>>   BASH_LICENSE_FILES = COPYING
 >>
->> 2014-10-21 0:24 GMT+02:00 Paul Cercueil <paul@crapouillou.net>:
->>>
->>> In-Reply-To:
->>> 1413814528-26904-3-git-send-email-angelo.compagnucci at gmail.com
->>>
->>> Hi Angelo,
->>>
->>> Your package does not work here, host-mono fails to build.
->>> I attached the log file.
->>>
->>> Could the DLL files be downloaded instead of rebuilt? They should be
->>> arch-independent, so it may be easier and faster to just download them.
->>> Then only the runtime would need to be built.
->>>
->>> Regards,
->>>
->>> Paul
->>>
+>> -BASH_CONF_ENV += \
+>> +BASH_CONF_OPTS += \
+>>   	ac_cv_rl_prefix="$(STAGING_DIR)" \
+>>   	ac_cv_rl_version="$(READLINE_VERSION)" \
+>>   	bash_cv_job_control_missing=present \
+>> @@ -28,6 +28,9 @@ BASH_MAKE = $(MAKE1)
+>>   # The static build needs some trickery
+>>   ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>>   BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
+>> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>> +BASH_CONF_OPTS += bash_cv_getenv_redef=no
+>> +endif
+>
+>   It's probably better to also set it to yes explicitly in the else branch.
+
+No problem.
+
+>   Also, a short comment would be good.
+
+No problem.
+
+>   Also, does musl allow redefining getenv?
+
+Well, I did a test with a static build using the musl toolchain and it 
+worked fine. So, yes, it seems that musl is ok with the getenv redefinition.
+
+>
+>
+>   Regards,
+>   Arnout
+>
+>>   endif
 >>
+>>   # Make /bin/sh -> bash (no other shell, better than busybox shells)
 >>
+>
 >
 
-
+Best regards,
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
