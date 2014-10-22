@@ -1,212 +1,34 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 22 Oct 2014 22:22:10 +0200
-Subject: [Buildroot] [PATCH v6 2/2] package/mono: new package
-In-Reply-To: <1414009330-4433-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1414009330-4433-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1414009330-4433-3-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Oct 2014 22:25:25 +0200
+Subject: [Buildroot] [git commit] eglibc/glibc: add hash file
+Message-ID: <20141022202536.B2535B02B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the complete Mono implementation. This patch builds
-both the native and managed parts.
+commit: http://git.buildroot.net/buildroot/commit/?id=8117608a3f6f8fc7c3ce9124ecf20c0e14ddefeb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                               |  1 +
- package/mono/Config.in                          | 40 +++++++++++++++
- package/mono/mono-001-gc-fix-uclibc.patch       | 16 ++++++
- package/mono/mono-002-support-uclibc-musl.patch | 25 ++++++++++
- package/mono/mono.mk                            | 65 +++++++++++++++++++++++++
- 5 files changed, 147 insertions(+)
- create mode 100644 package/mono/Config.in
- create mode 100644 package/mono/mono-001-gc-fix-uclibc.patch
- create mode 100644 package/mono/mono-002-support-uclibc-musl.patch
- create mode 100644 package/mono/mono.mk
+ package/glibc/glibc.hash |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b46dc..8f738ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -437,6 +437,7 @@ menu "Lua libraries/modules"
- 	source "package/xavante/Config.in"
- endmenu
- endif
-+	source "package/mono/Config.in"
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/mono/Config.in b/package/mono/Config.in
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
 new file mode 100644
-index 0000000..f8f4895
+index 0000000..094bbda
 --- /dev/null
-+++ b/package/mono/Config.in
-@@ -0,0 +1,40 @@
-+config BR2_PACKAGE_MONO_ARCH_SUPPORTS
-+	bool
-+	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
-+		      BR2_mipsel || BR2_powerpc || BR2_sparc || BR2_x86_64)
-+
-+config BR2_PACKAGE_MONO
-+	bool "mono"
-+	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_MONO_45 if !BR2_PACKAGE_MONO_20 && !BR2_PACKAGE_MONO_40
-+	help
-+	  An open source, cross-platform, implementation of C#
-+	  and the CLR that is binary compatible with Microsoft.NET.
-+
-+	  http://download.mono-project.com/sources/mono/
-+
-+if BR2_PACKAGE_MONO
-+
-+config BR2_PACKAGE_MONO_20
-+	bool "2.0/3.5 .Net Runtime"
-+	help
-+	  This option enables the installation of the 2.0/3.5 version
-+	  of the Mono .Net runtime to the target
-+
-+config BR2_PACKAGE_MONO_40
-+	bool "4.0 .Net Runtime"
-+	help
-+	  This option enables the installation of the 4.0 version
-+	  of the Mono .Net runtime to the target
-+
-+config BR2_PACKAGE_MONO_45
-+	bool "4.5 .Net Runtime"
-+	help
-+	  This option enables the installation of the 4.5 version
-+	  of the Mono .Net runtime to the target
-+
-+endif
-+
-+comment "mono needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/mono/mono-001-gc-fix-uclibc.patch b/package/mono/mono-001-gc-fix-uclibc.patch
-new file mode 100644
-index 0000000..62b52cd
---- /dev/null
-+++ b/package/mono/mono-001-gc-fix-uclibc.patch
-@@ -0,0 +1,16 @@
-+Disable backtrace on not supported uclibc.
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+
-+diff -purN mono-native-3.8.0.orig/libgc/include/gc.h mono-native-3.8.0/libgc/include/gc.h
-+--- mono-native-3.8.0.orig/libgc/include/gc.h	2014-10-07 15:00:21.259466731 +0200
-++++ mono-native-3.8.0/libgc/include/gc.h	2014-10-07 15:05:25.560975681 +0200
-+@@ -500,7 +500,7 @@ GC_API GC_PTR GC_malloc_atomic_ignore_of
-+ #ifdef __linux__
-+ # include <features.h>
-+ # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
-+-     && !defined(__ia64__)
-++     && !defined(__ia64__) && !defined(__UCLIBC__)
-+ #   ifndef GC_HAVE_BUILTIN_BACKTRACE
-+ #     define GC_HAVE_BUILTIN_BACKTRACE
-+ #   endif
-diff --git a/package/mono/mono-002-support-uclibc-musl.patch b/package/mono/mono-002-support-uclibc-musl.patch
-new file mode 100644
-index 0000000..48a3493
---- /dev/null
-+++ b/package/mono/mono-002-support-uclibc-musl.patch
-@@ -0,0 +1,25 @@
-+Adjust libc.so path depending on C library being used
-+
-+By default, on Linux systems, Mono assumes that the C library is
-+libc.so.6. While this is true for glibc, it is not true for uClibc and
-+Musl based systems. This patch adds support for such systems.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2973,6 +2973,12 @@
-+         SQLITE="libsqlite.so"
-+         SQLITE3="libsqlite3.so"
-+ 	;;
-++    *-*-*uclibc*)
-++	LIBC="libc.so.0"
-++	;;
-++    *-*-*musl*)
-++	LIBC="libc.so"
-++	;;
-+     *-*-*linux*)
-+ 	AC_PATH_X
-+ 	dlsearch_path=`(libtool --config ; echo eval echo \\$sys_lib_dlsearch_path_spec) | sh`
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-new file mode 100644
-index 0000000..3d11f87
---- /dev/null
-+++ b/package/mono/mono.mk
-@@ -0,0 +1,65 @@
-+#############################################################
-+#
-+# mono
-+#
-+#############################################################
-+
-+MONO_VERSION = 3.10.0
-+MONO_SITE = http://download.mono-project.com/sources/mono/
-+MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
-+MONO_LICENSE = LGPLv2 or commercial
-+MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING.LIB mcs/COPYING \
-+	eglib/COPYING external/Newtonsoft.Json/Tools/7-zip/copying.txt
-+MONO_INSTALL_STAGING = YES
-+
-+## Mono native
-+
-+# patching configure.ac
-+MONO_AUTORECONF = YES
-+
-+# Disable managed code (mcs folder) from building
-+MONO_CONF_OPTS = --disable-gtk-doc \
-+	--with-mcs-docs=no \
-+	--with-moonlight=no \
-+	--disable-libraries \
-+	--with-ikvm-native=no \
-+	--enable-minimal=aot,profiler,debug \
-+	--disable-mcs-build
-+
-+define MONO_INSTALL_LIBS
-+	rsync -av --exclude=*.so --exclude=*.mdb \
-+		$(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
-+	rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
-+endef
-+
-+MONO_DEPENDENCIES += host-mono
-+
-+MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
-+
-+## Mono managed
-+
-+HOST_MONO_CONF_OPTS = --disable-gtk-doc \
-+	--with-mcs-docs=no \
-+	--with-moonlight=no \
-+	--disable-libraries \
-+	--with-ikvm-native=no \
-+	--enable-minimal=aot,profiler,debug \
-+	--enable-static
-+
-+# These options refer to the target mono, not the host. We use the host
-+# only to compile libraries, then we copy them to the target.
-+HOST_MONO_CONF_OPTS += --with-profile2=$(if $(BR2_PACKAGE_MONO_20),yes,no)
-+HOST_MONO_CONF_OPTS += --with-profile4=$(if $(BR2_PACKAGE_MONO_40),yes,no)
-+HOST_MONO_CONF_OPTS += --with-profile4_5=$(if $(BR2_PACKAGE_MONO_45),yes,no)
-+
-+HOST_MONO_DEPENDENCIES = host-monolite
-+
-+define HOST_MONO_SETUP_MONOLITE
-+	rm -rf $(@D)/mcs/class/lib/monolite
-+	(cd $(@D)/mcs/class/lib; ln -s $(HOST_DIR)/usr/lib/monolite monolite)
-+endef
-+
-+HOST_MONO_POST_CONFIGURE_HOOKS += HOST_MONO_SETUP_MONOLITE
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-2.1.1
++++ b/package/glibc/glibc.hash
+@@ -0,0 +1,8 @@
++# Locally calculated after checking pgp signature (glibc)
++# http://downloads.yoctoproject.org/releases/eglibc/*.{md5,sha1} (eglibc)
++md5	b395b021422a027d89884992e91734fc	eglibc-2.18-svnr23787.tar.bz2
++sha1	224d9e655e8f0ad04ffde47b97a11c64e2255b56	eglibc-2.18-svnr23787.tar.bz2
++md5	197836c2ba42fb146e971222647198dd	eglibc-2.19-svnr25243.tar.bz2
++sha1	8013c1935b46fd50d2d1fbfad3b0af362b75fb28	eglibc-2.19-svnr25243.tar.bz2
++sha256	2d3997f588401ea095a0b27227b1d50cdfdd416236f6567b564549d3b46ea2a2	glibc-2.19.tar.xz
++sha256	f84b6d42aecc288d593c397b0a3d02260a33ee686bce0c634eb9b32798f36ba5	glibc-2.20.tar.xz
