@@ -1,43 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Oct 2014 11:35:21 +0200
-Subject: [Buildroot] [PATCH] bash: fix linking for static builds with
- uClibc toolchains
-In-Reply-To: <54477614.1040209@imgtec.com>
-References: <1413897705-47811-1-git-send-email-Vincent.Riera@imgtec.com>
- <5446C703.7070501@mind.be> <54477614.1040209@imgtec.com>
-Message-ID: <54477A59.1050000@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 22 Oct 2014 10:40:40 +0100
+Subject: [Buildroot] [PATCH v4] bash: fix linking for static builds with
+	uClibc toolchains
+Message-ID: <1413970840-17304-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/10/14 11:17, Vicente Olivert Riera wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On 10/21/2014 09:50 PM, Arnout Vandecappelle wrote:
->>   Also, does musl allow redefining getenv?
-> 
-> Well, I did a test with a static build using the musl toolchain and it worked
-> fine. So, yes, it seems that musl is ok with the getenv redefinition.
+bash fails to link for static builds with uClibc toolchains due to
+getenv redefinitions. This is caused because bash is unable to check if
+getenv is already defined when cross-compiling, so it defaults to 'yes':
 
- Perhaps it's a good idea to mention this analysis explicitly in comments.
-Something like:
+configure:14438: WARNING: cannot check getenv redefinition if cross
+compiling -- defaulting to yes
 
-# bash wants to redefine the getenv() function. To check whether this is
-# possible, AC_TRY_RUN is used which is not possible in cross-compilation.
-# On uClibc, redefining getenv is not possible; on glibc and musl it is.
+We can avoid this redefinition by passing bash_cv_getenv_redef=no to the
+configure script.
 
+Related:
+	http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
 
- Regards,
- Arnout
+Fixes:
+	http://autobuild.buildroot.net/results/a20/a2007e6dbcfe53e7cd837ae642869ee26376826a/
 
-[snip]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/bash/bash.mk |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 34a3a73..5eec3cc 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -28,6 +28,17 @@ BASH_MAKE = $(MAKE1)
+ # The static build needs some trickery
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
++# bash wants to redefine the getenv() function. To check whether this is
++# possible, AC_TRY_RUN is used which is not possible in
++# cross-compilation.
++# On uClibc, redefining getenv is not possible; on glibc and musl it is.
++# Related:
++# http://lists.gnu.org/archive/html/bug-bash/2012-03/msg00052.html
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++BASH_CONF_ENV += bash_cv_getenv_redef=no
++else
++BASH_CONF_ENV += bash_cv_getenv_redef=yes
++endif
+ endif
+ 
+ # Make /bin/sh -> bash (no other shell, better than busybox shells)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
