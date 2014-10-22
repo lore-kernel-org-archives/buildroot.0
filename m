@@ -1,49 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Oct 2014 14:55:58 +0200
-Subject: [Buildroot] Buildroot developer meeting report
-Message-ID: <5447A95E.2090008@mind.be>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Wed, 22 Oct 2014 15:14:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cdrkit: standardize site URL
+Message-ID: <1413983659-3496-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Standardize download site URL using the Debian mirror.
 
- Just before ELC-E in Duesseldorf, on October 11 and 12, we had a Buildroot
-Developer Meeting (sponsored by Mind, yay!). You can find the report on the wiki:
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+---
+ package/cdrkit/cdrkit.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-http://elinux.org/Buildroot:DeveloperDaysELCE2014#Discussion_topics_and_report
-
-
- Some highlights:
-
-* We mainly used this time to clean up patchwork. We didn't keep exact
-statistics, but the number of patches was reduced from roughly 350 to roughly
-250, and a significant number of patches have been reviewed and/or reposted.
-
-* There were a few important large series that were discussed and eventually
-applied.
-
-* We have taken a decision on how to deal with atomic operations, with missing
-license files, with march/mcpu/mtune conflicts, and we have decided to leave the
-package name out of patch file names. Some of these things have been
-implemented, some are still to do.
-
-* We discussed the GSoC project which wasn't successful this year. We'll try
-again next year.
-
-
- If there is any further point of discussion or a conclusion that you don't
-agree with, feel free to start a discussion here on the list or on IRC.
-
-
- Regards,
- Arnout
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index 3f2b429..e1392b6 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -6,7 +6,7 @@
+ 
+ CDRKIT_VERSION = 1.1.11
+ CDRKIT_SOURCE = cdrkit_$(CDRKIT_VERSION).orig.tar.gz
+-CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20101018T151929Z/pool/main/c/cdrkit/
++CDRKIT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/c/cdrkit
+ CDRKIT_DEPENDENCIES = libcap bzip2 zlib
+ CDRKIT_LICENSE = GPLv2
+ CDRKIT_LICENSE_FILES = COPYING
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
