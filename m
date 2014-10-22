@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2014 22:51:33 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: fix saving the config
- file
-In-Reply-To: <1413836616-4209-1-git-send-email-yann.morin.1998@free.fr>
-References: <1413836616-4209-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141022225133.59ae7d55@free-electrons.com>
+Date: Wed, 22 Oct 2014 22:53:53 +0200
+Subject: [Buildroot] [PATCH] qt5connectivity: propagate bluez-utils
+ dependencies
+In-Reply-To: <1413820376-11771-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1413820376-11771-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141022225353.3731b2e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Vicente Olivert Riera,
 
-On Mon, 20 Oct 2014 22:23:36 +0200, Yann E. MORIN wrote:
-> When saving (aka updating) the configuration file of a kconfig package,
-> a subsequent call to "make" would rebuild the package, even though the
-> configuration did not actually change.
+On Mon, 20 Oct 2014 16:52:56 +0100, Vicente Olivert Riera wrote:
+> qt5connectivity selects the bluez-utils package but the dependencies are
+> not fully propagated so someone could do a static build, then select the
+> qt5connectivity package causing bluez-utils being auto-selected, which
+> is disabled for static builds, and then obtain a build failure like this
+> one:
 > 
-> It took quite a while to understand why. But the reason is so simple and
-> obvious, when you think about it:
+> checking for dlopen in -ldl... no
+> configure: error: dynamic linking loader is required
 > 
->   - $(@D)/.config depends on the config file $(BUSYBOX_CONFIG_FILE)
->   - busybox-update-config then copies $(@D)/.config back to the config
->     file $(BUSYBOX_CONFIG_FILE)
->   - so the config file is newer than $(@D)/.config
+> Fixes:
+> 	http://autobuild.buildroot.net/results/96d/96d8297be0b731da138b1e2aafb851061aee3c40/
 > 
-> So, in the next run, pkg-kconfig believes that it has to rebuild
-> busybox. Bummer... :-/
-> 
-> So, the fix is very trivial, and just requires asking "cp" to preserve
-> timestamps, so the dependency does not kick in at the next run.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/qt5/qt5connectivity/Config.in |    7 +++++++
+>  1 files changed, 7 insertions(+), 0 deletions(-)
 
 Applied, thanks.
 
