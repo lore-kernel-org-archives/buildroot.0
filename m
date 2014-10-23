@@ -1,82 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Oct 2014 10:27:35 +0200
-Subject: [Buildroot] [PATCH v2 04/30] gst-ffmpeg: use the new
- BR2_ARM_CPU_ARM* options
-In-Reply-To: <20141023094932.7e5559b7@free-electrons.com>
-References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1413923237-2861-5-git-send-email-thomas.petazzoni@free-electrons.com>	<20141021211811.GF23999@free.fr>	<20141022093400.2bc39e83@free-electrons.com>	<5447D7DD.5090200@mind.be>
- <20141023094932.7e5559b7@free-electrons.com>
-Message-ID: <5448BBF7.1010206@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 23 Oct 2014 09:30:40 +0100
+Subject: [Buildroot] [PATCH] botan: fix mips64 build using n32 ABI
+In-Reply-To: <301f9a581364fbaaf8f8ec7c2cde1d18241928c7.1414046088.git.baruch@tkos.co.il>
+References: <301f9a581364fbaaf8f8ec7c2cde1d18241928c7.1414046088.git.baruch@tkos.co.il>
+Message-ID: <5448BCB0.7060405@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/10/14 09:49, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Wed, 22 Oct 2014 18:14:21 +0200, Arnout Vandecappelle wrote:
-> 
->>  I wouldn't want to actually use it unless tested on real hardware, however.
-> 
-> Well, if you grep through the gst-ffmpeg tree, you will that the
-> ARMV6T2 condition is only used in two places in
-> gst-libs/ext/libav/libavcodec/arm/asm.S :
-> 
-> .macro  mov32   rd, val
-> #if HAVE_ARMV6T2
->         movw            \rd, #(\val) & 0xffff
->     .if (\val) >> 16
->         movt            \rd, #(\val) >> 16
->     .endif
-> #else
->         ldr             \rd, =\val
-> #endif
-> .endm
-> 
-> .macro  movrel rd, val
-> #if HAVE_ARMV6T2 && !CONFIG_PIC && !defined(__APPLE__)
->         movw            \rd, #:lower16:\val
->         movt            \rd, #:upper16:\val
-> #else
->         ldr             \rd, =\val
-> #endif
-> .endm
-> 
-> So when you have ARMV6T2, it uses movw/movt instead of ldr. That's the
-> only difference with the non-ARMV6T2 mode. Then you can read
-> http://community.arm.com/groups/processors/blog/2010/07/27/how-to-load-constants-in-assembly-for-arm-architecture,
-> which says:
-> 
-> """
-> As mentioned earlier, there are other ways to load a constant. In the
-> latest version of the ARM architecture, ARMv7, two new instructions
-> were introduced to improve the situation:
-> 
-> - movw, or move wide, will move a 16-bit constant into a register,
->   implicitly zeroing the top 16 bits of the target register.
-> 
-> - movt, or move top, will move a 16-bit constant into the top half of a
->   given register without altering the bottom 16 bits. Now moving an
->   arbitrary 32-bit constant is as simple as this:
-> """
-> 
-> So I think it's safe to say than --enable-armv6t2 can be used on ARMv7
-> as well.
+Dear Baruch Siach,
 
- Okay, that's good enough for me.
+On 10/23/2014 07:34 AM, Baruch Siach wrote:
+> Remove explicit -mabi parameter, and let the external toolchain wrapper set
+> the correct -mabi.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/8fb/8fb8621bc5175f593de4ad0f005a5c7ffd4d9241/
+>
+> Cc: Francois Perrad <fperrad@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>   package/botan/0001-remove-mips64-explicit-mabi.patch | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+>   create mode 100644 package/botan/0001-remove-mips64-explicit-mabi.patch
+>
+> diff --git a/package/botan/0001-remove-mips64-explicit-mabi.patch b/package/botan/0001-remove-mips64-explicit-mabi.patch
+> new file mode 100644
+> index 000000000000..3fddd54e9a06
+> --- /dev/null
+> +++ b/package/botan/0001-remove-mips64-explicit-mabi.patch
+> @@ -0,0 +1,18 @@
+> +Remove explicit mips64 -mabi parameter
+> +
+> +This breaks when building for n32 ABI on mips64.
+> +
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> +
+> +diff -Nuar Botan-1.10.8-orig/src/build-data/cc/gcc.txt Botan-1.10.8/src/build-data/cc/gcc.txt
+> +--- Botan-1.10.8-orig/src/build-data/cc/gcc.txt	2014-04-10 17:11:44.000000000 +0300
+> ++++ Botan-1.10.8/src/build-data/cc/gcc.txt	2014-10-23 09:20:34.506722323 +0300
+> +@@ -92,7 +92,6 @@
+> + # The 'linking' bit means "use this for both compiling *and* linking"
+> + <mach_abi_linking>
+> + x86_64  -> "-m64"
+> +-mips64  -> "-mabi=64"
+> + s390    -> "-m31"
+> + s390x   -> "-m64"
+> + sparc32 -> "-m32 -mno-app-regs"
+>
 
+I sent an email to the Botan mailing list informing about this problem:
 
- Regards,
- Arnout
+http://lists.randombit.net/pipermail/botan-devel/2014-October/001949.html
 
+I haven't received a reply yet, but I hope they fix this problem 
+upstream so we can do a version bump or backport the upstream patch into 
+Buildroot.
 
+However, your patch does the trick and fixes the problem by now, so here 
+you have my...
 
+Acked-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
+Best regards,
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
