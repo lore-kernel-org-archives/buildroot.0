@@ -1,51 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Oct 2014 14:24:57 +0300
-Subject: [Buildroot] [PATCH] tftpd: Install TFTP client as well
-In-Reply-To: <1414062804-11701-1-git-send-email-keguang.zhang@gmail.com>
-References: <1414062804-11701-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <20141023112457.GQ2220@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Oct 2014 14:01:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-10-22
+In-Reply-To: <20141023082416.GG2220@tarshish>
+References: <20141023063017.0B8391011FF@stock.ovh.net>
+ <20141023082416.GG2220@tarshish>
+Message-ID: <20141023140156.0e6bbc8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kelvin,
+Dear Baruch Siach,
 
-On Thu, Oct 23, 2014 at 07:13:24PM +0800, Kelvin Cheung wrote:
-> This patch installs TFTP client as well and overrides
-> BusyBox implementations if BusyBox is enabled.
+On Thu, 23 Oct 2014 11:24:16 +0300, Baruch Siach wrote:
+
+> On Thu, Oct 23, 2014 at 08:30:16AM +0200, Thomas Petazzoni wrote:
+> >          arm |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/2ae233d33b05fac10e9b6676a6ca179c75e4c1d9/
+> >     mips64el |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/4f55c2415281c6204500efe28fe9e24c8ef73863/
 > 
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> ---
->  package/tftpd/tftpd.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+> I started looking into these build failures and it makes me wonder. The direct 
+> cause of these failures is a combination of two things. Host header directory, 
+> /usr/local/include, being used for target build (clearly a bad thing), and 
+> -Werror. We normally remove -Werror since it is quite useless when you only 
+> want to build the package. The thing is that ipset add -Werror only when 
+> configures with --enable-debug, which in turn is triggered by 
+> BR2_ENABLE_DEBUG. This apparently causes other build issues as well 
+> (http://patchwork.ozlabs.org/patch/400834/). Does it make sense to remove 
+> -Werror in this case? This is after all what the user asks for when enabling 
+> BR2_ENABLE_DEBUG. But then again, does it make sense to have the autobuilder 
+> test BR2_ENABLE_DEBUG, given its relatively high rate of -Werror induced false 
+> positives?
 > 
-> diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-> index c8457db..74e7cfa 100644
-> --- a/package/tftpd/tftpd.mk
-> +++ b/package/tftpd/tftpd.mk
-> @@ -13,7 +13,13 @@ ifneq ($(BR2_INET_IPV6),y)
->  TFTPD_CONF_OPTS += --without-ipv6
->  endif
->  
-> +# Override BusyBox implementations if BusyBox is enabled.
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> +SYSKLOGD_DEPENDENCIES = busybox
+> What do others think?
 
-SYSKLOGD? Are you sure?
+That is indeed a very good question. In some sense, having -Werror
+enabled when --enable-debug is passed is quite legitimate. On the other
+hand, the reason I'm testing BR2_ENABLE_DEBUG=y in the autobuilders is
+because users could do it, so I prefer to have this case tested as
+well. My reasoning is that if we have an option in Buildroot, then it
+should be tested and working. Otherwise, we should get rid of the
+option.
 
-baruch
+Maybe the fact that BR2_ENABLE_DEBUG=y passes --enable-debug is wrong?
+Maybe BR2_ENABLE_DEBUG=y should really only build all packages with
+debugging symbols (passing -g to gcc), and no try to enable per-package
+debugging features?
 
-> +endif
-> +
->  define TFTPD_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
->  	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
->  	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
->  endef
+Any input from others? Arnout, Peter?
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
