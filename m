@@ -1,10 +1,10 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 23 Oct 2014 16:48:28 +0200
-Subject: [Buildroot] [PATCH 02/11] package/*: update snapshot.debian.org
-	snapshot dates
+Date: Thu, 23 Oct 2014 16:48:29 +0200
+Subject: [Buildroot] [PATCH 03/11] package/libcap: move download URL back to
+	kernel.org
 In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1414075717-7333-3-git-send-email-kaszak@gmail.com>
+Message-ID: <1414075717-7333-4-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,91 +14,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/alsamixergui/alsamixergui.mk     |    2 +-
- package/cdrkit/cdrkit.mk                 |    2 +-
- package/heirloom-mailx/heirloom-mailx.mk |    2 +-
- package/libaio/libaio.mk                 |    2 +-
- package/rt-tests/rt-tests.mk             |    2 +-
- package/setserial/setserial.mk           |    2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ package/libcap/libcap.mk |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/alsamixergui/alsamixergui.mk b/package/alsamixergui/alsamixergui.mk
-index c762543..4f21127 100644
---- a/package/alsamixergui/alsamixergui.mk
-+++ b/package/alsamixergui/alsamixergui.mk
-@@ -6,7 +6,7 @@
- 
- ALSAMIXERGUI_VERSION = 0.9.0rc2-1
- ALSAMIXERGUI_SOURCE = alsamixergui_$(ALSAMIXERGUI_VERSION).orig.tar.gz
--ALSAMIXERGUI_SITE = http://snapshot.debian.org/archive/debian/20080319T000000Z/pool/main/a/alsamixergui
-+ALSAMIXERGUI_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/alsamixergui
- ALSAMIXERGUI_AUTORECONF = YES
- 
- ALSAMIXERGUI_CONF_ENV = ac_cv_lib_fltk_numericsort=yes \
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index 3f2b429..2e4bb1f 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -6,7 +6,7 @@
- 
- CDRKIT_VERSION = 1.1.11
- CDRKIT_SOURCE = cdrkit_$(CDRKIT_VERSION).orig.tar.gz
--CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20101018T151929Z/pool/main/c/cdrkit/
-+CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit
- CDRKIT_DEPENDENCIES = libcap bzip2 zlib
- CDRKIT_LICENSE = GPLv2
- CDRKIT_LICENSE_FILES = COPYING
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index c1e3ed1..7343479 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -6,7 +6,7 @@
- 
- HEIRLOOM_MAILX_VERSION = 12.5
- HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
--HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20110427T035506Z/pool/main/h/heirloom-mailx
-+HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
- HEIRLOOM_MAILX_LICENSE = BSD-4c, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
- 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index 545a299..07bf987 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -6,7 +6,7 @@
- 
- LIBAIO_VERSION = 0.3.109
- LIBAIO_SOURCE = libaio_$(LIBAIO_VERSION).orig.tar.gz
--LIBAIO_SITE = http://snapshot.debian.org/archive/debian/20110227T085214Z/pool/main/liba/libaio
-+LIBAIO_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio
- LIBAIO_INSTALL_STAGING = YES
- LIBAIO_LICENSE = LGPLv2.1+
- LIBAIO_LICENSE_FILES = COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index caa7959..94f4b1e 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index a3b7d4e..8d055de 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -5,10 +5,8 @@
  ################################################################################
  
--RT_TESTS_SITE = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests
-+RT_TESTS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/r/rt-tests
- RT_TESTS_VERSION = 0.83
- RT_TESTS_SOURCE = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
- RT_TESTS_LICENSE = GPLv2+
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 55be4c1..d589699 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -7,7 +7,7 @@
- SETSERIAL_VERSION = 2.17
- SETSERIAL_PATCH = setserial_2.17-45.3.diff.gz
- SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
--SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial
-+SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial
- SETSERIAL_LICENSE = GPLv2
- SETSERIAL_LICENSE_FILES = debian/copyright
- # make all also builds setserial.cat which needs nroff
+ LIBCAP_VERSION = 2.22
+-# Until kernel.org is completely back up use debian mirror
+-#LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+-LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
+-LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
++LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
++LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.gz
+ LIBCAP_LICENSE = GPLv2 or BSD-3c
+ LIBCAP_LICENSE_FILES = License
+ 
 -- 
 1.7.10.4
