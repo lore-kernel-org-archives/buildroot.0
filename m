@@ -1,10 +1,10 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 23 Oct 2014 16:48:29 +0200
-Subject: [Buildroot] [PATCH 03/11] package/libcap: move download URL back to
-	kernel.org
+Date: Thu, 23 Oct 2014 16:48:31 +0200
+Subject: [Buildroot] [PATCH 05/11] package/hwdata: bump to 0.267,
+	move download URL to snapshot.debian.org
 In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1414075717-7333-4-git-send-email-kaszak@gmail.com>
+Message-ID: <1414075717-7333-6-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/libcap/libcap.mk |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/hwdata/hwdata.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index a3b7d4e..8d055de 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -5,10 +5,8 @@
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index a830263..f8cffcd 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,10 +4,10 @@
+ #
  ################################################################################
  
- LIBCAP_VERSION = 2.22
--# Until kernel.org is completely back up use debian mirror
--#LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
--LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
--LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
-+LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
-+LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.gz
- LIBCAP_LICENSE = GPLv2 or BSD-3c
- LIBCAP_LICENSE_FILES = License
+-HWDATA_VERSION = 0.230
++HWDATA_VERSION = 0.267
+ HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+ HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+-HWDATA_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata
++HWDATA_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/hwdata
+ HWDATA_LICENSE = GPLv2+ or XFree86 1.0 license
+ HWDATA_LICENSE_FILES = COPYING LICENSE
  
 -- 
 1.7.10.4
