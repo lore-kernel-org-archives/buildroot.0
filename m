@@ -1,47 +1,49 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 23 Oct 2014 19:41:01 +0200
-Subject: [Buildroot] [PATCH] Complain loudly if BR2_GLOBAL_PATCH_DIR
- does not exit
-In-Reply-To: <5447DCCB.1030409@mind.be>
-References: <1413880974-30138-1-git-send-email-sojka@merica.cz>
- <20141021165817.GI3912@free.fr>
- <CAGduivxejVSE-p42u+WRBbYqc-oMNSKdd6cEqBw4ROtuKUU5sA@mail.gmail.com>
- <87tx2wjpob.fsf@steelpick.2x.cz>
- <CAGduivy5cXHFqEj-ZV16XSUU8y+fEaDS2cOZu-OAJ16q=XkmTQ@mail.gmail.com>
- <5447DCCB.1030409@mind.be>
-Message-ID: <CAGduivxCoA1ufF7joo_eAGXWkezS196Xn1kFfXfWctrcC3rM1g@mail.gmail.com>
+Date: Thu, 23 Oct 2014 19:47:35 +0200
+Subject: [Buildroot] [PATCH 1/2] system/skeleton: make nsswitch install
+	conditional
+In-Reply-To: <54480A4E.7030900@zacarias.com.ar>
+References: <1413808086-12177-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141020150209.5f8b45a5@free-electrons.com>
+ <54450BF5.4000202@zacarias.com.ar>
+ <20141020152759.4f438890@free-electrons.com>
+ <54450F51.5050801@zacarias.com.ar>
+ <20141020153719.034df3be@free-electrons.com>
+ <54451174.5060309@zacarias.com.ar>
+ <20141020155447.21c7c7ff@free-electrons.com>
+ <5445185C.6020604@zacarias.com.ar>
+ <20141020162811.4c3e2ce5@free-electrons.com>
+ <CAGduivwEezhtmw0OfpqELQs2k3sGF_StUdC7hyqAWuKXj6u1yA@mail.gmail.com>
+ <54480916.6070704@zacarias.com.ar> <54480A4E.7030900@zacarias.com.ar>
+Message-ID: <CAGduivw7xJWXgweVZ_kktQKvtJrqSr0QzT=zpwG8_q8XhJ6Hgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Michal, Yann, all,
-
-On Wed, Oct 22, 2014 at 6:35 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 22/10/14 13:54, Maxime Hadjinlian wrote:
->> Other question, why don't put that bit of code at the beginning of the
->> target stamp_patched ? Or at least in the target stamp_patched ?
+On Wed, Oct 22, 2014 at 9:49 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> On 10/22/2014 04:44 PM, Gustavo Zacarias wrote:
 >
->  Because we prefer to have checks for the validity of the .config immediately,
-> before the build is started. Even a 'make savedefconfig' or 'make graph-depends'
-> will trigger the error. For this particular one it is not so important, but for
-> other checks it is really useful to have it before the build begins and not
-> after half an hour of building.
-Understood. Thanks for clearing that up.
+>> 5) Make sysvinit without busybox work really well: this needs the
+>> addition of a couple of packages (ifupdown if we plan on doing that for
+>> interfaces for SysV-style), and start-stop-daemon (i don't recall OTOH
+>> which debian package ships it but it's available).
+>> And document what's required - i don't think it's work to select heaven
+>> & hell automatically since it's pretty subjective.
 >
->  Note that this is currently not always the case, e.g. dependencies.sh, external
-> toolchain validity. But if possible, I prefer .config checks to be done in make.
+> s/work/worth/
 >
+>> I don't recall more right now :)
+>> Regards.
 >
->  Regards,
->  Arnout
+> 7) Make a common template for sysv initscripts and update the current
+> ones - they're pretty divergent right now.
 >
+> 8) Most embedded systems won't shutdown in the distribution sense, but
+> still we should do K* initscript symlinks where appropiate.
+I have pasted that in my todo, I'll work on this and send you a link
+to a branch so we can work this one out.
 >
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> Regards.
