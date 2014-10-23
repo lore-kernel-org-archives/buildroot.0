@@ -1,10 +1,10 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 23 Oct 2014 16:48:33 +0200
-Subject: [Buildroot] [PATCH 07/11] package/lockdev: add Debian patch,
+Date: Thu, 23 Oct 2014 16:48:34 +0200
+Subject: [Buildroot] [PATCH 08/11] package/fakeroot: bump to 1.18.4,
 	update snapshot.debian.org date
 In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1414075717-7333-8-git-send-email-kaszak@gmail.com>
+Message-ID: <1414075717-7333-9-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/lockdev/lockdev.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/fakeroot/fakeroot.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-index d90009a..21755e0 100644
---- a/package/lockdev/lockdev.mk
-+++ b/package/lockdev/lockdev.mk
-@@ -6,7 +6,8 @@
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 2f26b68..3f1c803 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- LOCKDEV_VERSION = 1.0.3
- LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
--LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20130508T154517Z/pool/main/l/lockdev
-+LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
-+LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
- LOCKDEV_LICENSE = LGPLv2.1
- LOCKDEV_LICENSE_FILES = LICENSE
- LOCKDEV_INSTALL_STAGING = YES
+-FAKEROOT_VERSION = 1.18.2
++FAKEROOT_VERSION = 1.18.4
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+-FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20111201T093630Z/pool/main/f/fakeroot
++FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot
+ FAKEROOT_LICENSE = GPLv3+
+ FAKEROOT_LICENSE_FILES = COPYING
+ 
 -- 
 1.7.10.4
