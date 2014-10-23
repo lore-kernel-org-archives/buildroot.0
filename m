@@ -1,10 +1,10 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 23 Oct 2014 16:48:34 +0200
-Subject: [Buildroot] [PATCH 08/11] package/fakeroot: bump to 1.18.4,
-	update snapshot.debian.org date
+Date: Thu, 23 Oct 2014 16:48:30 +0200
+Subject: [Buildroot] [PATCH 04/11] package/jimtcl: bump to 0.75,
+	move download URL to snapshot.debian.org
 In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1414075717-7333-9-git-send-email-kaszak@gmail.com>
+Message-ID: <1414075717-7333-5-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/fakeroot/fakeroot.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/jimtcl/jimtcl.mk |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 2f26b68..3f1c803 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 1f2ea82..27f43f0 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FAKEROOT_VERSION = 1.18.2
-+FAKEROOT_VERSION = 1.18.4
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
--FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20111201T093630Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot
- FAKEROOT_LICENSE = GPLv3+
- FAKEROOT_LICENSE_FILES = COPYING
+-JIMTCL_VERSION = 0.73
+-JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
+-JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
++JIMTCL_VERSION = 0.75
++JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
++JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
+ JIMTCL_INSTALL_STAGING = YES
+ JIMTCL_LICENSE = BSD-2c
+ JIMTCL_LICENSE_FILES = LICENSE
+@@ -31,9 +31,10 @@ JIMTCL_LIB = a
+ JIMTCL_INSTALL_LIB =
+ else
+ JIMTCL_SHARED = --shared
+-JIMTCL_LIB = so
++JIMTCL_LIB = so.$(JIMTCL_VERSION)
+ JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
+-		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
++		     ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
+ endif
  
+ define JIMTCL_CONFIGURE_CMDS
+@@ -52,7 +53,8 @@ define JIMTCL_INSTALL_STAGING_CMDS
+ 	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+ 		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
+ 	done; \
+-	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
++	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
+ endef
+ 
+ define JIMTCL_INSTALL_TARGET_CMDS
 -- 
 1.7.10.4
