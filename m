@@ -1,51 +1,58 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 23 Oct 2014 20:58:25 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-22
-In-Reply-To: <CAHkwnC84N+Lp9yZh6Rci+-MWPuRf+zgAjdom_LU2cFrRYwgGjQ@mail.gmail.com>
-References: <20141023063017.0B8391011FF@stock.ovh.net>
- <CAHkwnC84N+Lp9yZh6Rci+-MWPuRf+zgAjdom_LU2cFrRYwgGjQ@mail.gmail.com>
-Message-ID: <CAB0FRsvdf=YAfrW5RBmavp-G6Snks8DK_xesxYJt8MNqmWjd3g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Oct 2014 21:10:24 +0200
+Subject: [Buildroot] Question about native tools.
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C698E46CB3@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C698E46BA4@ex-mb1.corp.adtran.com>
+ <5449488C.4070901@vanguardiasur.com.ar>
+ <F9C551623D2CBB4C9488801D14F864C698E46CB3@ex-mb1.corp.adtran.com>
+Message-ID: <20141023211024.3a55df13@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-10-23 14:08 GMT+02:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
-> On Thu, Oct 23, 2014 at 8:30 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/e2c0bccb854ea7736ed81ce9071dfb8700148da9/
->>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/40030b5b210fe0cca547136a34e9f2a8ddd27bc1/
->>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/c66c3ba8f7b912d584f72f71283ebe9b3b6ec628/
->>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/f4ce3665b8953b52433627c2e743f7c3c4d9423e/
->>         i486 |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/eabda08e4b1343aaef039198d8695ca5e12e1650/
->>         sh4a |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/4eecb13a1479f3d175ef1fece9569e647066a20f/
->
-> Hi Francois,
-> Reverting your commit fix those build failures.
->
-> commit 8e716d659b08635bba703d9ae0867d8590f6b083
-> Author: Francois Perrad <fperrad@gmail.com>
-> Date:   Sat Oct 11 08:36:42 2014 +0200
->     libxml-parser-perl: restore it like before perl infra
->
-> What do you think about it?
+Andy,
 
-If we revert only this patch, host-intltool requires the build of
-host-perl. And it is a problem for many people. So, the whole serie
-host-perl (4 patches) must be reverted.
+On Thu, 23 Oct 2014 18:42:36 +0000, ANDY KENNEDY wrote:
 
-Instead of reverting a patch, could you try this patch
-http://patchwork.ozlabs.org/patch/400614/ and give you feedback ?
+> Is it that difficult to cross-build gcc and binutils for a target?
+> Thinking back to when I have natively built a newer version of gcc
+> and binutils for my systems, it was as simple as ./configure &&
+> make.  Now, I understand that the build/host/target would need to
+> be set, but this doesn't seem that hard.  Am I over trivializing
+> this process?
 
-Fran?ois
+Yes, you are :-)
 
->
-> BR
-> --
-> Fabio Porcedda
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Basically, you believe that building a native toolchain is just about
+cross-building gcc and binutils, which indeed isn't that hard.
+
+But actually, building a native toolchain means that you want to enable
+people to do development on the target. Which means you also need to
+install header files on the target, static libraries, pkg-config files,
+and also tools like make, autoconf, automake, libtool, pkg-config and
+many, many, many other tools, depending on what you want to build.
+
+Yes, gcc and binutils are sufficient to build a simple Hello World
+application on the target (assuming of course you also have installed
+the C library and kernel headers). But to do real development on the
+target, you need much, much more than just gcc and binutils on the
+target. It's really this "much more" thing that nobody was taking care
+of, and that we believe doesn't really belong to Buildroot, as
+Buildroot is here to do cross-compilation: so why would you need a
+compiler for the target? Just create a Buildroot package, and build
+things at build-time, on a fast build machine.
+
+If you target is fast enough, powerful enough, and has enough storage
+space to afford a complete development system, then most likely
+Buildroot doesn't make much sense, and you could just as well install a
+real Linux distribution.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
