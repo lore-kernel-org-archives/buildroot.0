@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Oct 2014 22:11:11 +0200
-Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.12
-In-Reply-To: <1414071078-10158-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414071078-10158-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141023221111.06deffa5@free-electrons.com>
+Date: Thu, 23 Oct 2014 22:11:44 +0200
+Subject: [Buildroot] [git commit] tftpd: install TFTP client as well
+Message-ID: <20141023201255.D3E09B07BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=0659ca799fe0b8945880fb768364a6e7721b132e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Oct 2014 10:31:18 -0300, Gustavo Zacarias wrote:
-> Switch to alternate github download link (s3-hosted) that provides a
-> hash to verify the tarball.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/inadyn/inadyn.hash | 4 ++--
->  package/inadyn/inadyn.mk   | 7 ++++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
+This patch installs TFTP client as well and overrides BusyBox
+implementations if BusyBox is enabled.
 
-Applied, thanks.
+[Thomas: fix typo SYSKLOGD_DEPENDENCIES -> TFTPD_DEPENDENCIES noticed
+by Baruch.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tftpd/tftpd.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+index c8457db..816a25e 100644
+--- a/package/tftpd/tftpd.mk
++++ b/package/tftpd/tftpd.mk
+@@ -13,7 +13,13 @@ ifneq ($(BR2_INET_IPV6),y)
+ TFTPD_CONF_OPTS += --without-ipv6
+ endif
+ 
++# Override BusyBox implementations if BusyBox is enabled.
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++TFTPD_DEPENDENCIES += busybox
++endif
++
+ define TFTPD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+ 	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
+ 	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
+ endef
