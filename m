@@ -1,56 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Oct 2014 22:08:56 +0200
-Subject: [Buildroot] [PATCH] intltool: fix build
-In-Reply-To: <CAB0FRsv_6MEV1WuboQcWp9YpZgz4xvCTg9fr4t2cBy4ydfR6qg@mail.gmail.com>
-References: <1413571681-27963-1-git-send-email-francois.perrad@gadz.org>
- <20141022180339.47298e90@free-electrons.com>
- <CAB0FRsv_6MEV1WuboQcWp9YpZgz4xvCTg9fr4t2cBy4ydfR6qg@mail.gmail.com>
-Message-ID: <20141023220856.2bd3203d@free-electrons.com>
+Date: Thu, 23 Oct 2014 22:09:26 +0200
+Subject: [Buildroot] [git commit] dropbear: bump to version 2014.66
+Message-ID: <20141023200934.75165B06A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=b1c2c47bd76c05771cba9c03b6eadb614343c0b4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Oct 2014 19:15:36 +0200, Fran?ois Perrad wrote:
+And add hash file.
 
-> > Can you cook an updated version of this patch that takes into account
-> > the comment you have received? It would help us fix a number of Perl
-> > related autobuilder issues.
-> 
-> When I try to do that you suggest, I only obtain no working result.
-> 
-> I think that comments from Arnout, come from a pure review but no from
-> testing or experiment.
-> 
-> This patch doesn't try to fix the package host-intltool, it fixes the
-> packages which depend on host-intltool.
-> Currently, this kind of package is broken in the configure step
-> because they can not find the correct perl.
-> So, the variable INTLTOOL_PERL=$(PERL) in *_CONFIGURE_OPTS is mandatory.
-> 
-> When PATH=$(BR_PATH), `which perl` find the system perl when host-perl
-> is not yet installed, after it find the host-perl.
-> So, it is important to save the result of `which perl` with the
-> original PATH (ie. without $(HOST_DIR)/usr/bin).
-> 
-> The current patch stay the best that I can do (the commit message can
-> always be improved).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dropbear/dropbear.hash |    2 ++
+ package/dropbear/dropbear.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-Hum, right, ok. I'm not a big fan of how we handle intltool, but I
-admit that the main reason for this mess is me asking you to not make
-intltool and libxml-parser-perl depend on host-perl.
-
-I've applied your patch (after slightly rewording the commit log), it
-indeed seems to fix the issue. We'll see how things go, but I'm not
-very happy with our intltool handling :/
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+new file mode 100644
+index 0000000..f7042c3
+--- /dev/null
++++ b/package/dropbear/dropbear.hash
+@@ -0,0 +1,2 @@
++# From https://matt.ucc.asn.au/dropbear/releases/SHA1SUM.asc
++sha1	793f5f1bb465b3c55e795d607932e8b21c130e95	dropbear-2014.66.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 24f879c..d5a3509 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2014.65
++DROPBEAR_VERSION = 2014.66
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
