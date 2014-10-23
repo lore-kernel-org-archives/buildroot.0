@@ -1,63 +1,51 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 23 Oct 2014 18:42:36 +0000
-Subject: [Buildroot] Question about native tools.
-In-Reply-To: <5449488C.4070901@vanguardiasur.com.ar>
-References: <F9C551623D2CBB4C9488801D14F864C698E46BA4@ex-mb1.corp.adtran.com>
- <5449488C.4070901@vanguardiasur.com.ar>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C698E46CB3@ex-mb1.corp.adtran.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 23 Oct 2014 20:58:25 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-22
+In-Reply-To: <CAHkwnC84N+Lp9yZh6Rci+-MWPuRf+zgAjdom_LU2cFrRYwgGjQ@mail.gmail.com>
+References: <20141023063017.0B8391011FF@stock.ovh.net>
+ <CAHkwnC84N+Lp9yZh6Rci+-MWPuRf+zgAjdom_LU2cFrRYwgGjQ@mail.gmail.com>
+Message-ID: <CAB0FRsvdf=YAfrW5RBmavp-G6Snks8DK_xesxYJt8MNqmWjd3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: Ezequiel Garcia [mailto:ezequiel at vanguardiasur.com.ar]
-> Sent: Thursday, October 23, 2014 1:27 PM
-> To: ANDY KENNEDY; 'buildroot at busybox.net'
-> Subject: Re: [Buildroot] Question about native tools.
-> 
-> 
-> 
-> On 10/23/2014 02:39 PM, ANDY KENNEDY wrote:
-> > I have the need to build a cross-built native toolchain (basically a
-> > Canadian Cross).  I also have had various people ask me (verbally, not
-> > on lists) for a way to build a toolchain (including make, etc) for a
-> > target.  Used to be that I would recommend BuildRoot as, prior to
-> > 2013.08 (IIRC), this was a trivial thing to do through the menuconfig.
-> >
-> > Why was it decided to remove the support for the toolchain/build tools
-> > on the target?
-> >
-> 
-> Maybe this answers your question:
-> 
-> http://buildroot-busybox.2317881.n4.nabble.com/Open-question-remove-quot-toolchain-on-target-quot-
-> option-td8832.html
+2014-10-23 14:08 GMT+02:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
+> On Thu, Oct 23, 2014 at 8:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/e2c0bccb854ea7736ed81ce9071dfb8700148da9/
+>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/40030b5b210fe0cca547136a34e9f2a8ddd27bc1/
+>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/c66c3ba8f7b912d584f72f71283ebe9b3b6ec628/
+>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/f4ce3665b8953b52433627c2e743f7c3c4d9423e/
+>>         i486 |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/eabda08e4b1343aaef039198d8695ca5e12e1650/
+>>         sh4a |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/4eecb13a1479f3d175ef1fece9569e647066a20f/
+>
+> Hi Francois,
+> Reverting your commit fix those build failures.
+>
+> commit 8e716d659b08635bba703d9ae0867d8590f6b083
+> Author: Francois Perrad <fperrad@gmail.com>
+> Date:   Sat Oct 11 08:36:42 2014 +0200
+>     libxml-parser-perl: restore it like before perl infra
+>
+> What do you think about it?
 
-Figures.  I missed that e-mail conversation.  We had been derailed on
-our Linux project during that time frame and I was completely ignoring
-the Linux lists to which I subscribe.
+If we revert only this patch, host-intltool requires the build of
+host-perl. And it is a problem for many people. So, the whole serie
+host-perl (4 patches) must be reverted.
 
-I see in that thread a vote to keep it and a vote to remove it.
+Instead of reverting a patch, could you try this patch
+http://patchwork.ozlabs.org/patch/400614/ and give you feedback ?
 
-So, given the split ballot, it was decided to remove it.
+Fran?ois
 
-Looking through the older code, eg, gcc code, it doesn't look like
-there was *that* much support required to keep it up.  I am
-possibly over simplifying things, but I wonder why the toolchain
-cannot be easily natively built?
-
-Is it that difficult to cross-build gcc and binutils for a target?
-Thinking back to when I have natively built a newer version of gcc
-and binutils for my systems, it was as simple as ./configure &&
-make.  Now, I understand that the build/host/target would need to
-be set, but this doesn't seem that hard.  Am I over trivializing
-this process?
-
-Before Peter or Thomas asks, no I really do NOT have the time to
-maintain this in BuildRoot (I'd have to give up sleeping entirely),
-so, no, I don't want it bad enough to maintain it.  :))) I do,
-however, want it bad enough for one of you to maintain it :))))!!
-
-Andy
+>
+> BR
+> --
+> Fabio Porcedda
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
