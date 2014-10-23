@@ -1,10 +1,10 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 23 Oct 2014 16:48:30 +0200
-Subject: [Buildroot] [PATCH 04/11] package/jimtcl: bump to 0.75,
-	move download URL to snapshot.debian.org
+Date: Thu, 23 Oct 2014 16:48:35 +0200
+Subject: [Buildroot] [PATCH 09/11] package/ca-certificates: bump to 20141019,
+	update snapshot date & hash
 In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1414075717-7333-5-git-send-email-kaszak@gmail.com>
+Message-ID: <1414075717-7333-10-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +14,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/jimtcl/jimtcl.mk |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ package/ca-certificates/ca-certificates.hash |    4 ++--
+ package/ca-certificates/ca-certificates.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 1f2ea82..27f43f0 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index bcd0723..0165cb5 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   ad57a45f0422fafd78a2e8191e5204f2306cc91b                         ca-certificates_20140223.tar.xz
+-sha256 815b7cd97200b0d76450bb3e7d9b65997ac494ab6467b17369f65b2ef94bcb0c ca-certificates_20140223.tar.xz
++sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
++sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index cd6a7f2..271985a 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--JIMTCL_VERSION = 0.73
--JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
--JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
-+JIMTCL_VERSION = 0.75
-+JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
-+JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
- JIMTCL_INSTALL_STAGING = YES
- JIMTCL_LICENSE = BSD-2c
- JIMTCL_LICENSE_FILES = LICENSE
-@@ -31,9 +31,10 @@ JIMTCL_LIB = a
- JIMTCL_INSTALL_LIB =
- else
- JIMTCL_SHARED = --shared
--JIMTCL_LIB = so
-+JIMTCL_LIB = so.$(JIMTCL_VERSION)
- JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
--		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
-+		     ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
- endif
- 
- define JIMTCL_CONFIGURE_CMDS
-@@ -52,7 +53,8 @@ define JIMTCL_INSTALL_STAGING_CMDS
- 	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
- 		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
- 	done; \
--	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
-+	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
- endef
- 
- define JIMTCL_INSTALL_TARGET_CMDS
+-CA_CERTIFICATES_VERSION = 20140223
++CA_CERTIFICATES_VERSION = 20141019
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20140325T163435Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 -- 
 1.7.10.4
