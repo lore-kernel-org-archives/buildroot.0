@@ -1,295 +1,94 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Thu, 23 Oct 2014 15:40:00 +0200
-Subject: [Buildroot] [PATCH v3] set simple network setup via the system
-	configuration submenu
-Message-ID: <1414071600-28318-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Thu, 23 Oct 2014 16:48:26 +0200
+Subject: [Buildroot] [PATCH 00/11] Remove BR2_DEBIAN_MIRROR & related changes
+Message-ID: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch allows the setup of simple /etc/network/interfaces (or
-/etc/systemd/network/80-buildroot.network if networkd is enabled) via the
-configuration menus instead of using an overlay
+As discussed, this series will completely remove BR2_DEBIAN_MIRROR.
+I also did two other changes: bumped minor versions and/or patchlevels
+where it seemed safe (did a test-compile) and updated
+snapshot.debian.org URLs everywhere to the same date.
 
-* supports disabling the interface
-* supports manual ipv4 configuration
-* supports dhcp configuration
+Note, Debian uses a new patch-tarball format somewhere, with the
+naming <package_name>_<version>-<patchlevel>.debian.tar.<bz2 or xz>,
+which is not yet implemented into Buildroot I think.
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+I also noticed the following regarding packages:
 
----
+memstat could be bumped - but current BR patch(es) exist
+liblockfile - same
+input-tools (joystick) - same, also the -5 patch doesn't exist anymore
+libcap - same
+cvs - same (I guess with cvs+real?)
+at - same
+rt-tests - same
+libaio - same
 
-This patch is here to avoid having to do an overlay for the most common
-cases (ipv4 with fixed IP or DHCP)
+sysvinit - new debian patches exist, but conflict (?) BR patches
+dash - same
+alsamixergui - same
 
-This is reduced to the bare minimum to cover the most common case. Anything
-more complex can be done by using overlays instead.
+cdrkit - debian patch could be added (?)
+heirloom-mailx - same
 
-I have not added the option to (de)activate persistant naming when networkd
-is enabled because it logically belongs to the networkd package and not to
-the simple network configuration
----
-v3 :
-* rename the script to a more generic name
-* reorganized script to separate param verification from generation
-* quoted params properly to protect against faulty params
-* removed /etc/network/interfaces from skeleton
-* reorganized options in configuration menu
-* added networkd configuration support
+fakeroot - could be bumped even more, but then it will also need libfakeroot
 
-v2 :
-* moved to TARGET_FINALIZE
-* removed support for lo. It should always be on.
-* reworked default parameters
----
- support/scripts/generate-network-config.sh | 136 +++++++++++++++++++++++++++++
- system/Config.in                           |  60 +++++++++++++
- system/skeleton/etc/network/interfaces     |   4 -
- system/system.mk                           |   5 ++
- 4 files changed, 201 insertions(+), 4 deletions(-)
- create mode 100755 support/scripts/generate-network-config.sh
- delete mode 100644 system/skeleton/etc/network/interfaces
+cloop - could be bumped than moved to snapshot.debian.org
+psc-lite - same
+ltrace - same
 
-diff --git a/support/scripts/generate-network-config.sh b/support/scripts/generate-network-config.sh
-new file mode 100755
-index 0000000..c09d165
---- /dev/null
-+++ b/support/scripts/generate-network-config.sh
-@@ -0,0 +1,136 @@
-+#!/bin/sh
-+
-+#extract our parameters from the config file
-+# see comment in support/scripts/mkusers at to why we can't simply source
-+for PARAM in \
-+	BR2_PACKAGE_SYSTEMD_NETWORKD \
-+	BR2_SIMPLE_NETWORK_NONE \
-+	BR2_SIMPLE_NETWORK_IPV4_DHCP \
-+	BR2_SIMPLE_NETWORK_IPV4_MANUAL \
-+	; do
-+TMP=$(sed -r -e "/^$PARAM=(.*)$/!d;" -e 's//\1/;' $BR2_CONFIG)
-+export $PARAM=$TMP
-+done
-+
-+for PARAM in \
-+	BR2_SIMPLE_NETWORK_NAME \
-+	BR2_SIMPLE_NETWORK_IPV4_ADDRESS \
-+	BR2_SIMPLE_NETWORK_IPV4_NETMASK \
-+	BR2_SIMPLE_NETWORK_IPV4_BROADCAST \
-+	BR2_SIMPLE_NETWORK_IPV4_GATEWAY \
-+	; do
-+TMP=$(sed -r -e "/^$PARAM=\"(.*)\"$/!d;" -e 's//\1/;' $BR2_CONFIG)
-+export $PARAM="$TMP"
-+done
-+
-+check_configuration ()
-+{
-+	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-+		if [ -z "$BR2_SIMPLE_NETWORK_NAME" ] ; then
-+			echo ERROR no name specified for first network interface
-+			exit 1
-+		fi
-+		if [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
-+			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" ] ; then
-+				echo ERROR BR2_SIMPLE_NETWORK_IPV4_ADDRESS not set 1>&2
-+				exit 1
-+			fi
-+			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_NETMASK" ] ; then
-+				echo ERROR BR2_SIMPLE_NETWORK_IPV4_NETMASK not set 1>&2
-+				exit 1
-+			fi
-+			IFS=.
-+			for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
-+				case $dec in
-+					255 | 254 | 252 |248 | 240 |224 | 192 | 128 | 0 );;
-+					*) echo "Error: $BR2_SIMPLE_NETWORK_IPV4_NETMASK is not a correct NETMASK" 1>&2; exit 1 ;;
-+				esac
-+			done
-+		fi
-+	fi
-+}
-+
-+do_generate_interfaces ()
-+{
-+	if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
-+		echo
-+		return
-+	fi
-+	echo "# interface file auto-generated by buildroot"
-+	echo
-+	echo "auto lo"
-+	echo "iface lo inet loopback"
-+	echo
-+
-+	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-+		echo "auto $BR2_SIMPLE_NETWORK_NAME"
-+		if [ "$BR2_SIMPLE_NETWORK_IPV4_DHCP" ] ; then
-+			echo "iface $BR2_SIMPLE_NETWORK_NAME inet dhcp"
-+		elif [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
-+			echo "iface $BR2_SIMPLE_NETWORK_NAME inet static"
-+			echo "	address $BR2_SIMPLE_NETWORK_IPV4_ADDRESS"
-+			echo "	netmask $BR2_SIMPLE_NETWORK_IPV4_NETMASK"
-+
-+			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
-+				echo "	broadcast $BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
-+			fi
-+			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
-+				echo "	gateway $BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
-+			fi
-+		fi
-+	fi
-+}
-+
-+do_generate_network_service ()
-+{
-+	if [ "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-+		return
-+	fi
-+	echo "[Match]"
-+	echo "Name=$BR2_SIMPLE_NETWORK_NAME"
-+	echo
-+	if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
-+		echo "[Network]"
-+		echo "DHCP=v4"
-+	elif [ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] ; then
-+		nbits=0
-+		IFS=.
-+		for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
-+			case $dec in
-+				255) let nbits+=8;;
-+				254) let nbits+=7;;
-+				252) let nbits+=6;;
-+				248) let nbits+=5;;
-+				240) let nbits+=4;;
-+				224) let nbits+=3;;
-+				192) let nbits+=2;;
-+				128) let nbits+=1;;
-+				0);;
-+			esac
-+		done
-+
-+		if [ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ] ; then
-+			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
-+				echo "[Network]"
-+				echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
-+				echo "Description=buildroot-configured interface"
-+				echo
-+			fi
-+			echo "[Address]"
-+			echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
-+			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
-+				echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
-+			fi
-+		fi
-+	fi
-+}
-+
-+check_configuration
-+mkdir -p $TARGET_DIR/etc/network/
-+if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
-+	echo > $TARGET_DIR/etc/network/interfaces
-+	do_generate_network_service > $TARGET_DIR/etc/systemd/network/80-buildroot.network
-+else
-+	do_generate_interfaces > $TARGET_DIR/etc/network/interfaces
-+	echo > $TARGET_DIR/etc/systemd/network/80-buildroot.network
-+fi
-diff --git a/system/Config.in b/system/Config.in
-index 2465f79..3683edf 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -324,6 +324,66 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 
- endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
-+choice
-+	prompt 'Simple network configuration'
-+	default BR2_SIMPLE_NETWORK_NONE
-+	help
-+	  buildroot will create a simple network configuration for a network
-+	  interface. This will generate the corresponding lines in
-+	  /etc/network/interfaces which is used by ifupdown.
-+
-+	  The simple network configuration only supports a single network
-+	  interface using a static or DHCP-allocated IPv4 address. If you
-+	  need something more complicate, create your own configuration file
-+	  in the BR2_ROOTFS_OVERLAY.
-+
-+config BR2_SIMPLE_NETWORK_NONE
-+	bool "No configured network interface"
-+	help
-+	  Do not configure the network interface, only configure the
-+	  loopback device
-+
-+config BR2_SIMPLE_NETWORK_IPV4_DHCP
-+	bool "IPv4 with DHCP"
-+	help
-+	  Use DHCP to configure this interface using the IPv4 protocol
-+
-+config BR2_SIMPLE_NETWORK_IPV4_MANUAL
-+	bool "IPv4 with static IP address"
-+	help
-+	  Configure IPv4 by specifying each parameter separately
-+
-+endchoice
-+
-+if !BR2_SIMPLE_NETWORK_NONE
-+
-+config BR2_SIMPLE_NETWORK_NAME
-+	string "name of the physical network interface"
-+	default "eth0"
-+	help
-+	  The name used to recognise the network interface as reported
-+	  by the kernel
-+
-+if BR2_SIMPLE_NETWORK_IPV4_MANUAL
-+config BR2_SIMPLE_NETWORK_IPV4_ADDRESS
-+	string "IP Address of the network interface"
-+	default "0.0.0.0"
-+
-+config BR2_SIMPLE_NETWORK_IPV4_NETMASK
-+	string "Netmask of the network interface"
-+	default "255.255.255.255"
-+
-+config BR2_SIMPLE_NETWORK_IPV4_BROADCAST
-+	string "Broadcast Address of the network interface"
-+
-+config BR2_SIMPLE_NETWORK_IPV4_GATEWAY
-+	string "Address of the gateway for the network interface"
-+
-+endif # BR2_SIMPLE_NETWORK_IPV4_MANUAL
-+
-+endif # !BR2_SIMPLE_NETWORK_NONE
-+
-+
- config BR2_TARGET_TZ_INFO
- 	bool "Install timezone info"
- 	# No timezone for musl; only for uClibc or (e)glibc.
-diff --git a/system/skeleton/etc/network/interfaces b/system/skeleton/etc/network/interfaces
-deleted file mode 100644
-index 218b82c..0000000
---- a/system/skeleton/etc/network/interfaces
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Configure Loopback
--auto lo
--iface lo inet loopback
--
-diff --git a/system/system.mk b/system/system.mk
-index 5802e2d..8385c31 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -38,6 +38,11 @@ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
- TARGETS += host-mkpasswd
- endif
- 
-+define SIMPLE_NETWORK
-+	$(TOPDIR)/support/scripts/generate-network-config.sh $(TARGET_DIR)
-+endef
-+TARGET_FINALIZE_HOOKS += SIMPLE_NETWORK
-+
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- 
- define SYSTEM_ROOT_PASSWD
+Karoly Kasza (11):
+  package/*: move download URLs to snapshot.debian.org
+  package/*: update snapshot.debian.org snapshot dates
+  package/libcap: move download URL back to kernel.org
+  package/jimtcl: bump to 0.75, move download URL to
+    snapshot.debian.org
+  package/hwdata: bump to 0.267, move download URL to
+    snapshot.debian.org
+  package/ccid: bump to 1.4.18, move download URL to
+    snapshot.debian.org
+  package/lockdev: add Debian patch, update snapshot.debian.org date
+  package/fakeroot: bump to 1.18.4, update snapshot.debian.org date
+  package/ca-certificates: bump to 20141019, update snapshot date &
+    hash
+  boot/grub: update patchlevel, update snapshot.debian.org date
+  Config.in: remove BR2_DEBIAN_MIRROR completely
+
+ Config.in                                    |   10 ----------
+ boot/grub/grub.mk                            |    4 ++--
+ package/alsamixergui/alsamixergui.mk         |    2 +-
+ package/at/at.mk                             |    2 +-
+ package/ca-certificates/ca-certificates.hash |    4 ++--
+ package/ca-certificates/ca-certificates.mk   |    4 ++--
+ package/ccid/ccid.mk                         |    6 +++---
+ package/cdrkit/cdrkit.mk                     |    2 +-
+ package/cvs/cvs.mk                           |    4 ++--
+ package/dash/dash.mk                         |    2 +-
+ package/fakeroot/fakeroot.mk                 |    4 ++--
+ package/heirloom-mailx/heirloom-mailx.mk     |    2 +-
+ package/hwdata/hwdata.mk                     |    4 ++--
+ package/input-tools/input-tools.mk           |    2 +-
+ package/jimtcl/jimtcl.mk                     |   14 ++++++++------
+ package/libaio/libaio.mk                     |    2 +-
+ package/libcap/libcap.mk                     |    6 ++----
+ package/liblockfile/liblockfile.mk           |    2 +-
+ package/lockdev/lockdev.mk                   |    3 ++-
+ package/lockfile-progs/lockfile-progs.mk     |    2 +-
+ package/memstat/memstat.mk                   |    2 +-
+ package/mii-diag/mii-diag.mk                 |    2 +-
+ package/rsh-redone/rsh-redone.mk             |    2 +-
+ package/rt-tests/rt-tests.mk                 |    2 +-
+ package/setserial/setserial.mk               |    2 +-
+ package/sredird/sredird.mk                   |    2 +-
+ package/sysvinit/sysvinit.mk                 |    4 ++--
+ package/thttpd/thttpd.mk                     |    2 +-
+ package/usbmount/usbmount.mk                 |    2 +-
+ package/whois/whois.mk                       |    2 +-
+ 30 files changed, 47 insertions(+), 56 deletions(-)
+
 -- 
-2.1.1
+1.7.10.4
