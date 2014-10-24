@@ -1,27 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 Oct 2014 01:10:49 +0200
-Subject: [Buildroot] [PATCH 2/2] coreutils: bump to version 8.23
-In-Reply-To: <1414188575-28860-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 24 Oct 2014 19:09:35 -0300")
-References: <1414188575-28860-1-git-send-email-gustavo@zacarias.com.ar>
- <1414188575-28860-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87h9yt83nq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Oct 2014 01:09:15 +0200
+Subject: [Buildroot] [git commit] util-linux: bump to version 2.25.2
+Message-ID: <20141024231057.93E9CB5757@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a9ef96aefa11e97640e7d4d285ab4612a713b65a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add hash file. patches 01 & 02 are now upstream so remove them.
- > Patch 01 isn't required any more (no posix_spawn usage).
- > Patch 02 is upstream.
- > Patch 03 retooled for 8.23 and renamed to 01.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.hash |    2 +-
+ package/util-linux/util-linux.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index cfa1364..b5fc18e 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.25/sha256sums.asc
+-sha256	4701305ae22790c3a92ce48e50794fa05b7ee01f4227f419a171c100d08986e8	util-linux-2.25.1.tar.xz
++sha256	e0457f715b73f4a349e1acb08cb410bf0edc9a74a3f75c357070f31f70e33cd6	util-linux-2.25.2.tar.xz
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 1d52b50..6ecd16d 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
+ UTIL_LINUX_VERSION_MAJOR = 2.25
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
