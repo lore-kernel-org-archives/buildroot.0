@@ -1,53 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Oct 2014 16:53:23 -0700
-Subject: [Buildroot] [PATCH 1/2] skeleton: ld.so.conf include
- ld.so.conf.d/*.conf
-In-Reply-To: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
-References: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141024235323.GE14818@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Oct 2014 01:56:31 +0200
+Subject: [Buildroot] [PATCH 1/1] Change /bin/bash shebangs into
+	/usr/bin/env bash
+In-Reply-To: <1413900356-5423-1-git-send-email-bjorn.forsman@gmail.com>
+ (=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Tue, 21 Oct 2014 16:05:56
+ +0200")
+References: <1413900356-5423-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <87egtx6mz4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
-On 2014-10-13 09:55 +0200, J?r?me Pouiller spake thusly:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+ > Not all systems have /bin/bash (e.g. NixOS[1] doesn't). Buildroot
+ > already uses /usr/bin/env shebangs for other interpreters (perl,
+ > python), so why not bash?
 
-Given the feedback given in the thread, I've marked this patch "Changes
-Requested" in patchwork.
+ > This changes only the shebangs used by Buildroot itself; stuff installed
+ > to the target system is left unchanged.
 
-Are you working on an updated patch?
+ > With this applied I can run Buildroot unmodified on NixOS.
 
-Regards,
-Yann E. MORIN.
+ > [1]: http://nixos.org/
 
-> ---
->  system/skeleton/etc/ld.so.conf | 1 +
->  1 file changed, 1 insertion(+)
->  create mode 100644 system/skeleton/etc/ld.so.conf
-> 
-> diff --git a/system/skeleton/etc/ld.so.conf b/system/skeleton/etc/ld.so.conf
-> new file mode 100644
-> index 0000000..83327c0
-> --- /dev/null
-> +++ b/system/skeleton/etc/ld.so.conf
-> @@ -0,0 +1 @@
-> +include /etc/ld.so.conf.d/*.conf
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
