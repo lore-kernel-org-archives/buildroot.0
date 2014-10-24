@@ -1,125 +1,175 @@
-From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
-Date: Sat, 25 Oct 2014 00:22:20 +0200
-Subject: [Buildroot] [PATCH 1/1] shairplay-sync: new package
-In-Reply-To: <20141020173137.GF3742@free.fr>
-References: <1413811309-16019-1-git-send-email-jkrause@posteo.de>
- <20141020173137.GF3742@free.fr>
-Message-ID: <544AD11C.5050704@posteo.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Sat, 25 Oct 2014 00:55:41 +0200
+Subject: [Buildroot] [PATCH v2 1/1] shairplay-sync: new package
+Message-ID: <1414191341-21557-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Hi All,
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+Changes v1 -> v2:
+  - autoselect SSL backend instead of a user choice
+  - autoselect zeroconf backend instead of a user choice
+  - fix missing select for optional package libsoxr
+  - fix config option for avahi (--with-avahi instead of --with-openssl)
+  - add comment to tinysvcmdns in shairport-sync.mk
+---
+ package/Config.in                        |  1 +
+ package/shairport-sync/Config.in         | 37 +++++++++++++++++++++++++
+ package/shairport-sync/S99shairport-sync | 31 +++++++++++++++++++++
+ package/shairport-sync/shairport-sync.mk | 47 ++++++++++++++++++++++++++++++++
+ 4 files changed, 116 insertions(+)
+ create mode 100644 package/shairport-sync/Config.in
+ create mode 100644 package/shairport-sync/S99shairport-sync
+ create mode 100644 package/shairport-sync/shairport-sync.mk
 
-On 10/20/2014 07:31 PM, Yann E. MORIN wrote:
-> J?rg, All,
->
-> On 2014-10-20 15:21 +0200, J?rg Krause spake thusly:
->> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> [--SNIP--]
->> diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
->> new file mode 100644
->> index 0000000..2eab88d
->> --- /dev/null
->> +++ b/package/shairport-sync/Config.in
->> @@ -0,0 +1,72 @@
->> +config BR2_PACKAGE_SHAIRPORT_SYNC
->> +	bool "shairport-sync"
->> +	depends on BR2_USE_MMU # libdaemon
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
->> +	select BR2_PACKAGE_ALSA_LIB
->> +	select BR2_PACKAGE_LIBDAEMON
->> +	select BR2_PACKAGE_POPT
->> +	help
->> +	  Shairport Sync emulates an AirPort Express for the purpose of
->> +	  streaming audio from iTunes, iPods, iPhones, iPads and AppleTVs.
->> +	  Audio played by a Shairport Sync-powered device stays in synchrony
->> +	  with the source and thus with other devices that are playing the same
->> +	  source synchronously. Thus, for example, synchronised multi-room
->> +	  audio is possible without difficulty.
->> +
->> +	  https://github.com/mikebrady/shairport-sync
->> +
->> +if BR2_PACKAGE_SHAIRPORT_SYNC
->> +
->> +choice
->> +	prompt "Choose SSL encryption backend"
->> +	default BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
->> +
->> +config BR2_PACKAGE_SHAIRPORT_SYNC_OPENSSL
->> +	bool "OpenSSL"
->> +	select BR2_PACKAGE_OPENSSL
->> +
->> +config BR2_PACKAGE_SHAIRPORT_SYNC_POLARSSL
->> +	bool "PolarSSL"
->> +	select BR2_PACKAGE_POLARSSL
->> +endchoice
-> Since this is a choice, either one is selected. Which means SSL support
-> seems to be not optional.
-
-You're right! SSL support is mandatory, but you can choose between 
-OpenSSL and PolarSSL.
-
-> In that case I would prefer we use something like:
->
->      config BR2_PACKAGE_SHAIRPORT_SYNC
->          bool "shairport-sync"
->          # Dependencies and selects as above
->          select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
->
-> This way, we ensure at least one SSL implementation is available, and do
-> not bother the user with a useless prompt.
-
-Ok
-
->> +choice
->> +	prompt "Choose mDNS backend"
->> +	default BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
->> +
->> +config BR2_PACKAGE_SHAIRPORT_SYNC_AVAHI
->> +	bool "Avahi"
->> +	depends on BR2_USE_WCHAR # avahi -> gettext
->> +	depends on !BR2_PREFER_STATIC_LIB
->> +	select BR2_PACKAGE_AVAHI
->> +	select BR2_PACKAGE_AVAHI_DAEMON
->> +	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
->> +
->> +comment "Avahi support needs a toolchain w/ wchar, dynamic library"
->> +	depends on !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
->> +
->> +config BR2_PACKAGE_SHAIRPORT_SYNC_TINYSVCMDNS
->> +	bool "tinysvcmdns"
->> +	help
->> +	  tinysvcmdns is a tiny mDNS responder which is only concerned with
->> +	  publishing services, without a system-wide daemon like Bonjour or
->> +	  Avahi. Its other goal is to be extremely small, embeddable, and have
->> +	  no external dependencies.
->> +endchoice
-> There is no tinysvcmdns packaged in Buildroot. Does shairport-sync
-> bundles its own version? Otherwise, I've seen there is a tinysvcmdns
-> package on bitbucket: https://bitbucket.org/geekman/tinysvcmdns
-> Maybe it would be interesting to package it in Buildroot?
->
-> If so, I would just remove the choice altogether, and just use
-> tinysvcmdns if avahi is not enabled.
-
-Shairport bundles its own version of tinysvcmdns which is based on the 
-one you've found on bitbucket. I will do the following: if avahi is not 
-selected as a package, shairport-sync builds with tinysvcmdns support.
-
->
->> +config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
->> +	bool "libsoxr support"
-> There, you need to select BR2_PACKAGE_LIBSOXR.
-
-Oops!
-
->
-> Obviously, adapt the .mk to the above comments.
->
-
-Many thanks for the review!
-
-J?rg
+diff --git a/package/Config.in b/package/Config.in
+index d6cd876..b154219 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1088,6 +1088,7 @@ endif
+ 	source "package/samba4/Config.in"
+ 	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
++	source "package/shairport-sync/Config.in"
+ 	source "package/smcroute/Config.in"
+ 	source "package/socat/Config.in"
+ 	source "package/socketcand/Config.in"
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+new file mode 100644
+index 0000000..bf40524
+--- /dev/null
++++ b/package/shairport-sync/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_SHAIRPORT_SYNC
++	bool "shairport-sync"
++	depends on BR2_USE_MMU # libdaemon
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_LIBDAEMON
++	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
++	help
++	  Shairport Sync emulates an AirPort Express for the purpose of
++	  streaming audio from iTunes, iPods, iPhones, iPads and AppleTVs.
++	  Audio played by a Shairport Sync-powered device stays in synchrony
++	  with the source and thus with other devices that are playing the same
++	  source synchronously. Thus, for example, synchronised multi-room
++	  audio is possible without difficulty.
++
++	  https://github.com/mikebrady/shairport-sync
++
++if BR2_PACKAGE_SHAIRPORT_SYNC
++
++config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
++	bool "libsoxr support"
++	select BR2_PACKAGE_LIBSOXR
++	help
++	  Enable support for libsoxr, the SoX Resampler library.
++
++	  Briefly, Shairport Sync keeps in step with the audio source by
++	  deleting or inserting frames of audio into the stream as needed. This
++	  "interpolation" is normally inaudible, but it can be heard in some
++	  circumstances. Libsoxr allows this interpolation to be done much more
++	  smoothly and subtly.
++
++endif
++
++comment "shairport-sync needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+new file mode 100644
+index 0000000..377b0bb
+--- /dev/null
++++ b/package/shairport-sync/S99shairport-sync
+@@ -0,0 +1,31 @@
++#! /bin/sh
++
++NAME=shairport-sync
++DAEMON=/usr/bin/$NAME
++
++# Additional options that are passed to Shairport Sync
++OPTIONS=""
++
++# Exit if the package is not installed
++[ -x "$DAEMON" ] || exit 0
++
++case "$1" in
++  start)
++    echo -n "Starting shairport-sync: "
++    start-stop-daemon --start --quiet --exec $DAEMON -- -d $OPTIONS
++    [ $? == 0 ] && echo "OK" || echo "FAIL"
++    ;;
++  stop)
++    echo -n "Stopping shairport-sync: "
++    start-stop-daemon --stop --quiet --name $NAME
++    [ $? == 0 ] && echo "OK" || echo "FAIL"
++    ;;
++  restart)
++    $0 stop
++    $0 start
++    ;;
++  *)
++  echo "Usage: $0 {start|stop|restart}"
++  exit 1
++  ;;
++esac
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+new file mode 100644
+index 0000000..c038b60
+--- /dev/null
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# shairport-sync
++#
++################################################################################
++
++SHAIRPORT_SYNC_VERSION = 2.1.5
++SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
++SHAIRPORT_SYNC_LICENSE = GPLv3+
++SHAIRPORT_SYNC_LICENSE_FILES = COPYING
++SHAIRPORT_SYNC_DEPENDENCIES = host-autoconf host-libtool alsa-lib libdaemon popt
++SHAIRPORT_SYNC_AUTORECONF = YES
++SHAIRPORT_SYNC_CONF_OPTS = --with-alsa # required
++
++# Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns)
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++	SHAIRPORT_SYNC_DEPENDENCIES += avahi
++	SHAIRPORT_SYNC_CONF_OPTS += --with-avahi
++else
++	SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
++endif
++
++# OpenSSL or PolarSSL
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	SHAIRPORT_SYNC_DEPENDENCIES += openssl
++	SHAIRPORT_SYNC_CONF_OPTS += --with-openssl
++else
++	SHAIRPORT_SYNC_DEPENDENCIES += polarssl
++	SHAIRPORT_SYNC_CONF_OPTS += --with-polarssl
++endif
++
++ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
++	SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
++	SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
++endif
++
++define SHAIRPORT_SYNC_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/shairport-sync \
++		$(TARGET_DIR)/usr/bin/shairport-sync
++endef
++
++define SHAIRPORT_SYNC_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/shairport-sync/S99shairport-sync \
++		$(TARGET_DIR)/etc/init.d/S99shairport-sync
++endef
++
++$(eval $(autotools-package))
+-- 
+2.1.2
