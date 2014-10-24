@@ -1,31 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 24 Oct 2014 23:30:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 7442] rootfs remount does not work as expected
-	with sysvinit
-In-Reply-To: <bug-7442-163@https.bugs.busybox.net/>
-References: <bug-7442-163@https.bugs.busybox.net/>
-Message-ID: <20141024233032.1BF7CAF4D1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Oct 2014 01:33:32 +0200
+Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: Use the
+	"APPLY_PATCHES" variable to call the script
+In-Reply-To: <1413994811-19452-2-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Wed, 22 Oct 2014 18:20:10 +0200")
+References: <1413994811-19452-1-git-send-email-fabio.porcedda@gmail.com>
+ <1413994811-19452-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87mw8l6o1f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7442
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > To easy up adding optional parameters when calling the
+ > "apply-patches.sh" add and use the "APPLY_PATCHES" variable to execute
+ > the script.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2014-10-24 23:30:30 UTC ---
-Fixed in git by Gustavo:
-
-http://git.buildroot.net/buildroot/commit/?id=bcb835b042d385bac801e00cff2f1dbacff93629
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
