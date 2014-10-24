@@ -1,43 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Oct 2014 23:44:26 +0200
-Subject: [Buildroot] [git commit] samba4: bump to version 4.1.13
-Message-ID: <20141024230432.017A9B0B18@busybox.osuosl.org>
+Date: Fri, 24 Oct 2014 23:47:37 +0200
+Subject: [Buildroot] [git commit] package/trinity: New package
+Message-ID: <20141024230432.07C209CDBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee3d2a60cf9823ceb06d0f6df1bab4cc00aae9ed
+commit: http://git.buildroot.net/buildroot/commit/?id=ab88446507c7816899787d5a02e9d7098350090d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Adding the Trinity Linux System call fuzz tester.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash |    2 ++
- package/samba4/samba4.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/Config.in          |    1 +
+ package/trinity/Config.in  |    6 ++++++
+ package/trinity/trinity.mk |   35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+diff --git a/package/Config.in b/package/Config.in
+index d6cd876..6822cd7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -90,6 +90,7 @@ endif
+ 	source "package/sysprof/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
++	source "package/trinity/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
 new file mode 100644
-index 0000000..b263bd8
+index 0000000..de9c467
 --- /dev/null
-+++ b/package/samba4/samba4.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	737907f4ed3a71f6ec12638387aff7cda4764f8c2eb18deeca16e2fb7ed66c9f	samba-4.1.13.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 0df267f..c4613f1 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.1.12
-+SAMBA4_VERSION = 4.1.13
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_LICENSE = GPLv3+
++++ b/package/trinity/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TRINITY
++	bool "trinity"
++	help
++	  A Linux System call fuzz tester
++
++	  http://codemonkey.org.uk/projects/trinity/
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+new file mode 100644
+index 0000000..8415141
+--- /dev/null
++++ b/package/trinity/trinity.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# trinity
++#
++################################################################################
++
++TRINITY_VERSION = d68d1f7b9ab6c65a379ea990a263ee6b4f234bbd
++TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
++TRINITY_LICENSE = GPLv2
++TRINITY_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_INET_IPV6),)
++TARGET_CONFIGURE_OPTS += IPV6=no
++endif
++
++define TRINITY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
++endef
++
++define TRINITY_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define TRINITY_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
++endef
++
++# Install helper scripts
++define TRINITY_INSTALL_HELPER_SCRIPTS
++	mkdir -p $(TARGET_DIR)/usr/libexec/trinity
++	cp -p $(@D)/scripts/* $(TARGET_DIR)/usr/libexec/trinity/
++endef
++TRINITY_POST_INSTALL_TARGET_HOOKS += TRINITY_INSTALL_HELPER_SCRIPTS
++
++$(eval $(generic-package))
