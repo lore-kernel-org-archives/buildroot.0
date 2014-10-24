@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Oct 2014 01:17:14 +0200
-Subject: [Buildroot] [git commit] libv4l: needs iconv
-Message-ID: <20141024232206.DDD13B0BC2@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 01:21:10 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 1.4.1
+Message-ID: <20141024232206.F1140B0BC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a33ae93ab6fefadc97a350dcd6868b209718e117
+commit: http://git.buildroot.net/buildroot/commit/?id=f6ee88f4806b50d7108ec382579e04b68a5d4f42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- http://autobuild.buildroot.net/results/901/901ed0092ee0411ba77a6f1f46d161621569c7f7/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libv4l/Config.in |    1 +
- package/libv4l/libv4l.mk |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ package/libva/libva.hash |    4 ++--
+ package/libva/libva.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 866f8c6..04f0c6a 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBV4L
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  libv4l is a collection of libraries which adds a thin abstraction
- 	  layer on top of video4linux2 devices. libv4l consists of 3 different
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 0512e49..732fad5 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -20,6 +20,8 @@ LIBV4L_DEPENDENCIES += argp-standalone
- LIBV4L_CONF_ENV += LIBS="-largp"
- endif
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 0495000..2c611a5 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/libva/2014-September/002746.html
+-sha1	5704e728aa59a748cf820ac2a5efe0764f6e4b01	libva-1.4.0.tar.bz2
++# http://lists.freedesktop.org/archives/libva/2014-October/002778.html
++sha1	23415d5ad50725ac1d1b7d64401f776c13c305ae	libva-1.4.1.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 984222d..e9892d3 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+LIBV4L_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBV4L_DEPENDENCIES += jpeg
- LIBV4L_CONF_OPTS += --with-jpeg
+-LIBVA_VERSION = 1.4.0
++LIBVA_VERSION = 1.4.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
