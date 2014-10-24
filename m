@@ -1,42 +1,208 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Oct 2014 10:11:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-10-23
-In-Reply-To: <CAMo8BfKK1=DZF09GJMa__rw=z-i3pzMhNGy+pfY49f-PtKcZCQ@mail.gmail.com>
-References: <20141024063016.0D21A1014BF@stock.ovh.net>
- <CAMo8BfKK1=DZF09GJMa__rw=z-i3pzMhNGy+pfY49f-PtKcZCQ@mail.gmail.com>
-Message-ID: <20141024101151.44021dc0@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 24 Oct 2014 13:34:30 +0100
+Subject: [Buildroot] [PATCH 2/2] uclibc: Do not include __iconv_codesets
+	into iconv utility
+In-Reply-To: <1414154070-25745-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1414154070-25745-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1414154070-25745-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+Backporting an upstream patch to fix a problem in the install step:
 
-On Fri, 24 Oct 2014 11:48:51 +0400, Max Filippov wrote:
+make[1]: Entering directory `/br/output/build/uclibc-0.9.31.1'
+make[2]: Nothing to be done for `locale_headers'.
+	CC utils/getconf
+	STRIP -x -R .note -R .comment ../utils/getconf
+	CC utils/iconv
+../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
+`__iconv_codesets'
+/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
+collect2: error: ld returned 1 exit status
 
-> This fails because BR2_PREFER_STATIC_LIB is defined and the package
-> treats it the old way. I'll send a patch that adds dependency on
-> ! BR2_PREFER_STATIC_LIB to aircrack-ng.
+Upstream commit:
+	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
 
-Hum, when you grep through the code, it only uses dlopen() if used with
-Cygwin:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...clude-__iconv_codesets-into-iconv-utility.patch |   79 ++++++++++++++++++++
+ ...clude-__iconv_codesets-into-iconv-utility.patch |   79 ++++++++++++++++++++
+ 2 files changed, 158 insertions(+), 0 deletions(-)
+ create mode 100644 package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+ create mode 100644 package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch
 
-$ grep -r dlopen *
-src/osdep/cygwin.c:		lib = dlopen(file, RTLD_LAZY);
-
-Maybe it's one of the dependencies that need -ldl ? But indeed, doing:
-
-AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) -lz \
-        $(if $(BR2_PREFER_STATIC_LIB),-ldl -lpthread)
-
-is quite silly. How can you have -ldl if you're using static libraries.
-
-Best regards,
-
-Thomas
+diff --git a/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch b/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+new file mode 100644
+index 0000000..4b6a701
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+@@ -0,0 +1,79 @@
++uclibc: Do not include __iconv_codesets into iconv utility
++
++Backporting an upstream patch to fix a problem in the install step:
++
++make[1]: Entering directory `/br/output/build/uclibc-0.9.31.1'
++make[2]: Nothing to be done for `locale_headers'.
++	CC utils/getconf
++	STRIP -x -R .note -R .comment ../utils/getconf
++	CC utils/iconv
++../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
++`__iconv_codesets'
++/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
++collect2: error: ld returned 1 exit status
++
++Upstream commit:
++	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From d46dc8bc88e38251bfa3712efe7abf62933f5419 Mon Sep 17 00:00:00 2001
++From: Peter S. Mazinger <ps.m@gmx.net>
++Date: Thu, 24 Mar 2011 00:15:25 +0000
++Subject: iconv: Do not include __iconv_codesets into iconv utility
++
++Host iconv needs only L_iconv_main defined and __iconv_codesets
++has to included, as host system does not provide it.
++Keep __iconv_codesets out of iconv linked against uClibc.
++
++Signed-off-by: Peter S. Mazinger <ps.m@gmx.net>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/libc/misc/wchar/wchar.c b/libc/misc/wchar/wchar.c
++index 412c557..0704096 100644
++--- a/libc/misc/wchar/wchar.c
+++++ b/libc/misc/wchar/wchar.c
++@@ -1196,6 +1196,9 @@ libc_hidden_proto(__iconv_codesets)
++ #endif
++ 
++ #if defined L_iconv || defined L_iconv_main
+++# ifdef L_iconv_main
+++static
+++# endif
++ const unsigned char __iconv_codesets[] =
++ 	"\x0a\xe0""WCHAR_T\x00"		/* superset of UCS-4 but platform-endian */
++ #if __BYTE_ORDER == __BIG_ENDIAN
++diff --git a/utils/Makefile.in b/utils/Makefile.in
++index bb85be3..1714d28 100644
++--- a/utils/Makefile.in
+++++ b/utils/Makefile.in
++@@ -36,8 +36,7 @@ CFLAGS-ldd := $(CFLAGS-utils-shared) -DBUILDING_LINKAGE
++ # Need CFLAGS-utils explicitly, because the source file is not located in utils
++ CFLAGS-iconv := $(CFLAGS-utils) \
++     $(CFLAGS-utils-shared) \
++-    -I$(top_srcdir)libc/misc/wchar \
++-    -DL_iconv_main \
+++    -I$(top_srcdir)libc/misc/wchar
++ 
++ CFLAGS-locale := $(CFLAGS-utils)
++ CFLAGS-getconf :=$(CFLAGS-utils) \
++diff --git a/utils/iconv.c b/utils/iconv.c
++index 04e2c32..a0260df 100644
++--- a/utils/iconv.c
+++++ b/utils/iconv.c
++@@ -108,7 +108,12 @@
++ #include <wchar.h>
++ #include "wchar.c" /* for _UC_iconv_t and __iconv_codesets */
++ 
++-extern const unsigned char __iconv_codesets[];
+++#ifdef L_iconv_main
+++static
+++#else
+++extern
+++#endif
+++const unsigned char __iconv_codesets[];
++ 
++ #define IBUF BUFSIZ
++ #define OBUF BUFSIZ
++--
++cgit v0.9.1
+diff --git a/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch b/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+new file mode 100644
+index 0000000..a6b5b5e
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+@@ -0,0 +1,79 @@
++uclibc: Do not include __iconv_codesets into iconv utility
++
++Backporting an upstream patch to fix a problem in the install step:
++
++make[1]: Entering directory `/br/output/build/uclibc-0.9.33.2'
++make[2]: Nothing to be done for `locale_headers'.
++	CC utils/getconf
++	STRIP -x -R .note -R .comment ../utils/getconf
++	CC utils/iconv
++../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
++`__iconv_codesets'
++/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
++collect2: error: ld returned 1 exit status
++
++Upstream commit:
++	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From d46dc8bc88e38251bfa3712efe7abf62933f5419 Mon Sep 17 00:00:00 2001
++From: Peter S. Mazinger <ps.m@gmx.net>
++Date: Thu, 24 Mar 2011 00:15:25 +0000
++Subject: iconv: Do not include __iconv_codesets into iconv utility
++
++Host iconv needs only L_iconv_main defined and __iconv_codesets
++has to included, as host system does not provide it.
++Keep __iconv_codesets out of iconv linked against uClibc.
++
++Signed-off-by: Peter S. Mazinger <ps.m@gmx.net>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/libc/misc/wchar/wchar.c b/libc/misc/wchar/wchar.c
++index 412c557..0704096 100644
++--- a/libc/misc/wchar/wchar.c
+++++ b/libc/misc/wchar/wchar.c
++@@ -1196,6 +1196,9 @@ libc_hidden_proto(__iconv_codesets)
++ #endif
++ 
++ #if defined L_iconv || defined L_iconv_main
+++# ifdef L_iconv_main
+++static
+++# endif
++ const unsigned char __iconv_codesets[] =
++ 	"\x0a\xe0""WCHAR_T\x00"		/* superset of UCS-4 but platform-endian */
++ #if __BYTE_ORDER == __BIG_ENDIAN
++diff --git a/utils/Makefile.in b/utils/Makefile.in
++index bb85be3..1714d28 100644
++--- a/utils/Makefile.in
+++++ b/utils/Makefile.in
++@@ -36,8 +36,7 @@ CFLAGS-ldd := $(CFLAGS-utils-shared) -DBUILDING_LINKAGE
++ # Need CFLAGS-utils explicitly, because the source file is not located in utils
++ CFLAGS-iconv := $(CFLAGS-utils) \
++     $(CFLAGS-utils-shared) \
++-    -I$(top_srcdir)libc/misc/wchar \
++-    -DL_iconv_main \
+++    -I$(top_srcdir)libc/misc/wchar
++ 
++ CFLAGS-locale := $(CFLAGS-utils)
++ CFLAGS-getconf :=$(CFLAGS-utils) \
++diff --git a/utils/iconv.c b/utils/iconv.c
++index 04e2c32..a0260df 100644
++--- a/utils/iconv.c
+++++ b/utils/iconv.c
++@@ -108,7 +108,12 @@
++ #include <wchar.h>
++ #include "wchar.c" /* for _UC_iconv_t and __iconv_codesets */
++ 
++-extern const unsigned char __iconv_codesets[];
+++#ifdef L_iconv_main
+++static
+++#else
+++extern
+++#endif
+++const unsigned char __iconv_codesets[];
++ 
++ #define IBUF BUFSIZ
++ #define OBUF BUFSIZ
++--
++cgit v0.9.1
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
