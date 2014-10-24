@@ -1,58 +1,33 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Fri, 24 Oct 2014 16:34:36 -0300
-Subject: [Buildroot] target rootfs permissions
-Message-ID: <20141024193436.GA29505@fox>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 24 Oct 2014 16:37:43 -0300
+Subject: [Buildroot] [PATCH] freerdp: alsa support needs mixer as well
+Message-ID: <1414179463-28560-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes:
+http://autobuild.buildroot.net/results/5ed/5edaa6654b90299ead5255d1cbdf79eb8b40fc6f/
 
-I've noticed that when building a rootfs, some of the permissions on the
-target depend on the users umask (directly and indirectly). This occurs
-because some files (notably the system skeleton and overlay) are copied
-with "rsync -a", which copies permissions exactly as they were on the
-source. The thing is, Git doesn't track file permissions (except for
-the exec bit) so both of these depend on the users umask at the time of
-cloning (if there were no posterior changes).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, some files are created in BR code with cp/mkdir, which depend on
-the current umask.
-
-I think this is pretty important, since if we do care about permissions,
-the target rootfs may not be easily reproducible on other hosts.
-
-For my current project, we do need a specific set of permissions and
-ownerships for each file in the rootfs. We're trying to isolate the
-custom application from the rest of the system, and give it the exact
-privileges it needs. I found that when I build the rootfs (my umask
-was 0027) the application could not do absolutely anything as / wasn't
-executable or readable by it. But building on other hosts (with more
-relaxed umasks) we had a working rootfs.
-
-We accomplished this by adding a custom script that gets called just
-prior to the image creation, inside of the fakeroot script (thus, it
-gets called multiple times, but this isn't a big deal for us).
-
-One downside of our approach is that in order to not depend on the
-previous set of permissions (which could vary), we need to specify the
-exact mode for each file. So we need to set the sticky bit on /tmp
-manually, make /etc/shadow not readable and etc, etc, etc.
-
-Permissions alone could (maybe) be fixed by changing BR code to
-be aware of this issue, and by setting correct permissions on the
-overlay/skeleton via some script. But ownerships cannot be changed by
-a non-root user! And, since building as root is a Very Bad Thing (tm),
-we'd need to resort to fakeroot.
-
-So: has anyone else had this problem?
-Is it important for someone else?
-What do you think a mainline solution would look like?
-
-Thanks a lot guys!
-
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 84c2d81..cb745ec 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -26,7 +26,7 @@ else
+ FREERDP_CONF_OPTS += -DWITH_FFMPEG=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER),y)
+ FREERDP_CONF_OPTS += -DWITH_ALSA=ON
+ FREERDP_DEPENDENCIES += alsa-lib
+ else
 -- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+2.0.4
