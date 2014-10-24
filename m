@@ -1,71 +1,58 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Fri, 24 Oct 2014 19:32:25 +0000 (UTC)
-Subject: [Buildroot] Buildroot developer meeting report
-In-Reply-To: <5447A95E.2090008@mind.be>
-References: <5447A95E.2090008@mind.be>
-Message-ID: <483025893.317038.1414179145585.JavaMail.yahoo@jws10056.mail.ne1.yahoo.com>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Fri, 24 Oct 2014 16:34:36 -0300
+Subject: [Buildroot] target rootfs permissions
+Message-ID: <20141024193436.GA29505@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Everyone,
-I'm new to Buildroot and have been evaluating it along with Yocto to replace uClinux/home-brew environment for a new design. ?I noticed in the 'Discussion_topics_and_report' that there was an evaluation of BR2_EXTERNAL. ?Was it determined what was needed? ?I hope this wasn't a foreshadowing that BR2_EXTERNAL might be deprecated.
-As part of my evaluation, I created a 'doug' directory and mimicked the Buildroot?directory structure as needed. ?All my custom bits were confined to this directory; I didn't pollute the Buildroot tree with irrelevant changes. ?I then use BR2_EXTERNAL to point to 'doug'. ?For example,
-make BR2_EXTERNAL=doug [defconfig]
-set up the environment to point to all the proper locations. ?BR2_EXTERNAL, as is, is a very nice feature!
-Thanks and regards,...doug(Doug Kehn) 
+Hi all,
 
-     On Wednesday, October 22, 2014 7:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-   
+I've noticed that when building a rootfs, some of the permissions on the
+target depend on the users umask (directly and indirectly). This occurs
+because some files (notably the system skeleton and overlay) are copied
+with "rsync -a", which copies permissions exactly as they were on the
+source. The thing is, Git doesn't track file permissions (except for
+the exec bit) so both of these depend on the users umask at the time of
+cloning (if there were no posterior changes).
 
-  Hi all,
+Also, some files are created in BR code with cp/mkdir, which depend on
+the current umask.
 
- Just before ELC-E in Duesseldorf, on October 11 and 12, we had a Buildroot
-Developer Meeting (sponsored by Mind, yay!). You can find the report on the wiki:
+I think this is pretty important, since if we do care about permissions,
+the target rootfs may not be easily reproducible on other hosts.
 
-http://elinux.org/Buildroot:DeveloperDaysELCE2014#Discussion_topics_and_report
+For my current project, we do need a specific set of permissions and
+ownerships for each file in the rootfs. We're trying to isolate the
+custom application from the rest of the system, and give it the exact
+privileges it needs. I found that when I build the rootfs (my umask
+was 0027) the application could not do absolutely anything as / wasn't
+executable or readable by it. But building on other hosts (with more
+relaxed umasks) we had a working rootfs.
 
+We accomplished this by adding a custom script that gets called just
+prior to the image creation, inside of the fakeroot script (thus, it
+gets called multiple times, but this isn't a big deal for us).
 
- Some highlights:
+One downside of our approach is that in order to not depend on the
+previous set of permissions (which could vary), we need to specify the
+exact mode for each file. So we need to set the sticky bit on /tmp
+manually, make /etc/shadow not readable and etc, etc, etc.
 
-* We mainly used this time to clean up patchwork. We didn't keep exact
-statistics, but the number of patches was reduced from roughly 350 to roughly
-250, and a significant number of patches have been reviewed and/or reposted.
+Permissions alone could (maybe) be fixed by changing BR code to
+be aware of this issue, and by setting correct permissions on the
+overlay/skeleton via some script. But ownerships cannot be changed by
+a non-root user! And, since building as root is a Very Bad Thing (tm),
+we'd need to resort to fakeroot.
 
-* There were a few important large series that were discussed and eventually
-applied.
+So: has anyone else had this problem?
+Is it important for someone else?
+What do you think a mainline solution would look like?
 
-* We have taken a decision on how to deal with atomic operations, with missing
-license files, with march/mcpu/mtune conflicts, and we have decided to leave the
-package name out of patch file names. Some of these things have been
-implemented, some are still to do.
+Thanks a lot guys!
 
-* We discussed the GSoC project which wasn't successful this year. We'll try
-again next year.
-
-
- If there is any further point of discussion or a conclusion that you don't
-agree with, feel free to start a discussion here on the list or on IRC.
-
-
- Regards,
- Arnout
 -- 
-Arnout Vandecappelle? ? ? ? ? ? ? ? ? ? ? ? ? arnout at mind be
-Senior Embedded Software Architect? ? ? ? ? ? +32-16-286500
-Essensium/Mind? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium? ? ? ? ? BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:? 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-   
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141024/a731637d/attachment.html>
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
