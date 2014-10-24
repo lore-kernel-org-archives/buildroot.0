@@ -1,46 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 23 Oct 2014 23:22:36 +0200
-Subject: [Buildroot] [PATCH] libv4l: needs iconv
-Message-ID: <1414099356-461-1-git-send-email-ps.report@gmx.net>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Fri, 24 Oct 2014 10:36:10 +0800
+Subject: [Buildroot] [PATCH] tftpd: Install TFTP client as well
+In-Reply-To: <20141023221315.2d4f658a@free-electrons.com>
+References: <1414062804-11701-1-git-send-email-keguang.zhang@gmail.com>
+ <20141023221315.2d4f658a@free-electrons.com>
+Message-ID: <CAJhJPsXx8+3nJoOWFx+u2RkvgaUSuJykDGzqS8jJ55UjTB+9QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- http://autobuild.buildroot.net/results/901/901ed0092ee0411ba77a6f1f46d161621569c7f7/
+Sorry for my negligence.
+Thanks Thomas!
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libv4l/Config.in | 1 +
- package/libv4l/libv4l.mk | 2 ++
- 2 files changed, 3 insertions(+)
+2014-10-24 4:13 GMT+08:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 866f8c6..04f0c6a 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBV4L
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  libv4l is a collection of libraries which adds a thin abstraction
- 	  layer on top of video4linux2 devices. libv4l consists of 3 different
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 0512e49..732fad5 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -20,6 +20,8 @@ LIBV4L_DEPENDENCIES += argp-standalone
- LIBV4L_CONF_ENV += LIBS="-largp"
- endif
- 
-+LIBV4L_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBV4L_DEPENDENCIES += jpeg
- LIBV4L_CONF_OPTS += --with-jpeg
+> Dear Kelvin Cheung,
+>
+> On Thu, 23 Oct 2014 19:13:24 +0800, Kelvin Cheung wrote:
+> > This patch installs TFTP client as well and overrides
+> > BusyBox implementations if BusyBox is enabled.
+> >
+> > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> > ---
+> >  package/tftpd/tftpd.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+>
+> Thanks, applied, after fixing the SYSKLOGD typo noticed by Baruch.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+
+
+
 -- 
-1.8.1.4
+Best Regards!
+Kelvin Cheung
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141024/20ebf3b7/attachment.html>
