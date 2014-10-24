@@ -1,175 +1,31 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 25 Oct 2014 00:55:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] shairplay-sync: new package
-Message-ID: <1414191341-21557-1-git-send-email-jkrause@posteo.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Oct 2014 01:02:01 +0200
+Subject: [Buildroot] [PATCH v3] 1/2] mx53loco: update support
+In-Reply-To: <1413809176-5063-1-git-send-email-eric@eukrea.com> ("Eric
+ =?utf-8?Q?B=C3=A9nard=22's?= message of "Mon, 20 Oct 2014 14:46:15 +0200")
+References: <1413809176-5063-1-git-send-email-eric@eukrea.com>
+Message-ID: <87tx2t842e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
-Changes v1 -> v2:
-  - autoselect SSL backend instead of a user choice
-  - autoselect zeroconf backend instead of a user choice
-  - fix missing select for optional package libsoxr
-  - fix config option for avahi (--with-avahi instead of --with-openssl)
-  - add comment to tinysvcmdns in shairport-sync.mk
----
- package/Config.in                        |  1 +
- package/shairport-sync/Config.in         | 37 +++++++++++++++++++++++++
- package/shairport-sync/S99shairport-sync | 31 +++++++++++++++++++++
- package/shairport-sync/shairport-sync.mk | 47 ++++++++++++++++++++++++++++++++
- 4 files changed, 116 insertions(+)
- create mode 100644 package/shairport-sync/Config.in
- create mode 100644 package/shairport-sync/S99shairport-sync
- create mode 100644 package/shairport-sync/shairport-sync.mk
+>>>>> "Eric" == Eric B?nard <eric@eukrea.com> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index d6cd876..b154219 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1088,6 +1088,7 @@ endif
- 	source "package/samba4/Config.in"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
-+	source "package/shairport-sync/Config.in"
- 	source "package/smcroute/Config.in"
- 	source "package/socat/Config.in"
- 	source "package/socketcand/Config.in"
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-new file mode 100644
-index 0000000..bf40524
---- /dev/null
-+++ b/package/shairport-sync/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_SHAIRPORT_SYNC
-+	bool "shairport-sync"
-+	depends on BR2_USE_MMU # libdaemon
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_LIBDAEMON
-+	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_POPT
-+	help
-+	  Shairport Sync emulates an AirPort Express for the purpose of
-+	  streaming audio from iTunes, iPods, iPhones, iPads and AppleTVs.
-+	  Audio played by a Shairport Sync-powered device stays in synchrony
-+	  with the source and thus with other devices that are playing the same
-+	  source synchronously. Thus, for example, synchronised multi-room
-+	  audio is possible without difficulty.
-+
-+	  https://github.com/mikebrady/shairport-sync
-+
-+if BR2_PACKAGE_SHAIRPORT_SYNC
-+
-+config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
-+	bool "libsoxr support"
-+	select BR2_PACKAGE_LIBSOXR
-+	help
-+	  Enable support for libsoxr, the SoX Resampler library.
-+
-+	  Briefly, Shairport Sync keeps in step with the audio source by
-+	  deleting or inserting frames of audio into the stream as needed. This
-+	  "interpolation" is normally inaudible, but it can be heard in some
-+	  circumstances. Libsoxr allows this interpolation to be done much more
-+	  smoothly and subtly.
-+
-+endif
-+
-+comment "shairport-sync needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
-new file mode 100644
-index 0000000..377b0bb
---- /dev/null
-+++ b/package/shairport-sync/S99shairport-sync
-@@ -0,0 +1,31 @@
-+#! /bin/sh
-+
-+NAME=shairport-sync
-+DAEMON=/usr/bin/$NAME
-+
-+# Additional options that are passed to Shairport Sync
-+OPTIONS=""
-+
-+# Exit if the package is not installed
-+[ -x "$DAEMON" ] || exit 0
-+
-+case "$1" in
-+  start)
-+    echo -n "Starting shairport-sync: "
-+    start-stop-daemon --start --quiet --exec $DAEMON -- -d $OPTIONS
-+    [ $? == 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+  stop)
-+    echo -n "Stopping shairport-sync: "
-+    start-stop-daemon --stop --quiet --name $NAME
-+    [ $? == 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+  restart)
-+    $0 stop
-+    $0 start
-+    ;;
-+  *)
-+  echo "Usage: $0 {start|stop|restart}"
-+  exit 1
-+  ;;
-+esac
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-new file mode 100644
-index 0000000..c038b60
---- /dev/null
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -0,0 +1,47 @@
-+################################################################################
-+#
-+# shairport-sync
-+#
-+################################################################################
-+
-+SHAIRPORT_SYNC_VERSION = 2.1.5
-+SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
-+SHAIRPORT_SYNC_LICENSE = GPLv3+
-+SHAIRPORT_SYNC_LICENSE_FILES = COPYING
-+SHAIRPORT_SYNC_DEPENDENCIES = host-autoconf host-libtool alsa-lib libdaemon popt
-+SHAIRPORT_SYNC_AUTORECONF = YES
-+SHAIRPORT_SYNC_CONF_OPTS = --with-alsa # required
-+
-+# Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns)
-+ifeq ($(BR2_PACKAGE_AVAHI),y)
-+	SHAIRPORT_SYNC_DEPENDENCIES += avahi
-+	SHAIRPORT_SYNC_CONF_OPTS += --with-avahi
-+else
-+	SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
-+endif
-+
-+# OpenSSL or PolarSSL
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	SHAIRPORT_SYNC_DEPENDENCIES += openssl
-+	SHAIRPORT_SYNC_CONF_OPTS += --with-openssl
-+else
-+	SHAIRPORT_SYNC_DEPENDENCIES += polarssl
-+	SHAIRPORT_SYNC_CONF_OPTS += --with-polarssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
-+	SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
-+	SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
-+endif
-+
-+define SHAIRPORT_SYNC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/shairport-sync \
-+		$(TARGET_DIR)/usr/bin/shairport-sync
-+endef
-+
-+define SHAIRPORT_SYNC_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/shairport-sync/S99shairport-sync \
-+		$(TARGET_DIR)/etc/init.d/S99shairport-sync
-+endef
-+
-+$(eval $(autotools-package))
+ > - update bootloader to 2014.07 with fslc patches
+ > - update kernel to 2.6.35_maintain branch which contains latest fixes
+ > - defconfig was then generated by savedefconfig which suppressed and
+ >   reordered some items which explains the number of lines changed.
+
+ > Tested on an i.MX53 QSB and an i.MX53 QSB-R
+
+ > Signed-off-by: Eric B?nard <eric@eukrea.com>
+ > ---
+ > v3:
+ > 	- keep section comments in the defconfig (PK)
+
+Committed, thanks.
+
 -- 
-2.1.2
+Bye, Peter Korsgaard
