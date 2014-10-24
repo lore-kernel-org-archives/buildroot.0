@@ -1,34 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 Oct 2014 01:56:31 +0200
-Subject: [Buildroot] [PATCH 1/1] Change /bin/bash shebangs into
-	/usr/bin/env bash
-In-Reply-To: <1413900356-5423-1-git-send-email-bjorn.forsman@gmail.com>
- (=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Tue, 21 Oct 2014 16:05:56
- +0200")
-References: <1413900356-5423-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <87egtx6mz4.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Oct 2014 16:57:09 -0700
+Subject: [Buildroot] [PATCH] snowball-hdmiservice: Use github call
+In-Reply-To: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141024235709.GF14818@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
+Maxime, All,
 
- > Not all systems have /bin/bash (e.g. NixOS[1] doesn't). Buildroot
- > already uses /usr/bin/env shebangs for other interpreters (perl,
- > python), so why not bash?
+On 2014-10-12 20:00 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
- > This changes only the shebangs used by Buildroot itself; stuff installed
- > to the target system is left unchanged.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > With this applied I can run Buildroot unmodified on NixOS.
+Note: this patch also removes trailing spaces+tab, which is not readily
+visible in a mail, you should have stated so in the commit log, somethig
+like:
 
- > [1]: http://nixos.org/
+    Also get rid of traling spaces+tabs.
 
- > Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Regards,
+Yann E. MORIN.
 
-Committed, thanks.
+> ---
+>  package/snowball-hdmiservice/snowball-hdmiservice.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
+> index f254414..267b5ad 100644
+> --- a/package/snowball-hdmiservice/snowball-hdmiservice.mk
+> +++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
+> @@ -5,13 +5,13 @@
+>  ################################################################################
+>  
+>  SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
+> -SNOWBALL_HDMISERVICE_SITE = https://github.com/igloocommunity/hdmiservice
+> +SNOWBALL_HDMISERVICE_SITE = $(call github,igloocommunity,hdmiservice,$(SNOWBALL_HDMISERVICE_VERSION))
+>  SNOWBALL_HDMISERVICE_LICENSE = MIT
+>  SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
+>  SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
+>  
+>  define SNOWBALL_HDMISERVICE_BUILD_CMDS
+> -	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
+> +	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
+>  endef
+>  
+>  define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
+> -- 
+> 2.1.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
