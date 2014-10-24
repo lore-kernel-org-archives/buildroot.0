@@ -1,67 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Oct 2014 16:57:09 -0700
-Subject: [Buildroot] [PATCH] snowball-hdmiservice: Use github call
-In-Reply-To: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141024235709.GF14818@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Oct 2014 01:58:35 +0200
+Subject: [Buildroot] [PATCH] Complain loudly if BR2_GLOBAL_PATCH_DIR
+	does not exit
+In-Reply-To: <1413880974-30138-1-git-send-email-sojka@merica.cz> (Michal
+ Sojka's message of "Tue, 21 Oct 2014 10:42:54 +0200")
+References: <1413880974-30138-1-git-send-email-sojka@merica.cz>
+Message-ID: <87a94l6mvo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+>>>>> "Michal" == Michal Sojka <sojka@merica.cz> writes:
 
-On 2014-10-12 20:00 +0200, Maxime Hadjinlian spake thusly:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > If the BR2_GLOBAL_PATCH_DIR is misspelled in the .config or if somebody
+ > renamed the existing directory with patches, buildroot happily builds
+ > everything but without the patches. As this can lead to surprising
+ > results, it is better to fail and give a user a message that
+ > BR2_GLOBAL_PATCH_DIR is wrongly configured.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Michal Sojka <sojka@merica.cz>
 
-Note: this patch also removes trailing spaces+tab, which is not readily
-visible in a mail, you should have stated so in the commit log, somethig
-like:
-
-    Also get rid of traling spaces+tabs.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/snowball-hdmiservice/snowball-hdmiservice.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-> index f254414..267b5ad 100644
-> --- a/package/snowball-hdmiservice/snowball-hdmiservice.mk
-> +++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-> @@ -5,13 +5,13 @@
->  ################################################################################
->  
->  SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
-> -SNOWBALL_HDMISERVICE_SITE = https://github.com/igloocommunity/hdmiservice
-> +SNOWBALL_HDMISERVICE_SITE = $(call github,igloocommunity,hdmiservice,$(SNOWBALL_HDMISERVICE_VERSION))
->  SNOWBALL_HDMISERVICE_LICENSE = MIT
->  SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
->  SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
->  
->  define SNOWBALL_HDMISERVICE_BUILD_CMDS
-> -	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
-> +	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
->  endef
->  
->  define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
-> -- 
-> 2.1.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
