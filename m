@@ -1,105 +1,239 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 24 Oct 2014 17:01:00 +0300
-Subject: [Buildroot] [PATCHv2] spidev_test: new package
-In-Reply-To: <1414155897-2687-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414155897-2687-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141024140100.GA2220@tarshish>
+From: =?UTF-8?B?QW5kcsOpIEVyZG1hbm4=?= <dywi@mailerd.de>
+Date: Fri, 24 Oct 2014 16:37:35 +0200
+Subject: [Buildroot] [PATCH v3] set simple network setup via the system
+ configuration submenu
+In-Reply-To: <1414071600-28318-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1414071600-28318-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <544A642F.4020604@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Hi,
 
-On Fri, Oct 24, 2014 at 10:04:57AM -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                  |  1 +
->  package/spidev_test/Config.in      | 11 +++++++++++
->  package/spidev_test/spidev_test.mk | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+)
->  create mode 100644 package/spidev_test/Config.in
->  create mode 100644 package/spidev_test/spidev_test.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index b0d8a80..a5d4dc9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -85,6 +85,7 @@ endif
->  	source "package/ramsmp/Config.in"
->  	source "package/ramspeed/Config.in"
->  	source "package/rt-tests/Config.in"
-> +	source "package/spidev_test/Config.in"
->  	source "package/strace/Config.in"
->  	source "package/stress/Config.in"
->  	source "package/sysprof/Config.in"
-> diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-> new file mode 100644
-> index 0000000..0fca030
+
+2014/10/24 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+> diff --git a/support/scripts/generate-network-config.sh b/support/scripts/generate-network-config.sh
+> new file mode 100755
+> index 0000000..c09d165
 > --- /dev/null
-> +++ b/package/spidev_test/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_SPIDEV_TEST
-> +	bool "spidev_test"
-> +	help
-> +	  SPI testing utility (using spidev driver).
+> +++ b/support/scripts/generate-network-config.sh
+> @@ -0,0 +1,136 @@
+> +#!/bin/sh
 > +
-> +	  This package builds and installs the userspace 'spidev_test'
-> +	  command. It is up to the user to ensure that the kernel
-> +	  configuration has all suitable options enabled to allow a
-> +	  proper operation of 'spidev_test'.
+> +#extract our parameters from the config file
+> +# see comment in support/scripts/mkusers at to why we can't simply source
+> +for PARAM in \
+> +	BR2_PACKAGE_SYSTEMD_NETWORKD \
+> +	BR2_SIMPLE_NETWORK_NONE \
+> +	BR2_SIMPLE_NETWORK_IPV4_DHCP \
+> +	BR2_SIMPLE_NETWORK_IPV4_MANUAL \
+> +	; do
+> +TMP=$(sed -r -e "/^$PARAM=(.*)$/!d;" -e 's//\1/;' $BR2_CONFIG)
+> +export $PARAM=$TMP
+> +done
 > +
-> +	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
-> diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-> new file mode 100644
-> index 0000000..5662eb1
-> --- /dev/null
-> +++ b/package/spidev_test/spidev_test.mk
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# spidev_test
-> +#
-> +################################################################################
+> +for PARAM in \
+> +	BR2_SIMPLE_NETWORK_NAME \
+> +	BR2_SIMPLE_NETWORK_IPV4_ADDRESS \
+> +	BR2_SIMPLE_NETWORK_IPV4_NETMASK \
+> +	BR2_SIMPLE_NETWORK_IPV4_BROADCAST \
+> +	BR2_SIMPLE_NETWORK_IPV4_GATEWAY \
+> +	; do
+> +TMP=$(sed -r -e "/^$PARAM=\"(.*)\"$/!d;" -e 's//\1/;' $BR2_CONFIG)
+> +export $PARAM="$TMP"
+> +done
 > +
-> +# Newest version requires SPI_TX_QUAD/SPI_RX_QUAD to build
+> +check_configuration ()
+> +{
+> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		if [ -z "$BR2_SIMPLE_NETWORK_NAME" ] ; then
+> +			echo ERROR no name specified for first network interface
+> +			exit 1
+> +		fi
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
+> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" ] ; then
+> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_ADDRESS not set 1>&2
+> +				exit 1
+> +			fi
+> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_NETMASK" ] ; then
+> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_NETMASK not set 1>&2
+> +				exit 1
+> +			fi
 
-I'd add that SPI_TX_QUAD is also an ABI change to make the next line clearer.
+Not strictly necessary(*), but it's safer to back up the old field separator and
+restore it later on:
 
-> +# Pretty safe assumption that toolchain headers are <= runtime kernel version
+OLDIFS="$IFS"; IFS=.
 
-This assumption should@least be documented in the help text, IMO.
 
-> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
-> +SPIDEV_TEST_VERSION = c2e78c34ef0bf4fa860b5fffc99c769d6ddaf52d
+(*) otherwise, the script could misbehave if TARGET_DIR contains dot "." chars:
+
+  TARGET_DIR="/tmp/br.foo/..."
+  echo > $TARGET_DIR/x   =expands-to=>   echo > /tmp/br foo/.../x
+
+> +			IFS=.
+> +			for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
+> +				case $dec in
+> +					255 | 254 | 252 |248 | 240 |224 | 192 | 128 | 0 );;
+> +					*) echo "Error: $BR2_SIMPLE_NETWORK_IPV4_NETMASK is not a correct NETMASK" 1>&2; exit 1 ;;
+> +				esac
+> +			done
+
+IFS="$OLDIFS"
+
+> +		fi
+> +	fi
+> +}
+> +
+> +do_generate_interfaces ()
+> +{
+
+==START
+> +	if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
+> +		echo
+> +		return
+> +	fi
+==END
+
+Can be dropped, because you already check BR2_PACKAGE_SYSTEMD_NETWORKD
+before calling do_generate_interfaces().
+
+> +	echo "# interface file auto-generated by buildroot"
+> +	echo
+> +	echo "auto lo"
+> +	echo "iface lo inet loopback"
+> +	echo
+> +
+> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		echo "auto $BR2_SIMPLE_NETWORK_NAME"
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_DHCP" ] ; then
+> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet dhcp"
+> +		elif [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
+> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet static"
+> +			echo "	address $BR2_SIMPLE_NETWORK_IPV4_ADDRESS"
+> +			echo "	netmask $BR2_SIMPLE_NETWORK_IPV4_NETMASK"
+> +
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
+> +				echo "	broadcast $BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+> +			fi
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
+> +				echo "	gateway $BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+> +			fi
+> +		fi
+> +	fi
+> +}
+> +
+> +do_generate_network_service ()
+> +{
+> +	if [ "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		return
+> +	fi
+> +	echo "[Match]"
+> +	echo "Name=$BR2_SIMPLE_NETWORK_NAME"
+> +	echo
+
+==START
+> +	if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
+> +		echo "[Network]"
+> +		echo "DHCP=v4"
+> +	elif [ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] ; then
+> +		nbits=0
+> +		IFS=.
+> +		for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
+> +			case $dec in
+> +				255) let nbits+=8;;
+> +				254) let nbits+=7;;
+> +				252) let nbits+=6;;
+> +				248) let nbits+=5;;
+> +				240) let nbits+=4;;
+> +				224) let nbits+=3;;
+> +				192) let nbits+=2;;
+> +				128) let nbits+=1;;
+> +				0);;
+> +			esac
+> +		done
+> +
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ] ; then
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
+> +				echo "[Network]"
+> +				echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+> +				echo "Description=buildroot-configured interface"
+> +				echo
+> +			fi
+> +			echo "[Address]"
+> +			echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
+> +				echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+> +			fi
+> +		fi
+> +	fi
+==END
+
+What happens here is that "Description=" is only printed if a gateway is configured,
+plus you can optimize the control flow a bit:
+
+
+echo "[Network]"
+echo "Description=buildroot-configured interface"
+
+if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
+	echo "DHCP=v4"
+elif \
+	[ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] && \
+	[ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ]
+then
+	OLDIFS="$IFS"; IFS=.            ## save IFS
+	for ... case ... esac ... done  ## nbits
+	IFS="$OLDIFS"                   ## restore IFS
+
+	if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ]; then
+		echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+	fi
+	echo
+	echo "[Address]"
+	echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
+	if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
+		echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+	fi
+fi
+
+
+> +}
+> +
+> +check_configuration
+> +mkdir -p $TARGET_DIR/etc/network/
+
+Need an "mkdir -p $TARGET_DIR/etc/systemd/network" here.
+However, this would also create it for non-systemd systems, which is useless,
+so rather remove the systemd file if it exists:
+
+rm -f -- $TARGET_DIR/etc/systemd/network/80-buildroot.network
+
+
+> +if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
+
+and create the directory here:
+
+	mkdir -p $TARGET_DIR/etc/systemd/network
+
+> +	echo > $TARGET_DIR/etc/network/interfaces
+> +	do_generate_network_service > $TARGET_DIR/etc/systemd/network/80-buildroot.network
 > +else
-> +SPIDEV_TEST_VERSION = 925d16a209b40a3e7202a4f867991fb608834d36
+> +	do_generate_interfaces > $TARGET_DIR/etc/network/interfaces
 
-Why not use kernel version tags, v3.14 and v3.15?
+and drop this echo:
 
-> +endif
-> +SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi
-> +SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
-> +
-> +# Downloaded file is C source
-> +SPIDEV_TEST_EXTRACT_CMDS =
-> +
-> +define SPIDEV_TEST_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) -x c \
-> +		-o $(@D)/spidev_test $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE)
-> +endef
-> +
-> +define SPIDEV_TEST_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/spidev_test \
-> +		$(TARGET_DIR)/usr/sbin/spidev_test
-> +endef
-> +
-> +$(eval $(generic-package))
+> +	echo > $TARGET_DIR/etc/systemd/network/80-buildroot.network
 
-baruch
+> +fi
+> diff --git a/system/Config.in b/system/Config.in
+> index 2465f79..3683edf 100644
+> --- a/system/Config.in
+[snip]
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Andr?
