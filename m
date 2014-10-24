@@ -1,239 +1,50 @@
-From: =?UTF-8?B?QW5kcsOpIEVyZG1hbm4=?= <dywi@mailerd.de>
-Date: Fri, 24 Oct 2014 16:37:35 +0200
-Subject: [Buildroot] [PATCH v3] set simple network setup via the system
- configuration submenu
-In-Reply-To: <1414071600-28318-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1414071600-28318-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <544A642F.4020604@mailerd.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 24 Oct 2014 17:01:02 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-22
+In-Reply-To: <CAB0FRsvdf=YAfrW5RBmavp-G6Snks8DK_xesxYJt8MNqmWjd3g@mail.gmail.com>
+References: <20141023063017.0B8391011FF@stock.ovh.net>
+ <CAHkwnC84N+Lp9yZh6Rci+-MWPuRf+zgAjdom_LU2cFrRYwgGjQ@mail.gmail.com>
+ <CAB0FRsvdf=YAfrW5RBmavp-G6Snks8DK_xesxYJt8MNqmWjd3g@mail.gmail.com>
+Message-ID: <CAHkwnC9RFDdPNuscLhtQGpb=SceeZWTbd73P3huEn3k=9xySDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Thu, Oct 23, 2014 at 8:58 PM, Fran?ois Perrad
+<francois.perrad@gadz.org> wrote:
+> 2014-10-23 14:08 GMT+02:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
+>> On Thu, Oct 23, 2014 at 8:30 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/e2c0bccb854ea7736ed81ce9071dfb8700148da9/
+>>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/40030b5b210fe0cca547136a34e9f2a8ddd27bc1/
+>>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/c66c3ba8f7b912d584f72f71283ebe9b3b6ec628/
+>>>          arm |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/f4ce3665b8953b52433627c2e743f7c3c4d9423e/
+>>>         i486 |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/eabda08e4b1343aaef039198d8695ca5e12e1650/
+>>>         sh4a |    sound-theme-freedesktop-0.7 | NOK | http://autobuild.buildroot.net/results/4eecb13a1479f3d175ef1fece9569e647066a20f/
+>>
+>> Hi Francois,
+>> Reverting your commit fix those build failures.
+>>
+>> commit 8e716d659b08635bba703d9ae0867d8590f6b083
+>> Author: Francois Perrad <fperrad@gmail.com>
+>> Date:   Sat Oct 11 08:36:42 2014 +0200
+>>     libxml-parser-perl: restore it like before perl infra
+>>
+>> What do you think about it?
+>
+> If we revert only this patch, host-intltool requires the build of
+> host-perl. And it is a problem for many people. So, the whole serie
+> host-perl (4 patches) must be reverted.
+>
+> Instead of reverting a patch, could you try this patch
+> http://patchwork.ozlabs.org/patch/400614/ and give you feedback ?
 
+Great, i can confirm that after this patch was merged in master the
+build failure is gone,
 
-2014/10/24 Jeremy Rosen <jeremy.rosen@openwide.fr>:
-> diff --git a/support/scripts/generate-network-config.sh b/support/scripts/generate-network-config.sh
-> new file mode 100755
-> index 0000000..c09d165
-> --- /dev/null
-> +++ b/support/scripts/generate-network-config.sh
-> @@ -0,0 +1,136 @@
-> +#!/bin/sh
-> +
-> +#extract our parameters from the config file
-> +# see comment in support/scripts/mkusers at to why we can't simply source
-> +for PARAM in \
-> +	BR2_PACKAGE_SYSTEMD_NETWORKD \
-> +	BR2_SIMPLE_NETWORK_NONE \
-> +	BR2_SIMPLE_NETWORK_IPV4_DHCP \
-> +	BR2_SIMPLE_NETWORK_IPV4_MANUAL \
-> +	; do
-> +TMP=$(sed -r -e "/^$PARAM=(.*)$/!d;" -e 's//\1/;' $BR2_CONFIG)
-> +export $PARAM=$TMP
-> +done
-> +
-> +for PARAM in \
-> +	BR2_SIMPLE_NETWORK_NAME \
-> +	BR2_SIMPLE_NETWORK_IPV4_ADDRESS \
-> +	BR2_SIMPLE_NETWORK_IPV4_NETMASK \
-> +	BR2_SIMPLE_NETWORK_IPV4_BROADCAST \
-> +	BR2_SIMPLE_NETWORK_IPV4_GATEWAY \
-> +	; do
-> +TMP=$(sed -r -e "/^$PARAM=\"(.*)\"$/!d;" -e 's//\1/;' $BR2_CONFIG)
-> +export $PARAM="$TMP"
-> +done
-> +
-> +check_configuration ()
-> +{
-> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-> +		if [ -z "$BR2_SIMPLE_NETWORK_NAME" ] ; then
-> +			echo ERROR no name specified for first network interface
-> +			exit 1
-> +		fi
-> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
-> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" ] ; then
-> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_ADDRESS not set 1>&2
-> +				exit 1
-> +			fi
-> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_NETMASK" ] ; then
-> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_NETMASK not set 1>&2
-> +				exit 1
-> +			fi
-
-Not strictly necessary(*), but it's safer to back up the old field separator and
-restore it later on:
-
-OLDIFS="$IFS"; IFS=.
-
-
-(*) otherwise, the script could misbehave if TARGET_DIR contains dot "." chars:
-
-  TARGET_DIR="/tmp/br.foo/..."
-  echo > $TARGET_DIR/x   =expands-to=>   echo > /tmp/br foo/.../x
-
-> +			IFS=.
-> +			for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
-> +				case $dec in
-> +					255 | 254 | 252 |248 | 240 |224 | 192 | 128 | 0 );;
-> +					*) echo "Error: $BR2_SIMPLE_NETWORK_IPV4_NETMASK is not a correct NETMASK" 1>&2; exit 1 ;;
-> +				esac
-> +			done
-
-IFS="$OLDIFS"
-
-> +		fi
-> +	fi
-> +}
-> +
-> +do_generate_interfaces ()
-> +{
-
-==START
-> +	if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
-> +		echo
-> +		return
-> +	fi
-==END
-
-Can be dropped, because you already check BR2_PACKAGE_SYSTEMD_NETWORKD
-before calling do_generate_interfaces().
-
-> +	echo "# interface file auto-generated by buildroot"
-> +	echo
-> +	echo "auto lo"
-> +	echo "iface lo inet loopback"
-> +	echo
-> +
-> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-> +		echo "auto $BR2_SIMPLE_NETWORK_NAME"
-> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_DHCP" ] ; then
-> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet dhcp"
-> +		elif [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
-> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet static"
-> +			echo "	address $BR2_SIMPLE_NETWORK_IPV4_ADDRESS"
-> +			echo "	netmask $BR2_SIMPLE_NETWORK_IPV4_NETMASK"
-> +
-> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
-> +				echo "	broadcast $BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
-> +			fi
-> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
-> +				echo "	gateway $BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
-> +			fi
-> +		fi
-> +	fi
-> +}
-> +
-> +do_generate_network_service ()
-> +{
-> +	if [ "$BR2_SIMPLE_NETWORK_NONE" ] ; then
-> +		return
-> +	fi
-> +	echo "[Match]"
-> +	echo "Name=$BR2_SIMPLE_NETWORK_NAME"
-> +	echo
-
-==START
-> +	if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
-> +		echo "[Network]"
-> +		echo "DHCP=v4"
-> +	elif [ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] ; then
-> +		nbits=0
-> +		IFS=.
-> +		for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
-> +			case $dec in
-> +				255) let nbits+=8;;
-> +				254) let nbits+=7;;
-> +				252) let nbits+=6;;
-> +				248) let nbits+=5;;
-> +				240) let nbits+=4;;
-> +				224) let nbits+=3;;
-> +				192) let nbits+=2;;
-> +				128) let nbits+=1;;
-> +				0);;
-> +			esac
-> +		done
-> +
-> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ] ; then
-> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
-> +				echo "[Network]"
-> +				echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
-> +				echo "Description=buildroot-configured interface"
-> +				echo
-> +			fi
-> +			echo "[Address]"
-> +			echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
-> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
-> +				echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
-> +			fi
-> +		fi
-> +	fi
-==END
-
-What happens here is that "Description=" is only printed if a gateway is configured,
-plus you can optimize the control flow a bit:
-
-
-echo "[Network]"
-echo "Description=buildroot-configured interface"
-
-if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
-	echo "DHCP=v4"
-elif \
-	[ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] && \
-	[ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ]
-then
-	OLDIFS="$IFS"; IFS=.            ## save IFS
-	for ... case ... esac ... done  ## nbits
-	IFS="$OLDIFS"                   ## restore IFS
-
-	if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ]; then
-		echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
-	fi
-	echo
-	echo "[Address]"
-	echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
-	if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
-		echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
-	fi
-fi
-
-
-> +}
-> +
-> +check_configuration
-> +mkdir -p $TARGET_DIR/etc/network/
-
-Need an "mkdir -p $TARGET_DIR/etc/systemd/network" here.
-However, this would also create it for non-systemd systems, which is useless,
-so rather remove the systemd file if it exists:
-
-rm -f -- $TARGET_DIR/etc/systemd/network/80-buildroot.network
-
-
-> +if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
-
-and create the directory here:
-
-	mkdir -p $TARGET_DIR/etc/systemd/network
-
-> +	echo > $TARGET_DIR/etc/network/interfaces
-> +	do_generate_network_service > $TARGET_DIR/etc/systemd/network/80-buildroot.network
-> +else
-> +	do_generate_interfaces > $TARGET_DIR/etc/network/interfaces
-
-and drop this echo:
-
-> +	echo > $TARGET_DIR/etc/systemd/network/80-buildroot.network
-
-> +fi
-> diff --git a/system/Config.in b/system/Config.in
-> index 2465f79..3683edf 100644
-> --- a/system/Config.in
-[snip]
-
-
+Thanks
 -- 
-Andr?
+Fabio Porcedda
