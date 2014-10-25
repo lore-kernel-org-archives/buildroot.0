@@ -1,46 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Oct 2014 02:46:50 +0200
-Subject: [Buildroot] [git commit] package/nginx: fix build failure
-Message-ID: <20141025004725.92D52B0E08@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 24 Oct 2014 23:06:45 -0300
+Subject: [Buildroot] [PATCH] coreutils: add optionals, use single binary
+Message-ID: <1414202806-12495-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6476f9adcd50adbe5d262ed37b1dca5081430bff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add proper support for optional libraries: acl, attr, gmp & libcap.
 
-Correctly set NGX_SYS_NERR, even when it is 0.
+Also build the single binary as pointed out by P?draig Brady for some
+neat space savings.
+Use the shebang (default) method since it allows us to move binaries
+into other directories to suit our needs whereas for symlink that
+wouldn't be so easy.
 
-Fixes:
-  http://autobuild.buildroot.org/results/666/666d780bf61e10c9f89f765bb04ddc1afc11d0d1/
-  http://autobuild.buildroot.org/?reason=nginx-1.6.2&&arch=powerpc
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...nix-make-sys_nerr-guessing-cross-friendly.patch |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/coreutils/coreutils.mk | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-index 4c00755..d02de68 100644
---- a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-+++ b/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-@@ -22,7 +22,7 @@ new file mode 100644
- index 0000000..25e7c22
- --- /dev/null
- +++ b/auto/os/sys_nerr
--@@ -0,0 +1,77 @@
-+@@ -0,0 +1,78 @@
- +
- +# Copyright (C) Samuel Martin <s.martin49@gmail.com>
- +
-@@ -89,6 +89,7 @@ index 0000000..25e7c22
- +
- +if test -z $ngx_sys_nerr ; then
- +    ngx_size=0
-++    ngx_sys_nerr=0
- +fi
- +
- +cat << END >> $NGX_AUTO_CONFIG_H
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 54c7892..1a25a3a 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -20,6 +20,30 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ COREUTILS_DEPENDENCIES = busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ACL),y)
++COREUTILS_DEPENDENCIES += acl
++else
++COREUTILS_CONF_OPTS += --disable-acl
++endif
++
++ifeq ($(BR2_PACKAGE_ATTR),y)
++COREUTILS_DEPENDENCIES += attr
++else
++COREUTILS_CONF_OPTS += --disable-xattr
++endif
++
++ifeq ($(BR2_PACKAGE_GMP),y)
++COREUTILS_DEPENDENCIES += gmp
++else
++COREUTILS_CONF_OPTS += --without-gmp
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++COREUTILS_DEPENDENCIES += libcap
++else
++COREUTILS_CONF_OPTS += --disable-libcap
++endif
++
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
+ 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+ 	uname join
+@@ -61,7 +85,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 		utils_cv_localtime_cache=no \
+ 		PERL=missing
+ 
+-COREUTILS_CONF_OPTS = --disable-rpath
++COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs
+ 
+ define COREUTILS_POST_INSTALL
+ 	# some things go in root rather than usr
+-- 
+2.0.4
