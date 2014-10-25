@@ -1,35 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 19:10:12 +0200
-Subject: [Buildroot] [git commit] shairport-sync: requires alsa-lib mixer
-	support
-Message-ID: <20141025171031.B32ECAF458@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 19:29:25 +0200
+Subject: [Buildroot] [git commit] libunistring: new package
+Message-ID: <20141025173126.79C5CAF65C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2287b9a3ab5c116a4866b7026d013d48cd61950
+commit: http://git.buildroot.net/buildroot/commit/?id=c2a5b777a5ba923f440a21497a97d32b64f09164
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+[Thomas:
+  - adjust the title of the commit
+  - remove the thread dependency, by using the --disable-threads
+    option when needed
+  - remove LIBUNISTRING_SOURCE, since its value was the default
+  - use BR2_GNU_MIRROR in LIBUNISTRING_SITE
+  - adjust the license, which really is LGPLv3+, not LGPLv2. The
+    license file is COPYING.LIB.]
 
-  http://autobuild.buildroot.org/results/b74/b74c764e9527ce1cce8825682285824a519ac2cf/
-
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shairport-sync/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Config.in                    |    1 +
+ package/libunistring/Config.in       |    8 ++++++++
+ package/libunistring/libunistring.mk |   19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index bf40524..ce31061 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
- 	depends on BR2_USE_MMU # libdaemon
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa_lib
- 	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_LIBDAEMON
- 	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POPT
+diff --git a/package/Config.in b/package/Config.in
+index 03639e4..9e361b9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -907,6 +907,7 @@ menu "Other"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/libunistring/Config.in"
+ endmenu
+ 
+ menu "Security"
+diff --git a/package/libunistring/Config.in b/package/libunistring/Config.in
+new file mode 100644
+index 0000000..ebb37d9
+--- /dev/null
++++ b/package/libunistring/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBUNISTRING
++	bool "libunistring"
++	help
++	  The libunistring library provides functions for manipulating
++	  Unicode strings and for manipulating C strings according to
++	  the Unicode standard.
++
++	  http://www.gnu.org/software/libunistring/
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+new file mode 100644
+index 0000000..3234ddc
+--- /dev/null
++++ b/package/libunistring/libunistring.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libunistring
++#
++################################################################################
++
++LIBUNISTRING_VERSION = 0.9.4
++LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
++LIBUNISTRING_INSTALL_STAGING = YES
++LIBUNISTRING_LICENSE = LGPLv3+
++LIBUNISTRING_LICENSE_FILES = COPYING.LIB
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBUNISTRING_CONF_OPTS += --enable-threads=posix
++else
++LIBUNISTRING_CONF_OPTS += --disable-threads
++endif
++
++$(eval $(autotools-package))
