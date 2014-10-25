@@ -1,42 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Oct 2014 02:04:30 +0200
-Subject: [Buildroot] [git commit] snowball-hdmiservice: Use github call
-Message-ID: <20141025001137.09A1CB0D0E@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 02:05:06 +0200
+Subject: [Buildroot] [git commit] mrouted: Use github call
+Message-ID: <20141025001137.10FE8B0CEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b05963181a2402e446e4a917fc4e7ad655ba6978
+commit: http://git.buildroot.net/buildroot/commit/?id=2311214615d8818ab54449b2d58c9589abbcbf98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also drop trailing spaces.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../snowball-hdmiservice/snowball-hdmiservice.mk   |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/mrouted/mrouted.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-index f254414..267b5ad 100644
---- a/package/snowball-hdmiservice/snowball-hdmiservice.mk
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-@@ -5,13 +5,13 @@
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 67bb8a1..78fe98a 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -5,8 +5,7 @@
  ################################################################################
  
- SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
--SNOWBALL_HDMISERVICE_SITE = https://github.com/igloocommunity/hdmiservice
-+SNOWBALL_HDMISERVICE_SITE = $(call github,igloocommunity,hdmiservice,$(SNOWBALL_HDMISERVICE_VERSION))
- SNOWBALL_HDMISERVICE_LICENSE = MIT
- SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
- SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
+ MROUTED_VERSION = 3.9.6
+-MROUTED_SOURCE = mrouted-$(MROUTED_VERSION).tar.bz2
+-MROUTED_SITE = http://cloud.github.com/downloads/troglobit/mrouted
++MROUTED_SITE = $(call github,troglobit,mrouted,$(MROUTED_VERSION))
+ MROUTED_DEPENDENCIES = host-bison
  
- define SNOWBALL_HDMISERVICE_BUILD_CMDS
--	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
- endef
- 
- define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
+ define MROUTED_BUILD_CMDS
