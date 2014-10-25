@@ -1,48 +1,49 @@
-From: =?UTF-8?Q?J=C3=B6rg_Krause?= <jkrause@posteo.de>
-Date: Sat, 25 Oct 2014 15:41:02 +0200
-Subject: [Buildroot] [PATCH v2 1/1] shairplay-sync: new package
-In-Reply-To: <20141025122921.0ad0652e@free-electrons.com>
-References: <1414191341-21557-1-git-send-email-jkrause@posteo.de>
- <20141025122921.0ad0652e@free-electrons.com>
-Message-ID: <56aabaa3604876fb38ac9833169f1b88@posteo.de>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Sat, 25 Oct 2014 16:28:31 +0200
+Subject: [Buildroot] [PATCH v2] linux-headers: allow use of headers from
+ kernel "package" selected
+In-Reply-To: <1413560410.19660.5.camel@abrodkin-8560l.internal.synopsys.com>
+References: <1413132543-7148-1-git-send-email-abrodkin@synopsys.com>
+ <CABbD_XBjo-UJf95vFi5innY4db=CzKDLeKqgXSsmEsf7eWw5yw@mail.gmail.com>
+ <1413560410.19660.5.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <CABbD_XAv=+=zGo4mOkuCRCd9ay4TPyuuU0P_N8hLT0=UZL-PZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi Alexey,
 
-Am 25.10.2014 12:29 schrieb Thomas Petazzoni:
-> Dear J?rg Krause,
-> 
-> On Sat, 25 Oct 2014 00:55:41 +0200, J?rg Krause wrote:
->> Signed-off-by: J?rg Krause <jkrause@posteo.de>
->> ---
->> Changes v1 -> v2:
->>   - autoselect SSL backend instead of a user choice
->>   - autoselect zeroconf backend instead of a user choice
->>   - fix missing select for optional package libsoxr
->>   - fix config option for avahi (--with-avahi instead of 
->> --with-openssl)
->>   - add comment to tinysvcmdns in shairport-sync.mk
-> 
-> Applied, after doing a few tweaks:
-> 
->     [Thomas:
->      - rework init script to be more like other Buildroot init scripts,
->        and fix indentation.
->      - fix indentation in the .mk file
->      - remove dependencies on host-autoconf and host-libtool, since the
->        package has AUTORECONF = YES, this is not needed.
->      - fix licensing informations.]
+Much more significant one is how to get kernel sources for
+> "linux-headers" package from the same location as "linux" package will
+> get them.
+>
+> We cannot rely on internal variables of "linux" package like LINUX_xxx
+> because they could be resolved later than we need them.
+>
+Could you point me some examples, in which cases can these be computed too
+late?
 
 
-Many thanks for the thorough review! You even checked the license!
+> So we need to do the same one calculations as we do in "linux.mk" see:
+> linux/linux.mk: # Compute LINUX_SOURCE and LINUX_SITE from the
+> configuration
+>
+Maybe add an extra target for computing the variables somewhere, and make
+both
+linux and linux-headers depend on it?
 
-One question to the init script file: shairport-sync uses libdaemon for 
-creating the pidfile. Does this conflicts with the `-p` switch of 
-start-stop-daemon?
 
-Best regards
-J?rg
+>
+> In the best case it's dummy code duplication which inevitably will bite
+> us in the future. Still I didn't find any better solution. Any input is
+> much appreciated.
+
+I agree, code duplication is at least not future-proof :)
+
+Best regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141025/1092b844/attachment.html>
