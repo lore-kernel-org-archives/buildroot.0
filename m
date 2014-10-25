@@ -1,97 +1,206 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:24:02 +0200
-Subject: [Buildroot] [git commit] uclibc: rename patches to follow the new
-	name structure
-Message-ID: <20141025092426.177B2A5C0B@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 11:24:20 +0200
+Subject: [Buildroot] [git commit] uclibc: Do not include __iconv_codesets
+	into iconv utility
+Message-ID: <20141025092426.20967A5C0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e30c5c2b1cf2c535734a5c1f07b612e830a60b1
+commit: http://git.buildroot.net/buildroot/commit/?id=c34110ec51a66fb0a1efb5823ea41ba036c1bfe3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Backporting an upstream patch to fix a problem in the install step:
+
+make[1]: Entering directory `/br/output/build/uclibc-0.9.31.1'
+make[2]: Nothing to be done for `locale_headers'.
+	CC utils/getconf
+	STRIP -x -R .note -R .comment ../utils/getconf
+	CC utils/iconv
+../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
+`__iconv_codesets'
+/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
+collect2: error: ld returned 1 exit status
+
+Upstream commit:
+	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...patch => 0001-add-bsd-endian-conversions.patch} |    0
- ...fy-init1.patch => 0002-add-inotify-init1.patch} |    0
- ...k-cloexec.patch => 0003-add-sock-cloexec.patch} |    0
- ...rverscmp.patch => 0004-export-strverscmp.patch} |    0
- ...> 0005-fix-daylight-saving-time-handling.patch} |    0
- ...f-8.patch => 0006-fix-error-locale-utf-8.patch} |    0
- ...fix.patch => 0007-linuxthreads-errno-fix.patch} |    0
- ...tch => 0008-more-workarounds-GCC-PR32219.patch} |    0
- ...clibc-0009-unshare.patch => 0009-unshare.patch} |    0
- ...219.patch => 0010-workaround-GCC-PR32219.patch} |    0
- ...ts.patch => 0011-startfiles-Make-targets.patch} |    0
- ...patch => 0012-netlinkaccess-header-types.patch} |    0
- ...eps-add-__kernel_long-and-__kernel_ulong.patch} |    0
- ...=> 0001-bits-time.h-sync-with-glibc-2.16.patch} |    0
- ...3-syscall.patch => 0003-Add-dup3-syscall.patch} |    0
- ...eps-add-__kernel_long-and-__kernel_ulong.patch} |    0
- ...tch => 0005-Patch-from-OpenWRT-for-avr32.patch} |    0
- ...store-stack-pointer-just-after-return-fr.patch} |    0
- ....S-Add-missing-IT-instruction-for-Thumb2.patch} |    0
- ...-arm-move-check-for-BX-to-its-own-header.patch} |    0
- ...terp.patch => 0009-mips64-fix-n64-interp.patch} |    0
- ...010-Rules.mak-fix-breakage-from-603af30d.patch} |    0
- ...1-libc-add-non-standard-execvpe-function.patch} |    0
- ...=> 0012-libc-stdlib-add-mkostemp-helpers.patch} |    0
- ...entfd-Implement-eventfd2-and-fix-eventfd.patch} |    0
- ...vise.c.patch => 0015-add-posix_madvise.c.patch} |    0
- ...tl-sh-fix-race-condition-in-lll_wait_tid.patch} |    0
- ...-SIGCANCEL-to-the-list-of-blocked-signal.patch} |    0
- ...8-ldso-include-dlfcn.h-for-RTLD_NODELETE.patch} |    0
- ...clude-elf.h-update-for-ELFOSABI_-changes.patch} |    0
- ...020-update-ptrace.h-to-latest-from-glibc.patch} |    0
- ...-authnone_marshal-in-multithreading-cont.patch} |    0
- ...-__syscall_error-callers-to-use-a0-for-a.patch} |    0
- ...instead-of-v0-for-__syscall_error-argume.patch} |    0
- ...e-.arm-mode-for-resolver-unconditionally.patch} |    0
- ...-getpid-behave-similar-to-the-common-one.patch} |    0
- ...scalls.h-allow-immediate-values-as-6th-s.patch} |    0
- ...0028-dl-fix-dlsym-lookups-with-RTLD_NEXT.patch} |    0
- ... => 0029-inet-rpc-fix-build-in-NPTL-case.patch} |    0
- ...lement-assignment-allocation-m-character.patch} |    0
- ...ap-sys_mmap2-do-unsigned-shift-of-offset.patch} |    0
- ....patch => 0033-rpmatch-backport-function.patch} |    0
- ...ze.patch => 0034-statfs-support-f_frsize.patch} |    0
- ...-socket.h-pull-socket_type.h-from-eglibc.patch} |    0
- ...nt.h-update.patch => 0036-mount.h-update.patch} |    0
- ..._bits_syscall_h-do-not-leave-undefined-S.patch} |    0
- ...8-libc-sysdeps-sync-bits-in.h-with-glibc.patch} |    0
- ...reuse-free-slots-at-the-end-of-exit-func.patch} |    0
- ...me-MAP_UNINITIALIZE-to-MAP_UNINITIALIZED.patch} |    0
- ...e.patch => 0041-libc-add-posix_fallocate.patch} |    0
- ...fix-overflow-checking-in-int_add_no_wrap.patch} |    0
- ...dd-missing-SYMBOL_PREFIX-to-symbol-names.patch} |    0
- ...net-do-not-filter-responses-in-res_query.patch} |    0
- ...Remove-pragma-weak-for-undeclared-symbol.patch} |    0
- ...ting-the-nameserver-from-_res-state-afte.patch} |    0
- ...use-fputws_unlocked-S-F-instead-of-fputw.patch} |    0
- ...8-Fix-a-problem-with-scanning-wide-chars.patch} |    0
- ...gileness-in-dlopen-do_dlopen-wrapper-wor.patch} |    0
- ...open-implementation-from-statically-link.patch} |    0
- ...e-fix-backtrace-for-statically-linked-ap.patch} |    0
- ...ibubacktrace-fix-build-due-to-some-typos.patch} |    0
- ...licitly-include-uClibc_page.h-to-make-PA.patch} |    0
- ...e-new-bits-scheme-for-arch-specific-flag.patch} |    0
- ...-siginfo_h-add-a-missing-function-member.patch} |    0
- ..._NSIG-to-128-not-129.-This-matches-glibc.patch} |    0
- ...V_PAD_SIZE-takes-__WORDSIZE-into-account.patch} |    0
- ...tus.h-correctly-interpret-status-0x007f-.patch} |    0
- ...8-test-tls-fix-build-with-newer-binutils.patch} |    0
- ...nfig.patch => 0059-test-cater-for-config.patch} |    0
- ...patch => 0060-test-Fix-math-c-dependency.patch} |    0
- ...rking.patch => 0061-fix-sparc-networking.patch} |    0
- ...bdl-Also-include-dl-tls.h-for-for-SHARED.patch} |    0
- ...ptl-remove-duplicate-vfork-in-libpthread.patch} |    0
- ...rpc-update-ptrace.h-to-latest-from-glibc.patch} |    0
- ...arc-update-ptrace.h-to-latest-from-glibc.patch} |    0
- ...add-missing-.literal_position-directives.patch} |    0
- ...posix_fadvise-Fix-build-breakage-for-LFS.patch} |    0
- 77 files changed, 0 insertions(+), 0 deletions(-)
+ ...clude-__iconv_codesets-into-iconv-utility.patch |   79 ++++++++++++++++++++
+ ...clude-__iconv_codesets-into-iconv-utility.patch |   79 ++++++++++++++++++++
+ 2 files changed, 158 insertions(+), 0 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch b/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+new file mode 100644
+index 0000000..4b6a701
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/0014-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+@@ -0,0 +1,79 @@
++uclibc: Do not include __iconv_codesets into iconv utility
++
++Backporting an upstream patch to fix a problem in the install step:
++
++make[1]: Entering directory `/br/output/build/uclibc-0.9.31.1'
++make[2]: Nothing to be done for `locale_headers'.
++	CC utils/getconf
++	STRIP -x -R .note -R .comment ../utils/getconf
++	CC utils/iconv
++../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
++`__iconv_codesets'
++/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
++collect2: error: ld returned 1 exit status
++
++Upstream commit:
++	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From d46dc8bc88e38251bfa3712efe7abf62933f5419 Mon Sep 17 00:00:00 2001
++From: Peter S. Mazinger <ps.m@gmx.net>
++Date: Thu, 24 Mar 2011 00:15:25 +0000
++Subject: iconv: Do not include __iconv_codesets into iconv utility
++
++Host iconv needs only L_iconv_main defined and __iconv_codesets
++has to included, as host system does not provide it.
++Keep __iconv_codesets out of iconv linked against uClibc.
++
++Signed-off-by: Peter S. Mazinger <ps.m@gmx.net>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/libc/misc/wchar/wchar.c b/libc/misc/wchar/wchar.c
++index 412c557..0704096 100644
++--- a/libc/misc/wchar/wchar.c
+++++ b/libc/misc/wchar/wchar.c
++@@ -1196,6 +1196,9 @@ libc_hidden_proto(__iconv_codesets)
++ #endif
++ 
++ #if defined L_iconv || defined L_iconv_main
+++# ifdef L_iconv_main
+++static
+++# endif
++ const unsigned char __iconv_codesets[] =
++ 	"\x0a\xe0""WCHAR_T\x00"		/* superset of UCS-4 but platform-endian */
++ #if __BYTE_ORDER == __BIG_ENDIAN
++diff --git a/utils/Makefile.in b/utils/Makefile.in
++index bb85be3..1714d28 100644
++--- a/utils/Makefile.in
+++++ b/utils/Makefile.in
++@@ -36,8 +36,7 @@ CFLAGS-ldd := $(CFLAGS-utils-shared) -DBUILDING_LINKAGE
++ # Need CFLAGS-utils explicitly, because the source file is not located in utils
++ CFLAGS-iconv := $(CFLAGS-utils) \
++     $(CFLAGS-utils-shared) \
++-    -I$(top_srcdir)libc/misc/wchar \
++-    -DL_iconv_main \
+++    -I$(top_srcdir)libc/misc/wchar
++ 
++ CFLAGS-locale := $(CFLAGS-utils)
++ CFLAGS-getconf :=$(CFLAGS-utils) \
++diff --git a/utils/iconv.c b/utils/iconv.c
++index 04e2c32..a0260df 100644
++--- a/utils/iconv.c
+++++ b/utils/iconv.c
++@@ -108,7 +108,12 @@
++ #include <wchar.h>
++ #include "wchar.c" /* for _UC_iconv_t and __iconv_codesets */
++ 
++-extern const unsigned char __iconv_codesets[];
+++#ifdef L_iconv_main
+++static
+++#else
+++extern
+++#endif
+++const unsigned char __iconv_codesets[];
++ 
++ #define IBUF BUFSIZ
++ #define OBUF BUFSIZ
++--
++cgit v0.9.1
+diff --git a/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch b/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+new file mode 100644
+index 0000000..a6b5b5e
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/0065-Do-not-include-__iconv_codesets-into-iconv-utility.patch
+@@ -0,0 +1,79 @@
++uclibc: Do not include __iconv_codesets into iconv utility
++
++Backporting an upstream patch to fix a problem in the install step:
++
++make[1]: Entering directory `/br/output/build/uclibc-0.9.33.2'
++make[2]: Nothing to be done for `locale_headers'.
++	CC utils/getconf
++	STRIP -x -R .note -R .comment ../utils/getconf
++	CC utils/iconv
++../lib/libc.a(iconv.os):(.rodata+0x18): multiple definition of
++`__iconv_codesets'
++/tmp/ccVmV8Lq.o:(.rodata+0x18): first defined here
++collect2: error: ld returned 1 exit status
++
++Upstream commit:
++	http://git.uclibc.org/uClibc/commit/?id=d46dc8bc88e38251bfa3712efe7abf62933f5419
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From d46dc8bc88e38251bfa3712efe7abf62933f5419 Mon Sep 17 00:00:00 2001
++From: Peter S. Mazinger <ps.m@gmx.net>
++Date: Thu, 24 Mar 2011 00:15:25 +0000
++Subject: iconv: Do not include __iconv_codesets into iconv utility
++
++Host iconv needs only L_iconv_main defined and __iconv_codesets
++has to included, as host system does not provide it.
++Keep __iconv_codesets out of iconv linked against uClibc.
++
++Signed-off-by: Peter S. Mazinger <ps.m@gmx.net>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++diff --git a/libc/misc/wchar/wchar.c b/libc/misc/wchar/wchar.c
++index 412c557..0704096 100644
++--- a/libc/misc/wchar/wchar.c
+++++ b/libc/misc/wchar/wchar.c
++@@ -1196,6 +1196,9 @@ libc_hidden_proto(__iconv_codesets)
++ #endif
++ 
++ #if defined L_iconv || defined L_iconv_main
+++# ifdef L_iconv_main
+++static
+++# endif
++ const unsigned char __iconv_codesets[] =
++ 	"\x0a\xe0""WCHAR_T\x00"		/* superset of UCS-4 but platform-endian */
++ #if __BYTE_ORDER == __BIG_ENDIAN
++diff --git a/utils/Makefile.in b/utils/Makefile.in
++index bb85be3..1714d28 100644
++--- a/utils/Makefile.in
+++++ b/utils/Makefile.in
++@@ -36,8 +36,7 @@ CFLAGS-ldd := $(CFLAGS-utils-shared) -DBUILDING_LINKAGE
++ # Need CFLAGS-utils explicitly, because the source file is not located in utils
++ CFLAGS-iconv := $(CFLAGS-utils) \
++     $(CFLAGS-utils-shared) \
++-    -I$(top_srcdir)libc/misc/wchar \
++-    -DL_iconv_main \
+++    -I$(top_srcdir)libc/misc/wchar
++ 
++ CFLAGS-locale := $(CFLAGS-utils)
++ CFLAGS-getconf :=$(CFLAGS-utils) \
++diff --git a/utils/iconv.c b/utils/iconv.c
++index 04e2c32..a0260df 100644
++--- a/utils/iconv.c
+++++ b/utils/iconv.c
++@@ -108,7 +108,12 @@
++ #include <wchar.h>
++ #include "wchar.c" /* for _UC_iconv_t and __iconv_codesets */
++ 
++-extern const unsigned char __iconv_codesets[];
+++#ifdef L_iconv_main
+++static
+++#else
+++extern
+++#endif
+++const unsigned char __iconv_codesets[];
++ 
++ #define IBUF BUFSIZ
++ #define OBUF BUFSIZ
++--
++cgit v0.9.1
