@@ -1,30 +1,23 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 25 Oct 2014 18:23:04 +0200
-Subject: [Buildroot] [PATCH 1/2] skeleton: ld.so.conf include
-	ld.so.conf.d/*.conf
-In-Reply-To: <20141024235323.GE14818@free.fr>
-References: <1413186949-7006-1-git-send-email-jezz@sysmic.org>
- <20141024235323.GE14818@free.fr>
-Message-ID: <2140816.4gLhkShfBv@sagittea>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Oct 2014 18:40:56 +0200
+Subject: [Buildroot] [PATCH 1/3] skeleton/etc/profile: remove
+	/usr/bin/X11 from PATH
+In-Reply-To: <1413761457-25565-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 19 Oct 2014 20:30:55 -0300")
+References: <1413761457-25565-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k33o5ch3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 24 October 2014 16:53:23 Yann E. MORIN wrote:
-> J?r?me, All,
-> 
-> On 2014-10-13 09:55 +0200, J?r?me Pouiller spake thusly:
-> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> 
-> Given the feedback given in the thread, I've marked this patch "Changes
-> Requested" in patchwork.
-> 
-> Are you working on an updated patch?
-I will do next week I think.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+
+ > That directory has been unused for ages so remove it.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed all 3, thanks.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Bye, Peter Korsgaard
