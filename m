@@ -1,386 +1,98 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 25 Oct 2014 08:20:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package: indentation cleanup
-Message-ID: <1414218044-32560-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Oct 2014 08:30:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-10-24
+Message-ID: <20141025063015.AC1771011CB@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/cegui06/cegui06.mk       |   36 ++++++++++++++++++------------------
- package/dmraid/dmraid.mk         |    6 +++---
- package/fxload/fxload.mk         |    4 ++--
- package/gptfdisk/gptfdisk.mk     |    8 ++++----
- package/keyutils/keyutils.mk     |   14 +++++++-------
- package/libcofi/libcofi.mk       |    4 ++--
- package/luaposix/luaposix.mk     |    2 +-
- package/netcat-openbsd/Config.in |    4 ++--
- package/nodejs/nodejs.mk         |    2 +-
- package/perl/perl.mk             |   10 +++++-----
- package/qemu/Config.in           |    4 ++--
- package/qemu/qemu.mk             |   12 ++++++------
- package/redis/redis.mk           |    2 +-
- package/rtmpdump/rtmpdump.mk     |   20 ++++++++++----------
- package/spice/spice.mk           |   16 ++++++++--------
- 15 files changed, 72 insertions(+), 72 deletions(-)
+Build statistics for 2014-10-24
+===============================
 
-diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
-index ee74363..43d3b09 100644
---- a/package/cegui06/cegui06.mk
-+++ b/package/cegui06/cegui06.mk
-@@ -13,24 +13,24 @@ CEGUI06_LICENSE = MIT
- CEGUI06_LICENSE_FILES = COPYING
- CEGUI06_INSTALL_STAGING = YES
- 
--CEGUI06_DEPENDENCIES =          \
--    expat                       \
--    freetype                    \
--    pcre                        \
-+CEGUI06_DEPENDENCIES =              \
-+	expat                       \
-+	freetype                    \
-+	pcre                        \
- 
--CEGUI06_CONF_OPTS =             \
--    --enable-expat              \
--    --disable-external-tinyxml  \
--    --disable-xerces-c          \
--    --disable-libxml            \
--    --disable-tinyxml           \
--    --disable-opengl-renderer   \
--    --disable-external-glew     \
--    --disable-irrlicht-renderer \
--    --disable-directfb-renderer \
--    --disable-samples           \
--    --disable-lua-module        \
--    --disable-toluacegui        \
--    --disable-external-toluapp  \
-+CEGUI06_CONF_OPTS =                 \
-+	--enable-expat              \
-+	--disable-external-tinyxml  \
-+	--disable-xerces-c          \
-+	--disable-libxml            \
-+	--disable-tinyxml           \
-+	--disable-opengl-renderer   \
-+	--disable-external-glew     \
-+	--disable-irrlicht-renderer \
-+	--disable-directfb-renderer \
-+	--disable-samples           \
-+	--disable-lua-module        \
-+	--disable-toluacegui        \
-+	--disable-external-toluapp  \
- 
- $(eval $(autotools-package))
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 9699ead..024b9b5 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -18,9 +18,9 @@ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
- DMRAID_DEPENDENCIES = lvm2
- 
- define DMRAID_INSTALL_INIT_SYSV
--    [ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
--        $(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
--            $(TARGET_DIR)/etc/init.d/S20dmraid
-+	[ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
-+		$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
-+			$(TARGET_DIR)/etc/init.d/S20dmraid
- endef
- 
- $(eval $(autotools-package))
-diff --git a/package/fxload/fxload.mk b/package/fxload/fxload.mk
-index 26feec3..b34dccd 100644
---- a/package/fxload/fxload.mk
-+++ b/package/fxload/fxload.mk
-@@ -10,11 +10,11 @@ FXLOAD_LICENSE = GPLv2+
- FXLOAD_LICENSE_FILES = COPYING
- 
- define FXLOAD_BUILD_CMDS
--    $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
- endef
- 
- define FXLOAD_INSTALL_TARGET_CMDS
--    $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) prefix=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) prefix=$(TARGET_DIR) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 6835f40..f6e9ecd 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -15,15 +15,15 @@ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
- 
- GPTFDISK_DEPENDENCIES += util-linux
- ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
--    GPTFDISK_DEPENDENCIES += popt
-+GPTFDISK_DEPENDENCIES += popt
- endif
- ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
--    GPTFDISK_DEPENDENCIES += ncurses
-+GPTFDISK_DEPENDENCIES += ncurses
- endif
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
--    GPTFDISK_DEPENDENCIES += icu
--    GPTFDISK_MAKE_OPTS += USE_UTF16=y
-+GPTFDISK_DEPENDENCIES += icu
-+GPTFDISK_MAKE_OPTS += USE_UTF16=y
- endif
- 
- define GPTFDISK_BUILD_CMDS
-diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-index 241536f..27cd4ae 100644
---- a/package/keyutils/keyutils.mk
-+++ b/package/keyutils/keyutils.mk
-@@ -11,13 +11,13 @@ KEYUTILS_LICENSE = GPLv2+ LGPLv2.1+
- KEYUTILS_LICENSE_FILES = LICENCE.GPL LICENCE.LGPL
- KEYUTILS_INSTALL_STAGING = YES
- 
--KEYUTILS_MAKE_PARAMS =                \
--    INSTALL=$(INSTALL)                \
--    LIBDIR=/usr/lib                   \
--    USRLIBDIR=/usr/lib                \
--    CFLAGS="$(TARGET_CFLAGS)"         \
--    CPPFLAGS="$(TARGET_CPPFLAGS) -I." \
--    LNS="$(HOSTLN) -sf"
-+KEYUTILS_MAKE_PARAMS =                    \
-+	INSTALL=$(INSTALL)                \
-+	LIBDIR=/usr/lib                   \
-+	USRLIBDIR=/usr/lib                \
-+	CFLAGS="$(TARGET_CFLAGS)"         \
-+	CPPFLAGS="$(TARGET_CPPFLAGS) -I." \
-+	LNS="$(HOSTLN) -sf"
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- KEYUTILS_MAKE_PARAMS += NO_SOLIB=1
-diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
-index dcfc641..90daff2 100644
---- a/package/libcofi/libcofi.mk
-+++ b/package/libcofi/libcofi.mk
-@@ -10,11 +10,11 @@ LIBCOFI_LICENSE = LGPLv2.1
- LIBCOFI_LICENSE_FILES = README.md
- 
- define LIBCOFI_BUILD_CMDS
--    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
- 
- define LIBCOFI_INSTALL_TARGET_CMDS
--    $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
-+	$(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 13fc266..a723a50 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -12,7 +12,7 @@ LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
- LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
--    LUAPOSIX_DEPENDENCIES += ncurses
-+LUAPOSIX_DEPENDENCIES += ncurses
- endif
- 
- $(eval $(autotools-package))
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 16be610..47dfe5f 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -19,6 +19,6 @@ config BR2_PACKAGE_NETCAT_OPENBSD
-           https://packages.debian.org/sid/netcat-openbsd
- 
- comment "netcat-openbsd needs an (e)glibc toolchain w/ threads"
--    depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--    depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
- ~
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e73e080..8832ce3 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -8,7 +8,7 @@ NODEJS_VERSION = 0.10.32
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
--    $(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
-+	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
- HOST_NODEJS_DEPENDENCIES = host-python host-zlib
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index a8ed49f..9684668 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -42,10 +42,10 @@ endef
- PERL_POST_PATCH_HOOKS += PERL_CROSS_SET_POD
- 
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
--    PERL_DEPENDENCIES += berkeleydb
-+PERL_DEPENDENCIES += berkeleydb
- endif
- ifeq ($(BR2_PACKAGE_GDBM),y)
--    PERL_DEPENDENCIES += gdbm
-+PERL_DEPENDENCIES += gdbm
- endif
- 
- # We have to override LD, because an external multilib toolchain ld is not
-@@ -66,15 +66,15 @@ PERL_CONF_OPTS = \
- 	-Dperladmin=root
- 
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
--    PERL_CONF_OPTS += -Dusedevel
-+PERL_CONF_OPTS += -Dusedevel
- endif
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
--    PERL_CONF_OPTS += --all-static --no-dynaloader
-+PERL_CONF_OPTS += --all-static --no-dynaloader
- endif
- 
- ifneq ($(BR2_LARGEFILE),y)
--    PERL_CONF_OPTS += -Uuselargefiles
-+PERL_CONF_OPTS += -Uuselargefiles
- endif
- 
- PERL_MODULES = $(call qstrip,$(BR2_PACKAGE_PERL_MODULES))
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index cd7fed7..e8d03da 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -65,8 +65,8 @@ config BR2_PACKAGE_QEMU_LINUX_USER
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
- 
- config BR2_PACKAGE_QEMU_HAS_EMULS
--    def_bool y
--    depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER || BR2_PACKAGE_QEMU_CUSTOM_TARGETS != ""
-+	def_bool y
-+	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER || BR2_PACKAGE_QEMU_CUSTOM_TARGETS != ""
- 
- if BR2_PACKAGE_QEMU_HAS_EMULS
- 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 8735b46..2495674 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -46,16 +46,16 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
- 
- HOST_QEMU_ARCH = $(ARCH)
- ifeq ($(HOST_QEMU_ARCH),i486)
--    HOST_QEMU_ARCH = i386
-+HOST_QEMU_ARCH = i386
- endif
- ifeq ($(HOST_QEMU_ARCH),i586)
--    HOST_QEMU_ARCH = i386
-+HOST_QEMU_ARCH = i386
- endif
- ifeq ($(HOST_QEMU_ARCH),i686)
--    HOST_QEMU_ARCH = i386
-+HOST_QEMU_ARCH = i386
- endif
- ifeq ($(HOST_QEMU_ARCH),powerpc)
--    HOST_QEMU_ARCH = ppc
-+HOST_QEMU_ARCH = ppc
- endif
- HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
- 
-@@ -96,8 +96,8 @@ QEMU_OPTS =
- 
- QEMU_VARS = \
- 	LIBTOOL=$(HOST_DIR)/usr/bin/libtool \
--    PYTHON=$(HOST_DIR)/usr/bin/python \
--    PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+	PYTHON=$(HOST_DIR)/usr/bin/python \
-+	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c41469e..f3f9acb 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -13,7 +13,7 @@ REDIS_LICENSE_FILES = COPYING
- # https://github.com/antirez/redis/pull/609).  We set PREFIX
- # instead.
- REDIS_BUILDOPTS = $(TARGET_CONFIGURE_OPTS) \
--    PREFIX=$(TARGET_DIR)/usr MALLOC=libc \
-+	PREFIX=$(TARGET_DIR)/usr MALLOC=libc \
- 
- define REDIS_BUILD_CMDS
-         $(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D)
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 684e0cf..e8fd0b8 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -14,25 +14,25 @@ RTMPDUMP_LICENSE_FILES = librtmp/COPYING
- RTMPDUMP_DEPENDENCIES = zlib
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
--    RTMPDUMP_DEPENDENCIES += gnutls
--    RTMPDUMP_CRYPTO = GNUTLS
-+RTMPDUMP_DEPENDENCIES += gnutls
-+RTMPDUMP_CRYPTO = GNUTLS
- else ifeq ($(BR2_PACKAGE_POLARSSL),y)
--    RTMPDUMP_DEPENDENCIES += polarssl
--    RTMPDUMP_CRYPTO = POLARSSL
-+RTMPDUMP_DEPENDENCIES += polarssl
-+RTMPDUMP_CRYPTO = POLARSSL
- else ifeq ($(BR2_PACKAGE_OPENSSL),y)
--    RTMPDUMP_DEPENDENCIES += openssl
--    RTMPDUMP_CRYPTO = OPENSSL
-+RTMPDUMP_DEPENDENCIES += openssl
-+RTMPDUMP_CRYPTO = OPENSSL
- else
--    # no crypto
--    RTMPDUMP_CRYPTO =
-+# no crypto
-+RTMPDUMP_CRYPTO =
- endif
- 
- RTMPDUMP_CFLAGS = $(TARGET_CFLAGS)
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
--    RTMPDUMP_CFLAGS += -fPIC
-+RTMPDUMP_CFLAGS += -fPIC
- else
--    RTMPDUMP_SHARED = "SHARED="
-+RTMPDUMP_SHARED = "SHARED="
- endif
- 
- define RTMPDUMP_BUILD_CMDS
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 52a265e..be46493 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -10,14 +10,14 @@ SPICE_SITE = http://www.spice-space.org/download/releases
- SPICE_LICENSE = LGPLv2.1+
- SPICE_LICENSE_FILES = COPYING
- SPICE_INSTALL_STAGING = YES
--SPICE_DEPENDENCIES =    \
--    alsa-lib            \
--    celt051             \
--    jpeg                \
--    openssl             \
--    pixman              \
--    python-pyparsing    \
--    spice-protocol      \
-+SPICE_DEPENDENCIES =        \
-+	alsa-lib            \
-+	celt051             \
-+	jpeg                \
-+	openssl             \
-+	pixman              \
-+	python-pyparsing    \
-+	spice-protocol      \
- 
- # We disable everything for now, because the dependency tree can become
- # quite deep if we try to enable some features, and I have not tested that.
+        success : 213
+       failures : 45 
+       timeouts : 0  
+          TOTAL : 258
+
+Classification of failures by reason
+====================================
+
+                 rt-tests-0.83 | 7 
+                pulseaudio-5.0 | 5 
+freerdp-440916eae2e07463912... | 4 
+           libmemcached-1.0.18 | 3 
+                elfutils-0.155 | 2 
+zlog-ca6162be1608839e99c638... | 2 
+                    ipset-6.23 | 2 
+                 schifra-0.0.1 | 2 
+              qdecoder-r12.0.5 | 2 
+               sdl_sound-1.0.3 | 2 
+               iptables-1.4.21 | 1 
+                collectd-5.4.1 | 1 
+            lttng-libust-2.5.0 | 1 
+                    qemu-2.1.2 | 1 
+                libgtk3-3.12.2 | 1 
+                 webkit-1.11.5 | 1 
+                   nginx-1.6.2 | 1 
+                   gvfs-1.16.2 | 1 
+                  libcdio-0.93 | 1 
+                   perl-5.20.1 | 1 
+       opentyrian-2.1.20130907 | 1 
+               mpdecimal-2.4.0 | 1 
+               qt5webkit-5.3.2 | 1 
+               polarssl-1.2.11 | 1 
+
+Detail of failures
+===================
+
+         arm |                 collectd-5.4.1 | NOK | http://autobuild.buildroot.net/results/4f77b1e007573c356b265e73d9f880d1fa5bdf0a/
+         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/2bf1981b7fd575f21da86eaf1b3ae621f579ff55/
+         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/0baf98fdbeaec946df0aa9d9b4d843ea87766dae/
+        sh4a | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/5edaa6654b90299ead5255d1cbdf79eb8b40fc6f/
+         sh4 | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/602f3896d5eda01a24861732435eec1fc418e7ec/
+      xtensa | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/3236ddfe8eaf89f05f84db60eb42583cca397464/
+      x86_64 | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/2d55910e859f5b39f4a315472c51dca19483c2ed/
+     powerpc |                    gvfs-1.16.2 | NOK | http://autobuild.buildroot.net/results/94c2a1801c3293effd8e257a0c877aae79f14cb7/
+        mips |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/c7ba00a763b9894c05e3bdd36ce3604c9135ad21/
+     aarch64 |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/e092c05b949a2bcdadc4f4a0a57d7dd1dc8dca26/
+        bfin |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/6ec8b7f1ad508b477d94da0c3970a488123f8b1b/
+    mips64el |                   libcdio-0.93 | NOK | http://autobuild.buildroot.net/results/91e3b0df67c9cb79fe96778b831ff5b24fd53f9d/
+    mips64el |                 libgtk3-3.12.2 | NOK | http://autobuild.buildroot.net/results/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/fce353554793f72fa2c39cb71bd266021d51b5cb/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/176a1477cf7571cdef5726fef94f51d4096dc007/
+         sh4 |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/9371fc9b043c691fdd23cd231a99b4d5b0601a62/
+         arm |             lttng-libust-2.5.0 | NOK | http://autobuild.buildroot.net/results/ee331e4cd8fa366a87bc8e982b9602c3519b42c9/
+        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/427bff0ce4f8864f03fb0debe991c647bb72f705/
+     powerpc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/455634e31460b3a05d77eaef07afaec87bee68e6/
+        bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/fa27e8e11186ab8c757fde65ee37ef748b2acba2/
+         arm |                    perl-5.20.1 | NOK | http://autobuild.buildroot.net/results/057a4b9976fd6b9c5cddd117a3f29de51efe719f/
+         arm |                polarssl-1.2.11 | NOK | http://autobuild.buildroot.net/results/8944dee4314c9443b654529ca97386c177487709/
+      xtensa |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/ea05d2fbb831405daa3b5bb5ca903dfcf983d0f0/
+         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/d78068fef15b7aef09df52630ecac8b886660965/
+         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/60c025e2499cb0b3926b6c0541330039699dc6b5/
+         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/0a88ed8e7bd7c4a34ade879fe67dba6ea02a30b2/
+     powerpc |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/f430c40fd1d4b91259a02bd96e97cf36952dde2f/
+         arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/ec06b196e0fe1e2cccb660c683cd1ba012c7f8c7/
+         arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/55e86d72a2c70b04b3cfd052d70645795badc24f/
+        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/1bfbce8951cd11375e6bc197ec8332de23ad4bdc/
+         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/f982307967a2da9961625fadb2d8b03e526e0bf9/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/a17849be3c7c3ff155cc5d6254951ed1fba4f602/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e0e858130c036df81308d207d6d2e49f901b9c55/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/8f8335a339205fcd3977b022a66d4fdec018fa95/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/27f25b8d00a22c9bd774947c8a9c01e2c70cd363/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/5b983e18131b07ad10e03071ef59386106772425/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/375518abcf994cc39f853d8d78e9d42e65d356da/
+      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/dabc9b31851e99d351fc337fe64be097ba132a1e/
+      xtensa |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
+         arm |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/b1f703e5440f470e07cd5df417fde24e51d0964f/
+     powerpc |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/280628f493b91fcac899414f0cdc310262a441cd/
+        sh4a |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/d9477d324c81bb0f45ca08c6f5d8af66725a2430/
+      x86_64 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/6d5ed01ae23f50bdb6700e5e5463f2e42e4e9f4a/
+       nios2 | zlog-ca6162be1608839e99c638... | NOK | http://autobuild.buildroot.net/results/16a37adccc6d646f7ac219e5692ae16cd9a550b0/
+       nios2 | zlog-ca6162be1608839e99c638... | NOK | http://autobuild.buildroot.net/results/6935e1107d832e5678c8742239eccd89d4abed47/
+
+
 -- 
-1.7.9.5
+http://autobuild.buildroot.net
