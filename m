@@ -1,34 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 19:38:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qdecoder: Fix build error
-In-Reply-To: <1413754004-4439-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413754004-4439-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141025193854.634df118@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 25 Oct 2014 20:19:55 +0200
+Subject: [Buildroot] [PATCH 3/3] package/xbmc: Add optional support for
+	libcap
+In-Reply-To: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1414261195-5009-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
 
-On Sun, 19 Oct 2014 23:26:44 +0200, Bernd Kuhls wrote:
-> Error occured with an allyespackageconfig setup:
-> 
-> qcgireq.c: In function '_parse_multipart_value_into_disk':
-> qcgireq.c:738:60: error: 'errno' undeclared (first use in this function)
->          DEBUG("I/O error. (errno=%d)", (ioerror == true) ? errno : 0);
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/qdecoder/qdecoder-0003-errno.patch |   34 ++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/qdecoder/qdecoder-0003-errno.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/xbmc/xbmc.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 86a9721..03362c2 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -63,6 +63,13 @@ XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
+ 	LIBS="-lvcos -lvchostif"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++XBMC_CONF_OPTS += --enable-libcap
++XBMC_DEPENDENCIES += libcap
++else
++XBMC_CONF_OPTS += --disable-libcap
++endif
++
+ ifeq ($(BR2_PACKAGE_XBMC_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ XBMC_CONF_OPTS += --enable-dbus
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
