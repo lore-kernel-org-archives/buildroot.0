@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Oct 2014 20:19:53 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libcap: bump version to 2.24
-Message-ID: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 25 Oct 2014 20:19:54 +0200
+Subject: [Buildroot] [PATCH 2/3] package/libcap: add hash file
+In-Reply-To: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1414261195-5009-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,24 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcap/libcap.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libcap/libcap.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libcap/libcap.hash
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 8d055de..43c3e7e 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBCAP_VERSION = 2.22
-+LIBCAP_VERSION = 2.24
- LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
--LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.gz
-+LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
- LIBCAP_LICENSE = GPLv2 or BSD-3c
- LIBCAP_LICENSE_FILES = License
- 
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+new file mode 100644
+index 0000000..75822e5
+--- /dev/null
++++ b/package/libcap/libcap.hash
+@@ -0,0 +1,2 @@
++# https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
++sha256	cee4568f78dc851d726fc93f25f4ed91cc223b1fe8259daa4a77158d174e6c65	libcap-2.24.tar.xz
 -- 
 1.7.10.4
