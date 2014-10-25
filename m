@@ -1,34 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:26:12 +0200
-Subject: [Buildroot] [git commit] package/lockdev: add Debian patch,
-	update snapshot.debian.org date
-Message-ID: <20141025095905.7574AB13C4@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 11:25:52 +0200
+Subject: [Buildroot] [git commit] package/jimtcl: bump to 0.75,
+	move download URL to snapshot.debian.org
+Message-ID: <20141025095905.5EDDFB13C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=558e3d4eff51e8a3464558f41d4aaa42808cf116
+commit: http://git.buildroot.net/buildroot/commit/?id=7def899c4d5a525b041b797385d4d87e18366651
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lockdev/lockdev.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/jimtcl/jimtcl.mk |   14 ++++++++------
+ 1 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-index d90009a..21755e0 100644
---- a/package/lockdev/lockdev.mk
-+++ b/package/lockdev/lockdev.mk
-@@ -6,7 +6,8 @@
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 1f2ea82..27f43f0 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- LOCKDEV_VERSION = 1.0.3
- LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
--LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20130508T154517Z/pool/main/l/lockdev
-+LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
-+LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
- LOCKDEV_LICENSE = LGPLv2.1
- LOCKDEV_LICENSE_FILES = LICENSE
- LOCKDEV_INSTALL_STAGING = YES
+-JIMTCL_VERSION = 0.73
+-JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
+-JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
++JIMTCL_VERSION = 0.75
++JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
++JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
+ JIMTCL_INSTALL_STAGING = YES
+ JIMTCL_LICENSE = BSD-2c
+ JIMTCL_LICENSE_FILES = LICENSE
+@@ -31,9 +31,10 @@ JIMTCL_LIB = a
+ JIMTCL_INSTALL_LIB =
+ else
+ JIMTCL_SHARED = --shared
+-JIMTCL_LIB = so
++JIMTCL_LIB = so.$(JIMTCL_VERSION)
+ JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
+-		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
++		     ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
+ endif
+ 
+ define JIMTCL_CONFIGURE_CMDS
+@@ -52,7 +53,8 @@ define JIMTCL_INSTALL_STAGING_CMDS
+ 	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+ 		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
+ 	done; \
+-	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
++	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
++	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
+ endef
+ 
+ define JIMTCL_INSTALL_TARGET_CMDS
