@@ -1,60 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:25:52 +0200
-Subject: [Buildroot] [git commit] package/jimtcl: bump to 0.75,
-	move download URL to snapshot.debian.org
-Message-ID: <20141025095905.5EDDFB13C4@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 11:26:30 +0200
+Subject: [Buildroot] [git commit] package/ca-certificates: bump to 20141019,
+	update snapshot date & hash
+Message-ID: <20141025095905.83A06B13C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7def899c4d5a525b041b797385d4d87e18366651
+commit: http://git.buildroot.net/buildroot/commit/?id=ac09a36c70dc3e663481978e62c39ce8cc4f8f09
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jimtcl/jimtcl.mk |   14 ++++++++------
- 1 files changed, 8 insertions(+), 6 deletions(-)
+ package/ca-certificates/ca-certificates.hash |    4 ++--
+ package/ca-certificates/ca-certificates.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 1f2ea82..27f43f0 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index bcd0723..0165cb5 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   ad57a45f0422fafd78a2e8191e5204f2306cc91b                         ca-certificates_20140223.tar.xz
+-sha256 815b7cd97200b0d76450bb3e7d9b65997ac494ab6467b17369f65b2ef94bcb0c ca-certificates_20140223.tar.xz
++sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
++sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index cd6a7f2..271985a 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--JIMTCL_VERSION = 0.73
--JIMTCL_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/jimtcl
--JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.bz2
-+JIMTCL_VERSION = 0.75
-+JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
-+JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
- JIMTCL_INSTALL_STAGING = YES
- JIMTCL_LICENSE = BSD-2c
- JIMTCL_LICENSE_FILES = LICENSE
-@@ -31,9 +31,10 @@ JIMTCL_LIB = a
- JIMTCL_INSTALL_LIB =
- else
- JIMTCL_SHARED = --shared
--JIMTCL_LIB = so
-+JIMTCL_LIB = so.$(JIMTCL_VERSION)
- JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
--		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
-+		     ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
- endif
- 
- define JIMTCL_CONFIGURE_CMDS
-@@ -52,7 +53,8 @@ define JIMTCL_INSTALL_STAGING_CMDS
- 	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
- 		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
- 	done; \
--	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
-+	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
-+	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
- endef
- 
- define JIMTCL_INSTALL_TARGET_CMDS
+-CA_CERTIFICATES_VERSION = 20140223
++CA_CERTIFICATES_VERSION = 20141019
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20140325T163435Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
