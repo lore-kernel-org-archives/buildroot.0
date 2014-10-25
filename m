@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:59:42 +0200
-Subject: [Buildroot] [PATCH autobuild] autobuild-run: libffi is now
- available on ARC
-In-Reply-To: <1414230149-2227-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1414230149-2227-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141025115942.090a789d@free-electrons.com>
+Date: Sat, 25 Oct 2014 12:00:18 +0200
+Subject: [Buildroot] [PATCH 00/11] Remove BR2_DEBIAN_MIRROR & related
+ changes
+In-Reply-To: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
+References: <1414075717-7333-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20141025120018.66e5a2ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Karoly Kasza,
 
-On Sat, 25 Oct 2014 11:42:29 +0200, Thomas Petazzoni wrote:
-> Since commit 34c2afeb750fbbe92e4c00eaa374303bcf5e2584 in Buildroot
-> ("libffi: back-port support for ARC"), we have ARC support in libffi,
-> so we should no longer prevent configurations having libffi enabled on
-> ARC from being used on the autobuilders.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-> ---
->  scripts/autobuild-run | 2 --
->  1 file changed, 2 deletions(-)
+On Thu, 23 Oct 2014 16:48:26 +0200, Karoly Kasza wrote:
+> As discussed, this series will completely remove BR2_DEBIAN_MIRROR.
+> I also did two other changes: bumped minor versions and/or patchlevels
+> where it seemed safe (did a test-compile) and updated
+> snapshot.debian.org URLs everywhere to the same date.
 
-Applied.
+Series applied, thanks.
 
 Thomas
 -- 
