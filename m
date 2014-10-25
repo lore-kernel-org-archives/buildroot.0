@@ -1,98 +1,163 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 08:30:14 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-10-24
-Message-ID: <20141025063015.AC1771011CB@stock.ovh.net>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Sat, 25 Oct 2014 08:36:40 +0200
+Subject: [Buildroot] [PATCH 1/1] Add proxy download support
+In-Reply-To: <20141024232355.GC14818@free.fr>
+References: <1413903203-33909-1-git-send-email-kaszak@gmail.com>
+ <20141024232355.GC14818@free.fr>
+Message-ID: <CABbD_XAOnFHNmcB87Br94_BGX1EAmcd2O_vxPt4Cnyw97gDObw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-10-24
-===============================
+Ok, I understand.
 
-        success : 213
-       failures : 45 
-       timeouts : 0  
-          TOTAL : 258
+Best regards,
+Karoly
+On 25 Oct 2014 01:24, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Classification of failures by reason
-====================================
-
-                 rt-tests-0.83 | 7 
-                pulseaudio-5.0 | 5 
-freerdp-440916eae2e07463912... | 4 
-           libmemcached-1.0.18 | 3 
-                elfutils-0.155 | 2 
-zlog-ca6162be1608839e99c638... | 2 
-                    ipset-6.23 | 2 
-                 schifra-0.0.1 | 2 
-              qdecoder-r12.0.5 | 2 
-               sdl_sound-1.0.3 | 2 
-               iptables-1.4.21 | 1 
-                collectd-5.4.1 | 1 
-            lttng-libust-2.5.0 | 1 
-                    qemu-2.1.2 | 1 
-                libgtk3-3.12.2 | 1 
-                 webkit-1.11.5 | 1 
-                   nginx-1.6.2 | 1 
-                   gvfs-1.16.2 | 1 
-                  libcdio-0.93 | 1 
-                   perl-5.20.1 | 1 
-       opentyrian-2.1.20130907 | 1 
-               mpdecimal-2.4.0 | 1 
-               qt5webkit-5.3.2 | 1 
-               polarssl-1.2.11 | 1 
-
-Detail of failures
-===================
-
-         arm |                 collectd-5.4.1 | NOK | http://autobuild.buildroot.net/results/4f77b1e007573c356b265e73d9f880d1fa5bdf0a/
-         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/2bf1981b7fd575f21da86eaf1b3ae621f579ff55/
-         arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/0baf98fdbeaec946df0aa9d9b4d843ea87766dae/
-        sh4a | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/5edaa6654b90299ead5255d1cbdf79eb8b40fc6f/
-         sh4 | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/602f3896d5eda01a24861732435eec1fc418e7ec/
-      xtensa | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/3236ddfe8eaf89f05f84db60eb42583cca397464/
-      x86_64 | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/2d55910e859f5b39f4a315472c51dca19483c2ed/
-     powerpc |                    gvfs-1.16.2 | NOK | http://autobuild.buildroot.net/results/94c2a1801c3293effd8e257a0c877aae79f14cb7/
-        mips |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/c7ba00a763b9894c05e3bdd36ce3604c9135ad21/
-     aarch64 |                     ipset-6.23 | NOK | http://autobuild.buildroot.net/results/e092c05b949a2bcdadc4f4a0a57d7dd1dc8dca26/
-        bfin |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/6ec8b7f1ad508b477d94da0c3970a488123f8b1b/
-    mips64el |                   libcdio-0.93 | NOK | http://autobuild.buildroot.net/results/91e3b0df67c9cb79fe96778b831ff5b24fd53f9d/
-    mips64el |                 libgtk3-3.12.2 | NOK | http://autobuild.buildroot.net/results/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/fce353554793f72fa2c39cb71bd266021d51b5cb/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/176a1477cf7571cdef5726fef94f51d4096dc007/
-         sh4 |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/9371fc9b043c691fdd23cd231a99b4d5b0601a62/
-         arm |             lttng-libust-2.5.0 | NOK | http://autobuild.buildroot.net/results/ee331e4cd8fa366a87bc8e982b9602c3519b42c9/
-        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/427bff0ce4f8864f03fb0debe991c647bb72f705/
-     powerpc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/455634e31460b3a05d77eaef07afaec87bee68e6/
-        bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/fa27e8e11186ab8c757fde65ee37ef748b2acba2/
-         arm |                    perl-5.20.1 | NOK | http://autobuild.buildroot.net/results/057a4b9976fd6b9c5cddd117a3f29de51efe719f/
-         arm |                polarssl-1.2.11 | NOK | http://autobuild.buildroot.net/results/8944dee4314c9443b654529ca97386c177487709/
-      xtensa |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/ea05d2fbb831405daa3b5bb5ca903dfcf983d0f0/
-         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/d78068fef15b7aef09df52630ecac8b886660965/
-         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/60c025e2499cb0b3926b6c0541330039699dc6b5/
-         arm |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/0a88ed8e7bd7c4a34ade879fe67dba6ea02a30b2/
-     powerpc |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/f430c40fd1d4b91259a02bd96e97cf36952dde2f/
-         arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/ec06b196e0fe1e2cccb660c683cd1ba012c7f8c7/
-         arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/55e86d72a2c70b04b3cfd052d70645795badc24f/
-        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/1bfbce8951cd11375e6bc197ec8332de23ad4bdc/
-         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/f982307967a2da9961625fadb2d8b03e526e0bf9/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/a17849be3c7c3ff155cc5d6254951ed1fba4f602/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e0e858130c036df81308d207d6d2e49f901b9c55/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/8f8335a339205fcd3977b022a66d4fdec018fa95/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/27f25b8d00a22c9bd774947c8a9c01e2c70cd363/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/5b983e18131b07ad10e03071ef59386106772425/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/375518abcf994cc39f853d8d78e9d42e65d356da/
-      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/dabc9b31851e99d351fc337fe64be097ba132a1e/
-      xtensa |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
-         arm |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/b1f703e5440f470e07cd5df417fde24e51d0964f/
-     powerpc |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/280628f493b91fcac899414f0cdc310262a441cd/
-        sh4a |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/d9477d324c81bb0f45ca08c6f5d8af66725a2430/
-      x86_64 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/6d5ed01ae23f50bdb6700e5e5463f2e42e4e9f4a/
-       nios2 | zlog-ca6162be1608839e99c638... | NOK | http://autobuild.buildroot.net/results/16a37adccc6d646f7ac219e5692ae16cd9a550b0/
-       nios2 | zlog-ca6162be1608839e99c638... | NOK | http://autobuild.buildroot.net/results/6935e1107d832e5678c8742239eccd89d4abed47/
-
-
--- 
-http://autobuild.buildroot.net
+> Karoly, All,
+>
+> On 2014-10-21 16:53 +0200, Karoly Kasza spake thusly:
+> > This patch adds support for downloading sources over a http proxy.
+> > Supports wget with http, https & ftp targets, bzr, hg, svn.
+> > Git does work with forcing https instead of git protocol.
+> > Cvs is not supported, but Buildroot does not currently have any
+> > packages relying on cvs repos (plus this would fall back to the
+> > Buildroot mirror over http).
+> >
+> > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+>
+> After speaking with Peter, and given the feedback from both Arnout and
+> I, we believe this belongs to the user's settings, and has no place in
+> Buildroot.
+>
+> So, I've marked this patch as Rejected in patchwork.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  Config.in                |   25 +++++++++++++++++++++++++
+> >  Makefile                 |    9 +++++++++
+> >  support/download/wrapper |   26 ++++++++++++++++++++++++++
+> >  3 files changed, 60 insertions(+)
+> >
+> > diff --git a/Config.in b/Config.in
+> > index 9cefcbc..2e2b493 100644
+> > --- a/Config.in
+> > +++ b/Config.in
+> > @@ -253,6 +253,31 @@ config BR2_CPAN_MIRROR
+> >
+> >  endmenu
+> >
+> > +config BR2_PROXY
+> > +     bool "Use http proxy"
+> > +     help
+> > +       Use a http proxy when downloading sources with various protocols.
+> > +
+> > +if BR2_PROXY
+> > +
+> > +config BR2_PROXY_URL
+> > +     string "Http proxy URL"
+> > +     help
+> > +       Http proxy URL in the form of <IP or FQDN>:<port>.
+> > +
+> > +config BR2_PROXY_USER
+> > +     string "Http proxy username"
+> > +     help
+> > +       Http proxy username (if needed).
+> > +
+> > +config BR2_PROXY_PASS
+> > +     string "Http proxy password"
+> > +     help
+> > +       Http proxy password (if needed).
+> > +       PLEASE NOTE! This password will be saved in the .config file!
+> > +
+> > +endif
+> > +
+> >  config BR2_JLEVEL
+> >       int "Number of jobs to run simultaneously (0 for auto)"
+> >       default "0"
+> > diff --git a/Makefile b/Makefile
+> > index 907a0fc..5dd40e8 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -338,6 +338,15 @@ TARGET_SKELETON = $(TOPDIR)/system/skeleton
+> >  # should not be used as the root filesystem.
+> >  TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+> >
+> > +ifeq ($(BR2_PROXY),y)
+> > +BR_PROXY_URL = $(call qstrip,$(BR2_PROXY_URL))
+> > +export BR_PROXY_URL
+> > +BR_PROXY_USER = $(call qstrip,$(BR2_PROXY_USER))
+> > +export BR_PROXY_USER
+> > +BR_PROXY_PASS = $(call qstrip,$(BR2_PROXY_PASS))
+> > +export BR_PROXY_PASS
+> > +endif
+> > +
+> >  ifeq ($(BR2_CCACHE),y)
+> >  CCACHE := $(HOST_DIR)/usr/bin/ccache
+> >  BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
+> > diff --git a/support/download/wrapper b/support/download/wrapper
+> > index 8ae2797..b224474 100755
+> > --- a/support/download/wrapper
+> > +++ b/support/download/wrapper
+> > @@ -44,6 +44,32 @@ tmpf="${tmpd}/output"
+> >  # Doing the 'cd' here rather than in all helpers is easier.
+> >  cd "${tmpd}"
+> >
+> > +# Set the proxy environment variables.
+> > +# cvs doesn't support proxies OOB, but there is currently no cvs
+> > +# based package in Buildroot. Also, in that case after the download
+> > +# fails, the wget method would be used from sources.buildroot.net.
+> > +if [ -n "${BR_PROXY_URL}" ]; then
+> > +# SVN does not support http_proxy environment variables, so we use
+> > +# it's commandline arguments
+> > +proxy_host=`echo $BR_PROXY_URL | cut -d":" -f1`
+> > +proxy_port=`echo $BR_PROXY_URL | cut -d":" -f2`
+> > +SVN="${SVN} --config-option
+> servers:global:http-proxy-host=${proxy_host} \
+> > +--config-option servers:global:http-proxy-port=${proxy_port}"
+> > +if [ -n "${BR_PROXY_USER}" ] && [ -n "${BR_PROXY_PASS}" ]; then
+> > +SVN="${SVN} --config-option
+> servers:global:http-proxy-username=${BR_PROXY_USER} \
+> > +--config-option servers:global:http-proxy-password=${BR_PROXY_PASS}"
+> > +proxy="http://${BR_PROXY_USER}:${BR_PROXY_PASS}@${BR_PROXY_URL}"
+> > +else
+> > +proxy="http://${BR_PROXY_URL}"
+> > +fi
+> > +export http_proxy=${proxy}
+> > +export https_proxy=${proxy}
+> > +export ftp_proxy=${proxy}
+> > +# While git does support http_proxy environment variables, we need to
+> use
+> > +# the config option below to force proxying over https instead of git
+> > +GIT="${GIT} -c url.https://.insteadOf=git://"
+> > +fi
+> > +
+> >  # If the helper fails, we can just remove the temporary directory to
+> >  # remove all the cruft it may have left behind. Then we just exit in
+> >  # error too.
+> > --
+> > 1.7.10.4
+> >
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141025/5018238a/attachment.html>
