@@ -1,163 +1,79 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 25 Oct 2014 08:36:40 +0200
-Subject: [Buildroot] [PATCH 1/1] Add proxy download support
-In-Reply-To: <20141024232355.GC14818@free.fr>
-References: <1413903203-33909-1-git-send-email-kaszak@gmail.com>
- <20141024232355.GC14818@free.fr>
-Message-ID: <CABbD_XAOnFHNmcB87Br94_BGX1EAmcd2O_vxPt4Cnyw97gDObw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Oct 2014 10:34:54 +0200
+Subject: [Buildroot] target rootfs permissions
+In-Reply-To: <20141024193436.GA29505@fox>
+References: <20141024193436.GA29505@fox>
+Message-ID: <20141025103454.0b923b26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, I understand.
+Dear Guido Mart?nez,
+
+On Fri, 24 Oct 2014 16:34:36 -0300, Guido Mart?nez wrote:
+
+> I've noticed that when building a rootfs, some of the permissions on the
+> target depend on the users umask (directly and indirectly). This occurs
+> because some files (notably the system skeleton and overlay) are copied
+> with "rsync -a", which copies permissions exactly as they were on the
+> source. The thing is, Git doesn't track file permissions (except for
+> the exec bit) so both of these depend on the users umask at the time of
+> cloning (if there were no posterior changes).
+> 
+> Also, some files are created in BR code with cp/mkdir, which depend on
+> the current umask.
+> 
+> I think this is pretty important, since if we do care about permissions,
+> the target rootfs may not be easily reproducible on other hosts.
+> 
+> For my current project, we do need a specific set of permissions and
+> ownerships for each file in the rootfs. We're trying to isolate the
+> custom application from the rest of the system, and give it the exact
+> privileges it needs. I found that when I build the rootfs (my umask
+> was 0027) the application could not do absolutely anything as / wasn't
+> executable or readable by it. But building on other hosts (with more
+> relaxed umasks) we had a working rootfs.
+> 
+> We accomplished this by adding a custom script that gets called just
+> prior to the image creation, inside of the fakeroot script (thus, it
+> gets called multiple times, but this isn't a big deal for us).
+> 
+> One downside of our approach is that in order to not depend on the
+> previous set of permissions (which could vary), we need to specify the
+> exact mode for each file. So we need to set the sticky bit on /tmp
+> manually, make /etc/shadow not readable and etc, etc, etc.
+> 
+> Permissions alone could (maybe) be fixed by changing BR code to
+> be aware of this issue, and by setting correct permissions on the
+> overlay/skeleton via some script. But ownerships cannot be changed by
+> a non-root user! And, since building as root is a Very Bad Thing (tm),
+> we'd need to resort to fakeroot.
+> 
+> So: has anyone else had this problem?
+> Is it important for someone else?
+> What do you think a mainline solution would look like?
+
+Thanks for your report. It is indeed a problem that should be fixed.
+The only clean solution that I see is to have the fakeroot script reset
+the permission for all files to a certain sane value (just like we
+already have a 'chown -h -R 0:0' to re-assign all files to the root
+user), and then re-adjust using makedevs the permissions of the needed
+files, such as /tmp, /etc/shadow and so on.
+
+Since /tmp, /etc/shadow and so on are part of the skeleton, one option
+would be to make the skeleton a real package, so it could declare a
+SKELETON_PERMISSIONS variable to adjust whatever is needed. This is
+quite in line with some discussions we had recently about cleaning up
+the skeleton from init scripts, and possibly making it a proper package.
+
+I'm Cc'ing Maxime and Gustavo, who are both active on this topic.
 
 Best regards,
-Karoly
-On 25 Oct 2014 01:24, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Karoly, All,
->
-> On 2014-10-21 16:53 +0200, Karoly Kasza spake thusly:
-> > This patch adds support for downloading sources over a http proxy.
-> > Supports wget with http, https & ftp targets, bzr, hg, svn.
-> > Git does work with forcing https instead of git protocol.
-> > Cvs is not supported, but Buildroot does not currently have any
-> > packages relying on cvs repos (plus this would fall back to the
-> > Buildroot mirror over http).
-> >
-> > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
->
-> After speaking with Peter, and given the feedback from both Arnout and
-> I, we believe this belongs to the user's settings, and has no place in
-> Buildroot.
->
-> So, I've marked this patch as Rejected in patchwork.
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  Config.in                |   25 +++++++++++++++++++++++++
-> >  Makefile                 |    9 +++++++++
-> >  support/download/wrapper |   26 ++++++++++++++++++++++++++
-> >  3 files changed, 60 insertions(+)
-> >
-> > diff --git a/Config.in b/Config.in
-> > index 9cefcbc..2e2b493 100644
-> > --- a/Config.in
-> > +++ b/Config.in
-> > @@ -253,6 +253,31 @@ config BR2_CPAN_MIRROR
-> >
-> >  endmenu
-> >
-> > +config BR2_PROXY
-> > +     bool "Use http proxy"
-> > +     help
-> > +       Use a http proxy when downloading sources with various protocols.
-> > +
-> > +if BR2_PROXY
-> > +
-> > +config BR2_PROXY_URL
-> > +     string "Http proxy URL"
-> > +     help
-> > +       Http proxy URL in the form of <IP or FQDN>:<port>.
-> > +
-> > +config BR2_PROXY_USER
-> > +     string "Http proxy username"
-> > +     help
-> > +       Http proxy username (if needed).
-> > +
-> > +config BR2_PROXY_PASS
-> > +     string "Http proxy password"
-> > +     help
-> > +       Http proxy password (if needed).
-> > +       PLEASE NOTE! This password will be saved in the .config file!
-> > +
-> > +endif
-> > +
-> >  config BR2_JLEVEL
-> >       int "Number of jobs to run simultaneously (0 for auto)"
-> >       default "0"
-> > diff --git a/Makefile b/Makefile
-> > index 907a0fc..5dd40e8 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -338,6 +338,15 @@ TARGET_SKELETON = $(TOPDIR)/system/skeleton
-> >  # should not be used as the root filesystem.
-> >  TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-> >
-> > +ifeq ($(BR2_PROXY),y)
-> > +BR_PROXY_URL = $(call qstrip,$(BR2_PROXY_URL))
-> > +export BR_PROXY_URL
-> > +BR_PROXY_USER = $(call qstrip,$(BR2_PROXY_USER))
-> > +export BR_PROXY_USER
-> > +BR_PROXY_PASS = $(call qstrip,$(BR2_PROXY_PASS))
-> > +export BR_PROXY_PASS
-> > +endif
-> > +
-> >  ifeq ($(BR2_CCACHE),y)
-> >  CCACHE := $(HOST_DIR)/usr/bin/ccache
-> >  BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
-> > diff --git a/support/download/wrapper b/support/download/wrapper
-> > index 8ae2797..b224474 100755
-> > --- a/support/download/wrapper
-> > +++ b/support/download/wrapper
-> > @@ -44,6 +44,32 @@ tmpf="${tmpd}/output"
-> >  # Doing the 'cd' here rather than in all helpers is easier.
-> >  cd "${tmpd}"
-> >
-> > +# Set the proxy environment variables.
-> > +# cvs doesn't support proxies OOB, but there is currently no cvs
-> > +# based package in Buildroot. Also, in that case after the download
-> > +# fails, the wget method would be used from sources.buildroot.net.
-> > +if [ -n "${BR_PROXY_URL}" ]; then
-> > +# SVN does not support http_proxy environment variables, so we use
-> > +# it's commandline arguments
-> > +proxy_host=`echo $BR_PROXY_URL | cut -d":" -f1`
-> > +proxy_port=`echo $BR_PROXY_URL | cut -d":" -f2`
-> > +SVN="${SVN} --config-option
-> servers:global:http-proxy-host=${proxy_host} \
-> > +--config-option servers:global:http-proxy-port=${proxy_port}"
-> > +if [ -n "${BR_PROXY_USER}" ] && [ -n "${BR_PROXY_PASS}" ]; then
-> > +SVN="${SVN} --config-option
-> servers:global:http-proxy-username=${BR_PROXY_USER} \
-> > +--config-option servers:global:http-proxy-password=${BR_PROXY_PASS}"
-> > +proxy="http://${BR_PROXY_USER}:${BR_PROXY_PASS}@${BR_PROXY_URL}"
-> > +else
-> > +proxy="http://${BR_PROXY_URL}"
-> > +fi
-> > +export http_proxy=${proxy}
-> > +export https_proxy=${proxy}
-> > +export ftp_proxy=${proxy}
-> > +# While git does support http_proxy environment variables, we need to
-> use
-> > +# the config option below to force proxying over https instead of git
-> > +GIT="${GIT} -c url.https://.insteadOf=git://"
-> > +fi
-> > +
-> >  # If the helper fails, we can just remove the temporary directory to
-> >  # remove all the cruft it may have left behind. Then we just exit in
-> >  # error too.
-> > --
-> > 1.7.10.4
-> >
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141025/5018238a/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
