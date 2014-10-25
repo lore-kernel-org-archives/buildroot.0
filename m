@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 Oct 2014 02:04:52 +0200
-Subject: [Buildroot] [PATCH] snowball-hdmiservice: Use github call
-In-Reply-To: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 12 Oct 2014 20:00:27 +0200")
-References: <1413136827-31792-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <8761f96ml7.fsf@dell.be.48ers.dk>
+Date: Sat, 25 Oct 2014 02:11:27 +0200
+Subject: [Buildroot] [PATCH] mrouted: Use github call
+In-Reply-To: <1413136693-30255-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 12 Oct 2014 19:58:13 +0200")
+References: <1413136693-30255-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <871tpx6ma8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
