@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:07:01 +0200
-Subject: [Buildroot] [git commit] ruby: disable fiddle support for bfin
-Message-ID: <20141025090725.54AB0B0EF3@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 11:07:46 +0200
+Subject: [Buildroot] [PATCH] ruby: disable fiddle support for bfin
+In-Reply-To: <1414094314-11429-1-git-send-email-ps.report@gmx.net>
+References: <1414094314-11429-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20141025110746.30a4b71a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=816f5bbad11370187e519060b22da9ed76b57484
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-Disable fiddle support because of compile failure (no ffi_closure support
-for bfin).
+On Thu, 23 Oct 2014 21:58:34 +0200, Peter Seiderer wrote:
+> Disable fiddle support because of compile failure (no ffi_closure support
+> for bfin).
+> 
+> Fixes:
+>  http://autobuild.buildroot.net/results/0a8/0a854274b520d4daca3911a64777a447b5756a52/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/ruby/ruby.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Fixes:
- http://autobuild.buildroot.net/results/0a8/0a854274b520d4daca3911a64777a447b5756a52/
+Applied, thanks.
 
-[Thomas: slightly adjust the comment wording.]
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ruby/ruby.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 34da13d..e633ee4 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -30,6 +30,9 @@ RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
- 
- ifeq ($(BR2_bfin),y)
- RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
-+# Blackfin doesn't have FFI closure support, needed by the fiddle
-+# extension.
-+RUBY_CONF_OPTS += --with-out-ext=fiddle
- endif
- 
- # Force optionals to build before we do
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
