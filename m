@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 10:55:32 +0200
-Subject: [Buildroot] [PATCHv3] spidev_test: new package
-In-Reply-To: <1414169770-18234-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414169770-18234-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141025105532.26c151dc@free-electrons.com>
+Date: Sat, 25 Oct 2014 11:07:01 +0200
+Subject: [Buildroot] [git commit] ruby: disable fiddle support for bfin
+Message-ID: <20141025090725.54AB0B0EF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=816f5bbad11370187e519060b22da9ed76b57484
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Oct 2014 13:56:10 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                  |  1 +
->  package/spidev_test/Config.in      | 17 +++++++++++++++++
->  package/spidev_test/spidev_test.mk | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 50 insertions(+)
->  create mode 100644 package/spidev_test/Config.in
->  create mode 100644 package/spidev_test/spidev_test.mk
+Disable fiddle support because of compile failure (no ffi_closure support
+for bfin).
 
-Applied, after doing a small change, see below.
+Fixes:
+ http://autobuild.buildroot.net/results/0a8/0a854274b520d4daca3911a64777a447b5756a52/
 
-> +# Downloaded file is C source
-> +SPIDEV_TEST_EXTRACT_CMDS =
-> +
-> +define SPIDEV_TEST_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) -x c \
-> +		-o $(@D)/spidev_test $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE)
-> +endef
+[Thomas: slightly adjust the comment wording.]
 
-I've chosen to actually implement SPIDEV_TEST_EXTRACT_CMDS by copying
-the source file from $(BR2_DL_DIR) to $(@D). This allows to have
-patches applied on spidev_test, or to do some manual tweaks (for
-testing) in the build directory and rebuild the package. Consequently,
-I've dropped the "-x c" option since the file is now copied with a .c
-extension.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ruby/ruby.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 34da13d..e633ee4 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -30,6 +30,9 @@ RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+ 
+ ifeq ($(BR2_bfin),y)
+ RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
++# Blackfin doesn't have FFI closure support, needed by the fiddle
++# extension.
++RUBY_CONF_OPTS += --with-out-ext=fiddle
+ endif
+ 
+ # Force optionals to build before we do
