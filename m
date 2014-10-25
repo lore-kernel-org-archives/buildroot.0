@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 12:46:22 +0200
-Subject: [Buildroot] [PATCH v2 00/30] Removal of BR2_GCC_TARGET_TUNE and
- other arch/ updates
-In-Reply-To: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141025124622.0184b24f@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sat, 25 Oct 2014 14:47:52 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-24
+In-Reply-To: <20141025063015.AC1771011CB@stock.ovh.net>
+References: <20141025063015.AC1771011CB@stock.ovh.net>
+Message-ID: <CAMo8BfLG1rHMWQgsL=t=zW8mnWDqQ-Efzzo=M1rsx45fx9sq_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sat, Oct 25, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-10-24
+>       xtensa | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/3236ddfe8eaf89f05f84db60eb42583cca397464/
 
-On Tue, 21 Oct 2014 22:26:47 +0200, Thomas Petazzoni wrote:
+Fails with
 
-> Thomas Petazzoni (30):
->   arch/arm: add blind options to know the ARM architecture
->   ffmpeg: use the new BR2_ARM_CPU_ARM* options
->   ffmpeg: fix ARM condition for --{enable,disable}-vfp
->   gst-ffmpeg: use the new BR2_ARM_CPU_ARM* options
->   gst-ffmpeg: allow usage of ARMv6 optimizations on ARMv7 platforms
+Linking C executable winpr-hash
+../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `powl'
+../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `fmodl'
+../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `ceill'
+../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `log10l'
+../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `floorl'
 
-I've applied those first five patches, since they have been Reviewed-by
-Yann. I'll leave the other patches pending for now, until someone
-reviews them.
+because long double math is not enabled in xtensa uclibc. I'll send a patch.
 
-Thanks,
+>       xtensa |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
 
-Thomas
+Fails with
+
+/usr/bin/make -j4 -C
+/home/test/autobuild/instance-1/output/build/schifra-0.0.1
+COMPILER="/home/test/autobuild/instance-1/output/host/usr/bin/xtensa-buildroot-linux-uclibc-g++"
+OPTIONS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals -pipe -Os
+-o" all
+make[1]: Entering directory
+`/home/test/autobuild/instance-1/output/build/schifra-0.0.1'
+/home/test/autobuild/instance-1/output/host/usr/bin/xtensa-buildroot-linux-uclibc-g++
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-mlongcalls -mtext-section-literals -pipe -Os   -o -o
+schifra_reed_solomon_codec_validation
+schifra_reed_solomon_codec_validation.cpp -lstdc++ -lm
+xtensa-buildroot-linux-uclibc-g++: error:
+schifra_reed_solomon_codec_validation: No such file or directory
+
+note -o -o schifra_reed_solomon_codec_validation in the command line.
+Couldn't reproduce, looks like there's something in the environment
+variables on the build host.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
