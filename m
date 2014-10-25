@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Oct 2014 11:26:45 +0200
-Subject: [Buildroot] [git commit] Config.in: remove BR2_DEBIAN_MIRROR
-	completely
-Message-ID: <20141025095905.905AEB13C4@busybox.osuosl.org>
+Date: Sat, 25 Oct 2014 11:59:42 +0200
+Subject: [Buildroot] [PATCH autobuild] autobuild-run: libffi is now
+ available on ARC
+In-Reply-To: <1414230149-2227-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1414230149-2227-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141025115942.090a789d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39b790c9ba68bac14b470bc4fbe86cb41943e158
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in |   10 ----------
- 1 files changed, 0 insertions(+), 10 deletions(-)
+On Sat, 25 Oct 2014 11:42:29 +0200, Thomas Petazzoni wrote:
+> Since commit 34c2afeb750fbbe92e4c00eaa374303bcf5e2584 in Buildroot
+> ("libffi: back-port support for ARC"), we have ARC support in libffi,
+> so we should no longer prevent configurations having libffi enabled on
+> ARC from being used on the autobuilders.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+> ---
+>  scripts/autobuild-run | 2 --
+>  1 file changed, 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 9cefcbc..8d7081f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -220,16 +220,6 @@ config BR2_GNU_MIRROR
- 	     http://ftp.gnu.org/pub/gnu
- 	     http://mirror.aarnet.edu.au/pub/gnu
- 
--config BR2_DEBIAN_MIRROR
--	string "Debian Software mirror"
--	default "http://ftp.debian.org"
--	help
--	  Debian has multiple software mirrors scattered around the world.
--	  The following allows you to select your preferred mirror.
--
--	  Usually, just add your country code like XX here:
--	  http://ftp.XX.debian.org
--
- endif
- 
- config BR2_LUAROCKS_MIRROR
+Applied.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
