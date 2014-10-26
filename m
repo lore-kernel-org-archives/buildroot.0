@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 16:42:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ipset: Fix compile error
-In-Reply-To: <1413745147-12299-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413745147-12299-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141026164254.2f4f8591@free-electrons.com>
+Date: Sun, 26 Oct 2014 16:50:00 +0100
+Subject: [Buildroot] [git commit] gst-ffmpeg: add --pkg-config to internal
+	libav configure options
+Message-ID: <20141026155119.E884BB089B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=15a7140bc55e431590cf47a4f4cc8d793543e343
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Oct 2014 20:59:07 +0200, Bernd Kuhls wrote:
-> Error occured with an allyespackageconfig setup:
-> 
-> In file included from print.c:19:0:
-> print.c: In function 'ipset_print_ip':
-> ../include/libipset/data.h:150:1: error: inlining failed in call to 'ipset_data_test': call is unlikely and code size would grow [-Werror=inline]
->  ipset_data_test(const struct ipset_data *data, enum ipset_opt opt)
->  ^
-> print.c:273:21: error: called from here [-Werror=inline]
->   if (ipset_data_test(data, cidropt)) {
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ipset/ipset.mk |    2 ++
->  1 file changed, 2 insertions(+)
+The internal copy of libav in gst-ffmpeg does not understand the
+PKG_CONFIG env variable, so it throws a line like this at the end
+of its configuration:
 
-To fix the same problem, I've applied a slightly different fix, that
-simply removes -Werror altogether.
+WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found, library detection may fail.
 
-See
-http://git.buildroot.net/buildroot/commit/?id=a923b44112aa3bfdb42b12cc1bd2712a263c1a0c.
+This patch adds the --pkg-config to let libav know where it is.
 
-Thanks,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index 44d3ace..984b64c 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -22,7 +22,8 @@ endif
+ 
+ GST_FFMPEG_CONF_EXTRA_OPTS = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+-		--target-os=linux
++		--target-os=linux \
++		--pkg-config='$(PKG_CONFIG_HOST_BINARY)'
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GST_FFMPEG_CONF_EXTRA_OPTS += --enable-zlib
