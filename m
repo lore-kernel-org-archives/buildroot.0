@@ -1,36 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Oct 2014 21:43:17 +0100
-Subject: [Buildroot] [PATCH 38/51] xbmc-pvr-addons: Bump version
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-38-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <XnsA3D2DCF60C386berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 21:47:42 +0100
+Subject: [Buildroot] Approaching 2014.11-rc1
+In-Reply-To: <CA+sos79bohyvG8wCZKZbFOQyAG7Fo5+sUh1hS_8RJvYtG_yXwA@mail.gmail.com>
+References: <20141026120700.79915afb@free-electrons.com>
+ <CA+sos79bohyvG8wCZKZbFOQyAG7Fo5+sUh1hS_8RJvYtG_yXwA@mail.gmail.com>
+Message-ID: <20141026214742.1a92dade@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Dear Beno?t Th?baudeau,
 
-Maxime Hadjinlian <maxime.hadjinlian@gmail.com> 
-wrote in news:1414349157-22749-38-git-send-email-maxime.hadjinlian at gmail.com:
+On Sun, 26 Oct 2014 21:21:17 +0100, Beno?t Th?baudeau wrote:
 
->  # This cset is on the branch 'gotham'
->  # When XBMC is updated, then this should be updated to the corresponding 
-branch
-> -XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
-> +XBMC_PVR_ADDONS_VERSION = 067befe6b8da81e29abca8cd394d08c84233677b
+> There are many old pending patches that are in the 'new' state and
+> waiting for replies. A lot of more recent patches have been replied to
+> and even applied. What are the 'prioritization' rules here? What
+> should be expected for these older patches?
 
-Hi,
+There are no strict rules. However, recent patches tend to get more
+attention I believe because it's quite certain that they still apply to
+the latest Buildroot, and also because they are generally actively
+being pushed. Also, some of the recent patches get quickly applied
+because they don't raise any specific question, so we can just apply
+them as is, without much discussion.
 
-you are sure that code from the master branch of xbmc-pvr-addons is 
-compatible with xbmc Gotham? 
+On the other hand, when a patch requires some discussion, or is not
+clear, or requires some complicated testing, we tend to delay its
+review/application, and therefore such patches tend to move
+progressively toward the end of the queue.
 
-Openelec also uses code from the Gotham branch of xbmc-pvr-addons:
-https://github.com/OpenELEC/OpenELEC.tv/blob/openelec-
-4.2/packages/mediacenter/xbmc-pvr-addons/package.mk
+When I look at patchwork, I try to look both at recent patches to
+quickly reduce the length of the queue by applying the "easy" stuff,
+but also to look at older patches that are generally more
+"complicated" (if they were not "complicated", they would already have
+been applied).
 
-While staying on the Gotham branch you can bump xbmc-pvr-addons to
-f7d9b42b2f1795a467093acb9c120b9c361ffbc4 btw.
+This is where help from others is welcome. If you see a patch in the
+queue (even not a patch from you) that you believe is useful, do not
+hesitate to test/review it and report about that. Or if needed: resend
+a new version of this patch, updated for the latest Buildroot, after of
+course testing it. This is the best way to help getting those older
+patches applied.
 
-Regards, Bernd
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
