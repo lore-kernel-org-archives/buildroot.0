@@ -1,46 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Oct 2014 17:58:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 7556] New: make interactive CLI optional for
-	nftables
-Message-ID: <bug-7556-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 18:59:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libhid: Fix build with
+ BR2_ENABLE_DEBUG=yes
+In-Reply-To: <1413747441-8680-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1413747441-8680-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141026185942.788b0d88@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7556
+Dear Bernd Kuhls,
 
-           Summary: make interactive CLI optional for nftables
-           Product: buildroot
-           Version: 2014.08
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: alex at digriz.org.uk
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Sun, 19 Oct 2014 21:37:21 +0200, Bernd Kuhls wrote:
+> Updated Thomas? patch fix also fix the case when debug is enabled, otherwise this error occurs:
+> 
+> /bin/bash ../libtool  --tag=CC   --mode=compile /home/fli4l/br5/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
+>  -DHAVE_CONFIG_H -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC
+>  -I/home/fli4l/br5/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include -D_LARGEFILE_SOURCE
+>  -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe s -g2 -O0 -g -Wall -W -c -o hidparser.lo hidparser.c
+> libtool: compile:  /home/fli4l/br5/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -DHAVE_CONFIG_H -I.
+>  -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC
+>  -I/home/fli4l/br5/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include
+>  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe s -g2 -O0
+>  -g -Wall -W -c hidparser.c  -fPIC -DPIC -o .libs/hidparser.o
+> 
+> i586-buildroot-linux-uclibc-gcc: error: s: No such file or directory
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../libhid-0001-dont-fiddle-with-debug-flags.patch |   32 +++++++++++---------
+>  1 file changed, 18 insertions(+), 14 deletions(-)
 
+Fine, but then you also need to change the description of the patch
+libhid-0001-dont-fiddle-with-debug-flags.patch, since with your change,
+the original description that I made doesn't make sense anymore.
 
-Created attachment 5744
-  --> https://bugs.busybox.net/attachment.cgi?id=5744
-patch to make nftables cli optional
+Could you resend an updated patch?
 
-nftables requires readline (and thus in turn ncurses) which adds considerably
-to the size of the root filesystem (~500kB for MIPS).
+Thanks!
 
-Did a bit of work and we can now make it optional (by default it is not
-enabled).
-
-Is this patch reasonable, need me to do anything else to it for it to be
-considered for buildroot.  I am also reaching out to the nftables team to see
-about upstreaming this.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
