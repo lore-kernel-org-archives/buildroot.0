@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 16:50:00 +0100
-Subject: [Buildroot] [git commit] gst-ffmpeg: add --pkg-config to internal
-	libav configure options
-Message-ID: <20141026155119.E884BB089B@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 16:50:13 +0100
+Subject: [Buildroot] [git commit] gst-ffmpeg: expand package description to
+	describe libav usage
+Message-ID: <20141026155119.F032EB089B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15a7140bc55e431590cf47a4f4cc8d793543e343
+commit: http://git.buildroot.net/buildroot/commit/?id=a732c545246d4066d8eb389ac17c6983c0b4e20e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The internal copy of libav in gst-ffmpeg does not understand the
-PKG_CONFIG env variable, so it throws a line like this at the end
-of its configuration:
-
-WARNING: .../output/host/usr/bin/i686-pc-linux-gnu-pkg-config not found, library detection may fail.
-
-This patch adds the --pkg-config to let libav know where it is.
+- Change URL to gst-ffmpeg page at the gstreamer site.
+- Note that gst-ffmpeg actually uses libav, not ffmpeg [anymore].
+- Note that gst-ffmpeg is using an internal copy of libav, not a
+  system copy.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/gstreamer/gst-ffmpeg/Config.in |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index 44d3ace..984b64c 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -22,7 +22,8 @@ endif
+diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+index 9bf5196..ab80ef8 100644
+--- a/package/gstreamer/gst-ffmpeg/Config.in
++++ b/package/gstreamer/gst-ffmpeg/Config.in
+@@ -4,9 +4,14 @@ config BR2_PACKAGE_GST_FFMPEG
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_INET_IPV6
+ 	help
+-	  GStreamer plugin using FFmpeg.
++	  GStreamer plugin containing one plugin with a set of elements using
++	  the Libav library.  It contains most popular decoders as well as
++	  colorspace conversion elements.
  
- GST_FFMPEG_CONF_EXTRA_OPTS = \
- 		--cross-prefix=$(TARGET_CROSS) \
--		--target-os=linux
-+		--target-os=linux \
-+		--pkg-config='$(PKG_CONFIG_HOST_BINARY)'
+-	  http://gstreamer.freedesktop.org/
++	  This package is configured to use an internal copy of the Libav
++	  library.
++
++	  http://gstreamer.freedesktop.org/modules/gst-ffmpeg.html
  
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- GST_FFMPEG_CONF_EXTRA_OPTS += --enable-zlib
+ if BR2_PACKAGE_GST_FFMPEG
+ 
