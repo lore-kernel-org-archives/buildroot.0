@@ -1,96 +1,58 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 26 Oct 2014 19:45:57 +0100
-Subject: [Buildroot] [PATCH 51/51] protobuf: bump version
+Date: Sun, 26 Oct 2014 19:45:56 +0100
+Subject: [Buildroot] [PATCH 50/51] protobuf-c: bump version
 In-Reply-To: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1414349157-22749-51-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1414349157-22749-50-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-
-* Adds powerpc architecture support
-* Changes to the new github upstream site
-* Updates the license filename
-
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-This patch is a re-spin of the previous bump by Matt Weber, we bump to
-2.6.1, change effectively the license filename and also add a hash file.
-
-Since the previous bump has caused issues with other packages, this
-patch (along with the bump of protobuf-c) has been tested:
-* host-protobuf-c-v1.0.0-rc1
-http://autobuild.buildroot.org/results/647/64707ecd9acfbf519d5f22dd6bd5b39c3b544073/build-end.log
-
-* python-protobuf-2.6.0
-http://autobuild.buildroot.org/results/b3b/b3b36c72b233a624ebae9eaac592b7c6fbd394be/build-end.log
-
-Both issues were reported by Thomas Petazzoni after the last bump.
-None of them did occur with this current bump on my machine.
+The releases contains generated Makefile and configure, there's no need
+to AUTORECONF anymore.
+Also add a hash file since the release tarball has been uploaded by the
+maintainer.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/protobuf/Config.in     | 7 +++----
- package/protobuf/protobuf.hash | 2 ++
- package/protobuf/protobuf.mk   | 6 +++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
- create mode 100644 package/protobuf/protobuf.hash
+ package/protobuf-c/protobuf-c.hash | 2 ++
+ package/protobuf-c/protobuf-c.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ create mode 100644 package/protobuf-c/protobuf-c.hash
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 6015b13..e45ed14 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -3,17 +3,16 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
--	# PowerPC doesn't actually work.
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	help
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
- 	  extensible mechanism for serializing structured data.
- 
--	  http://code.google.com/p/protobuf/
-+	  https://github.com/google/protobuf/
- 
- comment "protobuf needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
 new file mode 100644
-index 0000000..ea9b7ef
+index 0000000..73adbaf
 --- /dev/null
-+++ b/package/protobuf/protobuf.hash
++++ b/package/protobuf-c/protobuf-c.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256  dbbd7bdd2381633995404de65a945ff1a7610b0da14593051b4738c90c6dd164  protobuf-2.6.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 9043f98..366cd1f 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,10 +4,10 @@
++sha256  db771f7b0e76d5bb14140a50df4a32553288fd3e701b60e90e034e22f411ef76  protobuf-c-1.0.2.tar.gz
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index d73eb25..bf4f146 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PROTOBUF_VERSION = 2.5.0
--PROTOBUF_SITE = http://protobuf.googlecode.com/files
-+PROTOBUF_VERSION = 2.6.1
-+PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)/
- PROTOBUF_LICENSE = BSD-3c
--PROTOBUF_LICENSE_FILES = COPYING.txt
-+PROTOBUF_LICENSE_FILES = LICENSE
+-PROTOBUF_C_VERSION = v1.0.0-rc1
+-PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
++PROTOBUF_C_VERSION = 1.0.2
++PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+@@ -13,8 +13,6 @@ PROTOBUF_C_CONF_OPTS = --disable-protoc
+ PROTOBUF_C_INSTALL_STAGING = YES
+ PROTOBUF_C_LICENSE = BSD-2c
+ PROTOBUF_C_LICENSE_FILES = LICENSE
+-PROTOBUF_C_AUTORECONF = YES
+-HOST_PROTOBUF_C_AUTORECONF = YES
  
- # N.B. Need to use host protoc during cross compilation.
- PROTOBUF_DEPENDENCIES = host-protobuf
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.1.1
