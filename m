@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Oct 2014 03:03:20 +0100
-Subject: [Buildroot] [git commit] pulseaudio: correct libgtk3 handling
-Message-ID: <20141026020556.41485AF6E9@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 05:30:02 +0100
+Subject: [Buildroot] [git commit] avahi: add optional gtk3 support
+Message-ID: <20141026043430.88B59B57DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7006bff9b3cda17b36bd45e94426b64f270c625e
+commit: http://git.buildroot.net/buildroot/commit/?id=4ee770e1847b16e6b671513aee492e8426f5398d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The gtk3 support uses X11 specific functionality, so it should only be
-enabled if the X11 backend is enabled.
-
-Fixes:
-http://autobuild.buildroot.net/results/9d9/9d9ddea26a5193367a80eede1be1122cec5cd939/
-http://autobuild.buildroot.net/results/3fb/3fbbdbf39e29319b349b2cf155397a121f24bf28/
-http://autobuild.buildroot.net/results/ccf/ccf31740a0e730f2626db9051931b1e0703c770d/
-
-And many others.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pulseaudio/pulseaudio.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/avahi/avahi.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 8d3d0f7..d24dcc8 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -47,6 +47,14 @@ else
- PULSEAUDIO_CONF_OPTS += --without-caps
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 3b9ac63..752f2e7 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -73,7 +73,6 @@ AVAHI_CONF_OPTS = \
+ 		--disable-gdbm \
+ 		--disable-python-dbus \
+ 		--disable-pygtk \
+-		--disable-gtk3 \
+ 		--disable-mono \
+ 		--disable-monodoc \
+ 		--disable-stack-protector \
+@@ -123,6 +122,13 @@ else
+ AVAHI_CONF_OPTS += --disable-gtk
  endif
  
-+# gtk3 support needs X11 backend
-+ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
-+PULSEAUDIO_DEPENDENCIES += libgtk3
-+PULSEAUDIO_CONF_OPTS += --enable-gtk3
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++AVAHI_DEPENDENCIES += libgtk3
++AVAHI_CONF_OPTS += --enable-gtk3
 +else
-+PULSEAUDIO_CONF_OPTS += --disable-gtk3
++AVAHI_CONF_OPTS += --disable-gtk3
 +endif
 +
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
+ 		am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
