@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 18:51:21 +0100
-Subject: [Buildroot] [git commit] sysv init scripts: replace &>/dev/null
-	redirection
-Message-ID: <20141026175158.DAF04B0B9E@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 18:53:16 +0100
+Subject: [Buildroot] [PATCH 2/4] sysv init scripts: remove gettext
+ invocations
+In-Reply-To: <1414345306-27184-2-git-send-email-dywi@mailerd.de>
+References: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
+ <1414345306-27184-2-git-send-email-dywi@mailerd.de>
+Message-ID: <20141026185316.602130d1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5065d475fb9e33f8b6cceb2d44326cffece22999
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Andr? Erdmann,
 
-"<command> &>/dev/null" is supposed to redirect all output to /dev/null.
+On Sun, 26 Oct 2014 18:41:44 +0100, Andr? Erdmann wrote:
+> $"str" is supposed to translate str (depending on the current locale).
+> In ash/dash/..., it cannot be expanded, so commands like
+> 
+>  echo  $"Usage: $0 start|stop"
+> 
+> are printed as '$Usage: SCRIPT start|stop' in [d]ash,
+> and as 'Usage: SCRIPT start|stop' in bash.
+> 
+> This patch removes the '$' in front of '"'.
+> 
+> Command(s) used for editing:
+> 
+>   find . -type f -name '[SK][0-9][0-9]*' | \
+>      xargs sed -r -e 's@[$](["])@\1 at g' -i
+> 
+> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+> ---
+>  package/busybox/S15watchdog  | 2 +-
+>  package/inadyn/S70inadyn     | 2 +-
+>  package/netatalk/S50netatalk | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-However, in shells that don't support it (dash, ash without bash extensions),
-a command like "echo a &>/dev/null" is interpreted as
+Applied, thanks.
 
-(a) "echo a" in background
-(b) write nothing to /dev/null (redirect <empty command> to /dev/null)
-
-This commit replaces "&>..." with ">/dev/null 2>&1".
-
-Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/network-manager/S45network-manager |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
-index 112aa66..7880891 100755
---- a/package/network-manager/S45network-manager
-+++ b/package/network-manager/S45network-manager
-@@ -24,7 +24,7 @@ case "$1" in
- 		;;
- 	stop)
- 		echo -n "Stopping NetworkManager ... "
--			[ ! -z "$PID" ] && kill $PID &> /dev/null
-+			[ ! -z "$PID" ] && kill $PID > /dev/null 2>&1
- 		if [ $? -gt 0 ]; then
- 			echo "failed!"
- 		else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
