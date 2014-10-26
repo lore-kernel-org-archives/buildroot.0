@@ -1,44 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Oct 2014 05:30:02 +0100
-Subject: [Buildroot] [git commit] avahi: add optional gtk3 support
-Message-ID: <20141026043430.88B59B57DC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Oct 2014 05:45:59 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libcap: bump version to 2.24
+In-Reply-To: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sat, 25 Oct 2014 20:19:53 +0200")
+References: <1414261195-5009-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87zjcj781k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ee770e1847b16e6b671513aee492e8426f5398d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/avahi.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 3b9ac63..752f2e7 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -73,7 +73,6 @@ AVAHI_CONF_OPTS = \
- 		--disable-gdbm \
- 		--disable-python-dbus \
- 		--disable-pygtk \
--		--disable-gtk3 \
- 		--disable-mono \
- 		--disable-monodoc \
- 		--disable-stack-protector \
-@@ -123,6 +122,13 @@ else
- AVAHI_CONF_OPTS += --disable-gtk
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+AVAHI_DEPENDENCIES += libgtk3
-+AVAHI_CONF_OPTS += --enable-gtk3
-+else
-+AVAHI_CONF_OPTS += --disable-gtk3
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
- 		am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
+Committed all 3, thanks.
+
+-- 
+Bye, Peter Korsgaard
