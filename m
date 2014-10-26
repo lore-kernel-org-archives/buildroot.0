@@ -1,37 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 13:56:01 +0100
-Subject: [Buildroot] [git commit] perl-module-build: bump to version 0.4210
-Message-ID: <20141026125630.2561DB0205@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 13:56:42 +0100
+Subject: [Buildroot] [PATCH 1/6] perl-module-build: bump to version
+ 0.4210
+In-Reply-To: <1414311174-28291-1-git-send-email-francois.perrad@gadz.org>
+References: <1414311174-28291-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20141026135642.597731b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4bff77d59a314dfe3d74e988ecb9aea7684d420
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-[Thomas: drop empty HOST_PERL_MODULE_BUILD_DEPENDENCIES.]
+On Sun, 26 Oct 2014 09:12:49 +0100, Francois Perrad wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-module-build/perl-module-build.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+> +HOST_PERL_MODULE_BUILD_DEPENDENCIES =
 
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 1eabe61..4fdb4c7 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--PERL_MODULE_BUILD_VERSION = 0.4206
-+PERL_MODULE_BUILD_VERSION = 0.4210
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
-+PERL_MODULE_BUILD_LICENSE_FILES = LICENSE
- 
- $(eval $(host-perl-package))
+I've dropped this apparently useless line and applied.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
