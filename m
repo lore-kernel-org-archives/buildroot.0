@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 22:19:27 +0100
+Date: Sun, 26 Oct 2014 22:23:01 +0100
 Subject: [Buildroot] [git commit] package/apr-util: add optional dependency
-	to berkeleydb
-Message-ID: <20141026213050.C5DADB0D65@busybox.osuosl.org>
+	to mysql
+Message-ID: <20141026213050.D710EB0D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f64125a3c1b07946e7142550b4fa664b163f5cee
+commit: http://git.buildroot.net/buildroot/commit/?id=f187c5fd8943d223630c8dc358ccb308e69f2334
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,18 +19,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index 6bc6ee9..c65b0fb 100644
+index e22efb2..42506bb 100644
 --- a/package/apr-util/apr-util.mk
 +++ b/package/apr-util/apr-util.mk
-@@ -18,6 +18,13 @@ APR_UTIL_CONFIG_SCRIPTS = apu-1-config
- # features.
- APR_UTIL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+@@ -32,6 +32,13 @@ else
+ APR_UTIL_CONF_OPTS += --without-gdbm
+ endif
  
-+ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-+APR_UTIL_CONF_OPTS += --with-dbm=db53 --with-berkeley-db="$(STAGING_DIR)/usr"
-+APR_UTIL_DEPENDENCIES += berkeleydb
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++APR_UTIL_CONF_OPTS += --with-mysql="$(STAGING_DIR)/usr"
++APR_UTIL_DEPENDENCIES += mysql
 +else
-+APR_UTIL_CONF_OPTS += --without-berkeley-db
++APR_UTIL_CONF_OPTS += --without-mysql
 +endif
 +
  ifeq ($(BR2_PACKAGE_SQLITE),y)
