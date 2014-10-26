@@ -1,31 +1,59 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 26 Oct 2014 17:06:24 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
-	with pkg-config
-In-Reply-To: <20141026164155.4c1bc8db@free-electrons.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
-Message-ID: <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 17:02:46 +0100
+Subject: [Buildroot] [git commit] package/pkg-cmake.mk: globally disable doc,
+	examples and tests
+Message-ID: <20141026160659.E6B9EB0961@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 October 2014 16:41, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[...]
-> Hum, whenever we do change in the kconfig code, we like them to be part
-> of the patch series we have. See support/kconfig/README.buildroot for
-> details. In this case, indeed, the fix is already upstream. But still,
-> we would like to keep separated the base kconfig version (copied
-> as-is from the kernel) from any further modification we have made.
->
-> Thanks!
+commit: http://git.buildroot.net/buildroot/commit/?id=c99a1ab3b412c2af1d92a492aee48ca825ba6dfb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ok. I understand. I'll try to do the re-sync as described in
-support/kconfig/README.buildroot then.
+This patch globally disables doc, examples and tests build for both the
+target and host packages.
 
-Best regards,
-Bj?rn Forsman
+If needed, these configure flags can be overloaded in the per-package
+*_CONF_OPTS variables.
+
+This makes the cmake-package infrastructure even closer to the autotools
+one.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 92574e2..3c5d4fe 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -66,6 +66,12 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
++		-DBUILD_DOC=OFF \
++		-DBUILD_DOCS=OFF \
++		-DBUILD_EXAMPLE=OFF \
++		-DBUILD_EXAMPLES=OFF \
++		-DBUILD_TEST=OFF \
++		-DBUILD_TESTS=OFF \
+ 		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_PREFER_STATIC_LIB),OFF,ON) \
+ 		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
+@@ -89,6 +95,12 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
+ 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
+ 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
++		-DBUILD_DOC=OFF \
++		-DBUILD_DOCS=OFF \
++		-DBUILD_EXAMPLE=OFF \
++		-DBUILD_EXAMPLES=OFF \
++		-DBUILD_TEST=OFF \
++		-DBUILD_TESTS=OFF \
+ 		-DBUILD_TESTING=OFF \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
