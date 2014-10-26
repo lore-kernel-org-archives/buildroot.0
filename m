@@ -1,43 +1,56 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 26 Oct 2014 22:16:33 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
-	with pkg-config
-In-Reply-To: <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
- <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
-Message-ID: <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 22:17:19 +0100
+Subject: [Buildroot] [git commit] package/apr: Fix detection of rlimit and
+	large file support
+Message-ID: <20141026211724.EA62FB0BE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=aac552e61fb7ff8cbae3d615dcf17e9335996e00
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 26 October 2014 17:06, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-> On 26 October 2014 16:41, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> [...]
->> Hum, whenever we do change in the kconfig code, we like them to be part
->> of the patch series we have. See support/kconfig/README.buildroot for
->> details. In this case, indeed, the fix is already upstream. But still,
->> we would like to keep separated the base kconfig version (copied
->> as-is from the kernel) from any further modification we have made.
->>
->> Thanks!
->
-> Ok. I understand. I'll try to do the re-sync as described in
-> support/kconfig/README.buildroot then.
+Snippets from configure log:
 
-I've tried to re-sync with linux 3.18-rc1. Without luck. Quite
-frustrating. Something is changed upstream and I don't (yet) manage to
-fill in the missing bits of Make code to have Buildroot's "make
-menuconfig" work with these changes.
+before:
+checking whether to enable -D_LARGEFILE64_SOURCE... no
+...
+checking struct rlimit... no
 
-Would it be acceptable to add the patch posted in this thread directly
-to support/kconfig/patches/ instead?
+after
+checking whether to enable -D_LARGEFILE64_SOURCE... (cached) yes
+...
+checking struct rlimit... (cached) yes
 
-Best regards,
-Bj?rn Forsman
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apr/apr.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 1a4c0e2..dfaf213 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -16,6 +16,7 @@ APR_CONF_ENV = \
+ 	apr_cv_mutex_robust_shared=no \
+ 	apr_cv_tcp_nodelay_with_cork=yes \
+ 	ac_cv_sizeof_struct_iovec=8 \
++	ac_cv_struct_rlimit=yes \
+ 	apr_cv_mutex_recursive=yes
+ APR_CONFIG_SCRIPTS = apr-1-config
+ 
+@@ -24,6 +25,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ APR_CONF_ENV += apr_cv_pthreads_lib="-lpthread"
+ endif
+ 
++# Fix lfs detection when cross compiling
++ifeq ($(BR2_LARGEFILE),y)
++APR_CONF_ENV += apr_cv_use_lfs64=yes
++endif
++
+ define APR_CLEANUP_UNNEEDED_FILES
+ 	$(RM) -rf $(TARGET_DIR)/usr/build-1/
+ endef
