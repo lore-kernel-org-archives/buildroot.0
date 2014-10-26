@@ -1,51 +1,217 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Oct 2014 18:00:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ipset: Fix compile error
-In-Reply-To: <20141026164254.2f4f8591@free-electrons.com>
-References: <1413745147-12299-1-git-send-email-bernd.kuhls@t-online.de>
- <20141026164254.2f4f8591@free-electrons.com>
-Message-ID: <20141026160028.GH12843@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 16:57:27 +0100
+Subject: [Buildroot] [git commit] libevent: Use github call & fix patch
+Message-ID: <20141026160124.7D895B08BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=cfb4d2451ba0feac9e5e050319e542e128b3aec9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Oct 26, 2014 at 04:42:54PM +0100, Thomas Petazzoni wrote:
-> Dear Bernd Kuhls,
-> 
-> On Sun, 19 Oct 2014 20:59:07 +0200, Bernd Kuhls wrote:
-> > Error occured with an allyespackageconfig setup:
-> > 
-> > In file included from print.c:19:0:
-> > print.c: In function 'ipset_print_ip':
-> > ../include/libipset/data.h:150:1: error: inlining failed in call to 'ipset_data_test': call is unlikely and code size would grow [-Werror=inline]
-> >  ipset_data_test(const struct ipset_data *data, enum ipset_opt opt)
-> >  ^
-> > print.c:273:21: error: called from here [-Werror=inline]
-> >   if (ipset_data_test(data, cidropt)) {
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/ipset/ipset.mk |    2 ++
-> >  1 file changed, 2 insertions(+)
-> 
-> To fix the same problem, I've applied a slightly different fix, that
-> simply removes -Werror altogether.
-> 
-> See
-> http://git.buildroot.net/buildroot/commit/?id=a923b44112aa3bfdb42b12cc1bd2712a263c1a0c.
+We want to use the github helper since there is not a specific releases
+tarball that we can download, as specified in the manual.
 
-The presence of /usr/local/include directory in the include path still needs 
-to be fixes by itself. See 
-http://autobuild.buildroot.net/results/4f5/4f55c2415281c6204500efe28fe9e24c8ef73863/build-end.log. 
-This comes from the AM_CPPFLAGS variable that is set in Make_global.am.
+This tarball is generated from the tag, which doesn't contains the
+autotools generated files, we then need to use AUTORECONF.
 
-baruch
+We want to use the github helper anyway as the current URL use an old
+GitHub feature which was called 'Download' where you could upload files
+along your repositories, theses files were not related to your tags.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+This features has been replaced with the 'Release' option where you can
+create a release from a git tag. But these tarball are generated from
+the sources and they don't contains all the generated autotools file.
+
+Since the old URL scheme can be deprecated at any time, we want to
+switch to the new URL scheme, which in the case of libevent, implies
+    having to do an AUTORECONF.
+
+The patch that was already present is updated to apply against
+Makefile.am instead of Makefile.in
+
+The second patch is backported from upstream to remove the use of
+$(top_src_dirs) which makes current autotools error out.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Disable-building-test-programs.patch      |   30 ++++++++
+ .../0002-Avoid-using-top_srcdir-in-TESTS.patch     |   71 ++++++++++++++++++++
+ .../libevent-disable-building-test-programs.patch  |   30 --------
+ package/libevent/libevent.mk                       |    7 +-
+ 4 files changed, 105 insertions(+), 33 deletions(-)
+
+diff --git a/package/libevent/0001-Disable-building-test-programs.patch b/package/libevent/0001-Disable-building-test-programs.patch
+new file mode 100644
+index 0000000..eb1acfd
+--- /dev/null
++++ b/package/libevent/0001-Disable-building-test-programs.patch
+@@ -0,0 +1,30 @@
++From 4b5a135fa681e85eb6988a379f59f3c7a41cc48c Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Fri, 21 Jun 2013 15:25:11 -0700
++Subject: [PATCH 1/2] Disable building test programs
++
++We are not really interested in building test programs.
++Moreover, these programs use fork() function that is
++not available on MMU-less architectures.
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 42879a3..dc90359 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -126,7 +126,7 @@ else
++ noinst_LTLIBRARIES =  $(LIBEVENT_LIBS_LA)
++ endif
++ 
++-SUBDIRS = . include sample test
+++SUBDIRS = . include sample
++ 
++ if BUILD_WIN32
++ 
++-- 
++2.1.1
++
+diff --git a/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch b/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
+new file mode 100644
+index 0000000..54f03cc
+--- /dev/null
++++ b/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
+@@ -0,0 +1,71 @@
++From 366165fc19e862d08ff51ee2bbbff253fc234dd1 Mon Sep 17 00:00:00 2001
++From: Nick Mathewson <nickm@torproject.org>
++Date: Fri, 8 Feb 2013 22:10:05 -0500
++Subject: [PATCH 2/2] Avoid using $(top_srcdir) in TESTS.
++
++Newer automakes don't like this.
++
++Signed-off-by: Nick Mathewson <nickm@torproject.org>
++----
++Patch backported from upstream:
++https://github.com/libevent/libevent/commit/2863c837007c9f28ae542663a6098c91e704b3ca.patch
++
++Slight modifications to test/Makefile.am
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++---
++ Makefile.am      |  4 +++-
++ test/Makefile.am | 10 +++++++++-
++ 2 files changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index dc90359..c34576d 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -128,6 +128,8 @@ endif
++ 
++ SUBDIRS = . include sample
++ 
+++DISTCLEANFILES=
+++
++ if BUILD_WIN32
++ 
++ SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
++@@ -239,5 +241,5 @@ doxygen: FORCE
++ 	doxygen $(srcdir)/Doxyfile
++ FORCE:
++ 
++-DISTCLEANFILES = *~ libevent.pc ./include/event2/event-config.h
+++DISTCLEANFILES += *~ libevent.pc ./include/event2/event-config.h
++ 
++diff --git a/test/Makefile.am b/test/Makefile.am
++index b10c41a..e2f4f4e 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -5,6 +5,7 @@
++ # See LICENSE for copying information.
++ 
++ AUTOMAKE_OPTIONS = foreign
+++DISTCLEANFILES=
++ 
++ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/compat -I$(top_srcdir)/include -I../include -DTINYTEST_LOCAL
++ 
++@@ -19,7 +20,14 @@ endif
++ EXTRA_PROGRAMS = regress
++ noinst_HEADERS = tinytest.h tinytest_macros.h regress.h tinytest_local.h
++ 
++-TESTS = $(top_srcdir)/test/test.sh
+++# We need to copy this file, since automake doesn't want us to use top_srcdir
+++# in TESTS.
+++TESTS = test/test-script.sh
+++
+++test/test-script.sh: test/test.sh
+++ cp $< $@
+++
+++DISTCLEANFILES += test/test-script.s
++ 
++ BUILT_SOURCES =
++ if BUILD_REGRESS
++-- 
++2.1.1
++
+diff --git a/package/libevent/libevent-disable-building-test-programs.patch b/package/libevent/libevent-disable-building-test-programs.patch
+deleted file mode 100644
+index 4b0f0d9..0000000
+--- a/package/libevent/libevent-disable-building-test-programs.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e932c8864e1bb8b6a7901d4b049a1100c4becba5 Mon Sep 17 00:00:00 2001
+-From: Gilles Talis <gilles.talis@gmail.com>
+-Date: Fri, 21 Jun 2013 15:25:11 -0700
+-Subject: [PATCH] Disable building test programs
+-
+-We are not really interested in building test programs.
+-Moreover, these programs use fork() function that is
+-not available on MMU-less architectures.
+-
+-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+----
+- Makefile.in |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 2ebefa2..4fba1ff 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -487,7 +487,7 @@ LIBEVENT_LIBS_LA = libevent.la libevent_core.la libevent_extra.la \
+- @INSTALL_LIBEVENT_TRUE at lib_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
+- @INSTALL_LIBEVENT_TRUE at pkgconfig_DATA = $(LIBEVENT_PKGCONFIG)
+- @INSTALL_LIBEVENT_FALSE at noinst_LTLIBRARIES = $(LIBEVENT_LIBS_LA)
+--SUBDIRS = . include sample test
+-+SUBDIRS = . include sample
+- @BUILD_WIN32_FALSE at SYS_LIBS = 
+- @BUILD_WIN32_TRUE at SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
+- @BUILD_WIN32_FALSE at SYS_SRC = $(am__append_5) $(am__append_6) \
+--- 
+-1.7.4.1
+-
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 73be502..607b7b2 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION = 2.0.21
+-LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+-LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
++LIBEVENT_VERSION = release-2.0.21-stable
++LIBEVENT_SITE = $(call github,libevent,libevent,$(LIBEVENT_VERSION))
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3c, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
++# Straight from the repository, need to generate autotools files
++LIBEVENT_AUTORECONF = YES
+ 
+ define LIBEVENT_REMOVE_PYSCRIPT
+ 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
