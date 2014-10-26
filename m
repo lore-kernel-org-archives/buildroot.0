@@ -1,76 +1,43 @@
 From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Sun, 26 Oct 2014 18:41:44 +0100
-Subject: [Buildroot] [PATCH 2/4] sysv init scripts: remove gettext
-	invocations
+Date: Sun, 26 Oct 2014 18:41:45 +0100
+Subject: [Buildroot] [PATCH 3/4] sysv init scripts: replace &>/dev/null
+	redirection
 In-Reply-To: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
 References: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1414345306-27184-2-git-send-email-dywi@mailerd.de>
+Message-ID: <1414345306-27184-3-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-$"str" is supposed to translate str (depending on the current locale).
-In ash/dash/..., it cannot be expanded, so commands like
+"<command> &>/dev/null" is supposed to redirect all output to /dev/null.
 
- echo  $"Usage: $0 start|stop"
+However, in shells that don't support it (dash, ash without bash extensions),
+a command like "echo a &>/dev/null" is interpreted as
 
-are printed as '$Usage: SCRIPT start|stop' in [d]ash,
-and as 'Usage: SCRIPT start|stop' in bash.
+(a) "echo a" in background
+(b) write nothing to /dev/null (redirect <empty command> to /dev/null)
 
-This patch removes the '$' in front of '"'.
-
-Command(s) used for editing:
-
-  find . -type f -name '[SK][0-9][0-9]*' | \
-     xargs sed -r -e 's@[$](["])@\1 at g' -i
+This commit replaces "&>..." with ">/dev/null 2>&1".
 
 Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- package/busybox/S15watchdog  | 2 +-
- package/inadyn/S70inadyn     | 2 +-
- package/netatalk/S50netatalk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/network-manager/S45network-manager | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
-index 7f1110c..470c6d7 100644
---- a/package/busybox/S15watchdog
-+++ b/package/busybox/S15watchdog
-@@ -13,7 +13,7 @@ case "$1" in
-   restart|reload)
- 	;;
-   *)
--	echo $"Usage: $0 {start|stop|restart}"
-+	echo "Usage: $0 {start|stop|restart}"
- 	exit 1
- esac
- 
-diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
-index 9f2cbf7..b20048c 100644
---- a/package/inadyn/S70inadyn
-+++ b/package/inadyn/S70inadyn
-@@ -29,7 +29,7 @@ case "$1" in
- 		"$0" start
+diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
+index 112aa66..7880891 100755
+--- a/package/network-manager/S45network-manager
++++ b/package/network-manager/S45network-manager
+@@ -24,7 +24,7 @@ case "$1" in
  		;;
- 		*)
--		echo $"Usage: $0 {start|stop|restart}"
-+		echo "Usage: $0 {start|stop|restart}"
- 		exit 1
- esac
- 
-diff --git a/package/netatalk/S50netatalk b/package/netatalk/S50netatalk
-index f109174..287b20d 100755
---- a/package/netatalk/S50netatalk
-+++ b/package/netatalk/S50netatalk
-@@ -25,7 +25,7 @@ case "$1" in
-         stop
-     ;;
-     *)
--        echo $"Usage: $0 {start|stop|restart}"
-+        echo "Usage: $0 {start|stop|restart}"
-         exit 1
- esac
- 
+ 	stop)
+ 		echo -n "Stopping NetworkManager ... "
+-			[ ! -z "$PID" ] && kill $PID &> /dev/null
++			[ ! -z "$PID" ] && kill $PID > /dev/null 2>&1
+ 		if [ $? -gt 0 ]; then
+ 			echo "failed!"
+ 		else
 -- 
 2.1.2
