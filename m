@@ -1,40 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Oct 2014 21:17:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ipset: Fix compile error
-In-Reply-To: <20141026175220.22d94284@free-electrons.com>
-References: <1413745147-12299-1-git-send-email-bernd.kuhls@t-online.de>
- <20141026164254.2f4f8591@free-electrons.com>
- <20141026160028.GH12843@sapphire.tkos.co.il>
- <20141026175220.22d94284@free-electrons.com>
-Message-ID: <20141026191703.GD2307@tarshish>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 26 Oct 2014 16:34:39 -0300
+Subject: [Buildroot] [PATCH] zlog: Add patch to remove -Werror
+Message-ID: <1414352079-17708-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add patch to remove -Werror and avoid build errors because of warnings.
 
-On Sun, Oct 26, 2014 at 05:52:20PM +0100, Thomas Petazzoni wrote:
-> On Sun, 26 Oct 2014 18:00:29 +0200, Baruch Siach wrote:
-> > > To fix the same problem, I've applied a slightly different fix, that
-> > > simply removes -Werror altogether.
-> > > 
-> > > See
-> > > http://git.buildroot.net/buildroot/commit/?id=a923b44112aa3bfdb42b12cc1bd2712a263c1a0c.
-> > 
-> > The presence of /usr/local/include directory in the include path still needs 
-> > to be fixes by itself. See 
-> > http://autobuild.buildroot.net/results/4f5/4f55c2415281c6204500efe28fe9e24c8ef73863/build-end.log. 
-> > This comes from the AM_CPPFLAGS variable that is set in Make_global.am.
-> 
-> Ah, right. Could you send a patch for this?
+Fixes: http://autobuild.buildroot.net/results/6935e1107d832e5678c8742239eccd89d4abed47/
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+--
+Sent upstream: https://github.com/HardySimpson/zlog/pull/68
+---
+ ...ove-Werror-and-avoid-build-failures-becau.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/zlog/zlog-02-compile-Remove-Werror-and-avoid-build-failures-becau.patch
 
-I hope I'll have some time for this later this week.
-
-baruch
-
+diff --git a/package/zlog/zlog-02-compile-Remove-Werror-and-avoid-build-failures-becau.patch b/package/zlog/zlog-02-compile-Remove-Werror-and-avoid-build-failures-becau.patch
+new file mode 100644
+index 0000000..0f1b912
+--- /dev/null
++++ b/package/zlog/zlog-02-compile-Remove-Werror-and-avoid-build-failures-becau.patch
+@@ -0,0 +1,38 @@
++From 4a08c9e07fa8b7a1d6a76b927ea97e3eaa784845 Mon Sep 17 00:00:00 2001
++From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
++Date: Sun, 26 Oct 2014 16:16:25 -0300
++Subject: [PATCH] compile: Remove -Werror and avoid build failures because of
++ warnings
++
++Using -Werror on production is a bad idea, as otherwise harmless warnings
++get treated as errors breaking builds. This is currently the case with
++Nios-II architecture toolchain, warning about a deprecated macro:
++
++../usr/nios2-buildroot-linux-gnu/sysroot/usr/include/features.h:148:3:
++error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Werror=cpp]
++ # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
++
++Instead of trying to fix the macro, let's fix the real issue here,
++and remove -Werror.
++
++Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
++---
++ src/makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/makefile b/src/makefile
++index 294dc08..4ac4c43 100644
++--- a/src/makefile
+++++ b/src/makefile
++@@ -32,7 +32,7 @@ ZLOG_MINOR=2
++ # Fallback to gcc when $CC is not in $PATH.
++ CC:=$(shell sh -c 'type $(CC) >/dev/null 2>/dev/null && echo $(CC) || echo gcc')
++ OPTIMIZATION?=-O2
++-WARNINGS=-Wall -Werror -Wstrict-prototypes -fwrapv
+++WARNINGS=-Wall -Wstrict-prototypes -fwrapv
++ DEBUG?= -g -ggdb
++ REAL_CFLAGS=$(OPTIMIZATION) -fPIC -pthread $(CFLAGS) $(WARNINGS) $(DEBUG)
++ REAL_LDFLAGS=$(LDFLAGS) -pthread
++-- 
++2.1.0
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.0
