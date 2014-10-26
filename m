@@ -1,53 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 16:41:55 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
- with pkg-config
-In-Reply-To: <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20141026164155.4c1bc8db@free-electrons.com>
+Date: Sun, 26 Oct 2014 14:24:58 +0100
+Subject: [Buildroot] [git commit] ipset: add patch to fix --enable-debug
+	build
+Message-ID: <20141026154216.525FAB0868@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bj?rn Forsman,
+commit: http://git.buildroot.net/buildroot/commit/?id=a923b44112aa3bfdb42b12cc1bd2712a263c1a0c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Oct 2014 14:17:25 +0100, Bj?rn Forsman wrote:
-> This makes "make menuconfig" also work on systems where ncurses is not
-> installed in a standard location (such as on NixOS).
-> 
-> This patch changes ccflags() so that it tries pkg-config first, and only
-> if pkg-config fails does it go back to the fallback/manual checks. This
-> is the same algorithm that ldflags() already uses.
-> 
-> [This patch is already applied upstream (will be part of linux v3.18):
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=be8af2d54a66911693eddc556e4f7a866670082b
-> 
-> I'm adding this instead of doing a full upstream kconfig sync because
-> (1) there was a conflict in one of the Buildroot kconfg patches (against
-> linux 3.18-rc1), (2) adding this patch won't create any conflict next
-> time someone re-syncs kconfig with linux and (3) because this is easier
-> to review.
-> ]
-> 
-> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
-> ---
->  support/kconfig/lxdialog/check-lxdialog.sh | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->  mode change 100644 => 100755 support/kconfig/lxdialog/check-lxdialog.sh
+Fixes:
 
-Hum, whenever we do change in the kconfig code, we like them to be part
-of the patch series we have. See support/kconfig/README.buildroot for
-details. In this case, indeed, the fix is already upstream. But still,
-we would like to keep separated the base kconfig version (copied
-as-is from the kernel) from any further modification we have made.
+  http://autobuild.buildroot.org/results/e09/e092c05b949a2bcdadc4f4a0a57d7dd1dc8dca26/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...not-pass-Werror-when-enable-debug-is-used.patch |   39 ++++++++++++++++++++
+ 1 files changed, 39 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch b/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
+new file mode 100644
+index 0000000..c115f63
+--- /dev/null
++++ b/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
+@@ -0,0 +1,39 @@
++From f31bb2561776ad2ce4b77339da6fbfc9e3b2ffbb Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 26 Oct 2014 14:18:29 +0100
++Subject: [PATCH] Do not pass -Werror when --enable-debug is used
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Make_global.am | 2 +-
++ configure.ac   | 1 -
++ 2 files changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Make_global.am b/Make_global.am
++index 7953451..25c4d64 100644
++--- a/Make_global.am
+++++ b/Make_global.am
++@@ -77,7 +77,7 @@ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include \
++ AM_CFLAGS = -std=gnu99
++ 
++ if ENABLE_DEBUG
++-AM_CFLAGS += -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+++AM_CFLAGS += -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall
++ else
++ AM_CFLAGS += -O2 -DNDEBUG
++ endif
++diff --git a/configure.ac b/configure.ac
++index 8fdac15..ee3b147 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -345,7 +345,6 @@ AX_CFLAGS_GCC_OPTION(-Waggregate-return)
++ AX_CFLAGS_GCC_OPTION(-Wbad-function-cast)
++ AX_CFLAGS_GCC_OPTION(-Wcast-align)
++ AX_CFLAGS_GCC_OPTION(-Wcast-qual)
++-AX_CFLAGS_GCC_OPTION(-Werror)
++ AX_CFLAGS_GCC_OPTION(-Wextra)
++ AX_CFLAGS_GCC_OPTION(-Wfloat-equal)
++ AX_CFLAGS_GCC_OPTION(-Wformat=2)
++-- 
++2.0.0
++
