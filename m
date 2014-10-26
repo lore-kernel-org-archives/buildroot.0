@@ -1,48 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 18:59:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libhid: Fix build with
- BR2_ENABLE_DEBUG=yes
-In-Reply-To: <1413747441-8680-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413747441-8680-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141026185942.788b0d88@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Oct 2014 18:06:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 7556] make interactive CLI optional for nftables
+In-Reply-To: <bug-7556-163@https.bugs.busybox.net/>
+References: <bug-7556-163@https.bugs.busybox.net/>
+Message-ID: <20141026180633.CFC4CAD9F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+https://bugs.busybox.net/show_bug.cgi?id=7556
 
-On Sun, 19 Oct 2014 21:37:21 +0200, Bernd Kuhls wrote:
-> Updated Thomas? patch fix also fix the case when debug is enabled, otherwise this error occurs:
-> 
-> /bin/bash ../libtool  --tag=CC   --mode=compile /home/fli4l/br5/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
->  -DHAVE_CONFIG_H -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC
->  -I/home/fli4l/br5/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include -D_LARGEFILE_SOURCE
->  -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe s -g2 -O0 -g -Wall -W -c -o hidparser.lo hidparser.c
-> libtool: compile:  /home/fli4l/br5/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -DHAVE_CONFIG_H -I.
->  -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC
->  -I/home/fli4l/br5/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include
->  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe s -g2 -O0
->  -g -Wall -W -c hidparser.c  -fPIC -DPIC -o .libs/hidparser.o
-> 
-> i586-buildroot-linux-uclibc-gcc: error: s: No such file or directory
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../libhid-0001-dont-fiddle-with-debug-flags.patch |   32 +++++++++++---------
->  1 file changed, 18 insertions(+), 14 deletions(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-10-26 18:06:33 UTC ---
+Since this is really a feature patch, we generally prefer to not have it in
+Buildroot. Can you instead send your patch to the nftables maintainers, and
+then once accepted, send the appropriate patch to Buildroot?
 
-Fine, but then you also need to change the description of the patch
-libhid-0001-dont-fiddle-with-debug-flags.patch, since with your change,
-the original description that I made doesn't make sense anymore.
+By the way, we prefer to see patches posted on the mailing list. See
+http://buildroot.org/downloads/manual/manual.html#submitting-patches for
+details.
 
-Could you resend an updated patch?
+Thanks a lot!
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
