@@ -1,53 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 18:51:54 +0100
-Subject: [Buildroot] [git commit] sysv init scripts: use symbolic names in
-	trap command
-Message-ID: <20141026175158.E18E2B0BA6@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 18:51:21 +0100
+Subject: [Buildroot] [git commit] sysv init scripts: replace &>/dev/null
+	redirection
+Message-ID: <20141026175158.DAF04B0B9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=286e4d94344f04c80cc4f3158bc0a14b80301638
+commit: http://git.buildroot.net/buildroot/commit/?id=5065d475fb9e33f8b6cceb2d44326cffece22999
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Not really necessary(*), but checkbashisms complains about
-"trap with signal numbers".
+"<command> &>/dev/null" is supposed to redirect all output to /dev/null.
 
-(*) Quoting man 1p trap:
-   trap [action condition...]
-   [...]
-   The condition can be EXIT, 0 (equivalent to EXIT),
-   or a signal specified using a symbolic name, without the SIG prefix
-   [...]
-   XSI-conformant systems also allow numeric signal numbers[...]
+However, in shells that don't support it (dash, ash without bash extensions),
+a command like "echo a &>/dev/null" is interpreted as
 
-Only one file is affected by this commit, and it should be checked
-whether it really needs to ignore SIGTERM/SIGHUP or if the trap commands
-can simply be removed:
+(a) "echo a" in background
+(b) write nothing to /dev/null (redirect <empty command> to /dev/null)
 
- package/proftpd/S50proftpd
+This commit replaces "&>..." with ">/dev/null 2>&1".
 
 Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/proftpd/S50proftpd |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/network-manager/S45network-manager |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/proftpd/S50proftpd b/package/proftpd/S50proftpd
-index 550e0a6..dd6cad2 100755
---- a/package/proftpd/S50proftpd
-+++ b/package/proftpd/S50proftpd
-@@ -1,8 +1,8 @@
--#!/bin/sh 
-+#!/bin/sh
- 
- DAEMON=/usr/sbin/proftpd
--trap "" 1
--trap "" 15
-+trap "" HUP
-+trap "" TERM
- test -f $DAEMON || exit 0
- [ ! -d /var/run/proftpd ] && mkdir /var/run/proftpd
- [ ! -f /var/log/wtmp ] && touch /var/log/wtmp
+diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
+index 112aa66..7880891 100755
+--- a/package/network-manager/S45network-manager
++++ b/package/network-manager/S45network-manager
+@@ -24,7 +24,7 @@ case "$1" in
+ 		;;
+ 	stop)
+ 		echo -n "Stopping NetworkManager ... "
+-			[ ! -z "$PID" ] && kill $PID &> /dev/null
++			[ ! -z "$PID" ] && kill $PID > /dev/null 2>&1
+ 		if [ $? -gt 0 ]; then
+ 			echo "failed!"
+ 		else
