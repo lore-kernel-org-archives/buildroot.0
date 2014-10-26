@@ -1,53 +1,76 @@
-From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Sun, 26 Oct 2014 18:41:46 +0100
-Subject: [Buildroot] [PATCH 4/4] sysv init scripts: use symbolic names in
-	trap command
-In-Reply-To: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
-References: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1414345306-27184-4-git-send-email-dywi@mailerd.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Oct 2014 18:51:00 +0100
+Subject: [Buildroot] [git commit] sysv init scripts: remove gettext
+	invocations
+Message-ID: <20141026175105.D94F9B0B75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not really necessary(*), but checkbashisms complains about
-"trap with signal numbers".
+commit: http://git.buildroot.net/buildroot/commit/?id=2113ed46b2ea6ce7e44c7af566059d4d1a1504ae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(*) Quoting man 1p trap:
-   trap [action condition...]
-   [...]
-   The condition can be EXIT, 0 (equivalent to EXIT),
-   or a signal specified using a symbolic name, without the SIG prefix
-   [...]
-   XSI-conformant systems also allow numeric signal numbers[...]
+$"str" is supposed to translate str (depending on the current locale).
+In ash/dash/..., it cannot be expanded, so commands like
 
-Only one file is affected by this commit, and it should be checked
-whether it really needs to ignore SIGTERM/SIGHUP or if the trap commands
-can simply be removed:
+ echo  $"Usage: $0 start|stop"
 
- package/proftpd/S50proftpd
+are printed as '$Usage: SCRIPT start|stop' in [d]ash,
+and as 'Usage: SCRIPT start|stop' in bash.
 
-Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+This patch removes the '$' in front of '"'.
+
+Command(s) used for editing:
+
+  find . -type f -name '[SK][0-9][0-9]*' | \
+     xargs sed -r -e 's@[$](["])@\1 at g' -i
+
+Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/proftpd/S50proftpd | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/S15watchdog  |    2 +-
+ package/inadyn/S70inadyn     |    2 +-
+ package/netatalk/S50netatalk |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/proftpd/S50proftpd b/package/proftpd/S50proftpd
-index 550e0a6..dd6cad2 100755
---- a/package/proftpd/S50proftpd
-+++ b/package/proftpd/S50proftpd
-@@ -1,8 +1,8 @@
--#!/bin/sh 
-+#!/bin/sh
+diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
+index 7f1110c..470c6d7 100644
+--- a/package/busybox/S15watchdog
++++ b/package/busybox/S15watchdog
+@@ -13,7 +13,7 @@ case "$1" in
+   restart|reload)
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
  
- DAEMON=/usr/sbin/proftpd
--trap "" 1
--trap "" 15
-+trap "" HUP
-+trap "" TERM
- test -f $DAEMON || exit 0
- [ ! -d /var/run/proftpd ] && mkdir /var/run/proftpd
- [ ! -f /var/log/wtmp ] && touch /var/log/wtmp
--- 
-2.1.2
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index b5d7eed..96e7532 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -29,7 +29,7 @@ case "$1" in
+ 		"$0" start
+ 		;;
+ 		*)
+-		echo $"Usage: $0 {start|stop|restart}"
++		echo "Usage: $0 {start|stop|restart}"
+ 		exit 1
+ esac
+ 
+diff --git a/package/netatalk/S50netatalk b/package/netatalk/S50netatalk
+index f109174..287b20d 100755
+--- a/package/netatalk/S50netatalk
++++ b/package/netatalk/S50netatalk
+@@ -25,7 +25,7 @@ case "$1" in
+         stop
+     ;;
+     *)
+-        echo $"Usage: $0 {start|stop|restart}"
++        echo "Usage: $0 {start|stop|restart}"
+         exit 1
+ esac
+ 
