@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 17:05:40 +0100
-Subject: [Buildroot] [git commit] package/polarssl: cleanup configure options
-Message-ID: <20141026160700.57579B0961@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 17:04:52 +0100
+Subject: [Buildroot] [git commit] package/libubox: cleanup dependencies
+Message-ID: <20141026160700.2473AB0961@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cf0738a2e4959a92a5ed5dbad1bf2be101adced
+commit: http://git.buildroot.net/buildroot/commit/?id=1ff0ef4500c1fadc6520c05b1c2b1393ad38027b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Test build is already disabled by the cmake-package infrastructure.
+host-pkgconf is already a (runtime) dependency for host-cmake.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/polarssl/polarssl.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/libubox/libubox.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 98dd5bc..21bf160 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -8,7 +8,6 @@ POLARSSL_SITE = https://polarssl.org/code/releases
- POLARSSL_VERSION = 1.2.11
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPTS = \
--	-DBUILD_TESTS=OFF \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 7ff3c16..e6d95b7 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -8,7 +8,7 @@ LIBUBOX_VERSION = 5a0bbefc8fa440446253b171d0ac038d839360e3
+ LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
+ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+ LIBUBOX_INSTALL_STAGING = YES
+-LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
++LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
  
- POLARSSL_INSTALL_STAGING = YES
+ ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
+ LIBUBOX_DEPENDENCIES += lua
