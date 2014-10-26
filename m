@@ -1,26 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 21:52:22 +0100
-Subject: [Buildroot] [PATCH] zlog: Add patch to remove -Werror
-In-Reply-To: <1414352079-17708-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1414352079-17708-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20141026215222.1bf25872@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Oct 2014 21:01:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
+ due to missing header files in include path
+In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
+References: <bug-7478-163@https.bugs.busybox.net/>
+Message-ID: <20141026210115.0C9A7ADAB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
-On Sun, 26 Oct 2014 16:34:39 -0300, Ezequiel Garcia wrote:
+--- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-10-26 21:01:14 UTC ---
+(In reply to comment #9)
+> From that point, I'm a bit clueless why the sysroot include dir isn't in the
+> dir list when an internal toolchain is used. Where is the next place to look ?
+> Maybe something with the python configure options ?
 
-> +Instead of trying to fix the macro, let's fix the real issue here,
-> +and remove -Werror.
+There is no need for the sysroot include dir to be explicitly passed to gcc
+with the internal toolchain, because the Buildroot sysroot is configured to be
+the natural location for the compiler to look for headers.
 
-I actually think the real problem should also be fixed :)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
