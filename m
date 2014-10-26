@@ -1,35 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 17:03:06 +0100
-Subject: [Buildroot] [git commit] package/clapack: cleanup configure options
-Message-ID: <20141026160700.056F3B0961@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 17:08:03 +0100
+Subject: [Buildroot] [PATCH 00/15] CMake janitor
+In-Reply-To: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
+References: <1413741891-30113-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20141026170803.5758b2f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63f7c707f75d8d0cc00a6064017162bd618cb5bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-Remove the BUILD_TESTING configure option (note the typo in its existing
-name), which is already set to the same value by the cmake
-infrastructure.
+On Sun, 19 Oct 2014 20:04:36 +0200, Samuel Martin wrote:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/clapack/clapack.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+> Samuel Martin (15):
+>   package/pkg-cmake.mk: globally disable doc, examples and tests
+>   package/pkg-cmake.mk: disable colouring the output
+>   package/clapack: cleanup configure options
+>   package/flann: cleanup configure options
+>   package/libsoxr: cleanup configure options
 
-diff --git a/package/clapack/clapack.mk b/package/clapack/clapack.mk
-index 99de35d..c3841f2 100644
---- a/package/clapack/clapack.mk
-+++ b/package/clapack/clapack.mk
-@@ -14,7 +14,6 @@ CLAPACK_LICENSE = HPND (libf2c), BSD-3c (libblas and liblapack)
- CLAPACK_LICENSE_FILES = F2CLIBS/libf2c/Notice COPYING
- CLAPACK_SITE = http://www.netlib.org/clapack
- CLAPACK_INSTALL_STAGING = YES
--CLAPACK_CONF_OPTS = -DBUILDTESTING=OFF
- 
- ifneq ($(BR2_PACKAGE_CLAPACK_ARITH_H),)
- CLAPACK_CONF_OPTS += -DARITH_H=$(BR2_PACKAGE_CLAPACK_ARITH_H)
+All applied.
+
+>   package/libsoxr: cleanup configure options
+
+Applied after removing the entire BUILD_SHARED_LIBS option.
+
+>   package/libubox: cleanup dependencies
+>   package/libubox: cleanup configure options
+>   package/libubox: cleanup configure options
+>   package/libuci: cleanup configure options
+>   package/libuci: cleanup configure options
+
+All applied.
+
+>   package/ne10: cleanup configure options
+
+Rejected, as it doesn't make sense: the ne10 option to disable shared
+libraries is specific, and is not the one passed by the CMake package
+infra.
+
+>   package/opencv: cleanup configure options
+>   package/polarssl: cleanup configure options
+>   docs/manual: update cmake-package infrastructure section
+
+All applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
