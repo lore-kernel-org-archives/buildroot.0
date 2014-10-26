@@ -1,9 +1,9 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 26 Oct 2014 19:45:24 +0100
-Subject: [Buildroot] [PATCH 18/51] lua-msgpack-native: bump version
+Date: Sun, 26 Oct 2014 19:45:26 +0100
+Subject: [Buildroot] [PATCH 20/51] lz4: bump version
 In-Reply-To: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1414349157-22749-18-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1414349157-22749-20-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/lua-msgpack-native/lua-msgpack-native.mk | 2 +-
+ package/lz4/lz4.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index ceb453d..acd3a0e 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.mk
-+++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 819cc54..761ce4d 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_MSGPACK_NATIVE_VERSION = 41cce91ab6b54e4426c6d626a0ac41a02ec2096d
-+LUA_MSGPACK_NATIVE_VERSION = 41a91b994c70389dc9daa1a15678741d8ec41749
- LUA_MSGPACK_NATIVE_SITE = $(call github,kengonakajima,lua-msgpack-native,$(LUA_MSGPACK_NATIVE_VERSION))
- LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
- LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+-LZ4_VERSION = r119
++LZ4_VERSION = r123
+ LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2c
 -- 
 2.1.1
