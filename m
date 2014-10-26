@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 22:09:49 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/alsa-utils: Fix gettext
- related build error
-In-Reply-To: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141026220949.28c735c8@free-electrons.com>
+Date: Sun, 26 Oct 2014 22:13:07 +0100
+Subject: [Buildroot] [PATCH] dhcp: add systemd service file
+In-Reply-To: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141026221307.60bc5ffa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Eric Le Bihan,
 
-On Sun, 19 Oct 2014 16:49:10 +0200, Bernd Kuhls wrote:
-> ALSA_UTILS_GETTEXTIZE = YES
+On Mon, 15 Sep 2014 23:04:43 +0200, Eric Le Bihan wrote:
+> Add a systemd service file to start dhcpd.
 > 
-> is also needed to fix
+> The network interfaces to listen on can be set via the variable
+> INTERFACES in /etc/default/dhcpd.conf. Example:
 > 
-> *** error: gettext infrastructure mismatch: using a Makefile.in.in from
-> gettext version 0.18 but the autoconf macros are from gettext version 0.19
+>   INTERFACES="eth0 eth1"
 > 
-> To reproduce the build error make sure gettext is build before alsa-utils
-> by also applying this patch: http://patchwork.ozlabs.org/patch/400779/
+> Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
+> (needed at dhcpd start-up).
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/dhcp/dhcp.mk       | 15 +++++++++++++++
+>  package/dhcp/dhcpd.service | 13 +++++++++++++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 package/dhcp/dhcpd.service
 
-Hum, I've built gettext and then alsa-utils, and I didn't see the
-problem. Do you have a defconfig that exhibits the problem?
+What is the status of this patch? Yann made some comments, which
+apparently you agreed on. Is a new version of the patch needed?
 
 Thanks,
 
