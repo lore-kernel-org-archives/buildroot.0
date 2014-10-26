@@ -1,42 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 13:58:39 +0100
-Subject: [Buildroot] [PATCH] coreutils: fix libintl, reorder ENV,
- OPTS & PROGS
-In-Reply-To: <1414326790-26103-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414326790-26103-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141026135839.71d17069@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 26 Oct 2014 10:04:29 -0300
+Subject: [Buildroot] [PATCH 1/2] memcached: bump to version 1.4.21
+Message-ID: <1414328670-29719-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+And add hash file.
 
-On Sun, 26 Oct 2014 09:33:10 -0300, Gustavo Zacarias wrote:
-> Move OPTS, ENV & PROGS up to the top, the fact that a conditional
-> (BR2_PACKAGE_BUSYBOX) was before them is bad style and confused me while
-> i tried to get them grouped together.
-> This was making all of the new disable OPTS fail, pretty much harmless
-> but still.
-> 
-> Account for libintl/gettext presence, it's not required in any toolchain
-> combination but it will fail if it's present, so use it when it's
-> selected by some other package. Fixes:
-> http://autobuild.buildroot.net/results/30d/30d0e3d27d8606443479466e60716e6f202a4711/
-> 
-> Add conditional on OpenSSL for faster hashing binaries as pointed again
-> by P?draig Brady.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/coreutils/coreutils.mk | 94 +++++++++++++++++++++++-------------------
->  1 file changed, 52 insertions(+), 42 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/memcached/memcached.hash | 2 ++
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/memcached/memcached.hash
 
-Applied, thanks!
-
-Thomas
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+new file mode 100644
+index 0000000..7acbaf4
+--- /dev/null
++++ b/package/memcached/memcached.hash
+@@ -0,0 +1,2 @@
++# From http://www.memcached.org/files/memcached-1.4.21.tar.gz.sha1
++sha1	ab10c46dd9f5d4401872d9670e575afa5bc7d66f	memcached-1.4.21.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 4efe093..c057d57 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.20
++MEMCACHED_VERSION = 1.4.21
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
