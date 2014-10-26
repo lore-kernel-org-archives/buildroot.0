@@ -1,58 +1,45 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 26 Oct 2014 19:45:56 +0100
-Subject: [Buildroot] [PATCH 50/51] protobuf-c: bump version
+Date: Sun, 26 Oct 2014 19:45:41 +0100
+Subject: [Buildroot] [PATCH 35/51] tslib: Use the release tarball
 In-Reply-To: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1414349157-22749-50-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1414349157-22749-35-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The releases contains generated Makefile and configure, there's no need
-to AUTORECONF anymore.
-Also add a hash file since the release tarball has been uploaded by the
+Add a hash file since the release tarball has been uploaded from the
 maintainer.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/protobuf-c/protobuf-c.hash | 2 ++
- package/protobuf-c/protobuf-c.mk   | 6 ++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
- create mode 100644 package/protobuf-c/protobuf-c.hash
+ package/tslib/tslib.hash | 2 ++
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/tslib/tslib.hash
 
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
 new file mode 100644
-index 0000000..73adbaf
+index 0000000..e3ddce5
 --- /dev/null
-+++ b/package/protobuf-c/protobuf-c.hash
++++ b/package/tslib/tslib.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256  db771f7b0e76d5bb14140a50df4a32553288fd3e701b60e90e034e22f411ef76  protobuf-c-1.0.2.tar.gz
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index d73eb25..bf4f146 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,8 +4,8 @@
- #
++sha256  121750e9ae0f05ce840ab8dbefdae1297258f0a69dd1967f55c40ac6e87d5ee9  tslib-1.1.tar.gz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 51aaf23..3f93149 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PROTOBUF_C_VERSION = v1.0.0-rc1
--PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
-+PROTOBUF_C_VERSION = 1.0.2
-+PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
- PROTOBUF_C_MAKE = $(MAKE1)
-@@ -13,8 +13,6 @@ PROTOBUF_C_CONF_OPTS = --disable-protoc
- PROTOBUF_C_INSTALL_STAGING = YES
- PROTOBUF_C_LICENSE = BSD-2c
- PROTOBUF_C_LICENSE_FILES = LICENSE
--PROTOBUF_C_AUTORECONF = YES
--HOST_PROTOBUF_C_AUTORECONF = YES
+ TSLIB_VERSION = 1.1
+-TSLIB_SITE = $(call github,kergoth,tslib,$(TSLIB_VERSION))
++TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)/
+ TSLIB_LICENSE = GPL, LGPL
+ TSLIB_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
 2.1.1
