@@ -1,34 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Oct 2014 01:51:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: Add eventfd_read() and
-	eventfd_write()
-In-Reply-To: <XnsA3D1CF411C49EberndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Sat, 25 Oct 2014 20:22:26 +0200")
-References: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
- <87wq7p57i0.fsf@dell.be.48ers.dk>
- <XnsA3D1CF411C49EberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <874mur908x.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Oct 2014 03:03:20 +0100
+Subject: [Buildroot] [git commit] pulseaudio: correct libgtk3 handling
+Message-ID: <20141026020556.41485AF6E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7006bff9b3cda17b36bd45e94426b64f270c625e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter Korsgaard <jacmet@uclibc.org> wrote in 
- > news:87wq7p57i0.fsf at dell.be.48ers.dk:
+The gtk3 support uses X11 specific functionality, so it should only be
+enabled if the X11 backend is enabled.
 
- >> Is there any real reason to use uClibc with kodi?
+Fixes:
+http://autobuild.buildroot.net/results/9d9/9d9ddea26a5193367a80eede1be1122cec5cd939/
+http://autobuild.buildroot.net/results/3fb/3fbbdbf39e29319b349b2cf155397a121f24bf28/
+http://autobuild.buildroot.net/results/ccf/ccf31740a0e730f2626db9051931b1e0703c770d/
 
- > Hi,
+And many others.
 
- > yes, I am using kodi on an uClibc-based system (www.fli4l.de) and it works 
- > perfectly fine.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pulseaudio/pulseaudio.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-I'm not questioning if it is possible given enough patches, but rather
-if it is worth the effort. Is there any specific reason why you are
-using uClibc instead of musl or glibc?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 8d3d0f7..d24dcc8 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -47,6 +47,14 @@ else
+ PULSEAUDIO_CONF_OPTS += --without-caps
+ endif
+ 
++# gtk3 support needs X11 backend
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++PULSEAUDIO_DEPENDENCIES += libgtk3
++PULSEAUDIO_CONF_OPTS += --enable-gtk3
++else
++PULSEAUDIO_CONF_OPTS += --disable-gtk3
++endif
++
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ # The optional webrtc echo canceller is written in C++, causing auto* to want
+ # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
