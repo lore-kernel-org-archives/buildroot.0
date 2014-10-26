@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 17:05:32 +0100
-Subject: [Buildroot] [git commit] package/opencv: cleanup configure options
-Message-ID: <20141026160700.4EFA2B0961@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 17:03:46 +0100
+Subject: [Buildroot] [git commit] package/libsoxr: cleanup configure options
+Message-ID: <20141026160700.147C0B0961@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9d5682e8e6d440d3a70ea383abd07390e2b2d79
+commit: http://git.buildroot.net/buildroot/commit/?id=136340bc0afd33abd6b703b632c38c42d86811ca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disabling doc and example build is already done by the cmake-package
-infrastructure.
+Test build is already disabled by the cmake-package infrastructure. We
+also get rid of the option type for the WITH_OPENMP option, as it is
+not necessary.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/opencv.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/libsoxr/libsoxr.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 5fc7387..61f529e 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -13,8 +13,6 @@ OPENCV_LICENSE_FILES = LICENSE
- # OpenCV component options
- OPENCV_CONF_OPTS += \
- 	-DBUILD_WITH_DEBUG_INFO=OFF \
--	-DBUILD_DOCS=OFF            \
--	-DBUILD_EXAMPLES=OFF        \
- 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_PERF_TESTS),ON,OFF) \
- 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_TESTS),ON,OFF)
+diff --git a/package/libsoxr/libsoxr.mk b/package/libsoxr/libsoxr.mk
+index 498db8e..528d5c1 100644
+--- a/package/libsoxr/libsoxr.mk
++++ b/package/libsoxr/libsoxr.mk
+@@ -10,7 +10,7 @@ LIBSOXR_SITE = http://downloads.sourceforge.net/project/soxr
+ LIBSOXR_LICENSE = LGPLv2.1+
+ LIBSOXR_LICENSE_FILES = LICENCE COPYING.LGPL
+ LIBSOXR_INSTALL_STAGING = YES
+-LIBSOXR_CONF_OPTS = -DWITH_OPENMP:BOOL=OFF -DBUILD_TESTS:BOOL=OFF
++LIBSOXR_CONF_OPTS = -DWITH_OPENMP=OFF
  
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ LIBSOXR_CONF_OPTS += -DBUILD_SHARED_LIBS:BOOL=OFF
