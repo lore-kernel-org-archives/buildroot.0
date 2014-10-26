@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 18:53:16 +0100
-Subject: [Buildroot] [PATCH 2/4] sysv init scripts: remove gettext
- invocations
-In-Reply-To: <1414345306-27184-2-git-send-email-dywi@mailerd.de>
+Date: Sun, 26 Oct 2014 18:53:24 +0100
+Subject: [Buildroot] [PATCH 3/4] sysv init scripts: replace &>/dev/null
+ redirection
+In-Reply-To: <1414345306-27184-3-git-send-email-dywi@mailerd.de>
 References: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
- <1414345306-27184-2-git-send-email-dywi@mailerd.de>
-Message-ID: <20141026185316.602130d1@free-electrons.com>
+ <1414345306-27184-3-git-send-email-dywi@mailerd.de>
+Message-ID: <20141026185324.5fb88ca8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,21 @@ To: buildroot@busybox.net
 
 Dear Andr? Erdmann,
 
-On Sun, 26 Oct 2014 18:41:44 +0100, Andr? Erdmann wrote:
-> $"str" is supposed to translate str (depending on the current locale).
-> In ash/dash/..., it cannot be expanded, so commands like
+On Sun, 26 Oct 2014 18:41:45 +0100, Andr? Erdmann wrote:
+> "<command> &>/dev/null" is supposed to redirect all output to /dev/null.
 > 
->  echo  $"Usage: $0 start|stop"
+> However, in shells that don't support it (dash, ash without bash extensions),
+> a command like "echo a &>/dev/null" is interpreted as
 > 
-> are printed as '$Usage: SCRIPT start|stop' in [d]ash,
-> and as 'Usage: SCRIPT start|stop' in bash.
+> (a) "echo a" in background
+> (b) write nothing to /dev/null (redirect <empty command> to /dev/null)
 > 
-> This patch removes the '$' in front of '"'.
-> 
-> Command(s) used for editing:
-> 
->   find . -type f -name '[SK][0-9][0-9]*' | \
->      xargs sed -r -e 's@[$](["])@\1 at g' -i
+> This commit replaces "&>..." with ">/dev/null 2>&1".
 > 
 > Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 > ---
->  package/busybox/S15watchdog  | 2 +-
->  package/inadyn/S70inadyn     | 2 +-
->  package/netatalk/S50netatalk | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+>  package/network-manager/S45network-manager | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
