@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 26 Oct 2014 09:12:49 +0100
-Subject: [Buildroot] [PATCH 1/6] perl-module-build: bump to version 0.4210
-Message-ID: <1414311174-28291-1-git-send-email-francois.perrad@gadz.org>
+Date: Sun, 26 Oct 2014 09:12:50 +0100
+Subject: [Buildroot] [PATCH 2/6] perl-path-tiny: bump to version 0.059
+In-Reply-To: <1414311174-28291-1-git-send-email-francois.perrad@gadz.org>
+References: <1414311174-28291-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1414311174-28291-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-module-build/perl-module-build.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/perl-path-tiny/perl-path-tiny.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 1eabe61..0274d28 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
+index d8ed899..4f34b8a 100644
+--- a/package/perl-path-tiny/perl-path-tiny.mk
++++ b/package/perl-path-tiny/perl-path-tiny.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MODULE_BUILD_VERSION = 0.4206
-+PERL_MODULE_BUILD_VERSION = 0.4210
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
-+HOST_PERL_MODULE_BUILD_DEPENDENCIES =
- PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
-+PERL_MODULE_BUILD_LICENSE_FILES = LICENSE
- 
- $(eval $(host-perl-package))
+-PERL_PATH_TINY_VERSION = 0.055
++PERL_PATH_TINY_VERSION = 0.059
+ PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
+ PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_PATH_TINY_DEPENDENCIES = perl
 -- 
 1.9.1
