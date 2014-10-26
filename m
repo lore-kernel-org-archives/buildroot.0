@@ -1,81 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 18:15:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: alsamixer
- optionally depends on gettext
-In-Reply-To: <1413729905-12035-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413729905-12035-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141026181522.4ccb8ace@free-electrons.com>
+Date: Sun, 26 Oct 2014 18:16:49 +0100
+Subject: [Buildroot] [PATCH 3/3] manual: Add notes about GitHub and
+ hashes
+In-Reply-To: <20141026171305.GB3592@free.fr>
+References: <1414341315-31896-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414341315-31896-3-git-send-email-maxime.hadjinlian@gmail.com>
+ <20141026180855.6aa51f07@free-electrons.com>
+ <20141026171305.GB3592@free.fr>
+Message-ID: <20141026181649.14020383@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Yann E. MORIN,
 
-On Sun, 19 Oct 2014 16:45:05 +0200, Bernd Kuhls wrote:
-> To get a reproducable build add optional gettext dependency.
-> 
-> - Configure log without gettext
-> 
-> checking for GNU gettext in libc... no
-> checking for iconv... yes
-> checking for working iconv... guessing yes
-> checking for GNU gettext in libintl... no
-> checking whether to use NLS... no
-> 
-> - Configure log with gettext built before alsa-utils
-> 
-> checking for GNU gettext in libc... no
-> checking for iconv... yes
-> checking for working iconv... guessing yes
-> checking for GNU gettext in libintl... yes
-> checking whether to use NLS... yes
-> checking where the gettext function comes from... external libintl
-> checking how to link with libintl... -lintl
-> 
-> Tested using this defconfig
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_PACKAGE_ALSA_UTILS=y
-> BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-> BR2_PACKAGE_ALSA_UTILS_AMIDI=y
-> BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-> BR2_PACKAGE_ALSA_UTILS_APLAY=y
-> BR2_PACKAGE_ALSA_UTILS_IECSET=y
-> BR2_PACKAGE_ALSA_UTILS_ACONNECT=y
-> BR2_PACKAGE_ALSA_UTILS_APLAYMIDI=y
-> BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI=y
-> BR2_PACKAGE_ALSA_UTILS_ASEQDUMP=y
-> BR2_PACKAGE_ALSA_UTILS_ASEQNET=y
-> BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-> BR2_PACKAGE_NCURSES_WCHAR=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/alsa-utils/Config.in     |    1 +
->  package/alsa-utils/alsa-utils.mk |    6 +++++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
+On Sun, 26 Oct 2014 10:13:05 -0700, Yann E. MORIN wrote:
 
-I've applied this, but I've done some changes because I didn't agree
-with your solution:
+> > I don't really understand this. If the tarball is automatically
+> > generated, then it should always be the same for a given version/tag of
+> > a certain repository, no?
+> 
+> The content of the extracted archive is always the same, except for
+> timestamps, so, the archive is not reproducible itself.
 
-    [Thomas:
-     - it's not only alsamixer, but also several other alsa-utils
-       utilities, like aplay or arecord, which optionally depend on
-       gettext. Therefore, the patch was changed to have the optional
-       gettext dependency apply to the entire package.
-     - in addition, we don't need gettext when locales are enabled:
-       alsa-utils builds perfectly fine with a toolchain having locales
-       enabled even without gettext. So all we really want is to have
-       gettext built before alsa-utils, if gettext is enabled.]
+The timestamps change each time you generate the tarball? This would be
+really weird from github to not have planned to make the tarballs
+reproducible for a given version of the repository. If that's really
+the case, then maybe it's something we should report to github?
 
-Of course, if you disagree, do not hesitate to comment.
+> But then that's the case for generated tarballs from github: we have
+> absolutely no way to check them, unless we want to have hashes for the
+> extracted files themselves (which I doubt we want, as it would be a
+> nightmare to handle).
 
-Thanks a lot!
+Indeed, we don't want to go this way.
 
 Thomas
 -- 
