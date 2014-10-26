@@ -1,42 +1,28 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 26 Oct 2014 10:04:29 -0300
-Subject: [Buildroot] [PATCH 1/2] memcached: bump to version 1.4.21
-Message-ID: <1414328670-29719-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 26 Oct 2014 10:04:30 -0300
+Subject: [Buildroot] [PATCH 2/2] libmemcached: add hash file
+In-Reply-To: <1414328670-29719-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1414328670-29719-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1414328670-29719-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And add hash file.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/memcached/memcached.hash | 2 ++
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/memcached/memcached.hash
+ package/libmemcached/libmemcached.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libmemcached/libmemcached.hash
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+diff --git a/package/libmemcached/libmemcached.hash b/package/libmemcached/libmemcached.hash
 new file mode 100644
-index 0000000..7acbaf4
+index 0000000..85df58f
 --- /dev/null
-+++ b/package/memcached/memcached.hash
++++ b/package/libmemcached/libmemcached.hash
 @@ -0,0 +1,2 @@
-+# From http://www.memcached.org/files/memcached-1.4.21.tar.gz.sha1
-+sha1	ab10c46dd9f5d4401872d9670e575afa5bc7d66f	memcached-1.4.21.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 4efe093..c057d57 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.20
-+MEMCACHED_VERSION = 1.4.21
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++# From https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz/+md5
++md5	b3958716b4e53ddc5992e6c49d97e819	libmemcached-1.0.18.tar.gz
 -- 
 2.0.4
