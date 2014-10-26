@@ -1,48 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 17:01:44 +0100
-Subject: [Buildroot] [PATCH v4] libevent: Use github call & fix patch
-In-Reply-To: <1413739261-3675-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413739261-3675-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141026170144.0aaa3d00@free-electrons.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Sun, 26 Oct 2014 17:06:24 +0100
+Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
+	with pkg-config
+In-Reply-To: <20141026164155.4c1bc8db@free-electrons.com>
+References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
+ <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
+ <20141026164155.4c1bc8db@free-electrons.com>
+Message-ID: <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+On 26 October 2014 16:41, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[...]
+> Hum, whenever we do change in the kconfig code, we like them to be part
+> of the patch series we have. See support/kconfig/README.buildroot for
+> details. In this case, indeed, the fix is already upstream. But still,
+> we would like to keep separated the base kconfig version (copied
+> as-is from the kernel) from any further modification we have made.
+>
+> Thanks!
 
-On Sun, 19 Oct 2014 19:21:01 +0200, Maxime Hadjinlian wrote:
-> We want to use the github helper since there is not a specific releases
-> tarball that we can download, as specified in the manual.
-> 
-> This tarball is generated from the tag, which doesn't contains the
-> autotools generated files, we then need to use AUTORECONF.
-> 
-> We want to use the github helper anyway as the current URL use an old
-> GitHub feature which was called 'Download' where you could upload files
-> along your repositories, theses files were not related to your tags.
-> 
-> This features has been replaced with the 'Release' option where you can
-> create a release from a git tag. But these tarball are generated from
-> the sources and they don't contains all the generated autotools file.
-> 
-> Since the old URL scheme can be deprecated at any time, we want to
-> switch to the new URL scheme, which in the case of libevent, implies
->     having to do an AUTORECONF.
-> 
-> The patch that was already present is updated to apply against
-> Makefile.am instead of Makefile.in
-> 
-> The second patch is backported from upstream to remove the use of
-> $(top_src_dirs) which makes current autotools error out.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Ok. I understand. I'll try to do the re-sync as described in
+support/kconfig/README.buildroot then.
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Bj?rn Forsman
