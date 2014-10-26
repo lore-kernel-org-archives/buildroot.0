@@ -1,32 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Oct 2014 14:14:08 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: Fix uClibc build
- with BR2_ENABLE_DEBUG=yes
-In-Reply-To: <1413741922-30234-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1413741922-30234-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141026141408.3ff98c48@free-electrons.com>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Sun, 26 Oct 2014 14:17:24 +0100
+Subject: [Buildroot] [PATCH 0/2] Portability fixes for "make menuconfig"
+Message-ID: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi,
 
-On Sun, 19 Oct 2014 20:05:22 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: reworked patch to include a configure check (Thomas)
-> 
->  package/mesa3d/mesa3d-0002-execinfo_h.patch |   47 +++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/mesa3d/mesa3d-0002-execinfo_h.patch
+Here are two portability fixes needed to be able to run "make menuconfig" on
+NixOS[1].
 
-Applied, thanks.
+[1]: http://nixos.org/
 
-Thomas
+Bj?rn Forsman (2):
+  kconfig/lxdialog: get ncurses CFLAGS with pkg-config
+  Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time
+
+ Makefile                                   | 6 +++++-
+ support/kconfig/lxdialog/check-lxdialog.sh | 6 +++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 support/kconfig/lxdialog/check-lxdialog.sh
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.2
