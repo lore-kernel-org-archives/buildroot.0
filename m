@@ -1,22 +1,51 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Oct 2014 18:11:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 7358] rpi-userland: linking with bcm_host doesn't
- give vc_dispmanx_* functions
-In-Reply-To: <bug-7358-163@https.bugs.busybox.net/>
-References: <bug-7358-163@https.bugs.busybox.net/>
-Message-ID: <20141026181105.4813FB08C3@busybox.osuosl.org>
+Date: Sun, 26 Oct 2014 18:19:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 7562] New: musl buildroot-toolchain and
+ BR2_MIPS_SOFT_FLOAT break
+Message-ID: <bug-7562-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7358
+https://bugs.busybox.net/show_bug.cgi?id=7562
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-10-26 18:11:04 UTC ---
-So, in the end there is no real bug here? It's really SDL2 that should be
-fixed, and since we don't yet have a SDL2 package, this is not a bug for now,
-right?
+           Summary: musl buildroot-toolchain and BR2_MIPS_SOFT_FLOAT break
+           Product: buildroot
+           Version: 2014.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: alex+buildroot at digriz.org.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+I use the following settings:
+
+BR2_mipsel=y
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_MIPS_SOFT_FLOAT=y
+
+Even trying to run busybox fails as ld-musl-mipsel.so.1 does not exist.  Some
+digging around I found that ld-musl-mipsel-sf.so.1 does, I am guessing 'sf'
+stands for "soft float".
+
+To workaround the problem, I slipped into my post-build.sh script the
+following:
+----
+ln -f -s /lib/libc.so "$1/lib/ld-musl-mipsel.so.1"
+----
+
+That gets things working again.  Not should how this should actually be fixed,
+otherwise I would submit a patch.
+
+Let me know if you need anything from me to help get this fixed.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
