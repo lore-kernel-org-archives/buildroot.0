@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 17:48:59 +0100
-Subject: [Buildroot] [PATCH 2/2] polarssl: disable assembly for more
- scenarios
-In-Reply-To: <1414418838-3487-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1414418838-3487-1-git-send-email-gustavo@zacarias.com.ar>
- <1414418838-3487-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141027174859.45788b19@free-electrons.com>
+Date: Mon, 27 Oct 2014 17:49:13 +0100
+Subject: [Buildroot] [git commit] polarssl: security bump to version 1.2.12
+Message-ID: <20141027164932.58F77B110B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=beb20c5492f310e2971c14d1f1e56437ed554a46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Oct 2014 11:07:18 -0300, Gustavo Zacarias wrote:
+Fixes several memory leaks.
+No assigned CVE or Polar-SA yet.
 
-> +# ARM in thumb mode breaks debugging with asm optimizations
-> +# Microblaze asm optimizations are broken in general
-> +ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-> +POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/polarssl/polarssl.hash |    5 ++---
+ package/polarssl/polarssl.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-It's not really great to have to build things differently debugging on
-BR2_ENABLE_DEBUG, because the prompt of BR2_ENABLE_DEBUG is "build
-packages with debugging symbols". So the user may expect that we build
-the same set of features, just with debugging symbols.
-
-Though I agree that with BR2_ENABLE_DEBUG also activating
---enable-debug, a lot more than just debugging symbols actually happens.
-
-Therefore, committed, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+index ca437ac..9769788 100644
+--- a/package/polarssl/polarssl.hash
++++ b/package/polarssl/polarssl.hash
+@@ -1,3 +1,2 @@
+-# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
+-sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
+-sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
++# From https://polarssl.org/tech-updates/releases/polarssl-1.2.12-released
++sha256	63dd60e78d25c438648607bb177b063dcf5fbf3ced9ee794fcb165d101940131	polarssl-1.2.12-gpl.tgz
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 21bf160..7c27505 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ POLARSSL_SITE = https://polarssl.org/code/releases
+-POLARSSL_VERSION = 1.2.11
++POLARSSL_VERSION = 1.2.12
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
