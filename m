@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 17:59:51 +0100
-Subject: [Buildroot] [PATCH 2/2] polarssl: disable assembly for more
- scenarios
-In-Reply-To: <544E789C.8090402@zacarias.com.ar>
-References: <1414418838-3487-1-git-send-email-gustavo@zacarias.com.ar>
- <1414418838-3487-2-git-send-email-gustavo@zacarias.com.ar>
- <20141027174859.45788b19@free-electrons.com>
- <544E789C.8090402@zacarias.com.ar>
-Message-ID: <20141027175951.3f27a70b@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 27 Oct 2014 18:14:24 +0100
+Subject: [Buildroot] [PATCH] dhcp: add systemd service file
+In-Reply-To: <20141026221307.60bc5ffa@free-electrons.com>
+References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20141026221307.60bc5ffa@free-electrons.com>
+Message-ID: <20141027171424.GC24636@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi!
 
-On Mon, 27 Oct 2014 13:53:48 -0300, Gustavo Zacarias wrote:
+On Sun, Oct 26, 2014 at 10:13:07PM +0100, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Mon, 15 Sep 2014 23:04:43 +0200, Eric Le Bihan wrote:
+> > Add a systemd service file to start dhcpd.
+> >
+> > The network interfaces to listen on can be set via the variable
+> > INTERFACES in /etc/default/dhcpd.conf. Example:
+> >
+> >   INTERFACES="eth0 eth1"
+> >
+> > Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
+> > (needed at dhcpd start-up).
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/dhcp/dhcp.mk       | 15 +++++++++++++++
+> >  package/dhcp/dhcpd.service | 13 +++++++++++++
+> >  2 files changed, 28 insertions(+)
+> >  create mode 100644 package/dhcp/dhcpd.service
+>
+> What is the status of this patch? Yann made some comments, which
+> apparently you agreed on. Is a new version of the patch needed?
 
-> > It's not really great to have to build things differently debugging on
-> > BR2_ENABLE_DEBUG, because the prompt of BR2_ENABLE_DEBUG is "build
-> > packages with debugging symbols". So the user may expect that we build
-> > the same set of features, just with debugging symbols.
-> > 
-> > Though I agree that with BR2_ENABLE_DEBUG also activating
-> > --enable-debug, a lot more than just debugging symbols actually happens.
-> > 
-> > Therefore, committed, thanks!
-> 
-> Well i'm not very happy to build things differently (asm vs no asm) if
-> debugging is on since it can change the result and make it pointless,
-> but it wouldn't be too good to disable asm in general for thumb either
-> so i threw the dice on the lesser evil.
+As explained in my reply to Yann, there is no need for a new version of the
+patch.
 
-Yeah, I'm fine with the trade-off as well.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards
+ELB
