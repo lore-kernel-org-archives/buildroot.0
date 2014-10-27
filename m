@@ -1,45 +1,35 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 27 Oct 2014 16:21:34 +0100
-Subject: [Buildroot] [PATCH 2/2] apply-patches.sh: don't print anything
- when "make -s" is used
-In-Reply-To: <87ioj96njl.fsf@dell.be.48ers.dk>
-References: <1413994811-19452-1-git-send-email-fabio.porcedda@gmail.com>
- <1413994811-19452-3-git-send-email-fabio.porcedda@gmail.com>
- <87ioj96njl.fsf@dell.be.48ers.dk>
-Message-ID: <CAHkwnC8VOr8HVSCEo0W_TiXOJ6V-gUW4BatqQVZazWAWK0ATYQ@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 27 Oct 2014 16:11:10 +0000
+Subject: [Buildroot] [PATCH] trinity: Disable for Microblaze architecture
+Message-ID: <1414426270-14436-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 25, 2014 at 1:44 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
->
->  > The make "-s" option is used to enable the "Silent operation" so if that
->  > option is used don't print anything as far as there isn't any error.
->
->  > Add the "-s" option to "apply-patches.sh" to enable silent operation.
->
->  > Also add the "BR_SILENT" variable the contain "YES" when "make -s" is
->  > used so others parts can use it to silence the build as well.
->
-> Your patch actually sets it to 'y', not "YES". We also already have the
-> QUIET variable basically doing the same stuff, so I've changed it to use
-> that instead.
+This package doesn't support the Microblaze architecture. The full list
+of supported architectures is in the trinity website, and Microblaze is
+not among them.
 
-Thanks for the correction, i didn't know that the "QUIET" variable was
-doing the same as BR_SILENT.
+Fixes:
+	http://autobuild.buildroot.net/results/ea7/ea788f1f0ed5ee4e9b1bf0c8a0d1304e7467dc77/
 
-> I see that you filter out --%, which we currently aren't doing
-> for QUIET. Should we?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/trinity/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-We should because otherwise even a "make --warn-undefined-variables"
-is detected as a silent build.
-
-I've sent a patch to fix that:
-http://patchwork.ozlabs.org/patch/403632/
-
-Thanks & BR
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+index de9c467..9882573 100644
+--- a/package/trinity/Config.in
++++ b/package/trinity/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TRINITY
+ 	bool "trinity"
++	depends on !BR2_microblazeel && !BR2_microblazeeb
+ 	help
+ 	  A Linux System call fuzz tester
+ 
 -- 
-Fabio Porcedda
+1.7.1
