@@ -1,51 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 27 Oct 2014 17:19:36 +0000
-Subject: [Buildroot] [PATCH] trinity: Disable for Microblaze architecture
-In-Reply-To: <20141027174348.0d4bcccb@free-electrons.com>
-References: <1414426270-14436-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141027174348.0d4bcccb@free-electrons.com>
-Message-ID: <544E7EA8.7030207@imgtec.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 27 Oct 2014 18:51:11 +0100
+Subject: [Buildroot] [PATCH] system/skeleton: remove haldaemon
+In-Reply-To: <1414430248-10270-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1414430248-10270-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAGduivwJELbmBzHKT=ca2vjpu09tndHJmEVbOUPY3TnYTashRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hi Gustavo, all
 
-On 10/27/2014 04:43 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
+On Mon, Oct 27, 2014 at 6:17 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> We dropped the hal package quite some time ago, and it's not even a
+> properly created user.
 >
-> On Mon, 27 Oct 2014 16:11:10 +0000, Vicente Olivert Riera wrote:
->> This package doesn't support the Microblaze architecture. The full list
->> of supported architectures is in the trinity website, and Microblaze is
->> not among them.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  system/skeleton/etc/group  | 1 -
+>  system/skeleton/etc/passwd | 1 -
+>  2 files changed, 2 deletions(-)
 >
-> Then what we want is not something like the patch you propose, but
-> instead a patch using positive logic to enable Trinity only on the
-> architecture that are known to work.
+> diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+> index 41c396b..98f712b 100644
+> --- a/system/skeleton/etc/group
+> +++ b/system/skeleton/etc/group
+> @@ -20,7 +20,6 @@ utmp:x:43:
+>  plugdev:x:46:
+>  staff:x:50:
+>  lock:x:54:
+> -haldaemon:x:68:
+>  dbus:x:81:
+>  netdev:x:82:
+>  ftp:x:83
+> diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+> index 8696954..d2e426b 100644
+> --- a/system/skeleton/etc/passwd
+> +++ b/system/skeleton/etc/passwd
+> @@ -8,7 +8,6 @@ proxy:x:13:13:proxy:/bin:/bin/sh
+>  www-data:x:33:33:www-data:/var/www:/bin/sh
+>  backup:x:34:34:backup:/var/backups:/bin/sh
+>  operator:x:37:37:Operator:/var:/bin/sh
+> -haldaemon:x:68:68:hald:/:/bin/sh
+>  dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
+>  ftp:x:83:83:ftp:/home/ftp:/bin/sh
+>  nobody:x:99:99:nobody:/home:/bin/sh
+> --
+> 2.0.4
+Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 >
-> The website says: "Trinity supports Alpha, Aarch64, ARM, i386, IA-64,
-> MIPS, PowerPC-64, S390, S390x, SPARC-64, x86-64.". So it means that not
-> only Microblaze is going to cause issue, but also Blackfin, ARC,
-> Xtensa, SPARC 32 bits, and probably some others I forgot.
->
-> Can you respin the patch with something like:
->
-> 	depends BR2_... || BR2_... || BR2_...
->
-> Thanks!
->
-> Thomas
-
-Done: http://patchwork.ozlabs.org/patch/403703/
-
-I have marked the former patch as superseded.
-
-Best regards,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
