@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Oct 2014 21:00:15 +0100
-Subject: [Buildroot] [PATCH v5 2/3] package/dovecot-pigeonhole: New package
+Date: Mon, 27 Oct 2014 21:00:16 +0100
+Subject: [Buildroot] [PATCH v5 3/3] package/exim: Add support for SMTP AUTH
+	through Dovecot
 In-Reply-To: <1414440016-3863-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1414440016-3863-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1414440016-3863-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1414440016-3863-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +15,36 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v5: no changes
-v4: no changes
-v3: DOVECOT_PIGEONHOLE_CONF_OPT -> DOVECOT_PIGEONHOLE_CONF_OPTS
-v2: - package moved to new Dovecot dependency submenu
-    - removed cruft from CONV_OPT not needed for buildroot (Thomas)
+v4: Initial version
 
- package/dovecot-pigeonhole/Config.in             |    8 ++++++++
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk |   16 ++++++++++++++++
- package/dovecot/Config.in                        |    2 ++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/dovecot-pigeonhole/Config.in
- create mode 100644 package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+ package/exim/exim.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/dovecot-pigeonhole/Config.in b/package/dovecot-pigeonhole/Config.in
-new file mode 100644
-index 0000000..83f5287
---- /dev/null
-+++ b/package/dovecot-pigeonhole/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_DOVECOT_PIGEONHOLE
-+	bool "dovecot-pigeonhole"
-+	help
-+	  Pigeonhole is the name of the project that adds support for the Sieve
-+	  language (RFC 5228) and the ManageSieve protocol (RFC 5804) to the
-+	  Dovecot Secure IMAP Server.
-+
-+	  http://pigeonhole.dovecot.org
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-new file mode 100644
-index 0000000..7304c4a
---- /dev/null
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# dovecot-pigeonhole
-+#
-+################################################################################
-+
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.3
-+DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
-+DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
-+DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
-+DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
-+DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
-+
-+DOVECOT_PIGEONHOLE_CONF_OPTS = --with-dovecot=$(STAGING_DIR)/usr/lib
-+
-+$(eval $(autotools-package))
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index c692402..9c0ecc8 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -49,6 +49,8 @@ config BR2_PACKAGE_DOVECOT_ZLIB
- 	help
- 	  Enable zlib support.
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 9ae94c3..43f1a6b 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -55,6 +55,13 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
+ endef
+ endif
  
-+source package/dovecot-pigeonhole/Config.in
++ifeq ($(BR2_PACKAGE_DOVECOT),y)
++EXIM_DEPENDENCIES += dovecot
++define EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT
++	$(call exim-config-change,AUTH_DOVECOT,yes)
++endef
++endif
 +
- endif # BR2_PACKAGE_DOVECOT
- 
- comment "dovecot needs a toolchain w/ ipv6"
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
+@@ -73,6 +80,7 @@ else # CUSTOM_CONFIG
+ define EXIM_CONFIGURE_CMDS
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
++	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
+ 	$(EXIM_CONFIGURE_TOOLCHAIN)
+ endef
+ endif # CUSTOM_CONFIG
 -- 
 1.7.10.4
