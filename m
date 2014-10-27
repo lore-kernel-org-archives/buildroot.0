@@ -1,50 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Oct 2014 21:00:16 +0100
-Subject: [Buildroot] [PATCH v5 3/3] package/exim: Add support for SMTP AUTH
-	through Dovecot
-In-Reply-To: <1414440016-3863-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1414440016-3863-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1414440016-3863-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 27 Oct 2014 21:40:25 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/alsa-utils: Fix gettext
+	related build error
+References: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141026220949.28c735c8@free-electrons.com>
+Message-ID: <XnsA3D3DC79D56EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141026220949.28c735c8 at free-electrons.com:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v5: no changes
-v4: Initial version
+> Dear Bernd Kuhls,
+> 
+> On Sun, 19 Oct 2014 16:49:10 +0200, Bernd Kuhls wrote:
+>> ALSA_UTILS_GETTEXTIZE = YES
+>> 
+>> is also needed to fix
+>> 
+>> *** error: gettext infrastructure mismatch: using a Makefile.in.in from
+>> gettext version 0.18 but the autoconf macros are from gettext version 0.19
+>> 
+>> To reproduce the build error make sure gettext is build before alsa-utils
+>> by also applying this patch: http://patchwork.ozlabs.org/patch/400779/
+>> 
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls-
+zqRNUXuvxA0b1SvskN2V4Q@public.gmane.org>
+> 
+> Hum, I've built gettext and then alsa-utils, and I didn't see the
+> problem. Do you have a defconfig that exhibits the problem?
 
- package/exim/exim.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi,
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 9ae94c3..43f1a6b 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -55,6 +55,13 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_DOVECOT),y)
-+EXIM_DEPENDENCIES += dovecot
-+define EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT
-+	$(call exim-config-change,AUTH_DOVECOT,yes)
-+endef
-+endif
-+
- define EXIM_CONFIGURE_TOOLCHAIN
- 	$(call exim-config-add,CC,$(TARGET_CC))
- 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
-@@ -73,6 +80,7 @@ else # CUSTOM_CONFIG
- define EXIM_CONFIGURE_CMDS
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
-+	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
- 	$(EXIM_CONFIGURE_TOOLCHAIN)
- endef
- endif # CUSTOM_CONFIG
--- 
-1.7.10.4
+I can not reproduce it either now, maybe I hit some weird combination during 
+my allyesconfig testing of the --enable-debug_for_all_packages patch.
+
+I marked my patch[1] as rejected for now, if it is caught by the autobuilders 
+we can find the patch in the mailinglist archives ;)
+
+Regards, Bernd
+
+[1] http://patchwork.ozlabs.org/patch/400780/
