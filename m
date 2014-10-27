@@ -1,88 +1,74 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Oct 2014 11:07:18 -0300
-Subject: [Buildroot] [PATCH 2/2] polarssl: disable assembly for more
-	scenarios
-In-Reply-To: <1414418838-3487-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414418838-3487-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1414418838-3487-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 27 Oct 2014 11:34:08 -0300
+Subject: [Buildroot] [PATCH] subversion: fix dependencies/selects
+Message-ID: <1414420448-5573-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable assembly optimizations for:
-Microblaze in general (previously a patch).
-ARM with debugging in Thumb1/2 mode. This one fixes:
-http://autobuild.buildroot.net/results/31e/31e8c4e29d51039cd5d213c2fe176a9cc39879da/
+Add all of the missing selects and dependencies, they may be inherent
+to other dependencies but are used by subversion itself.
 
-Do so in a nicer way with a one-liner sed and drop the patch.
+Except for sqlite which fixes:
+http://autobuild.buildroot.net/results/40c/40ce377893789883503deaa57912b87d2e0192e8/
 
-And rename patches around, numbering was off.
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...t-suite.patch => polarssl-0001-no-test-suite.patch} |  0
- ...e-the-standard-CMake-flag-to-drive-the-share.patch} |  0
- .../polarssl/polarssl-02-disable-microblaze-asm.patch  | 18 ------------------
- package/polarssl/polarssl.mk                           | 12 ++++++++++++
- 4 files changed, 12 insertions(+), 18 deletions(-)
- rename package/polarssl/{polarssl-01-no-test-suite.patch => polarssl-0001-no-test-suite.patch} (100%)
- rename package/polarssl/{polarssl-0003-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch => polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch} (100%)
- delete mode 100644 package/polarssl/polarssl-02-disable-microblaze-asm.patch
+ package/subversion/Config.in       | 8 +++++++-
+ package/subversion/subversion.hash | 2 ++
+ package/subversion/subversion.mk   | 3 +--
+ 3 files changed, 10 insertions(+), 3 deletions(-)
+ create mode 100644 package/subversion/subversion.hash
 
-diff --git a/package/polarssl/polarssl-01-no-test-suite.patch b/package/polarssl/polarssl-0001-no-test-suite.patch
-similarity index 100%
-rename from package/polarssl/polarssl-01-no-test-suite.patch
-rename to package/polarssl/polarssl-0001-no-test-suite.patch
-diff --git a/package/polarssl/polarssl-0003-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0003-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-rename to package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-diff --git a/package/polarssl/polarssl-02-disable-microblaze-asm.patch b/package/polarssl/polarssl-02-disable-microblaze-asm.patch
-deleted file mode 100644
-index e90e12d..0000000
---- a/package/polarssl/polarssl-02-disable-microblaze-asm.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Microblaze assembly seems to be broken, fixes:
--
--http://autobuild.buildroot.net/results/4d5/4d54958ded61a0d929d992e4ca0bb31c996953cb/
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura polarssl-1.2.11.orig/include/polarssl/bn_mul.h polarssl-1.2.11/include/polarssl/bn_mul.h
----- polarssl-1.2.11.orig/include/polarssl/bn_mul.h	2014-07-30 15:47:27.381658434 -0300
--+++ polarssl-1.2.11/include/polarssl/bn_mul.h	2014-07-30 15:48:52.616543074 -0300
--@@ -480,7 +480,7 @@
-- 
-- #endif /* SPARCv8 */
-- 
---#if defined(__microblaze__) || defined(microblaze)
--+#if 0 && defined(__microblaze__) || defined(microblaze)
-- 
-- #define MULADDC_INIT                    \
--     asm(                                \
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 7c27505..046c6bf 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -14,4 +14,16 @@ POLARSSL_INSTALL_STAGING = YES
- POLARSSL_LICENSE = GPLv2
- POLARSSL_LICENSE_FILES = LICENSE
+diff --git a/package/subversion/Config.in b/package/subversion/Config.in
+index cc2549f..34d1987 100644
+--- a/package/subversion/Config.in
++++ b/package/subversion/Config.in
+@@ -1,12 +1,18 @@
+ config BR2_PACKAGE_SUBVERSION
+ 	bool "subversion"
+-	select BR2_PACKAGE_APR_UTIL
+ 	# apr really needs shared library support
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_USE_MMU # apr
++	select BR2_PACKAGE_APR_UTIL
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_NEON
+ 	select BR2_PACKAGE_NEON_XML
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Subversion is an open source version control system
  
-+define POLARSSL_DISABLE_ASM
-+	$(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/include/polarssl/config.h
-+endef
+ 	  http://subversion.apache.org/
 +
-+# ARM in thumb mode breaks debugging with asm optimizations
-+# Microblaze asm optimizations are broken in general
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-+POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
-+else ifeq ($(BR2_microblaze),y)
-+POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
-+endif
-+
- $(eval $(cmake-package))
++comment "subversion needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+new file mode 100644
+index 0000000..08e5cb8
+--- /dev/null
++++ b/package/subversion/subversion.hash
+@@ -0,0 +1,2 @@
++# From http://archive.apache.org/dist/subversion/subversion-1.7.18.tar.gz.sha1
++sha1	96873512eeb196e5ba6435fbffb24ba284bfcf84	subversion-1.7.18.tar.gz
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index af5244b..f74c8e5 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -8,8 +8,7 @@ SUBVERSION_VERSION = 1.7.18
+ SUBVERSION_SITE = http://archive.apache.org/dist/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+ SUBVERSION_LICENSE_FILES = LICENSE
+-
+-SUBVERSION_DEPENDENCIES = apr apr-util expat neon zlib
++SUBVERSION_DEPENDENCIES = apr apr-util expat neon sqlite zlib
+ SUBVERSION_CONF_OPTS = \
+ 	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
+ 	--with-apr=$(STAGING_DIR)/usr \
 -- 
 2.0.4
