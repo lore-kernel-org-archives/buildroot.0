@@ -1,85 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 17:49:13 +0100
-Subject: [Buildroot] [git commit] polarssl: disable assembly for more
-	scenarios
-Message-ID: <20141027164932.641FBB110B@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 17:49:38 +0100
+Subject: [Buildroot] [git commit] wget: bump to version 1.16
+Message-ID: <20141027164941.D243BB112F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=130ca81bb28a3d842f6c99e7f3a6de35733df331
+commit: http://git.buildroot.net/buildroot/commit/?id=e9faa850c158c075a5723c10802b866e169fc9f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable assembly optimizations for:
-Microblaze in general (previously a patch).
-ARM with debugging in Thumb1/2 mode. This one fixes:
-http://autobuild.buildroot.net/results/31e/31e8c4e29d51039cd5d213c2fe176a9cc39879da/
-
-Do so in a nicer way with a one-liner sed and drop the patch.
-
-And rename patches around, numbering was off.
+Add hash file.
+And drop autoreconf/gettextize/patch, it's upstream now.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ite.patch => polarssl-0001-no-test-suite.patch} |    0
- ...e-standard-CMake-flag-to-drive-the-share.patch} |    0
- .../polarssl-02-disable-microblaze-asm.patch       |   18 ------------------
- package/polarssl/polarssl.mk                       |   12 ++++++++++++
- 4 files changed, 12 insertions(+), 18 deletions(-)
+ .../wget-0001-spawn-fix-link-error-on-uclibc.patch |   40 --------------------
+ package/wget/wget.hash                             |    2 +
+ package/wget/wget.mk                               |    6 +--
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/package/polarssl/polarssl-01-no-test-suite.patch b/package/polarssl/polarssl-0001-no-test-suite.patch
-similarity index 100%
-rename from package/polarssl/polarssl-01-no-test-suite.patch
-rename to package/polarssl/polarssl-0001-no-test-suite.patch
-diff --git a/package/polarssl/polarssl-0003-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0003-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-rename to package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-diff --git a/package/polarssl/polarssl-02-disable-microblaze-asm.patch b/package/polarssl/polarssl-02-disable-microblaze-asm.patch
+diff --git a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
 deleted file mode 100644
-index e90e12d..0000000
---- a/package/polarssl/polarssl-02-disable-microblaze-asm.patch
+index 54d6dfb..0000000
+--- a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
 +++ /dev/null
-@@ -1,18 +0,0 @@
--Microblaze assembly seems to be broken, fixes:
+@@ -1,40 +0,0 @@
+-From d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5 Mon Sep 17 00:00:00 2001
+-Message-Id: <d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5.1393836674.git.baruch@tkos.co.il>
+-From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+-Date: Tue, 14 Jan 2014 16:59:07 +0000
+-Subject: [PATCH] spawn: fix link error on uclibc
 -
--http://autobuild.buildroot.net/results/4d5/4d54958ded61a0d929d992e4ca0bb31c996953cb/
+-* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
+-to incorporate -lrt if needed (on uclibc for example).
+-* modules/posix_spawn: Reference the substituted LIB.
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Patch status: upstream (gnulib commit d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5)
 -
--diff -Nura polarssl-1.2.11.orig/include/polarssl/bn_mul.h polarssl-1.2.11/include/polarssl/bn_mul.h
----- polarssl-1.2.11.orig/include/polarssl/bn_mul.h	2014-07-30 15:47:27.381658434 -0300
--+++ polarssl-1.2.11/include/polarssl/bn_mul.h	2014-07-30 15:48:52.616543074 -0300
--@@ -480,7 +480,7 @@
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-
+-diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
+-index 87fe12298471..3eb835c3c2a8 100644
+---- a/m4/spawn_h.m4
+-+++ b/m4/spawn_h.m4
+-@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
+-   dnl once only, before all statements that occur in other macros.
+-   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
 - 
-- #endif /* SPARCv8 */
+--  AC_CHECK_FUNCS_ONCE([posix_spawn])
+-+  LIB_POSIX_SPAWN=
+-+  AC_SUBST([LIB_POSIX_SPAWN])
+-+  gl_saved_libs=$LIBS
+-+    AC_SEARCH_LIBS([posix_spawn], [rt],
+-+                   [test "$ac_cv_search_posix_spawn" = "none required" ||
+-+                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
+-+    AC_CHECK_FUNCS([posix_spawn])
+-+  LIBS=$gl_saved_libs
+-+
+-   if test $ac_cv_func_posix_spawn != yes; then
+-     HAVE_POSIX_SPAWN=0
+-   fi
 - 
---#if defined(__microblaze__) || defined(microblaze)
--+#if 0 && defined(__microblaze__) || defined(microblaze)
-- 
-- #define MULADDC_INIT                    \
--     asm(                                \
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 7c27505..046c6bf 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -14,4 +14,16 @@ POLARSSL_INSTALL_STAGING = YES
- POLARSSL_LICENSE = GPLv2
- POLARSSL_LICENSE_FILES = LICENSE
+--- 
+-1.9.0
+-
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+new file mode 100644
+index 0000000..8ef92bf
+--- /dev/null
++++ b/package/wget/wget.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	9261dd090a17687b6dc0682a257e90a926def15624b650e8f799af57e5c8b0e7	wget-1.16.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 9bfa4ba..e50981e 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,16 +4,12 @@
+ #
+ ################################################################################
  
-+define POLARSSL_DISABLE_ASM
-+	$(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/include/polarssl/config.h
-+endef
-+
-+# ARM in thumb mode breaks debugging with asm optimizations
-+# Microblaze asm optimizations are broken in general
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-+POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
-+else ifeq ($(BR2_microblaze),y)
-+POLARSSL_POST_CONFIGURE_HOOKS += POLARSSL_DISABLE_ASM
-+endif
-+
- $(eval $(cmake-package))
+-WGET_VERSION = 1.15
++WGET_VERSION = 1.16
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_LICENSE = GPLv3+
+ WGET_LICENSE_FILES = COPYING
+ 
+-# patching gnulib .m4 file
+-WGET_AUTORECONF = YES
+-WGET_GETTEXTIZE = YES
+-
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	WGET_DEPENDENCIES += busybox
