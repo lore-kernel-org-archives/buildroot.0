@@ -1,51 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Oct 2014 01:07:41 +0100
-Subject: [Buildroot] [git commit] bmon: Bump version
-Message-ID: <20141027002036.EE7CDB0DB7@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 01:11:06 +0100
+Subject: [Buildroot] [git commit] czmq: bump version
+Message-ID: <20141027002037.11B10B0FF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=148ea737c084f6cee7d46cca7a3548959fc43965
+commit: http://git.buildroot.net/buildroot/commit/?id=7f3387d04d3645252ae744d62f55a5a7f83346ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The release contains the configure scripts, as such we don't need the
-autoreconf anymore.
-
-Also add a hash file since there is a release tarball uploaded by the
-maintainer.
+Remove patch as it was merged upstream.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bmon/bmon.hash |    2 ++
- package/bmon/bmon.mk   |    6 ++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...se-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch |   53 --------------------
+ package/czmq/czmq.mk                               |    2 +-
+ 2 files changed, 1 insertions(+), 54 deletions(-)
 
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-new file mode 100644
-index 0000000..dbe2e68
---- /dev/null
-+++ b/package/bmon/bmon.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  78ab9e46840178fbc874cdbc94fde34e72e41a18a27383660b50b4c3cd0d1f9c  bmon-3.5.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index d4c7a49..d440156 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,10 +4,8 @@
+diff --git a/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch b/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch
+deleted file mode 100644
+index cef187a..0000000
+--- a/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 04be584035b4d9b6a61fd748b6d21c92c6bb9694 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 9 Sep 2014 23:36:10 +0200
+-Subject: [PATCH] Use _DEFAULT_SOURCE instead of _BSD_SOURCE
+-
+-Since glibc 2.20, using _BSD_SOURCE triggers a warning, and since czmq
+-uses -Werror, it aborts the build:
+-
+-  CC       zchunk.lo
+-In file included from /home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/ctype.h:25:0,
+-                 from ../include/czmq_prelude.h:203,
+-                 from ../include/czmq.h:19,
+-                 from zauth.c:25:
+-/home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/features.h:148:3: error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Werror=cpp]
+- # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
+-   ^
+-
+-See the glibc 2.20 release notes, https://lwn.net/Articles/611162/,
+-explaining the change about _BSD_SOURCE:
+-
+-* The _BSD_SOURCE and _SVID_SOURCE feature test macros are no longer
+-  supported; they now act the same as _DEFAULT_SOURCE (but generate a
+-  warning).  Except for cases where _BSD_SOURCE enabled BSD interfaces that
+-  conflicted with POSIX (support for which was removed in 2.19), the
+-  interfaces those macros enabled remain available when compiling with
+-  _GNU_SOURCE defined, with _DEFAULT_SOURCE defined, or without any feature
+-  test macros defined.
+-
+-Submitted upstream: https://github.com/zeromq/czmq/pull/648
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- include/czmq_prelude.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/include/czmq_prelude.h b/include/czmq_prelude.h
+-index 8b4b53d..f77add2 100644
+---- a/include/czmq_prelude.h
+-+++ b/include/czmq_prelude.h
+-@@ -152,8 +152,8 @@
+- #   ifndef __NO_CTYPE
+- #   define __NO_CTYPE                   //  Suppress warnings on tolower()
+- #   endif
+--#   ifndef _BSD_SOURCE
+--#   define _BSD_SOURCE                  //  Include stuff from 4.3 BSD Unix
+-+#   ifndef _DEFAULT_SOURCE
+-+#   define _DEFAULT_SOURCE                  //  Include stuff from 4.3 BSD Unix
+- #   endif
+- #elif (defined (Mips))
+- #   define __UTYPE_MIPS
+--- 
+-2.0.0
+-
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 9bc4a2a..d25bf01 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BMON_VERSION = 3.2
--BMON_SITE = $(call github,tgraf,bmon,v$(BMON_VERSION))
--# configure not shipped
--BMON_AUTORECONF = YES
-+BMON_VERSION = 3.5
-+BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)/
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_LICENSE = BSD-2c
- BMON_LICENSE_FILES = LICENSE
+-CZMQ_VERSION = v2.2.0
++CZMQ_VERSION = v3.0.0
+ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
+ 
+ # Autoreconf required as we use the git tree
