@@ -1,33 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 22:07:57 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/alsa-utils: Fix gettext
- related build error
-In-Reply-To: <XnsA3D3DC79D56EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
- <20141026220949.28c735c8@free-electrons.com>
- <XnsA3D3DC79D56EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141027220757.66740943@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 27 Oct 2014 18:13:41 -0300
+Subject: [Buildroot] [PATCH] ruby: security bump to version 2.1.4
+Message-ID: <1414444421-821-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Fixes:
+CVE-2014-8080 - Denial of service XML expansion
 
-On Mon, 27 Oct 2014 21:40:25 +0100, Bernd Kuhls wrote:
+And change default ext/openssl settings WRT CVE-2014-3566.
 
-> I can not reproduce it either now, maybe I hit some weird combination during 
-> my allyesconfig testing of the --enable-debug_for_all_packages patch.
-> 
-> I marked my patch[1] as rejected for now, if it is caught by the autobuilders 
-> we can find the patch in the mailinglist archives ;)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ok, thanks for the feedback. We'll see what happens in the autobuilders
-then :)
-
-Thomas
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 3d17e8c..8d5d133 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/downloads/
+-md5	74a37b9ad90e4ea63c0eed32b9d5b18f	ruby-2.1.3.tar.gz
++# From https://www.ruby-lang.org/en/news/2014/10/27/ruby-2-1-4-released/
++sha256	bf9952cdeb3a0c6a5a27745c9b4c0e5e264e92b669b2b08efb363f5156549204	ruby-2.1.4.tar.gz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index e633ee4..36f6d3f 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
+ RUBY_VERSION_EXT = 2.1.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
