@@ -1,62 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Oct 2014 13:46:23 -0700
-Subject: [Buildroot] [PATCH 15/15 v6] [RFC] package/weston: needs libudev,
-	not a udev daemon
-In-Reply-To: <cover.1414442699.git.yann.morin.1998@free.fr>
-References: <cover.1414442699.git.yann.morin.1998@free.fr>
-Message-ID: <194186ed8f4117444db62f8642ad3f305a11fa27.1414442699.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Oct 2014 22:07:57 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/alsa-utils: Fix gettext
+ related build error
+In-Reply-To: <XnsA3D3DC79D56EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1413730150-19225-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141026220949.28c735c8@free-electrons.com>
+ <XnsA3D3DC79D56EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20141027220757.66740943@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-weston is happy enough with just a libudev, and does
-not require a udev daemon.
+Dear Bernd Kuhls,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/weston/Config.in | 8 ++++----
- package/weston/weston.mk | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Mon, 27 Oct 2014 21:40:25 +0100, Bernd Kuhls wrote:
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index fafdf95..0fd0a71 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,8 +1,8 @@
--comment "weston needs udev and a toolchain w/ threads, dynamic library, headers >= 3.0"
-+comment "weston needs a toolchain w/ threads, dynamic library, headers >= 3.0"
- 	depends on !BR2_avr32
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PREFER_STATIC_LIB \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 
- config BR2_PACKAGE_WESTON
- 	bool "weston"
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_MTDEV
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	depends on !BR2_avr32 # wayland
- 	depends on !BR2_PREFER_STATIC_LIB # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 9964b90..cfe1eba 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -11,7 +11,7 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
--	jpeg mtdev udev cairo
-+	jpeg mtdev libudev cairo
- 
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+> I can not reproduce it either now, maybe I hit some weird combination during 
+> my allyesconfig testing of the --enable-debug_for_all_packages patch.
+> 
+> I marked my patch[1] as rejected for now, if it is caught by the autobuilders 
+> we can find the patch in the mailinglist archives ;)
+
+Ok, thanks for the feedback. We'll see what happens in the autobuilders
+then :)
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
