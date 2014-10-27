@@ -1,61 +1,150 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 22:53:24 +0100
-Subject: [Buildroot] [git commit] package/mpd: enable support for libnfs
-Message-ID: <20141027220850.AF5C1B1AB4@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 22:50:44 +0100
+Subject: [Buildroot] [git commit] package/mpd: sort plugins alphabetically
+	in mpd.mk
+Message-ID: <20141027220850.91CE7B1AB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c83e790655a3409ea76588ef07ce73f93b83d21
+commit: http://git.buildroot.net/buildroot/commit/?id=52cc4a2620d488aa40cc50b1775434f8a67b6aa8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: add missing comment for the toolchain dependency.]
 
 Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/Config.in |   10 ++++++++++
- package/mpd/mpd.mk    |    7 +++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+ package/mpd/mpd.mk |   70 ++++++++++++++++++++++++++--------------------------
+ 1 files changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 09df556..289b197 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -182,6 +182,16 @@ config BR2_PACKAGE_MPD_CURL
- 	help
- 	  Enable curl streaming (http) support.
- 
-+config BR2_PACKAGE_MPD_LIBNFS
-+	bool "nfs"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBNFS
-+	help
-+	  Enable Network File System (NFS) support.
-+
-+comment "nfs support needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
- config BR2_PACKAGE_MPD_LIBSMBCLIENT
- 	bool "samba"
- 	depends on !BR2_nios2 # samba
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index ecd2a77..ef89f3d 100644
+index 1542338..b10a60a 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -90,6 +90,13 @@ else
- MPD_CONF_OPTS += --disable-lame-encoder
+@@ -48,13 +48,6 @@ else
+ MPD_CONF_OPTS += --disable-audiofile
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_LIBNFS),y)
-+MPD_DEPENDENCIES += libnfs
-+MPD_CONF_OPTS += --enable-nfs
+-ifeq ($(BR2_PACKAGE_MPD_PULSEAUDIO),y)
+-MPD_DEPENDENCIES += pulseaudio
+-MPD_CONF_OPTS += --enable-pulse
+-else
+-MPD_CONF_OPTS += --disable-pulse
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_BZIP2),y)
+ MPD_DEPENDENCIES += bzip2
+ MPD_CONF_OPTS += --enable-bzip2
+@@ -62,6 +55,13 @@ else
+ MPD_CONF_OPTS += --disable-bzip2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_CURL),y)
++MPD_DEPENDENCIES += libcurl
++MPD_CONF_OPTS += --enable-curl
 +else
-+MPD_CONF_OPTS += --disable-nfs
++MPD_CONF_OPTS += --disable-curl
 +endif
 +
- ifeq ($(BR2_PACKAGE_MPD_LIBSMBCLIENT),y)
- MPD_DEPENDENCIES += samba
- MPD_CONF_OPTS += --enable-smbclient
+ ifeq ($(BR2_PACKAGE_MPD_FAAD2),y)
+ MPD_DEPENDENCIES += faad2
+ MPD_CONF_OPTS += --enable-aac
+@@ -69,6 +69,13 @@ else
+ MPD_CONF_OPTS += --disable-aac
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_FFMPEG),y)
++MPD_DEPENDENCIES += ffmpeg
++MPD_CONF_OPTS += --enable-ffmpeg
++else
++MPD_CONF_OPTS += --disable-ffmpeg
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_FLAC),y)
+ MPD_DEPENDENCIES += flac
+ MPD_CONF_OPTS += --enable-flac
+@@ -76,13 +83,6 @@ else
+ MPD_CONF_OPTS += --disable-flac
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MPD_CURL),y)
+-MPD_DEPENDENCIES += libcurl
+-MPD_CONF_OPTS += --enable-curl
+-else
+-MPD_CONF_OPTS += --disable-curl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_LAME),y)
+ MPD_DEPENDENCIES += lame
+ MPD_CONF_OPTS += --enable-lame-encoder
+@@ -104,20 +104,6 @@ else
+ MPD_CONF_OPTS += --disable-sndfile
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
+-MPD_DEPENDENCIES += opus libogg
+-MPD_CONF_OPTS += --enable-opus
+-else
+-MPD_CONF_OPTS += --disable-opus
+-endif
+-
+-ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
+-MPD_DEPENDENCIES += libvorbis
+-MPD_CONF_OPTS += --enable-vorbis --enable-vorbis-encoder
+-else
+-MPD_CONF_OPTS += --disable-vorbis --disable-vorbis-encoder
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_MAD),y)
+ MPD_DEPENDENCIES += libid3tag libmad
+ MPD_CONF_OPTS += --enable-mad
+@@ -139,6 +125,20 @@ else
+ MPD_CONF_OPTS += --disable-mpc
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
++MPD_DEPENDENCIES += opus libogg
++MPD_CONF_OPTS += --enable-opus
++else
++MPD_CONF_OPTS += --disable-opus
++endif
++
++ifeq ($(BR2_PACKAGE_MPD_PULSEAUDIO),y)
++MPD_DEPENDENCIES += pulseaudio
++MPD_CONF_OPTS += --enable-pulse
++else
++MPD_CONF_OPTS += --disable-pulse
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
+ MPD_DEPENDENCIES += yajl
+ MPD_CONF_OPTS += --enable-soundcloud
+@@ -169,6 +169,13 @@ else
+ MPD_CONF_OPTS += --disable-twolame-encoder
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
++MPD_DEPENDENCIES += libvorbis
++MPD_CONF_OPTS += --enable-vorbis --enable-vorbis-encoder
++else
++MPD_CONF_OPTS += --disable-vorbis --disable-vorbis-encoder
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_WAVPACK),y)
+ MPD_DEPENDENCIES += wavpack
+ MPD_CONF_OPTS += --enable-wavpack
+@@ -176,13 +183,6 @@ else
+ MPD_CONF_OPTS += --disable-wavpack
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MPD_FFMPEG),y)
+-MPD_DEPENDENCIES += ffmpeg
+-MPD_CONF_OPTS += --enable-ffmpeg
+-else
+-MPD_CONF_OPTS += --disable-ffmpeg
+-endif
+-
+ define MPD_INSTALL_EXTRA_FILES
+ 	@if [ ! -f $(TARGET_DIR)/etc/mpd.conf ]; then \
+ 		$(INSTALL) -D package/mpd/mpd.conf \
