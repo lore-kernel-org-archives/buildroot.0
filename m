@@ -1,44 +1,37 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 27 Oct 2014 18:14:24 +0100
-Subject: [Buildroot] [PATCH] dhcp: add systemd service file
-In-Reply-To: <20141026221307.60bc5ffa@free-electrons.com>
-References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20141026221307.60bc5ffa@free-electrons.com>
-Message-ID: <20141027171424.GC24636@pc-eric>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 27 Oct 2014 17:17:20 +0000
+Subject: [Buildroot] [PATCH] trinity: enable only for supported architectures
+Message-ID: <1414430240-53243-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+This package only has support for some architectures which are listed in
+the project website: http://codemonkey.org.uk/projects/trinity/
 
-On Sun, Oct 26, 2014 at 10:13:07PM +0100, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Mon, 15 Sep 2014 23:04:43 +0200, Eric Le Bihan wrote:
-> > Add a systemd service file to start dhcpd.
-> >
-> > The network interfaces to listen on can be set via the variable
-> > INTERFACES in /etc/default/dhcpd.conf. Example:
-> >
-> >   INTERFACES="eth0 eth1"
-> >
-> > Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
-> > (needed at dhcpd start-up).
-> >
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > ---
-> >  package/dhcp/dhcp.mk       | 15 +++++++++++++++
-> >  package/dhcp/dhcpd.service | 13 +++++++++++++
-> >  2 files changed, 28 insertions(+)
-> >  create mode 100644 package/dhcp/dhcpd.service
->
-> What is the status of this patch? Yann made some comments, which
-> apparently you agreed on. Is a new version of the patch needed?
+We enable this package only for those supported architectures which are
+also supported in Buildroot.
 
-As explained in my reply to Yann, there is no need for a new version of the
-patch.
+Fixes:
+	http://autobuild.buildroot.net/results/ea7/ea788f1f0ed5ee4e9b1bf0c8a0d1304e7467dc77/
 
-Best regards
-ELB
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/trinity/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+index de9c467..9882573 100644
+--- a/package/trinity/Config.in
++++ b/package/trinity/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TRINITY
+ 	bool "trinity"
++	depends on !BR2_microblazeel && !BR2_microblazeeb
+ 	help
+ 	  A Linux System call fuzz tester
+ 
+-- 
+1.7.1
