@@ -1,74 +1,65 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Oct 2014 11:34:08 -0300
-Subject: [Buildroot] [PATCH] subversion: fix dependencies/selects
-Message-ID: <1414420448-5573-1-git-send-email-gustavo@zacarias.com.ar>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 27 Oct 2014 15:42:48 +0100
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <CAJtjsKYZQabHeU5OwSm5sjfA3dpTg33uhkOX7M1Drv6scAkOTA@mail.gmail.com>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20141011162152.GA4254@free.fr>
+ <CAJtjsKZC=Fi4ND7HX+YEEyGrNivu+6RduYnQ08FmVWU+NAiYqA@mail.gmail.com>
+ <5441A0DF.20309@mind.be> <20141018100040.GA3858@free.fr>
+ <CAJtjsKYZQabHeU5OwSm5sjfA3dpTg33uhkOX7M1Drv6scAkOTA@mail.gmail.com>
+Message-ID: <CAJtjsKbaAKyGODDjpcCQRnzP__weqk1Jt8fTWnWVVMt7KPJM_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add all of the missing selects and dependencies, they may be inherent
-to other dependencies but are used by subversion itself.
+On Sat, Oct 18, 2014 at 12:31 PM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> Yann, Arnout, All,
+> Le 18 oct. 2014 12:00, "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+>> On 2014-10-18 01:06 +0200, Arnout Vandecappelle spake thusly:
+>> > On 16/10/14 14:38, Johan Oudinet wrote:
+>> > > ** Fix ejabberd build system
+>> > > ** ===================
+>> > > The only solution i see is to create a buildroot package for every
+>> > > ejabberd dependency, listed in rebar.config.script :
+>> > > esip, goldrush, lager, p1_cache_tab, p1_iconv, p1_stringprep, p1_stun,
+>> > > p1_tls, p1_utils, p1_xml, p1_yaml, p1_zlib, xmlrpc
+>> > > Then, modify ejabberd package to not use rebar at all, or at least to
+>> > > not call rebar get-deps. Thus, if I remove deps from the `all'
+>> > > makefile rule and deps/.build from the `src' rule dependency, it might
+>> > > work.
+>> > >
+>> > > Do you have a better idea?
+>> >
+>> >  Perhaps it's an option to run rebar in download-only mode in the
+>> > download step?
+>>
+>> The problem is that rebar is an executable bundled in the ejabberd
+>> archive, so, we can't run it before we extract ejabberd... :-(
+>>
+>> Unless we can switch to using an external rebar. Johan?
+>
+> Well, we could package the rebar project and use it instead of the binary
+> included in ejabberd but I don't think it's a good idea.
+> Actually, I've looked at how Debian has packaged ejabberd and they did patch
+> it to get rid of the get-deps rule and packages every dependency separately.
+> I'm going to have a look how perl is integrated in buildroot.
+> Thanks.
 
-Except for sqlite which fixes:
-http://autobuild.buildroot.net/results/40c/40ce377893789883503deaa57912b87d2e0192e8/
+I (with the help of a colleague) manage to package every ejabberd
+dependency separately. We also had to package rebar because some
+erlang packages rely on it but do not provide it. Therefore, if an
+erlang package includes a rebar script, we use it. Otherwise, we add a
+dependency on host-erlang-rebar and we use this one instead.
+To simplify the task (12 erlang packages), we created a pkg-rebar.mk
+file that provides {host-}rebar-package, similar to pkg-autotools.mk.
+In doing so, we had to factorize the hooks in pkg-autotools.mk.
 
-Also add hash file.
+I guess the minor modifications of pkg-autotools.mk should be pushed
+in a separate patch.
+Then, should I push the rest of my commits as a big new revision of
+this patch, or should I push each erlang package as a separate patch ?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/subversion/Config.in       | 8 +++++++-
- package/subversion/subversion.hash | 2 ++
- package/subversion/subversion.mk   | 3 +--
- 3 files changed, 10 insertions(+), 3 deletions(-)
- create mode 100644 package/subversion/subversion.hash
-
-diff --git a/package/subversion/Config.in b/package/subversion/Config.in
-index cc2549f..34d1987 100644
---- a/package/subversion/Config.in
-+++ b/package/subversion/Config.in
-@@ -1,12 +1,18 @@
- config BR2_PACKAGE_SUBVERSION
- 	bool "subversion"
--	select BR2_PACKAGE_APR_UTIL
- 	# apr really needs shared library support
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_MMU # apr
-+	select BR2_PACKAGE_APR_UTIL
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_NEON
- 	select BR2_PACKAGE_NEON_XML
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Subversion is an open source version control system
- 
- 	  http://subversion.apache.org/
-+
-+comment "subversion needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-new file mode 100644
-index 0000000..08e5cb8
---- /dev/null
-+++ b/package/subversion/subversion.hash
-@@ -0,0 +1,2 @@
-+# From http://archive.apache.org/dist/subversion/subversion-1.7.18.tar.gz.sha1
-+sha1	96873512eeb196e5ba6435fbffb24ba284bfcf84	subversion-1.7.18.tar.gz
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index af5244b..f74c8e5 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -8,8 +8,7 @@ SUBVERSION_VERSION = 1.7.18
- SUBVERSION_SITE = http://archive.apache.org/dist/subversion
- SUBVERSION_LICENSE = Apache-2.0
- SUBVERSION_LICENSE_FILES = LICENSE
--
--SUBVERSION_DEPENDENCIES = apr apr-util expat neon zlib
-+SUBVERSION_DEPENDENCIES = apr apr-util expat neon sqlite zlib
- SUBVERSION_CONF_OPTS = \
- 	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
- 	--with-apr=$(STAGING_DIR)/usr \
 -- 
-2.0.4
+Johan
