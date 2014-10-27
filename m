@@ -1,64 +1,52 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Mon, 27 Oct 2014 10:26:11 +0100
-Subject: [Buildroot] [PATCH 1/1] targetcli-fb: allow to build with Python 3
-Message-ID: <1414401971-8577-1-git-send-email-cvubrugier@fastmail.fm>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 27 Oct 2014 10:50:29 +0100
+Subject: [Buildroot] systemd not working properly?
+In-Reply-To: <20141021081533.GB9754@pc-eric>
+References: <20141019124525.01fe9653@free-electrons.com>
+ <20141021081533.GB9754@pc-eric>
+Message-ID: <CAGduivzxNzHY1j1JJBG0j9XSabWjs-7NfL9Mk=YHhYV7E_tMNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
----
- package/python-configshell-fb/Config.in | 5 +++--
- package/python-rtslib-fb/Config.in      | 2 +-
- package/targetcli-fb/Config.in          | 6 +++---
- 3 files changed, 7 insertions(+), 6 deletions(-)
+Hi all,
 
-diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
-index 05de585..fb96763 100644
---- a/package/python-configshell-fb/Config.in
-+++ b/package/python-configshell-fb/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
- 	bool "python-configshell-fb"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYPARSING
--	select BR2_PACKAGE_PYTHON_READLINE
-+	select BR2_PACKAGE_PYTHON3_READLINE if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_READLINE if BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_URWID
- 	help
- 	  configshell-fb is a Python library that provides a framework
-diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
-index b2aebcf..119b63b 100644
---- a/package/python-rtslib-fb/Config.in
-+++ b/package/python-rtslib-fb/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_RTSLIB_FB
- 	bool "python-rtslib-fb"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	help
- 	  rtslib-fb is an object-based Python library for configuring
- 	  the LIO generic SCSI target, present in 3.x Linux kernel
-diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
-index dcc6a54..ee241ef 100644
---- a/package/targetcli-fb/Config.in
-+++ b/package/targetcli-fb/Config.in
-@@ -1,9 +1,9 @@
--comment "targetcli-fb depends on python"
--	depends on !BR2_PACKAGE_PYTHON
-+comment "targetcli-fb depends on Python"
-+	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
- 
- config BR2_PACKAGE_TARGETCLI_FB
- 	bool "targetcli-fb"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
- 	select BR2_PACKAGE_PYTHON_RTSLIB_FB
- 	help
--- 
-2.1.1
+On Tue, Oct 21, 2014 at 10:15 AM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> Hi!
+> On Sun, Oct 19, 2014 at 12:45:25PM +0200, Thomas Petazzoni wrote:
+>> Dear systemd/Buildroot users,
+>>
+>> I don't use systemd much, but every time I need to test a config with
+>> systemd enabled, there are quite a few errors at boot time, and more
+>> precisely, it doesn't even boot completely. Here are the errors I get:
+>>
+>> [FAILED] Failed to start Remount Root and Kernel File Systems.
+>> See 'systemctl status systemd-remount-fs.service' for details.
+>> ...
+>>
+>> Then a *very* long delay because of dev-ttyAMA0.device., that finally
+>> ends up with:
+>>
+>> [ TIME ] Timed out waiting for device dev-ttyAMA0.device.
+>> [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
+>>
+>> And finally, I get no getty at all.
+>>
+>> Defconfig being used:
+>>
+>> BR2_arm=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_INIT_SYSTEMD=y
+>> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+>> BR2_PACKAGE_AVAHI=y
+>> BR2_PACKAGE_AVAHI_DAEMON=y
+
+In the end, FHANDLE needs to be selected in the Linux configuration
+for systemd to work properly.
+This option is enabled automatically when systemd is selected as init
+system in BR. In Thomas case (and mine too), the kernel was too old
+and it was not build with this feature enabled.
+Rebuilding fixed the issue.
