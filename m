@@ -1,137 +1,172 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Oct 2014 13:46:11 -0700
-Subject: [Buildroot] [PATCH 0/15 v6] Introduce libudev (branch yem/libudev2)
-Message-ID: <cover.1414442699.git.yann.morin.1998@free.fr>
+Date: Mon, 27 Oct 2014 13:46:09 -0700
+Subject: [Buildroot] [PATCH 01/15 v6] support/gen-manual-lists.py: rework
+	generating the virtual package list
+In-Reply-To: <cover.1414442699.git.yann.morin.1998@free.fr>
+References: <cover.1414442699.git.yann.morin.1998@free.fr>
+Message-ID: <13c110aa4db2bf24f0d9d082ad21b769a93c0590.1414442699.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+To get the list of providers of a virtual pacakge, we currently scan
+all the symbols to see if they select the virtual package _HAS symbol.
 
-This series introduces the possibility to just build and install libudev,
-without requiring that the /dev management be handled by eudev or systemd.
+Then, for all such selecting symbols, we iterate through the select
+chain, up to the uppermost symbol that has a prompt, to get the actual
+user-selectable symbol that ultimately will select the virtual package.
+This handles blind symbols that are options to a package.
 
-A lot of packages that have a dependency on udev, in fact only require a
-libudev, not a udev daemon. That's the case for e.g. libinput, libcec,
-mesa3d...
+So far, this is working relatively OK, except we do not account for a
+special type of providers: virtual packages. There is nothing that
+prevents a virtual package to declare itself as a provider for another
+virtual package.
 
-The series contains:
+Additionally, another case that is not handled is actual packages that
+are actually promptless. So far, we expected symbols with no prompt to
+be an option to a package, and we would ultimately (via the backward
+select recursion, above) end up finding a package symbol with a prompt.
 
-  - a patch to fix generating the list of virtual packages for the manual
+But we're soon removing the prompts of eudev and systemd [*], so the
+previously valid heuristic is no longer valid.
 
-  - three patches to introduce the libudev virtual package, and its
-    providers: eudev and systemd
+So, we need a brand-new heuristic to build up the list of providers.
 
-  - a patch to make eudev only build libudev if /dev management is
-    handled by neither eudev nor systemd
+Fortunately, instead of _blindly_ looking for selecting symbols, we
+can actually extract the providing packages from the list of 'default'
+values of the _PROVIDES_XXX symbol. This gives us the list of packages,
+but not sub-options.
 
-  - four patches to convert packages to depend on libusb instead of a
-    udev daemon; those packages have been confirmed by Bernd to indeed
-    only need libudev and not a udev daemon
+Then, we can go on hunting for any selecting symbol. Each such symbol
+that is not a known package gets treated like an option, as was done
+up until now.
 
-  - five RFC patches to convert packages we are not sure whether they
-    would be happy with only a libudev, and which would need run-time
-    testing to check
+What this additional complexity brings, is that prompt-less packages
+are automatically found, from the list of 'default' values, and this
+includes real prompt-less packages, as well as virtual packages. These
+are what we were missing previously.
 
-Not all packages that reference udev have been switched over to depend
-on libudev, though, since it is unclear to me whether they require a
-udev daemon, or would be happy with just libudev.
+[*] because they are not directly user-selectable, see the corresponding
+following changesets for the rationale.
 
-On your keyboards, get set, ready... Comment! :-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ support/scripts/gen-manual-lists.py | 93 +++++++++++++++++++++++++++++++------
+ 1 file changed, 78 insertions(+), 15 deletions(-)
 
-
-Changes v5 -> v6:
-  - rebase ontop latest master
-  - fix misc comments  (Peter, Bernd)
-
-Changes v4 -> v5:
-  - bump to eudev 1.10  (Bernd)
-
-Changes v3 -> v4:
-  - do not remove the prompts for eudev and systemd  (Thomas P.)
-  - patch to convert xserver_xorg-server dropped  (Bernd)
-
-Changes RFCv2 -> v3:
-  - some typoes  (Samuel)
-  - misc fixes in gen-manual-lists.py  (Samuel)
-
-Changes RFCv1 -> RFCv2:
-  - have eudev and systemd be providers for libudev, instead of having
-    udev be the provider  (Thomas, on IRC)
-  - fix the manual lists after bugs were uncovered with the removal of
-    the eudev and systemd prompts
-  - convert some packages
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 36531f35490d704c072007fe5cfe9743b537fb88:
-
-  imagemagick: bump to version 6.8.9-9 (2014-10-27 19:31:43 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/libudev2
-
-for you to fetch changes up to 194186ed8f4117444db62f8642ad3f305a11fa27:
-
-  [RFC] package/weston: needs libudev, not a udev daemon (2014-10-27 13:43:08 -0700)
-
-----------------------------------------------------------------
-Yann E. MORIN (15):
-      support/gen-manual-lists.py: rework generating the virtual package list
-      package/libudev: new virtual package
-      package/eudev: is a provider for libudev
-      package/systemd: is a provider for libudev
-      package/eudev: bump to 1.10
-      package/eudev: split udev/libudev
-      package/mesa3d: depends on libudev, not udev
-      package/libcec: needs libudev, not a udev daemon
-      package/libdrm: can also use only libudev
-      package/xdriver_xf86-input-evdev: needs libudev, not a udev daemon
-      [RFC] package/libatasmart: needs libudev, not a udev daemon
-      [RFC] package/libinput: needs libudev, not a udev daemon
-      [RFC] package/libusb: needs libudev, not a udev daemon
-      [RFC] package/vlc: needs libudev, not a udev daemon
-      [RFC] package/weston: needs libudev, not a udev daemon
-
- package/Config.in                                  |  1 +
- package/eudev/Config.in                            | 40 ++++++++--
- ...y-use-pragma-for-ignoring-diagnostics-if-.patch |  8 +-
- package/eudev/eudev.mk                             | 55 +++++++++++--
- package/libatasmart/Config.in                      |  4 +-
- package/libcec/Config.in                           |  5 +-
- package/libcec/libcec.mk                           |  4 +-
- package/libdrm/libdrm.mk                           |  4 +-
- package/libinput/Config.in                         |  6 +-
- package/libinput/libinput.mk                       |  2 +-
- package/libudev/Config.in                          |  6 ++
- package/libudev/libudev.mk                         |  7 ++
- package/libusb/libusb.mk                           |  5 +-
- package/mesa3d/Config.in                           | 11 +--
- package/mesa3d/mesa3d.mk                           |  4 +-
- package/systemd/Config.in                          |  4 +
- package/systemd/systemd.mk                         |  2 +-
- package/vlc/vlc.mk                                 |  4 +-
- package/weston/Config.in                           |  8 +-
- package/weston/weston.mk                           |  2 +-
- package/x11r7/xdriver_xf86-input-evdev/Config.in   |  5 +-
- .../xdriver_xf86-input-evdev.mk                    |  3 +-
- package/xbmc/Config.in                             |  6 +-
- support/scripts/gen-manual-lists.py                | 93 ++++++++++++++++++----
- system/Config.in                                   | 26 ++++--
- 25 files changed, 239 insertions(+), 76 deletions(-)
- create mode 100644 package/libudev/Config.in
- create mode 100644 package/libudev/libudev.mk
-
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 95c10dc..0f1906d 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -384,28 +384,91 @@ class Buildroot:
+                     return s
+             return None
+ 
+-        def _get_providers(symbol):
+-            providers = list()
++        # This functions return a list of all symbols that have a prompt,
++        # and that 'select' the given symbol
++        def _get_selecting_symbols_with_prompt(symbol):
++            syms = list()
+             for sym in self.config:
+                 if not sym.is_symbol():
+                     continue
+-                if _symbol_is_legacy(sym):
+-                    continue
+                 selects = sym.get_selected_symbols()
+                 if not selects:
+                     continue
++                # Does this symbol selects us?
+                 for s in selects:
+-                    if s == symbol:
+-                        if sym.prompts:
+-                            l = self._get_symbol_label(sym,False)
+-                            parent_pkg = _get_parent_package(sym)
+-                            if parent_pkg is not None:
+-                                l = self._get_symbol_label(parent_pkg, False) \
+-                                  + " (w/ " + l + ")"
+-                            providers.append(l)
+-                        else:
+-                            providers.extend(_get_providers(sym))
+-            return providers
++                    if not s == symbol:
++                        continue
++                    if sym.prompts:
++                        syms.append(sym)
++                    else:
++                        syms.extend(_get_selecting_symbols_with_prompt(sym))
++            return syms
++
++        # This function returns a list of providers for the specified symbol.
++        # 'symbol' must be a _HAS_XXX symbol.
++        # Each element is a string.
++        # Each element is the name of the providing package, with any
++        # sub-option of that package.
++        # E.g.:  "rpi-userland"   "mesa3d (w/ OpenGL ES)"
++        #
++        # We consider the provider packages by looking at all the default "foo"
++        # for the corresponding _PROVIDES_XXX symbol, which gives us all the
++        # packages.
++        # Then we look at all the symbols that 'select' the _HAS_XXX symbol.
++        # If a selecting symbol is also a package symbol, this is a cut.
++        # Otherwise, we iterate the 'selected by' chain until we find a symbol
++        # with a prompt, which we consider the enabling sub-option, or we end
++        # up with the providing-package's symbol.
++        def _get_providers(symbol):
++            providers_syms = list()
++            providers_syms_names = list()
++            providers_syms_w_opts = list()
++
++            # Get all providing packages
++            _provides_pkg = re.sub(r"^(BR2_PACKAGE)_HAS_(.+)$",
++                                   r"\1_PROVIDES_\2",
++                                   symbol.get_name())
++            _provides_sym = self.config.get_symbol(_provides_pkg)
++            for (pn, _) in _provides_sym.def_exprs:
++                ps = self.config._expr_val_str(pn, get_val_instead_of_eval=True)
++                ps = re.sub(r"-", r"_", ps.strip('"'))
++                ps = self.config.get_symbol("BR2_PACKAGE_" + ps.upper())
++                providers_syms.append(ps)
++                providers_syms_names.append( (ps, pn) )
++
++            # Now, try to get sub-options
++            # Iterate across all symbols, to see if any selects us
++            for sym in _get_selecting_symbols_with_prompt(symbol):
++                if _symbol_is_legacy(sym):
++                    continue
++                if sym in providers_syms:
++                    # The symbol is a package that provides us, and we already
++                    # know of it
++                    continue
++                # The symbol is unknown, we suppose it is an option, so find
++                # the package it comes from
++                parent_pkg = _get_parent_package(sym)
++                if parent_pkg is not None:
++                    providers_syms_w_opts.append( (parent_pkg, sym) )
++
++            # Now, build a list of providers with option
++            seen = list()
++            providers_str = list()
++            for (p, o) in providers_syms_w_opts:
++                if not p in seen:
++                    seen.append(p)
++                l = self._get_symbol_label(p, False) + " (w/ " \
++                  + self._get_symbol_label(o, False) + ")"
++                providers_str.append(l)
++
++            # Finally, complete with the list of providers without option
++            for (ps, pn) in providers_syms_names:
++                if ps in seen:
++                    continue
++                if not pn in providers_str:
++                    providers_str.append(pn)
++
++            return providers_str
+ 
+         if what == "layout":
+             return ( "100%", "^1,4,4" )
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
