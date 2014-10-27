@@ -1,49 +1,68 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 27 Oct 2014 07:59:33 -0300
-Subject: [Buildroot] [PATCH] zlog: Add patch to remove -Werror
-In-Reply-To: <20141027080209.7cbcf476@free-electrons.com>
-References: <1414352079-17708-1-git-send-email-ezequiel@vanguardiasur.com.ar>	<20141026215222.1bf25872@free-electrons.com>	<544DB1AA.7070805@vanguardiasur.com.ar>
- <20141027080209.7cbcf476@free-electrons.com>
-Message-ID: <544E2595.9000406@vanguardiasur.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 27 Oct 2014 12:03:02 +0100
+Subject: [Buildroot] [PATCH 1/1] libgtk3: fix undefined reference to
+	get_xkb()
+Message-ID: <1414407782-9324-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When configuring Gtk+ with --disable-xkb, the build fails because of an
+undefined reference to get_xkb().
 
+This issue as been reported upstream [1]. This patch fixes it.
 
-On 10/27/2014 04:02 AM, Thomas Petazzoni wrote:
-> Dear Ezequiel Garcia,
-> 
-> On Sun, 26 Oct 2014 23:44:58 -0300, Ezequiel Garcia wrote:
-> 
->> But which is the real problem: the BSD_SOURCE macro usage or the warning
->> in the toolchain?
-> 
-> The BSD_SOURCE macro usage.
-> 
->> Other architectures are not producing any warning, so this sounds like
->> yet another issue with the toolchain.
-> 
-> That's because NIOS II is for now the only toolchain using glibc 2.20,
-> which has deprecated certain macros. Packages should be converted, as
-> such warnings will also appear with other toolchain as they start using
-> glibc 2.20.
-> 
-> See commit 116733c6c211f49d7ba5fff5883f682eb72106a3 for instance.
-> 
+Fixes: 513d79b97bb8ad0e5cd431c47c706b5ec87a9882
+Fixes: 0c3f1df92481852622445478d2239371fc818f41
 
-Great, thanks. I hadn't noticed you fixed a similar thing before.
+[1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
 
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ ...3-0004-Fix-undefined-reference-to-get_xkb.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+
+diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+new file mode 100644
+index 0000000..c2f4b4f
+--- /dev/null
++++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+@@ -0,0 +1,33 @@
++From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Mon, 27 Oct 2014 10:34:38 +0100
++Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
++
++When configuring Gtk+ with --disable-xkb, the build fails because of an
++undefined reference to get_xkb().
++
++This patch fixes this issue.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ gdk/x11/gdkkeys-x11.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
++index c45a971..6a5481b 100644
++--- a/gdk/x11/gdkkeys-x11.c
+++++ b/gdk/x11/gdkkeys-x11.c
++@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
++   int i, j;
++   gboolean retval;
++ 
+++#ifdef HAVE_XKB
++   if (KEYMAP_USE_XKB (keymap))
++     get_xkb (keymap_x11);
+++#endif
++ 
++   retval = TRUE;
++ 
++-- 
++1.9.1
++
 -- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141027/a610790e/attachment.asc>
+1.9.1
