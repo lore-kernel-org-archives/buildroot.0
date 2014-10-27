@@ -1,54 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Oct 2014 01:17:06 +0100
-Subject: [Buildroot] [git commit] geoip: bump version
-Message-ID: <20141027002037.331A3B0DB7@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 01:03:20 +0100
+Subject: [Buildroot] [git commit] package/libcap: Fix build error with
+	kernel headers < 3.6
+Message-ID: <20141027002036.E7118B0FF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d595b178e23b97e5cd19c2b2a6049e0b7afea77
+commit: http://git.buildroot.net/buildroot/commit/?id=a759931c9b0cb4337dc30fd35d03ce123271c5a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tarball from the release contains the configure and Makefile.in,
-there's no longer need to AUTORECONF.
+Fixes
+http://autobuild.buildroot.net/results/cce/cceb1ccacec36fb7ef41bb7cdb13b3014813b599/
 
-Add a hash file since the tarball has been uploaded by the maintainer.
+XATTR_NAME_CAPS appears in kernel headers since 3.7:
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/include/uapi/linux/xattr.h?id=v3.7
 
-[Peter: fix _LICENSE_FILES]
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Before it was an internal define of the kernel:
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/include/linux/xattr.h?id=607ca46e97a1b6594b29647d98a32d545c24bdff
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/geoip/geoip.hash |    2 ++
- package/geoip/geoip.mk   |    7 +++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/cdrkit/Config.in  |    5 +++--
+ package/libcap/Config.in  |    4 ++++
+ package/lxc/Config.in     |    6 ++++--
+ package/squid/Config.in   |    6 ++++--
+ package/systemd/Config.in |    1 +
+ 5 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
-new file mode 100644
-index 0000000..717bec4
---- /dev/null
-+++ b/package/geoip/geoip.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  8ef059ee3680b39db967248331ec41188f4b45f86a4a77e39247ff41b61efd7c  GeoIP-1.6.2.tar.gz
-diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
-index bbfa014..5664f03 100644
---- a/package/geoip/geoip.mk
-+++ b/package/geoip/geoip.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
+diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
+index 9ba5dbf..cfbddb8 100644
+--- a/package/cdrkit/Config.in
++++ b/package/cdrkit/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CDRKIT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_LIBCAP
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # libcap
+ 	depends on BR2_USE_MMU # fork
+ 	bool "cdrkit"
+ 	help
+@@ -12,6 +13,6 @@ config BR2_PACKAGE_CDRKIT
  
--GEOIP_VERSION = 1.6.0
-+GEOIP_VERSION = 1.6.2
- GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
--GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
--GEOIP_AUTORECONF = YES
-+GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)/
- GEOIP_INSTALL_STAGING = YES
- GEOIP_LICENSE = LGPLv2.1+
--GEOIP_LICENSE_FILES = LICENSE COPYING
-+GEOIP_LICENSE_FILES = COPYING
+ 	  http://www.cdrkit.org/
  
- $(eval $(autotools-package))
+-comment "cdrkit needs a toolchain w/ largefile"
++comment "cdrkit needs a toolchain w/ largefile, headers >= 3.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/libcap/Config.in b/package/libcap/Config.in
+index 5b0c827..a019928 100644
+--- a/package/libcap/Config.in
++++ b/package/libcap/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBCAP
+ 	bool "libcap"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	help
+ 	  This library implements the user-space interfaces to the
+ 	  POSIX 1003.1e capabilities available in Linux kernels. These
+@@ -22,3 +23,6 @@ config BR2_PACKAGE_LIBCAP_TOOLS
+ 	  CONFIG_EXT2_FS_XATTR and CONFIG_EXT2_FS_SECURITY for ext2).
+ 
+ endif
++
++comment "libcap needs headers >= 3.7"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index 3eae64a..bae83b9 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LXC
+ 	select BR2_PACKAGE_LIBCAP
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # libcap
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_avr32 # no timerfd
+@@ -14,8 +15,9 @@ config BR2_PACKAGE_LXC
+ 
+ 	  https://linuxcontainers.org/
+ 
+-comment "lxc needs a toolchain w/ IPv6, threads, largefile"
++comment "lxc needs a toolchain w/ IPv6, threads, largefile, headers >= 3.7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_avr32 # no timerfd
+ 	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
+-	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index ad9fab5..4fadd04 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,12 +1,14 @@
+-comment "squid needs a toolchain w/ C++, IPv6"
++comment "squid needs a toolchain w/ C++, IPv6, headers >= 3.7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_avr32 # toolchain too old
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_INET_IPV6
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_INET_IPV6 || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # libcap
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBCAP
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 58f76a5..be28975 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_INET_IPV6
+ 	depends on !BR2_PREFER_STATIC_LIB # kmod
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # libcap
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
