@@ -1,35 +1,100 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 27 Oct 2014 13:56:11 +0100
-Subject: [Buildroot] [PATCH 1/1] libgtk3: fix undefined reference to
- get_xkb()
-In-Reply-To: <20141027134137.7a9d83fb@free-electrons.com>
-References: <1414407782-9324-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20141027134137.7a9d83fb@free-electrons.com>
-Message-ID: <20141027125611.GB24636@pc-eric>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 27 Oct 2014 10:00:08 -0300
+Subject: [Buildroot] [PATCH] wget: bump to version 1.16
+Message-ID: <1414414808-26134-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Add hash file.
+And drop autoreconf/gettextize/patch, it's upstream now.
 
-On Mon, Oct 27, 2014 at 01:41:37PM +0100, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Mon, 27 Oct 2014 12:03:02 +0100, Eric Le Bihan wrote:
-> > When configuring Gtk+ with --disable-xkb, the build fails because of an
-> > undefined reference to get_xkb().
-> >
-> > This issue as been reported upstream [1]. This patch fixes it.
-> >
-> > Fixes: 513d79b97bb8ad0e5cd431c47c706b5ec87a9882
-> > Fixes: 0c3f1df92481852622445478d2239371fc818f41
->
-> Are these commit IDs, or autobuilder result IDs? If the latter, then
-> it should be full URL to the autobuilder result.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../wget-0001-spawn-fix-link-error-on-uclibc.patch | 40 ----------------------
+ package/wget/wget.hash                             |  2 ++
+ package/wget/wget.mk                               |  6 +---
+ 3 files changed, 3 insertions(+), 45 deletions(-)
+ delete mode 100644 package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+ create mode 100644 package/wget/wget.hash
 
-D'Oh! I will a new version with the correct URLs.
-
-Best regards
-ELB
+diff --git a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+deleted file mode 100644
+index 54d6dfb..0000000
+--- a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5 Mon Sep 17 00:00:00 2001
+-Message-Id: <d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5.1393836674.git.baruch@tkos.co.il>
+-From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+-Date: Tue, 14 Jan 2014 16:59:07 +0000
+-Subject: [PATCH] spawn: fix link error on uclibc
+-
+-* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
+-to incorporate -lrt if needed (on uclibc for example).
+-* modules/posix_spawn: Reference the substituted LIB.
+-
+-Patch status: upstream (gnulib commit d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5)
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-
+-diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
+-index 87fe12298471..3eb835c3c2a8 100644
+---- a/m4/spawn_h.m4
+-+++ b/m4/spawn_h.m4
+-@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
+-   dnl once only, before all statements that occur in other macros.
+-   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
+- 
+--  AC_CHECK_FUNCS_ONCE([posix_spawn])
+-+  LIB_POSIX_SPAWN=
+-+  AC_SUBST([LIB_POSIX_SPAWN])
+-+  gl_saved_libs=$LIBS
+-+    AC_SEARCH_LIBS([posix_spawn], [rt],
+-+                   [test "$ac_cv_search_posix_spawn" = "none required" ||
+-+                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
+-+    AC_CHECK_FUNCS([posix_spawn])
+-+  LIBS=$gl_saved_libs
+-+
+-   if test $ac_cv_func_posix_spawn != yes; then
+-     HAVE_POSIX_SPAWN=0
+-   fi
+- 
+--- 
+-1.9.0
+-
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+new file mode 100644
+index 0000000..8ef92bf
+--- /dev/null
++++ b/package/wget/wget.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	9261dd090a17687b6dc0682a257e90a926def15624b650e8f799af57e5c8b0e7	wget-1.16.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 9bfa4ba..e50981e 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,16 +4,12 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.15
++WGET_VERSION = 1.16
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_LICENSE = GPLv3+
+ WGET_LICENSE_FILES = COPYING
+ 
+-# patching gnulib .m4 file
+-WGET_AUTORECONF = YES
+-WGET_GETTEXTIZE = YES
+-
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	WGET_DEPENDENCIES += busybox
+-- 
+2.0.4
