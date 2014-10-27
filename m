@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Oct 2014 01:18:51 +0100
-Subject: [Buildroot] [git commit] json-javascript: bump version
-Message-ID: <20141027002037.4408FB0DB7@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 01:13:19 +0100
+Subject: [Buildroot] [git commit] flann: bump version
+Message-ID: <20141027002037.2AB72B0DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=defb0ddc1dfea7b81729d35274eb7b3ee51ad7eb
+commit: http://git.buildroot.net/buildroot/commit/?id=6eda7df7a1e0058e21b7d6b2e63b3dd0e1f577de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-javascript/json-javascript.mk |    2 +-
+ package/flann/flann.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/json-javascript/json-javascript.mk b/package/json-javascript/json-javascript.mk
-index 453ad34..c15b531 100644
---- a/package/json-javascript/json-javascript.mk
-+++ b/package/json-javascript/json-javascript.mk
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index 98af0b1..8af58e3 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JSON_JAVASCRIPT_VERSION = 42c18c621a411c3f39a81bb0a387fc50dcd738d9
-+JSON_JAVASCRIPT_VERSION = 3d7767b6b1f3da363c625ff54e63bbf20e9e83ac
- JSON_JAVASCRIPT_SITE = $(call github,douglascrockford,JSON-js,$(JSON_JAVASCRIPT_VERSION))
- JSON_JAVASCRIPT_LICENSE = Public Domain
- JSON_JAVASCRIPT_LICENSE_FILES = json2.js
+-FLANN_VERSION = d0c04f4d290ebc3aa9411a3322992d298e51f5aa
++FLANN_VERSION = 04b4a56533faf8c8228d011d05ba376038364b49
+ FLANN_SITE = $(call github,mariusmuja,flann,$(FLANN_VERSION))
+ FLANN_INSTALL_STAGING = YES
+ FLANN_LICENSE = BSD-3c
