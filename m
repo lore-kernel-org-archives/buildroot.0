@@ -1,27 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2014 19:30:25 +0100
-Subject: [Buildroot] [PATCH] trinity: Disable for Microblaze architecture
-In-Reply-To: <544E7EA8.7030207@imgtec.com>
-References: <1414426270-14436-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141027174348.0d4bcccb@free-electrons.com>
- <544E7EA8.7030207@imgtec.com>
-Message-ID: <20141027193025.43a59846@free-electrons.com>
+Date: Mon, 27 Oct 2014 19:30:53 +0100
+Subject: [Buildroot] [git commit] targetcli-fb: allow to build with Python 3
+Message-ID: <20141027183057.8CBD8B19CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=42c2da0d8ac0347b90d0413639bbea4861732c3e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Oct 2014 17:19:36 +0000, Vicente Olivert Riera wrote:
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-configshell-fb/Config.in |    5 +++--
+ package/python-rtslib-fb/Config.in      |    2 +-
+ package/targetcli-fb/Config.in          |    6 +++---
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-> Done: http://patchwork.ozlabs.org/patch/403703/
-
-This is exactly the same patch as before. What happened ? :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
+index 05de585..fb96763 100644
+--- a/package/python-configshell-fb/Config.in
++++ b/package/python-configshell-fb/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
+ 	bool "python-configshell-fb"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_PYPARSING
+-	select BR2_PACKAGE_PYTHON_READLINE
++	select BR2_PACKAGE_PYTHON3_READLINE if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_READLINE if BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON_URWID
+ 	help
+ 	  configshell-fb is a Python library that provides a framework
+diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
+index b2aebcf..119b63b 100644
+--- a/package/python-rtslib-fb/Config.in
++++ b/package/python-rtslib-fb/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_RTSLIB_FB
+ 	bool "python-rtslib-fb"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  rtslib-fb is an object-based Python library for configuring
+ 	  the LIO generic SCSI target, present in 3.x Linux kernel
+diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
+index dcc6a54..ee241ef 100644
+--- a/package/targetcli-fb/Config.in
++++ b/package/targetcli-fb/Config.in
+@@ -1,9 +1,9 @@
+-comment "targetcli-fb depends on python"
+-	depends on !BR2_PACKAGE_PYTHON
++comment "targetcli-fb depends on Python"
++	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
+ 
+ config BR2_PACKAGE_TARGETCLI_FB
+ 	bool "targetcli-fb"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
+ 	select BR2_PACKAGE_PYTHON_RTSLIB_FB
+ 	help
