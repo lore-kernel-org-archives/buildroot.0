@@ -1,100 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Oct 2014 10:00:08 -0300
-Subject: [Buildroot] [PATCH] wget: bump to version 1.16
-Message-ID: <1414414808-26134-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 27 Oct 2014 11:07:17 -0300
+Subject: [Buildroot] [PATCH 1/2] polarssl: security bump to version 1.2.12
+Message-ID: <1414418838-3487-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash file.
-And drop autoreconf/gettextize/patch, it's upstream now.
+Fixes several memory leaks.
+No assigned CVE or Polar-SA yet.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../wget-0001-spawn-fix-link-error-on-uclibc.patch | 40 ----------------------
- package/wget/wget.hash                             |  2 ++
- package/wget/wget.mk                               |  6 +---
- 3 files changed, 3 insertions(+), 45 deletions(-)
- delete mode 100644 package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
- create mode 100644 package/wget/wget.hash
+ package/polarssl/polarssl.hash | 5 ++---
+ package/polarssl/polarssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
-deleted file mode 100644
-index 54d6dfb..0000000
---- a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5 Mon Sep 17 00:00:00 2001
--Message-Id: <d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5.1393836674.git.baruch@tkos.co.il>
--From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
--Date: Tue, 14 Jan 2014 16:59:07 +0000
--Subject: [PATCH] spawn: fix link error on uclibc
--
--* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
--to incorporate -lrt if needed (on uclibc for example).
--* modules/posix_spawn: Reference the substituted LIB.
--
--Patch status: upstream (gnulib commit d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5)
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--
--diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
--index 87fe12298471..3eb835c3c2a8 100644
----- a/m4/spawn_h.m4
--+++ b/m4/spawn_h.m4
--@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
--   dnl once only, before all statements that occur in other macros.
--   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
-- 
---  AC_CHECK_FUNCS_ONCE([posix_spawn])
--+  LIB_POSIX_SPAWN=
--+  AC_SUBST([LIB_POSIX_SPAWN])
--+  gl_saved_libs=$LIBS
--+    AC_SEARCH_LIBS([posix_spawn], [rt],
--+                   [test "$ac_cv_search_posix_spawn" = "none required" ||
--+                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
--+    AC_CHECK_FUNCS([posix_spawn])
--+  LIBS=$gl_saved_libs
--+
--   if test $ac_cv_func_posix_spawn != yes; then
--     HAVE_POSIX_SPAWN=0
--   fi
-- 
---- 
--1.9.0
--
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-new file mode 100644
-index 0000000..8ef92bf
---- /dev/null
-+++ b/package/wget/wget.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	9261dd090a17687b6dc0682a257e90a926def15624b650e8f799af57e5c8b0e7	wget-1.16.tar.xz
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 9bfa4ba..e50981e 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,16 +4,12 @@
- #
+diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+index ca437ac..9769788 100644
+--- a/package/polarssl/polarssl.hash
++++ b/package/polarssl/polarssl.hash
+@@ -1,3 +1,2 @@
+-# From https://polarssl.org/tech-updates/releases/polarssl-1.2.11-released
+-sha1	40cb3a833245273946c2075e6c948bbcda8a1be9	polarssl-1.2.11-gpl.tgz
+-sha256	b3e9d059c687980976b468d8260f658e9003aede1dbc4a918526e90abdaa7d75	polarssl-1.2.11-gpl.tgz
++# From https://polarssl.org/tech-updates/releases/polarssl-1.2.12-released
++sha256	63dd60e78d25c438648607bb177b063dcf5fbf3ced9ee794fcb165d101940131	polarssl-1.2.12-gpl.tgz
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 21bf160..7c27505 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WGET_VERSION = 1.15
-+WGET_VERSION = 1.16
- WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_LICENSE = GPLv3+
- WGET_LICENSE_FILES = COPYING
- 
--# patching gnulib .m4 file
--WGET_AUTORECONF = YES
--WGET_GETTEXTIZE = YES
--
- # Prefer full-blown wget over busybox
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	WGET_DEPENDENCIES += busybox
+ POLARSSL_SITE = https://polarssl.org/code/releases
+-POLARSSL_VERSION = 1.2.11
++POLARSSL_VERSION = 1.2.12
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
 -- 
 2.0.4
