@@ -1,54 +1,63 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 27 Oct 2014 23:16:34 +0100
-Subject: [Buildroot] [PATCH v6 0/2] Mono new package
-In-Reply-To: <20141025105055.05c53953@free-electrons.com>
-References: <1414009330-4433-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141025105055.05c53953@free-electrons.com>
-Message-ID: <544EC442.5030804@lucaceresoli.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 28 Oct 2014 00:33:26 +0200
+Subject: [Buildroot] [PATCH] ipset: Don't include host headers
+Message-ID: <c69b0ea4caf640e9ca3c2357f6e701cab02fa689.1414449206.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Angelo,
+Add a patch removing /usr/local/include from the include path.
 
-Thomas Petazzoni wrote:
-> Dear Angelo Compagnucci,
->
-> On Wed, 22 Oct 2014 22:22:08 +0200, Angelo Compagnucci wrote:
->
->> Angelo Compagnucci (2):
->>    package/monolite: new package
->>    package/mono: new package
->
-> Thanks, both patches applied. On the second patch, there was a missing
-> dependency of host-mono on host-gettext (which you didn't see probably
-> because you have gettext installed on your machine). I also did some
-> improvements to the licensing description, even though some independent
-> review of this (Yann, Luca ?) would be good.
+Fixes:
+http://autobuild.buildroot.net/results/4f5/4f55c2415281c6204500efe28fe9e24c8ef73863/
 
-I don't use Mono and it's a fairly large package. I just gave it a
-quick look, and it looks like it has a _very_ complex licensing
-scheme...
+Technically speaking this autobuild failure has already been fixes when
+-Werror was removed in commit a923b44112aa3 (ipset: add patch to fix
+--enable-debug build). But the warning in this case indicates a real problem
+that needs to be fixed by itself.
 
-The file LICENSE is there to clarify the licensing. The need to have
-such a file is itself quite enlightening on how arcane the thing is.
-And around the middle of the file I got a headache and gave up.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...Make_global.am-Don-t-include-host-headers.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
 
-According to their website [1], the tools are released under the GPL (no
-version specified). But in the tools/ subdirectory there is no mention
-of GPL, only a BSD license.
-
-Overall, if it were me, and if I were forced to use Mono at all, I'd
-state:
-   MONO_LICENSE = A fuzzy mix of LGPL (any version), MIT/X11 and \
-                  others, or commercial
-
-BTW, Angelo, Thomas, where did you get licensing info when
-writing/committing the package?
-
-[1] http://www.mono-project.com/docs/faq/licensing/
-
+diff --git a/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch b/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
+new file mode 100644
+index 000000000000..f8809791d3ff
+--- /dev/null
++++ b/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
+@@ -0,0 +1,29 @@
++From 1f1b5ed5e8402214a6516a380247123e6dd75d2a Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 28 Oct 2014 00:19:25 +0200
++Subject: [PATCH] Make_global.am: Don't include host headers
++
++This is bad for cross compilation.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ Make_global.am | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Make_global.am b/Make_global.am
++index 25c4d64715c7..11ea1c333186 100644
++--- a/Make_global.am
+++++ b/Make_global.am
++@@ -71,8 +71,7 @@
++ #            curr:rev:age
++ LIBVERSION = 8:0:5
++ 
++-AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include \
++-	-I/usr/local/include
+++AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
++ 
++ AM_CFLAGS = -std=gnu99
++ 
++-- 
++2.1.1
++
 -- 
-Luca
+2.1.1
