@@ -1,94 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Oct 2014 01:11:06 +0100
-Subject: [Buildroot] [git commit] czmq: bump version
-Message-ID: <20141027002037.11B10B0FF2@busybox.osuosl.org>
+Date: Mon, 27 Oct 2014 01:17:06 +0100
+Subject: [Buildroot] [git commit] geoip: bump version
+Message-ID: <20141027002037.331A3B0DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f3387d04d3645252ae744d62f55a5a7f83346ea
+commit: http://git.buildroot.net/buildroot/commit/?id=5d595b178e23b97e5cd19c2b2a6049e0b7afea77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch as it was merged upstream.
+The tarball from the release contains the configure and Makefile.in,
+there's no longer need to AUTORECONF.
 
+Add a hash file since the tarball has been uploaded by the maintainer.
+
+[Peter: fix _LICENSE_FILES]
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...se-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch |   53 --------------------
- package/czmq/czmq.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 54 deletions(-)
+ package/geoip/geoip.hash |    2 ++
+ package/geoip/geoip.mk   |    7 +++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch b/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch
-deleted file mode 100644
-index cef187a..0000000
---- a/package/czmq/czmq-0001-Use-_DEFAULT_SOURCE-instead-of-_BSD_SOURCE.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 04be584035b4d9b6a61fd748b6d21c92c6bb9694 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 9 Sep 2014 23:36:10 +0200
--Subject: [PATCH] Use _DEFAULT_SOURCE instead of _BSD_SOURCE
--
--Since glibc 2.20, using _BSD_SOURCE triggers a warning, and since czmq
--uses -Werror, it aborts the build:
--
--  CC       zchunk.lo
--In file included from /home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/ctype.h:25:0,
--                 from ../include/czmq_prelude.h:203,
--                 from ../include/czmq.h:19,
--                 from zauth.c:25:
--/home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/features.h:148:3: error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Werror=cpp]
-- # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
--   ^
--
--See the glibc 2.20 release notes, https://lwn.net/Articles/611162/,
--explaining the change about _BSD_SOURCE:
--
--* The _BSD_SOURCE and _SVID_SOURCE feature test macros are no longer
--  supported; they now act the same as _DEFAULT_SOURCE (but generate a
--  warning).  Except for cases where _BSD_SOURCE enabled BSD interfaces that
--  conflicted with POSIX (support for which was removed in 2.19), the
--  interfaces those macros enabled remain available when compiling with
--  _GNU_SOURCE defined, with _DEFAULT_SOURCE defined, or without any feature
--  test macros defined.
--
--Submitted upstream: https://github.com/zeromq/czmq/pull/648
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/czmq_prelude.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/include/czmq_prelude.h b/include/czmq_prelude.h
--index 8b4b53d..f77add2 100644
----- a/include/czmq_prelude.h
--+++ b/include/czmq_prelude.h
--@@ -152,8 +152,8 @@
-- #   ifndef __NO_CTYPE
-- #   define __NO_CTYPE                   //  Suppress warnings on tolower()
-- #   endif
---#   ifndef _BSD_SOURCE
---#   define _BSD_SOURCE                  //  Include stuff from 4.3 BSD Unix
--+#   ifndef _DEFAULT_SOURCE
--+#   define _DEFAULT_SOURCE                  //  Include stuff from 4.3 BSD Unix
-- #   endif
-- #elif (defined (Mips))
-- #   define __UTYPE_MIPS
---- 
--2.0.0
--
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 9bc4a2a..d25bf01 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
+new file mode 100644
+index 0000000..717bec4
+--- /dev/null
++++ b/package/geoip/geoip.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  8ef059ee3680b39db967248331ec41188f4b45f86a4a77e39247ff41b61efd7c  GeoIP-1.6.2.tar.gz
+diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+index bbfa014..5664f03 100644
+--- a/package/geoip/geoip.mk
++++ b/package/geoip/geoip.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--CZMQ_VERSION = v2.2.0
-+CZMQ_VERSION = v3.0.0
- CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
+-GEOIP_VERSION = 1.6.0
++GEOIP_VERSION = 1.6.2
+ GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
+-GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
+-GEOIP_AUTORECONF = YES
++GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)/
+ GEOIP_INSTALL_STAGING = YES
+ GEOIP_LICENSE = LGPLv2.1+
+-GEOIP_LICENSE_FILES = LICENSE COPYING
++GEOIP_LICENSE_FILES = COPYING
  
- # Autoreconf required as we use the git tree
+ $(eval $(autotools-package))
