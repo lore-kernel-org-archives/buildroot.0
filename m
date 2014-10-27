@@ -1,41 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Oct 2014 00:54:01 +0100
-Subject: [Buildroot] [git commit] gd: fix pthread related static linking
-	issue for utilities
-Message-ID: <20141026235413.63E1DB5857@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Oct 2014 01:03:45 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/libcap: Fix build error with
+	kernel headers < 3.6
+In-Reply-To: <1414347915-2617-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sun, 26 Oct 2014 19:25:15 +0100")
+References: <1414347915-2617-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87r3xu750e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6debc2e078d06e0ac177a882d9f4268f5b37077
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-gd forgets to link utilities with -pthread even though it uses pthreads,
-causing linking errors with static linking.
+ > Fixes
+ > http://autobuild.buildroot.net/results/cce/cceb1ccacec36fb7ef41bb7cdb13b3014813b599/
 
-Fixes http://autobuild.buildroot.net/results/156/1564b8de7785c1a756bead1a4160a2b6e2a2243e/
+ > XATTR_NAME_CAPS appears in kernel headers since 3.7:
+ > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/log/include/uapi/linux/xattr.h?id=v3.7
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gd/gd.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ > Before it was an internal define of the kernel:
+ > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/include/linux/xattr.h?id=607ca46e97a1b6594b29647d98a32d545c24bdff
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 906c333..927dfb2 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -14,6 +14,12 @@ GD_LICENSE_FILES = COPYING
- GD_CONFIG_SCRIPTS = gdlib-config
- GD_CONF_OPTS = --without-x --disable-rpath
- 
-+# gd forgets to link utilities with -pthread even though it uses
-+# pthreads, causing linking errors with static linking
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+GD_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
-+endif
-+
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- GD_DEPENDENCIES += fontconfig
- GD_CONF_OPTS += --with-fontconfig
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: propagate to reverse dependencies (Thomas)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
