@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 28 Oct 2014 14:33:41 +0100
-Subject: [Buildroot] [PATCH 04/15] erlang-lager: new package.
+Date: Tue, 28 Oct 2014 14:33:42 +0100
+Subject: [Buildroot] [PATCH 05/15] erlang-p1-zlib: new package.
 In-Reply-To: <1414503232-28314-1-git-send-email-johan.oudinet@gmail.com>
 References: <1414503232-28314-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1414503232-28314-5-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1414503232-28314-6-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +12,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                    |  1 +
- package/erlang-lager/Config.in       | 12 ++++++++++++
- package/erlang-lager/erlang-lager.mk | 14 ++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/erlang-lager/Config.in
- create mode 100644 package/erlang-lager/erlang-lager.mk
+ package/Config.in                        |  1 +
+ package/erlang-p1-zlib/Config.in         |  5 +++++
+ package/erlang-p1-zlib/erlang-p1-zlib.mk | 13 +++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/erlang-p1-zlib/Config.in
+ create mode 100644 package/erlang-p1-zlib/erlang-p1-zlib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c3932af..b3b67a8 100644
+index b3b67a8..3e25766 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -395,6 +395,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
+@@ -396,6 +396,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-lager/Config.in"
++	source "package/erlang-p1-zlib/Config.in"
  endmenu
  endif
  	source "package/haserl/Config.in"
-diff --git a/package/erlang-lager/Config.in b/package/erlang-lager/Config.in
+diff --git a/package/erlang-p1-zlib/Config.in b/package/erlang-p1-zlib/Config.in
 new file mode 100644
-index 0000000..f83239e
+index 0000000..3d4f455
 --- /dev/null
-+++ b/package/erlang-lager/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_ERLANG_LAGER
-+	bool "erlang-lager"
++++ b/package/erlang-p1-zlib/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_ERLANG_P1_ZLIB
++	bool "erlang-p1-zlib"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_ERLANG_GOLDRUSH
 +	help
-+	  Logging framework for Erlang.
-+	  
-+	  Lager (as in the beer) is a logging framework for
-+	  Erlang. Its purpose is to provide a more traditional way to
-+	  perform logging in an erlang application that plays nicely
-+	  with traditional UNIX logging tools like logrotate and
-+	  syslog.
-diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
++	  Erlang interface to zlib
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 new file mode 100644
-index 0000000..b530c8e
+index 0000000..84ecb35
 --- /dev/null
-+++ b/package/erlang-lager/erlang-lager.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-lager
++# erlang-p1-zlib
 +#
 +################################################################################
 +
-+ERLANG_LAGER_VERSION = 2.0.3
-+ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
-+ERLANG_LAGER_LICENSE = Apache-2.0
-+ERLANG_LAGER_LICENSE_FILES = LICENSE
-+ERLANG_LAGER_DEPENDENCIES = erlang erlang-goldrush
++ERLANG_P1_ZLIB_VERSION = 52e82bb
++ERLANG_P1_ZLIB_SITE = $(call github,processone,zlib,$(ERLANG_P1_ZLIB_VERSION))
++ERLANG_P1_ZLIB_LICENSE = GPLv2+
++ERLANG_P1_ZLIB_LICENSE_FILES = COPYING
++ERLANG_P1_ZLIB_DEPENDENCIES = erlang
 +
 +$(eval $(rebar-package))
-+$(eval $(host-rebar-package))
 -- 
 2.1.0
