@@ -1,71 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2014 18:58:05 +0100
-Subject: [Buildroot] [git commit] libgtk3: fix undefined reference to
-	get_xkb()
-Message-ID: <20141028175816.5A108B1CBF@busybox.osuosl.org>
+Date: Tue, 28 Oct 2014 19:02:36 +0100
+Subject: [Buildroot] [PATCH 2/3] iptables: enable basic kernel options
+In-Reply-To: <1413925852-12765-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
+ <1413925852-12765-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141028190236.7b8ed9be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9879f676d8c8ca8f3eac14a2c5193959d97d093
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gustavo, Peter,
 
-When configuring Gtk+ with --disable-xkb, the build fails because of an
-undefined reference to get_xkb().
+On Tue, 21 Oct 2014 18:10:51 -0300, Gustavo Zacarias wrote:
+> Enable the basic kernel options for iptables to be useful at least to
+> filter incoming connections.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  linux/linux.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 2b862ec..b9d3c8e 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -210,6 +210,11 @@ define LINUX_CONFIGURE_CMDS
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
+> +	$(if $(BR2_PACKAGE_IPTABLES),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
+>  	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+>  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
 
-This issue as been reported upstream [1]. This patch fixes it.
+For this one, I don't know. Back some time ago, Peter said that his
+preference was to not enforce too much stuff in terms of kernel
+configuration options in linux/linux.mk. I think the idea is that it's
+something that can quickly become very complicated if you want to
+handle all the kernel config options that all packages might need. It's
+also being forced without the user being capable of doing anything
+against that: those KCONFIG_ENABLE_OPT calls are done even if the user
+passes a custom configuration file.
 
-Fixes:
+But back at the time, we only had the CONFIG_AEABI option being
+handled. Now it's true we already have ktap, systemd, smack being
+handled, and many other things related to appended DTB, initramfs, and
+more. So it seems like the iptables/xtables-addons proposal from
+Gustavo are not really creating a precedent.
 
-http://autobuild.buildroot.net/results/513/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
-http://autobuild.buildroot.net/results/0c3/0c3f1df92481852622445478d2239371fc818f41/
+Peter, what is your position on this?
 
-[1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
+Thanks,
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...3-0004-Fix-undefined-reference-to-get_xkb.patch |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
-
-diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-new file mode 100644
-index 0000000..c2f4b4f
---- /dev/null
-+++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-@@ -0,0 +1,33 @@
-+From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Mon, 27 Oct 2014 10:34:38 +0100
-+Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
-+
-+When configuring Gtk+ with --disable-xkb, the build fails because of an
-+undefined reference to get_xkb().
-+
-+This patch fixes this issue.
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ gdk/x11/gdkkeys-x11.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
-+index c45a971..6a5481b 100644
-+--- a/gdk/x11/gdkkeys-x11.c
-++++ b/gdk/x11/gdkkeys-x11.c
-+@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-+   int i, j;
-+   gboolean retval;
-+ 
-++#ifdef HAVE_XKB
-+   if (KEYMAP_USE_XKB (keymap))
-+     get_xkb (keymap_x11);
-++#endif
-+ 
-+   retval = TRUE;
-+ 
-+-- 
-+1.9.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
