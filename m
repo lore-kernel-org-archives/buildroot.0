@@ -1,59 +1,57 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Oct 2014 09:48:07 -0300
-Subject: [Buildroot] [PATCH 2/3] mpd: fix upnp build failure
+Date: Tue, 28 Oct 2014 09:48:08 -0300
+Subject: [Buildroot] [PATCH 3/3] mpd: add explicit upnp support option
 In-Reply-To: <1414500488-32597-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1414500488-32597-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1414500488-32597-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1414500488-32597-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build failure:
-http://autobuild.buildroot.net/results/7ff/7ff28551b9c72658eb75394e7cbd1904861f23e3/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...np-Discovery-add-missing-stdlib.h-include.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
+ package/mpd/Config.in | 8 ++++++++
+ package/mpd/mpd.mk    | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch b/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-new file mode 100644
-index 0000000..ff581c3
---- /dev/null
-+++ b/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-@@ -0,0 +1,30 @@
-+From 1901bd9d6be651fbaa5c7659d92d3361e6d6a823 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 28 Oct 2014 07:25:48 -0300
-+Subject: [PATCH] upnp/Discovery: add missing stdlib.h include
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index ed0df7f..ac9ca95 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -265,6 +265,14 @@ config BR2_PACKAGE_MPD_TCP
+ 
+ 	  You want this on if mpd and the client(s) work
+ 	  on different machines (the usual scenario).
 +
-+Used for free().
++config BR2_PACKAGE_MPD_UPNP
++	bool "UPnp"
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBUPNP
++	help
++	  Enable mpd UPnP client support.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: Sent upstream.
+ endif
+ 
+ comment "mpd needs a toolchain w/ C++, threads, wchar"
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index b3ff6f5..d7b912b 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -199,6 +199,13 @@ else
+ MPD_CONF_OPTS += --disable-twolame-encoder
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
++MPD_DEPENDENCIES += expat libupnp
++MPD_CONF_OPTS += --enable-upnp
++else
++MPD_CONF_OPTS += --disable-upnp
++endif
 +
-+ src/lib/upnp/Discovery.cxx | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/lib/upnp/Discovery.cxx b/src/lib/upnp/Discovery.cxx
-+index 9ea78c6..2c91e37 100644
-+--- a/src/lib/upnp/Discovery.cxx
-++++ b/src/lib/upnp/Discovery.cxx
-+@@ -26,6 +26,8 @@
-+ 
-+ #include <upnp/upnptools.h>
-+ 
-++#include <stdlib.h>
-++
-+ #include <string.h>
-+ 
-+ // The service type string we are looking for.
-+-- 
-+2.0.4
-+
+ ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
+ MPD_DEPENDENCIES += libvorbis
+ MPD_CONF_OPTS += --enable-vorbis --enable-vorbis-encoder
 -- 
 2.0.4
