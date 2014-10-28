@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2014 22:11:04 +0100
-Subject: [Buildroot] [PATCH v3 7/7] package/tvheadend: Add transcoding
- support by ffmpeg
-In-Reply-To: <1413311309-30811-7-git-send-email-bernd.kuhls@t-online.de>
-References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
- <1413311309-30811-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141028221104.35a56dd4@free-electrons.com>
+Date: Tue, 28 Oct 2014 22:11:57 +0100
+Subject: [Buildroot] [git commit] tvheadend: bump version
+Message-ID: <20141028211203.38239B1DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=1cce8adc336d417401a0278dc3b81fa3e726a440
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Oct 2014 20:28:29 +0200, Bernd Kuhls wrote:
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
->  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
->  TVHEADEND_DEPENDENCIES += libdvbcsa
->  TVHEADEND_CONF_OPTS += --enable-dvbcsa
-> @@ -38,6 +45,7 @@ define TVHEADEND_CONFIGURE_CMDS
->  	 --python="$(HOST_DIR)/usr/bin/python"	\
->  	 --disable-dvbscan			\
->  	 --enable-bundle			\
-> +	 --disable-libffmpeg_static		\
-
-Maybe I haven't looked properly, but I don't see this option supported
-by tvheadend configure script. Can you check?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 9216f78..bd46d0e 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 8cdaab42c5a1aa7cd646fcbfd9ba3ce9cf410b34
++TVHEADEND_VERSION = 596b4e0b29937a6123b25940621fe17dccbefbb4
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
