@@ -1,139 +1,125 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Tue, 28 Oct 2014 14:33:31 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-headers: allow use of headers from
-	kernel "package" selected
-Message-ID: <1414503211-38141-1-git-send-email-kaszak@gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 28 Oct 2014 14:33:37 +0100
+Subject: [Buildroot] [PATCH 00/15] ejabberd: XMPP server
+Message-ID: <1414503232-28314-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change makes it possible to use exactly the same sources for both
-headers during toolchain building and for kernel building itself, even
-if custom kernel is selected.
+Since ejabberd build system relies on rebar to download its
+dependencies, we've packaged all of them separately and modified
+ejabberd makefile to not download any dependency.
 
-That way user might be sure that ABI mismatch won't happen between toolchain
-and kernel.
+Actually, every erlang package that is introduced here rely on the
+rebar software. Thus, we also introduce a new infrastructure to
+simplify the development of such packages in buildroot.
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
+Johan Oudinet (15):
+  package/pkg-autotools.mk: Factorize hooks.
+  rebar package infrastructure: new infrastructure.
+  erlang-goldrush: new package.
+  erlang-lager: new package.
+  erlang-p1-zlib: new package.
+  erlang-p1-yaml: new package.
+  erlang-p1-xml: new package.
+  erlang-p1-utils: new package.
+  erlang-p1-tls: new package.
+  erlang-p1-stun: new package.
+  erlang-p1-stringprep: new package.
+  erlang-p1-sip: new package.
+  erlang-p1-iconv: new package.
+  erlang-p1-cache-tab: new package.
+  ejabberd: new package.
 
-Changes v2 -> v3:
-  - Forbid KERNEL_SAME_AS_HEADERS w/ HEADERS_SAME_AS_KERNEL
-  - Made the calculation of LINUX_ variables to be a subroutine,
-    which can be called compulsorily when needed
+ docs/manual/adding-packages-rebar.txt              | 157 ++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ package/Config.in                                  |  17 ++
+ package/Makefile.in                                |   1 +
+ package/ejabberd/0001-remove-deps.patch            |  20 ++
+ package/ejabberd/0002-disable-rebar-deps.patch     |  70 +++++++
+ package/ejabberd/0003-disable-test.patch           |  21 ++
+ package/ejabberd/0004-disable-version-check.patch  |  20 ++
+ package/ejabberd/0005-fix-includes.patch           |  45 ++++
+ package/ejabberd/0006-remove-doc.patch             |  26 +++
+ package/ejabberd/0007-fix-init.patch               |  99 +++++++++
+ .../ejabberd/0008-fix-install-permissions.patch    |  76 +++++++
+ package/ejabberd/Config.in                         |  21 ++
+ package/ejabberd/S50ejabberd                       |  35 ++++
+ package/ejabberd/check-erlang-lib                  |  55 +++++
+ package/ejabberd/ejabberd.mk                       |  51 +++++
+ package/erlang-goldrush/Config.in                  |   6 +
+ package/erlang-goldrush/erlang-goldrush.mk         |  14 ++
+ package/erlang-lager/Config.in                     |  12 ++
+ package/erlang-lager/erlang-lager.mk               |  14 ++
+ package/erlang-p1-cache-tab/Config.in              |   6 +
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk |  13 ++
+ package/erlang-p1-iconv/Config.in                  |   6 +
+ package/erlang-p1-iconv/erlang-p1-iconv.mk         |  17 ++
+ package/erlang-p1-sip/Config.in                    |   8 +
+ .../erlang-p1-sip-01-fix-includes.patch            |  19 ++
+ package/erlang-p1-sip/erlang-p1-sip.mk             |  14 ++
+ package/erlang-p1-stringprep/Config.in             |   5 +
+ .../erlang-p1-stringprep/erlang-p1-stringprep.mk   |  13 ++
+ package/erlang-p1-stun/Config.in                   |   7 +
+ package/erlang-p1-stun/erlang-p1-stun.mk           |  14 ++
+ package/erlang-p1-tls/Config.in                    |   5 +
+ package/erlang-p1-tls/erlang-p1-tls.mk             |  14 ++
+ package/erlang-p1-utils/Config.in                  |   5 +
+ package/erlang-p1-utils/erlang-p1-utils.mk         |  14 ++
+ package/erlang-p1-xml/Config.in                    |   6 +
+ package/erlang-p1-xml/erlang-p1-xml.mk             |  14 ++
+ package/erlang-p1-yaml/Config.in                   |   6 +
+ package/erlang-p1-yaml/erlang-p1-yaml.mk           |  13 ++
+ package/erlang-p1-zlib/Config.in                   |   5 +
+ package/erlang-p1-zlib/erlang-p1-zlib.mk           |  13 ++
+ package/erlang-rebar/erlang-rebar.mk               |  20 ++
+ package/pkg-autotools.mk                           | 119 +++++------
+ package/pkg-rebar.mk                               | 229 +++++++++++++++++++++
+ support/scripts/erlang-ei-vsn                      |  19 ++
+ 45 files changed, 1303 insertions(+), 63 deletions(-)
+ create mode 100644 docs/manual/adding-packages-rebar.txt
+ create mode 100644 package/ejabberd/0001-remove-deps.patch
+ create mode 100644 package/ejabberd/0002-disable-rebar-deps.patch
+ create mode 100644 package/ejabberd/0003-disable-test.patch
+ create mode 100644 package/ejabberd/0004-disable-version-check.patch
+ create mode 100644 package/ejabberd/0005-fix-includes.patch
+ create mode 100644 package/ejabberd/0006-remove-doc.patch
+ create mode 100644 package/ejabberd/0007-fix-init.patch
+ create mode 100644 package/ejabberd/0008-fix-install-permissions.patch
+ create mode 100644 package/ejabberd/Config.in
+ create mode 100644 package/ejabberd/S50ejabberd
+ create mode 100755 package/ejabberd/check-erlang-lib
+ create mode 100644 package/ejabberd/ejabberd.mk
+ create mode 100644 package/erlang-goldrush/Config.in
+ create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
+ create mode 100644 package/erlang-lager/Config.in
+ create mode 100644 package/erlang-lager/erlang-lager.mk
+ create mode 100644 package/erlang-p1-cache-tab/Config.in
+ create mode 100644 package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+ create mode 100644 package/erlang-p1-iconv/Config.in
+ create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
+ create mode 100644 package/erlang-p1-sip/Config.in
+ create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
+ create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
+ create mode 100644 package/erlang-p1-stringprep/Config.in
+ create mode 100644 package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+ create mode 100644 package/erlang-p1-stun/Config.in
+ create mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
+ create mode 100644 package/erlang-p1-tls/Config.in
+ create mode 100644 package/erlang-p1-tls/erlang-p1-tls.mk
+ create mode 100644 package/erlang-p1-utils/Config.in
+ create mode 100644 package/erlang-p1-utils/erlang-p1-utils.mk
+ create mode 100644 package/erlang-p1-xml/Config.in
+ create mode 100644 package/erlang-p1-xml/erlang-p1-xml.mk
+ create mode 100644 package/erlang-p1-yaml/Config.in
+ create mode 100644 package/erlang-p1-yaml/erlang-p1-yaml.mk
+ create mode 100644 package/erlang-p1-zlib/Config.in
+ create mode 100644 package/erlang-p1-zlib/erlang-p1-zlib.mk
+ create mode 100644 package/erlang-rebar/erlang-rebar.mk
+ create mode 100644 package/pkg-rebar.mk
+ create mode 100755 support/scripts/erlang-ei-vsn
 
- linux/Config.in                        |    1 +
- linux/linux.mk                         |    7 +++++++
- package/linux-headers/Config.in.host   |   14 ++++++++++++--
- package/linux-headers/linux-headers.mk |    9 +++++++++
- 4 files changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 718afb5..a523f85 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,6 +26,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
- 	depends on BR2_TOOLCHAIN_BUILDROOT
-+	depends on !BR2_KERNEL_HEADERS_SAME_AS_KERNEL
- 	help
- 	  This option will re-use the same kernel sources as the one
- 	  that have been used for the kernel headers of the
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6740d01..448952e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -8,6 +8,9 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPLv2
- LINUX_LICENSE_FILES = COPYING
- 
-+# Compute variables as a function, so linux-headers can call it when needed
-+define BR2_LINUX_COMPUTE_VARS
-+
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-@@ -38,6 +41,10 @@ LINUX_SITE := $(LINUX_SITE)/testing/
- endif # -rc
- endif
- 
-+endef
-+
-+$(eval $(BR2_LINUX_COMPUTE_VARS))
-+
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- LINUX_INSTALL_IMAGES = YES
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b494885..e6e3730 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,6 +5,7 @@ comment "Kernel Header Options"
- 
- choice
- 	prompt "Kernel Headers"
-+	default BR2_KERNEL_HEADERS_SAME_AS_KERNEL if BR2_LINUX_KERNEL
- 	default BR2_KERNEL_HEADERS_3_17
- 	help
- 	  Select the version of kernel header files you wish to use.
-@@ -69,6 +70,13 @@ choice
- 
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
-+
-+	config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
-+		bool "Use Linux kernel specified for target"
-+		depends on BR2_LINUX_KERNEL
-+		help
-+		  Use the Linux kernel specified for the target in
-+		  the Kernel menu.
- endchoice
- 
- config BR2_DEFAULT_KERNEL_VERSION
-@@ -80,10 +88,12 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_SAME_AS_KERNEL
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
- 	help
--	  Set to the kernel headers series you manually set above.
-+	  Set to the kernel headers series you manually entered in
-+	  "linux version" field or matching version of specific kernel selected
-+	  for building in "kernel" section.
- 
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index d770927..b4a1c8d 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -7,6 +7,14 @@
- # This package is used to provide Linux kernel headers for the
- # internal toolchain backend.
- 
-+ifeq ($(BR2_KERNEL_HEADERS_SAME_AS_KERNEL),y)
-+# Force computing the variables from the Kernel package
-+$(eval $(BR2_LINUX_COMPUTE_VARS))
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_HEADERS_SOURCE = $(LINUX_SOURCE)
-+LINUX_HEADERS_SITE = $(LINUX_SITE)
-+LINUX_HEADERS_SITE_METHOD = $(LINUX_SITE_METHOD)
-+else
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-@@ -14,6 +22,7 @@ else
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-+endif
- 
- LINUX_HEADERS_INSTALL_STAGING = YES
- 
 -- 
-1.7.10.4
+2.1.0
