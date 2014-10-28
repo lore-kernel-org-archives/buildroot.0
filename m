@@ -1,46 +1,57 @@
-From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
-Date: Tue, 28 Oct 2014 19:30:52 +0400
-Subject: [Buildroot] [PATCH 1/1] linux-headers: allow use of headers
- from kernel "package" selected
-In-Reply-To: <1414503211-38141-1-git-send-email-kaszak@gmail.com>
-References: <1414503211-38141-1-git-send-email-kaszak@gmail.com>
-Message-ID: <CAML3pwUizupHKUZf9wC4G+H6tm=q1VjXa6KVccdz6NO1TU1tUA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Oct 2014 17:20:31 +0100
+Subject: [Buildroot] [RFC] Responsive Design Website
+In-Reply-To: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+Message-ID: <20141028172031.28dfdde4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Karoly,
+Dear Angelo Compagnucci,
 
-2014-10-28 16:33 GMT+03:00 Karoly Kasza <kaszak@gmail.com>:
-> This change makes it possible to use exactly the same sources for both
-> headers during toolchain building and for kernel building itself, even
-> if custom kernel is selected.
->
-> That way user might be sure that ABI mismatch won't happen between toolchain
-> and kernel.
->
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->
-> Changes v2 -> v3:
->   - Forbid KERNEL_SAME_AS_HEADERS w/ HEADERS_SAME_AS_KERNEL
->   - Made the calculation of LINUX_ variables to be a subroutine,
->     which can be called compulsorily when needed
->
->  linux/Config.in                        |    1 +
->  linux/linux.mk                         |    7 +++++++
->  package/linux-headers/Config.in.host   |   14 ++++++++++++--
->  package/linux-headers/linux-headers.mk |    9 +++++++++
->  4 files changed, 29 insertions(+), 2 deletions(-)
+On Mon, 27 Oct 2014 22:56:10 +0100, Angelo Compagnucci wrote:
 
-For me this one looks good. Solution with dedicated function for
-calculation of variables works and looks much better than duplicated
-code.
+> As a sign of gratitude for my recently committed mono patches, I
+> thought having a responsive design website could be a nice addition to
+> Buildroot.
+> 
+> With this in mind, I updated to the latest bootstrap3 and jquery
+> versions, fixed various unbootstrapness everywhere and made the
+> website responsive!
+> 
+> The website is very similar to the old one, the most difficult task
+> was to clean it to let conditional css rules make their job.
+> 
+> You can try it (also with your mobile phone) at:
+> 
+> http://buildrootrd.idea-on-line.it/ (WARNING: dns is stil propagating)
+> 
+> I'm open to suggestions and if you like the work I'll continue to fix
+> the entire website and I'll send a patch in the next few days.
 
-I tried it and indeed it worked flawlessly.
+Definitely looks good. And it's nice to have someone interested in
+working on the web site. If you're interested, I have a TODO list of
+things to do on the web site :-)
 
-So let's wait for comments from others.
+However, one thing that I find weird in your new version is that the
+"Recent commits" and "Recent discussions" are placed in a weird way
+from a horizontal point of view. On the original web site, they look
+nicely aligned with the gray block containing the few words of
+introduction about Buildroot. But on your new version, they are placed
+in a weird way.
 
--Alexey
+In case I'm not clear, here are the screenshot before/after:
+
+  http://free-electrons.com/~thomas/buildroot-org-before.png
+  http://free-electrons.com/~thomas/buildroot-org-after.png
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
