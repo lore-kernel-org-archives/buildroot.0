@@ -1,31 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2014 18:52:50 +0100
-Subject: [Buildroot] [PATCH 1/3] mpd: bump to version 0.19.1
-In-Reply-To: <1414500488-32597-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414500488-32597-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141028185250.46e67e1d@free-electrons.com>
+Date: Tue, 28 Oct 2014 18:54:26 +0100
+Subject: [Buildroot] [git commit] boost: ignore site config
+Message-ID: <20141028175447.71323B1C96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b65013988f0ee5c9d596a2fd819f0d722183f020
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Oct 2014 09:48:06 -0300, Gustavo Zacarias wrote:
-> Also add hash file.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/mpd/mpd.hash | 2 ++
->  package/mpd/mpd.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/mpd/mpd.hash
+It can lead to build failures if you've got boost installed in the host,
+like this:
+http://stackoverflow.com/questions/23013433/how-to-install-modular-boost
 
-All three patches applied.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/boost.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 46a98e8..275ee00 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -125,6 +125,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(TARGET_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+@@ -132,6 +133,7 @@ define HOST_BOOST_BUILD_CMDS
+ 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
++	--ignore-site-config \
+ 	--prefix=$(HOST_DIR)/usr )
+ endef
+ 
+@@ -140,6 +142,7 @@ define HOST_BOOST_INSTALL_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+ 	--prefix=$(HOST_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+@@ -148,6 +151,7 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(STAGING_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install)
+ endef
+ 
