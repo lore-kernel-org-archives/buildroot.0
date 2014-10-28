@@ -1,51 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Oct 2014 23:18:02 +0100
-Subject: [Buildroot] [PATCH 1/3] xtables-addons: new package
-In-Reply-To: <544831DD.70608@zacarias.com.ar>
-References: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
- <5447E6E5.10904@mind.be> <544831DD.70608@zacarias.com.ar>
-Message-ID: <5450161A.3010102@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Oct 2014 23:19:17 +0100
+Subject: [Buildroot] [PATCH 2/3] binutils: bump the default target version
+	of binutils
+In-Reply-To: <1414534758-7545-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1414534758-7545-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1414534758-7545-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/10/14 00:38, Gustavo Zacarias wrote:
-> On 10/22/2014 02:18 PM, Arnout Vandecappelle wrote:
->
-> >> +comment "xtables-addons needs a Linux kernel to be built"
-> >> +    depends on !BR2_LINUX_KERNEL
-> >> +
-> >> +comment "xtables-addons needs a toolchain w/ dynamic library, largefile,
-> threads"
-> >> +    depends on BR2_LINUX_KERNEL
-> >
-> >  Do we usually do this? I mean, if a user discovers the 'needs a Linux kernel'
-> > comment and builds a kernel, then he comes back only to discover that he still
-> > has to enable all this other stuff...
->
-> I can move it to linux extensions instead of it being a package, i don't
-> know if it's worth bloating too much there.
+When binutils for the host is not built (which is the case when an
+external toolchain is used), the version of binutils used is 2.21,
+which is quite old. Since we have bumped to 2.22 as the default
+version for the host binutils, let's do the same for the target
+binutils.
 
- No, that's not what I meant: linux extensions are for things that modify
-the kernel source, so it's really exceptional.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/binutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- What I meant is that the second comment should not depend on
-BR2_LINUX_KERNEL, so both comments appear if you don't have the kernel nor
-largefile selected.
-
-
- Regards,
- Arnout
-
-
-[snip]
-
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index ab9f167..b8dab5d 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -12,7 +12,7 @@ ifeq ($(BR2_avr32),y)
+ # avr32 uses a special version
+ BINUTILS_VERSION = 2.18-avr32-1.0.1
+ else
+-BINUTILS_VERSION = 2.21
++BINUTILS_VERSION = 2.22
+ endif
+ endif
+ 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.0
