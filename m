@@ -1,137 +1,107 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 28 Oct 2014 22:28:17 +0100
-Subject: [Buildroot] [PATCH v2 1/3] toolchain-external: Detect empty or
-	invalid sysroot
+Date: Tue, 28 Oct 2014 22:28:19 +0100
+Subject: [Buildroot] [PATCH v2 3/3] toolchain-external: calculation of the
+	symlink to the arch sysroot
 In-Reply-To: <1414531699-6789-1-git-send-email-romain.naour@openwide.fr>
 References: <1414531699-6789-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1414531699-6789-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1414531699-6789-4-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the Sourcery Codebench standard edition, the sysroot returned
-point to a non existant directory if no CFLAGS are specified.
+When copying external toolchain sysroot to staging, we need to
+create the symbolic link that matches the name of the subdirectory
+for the architecture variant in the original sysroot.
+(ex: sgxx-glibc for CodeSourcery Standard edition)
+To do that, SYSROOT_DIR must be different than ARCH_SYSROOT_DIR.
 
-Here are the results of -print-sysroot gcc option:
-
-$ ./i686-pc-linux-gnu-gcc -print-sysroot
-Full/path/to/i686-pc-linux-gnu/libc/system32 (doesn't exist)
-
-$ ./i686-pc-linux-gnu-gcc -m64 -print-sysroot
-Full/path/to/i686-pc-linux-gnu/libc/system64 (doesn't exist)
-
-$ ./i686-pc-linux-gnu-gcc -msgxx-glibc -print-sysroot
-Full/path/to/i686-pc-linux-gnu/libc/sgxx-glibc (exist)
-
-The problem is that in the "libc" directory there is only the sub-directory
-"sgxx-glibc". Therefore all hearders files and libraries are only available
-in arch specific sysroot.
-
-When using the -print-file-name gcc option, the result is quite buggy and it
-is not empty.
-
-$ ./i686-pc-linux-gnu-gcc -print-file-name=libc.a
-libc.a
-
-So the toolchain check fail because $PWD/libc.a is used as SYSROOT_DIR since
-the toolchain-external backend does not always use CFLAGS.
-
-This patch change the SYSROOT_DIR/ARCH_SYSROOT_DIR detection logic so that if
-SYSROOT_DIR is empty/bogus, then the same value as ARCH_SYSROOT_DIR is used.
-
-This ensures that both SYSROOT_DIR and ARCH_SYSROOT_DIR point to valid
-directories (which would the same in the case of this toolchain, which brings
-us back to the non-multilib toolchain case).
-
-If toolchain_find_sysroot() was used without flags, then flags are added to
-allow the fallback to arch sysroot. In normal cases the same behavior as
-before is expected.
-
-If toolchain_find_sysroot() was used with flags, then it's replaced by
-toolchain_find_arch_sysroot() with the same flags.
+In the case where ARCH_SYSROOT_DIR is used as SYSROOT_DIR  we need
+to check again the path to the main sysroot directory.
+if SYSROOT_DIR returned by toolchain_find_sysroot without
+TOOLCHAIN_EXTERNAL_CFLAGS is empty/invalid, then compute the common
+part between SYSROOT_DIR and ARCH_SYSROOT_DIR returned by
+toolchain_print_sysroot in order to get the "base sysroot".
+This "base sysroot" is used as SYSROOT_DIR to create the symlink
+in the staging directory.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 28 +++++++++++++++-------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ toolchain/helpers.mk | 47 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b7a0e60..2aee133 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -437,9 +437,9 @@ define toolchain_find_libc_a
- $$(readlink -f $$(LANG=C $(1) -print-file-name=libc.a))
- endef
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 7d7af5f..a4a3661 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -97,6 +97,32 @@ toolchain_create_arch_sysroot_symlink = \
+ 	ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+ 	echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}"
  
--# Returns the sysroot location for the given compiler + flags
--define toolchain_find_sysroot
--$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
-+# Returns the arch sysroot location for the given compiler + flags
-+define toolchain_find_arch_sysroot
-+$$(echo -n $(call toolchain_find_libc_a,$(1) $(2)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
- endef
- 
- # Returns the lib subdirectory for the given compiler + flags (i.e
-@@ -448,6 +448,18 @@ define toolchain_find_libdir
- $$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:')
- endef
- 
-+# Returns the main sysroot location for the given compiler + flags
-+# First, try to find the sysroot without flags.
-+# If the sysroot path is empty/bogus then use the arch sysroot instead.
-+define toolchain_find_sysroot
-+$$(main_sysroot="$(call toolchain_find_arch_sysroot,$(1))"; \
-+if ! test -d $${main_sysroot}; then \
-+	echo -n $(call toolchain_find_arch_sysroot,$(1), $(2)) ; \
-+else \
-+	echo -n $${main_sysroot}; \
-+fi)
++# Returns the location of the sysroot for the given compiler + flags using
++# -print-sysroot gcc option (gcc > 4.3 is needed)
++define toolchain_print_sysroot
++$$(readlink -f $$(LANG=C $(1) -print-sysroot))
 +endef
 +
- # Checks for an already installed toolchain: check the toolchain
- # location, check that it supports sysroot, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
-@@ -455,13 +467,13 @@ endef
- define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
--	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC), $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
++# Returns the common path between the main sysroot and arch sysroot returned by
++# toolchain_print_sysroot. This is required to calculate the depth of the symlink
++# in the staging directory when the main sysroot directory is empty/bogus.
++define toolchain_calculate_base_sysroot
++$$(index=0 ; \
++common_sysroot_path="" ; \
++main_sysroot_path=$(call toolchain_print_sysroot,$(TOOLCHAIN_EXTERNAL_CC)); \
++arch_sysroot_path=$(call toolchain_print_sysroot,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS)); \
++while [ "$${main_sysroot_path:$${index}:1}" = "$${arch_sysroot_path:$${index}:1}" ] ; do \
++	if [ "$${main_sysroot_path:$${index}:1}" = "/" ]; then \
++		common_sysroot_path="$${main_sysroot_path:0:$${index}+1}"; \
++	fi ; \
++	if [ "$${main_sysroot_path:$${index}:1}" = "" ] || [ "$${arch_sysroot_path:$${index}:1}" = "" ]; then \
++		break; \
++	fi ; \
++	: $$((index++)) ; \
++done ; \
++echo -n $${common_sysroot_path})
++endef
++
+ #
+ # Copy the full external toolchain sysroot directory to the staging
+ # dir. The operation of this function is rendered a little bit
+@@ -130,6 +156,17 @@ toolchain_create_arch_sysroot_symlink = \
+ #    non-default architecture variant is used. Without this, the
+ #    compiler fails to find libraries and headers.
+ #
++# Some toolchain (i.e CodeSourcery Standard edition) doesn't have
++# a main sysroot directory and use the arch sysroot as fallback.
++# In this case we need to check again the path to the main sysroot
++# directory when SYSROOT_DIR == ARCH_SYSROOT_DIR.
++# if SYSROOT_DIR returned by toolchain_find_sysroot without
++# TOOLCHAIN_EXTERNAL_CFLAGS point to valid directory.
++# If SYSROOT_DIR is empty/invalid, compute the common part between
++# SYSROOT_DIR and ARCH_SYSROOT_DIR returned by toolchain_print_sysroot
++# in order to get the "base sysroot". This "base sysroot" is used
++# to create the symlink in the staging directory.
++#
+ # Some toolchains (i.e Linaro binary toolchains) store support
+ # libraries (libstdc++, libgcc_s) outside of the sysroot, so we simply
+ # copy all the libraries from the "support lib directory" into our
+@@ -163,6 +200,16 @@ copy_toolchain_sysroot = \
+ 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
+ 		$(call toolchain_create_arch_sysroot_symlink,$${ARCH_SUBDIR}) ; \
++	else \
++		if ! test -d "$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; then \
++			SYSROOT_DIR="$(call toolchain_calculate_base_sysroot)"; \
++			if ! test -d $${SYSROOT_DIR} ; then \
++				echo "ERROR: Unable to find the main sysroot directory." ; \
++				exit 1; \
++			fi ; \
++			ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
++			$(call toolchain_create_arch_sysroot_symlink,$${ARCH_SUBDIR}) ; \
++		fi ; \
  	fi ; \
- 	$(call check_kernel_headers_version,\
--		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
-+		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC), $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
- 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
- 	if test "$(BR2_arm)" = "y" ; then \
- 		$(call check_arm_abi,\
-@@ -544,12 +556,12 @@ endif
- #                       to the target filesystem.
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_CORE
--	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC), $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
- 	fi ; \
--	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	ARCH_SYSROOT_DIR="$(call toolchain_find_arch_sysroot,$(TOOLCHAIN_EXTERNAL_CC), $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	SUPPORT_LIB_DIR="" ; \
- 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-@@ -595,7 +607,7 @@ ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
- define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
- 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
--	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	FDPIC_SYSROOT_DIR="$(call toolchain_find_arch_sysroot,$${FDPIC_EXTERNAL_CC}, $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	FDPIC_SUPPORT_LIB_DIR="" ; \
- 	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+ 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+ 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
 -- 
 1.9.3
