@@ -1,57 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Oct 2014 07:49:11 -0300
-Subject: [Buildroot] [PATCH] boost: ignore site config
-Message-ID: <1414493351-10954-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 28 Oct 2014 12:10:50 +0100
+Subject: [Buildroot] [PATCHv2 buildroot-test 01/11] autobuild-run:
+ check-requirements does not need to know the login details
+In-Reply-To: <87fve95rd4.fsf@dell.be.48ers.dk>
+References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
+ <1413747007-24990-2-git-send-email-patrickdepinguin@gmail.com>
+ <20141019225918.57f55ebf@free-electrons.com>
+ <CAAXf6LX4SQsCCnbU5aR37KypC+QUx3ryVPk4hoiceQebu9ic4Q@mail.gmail.com>
+ <87fve95rd4.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LUw-7815B8ffeSpqLGgeRjtXCdkhjg+vYEpaXg=Do2v8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It can lead to build failures if you've got boost installed in the host,
-like this:
-http://stackoverflow.com/questions/23013433/how-to-install-modular-boost
+On Mon, Oct 27, 2014 at 6:56 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+> Hi,
+>
+>  >> are you not overlooking another place where http_login + http_password
+>  >> are used to find out whether uploading should take place? I.e, in:
+>  >>
+>  >> if http_login and http_password:
+>  >> # Submit results. Yes, Python has some HTTP libraries, but
+>  >> # none of the ones that are part of the standard library can
+>  >> # upload a file without writing dozens of lines of code.
+>  >>
+>  >> Probably we want the same test to be used everywhere?
+>
+>  > Hmm, indeed.
+>  > But then I think we better add do_send_results to kwargs so the value
+>  > can be calculated once and used multiple times. Btw, if you have a
+>  > better name than do_send_results, that would be great. I'd pick
+>  > 'send_results' but it's already the function name...
+>
+> What about 'upload'?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/boost/boost.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Sounds good to me.
+Thomas Petazzoni: do you agree?
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 46a98e8..275ee00 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -125,6 +125,7 @@ define BOOST_INSTALL_TARGET_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--prefix=$(TARGET_DIR)/usr \
-+	--ignore-site-config \
- 	--layout=$(BOOST_LAYOUT) install )
- endef
- 
-@@ -132,6 +133,7 @@ define HOST_BOOST_BUILD_CMDS
- 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(HOST_BOOST_OPTS) \
-+	--ignore-site-config \
- 	--prefix=$(HOST_DIR)/usr )
- endef
- 
-@@ -140,6 +142,7 @@ define HOST_BOOST_INSTALL_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(HOST_BOOST_OPTS) \
- 	--prefix=$(HOST_DIR)/usr \
-+	--ignore-site-config \
- 	--layout=$(BOOST_LAYOUT) install )
- endef
- 
-@@ -148,6 +151,7 @@ define BOOST_INSTALL_STAGING_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPTS) \
- 	--prefix=$(STAGING_DIR)/usr \
-+	--ignore-site-config \
- 	--layout=$(BOOST_LAYOUT) install)
- endef
- 
--- 
-2.0.4
+Thanks,
+Thomas
