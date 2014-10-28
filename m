@@ -1,60 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Oct 2014 22:06:53 +0100
-Subject: [Buildroot] [PATCH] Makefile: improve detection of make "-s"
- flag
-In-Reply-To: <1414422891-7269-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1414422891-7269-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <5450056D.4010601@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Oct 2014 22:07:29 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: Enable bundled build
+Message-ID: <20141028211001.91E77B1DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/10/14 16:14, Fabio Porcedda wrote:
-> Because it's just checked the presence of the "s" character even a
->   make --warn-undefined-variables
-> is detected as a silent build so fix this by filtering out long options.
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 907a0fc..4fd6b64 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
->  TARGETS :=
->  
->  # silent mode requested?
-> -QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-> +QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))), -q)
+commit: http://git.buildroot.net/buildroot/commit/?id=843db449d901722e602ad29df213d8fee757eea8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- This add a spurious space to the QUIET variable. Not really important, but we
-normally avoid that.
+host-python is needed to create a bundled version of the tvheadend binary which
+includes all files used by the web UI.
 
- Also, maybe an easier solution is:
+Having host-python alone as dependency is not enough, we need to add
+--enable-bundle to enable this functionality.
 
-# Search for s only in the short options
-QUIET := $(if $(findstring s,$(firstword $(MAKEFLAGS))),-q)
+Also remove the now bundled webinterface files from /usr/share/tvheadend/
 
-(Note that GNU make converts something like --silent into an s in MAKEFLAGS, and
-that all the short options are collected to the beginning of MAKEFLAGS.)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
 
-
- Regards,
- Arnout
-
->  
->  # Strip off the annoying quoting
->  ARCH := $(call qstrip,$(BR2_ARCH))
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 54112a6..979c321 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -37,6 +37,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
+ 	 --python="$(HOST_DIR)/usr/bin/python"	\
+ 	 --disable-dvbscan			\
++	 --enable-bundle			\
+ 	 $(TVHEADEND_CONF_OPTS)			\
+ 	)
+ endef
+@@ -49,6 +50,15 @@ define TVHEADEND_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
++# Remove documentation and source files that are not needed because we
++# use the bundled web interface version.
++define TVHEADEND_CLEAN_SHARE
++	rm -rf $(TARGET_DIR)/usr/share/tvheadend/docs
++	rm -rf $(TARGET_DIR)/usr/share/tvheadend/src
++endef
++
++TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_CLEAN_SHARE
++
+ #----------------------------------------------------------------------------
+ # To run tvheadend, we need:
+ #  - a startup script, and its config file
+@@ -59,7 +69,7 @@ define TVHEADEND_INSTALL_DB
+ 	              $(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
+ 	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
+ endef
+-TVHEADEND_POST_INSTALL_TARGET_HOOKS = TVHEADEND_INSTALL_DB
++TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_INSTALL_DB
+ 
+ define TVHEADEND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D package/tvheadend/etc.default.tvheadend $(TARGET_DIR)/etc/default/tvheadend
