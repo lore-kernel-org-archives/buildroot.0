@@ -1,75 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Oct 2014 22:21:00 +0100
-Subject: [Buildroot] [PATCH 0/15 v6] Introduce libudev (branch
-	yem/libudev2)
-In-Reply-To: <XnsA3D3E6DF040E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <cover.1414442699.git.yann.morin.1998@free.fr>
- <XnsA3D3E6DF040E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <545008BC.90706@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 28 Oct 2014 22:28:16 +0100
+Subject: [Buildroot] [PATCH v2 0/3] toolchain: Add support for Sourcery
+	Codebench Standard
+Message-ID: <1414531699-6789-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/10/14 22:41, Bernd Kuhls wrote:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:cover.1414442699.git.yann.morin.1998 at free.fr:
-> 
->> A lot of packages that have a dependency on udev, in fact only require a
->> libudev, not a udev daemon. That's the case for e.g. libinput, libcec,
->> mesa3d...
-> 
-> Hi,
-> 
-> building this defconfig worked:
+The purpose of this series is to provide support for Sourcery Codebench
+Standard (licenced) edition in Buildroot.
 
- With "worked", you do mean that it works at runtime, right? Because the problem
-with this change is to be sure that the packages still function correctly when
-the udev daemon is not running.
+Since these toolchain can't be downloaded, we need to use the custom toolchain
+backend to import them into Buildroot.
 
- Regards,
- Arnout
+In Toolchain menu, select:
+  Toolchain type (External toolchain)
+  Toolchain (Custom toolchain)
+  Toolchain origin (Pre-installed toolchain)
 
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_GCC_VERSION_4_9_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XBMC=y
-> BR2_PACKAGE_XBMC_ALSA_LIB=y
-> BR2_PACKAGE_XBMC_LIBBLURAY=y
-> BR2_PACKAGE_XBMC_GOOM=y
-> BR2_PACKAGE_XBMC_RSXS=y
-> BR2_PACKAGE_XBMC_LIBCEC=y
-> BR2_PACKAGE_XBMC_LIBMICROHTTPD=y
-> BR2_PACKAGE_XBMC_RTMPDUMP=y
-> BR2_PACKAGE_XBMC_LIBSHAIRPLAY=y
-> BR2_PACKAGE_XBMC_LIBSMBCLIENT=y
-> BR2_PACKAGE_XBMC_LIBTHEORA=y
-> BR2_PACKAGE_XBMC_LIBUSB=y
-> BR2_PACKAGE_XBMC_LIBVA=y
-> BR2_PACKAGE_XBMC_WAVPACK=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_EUDEV=y
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Then set all toolchain settings (kernel headers, libc, rpc, c++ etc...)
 
+I'm using the Sourcery Codebench 2014.05 for IA32 GNU/Linux, here is the
+settings:
+
+(i686-pc-linux-gnu) Toolchain prefix
+  External toolchain kernel headers series (3.13.x)
+  External toolchain C library (glibc/eglibc)
+[*] Toolchain has RPC support
+[*] Toolchain has C++ support?
+(-pipe -msgxx-glibc) Target Optimizations
+
+The "-msgxx-glibc" flag in "Target Optimizations" is mandatory otherwise the
+toolchain won't work.
+
+Thanks to Yann E. Morin and Thomas Petazzoni for the help and review on this topic.
+
+v2: Rework entirely this serie to take into account comments received on v1.
+http://lists.busybox.net/pipermail/buildroot/2014-October/108641.html
+
+Romain Naour (3):
+  toolchain-external: Detect empty or invalid sysroot
+  toolchain-helpers: factorise the arch sysroot symlink creation
+  toolchain-external: calculation of the symlink to the arch sysroot
+
+ toolchain/helpers.mk                               | 70 +++++++++++++++++++---
+ toolchain/toolchain-external/toolchain-external.mk | 28 ++++++---
+ 2 files changed, 82 insertions(+), 16 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
