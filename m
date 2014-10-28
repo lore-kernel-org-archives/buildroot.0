@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2014 22:07:42 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: Bump version to current
-	git master
-Message-ID: <20141028211001.9B97DB1DC3@busybox.osuosl.org>
+Date: Tue, 28 Oct 2014 22:10:23 +0100
+Subject: [Buildroot] [PATCH v3 4/7] package/tvheadend: Add support for
+ libdvbcsa
+In-Reply-To: <1413311309-30811-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+ <1413311309-30811-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141028221023.05c9f11c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5711bd0918c36bc8be6691a763aeafc2e7f6128e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tvheadend/tvheadend.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 14 Oct 2014 20:28:26 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: added TVHEADEND_CONF_OPTS, tvheadend is not an autoconf-package
+> v2: no changes
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 979c321..9216f78 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = ca742e00a7717787351e1a432ca9b41f93369d60
-+TVHEADEND_VERSION = 8cdaab42c5a1aa7cd646fcbfd9ba3ce9cf410b34
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+Patches 4 to 6 applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
