@@ -1,63 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Oct 2014 00:33:26 +0200
-Subject: [Buildroot] [PATCH] ipset: Don't include host headers
-Message-ID: <c69b0ea4caf640e9ca3c2357f6e701cab02fa689.1414449206.git.baruch@tkos.co.il>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 28 Oct 2014 08:58:45 +0300
+Subject: [Buildroot] [PATCH] schifra: fix build of examples
+In-Reply-To: <1414446515-18578-1-git-send-email-arnout@mind.be>
+References: <1414446515-18578-1-git-send-email-arnout@mind.be>
+Message-ID: <CAMo8Bf+tSmUXEMM10-snOOT9mJq2cnbOojdYQQDy4+j+D3Aurg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch removing /usr/local/include from the include path.
+On Tue, Oct 28, 2014 at 12:48 AM, Arnout Vandecappelle
+(Essensium/Mind) <arnout@mind.be> wrote:
+> The OPTIONS argument passed to make had a redundant -o option, leading
+> to:
+>
+> g++ -pipe -Os   -o -o schifra_reed_solomon_speed_evaluation schifra_reed_solomon_speed_evaluation.cpp -lstdc++ -lm
+> arm-linux-musleabi-g++: error: schifra_reed_solomon_speed_evaluation: No such file or directory
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> This has been in buildroot for more than two years and it cannot ever
+> have succeeded... How come the autobuilders didn't pick this up?
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/schifra/schifra.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
+> index 96387d3..e55bf02 100644
+> --- a/package/schifra/schifra.mk
+> +++ b/package/schifra/schifra.mk
+> @@ -12,7 +12,7 @@ SCHIFRA_LICENSE = schifra license
+>  SCHIFRA_LICENSE_FILES = schifra_license.txt
+>
+>  SCHIFRA_MAKE_OPTS = COMPILER="$(TARGET_CXX)" \
+> -                  OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o"
+> +                  OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
 
-Fixes:
-http://autobuild.buildroot.net/results/4f5/4f55c2415281c6204500efe28fe9e24c8ef73863/
+With this patch applied the build fails for me locally, whereas without it
+it used to be successful.
+I think that passing relying on '-o' being in OPTIONS (which Makefile does)
+is a bad idea, and the package Makefile needs to be patched accordingly.
+I'll send a patch that I propose.
 
-Technically speaking this autobuild failure has already been fixes when
--Werror was removed in commit a923b44112aa3 (ipset: add patch to fix
---enable-debug build). But the warning in this case indicates a real problem
-that needs to be fixed by itself.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...Make_global.am-Don-t-include-host-headers.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
-
-diff --git a/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch b/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
-new file mode 100644
-index 000000000000..f8809791d3ff
---- /dev/null
-+++ b/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
-@@ -0,0 +1,29 @@
-+From 1f1b5ed5e8402214a6516a380247123e6dd75d2a Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 28 Oct 2014 00:19:25 +0200
-+Subject: [PATCH] Make_global.am: Don't include host headers
-+
-+This is bad for cross compilation.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ Make_global.am | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/Make_global.am b/Make_global.am
-+index 25c4d64715c7..11ea1c333186 100644
-+--- a/Make_global.am
-++++ b/Make_global.am
-+@@ -71,8 +71,7 @@
-+ #            curr:rev:age
-+ LIBVERSION = 8:0:5
-+ 
-+-AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include \
-+-	-I/usr/local/include
-++AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
-+ 
-+ AM_CFLAGS = -std=gnu99
-+ 
-+-- 
-+2.1.1
-+
 -- 
-2.1.1
+Thanks.
+-- Max
