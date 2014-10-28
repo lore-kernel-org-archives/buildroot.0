@@ -1,134 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Oct 2014 23:29:06 +0100
-Subject: [Buildroot] [PATCH 3/3] binutils: now depends on wchar
-In-Reply-To: <1414534758-7545-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1414534758-7545-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1414534758-7545-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <545018B2.7080905@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 28 Oct 2014 23:32:04 +0100
+Subject: [Buildroot] [PATCH v4] cppunit: new package
+In-Reply-To: <1413474395-20165-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+References: <1413474395-20165-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <54501964.4050702@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/10/14 23:19, Thomas Petazzoni wrote:
-> From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-> 
-> binutils starting at least from 2.23 when build for target require
-> uClibc configured with UCLIBC_HAS_WCHAR otherwise:
-> 
-> libtool: link: [...] -o as-new [...]
-> read.o: In function `read_symbol_name':
-> read.c:(.text+0x3634): undefined reference to `mbstowcs'
-> collect2: error: ld returned 1 exit status
-> 
-> because "mbstowcs" is not available in the C library.
-> 
-> Even though we're not yet using 2.23.2 as the default version, we will
-> probably do it in the near future, so this commit doesn't bother with
-> making the wchar dependency version-specific, and applies it to the
-> binutils package as a whole.
-> 
-> Fixes bug #6218
-> 
-> [Thomas:
->  - more details in the commit log.
->  - add comment about the wchar dependency
->  - propagate the dependency to dropwatch (and fix a mistake in the
->    architecture dependencies of the comment)
->  - propagate the dependency to oprofile.]
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hi Sebastien,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
+Le 16/10/2014 17:46, Sebastien Bourdelin a ?crit :
+> CppUnit is the C++ port of the famous JUnit framework for unit testing.
+> Test output is in XML or text format for automatic testing and GUI
+> based for supervised tests.
+> 
+> http://www.freedesktop.org/wiki/Software/cppunit/
+> 
+> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 > ---
->  package/binutils/Config.in  | 5 +++++
->  package/dropwatch/Config.in | 7 ++++---
->  package/oprofile/Config.in  | 5 +++--
->  3 files changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-> index 44e7ae0..50c38b6 100644
-> --- a/package/binutils/Config.in
-> +++ b/package/binutils/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_BINUTILS
->  	bool "binutils"
->  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
->  	depends on !BR2_aarch64 && !BR2_nios2
-> +	depends on BR2_USE_WCHAR
->  	help
->  	  Install binutils on the target
->  
-> @@ -19,3 +20,7 @@ config BR2_PACKAGE_BINUTILS_TARGET
->  	  http://www.gnu.org/software/binutils/
->  
->  endif
-> +
-> +comment "binutils needs a toolchain w/ wchar"
-> +	depends on !BR2_aarch64 && !BR2_nios2
-> +	depends on BR2_USE_WCHAR
-> diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-> index 0c9aca6..d331e5e 100644
-> --- a/package/dropwatch/Config.in
-> +++ b/package/dropwatch/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DROPWATCH
->  	bool "dropwatch"
->  	select BR2_PACKAGE_BINUTILS
->  	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-> +	depends on BR2_USE_WCHAR # binutils
->  	select BR2_PACKAGE_READLINE
->  	select BR2_PACKAGE_LIBNL
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-> @@ -11,6 +12,6 @@ config BR2_PACKAGE_DROPWATCH
->  
->  	  https://fedorahosted.org/dropwatch/
->  
-> -comment "dropwatch needs a toolchain w/ threads"
-> -	depends on !BR2_aarch64
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "dropwatch needs a toolchain w/ threads, wchar"
-> +	depends on !BR2_aarch64 && !BR2_nios2
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-> index 075e9ea..3ea07d9 100644
-> --- a/package/oprofile/Config.in
-> +++ b/package/oprofile/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_OPROFILE
->  	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-> +	depends on BR2_USE_WCHAR # binutils
->  	depends on !BR2_xtensa
->  	# libpfm4 is needed on PowerPC, and requires thread support
->  	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
-> @@ -25,10 +26,10 @@ config BR2_PACKAGE_OPROFILE
->  	  interrupt handlers, kernel modules, the kernel, shared
->  	  libraries, and applications.
->  
-> -comment "oprofile needs a toolchain w/ C++"
-> +comment "oprofile needs a toolchain w/ C++, wchar"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->  
->  comment "oprofile needs a toolchain w/ threads on PPC"
->  	depends on BR2_USE_MMU && BR2_powerpc
-> 
+> Changes v3 -> v4:
+>   - move the package from "Librairies" > "Others" to "Development tools"
+> 		 (suggested by arnout at mind.be)
+>   - change the CPPUNIT_VERSION and remove the useless CPPUNIT_SOURCE
+> 		 (suggested by jerzy.grzegorek at trzebnica.net and
+> 		 arnout at mind.be)
+>   - change the link which refer to the md5 hash (suggested by
+> 		 arnout at mind.be)
+>   - change the comment for the locally calculated hash in the .hash file
+>   - change the commit title
+>   - add a dependency to a toolchain with dynamic library supported
+>   since the static situation is not correctly detected (suggested by
+> 		 arnout at mind.be and thomas.petazzoni at free-electrons.com)
+> ---
+> Changes v2 -> v3:
+>  - use the release tarball instead of the git repository (suggested by
+> 		 arnout at mind.be)
+>  - fix the Licence (suggested by arnout at mind.be)
+>  - add upstream and locally compute .hash (suggested by
+> 		 arnout at mind.be)
+> ---
+> Changes v1 -> v2:
+>  - used AUTORECONF option (suggested by romain.naour at openwide.fr)
+>  - removed useless CONFIGURE_CMDS (suggested by romain.naour at openwide.fr)
 
+It's almost done but I noticed that the cppunit documentation is generated with
+doxygen because the configure script doesn't handle one of these option:
+--disable-doc, --disable-docs, --disable-documentation
 
+The build will fail if doxygen is not found on the system (which is generally
+the case in auto-builders)
+
+I have attached a patch that implement --disable-docs option but since it touch
+the configure.ac file, the package will need again CPPUNIT_AUTORECONF = YES.
+
+Can you please integrate this patch in v5.
+In the same time I'll upstream it.
+
+Best regards,
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel| 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-add-option-to-disable-documentations.patch
+Type: text/x-patch
+Size: 1254 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141028/ac50072b/attachment.bin>
