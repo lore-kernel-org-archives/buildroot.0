@@ -1,40 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2014 12:14:59 +0100
-Subject: [Buildroot] [PATCHv2 buildroot-test 01/11] autobuild-run:
- check-requirements does not need to know the login details
-In-Reply-To: <CAAXf6LUw-7815B8ffeSpqLGgeRjtXCdkhjg+vYEpaXg=Do2v8Q@mail.gmail.com>
-References: <1413747007-24990-1-git-send-email-patrickdepinguin@gmail.com>
- <1413747007-24990-2-git-send-email-patrickdepinguin@gmail.com>
- <20141019225918.57f55ebf@free-electrons.com>
- <CAAXf6LX4SQsCCnbU5aR37KypC+QUx3ryVPk4hoiceQebu9ic4Q@mail.gmail.com>
- <87fve95rd4.fsf@dell.be.48ers.dk>
- <CAAXf6LUw-7815B8ffeSpqLGgeRjtXCdkhjg+vYEpaXg=Do2v8Q@mail.gmail.com>
-Message-ID: <20141028121459.375b3583@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 28 Oct 2014 12:16:52 +0100
+Subject: [Buildroot] [RFC] Responsive Design Website
+In-Reply-To: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+Message-ID: <CAAXf6LXnt=MEKpTLVUx4SmuJOHStdMQ-gsKQHax0me=x8obwxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Angelo,
 
-On Tue, 28 Oct 2014 12:10:50 +0100, Thomas De Schampheleire wrote:
+On Mon, Oct 27, 2014 at 10:56 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> Hello List!
+>
+> As a sign of gratitude for my recently committed mono patches, I
+> thought having a responsive design website could be a nice addition to
+> Buildroot.
+>
+> With this in mind, I updated to the latest bootstrap3 and jquery
+> versions, fixed various unbootstrapness everywhere and made the
+> website responsive!
+>
+> The website is very similar to the old one, the most difficult task
+> was to clean it to let conditional css rules make their job.
+>
+> You can try it (also with your mobile phone) at:
+>
+> http://buildrootrd.idea-on-line.it/ (WARNING: dns is stil propagating)
+>
+> I'm open to suggestions and if you like the work I'll continue to fix
+> the entire website and I'll send a patch in the next few days.
 
-> >  > Hmm, indeed.
-> >  > But then I think we better add do_send_results to kwargs so the value
-> >  > can be calculated once and used multiple times. Btw, if you have a
-> >  > better name than do_send_results, that would be great. I'd pick
-> >  > 'send_results' but it's already the function name...
-> >
-> > What about 'upload'?
-> 
-> Sounds good to me.
-> Thomas Petazzoni: do you agree?
+Many thanks for this work, this is very much appreciated!
+This has been (somewhere) on my TODO list for a long time, and I'm
+glad you picked it up.
 
-Fine with me.
+Some comments:
 
+- the 'Buildroot' button top-left should link to the home page,
+currently it links to #.
+- for some reason, the website does not support zooming on Android
+with Dolphin Browser. I haven't checked other browsers. Is this
+expected?
+- on a desktop, the Sponsors page does not look the same way as the
+original. (Firefox 29 on Linux)
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
