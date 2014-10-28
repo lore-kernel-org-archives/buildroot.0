@@ -1,29 +1,58 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Tue, 28 Oct 2014 15:04:09 +0100
-Subject: [Buildroot] Telnet client (inetutils)
-Message-ID: <CABbD_XCzBtvwnoHjpBKU902MY9FQMcUGnbix3MVTP7vRde+cLA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 28 Oct 2014 15:15:59 +0100
+Subject: [Buildroot] [RFC] Responsive Design Website
+In-Reply-To: <CA+TH9V=a2bt7_X=7FGrgkAD5MivuSG5fUFzXSBO7=3DjoWKNGA@mail.gmail.com>
+References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+ <CAAXf6LXnt=MEKpTLVUx4SmuJOHStdMQ-gsKQHax0me=x8obwxA@mail.gmail.com>
+ <CA+TH9V=a2bt7_X=7FGrgkAD5MivuSG5fUFzXSBO7=3DjoWKNGA@mail.gmail.com>
+Message-ID: <CAAXf6LVmeih7Xj14OX_bG2OJNLHqod4k0eaUGjaP03MxztCAKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout & list,
+Hi Angelo,
 
-I think since commit
-http://git.buildroot.org/buildroot/commit/?id=560fe85bf7fb81956e80848c8bb28d7a6d00a2a2
-there is no
-telnet client in Buildroot if the user does not want to use Busybox (which
-is my case sometimes).
-Do you think adding the inetutils package, which provides a simple telnet,
-telnetd, ftp and ftpd and a few more utilities would
-be acceptable? It looks far more recent than netkit was (Jan. 2014 was the
-latest release).
+On Tue, Oct 28, 2014 at 2:31 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> Hi Thomas!
+>
+>> Some comments:
+>>
+>> - the 'Buildroot' button top-left should link to the home page,
+>> currently it links to #.
+>> - for some reason, the website does not support zooming on Android
+>> with Dolphin Browser. I haven't checked other browsers. Is this
+>> expected?
+>
+> Yes, it's expected, I disabled zooming due to the responsive layout.
+> If you want, I can re-enable it, but it's a little bit in contrast
+> with RD principles.
 
-If so, I would be happy to try to provide a package.
+This is arguable. Here is an interesting link on this topic:
+http://ux.stackexchange.com/questions/37511/should-users-be-able-to-zoom-in-a-responsive-webdesign
+
+From the top answers it seems the consensus is that zooming should be possible.
+
+
+>
+>> - on a desktop, the Sponsors page does not look the same way as the
+>> original. (Firefox 29 on Linux)
+>
+> As stated in the original email, the work is not complete, I started
+> with the homepage and included header and footer just to show
+> something. Obviously, if you love the result, I can commit a full set
+> of patches.
+> In the next few days, I'll update my copy of the website, when it
+> looks as expected, I'll send a PR.
+
+I definitely like these changes. Of course I cannot speak for the
+entire community, but I do not expect anyone to object against a
+better mobile experience of the website, provided that the desktop
+experience remains good.
+
+Looking forward to the result!
 
 Best regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141028/1ec869c5/attachment.html>
+Thomas
