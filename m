@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 28 Oct 2014 14:33:49 +0100
-Subject: [Buildroot] [PATCH 12/15] erlang-p1-sip: new package.
+Date: Tue, 28 Oct 2014 14:33:48 +0100
+Subject: [Buildroot] [PATCH 11/15] erlang-p1-stringprep: new package.
 In-Reply-To: <1414503232-28314-1-git-send-email-johan.oudinet@gmail.com>
 References: <1414503232-28314-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1414503232-28314-13-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1414503232-28314-12-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +12,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                                     |  1 +
- package/erlang-p1-sip/Config.in                       |  8 ++++++++
- .../erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch | 19 +++++++++++++++++++
- package/erlang-p1-sip/erlang-p1-sip.mk                | 14 ++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/erlang-p1-sip/Config.in
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
+ package/Config.in                                    |  1 +
+ package/erlang-p1-stringprep/Config.in               |  5 +++++
+ package/erlang-p1-stringprep/erlang-p1-stringprep.mk | 13 +++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/erlang-p1-stringprep/Config.in
+ create mode 100644 package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1e337d1..6db319d 100644
+index ffc2601..1e337d1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -396,6 +396,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
++	source "package/erlang-p1-stringprep/Config.in"
  	source "package/erlang-p1-stun/Config.in"
  	source "package/erlang-p1-tls/Config.in"
-diff --git a/package/erlang-p1-sip/Config.in b/package/erlang-p1-sip/Config.in
+ 	source "package/erlang-p1-utils/Config.in"
+diff --git a/package/erlang-p1-stringprep/Config.in b/package/erlang-p1-stringprep/Config.in
 new file mode 100644
-index 0000000..64a12b1
+index 0000000..eaaa59e
 --- /dev/null
-+++ b/package/erlang-p1-sip/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_ERLANG_P1_SIP
-+	bool "erlang-p1-sip"
++++ b/package/erlang-p1-stringprep/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	bool "erlang-p1-stringprep"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_ERLANG_P1_STUN
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  SIP library for Erlang
-diff --git a/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
++	  Erlang interface to stringprep
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 new file mode 100644
-index 0000000..80e2ab3
+index 0000000..b83e106
 --- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
-@@ -0,0 +1,19 @@
-+Description: correct include
-+ This part of the code was moved into it's own project and was packaged
-+ separately by me. To make the build process work, this small fix is
-+ necessary.
-+Author: Philipp Huebner <debalance@debian.org>
-+
-+Index: erlang-p1-sip/src/esip_socket.erl
-+===================================================================
-+--- erlang-p1-sip.orig/src/esip_socket.erl
-++++ erlang-p1-sip/src/esip_socket.erl
-+@@ -22,7 +22,7 @@
-+ 
-+ -include("esip.hrl").
-+ -include("esip_lib.hrl").
-+--include("stun.hrl").
-++-include_lib("p1_stun/include/stun.hrl").
-+ 
-+ -define(TCP_SEND_TIMEOUT, 15000).
-+ -define(CONNECT_TIMEOUT, 20000).
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-new file mode 100644
-index 0000000..d38ff2b
---- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-p1-sip
++# erlang-p1-stringprep
 +#
 +################################################################################
 +
-+ERLANG_P1_SIP_VERSION = bba4459
-+ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
-+ERLANG_P1_SIP_LICENSE = GPLv2
-+ERLANG_P1_SIP_LICENSE_FILES = COPYING
-+ERLANG_P1_SIP_DEPENDENCIES = erlang erlang-p1-stun erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_SIP_INSTALL_STAGING = YES
++ERLANG_P1_STRINGPREP_VERSION = 9e9e0f8
++ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
++ERLANG_P1_STRINGPREP_LICENSE = GPLv2+
++ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.TCL
++ERLANG_P1_STRINGPREP_DEPENDENCIES = erlang
 +
 +$(eval $(rebar-package))
 -- 
