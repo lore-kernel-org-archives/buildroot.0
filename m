@@ -1,40 +1,35 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 28 Oct 2014 09:29:13 +0000
-Subject: [Buildroot] [PATCH] trinity: enable only for supported architectures
-Message-ID: <1414488553-9374-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 28 Oct 2014 09:31:12 +0000
+Subject: [Buildroot] [PATCH] trinity: Disable for Microblaze architecture
+In-Reply-To: <20141027193025.43a59846@free-electrons.com>
+References: <1414426270-14436-1-git-send-email-Vincent.Riera@imgtec.com>	<20141027174348.0d4bcccb@free-electrons.com>	<544E7EA8.7030207@imgtec.com>
+ <20141027193025.43a59846@free-electrons.com>
+Message-ID: <544F6260.3090606@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package only has support for some architectures which are listed in
-the project website: http://codemonkey.org.uk/projects/trinity/
+Dear Thomas Petazzoni,
 
-We enable this package only for those supported architectures which are
-also supported in Buildroot.
+On 10/27/2014 06:30 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+>
+> On Mon, 27 Oct 2014 17:19:36 +0000, Vicente Olivert Riera wrote:
+>
+>> Done: http://patchwork.ozlabs.org/patch/403703/
+>
+> This is exactly the same patch as before. What happened ? :-)
 
-Fixes:
-	http://autobuild.buildroot.net/results/ea7/ea788f1f0ed5ee4e9b1bf0c8a0d1304e7467dc77/
+git add... :-(
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/trinity/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+I have sent the right patch now.
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index de9c467..a6c2fbc 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_TRINITY
- 	bool "trinity"
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
-+		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_sparc \
-+		BR2_x86_64
- 	help
- 	  A Linux System call fuzz tester
- 
+Thanks!
 -- 
-1.7.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
