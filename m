@@ -1,54 +1,57 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 28 Oct 2014 11:17:41 +0100
-Subject: [Buildroot] [PATCH v2] schifra: fix build of examples and add hash
-Message-ID: <1414491461-9629-1-git-send-email-arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Oct 2014 07:49:11 -0300
+Subject: [Buildroot] [PATCH] boost: ignore site config
+Message-ID: <1414493351-10954-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OPTIONS argument passed to make had a redundant -o option, leading
-to:
+It can lead to build failures if you've got boost installed in the host,
+like this:
+http://stackoverflow.com/questions/23013433/how-to-install-modular-boost
 
-g++ -pipe -Os   -o -o schifra_reed_solomon_speed_evaluation schifra_reed_solomon_speed_evaluation.cpp -lstdc++ -lm
-arm-linux-musleabi-g++: error: schifra_reed_solomon_speed_evaluation: No such file or directory
-
-Fixes:
-http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
-
-This error didn't occur before because upstream has silently updated
-the tarball. To protect against this in the future, a hash is added as
-well.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/schifra/schifra.hash | 3 +++
- package/schifra/schifra.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/schifra/schifra.hash
+ package/boost/boost.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/schifra/schifra.hash b/package/schifra/schifra.hash
-new file mode 100644
-index 0000000..7f8e6c0
---- /dev/null
-+++ b/package/schifra/schifra.hash
-@@ -0,0 +1,3 @@
-+# Calculated locally after download
-+# Upstream doesn't store a version and tarball may change unexpectedly!
-+sha256	3e60478cf024d87735d1cc1460aa2176c449e6c7f76914eefda25d3b20d22522	schifra.tgz
-diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-index 96387d3..e55bf02 100644
---- a/package/schifra/schifra.mk
-+++ b/package/schifra/schifra.mk
-@@ -12,7 +12,7 @@ SCHIFRA_LICENSE = schifra license
- SCHIFRA_LICENSE_FILES = schifra_license.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 46a98e8..275ee00 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -125,6 +125,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(TARGET_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install )
+ endef
  
- SCHIFRA_MAKE_OPTS = COMPILER="$(TARGET_CXX)" \
--		   OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o"
-+		   OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
+@@ -132,6 +133,7 @@ define HOST_BOOST_BUILD_CMDS
+ 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
++	--ignore-site-config \
+ 	--prefix=$(HOST_DIR)/usr )
+ endef
  
- # The examples are the only buildable artefacts.
- ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
+@@ -140,6 +142,7 @@ define HOST_BOOST_INSTALL_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+ 	--prefix=$(HOST_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+@@ -148,6 +151,7 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(STAGING_DIR)/usr \
++	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install)
+ endef
+ 
 -- 
-2.1.1
+2.0.4
