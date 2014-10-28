@@ -1,29 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Oct 2014 10:05:25 +0100
-Subject: [Buildroot] [git commit] subversion: needs sqlite and pkg-config
-In-Reply-To: <20141027175017.212d8da0@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 27 Oct 2014 17:50:17 +0100")
-References: <20141027164208.8EC20B10EA@busybox.osuosl.org>
- <20141027175017.212d8da0@free-electrons.com>
-Message-ID: <874muoa7je.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 28 Oct 2014 09:29:13 +0000
+Subject: [Buildroot] [PATCH] trinity: enable only for supported architectures
+Message-ID: <1414488553-9374-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This package only has support for some architectures which are listed in
+the project website: http://codemonkey.org.uk/projects/trinity/
 
-Hi,
+We enable this package only for those supported architectures which are
+also supported in Buildroot.
 
- >> ---
- >> package/subversion/Config.in     |    4 ++++
- >> package/subversion/subversion.mk |    2 +-
- >> 2 files changed, 5 insertions(+), 1 deletions(-)
+Fixes:
+	http://autobuild.buildroot.net/results/ea7/ea788f1f0ed5ee4e9b1bf0c8a0d1304e7467dc77/
 
- > This was already taken care of by a patch from Gustavo:
- > http://patchwork.ozlabs.org/patch/403623/. I've marked it as Superseded.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/trinity/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Sorry about that, I blame the jetlag ;)
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+index de9c467..a6c2fbc 100644
+--- a/package/trinity/Config.in
++++ b/package/trinity/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_TRINITY
+ 	bool "trinity"
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_sparc \
++		BR2_x86_64
+ 	help
+ 	  A Linux System call fuzz tester
+ 
 -- 
-Bye, Peter Korsgaard 
+1.7.1
