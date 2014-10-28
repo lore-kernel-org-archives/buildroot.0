@@ -1,53 +1,147 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 28 Oct 2014 08:58:45 +0300
-Subject: [Buildroot] [PATCH] schifra: fix build of examples
-In-Reply-To: <1414446515-18578-1-git-send-email-arnout@mind.be>
-References: <1414446515-18578-1-git-send-email-arnout@mind.be>
-Message-ID: <CAMo8Bf+tSmUXEMM10-snOOT9mJq2cnbOojdYQQDy4+j+D3Aurg@mail.gmail.com>
+Date: Tue, 28 Oct 2014 10:17:38 +0400
+Subject: [Buildroot] [PATCH] package/schifra: move -o option from OPTIONS to
+	build commands
+Message-ID: <1414477058-3382-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 28, 2014 at 12:48 AM, Arnout Vandecappelle
-(Essensium/Mind) <arnout@mind.be> wrote:
-> The OPTIONS argument passed to make had a redundant -o option, leading
-> to:
->
-> g++ -pipe -Os   -o -o schifra_reed_solomon_speed_evaluation schifra_reed_solomon_speed_evaluation.cpp -lstdc++ -lm
-> arm-linux-musleabi-g++: error: schifra_reed_solomon_speed_evaluation: No such file or directory
->
-> Fixes:
-> http://autobuild.buildroot.net/results/2143b4f6f22f50ccb4af36732cc7d9304daa3ff9/
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> This has been in buildroot for more than two years and it cannot ever
-> have succeeded... How come the autobuilders didn't pick this up?
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/schifra/schifra.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-> index 96387d3..e55bf02 100644
-> --- a/package/schifra/schifra.mk
-> +++ b/package/schifra/schifra.mk
-> @@ -12,7 +12,7 @@ SCHIFRA_LICENSE = schifra license
->  SCHIFRA_LICENSE_FILES = schifra_license.txt
->
->  SCHIFRA_MAKE_OPTS = COMPILER="$(TARGET_CXX)" \
-> -                  OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o"
-> +                  OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
+This allows redefining OPTIONS w/o risk of having too many or too few -o
+in the end of it.
 
-With this patch applied the build fails for me locally, whereas without it
-it used to be successful.
-I think that passing relying on '-o' being in OPTIONS (which Makefile does)
-is a bad idea, and the package Makefile needs to be patched accordingly.
-I'll send a patch that I propose.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/schifra/0001-fix-makefile-options.patch |  119 +++++++++++++++++++++++
+ 1 files changed, 119 insertions(+), 0 deletions(-)
+ create mode 100644 package/schifra/0001-fix-makefile-options.patch
 
+diff --git a/package/schifra/0001-fix-makefile-options.patch b/package/schifra/0001-fix-makefile-options.patch
+new file mode 100644
+index 0000000..c8395e9
+--- /dev/null
++++ b/package/schifra/0001-fix-makefile-options.patch
+@@ -0,0 +1,119 @@
++Move -o option from OPTIONS to build commands
++
++This allows redefining OPTIONS w/o risk of having too many or too few -o
++in the end of it.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++
++--- schifra-0.0.1/Makefile	1999-12-31 17:00:00.000000000 +0300
+++++ schifra-0.0.1/Makefile.new	2014-10-28 10:07:19.000000000 +0400
++@@ -22,7 +22,7 @@
++ 
++ COMPILER         = -c++
++ OPTIMIZATION_OPT = -O3
++-OPTIONS          = -ansi -pedantic-errors -Wall -Wextra -Werror -Wno-long-long -lstdc++ $(OPTIMIZATION_OPT) -o
+++OPTIONS          = -ansi -pedantic-errors -Wall -Wextra -Werror -Wno-long-long -lstdc++ $(OPTIMIZATION_OPT)
++ 
++ HPP_SRC+=schifra_galois_field_polynomial.hpp
++ HPP_SRC+=schifra_galois_field.hpp
++@@ -70,76 +70,76 @@
++ 	./schifra_reed_solomon_speed_evaluation
++ 
++ schifra_reed_solomon_codec_validation: schifra_reed_solomon_codec_validation.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_codec_validation schifra_reed_solomon_codec_validation.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_codec_validation schifra_reed_solomon_codec_validation.cpp
++ 
++ schifra_reed_solomon_speed_evaluation: schifra_reed_solomon_speed_evaluation.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_speed_evaluation schifra_reed_solomon_speed_evaluation.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_speed_evaluation schifra_reed_solomon_speed_evaluation.cpp
++ 
++ schifra_reed_solomon_file_encoding_example: schifra_reed_solomon_file_encoding_example.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_file_encoding_example schifra_reed_solomon_file_encoding_example.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_file_encoding_example schifra_reed_solomon_file_encoding_example.cpp
++ 
++ schifra_reed_solomon_file_decoding_example: schifra_reed_solomon_file_decoding_example.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_file_decoding_example schifra_reed_solomon_file_decoding_example.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_file_decoding_example schifra_reed_solomon_file_decoding_example.cpp
++ 
++ schifra_reed_solomon_example01: schifra_reed_solomon_example01.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example01 schifra_reed_solomon_example01.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example01 schifra_reed_solomon_example01.cpp
++ 
++ schifra_reed_solomon_example02: schifra_reed_solomon_example02.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example02 schifra_reed_solomon_example02.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example02 schifra_reed_solomon_example02.cpp
++ 
++ schifra_reed_solomon_example03: schifra_reed_solomon_example03.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example03 schifra_reed_solomon_example03.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example03 schifra_reed_solomon_example03.cpp
++ 
++ schifra_reed_solomon_example04: schifra_reed_solomon_example04.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example04 schifra_reed_solomon_example04.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example04 schifra_reed_solomon_example04.cpp
++ 
++ schifra_reed_solomon_example05: schifra_reed_solomon_example05.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example05 schifra_reed_solomon_example05.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example05 schifra_reed_solomon_example05.cpp
++ 
++ schifra_reed_solomon_example06: schifra_reed_solomon_example06.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example06 schifra_reed_solomon_example06.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example06 schifra_reed_solomon_example06.cpp
++ 
++ schifra_reed_solomon_example07: schifra_reed_solomon_example07.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example07 schifra_reed_solomon_example07.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example07 schifra_reed_solomon_example07.cpp
++ 
++ schifra_reed_solomon_example08: schifra_reed_solomon_example08.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_example08 schifra_reed_solomon_example08.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_example08 schifra_reed_solomon_example08.cpp
++ 
++ schifra_interleaving_example01: schifra_interleaving_example01.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_interleaving_example01 schifra_interleaving_example01.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_interleaving_example01 schifra_interleaving_example01.cpp
++ 
++ schifra_interleaving_example02: schifra_interleaving_example02.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_interleaving_example02 schifra_interleaving_example02.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_interleaving_example02 schifra_interleaving_example02.cpp
++ 
++ schifra_interleaving_example03: schifra_interleaving_example03.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_interleaving_example03 schifra_interleaving_example03.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_interleaving_example03 schifra_interleaving_example03.cpp
++ 
++ schifra_reed_solomon_file_interleaving_example: schifra_reed_solomon_file_interleaving_example.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_file_interleaving_example schifra_reed_solomon_file_interleaving_example.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_file_interleaving_example schifra_reed_solomon_file_interleaving_example.cpp
++ 
++ schifra_bitio_example01: schifra_bitio_example01.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_bitio_example01 schifra_bitio_example01.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_bitio_example01 schifra_bitio_example01.cpp
++ 
++ schifra_bitio_example02: schifra_bitio_example02.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_bitio_example02 schifra_bitio_example02.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_bitio_example02 schifra_bitio_example02.cpp
++ 
++ schifra_erasure_channel_example01: schifra_erasure_channel_example01.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_erasure_channel_example01 schifra_erasure_channel_example01.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_erasure_channel_example01 schifra_erasure_channel_example01.cpp
++ 
++ schifra_erasure_channel_example02: schifra_erasure_channel_example02.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_erasure_channel_example02 schifra_erasure_channel_example02.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_erasure_channel_example02 schifra_erasure_channel_example02.cpp
++ 
++ schifra_reed_solomon_gencodec_example: schifra_reed_solomon_gencodec_example.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_gencodec_example schifra_reed_solomon_gencodec_example.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_gencodec_example schifra_reed_solomon_gencodec_example.cpp
++ 
++ schifra_reed_solomon_product_code_example : schifra_reed_solomon_product_code_example.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_product_code_example schifra_reed_solomon_product_code_example.cpp
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_product_code_example schifra_reed_solomon_product_code_example.cpp
++ 
++ schifra_reed_solomon_threads_example01: schifra_reed_solomon_threads_example01.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_threads_example01 schifra_reed_solomon_threads_example01.cpp -pthread -lboost_thread
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_threads_example01 schifra_reed_solomon_threads_example01.cpp -pthread -lboost_thread
++ 
++ schifra_reed_solomon_threads_example02: schifra_reed_solomon_threads_example02.cpp $(HPP_SRC)
++-	$(COMPILER) $(OPTIONS) schifra_reed_solomon_threads_example02 schifra_reed_solomon_threads_example02.cpp -pthread -lboost_thread
+++	$(COMPILER) $(OPTIONS) -o schifra_reed_solomon_threads_example02 schifra_reed_solomon_threads_example02.cpp -pthread -lboost_thread
++ 
++ clean:
++ 	rm -f core.* *.o *.bak *stackdump *~
 -- 
-Thanks.
--- Max
+1.7.7.6
