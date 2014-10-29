@@ -1,30 +1,39 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 29 Oct 2014 14:56:40 +0100
-Subject: [Buildroot] [PATCH 1/1] fix minor typo in kexec description
-Message-ID: <1414591001-25080-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 29 Oct 2014 15:24:58 +0100
+Subject: [Buildroot] [RFC] Responsive Design Website
+In-Reply-To: <20141028172031.28dfdde4@free-electrons.com>
+References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+ <20141028172031.28dfdde4@free-electrons.com>
+Message-ID: <CAGduivw-xDhq5b9R5dxRbysHAoXJd8BN63-V+SRTcbTvAHXwxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/kexec/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Angelo, all
+> On Mon, 27 Oct 2014 22:56:10 +0100, Angelo Compagnucci wrote:
+>
+>> As a sign of gratitude for my recently committed mono patches, I
+>> thought having a responsive design website could be a nice addition to
+>> Buildroot.
+>>
+>> With this in mind, I updated to the latest bootstrap3 and jquery
+>> versions, fixed various unbootstrapness everywhere and made the
+>> website responsive!
+>>
+>> The website is very similar to the old one, the most difficult task
+>> was to clean it to let conditional css rules make their job.
+>>
+>> You can try it (also with your mobile phone) at:
+>>
+>> http://buildrootrd.idea-on-line.it/ (WARNING: dns is stil propagating)
+>>
+>> I'm open to suggestions and if you like the work I'll continue to fix
+>> the entire website and I'll send a patch in the next few days.
 
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index 0139c17..d92e6b9 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_KEXEC
- 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
- 		BR2_powerpc || BR2_sh4 || BR2_sh4a
- 	help
--	  Kexec is a user space utiltity for loading another kernel
-+	  Kexec is a user space utility for loading another kernel
- 	  and asking the currently running kernel to do something with it.
- 
- 	  https://www.kernel.org/pub/linux/utils/kernel/kexec/
--- 
-2.0.0
+Really nice ! Thanks a lot for this, as Thomas, said, if you are
+interested in working on this, there's a lot that can be done :).
+I have the same issue as Thomas for the alignment.
+Regarding the zoom, it's only from my users perspective but I would
+really like to be able to zoom on the web page, it's really usefull.
