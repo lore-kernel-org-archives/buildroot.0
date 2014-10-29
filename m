@@ -1,77 +1,44 @@
-From: =?UTF-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCT0LvRg9GF0L7Qsg==?= <alexandrgluhov@mail.ru>
-Date: Wed, 29 Oct 2014 15:46:04 +0300
-Subject: [Buildroot] =?utf-8?q?postgreSQL_in_buildroot?=
-Message-ID: <1414586764.228504684@f411.i.mail.ru>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 29 Oct 2014 15:02:52 +0200
+Subject: [Buildroot] [PATCH] nuttcp: update download link and homepage
+Message-ID: <01921516b3b2a7684f35da5926d7b53ad2f80428.1414587772.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/9b3/9b335d93fd1dba87a5c30923718e137f28b46867/
 
-Hello, I'm using Buildroot for building Linux on my one-boarded computer on the base of freescale i.mx28. And I select postgresql in make menuconfig window. Now I want to configure postgresql, I mean, I want to set database destination, name, username and password, port and create tables in database but I don't know how to do it. And I have not enough experience in it. I tried search config files and tried run initdb and createdb on i.mx28, but unsuccessfully. When I run the i.mx, I get the following messages:
-?
-Initializing postgresql data base...
-The files belonging to this database system will be owned by user "postgres".
-This user must also own the server process.
-?
-?
-The database cluster will be initialized with locale "C".
-The default database encoding has accordingly been set to "SQL_ASCII".
-The default text search configuration will be set to "english".
-?
-?
-Data page checksums are disabled.
-?
-?
-fixing permissions on existing directory /var/lib/pgsql ... ok
-creating subdirectories ... ok
-selecting default max_connections ... 100
-selecting default shared_buffers ... 64MB
-creating configuration files ... ok
-creating template1 database in /var/lib/pgsql/base/1 ... ok
-initializing pg_authid ... ok
-initializing dependencies ... ok
-creating system views ... ok
-loading system objects' descriptions ... ok
-creating collations ... sh: locale: not found
-ok
-No usable system locales were found.
-Use the option "--debug" to see details.
-creating conversions ... ok
-creating dictionaries ... ok
-setting privileges on built-in objects ... ok
-creating information schema ... ok
-loading PL/pgSQL server-side language ... ok
-vacuuming database template1 ... ok
-copying template1 to template0 ... ok
-copying template1 to postgres ... ok
-syncing data to disk ... ok
-?
-?
-WARNING: enabling "trust" authentication for local connections
-You can change this by editing pg_hba.conf or using the option -A, or
---auth-local and --auth-host, the next time you run initdb.
-?
-?
-Success. You can now start the database server using:
-?
-?
-??? /usr/bin/postgres -D /var/lib/pgsql
-or
-??? /usr/bin/pg_ctl -D /var/lib/pgsql -l logfile start
-?
-?
-done
-Starting postgresql: server starting
-OK
-?
-So, it seems, that postgreSQL works, and create database template with user postgres.
-I already read documentation, but I still have this problem.
-So, could you help me, or advise something, because I have not enough experience to do it by myself.?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/nuttcp/Config.in | 2 +-
+ package/nuttcp/nuttcp.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-With best regards,
-Alexandr Glukhov
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141029/c6b9c2d0/attachment.html>
+diff --git a/package/nuttcp/Config.in b/package/nuttcp/Config.in
+index eea88fd4e521..0b5f0811a5d2 100644
+--- a/package/nuttcp/Config.in
++++ b/package/nuttcp/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_NUTTCP
+ 	help
+ 	  nuttcp is a TCP/UDP network testing tool, much like iperf
+ 
+-	  http://www.lcp.nrl.navy.mil/nuttcp/nuttcp.html
++	  http://nuttcp.net
+diff --git a/package/nuttcp/nuttcp.mk b/package/nuttcp/nuttcp.mk
+index 3953baa13aa1..455875a8238b 100644
+--- a/package/nuttcp/nuttcp.mk
++++ b/package/nuttcp/nuttcp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NUTTCP_VERSION = 6.1.2
+-NUTTCP_SITE = http://www.lcp.nrl.navy.mil/nuttcp
++NUTTCP_SITE = http://nuttcp.net/nuttcp
+ NUTTCP_SOURCE = nuttcp-$(NUTTCP_VERSION).tar.bz2
+ NUTTCP_LICENSE = GPLv2
+ NUTTCP_LICENSE_FILES = LICENSE
+-- 
+2.1.1
