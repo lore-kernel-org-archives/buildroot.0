@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 21:38:22 +0100
-Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.8.7.1
-Message-ID: <20141029203827.7C2B4B1F1B@busybox.osuosl.org>
+Date: Wed, 29 Oct 2014 21:38:54 +0100
+Subject: [Buildroot] [git commit] fix minor typo in kexec description
+Message-ID: <20141029203859.0F2FAB1F5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf3bc9c4be1bae44a7a682973c2a5b22a7c56edd
+commit: http://git.buildroot.net/buildroot/commit/?id=2cf29dfb286fd7d5c36bc2a11655b60ea3f34be2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kexec/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index e2a0f91..ad1b6c5 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	8b773b006db46f3ffcbabe065e927823d13bf5c0	sqlite-autoconf-3080700.tar.gz
-+sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 19bde83..ea8407c 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 0139c17..d92e6b9 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KEXEC
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+ 		BR2_powerpc || BR2_sh4 || BR2_sh4a
+ 	help
+-	  Kexec is a user space utiltity for loading another kernel
++	  Kexec is a user space utility for loading another kernel
+ 	  and asking the currently running kernel to do something with it.
  
--SQLITE_VERSION = 3080700
-+SQLITE_VERSION = 3080701
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+ 	  https://www.kernel.org/pub/linux/utils/kernel/kexec/
