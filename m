@@ -1,128 +1,112 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 29 Oct 2014 14:20:21 +0200
-Subject: [Buildroot] [PATCH] tcpdump: use libpcap shared library
-Message-ID: <67c0a327947d1f710687a04d56a3a047984f3988.1414585221.git.baruch@tkos.co.il>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 29 Oct 2014 15:25:17 +0300
+Subject: [Buildroot] [PATCH] arch/arc: add support of ARC HS38 core
+Message-ID: <1414585517-5957-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the tcpdump configure script finds libpcap.a in
-output/build/libpcap-[version]. This check is hard coded in aclocal.m4. Add a
-patch to optionally ignore local libpcap so that the system shared library
-version is found instead. This reduces the tcpdump binary size in a few 100KB.
+Synopsys has recently announced its new ARC HS38 core that is capable of running
+Linux - http://www.synopsys.com/dw/ipdir.php?ds=arc-hs38-processor
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ARC HS38 is based on ARCv2 ISA and requires special settings of gcc and libc.
+Also in case of HS38 atomic extensions (LLOCK/SCOND instructions) are built-in
+by default, so enabling atomic extensions in Buildroot as well.
+
+This commit adds support of the core in buildroot.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <anton.kolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...libpcap-when-configured-with-with-system-.patch | 78 ++++++++++++++++++++++
- package/tcpdump/tcpdump.mk                         |  7 +-
- 2 files changed, 83 insertions(+), 2 deletions(-)
- create mode 100644 package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
+ arch/Config.in.arc       | 20 +++++++++++++++++++-
+ package/uclibc/Config.in |  6 ++++++
+ package/uclibc/uclibc.mk | 12 ++++++++++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch b/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
-new file mode 100644
-index 000000000000..7f8b7151c9d0
---- /dev/null
-+++ b/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
-@@ -0,0 +1,78 @@
-+From 4289e62c7966e5abeb95307717cef30a51fcdccf Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 29 Oct 2014 13:21:05 +0200
-+Subject: [PATCH] Use system libpcap when configured with --with-system-pcap
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index fcb5d7d..1a862d7 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,5 +1,22 @@
++# Choise of CPU
++choice
++	prompt "Target CPU"
++	depends on BR2_arc
++	default BR2_arc700
++	help
++	    Specific CPU to use
 +
-+Don't force the local libpcap build when the system provides one. When
-+--with-system-pcap is given to configure, don't try to locate a local libpcap
-+build. This help build systems like Buildroot that store build trees in the
-+same directory, but still prefer dynamically linking against system wide
-+libpcap.so to save space.
++config BR2_arc700
++	bool "ARC 700"
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Status: sent upstream (https://github.com/the-tcpdump-group/tcpdump/pull/408)
++config BR2_archs
++	bool "ARC HS"
 +
-+ aclocal.m4 | 46 +++++++++++++++++++++++++---------------------
-+ 1 file changed, 25 insertions(+), 21 deletions(-)
++endchoice
 +
-+diff --git a/aclocal.m4 b/aclocal.m4
-+index 80614cf21050..cd0a94414bbf 100644
-+--- a/aclocal.m4
-++++ b/aclocal.m4
-+@@ -438,27 +438,31 @@ AC_DEFUN(AC_LBL_LIBPCAP,
-+ 		    LIBS="$LIBS $pfopen"
-+ 	    fi
-+     fi
-+-    AC_MSG_CHECKING(for local pcap library)
-+-    libpcap=FAIL
-+-    lastdir=FAIL
-+-    places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
-+-	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
-+-    places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
-+-	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
-+-    for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
-+-	    basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
-+-	        sed -e 's/-PRE-GIT$//' `
-+-	    if test $lastdir = $basedir ; then
-+-		    dnl skip alphas when an actual release is present
-+-		    continue;
-+-	    fi
-+-	    lastdir=$dir
-+-	    if test -r $dir/libpcap.a ; then
-+-		    libpcap=$dir/libpcap.a
-+-		    d=$dir
-+-		    dnl continue and select the last one that exists
-+-	    fi
-+-    done
-++	libpcap=FAIL
-++	AC_MSG_CHECKING(for local pcap library)
-++	AC_ARG_WITH([system-libpcap],
-++		[AS_HELP_STRING([--with-system-libpcap], [don't use local pcap library])])
-++	if test "x$with_system_libpcap" != xyes ; then
-++		lastdir=FAIL
-++    	places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
-++		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
-++    	places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
-++		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
-++    	for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
-++	    	basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
-++	        	sed -e 's/-PRE-GIT$//' `
-++	    	if test $lastdir = $basedir ; then
-++		    	dnl skip alphas when an actual release is present
-++		    	continue;
-++	    	fi
-++	    	lastdir=$dir
-++	    	if test -r $dir/libpcap.a ; then
-++		    	libpcap=$dir/libpcap.a
-++		    	d=$dir
-++		    	dnl continue and select the last one that exists
-++	    	fi
-++		done
-++	fi
-+     if test $libpcap = FAIL ; then
-+ 	    AC_MSG_RESULT(not found)
-+ 
-+-- 
-+2.1.1
-+
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 550400d47d04..e62dfaf44a89 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -8,10 +8,13 @@ TCPDUMP_VERSION = 4.6.2
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
--TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
--TCPDUMP_CONF_OPTS = --without-crypto \
-+TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no \
-+		PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
-+TCPDUMP_CONF_OPTS = --without-crypto --with-system-libpcap \
- 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = zlib libpcap
-+# Patching aclocal.m4
-+TCPDUMP_AUTORECONF = YES
+ # Choise of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
++	default y if BR2_archs
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
  
- # make install installs an unneeded extra copy of the tcpdump binary
- define TCPDUMP_REMOVE_DUPLICATED_BINARY
+ config BR2_ARCH_HAS_ATOMICS
+@@ -18,4 +35,5 @@ config BR2_ENDIAN
+ 	default "BIG"	 if BR2_arceb
+ 
+ config BR2_GCC_TARGET_CPU
+-	default "arc700"
++	default "arc700" if BR2_arc700
++	default "archs"	 if BR2_archs
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index d319ae7..53ca173 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -194,6 +194,12 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default i386	   if BR2_i386
+ 	default x86_64	   if BR2_x86_64
+ 
++config BR2_UCLIBC_ARC_TYPE
++	string
++	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
++	default ARC_CPU_700	if BR2_arc700
++	default ARC_CPU_HS	if BR2_archs
++
+ config BR2_UCLIBC_ARM_BX
+ 	bool
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b2ecce3..8f990c7 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -57,6 +57,17 @@ UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
+ endif
+ 
+ #
++# ARC definitions
++#
++
++ifeq ($(UCLIBC_TARGET_ARCH),arc)
++UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
++define UCLIBC_ARC_TYPE_CONFIG
++	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
++endef
++endif # arc
++
++#
+ # ARM definitions
+ #
+ 
+@@ -410,6 +421,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
++	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+ 	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
 -- 
-2.1.1
+1.9.3
