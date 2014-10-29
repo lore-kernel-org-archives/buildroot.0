@@ -1,29 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Oct 2014 07:00:17 +0100
-Subject: [Buildroot] [PATCH 0/15 v6] Introduce libudev (branch
-	yem/libudev2)
-References: <cover.1414442699.git.yann.morin.1998@free.fr>
- <XnsA3D3E6DF040E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <545008BC.90706@mind.be>
-Message-ID: <XnsA3D547413CDD6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Wed, 29 Oct 2014 06:58:20 +0100
+Subject: [Buildroot] [PATCH v3 7/7] package/tvheadend: Add transcoding
+	support by ffmpeg
+References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
+ <1413311309-30811-7-git-send-email-bernd.kuhls@t-online.de>
+ <20141028221104.35a56dd4@free-electrons.com>
+Message-ID: <XnsA3D546EC787EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote in
-news:545008BC.90706 at mind.be: 
+[posted and mailed]
 
->  With "worked", you do mean that it works at runtime, right? Because the
->  problem 
-> with this change is to be sure that the packages still function
-> correctly when the udev daemon is not running.
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20141028221104.35a56dd4 at free-electrons.com:
+
+>> +      --disable-libffmpeg_static          \
+> 
+> Maybe I haven't looked properly, but I don't see this option supported
+> by tvheadend configure script. Can you check?
 
 Hi,
 
-yes. I am using xbmc/kodi with mesa3d, libcec and X.org on a system
-without the udev daemon but with libudev for several months now without
-problems. 
+you will find the option here:
+https://github.com/tvheadend/tvheadend/blob/master/configure#L36
 
 Regards, Bernd
