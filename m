@@ -1,46 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Oct 2014 19:24:34 -0300
-Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
- ip tables with C++
-In-Reply-To: <20141029223413.70abc05b@free-electrons.com>
-References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20141029223413.70abc05b@free-electrons.com>
-Message-ID: <54516922.1070306@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Oct 2014 23:24:26 +0100
+Subject: [Buildroot] [PATCH 25/51] python-rtslib-fb: bump version
+In-Reply-To: <1414349157-22749-25-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-25-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141029232426.654d0069@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/29/2014 06:34 PM, Thomas Petazzoni wrote:
+Dear Maxime Hadjinlian,
 
-> Dear Matt Weber,
-> 
-> On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
->>
->> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->> ---
->>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
->>  1 file changed, 43 insertions(+)
->>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
-> 
-> This patch apparently dates back from 2012. Why has it never been
-> merged upstream? Also, I don't really understand the interaction
-> between the kernel headers, and this include/linux/ header in iptables.
-> 
-> Has the problem been reported upstream to iptables?
-> 
-> Gustavo, an opinion?
+On Sun, 26 Oct 2014 19:45:31 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/python-rtslib-fb/python-rtslib-fb.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-It was posted to lkml & linux-netdev at first, Davem told to post to
-netfilter-devel. That was done:
+Applied.
 
-http://marc.info/?t=134904906300003&r=1&w=1
-
-The logic seems right, C++ is more strict and triggers the issue.
-It's an issue when dealing with netfilter rules from custom C++ code.
-
-But it seems to have been rejected without much explanation:
-http://patchwork.ozlabs.org/patch/188216/
-
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
