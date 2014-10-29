@@ -1,13 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 29 Oct 2014 10:05:04 +0000
-Subject: [Buildroot] [PATCH] lame: Disable for Aarch64 and MIPS when
- building with debug symbols
-In-Reply-To: <545012E2.2000604@mind.be>
-References: <1414515902-3153-1-git-send-email-Vincent.Riera@imgtec.com>
- <544FCF49.5010704@zacarias.com.ar> <544FCFAE.3050806@imgtec.com>
- <544FD003.1080800@zacarias.com.ar> <544FD129.1070402@imgtec.com>
- <545012E2.2000604@mind.be>
-Message-ID: <5450BBD0.4030207@imgtec.com>
+Date: Wed, 29 Oct 2014 10:37:07 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-27
+In-Reply-To: <20141028073015.67097100E86@stock.ovh.net>
+References: <20141028073015.67097100E86@stock.ovh.net>
+Message-ID: <5450C353.9070701@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,45 +13,15 @@ To: buildroot@busybox.net
 
 Dear all,
 
-On 10/28/2014 10:04 PM, Arnout Vandecappelle wrote:
-> On 28/10/14 18:23, Vicente Olivert Riera wrote:
->> Dear all,
->>
->> On 10/28/2014 05:18 PM, Gustavo Zacarias wrote:
->>> On 10/28/2014 02:17 PM, Vicente Olivert Riera wrote:
->>>
->>>> You are right, the dependences should be propagated to those packages. I
->>>> will respin a new version.
->>>>
->>>> My apologies for that.
->>>
->>> It's more of an open question, i don't think we want to go dependency
->>> hell on this.
->>> We could probably just disable debugging for the particular package on
->>> the particular conditions i think.
->>> Regards.
->>
->> Uhm..., yeah, to be honest that was my first thought when I found what was the
->> problem.
->>
->> I'm fine with that. Let's wait until some other developers say their opinion as
->> well.
->
->   I agree that that is the way to go: disable debug on the architectures that
-> have a problem with it.
->
->
->   Regards,
->   Arnout
->
->>
->> Best regards,
+On 10/28/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-10-27
+> ===============================
+>      mips64el |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/b4d06ffc9591aa67bb1ada7ba2a664450cabc77e/
 
-Thanks for your opinion Arnout.
+I don't know why that build failure is happening, and I cannot reproduce 
+it even using the same exact ".config" file.
 
-Patch v2 sent: http://patchwork.ozlabs.org/patch/404494/
-
-Best regards,
+Regards,
 -- 
 Vicente Olivert Riera
 Graduate Software Engineer, MIPS Processor IP
