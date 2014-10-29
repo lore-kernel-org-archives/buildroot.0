@@ -1,67 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 22:18:47 +0100
-Subject: [Buildroot] [PATCH] arch/arc: add support of ARC HS38 core
-In-Reply-To: <1414585517-5957-1-git-send-email-abrodkin@synopsys.com>
-References: <1414585517-5957-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20141029221847.33373037@free-electrons.com>
+Date: Wed, 29 Oct 2014 22:24:18 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libffi: make thread support optional
+In-Reply-To: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
+References: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20141029222418.17f91967@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear J?r?me Pouiller,
 
-On Wed, 29 Oct 2014 15:25:17 +0300, Alexey Brodkin wrote:
+On Mon, 15 Sep 2014 14:26:41 +0200, J?r?me Pouiller wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/7ee57d01917ea72d1811469e482513dda2ceb1ea/build-end.log
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-> index fcb5d7d..1a862d7 100644
-> --- a/arch/Config.in.arc
-> +++ b/arch/Config.in.arc
-> @@ -1,5 +1,22 @@
-> +# Choise of CPU
+To be honest, I am wondering if we really should bother merging a patch
+to make libffi usable on configurations that have thread support
+disabled. Nowadays, not having thread support is also impossible due to
+the large number of libraries/applications that rely on threads. libffi
+is generally used in "big" things like Python or glib, so not having
+thread support in systems using such big things is a bit unlikely.
 
-I don't think this comment is very useful, so you can get rid of it.
-And anyway, s/Choise/Choice/.
+In addition, I'm not sure the patch could be upstreamed as is, which
+means we would have to carry it in Buildroot forever.
 
-> +choice
-> +	prompt "Target CPU"
-> +	depends on BR2_arc
-> +	default BR2_arc700
-> +	help
-> +	    Specific CPU to use
-> +
-> +config BR2_arc700
-> +	bool "ARC 700"
-> +
-> +config BR2_archs
-> +	bool "ARC HS"
-
-The commit log says that the core is called HS38, but now it's just
-"HS". Can you clarify?
-
->  # Choise of atomic instructions presence
->  config BR2_ARC_ATOMIC_EXT
-> +	default y if BR2_archs
-
-Why? Are atomic instructions *always* available on HS38, or are they
-also optional like on ARC700 ?
-
->  config BR2_GCC_TARGET_CPU
-> -	default "arc700"
-> +	default "arc700" if BR2_arc700
-> +	default "archs"	 if BR2_archs
-
-So from gcc's point of view, the processor is called archs, but from a
-marketing point of view it's HS38. What happens if tomorrow Synopsys
-creates a different CPU core called HS100 ?
-
-Is this processor already supported by the current binutils/gcc/uClibc
-versions used for the ARC architecture in Buildroot?
-
-The rest of the patch looks good to me.
-
-Thanks,
+Peter, Arnout, Gustavo, what is your point of view on this?
 
 Thomas
 -- 
