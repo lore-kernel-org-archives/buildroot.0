@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 22:24:18 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libffi: make thread support optional
-In-Reply-To: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
-References: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141029222418.17f91967@free-electrons.com>
+Date: Wed, 29 Oct 2014 22:34:13 +0100
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
+ ip tables with C++
+In-Reply-To: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20141029223413.70abc05b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Matt Weber,
 
-On Mon, 15 Sep 2014 14:26:41 +0200, J?r?me Pouiller wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/7ee57d01917ea72d1811469e482513dda2ceb1ea/build-end.log
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
 
-To be honest, I am wondering if we really should bother merging a patch
-to make libffi usable on configurations that have thread support
-disabled. Nowadays, not having thread support is also impossible due to
-the large number of libraries/applications that rely on threads. libffi
-is generally used in "big" things like Python or glib, so not having
-thread support in systems using such big things is a bit unlikely.
+This patch apparently dates back from 2012. Why has it never been
+merged upstream? Also, I don't really understand the interaction
+between the kernel headers, and this include/linux/ header in iptables.
 
-In addition, I'm not sure the patch could be upstreamed as is, which
-means we would have to carry it in Buildroot forever.
+Has the problem been reported upstream to iptables?
 
-Peter, Arnout, Gustavo, what is your point of view on this?
+Gustavo, an opinion?
 
 Thomas
 -- 
