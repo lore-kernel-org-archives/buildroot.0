@@ -1,34 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 23:08:38 +0100
-Subject: [Buildroot] [PATCH] dhcp: add systemd service file
-In-Reply-To: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1410815083-11776-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20141029230838.6e0185bf@free-electrons.com>
+Date: Wed, 29 Oct 2014 23:23:44 +0100
+Subject: [Buildroot] [PATCH 22/51] python-configshell-fb: Bump version
+In-Reply-To: <1414349157-22749-22-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-22-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141029232344.277f5633@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Dear Maxime Hadjinlian,
 
-On Mon, 15 Sep 2014 23:04:43 +0200, Eric Le Bihan wrote:
-> Add a systemd service file to start dhcpd.
-> 
-> The network interfaces to listen on can be set via the variable
-> INTERFACES in /etc/default/dhcpd.conf. Example:
-> 
->   INTERFACES="eth0 eth1"
-> 
-> Also install a tmpfiles.d file to create /var/lib/dhcp/dhcpd.leases
-> (needed at dhcpd start-up).
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+On Sun, 26 Oct 2014 19:45:28 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/dhcp/dhcp.mk       | 15 +++++++++++++++
->  package/dhcp/dhcpd.service | 13 +++++++++++++
->  2 files changed, 28 insertions(+)
->  create mode 100644 package/dhcp/dhcpd.service
+>  package/python-configshell-fb/python-configshell-fb.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
