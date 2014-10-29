@@ -1,30 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Oct 2014 18:54:00 -0300
-Subject: [Buildroot] [PATCH v2 1/2] libffi: make thread support optional
-In-Reply-To: <20141029222418.17f91967@free-electrons.com>
-References: <1410784002-8659-1-git-send-email-jezz@sysmic.org>
- <20141029222418.17f91967@free-electrons.com>
-Message-ID: <545161F8.5040207@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Oct 2014 22:58:53 +0100
+Subject: [Buildroot] [PATCH] ser2net: Add a hash file
+In-Reply-To: <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1412692250-13513-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1412692250-13513-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141029225853.0b0dafcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/29/2014 06:24 PM, Thomas Petazzoni wrote:
+Dear Vicente Olivert Riera,
 
-> To be honest, I am wondering if we really should bother merging a patch
-> to make libffi usable on configurations that have thread support
-> disabled. Nowadays, not having thread support is also impossible due to
-> the large number of libraries/applications that rely on threads. libffi
-> is generally used in "big" things like Python or glib, so not having
-> thread support in systems using such big things is a bit unlikely.
+On Tue, 7 Oct 2014 15:30:50 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/ser2net/ser2net.hash |    6 ++++++
+>  1 files changed, 6 insertions(+), 0 deletions(-)
+>  create mode 100644 package/ser2net/ser2net.hash
 > 
-> In addition, I'm not sure the patch could be upstreamed as is, which
-> means we would have to carry it in Buildroot forever.
-> 
-> Peter, Arnout, Gustavo, what is your point of view on this?
+> diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+> new file mode 100644
+> index 0000000..d24e3a8
+> --- /dev/null
+> +++ b/package/ser2net/ser2net.hash
+> @@ -0,0 +1,6 @@
+> +md5 cd937041144de83d41d811521e72158c ser2net-2.10.0.tar.gz
+> +sha1 80e826ef1630cbf282d8a656754967d0f842ecba ser2net-2.10.0.tar.gz
+> +sha224 1d851e90fde37db55109a7399f3c7166628ca23d53e87f2c65b5b01a ser2net-2.10.0.tar.gz
+> +sha256 98f6193225338e25f35302fef5e1f16688693ed43e7b3c3e9e09187eb54547ac ser2net-2.10.0.tar.gz
+> +sha384 b4ea0014e5ffd303f7a2a6b0cd31ec2b24640fea535cd87631aa685b7b33464261dee0e4baba8c418209767c83961dca ser2net-2.10.0.tar.gz
+> +sha512 dd3e37619b10d8bf20d738e90c253bc2d109e0a57ee9f3a8b2a85a69399afa5a8459a4602b2856f0b655427023a36c78330851bf7f8d8da0f28d1fe22c1d5e10 ser2net-2.10.0.tar.gz
 
-+1, ditching threads (uClibc) is for really small targets which these
-days would mostly mean noMMU.
-Regards.
+Following the discussion, can you resend a patch that 1/ has a more
+reasonable number of hashes, and 2/ declares how the hash was found
+(locally computed, indicated on the upstream web site), etc.
+
+In the mean time, I'll mark your patch as 'Changes Requested' in
+patchwork.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
