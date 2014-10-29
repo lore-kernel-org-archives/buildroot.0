@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 23:26:11 +0100
-Subject: [Buildroot] [PATCH] pppd: set resolv.conf directory appropiately
-In-Reply-To: <1413840752-16362-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413840752-16362-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141029232611.5c130a96@free-electrons.com>
+Date: Wed, 29 Oct 2014 23:28:30 +0100
+Subject: [Buildroot] [PATCH 1/1] openocd bump to 0.8.0
+In-Reply-To: <5436A616.1090407@integrazionetotale.it>
+References: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>
+ <20141008231040.57406af4@free-electrons.com>
+ <5435C245.1090100@integrazionetotale.it>
+ <20141009095735.529fd5ca@free-electrons.com>
+ <543655B0.8030304@integrazionetotale.it>
+ <20141009132830.77fc2c47@free-electrons.com>
+ <5436A616.1090407@integrazionetotale.it>
+Message-ID: <20141029232830.69136c03@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Claudio Laurita,
 
-On Mon, 20 Oct 2014 18:32:32 -0300, Gustavo Zacarias wrote:
-> /etc/ppp/resolv.conf might not be writable and it's not useful, switch
-> to standard /etc/resolv.conf
-> If users don't want to update dns lookup entries they shouldn't use the
-> "userpeerdns" option.
+On Thu, 09 Oct 2014 17:13:26 +0200, Claudio Laurita wrote:
+
+> I was aware of the external option, but the actual BR package script for 
+> jimtcl suffers exactly of the same problem. No patches applied there and 
+> no autotools-package called. A custom configure command and 
+> generic-package management. But no way to build a static library if 
+> --enable-shared is globally adopted.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/pppd/pppd.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Anyway, I collected enough information to start working on release 2. 
+> Just need some spare hours, now.
 
-Thanks, applied, after slightly rewording the comment in the code.
+Do you think you will have some time to work on an updated patch to
+bump OpenOCD to 0.8.0 ?
+
+Thanks!
 
 Thomas
 -- 
