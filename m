@@ -1,40 +1,19 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 29 Oct 2014 10:13:00 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: improve detection of make "-s" flag
-Message-ID: <1414573980-20973-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Wed, 29 Oct 2014 10:17:31 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: improve detection of make "-s"
+	flag
+In-Reply-To: <1414573980-20973-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1414573980-20973-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC8i4Acno4y6+-uNDhkjSaCVtmTwsdUB9GbRULOefrCrWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because it's just checked the presence of the "s" character even a
-  make --warn-undefined-variables
-is detected as a silent build so fix this by filtering out long options.
+I've sent a new revision:
+http://patchwork.ozlabs.org/patch/404484/
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
-
-Notes:
-    v2:
-     - remove spurious space at the beginning of the QUIET variable (Arnout)
-
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 907a0fc..19997c7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- TARGETS :=
- 
- # silent mode requested?
--QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-+QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
- 
- # Strip off the annoying quoting
- ARCH := $(call qstrip,$(BR2_ARCH))
+BR
 -- 
-2.1.1
+Fabio Porcedda
