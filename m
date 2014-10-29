@@ -1,55 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 09:41:21 +0100
-Subject: [Buildroot] [PATCH] Revert "package/libcap: Fix build error
- with kernel headers < 3.6"
-In-Reply-To: <20141029093544.7fb84bf9@PAL-U515208D001>
-References: <1414445712-26011-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141029093544.7fb84bf9@PAL-U515208D001>
-Message-ID: <20141029094121.37a752d6@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 29 Oct 2014 10:13:00 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: improve detection of make "-s" flag
+Message-ID: <1414573980-20973-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+Because it's just checked the presence of the "s" character even a
+  make --warn-undefined-variables
+is detected as a silent build so fix this by filtering out long options.
 
-On Wed, 29 Oct 2014 09:35:44 +0100, Christophe Vu-Brugier wrote:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
 
-> Tested-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> 
-> I built libcap, cdrkit and lxc with an external toolchain with 3.0
-> kernel headers:
-> 
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_USES_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0=y
-> BR2_PACKAGE_CDRKIT=y
-> BR2_PACKAGE_LIBCAP=y
-> BR2_PACKAGE_LXC=y
+Notes:
+    v2:
+     - remove spurious space at the beginning of the QUIET variable (Arnout)
 
-Actually, it's enabling BR2_PACKAGE_ATTR=y that causes libcap to build
-the problematic code. But even with that, a toolchain that uses 3.1
-kernel headers builds fine a configuration that has BR2_PACKAGE_ATTR=y
-+ BR2_PACKAGE_LIBCAP=y.
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That being said, we probably need a dependency on kernel headers >=
-3.0, because we don't distinguish the version of the kernel headers for
-2.6.x kernels.
-
-In fact, I just realized that I have mistakenly pushed the revert. I
-had it locally in my master branch to do some testing, and I pushed it
-by mistake:
-http://git.buildroot.net/buildroot/commit/?id=d5146f4b53d926c13a47215ac514e43b2c66b9ac.
-Unfortunately, I pushed a quick and dirty version that doesn't have the
-huge explanation I had written for the patch I submitted to the mailing
-list :-/
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 907a0fc..19997c7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ TARGETS :=
+ 
+ # silent mode requested?
+-QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
++QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
+ 
+ # Strip off the annoying quoting
+ ARCH := $(call qstrip,$(BR2_ARCH))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
