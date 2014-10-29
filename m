@@ -1,42 +1,96 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Oct 2014 13:01:34 -0300
-Subject: [Buildroot] [PATCH 1/2] lvm2: bump to version 2.02.111
-Message-ID: <1414598495-31088-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 29 Oct 2014 13:01:35 -0300
+Subject: [Buildroot] [PATCH 2/2] cryptsetup: bump to version 1.6.6
+In-Reply-To: <1414598495-31088-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1414598495-31088-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1414598495-31088-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And add hash file.
+Drop upstream patch, add hash file, switch to kernel.org mirror.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lvm2/lvm2.hash | 2 ++
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/lvm2/lvm2.hash
+ ...ryptsetup-0002-mkdir.patch => 0001-mkdir.patch} |  0
+ ...p-0001-link-against-lrt-for-clock_gettime.patch | 33 ----------------------
+ package/cryptsetup/cryptsetup.hash                 |  2 ++
+ package/cryptsetup/cryptsetup.mk                   |  7 +++--
+ 4 files changed, 6 insertions(+), 36 deletions(-)
+ rename package/cryptsetup/{cryptsetup-0002-mkdir.patch => 0001-mkdir.patch} (100%)
+ delete mode 100644 package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
+ create mode 100644 package/cryptsetup/cryptsetup.hash
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+diff --git a/package/cryptsetup/cryptsetup-0002-mkdir.patch b/package/cryptsetup/0001-mkdir.patch
+similarity index 100%
+rename from package/cryptsetup/cryptsetup-0002-mkdir.patch
+rename to package/cryptsetup/0001-mkdir.patch
+diff --git a/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch b/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
+deleted file mode 100644
+index ae9a522..0000000
+--- a/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 715186bee512f25715e6d1c58ce03cc32e0efae3 Mon Sep 17 00:00:00 2001
+-From: Axel Lin <axel.lin@ingics.com>
+-Date: Mon, 30 Dec 2013 18:10:03 +0800
+-Subject: [PATCH] Link against -lrt for clock_gettime
+-
+-Fix undefined reference to `clock_gettime' error.
+-This is required since commit f3e398afc549 "Rewrite cipher benchmark loop.".
+-
+-Below is the build error report:
+-http://autobuild.buildroot.net/results/9ca/9cad1cf49ee6b5c58d8260ee33beef2e6c1ada4d/build-end.log
+-
+-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+----
+- configure.ac | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1c456be..aa4c10f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -49,7 +49,8 @@ AC_CHECK_LIB(uuid, uuid_clear, ,[AC_MSG_ERROR([You need the uuid library.])])
+- AC_SUBST(UUID_LIBS, $LIBS)
+- LIBS=$saved_LIBS
+- 
+--AC_CHECK_FUNCS([posix_memalign])
+-+AC_SEARCH_LIBS([clock_gettime],[rt posix4])
+-+AC_CHECK_FUNCS([posix_memalign clock_gettime])
+- 
+- if test "x$enable_largefile" = "xno" ; then
+-   AC_MSG_ERROR([Building with --disable-largefile is not supported, it can cause data corruption.])
+--- 
+-1.8.1.2
+-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
 new file mode 100644
-index 0000000..10f2905
+index 0000000..f288082
 --- /dev/null
-+++ b/package/lvm2/lvm2.hash
++++ b/package/cryptsetup/cryptsetup.hash
 @@ -0,0 +1,2 @@
-+# From ftp://sources.redhat.com/pub/lvm2/md5.sum
-+md5	02487ab2a9e02d1ee76fe217183df28a	LVM2.2.02.111.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 4b06bd4..76c2f82 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
++sha256	2d2ce28e4e1137dd599d87884b62ef6dbf14fd7848b2a2bf7d61cf125fbd8e6f	cryptsetup-1.6.6.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index e365d43..f43bbca 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.106
-+LVM2_VERSION = 2.02.111
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-CRYPTSETUP_VERSION = 1.6.3
+-CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
+-CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
++CRYPTSETUP_VERSION_MAJOR = 1.6
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
++CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
++CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
 2.0.4
