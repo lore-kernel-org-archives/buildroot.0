@@ -1,32 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 23:22:27 +0100
-Subject: [Buildroot] [git commit] python-pyusb: bump version
-Message-ID: <20141029222440.502E59D319@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 29 Oct 2014 19:24:34 -0300
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
+ ip tables with C++
+In-Reply-To: <20141029223413.70abc05b@free-electrons.com>
+References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20141029223413.70abc05b@free-electrons.com>
+Message-ID: <54516922.1070306@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8deb76797f61b78a8afe8a6f46801ad81b54f3d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/29/2014 06:34 PM, Thomas Petazzoni wrote:
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-pyusb/python-pyusb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Dear Matt Weber,
+> 
+> On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
+>>
+>> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> ---
+>>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
+>>  1 file changed, 43 insertions(+)
+>>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+> 
+> This patch apparently dates back from 2012. Why has it never been
+> merged upstream? Also, I don't really understand the interaction
+> between the kernel headers, and this include/linux/ header in iptables.
+> 
+> Has the problem been reported upstream to iptables?
+> 
+> Gustavo, an opinion?
 
-diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
-index dee6561..ae69026 100644
---- a/package/python-pyusb/python-pyusb.mk
-+++ b/package/python-pyusb/python-pyusb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
-+PYTHON_PYUSB_VERSION = 1.0.0b2
- PYTHON_PYUSB_SITE = $(call github,walac,pyusb,$(PYTHON_PYUSB_VERSION))
- PYTHON_PYUSB_LICENSE = BSD-3c
- PYTHON_PYUSB_LICENSE_FILES = LICENSE
+It was posted to lkml & linux-netdev at first, Davem told to post to
+netfilter-devel. That was done:
+
+http://marc.info/?t=134904906300003&r=1&w=1
+
+The logic seems right, C++ is more strict and triggers the issue.
+It's an issue when dealing with netfilter rules from custom C++ code.
+
+But it seems to have been rejected without much explanation:
+http://patchwork.ozlabs.org/patch/188216/
+
+Regards.
