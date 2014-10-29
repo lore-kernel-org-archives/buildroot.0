@@ -1,96 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Oct 2014 13:01:35 -0300
-Subject: [Buildroot] [PATCH 2/2] cryptsetup: bump to version 1.6.6
-In-Reply-To: <1414598495-31088-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414598495-31088-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1414598495-31088-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 29 Oct 2014 13:02:21 -0300
+Subject: [Buildroot] [PATCH] openvpn: bump to version 2.3.5
+Message-ID: <1414598541-31129-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch, add hash file, switch to kernel.org mirror.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...ryptsetup-0002-mkdir.patch => 0001-mkdir.patch} |  0
- ...p-0001-link-against-lrt-for-clock_gettime.patch | 33 ----------------------
- package/cryptsetup/cryptsetup.hash                 |  2 ++
- package/cryptsetup/cryptsetup.mk                   |  7 +++--
- 4 files changed, 6 insertions(+), 36 deletions(-)
- rename package/cryptsetup/{cryptsetup-0002-mkdir.patch => 0001-mkdir.patch} (100%)
- delete mode 100644 package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
- create mode 100644 package/cryptsetup/cryptsetup.hash
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup-0002-mkdir.patch b/package/cryptsetup/0001-mkdir.patch
-similarity index 100%
-rename from package/cryptsetup/cryptsetup-0002-mkdir.patch
-rename to package/cryptsetup/0001-mkdir.patch
-diff --git a/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch b/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
-deleted file mode 100644
-index ae9a522..0000000
---- a/package/cryptsetup/cryptsetup-0001-link-against-lrt-for-clock_gettime.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 715186bee512f25715e6d1c58ce03cc32e0efae3 Mon Sep 17 00:00:00 2001
--From: Axel Lin <axel.lin@ingics.com>
--Date: Mon, 30 Dec 2013 18:10:03 +0800
--Subject: [PATCH] Link against -lrt for clock_gettime
--
--Fix undefined reference to `clock_gettime' error.
--This is required since commit f3e398afc549 "Rewrite cipher benchmark loop.".
--
--Below is the build error report:
--http://autobuild.buildroot.net/results/9ca/9cad1cf49ee6b5c58d8260ee33beef2e6c1ada4d/build-end.log
--
--Signed-off-by: Axel Lin <axel.lin@ingics.com>
-----
-- configure.ac | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 1c456be..aa4c10f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -49,7 +49,8 @@ AC_CHECK_LIB(uuid, uuid_clear, ,[AC_MSG_ERROR([You need the uuid library.])])
-- AC_SUBST(UUID_LIBS, $LIBS)
-- LIBS=$saved_LIBS
-- 
---AC_CHECK_FUNCS([posix_memalign])
--+AC_SEARCH_LIBS([clock_gettime],[rt posix4])
--+AC_CHECK_FUNCS([posix_memalign clock_gettime])
-- 
-- if test "x$enable_largefile" = "xno" ; then
--   AC_MSG_ERROR([Building with --disable-largefile is not supported, it can cause data corruption.])
---- 
--1.8.1.2
--
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-new file mode 100644
-index 0000000..f288082
---- /dev/null
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
-+sha256	2d2ce28e4e1137dd599d87884b62ef6dbf14fd7848b2a2bf7d61cf125fbd8e6f	cryptsetup-1.6.6.tar.xz
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index e365d43..f43bbca 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index d13258d..4e1911a 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1ccd72c99e5c5627a7f7eb826489027dad35ce260b925b49dfc1f90bd24719ee	openvpn-2.3.4.tar.xz
++sha256	7ac286f09ed4981358ce01907993dc29f69b34d3652de2b70ca9b8b2a056b684	openvpn-2.3.5.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 2ab29b8..e0dba35 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CRYPTSETUP_VERSION = 1.6.3
--CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
--CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
-+CRYPTSETUP_VERSION_MAJOR = 1.6
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
-+CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
-+CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
- CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+-OPENVPN_VERSION = 2.3.4
++OPENVPN_VERSION = 2.3.5
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
 -- 
 2.0.4
