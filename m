@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 23:24:02 +0100
-Subject: [Buildroot] [PATCH 24/51] python-pyusb: bump version
-In-Reply-To: <1414349157-22749-24-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-24-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141029232402.35f8a79f@free-electrons.com>
+Date: Wed, 29 Oct 2014 23:21:54 +0100
+Subject: [Buildroot] [git commit] python-configshell-fb: Bump version
+Message-ID: <20141029222440.3C6FCB20A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=43bcd336c00ebab5ff7e5d42a6fc07bf931b9140
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Oct 2014 19:45:30 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/python-pyusb/python-pyusb.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../python-configshell-fb/python-configshell-fb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
+index 64b27fe..76ef48d 100644
+--- a/package/python-configshell-fb/python-configshell-fb.mk
++++ b/package/python-configshell-fb/python-configshell-fb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb14
++PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb15
+ PYTHON_CONFIGSHELL_FB_SITE = $(call github,agrover,configshell-fb,$(PYTHON_CONFIGSHELL_FB_VERSION))
+ PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
+ PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
