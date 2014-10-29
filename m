@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 22:11:07 +0100
-Subject: [Buildroot] [PATCH v5] cppunit: new package
-In-Reply-To: <1414541689-10361-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1414541689-10361-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <20141029221107.78de6fa6@free-electrons.com>
+Date: Wed, 29 Oct 2014 22:11:27 +0100
+Subject: [Buildroot] [git commit] binutils: remove dead code
+Message-ID: <20141029211324.BD13AB1FDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sebastien Bourdelin,
+commit: http://git.buildroot.net/buildroot/commit/?id=beaf1c1887837b3b4a11e681ad41cef71b2bcdf7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Oct 2014 20:14:49 -0400, Sebastien Bourdelin wrote:
-> CppUnit is the C++ port of the famous JUnit framework for unit testing.
-> Test output is in XML or text format for automatic testing and GUI
-> based for supervised tests.
-> 
-> http://www.freedesktop.org/wiki/Software/cppunit/
-> 
-> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+We no longer have any way of using version 2.23, and all the other
+versions that we support are available as .tar.bz2. Therefore we can
+remove the special case related to the 2.23 version only being
+available as a .tar.gz archive.
 
-Applied, thanks, after doing a few changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/binutils/binutils.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-    [Thomas:
-      - change license to LGPLv2.1, since there is no indication that the
-        "or later" option is used.
-      - slightly rewrap text in Config.in file.]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index f40c45f..ab9f167 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -16,10 +16,6 @@ BINUTILS_VERSION = 2.21
+ endif
+ endif
+ 
+-ifeq ($(BINUTILS_VERSION),2.23)
+-BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+-endif
+-
+ ifeq ($(ARCH),avr32)
+ BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+ endif
