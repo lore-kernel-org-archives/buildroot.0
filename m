@@ -1,40 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Oct 2014 20:51:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.8.7.1
-Message-ID: <1414612303-25410-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 29 Oct 2014 21:14:06 +0100
+Subject: [Buildroot] [PATCH v6 3/3] package/exim: Add support for SMTP AUTH
+	through Dovecot
+In-Reply-To: <1414613646-24490-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1414613646-24490-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1414613646-24490-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+---
+v6: no changes
+v5: no changes
+v4: Initial version
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/exim/exim.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index e2a0f91..ad1b6c5 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	8b773b006db46f3ffcbabe065e927823d13bf5c0	sqlite-autoconf-3080700.tar.gz
-+sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 19bde83..ea8407c 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 9ae94c3..43f1a6b 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -55,6 +55,13 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
+ endef
+ endif
  
--SQLITE_VERSION = 3080700
-+SQLITE_VERSION = 3080701
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
++ifeq ($(BR2_PACKAGE_DOVECOT),y)
++EXIM_DEPENDENCIES += dovecot
++define EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT
++	$(call exim-config-change,AUTH_DOVECOT,yes)
++endef
++endif
++
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
+@@ -73,6 +80,7 @@ else # CUSTOM_CONFIG
+ define EXIM_CONFIGURE_CMDS
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
++	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
+ 	$(EXIM_CONFIGURE_TOOLCHAIN)
+ endef
+ endif # CUSTOM_CONFIG
 -- 
 1.7.10.4
