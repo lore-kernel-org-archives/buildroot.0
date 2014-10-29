@@ -1,36 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 22:34:13 +0100
-Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
- ip tables with C++
-In-Reply-To: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20141029223413.70abc05b@free-electrons.com>
+Date: Wed, 29 Oct 2014 22:43:45 +0100
+Subject: [Buildroot] [git commit] gpu-viv-bin-mx6q: provide libopenvg
+Message-ID: <20141029214401.3FEA4B206C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+commit: http://git.buildroot.net/buildroot/commit/?id=146f69ec79672d7dd81a8d6e3adc549b16d32f4e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
-> 
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in   |    4 ++++
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-This patch apparently dates back from 2012. Why has it never been
-merged upstream? Also, I don't really understand the interaction
-between the kernel headers, and this include/linux/ header in iptables.
-
-Has the problem been reported upstream to iptables?
-
-Gustavo, an opinion?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 864c605..4e83dd3 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 	bool "gpu-viv-bin-mx6q"
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_HAS_LIBOPENVG
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	depends on BR2_arm # Only relevant for i.MX6
+@@ -30,6 +31,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "gpu-viv-bin-mx6q"
+ 
++config BR2_PACKAGE_PROVIDES_LIBOPENVG
++	default "gpu-viv-bin-mx6q"
++
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
+ 	bool "install examples"
+ 	help
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 60060d3..aef16a3 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -23,7 +23,7 @@ GPU_VIV_BIN_MX6Q_LICENSE = Freescale Semiconductor Software License Agreement
+ # for which a separate license is needed...
+ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
+ 
+-GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles
++GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+ 
+ # DirectFB is not supported (wrong version)
+ ifeq ($(BR2_PACKAGE_XORG7),y)
