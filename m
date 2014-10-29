@@ -1,24 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Oct 2014 21:38:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.8.7.1
-In-Reply-To: <1414612303-25410-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1414612303-25410-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141029213840.3c9e9769@free-electrons.com>
+Date: Wed, 29 Oct 2014 21:39:07 +0100
+Subject: [Buildroot] [PATCH 1/1] fix minor typo in kexec description
+In-Reply-To: <1414591001-25080-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1414591001-25080-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20141029213907.1a9c9036@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Zoltan Gyarmati,
 
-On Wed, 29 Oct 2014 20:51:43 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed, 29 Oct 2014 14:56:40 +0100, Zoltan Gyarmati wrote:
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 > ---
->  package/sqlite/sqlite.hash |    2 +-
->  package/sqlite/sqlite.mk   |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/kexec/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
