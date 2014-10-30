@@ -1,64 +1,45 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Oct 2014 19:48:38 -0500
-Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
- ip tables with C++
-In-Reply-To: <54516922.1070306@zacarias.com.ar>
-References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20141029223413.70abc05b@free-electrons.com>
- <54516922.1070306@zacarias.com.ar>
-Message-ID: <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Oct 2014 01:14:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 7580] Invalid filesystem in Pandaboard defconfig
+In-Reply-To: <bug-7580-163@https.bugs.busybox.net/>
+References: <bug-7580-163@https.bugs.busybox.net/>
+Message-ID: <20141030011406.1A853B1D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+https://bugs.busybox.net/show_bug.cgi?id=7580
 
-On Wed, Oct 29, 2014 at 5:24 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
->
-> On 10/29/2014 06:34 PM, Thomas Petazzoni wrote:
->
-> > Dear Matt Weber,
-> >
-> > On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
-> >>
-> >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> >> ---
-> >>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
-> >>  1 file changed, 43 insertions(+)
-> >>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
-> >
-> > This patch apparently dates back from 2012. Why has it never been
-> > merged upstream? Also, I don't really understand the interaction
-> > between the kernel headers, and this include/linux/ header in iptables.
-> >
-> > Has the problem been reported upstream to iptables?
-> >
-> > Gustavo, an opinion?
->
-> It was posted to lkml & linux-netdev at first, Davem told to post to
-> netfilter-devel. That was done:
->
-> http://marc.info/?t=134904906300003&r=1&w=1
->
-> The logic seems right, C++ is more strict and triggers the issue.
-> It's an issue when dealing with netfilter rules from custom C++ code.
->
-> But it seems to have been rejected without much explanation:
-> http://patchwork.ozlabs.org/patch/188216/
->
+--- Comment #1 from Lucas Verney <spam+busybox@phyks.me> 2014-10-30 01:14:05 UTC ---
+Update : After discussing on IRC (with NRoach44), here are some tests I did :
 
-Should I repost it to netfilter-devel and update my patch to reference
-the above information plus the new submission thread?
+* First, I tried modifying the conf in menuconfig so that the generated rootfs
+was in ext3 instead of ext2. This worked out of the box nicely.
+
+* Then, I used again the ext2 filesystem for the rootfs, and disabled any
+filesystem support in linux-menuconfig except the first line, corresponding to
+ext2.
+
+In this case, I got the following error instead of the previous one :
+2.331848] Waiting for root device /dev/mmcblk0p2...
+2.363922] mmcblk0: mmc0:59b4 SDC   7.34 GiB
+2.372253]  mmcblk0: p1 p201.
+2.455871] VFS: Cannot open root device "mmcblk0p2" or unknown-block(179,2):
+error -19
+2.464447] Please append a correct "root=" boot option; here are the available
+partitions:
+2.473388] b300         7697408 mmcblk0  driver: mmcblkiales
+2.477478]   b301           72261 mmcblk0p1 00000000-01
+2.477478]   b302         7622842 mmcblk0p2 00000000-02
+2.490356] Kernel panic - not syncing: VFS: Unable to mount root fs on
+unknown-block(179,2)
+
+I tried to mount mmcblk0p2 on my computer, and it mounted successfully using
+the ext2 filesystem.
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
