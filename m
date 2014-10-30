@@ -1,76 +1,73 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 30 Oct 2014 16:57:28 +0300
-Subject: [Buildroot] [PATCH 2/3] uclibc: add explicit setup of ARC-specific
-	options
+Date: Thu, 30 Oct 2014 16:57:29 +0300
+Subject: [Buildroot] [PATCH 3/3] arc: add support of ARC HS38 core
 In-Reply-To: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
 References: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1414677449-15937-4-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As with other architectures for ARC we need to have an ability to set
-specific options in uClibc.
+Synopsys has recently announced its new ARC HS38 core that is capable of
+running Linux -
+http://www.synopsys.com/dw/ipdir.php?ds=arc-hs38-processor
 
-In particular this is required for selection of ARC ISA version.
+ARC HS38 is based on ARCv2 ISA and requires special settings of gcc and
+libc.
+
+Also in case of HS38 atomic extensions (LLOCK/SCOND instructions) are
+built-in by default, so enabling atomic extensions in Buildroot as well.
+
+This commit adds support of the core in buildroot.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Anton Kolesov <anton.kolesov@synopsys.com>
 ---
- package/uclibc/Config.in |  6 ++++++
- package/uclibc/uclibc.mk | 12 ++++++++++++
- 2 files changed, 18 insertions(+)
+ arch/Config.in.arc       | 6 +++++-
+ package/uclibc/Config.in | 1 +
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index b31b141..b48a90f 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -11,12 +11,15 @@ config BR2_arc750d
+ config BR2_arc770d
+ 	bool "ARC 770D"
+ 
++config BR2_archs38
++	bool "ARC HS38"
++
+ endchoice
+ 
+ # Choice of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+-	default y if BR2_arc770d
++	default y if BR2_arc770d || BR2_archs38
+ 
+ config BR2_ARCH_HAS_ATOMICS
+ 	default y if BR2_ARC_ATOMIC_EXT
+@@ -36,3 +39,4 @@ config BR2_ENDIAN
+ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc750d
+ 	default "arc700" if BR2_arc770d
++	default "archs"	 if BR2_archs38
 diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index d319ae7..c68558f 100644
+index c68558f..40a268b 100644
 --- a/package/uclibc/Config.in
 +++ b/package/uclibc/Config.in
-@@ -194,6 +194,12 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default i386	   if BR2_i386
- 	default x86_64	   if BR2_x86_64
+@@ -199,6 +199,7 @@ config BR2_UCLIBC_ARC_TYPE
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+ 	default ARC_CPU_700	if BR2_arc750d
+ 	default ARC_CPU_700	if BR2_arc770d
++	default ARC_CPU_HS	if BR2_archs38
  
-+config BR2_UCLIBC_ARC_TYPE
-+	string
-+	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
-+	default ARC_CPU_700	if BR2_arc750d
-+	default ARC_CPU_700	if BR2_arc770d
-+
  config BR2_UCLIBC_ARM_BX
  	bool
- 	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index b2ecce3..8f990c7 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -57,6 +57,17 @@ UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
- endif
- 
- #
-+# ARC definitions
-+#
-+
-+ifeq ($(UCLIBC_TARGET_ARCH),arc)
-+UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
-+define UCLIBC_ARC_TYPE_CONFIG
-+	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
-+endef
-+endif # arc
-+
-+#
- # ARM definitions
- #
- 
-@@ -410,6 +421,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
- 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
- 	$(UCLIBC_MMU_CONFIG)
-+	$(UCLIBC_ARC_TYPE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
- 	$(UCLIBC_ARM_BX_CONFIG)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
 -- 
 1.9.3
