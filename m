@@ -1,64 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 22:58:12 +0100
-Subject: [Buildroot] [PATCH v3 7/7] package/tvheadend: Add transcoding
- support by ffmpeg
-In-Reply-To: <XnsA3D546EC787EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1413311309-30811-1-git-send-email-bernd.kuhls@t-online.de>
- <1413311309-30811-7-git-send-email-bernd.kuhls@t-online.de>
- <20141028221104.35a56dd4@free-electrons.com>
- <XnsA3D546EC787EEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141030225812.166745c6@free-electrons.com>
+Date: Thu, 30 Oct 2014 23:03:10 +0100
+Subject: [Buildroot] [PATCH v3 1/2] randconfig,
+ allyesconfig: fix handling of legacy options
+In-Reply-To: <1413278695-8979-1-git-send-email-arnout@mind.be>
+References: <1413278695-8979-1-git-send-email-arnout@mind.be>
+Message-ID: <20141030230310.4b91e6ab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Wed, 29 Oct 2014 06:58:20 +0100, Bernd Kuhls wrote:
-> [posted and mailed]
+On Tue, 14 Oct 2014 11:24:54 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Randconfig and allyesconfig should never select legacy options, so use
+> the same trick as allpackageyesconfig and randpackageconfig to remove
+> them.
 > 
-> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> @public.gmane.org> wrote in news:20141028221104.35a56dd4 at free-electrons.com:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  Makefile | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> >> +      --disable-libffmpeg_static          \
-> > 
-> > Maybe I haven't looked properly, but I don't see this option supported
-> > by tvheadend configure script. Can you check?
-> 
-> Hi,
-> 
-> you will find the option here:
-> https://github.com/tvheadend/tvheadend/blob/master/configure#L36
+> diff --git a/Makefile b/Makefile
+> index 907a0fc..5bcaa77 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -731,11 +731,25 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  
+>  randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
+> -	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
+> +	@rm -f $(CONFIG_DIR)/.config.nopkg
+> +	@grep '^config ' Config.in.legacy | \
+> +		while read config pkg; do \
+> +		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
+> +	@$(COMMON_CONFIG_ENV) \
+> +		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+> +		$< --randconfig $(CONFIG_CONFIG_IN)
+> +	@rm -f $(CONFIG_DIR)/.config.nopkg
+>  
+>  allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
+> -	@$(COMMON_CONFIG_ENV) $< --allyesconfig $(CONFIG_CONFIG_IN)
+> +	@rm -f $(CONFIG_DIR)/.config.nopkg
+> +	@grep '^config ' Config.in.legacy | \
+> +		while read config pkg; do \
+> +		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
+> +	@$(COMMON_CONFIG_ENV) \
+> +		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+> +		$< --allyesconfig $(CONFIG_CONFIG_IN)
+> +	@rm -f $(CONFIG_DIR)/.config.nopkg
+>  
+>  allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
 
-Aah, yes, it's there. Presumably I was going at the tvheadend code
-prior to the recent bump.
+I was going to apply this, and then I tested it, to discover that it
+then causes the same problem as the one we have with randpackageconfig
+today: none of the choice options get randomized anymore. So before
+this patch, if you do "randconfig", you get proper randomization. After
+this patch, if you do "randconfig", it only generates i386
+configurations.
 
-However, it's not clear to me what this option does, and therefore was
-is the impact on tvheadend.
-
-Also, the code:
-
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE),yy)
-+TVHEADEND_DEPENDENCIES += ffmpeg
-+TVHEADEND_CONF_OPTS += --enable-libav
-+else
-+TVHEADEND_CONF_OPTS += --disable-libav
-+endif
-
-Means that the user needs to know that both the avresample and swscale
-suboptions of ffmpeg have to be enabled in order to have ffmpeg support
-in tvheadend. Not easy to know. Should we do something like:
-
-	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
-	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
-
-in the tvheadend/Config.in file? This way the user would only have to
-enable BR2_PACKAGE_FFMPEG to get ffmpeg support in tvheadend. And the
-condition could be simplified to just test BR2_PACKAGE_FFMPEG.
-
-Best regards,
+I admit it's not really an issue introduced by the patch as the issue
+already exists for randpackageconfig. But it's very annoying :/
 
 Thomas
 -- 
