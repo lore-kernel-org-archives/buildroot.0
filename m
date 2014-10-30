@@ -1,52 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 21:43:23 +0100
-Subject: [Buildroot] [PATCH 2/2] gcc: remove version 4.4.x
-In-Reply-To: <1414657776-32427-3-git-send-email-andreas@gaisler.com>
-References: <1414657776-32427-1-git-send-email-andreas@gaisler.com>
- <1414657776-32427-3-git-send-email-andreas@gaisler.com>
-Message-ID: <20141030214323.4b7bb8ad@free-electrons.com>
+Date: Thu, 30 Oct 2014 21:47:42 +0100
+Subject: [Buildroot] [git commit] package/libupnpp: add hash file
+Message-ID: <20141030205046.3F9CFB22E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Larsson,
+commit: http://git.buildroot.net/buildroot/commit/?id=14367319b836a954a988826cf26366bf571f9076
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Oct 2014 09:29:36 +0100, Andreas Larsson wrote:
-> That gcc series is old and is not used as the default version for
-> any of the architectures we support, so this commit gets rid of it.
-> 
-> Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-> ---
->  Config.in.legacy                                   |    7 +
->  package/gcc/4.4.7/100-uclibc-conf.patch            |   13 --
->  package/gcc/4.4.7/301-missing-execinfo_h.patch     |   11 --
->  package/gcc/4.4.7/302-c99-snprintf.patch           |   13 --
->  .../gcc/4.4.7/305-libmudflap-susv3-legacy.patch    |   49 -------
->  package/gcc/4.4.7/810-arm-softfloat-libgcc.patch   |   38 ------
->  package/gcc/4.4.7/gcc-44-pr39429.patch             |   24 ----
->  .../powerpc-link-with-math-lib.patch.conditional   |  137 --------------------
->  package/gcc/Config.in.host                         |   24 ----
->  9 files changed, 7 insertions(+), 309 deletions(-)
->  delete mode 100644 package/gcc/4.4.7/100-uclibc-conf.patch
->  delete mode 100644 package/gcc/4.4.7/301-missing-execinfo_h.patch
->  delete mode 100644 package/gcc/4.4.7/302-c99-snprintf.patch
->  delete mode 100644 package/gcc/4.4.7/305-libmudflap-susv3-legacy.patch
->  delete mode 100644 package/gcc/4.4.7/810-arm-softfloat-libgcc.patch
->  delete mode 100644 package/gcc/4.4.7/gcc-44-pr39429.patch
->  delete mode 100644 package/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libupnpp/libupnpp.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-I moved the Config.in.legacy option to the right place and applied. You
-placed the Config.in.legacy option together with the other gcc versions
-that were deprecated. But that's not how Config.in.legacy works: it
-works by classifying options by the Buildroot version in which they
-were deprecated.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+new file mode 100644
+index 0000000..af39480
+--- /dev/null
++++ b/package/libupnpp/libupnpp.hash
+@@ -0,0 +1,2 @@
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.8.5.tar.gz.sha256
++sha256 07741ea219689174d0ea745df566bb617f7e2f250eefd424920291b3d344f693  libupnpp-0.8.5.tar.gz
