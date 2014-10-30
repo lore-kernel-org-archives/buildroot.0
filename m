@@ -1,92 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 21:17:10 +0100
-Subject: [Buildroot] [PATCH] arch/arc: add support of ARC HS38 core
-In-Reply-To: <1414667123.11768.20.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1414585517-5957-1-git-send-email-abrodkin@synopsys.com>
- <20141029221847.33373037@free-electrons.com>
- <1414667123.11768.20.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20141030211710.3caeb8c8@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 30 Oct 2014 21:27:23 +0100
+Subject: [Buildroot] [PATCH 1/2] package/shairport-sync: fix avahi
+	dependency
+In-Reply-To: <20141030211121.3a97a88b@free-electrons.com>
+References: <1414659789-16887-1-git-send-email-jkrause@posteo.de>
+ <20141030211121.3a97a88b@free-electrons.com>
+Message-ID: <54529F2B.8080707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
-
-On Thu, 30 Oct 2014 11:05:24 +0000, Alexey Brodkin wrote:
-
-> Ok, here's an explanation.
-> ARC has currently 4 families of CPU cores.
-> 2 of those families may have MMU, they are:
->  1) ARC700 series (ARC750D and ARC770D have MMU while others like
-> ARC705, ARC725 have no MMU)
->  2) ARC HS series (HS38 has MMU while HS34 and HS36 are MMU-less models)
+On 30/10/14 21:11, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> But since Buildroot is used for building tools and packages for
-> Linux-driven systems I don't even mention other HS family members.
+> On Thu, 30 Oct 2014 10:03:08 +0100, J?rg Krause wrote:
+>> Shairport-syncs avahi (zeroconf) support needs libdns_sd which is only build
+>> when BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY is selected.
+>>
+>> Fixes autobuild errors:
+>>   - http://autobuild.buildroot.net/results/a6a/a6ab7641a3cafcdaeffe11f08d5fcacbbb882d8d/
+>>   - http://autobuild.buildroot.net/results/cb4/cb41980f2fb416d627bea0950e1dae727eae0ca6/
+>>   - http://autobuild.buildroot.net/results/009/00929df01474813be576936e80e86374efdbc327/
+>>   - http://autobuild.buildroot.net/results/a40/a40b8cf9aaa4ade4d96524219276cfad2920104c/
+>>   - http://autobuild.buildroot.net/results/03f/03fff2805b3348f2557bbef73a716eadea3add03/
+>>
+>> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+>> ---
+>>  package/shairport-sync/shairport-sync.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+>> index 58343f4..53d7895 100644
+>> --- a/package/shairport-sync/shairport-sync.mk
+>> +++ b/package/shairport-sync/shairport-sync.mk
+>> @@ -17,7 +17,7 @@ SHAIRPORT_SYNC_AUTORECONF = YES
+>>  SHAIRPORT_SYNC_CONF_OPTS = --with-alsa # required
+>>  
+>>  # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns)
+>> -ifeq ($(BR2_PACKAGE_AVAHI),y)
+>> +ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
+>>  SHAIRPORT_SYNC_DEPENDENCIES += avahi
+>>  SHAIRPORT_SYNC_CONF_OPTS += --with-avahi
+>>  else
 > 
-> Also what's important that ARC700 and ARC HS families implement
-> different ISAs and that's why I had to add another type of CPU -
-> different settings of gcc and uclibc are required for ARC700 and HS.
+> I'm not sure about this one. Automatic dependencies are OK when they
+> are relatively obvious: it's relatively obvious that if you want Avahi
+> support in package "foo", then you should enable Avahi. However, it's
+> clearly not obvious that if you want Avahi support in Shairport-sync,
+> you should have this libdnssd compatibility option of Avahi enabled.
 > 
-> Probably what I need to do is to list explicitly all relevant CPU
-> modifications that could be used for Linux. then we'll have ARC750D,
-> ARC770D and ARC HS38. In this case there will be no confusions.
-
-Thanks for the explanation!
-
-> > >  # Choise of atomic instructions presence
-> > >  config BR2_ARC_ATOMIC_EXT
-> > > +	default y if BR2_archs
-> > 
-> > Why? Are atomic instructions *always* available on HS38, or are they
-> > also optional like on ARC700 ?
+> Therefore, my feeling is that this is the sort of case where we should
+> instead introduce a sub-option of Shairport-sync to enable Avahi
+> support, which would select both BR2_PACKAGE_AVAHI and
+> BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY.
 > 
-> Well with ARC things a bit more complex compared to other architectures.
-> Because we provide a LEGO-like IP - user may select each and every tiny
-> detail he wants or doesn't want.
+> Peter, Arnout, Gustavo, an opinion?
+
+ I agree with your theory. However, in this particular case, what you really
+want is the DNS-SD support. In case BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY,
+you'll still get DNS-SD support, just not through avahi but instead through the
+bundled tinysvcmdns. So I don't think adding a config option for it is really
+needed.
+
+ However, it would still be useful to use avahi when avahi is available. So
+instead I'd add to Config.in:
+
+	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY if BR2_PACKAGE_AVAHI_DAEMON
+
+(with the appropriate explanatory comment).
+
+
+ Regards,
+ Arnout
+
 > 
-> And all those "names" mentioned above like ARC770D, ARC HS are only
-> names of "templates" - sets of components and features that are most
-> likely will be used. But nobody can stop user to down-configure
-> anything.
+> Thomas
 > 
-> So in case of HS38 by default atomic options are enabled - that's why I
-> enabled them in Buildroot for ARC HS by default. But since there's a
-> probability one customer decides to down-configure atomic instructions
-> (even though we don't recommend to do it) we need to have an ability to
-> build software without atomic ops.
-
-Ok, that explains why you decided to make it 'default y' for some CPU,
-but still keep it an option.
 
 
-> > So from gcc's point of view, the processor is called archs, but from a
-> > marketing point of view it's HS38. What happens if tomorrow Synopsys
-> > creates a different CPU core called HS100 ?
-> 
-> See above. We need to have arc700 and archs to distinguish 2 different
-> ISAs and ABIs. Still as I commented above I'll add selection of a
-> particular CPU so for example we may pass fine-tuning options to gcc
-> like "-mtune=ARCxxx".
-
-Hum: beware, we are removing the support for -mtune in Buildroot. Since
-Buildroot targets only one system, -mtune is normally not useful and
--mcpu should be used instead. On some architecture, -march indicates
-the ISA, while -mcpu indicates the specific CPU. Maybe ARC should do
-the same?
-
-> > Is this processor already supported by the current binutils/gcc/uClibc
-> > versions used for the ARC architecture in Buildroot?
-> 
-> Right, arc-2014.08 tools (gcc, binutils, uClibc) already support ARC HS.
-> Moreover uClibc has ARC HS support even in upstream master branch.
-
-Great!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
