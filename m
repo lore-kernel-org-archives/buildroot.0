@@ -1,8 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 30 Oct 2014 14:29:22 -0300
-Subject: [Buildroot] [PATCH 1/3] linux-headers: bump 3.{17, 16, 14, 12,
-	10}.x series
-Message-ID: <1414690164-24718-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 30 Oct 2014 14:29:23 -0300
+Subject: [Buildroot] [PATCH 2/3] linux: bump default version to 3.17.2
+In-Reply-To: <1414690164-24718-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1414690164-24718-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1414690164-24718-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b494885..b363cdc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -171,12 +171,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.58"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.59"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.30"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.31"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.22"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.23"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
--	default "3.16.6"	if BR2_KERNEL_HEADERS_3_16
--	default "3.17.1"	if BR2_KERNEL_HEADERS_3_17
-+	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
-+	default "3.17.2"	if BR2_KERNEL_HEADERS_3_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 718afb5..e0d123c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.17.1"
++	bool "3.17.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.17.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.17.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.0.4
