@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 19:03:09 +0100
-Subject: [Buildroot] [git commit] linux: bump default version to 3.17.2
-Message-ID: <20141030180343.D47A3B20AB@busybox.osuosl.org>
+Date: Thu, 30 Oct 2014 19:03:24 +0100
+Subject: [Buildroot] [git commit] kernel headers: remove deprecated version
+	3.9
+Message-ID: <20141030180343.DCDCEB20AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ed76a7f6e8ae32f3a191b9e558e6b2b8de4c905
+commit: http://git.buildroot.net/buildroot/commit/?id=def35bf59cfb8208b0a17f0ce09fd8b2ac62e416
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Deprecate 3.9.x headers for the 2014.11 release, a year has passed.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 718afb5..e0d123c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b363cdc..5bb7170 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -27,11 +27,6 @@ choice
+ 		depends on !BR2_arc
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.17.1"
-+	bool "3.17.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.17.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.17.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	config BR2_KERNEL_HEADERS_3_9
+-		bool "Linux 3.9.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2013_11
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+-
+ 	config BR2_KERNEL_HEADERS_3_10
+ 		bool "Linux 3.10.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+@@ -170,7 +165,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.59"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.31"	if BR2_KERNEL_HEADERS_3_12
