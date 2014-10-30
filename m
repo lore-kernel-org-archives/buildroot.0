@@ -1,28 +1,48 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Oct 2014 23:30:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
- due to missing header files in include path
-In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
-References: <bug-7478-163@https.bugs.busybox.net/>
-Message-ID: <20141029233027.CFD12B5A0D@busybox.osuosl.org>
+Date: Thu, 30 Oct 2014 00:40:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 7580] New: Invalid filesystem in Pandaboard
+	defconfig
+Message-ID: <bug-7580-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7478
+https://bugs.busybox.net/show_bug.cgi?id=7580
 
---- Comment #12 from Christian Abegg <cma@vtxnet.ch> 2014-10-29 23:30:26 UTC ---
-(In reply to comment #11)
-> There is no need for the sysroot include dir to be explicitly passed to gcc
-> with the internal toolchain, because the Buildroot sysroot is configured to be
-> the natural location for the compiler to look for headers.
+           Summary: Invalid filesystem in Pandaboard defconfig
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: spam+busybox at phyks.me
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Ok, thanks for the details. However I'm still wondering why the inc path array
-in the setup.py script doesn't contain the sysroot include dir when the
-internal toolchain. What is the next place were I can check why this isn't the
-case?
+
+Hi,
+
+I tried to build a disk image using the provided Pandaboard defconfig, but I
+could not get the system to boot, due to a kernel panic.
+
+Here is the line I got at boot :
+
+Kernel panic - not syncing: VFS: Unable to mount root fs on
+unknown-block(179,2)
+
+After the kernel saying that it tried only ext3 to mount the root filesystem.
+
+However, the default root filesystem using the pandaboard defconfig is ext2.
+
+
+I manually used tune2fs to get an ext3 partition for my root filesystem, and
+everything boot up fine.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
