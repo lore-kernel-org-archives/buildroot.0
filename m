@@ -1,50 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Oct 2014 00:40:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 7580] New: Invalid filesystem in Pandaboard
-	defconfig
-Message-ID: <bug-7580-163@https.bugs.busybox.net/>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 29 Oct 2014 19:48:38 -0500
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
+ ip tables with C++
+In-Reply-To: <54516922.1070306@zacarias.com.ar>
+References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20141029223413.70abc05b@free-electrons.com>
+ <54516922.1070306@zacarias.com.ar>
+Message-ID: <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7580
+All,
 
-           Summary: Invalid filesystem in Pandaboard defconfig
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: spam+busybox at phyks.me
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Wed, Oct 29, 2014 at 5:24 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+>
+> On 10/29/2014 06:34 PM, Thomas Petazzoni wrote:
+>
+> > Dear Matt Weber,
+> >
+> > On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
+> >>
+> >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> >> ---
+> >>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
+> >>  1 file changed, 43 insertions(+)
+> >>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+> >
+> > This patch apparently dates back from 2012. Why has it never been
+> > merged upstream? Also, I don't really understand the interaction
+> > between the kernel headers, and this include/linux/ header in iptables.
+> >
+> > Has the problem been reported upstream to iptables?
+> >
+> > Gustavo, an opinion?
+>
+> It was posted to lkml & linux-netdev at first, Davem told to post to
+> netfilter-devel. That was done:
+>
+> http://marc.info/?t=134904906300003&r=1&w=1
+>
+> The logic seems right, C++ is more strict and triggers the issue.
+> It's an issue when dealing with netfilter rules from custom C++ code.
+>
+> But it seems to have been rejected without much explanation:
+> http://patchwork.ozlabs.org/patch/188216/
+>
 
-
-Hi,
-
-I tried to build a disk image using the provided Pandaboard defconfig, but I
-could not get the system to boot, due to a kernel panic.
-
-Here is the line I got at boot :
-
-Kernel panic - not syncing: VFS: Unable to mount root fs on
-unknown-block(179,2)
-
-After the kernel saying that it tried only ext3 to mount the root filesystem.
-
-However, the default root filesystem using the pandaboard defconfig is ext2.
-
-
-I manually used tune2fs to get an ext3 partition for my root filesystem, and
-everything boot up fine.
+Should I repost it to netfilter-devel and update my patch to reference
+the above information plus the new submission thread?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
