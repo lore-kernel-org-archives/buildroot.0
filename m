@@ -1,54 +1,32 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 30 Oct 2014 10:05:41 +0000
-Subject: [Buildroot] [PATCH v3] lame: Disable debug symbols for Aarch64 and
-	MIPS
-Message-ID: <1414663541-36385-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 30 Oct 2014 10:19:50 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-29
+In-Reply-To: <20141030073016.88C09100A62@stock.ovh.net>
+References: <20141030073016.88C09100A62@stock.ovh.net>
+Message-ID: <545210C6.8020701@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building lame with debug symbols needs the following macros to be
-defined: _FPU_MASK_IM, _FPU_MASK_ZM, _FPU_MASK_OM.
-So, if BR2_ENABLE_DEBUG is selected, then we have to force lame to be
-built without debug symbols for Aarch64 and MIPS because these
-architectures don't have those macros defined.
+Dear Thomas Petazzoni,
 
-Fixes:
-	http://autobuild.buildroot.net/results/721/721dff299b204b1d3ccc0846009eb17faa2d29eb/
+On 10/30/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-10-29
+>     mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/94aa0a79892ee110cb5a32cbfd0a6fbd0b09daff/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes since v2:
-- Amend the commit message and the comment in the lame.mk file.
+> Build statistics for 2014-10-26
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/49b459a4f722a4aaf78af2594435c83e02ed2fc7/
 
-Changes since v1:
-- Bild lame without debug symbols instead of disabling it. Doing this we 
-  avoid propagating dependencies to the packages which select lame.
+Why is this still happening if we have fixes for it in the autobuild-run
+script?
 
- package/lame/lame.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
-
-diff --git a/package/lame/lame.mk b/package/lame/lame.mk
-index dcd155f..c179cef 100644
---- a/package/lame/lame.mk
-+++ b/package/lame/lame.mk
-@@ -14,6 +14,15 @@ LAME_CONF_OPTS = --enable-dynamic-frontends
- LAME_LICENSE = LGPLv2+
- LAME_LICENSE_FILES = COPYING
- 
-+# Building lame with debug symbols needs the following macros to be
-+# defined: _FPU_MASK_IM, _FPU_MASK_ZM, _FPU_MASK_OM.
-+# So, if BR2_ENABLE_DEBUG is selected, then we have force lame to be
-+# built without debug symbols for Aarch64 and MIPS because these
-+# architectures don't have those macros defined.
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),yy)
-+LAME_CONF_OPTS += --disable-debug
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- LAME_DEPENDENCIES += libsndfile
- LAME_CONF_OPTS += --with-fileio=sndfile
+Best regards,
 -- 
-1.7.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
