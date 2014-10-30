@@ -1,33 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 19:07:18 +0100
-Subject: [Buildroot] [PATCH 2/2] package/shairport-sync: bump to version
- 2.1.8
-In-Reply-To: <1414659789-16887-2-git-send-email-jkrause@posteo.de>
-References: <1414659789-16887-1-git-send-email-jkrause@posteo.de>
- <1414659789-16887-2-git-send-email-jkrause@posteo.de>
-Message-ID: <20141030190718.6f0943e6@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 30 Oct 2014 19:28:17 +0100
+Subject: [Buildroot] [PATCH 05/15 v6] package/eudev: bump to 1.10
+References: <cover.1414442699.git.yann.morin.1998@free.fr>
+ <a60b93d041af1e32c5c8f49b0c4e4f69f6736e98.1414442699.git.yann.morin.1998@free.fr>
+ <XnsA3D5D9CD47DDCberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <XnsA3D6C61222DC5berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
+news:XnsA3D5D9CD47DDCberndkuhlsPkbjNfxxIA at bernd-kuhls.de:
 
-On Thu, 30 Oct 2014 10:03:09 +0100, J?rg Krause wrote:
-> Bump to version 2.1.8:
-> * remove comment about COPYING (fixed upstream)
-> * adapt ssl configure option for openssl and polarssl
+> a new version of eudev has been released; to bump, this patch
 > 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/shairport-sync/shairport-sync.mk | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> -EUDEV_VERSION = 1.10
+> +EUDEV_VERSION = 2.1.1
 
-Applied, thanks.
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1 was relased yesterday with a minor fix for musl.
+
+Regards, Bernd
