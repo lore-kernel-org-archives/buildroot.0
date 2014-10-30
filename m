@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2014 22:25:57 +0100
-Subject: [Buildroot] [PATCH v6 2/3] package/dovecot-pigeonhole: New
- package
-In-Reply-To: <1414613646-24490-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1414613646-24490-1-git-send-email-bernd.kuhls@t-online.de>
- <1414613646-24490-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141030222557.5a9ef950@free-electrons.com>
+Date: Thu, 30 Oct 2014 22:30:06 +0100
+Subject: [Buildroot] [git commit] package/exim: Add support for SMTP AUTH
+	through Dovecot
+Message-ID: <20141030213316.A2FF5B23B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=ee6789f0cda2ad43921b728a9f1d4922c7380f0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Oct 2014 21:14:05 +0100, Bernd Kuhls wrote:
-> ---
-> v6: bump version to 0.4.4
-> v5: no changes
-> v4: no changes
-> v3: DOVECOT_PIGEONHOLE_CONF_OPT -> DOVECOT_PIGEONHOLE_CONF_OPTS
-> v2: - package moved to new Dovecot dependency submenu
->     - removed cruft from CONV_OPT not needed for buildroot (Thomas)
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/dovecot-pigeonhole/Config.in             |    8 ++++++++
->  package/dovecot-pigeonhole/dovecot-pigeonhole.mk |   16 ++++++++++++++++
->  package/dovecot/Config.in                        |    2 ++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/dovecot-pigeonhole/Config.in
->  create mode 100644 package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exim/exim.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index f6016fa..b6fe202 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -48,6 +48,13 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+ 	$(call exim-config-unset,EXIM_MONITOR)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_DOVECOT),y)
++EXIM_DEPENDENCIES += dovecot
++define EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT
++	$(call exim-config-change,AUTH_DOVECOT,yes)
++endef
++endif
++
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
+@@ -65,6 +72,7 @@ endef
+ else # CUSTOM_CONFIG
+ define EXIM_CONFIGURE_CMDS
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
++	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
+ 	$(EXIM_CONFIGURE_TOOLCHAIN)
+ endef
+ endif # CUSTOM_CONFIG
