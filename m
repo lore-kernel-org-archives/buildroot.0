@@ -1,48 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Oct 2014 09:26:27 +0100
-Subject: [Buildroot] postgreSQL in buildroot
-In-Reply-To: <5451F491.70409@mind.be>
-References: <1414586764.228504684@f411.i.mail.ru> <5451F491.70409@mind.be>
-Message-ID: <5451F633.4060302@mind.be>
+From: Andreas Larsson <andreas@gaisler.com>
+Date: Thu, 30 Oct 2014 09:29:34 +0100
+Subject: [Buildroot] [PATCH 0/2] Clean up leon cpu types and remove gcc 4.4.x
+Message-ID: <1414657776-32427-1-git-send-email-andreas@gaisler.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alexandr,
+[Resent due to server rejection]
 
- Since your mail server doesn't seem to like my IP address, I'll send my reply
-below again via the list. Hopefully you will receive it this time.
+Use -mcpu=leon3 for LEON systems, remove the non-mainline sparcsfleon,
+sparchfleon, sparcsfleonv8, and sparchfleonv8 targets, and remove gcc
+4.4.x that no longer have any architectures needing it.
 
- Regards,
- Arnout
+Andreas Larsson (2):
+  arch: sparc: Add leon3 cpu type and remove sparc{s,h}fleon{,v8}
+  gcc: remove version 4.4.x
 
-On 30/10/14 09:19, Arnout Vandecappelle wrote:
-> On 29/10/14 13:46, ????????? ?????? wrote:
-> [snip]
->> So, it seems, that postgreSQL works, and create database template with user
->> postgres.
-> 
->  If it works, what exactly is your problem?
-> 
->  Just making a guess here: do you want this database template to appear in your
-> root filesystem when you do a 'make'? Then the easiest is to generate it once on
-> the target, like you did, and then copy it back to the rootfs overlay of your
-> buildroot setup (see the BR2_ROOTFS_OVERLAY option in the System configuration
-> menu). I'm not sure, but I guess everything should be in the /var/lib/postgresql
-> directory.
-> 
->  Regards,
->  Arnout
-> 
-> 
-
+ Config.in.legacy                                   |    7 +
+ arch/Config.in.sparc                               |   15 +-
+ package/gcc/4.4.7/100-uclibc-conf.patch            |   13 --
+ package/gcc/4.4.7/301-missing-execinfo_h.patch     |   11 -
+ package/gcc/4.4.7/302-c99-snprintf.patch           |   13 --
+ .../gcc/4.4.7/305-libmudflap-susv3-legacy.patch    |   49 ----
+ package/gcc/4.4.7/810-arm-softfloat-libgcc.patch   |   38 ----
+ package/gcc/4.4.7/950-sparc-leon.patch             |  239 --------------------
+ package/gcc/4.4.7/gcc-44-pr39429.patch             |   24 --
+ .../powerpc-link-with-math-lib.patch.conditional   |  137 -----------
+ package/gcc/Config.in.host                         |   39 +---
+ 11 files changed, 14 insertions(+), 571 deletions(-)
+ delete mode 100644 package/gcc/4.4.7/100-uclibc-conf.patch
+ delete mode 100644 package/gcc/4.4.7/301-missing-execinfo_h.patch
+ delete mode 100644 package/gcc/4.4.7/302-c99-snprintf.patch
+ delete mode 100644 package/gcc/4.4.7/305-libmudflap-susv3-legacy.patch
+ delete mode 100644 package/gcc/4.4.7/810-arm-softfloat-libgcc.patch
+ delete mode 100644 package/gcc/4.4.7/950-sparc-leon.patch
+ delete mode 100644 package/gcc/4.4.7/gcc-44-pr39429.patch
+ delete mode 100644 package/gcc/4.4.7/powerpc-link-with-math-lib.patch.conditional
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
