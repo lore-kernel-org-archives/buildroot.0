@@ -1,30 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 31 Oct 2014 16:28:08 +0100
-Subject: [Buildroot] [RFC] Responsive Design Website
-In-Reply-To: <20141028172031.28dfdde4@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 28 Oct 2014 17:20:31 +0100")
-References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
- <20141028172031.28dfdde4@free-electrons.com>
-Message-ID: <877fzg6yyf.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 Oct 2014 16:19:59 +0100
+Subject: [Buildroot] [git commit] libpcap: omit -rpath from pcap-config
+Message-ID: <20141031152829.E717CB25DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=be995fbb403653336b5929adcd6e90b1ebbbe604
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Angelo Compagnucci,
- > On Mon, 27 Oct 2014 22:56:10 +0100, Angelo Compagnucci wrote:
+For target processes the libraries are always in their usual location under
+/lib and /usr/lib. It doesn't make sense to add RPATH tag pointing to host
+build directory to programs using libpcap. This commit changes V_RPATH_OPT in
+pcap-config to remove -rpath from its output.
 
- >> As a sign of gratitude for my recently committed mono patches, I
- >> thought having a responsive design website could be a nice addition to
- >> Buildroot.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpcap/libpcap.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- > Definitely looks good. And it's nice to have someone interested in
- > working on the web site.
-
-Yes, thanks a lot - Looks great!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 6126a86..bcc83ed 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -20,6 +20,12 @@ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux
+ LIBPCAP_CONFIG_SCRIPTS = pcap-config
+ 
++# Omit -rpath from pcap-config output
++define LIBPCAP_CONFIG_REMOVE_RPATH
++	$(SED) 's/^V_RPATH_OPT=.*/V_RPATH_OPT=""/g' $(@D)/pcap-config
++endef
++LIBPCAP_POST_BUILD_HOOKS = LIBPCAP_CONFIG_REMOVE_RPATH
++
+ # On purpose, not compatible with bluez5
+ ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
+ LIBPCAP_DEPENDENCIES += bluez_utils
