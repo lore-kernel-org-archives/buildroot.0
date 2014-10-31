@@ -1,29 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2014 14:30:31 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <871tpo8jgv.fsf@dell.be.48ers.dk>
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
- <20141031134059.00eec2df@free-electrons.com>
- <871tpo8jgv.fsf@dell.be.48ers.dk>
-Message-ID: <20141031143031.5a9c3209@free-electrons.com>
+Date: Fri, 31 Oct 2014 14:35:11 +0100
+Subject: [Buildroot] Next Buildroot meeting in February!
+Message-ID: <20141031143511.17b104c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hello Niel,
 
-On Fri, 31 Oct 2014 14:19:44 +0100, Peter Korsgaard wrote:
+I hope you are doing well! The Buildroot project continues to be very
+lively, we're even seeing a continuous increase in the number of
+contributors and patches submitted, which is great!
 
->  > Don't we have a patch naming policy?
-> 
-> We do, but this matches the rest of the patches and Samuel's megapatch
-> hasn't been applied yet so I chose match the others.
+We had our last meeting in D?sseldorf two weeks ago, with 9-10
+participants, and it was very productive.
 
-Ok, fair enough.
+So, like the past years, we would like to host a meeting next to the
+FOSDEM conference in Brussels. FOSDEM will be January 31 and February 1
+this year, so we would like to organize our meeting on February 2 and
+3. Do you think that Google would be willing to host our meeting, in
+the same awesome conditions as last year?
 
-Do we want to apply Samuel's megapatch?
+Thanks a lot!
 
 Thomas
 -- 
