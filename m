@@ -1,33 +1,231 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Nov 2014 10:01:01 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
-	version to 1.16.2
-Message-ID: <20141201104839.BA8EE7FC49@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Sat, 01 Nov 2014 00:46:05 +0100
+Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
+In-Reply-To: <20141031115353.56D52B23C4@busybox.osuosl.org>
+References: <20141031115353.56D52B23C4@busybox.osuosl.org>
+Message-ID: <1414799165.15213.1.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b47f40bb29d9be34afabfb423bab0ad45cbc11f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fr, 2014-10-31 at 12:50 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=e6c04e6daae674f8983ec2fb106fb897c6803c32
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/daa/daad247db16818f25ab33402e26e27257defbe13/
+> http://autobuild.buildroot.net/results/720/720e2c8a5eab8b47d2510fe03b4a90ec8beafc17/
+> http://autobuild.buildroot.net/results/02b/02b4ab9ee07707ee4a4d4ea2b9c67bee91b1392d/
+> http://autobuild.buildroot.net/results/819/81914317ce82dc1321484d8c2b65647f92aa6929/
+> 
+> And many others.
+> 
+> avahi-ui uses deprecated gtk functionality, but explicitly requests to
+> disable the deprecated API support in gtk - Breaking the build when building
+> against libgtk3.
+> 
+> Patch is taken from Fedora:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1001676
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/avahi/avahi-no-gtk-deprecations.patch |   31 +++++++++++++++++++++++++
+>  package/avahi/avahi.mk                        |    1 +
+>  2 files changed, 32 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/avahi/avahi-no-gtk-deprecations.patch b/package/avahi/avahi-no-gtk-deprecations.patch
+> new file mode 100644
+> index 0000000..3a284d0
+> --- /dev/null
+> +++ b/package/avahi/avahi-no-gtk-deprecations.patch
+> @@ -0,0 +1,31 @@
+> +Patch from http://pkgs.fedoraproject.org/cgit/avahi.git/plain/avahi-0.6.31-no-deprecations.patch?id=b3f4de05e331258c5123e3acc144e452595c2112
+> +
+> +Don't disable deprecated GTK support, as that breaks builds with modern GTK3
+> +versions.
+> +
+> +For more details, see the Fedora bugzilla:
+> +https://bugzilla.redhat.com/show_bug.cgi?id=1001676
+> +
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +--- avahi-0.6.31/avahi-ui/Makefile.am.orig	2013-09-21 16:47:28.677659361 +0200
+> ++++ avahi-0.6.31/avahi-ui/Makefile.am	2013-09-21 16:47:34.852520537 +0200
+> +@@ -15,7 +15,7 @@
+> + # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+> + # USA.
+> + 
+> +-AM_CFLAGS=-I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1
+> ++AM_CFLAGS=-I$(top_srcdir)
+> + 
+> + # This cool debug trap works on i386/gcc only
+> + AM_CFLAGS+='-DDEBUG_TRAP=__asm__("int $$3")'
+> +--- avahi-0.6.31/configure.ac.orig	2013-09-21 16:46:43.750669413 +0200
+> ++++ avahi-0.6.31/configure.ac	2013-09-21 16:47:02.566246400 +0200
+> +@@ -92,7 +92,7 @@
+> +     AC_MSG_CHECKING([whether stack-smashing protection is available])
+> +     ssp_old_cflags="$CFLAGS"
+> +     ssp_old_ldflags="$LDFLAGS"
+> +-    CFLAGS="$CFLAGS -Werror -fstack-protector-all -fPIC"
+> ++    CFLAGS="$CFLAGS -fstack-protector-all -fPIC"
+> +     LDFLAGS="$LDFLAGS -Wl,-z,defs"
+> +     cat confdefs.h > conftest.c
+> +     cat >>conftest.c <<_ACEOF
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index 4e5dbc6..e4c327d 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -16,6 +16,7 @@ AVAHI_SITE = http://www.avahi.org/download
+>  AVAHI_LICENSE = LGPLv2.1+
+>  AVAHI_LICENSE_FILES = LICENSE
+>  AVAHI_INSTALL_STAGING = YES
+> +AVAHI_AUTORECONF = YES
+>  
+>  AVAHI_CONF_ENV = ac_cv_func_strtod=yes \
+>  		ac_fsusage_space=yes \
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This patch breaks building avahi for me. Is autoreconf really intended?
+Removing it fixed my build.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f118ef2..4db8b09 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.16.1
-+XSERVER_XORG_SERVER_VERSION = 1.16.2
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+        >>> avahi 0.6.31 Autoreconfiguring
+        configure.ac:419: warning: macro 'AM_GLIB_GNU_GETTEXT' not found
+        in library
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        libtoolize: putting auxiliary files in `.'.
+        libtoolize: copying file `./ltmain.sh'
+        libtoolize: putting macros in AC_CONFIG_MACRO_DIR, `common'.
+        libtoolize: copying file `common/libtool.m4'
+        libtoolize: copying file `common/ltoptions.m4'
+        libtoolize: copying file `common/ltsugar.m4'
+        libtoolize: copying file `common/ltversion.m4'
+        libtoolize: copying file `common/lt~obsolete.m4'
+        configure.ac:419: warning: macro 'AM_GLIB_GNU_GETTEXT' not found
+        in library
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
+        expanded from...
+        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
+        from...
+        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
+        from...
+        configure.ac:143: the top level
+        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
+        call detected in body
+        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
+        from...
+        configure.ac:300: the top level
+        configure.ac:419: error: possibly undefined macro:
+        AM_GLIB_GNU_GETTEXT
+              If this token and others are legitimate, please use
+        m4_pattern_allow.
+              See the Autoconf documentation.
+        autoreconf: /home/joerg/git/buildroot/output/host/usr/bin/autoconf failed with exit status: 1
+        package/pkg-generic.mk:172: recipe for target
+        '/home/joerg/git/buildroot/output/build/avahi-0.6.31/.stamp_configured' failed
+        make: ***
+        [/home/joerg/git/buildroot/output/build/avahi-0.6.31/.stamp_configured] Error 1
