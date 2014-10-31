@@ -1,37 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Oct 2014 17:18:43 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <20141031143031.5a9c3209@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 31 Oct 2014 14:30:31 +0100")
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
- <20141031134059.00eec2df@free-electrons.com>
- <871tpo8jgv.fsf@dell.be.48ers.dk>
- <20141031143031.5a9c3209@free-electrons.com>
-Message-ID: <8738a46wm4.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 31 Oct 2014 17:23:47 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-10-30
+In-Reply-To: <20141031073016.162E2100B71@stock.ovh.net>
+References: <20141031073016.162E2100B71@stock.ovh.net>
+Message-ID: <5453C5A3.4080506@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear all,
 
- > Dear Peter Korsgaard,
- > On Fri, 31 Oct 2014 14:19:44 +0100, Peter Korsgaard wrote:
+On 10/31/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-10-30
 
- >> > Don't we have a patch naming policy?
- >> 
- >> We do, but this matches the rest of the patches and Samuel's megapatch
- >> hasn't been applied yet so I chose match the others.
+>     mips64el | tvheadend-596b4e0b29937a612... | NOK | http://autobuild.buildroot.net/results/3aaa28eb4fd04a5b578c5128b57ce89165e473be/
+>     mips64el | tvheadend-596b4e0b29937a612... | NOK | http://autobuild.buildroot.net/results/467df0fde737de0ec89fe023b2ce33546543d335/
 
- > Ok, fair enough.
+tvheadend fails to build with Python3.
 
- > Do we want to apply Samuel's megapatch?
+Reported upstream: https://tvheadend.org/issues/2444
 
-Yes, even though I dislike big changes I think we should rather do it
-now and get over with it.
+Should we make this packages depend on !BR2_PACKAGE_PYTHON3 until
+upstream fixes the problem?
 
-I'll look into it this weekend.
-
+Best regards,
 -- 
-Bye, Peter Korsgaard 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
