@@ -1,42 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 31 Oct 2014 18:45:31 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-10-30
-References: <20141031073016.162E2100B71@stock.ovh.net>
- <5453C5A3.4080506@imgtec.com>
-Message-ID: <XnsA3D7BED321C6BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 31 Oct 2014 19:28:05 +0100
+Subject: [Buildroot] [RFC] Responsive Design Website
+In-Reply-To: <CA+TH9V=o_erPS2D0z-0QXq_egtXiHwq0W+ZLfvsqq7G7H0WXnA@mail.gmail.com>
+References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
+ <20141028172031.28dfdde4@free-electrons.com>
+ <CA+TH9VnZLSvKJjze-JhCrZQtdPJhc9eErMT4iAwMw+ZRJFLgUg@mail.gmail.com>
+ <CA+TH9VkMsJ8RSoBfz+imu8vq8nhZyQck3G7f-FUjyiG7aYh1-A@mail.gmail.com>
+ <20141031101932.6dc2069c@free-electrons.com>
+ <782144F7-60DD-4BB5-8EF3-D992743186F6@gmail.com>
+ <CA+TH9V=o_erPS2D0z-0QXq_egtXiHwq0W+ZLfvsqq7G7H0WXnA@mail.gmail.com>
+Message-ID: <BBB4DBBE-591D-4E5C-ADD0-6FEB459DE848@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente Olivert Riera <Vincent.Riera@imgtec.com> 
-wrote in news:5453C5A3.4080506 at imgtec.com:
+On October 31, 2014 12:06:43 PM CET, Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
-> Dear all,
-> 
-> On 10/31/2014 07:30 AM, Thomas Petazzoni wrote:
->> Build statistics for 2014-10-30
-> 
->>     mips64el | tvheadend-596b4e0b29937a612... | NOK | 
-http://autobuild.buildroot.net/results/3aaa28eb4fd04a5b578c5128b57ce89165e473
-be/
->>     mips64el | tvheadend-596b4e0b29937a612... | NOK | 
-http://autobuild.buildroot.net/results/467df0fde737de0ec89fe023b2ce33546543d3
-35/
-> 
-> tvheadend fails to build with Python3.
-> 
-> Reported upstream: https://tvheadend.org/issues/2444
-> 
-> Should we make this packages depend on !BR2_PACKAGE_PYTHON3 until
-> upstream fixes the problem?
+>
+>Cannot reproduce the problem on my really old htc g2. For me the menu
+>sliding is more or less instantaneous.
+>By the way, I used the defaults provided by bootstrap, I'll try to look
+>at that.
 
-Hi,
-
-it is not necessary to add this dependency, since tvheadend complains only 
-about the python host package, this morning I sent a patch to fix the 
-problem: http://patchwork.ozlabs.org/patch/405199/
-
-Regards, Bernd
+Don't bother: I checked using the stock android browser and the delay is not there. Must be a Dolphin issue.
