@@ -1,76 +1,51 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 31 Oct 2014 12:06:43 +0100
-Subject: [Buildroot] [RFC] Responsive Design Website
-In-Reply-To: <782144F7-60DD-4BB5-8EF3-D992743186F6@gmail.com>
-References: <CA+TH9VmP76wiQFJgn4i+f6b_oO7uQc2Duoswz+H5vrj=F0AOTA@mail.gmail.com>
- <20141028172031.28dfdde4@free-electrons.com>
- <CA+TH9VnZLSvKJjze-JhCrZQtdPJhc9eErMT4iAwMw+ZRJFLgUg@mail.gmail.com>
- <CA+TH9VkMsJ8RSoBfz+imu8vq8nhZyQck3G7f-FUjyiG7aYh1-A@mail.gmail.com>
- <20141031101932.6dc2069c@free-electrons.com>
- <782144F7-60DD-4BB5-8EF3-D992743186F6@gmail.com>
-Message-ID: <CA+TH9V=o_erPS2D0z-0QXq_egtXiHwq0W+ZLfvsqq7G7H0WXnA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Oct 2014 12:12:57 +0100
+Subject: [Buildroot] [PATCH v2] schifra: fix build of examples and add
+	hash
+In-Reply-To: <87egto8pv7.fsf@dell.be.48ers.dk>
+References: <1414491461-9629-1-git-send-email-arnout@mind.be>
+ <20141028185534.7e3aafb2@free-electrons.com>
+ <87egto8pv7.fsf@dell.be.48ers.dk>
+Message-ID: <20141031121257.540f4ba3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list!
+Dear Peter Korsgaard,
 
-@ Thomas Petazoni
-> Looks great! There's one issue left I believe: on the sponsors page,
-> when you reduce the width of the browser window, then the width of each
-> gray block for each sponsor is different. See the screen shot at
-> http://imgur.com/hw3MaRc.
+On Fri, 31 Oct 2014 12:01:32 +0100, Peter Korsgaard wrote:
 
-Fixed. I'm reworking the patch and plitting in approriate subpatches,
-they will be ready in weekend I think.
+> It seems like it changed AGAIN:
+> 
+> http://autobuild.buildroot.net/results/b62/b624c7f9fd7b431e97599e4b9b5e2a87fcb1a0a9/build-end.log
+> 
+> This is not workable. Nobody will be able to seriously use schifra in a
+> project like this, and E.G. 2014.08 and earlier releases are broken.
 
-@ Thomas De Schampheleire
-> Another thing I noticed is that there's a
-> considerable delay (about half a second)
-> between tapping the menu button and
-> the menu starting sliding down. I see this
-> on my phone. Is this a configurable option
-> or just processing?
+Are we sure it changed again? Isn't the build error above caused by the
+fact that the tarball in the cache was wrong, and now that we've added
+the hash, the individual autobuilder instances are progressively
+realizing that the tarball they have in their cache is wrong.
 
-Cannot reproduce the problem on my really old htc g2. For me the menu
-sliding is more or less instantaneous.
-By the way, I used the defaults provided by bootstrap, I'll try to look at that.
+> What do we do?
+> 
+> - Get upstream to add a version number to the tarball and bump the
+>   version whenever it changes
+> 
+> - Put a known good version on sources.buildroot.net and use that
+> 
+> - Drop the package
 
-Sincerely, Angelo
+I personally don't care about schifra. It was added back in August 2012
+by Simon Dawson, but unfortunately Simon is no longer contributing to
+Buildroot.
 
-2014-10-31 11:43 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
-> On October 31, 2014 10:19:32 AM CET, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->>Dear Angelo Compagnucci,
->>
->>On Fri, 31 Oct 2014 10:06:48 +0100, Angelo Compagnucci wrote:
->>> Hello List,
->>>
->>> Another slightly update (minor fixings), now it should be ready for
->>production!
->>>
->>> Hope you like it!
->>>
->>> http://buildrootrd.idea-on-line.it/
->>
->>Looks great! There's one issue left I believe: on the sponsors page,
->>when you reduce the width of the browser window, then the width of each
->>gray block for each sponsor is different. See the screen shot at
->>http://imgur.com/hw3MaRc.
->
-> Another thing I noticed is that there's a
->  considerable delay (about half a second)
->  between tapping the menu button and
->  the menu starting sliding down. I see this
->  on my phone. Is this a configurable option
->  or just processing?
->
-> Thanks,
-> Thomas
->
+Maybe we should first report the issue upstream?
 
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
