@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2014 16:39:19 +0100
-Subject: [Buildroot] [PATCH v2 3/3] mysql: use /etc/ld.so.conf.d instead
- of /etc/ld.so.conf
-In-Reply-To: <1414768749-15134-3-git-send-email-jezz@sysmic.org>
+Date: Fri, 31 Oct 2014 16:41:56 +0100
+Subject: [Buildroot] [PATCH v2 1/3] skeleton: add support for
+ /etc/ld.so.conf.d/*.conf files
+In-Reply-To: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
 References: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
- <1414768749-15134-3-git-send-email-jezz@sysmic.org>
-Message-ID: <20141031163919.4e436a70@free-electrons.com>
+Message-ID: <20141031164156.6a386482@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,25 @@ To: buildroot@busybox.net
 
 Dear J?r?me Pouiller,
 
-On Fri, 31 Oct 2014 16:19:09 +0100, J?r?me Pouiller wrote:
+On Fri, 31 Oct 2014 16:19:07 +0100, J?r?me Pouiller wrote:
 
->  define MYSQL_ADD_MYSQL_LIB_PATH
-> -	echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
-> +	$(INSTALL) -d $(TARGET_DIR)/etc/ld.so.conf.d
-> +	$(INSTALL) -m 644 \
-> +		package/mysql g/ld.so.conf.d-mysql.conf \
-> +		$(TARGET_DIR)/etc/ld.so.conf.d
->  endef
+> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +define GENERATE_LD_SO_CONF_FILE
+> +	ls $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > /dev/null 2>&1 && \
+> +	    echo "Usage of /etc/ld.so.conf.d/*.conf files with musl libc is not supported"
 
-Does this works with uClibc?
+We should error out here.
 
-The gst-fsl-plugins package is limited to glibc, so we don't care. But
-mysql is supported with uClibc, and I'm not sure uClibc
-supports /etc/ld.so.conf.d/.
+Does musl supports /etc/ld.so.conf ? If so, then I believe we should
+simply not use the /etc/ld.so.conf.d/ feature of glibc, and instead
+keep using /etc/ld.so.conf only, like MySQL was doing.
+
+If you don't want to see repeated entries, you can do something like:
+
+	grep -q "^/usr/lib/mysql$" $(TARGET_DIR)/etc/ld.so.conf ||
+		echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
+
+We could even imagine having a make function to do that.
 
 Best regards,
 
