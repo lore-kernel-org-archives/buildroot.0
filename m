@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2014 12:12:57 +0100
-Subject: [Buildroot] [PATCH v2] schifra: fix build of examples and add
-	hash
-In-Reply-To: <87egto8pv7.fsf@dell.be.48ers.dk>
-References: <1414491461-9629-1-git-send-email-arnout@mind.be>
- <20141028185534.7e3aafb2@free-electrons.com>
- <87egto8pv7.fsf@dell.be.48ers.dk>
-Message-ID: <20141031121257.540f4ba3@free-electrons.com>
+Date: Fri, 31 Oct 2014 12:20:52 +0100
+Subject: [Buildroot] [git commit] nss-mdns: unbreak after e1eba3d97
+ (system/skeleton: make nsswitch install conditional)
+In-Reply-To: <20141031103620.B1418B2511@busybox.osuosl.org>
+References: <20141031103620.B1418B2511@busybox.osuosl.org>
+Message-ID: <20141031122052.7c1b70b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +13,29 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Fri, 31 Oct 2014 12:01:32 +0100, Peter Korsgaard wrote:
+On Fri, 31 Oct 2014 11:31:05 +0100, Peter Korsgaard wrote:
 
-> It seems like it changed AGAIN:
-> 
-> http://autobuild.buildroot.net/results/b62/b624c7f9fd7b431e97599e4b9b5e2a87fcb1a0a9/build-end.log
-> 
-> This is not workable. Nobody will be able to seriously use schifra in a
-> project like this, and E.G. 2014.08 and earlier releases are broken.
+> diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+> index 8d23f89..22c2bc2 100644
+> --- a/package/nss-mdns/nss-mdns.mk
+> +++ b/package/nss-mdns/nss-mdns.mk
+> @@ -10,6 +10,9 @@ NSS_MDNS_LICENSE = LGPLv2.1+
+>  NSS_MDNS_LICENSE_FILES = LICENSE
+>  
+>  define NSS_MDNS_INSTALL_CONFIG
+> +	if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
+> +		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
+> +	fi
+>  	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
+>  	    $(TARGET_DIR)/etc/nsswitch.conf
+>  endef
 
-Are we sure it changed again? Isn't the build error above caused by the
-fact that the tarball in the cache was wrong, and now that we've added
-the hash, the individual autobuilder instances are progressively
-realizing that the tarball they have in their cache is wrong.
+As I already pointed out when I reviewed Gustavo's patch about
+nsswitch.conf, it's not the correct approach. This file should be
+installed by the glibc and toolchain-external packages. This way, it is
+guaranteed to be there when nss-mdns or samba want to modify.
 
-> What do we do?
-> 
-> - Get upstream to add a version number to the tarball and bump the
->   version whenever it changes
-> 
-> - Put a known good version on sources.buildroot.net and use that
-> 
-> - Drop the package
-
-I personally don't care about schifra. It was added back in August 2012
-by Simon Dawson, but unfortunately Simon is no longer contributing to
-Buildroot.
-
-Maybe we should first report the issue upstream?
+Best regards,
 
 Thomas
 -- 
