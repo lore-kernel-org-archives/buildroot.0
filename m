@@ -1,54 +1,54 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri, 31 Oct 2014 16:19:07 +0100
-Subject: [Buildroot] [PATCH v2 1/3] skeleton: add support for
-	/etc/ld.so.conf.d/*.conf files
-Message-ID: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
+Date: Fri, 31 Oct 2014 16:19:08 +0100
+Subject: [Buildroot] [PATCH v2 2/3] gst-fsl-plugins: fix plugins loading
+In-Reply-To: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
+References: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1414768749-15134-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Problem was reported :
+  http://lists.busybox.net/pipermail/buildroot/2014-July/101566.html
+  http://lists.busybox.net/pipermail/buildroot/2014-October/107613.html
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- toolchain/toolchain.mk | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk             | 9 +++++++++
+ .../gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf  | 5 +++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
 
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 3f9900b..cd65cfc 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -13,6 +13,31 @@ endef
- TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
- endif
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index 8d8b8b4..21046fc 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -40,4 +40,13 @@ endef
  
-+# - glibc can include configuration files at runtime
-+# - uclibc does not support "include" feature
-+# - musl use /etc/ld-musl-${ARCH}.path file. This file use same syntax
-+#     than $LD_LIBRARY_PATH. Since there are plenty of corner cases in
-+#     generation of this file, we prefer to not support it. User can
-+#     fix the problem by providing file manualy (in a an overlay).
-+#
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+define GENERATE_LD_SO_CONF_FILE
-+	echo 'include /etc/ld.so.conf.d/*.conf' > $(TARGET_DIR)/etc/ld.so.conf
+ GST_FSL_PLUGINS_POST_PATCH_HOOKS += GST_FSL_PLUGINS_PATCH_M4
+ 
++define GST_FSL_PLUGINS_FIX_LD_PATH
++	$(INSTALL) -d $(TARGET_DIR)/etc/ld.so.conf.d
++	$(INSTALL) -m 644 \
++		package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf \
++		$(TARGET_DIR)/etc/ld.so.conf.d
 +endef
-+else
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+define GENERATE_LD_SO_CONF_FILE
-+	ls $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > /dev/null 2>&1 && \
-+	    echo "Usage of /etc/ld.so.conf.d/*.conf files with musl libc is not supported"
-+endef
-+else # UCLIBC
-+define GENERATE_LD_SO_CONF_FILE
-+	cat $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > $(TARGET_DIR)/etc/ld.so.conf
-+endef
-+endif
-+endif
-+TARGET_FINALIZE_HOOKS += GENERATE_LD_SO_CONF_FILE
 +
- # Install the gconv modules
- ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
- GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
++GST_FSL_PLUGINS_POST_INSTALL_TARGET_HOOKS += GST_FSL_PLUGINS_FIX_LD_PATH
++
+ $(eval $(autotools-package))
+diff --git a/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
+new file mode 100644
+index 0000000..325fbf1
+--- /dev/null
++++ b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
+@@ -0,0 +1,5 @@
++# cf. https://community.freescale.com/thread/300387
++/usr/lib/imx-mm/audio-codec
++/usr/lib/imx-mm/video-codec
++/usr/lib/imx-mm/parser
++
 -- 
 1.9.1
