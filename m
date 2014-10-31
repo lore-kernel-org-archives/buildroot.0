@@ -1,54 +1,26 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri, 31 Oct 2014 16:19:08 +0100
-Subject: [Buildroot] [PATCH v2 2/3] gst-fsl-plugins: fix plugins loading
-In-Reply-To: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-References: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1414768749-15134-2-git-send-email-jezz@sysmic.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 31 Oct 2014 16:20:01 +0100
+Subject: [Buildroot] [PATCH] libpcap: omit -rpath from pcap-config
+In-Reply-To: <c33c2710ceee7a99051fe39f96e8480b6440fa79.1414738768.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 31 Oct 2014 08:59:28 +0200")
+References: <c33c2710ceee7a99051fe39f96e8480b6440fa79.1414738768.git.baruch@tkos.co.il>
+Message-ID: <87fve46zby.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Problem was reported :
-  http://lists.busybox.net/pipermail/buildroot/2014-July/101566.html
-  http://lists.busybox.net/pipermail/buildroot/2014-October/107613.html
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk             | 9 +++++++++
- .../gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf  | 5 +++++
- 2 files changed, 14 insertions(+)
- create mode 100644 package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
+ > For target processes the libraries are always in their usual location under
+ > /lib and /usr/lib. It doesn't make sense to add RPATH tag pointing to host
+ > build directory to programs using libpcap. This commit changes V_RPATH_OPT in
+ > pcap-config to remove -rpath from its output.
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index 8d8b8b4..21046fc 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -40,4 +40,13 @@ endef
- 
- GST_FSL_PLUGINS_POST_PATCH_HOOKS += GST_FSL_PLUGINS_PATCH_M4
- 
-+define GST_FSL_PLUGINS_FIX_LD_PATH
-+	$(INSTALL) -d $(TARGET_DIR)/etc/ld.so.conf.d
-+	$(INSTALL) -m 644 \
-+		package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf \
-+		$(TARGET_DIR)/etc/ld.so.conf.d
-+endef
-+
-+GST_FSL_PLUGINS_POST_INSTALL_TARGET_HOOKS += GST_FSL_PLUGINS_FIX_LD_PATH
-+
- $(eval $(autotools-package))
-diff --git a/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
-new file mode 100644
-index 0000000..325fbf1
---- /dev/null
-+++ b/package/gstreamer/gst-fsl-plugins/ld.so.conf.d-gst-fsl-plugins.conf
-@@ -0,0 +1,5 @@
-+# cf. https://community.freescale.com/thread/300387
-+/usr/lib/imx-mm/audio-codec
-+/usr/lib/imx-mm/video-codec
-+/usr/lib/imx-mm/parser
-+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
