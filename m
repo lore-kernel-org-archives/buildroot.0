@@ -1,42 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2014 16:41:56 +0100
-Subject: [Buildroot] [PATCH v2 1/3] skeleton: add support for
- /etc/ld.so.conf.d/*.conf files
-In-Reply-To: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-References: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141031164156.6a386482@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 31 Oct 2014 16:50:49 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+Message-ID: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+This patch series implements an RWD website.
 
-On Fri, 31 Oct 2014 16:19:07 +0100, J?r?me Pouiller wrote:
+The patch is splitted in two:
 
-> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> +define GENERATE_LD_SO_CONF_FILE
-> +	ls $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > /dev/null 2>&1 && \
-> +	    echo "Usage of /etc/ld.so.conf.d/*.conf files with musl libc is not supported"
+The first one upgrades to bootstrap 3.2, jquery 1.11.1 and removes older files.
+The second one contains the RWD rework.
 
-We should error out here.
+Angelo Compagnucci (2):
+  docs: RWD website - upgrading bootstrap/jquery
+  docs: RWD website
 
-Does musl supports /etc/ld.so.conf ? If so, then I believe we should
-simply not use the /etc/ld.so.conf.d/ feature of glibc, and instead
-keep using /etc/ld.so.conf only, like MySQL was doing.
+ docs/about.html                              |   13 +-
+ docs/contribute.html                         |    6 +
+ docs/css/bootstrap-responsive.css            | 1092 -----
+ docs/css/bootstrap-responsive.min.css        |    9 -
+ docs/css/bootstrap.css                       | 6039 --------------------------
+ docs/css/bootstrap.min.css                   | 2360 ++++++----
+ docs/css/buildroot.css                       |   14 +-
+ docs/docs.html                               |    6 +
+ docs/download.html                           |    6 +
+ docs/fonts/glyphicons-halflings-regular.woff |  Bin 0 -> 23320 bytes
+ docs/footer.html                             |    2 +-
+ docs/git.html                                |    5 +
+ docs/header.html                             |   36 +-
+ docs/index.html                              |   55 +-
+ docs/js/bootstrap.js                         | 2159 ---------
+ docs/js/bootstrap.min.js                     |   10 +-
+ docs/js/buildroot.js                         |   11 +-
+ docs/js/jquery-1.10.2.min.js                 |    6 -
+ docs/js/jquery-1.11.1.min.js                 |    4 +
+ docs/news.html                               |    6 +
+ docs/sponsors.html                           |  207 +-
+ docs/support.html                            |    6 +
+ 22 files changed, 1709 insertions(+), 10343 deletions(-)
+ delete mode 100644 docs/css/bootstrap-responsive.css
+ delete mode 100644 docs/css/bootstrap-responsive.min.css
+ delete mode 100644 docs/css/bootstrap.css
+ create mode 100644 docs/fonts/glyphicons-halflings-regular.woff
+ delete mode 100644 docs/js/bootstrap.js
+ delete mode 100644 docs/js/jquery-1.10.2.min.js
+ create mode 100644 docs/js/jquery-1.11.1.min.js
 
-If you don't want to see repeated entries, you can do something like:
-
-	grep -q "^/usr/lib/mysql$" $(TARGET_DIR)/etc/ld.so.conf ||
-		echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
-
-We could even imagine having a make function to do that.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.1
