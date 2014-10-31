@@ -1,24 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 31 Oct 2014 16:20:01 +0100
-Subject: [Buildroot] [PATCH] libpcap: omit -rpath from pcap-config
-In-Reply-To: <c33c2710ceee7a99051fe39f96e8480b6440fa79.1414738768.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 31 Oct 2014 08:59:28 +0200")
-References: <c33c2710ceee7a99051fe39f96e8480b6440fa79.1414738768.git.baruch@tkos.co.il>
-Message-ID: <87fve46zby.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Oct 2014 16:21:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump
+	version to 0.4.5
+In-Reply-To: <1414736261-11731-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Fri, 31 Oct 2014 07:17:41 +0100")
+References: <1414736261-11731-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87bnos6z9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > For target processes the libraries are always in their usual location under
- > /lib and /usr/lib. It doesn't make sense to add RPATH tag pointing to host
- > build directory to programs using libpcap. This commit changes V_RPATH_OPT in
- > pcap-config to remove -rpath from its output.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
