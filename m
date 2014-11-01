@@ -1,28 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 21:42:28 +0100
-Subject: [Buildroot] [PATCH 18/51] lua-msgpack-native: bump version
-In-Reply-To: <1414349157-22749-18-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-18-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141101214228.30fc0c3a@free-electrons.com>
+Date: Sat, 1 Nov 2014 21:46:33 +0100
+Subject: [Buildroot] [git commit] lxc: bump version
+Message-ID: <20141101204721.82AD8B2BA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=f5213d1d5834e88ef064beae46f15b4312ed574c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Oct 2014 19:45:24 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/lua-msgpack-native/lua-msgpack-native.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+[Thomas: switch back to a tarball from
+https://linuxcontainers.org/downloads/ instead of
+github. Unfortunately, even though the tarball has the configure
+script generated, we still need to autoreconf since we're patching
+configure.ac.]
 
-Applied, thanks.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lxc/lxc.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 38bda7e..69c2fb9 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 1.0.4
+-LXC_SITE = $(call github,lxc,lxc,lxc-$(LXC_VERSION))
++LXC_VERSION = 1.0.6
++LXC_SITE = https://linuxcontainers.org/downloads/
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+-# configure not shipped
++# we're patching configure.ac
+ LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python \
