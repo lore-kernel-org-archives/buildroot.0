@@ -1,104 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 17:39:52 +0100
-Subject: [Buildroot] [PATCH v2 1/3] skeleton: add support for
- /etc/ld.so.conf.d/*.conf files
-In-Reply-To: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-References: <1414768749-15134-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141101163952.GA10189@free.fr>
+Date: Sat, 1 Nov 2014 17:43:16 +0100
+Subject: [Buildroot] [PATCH 1/1] xinetd: change to snapshot.debian.org
+ and add hash
+In-Reply-To: <1414859755-33664-1-git-send-email-kaszak@gmail.com>
+References: <1414859755-33664-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20141101164316.GB10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Karoly, All,
 
-On 2014-10-31 16:19 +0100, J?r?me Pouiller spake thusly:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  toolchain/toolchain.mk | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-> index 3f9900b..cd65cfc 100644
-> --- a/toolchain/toolchain.mk
-> +++ b/toolchain/toolchain.mk
-> @@ -13,6 +13,31 @@ endef
->  TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
->  endif
->  
-> +# - glibc can include configuration files at runtime
-> +# - uclibc does not support "include" feature
-> +# - musl use /etc/ld-musl-${ARCH}.path file. This file use same syntax
-> +#     than $LD_LIBRARY_PATH. Since there are plenty of corner cases in
-> +#     generation of this file, we prefer to not support it. User can
-> +#     fix the problem by providing file manualy (in a an overlay).
-> +#
-> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> +define GENERATE_LD_SO_CONF_FILE
-> +	echo 'include /etc/ld.so.conf.d/*.conf' > $(TARGET_DIR)/etc/ld.so.conf
-> +endef
-> +else
-> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> +define GENERATE_LD_SO_CONF_FILE
-> +	ls $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > /dev/null 2>&1 && \
-> +	    echo "Usage of /etc/ld.so.conf.d/*.conf files with musl libc is not supported"
-> +endef
-> +else # UCLIBC
-> +define GENERATE_LD_SO_CONF_FILE
-> +	cat $(TARGET_DIR)/etc/ld.so.conf.d/*.conf > $(TARGET_DIR)/etc/ld.so.conf
-> +endef
-> +endif
-> +endif
-> +TARGET_FINALIZE_HOOKS += GENERATE_LD_SO_CONF_FILE
+On 2014-11-01 17:35 +0100, Karoly Kasza spake thusly:
+> xinetd.org seems down quite some time, so change to snapshot.debian.org.
 
-I think it would be much better to not support this glibcism.
+Indeed, it's down from here, too... :-(
 
-I can only see one use-case for that:
+> Also add hash.
 
-  - the package installs such a file in its install procedure
-    => we should provide a post-install hook to move the content of
-       this file into /etc/ld.so.conf
+Manually downloaded and verified the two hashes.
 
-As Thomas P. said, we can provide a macro to ease doing that. I propose
-something slightly different, because 'grep -q' is not portable and I do
-not like 'echo':
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 
-    # Add a path in $(1) to /etc/ld.so.conf
-    define UPDATE_LD_SO_CONF
-        grep -E '^$(1)$$' $(TARGET_DIR)/etc/ld.so.conf >/dev/null 2>&1 || \
-        printf '%s\n' '$(1)' >>$(TARGET_DIR)/etc/ld.so.conf
-    endef
-
-which you could then call like that:
-
-    define FOO_UPDATE_LD_SO_CONF
-        $(call UPDATE_LD_SO_CONF,/usr/lib/foo)
-    endef
-    FOO_POST_TARGET_INSTALL_HOOKS += FOO_UPDATE_LD_SO_CONF
-
-Alternatively, we could include that in the pakage infra:
-
-    FOO_LD_SO_CONF_PATHS = /usr/lib/foo /usr/lib/foo/bar
-
-and the infra would look at that variable, and if set, add all the paths
-to /et/ld/so/conf.
-
-I thionk the pkg-infra solution is a bit overkill, given we currently do
-not have that much packages that use that (well, only mysql needs it),
-but the macro would not be very much justified either.
-
-So, I just NAK this feature.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  # Install the gconv modules
->  ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
->  GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
-> -- 
-> 1.9.1
+> ---
+>  package/xinetd/xinetd.hash |    4 ++++
+>  package/xinetd/xinetd.mk   |    3 ++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+>  create mode 100644 package/xinetd/xinetd.hash
 > 
+> diff --git a/package/xinetd/xinetd.hash b/package/xinetd/xinetd.hash
+> new file mode 100644
+> index 0000000..f656422
+> --- /dev/null
+> +++ b/package/xinetd/xinetd.hash
+> @@ -0,0 +1,4 @@
+> +# From snapshot.debian.org dsc file
+> +sha1	168d54aeb181e271e68f4c53847c3e6b2574dba6				xinetd_2.3.15.orig.tar.gz
+> +sha256	bf4e060411c75605e4dcbdf2ac57c6bd9e1904470a2f91e01ba31b50a80a5be3	xinetd_2.3.15.orig.tar.gz
+> +
+> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+> index 1fb91b5..7060f0c 100644
+> --- a/package/xinetd/xinetd.mk
+> +++ b/package/xinetd/xinetd.mk
+> @@ -5,7 +5,8 @@
+>  ################################################################################
+>  
+>  XINETD_VERSION = 2.3.15
+> -XINETD_SITE = http://www.xinetd.org
+> +XINETD_SOURCE = xinetd_$(XINETD_VERSION).orig.tar.gz
+> +XINETD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/x/xinetd
+>  XINETD_LICENSE = xinetd license
+>  XINETD_LICENSE_FILES = COPYRIGHT
+>  
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
@@ -107,3 +74,10 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141101/266b2e49/attachment.asc>
