@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 23:27:57 +0100
-Subject: [Buildroot] [PATCH 29/51] sqlcipher: bump version
-In-Reply-To: <1414349157-22749-29-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-29-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141101232757.0c30f845@free-electrons.com>
+Date: Sat, 1 Nov 2014 23:28:06 +0100
+Subject: [Buildroot] [git commit] sunxi-boards: bump version
+Message-ID: <20141101222918.82153AC2EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=a0b5052e9dec110903e1887e17bca314df228bb4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Oct 2014 19:45:35 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/sqlcipher/sqlcipher.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sunxi-boards/sunxi-boards.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
+index c65d00f..1a2bb4c 100644
+--- a/package/sunxi-boards/sunxi-boards.mk
++++ b/package/sunxi-boards/sunxi-boards.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_BOARDS_VERSION = 4016ad7fb6c249c0bd6b6d804c706f9a7a165cc6
++SUNXI_BOARDS_VERSION = 68acb3b1610a44b9402560623f7e35b7882585e9
+ SUNXI_BOARDS_SITE = $(call github,linux-sunxi,sunxi-boards,$(SUNXI_BOARDS_VERSION))
+ SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
+ SUNXI_BOARDS_INSTALL_IMAGES = YES
