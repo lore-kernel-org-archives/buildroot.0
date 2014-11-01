@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 22:18:04 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain-buildroot: create a
- relocatable one
-In-Reply-To: <1402844418-28987-1-git-send-email-noamc@ezchip.com>
-References: <1402844418-28987-1-git-send-email-noamc@ezchip.com>
-Message-ID: <20141101221804.65152468@free-electrons.com>
+Date: Sat, 1 Nov 2014 22:22:05 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix redundant usage of -mcpu and
+ -march/-mtune
+In-Reply-To: <1399989494-21343-2-git-send-email-kaszak@gmail.com>
+References: <1399989494-21343-1-git-send-email-kaszak@gmail.com>
+ <1399989494-21343-2-git-send-email-kaszak@gmail.com>
+Message-ID: <20141101222205.372415a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Noam Camus,
+Dear Karoly Kasza,
 
-On Sun, 15 Jun 2014 18:00:18 +0300, Noam Camus wrote:
-> From: Tal Zilcer <talz@ezchip.com>
+On Tue, 13 May 2014 15:58:14 +0200, Karoly Kasza wrote:
+> Disable adding -mtune or -march to the external toolchain parameters
+> if -mcpu is present.
 > 
-> This adds ability so that pre built buildroot toolchain and GDB can be used
-> by others in different computers without the need to build them again.
-> 
-> Note: the toolchain/GDB is still depended on native libraries.
-> 
-> Signed-off-by: Tal Zilcer <talz@ezchip.com>
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 > ---
->  package/expat/expat.mk                  |    4 ++++
->  package/gmp/gmp.mk                      |    4 ++++
->  package/mpc/mpc.mk                      |    4 ++++
->  package/mpfr/mpfr.mk                    |    4 ++++
->  toolchain/toolchain-buildroot/Config.in |    8 ++++++++
->  5 files changed, 24 insertions(+), 0 deletions(-)
+>  toolchain/toolchain-external/toolchain-external.mk |    7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thanks for this proposal. We discussed it during the last Buildroot
-meeting in D?sseldorf, and the general feeling is that while we
-acknowledge the current problem, we don't believe your proposal is the
-right solution.
+We discussed this patch at the last Buildroot meeting, and our feeling
+is that it's not the correct approach. I've since then sent a patch
+series that fix the same problem. Our approach is:
 
-The problem is that your solution only fixes gcc/gdb, but we generally
-want the "SDK" (so not only the toolchain itself, but also all other
-host tools like pkg-config, automake, autoconf, etc.) to be
-relocatable. We believe that the real solution is to use something like
-patchelf (https://nixos.org/patchelf.html) to adjust the RPATH of the
-binaries so that they use something like $ORIGIN/../lib, and therefore
-find the shared libraries where they are.
+ * On ARM, to no longer specify -march, but only -mcpu, since the
+   latter is used by gcc to deduce the former.
 
-We have for now marked your patch as Rejected, but we definitely
-welcome other patches implementing the RPATH fixup solution.
+ * In general, get rid of -mtune, since it doesn't make much sense in
+   the context of Buildroot where we target one specific system, and
+   therefore using -mcpu is sufficient.
 
-Thanks a lot!
+So, we've marked your patch as Rejected in our patch tracking system.
+
+Best regards,
 
 Thomas
 -- 
