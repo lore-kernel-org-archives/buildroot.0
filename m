@@ -1,39 +1,56 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Sat,  1 Nov 2014 21:54:40 +0100
-Subject: [Buildroot] [PATCH v3] xinetd: change download location
-Message-ID: <1414875280-57041-1-git-send-email-kaszak@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Nov 2014 22:18:04 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain-buildroot: create a
+ relocatable one
+In-Reply-To: <1402844418-28987-1-git-send-email-noamc@ezchip.com>
+References: <1402844418-28987-1-git-send-email-noamc@ezchip.com>
+Message-ID: <20141101221804.65152468@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xinetd.org is down, change to github instead.
-Hash can not be used, the tarball is generated.
+Dear Noam Camus,
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
+On Sun, 15 Jun 2014 18:00:18 +0300, Noam Camus wrote:
+> From: Tal Zilcer <talz@ezchip.com>
+> 
+> This adds ability so that pre built buildroot toolchain and GDB can be used
+> by others in different computers without the need to build them again.
+> 
+> Note: the toolchain/GDB is still depended on native libraries.
+> 
+> Signed-off-by: Tal Zilcer <talz@ezchip.com>
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> ---
+>  package/expat/expat.mk                  |    4 ++++
+>  package/gmp/gmp.mk                      |    4 ++++
+>  package/mpc/mpc.mk                      |    4 ++++
+>  package/mpfr/mpfr.mk                    |    4 ++++
+>  toolchain/toolchain-buildroot/Config.in |    8 ++++++++
+>  5 files changed, 24 insertions(+), 0 deletions(-)
 
-Changes v2 -> v3:
-  - use github helper
+Thanks for this proposal. We discussed it during the last Buildroot
+meeting in D?sseldorf, and the general feeling is that while we
+acknowledge the current problem, we don't believe your proposal is the
+right solution.
 
- package/xinetd/xinetd.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The problem is that your solution only fixes gcc/gdb, but we generally
+want the "SDK" (so not only the toolchain itself, but also all other
+host tools like pkg-config, automake, autoconf, etc.) to be
+relocatable. We believe that the real solution is to use something like
+patchelf (https://nixos.org/patchelf.html) to adjust the RPATH of the
+binaries so that they use something like $ORIGIN/../lib, and therefore
+find the shared libraries where they are.
 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index 1fb91b5..92d0d53 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XINETD_VERSION = 2.3.15
--XINETD_SITE = http://www.xinetd.org
-+XINETD_VERSION = xinetd-2-3-15
-+XINETD_SITE = $(call github,xinetd-org,xinetd,$(XINETD_VERSION))
- XINETD_LICENSE = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
- 
+We have for now marked your patch as Rejected, but we definitely
+welcome other patches implementing the RPATH fixup solution.
+
+Thanks a lot!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
