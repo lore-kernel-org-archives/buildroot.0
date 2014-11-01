@@ -1,74 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 23:36:20 +0100
-Subject: [Buildroot] [PATCH 31/51] sunxi-mali: bump version
-In-Reply-To: <1414349157-22749-31-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-31-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141101233620.7d89911f@free-electrons.com>
+Date: Sat, 1 Nov 2014 23:37:42 +0100
+Subject: [Buildroot] [PATCH 6/6] adwaita-icon-theme: new package
+In-Reply-To: <1414833694-4236-7-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1414833694-4236-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1414833694-4236-7-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141101233742.222554a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Eric Le Bihan,
 
-On Sun, 26 Oct 2014 19:45:37 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/sunxi-mali/sunxi-mali.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat,  1 Nov 2014 10:21:34 +0100, Eric Le Bihan wrote:
+> This package provides the Adwaita icon theme from the GNOME desktop
+> environment.
 > 
-> diff --git a/package/sunxi-mali/sunxi-mali.mk b/package/sunxi-mali/sunxi-mali.mk
-> index c6900c8..5e2e78c 100644
-> --- a/package/sunxi-mali/sunxi-mali.mk
-> +++ b/package/sunxi-mali/sunxi-mali.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SUNXI_MALI_VERSION = c2491fe952354ba44538064e534ed7c731cedb1e
-> +SUNXI_MALI_VERSION = d343311efc8db166d8371b28494f0f27b6a58724
->  SUNXI_MALI_SITE = $(call github,linux-sunxi,sunxi-mali,$(SUNXI_MALI_VERSION))
->  
->  SUNXI_MALI_INSTALL_STAGING = YES
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/Config.in                                |  1 +
+>  package/adwaita-icon-theme/Config.in             |  4 ++++
+>  package/adwaita-icon-theme/adwaita-icon-theme.mk | 14 ++++++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 package/adwaita-icon-theme/Config.in
+>  create mode 100644 package/adwaita-icon-theme/adwaita-icon-theme.mk
 
-This breaks the build of sunxi-mali:
+This package needs gtk-update-icon-cache, so presumably, it should
+depend on host-libgtk3, and therefore also only be selectable for
+Gtk3-enabled configuratons, no?
 
-make[2]: entrant dans le r?pertoire ? /home/thomas/projets/buildroot/output/build/sunxi-mali-d343311efc8db166d8371b28494f0f27b6a58724/test ?
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -lm -ldl -lpthread -o test test.c -lEGL -lGLESv2
-/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.9.2/../../../../arm-linux-gnueabihf/bin/ld: warning: libUMP.so.3, needed by /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so, not found (try using -rpath or -rpath-link)
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_close'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_mapped_pointer_get'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_secure_id_get'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_mapped_pointer_release'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_reference_add'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_size_get'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_reference_release'
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libEGL.so: undefined reference to `ump_open'
-collect2: error: ld returned 1 exit status
-make[2]: *** [test] Erreur 1
-make[2]: quittant le r?pertoire ? /home/thomas/projets/buildroot/output/build/sunxi-mali-d343311efc8db166d8371b28494f0f27b6a58724/test ?
-make[1]: *** [test] Erreur 2
-make[1]: quittant le r?pertoire ? /home/thomas/projets/buildroot/output/build/sunxi-mali-d343311efc8db166d8371b28494f0f27b6a58724 ?
-make: *** [/home/thomas/projets/buildroot/output/build/sunxi-mali-d343311efc8db166d8371b28494f0f27b6a58724/.stamp_staging_installed] Erreur 2
-
-Tested with the following defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_EABIHF=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_SUNXI_TOOLS=y
-BR2_PACKAGE_SUNXI_MALI=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_SUNXI_TOOLS=y
-
-With your sunxi-mali, sunxi-mali-prop and sunxi-tools bump patches
-applied.
+See:
+http://autobuild.buildroot.org/results/f8d/f8d0e2198fa54f9141512e2db6dc46e3cee1cd44/build-end.log
 
 Can you have a look?
 
