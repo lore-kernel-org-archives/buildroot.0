@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 23:16:09 +0100
-Subject: [Buildroot] [git commit] xinetd: change download location
-Message-ID: <20141101221617.DB6F5B2BE1@busybox.osuosl.org>
+Date: Sat, 1 Nov 2014 23:18:00 +0100
+Subject: [Buildroot] [git commit] sconeserver: bump version
+Message-ID: <20141101221821.AFA4AB2BE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c79e80b3117dead27e066c93e24bd818524849d0
+commit: http://git.buildroot.net/buildroot/commit/?id=b488b25dab787fc289fb125cf4e52c7c2880c527
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xinetd.org is down, change to github instead.
-Hash can not be used, the tarball is generated.
-
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xinetd/xinetd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/sconeserver/sconeserver.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index 1fb91b5..92d0d53 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 6b91469..fd2123d 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -6,7 +6,7 @@
  
--XINETD_VERSION = 2.3.15
--XINETD_SITE = http://www.xinetd.org
-+XINETD_VERSION = xinetd-2-3-15
-+XINETD_SITE = $(call github,xinetd-org,xinetd,$(XINETD_VERSION))
- XINETD_LICENSE = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
- 
+ # Release 0.6.0 doesn't build cleanly, so use a recent
+ # Git commit.
+-SCONESERVER_VERSION = d58f2de88c681939554089f786e360042a30c8f8
++SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
