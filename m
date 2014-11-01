@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 14:52:42 +0100
-Subject: [Buildroot] [PATCH v4 1/2] package/tvheadend: Add transcoding
- support by ffmpeg
-In-Reply-To: <1414789621-10892-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1414789621-10892-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141101145242.32d26c33@free-electrons.com>
+Date: Sat, 1 Nov 2014 15:03:20 +0100
+Subject: [Buildroot] [PATCH] dstat: propagate python dependencies
+In-Reply-To: <1414769654-20569-1-git-send-email-jezz@sysmic.org>
+References: <1414769654-20569-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20141101150320.7dd9e8db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear J?r?me Pouiller,
 
-On Fri, 31 Oct 2014 22:07:00 +0100, Bernd Kuhls wrote:
-> Add --disable-libffmpeg_static to disable static linking of ffmpeg
-> libraries into the tvheadend binary.
-> 
-> tvheadend compiles with ffmpeg using this minimal defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> BR2_PACKAGE_FFMPEG=y
-> BR2_PACKAGE_TVHEADEND=y
-> 
+On Fri, 31 Oct 2014 16:34:14 +0100, J?r?me Pouiller wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
-> v4: simplify ffmpeg dependency handling, add description for
->     --disable-libffmpeg_static to commit log (Thomas)
-> v3: no changes
-> v2: add --disable-libffmpeg_static, newly added option to git master
+>  package/dstat/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/Config.in    |    2 ++
->  package/tvheadend/tvheadend.mk |    8 ++++++++
->  2 files changed, 10 insertions(+)
+> diff --git a/package/dstat/Config.in b/package/dstat/Config.in
+> index 62a392a..52fbb49 100644
+> --- a/package/dstat/Config.in
+> +++ b/package/dstat/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DSTAT
+>  	bool "dstat"
+>  	depends on BR2_USE_WCHAR # python
+>  	depends on BR2_USE_MMU # python
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+>  	select BR2_PACKAGE_PYTHON
+>  	help
+>  	  Dstat, written in Python, is a versatile replacement for vmstat,
+> @@ -22,4 +23,4 @@ config BR2_PACKAGE_DSTAT
+>  
+>  comment "dstat needs a toolchain w/ wchar"
 
-Both patches applied. But *again*, please put your SoB line *before*
-the first "---" sign. Everything that is after the first "---" gets
-removed by git when applying the patch, so your SoB line disappears.
+You forgot to update the comment here regarding the new thread
+dependency.
 
-Thanks!
+Committed with this fixed, thanks!
 
 Thomas
 -- 
