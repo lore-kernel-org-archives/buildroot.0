@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 23:22:09 +0100
-Subject: [Buildroot] [git commit] sqlcipher: bump version
-Message-ID: <20141101222733.B08A2B2BF7@busybox.osuosl.org>
+Date: Sat, 1 Nov 2014 23:27:57 +0100
+Subject: [Buildroot] [PATCH 29/51] sqlcipher: bump version
+In-Reply-To: <1414349157-22749-29-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-29-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141101232757.0c30f845@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2ec512aa4d4bbf0c0507e92e2e909e711416576
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sqlcipher/sqlcipher.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 26 Oct 2014 19:45:35 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/sqlcipher/sqlcipher.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index a118718..86eebb5 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLCIPHER_VERSION = v1.1.9
-+SQLCIPHER_VERSION = v3.2.0
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,$(SQLCIPHER_VERSION))
- SQLCIPHER_DEPENDENCIES = openssl host-tcl
- SQLCIPHER_INSTALL_STAGING = YES
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
