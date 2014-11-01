@@ -1,61 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 20:07:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tinyxml: fix the upstream URL
-In-Reply-To: <1414865313-30621-1-git-send-email-romain.naour@openwide.fr>
-References: <1414865313-30621-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141101190722.GE10189@free.fr>
+Date: Sat, 1 Nov 2014 20:08:33 +0100
+Subject: [Buildroot] [PATCH v2] xinetd: change download location
+In-Reply-To: <1414863185-1250-1-git-send-email-kaszak@gmail.com>
+References: <1414863185-1250-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20141101190833.GF10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Karoly, All,
 
-On 2014-11-01 19:08 +0100, Romain Naour spake thusly:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/tinyxml/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 2014-11-01 18:33 +0100, Karoly Kasza spake thusly:
+> xinetd.org is down, change to github instead.
+> Hash can not be used, the tarball is generated.
 > 
-> diff --git a/package/tinyxml/Config.in b/package/tinyxml/Config.in
-> index 061ff67..466e391 100644
-> --- a/package/tinyxml/Config.in
-> +++ b/package/tinyxml/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_TINYXML
->  	  TinyXML is a simple, small, C++ XML parser that can be
->  	  easily integrating into other programs.
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  package/xinetd/xinetd.mk |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+> index 1fb91b5..0ecc1ad 100644
+> --- a/package/xinetd/xinetd.mk
+> +++ b/package/xinetd/xinetd.mk
+> @@ -4,8 +4,9 @@
+>  #
+>  ################################################################################
 >  
-> -	  https://github.com/leethomason/tinyxml2
-> +	  http://sourceforge.net/projects/tinyxml
+> -XINETD_VERSION = 2.3.15
+> -XINETD_SITE = http://www.xinetd.org
+> +XINETD_VERSION = 2-3-15
+> +XINETD_SOURCE = xinetd-$(XINETD_VERSION).tar.gz
+> +XINETD_SITE = https://github.com/xinetd-org/xinetd/archive
 
-Well, I'm not even sure we are using that TinyXML.
-
-In fact, we get it from an XMBC mirror:
-    TINYXML_SITE = http://mirrors.xbmc.org/build-deps/sources
-
-The content of the tinyxml-2.6.2_2.tar.gz archive is not even remotely
-similar to the content of the repository on the sourceforge webpage; at
-least, it has been hugely re-organised, and patched. It also has
-autotools files, which is good, though.
-
-So, NAK on this, until we have a clear explanations on what's going on.
-
-Maxime, why do we need this specially patched tinyxml from the XBMC
-mirror, instead of the one from upstream?
+See the manual on how to use the github helper:
+    http://nightly.buildroot.org/#github-download-url
 
 Regards,
 Yann E. MORIN.
 
->  comment "tinyxml needs a toolchain w/ C++"
->  	depends on !BR2_INSTALL_LIBSTDCPP
+>  XINETD_LICENSE = xinetd license
+>  XINETD_LICENSE_FILES = COPYRIGHT
+>  
 > -- 
-> 1.9.3
+> 1.7.10.4
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
