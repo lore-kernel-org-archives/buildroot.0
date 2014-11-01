@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 14:48:01 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: Bump version to current
-	git master
-Message-ID: <20141101134819.9FA5AB27C9@busybox.osuosl.org>
+Date: Sat, 1 Nov 2014 14:52:42 +0100
+Subject: [Buildroot] [PATCH v4 1/2] package/tvheadend: Add transcoding
+ support by ffmpeg
+In-Reply-To: <1414789621-10892-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1414789621-10892-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141101145242.32d26c33@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb20aca0fddc54a3359448d9b3a27abd29f3f028
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tvheadend/tvheadend.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 31 Oct 2014 22:07:00 +0100, Bernd Kuhls wrote:
+> Add --disable-libffmpeg_static to disable static linking of ffmpeg
+> libraries into the tvheadend binary.
+> 
+> tvheadend compiles with ffmpeg using this minimal defconfig:
+> 
+> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+> BR2_PACKAGE_FFMPEG=y
+> BR2_PACKAGE_TVHEADEND=y
+> 
+> ---
+> v4: simplify ffmpeg dependency handling, add description for
+>     --disable-libffmpeg_static to commit log (Thomas)
+> v3: no changes
+> v2: add --disable-libffmpeg_static, newly added option to git master
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/tvheadend/Config.in    |    2 ++
+>  package/tvheadend/tvheadend.mk |    8 ++++++++
+>  2 files changed, 10 insertions(+)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 08d8e7e..f3d7863 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 596b4e0b29937a6123b25940621fe17dccbefbb4
-+TVHEADEND_VERSION = c053acd84e5cc48a3e70047f228728bf039cfacd
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+Both patches applied. But *again*, please put your SoB line *before*
+the first "---" sign. Everything that is after the first "---" gets
+removed by git when applying the patch, so your SoB line disappears.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
