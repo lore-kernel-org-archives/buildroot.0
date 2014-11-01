@@ -1,74 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 18:20:32 +0100
-Subject: [Buildroot] [PATCH 1/1] xinetd: change to snapshot.debian.org
- and add hash
-In-Reply-To: <CABbD_XBrSqZmXw2BuM46dKZYbRyYvTOzP3LZgkMBfx7F=jLkaQ@mail.gmail.com>
-References: <1414859755-33664-1-git-send-email-kaszak@gmail.com>
- <20141101180237.6b82f0f4@free-electrons.com>
- <CABbD_XBrSqZmXw2BuM46dKZYbRyYvTOzP3LZgkMBfx7F=jLkaQ@mail.gmail.com>
-Message-ID: <20141101172032.GD10189@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Nov 2014 18:19:57 +0100
+Subject: [Buildroot] [git commit] package/mono: add threads dependency
+Message-ID: <20141101172049.333B7B2AD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-K?roly, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0a73638d1a813f71de872a3531ad7a222dd26e44
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-11-01 18:06 +0100, K?roly Kasza spake thusly:
-> I'm not sure, but that seems logical.
-> The sha256 sum from github.com differs from debian.org.
-> Which one to prefer?
+This patch adds a dependency on BR2_TOOLCHAIN_HAS_THREADS to the mono
+package, in order to fix the following autobuilder failures:
 
-Well, I'd say we should switch to the github one.
+  http://autobuild.buildroot.net/results/ece/ece1051cb9238735130b29f76d90a4994058345a/
+  http://autobuild.buildroot.net/results/658/65850774d4c6b875cb6ebbf461dcc48cf8208f4f/
+  http://autobuild.buildroot.net/results/5d5/5d5074aa73e167099410d244a18114dbced348d1/
 
-However, we can't use a hash for those tarballs, since they will be
-generated, and thus are not reproducible (the content *is* the same, but
-not the tarball itself).
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mono/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> Best regards,
-> Karoly
-> 
-> On Sat, Nov 1, 2014 at 6:02 PM, Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com> wrote:
-> 
-> > Dear Karoly Kasza,
-> >
-> > On Sat,  1 Nov 2014 17:35:55 +0100, Karoly Kasza wrote:
-> >
-> > >  XINETD_VERSION = 2.3.15
-> > > -XINETD_SITE = http://www.xinetd.org
-> > > +XINETD_SOURCE = xinetd_$(XINETD_VERSION).orig.tar.gz
-> > > +XINETD_SITE =
-> > http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/x/xinetd
-> >
-> > Just wondering, isn't https://github.com/xinetd-org/xinetd the new
-> > appropriate upstream site?
-> >
-> > There is even a 2.3.15 release at
-> > https://github.com/xinetd-org/xinetd/releases.
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Free Electrons
-> > Embedded Linux, Kernel and Android engineering
-> > http://free-electrons.com
-> >
-> 
-> 
-> 
-> -- 
-> 
-> ?dv,
-> KK
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+index f8f4895..cc015e6 100644
+--- a/package/mono/Config.in
++++ b/package/mono/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_MONO
+ 	bool "mono"
+ 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+ 	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_MONO_45 if !BR2_PACKAGE_MONO_20 && !BR2_PACKAGE_MONO_40
+ 	help
+ 	  An open source, cross-platform, implementation of C#
+@@ -36,5 +37,5 @@ config BR2_PACKAGE_MONO_45
+ 
+ endif
+ 
+-comment "mono needs a toolchain w/ IPv6"
+-	depends on !BR2_INET_IPV6
++comment "mono needs a toolchain w/ IPv6, threads"
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
