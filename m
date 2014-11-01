@@ -1,62 +1,66 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 1 Nov 2014 20:07:25 +0100
-Subject: [Buildroot] [PATCH] inetutils: new package
-In-Reply-To: <20141101200125.509c0b89@free-electrons.com>
-References: <1414624048-37143-1-git-send-email-kaszak@gmail.com>
- <852735167.27218624.1414655605361.JavaMail.root@openwide.fr>
- <CABbD_XB2q_Vqn0cyJgHjeCPtLUrbC=rt7=VxLJhNwkX819Lu_A@mail.gmail.com>
- <20141030094018.GH1759@tarshish>
- <CABbD_XDXmwU5QgT0i=g=zs_13fBWPdv2Bn+WfFZMDU_YX8er+Q@mail.gmail.com>
- <20141030125801.GO1759@tarshish>
- <CABbD_XDu4yyqHX=0JbMg-4WpLivg7K41X62F6+BMtPT6NVS-dA@mail.gmail.com>
- <CABbD_XDjRYVSW4zLZhcOKD1asx8YMOk3+=L+d7teEr9cDhu1-A@mail.gmail.com>
- <20141101200125.509c0b89@free-electrons.com>
-Message-ID: <CABbD_XA35CzC9nWkUnXnidJFEnZ0=yV1wd1f8FytjPKunw=uQg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Nov 2014 20:07:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tinyxml: fix the upstream URL
+In-Reply-To: <1414865313-30621-1-git-send-email-romain.naour@openwide.fr>
+References: <1414865313-30621-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141101190722.GE10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Romain, All,
 
-it is unpleasant indeed.
-What is the Buildroot recommended method for these issues?
-Should I modify the install target to overwrite the existing tools?
+On 2014-11-01 19:08 +0100, Romain Naour spake thusly:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/tinyxml/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/tinyxml/Config.in b/package/tinyxml/Config.in
+> index 061ff67..466e391 100644
+> --- a/package/tinyxml/Config.in
+> +++ b/package/tinyxml/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_TINYXML
+>  	  TinyXML is a simple, small, C++ XML parser that can be
+>  	  easily integrating into other programs.
+>  
+> -	  https://github.com/leethomason/tinyxml2
+> +	  http://sourceforge.net/projects/tinyxml
 
-Best regards,
-Karoly
+Well, I'm not even sure we are using that TinyXML.
 
-On Sat, Nov 1, 2014 at 8:01 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+In fact, we get it from an XMBC mirror:
+    TINYXML_SITE = http://mirrors.xbmc.org/build-deps/sources
 
-> Dear K?roly Kasza,
->
-> On Sat, 1 Nov 2014 19:33:16 +0100, K?roly Kasza wrote:
->
-> > I investigated the matter further.
-> > Looks like inetutils won't overwrite ifconfig or ping, because of a
-> simple
-> > reason: it installs the binaries elsewhere.
-> > In these cases, both binaries will be present, and the $PATH will choose
-> > which to call.
->
-> This is not great. We don't really like having two variants of the same
-> tool in the filesystem.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+The content of the tinyxml-2.6.2_2.tar.gz archive is not even remotely
+similar to the content of the repository on the sourceforge webpage; at
+least, it has been hugely re-organised, and patched. It also has
+autotools files, which is good, though.
 
+So, NAK on this, until we have a clear explanations on what's going on.
 
+Maxime, why do we need this specially patched tinyxml from the XBMC
+mirror, instead of the one from upstream?
+
+Regards,
+Yann E. MORIN.
+
+>  comment "tinyxml needs a toolchain w/ C++"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-
-?dv,
-KK
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141101/37ce39fa/attachment-0001.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
