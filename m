@@ -1,40 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 14:43:54 +0100
-Subject: [Buildroot] [PATCH 0/2] RWD Website
-In-Reply-To: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20141101144354.66e2e698@free-electrons.com>
+Date: Sat, 1 Nov 2014 14:45:46 +0100
+Subject: [Buildroot] [git commit] rdesktop: bump to version 1.8.3
+Message-ID: <20141101134604.47F1DB27AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=26c32cfe430908afd1f810171f71d84510b76702
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Oct 2014 16:50:49 +0100, Angelo Compagnucci wrote:
-> This patch series implements an RWD website.
-> 
-> The patch is splitted in two:
-> 
-> The first one upgrades to bootstrap 3.2, jquery 1.11.1 and removes older files.
-> The second one contains the RWD rework.
-> 
-> Angelo Compagnucci (2):
->   docs: RWD website - upgrading bootstrap/jquery
->   docs: RWD website
+Also add hash file.
 
-Both patches applied, thanks. The first patch didn't apply properly, as
-the very long lines of the css/js code have been mangled either by git
-send-email (unlikely) or by one of the e-mail servers (very possible).
-Anyway, I've recreated the patch by updating jQuery and Bootstrap to
-the same versions, and removed the useless files as your patch was
-doing.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rdesktop/rdesktop.hash |    3 +++
+ package/rdesktop/rdesktop.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-Thanks a lot for having worked on this!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rdesktop/rdesktop.hash b/package/rdesktop/rdesktop.hash
+new file mode 100644
+index 0000000..cc1f55b
+--- /dev/null
++++ b/package/rdesktop/rdesktop.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/rdesktop/files/rdesktop/1.8.3/
++md5	86e8b368a7c715e74ded92e0d7912dc5	rdesktop-1.8.3.tar.gz
++sha1	aa1e56043782e04a0121357b24874e3ad6ae7b1d	rdesktop-1.8.3.tar.gz
+diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
+index ea1e505..79187b5 100644
+--- a/package/rdesktop/rdesktop.mk
++++ b/package/rdesktop/rdesktop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RDESKTOP_VERSION = 1.8.2
++RDESKTOP_VERSION = 1.8.3
+ RDESKTOP_SITE = http://downloads.sourceforge.net/project/rdesktop/rdesktop/$(RDESKTOP_VERSION)
+ RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
+ 	$(if $(BR2_PACKAGE_ALSA_LIB_PCM),alsa-lib) \
