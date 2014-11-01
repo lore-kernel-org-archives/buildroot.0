@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 20:04:55 +0100
-Subject: [Buildroot] [git commit] adwaita-icon-theme: add missing dependency
-	on host-intltool
-Message-ID: <20141101190644.ED9CCB2B32@busybox.osuosl.org>
+Date: Sat, 1 Nov 2014 20:07:07 +0100
+Subject: [Buildroot] [PATCH 15/51] libstrophe: bump version
+In-Reply-To: <1414349157-22749-15-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-15-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141101200707.5d0819be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0bc79d61601222d1ea005ffb0670d3222912638
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Fixes:
+On Sun, 26 Oct 2014 19:45:21 +0100, Maxime Hadjinlian wrote:
+> Remove patch that was accepted upstream. The other one was never sent
+> before.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  ...-configure.ac-fix-misdetection-of-libxml2.patch | 32 ----------------------
+>  package/libstrophe/libstrophe.mk                   |  2 +-
+>  2 files changed, 1 insertion(+), 33 deletions(-)
+>  delete mode 100644 package/libstrophe/libstrophe-02-configure.ac-fix-misdetection-of-libxml2.patch
 
-  http://autobuild.buildroot.org/results/2d7/2d74a4b7ea7c679a4879e209b42df75acbab690c/
+Applied, thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/adwaita-icon-theme/adwaita-icon-theme.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index af49dc0..e273d90 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -10,5 +10,6 @@ ADWAITA_ICON_THEME_SITE = ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-the
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
- ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
- ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
-+ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
