@@ -1,68 +1,36 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  1 Nov 2014 10:21:34 +0100
-Subject: [Buildroot] [PATCH 6/6] adwaita-icon-theme: new package
-In-Reply-To: <1414833694-4236-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1414833694-4236-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1414833694-4236-7-git-send-email-eric.le.bihan.dev@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Nov 2014 10:29:54 +0100
+Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
+In-Reply-To: <1414799165.15213.1.camel@posteo.de> (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sat, 01 Nov 2014 00:46:05 +0100")
+References: <20141031115353.56D52B23C4@busybox.osuosl.org>
+ <1414799165.15213.1.camel@posteo.de>
+Message-ID: <87tx2j5kvh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides the Adwaita icon theme from the GNOME desktop
-environment.
+>>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/Config.in                                |  1 +
- package/adwaita-icon-theme/Config.in             |  4 ++++
- package/adwaita-icon-theme/adwaita-icon-theme.mk | 14 ++++++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 package/adwaita-icon-theme/Config.in
- create mode 100644 package/adwaita-icon-theme/adwaita-icon-theme.mk
+Hi,
 
-diff --git a/package/Config.in b/package/Config.in
-index 5d5a9ee..bb9d4b5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -624,6 +624,7 @@ menu "Filesystem"
- endmenu
- 
- menu "Graphics"
-+	source "package/adwaita-icon-theme/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/cairo/Config.in"
- 	source "package/fltk/Config.in"
-diff --git a/package/adwaita-icon-theme/Config.in b/package/adwaita-icon-theme/Config.in
-new file mode 100644
-index 0000000..6fabd48
---- /dev/null
-+++ b/package/adwaita-icon-theme/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_ADWAITA_ICON_THEME
-+	bool "adwaita icon theme"
-+	help
-+	  Adwaita icon theme
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-new file mode 100644
-index 0000000..ef797a2
---- /dev/null
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# adwaita-icon-theme
-+#
-+################################################################################
-+
-+ADWAITA_ICON_THEME_VERSION_MAJOR = 3.14
-+ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
-+ADWAITA_ICON_THEME_SITE = ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
-+ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
-+ADWAITA_ICON_THEME_LICENSE = LGPLv3
-+ADWAITA_ICON_THEME_LICENSE_FILES = COPYING_LGPL COPYING_CCBYSA3
-+
-+$(eval $(autotools-package))
+ >> @@ -16,6 +16,7 @@ AVAHI_SITE = http://www.avahi.org/download
+ >> AVAHI_LICENSE = LGPLv2.1+
+ >> AVAHI_LICENSE_FILES = LICENSE
+ >> AVAHI_INSTALL_STAGING = YES
+ >> +AVAHI_AUTORECONF = YES
+ >> 
+
+ > This patch breaks building avahi for me. Is autoreconf really intended?
+ > Removing it fixed my build.
+
+Yes, the patch modifies Makefile.am, so autoreconf must be done. Odd, it built
+here without problems.
+
+I'll take a closer look.
+
 -- 
-1.9.3
+Venlig hilsen,
+Peter Korsgaard 
