@@ -1,59 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 22:47:21 +0100
-Subject: [Buildroot] [PATCH] infra: Add a way to apply patches using git
-In-Reply-To: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
-References: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141101224721.29b22269@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Nov 2014 22:47:23 +0100
+Subject: [Buildroot] [PATCH 3/3] arc: add support of ARC HS38 core
+In-Reply-To: <1414677449-15937-4-git-send-email-abrodkin@synopsys.com>
+References: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
+ <1414677449-15937-4-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20141101214723.GK10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Alexey, All,
 
-On Wed,  2 Jul 2014 19:20:05 +0200, J?r?me Pouiller wrote:
-> This option is mainly used for package developpers. When activated,
-> Buildroot will automaticaly create a git repository for each package
-> it extract. Initial version is tagged as `upstream'. Next, during
-> patch step, git is used instead of patch. BTW, patches are easier
-> to modify/fix/rebase/cherry-pick/upstream. Once satisfied with
-> changes, developper may use
->     git format-patch -o $TOPDIR/package/$PKG upstream
-> to save its patches to Buildroot.
+On 2014-10-30 16:57 +0300, Alexey Brodkin spake thusly:
+> Synopsys has recently announced its new ARC HS38 core that is capable of
+> running Linux -
+> http://www.synopsys.com/dw/ipdir.php?ds=arc-hs38-processor
 > 
-> Notice this option should be compatible with `guilt' (a clone of
-> `quilt')
+> ARC HS38 is based on ARCv2 ISA and requires special settings of gcc and
+> libc.
 > 
-> Notice you can also use this feature for a specific package using
->     make BR2_USE_GIT_TO_PATCH=y $PKG-dirclean $PKG-patch
+> Also in case of HS38 atomic extensions (LLOCK/SCOND instructions) are
+> built-in by default, so enabling atomic extensions in Buildroot as well.
+
+Ditto as for the first patch: are atomics configurable? Ditto the
+proposal if not.
+
+> This commit adds support of the core in buildroot.
 > 
-> Current known limitations:
->   - If a patch cannot be handled by `git am', we use `git apply`. In
->     this case, patch description is not reported in commit message.
->   - When patch is handled with `git apply`, subject used may not be
->     perfect (it is extracted from patch filename)
->   - `git format-patch' does not prefix patch files with name of package.
->   - If upstream was downloaded with git, we may also run
->     `git remote add $($(PKG)_SITE)' during git repository creation
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Anton Kolesov <anton.kolesov@synopsys.com>
+> ---
+>  arch/Config.in.arc       | 6 +++++-
+>  package/uclibc/Config.in | 1 +
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index b31b141..b48a90f 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -11,12 +11,15 @@ config BR2_arc750d
+>  config BR2_arc770d
+>  	bool "ARC 770D"
+>  
+> +config BR2_archs38
+> +	bool "ARC HS38"
+> +
+>  endchoice
+>  
+>  # Choice of atomic instructions presence
+>  config BR2_ARC_ATOMIC_EXT
+>  	bool "Atomic extension (LLOCK/SCOND instructions)"
+> -	default y if BR2_arc770d
+> +	default y if BR2_arc770d || BR2_archs38
+>  
+>  config BR2_ARCH_HAS_ATOMICS
+>  	default y if BR2_ARC_ATOMIC_EXT
+> @@ -36,3 +39,4 @@ config BR2_ENDIAN
+>  config BR2_GCC_TARGET_CPU
+>  	default "arc700" if BR2_arc750d
+>  	default "arc700" if BR2_arc770d
+> +	default "archs"	 if BR2_archs38
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index c68558f..40a268b 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -199,6 +199,7 @@ config BR2_UCLIBC_ARC_TYPE
+>  	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+>  	default ARC_CPU_700	if BR2_arc750d
+>  	default ARC_CPU_700	if BR2_arc770d
+> +	default ARC_CPU_HS	if BR2_archs38
 
-We discussed this proposal at the last Buildroot Developers meeting.
-Even though we understand the idea and some of us found it potentially
-interesting, we didn't really like the implementation, but nobody
-really found a way of implementing something like this in a nice way.
+Ditto: this is a string, so values must be enclosed between double
+quotes.
 
-One of the problem is that not all our patches are Git patches, which
-you had to work-around in your patch in a way that isn't really nice.
+Regards,
+Yann E. MORIN.
 
-Maybe Arnout and Yann (in Cc) remember more of the issues that we
-discussed at the meeting regarding this proposal.
+>  
+>  config BR2_UCLIBC_ARM_BX
+>  	bool
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
