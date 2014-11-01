@@ -1,44 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Nov 2014 18:19:04 +0100
-Subject: [Buildroot] [PATCH 1/1] libwebsockets : bump version to
- v1.3-chrome37-firefox30
-In-Reply-To: <1414763342-6580-1-git-send-email-sagaert.johan@skynet.be>
-References: <1414763342-6580-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20141101181904.797e7198@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Nov 2014 18:20:32 +0100
+Subject: [Buildroot] [PATCH 1/1] xinetd: change to snapshot.debian.org
+ and add hash
+In-Reply-To: <CABbD_XBrSqZmXw2BuM46dKZYbRyYvTOzP3LZgkMBfx7F=jLkaQ@mail.gmail.com>
+References: <1414859755-33664-1-git-send-email-kaszak@gmail.com>
+ <20141101180237.6b82f0f4@free-electrons.com>
+ <CABbD_XBrSqZmXw2BuM46dKZYbRyYvTOzP3LZgkMBfx7F=jLkaQ@mail.gmail.com>
+Message-ID: <20141101172032.GD10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+K?roly, All,
 
-On Fri, 31 Oct 2014 14:49:02 +0100, Sagaert Johan wrote:
+On 2014-11-01 18:06 +0100, K?roly Kasza spake thusly:
+> I'm not sure, but that seems logical.
+> The sha256 sum from github.com differs from debian.org.
+> Which one to prefer?
+
+Well, I'd say we should switch to the github one.
+
+However, we can't use a hash for those tarballs, since they will be
+generated, and thus are not reproducible (the content *is* the same, but
+not the tarball itself).
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> Karoly
 > 
-> Bumped the version and did some trivial reworking of the patch file :
-> libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
+> On Sat, Nov 1, 2014 at 6:02 PM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
 > 
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  ...le-shared-library-build-when-BUILD_SHARED.patch | 38 +++++++++-------------
->  package/libwebsockets/libwebsockets.mk             |  2 +-
->  2 files changed, 16 insertions(+), 24 deletions(-)
+> > Dear Karoly Kasza,
+> >
+> > On Sat,  1 Nov 2014 17:35:55 +0100, Karoly Kasza wrote:
+> >
+> > >  XINETD_VERSION = 2.3.15
+> > > -XINETD_SITE = http://www.xinetd.org
+> > > +XINETD_SOURCE = xinetd_$(XINETD_VERSION).orig.tar.gz
+> > > +XINETD_SITE =
+> > http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/x/xinetd
+> >
+> > Just wondering, isn't https://github.com/xinetd-org/xinetd the new
+> > appropriate upstream site?
+> >
+> > There is even a 2.3.15 release at
+> > https://github.com/xinetd-org/xinetd/releases.
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Free Electrons
+> > Embedded Linux, Kernel and Android engineering
+> > http://free-electrons.com
+> >
+> 
+> 
+> 
+> -- 
+> 
+> ?dv,
+> KK
 
-Applied, thanks. There were however a number of issues: it wasn't
-building in a non-IPv6 configuration, and wasn't building with OpenSSL
-disabled. So I've fixed that when committing:
-
-    [Thomas:
-     - Pass LWS_IPV6={ON,OFF} depending on the value of BR2_INET_IPV6,
-       otherwise the build failed in a non-IPv6 configuration.
-     - The name of the CMake option for OpenSSL support has changed, it's
-       now LWS_WITH_SSL={ON,OFF}.
-     - Adjust the description of patch 0002.]
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
