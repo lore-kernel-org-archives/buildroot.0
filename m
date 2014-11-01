@@ -1,59 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 22:44:59 +0100
-Subject: [Buildroot] [PATCH v3] xinetd: change download location
-In-Reply-To: <1414875280-57041-1-git-send-email-kaszak@gmail.com>
-References: <1414875280-57041-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20141101214459.GJ10189@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Nov 2014 22:47:21 +0100
+Subject: [Buildroot] [PATCH] infra: Add a way to apply patches using git
+In-Reply-To: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
+References: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20141101224721.29b22269@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Karoly, All,
+Dear J?r?me Pouiller,
 
-On 2014-11-01 21:54 +0100, Karoly Kasza spake thusly:
-> xinetd.org is down, change to github instead.
-> Hash can not be used, the tarball is generated.
+On Wed,  2 Jul 2014 19:20:05 +0200, J?r?me Pouiller wrote:
+> This option is mainly used for package developpers. When activated,
+> Buildroot will automaticaly create a git repository for each package
+> it extract. Initial version is tagged as `upstream'. Next, during
+> patch step, git is used instead of patch. BTW, patches are easier
+> to modify/fix/rebase/cherry-pick/upstream. Once satisfied with
+> changes, developper may use
+>     git format-patch -o $TOPDIR/package/$PKG upstream
+> to save its patches to Buildroot.
 > 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> Notice this option should be compatible with `guilt' (a clone of
+> `quilt')
+> 
+> Notice you can also use this feature for a specific package using
+>     make BR2_USE_GIT_TO_PATCH=y $PKG-dirclean $PKG-patch
+> 
+> Current known limitations:
+>   - If a patch cannot be handled by `git am', we use `git apply`. In
+>     this case, patch description is not reported in commit message.
+>   - When patch is handled with `git apply`, subject used may not be
+>     perfect (it is extracted from patch filename)
+>   - `git format-patch' does not prefix patch files with name of package.
+>   - If upstream was downloaded with git, we may also run
+>     `git remote add $($(PKG)_SITE)' during git repository creation
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We discussed this proposal at the last Buildroot Developers meeting.
+Even though we understand the idea and some of us found it potentially
+interesting, we didn't really like the implementation, but nobody
+really found a way of implementing something like this in a nice way.
 
-Regards,
-Yann E. MORIN.
+One of the problem is that not all our patches are Git patches, which
+you had to work-around in your patch in a way that isn't really nice.
 
-> ---
-> 
-> Changes v2 -> v3:
->   - use github helper
-> 
->  package/xinetd/xinetd.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-> index 1fb91b5..92d0d53 100644
-> --- a/package/xinetd/xinetd.mk
-> +++ b/package/xinetd/xinetd.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -XINETD_VERSION = 2.3.15
-> -XINETD_SITE = http://www.xinetd.org
-> +XINETD_VERSION = xinetd-2-3-15
-> +XINETD_SITE = $(call github,xinetd-org,xinetd,$(XINETD_VERSION))
->  XINETD_LICENSE = xinetd license
->  XINETD_LICENSE_FILES = COPYRIGHT
->  
-> -- 
-> 1.7.10.4
-> 
+Maybe Arnout and Yann (in Cc) remember more of the issues that we
+discussed at the meeting regarding this proposal.
 
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
