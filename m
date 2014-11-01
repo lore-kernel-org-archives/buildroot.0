@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 20:28:40 +0100
-Subject: [Buildroot] [PATCH 2/3] uclibc: add explicit setup of
- ARC-specific options
-In-Reply-To: <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
+Date: Sat, 1 Nov 2014 20:55:31 +0100
+Subject: [Buildroot] [PATCH 1/3] arc: add explicit selection of CPU
+ templates ARC 750D and ARC770D
+In-Reply-To: <1414677449-15937-2-git-send-email-abrodkin@synopsys.com>
 References: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
- <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20141101192840.GH10189@free.fr>
+ <1414677449-15937-2-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20141101195531.GI10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,85 +15,93 @@ To: buildroot@busybox.net
 Alexey, All,
 
 On 2014-10-30 16:57 +0300, Alexey Brodkin spake thusly:
-> As with other architectures for ARC we need to have an ability to set
-> specific options in uClibc.
+> This separation allows to specify unique options and features for each
+> CPU.
 > 
-> In particular this is required for selection of ARC ISA version.
+> For example ARC 770D has LLOCK/SCOND instructions built-in by default.
+
+"built-in by default": does that mean some cores might not have atomics?
+Does it make sense to disable atomics for 770D at all, or should they
+always be enabled?
+
+If it makes sense to disable atomics for 770D, then this code has my:
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, if it does not make sense to disable atomics for 770D, then we
+should do it a little bit differently, like (untested):
+
+    choice
+        bool "Target CPU"
+
+    config BR2_arc750d
+        bool "ARC 750D"
+        select BR2_ARC_MAYBE_ATOMIC_EXT
+
+    config BR2_arc770d
+        bool "ARC 770D"
+        select BR2_ARC_ATOMIC_EXT
+
+    endchoice
+
+    config BR2_ARC_MAYBE_ATOMIC_EXT
+        bool
+
+    config BR2_ARC_ATOMIC_EXT
+        bool
+        prompt "Atomic extension (LLOCK/SCOND instructions)" if BR2_ARC_MAYBE_ATOMICS
+
+    config BR2_ARCH_HAS_ATOMICS
+        default y if BR2_ARC_ATOMIC_EXT
+
+Regards,
+Yann E. MORIN.
+
+> Also this new scheme simplifies selection of proper configuration for
+> users - preconfigured options now match templates for ARC CPUs.
 > 
 > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 > 
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Anton Kolesov <akolesov@synopsys.com>
 > ---
->  package/uclibc/Config.in |  6 ++++++
->  package/uclibc/uclibc.mk | 12 ++++++++++++
->  2 files changed, 18 insertions(+)
+>  arch/Config.in.arc | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index d319ae7..c68558f 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -194,6 +194,12 @@ config BR2_UCLIBC_TARGET_ARCH
->  	default i386	   if BR2_i386
->  	default x86_64	   if BR2_x86_64
->  
-> +config BR2_UCLIBC_ARC_TYPE
-> +	string
-> +	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
-> +	default ARC_CPU_700	if BR2_arc750d
-> +	default ARC_CPU_700	if BR2_arc770d
-
-I know you just followed the existing style of the options around, but
-since this option is a "string", the default values must be enclosed
-between double quotes, like:
-
-    default "ARC_CPU_700" if BR2_arc750d
-
-The fact that it works is that we are lucky there are no symbol named
-ARC_CPU_700, otherwise its value would be used, not the string
-"ARC_CPU_700".
-
-I would prefer we get proper kconfig code, even though the rest of the
-code around is not correct. Maybe a preliminary patch to fix that? ;-)
-
-Otherwise, looks good to me.
-
-Regards,
-Yann E. MORIN.
-
->  config BR2_UCLIBC_ARM_BX
->  	bool
->  	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index b2ecce3..8f990c7 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -57,6 +57,17 @@ UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
->  endif
->  
->  #
-> +# ARC definitions
-> +#
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index fcb5d7d..b31b141 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -1,6 +1,22 @@
+> -# Choise of atomic instructions presence
+> +choice
+> +	prompt "Target CPU"
+> +	depends on BR2_arc
+> +	default BR2_arc770d
+> +	help
+> +	    Specific CPU to use
 > +
-> +ifeq ($(UCLIBC_TARGET_ARCH),arc)
-> +UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
-> +define UCLIBC_ARC_TYPE_CONFIG
-> +	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
-> +endef
-> +endif # arc
+> +config BR2_arc750d
+> +	bool "ARC 750D"
 > +
-> +#
->  # ARM definitions
->  #
+> +config BR2_arc770d
+> +	bool "ARC 770D"
+> +
+> +endchoice
+> +
+> +# Choice of atomic instructions presence
+>  config BR2_ARC_ATOMIC_EXT
+>  	bool "Atomic extension (LLOCK/SCOND instructions)"
+> +	default y if BR2_arc770d
 >  
-> @@ -410,6 +421,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
->  	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
->  	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
->  	$(UCLIBC_MMU_CONFIG)
-> +	$(UCLIBC_ARC_TYPE_CONFIG)
->  	$(UCLIBC_ARM_ABI_CONFIG)
->  	$(UCLIBC_ARM_BX_CONFIG)
->  	$(UCLIBC_MIPS_ABI_CONFIG)
+>  config BR2_ARCH_HAS_ATOMICS
+>  	default y if BR2_ARC_ATOMIC_EXT
+> @@ -18,4 +34,5 @@ config BR2_ENDIAN
+>  	default "BIG"	 if BR2_arceb
+>  
+>  config BR2_GCC_TARGET_CPU
+> -	default "arc700"
+> +	default "arc700" if BR2_arc750d
+> +	default "arc700" if BR2_arc770d
 > -- 
 > 1.9.3
 > 
