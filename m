@@ -1,36 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 01 Nov 2014 10:29:54 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <1414799165.15213.1.camel@posteo.de> (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Sat, 01 Nov 2014 00:46:05 +0100")
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
- <1414799165.15213.1.camel@posteo.de>
-Message-ID: <87tx2j5kvh.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Nov 2014 14:37:40 +0100
+Subject: [Buildroot] [git commit] docs: responsive web design website -
+	upgrading bootstrap/jquery
+Message-ID: <20141101133814.8FC1FB5A5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e40b9791d8c688ec5a1be71817edcc0d42543bad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+* Upgrading to Bootstrap 3.2.0
+* Upgrading to Jquery 1.11.1
+* Removing older files
 
- >> @@ -16,6 +16,7 @@ AVAHI_SITE = http://www.avahi.org/download
- >> AVAHI_LICENSE = LGPLv2.1+
- >> AVAHI_LICENSE_FILES = LICENSE
- >> AVAHI_INSTALL_STAGING = YES
- >> +AVAHI_AUTORECONF = YES
- >> 
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/css/bootstrap-responsive.css     | 1092 ------
+ docs/css/bootstrap-responsive.min.css |    9 -
+ docs/css/bootstrap.css                | 6039 ---------------------------------
+ docs/css/bootstrap.min.css            |  887 +-----
+ docs/js/bootstrap.js                  | 2159 ------------
+ docs/js/bootstrap.min.js              |   10 +-
+ docs/js/jquery-1.10.2.min.js          |    6 -
+ docs/js/jquery-1.11.1.min.js          |    4 +
+ 8 files changed, 14 insertions(+), 10192 deletions(-)
 
- > This patch breaks building avahi for me. Is autoreconf really intended?
- > Removing it fixed my build.
-
-Yes, the patch modifies Makefile.am, so autoreconf must be done. Odd, it built
-here without problems.
-
-I'll take a closer look.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Patch is too large, so refusing to show it
