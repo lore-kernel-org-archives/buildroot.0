@@ -1,49 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Nov 2014 20:13:04 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <1414799165.15213.1.camel@posteo.de>
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
- <1414799165.15213.1.camel@posteo.de>
-Message-ID: <20141101191304.GG10189@free.fr>
+Date: Sat, 1 Nov 2014 20:28:40 +0100
+Subject: [Buildroot] [PATCH 2/3] uclibc: add explicit setup of
+ ARC-specific options
+In-Reply-To: <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
+References: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
+ <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20141101192840.GH10189@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Alexey, All,
 
-On 2014-11-01 00:46 +0100, J?rg Krause spake thusly:
-> On Fr, 2014-10-31 at 12:50 +0100, Peter Korsgaard wrote:
-> > commit: http://git.buildroot.net/buildroot/commit/?id=e6c04e6daae674f8983ec2fb106fb897c6803c32
-> > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/daa/daad247db16818f25ab33402e26e27257defbe13/
-> > http://autobuild.buildroot.net/results/720/720e2c8a5eab8b47d2510fe03b4a90ec8beafc17/
-> > http://autobuild.buildroot.net/results/02b/02b4ab9ee07707ee4a4d4ea2b9c67bee91b1392d/
-> > http://autobuild.buildroot.net/results/819/81914317ce82dc1321484d8c2b65647f92aa6929/
-> > 
-> > And many others.
-[--SNIP--]
-> This patch breaks building avahi for me. Is autoreconf really intended?
-> Removing it fixed my build.
+On 2014-10-30 16:57 +0300, Alexey Brodkin spake thusly:
+> As with other architectures for ARC we need to have an ability to set
+> specific options in uClibc.
 > 
->         >>> avahi 0.6.31 Autoreconfiguring
-[--SNIP--]
->         configure.ac:419: error: possibly undefined macro:
->         AM_GLIB_GNU_GETTEXT
->               If this token and others are legitimate, please use
->         m4_pattern_allow.
+> In particular this is required for selection of ARC ISA version.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> ---
+>  package/uclibc/Config.in |  6 ++++++
+>  package/uclibc/uclibc.mk | 12 ++++++++++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index d319ae7..c68558f 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -194,6 +194,12 @@ config BR2_UCLIBC_TARGET_ARCH
+>  	default i386	   if BR2_i386
+>  	default x86_64	   if BR2_x86_64
+>  
+> +config BR2_UCLIBC_ARC_TYPE
+> +	string
+> +	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+> +	default ARC_CPU_700	if BR2_arc750d
+> +	default ARC_CPU_700	if BR2_arc770d
 
-It seems it requires gettext.
+I know you just followed the existing style of the options around, but
+since this option is a "string", the default values must be enclosed
+between double quotes, like:
 
-J?rg, care to test adding this to avahi.mk (just below AUTORECONF):
+    default "ARC_CPU_700" if BR2_arc750d
 
-    AVAHI_GETTEXTIZE = YES
+The fact that it works is that we are lucky there are no symbol named
+ARC_CPU_700, otherwise its value would be used, not the string
+"ARC_CPU_700".
+
+I would prefer we get proper kconfig code, even though the rest of the
+code around is not correct. Maybe a preliminary patch to fix that? ;-)
+
+Otherwise, looks good to me.
 
 Regards,
 Yann E. MORIN.
+
+>  config BR2_UCLIBC_ARM_BX
+>  	bool
+>  	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index b2ecce3..8f990c7 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -57,6 +57,17 @@ UCLIBC_LOCALES = $(foreach locale,$(GENERATE_LOCALE),\
+>  endif
+>  
+>  #
+> +# ARC definitions
+> +#
+> +
+> +ifeq ($(UCLIBC_TARGET_ARCH),arc)
+> +UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
+> +define UCLIBC_ARC_TYPE_CONFIG
+> +	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
+> +endef
+> +endif # arc
+> +
+> +#
+>  # ARM definitions
+>  #
+>  
+> @@ -410,6 +421,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+>  	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
+>  	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+>  	$(UCLIBC_MMU_CONFIG)
+> +	$(UCLIBC_ARC_TYPE_CONFIG)
+>  	$(UCLIBC_ARM_ABI_CONFIG)
+>  	$(UCLIBC_ARM_BX_CONFIG)
+>  	$(UCLIBC_MIPS_ABI_CONFIG)
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
