@@ -1,70 +1,22 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 02 Nov 2014 23:13:21 +0100
-Subject: [Buildroot] [PATCH v2] gst1-plugins-imx: add package
-In-Reply-To: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
-References: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <5456AC81.5090403@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Nov 2014 23:27:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package: indentation cleanup
+In-Reply-To: <1414398328-1646-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Mon, 27 Oct 2014 09:25:28 +0100")
+References: <1414398328-1646-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87r3xl44rv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary,
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-thanks for you resubmission.
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-Gary Bisson wrote:
-> Open-source GStreamer 1.0 plugins for i.MX platforms.
-> More info at https://github.com/Freescale/gstreamer-imx
->
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> ---
-> Modifications v1->v2:
-> - Use of github helper macro
-> - Modify package comment with Peter S. original patch
-> - Add comment for eglibc dependency (due to GPU libs)
-> - Remove comments on package dependencies
->
-> One thing I wasn't sure about, should all new package contain a .hash file? If
-> so I can submit a v3 right away.
-
-It is not mandatory. AFAIK the hash is recommended for security-related
-packages only.
-
-[...]
-> diff --git a/package/gstreamer1/gst1-plugins-imx/Config.in b/package/gstreamer1/gst1-plugins-imx/Config.in
-> new file mode 100644
-> index 0000000..d499874
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-imx/Config.in
-> @@ -0,0 +1,28 @@
-> +comment "gst1-plugins-imx needs an imx-specific Linux kernel to be built"
-> +	depends on BR2_arm && !BR2_LINUX_KERNEL
-> +
-> +# Required by gpu-viv-bin-mx6q
-> +comment "gst1-plugins-imx needs an (e)glibc toolchain"
-> +	depends on BR2_arm
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-
-These messages are much cleaner than in version 1 of your patch.
-However, for an ARM configuration with a musl or uClibc toolchain and
-without a kernel build activated, two lines are displayed. This is not
-coherent with the general Buildroot behavior.
-
-It should be:
-
-comment "gst1-plugins-imx needs an (e)glibc toolchain and an 
-imx-specific Linux kernel to be built"
-	depends on BR2_arm && (!BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_USES_GLIBC)
-
-Although that's a bit lengthy...
-
-With that fixed (which can be done by the committer):
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-I'll try to test it during the coming week and give my Tested-by tag, or
-report any issues.
+It no longer applied cleanly, but I've fixed that up and committed,
+thanks.
 
 -- 
-Luca
+Bye, Peter Korsgaard
