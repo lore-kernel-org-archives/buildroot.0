@@ -1,39 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 01 Nov 2014 21:16:25 -0300
-Subject: [Buildroot] Samba4 build issue
-In-Reply-To: <20141101233957.7ca9aabd@free-electrons.com>
-References: <20141101233957.7ca9aabd@free-electrons.com>
-Message-ID: <545577D9.1040405@zacarias.com.ar>
+From: Rohit Kumar <rkthebest@gmail.com>
+Date: Sun, 2 Nov 2014 13:03:59 +0900
+Subject: [Buildroot] valgrind for arm cortex A-7
+Message-ID: <CABzetm37v6n=-2r+YGV=YEVVOXqVBWvsKxFjXNs7=qL+n1otxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/2014 07:39 PM, Thomas Petazzoni wrote:
+Hello,
 
-> Hello Gustavo,
-> 
-> A build issue is affecting Samba 4, apparently on many
-> architectures/toolchains:
-> 
->    http://autobuild.buildroot.org/?reason=samba4-4.1.13
-> 
-> The error message seems to be more or less always the same:
-> 
-> /home/peko/autobuild/instance-2/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/xattr.h:32:3: error: expected identifier before numeric constant
->    XATTR_CREATE = 1, /* set value, fail if attr already exists.  */
->    ^
-> 
-> Is this some new kernel headers dependency? Dependency on the attr
-> package?
-> 
-> If you could have a look, it would be great.
+i am using Allwinner A20 CPU based embedded board that is cortex A7.
+so is there any valgrind available for cortex A7 yet?
 
-No, it's a bump from an autodep that's breaking havoc.
-Blame 57280c2f244500ac6616377b3b8eab458c1ead23.
-The release is all kinds of wrong apparently, even 2.23 breaks and more
-horribly than 2.24.
-So let's just roll back to 2.22 until a detailed analysis can take place
-to fix it.
-Regards.
+or can i build it from source for A7?
+
+With Regards,
+
+Rohit Kumar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141102/f1732c2e/attachment.html>
