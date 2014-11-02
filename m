@@ -1,68 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 2 Nov 2014 21:46:41 +0100
-Subject: [Buildroot] [git commit] linux-firmware: add option for realtek
-	8169 gigabit nic firmware
-Message-ID: <20141102210450.17D59B2DF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libcap: add upstream xattr patch
+Message-ID: <20141102210450.122D1B2DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99e149d7078c441a782ebbe72e268c2ecbbaed96
+commit: http://git.buildroot.net/buildroot/commit/?id=3fbe7b67e71ded1b6dfba600bba87bcca5491f8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed by E.G. minnowboard max.
+Add upstream patch for xattr include fix.
+Also rename patches to git naming convention.
+Fixes:
+http://autobuild.buildroot.net/results/2ef/2efb25356bc87ba0e1be08214eaa28ac064ad6c3/
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/Config.in         |    5 +++++
- package/linux-firmware/linux-firmware.mk |   19 +++++++++++++++++++
- 2 files changed, 24 insertions(+), 0 deletions(-)
+ ...-build-system.patch => 0001-build-system.patch} |    0
+ ...atch => 0002-split-static-shared-install.patch} |    0
+ ...nge-the-location-we-include-linux-xattr.h.patch |   46 ++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 8b71dd3..9e1eb91 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -208,6 +208,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
- 	help
- 	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards (cxgb4)
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
-+	bool "Realtek 8169"
-+	help
-+	  Firmware files for Realtek 8169 gigabit ethernet cards
+diff --git a/package/libcap/libcap-01-build-system.patch b/package/libcap/0001-build-system.patch
+similarity index 100%
+rename from package/libcap/libcap-01-build-system.patch
+rename to package/libcap/0001-build-system.patch
+diff --git a/package/libcap/libcap-02-split-static-shared-install.patch b/package/libcap/0002-split-static-shared-install.patch
+similarity index 100%
+rename from package/libcap/libcap-02-split-static-shared-install.patch
+rename to package/libcap/0002-split-static-shared-install.patch
+diff --git a/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
+new file mode 100644
+index 0000000..7858780
+--- /dev/null
++++ b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
+@@ -0,0 +1,46 @@
++From 84fb6007dcc7f6b6da9f6dab77a487c22b6c7beb Mon Sep 17 00:00:00 2001
++From: Andrew G Morgan <morgan@kernel.org>
++Date: Sun, 9 Mar 2014 16:33:15 -0700
++Subject: [PATCH] Change the location we include linux/xattr.h
 +
- endmenu
- 
- menu "DVB firmware"
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index b435199..5b8d214 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -221,6 +221,25 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.11.27.0.bin cxgb4/t5fw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
-+LINUX_FIRMWARE_FILES += \
-+	rtl_nic/rtl8168d-1.fw \
-+	rtl_nic/rtl8168d-2.fw \
-+	rtl_nic/rtl8168e-1.fw \
-+	rtl_nic/rtl8168e-2.fw \
-+	rtl_nic/rtl8168e-3.fw \
-+	rtl_nic/rtl8168f-1.fw \
-+	rtl_nic/rtl8168f-2.fw \
-+	rtl_nic/rtl8105e-1.fw \
-+	rtl_nic/rtl8402-1.fw \
-+	rtl_nic/rtl8411-1.fw \
-+	rtl_nic/rtl8411-2.fw \
-+	rtl_nic/rtl8106e-1.fw \
-+	rtl_nic/rtl8106e-2.fw \
-+	rtl_nic/rtl8168g-2.fw \
-+	rtl_nic/rtl8168g-3.fw
-+endif
++This header stuff seems a bit fragile, but Serge reports including
++it in sys/capability.h was causing a lot of trouble building dependent
++app packages.
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
- LINUX_FIRMWARE_FILES += dvb-fe-xc4000-1.4.1.fw \
- 			dvb-fe-xc5000-1.6.114.fw \
++From the perspective of libcap, this API is only needed internally in
++cap_file.c so we put an include there.
++
++Status: upstream.
++
++Signed-off-by: Andrew G Morgan <morgan@kernel.org>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++
++diff --git a/libcap/cap_file.c b/libcap/cap_file.c
++index d3dc1d0..553c2d2 100644
++--- a/libcap/cap_file.c
+++++ b/libcap/cap_file.c
++@@ -10,6 +10,8 @@
++ #include <sys/stat.h>
++ #include <unistd.h>
++ 
+++#include <linux/xattr.h>
+++
++ #define XATTR_SECURITY_PREFIX "security."
++ 
++ #include "libcap.h"
++diff --git a/libcap/include/sys/capability.h b/libcap/include/sys/capability.h
++index 64ac50e..dddc75b 100644
++--- a/libcap/include/sys/capability.h
+++++ b/libcap/include/sys/capability.h
++@@ -27,7 +27,6 @@ extern "C" {
++ #define __user
++ #endif
++ #include <linux/capability.h>
++-#include <linux/xattr.h>
++ 
++ /*
++  * POSIX capability types
++-- 
++2.0.4
++
