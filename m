@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2014 22:24:35 +0100
-Subject: [Buildroot] [PATCH 2/3] uclibc: add explicit setup of
-	ARC-specific options
-In-Reply-To: <1414677449-15937-3-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Thu, 30 Oct 2014 16:57:28 +0300")
+Date: Sun, 02 Nov 2014 22:25:14 +0100
+Subject: [Buildroot] [PATCH 3/3] arc: add support of ARC HS38 core
+In-Reply-To: <1414677449-15937-4-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Thu, 30 Oct 2014 16:57:29 +0300")
 References: <1414677449-15937-1-git-send-email-abrodkin@synopsys.com>
- <1414677449-15937-3-git-send-email-abrodkin@synopsys.com>
-Message-ID: <874muh5m98.fsf@dell.be.48ers.dk>
+ <1414677449-15937-4-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87zjc947np.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +14,17 @@ To: buildroot@busybox.net
 
 >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > As with other architectures for ARC we need to have an ability to set
- > specific options in uClibc.
+ > Synopsys has recently announced its new ARC HS38 core that is capable of
+ > running Linux -
+ > http://www.synopsys.com/dw/ipdir.php?ds=arc-hs38-processor
 
- > In particular this is required for selection of ARC ISA version.
+ > ARC HS38 is based on ARCv2 ISA and requires special settings of gcc and
+ > libc.
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Also in case of HS38 atomic extensions (LLOCK/SCOND instructions) are
+ > built-in by default, so enabling atomic extensions in Buildroot as well.
+
+ > This commit adds support of the core in buildroot.
 
 Committed with quotes added as noted by Yann, thanks.
 
