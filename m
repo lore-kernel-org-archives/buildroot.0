@@ -1,101 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Nov 2014 16:35:46 +0100
-Subject: [Buildroot] [PATCH] libcap: add upstream xattr patch
-In-Reply-To: <1414932640-23210-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1414932640-23210-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141102153546.GB11634@free.fr>
+Date: Sun, 2 Nov 2014 17:00:55 +0100
+Subject: [Buildroot] [PATCH 1/2] Add package bdwgc: A garbage collector
+ for C and C++. The Boehm-Demers-Weiser conservative garbage collector can
+ be used as a garbage collecting replacement for C 'malloc' or C++ 'new'.
+In-Reply-To: <1414941345-16581-2-git-send-email-paguilar@paguilar.org>
+References: <1414941345-16581-1-git-send-email-paguilar@paguilar.org>
+ <1414941345-16581-2-git-send-email-paguilar@paguilar.org>
+Message-ID: <20141102160055.GC11634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Pedro, All,
 
-On 2014-11-02 09:50 -0300, Gustavo Zacarias spake thusly:
-> Add upstream patch for xattr include fix.
-> Also rename patches to git naming convention.
-> Fixes:
-> http://autobuild.buildroot.net/results/2ef/2efb25356bc87ba0e1be08214eaa28ac064ad6c3/
+The commit log should be formatted as specified in the manual, which
+follows standard practive to format git commit logs, especially chapter
+21.5.2. Patch revision changelog:
+    http://nightly.buildroot.org/#submitting-patches 
+
+which would give something like the following for this patch:
+
+    bdwgc: new package
+
+    bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
+    conservative garbage collector can be used as a garbage collecting
+    replacement for C 'malloc' or C++ 'new'.
+
+    Signed-off-by: YOU <you@there>
+
+Otherwise, git will not recognise the subject of the patch, and mangles
+the commit log into an ugly mail subject, as you may notice here. ;-)
+
+On 2014-11-02 16:15 +0100, Pedro Aguilar spake thusly:
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> ---
+>  package/Config.in       |  1 +
+>  package/bdwgc/Config.in |  9 +++++++++
+>  package/bdwgc/bdwgc.mk  | 18 ++++++++++++++++++
+>  3 files changed, 28 insertions(+)
+>  create mode 100644 package/bdwgc/Config.in
+>  create mode 100644 package/bdwgc/bdwgc.mk
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+> new file mode 100644
+> index 0000000..38f612f
+> --- /dev/null
+> +++ b/package/bdwgc/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_BDWGC
+> +	bool "bdwgc"
+> +	help
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Indentation for kconfig keywords is: one tab. You have one tab followed
+by one extra space.
+
+Also, it seems it depends on libatomics_ops, so you should have:
+
+    depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # libatomic_ops
+    select BR2_PACKAGE_LIBATOMIC_OPS
+
+It bundles its own version of libatomic_ops, but I'd prefer we disable the
+bundled one, and use the one already packaged in Buildroot, which seems
+the default if an external one is found; from configure.ac:
+
+    [...]
+    # Do we want to use an external libatomic_ops? By default use it if  it's
+    # found.
+    AC_ARG_WITH([libatomic-ops],
+        [AS_HELP_STRING([--with-libatomic-ops[=yes|no|check]],
+                        [Use a external libatomic_ops? (default: check)])],
+        [], [with_libatomic_ops=check])
+
+    # Check for an external libatomic_ops if the answer was yes or check. If not
+    # found, fail on yes, and convert check to no.
+    [...]
+
+> +      The Boehm-Demers-Weiser conservative garbage collector can 
+> +      be used as a garbage collecting replacement for C 'malloc'
+> +      or C++ 'new'.
+> +
+> +      http://www.hboehm.info/gc/
+
+Indentation for the help text itself is: one tab and two spaces. You
+have 6 spaces.
+
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> new file mode 100644
+> index 0000000..9419265
+> --- /dev/null
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# bdwgc
+> +#
+> +################################################################################
+> +
+> +BDWGC_VERSION = 7.2f
+> +BDWGC_SOURCE  = gc-$(BDWGC_VERSION).tar.gz
+> +BDWGC_SITE    = http://www.hboehm.info/gc/gc_source
+> +BDWGC_INSTALL_STAGING = YES
+> +BDWGC_LICENSE = GPL compatible
+
+My. What a mess of a license... :-(
+
+From what I understand:
+  - bdwgc itself is using its own license, not unlike MIT, but not MIT
+  - it uses some GPL-licensed parts with exceptions
+  - the license of the build files (autostuff) is irrelevant, since they
+    do not end up in the target
+
+So I would just say something like:   bdwgc license
+and let the user decide by himself.
+
+> +BDWGC_LICENSE_FILES = README
+> +BDWGC_LIBTOOL_PATCH = NO
+> +
+> +BDWGC_DEPENDENCIES = host-bdwgc
+
+You also need:  libatomic_ops
+
+Host variant will automatically catch the dependency on host-libatomic_ops,
+so no need to specify it explicitly.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  ...-build-system.patch => 0001-build-system.patch} |  0
->  ...atch => 0002-split-static-shared-install.patch} |  0
->  ...nge-the-location-we-include-linux-xattr.h.patch | 46 ++++++++++++++++++++++
->  3 files changed, 46 insertions(+)
->  rename package/libcap/{libcap-01-build-system.patch => 0001-build-system.patch} (100%)
->  rename package/libcap/{libcap-02-split-static-shared-install.patch => 0002-split-static-shared-install.patch} (100%)
->  create mode 100644 package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
-> 
-> diff --git a/package/libcap/libcap-01-build-system.patch b/package/libcap/0001-build-system.patch
-> similarity index 100%
-> rename from package/libcap/libcap-01-build-system.patch
-> rename to package/libcap/0001-build-system.patch
-> diff --git a/package/libcap/libcap-02-split-static-shared-install.patch b/package/libcap/0002-split-static-shared-install.patch
-> similarity index 100%
-> rename from package/libcap/libcap-02-split-static-shared-install.patch
-> rename to package/libcap/0002-split-static-shared-install.patch
-> diff --git a/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
-> new file mode 100644
-> index 0000000..7858780
-> --- /dev/null
-> +++ b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
-> @@ -0,0 +1,46 @@
-> +From 84fb6007dcc7f6b6da9f6dab77a487c22b6c7beb Mon Sep 17 00:00:00 2001
-> +From: Andrew G Morgan <morgan@kernel.org>
-> +Date: Sun, 9 Mar 2014 16:33:15 -0700
-> +Subject: [PATCH] Change the location we include linux/xattr.h
-> +
-> +This header stuff seems a bit fragile, but Serge reports including
-> +it in sys/capability.h was causing a lot of trouble building dependent
-> +app packages.
-> +
-> +From the perspective of libcap, this API is only needed internally in
-> +cap_file.c so we put an include there.
-> +
-> +Status: upstream.
-> +
-> +Signed-off-by: Andrew G Morgan <morgan@kernel.org>
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +---
-> +
-> +diff --git a/libcap/cap_file.c b/libcap/cap_file.c
-> +index d3dc1d0..553c2d2 100644
-> +--- a/libcap/cap_file.c
-> ++++ b/libcap/cap_file.c
-> +@@ -10,6 +10,8 @@
-> + #include <sys/stat.h>
-> + #include <unistd.h>
-> + 
-> ++#include <linux/xattr.h>
-> ++
-> + #define XATTR_SECURITY_PREFIX "security."
-> + 
-> + #include "libcap.h"
-> +diff --git a/libcap/include/sys/capability.h b/libcap/include/sys/capability.h
-> +index 64ac50e..dddc75b 100644
-> +--- a/libcap/include/sys/capability.h
-> ++++ b/libcap/include/sys/capability.h
-> +@@ -27,7 +27,6 @@ extern "C" {
-> + #define __user
-> + #endif
-> + #include <linux/capability.h>
-> +-#include <linux/xattr.h>
-> + 
-> + /*
-> +  * POSIX capability types
-> +-- 
-> +2.0.4
-> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > -- 
-> 2.0.4
+> 1.9.1
 > 
 > _______________________________________________
 > buildroot mailing list
