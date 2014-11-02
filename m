@@ -1,20 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 02 Nov 2014 20:47:14 -0300
-Subject: [Buildroot] [PATCH] libcap: Revert
-	57280c2f244500ac6616377b3b8eab458c1ead23
-In-Reply-To: <87h9yh5nvm.fsf@dell.be.48ers.dk>
-References: <1414887377-5478-1-git-send-email-gustavo@zacarias.com.ar>
- <87h9yh5nvm.fsf@dell.be.48ers.dk>
-Message-ID: <5456C282.80405@zacarias.com.ar>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  3 Nov 2014 00:58:14 +0100
+Subject: [Buildroot] [PATCH 1/3] website: Remove debug message
+Message-ID: <1414972696-10647-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/2014 05:49 PM, Peter Korsgaard wrote:
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ docs/js/buildroot.js | 1 -
+ 1 file changed, 1 deletion(-)
 
-> This is superseeded by your xattr patch, right?
-
-Yes, i think i did mark it as so on patchwork.
-Regards.
+diff --git a/docs/js/buildroot.js b/docs/js/buildroot.js
+index 03c3968..6e0d97a 100644
+--- a/docs/js/buildroot.js
++++ b/docs/js/buildroot.js
+@@ -28,7 +28,6 @@ function load_activity(feedurl, divid) {
+         for (var i = 0; i < empty; i++) {
+           container.appendChild(document.createElement("p"));
+         }
+-        console.log(loaded);
+       }
+     });
+ }
+-- 
+2.1.1
