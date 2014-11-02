@@ -1,182 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Nov 2014 22:04:22 +0100
-Subject: [Buildroot] [git commit] board: add support for Minnowboard MAX
-Message-ID: <20141102210450.21CDBB2DF0@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 2 Nov 2014 22:14:10 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+In-Reply-To: <20141101144354.66e2e698@free-electrons.com>
+References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141101144354.66e2e698@free-electrons.com>
+Message-ID: <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bc1b60a23a10ce197a33f6ed107c2d0a60f68b0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Very similar to the older Minnowboard, except that it works with mainline
-Linux, uses 64bit firmware and a realtek NIC needing firmware.
+> Both patches applied, thanks. The first patch didn't apply properly, as
+> the very long lines of the css/js code have been mangled either by git
+> send-email (unlikely) or by one of the e-mail servers (very possible).
 
-The Linux configuration is based on the configuration fragment on elinux:
-http://elinux.org/Minnowboard:MinnowMaxLinuxKernel
+Git send-email warned me, but sending you via patch
+seemed to me the best thing to do. Unfortunately, git send-email was right!
 
-Many thanks to Circuitco for sponsoring a board.
+> Anyway, I've recreated the patch by updating jQuery and Bootstrap to
+> the same versions, and removed the useless files as your patch was
+> doing.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/minnowboard-max/grub.cfg          |    6 ++++
- board/minnowboard-max/linux-3.17.config |   47 +++++++++++++++++++++++++++++++
- board/minnowboard-max/post-build.sh     |    2 +
- board/minnowboard-max/readme.txt        |   40 ++++++++++++++++++++++++++
- configs/minnowboard_max_defconfig       |   27 +++++++++++++++++
- 5 files changed, 122 insertions(+), 0 deletions(-)
+Some tweaks are missing in vanilla bootstrap css, I tweaked a little
+to match the colour theme and font of the older website. You can find
+the right version here:
 
-diff --git a/board/minnowboard-max/grub.cfg b/board/minnowboard-max/grub.cfg
-new file mode 100644
-index 0000000..f38db8f
---- /dev/null
-+++ b/board/minnowboard-max/grub.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
-+
-+menuentry "Buildroot" {
-+	linux /bzImage root=/dev/mmcblk0p2 rootwait console=tty0 console=ttyS0,115200
-+}
-diff --git a/board/minnowboard-max/linux-3.17.config b/board/minnowboard-max/linux-3.17.config
-new file mode 100644
-index 0000000..d13f492
---- /dev/null
-+++ b/board/minnowboard-max/linux-3.17.config
-@@ -0,0 +1,47 @@
-+CONFIG_NO_HZ=y
-+CONFIG_SMP=y
-+CONFIG_X86_INTEL_LPSS=y
-+CONFIG_MATOM=y
-+CONFIG_EFI=y
-+CONFIG_PM_RUNTIME=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-+CONFIG_X86_INTEL_PSTATE=y
-+CONFIG_X86_ACPI_CPUFREQ=y
-+CONFIG_INTEL_IDLE=y
-+CONFIG_IA32_EMULATION=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_R8169=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_DW=y
-+CONFIG_I2C_I801=y
-+CONFIG_I2C_DESIGNWARE_PLATFORM=y
-+CONFIG_I2C_DESIGNWARE_PCI=y
-+CONFIG_SPI=y
-+CONFIG_SPI_PXA2XX=y
-+CONFIG_SPI_DESIGNWARE=y
-+CONFIG_PINCTRL_BAYTRAIL=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_AGP=y
-+CONFIG_DRM=y
-+CONFIG_DRM_I915=y
-+CONFIG_USB=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PCI=y
-+CONFIG_MMC_SDHCI_ACPI=y
-+CONFIG_PWM=y
-+CONFIG_PWM_LPSS=y
-+CONFIG_EXT4_FS=y
-diff --git a/board/minnowboard-max/post-build.sh b/board/minnowboard-max/post-build.sh
-new file mode 100755
-index 0000000..9f86d39
---- /dev/null
-+++ b/board/minnowboard-max/post-build.sh
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+cp board/minnowboard-max/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
-diff --git a/board/minnowboard-max/readme.txt b/board/minnowboard-max/readme.txt
-new file mode 100644
-index 0000000..f865b66
---- /dev/null
-+++ b/board/minnowboard-max/readme.txt
-@@ -0,0 +1,40 @@
-+Prepare the SD card for the Minnow Board MAX
-+============================================
-+
-+ 1. Partition the SD card with a GPT partition table
-+
-+    sudo cgdisk /dev/mmcblk0
-+
-+    Create two partitions:
-+
-+     a) First partition of a few dozens of megabytes, which will be
-+        used to store the bootloader and the kernel image. Type must
-+        be EF00 (EFI partition).
-+
-+     b) Second partition of any size, which will be used to store the
-+        root filesystem. Type must be 8300 (Linux filesystem)
-+
-+ 2. Prepare the boot partition
-+
-+    We will format it, mount it, copy the EFI data generated by
-+    Buildroot, and the kernel image.
-+
-+    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
-+    sudo mount /dev/mmcblk0p1 /mnt
-+    sudo cp -a output/images/efi-part/* /mnt/
-+    sudo cp output/images/bzImage /mnt/
-+    sudo umount /mnt
-+
-+ 3. Prepare the root partition
-+
-+    We will format it, mount it, and extract the root filesystem.
-+
-+    sudo mkfs.ext4 -L root /dev/mmcblk0p2
-+    sudo mount /dev/mmcblk0p2 /mnt
-+    sudo tar -C /mnt -xf output/images/rootfs.tar
-+    sudo umount /mnt
-+
-+ 4. Enjoy
-+
-+Additional information about this board can be found at
-+http://www.minnowboard.org/ or http://elinux.org/Minnowboard:MinnowMax.
-diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-new file mode 100644
-index 0000000..0cb5b97
---- /dev/null
-+++ b/configs/minnowboard_max_defconfig
-@@ -0,0 +1,27 @@
-+# Architecture
-+BR2_x86_64=y
-+BR2_x86_atom=y
-+
-+# Misc
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
-+
-+# Lock to 3.17 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
-+
-+# Needed for ethernet
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-+
-+# Linux kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.2"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard-max/linux-3.17.config"
-+
-+# Bootloader
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_X86_64_EFI=y
+http://buildrootrd.idea-on-line.it/css/bootstrap.min.css
+
+> Thanks a lot for having worked on this!
+
+You are welcome! It was really a distraction for me, I really love to
+mess with RWD, CSS, javascritp and all the other modern web
+technologies!
+
+Sincerely, Angelo
