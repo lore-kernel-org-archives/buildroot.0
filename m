@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Nov 2014 16:25:55 +0100
-Subject: [Buildroot] [PATCH 3/5] opencv: Remove hash file
+Date: Sun,  2 Nov 2014 16:25:56 +0100
+Subject: [Buildroot] [PATCH 4/5] libevent: Remove hash file
 In-Reply-To: <cover.1414941796.git.yann.morin.1998@free.fr>
 References: <cover.1414941796.git.yann.morin.1998@free.fr>
-Message-ID: <a64cc59cb138eaf1fde70f9024f982863b3cb1a7.1414941796.git.yann.morin.1998@free.fr>
+Message-ID: <7e828df5dc012e40da5859ccb59fbe600a9899c0.1414941796.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,18 +28,17 @@ YEM:
     minutes, which is largely enough to easily trigger a false hash
     mismatch.
 ---
- package/opencv/opencv.hash | 3 ---
- 1 file changed, 3 deletions(-)
- delete mode 100644 package/opencv/opencv.hash
+ package/libevent/libevent.hash | 2 --
+ 1 file changed, 2 deletions(-)
+ delete mode 100644 package/libevent/libevent.hash
 
-diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+diff --git a/package/libevent/libevent.hash b/package/libevent/libevent.hash
 deleted file mode 100644
-index fc3b750..0000000
---- a/package/opencv/opencv.hash
+index efa0dc5..0000000
+--- a/package/libevent/libevent.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# From https://github.com/itseez/opencv/archive/2.4.10/
--md5	3346a59310d788d3845f4fd6043a108a	opencv-2.4.10.tar.gz
--sha1	a0c2d5944364fc4f26b6160b33c03082b1fa08c1	opencv-2.4.10.tar.gz
+@@ -1,2 +0,0 @@
+-# Locally calculated after checking pgp signature
+-sha256	22a530a8a5ba1cb9c080cba033206b17dacd21437762155c6d30ee6469f574f5	libevent-2.0.21-stable.tar.gz
 -- 
 1.9.1
