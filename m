@@ -1,87 +1,182 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Nov 2014 21:46:41 +0100
-Subject: [Buildroot] [git commit] libcap: add upstream xattr patch
-Message-ID: <20141102210450.122D1B2DF0@busybox.osuosl.org>
+Date: Sun, 2 Nov 2014 22:04:22 +0100
+Subject: [Buildroot] [git commit] board: add support for Minnowboard MAX
+Message-ID: <20141102210450.21CDBB2DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fbe7b67e71ded1b6dfba600bba87bcca5491f8b
+commit: http://git.buildroot.net/buildroot/commit/?id=8bc1b60a23a10ce197a33f6ed107c2d0a60f68b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch for xattr include fix.
-Also rename patches to git naming convention.
-Fixes:
-http://autobuild.buildroot.net/results/2ef/2efb25356bc87ba0e1be08214eaa28ac064ad6c3/
+Very similar to the older Minnowboard, except that it works with mainline
+Linux, uses 64bit firmware and a realtek NIC needing firmware.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The Linux configuration is based on the configuration fragment on elinux:
+http://elinux.org/Minnowboard:MinnowMaxLinuxKernel
+
+Many thanks to Circuitco for sponsoring a board.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-build-system.patch => 0001-build-system.patch} |    0
- ...atch => 0002-split-static-shared-install.patch} |    0
- ...nge-the-location-we-include-linux-xattr.h.patch |   46 ++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
+ board/minnowboard-max/grub.cfg          |    6 ++++
+ board/minnowboard-max/linux-3.17.config |   47 +++++++++++++++++++++++++++++++
+ board/minnowboard-max/post-build.sh     |    2 +
+ board/minnowboard-max/readme.txt        |   40 ++++++++++++++++++++++++++
+ configs/minnowboard_max_defconfig       |   27 +++++++++++++++++
+ 5 files changed, 122 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcap/libcap-01-build-system.patch b/package/libcap/0001-build-system.patch
-similarity index 100%
-rename from package/libcap/libcap-01-build-system.patch
-rename to package/libcap/0001-build-system.patch
-diff --git a/package/libcap/libcap-02-split-static-shared-install.patch b/package/libcap/0002-split-static-shared-install.patch
-similarity index 100%
-rename from package/libcap/libcap-02-split-static-shared-install.patch
-rename to package/libcap/0002-split-static-shared-install.patch
-diff --git a/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
+diff --git a/board/minnowboard-max/grub.cfg b/board/minnowboard-max/grub.cfg
 new file mode 100644
-index 0000000..7858780
+index 0000000..f38db8f
 --- /dev/null
-+++ b/package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
-@@ -0,0 +1,46 @@
-+From 84fb6007dcc7f6b6da9f6dab77a487c22b6c7beb Mon Sep 17 00:00:00 2001
-+From: Andrew G Morgan <morgan@kernel.org>
-+Date: Sun, 9 Mar 2014 16:33:15 -0700
-+Subject: [PATCH] Change the location we include linux/xattr.h
++++ b/board/minnowboard-max/grub.cfg
+@@ -0,0 +1,6 @@
++set default="0"
++set timeout="5"
 +
-+This header stuff seems a bit fragile, but Serge reports including
-+it in sys/capability.h was causing a lot of trouble building dependent
-+app packages.
++menuentry "Buildroot" {
++	linux /bzImage root=/dev/mmcblk0p2 rootwait console=tty0 console=ttyS0,115200
++}
+diff --git a/board/minnowboard-max/linux-3.17.config b/board/minnowboard-max/linux-3.17.config
+new file mode 100644
+index 0000000..d13f492
+--- /dev/null
++++ b/board/minnowboard-max/linux-3.17.config
+@@ -0,0 +1,47 @@
++CONFIG_NO_HZ=y
++CONFIG_SMP=y
++CONFIG_X86_INTEL_LPSS=y
++CONFIG_MATOM=y
++CONFIG_EFI=y
++CONFIG_PM_RUNTIME=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
++CONFIG_X86_INTEL_PSTATE=y
++CONFIG_X86_ACPI_CPUFREQ=y
++CONFIG_INTEL_IDLE=y
++CONFIG_IA32_EMULATION=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI=y
++CONFIG_ATA_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_R8169=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_DW=y
++CONFIG_I2C_I801=y
++CONFIG_I2C_DESIGNWARE_PLATFORM=y
++CONFIG_I2C_DESIGNWARE_PCI=y
++CONFIG_SPI=y
++CONFIG_SPI_PXA2XX=y
++CONFIG_SPI_DESIGNWARE=y
++CONFIG_PINCTRL_BAYTRAIL=y
++CONFIG_GPIOLIB=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_AGP=y
++CONFIG_DRM=y
++CONFIG_DRM_I915=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PCI=y
++CONFIG_MMC_SDHCI_ACPI=y
++CONFIG_PWM=y
++CONFIG_PWM_LPSS=y
++CONFIG_EXT4_FS=y
+diff --git a/board/minnowboard-max/post-build.sh b/board/minnowboard-max/post-build.sh
+new file mode 100755
+index 0000000..9f86d39
+--- /dev/null
++++ b/board/minnowboard-max/post-build.sh
+@@ -0,0 +1,2 @@
++#!/bin/sh
++cp board/minnowboard-max/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+diff --git a/board/minnowboard-max/readme.txt b/board/minnowboard-max/readme.txt
+new file mode 100644
+index 0000000..f865b66
+--- /dev/null
++++ b/board/minnowboard-max/readme.txt
+@@ -0,0 +1,40 @@
++Prepare the SD card for the Minnow Board MAX
++============================================
 +
-+From the perspective of libcap, this API is only needed internally in
-+cap_file.c so we put an include there.
++ 1. Partition the SD card with a GPT partition table
 +
-+Status: upstream.
++    sudo cgdisk /dev/mmcblk0
 +
-+Signed-off-by: Andrew G Morgan <morgan@kernel.org>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
++    Create two partitions:
 +
-+diff --git a/libcap/cap_file.c b/libcap/cap_file.c
-+index d3dc1d0..553c2d2 100644
-+--- a/libcap/cap_file.c
-++++ b/libcap/cap_file.c
-+@@ -10,6 +10,8 @@
-+ #include <sys/stat.h>
-+ #include <unistd.h>
-+ 
-++#include <linux/xattr.h>
-++
-+ #define XATTR_SECURITY_PREFIX "security."
-+ 
-+ #include "libcap.h"
-+diff --git a/libcap/include/sys/capability.h b/libcap/include/sys/capability.h
-+index 64ac50e..dddc75b 100644
-+--- a/libcap/include/sys/capability.h
-++++ b/libcap/include/sys/capability.h
-+@@ -27,7 +27,6 @@ extern "C" {
-+ #define __user
-+ #endif
-+ #include <linux/capability.h>
-+-#include <linux/xattr.h>
-+ 
-+ /*
-+  * POSIX capability types
-+-- 
-+2.0.4
++     a) First partition of a few dozens of megabytes, which will be
++        used to store the bootloader and the kernel image. Type must
++        be EF00 (EFI partition).
 +
++     b) Second partition of any size, which will be used to store the
++        root filesystem. Type must be 8300 (Linux filesystem)
++
++ 2. Prepare the boot partition
++
++    We will format it, mount it, copy the EFI data generated by
++    Buildroot, and the kernel image.
++
++    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
++    sudo mount /dev/mmcblk0p1 /mnt
++    sudo cp -a output/images/efi-part/* /mnt/
++    sudo cp output/images/bzImage /mnt/
++    sudo umount /mnt
++
++ 3. Prepare the root partition
++
++    We will format it, mount it, and extract the root filesystem.
++
++    sudo mkfs.ext4 -L root /dev/mmcblk0p2
++    sudo mount /dev/mmcblk0p2 /mnt
++    sudo tar -C /mnt -xf output/images/rootfs.tar
++    sudo umount /mnt
++
++ 4. Enjoy
++
++Additional information about this board can be found at
++http://www.minnowboard.org/ or http://elinux.org/Minnowboard:MinnowMax.
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+new file mode 100644
+index 0000000..0cb5b97
+--- /dev/null
++++ b/configs/minnowboard_max_defconfig
+@@ -0,0 +1,27 @@
++# Architecture
++BR2_x86_64=y
++BR2_x86_atom=y
++
++# Misc
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
++
++# Lock to 3.17 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.17.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
++
++# Needed for ethernet
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.2"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard-max/linux-3.17.config"
++
++# Bootloader
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_X86_64_EFI=y
