@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2014 00:09:04 +0100
-Subject: [Buildroot] [PATCH 34/51] targetcli-fb: bump version
-In-Reply-To: <1414349157-22749-34-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 26 Oct 2014 19:45:40 +0100")
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-34-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <874muh42un.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 2 Nov 2014 23:54:06 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.4.3
+Message-ID: <20141102231025.DCDA7B2F56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=649907cd6ab1fa8f51766d4f0acea3e5e35e3fbe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 686f50d..233797c 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.4.2
++FFMPEG_VERSION = 2.4.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
