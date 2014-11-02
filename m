@@ -1,33 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2014 22:49:19 +0100
-Subject: [Buildroot] [PATCH v2] unzip: Use the "-q" option to silence
-	unzipping of source files
-In-Reply-To: <1414574321-16399-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Wed, 29 Oct 2014 10:18:41 +0100")
-References: <1414574321-16399-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87vbmx46jk.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Nov 2014 22:54:11 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+In-Reply-To: <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
+References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141101144354.66e2e698@free-electrons.com>
+ <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
+Message-ID: <20141102225411.0fe3d3de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+Dear Angelo Compagnucci,
 
- > Add and use the "UNZIP" variable instead of calling directly unzip
- > because the variable contains the "-q" option to silence "unzip" so it
- > doesn't show the list of files extracted just like when tar files are
- > being unpacked.
+On Sun, 2 Nov 2014 22:14:10 +0100, Angelo Compagnucci wrote:
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > ---
+> Git send-email warned me, but sending you via patch
+> seemed to me the best thing to do. Unfortunately, git send-email was right!
 
- > Notes:
- >     v2:
- >      - remove the "-d" option from the "UNZIP" variable (Arnout)
+git send-email often is right :)
 
-Committed, thanks.
+> Some tweaks are missing in vanilla bootstrap css, I tweaked a little
+> to match the colour theme and font of the older website. You can find
+> the right version here:
+> 
+> http://buildrootrd.idea-on-line.it/css/bootstrap.min.css
 
+This doesn't seem very clean, and a bit opposite to the principle of
+CSS, no? Why don't you create a separate CSS that overrides whatever
+needs to be overridden?
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
