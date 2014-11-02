@@ -1,32 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Nov 2014 22:45:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump version to
-	0.4.6
-Message-ID: <1414964722-7224-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Nov 2014 22:49:19 +0100
+Subject: [Buildroot] [PATCH v2] unzip: Use the "-q" option to silence
+	unzipping of source files
+In-Reply-To: <1414574321-16399-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Wed, 29 Oct 2014 10:18:41 +0100")
+References: <1414574321-16399-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87vbmx46jk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add and use the "UNZIP" variable instead of calling directly unzip
+ > because the variable contains the "-q" option to silence "unzip" so it
+ > doesn't show the list of files extracted just like when tar files are
+ > being unpacked.
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index e5a95ad..e4a2dff 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOVECOT_PIGEONHOLE_VERSION = 0.4.5
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.6
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > ---
+
+ > Notes:
+ >     v2:
+ >      - remove the "-d" option from the "UNZIP" variable (Arnout)
+
+Committed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
