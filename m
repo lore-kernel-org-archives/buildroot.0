@@ -1,95 +1,94 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 03 Nov 2014 22:33:04 +0100
-Subject: [Buildroot] [PATCH v2] gst1-plugins-imx: add package
-In-Reply-To: <5456AC81.5090403@lucaceresoli.net>
-References: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
- <5456AC81.5090403@lucaceresoli.net>
-Message-ID: <5457F490.6050200@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 3 Nov 2014 22:32:08 +0100
+Subject: [Buildroot] [git commit] avahi: fix libgtk3 build issue by patching
+	Makefile.in instead of Makefile.am
+Message-ID: <20141103213612.5169AB5922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/11/14 23:13, Luca Ceresoli wrote:
-> Dear Gary,
-> 
-> thanks for you resubmission.
-> 
-> Gary Bisson wrote:
->> Open-source GStreamer 1.0 plugins for i.MX platforms.
->> More info at https://github.com/Freescale/gstreamer-imx
->>
->> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
->> ---
->> Modifications v1->v2:
->> - Use of github helper macro
->> - Modify package comment with Peter S. original patch
->> - Add comment for eglibc dependency (due to GPU libs)
->> - Remove comments on package dependencies
->>
->> One thing I wasn't sure about, should all new package contain a .hash file? If
->> so I can submit a v3 right away.
-> 
-> It is not mandatory. AFAIK the hash is recommended for security-related
-> packages only.
+commit: http://git.buildroot.net/buildroot/commit/?id=ee817f63aa8a67c82bd5c27346d5197a8f3a9552
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- We discussed it last BR meeting but didn't come to a real conclusion. For sure,
-the hash file isn't mandatory.
+Fixes:
+http://autobuild.buildroot.net/results/f0b/f0b4f8c46eb1de6cf5ed081dacd248c66c591aa3/
+http://autobuild.buildroot.net/results/dac/daca5d030b8ecc6d11901e2936fe2151d0930852/
+http://autobuild.buildroot.net/results/05e/05e7fb9a888169ba7c4cb28abdb4febb5215354c/
+http://autobuild.buildroot.net/results/743/743f30b1816b17a0a1397b7fd8b5a8571c4dde03/
 
+And many others.
 
-> 
-> [...]
->> diff --git a/package/gstreamer1/gst1-plugins-imx/Config.in
->> b/package/gstreamer1/gst1-plugins-imx/Config.in
->> new file mode 100644
->> index 0000000..d499874
->> --- /dev/null
->> +++ b/package/gstreamer1/gst1-plugins-imx/Config.in
->> @@ -0,0 +1,28 @@
->> +comment "gst1-plugins-imx needs an imx-specific Linux kernel to be built"
->> +    depends on BR2_arm && !BR2_LINUX_KERNEL
->> +
->> +# Required by gpu-viv-bin-mx6q
->> +comment "gst1-plugins-imx needs an (e)glibc toolchain"
->> +    depends on BR2_arm
->> +    depends on !BR2_TOOLCHAIN_USES_GLIBC
-> 
-> These messages are much cleaner than in version 1 of your patch.
-> However, for an ARM configuration with a musl or uClibc toolchain and
-> without a kernel build activated, two lines are displayed. This is not
-> coherent with the general Buildroot behavior.
+So we no longer need to autoreconf the package. Autoreconfing is non-trivial
+as it uses m4 macros from glib, but we don't want to unconditionally pull in
+glib.
 
- Well, there are a few other packages like that. Because...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/avahi/avahi-no-gtk-deprecations.patch |   39 ++++++++++++-------------
+ package/avahi/avahi.mk                        |    1 -
+ 2 files changed, 19 insertions(+), 21 deletions(-)
 
-> 
-> It should be:
-> 
-> comment "gst1-plugins-imx needs an (e)glibc toolchain and an imx-specific Linux
-> kernel to be built"
-
- ... this line is really too long.
-
-
- Regards,
- Arnout
-
->     depends on BR2_arm && (!BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_USES_GLIBC)
-> 
-> Although that's a bit lengthy...
-> 
-> With that fixed (which can be done by the committer):
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> I'll try to test it during the coming week and give my Tested-by tag, or
-> report any issues.
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/avahi/avahi-no-gtk-deprecations.patch b/package/avahi/avahi-no-gtk-deprecations.patch
+index 3a284d0..d187053 100644
+--- a/package/avahi/avahi-no-gtk-deprecations.patch
++++ b/package/avahi/avahi-no-gtk-deprecations.patch
+@@ -6,26 +6,25 @@ versions.
+ For more details, see the Fedora bugzilla:
+ https://bugzilla.redhat.com/show_bug.cgi?id=1001676
+ 
++[Peter: patch Makefile.in so we don't need autoreconf]
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---- avahi-0.6.31/avahi-ui/Makefile.am.orig	2013-09-21 16:47:28.677659361 +0200
+-+++ avahi-0.6.31/avahi-ui/Makefile.am	2013-09-21 16:47:34.852520537 +0200
+-@@ -15,7 +15,7 @@
+- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+- # USA.
+- 
+--AM_CFLAGS=-I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1
+-+AM_CFLAGS=-I$(top_srcdir)
++---
++ avahi-ui/Makefile.am |    2 +-
++ avahi-ui/Makefile.in |    3 +--
++ configure.ac         |    2 +-
++ 3 files changed, 3 insertions(+), 4 deletions(-)
++
++Index: avahi-0.6.31/avahi-ui/Makefile.in
++===================================================================
++--- avahi-0.6.31.orig/avahi-ui/Makefile.in
+++++ avahi-0.6.31/avahi-ui/Makefile.in
++@@ -464,8 +464,7 @@
++ top_srcdir = @top_srcdir@
+  
+  # This cool debug trap works on i386/gcc only
+- AM_CFLAGS+='-DDEBUG_TRAP=__asm__("int $$3")'
+---- avahi-0.6.31/configure.ac.orig	2013-09-21 16:46:43.750669413 +0200
+-+++ avahi-0.6.31/configure.ac	2013-09-21 16:47:02.566246400 +0200
+-@@ -92,7 +92,7 @@
+-     AC_MSG_CHECKING([whether stack-smashing protection is available])
+-     ssp_old_cflags="$CFLAGS"
+-     ssp_old_ldflags="$LDFLAGS"
+--    CFLAGS="$CFLAGS -Werror -fstack-protector-all -fPIC"
+-+    CFLAGS="$CFLAGS -fstack-protector-all -fPIC"
+-     LDFLAGS="$LDFLAGS -Wl,-z,defs"
+-     cat confdefs.h > conftest.c
+-     cat >>conftest.c <<_ACEOF
++-AM_CFLAGS = -I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 \
++-	-DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1 \
+++AM_CFLAGS = -I$(top_srcdir) \
++ 	'-DDEBUG_TRAP=__asm__("int $$3")' $(am__append_1)
++ pkglibdatadir = $(libdir)/avahi
++ desktopdir = $(datadir)/applications
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index e4c327d..4e5dbc6 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -16,7 +16,6 @@ AVAHI_SITE = http://www.avahi.org/download
+ AVAHI_LICENSE = LGPLv2.1+
+ AVAHI_LICENSE_FILES = LICENSE
+ AVAHI_INSTALL_STAGING = YES
+-AVAHI_AUTORECONF = YES
+ 
+ AVAHI_CONF_ENV = ac_cv_func_strtod=yes \
+ 		ac_fsusage_space=yes \
