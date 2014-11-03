@@ -1,18 +1,18 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 10:59:06 +0100
-Subject: [Buildroot] [git commit] host-openssl: use correct prefix so libssl
-	/ libcrypto can be found
-Message-ID: <20141103100523.A8FDCB2F53@busybox.osuosl.org>
+Date: Mon, 3 Nov 2014 11:04:46 +0100
+Subject: [Buildroot] [git commit] libwebsockets: needs host-openssl when
+	built with openssl support
+Message-ID: <20141103100523.B2334B2F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93951c8f24f676e5ab775fcbbb1b2e8bdd821414
+commit: http://git.buildroot.net/buildroot/commit/?id=037a5d3655a78176deebd466c42b1fbdf6d837e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes (root cause of):
+Fixes
 http://autobuild.buildroot.net/results/d01/d0190a6e5c6b5aa78cfefc29e4e8a4e4b135450b/
 http://autobuild.buildroot.net/results/9bb/9bb8defedb8024de83eb3a609ab584efb5d0d2b0/
 http://autobuild.buildroot.net/results/e4a/e4a1b298e7e158d3614b89e61d40ef9a00e7ff67/
@@ -20,46 +20,24 @@ http://autobuild.buildroot.net/results/5e2/5e24a90058111f7d5618047410f809b45bc16
 
 And many others.
 
-The host version of openssl should be configured to use the host directory
-as its prefix and the INSTALL_PREFIX dance shouldn't be used, as otherwise
-host-openssl will look in /usr for its libraries.
-
-While we are at it, ensure our host CFLAGS are used similar to how we do for
-the target build.  Also enable zlib support as we already list it as a
-dependency.
+The build system wants to create a ssl key for testing using host-openssl,
+so ensure it is available.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ package/libwebsockets/libwebsockets.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 7c1c7f0..7e30cad 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -61,12 +61,13 @@ define HOST_OPENSSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
- 		./config \
--		--prefix=/usr \
--		--openssldir=/etc/ssl \
-+		--prefix=$(HOST_DIR)/usr \
-+		--openssldir=$(HOST_DIR)/etc/ssl \
- 		--libdir=/lib \
- 		shared \
--		no-zlib \
-+		zlib-dynamic \
- 	)
-+	$(SED) "s:-O[0-9]:$(HOST_CFLAGS):" $(@D)/Makefile
- endef
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 71a520d..e1a1aa3 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -21,7 +21,7 @@ LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=OFF
+ endif
  
- define OPENSSL_CONFIGURE_CMDS
-@@ -106,7 +107,7 @@ define OPENSSL_INSTALL_STAGING_CMDS
- endef
- 
- define HOST_OPENSSL_INSTALL_CMDS
--	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(HOST_DIR) install
-+	$(MAKE1) -C $(@D) install
- endef
- 
- define OPENSSL_INSTALL_TARGET_CMDS
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBWEBSOCKETS_DEPENDENCIES += openssl
++LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
+ else
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=OFF
