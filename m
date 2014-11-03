@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 11:04:46 +0100
-Subject: [Buildroot] [git commit] libwebsockets: needs host-openssl when
-	built with openssl support
-Message-ID: <20141103100523.B2334B2F53@busybox.osuosl.org>
+Date: Mon, 3 Nov 2014 10:08:22 +0100
+Subject: [Buildroot] [git commit] dbus: Remove DBUS_USERS duplicate
+Message-ID: <20141103100523.A1767B3054@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=037a5d3655a78176deebd466c42b1fbdf6d837e0
+commit: http://git.buildroot.net/buildroot/commit/?id=d230e7dbb4eb3058f15be7d78285fa1845388d28
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/d01/d0190a6e5c6b5aa78cfefc29e4e8a4e4b135450b/
-http://autobuild.buildroot.net/results/9bb/9bb8defedb8024de83eb3a609ab584efb5d0d2b0/
-http://autobuild.buildroot.net/results/e4a/e4a1b298e7e158d3614b89e61d40ef9a00e7ff67/
-http://autobuild.buildroot.net/results/5e2/5e24a90058111f7d5618047410f809b45bc165f6/
-
-And many others.
-
-The build system wants to create a ssl key for testing using host-openssl,
-so ensure it is available.
-
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libwebsockets/libwebsockets.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dbus/dbus.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 71a520d..e1a1aa3 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -21,7 +21,7 @@ LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=OFF
- endif
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 0fa1a0f..197f052 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -15,9 +15,10 @@ define DBUS_PERMISSIONS
+ endef
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBWEBSOCKETS_DEPENDENCIES += openssl
-+LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
- else
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=OFF
+ define DBUS_USERS
+-dbus -1 dbus -1 * - - - D-Bus
++	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
+ endef
+ 
++
+ DBUS_DEPENDENCIES = host-pkgconf expat
+ 
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+@@ -33,10 +34,6 @@ DBUS_CONF_OPTS = --with-dbus-user=dbus \
+ 		--with-system-socket=/var/run/dbus/system_bus_socket \
+ 		--with-system-pid-file=/var/run/messagebus.pid
+ 
+-define DBUS_USERS
+-	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
+-endef
+-
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ DBUS_CONF_OPTS += LIBS='-pthread'
+ endif
