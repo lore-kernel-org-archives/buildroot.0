@@ -1,68 +1,79 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Mon,  3 Nov 2014 14:43:22 +0100
-Subject: [Buildroot] [PATCH 1/1] python-docopt: new package
-Message-ID: <1415022202-31530-1-git-send-email-alvaro.gamez@hazent.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  3 Nov 2014 11:09:06 -0300
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.2
+Message-ID: <1415023746-3969-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
- package/Config.in                      |  1 +
- package/python-docopt/Config.in        | 11 +++++++++++
- package/python-docopt/python-bottle.mk | 12 ++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/python-docopt/Config.in
- create mode 100644 package/python-docopt/python-bottle.mk
+Patch now upstream.
 
-diff --git a/package/Config.in b/package/Config.in
-index 8be24f4..9196913 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -489,6 +489,7 @@ menu "external python modules"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
-+	source "package/python-docopt/Config.in"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-id3/Config.in"
-diff --git a/package/python-docopt/Config.in b/package/python-docopt/Config.in
-new file mode 100644
-index 0000000..bb7d0de
---- /dev/null
-+++ b/package/python-docopt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_DOCOPT
-+	bool "python-docopt"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	help
-+	  docopt helps you create most beautiful command-line interfaces easily.
-+	  The option parser is generated based on the beautiful help message
-+	  that you write yourself. This way you don't need to write this stupid
-+	  repeatable parser-code, and instead can write only the help message--
-+	  the way you want it.
-+
-+	  https://github.com/docopt/docopt
-diff --git a/package/python-docopt/python-bottle.mk b/package/python-docopt/python-bottle.mk
-new file mode 100644
-index 0000000..092358a
---- /dev/null
-+++ b/package/python-docopt/python-bottle.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# python-docopt
-+#
-+################################################################################
-+
-+PYTHON_DOCOPT_VERSION = 0.6.2
-+PYTHON_DOCOPT_SITE = $(call github,docopt,docopt,$(PYTHON_DOCOPT_VERSION))
-+PYTHON_DOCOPT_LICENSE = MIT
-+PYTHON_DOCOPT_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...np-Discovery-add-missing-stdlib.h-include.patch | 30 ----------------------
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+ delete mode 100644 package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
+
+diff --git a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch b/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
+deleted file mode 100644
+index ff581c3..0000000
+--- a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 1901bd9d6be651fbaa5c7659d92d3361e6d6a823 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 28 Oct 2014 07:25:48 -0300
+-Subject: [PATCH] upnp/Discovery: add missing stdlib.h include
+-
+-Used for free().
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: Sent upstream.
+-
+- src/lib/upnp/Discovery.cxx | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/lib/upnp/Discovery.cxx b/src/lib/upnp/Discovery.cxx
+-index 9ea78c6..2c91e37 100644
+---- a/src/lib/upnp/Discovery.cxx
+-+++ b/src/lib/upnp/Discovery.cxx
+-@@ -26,6 +26,8 @@
+- 
+- #include <upnp/upnptools.h>
+- 
+-+#include <stdlib.h>
+-+
+- #include <string.h>
+- 
+- // The service type string we are looking for.
+--- 
+-2.0.4
+-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 7676b37..0861706 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	8b3afcd440181c9bd18b229b5974e529d59648344dd371370d6f7d62ec2847c5	mpd-0.19.1.tar.xz
++sha256	73f0ed6b4001628287a71d077c624a2ca8200b24e3e877b725fcbf54dfe6a108	mpd-0.19.2.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6d2918d..8ec3c0e 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).1
++MPD_VERSION = $(MPD_VERSION_MAJOR).2
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-2.1.1
+2.0.4
