@@ -1,49 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2014 22:39:41 +0100
-Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
-	other Qt5 packages
-In-Reply-To: <20141103222519.7c8797e9@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 3 Nov 2014 22:25:19 +0100")
-References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87mw8943vw.fsf@dell.be.48ers.dk>
- <20141103222519.7c8797e9@free-electrons.com>
-Message-ID: <87fve02cbm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 3 Nov 2014 22:37:34 +0100
+Subject: [Buildroot] [git commit] qemu: fix build when python3 is enabled
+Message-ID: <20141103214423.CD179B175C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1d21e4c397cbd92d03d09daf4fadffaa79959f55
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/04e/04ec455e352319a46dc06def1762c65ad28a12a1/
+http://autobuild.buildroot.net/results/f19/f1932657912674af444602ac59211b6caf6841ca/
+http://autobuild.buildroot.net/results/18a/18a43df80616280506a44ac3abc327ddf0e7b079/
+http://autobuild.buildroot.net/results/44c/44c00b50248018c4e81f4fbb1041d35b78f89640/
 
- >> This (and elsewhere) shows a bit of a mixup between BR2_PACKAGE_QT5 and
- >> qt5base - But ok, having BR2_PACKAGE_QT5 enabled without qt5base isn't
- >> really sensible (but is allowed by kconfig).
+And many others.
 
- > I hesitated between qt5.mk or qt5base.mk. I decided to go with qt5.mk,
- > with the following reasoning:
+When python3 for the target is enabled, $(HOST_DIR)/usr/bin/python points to
+host-python3, not host-python - Breaking the build. Ensure host-python is used.
 
- >  * I wanted to name the variable QT5_QMAKE and not QT5BASE_QMAKE, to
- >    mimic what exists for qt4 (variable is named QT_QMAKE).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qemu/qemu.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- >  * Since the variable was going to be named QT5_QMAKE, I found it would
- >    be odd to have it in qt5base.mk where all variables are
- >    QT5BASE_<foo>. So I went with qt5.mk instead.
-
-Ok.
-
- >> Should we just use BR2_PACKAGE_QT5BASE everywhere you check for BR2_PACKAGE_QT5?
-
- > Where exactly? Or shouldn't we have qt5base selected as soon as qt5 is
- > enabled?
-
-Well, that's perhaps the easiest solution, yes. Having qt5 enabled but
-not qt5base doesn't make any sense.
-
-Will you send an updated series or should I do that here?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 4b8f0f4..8182697 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -96,7 +96,7 @@ QEMU_OPTS =
+ 
+ QEMU_VARS = \
+ 	LIBTOOL=$(HOST_DIR)/usr/bin/libtool \
+-	PYTHON=$(HOST_DIR)/usr/bin/python \
++	PYTHON=$(HOST_DIR)/usr/bin/python2 \
+ 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
