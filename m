@@ -1,122 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 23:05:42 +0100
-Subject: [Buildroot] [git commit] package: prepare to support modules that
-	work with Qt or Qt5
-Message-ID: <20141103220809.B9CA8B1943@busybox.osuosl.org>
+Date: Mon, 3 Nov 2014 23:06:23 +0100
+Subject: [Buildroot] [git commit] qextserialport: allow building with Qt5
+Message-ID: <20141103220809.DC925B1943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=699d1e75cfa1597a030d89abdf9376d2df2c3d6e
+commit: http://git.buildroot.net/buildroot/commit/?id=79d4063d78af7c0f21c6d3c1a0ee074976fde32b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, all the Qt external modules (qtuio, qjson, etc.) can only
-be compiled against Qt4. However, some of them (qjson, qextserialport
-at least) can compile with either Qt4 or Qt5.
-
-Therefore, this commit adjusts the Config.in logic to make it possible
-for certain modules to be selected with either Qt4 or Qt5. We use the
-same approach as the one of for Python 2 vs. Python 3 modules:
-
- - in package/Config.in, the package Config.in files are included
-   either if BR2_PACKAGE_QT or BR2_PACKAGE_QT5 are enabled.
-
- - each individual package is then responsible for having a dependency
-   on either BR2_PACKAGE_QT, or BR2_PACKAGE_QT5 or both depending on
-   what they support. In this commit, we add a dependency on
-   BR2_PACKAGE_QT to all packages, since for now, they only support
-   Qt4.
+qextserialport builds fine with both Qt4 and Qt5, so this commit
+enables it for Qt5.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    6 ++----
- package/grantlee/Config.in |    1 +
- package/qjson/Config.in    |    1 +
- package/qtuio/Config.in    |    2 ++
- package/qwt/Config.in      |    2 ++
- 5 files changed, 8 insertions(+), 4 deletions(-)
+ package/qextserialport/Config.in         |    4 +---
+ package/qextserialport/qextserialport.mk |   10 ++++++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3b3c372..28cf703 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -223,8 +223,8 @@ endif
- comment "Other GUIs"
- 	source "package/efl/Config.in"
- 	source "package/qt/Config.in"
+diff --git a/package/qextserialport/Config.in b/package/qextserialport/Config.in
+index 4e92ecf..ab05920 100644
+--- a/package/qextserialport/Config.in
++++ b/package/qextserialport/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_QEXTSERIALPORT
+ 	bool "qextserialport"
+-	# Qt is a big library, we don't want to select it
+-	# automatically without the user knowing
+-	depends on BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+ 	help
+ 	  A Qt library to manage serial ports
+ 
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 85abe19..2949da9 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -10,13 +10,19 @@ QEXTSERIALPORT_SITE_METHOD = git
+ 
+ QEXTSERIALPORT_LICENSE = MIT
+ 
+-QEXTSERIALPORT_DEPENDENCIES = qt
 -
--if BR2_PACKAGE_QT
-+	source "package/qt5/Config.in"
-+if BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- comment "QT libraries and helper libraries"
- 	source "package/grantlee/Config.in"
- 	source "package/qextserialport/Config.in"
-@@ -232,8 +232,6 @@ comment "QT libraries and helper libraries"
- 	source "package/qtuio/Config.in"
- 	source "package/qwt/Config.in"
- endif
--
--	source "package/qt5/Config.in"
- 	source "package/weston/Config.in"
- 	source "package/x11r7/Config.in"
+ QEXTSERIALPORT_INSTALL_STAGING = YES
  
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index 09ec70c..ce1342c 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	depends on BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
- 	select BR2_PACKAGE_QT_SCRIPT
- 	select BR2_PACKAGE_QT_GUI_MODULE
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
-index c15b12f..2dc2cc4 100644
---- a/package/qjson/Config.in
-+++ b/package/qjson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QJSON
- 	bool "qjson"
-+	depends on BR2_PACKAGE_QT
- 	help
- 	  QJson is a Qt-based library that maps JSON data to
- 	  QVariant objects and vice versa.
-diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
-index f3f5e3c..f46f1dd 100644
---- a/package/qtuio/Config.in
-+++ b/package/qtuio/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QTUIO
- 	bool "qtuio"
-+	depends on BR2_PACKAGE_QT
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	help
- 	  Implementation of an interface connecting TUIO messages
-@@ -17,4 +18,5 @@ config BR2_QTUIO_EXAMPLES
- endif
++ifeq ($(BR2_PACKAGE_QT),y)
++QEXTSERIALPORT_DEPENDENCIES += qt
+ define QEXTSERIALPORT_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
+ endef
++else ifeq ($(BR2_PACKAGE_QT5),y)
++QEXTSERIALPORT_DEPENDENCIES += qt5base
++define QEXTSERIALPORT_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE))
++endef
++endif
  
- comment "qtuio depends on QT gui module"
-+	depends on BR2_PACKAGE_QT
- 	depends on !BR2_PACKAGE_QT_GUI_MODULE
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 7718b59..8c7bc56 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QWT
- 	bool "qwt"
-+	depends on BR2_PACKAGE_QT
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	help
- 	  Qwt is a graphics extension to the Qt GUI application
-@@ -25,4 +26,5 @@ config BR2_PACKAGE_QWT_OPENGL
- endif
- 
- comment "qwt depends on QT gui module"
-+	depends on BR2_PACKAGE_QT
- 	depends on !BR2_PACKAGE_QT_GUI_MODULE
+ define QEXTSERIALPORT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
