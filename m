@@ -1,39 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Nov 2014 22:58:55 +0100
-Subject: [Buildroot] [git commit] qemu: fix build when python3 is enabled
-In-Reply-To: <5457F97E.7050509@mind.be> (Arnout Vandecappelle's message of
- "Mon, 03 Nov 2014 22:54:06 +0100")
-References: <20141103214423.CD179B175C@busybox.osuosl.org>
- <5457F97E.7050509@mind.be>
-Message-ID: <87bnoo2bfk.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Nov 2014 23:00:25 +0100
+Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
+	other Qt5 packages
+In-Reply-To: <20141103224620.5c3ffe1d@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 3 Nov 2014 22:46:20 +0100")
+References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw8943vw.fsf@dell.be.48ers.dk>
+ <20141103222519.7c8797e9@free-electrons.com>
+ <87fve02cbm.fsf@dell.be.48ers.dk>
+ <20141103224620.5c3ffe1d@free-electrons.com>
+Message-ID: <877fzc2bd2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > On 03/11/14 22:37, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=1d21e4c397cbd92d03d09daf4fadffaa79959f55
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> Well, that's perhaps the easiest solution, yes. Having qt5 enabled but
+ >> not qt5base doesn't make any sense.
  >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/04e/04ec455e352319a46dc06def1762c65ad28a12a1/
- >> http://autobuild.buildroot.net/results/f19/f1932657912674af444602ac59211b6caf6841ca/
- >> http://autobuild.buildroot.net/results/18a/18a43df80616280506a44ac3abc327ddf0e7b079/
- >> http://autobuild.buildroot.net/results/44c/44c00b50248018c4e81f4fbb1041d35b78f89640/
- >> 
- >> And many others.
- >> 
- >> When python3 for the target is enabled, $(HOST_DIR)/usr/bin/python points to
- >> host-python3, not host-python - Breaking the build. Ensure host-python is used.
+ >> Will you send an updated series or should I do that here?
 
- >  There's another potential issue like this in dbus-python, in python-pypcap and
- > in samba4.
+ > I can, but not this week. I'm busy giving a training, and will not have
+ > much free time.
 
-Ahh, ok - Do you know if they all need python2.7 or should we just wait
-for the autobuilders to know?
+Ok, I'll take a look so we can have it for 2014.11-rc1.
 
 -- 
-Bye, Peter Korsgaard 
+Bye, Peter Korsgaard
