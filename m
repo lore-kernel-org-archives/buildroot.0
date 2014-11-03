@@ -1,210 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 03 Nov 2014 22:51:01 +0100
-Subject: [Buildroot] [PATCH v2] gst1-plugins-imx: add package
-In-Reply-To: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
-References: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <5457F8C5.5000708@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  3 Nov 2014 22:51:18 +0100
+Subject: [Buildroot] [PATCH 1/2] tcl: update package disabling
+Message-ID: <1415051479-29611-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gary,
+Update package disabling (removing pkgs subdirectories) after
+latest tcl version update:
 
- Thanks for your continued effort on this package. I still have some feedback,
-however.
+$ ls tcl8.6.1/pkgs/
+ itcl4.0.0
+ sqlite3.8.0
+ tdbc1.0.0
+ tdbcmysql1.0.0
+ tdbcodbc1.0.0
+ tdbcpostgres1.0.0
+ tdbcsqlite3-1.0.0
+ thread2.7.0
 
-On 30/10/14 03:32, Gary Bisson wrote:
-> Open-source GStreamer 1.0 plugins for i.MX platforms.
-> More info at https://github.com/Freescale/gstreamer-imx
-> 
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> ---
-> Modifications v1->v2:
-> - Use of github helper macro
-> - Modify package comment with Peter S. original patch
-> - Add comment for eglibc dependency (due to GPU libs)
-> - Remove comments on package dependencies
-> 
-> One thing I wasn't sure about, should all new package contain a .hash file? If
-> so I can submit a v3 right away.
-> 
-> This patch has been tested using an i.MX6Q SabreLite (nitrogen6x config) along
-> with the usual Tears of Steel movie in 1080p:
-> http://media.xiph.org/mango/tears_of_steel_1080p.webm
-> 
-> Below are the commands used to test the different sinks:
-> 
-> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
-> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-> matroskademux ! imxvpudec ! imxipusink
-> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-> matroskademux ! imxvpudec ! imxeglvivsink
-> 
-> The toolchain used was the Sourcery CodeBench 2014.05. The video above also
-> requires the following extra configuration in order to demux the content:
-> BR2_PACKAGE_GST1_PLUGINS_GOOD=y
-> BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA=y
-> 
-> Thanks,
-> Gary
-> 
-> ---
->  package/gstreamer1/Config.in                       |  1 +
->  package/gstreamer1/gst1-plugins-imx/Config.in      | 28 +++++++++++
->  .../gst1-plugins-imx/gst1-plugins-imx.mk           | 56 ++++++++++++++++++++++
->  3 files changed, 85 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-plugins-imx/Config.in
->  create mode 100644 package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
-> 
-> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-> index 5f08faf..9dbbed4 100644
-> --- a/package/gstreamer1/Config.in
-> +++ b/package/gstreamer1/Config.in
-> @@ -6,6 +6,7 @@ source "package/gstreamer1/gst1-plugins-base/Config.in"
->  source "package/gstreamer1/gst1-plugins-good/Config.in"
->  source "package/gstreamer1/gst1-plugins-bad/Config.in"
->  source "package/gstreamer1/gst1-plugins-ugly/Config.in"
-> +source "package/gstreamer1/gst1-plugins-imx/Config.in"
+$ ls tcl8.6.2/pkgs/
+ itcl4.0.1
+ sqlite3.8.6
+ tdbc1.0.1
+ tdbcmysql1.0.1
+ tdbcodbc1.0.1
+ tdbcpostgres1.0.1
+ tdbcsqlite3-1.0.1
+ thread2.7.1
 
- I'm sorry to return to the naming issue, but shouldn't the package be called
-gst1-imx instead of gst1-plugins-imx? We don't use 'plugins' in any other gst
-package (except the official plugin bundles), and upstream also doesn't have
-'plugins' in the name.
+Fixes:
+ http://autobuild.buildroot.net/results/07ae8e42acf62fef99de70c8099ec5a0ca89a817/
 
->  source "package/gstreamer1/gst1-libav/Config.in"
->  source "package/gstreamer1/gst1-validate/Config.in"
->  source "package/gstreamer1/gst-omx/Config.in"
-> diff --git a/package/gstreamer1/gst1-plugins-imx/Config.in b/package/gstreamer1/gst1-plugins-imx/Config.in
-> new file mode 100644
-> index 0000000..d499874
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-imx/Config.in
-> @@ -0,0 +1,28 @@
-> +comment "gst1-plugins-imx needs an imx-specific Linux kernel to be built"
-> +	depends on BR2_arm && !BR2_LINUX_KERNEL
-> +
-> +# Required by gpu-viv-bin-mx6q
-> +comment "gst1-plugins-imx needs an (e)glibc toolchain"
-> +	depends on BR2_arm
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +
-> +config BR2_PACKAGE_GST1_PLUGINS_IMX
-> +	bool "gst1-plugins-imx"
-> +	depends on BR2_LINUX_KERNEL
+Could not reproduce the build failure, but disabling pkgs/sqlite3.8.6 should
+prevent all build failures in this directory...
 
- Put here a # libfslvpuwrap to make the reason explicit.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/tcl/tcl.mk | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-> +	depends on BR2_arm # Only relevant for i.MX
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # gpu-viv-bin-mx6q
-> +	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-
- This should be a select.
-
-> +	depends on BR2_PACKAGE_LIBFSLVPUWRAP
-
- This should be a select.
-
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
-> +	help
-> +	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
-> +	  i.MX platform, with emphasis on video en/decoding using the i.MX
-> +	  VPU engine.
-> +
-> +	  Currently, this software has been tested only with the i.MX6 SoC
-> +	  family and requires a kernel that includes the i.MX6 specific
-> +	  headers to be built.
-
- As far as I understand, it's _only_ for i.MX6 and i.MX7, not for the older
-ones. So perhaps that should be clarified.
-
-> +
-> +	  The software as a whole is currently in beta stage.
-> +
-> +	  More info at https://github.com/Freescale/gstreamer-imx
-
- Leave out the 'More info at'.
-
-
-> diff --git a/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk b/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
-> new file mode 100644
-> index 0000000..56b6fdf
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-imx/gst1-plugins-imx.mk
-> @@ -0,0 +1,56 @@
-> +################################################################################
-> +#
-> +# gst1-plugins-imx
-> +#
-> +################################################################################
-> +
-> +GST1_PLUGINS_IMX_VERSION = 0.9.9
-> +GST1_PLUGINS_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_PLUGINS_IMX_VERSION))
-> +
-> +GST1_PLUGINS_IMX_LICENSE = LGPLv2+
-> +GST1_PLUGINS_IMX_LICENSE_FILES = LICENSE
-> +
-> +GST1_PLUGINS_IMX_INSTALL_STAGING = YES
-> +
-> +GST1_PLUGINS_IMX_DEPENDENCIES += host-pkgconf host-python \
-> +	gpu-viv-bin-mx6q gstreamer1 gst1-plugins-base libfslvpuwrap
-> +
-> +# needs access to imx-specific kernel headers
-> +GST1_PLUGINS_IMX_DEPENDENCIES += linux
-> +GST1_PLUGINS_IMX_CONF_OPTS += --prefix="/usr" \
-> +	--kernel-headers="$(LINUX_DIR)/include"
-> +
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-> +GST1_PLUGINS_IMX_DEPENDENCIES += xlib_libX11
-> +GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=x11
-> +else
-> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
-> +GST1_PLUGINS_IMX_DEPENDENCIES += wayland
-> +GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=wayland
-> +else
-> +GST1_PLUGINS_IMX_CONF_OPTS += --egl-platform=fb
-> +endif
-> +endif
-> +
-> +define GST1_PLUGINS_IMX_CONFIGURE_CMDS
-> +	(cd $(@D); \
-> +		$(TARGET_CONFIGURE_OPTS)	\
-> +		$(HOST_DIR)/usr/bin/python2 ./waf configure \
-> +		$(GST1_PLUGINS_IMX_CONF_OPTS) \
-> +	)
-
- I realize that this is probably just copy-paste from somewhere else, but there
-is no need at all for the ()s. It just forks another shell with no good reason.
-
-
-
- Regards,
- Arnout
-
-> +endef
-> +
-> +define GST1_PLUGINS_IMX_BUILD_CMDS
-> +	(cd $(@D); \
-> +		$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS) \
-> +	)
-> +endef
-> +
-> +define GST1_PLUGINS_IMX_INSTALL_TARGET_CMDS
-> +	(cd $(@D); \
-> +		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
-> +		install \
-> +	)
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
-
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index a242760..a48e48c 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -32,21 +32,21 @@ HOST_TCL_CONF_OPTS = \
+ # I haven't found a good way to force pkgs to not build
+ # or configure without just removing the entire pkg directory.
+ define HOST_TCL_REMOVE_PACKAGES
+-	rm -fr $(@D)/pkgs/sqlite3.8.0 \
+-		$(@D)/pkgs/tdbc1.0.0 \
+-		$(@D)/pkgs/tdbcmysql1.0.0 \
+-		$(@D)/pkgs/tdbcodbc1.0.0 \
+-		$(@D)/pkgs/tdbcpostgres1.0.0 \
+-		$(@D)/pkgs/tdbcsqlite3-1.0.0
++	rm -fr $(@D)/pkgs/sqlite3.8.6 \
++		$(@D)/pkgs/tdbc1.0.1 \
++		$(@D)/pkgs/tdbcmysql1.0.1 \
++		$(@D)/pkgs/tdbcodbc1.0.1 \
++		$(@D)/pkgs/tdbcpostgres1.0.1 \
++		$(@D)/pkgs/tdbcsqlite3-1.0.1
+ endef
+ HOST_TCL_PRE_CONFIGURE_HOOKS += HOST_TCL_REMOVE_PACKAGES
+ define TCL_REMOVE_PACKAGES
+-	rm -fr $(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/sqlite3.8.0) \
+-		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbc1.0.0) \
+-		$(@D)/pkgs/tdbcmysql1.0.0 \
+-		$(@D)/pkgs/tdbcodbc1.0.0 \
+-		$(@D)/pkgs/tdbcpostgres1.0.0 \
+-		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbcsqlite3-1.0.0)
++	rm -fr $(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/sqlite3.8.6) \
++		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbc1.0.1) \
++		$(@D)/pkgs/tdbcmysql1.0.1 \
++		$(@D)/pkgs/tdbcodbc1.0.1 \
++		$(@D)/pkgs/tdbcpostgres1.0.1 \
++		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbcsqlite3-1.0.1)
+ endef
+ TCL_PRE_CONFIGURE_HOOKS += TCL_REMOVE_PACKAGES
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.4
