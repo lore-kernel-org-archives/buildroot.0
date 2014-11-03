@@ -1,79 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  3 Nov 2014 11:09:06 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.2
-Message-ID: <1415023746-3969-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 03 Nov 2014 16:01:57 +0100
+Subject: [Buildroot] [PATCH] infra: Add a way to apply patches using git
+In-Reply-To: <20141101231125.2ca351ca@free-electrons.com>
+References: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
+ <5455595F.6090205@mind.be> <20141101231125.2ca351ca@free-electrons.com>
+Message-ID: <10430487.gOJDMNlg1N@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch now upstream.
+On Saturday 01 November 2014 23:11:25 Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Sat, 01 Nov 2014 23:06:23 +0100, Arnout Vandecappelle wrote:
+> > > We discussed this proposal at the last Buildroot Developers meeting.
+> > > Even though we understand the idea and some of us found it potentially
+> > > interesting, we didn't really like the implementation, but nobody
+> > > really found a way of implementing something like this in a nice way.
+> > > 
+> > > One of the problem is that not all our patches are Git patches, which
+> > > you had to work-around in your patch in a way that isn't really nice.
+> > > 
+> > > Maybe Arnout and Yann (in Cc) remember more of the issues that we
+> > > discussed at the meeting regarding this proposal.
+> >  
+> >  For simple patches, a simple diff is normally sufficient. For more
+> >  complicated> 
+> > stuff, it is really worthwhile to clone the upstream repository and work
+> > from there - you'll anyway need to do that to upstream the patches.
+> > 
+> >  So we felt that the need for this feature did not outweigh the complexity
+> >  of> 
+> > its implementation.
+>
+> Ah yes, right: we thought that having a Git repository that isn't the
+> one from upstream made it unpractical to submit patches back to
+> upstream, and was making the entire feature a bit useless.
+I also worried about this restriction. My first idea was to recreate the link 
+between source directory and upstream repository with something like:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...np-Discovery-add-missing-stdlib.h-include.patch | 30 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 32 deletions(-)
- delete mode 100644 package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
+   cd $PKG_BUILD_DIR
+   git clone $PKG_SITE --bare .git
+   git config --bool core.bare false
+   git rev-parse $PKG_VERSION > .git/HEAD
+   git reset
 
-diff --git a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch b/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-deleted file mode 100644
-index ff581c3..0000000
---- a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 1901bd9d6be651fbaa5c7659d92d3361e6d6a823 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 28 Oct 2014 07:25:48 -0300
--Subject: [PATCH] upnp/Discovery: add missing stdlib.h include
--
--Used for free().
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: Sent upstream.
--
-- src/lib/upnp/Discovery.cxx | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/lib/upnp/Discovery.cxx b/src/lib/upnp/Discovery.cxx
--index 9ea78c6..2c91e37 100644
----- a/src/lib/upnp/Discovery.cxx
--+++ b/src/lib/upnp/Discovery.cxx
--@@ -26,6 +26,8 @@
-- 
-- #include <upnp/upnptools.h>
-- 
--+#include <stdlib.h>
--+
-- #include <string.h>
-- 
-- // The service type string we are looking for.
---- 
--2.0.4
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 7676b37..0861706 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8b3afcd440181c9bd18b229b5974e529d59648344dd371370d6f7d62ec2847c5	mpd-0.19.1.tar.xz
-+sha256	73f0ed6b4001628287a71d077c624a2ca8200b24e3e877b725fcbf54dfe6a108	mpd-0.19.2.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 6d2918d..8ec3c0e 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).1
-+MPD_VERSION = $(MPD_VERSION_MAJOR).2
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+However, my patch began to smell black magic. 
+
+
+Ideally, I wanted to create an external tool to do this. However, it is not 
+easy to integrate an external tool with Makefile system (For example, I did 
+not found any handy way to get variables associated with package).
+
+
+If anyone have ideas about this subject, I would be happy to work on and 
+resubmit a patch.
+
+
 -- 
-2.0.4
+J?r?me Pouiller, Sysmic
