@@ -1,94 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 22:32:08 +0100
-Subject: [Buildroot] [git commit] avahi: fix libgtk3 build issue by patching
-	Makefile.in instead of Makefile.am
-Message-ID: <20141103213612.5169AB5922@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Nov 2014 22:39:41 +0100
+Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
+	other Qt5 packages
+In-Reply-To: <20141103222519.7c8797e9@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 3 Nov 2014 22:25:19 +0100")
+References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw8943vw.fsf@dell.be.48ers.dk>
+ <20141103222519.7c8797e9@free-electrons.com>
+Message-ID: <87fve02cbm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee817f63aa8a67c82bd5c27346d5197a8f3a9552
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/f0b/f0b4f8c46eb1de6cf5ed081dacd248c66c591aa3/
-http://autobuild.buildroot.net/results/dac/daca5d030b8ecc6d11901e2936fe2151d0930852/
-http://autobuild.buildroot.net/results/05e/05e7fb9a888169ba7c4cb28abdb4febb5215354c/
-http://autobuild.buildroot.net/results/743/743f30b1816b17a0a1397b7fd8b5a8571c4dde03/
+Hi,
 
-And many others.
+ >> This (and elsewhere) shows a bit of a mixup between BR2_PACKAGE_QT5 and
+ >> qt5base - But ok, having BR2_PACKAGE_QT5 enabled without qt5base isn't
+ >> really sensible (but is allowed by kconfig).
 
-So we no longer need to autoreconf the package. Autoreconfing is non-trivial
-as it uses m4 macros from glib, but we don't want to unconditionally pull in
-glib.
+ > I hesitated between qt5.mk or qt5base.mk. I decided to go with qt5.mk,
+ > with the following reasoning:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/avahi-no-gtk-deprecations.patch |   39 ++++++++++++-------------
- package/avahi/avahi.mk                        |    1 -
- 2 files changed, 19 insertions(+), 21 deletions(-)
+ >  * I wanted to name the variable QT5_QMAKE and not QT5BASE_QMAKE, to
+ >    mimic what exists for qt4 (variable is named QT_QMAKE).
 
-diff --git a/package/avahi/avahi-no-gtk-deprecations.patch b/package/avahi/avahi-no-gtk-deprecations.patch
-index 3a284d0..d187053 100644
---- a/package/avahi/avahi-no-gtk-deprecations.patch
-+++ b/package/avahi/avahi-no-gtk-deprecations.patch
-@@ -6,26 +6,25 @@ versions.
- For more details, see the Fedora bugzilla:
- https://bugzilla.redhat.com/show_bug.cgi?id=1001676
- 
-+[Peter: patch Makefile.in so we don't need autoreconf]
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----- avahi-0.6.31/avahi-ui/Makefile.am.orig	2013-09-21 16:47:28.677659361 +0200
--+++ avahi-0.6.31/avahi-ui/Makefile.am	2013-09-21 16:47:34.852520537 +0200
--@@ -15,7 +15,7 @@
-- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-- # USA.
-- 
---AM_CFLAGS=-I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1
--+AM_CFLAGS=-I$(top_srcdir)
-+---
-+ avahi-ui/Makefile.am |    2 +-
-+ avahi-ui/Makefile.in |    3 +--
-+ configure.ac         |    2 +-
-+ 3 files changed, 3 insertions(+), 4 deletions(-)
-+
-+Index: avahi-0.6.31/avahi-ui/Makefile.in
-+===================================================================
-+--- avahi-0.6.31.orig/avahi-ui/Makefile.in
-++++ avahi-0.6.31/avahi-ui/Makefile.in
-+@@ -464,8 +464,7 @@
-+ top_srcdir = @top_srcdir@
-  
-  # This cool debug trap works on i386/gcc only
-- AM_CFLAGS+='-DDEBUG_TRAP=__asm__("int $$3")'
----- avahi-0.6.31/configure.ac.orig	2013-09-21 16:46:43.750669413 +0200
--+++ avahi-0.6.31/configure.ac	2013-09-21 16:47:02.566246400 +0200
--@@ -92,7 +92,7 @@
--     AC_MSG_CHECKING([whether stack-smashing protection is available])
--     ssp_old_cflags="$CFLAGS"
--     ssp_old_ldflags="$LDFLAGS"
---    CFLAGS="$CFLAGS -Werror -fstack-protector-all -fPIC"
--+    CFLAGS="$CFLAGS -fstack-protector-all -fPIC"
--     LDFLAGS="$LDFLAGS -Wl,-z,defs"
--     cat confdefs.h > conftest.c
--     cat >>conftest.c <<_ACEOF
-+-AM_CFLAGS = -I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 \
-+-	-DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1 \
-++AM_CFLAGS = -I$(top_srcdir) \
-+ 	'-DDEBUG_TRAP=__asm__("int $$3")' $(am__append_1)
-+ pkglibdatadir = $(libdir)/avahi
-+ desktopdir = $(datadir)/applications
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index e4c327d..4e5dbc6 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -16,7 +16,6 @@ AVAHI_SITE = http://www.avahi.org/download
- AVAHI_LICENSE = LGPLv2.1+
- AVAHI_LICENSE_FILES = LICENSE
- AVAHI_INSTALL_STAGING = YES
--AVAHI_AUTORECONF = YES
- 
- AVAHI_CONF_ENV = ac_cv_func_strtod=yes \
- 		ac_fsusage_space=yes \
+ >  * Since the variable was going to be named QT5_QMAKE, I found it would
+ >    be odd to have it in qt5base.mk where all variables are
+ >    QT5BASE_<foo>. So I went with qt5.mk instead.
+
+Ok.
+
+ >> Should we just use BR2_PACKAGE_QT5BASE everywhere you check for BR2_PACKAGE_QT5?
+
+ > Where exactly? Or shouldn't we have qt5base selected as soon as qt5 is
+ > enabled?
+
+Well, that's perhaps the easiest solution, yes. Having qt5 enabled but
+not qt5base doesn't make any sense.
+
+Will you send an updated series or should I do that here?
+
+-- 
+Bye, Peter Korsgaard
