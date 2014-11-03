@@ -1,80 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Nov 2014 00:01:05 +0100
-Subject: [Buildroot] [git commit] mpd: bump to version 0.19.2
-Message-ID: <20141103230407.93D43B1985@busybox.osuosl.org>
+Date: Tue, 4 Nov 2014 00:01:32 +0100
+Subject: [Buildroot] [git commit] adwaita-icon-theme: depends on host-libgtk3
+Message-ID: <20141103230407.9CC5EB195C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa1110a7e925bf319282de4c310fec7f0e9f43f0
+commit: http://git.buildroot.net/buildroot/commit/?id=704c540203ddd217d7bcf6d371fc87a079c0be9b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch now upstream.
+The adwaita icon theme can only be selected with libgtk3 and depends on
+host-libgtk3 to build.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes http://autobuild.buildroot.org/results/f8d/f8d0e2198fa54f9141512e2db6dc46e3cee1cd44/
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...np-Discovery-add-missing-stdlib.h-include.patch |   30 --------------------
- package/mpd/mpd.hash                               |    2 +-
- package/mpd/mpd.mk                                 |    2 +-
- 3 files changed, 2 insertions(+), 32 deletions(-)
+ package/adwaita-icon-theme/Config.in             |    1 +
+ package/adwaita-icon-theme/adwaita-icon-theme.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch b/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-deleted file mode 100644
-index ff581c3..0000000
---- a/package/mpd/0001-upnp-Discovery-add-missing-stdlib.h-include.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 1901bd9d6be651fbaa5c7659d92d3361e6d6a823 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 28 Oct 2014 07:25:48 -0300
--Subject: [PATCH] upnp/Discovery: add missing stdlib.h include
--
--Used for free().
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: Sent upstream.
--
-- src/lib/upnp/Discovery.cxx | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/lib/upnp/Discovery.cxx b/src/lib/upnp/Discovery.cxx
--index 9ea78c6..2c91e37 100644
----- a/src/lib/upnp/Discovery.cxx
--+++ b/src/lib/upnp/Discovery.cxx
--@@ -26,6 +26,8 @@
-- 
-- #include <upnp/upnptools.h>
-- 
--+#include <stdlib.h>
--+
-- #include <string.h>
-- 
-- // The service type string we are looking for.
---- 
--2.0.4
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 7676b37..0861706 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8b3afcd440181c9bd18b229b5974e529d59648344dd371370d6f7d62ec2847c5	mpd-0.19.1.tar.xz
-+sha256	73f0ed6b4001628287a71d077c624a2ca8200b24e3e877b725fcbf54dfe6a108	mpd-0.19.2.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 6d2918d..8ec3c0e 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/adwaita-icon-theme/Config.in b/package/adwaita-icon-theme/Config.in
+index 6fabd48..a06071e 100644
+--- a/package/adwaita-icon-theme/Config.in
++++ b/package/adwaita-icon-theme/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_ADWAITA_ICON_THEME
+ 	bool "adwaita icon theme"
++	depends on BR2_PACKAGE_LIBGTK3
+ 	help
+ 	  Adwaita icon theme
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+index e273d90..f9a6b50 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+@@ -10,6 +10,6 @@ ADWAITA_ICON_THEME_SITE = ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-the
+ ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
+ ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
+ ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
+-ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool
++ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool host-libgtk3
  
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).1
-+MPD_VERSION = $(MPD_VERSION_MAJOR).2
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+ $(eval $(autotools-package))
