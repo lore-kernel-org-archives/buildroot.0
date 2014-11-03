@@ -1,111 +1,146 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 03 Nov 2014 21:54:44 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <1415008511.2065.2.camel@posteo.de>
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
- <1414799165.15213.1.camel@posteo.de> <20141101191304.GG10189@free.fr>
- <1415008511.2065.2.camel@posteo.de>
-Message-ID: <5457EB94.8090005@mind.be>
+Date: Mon, 03 Nov 2014 21:58:26 +0100
+Subject: [Buildroot] [PATCH 2/6] package/*/*.mk: Fix indent
+In-Reply-To: <1414971595-9972-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414971595-9972-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414971595-9972-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <5457EC72.9090106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/14 10:55, J?rg Krause wrote:
-> Yann, Peter,
+On 03/11/14 00:39, Maxime Hadjinlian wrote:
+> Fix indent for LIBFOO_USERS and LIBFOO_PERMISSIONS  as per the manual example.
 > 
-> On Sa, 2014-11-01 at 20:13 +0100, Yann E. MORIN wrote:
->> J?rg, All,
->>
->> On 2014-11-01 00:46 +0100, J?rg Krause spake thusly:
->>> On Fr, 2014-10-31 at 12:50 +0100, Peter Korsgaard wrote:
->>>> commit: http://git.buildroot.net/buildroot/commit/?id=e6c04e6daae674f8983ec2fb106fb897c6803c32
->>>> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>>>
->>>> Fixes:
->>>> http://autobuild.buildroot.net/results/daa/daad247db16818f25ab33402e26e27257defbe13/
->>>> http://autobuild.buildroot.net/results/720/720e2c8a5eab8b47d2510fe03b4a90ec8beafc17/
->>>> http://autobuild.buildroot.net/results/02b/02b4ab9ee07707ee4a4d4ea2b9c67bee91b1392d/
->>>> http://autobuild.buildroot.net/results/819/81914317ce82dc1321484d8c2b65647f92aa6929/
->>>>
->>>> And many others.
->> [--SNIP--]
->>> This patch breaks building avahi for me. Is autoreconf really intended?
->>> Removing it fixed my build.
->>>
->>>         >>> avahi 0.6.31 Autoreconfiguring
->> [--SNIP--]
->>>         configure.ac:419: error: possibly undefined macro:
->>>         AM_GLIB_GNU_GETTEXT
->>>               If this token and others are legitimate, please use
->>>         m4_pattern_allow.
->>
->> It seems it requires gettext.
->>
->> J?rg, care to test adding this to avahi.mk (just below AUTORECONF):
->>
->>     AVAHI_GETTEXTIZE = YES
-> 
-> I'd like to discuss some possibilities to solve this issue:
-> 
-> 1) forget about patching Makefile.am / running
-> autoreconf and just strip the CFLAGS arguments in Makefile.in as Peter
-> suggested
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
- I think this one is the most practical. Patching the .am is generally better
-because then it's upstreamable, but that's not relevant here.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-
-> 2) replace AM_GLIB_GNU_GETTEXT by AM_GNU_GETTEXT([external]) and update
-> gettext to a recent version (and maybe intltool too)
-
- Updating gettext/intltool is nice, but may have far-reaching effects...
-
- As to replacing AM_GLIB_GNU_GETTEXT, as far as I understand that was already
-proposed upstream and rejected, so I don't think that's a good idea.
-
-
-> 3) remove AM_GLIB_GNU_GETTEXT entirely and use only intltool
-> (additionally update to recent version)
-
- Same consideration about upstream rejection.
-
-> 4) add dependency on glib (or glib-gettext, if possible)
-
- That is certainly not nice - libglib2 takes a long time to build so if we can
-avoid that...
+(verified whitespace-only with git diff --ignore-all-space).
 
 
  Regards,
  Arnout
 
-
+> ---
+>  package/bind/bind.mk           | 2 +-
+>  package/busybox/busybox.mk     | 4 ++--
+>  package/dbus/dbus.mk           | 2 +-
+>  package/exim/exim.mk           | 2 +-
+>  package/openntpd/openntpd.mk   | 2 +-
+>  package/openssh/openssh.mk     | 2 +-
+>  package/sudo/sudo.mk           | 2 +-
+>  package/tvheadend/tvheadend.mk | 2 +-
+>  8 files changed, 9 insertions(+), 9 deletions(-)
 > 
-> My thoughts:
-> 2) I'm not sure why glib version instead of gettext is used here. Maybe
-> for historical reasons. In autogen this piece of code is used:
->         # Evil, evil, evil, evil hack
->         sed 's/read dummy/\#/' `which gettextize` | sh -s -- --copy
->         --force
-> which uses GNU gettextize instead of glib-gettextize.
-> 3) I've found some threads about conflicts of using intltool and gettext
-> together, eg:
-> https://mail.gnome.org/archives/gtk-devel-list/2012-September/msg00022.html
-> [Quote] "intltool is a sort-of wrapper around xgetext which interferes
-> with gettext's own way of setting up po/."
-> 
-> I've tested 2, 3, and 4 and all are building successfully. I've
-> additionally checked if the .mo files are created in
-> target/usr/share/locale/.
-> 
-> Best regards
-> J?rg
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+> index 690ca3e..06c6601 100644
+> --- a/package/bind/bind.mk
+> +++ b/package/bind/bind.mk
+> @@ -88,7 +88,7 @@ BIND_POST_INSTALL_TARGET_HOOKS += BIND_TARGET_REMOVE_TOOLS
+>  endif
+>  
+>  define BIND_USERS
+> -named -1 named -1 * /etc/bind - - BIND daemon
+> +	named -1 named -1 * /etc/bind - - BIND daemon
+>  endef
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 98d1bd1..0ceaab1 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+>  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+>  
+>  define BUSYBOX_PERMISSIONS
+> -/bin/busybox			 f 4755	0 0 - - - - -
+> -/usr/share/udhcpc/default.script f 755  0 0 - - - - -
+> +	/bin/busybox			 f 4755	0 0 - - - - -
+> +	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
+>  endef
+>  
+>  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+> index 197f052..519146c 100644
+> --- a/package/dbus/dbus.mk
+> +++ b/package/dbus/dbus.mk
+> @@ -11,7 +11,7 @@ DBUS_LICENSE_FILES = COPYING
+>  DBUS_INSTALL_STAGING = YES
+>  
+>  define DBUS_PERMISSIONS
+> -/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
+> +	/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
+>  endef
+>  
+>  define DBUS_USERS
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index 77f51e3..ba184f0 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -105,7 +105,7 @@ define EXIM_INSTALL_TARGET_CMDS
+>  endef
+>  
+>  define EXIM_USERS
+> -exim 88 mail 8 * - - - exim
+> +	exim 88 mail 8 * - - - exim
+>  endef
+>  
+>  define EXIM_INSTALL_INIT_SYSV
+> diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+> index 3441c8b..38526dd 100644
+> --- a/package/openntpd/openntpd.mk
+> +++ b/package/openntpd/openntpd.mk
+> @@ -16,7 +16,7 @@ define OPENNTPD_INSTALL_INIT_SYSV
+>  endef
+>  
+>  define OPENNTPD_USERS
+> -_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
+> +	_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
+>  endef
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 4b16c34..d08b468 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -13,7 +13,7 @@ OPENSSH_CONF_OPTS = --sysconfdir=/etc/ssh --disable-lastlog --disable-utmp \
+>  		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
+>  
+>  define OPENSSH_USERS
+> -sshd -1 sshd -1 * - - - SSH drop priv user
+> +	sshd -1 sshd -1 * - - - SSH drop priv user
+>  endef
+>  
+>  # uClibc toolchain for ARC doesn't support PIE at the moment
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 9a294f1..283a40c 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -29,7 +29,7 @@ endef
+>  SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+>  
+>  define SUDO_PERMISSIONS
+> -/usr/bin/sudo			 f 4755	0 0 - - - - -
+> +	/usr/bin/sudo			 f 4755	0 0 - - - - -
+>  endef
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index 857f6e6..a83a508 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -85,7 +85,7 @@ define TVHEADEND_INSTALL_INIT_SYSV
+>  endef
+>  
+>  define TVHEADEND_USERS
+> -tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
+> +	tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
+>  endef
+>  
+>  $(eval $(generic-package))
 > 
 
 
