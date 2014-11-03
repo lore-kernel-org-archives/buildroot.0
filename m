@@ -1,54 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Nov 2014 22:25:19 +0100
-Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
- other Qt5 packages
-In-Reply-To: <87mw8943vw.fsf@dell.be.48ers.dk>
-References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87mw8943vw.fsf@dell.be.48ers.dk>
-Message-ID: <20141103222519.7c8797e9@free-electrons.com>
+Date: Mon, 3 Nov 2014 22:31:16 +0100
+Subject: [Buildroot] [PATCH 1/1] adwaita-icon-theme: depends on
+ host-libgtk3
+In-Reply-To: <1415021155-29232-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1415021155-29232-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141103223116.1d6f3efb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Eric Le Bihan,
 
-On Sun, 02 Nov 2014 23:46:43 +0100, Peter Korsgaard wrote:
-
->  > diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
->  > index e9c59db..2a3e274 100644
->  > --- a/package/qt5/qt5.mk
->  > +++ b/package/qt5/qt5.mk
->  > @@ -17,3 +17,6 @@ define QT5_LA_PRL_FILES_FIXUP
->  >  		$(SED) "s%-L/usr/lib%%" $$i; \
->  >  	done
->  >  endef
->  > +
->  > +# Variable for other Qt applications to use
->  > +QT5_QMAKE = $(HOST_DIR)/usr/bin/qmake -spec devices/linux-buildroot-g++
+On Mon,  3 Nov 2014 14:25:55 +0100, Eric Le Bihan wrote:
+> The adwaita icon theme can only be selected with libgtk3 and depends on
+> host-libgtk3 to build.
 > 
-> This (and elsewhere) shows a bit of a mixup between BR2_PACKAGE_QT5 and
-> qt5base - But ok, having BR2_PACKAGE_QT5 enabled without qt5base isn't
-> really sensible (but is allowed by kconfig).
+> Fixes http://autobuild.buildroot.org/results/f8d/f8d0e2198fa54f9141512e2db6dc46e3cee1cd44/
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/adwaita-icon-theme/Config.in             | 1 +
+>  package/adwaita-icon-theme/adwaita-icon-theme.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-I hesitated between qt5.mk or qt5base.mk. I decided to go with qt5.mk,
-with the following reasoning:
-
- * I wanted to name the variable QT5_QMAKE and not QT5BASE_QMAKE, to
-   mimic what exists for qt4 (variable is named QT_QMAKE).
-
- * Since the variable was going to be named QT5_QMAKE, I found it would
-   be odd to have it in qt5base.mk where all variables are
-   QT5BASE_<foo>. So I went with qt5.mk instead.
-
-> Should we just use BR2_PACKAGE_QT5BASE everywhere you check for BR2_PACKAGE_QT5?
-
-Where exactly? Or shouldn't we have qt5base selected as soon as qt5 is
-enabled?
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
