@@ -1,42 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 22:37:34 +0100
-Subject: [Buildroot] [git commit] qemu: fix build when python3 is enabled
-Message-ID: <20141103214423.CD179B175C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Nov 2014 22:46:20 +0100
+Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
+ other Qt5 packages
+In-Reply-To: <87fve02cbm.fsf@dell.be.48ers.dk>
+References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw8943vw.fsf@dell.be.48ers.dk>
+ <20141103222519.7c8797e9@free-electrons.com>
+ <87fve02cbm.fsf@dell.be.48ers.dk>
+Message-ID: <20141103224620.5c3ffe1d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d21e4c397cbd92d03d09daf4fadffaa79959f55
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Fixes:
-http://autobuild.buildroot.net/results/04e/04ec455e352319a46dc06def1762c65ad28a12a1/
-http://autobuild.buildroot.net/results/f19/f1932657912674af444602ac59211b6caf6841ca/
-http://autobuild.buildroot.net/results/18a/18a43df80616280506a44ac3abc327ddf0e7b079/
-http://autobuild.buildroot.net/results/44c/44c00b50248018c4e81f4fbb1041d35b78f89640/
+On Mon, 03 Nov 2014 22:39:41 +0100, Peter Korsgaard wrote:
 
-And many others.
+>  >> Should we just use BR2_PACKAGE_QT5BASE everywhere you check for BR2_PACKAGE_QT5?
+> 
+>  > Where exactly? Or shouldn't we have qt5base selected as soon as qt5 is
+>  > enabled?
+> 
+> Well, that's perhaps the easiest solution, yes. Having qt5 enabled but
+> not qt5base doesn't make any sense.
+> 
+> Will you send an updated series or should I do that here?
 
-When python3 for the target is enabled, $(HOST_DIR)/usr/bin/python points to
-host-python3, not host-python - Breaking the build. Ensure host-python is used.
+I can, but not this week. I'm busy giving a training, and will not have
+much free time.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/qemu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 4b8f0f4..8182697 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -96,7 +96,7 @@ QEMU_OPTS =
- 
- QEMU_VARS = \
- 	LIBTOOL=$(HOST_DIR)/usr/bin/libtool \
--	PYTHON=$(HOST_DIR)/usr/bin/python \
-+	PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
