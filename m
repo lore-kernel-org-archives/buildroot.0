@@ -1,114 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 03 Nov 2014 22:24:52 +0100
-Subject: [Buildroot] [PATCH v2 2/4] bdwgc: new package
-In-Reply-To: <1414974851-4819-3-git-send-email-paguilar@paguilar.org>
-References: <1414974851-4819-1-git-send-email-paguilar@paguilar.org>
- <1414974851-4819-3-git-send-email-paguilar@paguilar.org>
-Message-ID: <5457F2A4.4080708@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Nov 2014 22:25:19 +0100
+Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
+ other Qt5 packages
+In-Reply-To: <87mw8943vw.fsf@dell.be.48ers.dk>
+References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw8943vw.fsf@dell.be.48ers.dk>
+Message-ID: <20141103222519.7c8797e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/14 01:34, Pedro Aguilar wrote:
-> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
-> conservative garbage collector can be used as a garbage collecting
-> replacement for C 'malloc' or C++ 'new'.
+Dear Peter Korsgaard,
+
+On Sun, 02 Nov 2014 23:46:43 +0100, Peter Korsgaard wrote:
+
+>  > diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+>  > index e9c59db..2a3e274 100644
+>  > --- a/package/qt5/qt5.mk
+>  > +++ b/package/qt5/qt5.mk
+>  > @@ -17,3 +17,6 @@ define QT5_LA_PRL_FILES_FIXUP
+>  >  		$(SED) "s%-L/usr/lib%%" $$i; \
+>  >  	done
+>  >  endef
+>  > +
+>  > +# Variable for other Qt applications to use
+>  > +QT5_QMAKE = $(HOST_DIR)/usr/bin/qmake -spec devices/linux-buildroot-g++
 > 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> 
-> ---
-> Changes v1 -> v2
-> - Add external default dependency on libatomic_ops
-> - Fix several formatting issues
-> (All changes suggested by Yann Morin)
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> ---
->  package/Config.in       |  1 +
->  package/bdwgc/Config.in | 11 +++++++++++
->  package/bdwgc/bdwgc.mk  | 19 +++++++++++++++++++
->  3 files changed, 31 insertions(+)
->  create mode 100644 package/bdwgc/Config.in
->  create mode 100644 package/bdwgc/bdwgc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 3b3c372..bb158b4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -942,6 +942,7 @@ endmenu
->  menu "Miscellaneous"
->  	source "package/aespipe/Config.in"
->  	source "package/bc/Config.in"
-> +	source "package/bdwgc/Config.in"
+> This (and elsewhere) shows a bit of a mixup between BR2_PACKAGE_QT5 and
+> qt5base - But ok, having BR2_PACKAGE_QT5 enabled without qt5base isn't
+> really sensible (but is allowed by kconfig).
 
- This is a library, right? So doesn't it belong under Libraries/Other rather
-than here?
+I hesitated between qt5.mk or qt5base.mk. I decided to go with qt5.mk,
+with the following reasoning:
 
->  	source "package/clamav/Config.in"
->  	source "package/collectd/Config.in"
->  	source "package/empty/Config.in"
-> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-> new file mode 100644
-> index 0000000..6f3878e
-> --- /dev/null
-> +++ b/package/bdwgc/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_BDWGC
-> +	bool "bdwgc"
-> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_LIBATOMIC_OPS
-> +	help
-> +	  The Boehm-Demers-Weiser conservative garbage collector can 
-> +	  be used as a garbage collecting replacement for C 'malloc'
-> +	  or C++ 'new'.
-> +
-> +	  http://www.hboehm.info/gc/
-> +
-> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-> new file mode 100644
-> index 0000000..a687cc2
-> --- /dev/null
-> +++ b/package/bdwgc/bdwgc.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# bdwgc
-> +#
-> +################################################################################
-> +
-> +BDWGC_VERSION = 7.2f
-> +BDWGC_SOURCE  = gc-$(BDWGC_VERSION).tar.gz
-> +BDWGC_SITE    = http://www.hboehm.info/gc/gc_source
-> +BDWGC_INSTALL_STAGING = YES
-> +BDWGC_LICENSE = bdwgc license
-> +BDWGC_LICENSE_FILES = README
+ * I wanted to name the variable QT5_QMAKE and not QT5BASE_QMAKE, to
+   mimic what exists for qt4 (variable is named QT_QMAKE).
 
- Does the readme contain all the information of that license mess or are there
-additional files?
+ * Since the variable was going to be named QT5_QMAKE, I found it would
+   be odd to have it in qt5base.mk where all variables are
+   QT5BASE_<foo>. So I went with qt5.mk instead.
 
-> +BDWGC_LIBTOOL_PATCH = NO
+> Should we just use BR2_PACKAGE_QT5BASE everywhere you check for BR2_PACKAGE_QT5?
 
- There should be a comment explaining why this is necessary.
+Where exactly? Or shouldn't we have qt5base selected as soon as qt5 is
+enabled?
 
-
- Regards,
- Arnout
-
-> +
-> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> +
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
