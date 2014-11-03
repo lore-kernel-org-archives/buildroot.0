@@ -1,74 +1,86 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon,  3 Nov 2014 20:37:18 +0100
-Subject: [Buildroot] [PATCH] python-netifaces: bump to 0.10.4
-Message-ID: <1415043438-4920-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 03 Nov 2014 21:21:07 +0100
+Subject: [Buildroot] [PATCH] infra: Add a way to apply patches using git
+In-Reply-To: <10430487.gOJDMNlg1N@aquila>
+References: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
+ <5455595F.6090205@mind.be> <20141101231125.2ca351ca@free-electrons.com>
+ <10430487.gOJDMNlg1N@aquila>
+Message-ID: <5457E3B3.6090608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change download location and remove obsolete patch.
+On 03/11/14 16:01, J?r?me Pouiller wrote:
+> On Saturday 01 November 2014 23:11:25 Thomas Petazzoni wrote:
+>> Dear Arnout Vandecappelle,
+>>
+>> On Sat, 01 Nov 2014 23:06:23 +0100, Arnout Vandecappelle wrote:
+>>>> We discussed this proposal at the last Buildroot Developers meeting.
+>>>> Even though we understand the idea and some of us found it potentially
+>>>> interesting, we didn't really like the implementation, but nobody
+>>>> really found a way of implementing something like this in a nice way.
+>>>>
+>>>> One of the problem is that not all our patches are Git patches, which
+>>>> you had to work-around in your patch in a way that isn't really nice.
+>>>>
+>>>> Maybe Arnout and Yann (in Cc) remember more of the issues that we
+>>>> discussed at the meeting regarding this proposal.
+>>>  
+>>>  For simple patches, a simple diff is normally sufficient. For more
+>>>  complicated> 
+>>> stuff, it is really worthwhile to clone the upstream repository and work
+>>> from there - you'll anyway need to do that to upstream the patches.
+>>>
+>>>  So we felt that the need for this feature did not outweigh the complexity
+>>>  of> 
+>>> its implementation.
+>>
+>> Ah yes, right: we thought that having a Git repository that isn't the
+>> one from upstream made it unpractical to submit patches back to
+>> upstream, and was making the entire feature a bit useless.
+> I also worried about this restriction. My first idea was to recreate the link 
+> between source directory and upstream repository with something like:
+> 
+>    cd $PKG_BUILD_DIR
+>    git clone $PKG_SITE --bare .git
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .../python-netifaces-ifaddrs-uclibc.patch          | 31 ----------------------
- package/python-netifaces/python-netifaces.mk       |  4 +--
- 2 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch
+ This would only work if $PKG_SITE happened to be a git repository... But since
+we prefer to use release tarballs, the usual situation should be that the
+repository is somewhere else.
 
-diff --git a/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch b/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch
-deleted file mode 100644
-index 375b08d..0000000
---- a/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--[PATCH] fix compile error in ifaddrs() for HAVE_SOCKET_IOCTLS variant
--
--Used on E.G. uClibc. This variant seems to have bitrotten somewhat.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- netifaces.c |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--Index: netifaces-0.6/netifaces.c
--===================================================================
----- netifaces-0.6.orig/netifaces.c
--+++ netifaces-0.6/netifaces.c
--@@ -624,7 +624,7 @@
--   if (ioctl (sock, SIOCGIFHWADDR, &ifr) == 0) {
--     found = TRUE;
-- 
---    if (string_from_sockaddr (ifr->CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
--+    if (string_from_sockaddr ((struct sockaddr *)&ifr.CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
--       PyObject *hwaddr = PyString_FromString (buffer);
--       PyObject *dict = PyDict_New ();
--       PyObject *list = PyList_New (1);
--@@ -633,7 +633,7 @@
--       if (!hwaddr || !dict || !list || !family) {
--         Py_XDECREF (hwaddr);
--         Py_XDECREF (dict);
---        Py_XDECREF (list)
--+        Py_XDECREF (list);
--         Py_XDECREF (family);
--         Py_XDECREF (result);
--         close (sock);
-diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
-index f3b9beb..4aa53e6 100644
---- a/package/python-netifaces/python-netifaces.mk
-+++ b/package/python-netifaces/python-netifaces.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_NETIFACES_VERSION = 0.7
-+PYTHON_NETIFACES_VERSION = 0.10.4
- PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
--PYTHON_NETIFACES_SITE = http://alastairs-place.net/projects/netifaces
-+PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/source/n/netifaces/
- PYTHON_NETIFACES_LICENSE = MIT
- PYTHON_NETIFACES_LICENSE_FILES = README
- PYTHON_NETIFACES_SETUP_TYPE = setuptools
+>    git config --bool core.bare false
+>    git rev-parse $PKG_VERSION > .git/HEAD
+>    git reset
+> 
+> However, my patch began to smell black magic. 
+> 
+> 
+> Ideally, I wanted to create an external tool to do this. However, it is not 
+> easy to integrate an external tool with Makefile system (For example, I did 
+> not found any handy way to get variables associated with package).
+
+ At the BR developer meeting, we had the feeling that the number of situations
+where such a tool is useful is very limited, so that it is really not worth the
+effort to invest in it.
+
+
+ Regards,
+ Arnout
+
+> 
+> 
+> If anyone have ideas about this subject, I would be happy to work on and 
+> resubmit a patch.
+> 
+> 
+
+
 -- 
-1.8.3.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
