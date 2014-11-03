@@ -1,32 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Nov 2014 22:31:16 +0100
-Subject: [Buildroot] [PATCH 1/1] adwaita-icon-theme: depends on
- host-libgtk3
-In-Reply-To: <1415021155-29232-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1415021155-29232-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20141103223116.1d6f3efb@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 03 Nov 2014 22:33:04 +0100
+Subject: [Buildroot] [PATCH v2] gst1-plugins-imx: add package
+In-Reply-To: <5456AC81.5090403@lucaceresoli.net>
+References: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
+ <5456AC81.5090403@lucaceresoli.net>
+Message-ID: <5457F490.6050200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
-
-On Mon,  3 Nov 2014 14:25:55 +0100, Eric Le Bihan wrote:
-> The adwaita icon theme can only be selected with libgtk3 and depends on
-> host-libgtk3 to build.
+On 02/11/14 23:13, Luca Ceresoli wrote:
+> Dear Gary,
 > 
-> Fixes http://autobuild.buildroot.org/results/f8d/f8d0e2198fa54f9141512e2db6dc46e3cee1cd44/
+> thanks for you resubmission.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/adwaita-icon-theme/Config.in             | 1 +
->  package/adwaita-icon-theme/adwaita-icon-theme.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> Gary Bisson wrote:
+>> Open-source GStreamer 1.0 plugins for i.MX platforms.
+>> More info at https://github.com/Freescale/gstreamer-imx
+>>
+>> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+>> ---
+>> Modifications v1->v2:
+>> - Use of github helper macro
+>> - Modify package comment with Peter S. original patch
+>> - Add comment for eglibc dependency (due to GPU libs)
+>> - Remove comments on package dependencies
+>>
+>> One thing I wasn't sure about, should all new package contain a .hash file? If
+>> so I can submit a v3 right away.
+> 
+> It is not mandatory. AFAIK the hash is recommended for security-related
+> packages only.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ We discussed it last BR meeting but didn't come to a real conclusion. For sure,
+the hash file isn't mandatory.
+
+
+> 
+> [...]
+>> diff --git a/package/gstreamer1/gst1-plugins-imx/Config.in
+>> b/package/gstreamer1/gst1-plugins-imx/Config.in
+>> new file mode 100644
+>> index 0000000..d499874
+>> --- /dev/null
+>> +++ b/package/gstreamer1/gst1-plugins-imx/Config.in
+>> @@ -0,0 +1,28 @@
+>> +comment "gst1-plugins-imx needs an imx-specific Linux kernel to be built"
+>> +    depends on BR2_arm && !BR2_LINUX_KERNEL
+>> +
+>> +# Required by gpu-viv-bin-mx6q
+>> +comment "gst1-plugins-imx needs an (e)glibc toolchain"
+>> +    depends on BR2_arm
+>> +    depends on !BR2_TOOLCHAIN_USES_GLIBC
+> 
+> These messages are much cleaner than in version 1 of your patch.
+> However, for an ARM configuration with a musl or uClibc toolchain and
+> without a kernel build activated, two lines are displayed. This is not
+> coherent with the general Buildroot behavior.
+
+ Well, there are a few other packages like that. Because...
+
+> 
+> It should be:
+> 
+> comment "gst1-plugins-imx needs an (e)glibc toolchain and an imx-specific Linux
+> kernel to be built"
+
+ ... this line is really too long.
+
+
+ Regards,
+ Arnout
+
+>     depends on BR2_arm && (!BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_USES_GLIBC)
+> 
+> Although that's a bit lengthy...
+> 
+> With that fixed (which can be done by the committer):
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> I'll try to test it during the coming week and give my Tested-by tag, or
+> report any issues.
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
