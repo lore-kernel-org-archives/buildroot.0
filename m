@@ -1,16 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2014 23:00:25 +0100
-Subject: [Buildroot] [PATCH 2/4] qt5: expose a QT5_QMAKE variable for
-	other Qt5 packages
-In-Reply-To: <20141103224620.5c3ffe1d@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 3 Nov 2014 22:46:20 +0100")
+Date: Mon, 03 Nov 2014 23:07:53 +0100
+Subject: [Buildroot] [PATCH 1/4] package: prepare to support modules
+	that work with Qt or Qt5
+In-Reply-To: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 1 Nov 2014 23:15:08 +0100")
 References: <1414880111-19166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1414880111-19166-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87mw8943vw.fsf@dell.be.48ers.dk>
- <20141103222519.7c8797e9@free-electrons.com>
- <87fve02cbm.fsf@dell.be.48ers.dk>
- <20141103224620.5c3ffe1d@free-electrons.com>
-Message-ID: <877fzc2bd2.fsf@dell.be.48ers.dk>
+Message-ID: <8738a02b0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,15 +14,24 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >> Well, that's perhaps the easiest solution, yes. Having qt5 enabled but
- >> not qt5base doesn't make any sense.
- >> 
- >> Will you send an updated series or should I do that here?
+ > Currently, all the Qt external modules (qtuio, qjson, etc.) can only
+ > be compiled against Qt4. However, some of them (qjson, qextserialport
+ > at least) can compile with either Qt4 or Qt5.
 
- > I can, but not this week. I'm busy giving a training, and will not have
- > much free time.
+ > Therefore, this commit adjusts the Config.in logic to make it possible
+ > for certain modules to be selected with either Qt4 or Qt5. We use the
+ > same approach as the one of for Python 2 vs. Python 3 modules:
 
-Ok, I'll take a look so we can have it for 2014.11-rc1.
+ >  - in package/Config.in, the package Config.in files are included
+ >    either if BR2_PACKAGE_QT or BR2_PACKAGE_QT5 are enabled.
+
+ >  - each individual package is then responsible for having a dependency
+ >    on either BR2_PACKAGE_QT, or BR2_PACKAGE_QT5 or both depending on
+ >    what they support. In this commit, we add a dependency on
+ >    BR2_PACKAGE_QT to all packages, since for now, they only support
+ >    Qt4.
+
+Committed series after adding a select of qt5base to qt5, thanks.
 
 -- 
 Bye, Peter Korsgaard
