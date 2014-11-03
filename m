@@ -1,48 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Nov 2014 22:55:26 +0100
-Subject: [Buildroot] [git commit] qemu: needs IPv6
-Message-ID: <20141103215748.481A2B1944@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 3 Nov 2014 22:58:14 +0100
+Subject: [Buildroot] [PATCH 6/6] manual: Various tidy changes
+In-Reply-To: <5457EF4A.6050807@mind.be>
+References: <1414971595-9972-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414971595-9972-6-git-send-email-maxime.hadjinlian@gmail.com>
+ <5457EF4A.6050807@mind.be>
+Message-ID: <CAGduivzzbMySjtOeQiErW7PCK7JyZX+LR_yKmXX8VJPrPEqofg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45fe0d3b4698112a438c6199d73e18c4078c1ad1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes http://autobuild.buildroot.net/results/f53/f53d4d47a6b65c40c1b122dfad61d9164e533bf0/
-
-Actually only the linux-user code needs it, but with the _CUSTOM_TARGETS
-option it is difficult to ensure it only for userland emulation, so just add
-it to the main qemu option.
-
-At the same time add the missing wchar/mmu dependencies to the comment.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index e8d03da..ebd2684 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -1,6 +1,7 @@
--comment "QEMU requires a toolchain with threads"
-+comment "QEMU requires a toolchain with IPv6, wchar, threads"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR && BR2_INET_IPV6)
- 
- config BR2_PACKAGE_QEMU
- 	bool "QEMU"
-@@ -8,6 +9,7 @@ config BR2_PACKAGE_QEMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INET_IPV6 # for linux-user
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_ZLIB
+On Nov 3, 2014 10:10 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
+>
+> On 03/11/14 00:39, Maxime Hadjinlian wrote:
+> > Changes performed all over the manual:
+> >     - In AsciiDoc, you only need 4 dashes to make a code block.
+> >     - Remove trailing spaces.
+> >     - Adding '// vim: set syntax=asciidoc:' when missing.
+> >     - Adding empty lines were needed.
+> >     - When an example of an external command is done, harmoize the use
+> >       of the scheme:
+> >       ' $ cmd'
+> >
+> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>
+>  Seriously, are you combining 5 distinct changes into a 400-line patch?
+This
+> doesn't stand a chance of getting reviewed...
+Fair enough. Almost all the patch is about the dashes. Did not realize it
+was so huge. I'll re spin this into a short series.
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141103/4c6db349/attachment.html>
