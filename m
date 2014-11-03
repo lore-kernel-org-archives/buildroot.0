@@ -1,41 +1,42 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 3 Nov 2014 11:33:05 +0100
-Subject: [Buildroot] [PATCH 0/2] RWD Website
-In-Reply-To: <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
-References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141101144354.66e2e698@free-electrons.com>
- <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
- <20141102225411.0fe3d3de@free-electrons.com>
- <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
- <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
-Message-ID: <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 3 Nov 2014 11:51:46 +0100
+Subject: [Buildroot] [git commit] orc: disable for uclinux
+Message-ID: <20141103105348.D7F89B3051@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=6d5310409f09ef47219e8fb2a248eb6bee05ccb6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> So if you like this way, I'll update variables.less and
-> bootswatch.less to bootstrap 3.2, then I'll recompile bootstrap, then
-> I'll send you a zip with new files to overcome smtp problems with very
-> long lines.
+Fixes http://autobuild.buildroot.net/results/445/4456e49a6c33a80570b4f59ec9799a8d4a314af1/
 
-Attached you can find (in tar.gz format) the patch that updates
-bootstrap, theme, and source file to re-create the bootstrap.min.css
-file.
+The orc configure script doesn't recognize uclinux, so builds using
+BR2_BINFMT_FLAT fails.  While this could be patched, orc doesn't have any
+acceleration for blackfin and orc isn't a hard dependency of any other
+package, so just disable it.
 
-Hope you like it!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/orc/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch.tar.gz
-Type: application/x-gzip
-Size: 47552 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141103/a3db15d6/attachment-0001.bin>
+diff --git a/package/orc/Config.in b/package/orc/Config.in
+index 663d4d3..2470d99 100644
+--- a/package/orc/Config.in
++++ b/package/orc/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_ORC
+ 	bool "orc"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_BINFMT_FLAT # configure doesn't know uclinux
+ 	help
+ 	  Orc is a library and set of tools for compiling and executing
+ 	  very simple programs that operate on arrays of data.
+@@ -9,3 +10,4 @@ config BR2_PACKAGE_ORC
+ 
+ comment "orc needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_BINFMT_FLAT
