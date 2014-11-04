@@ -1,46 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 04 Nov 2014 11:01:54 -0300
-Subject: [Buildroot] Samba4 build issue
-In-Reply-To: <20141104082623.33a2136e@free-electrons.com>
-References: <20141101233957.7ca9aabd@free-electrons.com>	<545577D9.1040405@zacarias.com.ar>	<20141102103811.16e499df@free-electrons.com>	<545628BF.2030101@zacarias.com.ar>
- <20141104082623.33a2136e@free-electrons.com>
-Message-ID: <5458DC52.6020706@zacarias.com.ar>
+Date: Tue, 04 Nov 2014 13:44:18 -0300
+Subject: [Buildroot] [PATCH] ruby: security bump to version 2.1.4
+In-Reply-To: <87y4rs0w4c.fsf@dell.be.48ers.dk>
+References: <1414444421-821-1-git-send-email-gustavo@zacarias.com.ar>
+ <87y4rs0w4c.fsf@dell.be.48ers.dk>
+Message-ID: <54590262.7010101@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/04/2014 04:26 AM, Thomas Petazzoni wrote:
+On 11/03/2014 07:14 PM, Peter Korsgaard wrote:
 
-> Dear Gustavo Zacarias,
+> I know it wasn't caused by this bump, but we have a number of autobuild
+> issues related to RUBY_EXEC_PREFIX. Could you perhaps take a look
+> (ignore the bfin ones)?
 > 
-> On Sun, 02 Nov 2014 09:51:11 -0300, Gustavo Zacarias wrote:
->> On 11/02/2014 06:38 AM, Thomas Petazzoni wrote:
->>
->>> Ok, so it's libcap causing issues. Have those issues reported upstream?
->>> While reverting to an older version libcap being an acceptable
->>> temporary workaround, it's not going to be nice on the long run;
->>
->> They're fixed, revised patch sent.
->> Let's just hope it doesn't break other stuff.
-> 
-> Great, thanks for having worked on this.
+> http://autobuild.buildroot.net/?reason=ruby-2.1.4
+> http://autobuild.buildroot.net/?reason=ruby-2.1.3
 
-D'oh!
-http://autobuild.buildroot.net/results/992/9928a251e5cfcf6e574a447221e938135eeb69f9/build-end.log
-Seems the new libcap version requires 3.1+ kernel headers.
-I'm not a big fan of those ppc toolchains since they're old, but what's
-the linux headers baseline we're looking for?
-
-Mandatory use of libcap:
-cdrkit - ouch
-lxc - probably not that much
-squid - probably not that much
-systemd - irrelevant, needs newer headers by itself
-
-We could propagate the headers dep, it's just that it will look silly on
-cdrkit.
-Opinions?
-
+Hi.
+I'm unable to reproduce it.
+And it seems to be limited to failures on gcc16 (the 2.1.3 bfin failures
+are a different issue).
+So i think it's something there since i've tested on a very old/bare
+debian chroot here. Possibly a candidate for blacklisting.
 Regards.
