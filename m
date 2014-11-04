@@ -1,38 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 04 Nov 2014 15:54:59 -0300
-Subject: [Buildroot] Samba4 build issue
-In-Reply-To: <20141104192043.03f7159b@free-electrons.com>
-References: <20141101233957.7ca9aabd@free-electrons.com>	<545577D9.1040405@zacarias.com.ar>	<20141102103811.16e499df@free-electrons.com>	<545628BF.2030101@zacarias.com.ar>	<20141104082623.33a2136e@free-electrons.com>	<5458DC52.6020706@zacarias.com.ar>
- <20141104192043.03f7159b@free-electrons.com>
-Message-ID: <54592103.30908@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  4 Nov 2014 22:07:55 +0100
+Subject: [Buildroot] [PATCH] gst1-validate: needs python
+Message-ID: <1415135275-8828-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/04/2014 03:20 PM, Thomas Petazzoni wrote:
+Fixes:
+ http://autobuild.buildroot.net/results/e8c/e8c27db2a0935c2daef173d5650f6a2b3a219493/
 
-> There was a patch from Bernd, a759931c9b0cb4337dc30fd35d03ce123271c5a4,
-> which made libcap depend on headers >= 3.7. But I reverted it in
-> d5146f4b53d926c13a47215ac514e43b2c66b9ac, because Bernd's analysis was
-> not correct, and libcap did not depend on kernel headers >= 3.7.
-> 
-> Are you sure 3.1 is really the correct starting point? Here is what I
-> wrote at the time:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/gstreamer1/gst1-validate/Config.in        | 7 ++++++-
+ package/gstreamer1/gst1-validate/gst1-validate.mk | 4 +++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-Yes, true, the definition moved to another header from 2.6.35 -> 2.6.36
-The failure seems to affect only the 2011 cs lite ppc toolchain.
-Even though it's based on 2.6.38 headers something bad was done to it:
-
-freescale-2011.03 $ find . -type f -exec grep --with-filename
-XATTR_NAME_CAPS {} \; -> nothing (yes i did '-name *.h' first but to my
-amazement nothing returned so i went all-out).
-
-So as a POC i've built a 2.6.35.14-based basic toolchain with libcap
-enabled and everything went fine.
-
-My professional opinion is that the codesourcery powerpc 2011.03
-toolchain is messed up.
-So we either blacklist it or do users a favor and just deprecate/remove it.
-Regards.
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+index ffcdd27..b22aa4a 100644
+--- a/package/gstreamer1/gst1-validate/Config.in
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -1,5 +1,6 @@
+-menuconfig BR2_PACKAGE_GST1_VALIDATE
++config BR2_PACKAGE_GST1_VALIDATE
+ 	bool "gst1-validate"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	help
+ 	  GstValidate is a tool that allows GStreamer developers to
+@@ -7,3 +8,7 @@ menuconfig BR2_PACKAGE_GST1_VALIDATE
+ 	  are supposed to.
+ 
+ 	  http://gstreamer.freedesktop.org/
++
++comment "gst1-validate depends on python"
++	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
++
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index 4972cac..6cc0f65 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -12,6 +12,8 @@ GST1_VALIDATE_LICENSE_FILES = COPYING
+ 
+ GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
+ 
+-GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base
++GST1_VALIDATE_DEPENDENCIES = gstreamer1 gst1-plugins-base \
++	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
++	$(if $(BR2_PACKAGE_PYTHON3),python3,python)
+ 
+ $(eval $(autotools-package))
+-- 
+1.8.1.4
