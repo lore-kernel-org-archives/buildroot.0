@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 5 Nov 2014 16:39:06 +0000
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.39.0
-In-Reply-To: <1415197892-30325-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1415197892-30325-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <545A52AA.6080502@imgtec.com>
+Date: Wed, 5 Nov 2014 16:46:58 +0000
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.07
+In-Reply-To: <1415203319-30399-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1415203319-30399-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <545A5482.3070404@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,86 +12,50 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On 11/05/2014 02:31 PM, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2014-3707 - libcurl's function curl_easy_duphandle() has a bug that
-> can lead to libcurl eventually sending off sensitive data that was not
-> intended for sending.
-> 
-> Removed patch that was upstream and now in the release.
+On 11/05/2014 04:01 PM, Gustavo Zacarias wrote:
+> Also enable optional systemd support.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libcurl/libcurl-0001-fixtimeout.patch | 37 ---------------------------
->  package/libcurl/libcurl.hash                  |  2 +-
->  package/libcurl/libcurl.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 39 deletions(-)
->  delete mode 100644 package/libcurl/libcurl-0001-fixtimeout.patch
+>  package/stunnel/stunnel.hash |  2 +-
+>  package/stunnel/stunnel.mk   | 11 +++++++++--
+>  2 files changed, 10 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libcurl/libcurl-0001-fixtimeout.patch b/package/libcurl/libcurl-0001-fixtimeout.patch
-> deleted file mode 100644
-> index f897ca4..0000000
-> --- a/package/libcurl/libcurl-0001-fixtimeout.patch
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -This fixes a timeout problem with xbmc.
-> -
-> -Backported from upstream:
-> -https://github.com/bagder/curl/commit/d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -
-> -
-> -From d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1 Mon Sep 17 00:00:00 2001
-> -From: Daniel Stenberg <daniel@haxx.se>
-> -Date: Tue, 23 Sep 2014 11:44:03 +0200
-> -Subject: [PATCH] threaded-resolver: revert Curl_expire_latest() switch
-> -
-> -The switch to using Curl_expire_latest() in commit cacdc27f52b was a
-> -mistake and was against the advice even mentioned in that commit. The
-> -comparison in asyn-thread.c:Curl_resolver_is_resolved() makes
-> -Curl_expire() the suitable function to use.
-> -
-> -Bug: http://curl.haxx.se/bug/view.cgi?id=1426
-> -Reported-By: graysky
-> ----
-> - lib/asyn-thread.c | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/lib/asyn-thread.c b/lib/asyn-thread.c
-> -index e4ad32b..6cdc9ad 100644
-> ---- a/lib/asyn-thread.c
-> -+++ b/lib/asyn-thread.c
-> -@@ -541,7 +541,7 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
-> -       td->poll_interval = 250;
-> - 
-> -     td->interval_end = elapsed + td->poll_interval;
-> --    Curl_expire_latest(conn->data, td->poll_interval);
-> -+    Curl_expire(conn->data, td->poll_interval);
-> -   }
-> - 
-> -   return CURLE_OK;
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index 7eded03..4c3b8ac 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
+> diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+> index 89af571..e4e6366 100644
+> --- a/package/stunnel/stunnel.hash
+> +++ b/package/stunnel/stunnel.hash
 > @@ -1,2 +1,2 @@
->  # Locally calculated after checking pgp signature
-> -sha256	035bd41e99aa1a4e64713f4cea5ccdf366ca8199e9be1b53d5a043d5165f9eba	curl-7.38.0.tar.bz2
-> +sha256	b222566e7087cd9701b301dd6634b360ae118cc1cbc7697e534dc451102ea4e0	curl-7.39.0.tar.bz2
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 4af73b1..62ea5fb 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -4,7 +4,7 @@
+>  # From http://www.stunnel.org/pipermail/stunnel-announce/2014-October/000084.html
+> -sha256	098c2b6db0793ea4fa5b6767ce6ef1853e9f6cc2f32133024be55f6a460b1a40	stunnel-5.06.tar.gz
+> +sha256	505c6c63c4a20fc0cce8c35ef1ab7626c7b01071e3fca4ac6ea417afe8065309	stunnel-5.07.tar.gz
+> diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+> index 7be0cc7..dc56261 100644
+> --- a/package/stunnel/stunnel.mk
+> +++ b/package/stunnel/stunnel.mk
+> @@ -4,13 +4,20 @@
 >  #
 >  ################################################################################
 >  
-> -LIBCURL_VERSION = 7.38.0
-> +LIBCURL_VERSION = 7.39.0
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
->  LIBCURL_SITE = http://curl.haxx.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
+> -STUNNEL_VERSION = 5.06
+> +STUNNEL_VERSION = 5.07
+>  STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
+>  STUNNEL_DEPENDENCIES = openssl
+> -STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
+> +STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+> +	--disable-libwrap
+>  STUNNEL_LICENSE = GPLv2+
+>  STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
+>  
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +STUNNEL_DEPENDENCIES += systemd
+> +else
+> +STUNNEL_CONF_OPTS += --disable-systemd
+> +endif
+> +
+>  define STUNNEL_INSTALL_CONF_SCRIPT
+>  	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
+>  	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -100,37 +64,11 @@ Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Compile-test on MIPS architecture plus checking the files are actually
 installed in target and were built for the right architecture.
 
-$ file output/target/usr/lib/libcurl.so.4.3.0
-output/target/usr/lib/libcurl.so.4.3.0: ELF 32-bit MSB shared object,
-MIPS, MIPS32 rel2 version 1 (SYSV), dynamically linked, with unknown
-capability 0x41000000 = 0xf676e75, with unknown capability 0x10000 =
-0x70401, not stripped
-
-Also built successfully all the packages depending on
-BR2_PACKAGE_LIBCURL (except xbmc, which is not supported on MIPS;
-clamav, which for some reason I was unable to download; and webkit,
-which failed to build for a reason I still have to investigate):
-
-BR2_PACKAGE_COLLECTD
-BR2_PACKAGE_CURLFTPFS
-BR2_PACKAGE_LIBECORE
-BR2_PACKAGE_FEH
-BR2_PACKAGE_FLICKCURL
-BR2_PACKAGE_GNUPG
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CURL
-BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CURL
-BR2_PACKAGE_LIBOAUTH
-BR2_PACKAGE_LIBUPNPP
-BR2_PACKAGE_LIBXMLRPC
-BR2_PACKAGE_LINKNX
-BR2_PACKAGE_MPD_CURL
-BR2_PACKAGE_OPENSWAN
-BR2_PACKAGE_PHP_EXT_CURL
-BR2_PACKAGE_RTORRENT
-BR2_PACKAGE_STRONGSWAN_CURL
-BR2_PACKAGE_TRANSMISSION
-BR2_PACKAGE_VORBIS_TOOLS
-BR2_PACKAGE_XERCES
+$ file output/target/usr/bin/stunnel
+output/target/usr/bin/stunnel: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.16, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70401, stripped
 
 Best regards,
 -- 
