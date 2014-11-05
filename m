@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Nov 2014 08:15:05 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
- with pkg-config
-In-Reply-To: <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
- <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
- <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
- <20141026222449.315ce1ff@free-electrons.com>
- <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
- <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
-Message-ID: <20141105081505.58f2d26c@free-electrons.com>
+Date: Wed, 5 Nov 2014 08:15:55 +0100
+Subject: [Buildroot] [PATCH] wireshark: remove RPATH tag
+In-Reply-To: <0dae86e37516236d337e8433c63047504f1576f9.1415126141.git.baruch@tkos.co.il>
+References: <0dae86e37516236d337e8433c63047504f1576f9.1415126141.git.baruch@tkos.co.il>
+Message-ID: <20141105081555.5aca83e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bj?rn Forsman,
+Dear Baruch Siach,
 
-On Wed, 5 Nov 2014 08:10:26 +0100, Bj?rn Forsman wrote:
-
-> Are you able to help with synchronizing linux/upstream kconfig with
-> Buildroot? (See my failed attempt above.)
+On Tue,  4 Nov 2014 20:35:41 +0200, Baruch Siach wrote:
+> Edit libtool to remove RPATH from generated binaries. This is similar to
+> upstream commit making the same change when buiding RPMs.
+> https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff;h=a4a624e4c5
 > 
-> If you have no time, just let me know, and I'll add a patch in
-> support/kconfig/patches/ instead of doing a full sync.
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/wireshark/wireshark.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+> index ccf5a56f1f23..6c7c3920e7af 100644
+> --- a/package/wireshark/wireshark.mk
+> +++ b/package/wireshark/wireshark.mk
+> @@ -15,6 +15,12 @@ WIRESHARK_AUTORECONF = YES
+>  WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+>  			ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+>  
+> +define WIRESHARK_REMOVE_RPATH
+> +	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
+> +	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
+> +endef
+> +WIRESHARK_POST_CONFIGURE_HOOKS += WIRESHARK_REMOVE_RPATH
 
-I personally don't have the time this week, and I also know Yann is
-very busy as well this week. We might be able to help with that, but
-not before this WE or next week.
-
-Best regards,
+Isn't this problem potentially identical in many packages that use
+libtool? What leads the wireshark libtool to have this specifically?
 
 Thomas
 -- 
