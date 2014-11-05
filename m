@@ -1,38 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Nov 2014 08:31:24 +0100
-Subject: [Buildroot] [PATCH] wireshark: remove RPATH tag
-In-Reply-To: <20141105072214.GL2358@sapphire.tkos.co.il>
-References: <0dae86e37516236d337e8433c63047504f1576f9.1415126141.git.baruch@tkos.co.il>
- <20141105081555.5aca83e2@free-electrons.com>
- <20141105072214.GL2358@sapphire.tkos.co.il>
-Message-ID: <20141105083124.57a5d559@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 05 Nov 2014 10:19:05 +0100
+Subject: [Buildroot] [PATCH v3 2/4] bdwgc: new package
+In-Reply-To: <1415143709-10963-3-git-send-email-paguilar@paguilar.org>
+References: <1415143709-10963-1-git-send-email-paguilar@paguilar.org>
+ <1415143709-10963-3-git-send-email-paguilar@paguilar.org>
+Message-ID: <5459EB89.3030204@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi Pedro,
 
-On Wed, 5 Nov 2014 09:22:14 +0200, Baruch Siach wrote:
+> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
+> conservative garbage collector can be used as a garbage collecting
+> replacement for C 'malloc' or C++ 'new'.
+>
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+>
+> ---
+> Changes v2 -> v3:
+> - bdwgc belongs to Libraries/Other
+> - Fix license file name
+> - Comment options properly
+> - Fix a formatting issue
+> (All changes suggested by Arnout Vandecappelle)
+>
+> Changes v1 -> v2:
+> - Add external default dependency on libatomic_ops
+> - Fix several formatting issues
+> (All changes suggested by Yann Morin)
+>
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> ---
+>   package/Config.in       |  1 +
+>   package/bdwgc/Config.in | 11 +++++++++++
+>   package/bdwgc/bdwgc.mk  | 21 +++++++++++++++++++++
+>   3 files changed, 33 insertions(+)
+>   create mode 100644 package/bdwgc/Config.in
+>   create mode 100644 package/bdwgc/bdwgc.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 28cf703..1354c27 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -848,6 +848,7 @@ menu "Other"
+>   	source "package/apr-util/Config.in"
+>   	source "package/argp-standalone/Config.in"
+>   	source "package/armadillo/Config.in"
+> +	source "package/bdwgc/Config.in"
+>   	source "package/boost/Config.in"
+>   	source "package/clapack/Config.in"
+>   	source "package/classpath/Config.in"
+> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+> new file mode 100644
+> index 0000000..6f3878e
+> --- /dev/null
+> +++ b/package/bdwgc/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_BDWGC
+> +	bool "bdwgc"
+> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_LIBATOMIC_OPS
+> +	help
+> +	  The Boehm-Demers-Weiser conservative garbage collector can
+> +	  be used as a garbage collecting replacement for C 'malloc'
+> +	  or C++ 'new'.
+> +
+> +	  http://www.hboehm.info/gc/
+> +
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> new file mode 100644
+> index 0000000..a8fde66
+> --- /dev/null
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# bdwgc
+> +#
+> +################################################################################
+> +
+> +BDWGC_VERSION = 7.2f
+> +BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+> +BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+> +BDWGC_INSTALL_STAGING = YES
+> +BDWGC_LICENSE = bdwgc license
+> +BDWGC_LICENSE_FILES = README.QUICK
+> +
+> +# Patching libtool breaks build
+> +BDWGC_LIBTOOL_PATCH = NO
+> +
+> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> +
 
-> > Isn't this problem potentially identical in many packages that use
-> > libtool? What leads the wireshark libtool to have this specifically?
-> 
-> Probably. The Buildorot speex package does an almost identical edit to its own 
-> libtool. Do you think we should enable this for all libtool users? We'll only 
-> know if anything breaks at run time.
+This trailing empty line is not needed. Same in patch 4/4.
 
-Well, not having a rpath should not break things at runtime, unless a
-custom rpath is really necessary. But I'm pretty sure in those cases,
-the custom rpath will be wrong as it will point to some location on the
-build machine.
-
-What would be good is to understand why in certain situations libtool
-decides to set a rpath and not in other cases.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Jerzy
