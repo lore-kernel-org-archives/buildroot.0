@@ -1,104 +1,115 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 05 Nov 2014 10:19:05 +0100
-Subject: [Buildroot] [PATCH v3 2/4] bdwgc: new package
-In-Reply-To: <1415143709-10963-3-git-send-email-paguilar@paguilar.org>
-References: <1415143709-10963-1-git-send-email-paguilar@paguilar.org>
- <1415143709-10963-3-git-send-email-paguilar@paguilar.org>
-Message-ID: <5459EB89.3030204@trzebnica.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 5 Nov 2014 10:42:46 +0000
+Subject: [Buildroot] [PATCH] elfutils: disable for static builds
+Message-ID: <1415184166-61950-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pedro,
+Even when doing static builds, a shared library is built. This causes a
+build failure under some circumstances, for instance when building for
+MIPS + uClibc + static.
 
-> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
-> conservative garbage collector can be used as a garbage collecting
-> replacement for C 'malloc' or C++ 'new'.
->
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
->
-> ---
-> Changes v2 -> v3:
-> - bdwgc belongs to Libraries/Other
-> - Fix license file name
-> - Comment options properly
-> - Fix a formatting issue
-> (All changes suggested by Arnout Vandecappelle)
->
-> Changes v1 -> v2:
-> - Add external default dependency on libatomic_ops
-> - Fix several formatting issues
-> (All changes suggested by Yann Morin)
->
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> ---
->   package/Config.in       |  1 +
->   package/bdwgc/Config.in | 11 +++++++++++
->   package/bdwgc/bdwgc.mk  | 21 +++++++++++++++++++++
->   3 files changed, 33 insertions(+)
->   create mode 100644 package/bdwgc/Config.in
->   create mode 100644 package/bdwgc/bdwgc.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 28cf703..1354c27 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -848,6 +848,7 @@ menu "Other"
->   	source "package/apr-util/Config.in"
->   	source "package/argp-standalone/Config.in"
->   	source "package/armadillo/Config.in"
-> +	source "package/bdwgc/Config.in"
->   	source "package/boost/Config.in"
->   	source "package/clapack/Config.in"
->   	source "package/classpath/Config.in"
-> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-> new file mode 100644
-> index 0000000..6f3878e
-> --- /dev/null
-> +++ b/package/bdwgc/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_BDWGC
-> +	bool "bdwgc"
-> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_LIBATOMIC_OPS
-> +	help
-> +	  The Boehm-Demers-Weiser conservative garbage collector can
-> +	  be used as a garbage collecting replacement for C 'malloc'
-> +	  or C++ 'new'.
-> +
-> +	  http://www.hboehm.info/gc/
-> +
-> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-> new file mode 100644
-> index 0000000..a8fde66
-> --- /dev/null
-> +++ b/package/bdwgc/bdwgc.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# bdwgc
-> +#
-> +################################################################################
-> +
-> +BDWGC_VERSION = 7.2f
-> +BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
-> +BDWGC_SITE = http://www.hboehm.info/gc/gc_source
-> +BDWGC_INSTALL_STAGING = YES
-> +BDWGC_LICENSE = bdwgc license
-> +BDWGC_LICENSE_FILES = README.QUICK
-> +
-> +# Patching libtool breaks build
-> +BDWGC_LIBTOOL_PATCH = NO
-> +
-> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> +
+After asking upstream if it would be possible to add a configure option
+to not build the shared library, the answer was that doing a static
+build is not a good idea. Here is a small snippet of the conversation:
 
-This trailing empty line is not needed. Same in patch 4/4.
+"Note that fully static builds are problematic.  elfutils uses dlopen to
+open the EBL backends (the CPU-specific support snippets), so even if
+you link statically, the final binaries are still considerably dynamic."
 
-Regards,
-Jerzy
+Related:
+  https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
+
+Fixes:
+  http://autobuild.buildroot.net/results/691/6913f5af6519463fbed39ef37b6a40ecf6a67b54/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/avrdude/Config.in    |    5 +++--
+ package/elfutils/Config.in   |    5 +++--
+ package/kexec-lite/Config.in |    2 +-
+ package/ltrace/Config.in     |    5 +++--
+ 4 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
+index 7d9f5eb..84bd091 100644
+--- a/package/avrdude/Config.in
++++ b/package/avrdude/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_AVRDUDE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_LARGEFILE # elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
++	depends on !BR2_PREFER_STATIC_LIB # elfutils
+ 	depends on !BR2_avr32 # elfutils
+ 	depends on !BR2_bfin # elfutils
+ 	help
+@@ -15,7 +16,7 @@ config BR2_PACKAGE_AVRDUDE
+ 
+ 	  https://github.com/kcuzner/avrdude
+ 
+-comment "avrdude needs a toolchain w/ threads, largefile, wchar"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || !BR2_USE_WCHAR
++comment "avrdude needs a toolchain w/ threads, largefile, wchar, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+ 	depends on !BR2_avr32
+ 	depends on !BR2_bfin
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 20a1aaa..5d6e659 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -1,7 +1,7 @@
+-comment "elfutils needs a toolchain w/ largefile, wchar"
++comment "elfutils needs a toolchain w/ largefile, wchar, dynamic library"
+ 	depends on !BR2_avr32
+ 	depends on !BR2_bfin
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+ 
+ config BR2_PACKAGE_ELFUTILS
+ 	bool "elfutils"
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_PREFER_STATIC_LIB
+ 	# canonicalize_file_name() not available on uClibc 0.9.31, used
+ 	# only for AVR32
+ 	depends on !BR2_avr32
+diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
+index e98ad3a..8db6058 100644
+--- a/package/kexec-lite/Config.in
++++ b/package/kexec-lite/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_KEXEC_LITE
+ 	bool "kexec-lite"
+ 	depends on BR2_powerpc || BR2_powerpc64
+-	depends on !BR2_PREFER_STATIC_LIB # dtc
++	depends on !BR2_PREFER_STATIC_LIB # dtc, elfutils
+ 	depends on BR2_LARGEFILE # elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	select BR2_PACKAGE_ELFUTILS
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index dc759d8..08edd45 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_LTRACE
+ 	select BR2_PACKAGE_ELFUTILS
+ 	depends on BR2_LARGEFILE # elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
++	depends on !BR2_PREFER_STATIC_LIB # elfutils
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+ 	  While the command is executing, ltrace intercepts and records
+@@ -17,5 +18,5 @@ config BR2_PACKAGE_LTRACE
+ 
+ 	  http://ltrace.org
+ 
+-comment "ltrace needs toolchain w/ largefile, wchar"
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
++comment "ltrace needs toolchain w/ largefile, wchar, dynamic library"
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+-- 
+1.7.1
