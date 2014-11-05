@@ -1,83 +1,48 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Wed, 5 Nov 2014 08:10:26 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
-	with pkg-config
-In-Reply-To: <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
- <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
- <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
- <20141026222449.315ce1ff@free-electrons.com>
- <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
-Message-ID: <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Nov 2014 08:13:30 +0100
+Subject: [Buildroot] Samba4 build issue
+In-Reply-To: <54592103.30908@zacarias.com.ar>
+References: <20141101233957.7ca9aabd@free-electrons.com>
+ <545577D9.1040405@zacarias.com.ar>
+ <20141102103811.16e499df@free-electrons.com>
+ <545628BF.2030101@zacarias.com.ar>
+ <20141104082623.33a2136e@free-electrons.com>
+ <5458DC52.6020706@zacarias.com.ar>
+ <20141104192043.03f7159b@free-electrons.com>
+ <54592103.30908@zacarias.com.ar>
+Message-ID: <20141105081330.22733f80@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Dear Gustavo Zacarias,
 
-On 26 October 2014 22:45, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-> On 26 October 2014 22:24, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Bj?rn Forsman,
->>
->> On Sun, 26 Oct 2014 22:16:33 +0100, Bj?rn Forsman wrote:
->>
->>> I've tried to re-sync with linux 3.18-rc1. Without luck. Quite
->>> frustrating. Something is changed upstream and I don't (yet) manage to
->>> fill in the missing bits of Make code to have Buildroot's "make
->>> menuconfig" work with these changes.
->>
->> Argh :/
->>
->> At some point, Yann E. Morin was very active on the kbuild/kconfig code
->> in the upstream Linux kernel. Maybe he can help there?
->
-> Sure. For someone familiar with this code, it is probably/hopefully trivial :-)
->
-> For a bit of background, it's
-> support/kconfig/patches/06-br-build-system-integration.patch that
-> doesn't apply, due to upstream (linux) commit
-> 022af62d0190e1e3db63c19aeb5f51ae0612cd71 removing the code that the
-> patch touches.
->
-> I started out by skipping 06-br-build-system-integration.patch, but
-> I'm unable to glue the stuff back together. This is what happens now:
->
-> $ make menuconfig
-> mkdir -p /home/bfo/buildroot/output/build/buildroot-config/lxdialog
-> make CC="/run/current-system/sw/bin/gcc"
-> HOSTCC="/run/current-system/sw/bin/gcc"
-> obj=/home/bfo/buildroot/output/build/buildroot-config -C
-> support/kconfig -f Makefile.br mconf
-> make[1]: Entering directory `/home/bfo/buildroot/support/kconfig'
-> make[1]: *** No rule to make target
-> `/home/bfo/buildroot/output/build/buildroot-config/.tmp_gtkcheck',
-> needed by `/home/bfo/buildroot/output/build/buildroot-config/gconf.o'.
-> Stop.
-> make[1]: Leaving directory `/home/bfo/buildroot/support/kconfig'
-> make: *** [/home/bfo/buildroot/output/build/buildroot-config/mconf] Error 2
->
->>> Would it be acceptable to add the patch posted in this thread directly
->>> to support/kconfig/patches/ instead?
->>
->> Yes, it is acceptable. Especially if the patch description mentions
->> that it's already upstream, it will help when we'll bump the kconfig
->> code.
->
-> Great! But I'll wait and see if Yann has some inputs before going this route.
->
-> Best regards,
-> Bj?rn Forsman
+On Tue, 04 Nov 2014 15:54:59 -0300, Gustavo Zacarias wrote:
 
-Are you able to help with synchronizing linux/upstream kconfig with
-Buildroot? (See my failed attempt above.)
+> Yes, true, the definition moved to another header from 2.6.35 -> 2.6.36
+> The failure seems to affect only the 2011 cs lite ppc toolchain.
+> Even though it's based on 2.6.38 headers something bad was done to it:
+> 
+> freescale-2011.03 $ find . -type f -exec grep --with-filename
+> XATTR_NAME_CAPS {} \; -> nothing (yes i did '-name *.h' first but to my
+> amazement nothing returned so i went all-out).
+> 
+> So as a POC i've built a 2.6.35.14-based basic toolchain with libcap
+> enabled and everything went fine.
+> 
+> My professional opinion is that the codesourcery powerpc 2011.03
+> toolchain is messed up.
+> So we either blacklist it or do users a favor and just deprecate/remove it.
 
-If you have no time, just let me know, and I'll add a patch in
-support/kconfig/patches/ instead of doing a full sync.
+I'm fine with deprecating/removing this CS toolchain. However, I'd like
+to have in order set of toolchains at least one toolchain without "old"
+kernel headers, so that we keep testing the case of old kernel headers
+in the autobuilders.
 
-Best regards,
-Bj?rn Forsman
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
