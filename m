@@ -1,91 +1,124 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Nov 2014 11:31:32 -0300
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.39.0
-Message-ID: <1415197892-30325-1-git-send-email-gustavo@zacarias.com.ar>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Wed, 5 Nov 2014 15:30:29 +0100
+Subject: [Buildroot] [PATCH 1/1] exiv2: new package
+Message-ID: <1415197829-7086-1-git-send-email-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-3707 - libcurl's function curl_easy_duphandle() has a bug that
-can lead to libcurl eventually sending off sensitive data that was not
-intended for sending.
+Add support for Exiv2 library and utility to manage image metadata
 
-Removed patch that was upstream and now in the release.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/libcurl/libcurl-0001-fixtimeout.patch | 37 ---------------------------
- package/libcurl/libcurl.hash                  |  2 +-
- package/libcurl/libcurl.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
- delete mode 100644 package/libcurl/libcurl-0001-fixtimeout.patch
+ package/Config.in        |  1 +
+ package/exiv2/Config.in  | 33 +++++++++++++++++++++++++++++++++
+ package/exiv2/exiv2.hash |  4 ++++
+ package/exiv2/exiv2.mk   | 32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 70 insertions(+)
+ create mode 100644 package/exiv2/Config.in
+ create mode 100644 package/exiv2/exiv2.hash
+ create mode 100644 package/exiv2/exiv2.mk
 
-diff --git a/package/libcurl/libcurl-0001-fixtimeout.patch b/package/libcurl/libcurl-0001-fixtimeout.patch
-deleted file mode 100644
-index f897ca4..0000000
---- a/package/libcurl/libcurl-0001-fixtimeout.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--This fixes a timeout problem with xbmc.
--
--Backported from upstream:
--https://github.com/bagder/curl/commit/d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1 Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Tue, 23 Sep 2014 11:44:03 +0200
--Subject: [PATCH] threaded-resolver: revert Curl_expire_latest() switch
--
--The switch to using Curl_expire_latest() in commit cacdc27f52b was a
--mistake and was against the advice even mentioned in that commit. The
--comparison in asyn-thread.c:Curl_resolver_is_resolved() makes
--Curl_expire() the suitable function to use.
--
--Bug: http://curl.haxx.se/bug/view.cgi?id=1426
--Reported-By: graysky
-----
-- lib/asyn-thread.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/asyn-thread.c b/lib/asyn-thread.c
--index e4ad32b..6cdc9ad 100644
----- a/lib/asyn-thread.c
--+++ b/lib/asyn-thread.c
--@@ -541,7 +541,7 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
--       td->poll_interval = 250;
-- 
--     td->interval_end = elapsed + td->poll_interval;
---    Curl_expire_latest(conn->data, td->poll_interval);
--+    Curl_expire(conn->data, td->poll_interval);
--   }
-- 
--   return CURLE_OK;
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 7eded03..4c3b8ac 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	035bd41e99aa1a4e64713f4cea5ccdf366ca8199e9be1b53d5a043d5165f9eba	curl-7.38.0.tar.bz2
-+sha256	b222566e7087cd9701b301dd6634b360ae118cc1cbc7697e534dc451102ea4e0	curl-7.39.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 4af73b1..62ea5fb 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.38.0
-+LIBCURL_VERSION = 7.39.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/Config.in b/package/Config.in
+index 28cf703..6abf344 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -625,6 +625,7 @@ menu "Graphics"
+ 	source "package/adwaita-icon-theme/Config.in"
+ 	source "package/atk/Config.in"
+ 	source "package/cairo/Config.in"
++	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+ 	source "package/fontconfig/Config.in"
+ 	source "package/freetype/Config.in"
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+new file mode 100644
+index 0000000..d03447b
+--- /dev/null
++++ b/package/exiv2/Config.in
+@@ -0,0 +1,33 @@
++config BR2_PACKAGE_EXIV2
++	bool "exiv2"
++	help
++	  Exiv2 is a C++ library and a command line utility to manage image metadata.
++	  It provides fast and easy read and write access to the Exif,
++	  IPTC and XMP metadata of images in various formats.
++
++	  Exiv2 is available with GPLv2+ or commercial license.
++
++	  http://www.exiv2.org/
++
++if BR2_PACKAGE_EXIV2
++
++config BR2_PACKAGE_EXIV2_COMMERCIAL
++	bool "Enable commercial"
++	help
++	  Build the commercial version for closed source project.
++	  A commercial license request is needed.
++	  http://www.exiv2.org/download.html#license
++
++config BR2_PACKAGE_EXIV2_PNG
++	bool "PNG image support"
++	select BR2_PACKAGE_ZLIB
++	help
++	  Build with PNG image support
++
++config BR2_PACKAGE_EXIV2_XMP
++	bool "XMP support"
++	select BR2_PACKAGE_EXPAT
++	help
++	  Build with XMP support
++
++endif
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+new file mode 100644
+index 0000000..d4f8c60
+--- /dev/null
++++ b/package/exiv2/exiv2.hash
+@@ -0,0 +1,4 @@
++# From http://www.exiv2.org/download.html
++md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
++# Locally calculated
++sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+new file mode 100644
+index 0000000..cbf5bcd
+--- /dev/null
++++ b/package/exiv2/exiv2.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# exiv2
++#
++################################################################################
++
++EXIV2_VERSION = 0.24
++EXIV2_SOURCE = exiv2-$(EXIV2_VERSION).tar.gz
++EXIV2_SITE = http://www.exiv2.org
++EXIV2_LICENSE = GPLv2+ or commercial
++EXIV2_LICENSE_FILES = COPYING
++EXIV2_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
++EXIV2_CONF_OPTS += --enable-commercial --disable-nls --disable-lensdata
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
++EXIV2_CONF_OPTS += --with-zlib=$(STAGING_DIR)
++EXIV2_DEPENDENCIES += zlib
++else
++EXIV2_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
++EXIV2_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr/lib
++EXIV2_DEPENDENCIES += expat
++else
++EXIV2_CONF_OPTS += --disable-xmp
++endif
++
++$(eval $(autotools-package))
 -- 
-2.0.4
+2.1.3
