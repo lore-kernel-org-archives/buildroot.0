@@ -1,22 +1,39 @@
-From: Michael Sumulong <msumulong@gmail.com>
-Date: Wed, 5 Nov 2014 11:05:16 -0500
-Subject: [Buildroot] e2progs and pkgconfig file
-Message-ID: <CABDNR17g3JtFyPYmdioVzBg+OLDC9OQYk06BKPq2FiwDhEcuCw@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed,  5 Nov 2014 17:34:45 +0100
+Subject: [Buildroot] [PATCH] barebox: bump to version 2014.11.0
+Message-ID: <1415205285-29952-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am currently trying to get partclone to compile under buildroot which
-uses the ext2fs libraries. However, I get an issue when partclone compiles
-and its looking for a ext2fs.pc file under usr/lib/pkgconfig. Compiling
-e2fsprogs for the target does not produce this file under
-output/target/usr/lib/pkgconfig but if I compile the host-e2fsprogs it does
-generate a ext2fs.pc file under output/host/usr/lib/pkgconfig. I'm not sure
-if this is a bug or done on purpose for some reason.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--Mike
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141105/a1e7a0c7/attachment.html>
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 4edab1f..f534f98 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.10.0"
++	bool "2014.11.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2014.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+-- 
+2.1.3
