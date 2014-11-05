@@ -1,50 +1,62 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 5 Nov 2014 13:36:06 +0000
-Subject: [Buildroot] [PATCH] autobuild-run: Do not build civetweb with this
-	external MIPS toolchain
-Message-ID: <1415194566-60867-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 5 Nov 2014 13:46:14 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-04
+In-Reply-To: <20141105073015.758941014DB@stock.ovh.net>
+References: <20141105073015.758941014DB@stock.ovh.net>
+Message-ID: <545A2A26.8060506@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This MIPS uClibc toolchain doesn't have the needed fix in order to build
-the civetweb package statically for uClibc. It fails with messages like
-these ones:
+Dear all,
 
-libdl.c:(.text+0x1840): undefined reference to `TLS_DTPREL_VALUE'
-libdl.c:(.text+0x1884): undefined reference to `TLS_TPREL_VALUE'
+On 11/05/2014 07:30 AM, Thomas Petazzoni wrote:
+>       mipsel |                  civetweb-v1.5 | NOK | http://autobuild.buildroot.net/results/4a179bebdc9cd85780d7f16f672ee019a1947147/
 
-This has been already fixed in Buildroot, but this toolchain was
-generated before.
+The external toolchain used here doesn't have the needed fix in order to
+build civetweb for uClibc + static. This has been already fixes in
+Buildroot but this toolchain was generated before.
 
-Related:
-  http://lists.uclibc.org/pipermail/uclibc/2013-April/047708.html
-  http://git.buildroot.net/buildroot/commit/?id=c0b4c45780e4ffe23101a407e7c4cde22e27815a
+Patch sent: http://patchwork.ozlabs.org/patch/406989/
 
-Fixes:
-  http://autobuild.buildroot.net/results/4a1/4a179bebdc9cd85780d7f16f672ee019a1947147/
+>       mipsel |                 coreutils-8.23 | NOK | http://autobuild.buildroot.net/results/2f2f298c9baccba79d7c94a02703be708cec6757/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- scripts/autobuild-run |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+"makeinfo: command not found"
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 40291ce..13752f9 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -298,6 +298,10 @@ def fixup_config(instance, sysinfo):
-     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-+    # This MIPS uClibc toolchain fails to build the civetweb package
-+    if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+        return False
-     # This MIPS ctng toolchain fails to build the python3 package
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+This fails when generating the documentation because the build host
+doesn't have texinfo installed (which provides the makeinfo tool).
+
+However, using the same exact configuration and removing the makeinfo
+executable from my system, I still being unable to reproduce this failure.
+
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/9bfb9bcad67727bdaf74c94206eca0bb728d7eec/
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/b64a150f3e66d6f2504d2b28f2594e67eda8ea16/
+
+This shouldn't be happening. The rt-tests package should be removed from
+the build list for the toolchains used in those config files. The
+builder who did those builds doesn't have an updated autobuild-run script.
+
+ThomasP in CC.
+
+>          arm |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/aa4dc974c297ad2595363ee524a18ea30536cca1/
+
+Reported upstream:
+http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
+
+Related: http://patchwork.ozlabs.org/patch/400969/
+
+>     mips64el | znc-b396cafdb249544164ed029... | TIM | http://autobuild.buildroot.net/results/d777f62139f47677becd41c76c9ed4a02ff3301d/
+
+This seems an error of the autobuilder. The compilation stops suddenly
+without any error message.
+
+Best regards,
 -- 
-1.7.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
