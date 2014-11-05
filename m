@@ -1,39 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Nov 2014 08:10:54 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17.1
-Message-ID: <1415185854-9663-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ralph Koettlitz <ralph.koettlitz@gmail.com>
+Date: Wed, 5 Nov 2014 12:32:25 +0100
+Subject: [Buildroot] Howto use capes for the Beaglebone Black?
+Message-ID: <CADJRpt9mPFDu2gm2qMbY+ko__Ss9Y2TLpqfN3tb44++Q3iV+DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I missed the development of device tree and my last information was that I
+should use dtb file in /lib/firmware, but the kernel from the last stable
+version 08.2014 for Beaglebone Black doesn't has a cape manager. like the
+starter images from beagleboard.org. Looking at the repositories of Robert
+C. Nelson gives me the idea newer kernels have something builtin.
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 497f142..0f207b2 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	ecafbf71e729c7e907dac488c2e0c94983dd38420f56dce85e2a4310a06bf0a0	btrfs-progs-v3.17.tar.xz
-+sha256	6c01579c7b858c175aaed6b3b087dadaa38efb8e590a6928f1afe86bb8faaaab	btrfs-progs-v3.17.1.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 67d2e37..d16fa0d 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 3.17
-+BTRFS_PROGS_VERSION = 3.17.1
- BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
--- 
-2.0.4
+I have a can cape and 7" lcd with touch screen and want to use them. What
+must I do to activate them? I'm using the last stable version with the tI
+kernel 3.12.10. Maybe I have to use a kernel from RobertCNelson?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141105/fa26129b/attachment.html>
