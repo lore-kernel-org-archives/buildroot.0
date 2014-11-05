@@ -1,124 +1,61 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Wed, 5 Nov 2014 15:30:29 +0100
-Subject: [Buildroot] [PATCH 1/1] exiv2: new package
-Message-ID: <1415197829-7086-1-git-send-email-nicolas.serafini@sensefly.com>
+From: Sid Bharij <sid.bharij@gmail.com>
+Date: Wed, 5 Nov 2014 08:42:09 -0600
+Subject: [Buildroot] Buildroot and apt-get
+In-Reply-To: <20141105081824.01c2698a@free-electrons.com>
+References: <CAEk40fyze1gZL_x52zfESUqLzTMsjAUdmEKPVYL7DZJ2=3D1vQ@mail.gmail.com>
+ <20141105081824.01c2698a@free-electrons.com>
+Message-ID: <CAEk40fwsed9DmOPs-Pcp0txYvaS2_tzaHHBuWD9QsxrtBXd-QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Exiv2 library and utility to manage image metadata
+Hi,
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/Config.in        |  1 +
- package/exiv2/Config.in  | 33 +++++++++++++++++++++++++++++++++
- package/exiv2/exiv2.hash |  4 ++++
- package/exiv2/exiv2.mk   | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 package/exiv2/Config.in
- create mode 100644 package/exiv2/exiv2.hash
- create mode 100644 package/exiv2/exiv2.mk
+Thanks for the reply.
+I guess what I was asking was how to I install a package using build
+root. But it seems that build root doesn't support installing
+packages. I did read somewhere that you can use a post build script
+and add the package using buildroot. I am not sure how though.
 
-diff --git a/package/Config.in b/package/Config.in
-index 28cf703..6abf344 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -625,6 +625,7 @@ menu "Graphics"
- 	source "package/adwaita-icon-theme/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/cairo/Config.in"
-+	source "package/exiv2/Config.in"
- 	source "package/fltk/Config.in"
- 	source "package/fontconfig/Config.in"
- 	source "package/freetype/Config.in"
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-new file mode 100644
-index 0000000..d03447b
---- /dev/null
-+++ b/package/exiv2/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_PACKAGE_EXIV2
-+	bool "exiv2"
-+	help
-+	  Exiv2 is a C++ library and a command line utility to manage image metadata.
-+	  It provides fast and easy read and write access to the Exif,
-+	  IPTC and XMP metadata of images in various formats.
-+
-+	  Exiv2 is available with GPLv2+ or commercial license.
-+
-+	  http://www.exiv2.org/
-+
-+if BR2_PACKAGE_EXIV2
-+
-+config BR2_PACKAGE_EXIV2_COMMERCIAL
-+	bool "Enable commercial"
-+	help
-+	  Build the commercial version for closed source project.
-+	  A commercial license request is needed.
-+	  http://www.exiv2.org/download.html#license
-+
-+config BR2_PACKAGE_EXIV2_PNG
-+	bool "PNG image support"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Build with PNG image support
-+
-+config BR2_PACKAGE_EXIV2_XMP
-+	bool "XMP support"
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  Build with XMP support
-+
-+endif
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-new file mode 100644
-index 0000000..d4f8c60
---- /dev/null
-+++ b/package/exiv2/exiv2.hash
-@@ -0,0 +1,4 @@
-+# From http://www.exiv2.org/download.html
-+md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
-+# Locally calculated
-+sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-new file mode 100644
-index 0000000..cbf5bcd
---- /dev/null
-+++ b/package/exiv2/exiv2.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# exiv2
-+#
-+################################################################################
-+
-+EXIV2_VERSION = 0.24
-+EXIV2_SOURCE = exiv2-$(EXIV2_VERSION).tar.gz
-+EXIV2_SITE = http://www.exiv2.org
-+EXIV2_LICENSE = GPLv2+ or commercial
-+EXIV2_LICENSE_FILES = COPYING
-+EXIV2_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
-+EXIV2_CONF_OPTS += --enable-commercial --disable-nls --disable-lensdata
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
-+EXIV2_CONF_OPTS += --with-zlib=$(STAGING_DIR)
-+EXIV2_DEPENDENCIES += zlib
-+else
-+EXIV2_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
-+EXIV2_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr/lib
-+EXIV2_DEPENDENCIES += expat
-+else
-+EXIV2_CONF_OPTS += --disable-xmp
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.1.3
+Regards,
+Sid
+
+On Wed, Nov 5, 2014 at 1:18 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Sid Bharij,
+>
+> On Tue, 4 Nov 2014 15:34:54 -0600, Sid Bharij wrote:
+>
+>> I am trying to get a webcam installed on my pi.
+>> I created the kernel image using buildroot. The pi came up and I was
+>> able to ssh to it. But when I try to do a apt-get install motion it
+>> says apt-get not found. I checked the rootfs and it does not have the
+>> apt-get file in it.
+>>
+>> What do I need to do in order to get the apt-get to work, is there
+>> some post build script that I need which will install motion on the
+>> target ? or is there some setting in buildroot
+>
+> There is no package management system in Buildroot in the sense of
+> apt-get or similar tools in other Linux distributions. Buildroot
+> produces a root filesystem image, and if you want to add/remove things
+> to the filesystem image, you need to use Buildroot again to rebuild the
+> image.
+>
+> See also
+> http://buildroot.org/downloads/manual/manual.html#faq-no-binary-packages
+> for details.
+>
+> So, basically, you need to go in 'make menuconfig', enable whatever
+> package you need, hit 'make', and then use the resulting filesystem
+> image on your RPi.
+>
+> Best regards,
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
