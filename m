@@ -1,43 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Nov 2014 09:13:28 +0100
-Subject: [Buildroot] [git commit] barebox: bump to version 2014.11.0
-Message-ID: <20141106081556.2D633B12C5@busybox.osuosl.org>
+Date: Thu, 6 Nov 2014 09:09:20 +0100
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.39.0
+Message-ID: <20141106081556.2B6A3B246A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efeba86bf31e17ca707a650020a3b13c45c246b1
+commit: http://git.buildroot.net/buildroot/commit/?id=c30e017a1a6c2d368c4742d55e9ed17f96d29c06
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Fixes:
+CVE-2014-3707 - libcurl's function curl_easy_duphandle() has a bug that
+can lead to libcurl eventually sending off sensitive data that was not
+intended for sending.
+
+Removed patch that was upstream and now in the release.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl-0001-fixtimeout.patch |   37 -------------------------
+ package/libcurl/libcurl.hash                  |    2 +-
+ package/libcurl/libcurl.mk                    |    2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 4edab1f..f534f98 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/libcurl/libcurl-0001-fixtimeout.patch b/package/libcurl/libcurl-0001-fixtimeout.patch
+deleted file mode 100644
+index f897ca4..0000000
+--- a/package/libcurl/libcurl-0001-fixtimeout.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-This fixes a timeout problem with xbmc.
+-
+-Backported from upstream:
+-https://github.com/bagder/curl/commit/d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-
+-From d9762a7cdb35e70f8cb0bf1c2f8019e8391616e1 Mon Sep 17 00:00:00 2001
+-From: Daniel Stenberg <daniel@haxx.se>
+-Date: Tue, 23 Sep 2014 11:44:03 +0200
+-Subject: [PATCH] threaded-resolver: revert Curl_expire_latest() switch
+-
+-The switch to using Curl_expire_latest() in commit cacdc27f52b was a
+-mistake and was against the advice even mentioned in that commit. The
+-comparison in asyn-thread.c:Curl_resolver_is_resolved() makes
+-Curl_expire() the suitable function to use.
+-
+-Bug: http://curl.haxx.se/bug/view.cgi?id=1426
+-Reported-By: graysky
+----
+- lib/asyn-thread.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/asyn-thread.c b/lib/asyn-thread.c
+-index e4ad32b..6cdc9ad 100644
+---- a/lib/asyn-thread.c
+-+++ b/lib/asyn-thread.c
+-@@ -541,7 +541,7 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
+-       td->poll_interval = 250;
+- 
+-     td->interval_end = elapsed + td->poll_interval;
+--    Curl_expire_latest(conn->data, td->poll_interval);
+-+    Curl_expire(conn->data, td->poll_interval);
+-   }
+- 
+-   return CURLE_OK;
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7eded03..4c3b8ac 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	035bd41e99aa1a4e64713f4cea5ccdf366ca8199e9be1b53d5a043d5165f9eba	curl-7.38.0.tar.bz2
++sha256	b222566e7087cd9701b301dd6634b360ae118cc1cbc7697e534dc451102ea4e0	curl-7.39.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 4af73b1..62ea5fb 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.10.0"
-+	bool "2014.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2014.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+-LIBCURL_VERSION = 7.38.0
++LIBCURL_VERSION = 7.39.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
