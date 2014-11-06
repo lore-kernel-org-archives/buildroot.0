@@ -1,49 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Nov 2014 19:12:15 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 06 Nov 2014 15:34:48 -0300
 Subject: [Buildroot] [PATCH 7/7] ifupdown: new package
-In-Reply-To: <1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
- <1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141106191215.117286eb@free-electrons.com>
+In-Reply-To: <20141106191215.117286eb@free-electrons.com>
+References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
+ <20141106191215.117286eb@free-electrons.com>
+Message-ID: <545BBF48.4010005@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 11/06/2014 03:12 PM, Thomas Petazzoni wrote:
 
-On Thu,  6 Nov 2014 10:36:53 -0300, Gustavo Zacarias wrote:
 
-> +IFUPDOWN_VERSION = 0.7.49
-> +IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
-> +IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20140923T221921Z/pool/main/i/ifupdown
-> +IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-> +IFUPDOWN_LICENSE = GPLv2+
-> +IFUPDOWN_LICENSE_FILES = COPYING
-> +
-> +define IFUPDOWN_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
-> +		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
+> What about:
+> 
+> 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> 		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
+> 		-C $(@D)
+> 
 
-What about:
+Yes works as well.
 
-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
-		-C $(@D)
+>> +	$(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
+> 
+> -D missing
 
-> +define IFUPDOWN_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
+Do we want to enforce -D for skeleton/fhs dirs?
+Because there are many sinners out there already.
+(and i do vaguely recall someone telling me a long time ago that it was
+redundant and to drop it).
 
--D missing
+>> +	$(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
+>> +		$(TARGET_DIR)/lib/ifupdown/settle-dad.sh
+> 
+> Ditto.
 
-> +	$(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
-> +		$(TARGET_DIR)/lib/ifupdown/settle-dad.sh
-
-Ditto.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+No, take another look, otherwise it wouldn't even install :)
+Regards.
