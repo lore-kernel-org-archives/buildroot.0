@@ -1,43 +1,32 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 6 Nov 2014 16:33:16 +0100
-Subject: [Buildroot] [PATCH v2] exiv2: new package
-In-Reply-To: <545B8FC9.30305@imgtec.com>
-References: <1415285886-11117-1-git-send-email-nicolas.serafini@sensefly.com>
- <545B8ECE.9000208@sensefly.com> <545B8FC9.30305@imgtec.com>
-Message-ID: <545B94BC.1080800@sensefly.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 06 Nov 2014 13:16:19 -0300
+Subject: [Buildroot] Creation of /etc/dropbear
+In-Reply-To: <CAAXf6LXOFHMjbFpEe5QF1v9KhfXtnzZUsPRs+Dy1kxy7mhcfWA@mail.gmail.com>
+References: <545B9173.9080502@lucaceresoli.net>
+ <CAAXf6LXOFHMjbFpEe5QF1v9KhfXtnzZUsPRs+Dy1kxy7mhcfWA@mail.gmail.com>
+Message-ID: <545B9ED3.7000802@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On 11/06/2014 12:29 PM, Thomas De Schampheleire wrote:
 
-Thank you for the information I did not know this feature into patchwork
+> In my case, the rootfs is also not persistent, but mounted read-write.
+> In this case, I have an init script that restores the keys from
+> persistent storage into /etc/dropbear and an exit script that saves
+> the keys to persistent storage. All this after checking that the keys
+> are valid using dropbearkey.
+> 
+> If you could mount your roofs as read-write, then the same approach
+> could be taken, or alternatively the symlink could be created from an
+> init script.
+> 
+> Of course, when mounting the rootfs truly read-only, neither approach works.
 
-Best regards
-
-Nicolas
-
-Le 06. 11. 14 16:12, Vicente Olivert Riera a ?crit :
-> Dear Nicolas Serafini,
->
-> On 11/06/2014 03:07 PM, Nicolas Serafini wrote:
->> Hi all,
->>
->> Do not take into account this patch I was a little to fast.
->>
->> v3 is comming
->
-> if you have an account in patchwork, you can change the state of your
-> own patches. So, when you send a new version of a patch, you can mark
-> the old one as superseded, for instance.
->
-> Or, if your patch is not ok are you have been asked to do some changes,
-> you can set the state to "Changes requested".
->
-> If you do that, people will not "waste" their time testing those patches
-> because they will know you are going to submit an updated version.
->
-> Best regards,
->
+Overlayfs /etc, it won't matter if root is RO in that case.
+(alternatively aufs or other implementation as well).
+Also you could bind-mount /etc/dropbear if it's a directory (which it is
+given what the package does) from some other rw directory of your choosing.
+Regards.
