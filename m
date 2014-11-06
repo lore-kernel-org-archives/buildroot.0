@@ -1,51 +1,141 @@
-From: Michael Sumulong <msumulong@gmail.com>
-Date: Thu, 6 Nov 2014 08:55:43 -0500
-Subject: [Buildroot] e2progs and pkgconfig file
-In-Reply-To: <20141105190419.GD2234@tarshish>
-References: <CABDNR17g3JtFyPYmdioVzBg+OLDC9OQYk06BKPq2FiwDhEcuCw@mail.gmail.com>
- <20141105190419.GD2234@tarshish>
-Message-ID: <CABDNR169STaRTagQBMptshXNcWAxk2LaQ7tjruv0ZibEYG-waA@mail.gmail.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 6 Nov 2014 15:18:04 +0100
+Subject: [Buildroot] [PATCH 1/1] exiv2: new package
+In-Reply-To: <20141106083050.60e4d614@free-electrons.com>
+References: <1415197829-7086-1-git-send-email-nicolas.serafini@sensefly.com>
+ <20141106083050.60e4d614@free-electrons.com>
+Message-ID: <545B831C.6050908@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 5, 2014 at 2:04 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+Hi Thomas,
 
-> Hi Michael,
+
+
+Le 06. 11. 14 08:30, Thomas Petazzoni a ?crit :
+> Dear Nicolas Serafini,
 >
-> On Wed, Nov 05, 2014 at 11:05:16AM -0500, Michael Sumulong wrote:
-> > I am currently trying to get partclone to compile under buildroot which
-> > uses the ext2fs libraries. However, I get an issue when partclone
-> compiles
-> > and its looking for a ext2fs.pc file under usr/lib/pkgconfig. Compiling
-> > e2fsprogs for the target does not produce this file under
-> > output/target/usr/lib/pkgconfig but if I compile the host-e2fsprogs it
-> does
-> > generate a ext2fs.pc file under output/host/usr/lib/pkgconfig. I'm not
-> sure
-> > if this is a bug or done on purpose for some reason.
+> Thanks for your contribution. See a few comments below.
 >
-> The ext2fs.pc file for the target e2fsprogs package should be under
-> output/staging/usr/lib/pkgconfig/ like all other build facilities (headers,
-> static libraries, etc.). The command
+> On Wed, 5 Nov 2014 15:30:29 +0100, Nicolas Serafini wrote:
 >
->         output/host/usr/bin/pkg-config --libs ext2fs
+>> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+>> new file mode 100644
+>> index 0000000..d03447b
+>> --- /dev/null
+>> +++ b/package/exiv2/Config.in
+>> @@ -0,0 +1,33 @@
+>> +config BR2_PACKAGE_EXIV2
+>> +	bool "exiv2"
+>> +	help
+>> +	  Exiv2 is a C++ library and a command line utility to manage image metadata.
 >
-> gives the expected output on my system.
+> This line is a bit too long. Please wrap the help text so that it
+> doesn't go over 72 columns.
+
+Ok I fix this.
+I have not found the rule for maximum column in Config.in and *.mk files 
+in the manual. Maybe we should add.
+
 >
-> baruch
+>> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+>> new file mode 100644
+>> index 0000000..cbf5bcd
+>> --- /dev/null
+>> +++ b/package/exiv2/exiv2.mk
+>> @@ -0,0 +1,32 @@
+>> +################################################################################
+>> +#
+>> +# exiv2
+>> +#
+>> +################################################################################
+>> +
+>> +EXIV2_VERSION = 0.24
+>> +EXIV2_SOURCE = exiv2-$(EXIV2_VERSION).tar.gz
 >
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> This line is not needed, as it is the default value.
+
+
+Ok, I didn't know that it was the default value. I fix this.
+
+>
+>> +EXIV2_SITE = http://www.exiv2.org
+>> +EXIV2_LICENSE = GPLv2+ or commercial
+>> +EXIV2_LICENSE_FILES = COPYING
+>
+> You should probably make this conditional:
+>
+> ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
+> EXIV2_LICENSE = commercial
+> else
+> EXIV2_LICENSE = GPLv2+
+> EXIV2_LICENSE_FILES = COPYING
+> endif
+>
+> (Assuming COPYING contains the text of the GPLv2)
+
+Ok I fix, good idea.
+
+>
+>> +ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
+>> +EXIV2_CONF_OPTS += --enable-commercial --disable-nls --disable-lensdata
+>> +endif
+>
+> Why --disable-nls here? It is already passed automatically by the
+> package infrastructure when locale support is not available.
+>
+> Maybe a comment about why --disable-lensdata is passed when the
+> commercial license is used would be useful.
+
+
+
+The --disable-lensdata disable an included Nikon lens database for 
+conversion to readable lens name and this database is free use only in 
+non-commercial projects.
+
+For the --disable-nls, I don't know exactly why it's requested in 
+commercial version.
+This is what is specified in the README file.
+
+
+>
+>> +
+>> +ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
+>> +EXIV2_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+>> +EXIV2_DEPENDENCIES += zlib
+>> +else
+>> +EXIV2_CONF_OPTS += --without-zlib
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
+>> +EXIV2_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr/lib
+>
+> Maybe --enable-xmp here?
+
+It works in both cases because XMP is automatically enabled if expat is 
+found.
+
+>
+>> +EXIV2_DEPENDENCIES += expat
+>> +else
+>> +EXIV2_CONF_OPTS += --disable-xmp
+>> +endif
+>> +
+>> +$(eval $(autotools-package))
+>
+> Other than that, this patch looks good. Could you submit an updated
+> version that fixes the minor issues mentioned above?
+>
+> Thanks a lot!
+>
+> Thomas
 >
 
-Yes, you're absolutely correct. I'm still fairly new to buildroot. I didn't
-realize what the staging folder was for. Thanks, this helped fix my issue!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141106/36b2b832/attachment.html>
+I do the changes and I send the new patch
+
+Thanks for the review.
+
+Nicolas
