@@ -1,37 +1,63 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Nov 2014 10:36:47 -0300
-Subject: [Buildroot] [PATCH 1/7] skeleton/S40network: tweak for debian
-	ifupdown
+Date: Thu,  6 Nov 2014 10:36:48 -0300
+Subject: [Buildroot] [PATCH 2/7] package/uclibc: enable wordexp
 In-Reply-To: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415281013-1077-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1415281013-1077-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the S40network script create the /run/network directory for the
-debian variant of ifupdown which uses it as a lock directory.
+It's required by Debian ifupdown.
++13 KB for ARM.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- system/skeleton/etc/init.d/S40network | 3 +++
- 1 file changed, 3 insertions(+)
+ package/uclibc/uClibc-0.9.31.config   | 2 +-
+ package/uclibc/uClibc-0.9.33.config   | 2 +-
+ package/uclibc/uClibc-snapshot.config | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/system/skeleton/etc/init.d/S40network b/system/skeleton/etc/init.d/S40network
-index e69e613..4317d14 100755
---- a/system/skeleton/etc/init.d/S40network
-+++ b/system/skeleton/etc/init.d/S40network
-@@ -3,6 +3,9 @@
- # Start the network....
- #
- 
-+# Debian ifupdown needs the /run/network lock directory
-+[ -h /sbin/ifup ] || mkdir -p /run/network
-+
- case "$1" in
-   start)
-  	echo "Starting network..."
+diff --git a/package/uclibc/uClibc-0.9.31.config b/package/uclibc/uClibc-0.9.31.config
+index 76772e8..12db6b2 100644
+--- a/package/uclibc/uClibc-0.9.31.config
++++ b/package/uclibc/uClibc-0.9.31.config
+@@ -190,7 +190,7 @@ UCLIBC_HAS_REGEX=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_WORDEXP=y
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+ UCLIBC_HAS_GLOB=y
+diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
+index 1b07d4a..9db13d1 100644
+--- a/package/uclibc/uClibc-0.9.33.config
++++ b/package/uclibc/uClibc-0.9.33.config
+@@ -226,7 +226,7 @@ UCLIBC_HAS_REGEX=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_WORDEXP=y
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+ # UCLIBC_HAS_FTS is not set
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index ffc1535..e38bdc3 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -231,7 +231,7 @@ UCLIBC_HAS_REGEX=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_WORDEXP=y
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+ # UCLIBC_HAS_FTS is not set
 -- 
 2.0.4
