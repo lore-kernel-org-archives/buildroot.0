@@ -1,46 +1,43 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 6 Nov 2014 19:03:28 +0100
-Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
-In-Reply-To: <20141106185330.659d572f@free-electrons.com>
-References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
- <20141106182725.450971c9@free-electrons.com>
- <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
- <20141106185330.659d572f@free-electrons.com>
-Message-ID: <CAHkwnC9pwAmFxuah1SonEhtOqHcg90ZiyN1AutJ04cYXM6sABA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 6 Nov 2014 18:03:56 +0000
+Subject: [Buildroot] [PATCH] webkit: Add --enable-dependency-tracking to the
+	configure options
+Message-ID: <1415297036-21850-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 6, 2014 at 6:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Thu, 6 Nov 2014 18:35:32 +0100, Fabio Porcedda wrote:
->
->> > When I look at patches 2 and 3, I must say I dislike the fact that in
->> > one case (svn), silencing is handled in pkg-download.mk when defining
->> > the SVN variable, while in the other case (git), it's handled in the
->> > git-specific helper script.
->>
->> I would like to do the same for git but it does not work because:
->>   git -q clone <url>
->> does not work, but
->>   git  clone -q <url>
->> works, so adding the "-q" in the script is the only option.
->>
->> Do you have any better idea?
->
-> Yes: handle the svn case in the download helper as well. This way,
-> we're consistent between svn and git. And maybe wget should be handled
-> this way as well.
+--disable-dependency-tracking was added globally to
+package/pkg-autotools.mk by this commit:
 
-Even the HG and SCP variables contain the "-q" option so with this
-patch there are a total of four variables.
+http://git.buildroot.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
 
-> Yann can comment on this on whether my proposal is fine for him.
+This causes a failure in webkit because some source files are generated
+after the Makefile is created. To fix this, we add
+--enable-dependency-tracking to the configure options.
 
-BR
+Fixes:
+  http://autobuild.buildroot.net/results/5beea967b02df202bca1d42afd6fa8c2c13383d5/
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/webkit/webkit.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index fae2e7e..98da1d6 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -40,6 +40,7 @@ WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config \
+ 	AR_FLAGS="cru"
+ 
+ WEBKIT_CONF_OPTS += \
++	--enable-dependency-tracking \
+ 	--with-gtk=2.0 \
+ 	--disable-geolocation \
+ 	--disable-webkit2 \
 -- 
-Fabio Porcedda
+1.7.1
