@@ -1,46 +1,40 @@
 From: Pedro Aguilar <paguilar@paguilar.org>
-Date: Thu,  6 Nov 2014 22:48:02 +0100
-Subject: [Buildroot] [PATCH v4 0/4] package/guile: New package
-Message-ID: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+Date: Thu,  6 Nov 2014 22:48:03 +0100
+Subject: [Buildroot] [PATCH v4 1/4] libatomic_ops: Add host-autotools-package
+In-Reply-To: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+Message-ID: <1415310486-25904-2-git-send-email-paguilar@paguilar.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes the suggestion made by Jerzy Grzegorek in 
-guile and bdwgc.
+The host-libatomic_ops is needed by host-bdwgc that is needed
+in turn by guile.
 
-The patch adds the following:
-- libatomic_ops: Add host-autotools-package
-- libunistring: Add host-autotools-package
-- bdwgc: New package. A garbage collector library for C/C++
-- Guile: New package. A progamming language similar to Lisp.
+bdwgc bundles its own version of libatomic_ops, but it's prefered
+to use the external one that is the default.
 
-Pedro Aguilar (4):
-  libatomic_ops: Add host-autotools-package
-  bdwgc: new package
-  libunistring: Add host-autotools-package
-  guile: new package
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
- package/Config.in                                  |  2 ++
- package/bdwgc/Config.in                            | 10 ++++++
- package/bdwgc/bdwgc.mk                             | 20 ++++++++++++
- package/guile/Config.in                            | 15 +++++++++
- package/guile/guile-01-fix_arm_endianness.patch    | 25 +++++++++++++++
- .../guile/guile-02-calculate-csqrt_manually.patch  | 16 ++++++++++
- package/guile/guile-03-remove_unused_funcs.patch   | 36 ++++++++++++++++++++++
- package/guile/guile.mk                             | 25 +++++++++++++++
- package/libatomic_ops/libatomic_ops.mk             |  1 +
- package/libunistring/libunistring.mk               |  1 +
- 10 files changed, 151 insertions(+)
- create mode 100644 package/bdwgc/Config.in
- create mode 100644 package/bdwgc/bdwgc.mk
- create mode 100644 package/guile/Config.in
- create mode 100644 package/guile/guile-01-fix_arm_endianness.patch
- create mode 100644 package/guile/guile-02-calculate-csqrt_manually.patch
- create mode 100644 package/guile/guile-03-remove_unused_funcs.patch
- create mode 100644 package/guile/guile.mk
+---
+Changes v1 -> v2:
+- Add host-libatomic_ops (suggested by Yann Morin)
 
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+---
+ package/libatomic_ops/libatomic_ops.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index d473901..6a26775 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -20,3 +20,4 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+ LIBATOMIC_OPS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.9.1
