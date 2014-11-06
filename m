@@ -1,95 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Nov 2014 00:15:56 +0100
-Subject: [Buildroot] [git commit] toolchain-external: do not use
-	BR2_GCC_TARGET_TUNE anymore
-Message-ID: <20141106233447.50061B1DDF@busybox.osuosl.org>
+From: Jeff Horn <outforaride@gmail.com>
+Date: Thu, 6 Nov 2014 15:42:30 -0800
+Subject: [Buildroot] host ldconfig package
+Message-ID: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5715d2dcf48a39c16a3f3e41c97109613fed121d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Since the BR2_GCC_TARGET_TUNE value is always empty now, there is no
-longer a point in using it in the external toolchain logic.
+I am using buildroot for one of our i.MX6 based boards and I have it mostly
+working ( I can't get video to work ). While troubleshooting freescales
+gstreamer plugins I noticed the /etc/ld.so.cache was empty. I found in the
+buildroot makefile where ldconfig is called so I manually ran
+/sbin/ldconfig -v -r output/target and I see lots of output like this:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../toolchain-external/ext-toolchain-wrapper.c     |   12 +++---------
- toolchain/toolchain-external/toolchain-external.mk |    5 -----
- 2 files changed, 3 insertions(+), 14 deletions(-)
+/sbin/ldconfig.real: /usr/lib/libGLESv2.so is for unknown machine 40.
 
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 8db4ac4..f459a7e 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -33,10 +33,9 @@ static char sysroot[PATH_MAX];
-  * Currently, we have:
-  * 	-mfloat-abi=
-  * 	-march=
-- * 	-mtune=
-  * 	-mcpu=
-  */
--#define EXCLUSIVE_ARGS	4
-+#define EXCLUSIVE_ARGS	3
- 
- static char *predef_args[] = {
- 	path,
-@@ -154,14 +153,12 @@ int main(int argc, char **argv)
- #endif
- 
- #if defined(BR_ARCH) || \
--    defined(BR_TUNE) || \
-     defined(BR_CPU)
--	/* Add our -march/cpu/tune/abi flags, but only if none are
-+	/* Add our -march/cpu/abi flags, but only if none are
- 	 * already specified on the commandline
- 	 */
- 	for (i = 1; i < argc; i++) {
- 		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
--		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
- 		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
- 			break;
- 	}
-@@ -169,14 +166,11 @@ int main(int argc, char **argv)
- #ifdef BR_ARCH
- 		*cur++ = "-march=" BR_ARCH;
- #endif
--#ifdef BR_TUNE
--		*cur++ = "-mtune=" BR_TUNE;
--#endif
- #ifdef BR_CPU
- 		*cur++ = "-mcpu=" BR_CPU;
- #endif
- 	}
--#endif /* ARCH || TUNE || CPU */
-+#endif /* ARCH || CPU */
- 
- 	/* append forward args */
- 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b7a0e60..e16fce5 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -163,7 +163,6 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
- 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
- endif
- 
--CC_TARGET_TUNE_ := $(call qstrip,$(BR2_GCC_TARGET_TUNE))
- ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
- CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
- else
-@@ -181,10 +180,6 @@ ifeq ($(BR2_x86_64),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -m64
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
- endif
--ifneq ($(CC_TARGET_TUNE_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
--TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
--endif
- ifneq ($(CC_TARGET_ARCH_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
+It seems the ldconfig on my host (Ubuntu 14.04) cannot handle the tartget
+rootfs. I found a post from a year ago with the same issue but I did not
+see any resolution.
+
+So, I looked at my current Yocto build and I discovered Yocto builds a
+native hacked version of ldconfig and that is what gets called for the
+target rootfs. So, I copied that binary over and modified buildroots
+Makefile to call that instead and the cache is now populated correctly.
+
+With that all working I created a buildroot host ldconfig package based on
+the Yocto code ( I'm using BR2_EXTERNAL) and using that the ld.so.cache
+gets populated. I still had to modify the buildoort Makfile to look for the
+newly installed host ldconfig.
+
+I guess my question is are others having any issues with image finalization
+and ldconfig?
+
+On another note I see others are working on the fsl-gst-plugins and I can
+help test that as I REALLY want to get a working image out of buildroot.
+
+Thanks in advance,
+Jeff
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141106/ba32f38a/attachment.html>
