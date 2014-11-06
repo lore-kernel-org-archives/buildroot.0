@@ -1,62 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 06 Nov 2014 15:10:21 -0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Nov 2014 19:12:15 +0100
 Subject: [Buildroot] [PATCH 7/7] ifupdown: new package
-In-Reply-To: <CANxTyt70pdEdK30LwV47SDLOqsmR7xiGQPBa+z8gr4izwaZVwg@mail.gmail.com>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
- <CANxTyt70pdEdK30LwV47SDLOqsmR7xiGQPBa+z8gr4izwaZVwg@mail.gmail.com>
-Message-ID: <545BB98D.4060400@zacarias.com.ar>
+In-Reply-To: <1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
+References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
+ <1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141106191215.117286eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/06/2014 03:00 PM, Danomi Manchego wrote:
+Dear Gustavo Zacarias,
 
->> +define IFUPDOWN_INSTALL_TARGET_CMDS
->> +       $(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
-> 
-> No -D?
+On Thu,  6 Nov 2014 10:36:53 -0300, Gustavo Zacarias wrote:
 
-/sbin is part of the basic (FHS) skeleton dirs, there's no need.
-It's not the common practice, but it's skipped in some packages for
-those dirs.
+> +IFUPDOWN_VERSION = 0.7.49
+> +IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+> +IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20140923T221921Z/pool/main/i/ifupdown
+> +IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+> +IFUPDOWN_LICENSE = GPLv2+
+> +IFUPDOWN_LICENSE_FILES = COPYING
+> +
+> +define IFUPDOWN_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
 
->> +       $(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
->> +               $(TARGET_DIR)/lib/ifupdown/settle-dad.sh
->> +       ln -sf ifup $(TARGET_DIR)/sbin/ifdown
->> +       ln -sf ifup $(TARGET_DIR)/sbin/ifquery
->> +endef
-> 
-> If you patched Makefile's "ln: commands to have -f, then this would be
-> equivalent to:
-> 
-> define IFUPDOWN_INSTALL_TARGET_CMDS
-> $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) BASEDIR=$(TARGET_DIR) install
-> endef
-> 
-> Which might be more immune to changes in created files?
+What about:
 
-I try to avoid patching unless it's really necessary.
-Having generic install cmds is nice, but patches i think are lower
-priority than custom INSTALL cmds unless it's something big like a dozen
-files and directories of course.
-Besides a patch can need reworking for a new version if things changed
-in the Makefile.
+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
+		-C $(@D)
 
-> Just as an FYI .... I made an ifupdown.mk myself about six months ago,
-> but ended up not needing it.  Compared to what you have here, I had
-> done some extra stuff for compatibility with BusyBox ifupdown:
-> 
-> - In CFLAGS in BUILD_CMDS, I added:  -D'RUN_DIR="\"/var/run/\""'
-> - In inet.defn, I replaced all the "/run" with "/var/run"
-> - In main.c, I added "-f" option - ifupdown currently only accepts "--force"
-> - in execute.c, I dropped the "--verbose" from run-parts
-> 
-> But perhaps BusyBox compatibility is not a goal here ...
+> +define IFUPDOWN_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
 
-Sorry, FHS again... /run is the recommended running info directory, we
-shouldn't try to avoid it. In fact we should strive to move everything
-out of /var/run IMHO.
+-D missing
 
-Regards.
+> +	$(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
+> +		$(TARGET_DIR)/lib/ifupdown/settle-dad.sh
+
+Ditto.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
