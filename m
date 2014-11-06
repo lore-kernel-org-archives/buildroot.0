@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Nov 2014 23:33:35 +0100
-Subject: [Buildroot] [PATCH v2 08/30] mplayer: use BR2_ARM_CPU_ARM*
-	options
-In-Reply-To: <1413923237-2861-9-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 21 Oct 2014 22:26:55 +0200")
+Date: Thu, 06 Nov 2014 23:57:58 +0100
+Subject: [Buildroot] [PATCH v2 18/30] libnspr: use the
+	BR2_ARM_CPU_ARMV7A option
+In-Reply-To: <1413923237-2861-19-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 21 Oct 2014 22:27:05 +0200")
 References: <1413923237-2861-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1413923237-2861-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87zjc4x8lc.fsf@dell.be.48ers.dk>
+ <1413923237-2861-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87sihwx7gp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +15,31 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > The libnspr --enable-thumb2 option was only enabled on Cortex-A8 and
+ > Cortex-A9. This commit switches ot using BR2_ARM_CPU_ARMV7A instead,
+ > which will allow using Thumb2 for this package even with the other
+ > Cortex-A cores.
+
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  > ---
- >  package/mplayer/Config.in  | 3 +--
- >  package/mplayer/mplayer.mk | 4 ++--
- >  2 files changed, 3 insertions(+), 4 deletions(-)
+ >  package/libnspr/libnspr.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- > diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
- > index 8b5d05e..6b97aeb 100644
- > --- a/package/mplayer/Config.in
- > +++ b/package/mplayer/Config.in
- > @@ -4,8 +4,7 @@ config BR2_PACKAGE_MPLAYER
- >  	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
- >  			|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
- >  	# Broken support for <ARMv5
- > -	depends on !(BR2_arm920t || BR2_arm920t || BR2_arm922t || BR2_fa526 \
- > -		|| BR2_strongarm)
- > +	depends on !BR2_ARM_CPU_ARMV4
- >  	depends on BR2_LARGEFILE
- >  	help
- >  	  MPlayer is a movie player which runs on many systems and supports
- > diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
- > index 0c216d7..ee023b4 100644
- > --- a/package/mplayer/mplayer.mk
- > +++ b/package/mplayer/mplayer.mk
- > @@ -105,11 +105,11 @@ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
- >  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXV),xlib_libXv)
+ > diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+ > index eaa6eb7..537caa6 100644
+ > --- a/package/libnspr/libnspr.mk
+ > +++ b/package/libnspr/libnspr.mk
+ > @@ -22,7 +22,7 @@ LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
+ >  LIBNSPR_CONF_OPTS += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
  
- >  # ARM optimizations
- > -ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv5te)
- > +ifeq ($(BR2_ARM_CPU_ARMV5),y)
- >  MPLAYER_CONF_OPTS += --enable-armv5te
- >  endif
- 
- > -ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv6j)
- > +ifeq ($(BR2_ARM_CPU_ARMV6),y)
- >  MPLAYER_CONF_OPTS += --enable-armv6
- >  endif
+ >  ifeq ($(BR2_arm),y)
+ > -ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
+ > +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
 
-Not related to this patch, but we should probably do the same as for
-ffmpeg/gst-ffmpeg/gst1-libav and enable the armv6 stuff on armv7a.
+There's currently no functional difference, but it makes more sense to
+use BR2_ARM_CPU_HAS_THUMB2 here.
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
