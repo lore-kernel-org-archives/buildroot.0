@@ -1,35 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Nov 2014 09:29:43 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12, 2}.x series
-Message-ID: <1415276983-31374-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 06 Nov 2014 09:49:35 -0300
+Subject: [Buildroot] [PATCH] uclibc: respect top-level TARGET_CFLAGS
+In-Reply-To: <1415274442-24547-1-git-send-email-abrodkin@synopsys.com>
+References: <1415274442-24547-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <545B6E5F.5090406@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 11/06/2014 08:47 AM, Alexey Brodkin wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5bb7170..4169d41 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -163,11 +163,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.64"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.59"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.31"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.32"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.23"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
--- 
-2.0.4
+> When BR2_TARGET_OPTIMIZATION is used (with some specific compiler flags)
+> it's expected that ALL target binaries will be built with specified options.
+> 
+> Currently uClibc is built with its own set of options.
+> This change allows passing additional flags to uclibc build system.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+This was rejected before:
+https://bugs.busybox.net/show_bug.cgi?id=5294
+
+And i'm back to my original question, what's the specific need for this?
+Even for eglibc/glibc we force -O2 for example.
+If there's a very valid (like, it breaks!) reason for this we can look
+for a way to address it, but as-is i say NAK.
+If you look at uClibc's Rules.mak file you'll see there are lots of
+OPTIMIZATION/CPU_CFLAGS (and other) conditionals that could be undone by
+this and lead to unexpected results.
+Regards.
