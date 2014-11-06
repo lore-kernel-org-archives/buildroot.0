@@ -1,44 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Nov 2014 10:36:50 -0300
-Subject: [Buildroot] [PATCH 4/7] dhcpcd: bump to version 6.6.0
+Date: Thu,  6 Nov 2014 10:36:51 -0300
+Subject: [Buildroot] [PATCH 5/7] dash: bump to 0.5.8-2
 In-Reply-To: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415281013-1077-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1415281013-1077-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dhcpcd/dhcpcd.hash | 2 ++
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/dhcpcd/dhcpcd.hash
+ package/dash/dash.hash | 4 ++--
+ package/dash/dash.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-new file mode 100644
-index 0000000..fd64ebe
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated from download (no sig, hash)
-+sha256	16b94272cbb9ca22cb74c4421ee745f56850121613f6256587adb4e988c17fd0	dhcpcd-6.6.0.tar.bz2
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 60ac129..fe3c8d2 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+index 0198cd8..c4e60a4 100644
+--- a/package/dash/dash.hash
++++ b/package/dash/dash.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.debian.org/debian/pool/main/d/dash/dash_0.5.8-1.dsc
++# From http://ftp.debian.org/debian/pool/main/d/dash/dash_0.5.8-2.dsc
+ sha256	c6db3a237747b02d20382a761397563d813b306c020ae28ce25a1c3915fac60f	dash_0.5.8.orig.tar.gz
+-sha256	d751769cc1ef8b825a177e782f1cd3e35bde7c268107fa4febf8d235e12c64d9	dash_0.5.8-1.diff.gz
++sha256	00168a934864c26cae9a51367fe7ea013ece2d4844ff8bd6893fc00a8fa7b38c	dash_0.5.8-2.diff.gz
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index ed8525c..13169d1 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -6,8 +6,8 @@
  
--DHCPCD_VERSION = 6.4.7
-+DHCPCD_VERSION = 6.6.0
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+ DASH_VERSION = 0.5.8
+ DASH_SOURCE = dash_$(DASH_VERSION).orig.tar.gz
+-DASH_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/d/dash
+-DASH_PATCH = dash_$(DASH_VERSION)-1.diff.gz
++DASH_SITE = http://snapshot.debian.org/archive/debian/20141022T163236Z/pool/main/d/dash
++DASH_PATCH = dash_$(DASH_VERSION)-2.diff.gz
+ DASH_LICENSE = BSD-3c, GPLv2+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+ 
 -- 
 2.0.4
