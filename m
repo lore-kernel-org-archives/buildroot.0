@@ -1,46 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Nov 2014 19:09:59 +0100
-Subject: [Buildroot] [PATCH] webkit: Add --enable-dependency-tracking to
- the configure options
-In-Reply-To: <1415297036-21850-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415297036-21850-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141106190959.325d134f@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 06 Nov 2014 15:10:21 -0300
+Subject: [Buildroot] [PATCH 7/7] ifupdown: new package
+In-Reply-To: <CANxTyt70pdEdK30LwV47SDLOqsmR7xiGQPBa+z8gr4izwaZVwg@mail.gmail.com>
+References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
+ <CANxTyt70pdEdK30LwV47SDLOqsmR7xiGQPBa+z8gr4izwaZVwg@mail.gmail.com>
+Message-ID: <545BB98D.4060400@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On 11/06/2014 03:00 PM, Danomi Manchego wrote:
 
-On Thu, 6 Nov 2014 18:03:56 +0000, Vicente Olivert Riera wrote:
-> --disable-dependency-tracking was added globally to
-> package/pkg-autotools.mk by this commit:
+>> +define IFUPDOWN_INSTALL_TARGET_CMDS
+>> +       $(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
 > 
-> http://git.buildroot.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
+> No -D?
+
+/sbin is part of the basic (FHS) skeleton dirs, there's no need.
+It's not the common practice, but it's skipped in some packages for
+those dirs.
+
+>> +       $(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
+>> +               $(TARGET_DIR)/lib/ifupdown/settle-dad.sh
+>> +       ln -sf ifup $(TARGET_DIR)/sbin/ifdown
+>> +       ln -sf ifup $(TARGET_DIR)/sbin/ifquery
+>> +endef
 > 
-> This causes a failure in webkit because some source files are generated
-> after the Makefile is created. To fix this, we add
-> --enable-dependency-tracking to the configure options.
+> If you patched Makefile's "ln: commands to have -f, then this would be
+> equivalent to:
 > 
-> Fixes:
->   http://autobuild.buildroot.net/results/5beea967b02df202bca1d42afd6fa8c2c13383d5/
+> define IFUPDOWN_INSTALL_TARGET_CMDS
+> $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) BASEDIR=$(TARGET_DIR) install
+> endef
+> 
+> Which might be more immune to changes in created files?
 
-Aaah, that's what causing the build failure of webkit. I believe it's
-wrong for webkit to do that, because dependency tracking should only be
-needed for the developers of the package, and not needed for a normal
-build. But since we're anyway going to bump webkit at some point thanks
-to the work of Eric Le Bihan, I don't think we want to debug this
-webkit version.
+I try to avoid patching unless it's really necessary.
+Having generic install cmds is nice, but patches i think are lower
+priority than custom INSTALL cmds unless it's something big like a dozen
+files and directories of course.
+Besides a patch can need reworking for a new version if things changed
+in the Makefile.
 
-Therefore:
+> Just as an FYI .... I made an ifupdown.mk myself about six months ago,
+> but ended up not needing it.  Compared to what you have here, I had
+> done some extra stuff for compatibility with BusyBox ifupdown:
+> 
+> - In CFLAGS in BUILD_CMDS, I added:  -D'RUN_DIR="\"/var/run/\""'
+> - In inet.defn, I replaced all the "/run" with "/var/run"
+> - In main.c, I added "-f" option - ifupdown currently only accepts "--force"
+> - in execute.c, I dropped the "--verbose" from run-parts
+> 
+> But perhaps BusyBox compatibility is not a goal here ...
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Sorry, FHS again... /run is the recommended running info directory, we
+shouldn't try to avoid it. In fact we should strive to move everything
+out of /var/run IMHO.
 
-And thanks a lot for the investigation!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards.
