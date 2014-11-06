@@ -1,74 +1,146 @@
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 6 Nov 2014 16:06:52 +0100
-Subject: [Buildroot] [PATCH 1/1] exiv2: new package
-In-Reply-To: <20141106160141.61314607@free-electrons.com>
-References: <1415197829-7086-1-git-send-email-nicolas.serafini@sensefly.com>	<20141106083050.60e4d614@free-electrons.com>	<545B831C.6050908@sensefly.com>
- <20141106160141.61314607@free-electrons.com>
-Message-ID: <545B8E8C.7020807@sensefly.com>
+Date: Thu, 6 Nov 2014 16:07:58 +0100
+Subject: [Buildroot] [PATCH v2] exiv2: new package
+In-Reply-To: <1415285886-11117-1-git-send-email-nicolas.serafini@sensefly.com>
+References: <1415285886-11117-1-git-send-email-nicolas.serafini@sensefly.com>
+Message-ID: <545B8ECE.9000208@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear THomas,
+Hi all,
 
-Ok I will fix all this.
+Do not take into account this patch I was a little to fast.
 
-I was a little to fast with the v2 of the Patch so do not take into account.
+v3 is comming
 
 Thanks,
 
 Nicolas
 
-Le 06. 11. 14 16:01, Thomas Petazzoni a ?crit :
-> Dear Nicolas Serafini,
+Le 06. 11. 14 15:58, Nicolas Serafini a ?crit :
+> Add support for Exiv2 library and utility to manage image metadata
 >
-> On Thu, 6 Nov 2014 15:18:04 +0100, Nicolas Serafini wrote:
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 >
->> Ok I fix this.
->> I have not found the rule for maximum column in Config.in and *.mk files
->> in the manual. Maybe we should add.
+> ---
+> Changes v1 -> v2:
+>    - Make conditional GPLv2+/commercial license
+>    - Wrap Config.in to 72 columns
+>    - Leave default value for package source
 >
-> Feel free to submit a patch :-)
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> ---
+>   package/Config.in        |  1 +
+>   package/exiv2/Config.in  | 34 ++++++++++++++++++++++++++++++++++
+>   package/exiv2/exiv2.hash |  4 ++++
+>   package/exiv2/exiv2.mk   | 33 +++++++++++++++++++++++++++++++++
+>   4 files changed, 72 insertions(+)
+>   create mode 100644 package/exiv2/Config.in
+>   create mode 100644 package/exiv2/exiv2.hash
+>   create mode 100644 package/exiv2/exiv2.mk
 >
->>>> +ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
->>>> +EXIV2_CONF_OPTS += --enable-commercial --disable-nls --disable-lensdata
->>>> +endif
->>>
->>> Why --disable-nls here? It is already passed automatically by the
->>> package infrastructure when locale support is not available.
->>>
->>> Maybe a comment about why --disable-lensdata is passed when the
->>> commercial license is used would be useful.
->>
->> The --disable-lensdata disable an included Nikon lens database for
->> conversion to readable lens name and this database is free use only in
->> non-commercial projects.
->
-> This is *bad*. It's not because you use the GPLv2 version of the
-> library that you're not making a commercial product. So please add a
-> separate Config.in option for this lensdata, disabled by default, with
-> a warning in the Config.in help text.
->
->> For the --disable-nls, I don't know exactly why it's requested in
->> commercial version.
->> This is what is specified in the README file.
->
-> Then please add a comment above the usage of --disable-nls to explain
-> that.
->
->>>> +ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
->>>> +EXIV2_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr/lib
->>>
->>> Maybe --enable-xmp here?
->>
->> It works in both cases because XMP is automatically enabled if expat is
->> found.
->
-> If --enable-xmp exists, then I would prefer to see it explicitly used.
->
-> Thanks,
->
-> Thomas
+> diff --git a/package/Config.in b/package/Config.in
+> index 28cf703..6abf344 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -625,6 +625,7 @@ menu "Graphics"
+>   	source "package/adwaita-icon-theme/Config.in"
+>   	source "package/atk/Config.in"
+>   	source "package/cairo/Config.in"
+> +	source "package/exiv2/Config.in"
+>   	source "package/fltk/Config.in"
+>   	source "package/fontconfig/Config.in"
+>   	source "package/freetype/Config.in"
+> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+> new file mode 100644
+> index 0000000..ada25fb
+> --- /dev/null
+> +++ b/package/exiv2/Config.in
+> @@ -0,0 +1,34 @@
+> +config BR2_PACKAGE_EXIV2
+> +	bool "exiv2"
+> +	help
+> +	  Exiv2 is a C++ library and a command line utility to manage
+> +	  image metadata.
+> +	  It provides fast and easy read and write access to the Exif,
+> +	  IPTC and XMP metadata of images in various formats.
+> +
+> +	  Exiv2 is available with GPLv2+ or commercial license.
+> +
+> +	  http://www.exiv2.org/
+> +
+> +if BR2_PACKAGE_EXIV2
+> +
+> +config BR2_PACKAGE_EXIV2_COMMERCIAL
+> +	bool "Enable commercial"
+> +	help
+> +	  Build the commercial version for closed source project.
+> +	  A commercial license request is needed.
+> +	  http://www.exiv2.org/download.html#license
+> +
+> +config BR2_PACKAGE_EXIV2_PNG
+> +	bool "PNG image support"
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Build with PNG image support
+> +
+> +config BR2_PACKAGE_EXIV2_XMP
+> +	bool "XMP support"
+> +	select BR2_PACKAGE_EXPAT
+> +	help
+> +	  Build with XMP support
+> +
+> +endif
+> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+> new file mode 100644
+> index 0000000..d4f8c60
+> --- /dev/null
+> +++ b/package/exiv2/exiv2.hash
+> @@ -0,0 +1,4 @@
+> +# From http://www.exiv2.org/download.html
+> +md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
+> +# Locally calculated
+> +sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
+> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+> new file mode 100644
+> index 0000000..83c5e07
+> --- /dev/null
+> +++ b/package/exiv2/exiv2.mk
+> @@ -0,0 +1,33 @@
+> +################################################################################
+> +#
+> +# exiv2
+> +#
+> +################################################################################
+> +
+> +EXIV2_VERSION = 0.24
+> +EXIV2_SITE = http://www.exiv2.org
+> +EXIV2_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
+> +EXIV2_LICENSE = commercial
+> +EXIV2_CONF_OPTS += --enable-commercial --disable-nls --disable-lensdata
+> +else
+> +EXIV2_LICENSE = GPLv2+ or commercial
+> +EXIV2_LICENSE_FILES = COPYING
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
+> +EXIV2_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+> +EXIV2_DEPENDENCIES += zlib
+> +else
+> +EXIV2_CONF_OPTS += --without-zlib
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
+> +EXIV2_CONF_OPTS += --enable-xmp --with-expat=$(STAGING_DIR)/usr/lib
+> +EXIV2_DEPENDENCIES += expat
+> +else
+> +EXIV2_CONF_OPTS += --disable-xmp
+> +endif
+> +
+> +$(eval $(autotools-package))
 >
