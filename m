@@ -1,43 +1,30 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Nov 2014 10:13:35 +0100
-Subject: [Buildroot] [PATCH v3 1/3] Makefile: improve detection of make "-s"
-	flag
-In-Reply-To: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1415265217-18494-2-git-send-email-fabio.porcedda@gmail.com>
+Date: Thu,  6 Nov 2014 10:13:34 +0100
+Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
+Message-ID: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because it's just checked the presence of the "s" character even a
-  make --warn-undefined-variables
-is detected as a silent build so fix this by filtering out long options.
+This patch set improves silent builds.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
+Silent builds are nice when top-level parallel make is being used to
+reduce the output clutter.
 
-Notes:
-    v2:
-     - remove spurious space at the beginning of the QUIET variable (Arnout)
+The change logs are in each patch.
 
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards
+Fabio Porcedda (3):
+  Makefile: improve detection of make "-s" flag
+  pkg-download: silence the svn download helper if it is a silent build
+  support/download: silence git if it is a silence build
 
-diff --git a/Makefile b/Makefile
-index 907a0fc..19997c7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- TARGETS :=
- 
- # silent mode requested?
--QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-+QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
- 
- # Strip off the annoying quoting
- ARCH := $(call qstrip,$(BR2_ARCH))
+ Makefile                |  2 +-
+ package/pkg-download.mk |  5 +++--
+ support/download/git    | 14 ++++++++++----
+ 3 files changed, 14 insertions(+), 7 deletions(-)
+
 -- 
 2.1.3
