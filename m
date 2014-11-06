@@ -1,37 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Nov 2014 23:01:06 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{12, 2}.x series
-Message-ID: <20141106220524.51611B2070@busybox.osuosl.org>
+Date: Thu, 6 Nov 2014 23:04:54 +0100
+Subject: [Buildroot] [git commit] webkit: Add --enable-dependency-tracking
+	to the configure options
+Message-ID: <20141106220524.5CE58B2473@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd890e76ab8ba2e279dd974bf54dcd6c8c73abf0
+commit: http://git.buildroot.net/buildroot/commit/?id=8918cc50cb19af1e5cd51f2aa933ac755439d576
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+--disable-dependency-tracking was added globally to
+package/pkg-autotools.mk by this commit:
+
+http://git.buildroot.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
+
+This causes a failure in webkit because some source files are generated
+after the Makefile is created. To fix this, we add
+--enable-dependency-tracking to the configure options.
+
+Fixes:
+  http://autobuild.buildroot.net/results/5beea967b02df202bca1d42afd6fa8c2c13383d5/
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkit/webkit.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5bb7170..4169d41 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -163,11 +163,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.63"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.64"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.59"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.31"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.32"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.23"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index fae2e7e..98da1d6 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -40,6 +40,7 @@ WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config \
+ 	AR_FLAGS="cru"
+ 
+ WEBKIT_CONF_OPTS += \
++	--enable-dependency-tracking \
+ 	--with-gtk=2.0 \
+ 	--disable-geolocation \
+ 	--disable-webkit2 \
