@@ -1,37 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Nov 2014 00:14:30 +0100
-Subject: [Buildroot] [git commit] gcc: do not use BR2_GCC_TARGET_TUNE anymore
-Message-ID: <20141106233447.43E32B1DDF@busybox.osuosl.org>
+Date: Fri, 7 Nov 2014 00:13:49 +0100
+Subject: [Buildroot] [git commit] arch/powerpc: get rid of
+	BR2_GCC_TARGET_TUNE
+Message-ID: <20141106233447.2FBD9B1487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0b2c5985aa9d0cf35aebef266fe9cf01c54bc3d
+commit: http://git.buildroot.net/buildroot/commit/?id=75418c4cf678a3c34352bd7a781296937815681d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the BR2_GCC_TARGET_TUNE value is always empty now, there is no
-longer a point in using it in the gcc package.
+According to the gcc documentation for PowerPC options:
+
+'-mtune=CPU_TYPE'
+     Set the instruction scheduling parameters for machine type
+     CPU_TYPE, but do not set the architecture type, register usage, or
+     choice of mnemonics, as '-mcpu=CPU_TYPE' would.  The same values
+     for CPU_TYPE are used for '-mtune' as for '-mcpu'.  If both are
+     specified, the code generated will use the architecture, registers,
+     and mnemonics set by '-mcpu', but the scheduling parameters set by
+     '-mtune'.
+
+In the case of Buildroot where we only target a specific system, using
+-mtune therefore doesn't make much sense, and using -mcpu would be
+more appropriate. As a consequence, this patch makes PowerPC use
+BR2_GCC_TARGET_CPU instead of BR2_GCC_TARGET_TUNE.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ arch/Config.in.powerpc |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 59f6268..cdd71aa 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -174,9 +174,6 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
- endif
--ifneq ($(call qstrip,$(BR2_GCC_TARGET_TUNE)),)
--HOST_GCC_COMMON_CONF_OPTS += --with-tune=$(BR2_GCC_TARGET_TUNE)
--endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 239f5dc..fabee9f 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -160,7 +160,7 @@ config BR2_ENDIAN
+ config BR2_ARCH_HAS_ATOMICS
+ 	default y
+ 
+-config BR2_GCC_TARGET_TUNE
++config BR2_GCC_TARGET_CPU
+ 	default "401"		if BR2_powerpc_401
+ 	default "403"		if BR2_powerpc_403
+ 	default "405"		if BR2_powerpc_405
