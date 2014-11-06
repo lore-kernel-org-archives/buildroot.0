@@ -1,61 +1,28 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu,  6 Nov 2014 19:18:25 +0300
-Subject: [Buildroot] [PATCH 2/2] board: add support for ARC AXS103 Software
-	Development Platform
-In-Reply-To: <1415290705-994-1-git-send-email-abrodkin@synopsys.com>
-References: <1415290705-994-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1415290705-994-3-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Nov 2014 18:22:51 +0100
+Subject: [Buildroot] [PATCH 2/7] package/uclibc: enable wordexp
+In-Reply-To: <1415281013-1077-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
+ <1415281013-1077-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141106182251.1c12ea40@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AXS103 Platform consists of a DesignWare AXC003 CPU
-Card (typically with ARC HS38 core) mounted on an
-ARC Software Development Platform Mainboard with DesignWare peripherals:
- * SD/MMC contoller
- * Gigabit network contoller
- * Serial ports (8250-compatible)
- * USB 2.0
- * SPI
- * I2C
+Dear Gustavo Zacarias,
 
-It also houses HDMI output for extrenal monitor connection.
+On Thu,  6 Nov 2014 10:36:48 -0300, Gustavo Zacarias wrote:
+> It's required by Debian ifupdown.
+> +13 KB for ARM.
 
-As of today Linux kernel sources are not published for ARC HS core so
-kernel could be built from custom tarball with sources if required.
+Does Debian ifupdown fails to build? If it does, then we'll have
+zillions of build failures with all the prebuilt uClibc toolchains that
+don't have wordexp enabled :/
 
-When kernel sources for ARC HS are released this configuration will be updated.
-
-But even now rootfs image could be built with Buildroot for ARC HS since
-gcc, binutils and uClibc for ARC already has support of the new core starting
-from version "arc-2014.08".
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- configs/axs103_defconfig | 9 +++++++++
- 1 file changed, 9 insertions(+)
- create mode 100644 configs/axs103_defconfig
-
-diff --git a/configs/axs103_defconfig b/configs/axs103_defconfig
-new file mode 100644
-index 0000000..5be8fad
---- /dev/null
-+++ b/configs/axs103_defconfig
-@@ -0,0 +1,9 @@
-+BR2_arcle=y
-+BR2_archs38=y
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS3"
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_LTP_TESTSUITE=y
-+BR2_TARGET_ROOTFS_CPIO=y
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
