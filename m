@@ -1,33 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Nov 2014 23:40:27 +0100
-Subject: [Buildroot] [git commit] libplayer: use BR2_ARM_CPU_ARM* option
-Message-ID: <20141106233446.66AC9B2052@busybox.osuosl.org>
+Date: Fri, 7 Nov 2014 00:13:08 +0100
+Subject: [Buildroot] [git commit] arch/sparc: get rid of BR2_GCC_TARGET_TUNE
+Message-ID: <20141106233447.27500B1487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5ca78d84225c2dde1dd0ed5a43a0e270a335a0a
+commit: http://git.buildroot.net/buildroot/commit/?id=a5023c5204ad23323d21c1840a4ce7d99b7abf7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+On SPARC, BR2_GCC_TARGET_TUNE was only used for one specific case, the
+BR2_sparc_v8. There is actually no reason to not use
+BR2_GCC_TARGET_CPU instead for this, as all values supported for
+-mtune are also supported for -mcpu. Therefore, the only
+BR2_GCC_TARGET_TUNE case is moved as a BR2_GCC_TARGET_CPU case.
+
+[Peter: fixup merge conflict after 'sparc: Add leon3 cpu type and remove sparc{s,h}fleon{,v8}]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplayer/Config.in |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ arch/Config.in.sparc |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index 603bae8..fd3e325 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -19,8 +19,7 @@ config BR2_PACKAGE_LIBPLAYER_MPLAYER
- 	depends on BR2_LARGEFILE
- 	# mplayer
- 	# Broken support for <ARMv5
--	depends on !(BR2_arm920t || BR2_arm920t || BR2_arm922t || BR2_fa526 \
--		|| BR2_strongarm)
-+	depends on !BR2_ARM_CPU_ARMV4
- 	select BR2_PACKAGE_MPLAYER
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index cd845b2..4e502d5 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -20,8 +20,6 @@ config BR2_ENDIAN
+ config BR2_ARCH_HAS_ATOMICS
+ 	default y
  
- config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+-config BR2_GCC_TARGET_TUNE
+-	default "v8"		if BR2_sparc_v8
+-
+ config BR2_GCC_TARGET_CPU
+ 	default "leon3"		if BR2_sparc_leon3
++	default "v8"		if BR2_sparc_v8
