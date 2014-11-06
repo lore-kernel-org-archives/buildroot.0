@@ -1,41 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 06 Nov 2014 15:34:48 -0300
-Subject: [Buildroot] [PATCH 7/7] ifupdown: new package
-In-Reply-To: <20141106191215.117286eb@free-electrons.com>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
- <20141106191215.117286eb@free-electrons.com>
-Message-ID: <545BBF48.4010005@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 6 Nov 2014 22:15:37 +0100
+Subject: [Buildroot] CMake building in a subdirectory
+Message-ID: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/06/2014 03:12 PM, Thomas Petazzoni wrote:
+Hello list,
 
+I encountered a problem making a new package based on CMake. For this
+package, it's mandatory to build in a subdirectory inside src folder.
+To compile it you have to do something like this:
 
-> What about:
-> 
-> 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> 		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
-> 		-C $(@D)
-> 
+cd src
+mkdir build
+cd build
+cmake ..
+make
+make install
 
-Yes works as well.
+Honestly, it's a fairly common way to build with cmake, but it's
+unsupported in buildroot. To make it work I changed this in
+pkg-cmake.mk:
 
->> +	$(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
-> 
-> -D missing
+-$(2)_BUILDDIR                  = $$($(2)_SRCDIR)
++$(2)_BUILDDIR                  ?= $$($(2)_SRCDIR)
 
-Do we want to enforce -D for skeleton/fhs dirs?
-Because there are many sinners out there already.
-(and i do vaguely recall someone telling me a long time ago that it was
-redundant and to drop it).
+So, when you define LIBFOO_BUILDDIR in your .mk, cmake automatically
+build in that subdirectory. This works like a charm!
+Obviously, you have to mkdir that dir in LIBFOO_PRE_CONFIGURE_HOOKS.
 
->> +	$(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
->> +		$(TARGET_DIR)/lib/ifupdown/settle-dad.sh
-> 
-> Ditto.
+I can submit a patch, but I would really like to know others opinions.
 
-No, take another look, otherwise it wouldn't even install :)
-Regards.
+Sincerely, Angelo
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
