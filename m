@@ -1,87 +1,42 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Nov 2014 10:13:37 +0100
-Subject: [Buildroot] [PATCH v3 3/3] support/download: silence git if it is a
-	silence build
-In-Reply-To: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1415265217-18494-4-git-send-email-fabio.porcedda@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu,  6 Nov 2014 14:47:22 +0300
+Subject: [Buildroot] [PATCH] uclibc: respect top-level TARGET_CFLAGS
+Message-ID: <1415274442-24547-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If it is a silence build (make -s -> QUIET=-q), silence the git download
-helper using "git clone -q" just like others download helpers,
-e.g. wget.
+When BR2_TARGET_OPTIMIZATION is used (with some specific compiler flags)
+it's expected that ALL target binaries will be built with specified options.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Currently uClibc is built with its own set of options.
+This change allows passing additional flags to uclibc build system.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+ package/uclibc/uclibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Notes:
-    v3:
-     - add this patch
-
- package/pkg-download.mk |  3 ++-
- support/download/git    | 14 ++++++++++----
- 2 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 92240c0..265fb88 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -99,7 +99,8 @@ define DOWNLOAD_GIT
- 		$(DL_DIR)/$($(PKG)_SOURCE) \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$(QUIET)
- endef
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ce416dd..419a4d1 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -24,6 +24,8 @@ endif
  
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-diff --git a/support/download/git b/support/download/git
-index 5d36ca4..4ce9030 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -9,6 +9,7 @@ set -e
- #   $2: git repo
- #   $3: git cset
- #   $4: package's basename (eg. foobar-1.2.3)
-+#   $5: "-q", optional quiet flag
- # And this environment:
- #   GIT      : the git command to call
+ UCLIBC_INSTALL_STAGING = YES
  
-@@ -16,21 +17,26 @@ output="${1}"
- repo="${2}"
- cset="${3}"
- basename="${4}"
-+quiet="${5}"
++UCLIBC_EXTRA_CFLAGS = $(TARGET_CFLAGS)
++
+ # uclibc is part of the toolchain so disable the toolchain dependency
+ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
  
- # Try to see if we can do a shallow clone, since it is faster
- # than a full clone.
- git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing shallow clone\n";
-+    fi
-+    if ${GIT} clone ${quiet} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-         git_done=1
-     else
-         printf "Shallow clone failed, falling back to doing a full clone\n"
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    ${GIT} clone --bare "${repo}" "${basename}"
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing full clone\n";
-+    fi
-+    ${GIT} clone ${quiet} --bare "${repo}" "${basename}"
- fi
- 
- GIT_DIR="${basename}" \
 -- 
-2.1.3
+1.9.3
