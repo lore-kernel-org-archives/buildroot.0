@@ -1,31 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 06 Nov 2014 14:48:56 -0300
-Subject: [Buildroot] [PATCH 2/7] package/uclibc: enable wordexp
-In-Reply-To: <20141106184504.3133a975@free-electrons.com>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<1415281013-1077-3-git-send-email-gustavo@zacarias.com.ar>	<20141106182251.1c12ea40@free-electrons.com>	<545BAF17.2090009@zacarias.com.ar>
- <20141106184504.3133a975@free-electrons.com>
-Message-ID: <545BB488.9020200@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 6 Nov 2014 18:50:34 +0100
+Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
+In-Reply-To: <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
+References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+ <20141106182725.450971c9@free-electrons.com>
+ <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
+Message-ID: <CAHkwnC9Kzm5s64LStQjsPsG84xtWva542w9jSGr2Hz9TYtyZ=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/06/2014 02:45 PM, Thomas Petazzoni wrote:
+On Thu, Nov 6, 2014 at 6:35 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+> On Thu, Nov 6, 2014 at 6:27 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Thu,  6 Nov 2014 10:13:34 +0100, Fabio Porcedda wrote:
+>>> This patch set improves silent builds.
+>>>
+>>> Silent builds are nice when top-level parallel make is being used to
+>>> reduce the output clutter.
+>>>
+>>> The change logs are in each patch.
+>>>
+>>> Best regards
+>>> Fabio Porcedda (3):
+>>>   Makefile: improve detection of make "-s" flag
+>>>   pkg-download: silence the svn download helper if it is a silent build
+>>>   support/download: silence git if it is a silence build
+>>
+>> When I look at patches 2 and 3, I must say I dislike the fact that in
+>> one case (svn), silencing is handled in pkg-download.mk when defining
+>> the SVN variable, while in the other case (git), it's handled in the
+>> git-specific helper script.
+>
+> I would like to do the same for git but it does not work because:
+>   git -q clone <url>
+> does not work, but
+>   git  clone -q <url>
+> works, so adding the "-q" in the script is the only option.
+>
+> Do you have any better idea?
 
-> I just had a look at ifupdown source code, and wordexp() is pretty
-> central in the code, not sure we can easily replace it with something
-> else without significantly patching the stuff.
-> 
-> I don't really have a good answer here. Maybe as you suggest disabling
-> ifupdown entirely for uClibc toolchains? I've also checked
-> Crosstool-NG, and all its default uClibc configuration files have
-> wordexp disabled, so both Buildroot pre-built toolchains predating the
-> wordexp addition and all Crosstool-NG uClibc toolchain would be
-> affected by the problem.
+I've forgotten to add Yann in CC.
 
-Yes it's valid since it's bloat-land anyway, i'll wait for more feedback
-but i'm inclined to just do that for v2.
-And most of these standalone tools aren't happy with nommu anyway which
-would be the only incentive to stick with uClibc.
-Regards.
+BR
+-- 
+Fabio Porcedda
