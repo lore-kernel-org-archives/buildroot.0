@@ -1,30 +1,41 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Nov 2014 10:13:34 +0100
-Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
-Message-ID: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Thu,  6 Nov 2014 10:13:36 +0100
+Subject: [Buildroot] [PATCH v3 2/3] pkg-download: silence the svn download
+	helper if it is a silent build
+In-Reply-To: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1415265217-18494-3-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch set improves silent builds.
+If it is a silent build (make -s -> QUIET=-q), silence the svn download
+helper using "svn -q" just like others download helpers, e.g. wget.
 
-Silent builds are nice when top-level parallel make is being used to
-reduce the output clutter.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
 
-The change logs are in each patch.
+Notes:
+    v3:
+     - add this patch
 
-Best regards
-Fabio Porcedda (3):
-  Makefile: improve detection of make "-s" flag
-  pkg-download: silence the svn download helper if it is a silent build
-  support/download: silence git if it is a silence build
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Makefile                |  2 +-
- package/pkg-download.mk |  5 +++--
- support/download/git    | 14 ++++++++++----
- 3 files changed, 14 insertions(+), 7 deletions(-)
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index f3409bd..92240c0 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -9,7 +9,7 @@
+ 
+ # Download method commands
+ export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
+-export SVN := $(call qstrip,$(BR2_SVN))
++export SVN := $(call qstrip,$(BR2_SVN)) $(QUIET)
+ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
+ export GIT := $(call qstrip,$(BR2_GIT))
 -- 
 2.1.3
