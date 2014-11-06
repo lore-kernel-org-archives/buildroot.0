@@ -1,35 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Nov 2014 23:43:55 +0100
-Subject: [Buildroot] [git commit] nettle: use the BR2_ARM_CPU_ARM* options
-Message-ID: <20141106233446.6FB8CB1487@busybox.osuosl.org>
+Date: Thu, 6 Nov 2014 23:54:16 +0100
+Subject: [Buildroot] [git commit] valgrind: use the BR2_ARM_CPU_ARM* options
+Message-ID: <20141106233446.ADA7BB1487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=461f08072f0ae06c98ae5e72ef2dbb266a2672f9
+commit: http://git.buildroot.net/buildroot/commit/?id=56ea6a1391878c5e9e4b49efe147d7c9ee559200
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adjust the nettle package to use the BR2_ARM_CPU_ARM* option to
-disable the usage of assembly code on ARMv4 and ARMv5.
+Instead of using the exhaustive list of Cortex-A ARM cores, use
+BR2_ARM_CPU_ARMV7A instead. We also fix a wrong comment that said the
+Valgrind package could only be selected for Cortex-A8 and Cortex-A9,
+which was true a long time ago, but was no longer true since it was
+also enabled for all the other Cortex-A platforms.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nettle/nettle.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/valgrind/Config.in   |    7 +++----
+ package/valgrind/valgrind.mk |    4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index e73a718..a25bb24 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -15,7 +15,7 @@ NETTLE_LICENSE_FILES = COPYING.LIB
- NETTLE_CONF_OPTS = --disable-openssl
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 253555b..b7521b0 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_VALGRIND
+ 	bool "valgrind"
+-	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a5 || \
+-		   BR2_cortex_a7 || BR2_cortex_a8 || BR2_cortex_a9 || \
+-		   BR2_cortex_a12 || BR2_cortex_a15 || BR2_powerpc || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	depends on BR2_i386 || BR2_x86_64 || BR2_ARM_CPU_ARMV7A || \
++		   BR2_powerpc || BR2_mips || BR2_mipsel || BR2_mips64 || \
++		   BR2_mips64el
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
  
- # ARM assembly requires v6+ ISA
--ifeq ($(BR2_arm920t)$(BR2_arm922t)$(BR2_arm926t)$(BR2_fa526)$(BR2_strongarm)$(BR2_xscale)$(BR2_iwmmxt),y)
-+ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5),y)
- NETTLE_CONF_OPTS += --disable-assembler
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 9b79941..b65e048 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -16,8 +16,8 @@ VALGRIND_AUTORECONF = YES
+ # host tuple to determine whether it's being built for ARMv7 or
+ # not. Therefore, we adjust the host tuple to specify we're on
+ # ARMv7. The valgrind package is guaranteed, through Config.in, to
+-# only be selected on Cortex A8 and Cortex A9 platforms.
+-ifeq ($(BR2_cortex_a5)$(BR2_cortex_a7)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a12)$(BR2_cortex_a15),y)
++# only be selected on ARMv7-A platforms.
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ VALGRIND_CONF_OPTS += \
+ 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
  endif
- 
