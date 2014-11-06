@@ -1,98 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Nov 2014 10:36:53 -0300
-Subject: [Buildroot] [PATCH 7/7] ifupdown: new package
-In-Reply-To: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415281013-1077-8-git-send-email-gustavo@zacarias.com.ar>
+From: Michael Sumulong <msumulong@gmail.com>
+Date: Thu, 6 Nov 2014 08:55:43 -0500
+Subject: [Buildroot] e2progs and pkgconfig file
+In-Reply-To: <20141105190419.GD2234@tarshish>
+References: <CABDNR17g3JtFyPYmdioVzBg+OLDC9OQYk06BKPq2FiwDhEcuCw@mail.gmail.com>
+ <20141105190419.GD2234@tarshish>
+Message-ID: <CABDNR169STaRTagQBMptshXNcWAxk2LaQ7tjruv0ZibEYG-waA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in              |  3 +++
- package/ifupdown/Config.in     | 11 +++++++++++
- package/ifupdown/ifupdown.hash |  2 ++
- package/ifupdown/ifupdown.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+)
- create mode 100644 package/ifupdown/Config.in
- create mode 100644 package/ifupdown/ifupdown.hash
- create mode 100644 package/ifupdown/ifupdown.mk
+On Wed, Nov 5, 2014 at 2:04 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 278134d..8f3cc3c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1014,6 +1014,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/ifplugd/Config.in"
- endif
- 	source "package/iftop/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	source "package/ifupdown/Config.in"
-+endif
- 	source "package/igh-ethercat/Config.in"
- 	source "package/igmpproxy/Config.in"
- 	source "package/inadyn/Config.in"
-diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
-new file mode 100644
-index 0000000..ab552e0
---- /dev/null
-+++ b/package/ifupdown/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_IFUPDOWN
-+	bool "ifupdown"
-+	depends on BR2_USE_MMU # fork()
-+	# runtime for ip binary
-+	select BR2_PACKAGE_IPROUTE2 if !BR2_PACKAGE_BUSYBOX
-+	# runtime for run-parts
-+	select BR2_PACKAGE_DEBIANUTILS if !BR2_PACKAGE_BUSYBOX
-+	help
-+	  High level tools to configure network interfaces.
-+
-+	  https://tracker.debian.org/pkg/ifupdown
-diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
-new file mode 100644
-index 0000000..f0c314b
---- /dev/null
-+++ b/package/ifupdown/ifupdown.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.7.49.dsc
-+sha256	5d07c73610ff90393c7273e2af9003eeb1825fc88144ae5ed11a5517547d0f58	ifupdown_0.7.49.tar.xz
-diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
-new file mode 100644
-index 0000000..3b50d67
---- /dev/null
-+++ b/package/ifupdown/ifupdown.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# ifupdown
-+#
-+################################################################################
-+
-+IFUPDOWN_VERSION = 0.7.49
-+IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
-+IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20140923T221921Z/pool/main/i/ifupdown
-+IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+IFUPDOWN_LICENSE = GPLv2+
-+IFUPDOWN_LICENSE_FILES = COPYING
-+
-+define IFUPDOWN_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CFLAGS="$(TARGET_CFLAGS) -D'IFUPDOWN_VERSION=\"$(IFUPDOWN_VERSION)\"'" \
-+		-C $(@D)
-+endef
-+
-+define IFUPDOWN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/ifup $(TARGET_DIR)/sbin/ifup
-+	$(INSTALL) -m 0755 -D $(@D)/settle-dad.sh \
-+		$(TARGET_DIR)/lib/ifupdown/settle-dad.sh
-+	ln -sf ifup $(TARGET_DIR)/sbin/ifdown
-+	ln -sf ifup $(TARGET_DIR)/sbin/ifquery
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.0.4
+> Hi Michael,
+>
+> On Wed, Nov 05, 2014 at 11:05:16AM -0500, Michael Sumulong wrote:
+> > I am currently trying to get partclone to compile under buildroot which
+> > uses the ext2fs libraries. However, I get an issue when partclone
+> compiles
+> > and its looking for a ext2fs.pc file under usr/lib/pkgconfig. Compiling
+> > e2fsprogs for the target does not produce this file under
+> > output/target/usr/lib/pkgconfig but if I compile the host-e2fsprogs it
+> does
+> > generate a ext2fs.pc file under output/host/usr/lib/pkgconfig. I'm not
+> sure
+> > if this is a bug or done on purpose for some reason.
+>
+> The ext2fs.pc file for the target e2fsprogs package should be under
+> output/staging/usr/lib/pkgconfig/ like all other build facilities (headers,
+> static libraries, etc.). The command
+>
+>         output/host/usr/bin/pkg-config --libs ext2fs
+>
+> gives the expected output on my system.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+
+Yes, you're absolutely correct. I'm still fairly new to buildroot. I didn't
+realize what the staging folder was for. Thanks, this helped fix my issue!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141106/36b2b832/attachment.html>
