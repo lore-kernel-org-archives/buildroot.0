@@ -1,70 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Nov 2014 08:57:53 +0100
-Subject: [Buildroot] CMake building in a subdirectory
-In-Reply-To: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
-References: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
-Message-ID: <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 7 Nov 2014 09:04:17 +0100
+Subject: [Buildroot] [git commit] gdk-pixbuf: host variant needs pkgconfig
+	and libglib2 just like target variant
+Message-ID: <20141107080632.DAF42B2630@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+commit: http://git.buildroot.net/buildroot/commit/?id=fc90517b55b6030dbf0bc6686bae4dd01ffff114
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Nov 6, 2014 at 10:15 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Hello list,
->
-> I encountered a problem making a new package based on CMake. For this
-> package, it's mandatory to build in a subdirectory inside src folder.
-> To compile it you have to do something like this:
->
-> cd src
-> mkdir build
-> cd build
-> cmake ..
-> make
-> make install
->
-> Honestly, it's a fairly common way to build with cmake, but it's
-> unsupported in buildroot. To make it work I changed this in
-> pkg-cmake.mk:
->
-> -$(2)_BUILDDIR                  = $$($(2)_SRCDIR)
-> +$(2)_BUILDDIR                  ?= $$($(2)_SRCDIR)
->
-> So, when you define LIBFOO_BUILDDIR in your .mk, cmake automatically
-> build in that subdirectory. This works like a charm!
-> Obviously, you have to mkdir that dir in LIBFOO_PRE_CONFIGURE_HOOKS.
->
-> I can submit a patch, but I would really like to know others opinions.
->
+Fixes:
 
-AFAI remember, only eigen needs this but since it it a header only
-libs, we choose to install stuff manually using the generic-package
-infra.
+http://autobuild.buildroot.net/results/576/576d110cb02a8bc655e227bd949bb58ae39c2e38/
+http://autobuild.buildroot.net/results/c48/c487a1fff7c74218a31024074aa2fd6255b6d09f/
+http://autobuild.buildroot.net/results/b28/b282b7e7a9e3e5a8334d593be9092746509d4702/
+http://autobuild.buildroot.net/results/dee/dee288268d81cc19fe685b32d68036b596af260e/
 
-IIRC, similar propositions were already done.
-Among these, the Thomas P. 's RFC [1] about per-package out-of-tree is
-certainly the most advanced one trying to generalize this feature to
-all infras.
+And many more.
 
-But no work has been merged so far because:
-- we managed to workaround the corner cases (e.g.: eigen);
-- Thomas' RFC raised some questions/concerns [2] whose status are
-unclear (maybe the v3 of the RFC solved them, Thomas?)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdk-pixbuf/gdk-pixbuf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-For the particular package, you could get inspired by the RFC.
-
-Also, maybe it's time to reconsider/revive this RFC?
-
-
-Regards,
-
-[1] http://lists.busybox.net/pipermail/buildroot/2013-May/072611.html
-[2] http://lists.busybox.net/pipermail/buildroot/2013-May/072556.html
-
-
--- 
-Samuel
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index a4e3af0..61e7ae9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -58,6 +58,6 @@ HOST_GDK_PIXBUF_CONF_OPTS = \
+ 	--without-libjpeg \
+ 	--without-libtiff
+ 
+-HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng
++HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng host-pkgconf host-libglib2
+ 
+ $(eval $(host-autotools-package))
