@@ -1,56 +1,68 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 7 Nov 2014 17:41:32 +0100
-Subject: [Buildroot] CMake building in a subdirectory
-In-Reply-To: <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
-References: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
- <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
-Message-ID: <CA+TH9V=BEeZLo3FHgEPOvEmr7iTcVzw44q8=op5XAS-yA-KJqw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Nov 2014 18:17:02 +0100
+Subject: [Buildroot] [git commit] arch/x86: get rid of
+	BR2_GCC_TARGET_TUNE
+In-Reply-To: <87r3xfug0w.fsf@dell.be.48ers.dk>
+References: <20141106233447.1B0D4B1487@busybox.osuosl.org>
+ <CABbD_XADwGBWc2YUpOz2tqnhzNbzumW4G++3xFSRCObqN_8ncg@mail.gmail.com>
+ <87r3xfug0w.fsf@dell.be.48ers.dk>
+Message-ID: <20141107181702.42b72a06@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Dear Peter Korsgaard,
 
-> AFAI remember, only eigen needs this but since it it a header only
-> libs, we choose to install stuff manually using the generic-package
-> infra.
+On Fri, 07 Nov 2014 17:33:35 +0100, Peter Korsgaard wrote:
 
-I think it chould be supported, because it's fairly common pratice
-with cmake based sources to build in subdirectory.
-It's not meant in any way to be an outside build directory, also even
-if can be used that way.
+> It looks like you are right. From
+> https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options:
+> 
+> -mtune=cpu-type
+>     Tune to cpu-type everything applicable about the generated code,
+>     except for the ABI and the set of available instructions. While
+>     picking a specific cpu-type schedules things appropriately for that
+>     particular chip, the compiler does not generate any code that cannot
+>     run on the default machine type unless you use a -march=cpu-type
+>     option. For example, if GCC is configured for i686-pc-linux-gnu then
+>     -mtune=pentium4 generates code that is tuned for Pentium 4 but still
+>     runs on i686 machines.
+> 
+>     The choices for cpu-type are the same as for -march. In addition,
+>     -mtune supports 2 extra choices for cpu-type:
+> 
+>     ?generic?
+>         Produce code optimized for the most common IA32/AMD64/EM64T
+>         processors. If you know the CPU on which your code will run,
+>         then you should use the corresponding -mtune or -march option
+>         instead of -mtune=generic. But, if you do not know exactly what
+>         CPU users of your application will have, then you should use
+>         this option.
+> 
+>         As new processors are deployed in the marketplace, the behavior
+>         of this option will change. Therefore, if you upgrade to a newer
+>         version of GCC, code generation controlled by this option will
+>         change to reflect the processors that are most common at the
+>         time that version of GCC is released.
+> 
+>         There is no -march=generic option because -march indicates the
+>         instruction set the compiler can use, and there is no generic
+>         instruction set applicable to all processors. In contrast,
+>         -mtune indicates the processor (or, in this case, collection of
+>         processors) for which the code is optimized.
+> 
+> So we shouldn't pass -march=generic. I'm not sure it even makes sense to
+> have the BR2_x86_generic option.
+> 
+> Thomas, Yann - Any comments?
 
-> IIRC, similar propositions were already done.
-> Among these, the Thomas P. 's RFC [1] about per-package out-of-tree is
-> certainly the most advanced one trying to generalize this feature to
-> all infras.
->
-> But no work has been merged so far because:
-> - we managed to workaround the corner cases (e.g.: eigen);
-> - Thomas' RFC raised some questions/concerns [2] whose status are
-> unclear (maybe the v3 of the RFC solved them, Thomas?)
+As you suggest, I think the BR2_x86_generic option doesn't make any
+sense, and we should simply get rid of it.
 
-Ok, so this package cannot be built with standard buildroot. I really
-would like to see an intermediate solution in the meanwhile that RFC
-will be upstreamed.
-
-> For the particular package, you could get inspired by the RFC.
->
-> Also, maybe it's time to reconsider/revive this RFC?
->
->
-> Regards,
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2013-May/072611.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2013-May/072556.html
->
->
-> --
-> Samuel
-
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
