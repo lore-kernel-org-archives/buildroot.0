@@ -1,39 +1,56 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 07 Nov 2014 17:35:58 +0100
-Subject: [Buildroot] host ldconfig package
-In-Reply-To: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
-References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
-Message-ID: <1456757.71s6JAxXJf@aquila>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 7 Nov 2014 17:41:32 +0100
+Subject: [Buildroot] CMake building in a subdirectory
+In-Reply-To: <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
+References: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
+ <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
+Message-ID: <CA+TH9V=BEeZLo3FHgEPOvEmr7iTcVzw44q8=op5XAS-yA-KJqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jeff,
+Hi Samuel,
 
+> AFAI remember, only eigen needs this but since it it a header only
+> libs, we choose to install stuff manually using the generic-package
+> infra.
 
-On Thursday 06 November 2014 15:42:30 Jeff Horn wrote:
-> Hi,
-> 
-> I am using buildroot for one of our i.MX6 based boards and I have it mostly
-> working ( I can't get video to work ).
-As far as I understand, fixing ldconfig issue is not sufficient to make
-video work? Can you describe issue you are facing?
+I think it chould be supported, because it's fairly common pratice
+with cmake based sources to build in subdirectory.
+It's not meant in any way to be an outside build directory, also even
+if can be used that way.
 
+> IIRC, similar propositions were already done.
+> Among these, the Thomas P. 's RFC [1] about per-package out-of-tree is
+> certainly the most advanced one trying to generalize this feature to
+> all infras.
+>
+> But no work has been merged so far because:
+> - we managed to workaround the corner cases (e.g.: eigen);
+> - Thomas' RFC raised some questions/concerns [2] whose status are
+> unclear (maybe the v3 of the RFC solved them, Thomas?)
 
-For information, I made iMX6 hardware video decoding and display work. You
-may encounter a few difficulties:
+Ok, so this package cannot be built with standard buildroot. I really
+would like to see an intermediate solution in the meanwhile that RFC
+will be upstreamed.
 
-  - Xorg support for imx6 is not yet merged (and we are looking for 
-    testers :-) )
+> For the particular package, you could get inspired by the RFC.
+>
+> Also, maybe it's time to reconsider/revive this RFC?
+>
+>
+> Regards,
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2013-May/072611.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2013-May/072556.html
+>
+>
+> --
+> Samuel
 
-  - /etc/ld.so.conf have to contains these paths:
-       /usr/lib/imx-mm/audio-codec
-       /usr/lib/imx-mm/video-codec
-       /usr/lib/imx-mm/parser
-    (I have to write a patch for this)
 
 
 -- 
-J?r?me Pouiller, Sysmic
+Profile: http://it.linkedin.com/in/compagnucciangelo
