@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 7 Nov 2014 13:42:32 +0000
-Subject: [Buildroot] [PATCH 3/7] dhcpcd: install binary to /sbin
-In-Reply-To: <1415281013-1077-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 7 Nov 2014 13:42:49 +0000
+Subject: [Buildroot] [PATCH 4/7] dhcpcd: bump to version 6.6.0
+In-Reply-To: <1415281013-1077-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
- <1415281013-1077-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <545CCC48.9070106@imgtec.com>
+ <1415281013-1077-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <545CCC59.4000805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +14,36 @@ To: buildroot@busybox.net
 Dear Gustavo Zacarias,
 
 On 11/06/2014 01:36 PM, Gustavo Zacarias wrote:
-> Debian ifupdown expects dhcpcd to be in /sbin rather than /usr/sbin
+> Also add hash file.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/dhcpcd/dhcpcd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/dhcpcd/dhcpcd.hash | 2 ++
+>  package/dhcpcd/dhcpcd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/dhcpcd/dhcpcd.hash
 > 
+> diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+> new file mode 100644
+> index 0000000..fd64ebe
+> --- /dev/null
+> +++ b/package/dhcpcd/dhcpcd.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated from download (no sig, hash)
+> +sha256	16b94272cbb9ca22cb74c4421ee745f56850121613f6256587adb4e988c17fd0	dhcpcd-6.6.0.tar.bz2
 > diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> index f4b821a..60ac129 100644
+> index 60ac129..fe3c8d2 100644
 > --- a/package/dhcpcd/dhcpcd.mk
 > +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -37,7 +37,7 @@ endef
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  define DHCPCD_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
-> -		$(TARGET_DIR)/usr/sbin/dhcpcd
-> +		$(TARGET_DIR)/sbin/dhcpcd
->  	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
->  		$(TARGET_DIR)/etc/dhcpcd.conf
->  	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
+> -DHCPCD_VERSION = 6.4.7
+> +DHCPCD_VERSION = 6.6.0
+>  DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+>  DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+>  DHCPCD_DEPENDENCIES = host-pkgconf
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
