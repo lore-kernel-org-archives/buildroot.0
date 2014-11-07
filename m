@@ -1,68 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Nov 2014 18:17:02 +0100
-Subject: [Buildroot] [git commit] arch/x86: get rid of
-	BR2_GCC_TARGET_TUNE
-In-Reply-To: <87r3xfug0w.fsf@dell.be.48ers.dk>
-References: <20141106233447.1B0D4B1487@busybox.osuosl.org>
- <CABbD_XADwGBWc2YUpOz2tqnhzNbzumW4G++3xFSRCObqN_8ncg@mail.gmail.com>
- <87r3xfug0w.fsf@dell.be.48ers.dk>
-Message-ID: <20141107181702.42b72a06@free-electrons.com>
+From: Jeff Horn <outforaride@gmail.com>
+Date: Fri, 7 Nov 2014 09:43:34 -0800
+Subject: [Buildroot] host ldconfig package
+In-Reply-To: <1456757.71s6JAxXJf@aquila>
+References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
+ <1456757.71s6JAxXJf@aquila>
+Message-ID: <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Thanks for the info
 
-On Fri, 07 Nov 2014 17:33:35 +0100, Peter Korsgaard wrote:
+On Fri, Nov 7, 2014 at 8:35 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+>
+> As far as I understand, fixing ldconfig issue is not sufficient to make
+> video work? Can you describe issue you are facing?
 
-> It looks like you are right. From
-> https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options:
-> 
-> -mtune=cpu-type
->     Tune to cpu-type everything applicable about the generated code,
->     except for the ABI and the set of available instructions. While
->     picking a specific cpu-type schedules things appropriately for that
->     particular chip, the compiler does not generate any code that cannot
->     run on the default machine type unless you use a -march=cpu-type
->     option. For example, if GCC is configured for i686-pc-linux-gnu then
->     -mtune=pentium4 generates code that is tuned for Pentium 4 but still
->     runs on i686 machines.
-> 
->     The choices for cpu-type are the same as for -march. In addition,
->     -mtune supports 2 extra choices for cpu-type:
-> 
->     ?generic?
->         Produce code optimized for the most common IA32/AMD64/EM64T
->         processors. If you know the CPU on which your code will run,
->         then you should use the corresponding -mtune or -march option
->         instead of -mtune=generic. But, if you do not know exactly what
->         CPU users of your application will have, then you should use
->         this option.
-> 
->         As new processors are deployed in the marketplace, the behavior
->         of this option will change. Therefore, if you upgrade to a newer
->         version of GCC, code generation controlled by this option will
->         change to reflect the processors that are most common at the
->         time that version of GCC is released.
-> 
->         There is no -march=generic option because -march indicates the
->         instruction set the compiler can use, and there is no generic
->         instruction set applicable to all processors. In contrast,
->         -mtune indicates the processor (or, in this case, collection of
->         processors) for which the code is optimized.
-> 
-> So we shouldn't pass -march=generic. I'm not sure it even makes sense to
-> have the BR2_x86_generic option.
-> 
-> Thomas, Yann - Any comments?
+When launching gplay or gst-launch I get missing lib errors. Which
+makes sense considering the gst-fsl-plugins are in /usr/lib/imx-mm.
 
-As you suggest, I think the BR2_x86_generic option doesn't make any
-sense, and we should simply get rid of it.
+>
+>
+> For information, I made iMX6 hardware video decoding and display work. You
+> may encounter a few difficulties:
+>
+>   - Xorg support for imx6 is not yet merged (and we are looking for
+>     testers :-) )
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I can help test. I have a couple different i.MX6 boards (Wand,
+SabreSD). We are not using X11 on our board. We are using just Qt5
+with the eglfs platform.
+
+>
+>   - /etc/ld.so.conf have to contains these paths:
+>        /usr/lib/imx-mm/audio-codec
+>        /usr/lib/imx-mm/video-codec
+>        /usr/lib/imx-mm/parser
+>     (I have to write a patch for this)
+
+Yes, I saw a post about this patch and I added it to my buildroot
+branch. I will continue to work on this to see what is happening.
+
+Cheers,
+Jeff
