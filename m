@@ -1,55 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 07 Nov 2014 07:07:46 -0300
-Subject: [Buildroot] [PATCH 0/7] [RFC] systemV init without busybox
-	series
-In-Reply-To: <CABbD_XDLDuUNQWQRhK4KjAmVmZgTTUbZuJnXR=+83kMK_Xm23g@mail.gmail.com>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>	<20141106182413.198106d0@free-electrons.com>	<545BB09D.2080805@zacarias.com.ar>
- <CABbD_XDLDuUNQWQRhK4KjAmVmZgTTUbZuJnXR=+83kMK_Xm23g@mail.gmail.com>
-Message-ID: <545C99F2.8070208@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 7 Nov 2014 10:19:26 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <20141107073016.0C55F1018AC@stock.ovh.net>
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+Message-ID: <545C9CAE.3070303@imgtec.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/07/2014 06:12 AM, K?roly Kasza wrote:
+On 11/07/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-11-06
 
-> Hello guys,
+>       mipsel |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/edb374fba996973c21b7b4ed13d5d07c457793a0/
 
-Hello.
+[3m>>> ola 0.8.33 Autoreconfiguring[23m
+make: ***
+[/home/tmp/buildroot-test/instance-0/output/build/ola-0.8.33/.stamp_configured]
+Terminated
 
-> first, I'm happy that somebody else has the more/less same aim as me: to
-> make Buildroot able to create a more full Linux experience.
-> I think there are still some fundamental Linux tools' full versions are
-> missing, like shadow-utils to make Busybox circumventable,
-> but that's another story.
+No error message. It looks like the autobuilder stopped suddenly.
 
-My objective for this is differnet, somewhat less ambitious, which is to
-get the option of SysV-init without busybox in a workable/clean state,
-otherwise why are we given an option that's broken?
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/445bbbb0e6370cc2d1caf4ca66f59b8441f9dcda/
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/88b67de17d7059b2aeb41c483e4c275e5d2f2ee1/
+>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e6cb3215fcefd76805abee98b277b810366e456c/
 
-> Regarding start-stop-daemon: I think that while downloading, configuring
-> and compiling dpkg is a more straight solution to get st-st-d, it's a
-> bit unnecessary to just get one .c file to produce one simple binary.
-> For this patch, I mostly used package/cache-calibrator as a template,
-> which basically does the exact same method.
+I keep reporting this every day. The autobuilder which is reporting
+these failures is not updated with the latest version of the
+autobuilder-run script.
 
-In general i try to make things clean and without patches if possible
-since it helps future version bumps where patches might not apply
-cleanly. Also the policy in general is to make patches upstreamable
-which isn't the case.
-But ultimately it's not my decision and i'm doing a "dirty trick" (so to
-speak) in that i'm using a very full package as a small one. You're
-doing the same, just in another way.
-So my dilemma and reason not to send the dpkg/start-stop-daemon package
-is that, well, should be ship it with the small and lean trick or do so
-as dpkg with unrealistic expectations this will bring from some users?
+I don't know who owns this autobuilder, but please, fix it so we will
+not see the same useless reports gain and again.
 
-> Also, I think patching may still be needed for st-st-d for uClibc
-> compatibility, as uClibc tend not to have the O_NOFOLLOW preprocessor
-> macro declared in fcntl.h if __USE_GNU is not defined - and I think dpkg
-> configure does not define that?
+>         mips |                    systemd-216 | NOK | http://autobuild.buildroot.net/results/5764a0f71b5678701c2d4e4bd37516d8aae06f6b/
 
-That's because you're stripping everything out, that's taken care of in
-autotools and lib/compat, see, there's a reason for it :)
-Regards.
+I fixed this upstream and then backported the patch to Buildroot. The
+patch series is waiting in the queue:
+
+http://patchwork.ozlabs.org/patch/406583/
+http://patchwork.ozlabs.org/patch/406584/
+
+>     mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+
+"Fatal error: can't create obj/esfilter.o: No such file or directory"
+
+I think this is a race condition problem due to the "obj" directory not
+being created in time. I have reported the issue upstream.
+
+https://code.google.com/p/tstools/issues/detail?id=29
+
+Best regards,
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
