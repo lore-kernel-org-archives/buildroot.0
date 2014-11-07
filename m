@@ -1,68 +1,34 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Fri, 7 Nov 2014 10:16:29 -0300
-Subject: [Buildroot] [PATCH v2 5/5] package: linux-fusion: use install
- instead of cp
-In-Reply-To: <CANxTyt6nKbvrcRFtds8CxBBuEk-Su-LL5hzqOY=-m1BT2a_v+A@mail.gmail.com>
-References: <1415018556-28336-1-git-send-email-guido@vanguardiasur.com.ar>
- <1415332238-31677-1-git-send-email-guido@vanguardiasur.com.ar>
- <1415332238-31677-6-git-send-email-guido@vanguardiasur.com.ar>
- <CANxTyt6nKbvrcRFtds8CxBBuEk-Su-LL5hzqOY=-m1BT2a_v+A@mail.gmail.com>
-Message-ID: <20141107131629.GA2620@fox>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 07 Nov 2014 14:35:45 +0100
+Subject: [Buildroot] [PATCH 2/2] systemd: Properly define the
+	__NR_memfd_create macro for MIPS
+In-Reply-To: <1415103861-64413-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 4 Nov 2014 12:24:21 +0000")
+References: <1415103861-64413-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1415103861-64413-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87vbmruo9a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Fri, Nov 07, 2014 at 07:44:50AM -0500, Danomi Manchego wrote:
-> Guido
-> 
-> On Thu, Nov 6, 2014 at 10:50 PM, Guido Mart?nez
-> <guido@vanguardiasur.com.ar> wrote:
-> > in order to not depend on the previous permissions of the file
-> >
-> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> > ---
-> >  package/linux-fusion/linux-fusion.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-> > index c5e7976..81ecd8a 100644
-> > --- a/package/linux-fusion/linux-fusion.mk
-> > +++ b/package/linux-fusion/linux-fusion.mk
-> > @@ -37,7 +37,7 @@ define LINUX_FUSION_INSTALL_TARGET_CMDS
-> >                 INSTALL_MOD_PATH=$(TARGET_DIR) \
-> >                 -C $(@D) install
-> >         mkdir -p $(LINUX_FUSION_ETC_DIR)
-> > -       cp -dpf package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
-> > +       install -m 644 package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
-> 
-> 
-> How about also dropping the mkdir and doing:
-> 
->        install -D -m 644 package/linux-fusion/40-fusion.rules
-> $(LINUX_FUSION_ETC_DIR)/40-fusion.rules
-Ah yes, that's better. Will do for v3.
+ > This is an upstream patch which has been applied to the master branch
+ > and I have adapted it to make it apply to the v216 version.
 
-Thanks!
+ > v217 is not fixed. This patch can be removed when we bump to v218.
 
-> 
-> Danomi -
-> 
-> 
-> >  endef
-> >
-> >  $(eval $(generic-package))
-> > --
-> > 2.1.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+ > Upstream commit:
+ >   http://cgit.freedesktop.org/systemd/systemd/commit/?id=e6c019026b8cfd27a997e6e6ed1349f8f289b7e2
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/596/59617a822fb2c8961881dd78a0dc8e41bdb14ede/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
 
 -- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+Bye, Peter Korsgaard
