@@ -1,40 +1,60 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri,  7 Nov 2014 17:03:20 +0100
-Subject: [Buildroot] [PATCH 0/7] Better handling of freescale
-	self-extractible binaries
-Message-ID: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+Date: Fri,  7 Nov 2014 17:03:23 +0100
+Subject: [Buildroot] [PATCH 3/7] imx-vpu: Use self-extractible helper
+In-Reply-To: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1415376207-23292-4-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This serie introduce an helper fonction for freescale self-extractible
-binaries. 
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/freescale-imx/imx-vpu/imx-vpu.mk | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
-Obviously, last 3 patches of this serie apply on top of my previous 
-series: "Add Xorg support for imx6" and "Add support for iMX5 GPU"
-
-
-J?r?me Pouiller (7):
-  freescale-imx: Add helper to extract self-extractible binaries
-  firmware-imx: Use self-extractible helper
-  imx-vpu: Use self-extractible helper
-  libfsl*: Use self-extractible helper
-  gpu-viv-bin-mx6q: Use self-extractible helper
-  libz160: Use self-extractible helper
-  gpu-amd-bin-mx51: Use self-extractible helper
-
- package/freescale-imx/firmware-imx/firmware-imx.mk | 16 ++++---------
- package/freescale-imx/freescale-imx.mk             | 21 +++++++++++++++++
- .../gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk           | 27 ++++++++--------------
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 22 ++++--------------
- package/freescale-imx/imx-vpu/imx-vpu.mk           | 22 +++++-------------
- package/freescale-imx/libz160/libz160.mk           | 19 ++++-----------
- package/libfslcodec/libfslcodec.mk                 | 23 ++++--------------
- package/libfslparser/libfslparser.mk               | 23 ++++--------------
- package/libfslvpuwrap/libfslvpuwrap.mk             | 24 ++++---------------
- 9 files changed, 62 insertions(+), 135 deletions(-)
-
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+index e0292ed..b0892e1 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.mk
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+@@ -6,8 +6,6 @@
+ 
+ IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
+ IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+-IMX_VPU_LICENSE = Freescale License
+-IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
+ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+ 
+ IMX_VPU_INSTALL_STAGING = YES
+@@ -21,21 +19,13 @@ IMX_VPU_MAKE_ENV = \
+ 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
+ 	INCLUDE="-idirafter $(LINUX_DIR)/include"
+ 
+-# The archive is a shell-self-extractor of a bzipped tar. It happens
+-# to extract in the correct directory (imx-vpu-x.y.z)
+-# The --force makes sure it doesn't fail if the source dir already exists.
+-# The --auto-accept skips the license check - not needed for us
+-# because we have legal-info
+-# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
+-#
++# See freescale-imx.mk
++IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
++IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
++IMX_VPU_REDISTRIBUTE = NO
++
+ define IMX_VPU_EXTRACT_CMDS
+-	awk 'BEGIN      { start=0; } \
+-	     /^EOEULA/  { start = 0; } \
+-	                { if (start) print; } \
+-	     /<<EOEULA/ { start=1; }'\
+-	    $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
+-	cd $(BUILD_DIR); \
+-	sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_VPU_SOURCE))
+ endef
+ 
+ define IMX_VPU_BUILD_CMDS
 -- 
 1.9.1
