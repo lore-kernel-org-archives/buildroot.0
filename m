@@ -1,186 +1,121 @@
-From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Fri, 7 Nov 2014 14:49:21 +0100
-Subject: [Buildroot] [PATCH v2] libiio: new package
-Message-ID: <1415368161-31072-1-git-send-email-paul.cercueil@analog.com>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Fri, 7 Nov 2014 15:23:49 +0100
+Subject: [Buildroot] [git commit] arch/x86: get rid of
+	BR2_GCC_TARGET_TUNE
+In-Reply-To: <20141106233447.1B0D4B1487@busybox.osuosl.org>
+References: <20141106233447.1B0D4B1487@busybox.osuosl.org>
+Message-ID: <CABbD_XADwGBWc2YUpOz2tqnhzNbzumW4G++3xFSRCObqN_8ncg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libiio is a library to ease the development of software interfacing
-Linux Industrial I/O (IIO) devices.
+Hello all,
 
-http://wiki.analog.com/resources/tools-software/linux-software/libiio
+since this commit, GCC fails to build at the initial stage, with the i386
+or x86_x64 targets, if BR2_GCC_TARGET_ARCH is set to "generic".
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
----
- package/Config.in         |  1 +
- package/libiio/Config.in  | 43 +++++++++++++++++++++++++++++++++++++++++++
- package/libiio/S99iiod.sh | 42 ++++++++++++++++++++++++++++++++++++++++++
- package/libiio/libiio.mk  | 43 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 129 insertions(+)
- create mode 100644 package/libiio/Config.in
- create mode 100644 package/libiio/S99iiod.sh
- create mode 100644 package/libiio/libiio.mk
+4.8 error message:
+configure: error: cannot compute suffix of object files: cannot compile
+4.9 error message:
+Unknown CPU given in --with-arch=generic.
 
-diff --git a/package/Config.in b/package/Config.in
-index 89b46dc..a041476 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -680,6 +680,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libhid/Config.in"
-+	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
- 	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-new file mode 100644
-index 0000000..4bded41
---- /dev/null
-+++ b/package/libiio/Config.in
-@@ -0,0 +1,43 @@
-+config BR2_PACKAGE_LIBIIO
-+	bool "libiio"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	help
-+	  Libiio is a library to ease the development of software interfacing
-+	  Linux Industrial I/O (IIO) devices.
-+
-+	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
-+
-+if BR2_PACKAGE_LIBIIO
-+
-+config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	bool "Local backend"
-+	default y
-+	help
-+	  Enable the local backend of the library.
-+
-+config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	bool "Network backend"
-+	select BR2_PACKAGE_LIBXML2
-+	default y
-+	help
-+	  Enable the network backend of the library.
-+
-+config BR2_PACKAGE_LIBIIO_IIOD
-+	bool "IIO Daemon"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	default y
-+	help
-+	  Install the IIO Daemon.
-+
-+comment "IIO Daemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_LIBIIO_TESTS
-+	bool "Install test programs"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	help
-+	  Install the test programs (iio_info, iio_genxml, iio_readdev).
-+
-+endif
-diff --git a/package/libiio/S99iiod.sh b/package/libiio/S99iiod.sh
-new file mode 100644
-index 0000000..f900999
---- /dev/null
-+++ b/package/libiio/S99iiod.sh
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+
-+# Server-side demuxing by default
-+IIOD_OPTS=-D
-+
-+[ -r /etc/default/iiod ] && . /etc/default/iiod
-+
-+case "$1" in
-+	start)
-+		echo "Starting IIO Server Daemon"
-+		start-stop-daemon -S -b -q -m -p /var/run/iiod.pid -x /usr/sbin/iiod -- $IIOD_OPTS
-+		exit $?
-+		;;
-+
-+	stop)
-+		echo "Stopping IIO Server Daemon"
-+		start-stop-daemon -K -q -p /var/run/iiod.pid 2>/dev/null
-+		exit $?
-+		;;
-+
-+	status)
-+		RET=1
-+		if [ -f /var/run/iiod.pid ] ; then
-+			kill -0 `cat /var/run/iiod.pid` >/dev/null 2>&1
-+			RET=$?
-+		fi
-+
-+		if [ $RET -eq 0 ] ; then
-+			echo "iiod is running"
-+		else
-+			echo "iiod is NOT running"
-+		fi
-+
-+		return $RET
-+		;;
-+
-+	*)
-+		echo "Usage: $0 {start|stop|status}"
-+		exit 1
-+esac
-+
-+exit 0
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-new file mode 100644
-index 0000000..104b9d4
---- /dev/null
-+++ b/package/libiio/libiio.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# libiio
-+#
-+################################################################################
-+
-+LIBIIO_VERSION = v0.2
-+LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-+LIBIIO_INSTALL_STAGING = YES
-+LIBIIO_LICENSE = LGPLv2.1+
-+LIBIIO_LICENSE_FILES = COPYING
-+
-+# Avahi support in libiio requires avahi-client, which needs avahi-daemon
-+ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-+LIBIIO_DEPENDENCIES += avahi
-+endif
-+
-+ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
-+LIBIIO_CONF_OPTS += -DWITH_LOCAL_BACKEND=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
-+LIBIIO_DEPENDENCIES += libxml2
-+else
-+LIBIIO_CONF_OPTS += -DWITH_NETWORK_BACKEND=OFF
-+endif
-+
-+ifneq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-+LIBIIO_CONF_OPTS += -DWITH_IIOD=OFF
-+else
-+define LIBIIO_INSTALL_STARTUP_SCRIPT
-+	$(INSTALL) -D -m 0755 package/libiio/S99iiod.sh \
-+		$(TARGET_DIR)/etc/init.d/S99iiod.sh
-+endef
-+LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_STARTUP_SCRIPT
-+LIBIIO_DEPENDENCIES += host-flex host-bison
-+endif
-+
-+ifneq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
-+LIBIIO_CONF_OPTS += -DWITH_TESTS=OFF
-+endif
-+
-+$(eval $(cmake-package))
+I would substitute the "generic" variable with "" in arch/Config.in.x86,
+which would omit
+HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
+in package/gcc/gcc.mk. That makes compiling gcc possible.
+But that would also mean CC_TARGET_ARCH would also be blank in
+toolchain-external.mk, omitting
+TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_).
+
+I guess omitting a parameter, or setting it to "generic" _should_ mean the
+same, but I'm not sure.
+
+Best regards
+Karoly
+
+On Fri, Nov 7, 2014 at 12:09 AM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> commit:
+> http://git.buildroot.net/buildroot/commit/?id=6bec1d5191a2f017f1e7aa46286de50ba067b7de
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> According to the gcc documentation, -march implies -mtune on x86, so
+> defining both BR2_GCC_TARGET_ARCH and BR2_GCC_TARGET_TUNE is
+> redundant. Therefore, this commit removes the definition of
+> BR2_GCC_TARGET_TUNE on x86.
+>
+> However, while doing so, it adds one new case for BR2_GCC_TARGET_ARCH:
+> using -march=generic when BR2_x86_generic is selected.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  arch/Config.in.x86 |   32 +-------------------------------
+>  1 files changed, 1 insertions(+), 31 deletions(-)
+>
+> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+> index 9aa4ea2..0b7919b 100644
+> --- a/arch/Config.in.x86
+> +++ b/arch/Config.in.x86
+> @@ -205,37 +205,6 @@ config BR2_ENDIAN
+>  config BR2_ARCH_HAS_ATOMICS
+>         default y if !BR2_x86_i386
+>
+> -config BR2_GCC_TARGET_TUNE
+> -       default "i386"          if BR2_x86_i386
+> -       default "i486"          if BR2_x86_i486
+> -       default "i586"          if BR2_x86_i586
+> -       default "pentium-mmx"   if BR2_x86_pentium_mmx
+> -       default "i686"          if BR2_x86_i686
+> -       default "pentiumpro"    if BR2_x86_pentiumpro
+> -       default "pentium-m"     if BR2_x86_pentium_m
+> -       default "pentium2"      if BR2_x86_pentium2
+> -       default "pentium3"      if BR2_x86_pentium3
+> -       default "pentium4"      if BR2_x86_pentium4
+> -       default "prescott"      if BR2_x86_prescott
+> -       default "nocona"        if BR2_x86_nocona
+> -       default "core2"         if BR2_x86_core2
+> -       default "corei7"        if BR2_x86_corei7
+> -       default "atom"          if BR2_x86_atom
+> -       default "k8"            if BR2_x86_opteron
+> -       default "k8-sse3"       if BR2_x86_opteron_sse3
+> -       default "barcelona"     if BR2_x86_barcelona
+> -       default "btver2"        if BR2_x86_jaguar
+> -       default "k6"            if BR2_x86_k6
+> -       default "k6-2"          if BR2_x86_k6_2
+> -       default "athlon"        if BR2_x86_athlon
+> -       default "athlon-4"      if BR2_x86_athlon_4
+> -       default "winchip-c6"    if BR2_x86_winchip_c6
+> -       default "winchip2"      if BR2_x86_winchip2
+> -       default "c3"            if BR2_x86_c3
+> -       default "c3-2"          if BR2_x86_c32
+> -       default "geode"         if BR2_x86_geode
+> -       default "generic"       if BR2_x86_generic
+> -
+>  config BR2_GCC_TARGET_ARCH
+>         default "i386"          if BR2_x86_i386
+>         default "i486"          if BR2_x86_i486
+> @@ -265,3 +234,4 @@ config BR2_GCC_TARGET_ARCH
+>         default "c3"            if BR2_x86_c3
+>         default "c3-2"          if BR2_x86_c32
+>         default "geode"         if BR2_x86_geode
+> +       default "generic"       if BR2_x86_generic
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
 -- 
-2.1.1
+
+?dv,
+KK
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141107/d22f836b/attachment.html>
