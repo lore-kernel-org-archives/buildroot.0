@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Fri,  7 Nov 2014 14:28:44 +0100
-Subject: [Buildroot] [PATCH v2 08/15] erlang-p1-utils: new package.
+Date: Fri,  7 Nov 2014 14:28:46 +0100
+Subject: [Buildroot] [PATCH v2 10/15] erlang-p1-stun: new package.
 In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
 References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1415366931-6870-9-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1415366931-6870-11-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                          |  1 +
- package/erlang-p1-utils/Config.in          |  5 +++++
- package/erlang-p1-utils/erlang-p1-utils.mk | 14 ++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/erlang-p1-utils/Config.in
- create mode 100644 package/erlang-p1-utils/erlang-p1-utils.mk
+ package/Config.in                        |  1 +
+ package/erlang-p1-stun/Config.in         |  7 +++++++
+ package/erlang-p1-stun/erlang-p1-stun.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/erlang-p1-stun/Config.in
+ create mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index da13e8b..7f6fee9 100644
+index 21c4071..52c597a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-utils/Config.in"
++	source "package/erlang-p1-stun/Config.in"
+ 	source "package/erlang-p1-tls/Config.in"
+ 	source "package/erlang-p1-utils/Config.in"
  	source "package/erlang-p1-xml/Config.in"
- 	source "package/erlang-p1-yaml/Config.in"
- 	source "package/erlang-p1-zlib/Config.in"
-diff --git a/package/erlang-p1-utils/Config.in b/package/erlang-p1-utils/Config.in
+diff --git a/package/erlang-p1-stun/Config.in b/package/erlang-p1-stun/Config.in
 new file mode 100644
-index 0000000..a544eed
+index 0000000..bbe6bae
 --- /dev/null
-+++ b/package/erlang-p1-utils/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_ERLANG_P1_UTILS
-+	bool "erlang-p1-utils"
++++ b/package/erlang-p1-stun/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_P1_STUN
++	bool "erlang-p1-stun"
 +	depends on BR2_PACKAGE_ERLANG
++	select BR2_PACKAGE_ERLANG_P1_TLS
++	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  Set of small Erlang libraries
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
++	  STUN library for Erlang
+diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
 new file mode 100644
-index 0000000..23e2c63
+index 0000000..d963caa
 --- /dev/null
-+++ b/package/erlang-p1-utils/erlang-p1-utils.mk
++++ b/package/erlang-p1-stun/erlang-p1-stun.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-p1-utils
++# erlang-p1-stun
 +#
 +################################################################################
 +
-+ERLANG_P1_UTILS_VERSION = 940f42d
-+ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
-+ERLANG_P1_UTILS_LICENSE = GPLv2+
-+ERLANG_P1_UTILS_LICENSE_FILES = COPYING
-+ERLANG_P1_UTILS_DEPENDENCIES = erlang
-+ERLANG_P1_UTILS_INSTALL_STAGING = YES
++ERLANG_P1_STUN_VERSION = a7c07b6
++ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
++ERLANG_P1_STUN_LICENSE = GPLv2+
++ERLANG_P1_STUN_LICENSE_FILES = COPYING
++ERLANG_P1_STUN_DEPENDENCIES = erlang host-erlang-rebar erlang-p1-tls erlang-p1-utils
++ERLANG_P1_STUN_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 -- 
