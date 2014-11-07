@@ -1,14 +1,14 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Nov 2014 09:54:19 -0300
-Subject: [Buildroot] [PATCH] grep: fix build failure for musl
-Message-ID: <1415364859-23792-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  7 Nov 2014 09:56:57 -0300
+Subject: [Buildroot] [PATCHv2] grep: fix build failure for musl
+Message-ID: <1415365017-14860-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl doesn't implement re_match and friends and coreutils fails to
+musl doesn't implement re_match and friends and grep fails to
 detect this properly, so force internal regex routines for musl.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
