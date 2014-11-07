@@ -1,171 +1,186 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Fri,  7 Nov 2014 14:28:37 +0100
-Subject: [Buildroot] [PATCH v2 01/15] package/pkg-autotools.mk: Factorize
-	hooks.
-In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
-References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Fri, 7 Nov 2014 14:49:21 +0100
+Subject: [Buildroot] [PATCH v2] libiio: new package
+Message-ID: <1415368161-31072-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define common macros only once (instead of as many times as
-there are inner-autotools-package calls).
-Factorize LIBTOOL_PATCH_HOOK and AUTORECONF_HOOK to avoid duplicated
-code.
+Libiio is a library to ease the development of software interfacing
+Linux Industrial I/O (IIO) devices.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+http://wiki.analog.com/resources/tools-software/linux-software/libiio
+
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 ---
- package/pkg-autotools.mk | 119 ++++++++++++++++++++++-------------------------
- 1 file changed, 56 insertions(+), 63 deletions(-)
+ package/Config.in         |  1 +
+ package/libiio/Config.in  | 43 +++++++++++++++++++++++++++++++++++++++++++
+ package/libiio/S99iiod.sh | 42 ++++++++++++++++++++++++++++++++++++++++++
+ package/libiio/libiio.mk  | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 129 insertions(+)
+ create mode 100644 package/libiio/Config.in
+ create mode 100644 package/libiio/S99iiod.sh
+ create mode 100644 package/libiio/libiio.mk
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 09f9412..65af6f0 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -46,6 +46,57 @@ endef
- #	$(call AUTOCONF_AC_CHECK_FILE_VAL,/dev/random)=yes
- AUTOCONF_AC_CHECK_FILE_VAL = ac_cv_file_$(subst -,_,$(subst /,_,$(subst .,_,$(1))))
- 
-+# Recipe that patches libtool so it works properly with
-+# cross-compilation.
-+define PATCH_LIBTOOL
-+	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
-+		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
-+			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
-+			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
-+			if test $${ltmain_version} = 1.5; then \
-+				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
-+			elif test $${ltmain_version} = 2.2; then\
-+				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
-+			elif test $${ltmain_version} = 2.4; then\
-+				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
-+			fi \
-+		done \
-+	fi
-+endef
+diff --git a/package/Config.in b/package/Config.in
+index 89b46dc..a041476 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -680,6 +680,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libhid/Config.in"
++	source "package/libiio/Config.in"
+ 	source "package/libinput/Config.in"
+ 	source "package/libiqrf/Config.in"
+ 	source "package/libllcp/Config.in"
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+new file mode 100644
+index 0000000..4bded41
+--- /dev/null
++++ b/package/libiio/Config.in
+@@ -0,0 +1,43 @@
++config BR2_PACKAGE_LIBIIO
++	bool "libiio"
++	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
++	help
++	  Libiio is a library to ease the development of software interfacing
++	  Linux Industrial I/O (IIO) devices.
 +
-+#
-+# Hook to update config.sub and config.guess if needed
-+#
-+define UPDATE_CONFIG_HOOK
-+	@$(call MESSAGE,"Updating config.sub and config.guess")
-+	$(call CONFIG_UPDATE,$(@D))
-+endef
++	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
 +
-+#
-+# Hook to patch libtool to make it work properly for cross-compilation
-+#
-+define LIBTOOL_PATCH_HOOK
-+	@$(call MESSAGE,"Patching libtool")
-+	$(call PATCH_LIBTOOL)
-+endef
++if BR2_PACKAGE_LIBIIO
 +
-+#
-+# Hook to gettextize the package if needed
-+#
-+define GETTEXTIZE_HOOK
-+	@$(call MESSAGE,"Gettextizing")
-+	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE) $($(PKG)_GETTEXTIZE_OPTS)
-+endef
++config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	bool "Local backend"
++	default y
++	help
++	  Enable the local backend of the library.
 +
-+#
-+# Hook to autoreconf the package if needed
-+#
-+define AUTORECONF_HOOK
-+	@$(call MESSAGE,"Autoreconfiguring")
-+	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
-+	$(call PATCH_LIBTOOL)
-+endef
++config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
++	bool "Network backend"
++	select BR2_PACKAGE_LIBXML2
++	default y
++	help
++	  Enable the network backend of the library.
 +
- ################################################################################
- # inner-autotools-package -- defines how the configuration, compilation and
- # installation of an autotools package should be done, implements a
-@@ -183,71 +234,8 @@ endef
- endif
- endif
- 
--#
--# Hook to update config.sub and config.guess if needed
--#
--define UPDATE_CONFIG_HOOK
--	@$$(call MESSAGE,"Updating config.sub and config.guess")
--	$$(call CONFIG_UPDATE,$$(@D))
--endef
--
- $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
--#
--# Hook to patch libtool to make it work properly for cross-compilation
--#
--define LIBTOOL_PATCH_HOOK
--	@$$(call MESSAGE,"Patching libtool")
--	$$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES" \
--		-a "$$($$(PKG)_AUTORECONF)" != "YES"; then \
--		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
--			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
--			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
--			if test $$$${ltmain_version} = '1.5'; then \
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
--			elif test $$$${ltmain_version} = "2.2"; then\
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
--			elif test $$$${ltmain_version} = "2.4"; then\
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
--			fi \
--		done \
--	fi
--endef
--
--# default values are not evaluated yet, so don't rely on this defaulting to YES
--ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
--endif
--
--#
--# Hook to gettextize the package if needed
--#
--define GETTEXTIZE_HOOK
--	@$$(call MESSAGE,"Gettextizing")
--	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPTS)
--endef
--
--#
--# Hook to autoreconf the package if needed
--#
--define AUTORECONF_HOOK
--	@$$(call MESSAGE,"Autoreconfiguring")
--	$$(Q)cd $$($$(PKG)_SRCDIR) && $$($$(PKG)_AUTORECONF_ENV) $$(AUTORECONF) $$($$(PKG)_AUTORECONF_OPTS)
--	$$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
--		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
--			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
--			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
--			if test $$$${ltmain_version} = "1.5"; then \
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
--			elif test $$$${ltmain_version} = "2.2"; then\
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
--			elif test $$$${ltmain_version} = "2.4"; then\
--				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
--			fi \
--		done \
--	fi
--endef
--
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
- # and _GETTEXTIZE away from the non-host rule
-@@ -265,6 +253,11 @@ $(2)_DEPENDENCIES += host-gettext
- endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
-+else
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
++config BR2_PACKAGE_LIBIIO_IIOD
++	bool "IIO Daemon"
++	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	default y
++	help
++	  Install the IIO Daemon.
++
++comment "IIO Daemon needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_LIBIIO_TESTS
++	bool "Install test programs"
++	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
++	help
++	  Install the test programs (iio_info, iio_genxml, iio_readdev).
++
 +endif
- endif
- 
- #
+diff --git a/package/libiio/S99iiod.sh b/package/libiio/S99iiod.sh
+new file mode 100644
+index 0000000..f900999
+--- /dev/null
++++ b/package/libiio/S99iiod.sh
+@@ -0,0 +1,42 @@
++#!/bin/sh
++
++# Server-side demuxing by default
++IIOD_OPTS=-D
++
++[ -r /etc/default/iiod ] && . /etc/default/iiod
++
++case "$1" in
++	start)
++		echo "Starting IIO Server Daemon"
++		start-stop-daemon -S -b -q -m -p /var/run/iiod.pid -x /usr/sbin/iiod -- $IIOD_OPTS
++		exit $?
++		;;
++
++	stop)
++		echo "Stopping IIO Server Daemon"
++		start-stop-daemon -K -q -p /var/run/iiod.pid 2>/dev/null
++		exit $?
++		;;
++
++	status)
++		RET=1
++		if [ -f /var/run/iiod.pid ] ; then
++			kill -0 `cat /var/run/iiod.pid` >/dev/null 2>&1
++			RET=$?
++		fi
++
++		if [ $RET -eq 0 ] ; then
++			echo "iiod is running"
++		else
++			echo "iiod is NOT running"
++		fi
++
++		return $RET
++		;;
++
++	*)
++		echo "Usage: $0 {start|stop|status}"
++		exit 1
++esac
++
++exit 0
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+new file mode 100644
+index 0000000..104b9d4
+--- /dev/null
++++ b/package/libiio/libiio.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# libiio
++#
++################################################################################
++
++LIBIIO_VERSION = v0.2
++LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
++LIBIIO_INSTALL_STAGING = YES
++LIBIIO_LICENSE = LGPLv2.1+
++LIBIIO_LICENSE_FILES = COPYING
++
++# Avahi support in libiio requires avahi-client, which needs avahi-daemon
++ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
++LIBIIO_DEPENDENCIES += avahi
++endif
++
++ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
++LIBIIO_CONF_OPTS += -DWITH_LOCAL_BACKEND=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
++LIBIIO_DEPENDENCIES += libxml2
++else
++LIBIIO_CONF_OPTS += -DWITH_NETWORK_BACKEND=OFF
++endif
++
++ifneq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
++LIBIIO_CONF_OPTS += -DWITH_IIOD=OFF
++else
++define LIBIIO_INSTALL_STARTUP_SCRIPT
++	$(INSTALL) -D -m 0755 package/libiio/S99iiod.sh \
++		$(TARGET_DIR)/etc/init.d/S99iiod.sh
++endef
++LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_STARTUP_SCRIPT
++LIBIIO_DEPENDENCIES += host-flex host-bison
++endif
++
++ifneq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
++LIBIIO_CONF_OPTS += -DWITH_TESTS=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.1.0
+2.1.1
