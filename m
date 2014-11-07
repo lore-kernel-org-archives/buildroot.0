@@ -1,117 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Nov 2014 08:55:34 +0100
-Subject: [Buildroot] [git commit] elfutils: disable for static builds
-Message-ID: <20141107075730.79C1BB26A5@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 7 Nov 2014 08:57:53 +0100
+Subject: [Buildroot] CMake building in a subdirectory
+In-Reply-To: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
+References: <CA+TH9VmvRtq9KmXKsxfWDWgUsixg9yL6SMkDEmWNWz18vxuEnw@mail.gmail.com>
+Message-ID: <CAHXCMMK9ddV-KdeieCN4AuDVMMx6QHnxoSQLm0qOwPiz_-bpYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9406d4dc02b5fa452ff487b1c5ce9a891388b919
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Angelo,
 
-Even when doing static builds, a shared library is built. This causes a
-build failure under some circumstances, for instance when building for
-MIPS + uClibc + static.
+On Thu, Nov 6, 2014 at 10:15 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> Hello list,
+>
+> I encountered a problem making a new package based on CMake. For this
+> package, it's mandatory to build in a subdirectory inside src folder.
+> To compile it you have to do something like this:
+>
+> cd src
+> mkdir build
+> cd build
+> cmake ..
+> make
+> make install
+>
+> Honestly, it's a fairly common way to build with cmake, but it's
+> unsupported in buildroot. To make it work I changed this in
+> pkg-cmake.mk:
+>
+> -$(2)_BUILDDIR                  = $$($(2)_SRCDIR)
+> +$(2)_BUILDDIR                  ?= $$($(2)_SRCDIR)
+>
+> So, when you define LIBFOO_BUILDDIR in your .mk, cmake automatically
+> build in that subdirectory. This works like a charm!
+> Obviously, you have to mkdir that dir in LIBFOO_PRE_CONFIGURE_HOOKS.
+>
+> I can submit a patch, but I would really like to know others opinions.
+>
 
-After asking upstream if it would be possible to add a configure option
-to not build the shared library, the answer was that doing a static
-build is not a good idea. Here is a small snippet of the conversation:
+AFAI remember, only eigen needs this but since it it a header only
+libs, we choose to install stuff manually using the generic-package
+infra.
 
-"Note that fully static builds are problematic.  elfutils uses dlopen to
-open the EBL backends (the CPU-specific support snippets), so even if
-you link statically, the final binaries are still considerably dynamic."
+IIRC, similar propositions were already done.
+Among these, the Thomas P. 's RFC [1] about per-package out-of-tree is
+certainly the most advanced one trying to generalize this feature to
+all infras.
 
-Related:
-  https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
+But no work has been merged so far because:
+- we managed to workaround the corner cases (e.g.: eigen);
+- Thomas' RFC raised some questions/concerns [2] whose status are
+unclear (maybe the v3 of the RFC solved them, Thomas?)
 
-Fixes:
-  http://autobuild.buildroot.net/results/691/6913f5af6519463fbed39ef37b6a40ecf6a67b54/
+For the particular package, you could get inspired by the RFC.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avrdude/Config.in    |    5 +++--
- package/elfutils/Config.in   |    5 +++--
- package/kexec-lite/Config.in |    2 +-
- package/ltrace/Config.in     |    5 +++--
- 4 files changed, 10 insertions(+), 7 deletions(-)
+Also, maybe it's time to reconsider/revive this RFC?
 
-diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-index 7d9f5eb..84bd091 100644
---- a/package/avrdude/Config.in
-+++ b/package/avrdude/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_AVRDUDE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_LARGEFILE # elfutils
- 	depends on BR2_USE_WCHAR # elfutils
-+	depends on !BR2_PREFER_STATIC_LIB # elfutils
- 	depends on !BR2_avr32 # elfutils
- 	depends on !BR2_bfin # elfutils
- 	help
-@@ -15,7 +16,7 @@ config BR2_PACKAGE_AVRDUDE
- 
- 	  https://github.com/kcuzner/avrdude
- 
--comment "avrdude needs a toolchain w/ threads, largefile, wchar"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || !BR2_USE_WCHAR
-+comment "avrdude needs a toolchain w/ threads, largefile, wchar, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
- 	depends on !BR2_avr32
- 	depends on !BR2_bfin
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 20a1aaa..5d6e659 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -1,7 +1,7 @@
--comment "elfutils needs a toolchain w/ largefile, wchar"
-+comment "elfutils needs a toolchain w/ largefile, wchar, dynamic library"
- 	depends on !BR2_avr32
- 	depends on !BR2_bfin
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_ELFUTILS
- 	bool "elfutils"
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	depends on !BR2_PREFER_STATIC_LIB
- 	# canonicalize_file_name() not available on uClibc 0.9.31, used
- 	# only for AVR32
- 	depends on !BR2_avr32
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-index e98ad3a..8db6058 100644
---- a/package/kexec-lite/Config.in
-+++ b/package/kexec-lite/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KEXEC_LITE
- 	bool "kexec-lite"
- 	depends on BR2_powerpc || BR2_powerpc64
--	depends on !BR2_PREFER_STATIC_LIB # dtc
-+	depends on !BR2_PREFER_STATIC_LIB # dtc, elfutils
- 	depends on BR2_LARGEFILE # elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	select BR2_PACKAGE_ELFUTILS
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index dc759d8..08edd45 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_LTRACE
- 	select BR2_PACKAGE_ELFUTILS
- 	depends on BR2_LARGEFILE # elfutils
- 	depends on BR2_USE_WCHAR # elfutils
-+	depends on !BR2_PREFER_STATIC_LIB # elfutils
- 	help
- 	  Debugging program which runs a specified command until it exits.
- 	  While the command is executing, ltrace intercepts and records
-@@ -17,5 +18,5 @@ config BR2_PACKAGE_LTRACE
- 
- 	  http://ltrace.org
- 
--comment "ltrace needs toolchain w/ largefile, wchar"
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
-+comment "ltrace needs toolchain w/ largefile, wchar, dynamic library"
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+
+Regards,
+
+[1] http://lists.busybox.net/pipermail/buildroot/2013-May/072611.html
+[2] http://lists.busybox.net/pipermail/buildroot/2013-May/072556.html
+
+
+-- 
+Samuel
