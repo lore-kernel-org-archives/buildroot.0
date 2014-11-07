@@ -1,39 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Nov 2014 08:57:04 +0100
-Subject: [Buildroot] [PATCH] elfutils: disable for static builds
-In-Reply-To: <1415184166-61950-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 5 Nov 2014 10:42:46 +0000")
-References: <1415184166-61950-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87wq77wii7.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 7 Nov 2014 08:52:41 +0100
+Subject: [Buildroot] [git commit] pwgen: bump to version 2.07
+Message-ID: <20141107075730.60C3CB12B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=51f5f8a1657c8df993803920f3af8ce293fc70a0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Even when doing static builds, a shared library is built. This causes a
- > build failure under some circumstances, for instance when building for
- > MIPS + uClibc + static.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pwgen/pwgen.hash |    3 +++
+ package/pwgen/pwgen.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
- > After asking upstream if it would be possible to add a configure option
- > to not build the shared library, the answer was that doing a static
- > build is not a good idea. Here is a small snippet of the conversation:
-
- > "Note that fully static builds are problematic.  elfutils uses dlopen to
- > open the EBL backends (the CPU-specific support snippets), so even if
- > you link statically, the final binaries are still considerably dynamic."
-
- > Related:
- >   https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
-
- > Fixes:
- >   http://autobuild.buildroot.net/results/691/6913f5af6519463fbed39ef37b6a40ecf6a67b54/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pwgen/pwgen.hash b/package/pwgen/pwgen.hash
+new file mode 100644
+index 0000000..2997ed3
+--- /dev/null
++++ b/package/pwgen/pwgen.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/pwgen/files/pwgen/2.07/
++md5	910b1008cdd86445e9e01305d21ee4c5	pwgen-2.07.tar.gz
++sha1	51180f9cd5530d79eea18b2443780dec4ec5ea43	pwgen-2.07.tar.gz
+diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
+index cdc2fd3..9810097 100644
+--- a/package/pwgen/pwgen.mk
++++ b/package/pwgen/pwgen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PWGEN_VERSION = 2.06
++PWGEN_VERSION = 2.07
+ PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
+ PWGEN_LICENSE = GPLv2
+ PWGEN_LICENSE_FILES = debian/copyright
