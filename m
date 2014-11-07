@@ -1,67 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 7 Nov 2014 13:42:49 +0000
-Subject: [Buildroot] [PATCH 4/7] dhcpcd: bump to version 6.6.0
-In-Reply-To: <1415281013-1077-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1415281013-1077-1-git-send-email-gustavo@zacarias.com.ar>
- <1415281013-1077-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <545CCC59.4000805@imgtec.com>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Fri, 7 Nov 2014 10:57:21 -0300
+Subject: [Buildroot] [RFC/PATCH] Makefile: guarantee reproducible
+ permissions
+In-Reply-To: <CA+TH9VnK7iiTSXwfn_iNNoEDiQ7WnkTFz4_tANRfY-nUW3wNYA@mail.gmail.com>
+References: <1415018556-28336-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1415018556-28336-2-git-send-email-guido@vanguardiasur.com.ar>
+ <54580079.2070603@mind.be> <20141105144624.GA1257@fox>
+ <CA+TH9VnK7iiTSXwfn_iNNoEDiQ7WnkTFz4_tANRfY-nUW3wNYA@mail.gmail.com>
+Message-ID: <20141107135721.GB2620@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Angelo,
 
-On 11/06/2014 01:36 PM, Gustavo Zacarias wrote:
-> Also add hash file.
+On Wed, Nov 05, 2014 at 04:51:25PM +0100, Angelo Compagnucci wrote:
+> Hi Guido,
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/dhcpcd/dhcpcd.hash | 2 ++
->  package/dhcpcd/dhcpcd.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/dhcpcd/dhcpcd.hash
+> > Are you sure? I think rsync is used to copy the sysroot to the staging
+> > dir (output/host). The target is then filled with various 'install -m's
+> > for each library, so the previous set of permissions wouldn't matter.
 > 
-> diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-> new file mode 100644
-> index 0000000..fd64ebe
-> --- /dev/null
-> +++ b/package/dhcpcd/dhcpcd.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated from download (no sig, hash)
-> +sha256	16b94272cbb9ca22cb74c4421ee745f56850121613f6256587adb4e988c17fd0	dhcpcd-6.6.0.tar.bz2
-> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> index 60ac129..fe3c8d2 100644
-> --- a/package/dhcpcd/dhcpcd.mk
-> +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DHCPCD_VERSION = 6.4.7
-> +DHCPCD_VERSION = 6.6.0
->  DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
->  DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
->  DHCPCD_DEPENDENCIES = host-pkgconf
-> 
+> The mono package uses rsync to install some libraries in target, so
+> it's an exception.
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+I think this is not an issue since we're copying them from output/host,
+where we now build with a controlled umask. This means that the current
+permissions of source files in the BR repo and the umask won't affect
+the outcome. I just built mono with an umask of 077 on a repo with
+'chmod -R go=' and I think the end result was ok: 644 for most files,
+755 for DLLs and 755 for directories.
 
-Compile test on MIPS architecture plus checking the files are installed
-in target and have been built for the right architecture:
+Some packages call 'rsync -a' to copy files from their BR directory
+(under package/) where we don't track or care about permissions, so
+the result is not well-defined. But as long as the source is under
+output/host or output/build we should be ok, meaning: we won't depend on
+volatile things like the umask or the untracked permissions of the repo.
 
-$ file output/target/sbin/dhcpcd
-output/target/sbin/dhcpcd: ELF 32-bit MSB executable, MIPS, MIPS32 rel2
-version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux
-2.6.16, with unknown capability 0x41000000 = 0xf676e75, with unknown
-capability 0x10000 = 0x70403, stripped
+Of course, you probably know better about mono than I do, so if you do
+find a problem let me know!
 
-Best regards,
+Thanks!
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
