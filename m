@@ -1,47 +1,36 @@
-From: Jeff Horn <outforaride@gmail.com>
-Date: Fri, 7 Nov 2014 09:43:34 -0800
-Subject: [Buildroot] host ldconfig package
-In-Reply-To: <1456757.71s6JAxXJf@aquila>
-References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
- <1456757.71s6JAxXJf@aquila>
-Message-ID: <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 07 Nov 2014 19:32:13 +0100
+Subject: [Buildroot] [PATCH] bash: switch to release tarball
+In-Reply-To: <1415376509-22702-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 7 Nov 2014 13:08:29 -0300")
+References: <1415376509-22702-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mw82vp3m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the info
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Fri, Nov 7, 2014 at 8:35 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
->
-> As far as I understand, fixing ldconfig issue is not sufficient to make
-> video work? Can you describe issue you are facing?
+ > Yay!
+ > The release tarball allows us to drop sizable in-tree patches, so switch
+ > to it.
 
-When launching gplay or gst-launch I get missing lib errors. Which
-makes sense considering the gst-fsl-plugins are in /usr/lib/imx-mm.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/bash/bash-000-mkbuiltins-cross.patch |   31 -
+ >  package/bash/bash-001-patchlevel1-27.patch   | 1072 ------------
+ >  package/bash/bash-002-patchlevel28.patch     | 2270 --------------------------
+ >  package/bash/bash-003-patchlevel29.patch     |   64 -
+ >  package/bash/bash-004-patchlevel30.patch     | 2069 -----------------------
+ >  package/bash/bash.hash                       |    2 +-
+ >  package/bash/bash.mk                         |    2 +-
+ >  7 files changed, 2 insertions(+), 5508 deletions(-)
 
->
->
-> For information, I made iMX6 hardware video decoding and display work. You
-> may encounter a few difficulties:
->
->   - Xorg support for imx6 is not yet merged (and we are looking for
->     testers :-) )
+That's a nice diffstat!
 
-I can help test. I have a couple different i.MX6 boards (Wand,
-SabreSD). We are not using X11 on our board. We are using just Qt5
-with the eglfs platform.
+Committed, thanks.
 
->
->   - /etc/ld.so.conf have to contains these paths:
->        /usr/lib/imx-mm/audio-codec
->        /usr/lib/imx-mm/video-codec
->        /usr/lib/imx-mm/parser
->     (I have to write a patch for this)
-
-Yes, I saw a post about this patch and I added it to my buildroot
-branch. I will continue to work on this to see what is happening.
-
-Cheers,
-Jeff
+-- 
+Bye, Peter Korsgaard
