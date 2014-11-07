@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Nov 2014 09:45:46 -0300
-Subject: [Buildroot] [PATCH] coreutils: fix build failure for musl
-Message-ID: <1415364346-29236-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  7 Nov 2014 09:54:19 -0300
+Subject: [Buildroot] [PATCH] grep: fix build failure for musl
+Message-ID: <1415364859-23792-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,22 @@ detect this properly, so force internal regex routines for musl.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/coreutils/coreutils.mk | 3 ++-
+ package/grep/grep.mk | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 41857e2..391d2cd 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -14,7 +14,8 @@ COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_AUTORECONF = YES
- COREUTILS_GETTEXTIZE = YES
- 
--COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs
-+COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs \
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index e07f169..2c2477c 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -9,7 +9,8 @@ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
+ GREP_LICENSE_FILES = COPYING
+-GREP_CONF_OPTS = --disable-perl-regexp --without-included-regex
++GREP_CONF_OPTS = --disable-perl-regexp \
 +	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	ac_cv_func_chown_works=yes \
- 	ac_cv_func_euidaccess=no \
+ GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ # link with iconv if enabled
 -- 
 2.0.4
