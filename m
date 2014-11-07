@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Nov 2014 08:53:08 +0100
-Subject: [Buildroot] [git commit] iproute2: bump to version 3.17.0
-Message-ID: <20141107075730.68076B26B5@busybox.osuosl.org>
+Date: Fri, 7 Nov 2014 08:54:19 +0100
+Subject: [Buildroot] [git commit] btrfs-progs: bump to version 3.17.1
+Message-ID: <20141107075730.6FCB5B26A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4631ae3105f6754f24d28fd03ecbca07aaf7b6ca
+commit: http://git.buildroot.net/buildroot/commit/?id=c092462f9f8dfd1a3dadf2bb70e7ab3cebfec3c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -16,28 +16,28 @@ Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iproute2/iproute2.hash |    2 +-
- package/iproute2/iproute2.mk   |    2 +-
+ package/btrfs-progs/btrfs-progs.hash |    2 +-
+ package/btrfs-progs/btrfs-progs.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 5a8e6ca..3aecbfc 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 497f142..0f207b2 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,2 +1,2 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	1f0a8a6c0e872166f75433f5cbf9766f3002b5c2f13501b3bb8c51846a127b79	iproute2-3.16.0.tar.xz
-+sha256	09e406636e7598e46d5d4f7b928bf5db57049d65dbeb9a496005957ee16f6000	iproute2-3.17.0.tar.xz
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 17c3c36..a6ab445 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	ecafbf71e729c7e907dac488c2e0c94983dd38420f56dce85e2a4310a06bf0a0	btrfs-progs-v3.17.tar.xz
++sha256	6c01579c7b858c175aaed6b3b087dadaa38efb8e590a6928f1afe86bb8faaaab	btrfs-progs-v3.17.1.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 67d2e37..d16fa0d 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 3.16.0
-+IPROUTE2_VERSION = 3.17.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex
+-BTRFS_PROGS_VERSION = 3.17
++BTRFS_PROGS_VERSION = 3.17.1
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
