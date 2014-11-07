@@ -1,45 +1,50 @@
-From: Jeff Horn <outforaride@gmail.com>
-Date: Thu, 6 Nov 2014 15:42:30 -0800
-Subject: [Buildroot] host ldconfig package
-Message-ID: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Fri,  7 Nov 2014 00:50:33 -0300
+Subject: [Buildroot] [PATCH v2 0/5] target permissions
+In-Reply-To: <1415018556-28336-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1415018556-28336-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1415332238-31677-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Trying again to make the target's permissions well-defined. Differences
+with respect to the previous RFC are:
 
-I am using buildroot for one of our i.MX6 based boards and I have it mostly
-working ( I can't get video to work ). While troubleshooting freescales
-gstreamer plugins I noticed the /etc/ld.so.cache was empty. I found in the
-buildroot makefile where ldconfig is called so I manually ran
-/sbin/ldconfig -v -r output/target and I see lots of output like this:
+- previous patch splitted into two for clarity
 
-/sbin/ldconfig.real: /usr/lib/libGLESv2.so is for unknown machine 40.
+- packages with OVERRIDE_SRCIDR get chmoded so the build doesn't depend
+  on the permissions of the source directory
 
-It seems the ldconfig on my host (Ubuntu 14.04) cannot handle the tartget
-rootfs. I found a post from a year ago with the same issue but I did not
-see any resolution.
+- fixed two packages (matchbox-keyboard and linux-fusion) which copy
+  files from the BR directory (for which we don't control permissions)
+  with 'cp -p'. Change that to 'install -m' so we don't depend on the
+  current status
 
-So, I looked at my current Yocto build and I discovered Yocto builds a
-native hacked version of ldconfig and that is what gets called for the
-target rootfs. So, I copied that binary over and modified buildroots
-Makefile to call that instead and the cache is now populated correctly.
+There is no change for the toolchain, as I think it doesn't has any
+issues. The libs are copied to the target via several installs which
+set the mode explicitely. As long as toolchain installation is done via
+'install', we won't have any problem. However, it's possible that I
+missed something :).
 
-With that all working I created a buildroot host ldconfig package based on
-the Yocto code ( I'm using BR2_EXTERNAL) and using that the ld.so.cache
-gets populated. I still had to modify the buildoort Makfile to look for the
-newly installed host ldconfig.
+Comments are _very_ welcome.
 
-I guess my question is are others having any issues with image finalization
-and ldconfig?
+Guido Mart?nez (5):
+  Makefile: don't depend on the umask
+  Makefile: don't depend on current skeleton/overlay permissions
+  pkg-generic.mk: don't depend on external package permissions
+  package: matchbox-keyboard: use install instead of cp
+  package: linux-fusion: use install instead of cp
 
-On another note I see others are working on the fsl-gst-plugins and I can
-help test that as I REALLY want to get a working image out of buildroot.
+ Makefile                                                | 7 ++++---
+ package/linux-fusion/linux-fusion.mk                    | 2 +-
+ package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+ package/pkg-generic.mk                                  | 2 +-
+ support/scripts/shell-wrapper.sh                        | 5 +++++
+ 5 files changed, 12 insertions(+), 6 deletions(-)
+ create mode 100755 support/scripts/shell-wrapper.sh
 
-Thanks in advance,
-Jeff
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141106/ba32f38a/attachment.html>
+-- 
+2.1.1
