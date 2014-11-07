@@ -1,162 +1,74 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Fri, 7 Nov 2014 11:48:14 +0100
-Subject: [Buildroot] [PATCH v3] exiv2: new package
-Message-ID: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 07 Nov 2014 13:15:05 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <545C9CAE.3070303@imgtec.com> (Vicente Olivert Riera's message of
+ "Fri, 7 Nov 2014 10:19:26 +0000")
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+Message-ID: <87d28zw6k5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Exiv2 library and utility to manage image metadata
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Exiv2 can be built in GPLv2+ or commercial version. But in commercial
-version the Nikon lens name database and the NLS support has to be
-disabled for copyright reason.
+ > On 11/07/2014 07:30 AM, Thomas Petazzoni wrote:
+ >> Build statistics for 2014-11-06
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+ >> mipsel |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/edb374fba996973c21b7b4ed13d5d07c457793a0/
 
----
-Changes v2 -> v3:
-  - New Config.in option for Nikon lens name database
-  - Update/Add comments on copyright in commercial version
-  - Commercial licence removed when not selected (copy/paste bug)
+ >>>> ola 0.8.33 Autoreconfiguring
+ > make: ***
+ > [/home/tmp/buildroot-test/instance-0/output/build/ola-0.8.33/.stamp_configured]
+ > Terminated
 
-Changes v1 -> v2:
-  - Make conditional GPLv2+/commercial license
-  - Wrap Config.in to 72 columns
-  - Leave default value for package source
+ > No error message. It looks like the autobuilder stopped suddenly.
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/Config.in        |  1 +
- package/exiv2/Config.in  | 47 +++++++++++++++++++++++++++++++++++++++++++++++
- package/exiv2/exiv2.hash |  4 ++++
- package/exiv2/exiv2.mk   | 39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 91 insertions(+)
- create mode 100644 package/exiv2/Config.in
- create mode 100644 package/exiv2/exiv2.hash
- create mode 100644 package/exiv2/exiv2.mk
+Yes, it apparently timed out. Maxime, any idea why?
 
-diff --git a/package/Config.in b/package/Config.in
-index 28cf703..6abf344 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -625,6 +625,7 @@ menu "Graphics"
- 	source "package/adwaita-icon-theme/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/cairo/Config.in"
-+	source "package/exiv2/Config.in"
- 	source "package/fltk/Config.in"
- 	source "package/fontconfig/Config.in"
- 	source "package/freetype/Config.in"
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-new file mode 100644
-index 0000000..35f54a0
---- /dev/null
-+++ b/package/exiv2/Config.in
-@@ -0,0 +1,47 @@
-+config BR2_PACKAGE_EXIV2
-+	bool "exiv2"
-+	help
-+	  Exiv2 is a C++ library and a command line utility to manage
-+	  image metadata.
-+	  It provides fast and easy read and write access to the Exif,
-+	  IPTC and XMP metadata of images in various formats.
-+
-+	  Exiv2 is available with GPLv2+ or commercial license.
-+
-+	  http://www.exiv2.org/
-+
-+if BR2_PACKAGE_EXIV2
-+
-+config BR2_PACKAGE_EXIV2_COMMERCIAL
-+	bool "Enable commercial"
-+	help
-+	  Build the commercial version for closed source project.
-+
-+	  The Nikon lens name database and the NLS support is disabled
-+	  for copyright reason.
-+
-+	  A commercial license request is needed.
-+	  http://www.exiv2.org/download.html#license
-+
-+config BR2_PACKAGE_EXIV2_PNG
-+	bool "PNG image support"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Build with PNG image support
-+
-+config BR2_PACKAGE_EXIV2_XMP
-+	bool "XMP support"
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  Build with XMP support
-+
-+config BR2_PACKAGE_EXIV2_LENSDATA
-+	bool "Nikon lens name database"
-+	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
-+	help
-+	  Integrate Nikon lens name database.
-+
-+	  This database is integrated but comes from thirdparty:
-+	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html 
-+
-+endif
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-new file mode 100644
-index 0000000..d4f8c60
---- /dev/null
-+++ b/package/exiv2/exiv2.hash
-@@ -0,0 +1,4 @@
-+# From http://www.exiv2.org/download.html
-+md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
-+# Locally calculated
-+sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-new file mode 100644
-index 0000000..39f713a
---- /dev/null
-+++ b/package/exiv2/exiv2.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# exiv2
-+#
-+################################################################################
-+
-+EXIV2_VERSION = 0.24
-+EXIV2_SITE = http://www.exiv2.org
-+EXIV2_INSTALL_STAGING = YES
-+
-+ifneq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
-+EXIV2_CONF_OPTS += --disable-lensdata
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
-+EXIV2_LICENSE = commercial
-+# NLS support is disabled in commercial version due to the copyright
-+# of the translated texts.
-+EXIV2_CONF_OPTS += --enable-commercial --disable-nls
-+else
-+EXIV2_LICENSE = GPLv2+
-+EXIV2_LICENSE_FILES = COPYING
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
-+EXIV2_CONF_OPTS += --with-zlib=$(STAGING_DIR)
-+EXIV2_DEPENDENCIES += zlib
-+else
-+EXIV2_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
-+EXIV2_CONF_OPTS += --enable-xmp --with-expat=$(STAGING_DIR)/usr/lib
-+EXIV2_DEPENDENCIES += expat
-+else
-+EXIV2_CONF_OPTS += --disable-xmp
-+endif
-+
-+$(eval $(autotools-package))
+
+ >> mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/445bbbb0e6370cc2d1caf4ca66f59b8441f9dcda/
+ >> mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/88b67de17d7059b2aeb41c483e4c275e5d2f2ee1/
+ >> mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e6cb3215fcefd76805abee98b277b810366e456c/
+
+ > I keep reporting this every day. The autobuilder which is reporting
+ > these failures is not updated with the latest version of the
+ > autobuilder-run script.
+
+ > I don't know who owns this autobuilder, but please, fix it so we will
+ > not see the same useless reports gain and again.
+
+Yeah. You can see the owner in the submitter file (in this case Thomas,
+Richard and Maxime). I believe Thomas is currently travelling - But
+Richard and Maxime, please update your autobuilders.
+
+I've just checked and ensured the autobuilders I use are uptodate.
+
+
+ >> mips |                    systemd-216 | NOK | http://autobuild.buildroot.net/results/5764a0f71b5678701c2d4e4bd37516d8aae06f6b/
+
+ > I fixed this upstream and then backported the patch to Buildroot. The
+ > patch series is waiting in the queue:
+
+ > http://patchwork.ozlabs.org/patch/406583/
+ > http://patchwork.ozlabs.org/patch/406584/
+
+I'll have a look - Thanks!
+
+
+ >> mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+
+ > "Fatal error: can't create obj/esfilter.o: No such file or directory"
+
+ > I think this is a race condition problem due to the "obj" directory not
+ > being created in time. I have reported the issue upstream.
+
+ > https://code.google.com/p/tstools/issues/detail?id=29
+
+Yes, looks like it. Thanks for reporting it!
+
 -- 
-2.1.3
+Bye, Peter Korsgaard
