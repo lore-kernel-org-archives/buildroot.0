@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Fri,  7 Nov 2014 14:28:46 +0100
-Subject: [Buildroot] [PATCH v2 10/15] erlang-p1-stun: new package.
+Date: Fri,  7 Nov 2014 14:28:47 +0100
+Subject: [Buildroot] [PATCH v2 11/15] erlang-p1-stringprep: new package.
 In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
 References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1415366931-6870-11-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1415366931-6870-12-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/erlang-p1-stun/Config.in         |  7 +++++++
- package/erlang-p1-stun/erlang-p1-stun.mk | 14 ++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/erlang-p1-stun/Config.in
- create mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
+ package/Config.in                                    |  1 +
+ package/erlang-p1-stringprep/Config.in               |  5 +++++
+ package/erlang-p1-stringprep/erlang-p1-stringprep.mk | 13 +++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/erlang-p1-stringprep/Config.in
+ create mode 100644 package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 21c4071..52c597a 100644
+index 52c597a..5656a1a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-stun/Config.in"
++	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
  	source "package/erlang-p1-tls/Config.in"
  	source "package/erlang-p1-utils/Config.in"
- 	source "package/erlang-p1-xml/Config.in"
-diff --git a/package/erlang-p1-stun/Config.in b/package/erlang-p1-stun/Config.in
+diff --git a/package/erlang-p1-stringprep/Config.in b/package/erlang-p1-stringprep/Config.in
 new file mode 100644
-index 0000000..bbe6bae
+index 0000000..eaaa59e
 --- /dev/null
-+++ b/package/erlang-p1-stun/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ERLANG_P1_STUN
-+	bool "erlang-p1-stun"
++++ b/package/erlang-p1-stringprep/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	bool "erlang-p1-stringprep"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  STUN library for Erlang
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
++	  Erlang interface to stringprep
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 new file mode 100644
-index 0000000..d963caa
+index 0000000..b83e106
 --- /dev/null
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-p1-stun
++# erlang-p1-stringprep
 +#
 +################################################################################
 +
-+ERLANG_P1_STUN_VERSION = a7c07b6
-+ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
-+ERLANG_P1_STUN_LICENSE = GPLv2+
-+ERLANG_P1_STUN_LICENSE_FILES = COPYING
-+ERLANG_P1_STUN_DEPENDENCIES = erlang host-erlang-rebar erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_STUN_INSTALL_STAGING = YES
++ERLANG_P1_STRINGPREP_VERSION = 9e9e0f8
++ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
++ERLANG_P1_STRINGPREP_LICENSE = GPLv2+
++ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.TCL
++ERLANG_P1_STRINGPREP_DEPENDENCIES = erlang
 +
 +$(eval $(rebar-package))
 -- 
