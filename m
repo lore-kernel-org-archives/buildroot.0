@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Fri,  7 Nov 2014 14:28:45 +0100
-Subject: [Buildroot] [PATCH v2 09/15] erlang-p1-tls: new package.
+Date: Fri,  7 Nov 2014 14:28:48 +0100
+Subject: [Buildroot] [PATCH v2 12/15] erlang-p1-sip: new package.
 In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
 References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1415366931-6870-10-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1415366931-6870-13-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,84 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/erlang-p1-tls/Config.in        |  5 +++++
- package/erlang-p1-tls/erlang-p1-tls.mk | 14 ++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/erlang-p1-tls/Config.in
- create mode 100644 package/erlang-p1-tls/erlang-p1-tls.mk
+ package/Config.in                                     |  1 +
+ package/erlang-p1-sip/Config.in                       |  8 ++++++++
+ .../erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch | 19 +++++++++++++++++++
+ package/erlang-p1-sip/erlang-p1-sip.mk                | 14 ++++++++++++++
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/erlang-p1-sip/Config.in
+ create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
+ create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7f6fee9..21c4071 100644
+index 5656a1a..8abd6a6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-tls/Config.in"
- 	source "package/erlang-p1-utils/Config.in"
- 	source "package/erlang-p1-xml/Config.in"
- 	source "package/erlang-p1-yaml/Config.in"
-diff --git a/package/erlang-p1-tls/Config.in b/package/erlang-p1-tls/Config.in
++	source "package/erlang-p1-sip/Config.in"
+ 	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
+ 	source "package/erlang-p1-tls/Config.in"
+diff --git a/package/erlang-p1-sip/Config.in b/package/erlang-p1-sip/Config.in
 new file mode 100644
-index 0000000..1aa53bc
+index 0000000..64a12b1
 --- /dev/null
-+++ b/package/erlang-p1-tls/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_ERLANG_P1_TLS
-+	bool "erlang-p1-tls"
++++ b/package/erlang-p1-sip/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ERLANG_P1_SIP
++	bool "erlang-p1-sip"
 +	depends on BR2_PACKAGE_ERLANG
++	select BR2_PACKAGE_ERLANG_P1_STUN
++	select BR2_PACKAGE_ERLANG_P1_TLS
++	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  Erlang interface to OpenSSL
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
++	  SIP library for Erlang
+diff --git a/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
 new file mode 100644
-index 0000000..a884377
+index 0000000..80e2ab3
 --- /dev/null
-+++ b/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
+@@ -0,0 +1,19 @@
++Description: correct include
++ This part of the code was moved into it's own project and was packaged
++ separately by me. To make the build process work, this small fix is
++ necessary.
++Author: Philipp Huebner <debalance@debian.org>
++
++Index: erlang-p1-sip/src/esip_socket.erl
++===================================================================
++--- erlang-p1-sip.orig/src/esip_socket.erl
+++++ erlang-p1-sip/src/esip_socket.erl
++@@ -22,7 +22,7 @@
++ 
++ -include("esip.hrl").
++ -include("esip_lib.hrl").
++--include("stun.hrl").
+++-include_lib("p1_stun/include/stun.hrl").
++ 
++ -define(TCP_SEND_TIMEOUT, 15000).
++ -define(CONNECT_TIMEOUT, 20000).
+diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
+new file mode 100644
+index 0000000..d38ff2b
+--- /dev/null
++++ b/package/erlang-p1-sip/erlang-p1-sip.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-p1-tls
++# erlang-p1-sip
 +#
 +################################################################################
 +
-+ERLANG_P1_TLS_VERSION = 53f0478
-+ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
-+ERLANG_P1_TLS_LICENSE = GPLv2+
-+ERLANG_P1_TLS_LICENSE_FILES = COPYING
-+ERLANG_P1_TLS_DEPENDENCIES = erlang
-+ERLANG_P1_TLS_INSTALL_STAGING = YES
++ERLANG_P1_SIP_VERSION = bba4459
++ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
++ERLANG_P1_SIP_LICENSE = GPLv2
++ERLANG_P1_SIP_LICENSE_FILES = COPYING
++ERLANG_P1_SIP_DEPENDENCIES = erlang erlang-p1-stun erlang-p1-tls erlang-p1-utils
++ERLANG_P1_SIP_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 -- 
