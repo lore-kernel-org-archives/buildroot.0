@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Nov 2014 00:06:54 +0100
-Subject: [Buildroot] [git commit] package/dovecot: Adjust LIBDOVECOT in
-	dovecot-config to STAGING_DIR
-Message-ID: <20141108230843.1610BB3814@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 23:12:27 +0100
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 0.8.6
+Message-ID: <20141108230842.E2600B3815@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5278753c204477b465930c13868ff9da20eba75
+commit: http://git.buildroot.net/buildroot/commit/?id=130ca7d0c4bdca91774587a4b27a82c9ad33eccf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/3e6/3e6c258d7636fedbb87ba62069094291666e6a85/
-http://autobuild.buildroot.net/results/410/410b68afece06ddb03a00245cfdc3de4d9a4e5f1/
-http://autobuild.buildroot.net/results/bd3/bd37ee92eeb00adb1558dbb61315465a0cdfe635/
-http://autobuild.buildroot.net/results/fd1/fd18c3678eded431476b4e61a10c48e160ffd51a//
-and many others
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/upmpdcli/upmpdcli.hash |    4 ++--
+ package/upmpdcli/upmpdcli.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index fd597ee..a60dd4d 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -90,6 +90,7 @@ DOVECOT_POST_CONFIGURE_HOOKS += DOVECOT_POST_CONFIGURE
- # DOVECOT_CONFIG_SCRIPTS can not be used to rewrite paths
- define DOVECOT_FIX_STAGING_DOVECOT_CONFIG
- 	$(SED) 's,^LIBDOVECOT_INCLUDE=.*$$,LIBDOVECOT_INCLUDE=\"-I$(STAGING_DIR)/usr/include/dovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
-+	$(SED) 's,^LIBDOVECOT=.*$$,LIBDOVECOT=\"-L$(STAGING_DIR)/usr/lib -ldovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
- endef
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 8822aed..b3a793b 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.5.tar.gz.sha256
+-sha256 1903214a6170b1cc3a95d22ed23d0f9c78525721506f000bef846657e7517e4c  upmpdcli-0.8.5.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.6.tar.gz.sha256
++sha256 118d30d7c8ca9f9e94cebdec5cf8c7c619b71252a0dbac2afe30d5c9ff5bda87  upmpdcli-0.8.6.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index a90e8bd..0be4d91 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- DOVECOT_POST_INSTALL_STAGING_HOOKS += DOVECOT_FIX_STAGING_DOVECOT_CONFIG
+-UPMPDCLI_VERSION = 0.8.5
++UPMPDCLI_VERSION = 0.8.6
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
