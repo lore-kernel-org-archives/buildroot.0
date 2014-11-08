@@ -1,378 +1,902 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Nov 2014 15:53:38 +0100
-Subject: [Buildroot] [RFC/PATCH v5 05/13] package/kodi: Bump version to
-	14.0b2-Helix
+Date: Sat,  8 Nov 2014 15:53:37 +0100
+Subject: [Buildroot] [RFC/PATCH v5 04/13] Rename XBMC to Kodi - part II -
+	rename variables
 In-Reply-To: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1415458426-23645-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1415458426-23645-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- delete kodi-0002-mathutil.patch, committed upstream
-- delete kodi-0003-dbus.patch, committed upstream
-- add dependency to ffmpeg, xbmc does not deliver its own ffmpeg anymore
-- remove dependency to flac & lame, audio encoders have been seperated from kodi
+- add xbmc-related options to Config.in.legacy
+
+The "Rename XBMC to Kodi" is split in two parts for easier review,
+please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in                |    4 +-
- package/kodi/kodi-0002-mathutil.patch |  213 ---------------------------------
- package/kodi/kodi-0003-dbus.patch     |   46 -------
- package/kodi/kodi.mk                  |   26 +---
- 4 files changed, 8 insertions(+), 281 deletions(-)
- delete mode 100644 package/kodi/kodi-0002-mathutil.patch
- delete mode 100644 package/kodi/kodi-0003-dbus.patch
+ Config.in.legacy                           |  119 ++++++++++++++
+ package/kodi/Config.in                     |  100 ++++++------
+ package/kodi/S50kodi                       |   16 +-
+ package/kodi/br-kodi                       |   16 +-
+ package/kodi/kodi.mk                       |  232 ++++++++++++++--------------
+ package/kodi/kodi.service                  |    2 +-
+ package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk |    2 +-
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    2 +-
+ 8 files changed, 304 insertions(+), 185 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 95f77c3..1320ae8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,125 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.11"
+ 
++config BR2_PACKAGE_XBMC
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_ALSA_LIB
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_ALSA_LIB
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_AVAHI
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_AVAHI
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_DBUS
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_DBUS
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBBLURAY
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBBLURAY
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_GOOM
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_GOOM
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_RSXS
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_RSXS
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBCEC
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBCEC
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBMICROHTTPD
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBMICROHTTPD
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBNFS
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBNFS
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_RTMPDUMP
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_RTMPDUMP
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBSHAIRPLAY
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBSMBCLIENT
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBSMBCLIENT
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBTHEORA
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBTHEORA
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBUSB
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBUSB
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_LIBVA
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_LIBVA
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
++config BR2_PACKAGE_XBMC_WAVPACK
++	bool "xbmc options have been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_WAVPACK
++	help
++	  The XBMC media center project was renamed to Kodi entertainment center
++
+ config BR2_GCC_VERSION_4_4_X
+ 	bool "gcc 4.4.x has been removed"
+ 	select BR2_LEGACY
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 3f14a75..2dcd8b3 100644
+index a7337d5..3f14a75 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -35,7 +35,9 @@ menuconfig BR2_PACKAGE_KODI
+@@ -1,35 +1,35 @@
+-config BR2_PACKAGE_XBMC_ARCH_SUPPORTS
++config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_arm || BR2_i386 || BR2_x86_64
+ 
+-comment "xbmc needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
+-	depends on BR2_PACKAGE_XBMC_ARCH_SUPPORTS
++comment "kodi needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
++	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
+ 
+-config BR2_PACKAGE_XBMC_EGL_GLES
++config BR2_PACKAGE_KODI_EGL_GLES
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBGLES
+-	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
++	depends on !BR2_PACKAGE_KODI_GL # prefer GL if available
+ 
+-config BR2_PACKAGE_XBMC_GL
++config BR2_PACKAGE_KODI_GL
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on !BR2_arm # xbmc needs egl/gles on arm
++	depends on !BR2_arm # kodi needs egl/gles on arm
+ 
+-comment "xbmc needs an OpenGL or an openGL ES and EGL backend"
++comment "kodi needs an OpenGL or an openGL ES and EGL backend"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_XBMC_GL && !BR2_PACKAGE_XBMC_EGL_GLES
++	depends on !BR2_PACKAGE_KODI_GL && !BR2_PACKAGE_KODI_EGL_GLES
+ 
+-comment "xbmc requires an OpenGL ES and EGL backend"
++comment "kodi requires an OpenGL ES and EGL backend"
+ 	depends on BR2_arm
+-	depends on !BR2_PACKAGE_XBMC_EGL_GLES
++	depends on !BR2_PACKAGE_KODI_EGL_GLES
+ 
+-menuconfig BR2_PACKAGE_XBMC
+-	bool "xbmc"
++menuconfig BR2_PACKAGE_KODI
++	bool "kodi"
+ 	select BR2_NEEDS_HOST_JAVA
+ 	select BR2_PACKAGE_BOOST
  	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_GPL
-+	select BR2_PACKAGE_FFMPEG_POSTPROC # postproc depends on GPL
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JASPER
-diff --git a/package/kodi/kodi-0002-mathutil.patch b/package/kodi/kodi-0002-mathutil.patch
-deleted file mode 100644
-index 33f91eb..0000000
---- a/package/kodi/kodi-0002-mathutil.patch
-+++ /dev/null
-@@ -1,213 +0,0 @@
--Taken from upstream PR: https://github.com/xbmc/xbmc/pull/3760
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From 7388e8be7cd5e78100532ebf0dba15dccb7b03f8 Mon Sep 17 00:00:00 2001
--From: Ben Avison <bavison@riscosopen.org>
--Date: Tue, 3 Dec 2013 15:51:39 +0000
--Subject: [PATCH] Faster and simpler portable implementation of
-- MathUtils::round_int().
--
--Much as I like a bit of inline assembler, I have also removed the ARM versions
--of MathUtils::truncate_int() and MathUtils::round_int(). The former was just
--how any sane compiler should have assembled a cast from double to signed int
--anyway. The latter was a much too complicated way to achieve the desired
--effect, and was switched out in most ARM builds anyway in favour of the old
--portable implementation that used floor().
--
--Verified that MathUtils::test() still passes, and that GCC is now able to
--inline MathUtils::round_int(), where it didn't previously.
--
--I tested on a Raspberry Pi with the default theme, displaying the front page
--with the RSS ticker enabled. This saturates the CPU, so I'm measuring the
--improvement using the debug window's FPS figure. This patch improves this from
--~50.8 FPS to ~52.6 FPS.
-----
-- xbmc/utils/MathUtils.h | 129 +++++++++++++++++++++++--------------------------
-- 1 file changed, 61 insertions(+), 68 deletions(-)
--
--diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
--index 96af9f4..0dae77d 100644
----- a/xbmc/utils/MathUtils.h
--+++ b/xbmc/utils/MathUtils.h
--@@ -34,17 +34,13 @@
-- 
-- #if defined(__ppc__) || \
--     defined(__powerpc__) || \
---   (defined(TARGET_DARWIN_IOS) && defined(__llvm__)) || \
---   (defined(TARGET_ANDROID) && defined(__arm__)) || \
---    defined(TARGET_RASPBERRY_PI)
--+    defined(__arm__)
--   #define DISABLE_MATHUTILS_ASM_ROUND_INT
-- #endif
-- 
-- #if defined(__ppc__) || \
--     defined(__powerpc__) || \
---   (defined(TARGET_DARWIN) && defined(__llvm__)) || \
---   (defined(TARGET_ANDROID) && defined(__arm__)) || \
---    defined(TARGET_RASPBERRY_PI)
--+    defined(__arm__)
--   #define DISABLE_MATHUTILS_ASM_TRUNCATE_INT
-- #endif
-- 
--@@ -73,60 +69,63 @@
--   {
--     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
--     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
---    const float round_to_nearest = 0.5f;
---    int i;
-- 
-- #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
---    i = floor(x + round_to_nearest);
---
---#elif defined(__arm__)
---    // From 'ARM-v7-M Architecture Reference Manual' page A7-569:
---    //  "The floating-point to integer operation (vcvt) [normally] uses the Round towards Zero rounding mode"
---    // Because of this...we must use some less-than-straightforward logic to perform this operation without
---    //  changing the rounding mode flags
---
---    /* The assembly below implements the following logic:
---     if (x < 0)
---       inc = -0.5f
---     else
---       inc = 0.5f
---     int_val = trunc(x+inc);
---     err = x - int_val;
---     if (err == 0.5f)
---       int_val++;
---     return int_val;
---    */
--+    /* This implementation warrants some further explanation.
--+     *
--+     * First, a couple of notes on rounding:
--+     * 1) C casts from float/double to integer round towards zero.
--+     * 2) Float/double additions are rounded according to the normal rules,
--+     *    in other words: on some architectures, it's fixed at compile-time,
--+     *    and on others it can be set using fesetround()). The following
--+     *    analysis assumes round-to-nearest with ties rounding to even. This
--+     *    is a fairly sensible choice, and is the default with ARM VFP.
--+     *
--+     * What this function wants is round-to-nearest with ties rounding to
--+     * +infinity. This isn't an IEEE rounding mode, even if we could guarantee
--+     * that all architectures supported fesetround(), which they don't. Instead,
--+     * this adds an offset of 2147483648.5 (= 0x80000000.8p0), then casts to
--+     * an unsigned int (crucially, all possible inputs are now in a range where
--+     * round to zero acts the same as round to -infinity) and then subtracts
--+     * 0x80000000 in the integer domain. The 0.5 component of the offset
--+     * converts what is effectively a round down into a round to nearest, with
--+     * ties rounding up, as desired.
--+     *
--+     * There is a catch, that because there is a double rounding, there is a
--+     * small region where the input falls just *below* a tie, where the addition
--+     * of the offset causes a round *up* to an exact integer, due to the finite
--+     * level of precision available in floating point. You need to be aware of
--+     * this when calling this function, although@present it is not believed
--+     * that XBMC ever attempts to round numbers in this window.
--+     *
--+     * It is worth proving the size of the affected window. Recall that double
--+     * precision employs a mantissa of 52 bits.
--+     * 1) For all inputs -0.5 <= x <= INT_MAX
--+     *    Once the offset is applied, the most significant binary digit in the
--+     *    floating-point representation is +2^31.
--+     *    At this magnitude, the smallest step representable in double precision
--+     *    is 2^31 / 2^52 = 0.000000476837158203125
--+     *    So the size of the range which is rounded up due to the addition is
--+     *    half the size of this step, or 0.0000002384185791015625
--+     *
--+     * 2) For all inputs INT_MIN/2 < x < -0.5
--+     *    Once the offset is applied, the most significant binary digit in the
--+     *    floating-point representation is +2^30.
--+     *    At this magnitude, the smallest step representable in double precision
--+     *    is 2^30 / 2^52 = 0.0000002384185791015625
--+     *    So the size of the range which is rounded up due to the addition is
--+     *    half the size of this step, or 0.00000011920928955078125
--+     *
--+     * 3) For all inputs INT_MIN <= x <= INT_MIN/2
--+     *    The representation once the offset is applied has equal or greater
--+     *    precision than the input, so the addition does not cause rounding.
--+     */
--+    return ((unsigned int) (x + 0x80000000.8p0)) - 0x80000000;
-- 
---    __asm__ __volatile__ (
---#if defined(__ARM_PCS_VFP)
---      "fconstd d1,#%G[rnd_val]     \n\t" // Copy round_to_nearest into a working register (d1 = 0.5)
-- #else
---      "vmov.F64 d1,%[rnd_val]      \n\t"
---#endif
---      "fcmpezd %P[value]           \n\t" // Check value against zero (value == 0?)
---      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
---      "it mi                       \n\t"
---      "vnegmi.F64 d1, d1           \n\t" // if N-flag is set, negate round_to_nearest (if (value < 0) d1 = -1 * d1)
---      "vadd.F64 d1,%P[value],d1    \n\t" // Add round_to_nearest to value, store result in working register (d1 += value)
---      "vcvt.S32.F64 s3,d1          \n\t" // Truncate(round towards zero) (s3 = (int)d1)
---      "vmov %[result],s3           \n\t" // Store the integer result in a general-purpose register (result = s3)
---      "vcvt.F64.S32 d1,s3          \n\t" // Convert back to floating-point (d1 = (double)s3)
---      "vsub.F64 d1,%P[value],d1    \n\t" // Calculate the error (d1 = value - d1)
---#if defined(__ARM_PCS_VFP)
---      "fconstd d2,#%G[rnd_val]     \n\t" // d2 = 0.5;
---#else
---      "vmov.F64 d2,%[rnd_val]      \n\t"
---#endif
---      "fcmped d1, d2               \n\t" // (d1 == 0.5?)
---      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
---      "it eq                       \n\t"
---      "addeq %[result],#1          \n\t" // (if (d1 == d2) result++;)
---      : [result] "=r"(i)                                  // Outputs
---      : [rnd_val] "Dv" (round_to_nearest), [value] "w"(x) // Inputs
---      : "d1", "d2", "s3"                                  // Clobbers
---    );
---
---#elif defined(__SSE2__)
--+    const float round_to_nearest = 0.5f;
--+    int i;
--+#if defined(__SSE2__)
--     const float round_dn_to_nearest = 0.4999999f;
--     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
-- 
--@@ -150,8 +149,8 @@
--     );
-- 
-- #endif
---
--     return i;
--+#endif
--   }
-- 
--   /*! \brief Truncate to nearest integer.
--@@ -165,20 +164,13 @@
--   {
--     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
--     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
---    int i;
-- 
-- #if defined(DISABLE_MATHUTILS_ASM_TRUNCATE_INT)
---    return i = (int)x;
---
---#elif defined(__arm__)
---    __asm__ __volatile__ (
---      "vcvt.S32.F64 %[result],%P[value]   \n\t" // Truncate(round towards zero) and store the result
---      : [result] "=w"(i)                        // Outputs
---      : [value] "w"(x)                          // Inputs
---    );
---    return i;
--+    return x;
-- 
---#elif defined(TARGET_WINDOWS)
--+#else
--+    int i;
--+#if defined(TARGET_WINDOWS)
--     const float round_towards_m_i = -0.5f;
--     __asm
--     {
--@@ -204,6 +196,7 @@
--     if (x < 0)
--       i = -i;
--     return (i);
--+#endif
--   }
-- 
--   inline int64_t abs(int64_t a)
---- 
--1.9.1
--
-diff --git a/package/kodi/kodi-0003-dbus.patch b/package/kodi/kodi-0003-dbus.patch
-deleted file mode 100644
-index 3b63b23..0000000
---- a/package/kodi/kodi-0003-dbus.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--build: make D-Bus configurable
--
--Patch accepted upstream:
--https://github.com/xbmc/xbmc/commit/630f930d4c9c33230e9ff7df24f93afb3f05881f
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr xbmc-13.2-Gotham.org/configure.in xbmc-13.2-Gotham/configure.in
----- xbmc-13.2-Gotham.org/configure.in	2014-08-17 15:19:05.000000000 +0200
--+++ xbmc-13.2-Gotham/configure.in	2014-09-02 20:55:06.932442467 +0200
--@@ -129,6 +129,7 @@
-- goom_enabled="== GOOM enabled. =="
-- goom_disabled="== GOOM disabled. =="
-- alsa_disabled="== ALSA support disabled. =="
--+dbus_disabled="== DBUS support disabled. =="
-- rsxs_enabled="== RSXS enabled. =="
-- rsxs_disabled="== RSXS disabled. =="
-- fishbmc_enabled="== FishBMC enabled. =="
--@@ -369,6 +370,12 @@
--   [use_alsa=$enableval],
--   [use_alsa=yes])
-- 
--+AC_ARG_ENABLE([dbus],
--+  [AS_HELP_STRING([--disable-dbus],
--+  [disable DBUS support])],
--+  [use_dbus=$enableval],
--+  [use_dbus=yes])
--+
-- AC_ARG_ENABLE([pulse],
--   [AS_HELP_STRING([--enable-pulse],
--   [enable PulseAudio support (default is auto)])],
--@@ -1253,10 +1260,14 @@
--     [INCLUDES="$INCLUDES $ALSA_CFLAGS"; LIBS="$LIBS $ALSA_LIBS"; use_alsa=yes],
--     AC_MSG_NOTICE($alsa_not_found); use_alsa=no)
-- fi
--+if test "x$use_dbus" != "xno"; then
--   PKG_CHECK_MODULES([DBUS],    [dbus-1],
--     [INCLUDES="$INCLUDES $DBUS_CFLAGS"; LIBS="$LIBS $DBUS_LIBS"; use_dbus=yes]; \
--     AC_DEFINE([HAVE_DBUS],[1],["Define to 1 if dbus is installed"]),
--     AC_MSG_NOTICE($missing_library); use_dbus=no)
--+else
--+  AC_MSG_NOTICE($dbus_disabled)
--+fi
--   if test "x$use_sdl" != "xno"; then
--     PKG_CHECK_MODULES([SDL],   [sdl],
--       [INCLUDES="$INCLUDES $SDL_CFLAGS"; LIBS="$LIBS $SDL_LIBS"],
+@@ -44,8 +44,8 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBCDIO
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBFRIBIDI
+-	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XBMC_GL
+-	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_KODI_GL
++	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBID3TAG
+ 	select BR2_PACKAGE_LIBMAD
+@@ -75,56 +75,56 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_PYTHON_UNICODEDATA
+ 	select BR2_PACKAGE_PYTHON_ZLIB
+ 	select BR2_PACKAGE_READLINE
+-	select BR2_PACKAGE_SDL if BR2_PACKAGE_XBMC_GL
+-	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_XBMC_GL
+-	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_SDL if BR2_PACKAGE_KODI_GL
++	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_KODI_GL
++	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_KODI_GL
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TIFF
+ 	select BR2_PACKAGE_TINYXML
+-	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
+-	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_XBMC_GL
+-	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
++	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
++	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_KODI_GL
++	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
+ 	select BR2_PACKAGE_YAJL
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
++	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_PACKAGE_XBMC_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	help
+-	  XBMC is an award-winning free and open source (GPL) software
++	  Kodi is an award-winning free and open source (GPL) software
+ 	  media player and entertainment hub for digital media.
+ 
+-	  http://xbmc.org
++	  http://kodi.tv
+ 
+-if BR2_PACKAGE_XBMC
++if BR2_PACKAGE_KODI
+ 
+-config BR2_PACKAGE_XBMC_ALSA_LIB
++config BR2_PACKAGE_KODI_ALSA_LIB
+ 	bool "alsa"
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	help
+ 	  Enable alsa support.
+ 
+-config BR2_PACKAGE_XBMC_AVAHI
++config BR2_PACKAGE_KODI_AVAHI
+ 	bool "avahi"
+ 	depends on !BR2_PREFER_STATIC_LIB # avahi
+ 	select BR2_PACKAGE_AVAHI
+ 	select BR2_PACKAGE_AVAHI_DAEMON
+ 	help
+ 	  Enable Avahi support.
+-	  Select this if you want XBMC to support Bonjour protocol.
++	  Select this if you want Kodi to support Bonjour protocol.
+ 
+-config BR2_PACKAGE_XBMC_DBUS
++config BR2_PACKAGE_KODI_DBUS
+ 	bool "dbus"
+ 	select BR2_PACKAGE_DBUS
+ 	help
+ 	  Enable D-Bus support
+ 
+-config BR2_PACKAGE_XBMC_LIBBLURAY
++config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -135,43 +135,43 @@ config BR2_PACKAGE_XBMC_LIBBLURAY
+ comment "libbluray support needs a toolchain w/ dynamic library"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
+-config BR2_PACKAGE_XBMC_GOOM
++config BR2_PACKAGE_KODI_GOOM
+ 	bool "goom screensaver"
+-	depends on BR2_PACKAGE_XBMC_GL
++	depends on BR2_PACKAGE_KODI_GL
+ 	help
+ 	  Enable goom screensaver
+ 
+ comment "goom needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_XBMC_GL
++	depends on !BR2_PACKAGE_KODI_GL
+ 
+-config BR2_PACKAGE_XBMC_RSXS
++config BR2_PACKAGE_KODI_RSXS
+ 	bool "rsxs screensaver"
+-	depends on BR2_PACKAGE_XBMC_GL
++	depends on BR2_PACKAGE_KODI_GL
+ 	help
+ 	  Enable goom screensaver
+ 
+ comment "rsxs needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_XBMC_GL
++	depends on !BR2_PACKAGE_KODI_GL
+ 
+-config BR2_PACKAGE_XBMC_LIBCEC
++config BR2_PACKAGE_KODI_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_PREFER_STATIC_LIB # libcec
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBCEC
+ 	help
+ 	  Enable CEC (Consumer Electronics Control) support.
+-	  Select this if you want XBMC to support HDMI CEC.
++	  Select this if you want Kodi to support HDMI CEC.
+ 
+ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+ 	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
+ 
+-config BR2_PACKAGE_XBMC_LIBMICROHTTPD
++config BR2_PACKAGE_KODI_LIBMICROHTTPD
+ 	bool "web server"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 	help
+ 	  Enable webserver feature
+ 
+-config BR2_PACKAGE_XBMC_LIBNFS
++config BR2_PACKAGE_KODI_LIBNFS
+ 	bool "nfs"
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_LIBNFS
+@@ -181,42 +181,42 @@ config BR2_PACKAGE_XBMC_LIBNFS
+ comment "nfs support needs a toolchain w/ RPC support"
+ 	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 
+-config BR2_PACKAGE_XBMC_RTMPDUMP
++config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "rtmp"
+ 	select BR2_PACKAGE_RTMPDUMP
+ 	help
+ 	  Enable RTMP input support.
+ 	  Select this if you want to play back rtmp stream.
+ 
+-config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
++config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
+ 	help
+ 	  Enable Shairport support.
+ 	  Select this if you want to stream content from an Apple device.
+ 
+-config BR2_PACKAGE_XBMC_LIBSMBCLIENT
++config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	bool "samba"
+ 	select BR2_PACKAGE_SAMBA
+ 	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
+ 	help
+ 	  Enable Samba support
+ 
+-config BR2_PACKAGE_XBMC_LIBTHEORA
++config BR2_PACKAGE_KODI_LIBTHEORA
+ 	bool "theora"
+ 	select BR2_PACKAGE_LIBTHEORA
+ 	help
+ 	  Enable Theora input support.
+ 	  Select this if you want to play back OGG/OGV files (Video).
+ 
+-config BR2_PACKAGE_XBMC_LIBUSB
++config BR2_PACKAGE_KODI_LIBUSB
+ 	bool "usb"
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  Enable libusb support.
+ 
+-config BR2_PACKAGE_XBMC_LIBVA
++config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+ 	select BR2_PACKAGE_LIBVA
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -226,16 +226,16 @@ config BR2_PACKAGE_XBMC_LIBVA
+ comment "libva support needs toolchain w/ dynamic library"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
+-config BR2_PACKAGE_XBMC_WAVPACK
++config BR2_PACKAGE_KODI_WAVPACK
+ 	bool "wavpack"
+ 	select BR2_PACKAGE_WAVPACK
+ 	help
+ 	  Enable WAV input support.
+ 	  Select this if you want to play back WV files.
+ 
+-comment "XBMC addons"
++comment "Kodi addons"
+ 
+ source "package/xbmc-addon-xvdr/Config.in"
+ source "package/xbmc-pvr-addons/Config.in"
+ 
+-endif # BR2_PACKAGE_XBMC
++endif # BR2_PACKAGE_KODI
+diff --git a/package/kodi/S50kodi b/package/kodi/S50kodi
+index 312452b..f9abbb5 100755
+--- a/package/kodi/S50kodi
++++ b/package/kodi/S50kodi
+@@ -1,20 +1,20 @@
+ #!/bin/sh
+ #
+-# Starts XBMC.
++# Starts Kodi
+ #
+ 
+-BIN=/usr/bin/br-xbmc
+-XBMC=/usr/lib/xbmc/xbmc.bin
+-XBMC_ARGS="--standalone -fs -n"
+-PIDFILE=/var/run/xbmc.pid
++BIN=/usr/bin/br-kodi
++KODI=/usr/lib/xbmc/xbmc.bin
++KODI_ARGS="--standalone -fs -n"
++PIDFILE=/var/run/kodi.pid
+ 
+ start() {
+-	echo -n "Starting XBMC: "
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC $XBMC_ARGS
++	echo -n "Starting Kodi: "
++	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $KODI $KODI_ARGS
+ 	[ $? == 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
+-	echo -n "Stopping XBMC: "
++	echo -n "Stopping Kodi: "
+ 	start-stop-daemon -K -q -p $PIDFILE
+ 	[ $? == 0 ] && echo "OK" || echo "FAIL"
+ }
+diff --git a/package/kodi/br-kodi b/package/kodi/br-kodi
+index fee5d51..83d4d4e 100755
+--- a/package/kodi/br-kodi
++++ b/package/kodi/br-kodi
+@@ -1,15 +1,15 @@
+ #!/bin/sh
+ 
+-# We're called with the real XBMC executable as
+-# first argument, followed by any XBMC extra args
+-XBMC="${1}"
++# We're called with the real Kodi executable as
++# first argument, followed by any Kodi extra args
++KODI="${1}"
+ shift
+ 
+ # In case someone asked we terminate, just kill
+-# the XBMC process
++# the Kodi process
+ trap_kill() {
+     LOOP=0
+-    killall "${XBMC##*/}"
++    killall "${KODI##*/}"
+ }
+ trap trap_kill INT QUIT TERM
+ 
+@@ -17,11 +17,11 @@ LOOP=1
+ while [ ${LOOP} -eq 1 ]; do
+     # Hack: BusyBox ash does not catch signals while a non-builtin
+     # is running, and only catches the signal when the non-builtin
+-    # command ends. So, we just background the XBMC binary, and wait
++    # command ends. So, we just background the Kodi binary, and wait
+     # for it. But BusyBox' ash's wait builtin does not return the
+     # exit code even if there was only one job (which is correct
+-    # for POSIX). So we explicitly wait for the XBMC job
+-    "${XBMC}" "${@}" &
++    # for POSIX). So we explicitly wait for the Kodi job
++    "${KODI}" "${@}" &
+     wait %1
+     ret=$?
+     case "${ret}" in
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 551b53a..bbee6e8 100644
+index 03362c2..551b53a 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -4,7 +4,7 @@
+@@ -1,35 +1,35 @@
+ ################################################################################
+ #
+-# xbmc
++# kodi
  #
  ################################################################################
  
--KODI_VERSION = 13.2-Gotham
-+KODI_VERSION = 14.0b2-Helix
- KODI_SOURCE = $(KODI_VERSION).tar.gz
- KODI_SITE = https://github.com/xbmc/xbmc/archive
- KODI_LICENSE = GPLv2
-@@ -13,22 +13,13 @@ KODI_LICENSE_FILES = LICENSE.GPL
+-XBMC_VERSION = 13.2-Gotham
+-XBMC_SOURCE = $(XBMC_VERSION).tar.gz
+-XBMC_SITE = https://github.com/xbmc/xbmc/archive
+-XBMC_LICENSE = GPLv2
+-XBMC_LICENSE_FILES = LICENSE.GPL
+-# XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
++KODI_VERSION = 13.2-Gotham
++KODI_SOURCE = $(KODI_VERSION).tar.gz
++KODI_SITE = https://github.com/xbmc/xbmc/archive
++KODI_LICENSE = GPLv2
++KODI_LICENSE_FILES = LICENSE.GPL
++# Kodi needs host-sdl_image (and therefore host-sdl) for a host tools it builds
  # called TexturePacker. It is responsible to take all the images used in the
  # GUI and pack them in a blob.
  # http://wiki.xbmc.org/index.php?title=TexturePacker
--KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
--KODI_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
-+KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo \
-+	host-nasm host-sdl_image host-swig
-+KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype jasper jpeg \
+-XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+-XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
++KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
++KODI_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
  	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
  	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
--# kodi at i386 depends on nasm
--KODI_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
--
--# ffmpeg depends on yasm on MMX archs
--# kodi configure passes $(BR2_ARCH) to ffmpeg configure which adds
--# yasm as dependency for x86_64, even if BR2_x86_generic=y
--ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
--KODI_DEPENDENCIES += host-yasm
--endif
--
- KODI_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-@@ -40,7 +31,7 @@ KODI_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+-# xbmc at i386 depends on nasm
+-XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
++# kodi at i386 depends on nasm
++KODI_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
  
- KODI_CONF_OPTS +=  \
--	--with-arch=$(BR2_ARCH) \
-+	--with-ffmpeg=shared \
- 	--disable-crystalhd \
- 	--disable-dvdcss \
- 	--disable-hal \
-@@ -84,13 +75,6 @@ else
- KODI_CONF_OPTS += --disable-alsa
+ # ffmpeg depends on yasm on MMX archs
+-# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
++# kodi configure passes $(BR2_ARCH) to ffmpeg configure which adds
+ # yasm as dependency for x86_64, even if BR2_x86_generic=y
+ ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
+-XBMC_DEPENDENCIES += host-yasm
++KODI_DEPENDENCIES += host-yasm
  endif
  
--ifeq ($(BR2_PACKAGE_LAME),y)
--KODI_DEPENDENCIES += lame
--KODI_CONF_OPTS += --enable-libmp3lame
--else
--KODI_CONF_OPTS += --disable-libmp3lame
--endif
--
- # quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
+-XBMC_CONF_ENV = \
++KODI_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+@@ -39,7 +39,7 @@ XBMC_CONF_ENV = \
+ 	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+ 
+-XBMC_CONF_OPTS +=  \
++KODI_CONF_OPTS +=  \
+ 	--with-arch=$(BR2_ARCH) \
+ 	--disable-crystalhd \
+ 	--disable-dvdcss \
+@@ -56,206 +56,206 @@ XBMC_CONF_OPTS +=  \
+ 	--enable-optimizations
+ 
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-XBMC_DEPENDENCIES += rpi-userland
+-XBMC_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
+-XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
++KODI_DEPENDENCIES += rpi-userland
++KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
++KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+ 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
+ 	LIBS="-lvcos -lvchostif"
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-XBMC_CONF_OPTS += --enable-libcap
+-XBMC_DEPENDENCIES += libcap
++KODI_CONF_OPTS += --enable-libcap
++KODI_DEPENDENCIES += libcap
+ else
+-XBMC_CONF_OPTS += --disable-libcap
++KODI_CONF_OPTS += --disable-libcap
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_DBUS),y)
+-XBMC_DEPENDENCIES += dbus
+-XBMC_CONF_OPTS += --enable-dbus
++ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
++KODI_DEPENDENCIES += dbus
++KODI_CONF_OPTS += --enable-dbus
+ else
+-XBMC_CONF_OPTS += --disable-dbus
++KODI_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_ALSA_LIB),y)
+-XBMC_DEPENDENCIES += alsa-lib
+-XBMC_CONF_OPTS += --enable-alsa
++ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
++KODI_DEPENDENCIES += alsa-lib
++KODI_CONF_OPTS += --enable-alsa
+ else
+-XBMC_CONF_OPTS += --disable-alsa
++KODI_CONF_OPTS += --disable-alsa
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LAME),y)
+-XBMC_DEPENDENCIES += lame
+-XBMC_CONF_OPTS += --enable-libmp3lame
++KODI_DEPENDENCIES += lame
++KODI_CONF_OPTS += --enable-libmp3lame
+ else
+-XBMC_CONF_OPTS += --disable-libmp3lame
++KODI_CONF_OPTS += --disable-libmp3lame
+ endif
+ 
+-# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
++# quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
  # we choose the opposite because opengl offers more features, like libva support
- ifeq ($(BR2_PACKAGE_KODI_GL),y)
+-ifeq ($(BR2_PACKAGE_XBMC_GL),y)
+-XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
++ifeq ($(BR2_PACKAGE_KODI_GL),y)
++KODI_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
+ 	xlib_libXmu xlib_libXrandr xlib_libXt
+-XBMC_CONF_OPTS += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
+-ifeq ($(BR2_PACKAGE_XBMC_RSXS),y)
++KODI_CONF_OPTS += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
++ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
+ # fix rsxs compile
+ # make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
+-XBMC_CONF_ENV += \
++KODI_CONF_ENV += \
+ 	jm_cv_func_gettimeofday_clobber=no \
+ 	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
+ 	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
+ 	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
+ 	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
+ 	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
+-XBMC_CONF_OPTS += --enable-rsxs
++KODI_CONF_OPTS += --enable-rsxs
+ else
+-XBMC_CONF_OPTS += --disable-rsxs
++KODI_CONF_OPTS += --disable-rsxs
+ endif
+ else
+-XBMC_CONF_OPTS += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
+-ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
+-XBMC_DEPENDENCIES += libegl libgles
+-XBMC_CONF_OPTS += --enable-gles
++KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
++ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
++KODI_DEPENDENCIES += libegl libgles
++KODI_CONF_OPTS += --enable-gles
+ else
+-XBMC_CONF_OPTS += --disable-gles
++KODI_CONF_OPTS += --disable-gles
+ endif
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
+-XBMC_CONF_OPTS += --enable-goom
++ifeq ($(BR2_PACKAGE_KODI_GOOM),y)
++KODI_CONF_OPTS += --enable-goom
+ else
+-XBMC_CONF_OPTS += --disable-goom
++KODI_CONF_OPTS += --disable-goom
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+-XBMC_DEPENDENCIES += libusb-compat
+-XBMC_CONF_OPTS += --enable-libusb
++ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
++KODI_DEPENDENCIES += libusb-compat
++KODI_CONF_OPTS += --enable-libusb
+ else
+-XBMC_CONF_OPTS += --disable-libusb
++KODI_CONF_OPTS += --disable-libusb
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBMICROHTTPD),y)
+-XBMC_DEPENDENCIES += libmicrohttpd
+-XBMC_CONF_OPTS += --enable-webserver
++ifeq ($(BR2_PACKAGE_KODI_LIBMICROHTTPD),y)
++KODI_DEPENDENCIES += libmicrohttpd
++KODI_CONF_OPTS += --enable-webserver
+ else
+-XBMC_CONF_OPTS += --disable-webserver
++KODI_CONF_OPTS += --disable-webserver
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBSMBCLIENT),y)
+-XBMC_DEPENDENCIES += samba
+-XBMC_CONF_OPTS += --enable-samba
++ifeq ($(BR2_PACKAGE_KODI_LIBSMBCLIENT),y)
++KODI_DEPENDENCIES += samba
++KODI_CONF_OPTS += --enable-samba
+ else
+-XBMC_CONF_OPTS += --disable-samba
++KODI_CONF_OPTS += --disable-samba
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBNFS),y)
+-XBMC_DEPENDENCIES += libnfs
+-XBMC_CONF_OPTS += --enable-nfs
++ifeq ($(BR2_PACKAGE_KODI_LIBNFS),y)
++KODI_DEPENDENCIES += libnfs
++KODI_CONF_OPTS += --enable-nfs
+ else
+-XBMC_CONF_OPTS += --disable-nfs
++KODI_CONF_OPTS += --disable-nfs
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_RTMPDUMP),y)
+-XBMC_DEPENDENCIES += rtmpdump
+-XBMC_CONF_OPTS += --enable-rtmp
++ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
++KODI_DEPENDENCIES += rtmpdump
++KODI_CONF_OPTS += --enable-rtmp
+ else
+-XBMC_CONF_OPTS += --disable-rtmp
++KODI_CONF_OPTS += --disable-rtmp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBBLURAY),y)
+-XBMC_DEPENDENCIES += libbluray
+-XBMC_CONF_OPTS += --enable-libbluray
++ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
++KODI_DEPENDENCIES += libbluray
++KODI_CONF_OPTS += --enable-libbluray
+ else
+-XBMC_CONF_OPTS += --disable-libbluray
++KODI_CONF_OPTS += --disable-libbluray
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBSHAIRPLAY),y)
+-XBMC_DEPENDENCIES += libshairplay
+-XBMC_CONF_OPTS += --enable-airplay
++ifeq ($(BR2_PACKAGE_KODI_LIBSHAIRPLAY),y)
++KODI_DEPENDENCIES += libshairplay
++KODI_CONF_OPTS += --enable-airplay
+ else
+-XBMC_CONF_OPTS += --disable-airplay
++KODI_CONF_OPTS += --disable-airplay
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_AVAHI),y)
+-XBMC_DEPENDENCIES += avahi
+-XBMC_CONF_OPTS += --enable-avahi
++ifeq ($(BR2_PACKAGE_KODI_AVAHI),y)
++KODI_DEPENDENCIES += avahi
++KODI_CONF_OPTS += --enable-avahi
+ else
+-XBMC_CONF_OPTS += --disable-avahi
++KODI_CONF_OPTS += --disable-avahi
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
+-XBMC_DEPENDENCIES += libcec
+-XBMC_CONF_OPTS += --enable-libcec
++ifeq ($(BR2_PACKAGE_KODI_LIBCEC),y)
++KODI_DEPENDENCIES += libcec
++KODI_CONF_OPTS += --enable-libcec
+ else
+-XBMC_CONF_OPTS += --disable-libcec
++KODI_CONF_OPTS += --disable-libcec
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_WAVPACK),y)
+-XBMC_DEPENDENCIES += wavpack
++ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
++KODI_DEPENDENCIES += wavpack
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
+-XBMC_DEPENDENCIES += libtheora
++ifeq ($(BR2_PACKAGE_KODI_LIBTHEORA),y)
++KODI_DEPENDENCIES += libtheora
+ endif
+ 
+-# xbmc needs libva & libva-glx
+-ifeq ($(BR2_PACKAGE_XBMC_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
+-XBMC_DEPENDENCIES += mesa3d libva
+-XBMC_CONF_OPTS += --enable-vaapi
++# kodi needs libva & libva-glx
++ifeq ($(BR2_PACKAGE_KODI_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
++KODI_DEPENDENCIES += mesa3d libva
++KODI_CONF_OPTS += --enable-vaapi
+ else
+-XBMC_CONF_OPTS += --disable-vaapi
++KODI_CONF_OPTS += --disable-vaapi
+ endif
+ 
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+-define XBMC_BOOTSTRAP
++define KODI_BOOTSTRAP
+ 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ endef
+-XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
++KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
+ 
+-define XBMC_CLEAN_UNUSED_ADDONS
++define KODI_CLEAN_UNUSED_ADDONS
+ 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
+ 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.milkdrop
+ 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.projectm
+ 	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.itunes
+ endef
+-XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_UNUSED_ADDONS
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
+ 
+-define XBMC_CLEAN_CONFLUENCE_SKIN
++define KODI_CLEAN_CONFLUENCE_SKIN
+ 	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.png -delete
+ 	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.jpg -delete
+ endef
+-XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_CONFLUENCE_SKIN
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_CONFLUENCE_SKIN
+ 
+-define XBMC_INSTALL_BR_WRAPPER
+-	$(INSTALL) -D -m 0755 package/xbmc/br-xbmc \
+-		$(TARGET_DIR)/usr/bin/br-xbmc
++define KODI_INSTALL_BR_WRAPPER
++	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
++		$(TARGET_DIR)/usr/bin/br-kodi
+ endef
+-XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_BR_WRAPPER
+ 
+-# When run from a startup script, XBMC has no $HOME where to store its
++# When run from a startup script, Kodi has no $HOME where to store its
+ # configuration, so ends up storing it in /.xbmc  (yes, at the root of
+ # the rootfs). This is a problem for read-only filesystems. But we can't
+ # easily change that, so create /.xbmc as a symlink where we want the
+ # config to eventually be.
+-define XBMC_INSTALL_CONFIG_DIR
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/xbmc
+-	ln -sf /var/xbmc $(TARGET_DIR)/.xbmc
++define KODI_INSTALL_CONFIG_DIR
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/kodi
++	ln -sf /var/kodi $(TARGET_DIR)/.xbmc
+ endef
+-XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_CONFIG_DIR
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_CONFIG_DIR
+ 
+-define XBMC_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/xbmc/S50xbmc \
+-		$(TARGET_DIR)/etc/init.d/S50xbmc
++define KODI_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/kodi/S50kodi \
++		$(TARGET_DIR)/etc/init.d/S50kodi
+ endef
+ 
+-define XBMC_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/xbmc/xbmc.service \
+-		$(TARGET_DIR)/etc/systemd/system/xbmc.service
++define KODI_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/kodi/kodi.service \
++		$(TARGET_DIR)/etc/systemd/system/kodi.service
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 
+-	ln -fs ../xbmc.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/xbmc.service
++	ln -fs ../kodi.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/kodi.service
+ endef
+ 
+ $(eval $(autotools-package))
+diff --git a/package/kodi/kodi.service b/package/kodi/kodi.service
+index 3fe5895..acd3b8e 100644
+--- a/package/kodi/kodi.service
++++ b/package/kodi/kodi.service
+@@ -1,5 +1,5 @@
+ [Unit]
+-Description = XBMC media center
++Description = Kodi Entertainment Center
+ After = network.target
+ 
+ [Service]
+diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+index a4d9624..16f3a0d 100644
+--- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
++++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+@@ -21,6 +21,6 @@ XBMC_ADDON_XVDR_AUTORECONF = YES
+ # This really is a runtime dependency, but we need XBMC to be installed
+ # first, since we'll install files in XBMC's directories _after_ XBMC has
+ # installed his own files
+-XBMC_ADDON_XVDR_DEPENDENCIES = xbmc
++XBMC_ADDON_XVDR_DEPENDENCIES = kodi
+ 
+ $(eval $(autotools-package))
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+index bfcb7ed..4410153 100644
+--- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -18,7 +18,7 @@ XBMC_PVR_ADDONS_DEPENDENCIES = boost zlib
+ # This really is a runtime dependency, but we need XBMC to be installed
+ # first, since we'll install files in XBMC's directories _after_ XBMC has
+ # installed its own files
+-XBMC_PVR_ADDONS_DEPENDENCIES += xbmc
++XBMC_PVR_ADDONS_DEPENDENCIES += kodi
+ 
+ XBMC_PVR_ADDONS_CONF_OPTS = \
+ 	--enable-release \
 -- 
 1.7.10.4
