@@ -1,40 +1,44 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Nov 2014 22:16:04 +0100
-Subject: [Buildroot] [PATCH 2/2] libiscsi: only build the test tool and
-	ld-iscsi if we have shared libs
-In-Reply-To: <1415103896-64469-2-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 4 Nov 2014 12:24:56 +0000")
-References: <1415103896-64469-1-git-send-email-Vincent.Riera@imgtec.com>
- <1415103896-64469-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <878ujltmuj.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Nov 2014 22:22:02 +0100
+Subject: [Buildroot] socat version
+In-Reply-To: <CANxTyt5UVteo4xOJ85YfZP4J-3ZpVstGjnr8Yj4Sry93zfUqzg@mail.gmail.com>
+ (Danomi Manchego's message of "Tue, 4 Nov 2014 07:58:35 -0500")
+References: <CANxTyt5UVteo4xOJ85YfZP4J-3ZpVstGjnr8Yj4Sry93zfUqzg@mail.gmail.com>
+Message-ID: <874mu9tmkl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- > Backporting an upstream patch to fix a failure when doing a static
- > build:
+ > All,
+ > Buildroot has been using the socat 2.0.0 series for a while.  We
+ > recently ran into a socat issue which was fixed upstream, but in a
+ > 1.7.2.4 release.  For rears, the socat people released a version 1
+ > release and a version 2 release in tandem, but for some reason, the
+ > latest release was only 1.7.2.4.  Reading about socat 2 at
+ > http://www.dest-unreach.org/socat/socat-version2.html I see it is
+ > (was?) described as "beta".
 
- > /br/output/host/usr/bin/mipsel-ctng-linux-uclibc-gcc -shared -o
- > ld_iscsi.so ld_iscsi.o -ldl
- > /br/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-ctng-linux-uclibc/4.8.2/../../../../mipsel-ctng-linux-uclibc/bin/ld:
- > ld_iscsi.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be
- > used when making a shared object; recompile with -fPIC
- > ld_iscsi.o: could not read symbols: Bad value
- > collect2: error: ld returned 1 exit status
+ > So I was wondering: is buildroot on the 2.0.0 series under the
+ > normally sane presumption that 2.0 must be newer than 1.7, or is there
+ > an actual preference for the version 2 releases?
 
- > Upstream commit:
- >   https://github.com/sahlberg/libiscsi/commit/3d6c2be3428d88682cecfa2a4ad172aaacffb318
+I don't think there's any real reason that we've gone with 2.0 series. I
+atleast wasn't aware of the two branches. We moved from 1.4 to 2.0 a
+long time ago (back when we used subversion), and the person doing the
+change is no longer active.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/7a9/7a9caf1f4080c2c4b04ee3b13c1240f475a22ea7/
+commit 3fde5702db832475c4a45aa3f35aac7839c6a710
+Author: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date:   Fri Jan 2 08:29:31 2009 +0000
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+    Bump socat version, optionally add configure variables
 
-Committed both, thanks.
+Gustavo, you have recently bumped the version - Do you have anything to
+add?
 
 -- 
 Bye, Peter Korsgaard
