@@ -1,50 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 22:47:23 +0100
-Subject: [Buildroot] [git commit] lttng-babeltrace: Bump version
-Message-ID: <20141108214941.8583EB3091@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 22:47:26 +0100
+Subject: [Buildroot] [git commit] lttng-tools: bump version
+Message-ID: <20141108214941.8E37CB3091@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45ebebea880cde9d4672256edb78f568b4e07ed6
+commit: http://git.buildroot.net/buildroot/commit/?id=fdff90929f06ca475e02c519c77b3cfac2e8b60f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The previous releases was removed from their servers has they did a
+releases from a wrong tag, the resulting binary was wrong.
+Thanks to "Yann E. Morin" for spotting that.
+
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-babeltrace/lttng-babeltrace.hash |   10 +++++-----
- package/lttng-babeltrace/lttng-babeltrace.mk   |    2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/lttng-tools/lttng-tools.hash |    2 +-
+ package/lttng-tools/lttng-tools.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
-index 51e3a2c..a9f45b2 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.hash
-+++ b/package/lttng-babeltrace/lttng-babeltrace.hash
-@@ -1,7 +1,7 @@
--# From http://lttng.org/files/babeltrace/babeltrace-1.2.3.tar.bz2.md5
--md5     c35b480304ba34aacbfb3934182cdd21  babeltrace-1.2.3.tar.bz2
--# From http://lttng.org/files/babeltrace/babeltrace-1.2.3.tar.bz2.sha1
--sha1    55d3ad8fb5df4ff025e063a0993be1667bfc6554  babeltrace-1.2.3.tar.bz2
-+# From http://lttng.org/files/babeltrace/babeltrace-1.2.4.tar.bz2.md5
-+md5     20a806fa7570e69a91707855a98f3ca6 babeltrace-1.2.4.tar.bz2
-+# From http://lttng.org/files/babeltrace/babeltrace-1.2.4.tar.bz2.sha1
-+sha1    c72a80e8fd905cb1ae3b0cf88885517faafe0fa1  babeltrace-1.2.4.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 92a4401..fc2640e 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,2 +1,2 @@
  # Locally generated
--sha256  796fa6978102244d9c64d474baeac4e4292a0186660a53cf58f20d47226987ac  babeltrace-1.2.3.tar.bz2
-+sha256  666e3a1ad2dc7d5703059963056e7800f0eab59c8eeb6be2efe4f3acc5209eb1  babeltrace-1.2.4.tar.bz2
- 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 1fd2f8b..dacb15a 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -5,7 +5,7 @@
+-sha256  1084ce1fac0030cb5e0e3e117002444ceb9f94d6a15a6cce6607c480eca9b21b  lttng-tools-2.5.1.tar.bz2
++sha256  1f52d342fb5b56a6675748f0b8e8557ec7c4e90732c3d8f5732bd10b920b233d  lttng-tools-2.5.2.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 187b851..44b6880 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LTTNG_BABELTRACE_SITE = http://lttng.org/files/babeltrace
--LTTNG_BABELTRACE_VERSION = 1.2.3
-+LTTNG_BABELTRACE_VERSION = 1.2.4
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT; LGPLv2.1 for include/babeltrace/list.h; GPLv2 for test code
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+-LTTNG_TOOLS_VERSION = 2.5.1
++LTTNG_TOOLS_VERSION = 2.5.2
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
