@@ -1,65 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 23:10:40 +0100
-Subject: [Buildroot] [git commit] makedevs: Rework README
-Message-ID: <20141108230842.D9CC7B3814@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 23:13:04 +0100
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.8.6
+Message-ID: <20141108230842.EBE8EB3814@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba82e50f8d7fa3d25c1a02a12b32539ce6cd069b
+commit: http://git.buildroot.net/buildroot/commit/?id=d9dfa28d0335bf74480fcf942c7bd2efbc9f0be3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make all the example as a space separated list.
-The definition of the different type was modified to look like the same
-section on the manual.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/makedevs/README |   18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ package/libupnpp/libupnpp.hash |    4 ++--
+ package/libupnpp/libupnpp.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/makedevs/README b/package/makedevs/README
-index 6c54052..70844bf 100644
---- a/package/makedevs/README
-+++ b/package/makedevs/README
-@@ -6,7 +6,7 @@ You can do all sorts of interesting things with a device table file.
- For example, if you want to adjust the permissions on a particular
- file you can just add an entry like:
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index af39480..19541cf 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.8.5.tar.gz.sha256
+-sha256 07741ea219689174d0ea745df566bb617f7e2f250eefd424920291b3d344f693  libupnpp-0.8.5.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.8.6.tar.gz.sha256
++sha256 cdacf083100552a5aad57b30608e85fbcc222f4acf920c2d09d28cb75af2cdf8  libupnpp-0.8.6.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index d46de14..ad790f8 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--  /sbin/foobar        f       2755    0       0       -       -       -       -       -
-+  /sbin/foobar f 2755 0 0 - - - - -
- 
- and (assuming the file /sbin/foobar exists) it will be made setuid
- root (regardless of what its permissions are on the host filesystem.
-@@ -15,20 +15,20 @@ Furthermore, you can use a single table entry to create a many device
- minors.  For example, if I wanted to create /dev/hda and
- /dev/hda[0-15] I could just use the following two table entries:
- 
--  /dev/hda    b       640     0       0       3       0       0       0       -
--  /dev/hda    b       640     0       0       3       1       1       1       15
-+  /dev/hda b 640 0 0 3 0 0 0 -
-+  /dev/hda b 640 0 0 3 1 1 1 15
- 
- Device table entries take the form of:
- 
--<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
-+<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
- 
- where name is the file name,  type can be one of:
- 
--      f       A regular file
--      d       Directory
--      c       Character special device file
--      b       Block special device file
--      p       Fifo (named pipe)
-+      f: A regular file
-+      d: Directory
-+      c: Character special device file
-+      b: Block special device file
-+      p: Fifo (named pipe)
- 
- uid is the user id for the target file, gid is the group id for the
- target file.  The rest of the entries (major, minor, etc) apply only
+-LIBUPNPP_VERSION = 0.8.5
++LIBUPNPP_VERSION = 0.8.6
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPLv2+
+ LIBUPNPP_LICENSE_FILES = COPYING
