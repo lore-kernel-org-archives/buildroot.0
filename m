@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Nov 2014 15:53:44 +0100
-Subject: [Buildroot] [RFC/PATCH v5 11/13] package/kodi-audioencoder-lame:
-	New package
+Date: Sat,  8 Nov 2014 15:53:39 +0100
+Subject: [Buildroot] [RFC/PATCH v5 06/13] xbmc-pvr-addons: Bump version for
+	Helix-compatibility
 In-Reply-To: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1415458426-23645-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1415458426-23645-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +14,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-lame/Config.in               |    8 ++++++++
- .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk   |   16 ++++++++++++++++
- package/kodi/Config.in                                 |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audioencoder-lame/Config.in
- create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
-new file mode 100644
-index 0000000..78ec136
---- /dev/null
-+++ b/package/kodi-audioencoder-lame/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
-+	bool "kodi-audioencoder-lame"
-+	select BR2_PACKAGE_LAME
-+	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
-+	help
-+	  An audioencoder addon for Kodi
-+
-+	  https://github.com/xbmc/audioencoder.lame
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-new file mode 100644
-index 0000000..238a7df
---- /dev/null
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# kodi-audioencoder-lame
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_LAME_VERSION = 46592f80d89fca56822e6ed8592fa665f14bfceb
-+KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
-+KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
-+KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
-+KODI_AUDIOENCODER_LAME_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
-+	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 9c37765..11b88a5 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
- comment "Kodi audioencoder addons"
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+index 4410153..c89b2d5 100644
+--- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- source "package/kodi-audioencoder-flac/Config.in"
-+source "package/kodi-audioencoder-lame/Config.in"
- 
- endif # BR2_PACKAGE_KODI_OPTICALDRIVE
- 
+-# This cset is on the branch 'gotham'
+-# When XBMC is updated, then this should be updated to the corresponding branch
+-XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
++# This cset is on the branch 'master'
++# When Kodi is released, then this should be updated to the corresponding branch
++XBMC_PVR_ADDONS_VERSION = 067befe6b8da81e29abca8cd394d08c84233677b
+ XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+ XBMC_PVR_ADDONS_LICENSE = GPLv3+
+ XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
