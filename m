@@ -1,98 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 22:15:07 +0100
-Subject: [Buildroot] [git commit] libiscsi: only build the test tool and
-	ld-iscsi if we have shared libs
-Message-ID: <20141108214405.09386B2EC5@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 22:43:13 +0100
+Subject: [Buildroot] [git commit] opencv: superres - Fix return value
+	VideoFrameSource_GPU
+Message-ID: <20141108214405.2EB30B2EC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79d390aa0a1f5001b54d98e6b788f32f1243c0c1
+commit: http://git.buildroot.net/buildroot/commit/?id=1034d9f0d8e10b150a0c2ea311a95ae95fb12f77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backporting an upstream patch to fix a failure when doing a static
-build:
+superres module fails to compile with the following error messages:
 
-/br/output/host/usr/bin/mipsel-ctng-linux-uclibc-gcc -shared -o
-ld_iscsi.so ld_iscsi.o -ldl
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-ctng-linux-uclibc/4.8.2/../../../../mipsel-ctng-linux-uclibc/bin/ld:
-ld_iscsi.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be
-used when making a shared object; recompile with -fPIC
-ld_iscsi.o: could not read symbols: Bad value
-collect2: error: ld returned 1 exit status
+[100%] Building CXX object
+modules/superres/CMakeFiles/opencv_superres.dir/src/super_resolution.cpp.o
+/opencv-2.4.10/modules/superres/src/frame_source.cpp: In function
+'cv::Ptr<cv::superres::FrameSource>
+cv::superres::createFrameSource_Video_GPU(const string&)':
+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
+expected type-specifier before 'VideoFrameSource'
+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
+could not convert '(int*)operator new(4ul)' from 'int*' to
+'cv::Ptr<cv::superres::FrameSource>'
+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
+expected ';' before 'VideoFrameSource'
+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:41: error:
+'VideoFrameSource' was not declared in this scope
+/opencv-2.4.10/modules/superres/src/frame_source.cpp:264:1: error:
+control reaches end of non-void function [-Werror=return-type]
+cc1plus: some warnings being treated as errors
+make[3]: ***
+[modules/superres/CMakeFiles/opencv_superres.dir/src/frame_source.cpp.o]
+Error 1
+make[3]: *** Waiting for unfinished jobs....
 
-Upstream commit:
-  https://github.com/sahlberg/libiscsi/commit/3d6c2be3428d88682cecfa2a4ad172aaacffb318
+This is caused because the return value of the
+createFrameSource_Video_GPU function should be a VideoFrameSource_GPU
+object.
+
+Backporting an upstream patch to fix this problem in Buildroot:
+  https://github.com/Itseez/opencv/commit/2e393ab83362743ba1825ad4b31d4a2925c606b4
 
 Fixes:
-  http://autobuild.buildroot.net/results/7a9/7a9caf1f4080c2c4b04ee3b13c1240f475a22ea7/
+  http://autobuild.buildroot.net/results/b09/b0996267197a9016d29d6070804ebc0cb7853548/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nly-build-the-test-tool-and-ld-iscsi-iff-.patch |   55 ++++++++++++++++++++
- 1 files changed, 55 insertions(+), 0 deletions(-)
+ ...ix-return-type-value-VideoFrameSource_GPU.patch |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/libiscsi/0006-configure-only-build-the-test-tool-and-ld-iscsi-iff-.patch b/package/libiscsi/0006-configure-only-build-the-test-tool-and-ld-iscsi-iff-.patch
+diff --git a/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch b/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
 new file mode 100644
-index 0000000..d57a208
+index 0000000..d71235d
 --- /dev/null
-+++ b/package/libiscsi/0006-configure-only-build-the-test-tool-and-ld-iscsi-iff-.patch
-@@ -0,0 +1,55 @@
-+Only build the test tool and ld-iscsi if we have shared libraries
-+
-+Backporting an upstream patch to fix a failure when doing a static
-+build:
-+
-+/br/output/host/usr/bin/mipsel-ctng-linux-uclibc-gcc -shared -o 
-+ld_iscsi.so ld_iscsi.o -ldl
-+/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-ctng-linux-uclibc/4.8.2/../../../../mipsel-ctng-linux-uclibc/bin/ld: 
-+ld_iscsi.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be 
-+used when making a shared object; recompile with -fPIC
-+ld_iscsi.o: could not read symbols: Bad value
-+collect2: error: ld returned 1 exit status
-+
-+Upstream commit:
-+  https://github.com/sahlberg/libiscsi/commit/3d6c2be3428d88682cecfa2a4ad172aaacffb318
++++ b/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
+@@ -0,0 +1,40 @@
++superres: Fix return value VideoFrameSource_GPU
 +
 +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+From 3d6c2be3428d88682cecfa2a4ad172aaacffb318 Mon Sep 17 00:00:00 2001
-+From: Ronnie Sahlberg <ronniesahlberg@gmail.com>
-+Date: Wed, 22 Oct 2014 17:44:03 -0700
-+Subject: [PATCH] configure: only build the test tool and ld-iscsi iff we have shared libraries
++From 2e393ab83362743ba1825ad4b31d4a2925c606b4 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Mon, 27 Oct 2014 13:39:35 +0000
++Subject: [PATCH] superres: Fix return value VideoFrameSource_GPU
 +
-+Signed-off-by: Ronnie Sahlberg <ronniesahlberg@gmail.com>
++superres module fails to compile with the following error messages:
++
++[100%] Building CXX object modules/superres/CMakeFiles/opencv_superres.dir/src/super_resolution.cpp.o
++/opencv-2.4.10/modules/superres/src/frame_source.cpp: In function 'cv::Ptr<cv::superres::FrameSource> cv::superres::createFrameSource_Video_GPU(const string&)':
++/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected type-specifier before 'VideoFrameSource'
++/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: could not convert '(int*)operator new(4ul)' from 'int*' to 'cv::Ptr<cv::superres::FrameSource>'
++/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected ';' before 'VideoFrameSource'
++/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:41: error: 'VideoFrameSource' was not declared in this scope
++/opencv-2.4.10/modules/superres/src/frame_source.cpp:264:1: error: control reaches end of non-void function [-Werror=return-type]
++cc1plus: some warnings being treated as errors
++make[3]: *** [modules/superres/CMakeFiles/opencv_superres.dir/src/frame_source.cpp.o] Error 1
++make[3]: *** Waiting for unfinished jobs....
++
++This is caused because the return value of the createFrameSource_Video_GPU function should be a VideoFrameSource_GPU object.
 +---
-+ configure.ac |    5 ++---
-+ 1 files changed, 2 insertions(+), 3 deletions(-)
++ modules/superres/src/frame_source.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 5e18ff4..e9c5c93 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -10,8 +10,6 @@ AM_PROG_AR
-+ LT_INIT
++diff --git a/modules/superres/src/frame_source.cpp b/modules/superres/src/frame_source.cpp
++index 5f59a98..c5b2e76 100644
++--- a/modules/superres/src/frame_source.cpp
+++++ b/modules/superres/src/frame_source.cpp
++@@ -260,7 +260,7 @@ namespace
 + 
-+ AC_CANONICAL_HOST
-+-AM_CONDITIONAL(LD_ISCSI,
-+-               [expr "$host_os" : linux > /dev/null 2>&1])
-+ AM_PROG_CC_C_O
++ Ptr<FrameSource> cv::superres::createFrameSource_Video_GPU(const string& fileName)
++ {
++-    return new VideoFrameSource(fileName);
+++    return new VideoFrameSource_GPU(fileName);
++ }
 + 
-+ enable_write_strings="yes"
-+@@ -108,8 +106,9 @@ else
-+   AC_MSG_NOTICE(You need libcunit to build the test suite.)
-+   AC_MSG_NOTICE(The scsi/iscsi test suite will not be built.)
-+ fi
-+-AM_CONDITIONAL(ISCSITEST, [test "$ac_cv_have_cunit" = yes])
-++AM_CONDITIONAL(ISCSITEST, [test "$ac_cv_have_cunit" = yes -a "$enable_shared" = "yes"])
-+ 
-++AM_CONDITIONAL(LD_ISCSI, [expr "(" "$host_os" : "linux" ")" "&" "$enable_shared" "=" "yes"])
-+ 
-+ AC_CHECK_MEMBER([struct CU_SuiteInfo.pSetUpFunc],
-+ 		[AC_DEFINE([HAVE_CU_SUITEINFO_PSETUPFUNC], 1,
-+-- 
-+1.7.1
-+
++ #endif // HAVE_OPENCV_GPU
