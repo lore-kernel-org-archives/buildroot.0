@@ -1,36 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Nov 2014 18:43:03 +0100
-Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
-In-Reply-To: <20141108163942.GA3481@free.fr>
-References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
- <20141108163942.GA3481@free.fr>
-Message-ID: <20141108184303.1607bcb6@free-electrons.com>
+Date: Sat, 8 Nov 2014 18:47:41 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-06
+In-Reply-To: <545C9CAE.3070303@imgtec.com>
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+Message-ID: <20141108184741.66cf1357@free-electrons.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Yegor,
+Dear Vicente Olivert Riera,
 
-On Sat, 8 Nov 2014 17:39:42 +0100, Yann E. MORIN wrote:
-> Yegor, All,
+On Fri, 7 Nov 2014 10:19:26 +0000, Vicente Olivert Riera wrote:
+> On 11/07/2014 07:30 AM, Thomas Petazzoni wrote:
+> > Build statistics for 2014-11-06
 > 
-> On 2014-11-08 17:32 +0100, Yegor Yefremov spake thusly:
-> > This option will invoke "make tar-pkg" in kernel's build directory
-> > and the resulting linux-*.tar will be copied to images folder.
+> >       mipsel |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/edb374fba996973c21b7b4ed13d5d07c457793a0/
 > 
-> Why would we want that only for the kernel?
+> [3m>>> ola 0.8.33 Autoreconfiguring[23m
+> make: ***
+> [/home/tmp/buildroot-test/instance-0/output/build/ola-0.8.33/.stamp_configured]
+> Terminated
 > 
-> If we were to add such a command, we would want to have it for all
-> packages, done in a generic way, unless there is a *really* *compelling*
-> reason to have such a linux-specific command.
+> No error message. It looks like the autobuilder stopped suddenly.
 
-Well, the kernel has this "tar-pkg" target that other packages
-typically don't have. However, I'm curious to know what is the use case
-for "make tar-pkg" in the kernel in the context of Buildroot.
+See the result status: it's "TIM" and not "NOK". This means that the
+build too longer than 4 hours, so it was interrupted by the
+autobuild-run logic. You should simply ignore such results.
 
-Yegor?
+> 
+> >       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/445bbbb0e6370cc2d1caf4ca66f59b8441f9dcda/
+> >       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/88b67de17d7059b2aeb41c483e4c275e5d2f2ee1/
+> >       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e6cb3215fcefd76805abee98b277b810366e456c/
+> 
+> I keep reporting this every day. The autobuilder which is reporting
+> these failures is not updated with the latest version of the
+> autobuilder-run script.
+> 
+> I don't know who owns this autobuilder, but please, fix it so we will
+> not see the same useless reports gain and again.
+
+The autobuild-run script has now been updated today on all autobuilders,
+except on Peter autobuilders (I didn't receive an answer from Peter to
+my e-mail sent to the autobuilder "maintainers").
+
+> >     mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+> 
+> "Fatal error: can't create obj/esfilter.o: No such file or directory"
+> 
+> I think this is a race condition problem due to the "obj" directory not
+> being created in time. I have reported the issue upstream.
+> 
+> https://code.google.com/p/tstools/issues/detail?id=29
+
+If this is a race condition, we could switch to using $(MAKE1) for this
+package until the issue gets resolved upstream.
 
 Thomas
 -- 
