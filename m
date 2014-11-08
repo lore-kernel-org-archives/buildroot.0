@@ -1,49 +1,82 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  8 Nov 2014 10:54:37 -0300
-Subject: [Buildroot] [PATCH] vim: install vi symlink
-Message-ID: <1415454877-2710-1-git-send-email-gustavo@zacarias.com.ar>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Sat,  8 Nov 2014 15:02:45 +0100
+Subject: [Buildroot] [PATCH 1/1] mongoose: bump to version 5.5
+Message-ID: <1415455365-5446-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install a 'vi' symlink to win over busybox vi (more features) and in
-case busybox isn't around, for people expecting plain simple 'vi' to
-call the editor.
+ - examples/server was renamed examples/web_server
+ - patch was submitted and included upstream so we can drop it
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
 ---
- package/vim/vim.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ ...ongoose-0001-largefile-conditional-define.patch |   22 --------------------
+ package/mongoose/mongoose.mk                       |    9 ++++----
+ 2 files changed, 5 insertions(+), 26 deletions(-)
+ delete mode 100644 package/mongoose/mongoose-0001-largefile-conditional-define.patch
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index e06af00..7a07ef8 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -8,7 +8,9 @@ VIM_SITE = https://vim.googlecode.com/hg
- VIM_SITE_METHOD = hg
- # 7.4 release patchlevel 333
- VIM_VERSION = 8ae50e3ef8bf
--VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+# Win over busybox vi since vim is more feature-rich
-+VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
-+	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
- VIM_SUBDIR = src
- VIM_CONF_ENV = vim_cv_toupper_broken=no \
- 		vim_cv_terminfo=yes \
-@@ -40,6 +42,12 @@ define VIM_REMOVE_DOCS
- 	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
+diff --git a/package/mongoose/mongoose-0001-largefile-conditional-define.patch b/package/mongoose/mongoose-0001-largefile-conditional-define.patch
+deleted file mode 100644
+index b1d759a..0000000
+--- a/package/mongoose/mongoose-0001-largefile-conditional-define.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Avoid the following warning, due to duplicate definition of
+-"_LARGEFILE_SOURCE"
+-
+-mongoose.c:52:0: warning: "_LARGEFILE_SOURCE" redefined [enabled by default]
+- #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
+- ^
+-<command-line>:0:0: note: this is the location of the previous definition
+-
+-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+-
+---- mongoose-5.4/mongoose.c~	2014-07-28 13:19:00.000000000 +0200
+-+++ mongoose-5.4/mongoose.c	2014-08-04 23:10:59.164092500 +0200
+-@@ -49,7 +49,9 @@
+- #define _XOPEN_SOURCE 600       // For flockfile() on Linux
+- #define __STDC_FORMAT_MACROS    // <inttypes.h> wants this for C++
+- #define __STDC_LIMIT_MACROS     // C++ wants that for INT64_MAX
+-+#ifndef _LARGEFILE_SOURCE
+- #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
+-+#endif
+- #define _FILE_OFFSET_BITS 64    // Enable 64-bit file offsets
+- 
+- #ifdef _MSC_VER
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index e0104b4..35e4b43 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 5.4
++MONGOOSE_VERSION = 5.5
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+@@ -19,14 +19,15 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(TARGET_CC) $(@D)/examples/server.c $(@D)/mongoose.c -I$(@D) \
+-		-o $(@D)/examples/server $(MONGOOSE_CFLAGS) -pthread -ldl
++	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
++		-I$(@D) -o $(@D)/examples/web_server/web_server \
++		$(MONGOOSE_CFLAGS) -pthread -ldl
+ 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
+ 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
  endef
  
-+# Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
-+define VIM_INSTALL_VI_SYMLINK
-+	ln -sf /usr/bin/vim $(TARGET_DIR)/bin/vi
-+endef
-+VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
-+
- ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
+ define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/examples/server \
++	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
+ 		$(TARGET_DIR)/usr/sbin/mongoose
+ 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+ 		$(TARGET_DIR)/etc/init.d/S85mongoose
 -- 
-2.0.4
+1.7.10.4
