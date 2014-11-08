@@ -1,57 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 17:32:27 +0100
-Subject: [Buildroot] [git commit] package/qemu: fix specifying custom target
-	sub-set
-Message-ID: <20141108171552.D67C6B2F40@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 17:35:32 +0100
+Subject: [Buildroot] [git commit] vim: install vi symlink
+Message-ID: <20141108171552.EB0F7B2F40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=78c0bbacdf0e7ff9b86fd12e8b7ddfcfc4277af5
+commit: http://git.buildroot.net/buildroot/commit/?id=124edd4d5f4cddbd40a1113dccc255c5956bd9ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The logic was wrong.
+Install a 'vi' symlink to win over busybox vi (more features) and in
+case busybox isn't around, for people expecting plain simple 'vi' to
+call the editor.
 
-Even though it was working for previous versions of QEMU, it changed in
-later versions, and thus now breaks on the version we currently package.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk |   14 ++++++++++++--
- 1 files changed, 12 insertions(+), 2 deletions(-)
+ package/vim/vim.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 8182697..fe65a87 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -99,6 +99,18 @@ QEMU_VARS = \
- 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index e06af00..7a07ef8 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -8,7 +8,9 @@ VIM_SITE = https://vim.googlecode.com/hg
+ VIM_SITE_METHOD = hg
+ # 7.4 release patchlevel 333
+ VIM_VERSION = 8ae50e3ef8bf
+-VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++# Win over busybox vi since vim is more feature-rich
++VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ VIM_SUBDIR = src
+ VIM_CONF_ENV = vim_cv_toupper_broken=no \
+ 		vim_cv_terminfo=yes \
+@@ -40,6 +42,12 @@ define VIM_REMOVE_DOCS
+ 	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
+ endef
  
-+# If we want to specify only a subset of targets, we must still enable all
-+# of them, so that QEMU properly builds its list of default targets, from
-+# which it then checks if the specified sub-set is valid. That's what we
-+# do in the first part of the if-clause.
-+# Otherwise, if we do not want to pass a sub-set of targets, we then need
-+# to either enable or disable -user and/or -system emulation appropriately.
-+# That's what we do in the else-clause.
-+ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
-+QEMU_OPTS += --enable-system --enable-linux-user
-+QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
-+else
++# Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
++define VIM_INSTALL_VI_SYMLINK
++	ln -sf /usr/bin/vim $(TARGET_DIR)/bin/vi
++endef
++VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
 +
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
- else
-@@ -111,8 +123,6 @@ else
- QEMU_OPTS += --disable-linux-user
- endif
- 
--ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
--QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
- endif
- 
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
