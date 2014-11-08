@@ -1,45 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Nov 2014 22:53:04 +0100
-Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
-In-Reply-To: <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
- (Yegor Yefremov's message of "Sat, 8 Nov 2014 19:24:48 +0100")
-References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
- <20141108163942.GA3481@free.fr>
- <20141108184303.1607bcb6@free-electrons.com>
- <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
-Message-ID: <87a941s6kf.fsf@dell.be.48ers.dk>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sat, 8 Nov 2014 13:56:27 -0800
+Subject: [Buildroot] host ldconfig package
+In-Reply-To: <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
+References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
+ <1456757.71s6JAxXJf@aquila>
+ <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
+Message-ID: <CADCpmyNMs7yTdGEzurOEvpHHSPJsDVHCEv6+dMT3s1ez9tR2Pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+Jeff, Jerome, All,
 
-Hi,
+On Fri, Nov 7, 2014 at 9:43 AM, Jeff Horn <outforaride@gmail.com> wrote:
 
- >> Well, the kernel has this "tar-pkg" target that other packages
- >> typically don't have. However, I'm curious to know what is the use case
- >> for "make tar-pkg" in the kernel in the context of Buildroot.
- >> 
- >> Yegor?
+> [snip]
+> > For information, I made iMX6 hardware video decoding and display work.
+> You
+> > may encounter a few difficulties:
+> >
+> >   - Xorg support for imx6 is not yet merged (and we are looking for
+> >     testers :-) )
+>
+> I can help test. I have a couple different i.MX6 boards (Wand,
+> SabreSD). We are not using X11 on our board. We are using just Qt5
+> with the eglfs platform.
 
- > Image, you have a system/rootfs, that you've made via BR or it is
- > Debian etc. Now you just want to update the kernel and modules. Kernel
- > is simple, as BR compiles and copies it to output/images folder. But
- > to install kernel modules you first need to invoke one of the make
- > *-pkg commands, to do this you need to first export ARCH,
- > CROSS_COMPILE etc. First then you can copy resulting image to target
- > device and via "tar xf linux-*.tar -C /" install new kernel modules.
- > Am I missing something and such option already exists in BR? The only
- > one I see would be to tar output/target/lib/modules. But it still need
- > to be made manually. I wanted to have an option to have both kernel
- > image and modules ready for installation in output/images.
 
-That imho sounds like a quite special setup and something that could
-easily be implemented in a custom post-buid / post-image script.
+Jerome, could you point us the patchset as well as the configuration you
+would like people to test?
 
-So I prefer to NOT add this patch.
 
--- 
-Bye, Peter Korsgaard
+> >
+> >   - /etc/ld.so.conf have to contains these paths:
+> >        /usr/lib/imx-mm/audio-codec
+> >        /usr/lib/imx-mm/video-codec
+> >        /usr/lib/imx-mm/parser
+> >     (I have to write a patch for this)
+>
+> Yes, I saw a post about this patch and I added it to my buildroot
+> branch. I will continue to work on this to see what is happening.
+>
+
+Jeff, could you confirm everything works fine once the library paths have
+been added to ld.so.conf?
+
+Let me know if I can be of any help either writing the fix or testing it.
+
+Thanks,
+Gary
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141108/3bd70436/attachment.html>
