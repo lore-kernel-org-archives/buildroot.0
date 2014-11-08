@@ -1,59 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  8 Nov 2014 14:13:29 +0100
-Subject: [Buildroot] [PATCH] package/qemu: fix specifying custom target
-	sub-set
-Message-ID: <1415452409-1500-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  8 Nov 2014 10:22:23 -0300
+Subject: [Buildroot] [PATCH] arptables: re-enable for static
+Message-ID: <1415452943-11931-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The logic was wrong.
+Add a small patch to re-enable arptables for static builds.
+The dlfcn.h is a stray include for a past attempt at loadable plugins
+but the code is disabled so there's no need for it.
 
-Even though it was working for previous versions of QEMU, it changed in
-later versions, and thus now breaks on the version we currently package.
+Also add hash file.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Note: I did not notice so far because I always enabled a full-blown
-configure with all emulations enabled.
----
- package/qemu/qemu.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../0001-arptables-disable-dlfcn.h-include.patch   | 32 ++++++++++++++++++++++
+ package/arptables/Config.in                        |  5 ----
+ package/arptables/arptables.hash                   |  2 ++
+ 3 files changed, 34 insertions(+), 5 deletions(-)
+ create mode 100644 package/arptables/0001-arptables-disable-dlfcn.h-include.patch
+ create mode 100644 package/arptables/arptables.hash
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 8182697..fe65a87 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -99,6 +99,18 @@ QEMU_VARS = \
- 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
-+# If we want to specify only a subset of targets, we must still enable all
-+# of them, so that QEMU properly builds its list of default targets, from
-+# which it then checks if the specified sub-set is valid. That's what we
-+# do in the first part of the if-clause.
-+# Otherwise, if we do not want to pass a sub-set of targets, we then need
-+# to either enable or disable -user and/or -system emulation appropriately.
-+# That's what we do in the else-clause.
-+ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
-+QEMU_OPTS += --enable-system --enable-linux-user
-+QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
-+else
+diff --git a/package/arptables/0001-arptables-disable-dlfcn.h-include.patch b/package/arptables/0001-arptables-disable-dlfcn.h-include.patch
+new file mode 100644
+index 0000000..a5d56d2
+--- /dev/null
++++ b/package/arptables/0001-arptables-disable-dlfcn.h-include.patch
+@@ -0,0 +1,32 @@
++From 948a96d710f377fb0ed8d78c7fb85b299c80ef13 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Sat, 8 Nov 2014 10:12:54 -0300
++Subject: [PATCH] arptables: disable dlfcn.h include
 +
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
- else
-@@ -111,8 +123,6 @@ else
- QEMU_OPTS += --disable-linux-user
- endif
++The relevant code is disabled in libarptc_incl.c so it's not required
++and breaks the ability to build it in a pure-static toolchain.
++
++Status: sent upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ arptables.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/arptables.c b/arptables.c
++index 64ac3aa..fe270bc 100644
++--- a/arptables.c
+++++ b/arptables.c
++@@ -35,7 +35,9 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <inttypes.h>
+++#if 0
++ #include <dlfcn.h>
+++#endif
++ #include <ctype.h>
++ #include <stdarg.h>
++ #include <limits.h>
++-- 
++2.0.4
++
+diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+index 15414a0..873e791 100644
+--- a/package/arptables/Config.in
++++ b/package/arptables/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_ARPTABLES
+ 	bool "arptables"
+ 	depends on BR2_USE_MMU # needs fork()
+-	depends on !BR2_PREFER_STATIC_LIB # needs dlopen()
+ 	help
+ 	  Tool to set up, maintain, and inspect the tables of ARP rules.
  
--ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
--QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
- endif
- 
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ 	  http://ebtables.sourceforge.net
+-
+-comment "arptables needs a toolchain w/ dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/arptables/arptables.hash b/package/arptables/arptables.hash
+new file mode 100644
+index 0000000..95b9997
+--- /dev/null
++++ b/package/arptables/arptables.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	277985e29ecd93bd759a58242cad0e02ba9d4a6e1b7795235e3b507661bc0049	arptables-v0.0.4.tar.gz
 -- 
-1.9.1
+2.0.4
