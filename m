@@ -1,28 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Nov 2014 17:33:10 +0100
-Subject: [Buildroot] [PATCH] package/qemu: fix specifying custom target
-	sub-set
-In-Reply-To: <1415452409-1500-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 8 Nov 2014 14:13:29 +0100")
-References: <1415452409-1500-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87bnohveih.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Nov 2014 17:34:37 +0100
+Subject: [Buildroot] [PATCH] arptables: re-enable for static
+In-Reply-To: <1415452943-11931-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 8 Nov 2014 10:22:23 -0300")
+References: <1415452943-11931-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877fz5veg2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > The logic was wrong.
- > Even though it was working for previous versions of QEMU, it changed in
- > later versions, and thus now breaks on the version we currently package.
+ > Add a small patch to re-enable arptables for static builds.
+ > The dlfcn.h is a stray include for a past attempt at loadable plugins
+ > but the code is disabled so there's no need for it.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Also add hash file.
 
- > ---
- > Note: I did not notice so far because I always enabled a full-blown
- > configure with all emulations enabled.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Yeah, I didn't noticed that the code was within a #if 0 conditional when
+grepping for dlopen.
 
 Committed, thanks.
 
