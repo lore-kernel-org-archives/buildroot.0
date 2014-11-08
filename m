@@ -1,42 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 23:12:27 +0100
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 0.8.6
-Message-ID: <20141108230842.E2600B3815@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 23:10:40 +0100
+Subject: [Buildroot] [git commit] makedevs: Rework README
+Message-ID: <20141108230842.D9CC7B3814@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=130ca7d0c4bdca91774587a4b27a82c9ad33eccf
+commit: http://git.buildroot.net/buildroot/commit/?id=ba82e50f8d7fa3d25c1a02a12b32539ce6cd069b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Make all the example as a space separated list.
+The definition of the different type was modified to look like the same
+section on the manual.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/upmpdcli/upmpdcli.hash |    4 ++--
- package/upmpdcli/upmpdcli.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/makedevs/README |   18 +++++++++---------
+ 1 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 8822aed..b3a793b 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,2 +1,2 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.5.tar.gz.sha256
--sha256 1903214a6170b1cc3a95d22ed23d0f9c78525721506f000bef846657e7517e4c  upmpdcli-0.8.5.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.6.tar.gz.sha256
-+sha256 118d30d7c8ca9f9e94cebdec5cf8c7c619b71252a0dbac2afe30d5c9ff5bda87  upmpdcli-0.8.6.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index a90e8bd..0be4d91 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/makedevs/README b/package/makedevs/README
+index 6c54052..70844bf 100644
+--- a/package/makedevs/README
++++ b/package/makedevs/README
+@@ -6,7 +6,7 @@ You can do all sorts of interesting things with a device table file.
+ For example, if you want to adjust the permissions on a particular
+ file you can just add an entry like:
  
--UPMPDCLI_VERSION = 0.8.5
-+UPMPDCLI_VERSION = 0.8.6
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+-  /sbin/foobar        f       2755    0       0       -       -       -       -       -
++  /sbin/foobar f 2755 0 0 - - - - -
+ 
+ and (assuming the file /sbin/foobar exists) it will be made setuid
+ root (regardless of what its permissions are on the host filesystem.
+@@ -15,20 +15,20 @@ Furthermore, you can use a single table entry to create a many device
+ minors.  For example, if I wanted to create /dev/hda and
+ /dev/hda[0-15] I could just use the following two table entries:
+ 
+-  /dev/hda    b       640     0       0       3       0       0       0       -
+-  /dev/hda    b       640     0       0       3       1       1       1       15
++  /dev/hda b 640 0 0 3 0 0 0 -
++  /dev/hda b 640 0 0 3 1 1 1 15
+ 
+ Device table entries take the form of:
+ 
+-<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
++<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
+ 
+ where name is the file name,  type can be one of:
+ 
+-      f       A regular file
+-      d       Directory
+-      c       Character special device file
+-      b       Block special device file
+-      p       Fifo (named pipe)
++      f: A regular file
++      d: Directory
++      c: Character special device file
++      b: Block special device file
++      p: Fifo (named pipe)
+ 
+ uid is the user id for the target file, gid is the group id for the
+ target file.  The rest of the entries (major, minor, etc) apply only
