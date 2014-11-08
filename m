@@ -1,53 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 23:54:16 +0100
-Subject: [Buildroot] [git commit] package/dovecot: Fix build error in SQLite
-	module
-Message-ID: <20141108230843.0D39DB3814@busybox.osuosl.org>
+Date: Sun, 9 Nov 2014 00:15:24 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: add legacy handling for
+	the recently removed BR2_x86_generic option
+Message-ID: <20141108231828.3EB07B3824@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d5af94c81eb6ceaad09bd96a95603df845fa73b
+commit: http://git.buildroot.net/buildroot/commit/?id=a52bad854fc6b143c5036cedf33320a6434ed44c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch occured with "make dovecot" using this defconfig:
-http://autobuild.buildroot.net/results/bd3/bd37ee92eeb00adb1558dbb61315465a0cdfe635/
+Buildroot automatically falls back to a sensible CPU variant, but inform the
+user of the change anyway so they are aware of it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/0001-zlib.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ Config.in.legacy |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/dovecot/0001-zlib.patch b/package/dovecot/0001-zlib.patch
-new file mode 100644
-index 0000000..a6187bf
---- /dev/null
-+++ b/package/dovecot/0001-zlib.patch
-@@ -0,0 +1,24 @@
-+SQLite does not depend on zlib
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 95f77c3..d60f4eb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.11"
+ 
++config BR2_x86_generic
++	bool "x86 generic variant has been removed"
++	select BR2_LEGACY
++	help
++	  The generic x86 CPU variant has been removed. Use another
++	  CPU variant insted.
 +
-+Fixes build error when zlib target package is not present:
-+/home/br/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.9.2/../../../../arm-linux-gnueabihf/bin/ld: cannot find -lz
-+
-+Patch for configure.ac sent upstream:
-+http://www.dovecot.org/list/dovecot/2014-November/098634.html
-+
-+Here we patch ./configure instead because autoreconf is broken.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr dovecot-2.2.15.org/configure dovecot-2.2.15/configure
-+--- dovecot-2.2.15.org/configure	2014-10-25 06:08:57.000000000 +0200
-++++ dovecot-2.2.15/configure	2014-11-08 10:08:53.430745198 +0100
-+@@ -23865,7 +23865,7 @@
-+ 		ac_fn_c_check_header_mongrel "$LINENO" "sqlite3.h" "ac_cv_header_sqlite3_h" "$ac_includes_default"
-+ if test "x$ac_cv_header_sqlite3_h" = xyes; then :
-+ 
-+-			SQLITE_LIBS="$SQLITE_LIBS -lsqlite3 -lz"
-++			SQLITE_LIBS="$SQLITE_LIBS -lsqlite3"
-+ 
-+ 
-+ $as_echo "#define HAVE_SQLITE /**/" >>confdefs.h
+ config BR2_GCC_VERSION_4_4_X
+ 	bool "gcc 4.4.x has been removed"
+ 	select BR2_LEGACY
