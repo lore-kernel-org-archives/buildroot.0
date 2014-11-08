@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Nov 2014 00:01:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: Fix build error in
-	SQLite module
-In-Reply-To: <1415439365-3224-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 8 Nov 2014 10:36:05 +0100")
-References: <1415439365-3224-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87oashqou3.fsf@dell.be.48ers.dk>
+Date: Sun, 09 Nov 2014 00:07:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: Adjust LIBDOVECOT in
+	dovecot-config to STAGING_DIR
+In-Reply-To: <1415439548-3290-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sat, 8 Nov 2014 10:39:08 +0100")
+References: <1415439548-3290-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87k335qokb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,30 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Patch occured with "make dovecot" using this defconfig:
+ > Fixes
+ > http://autobuild.buildroot.net/results/3e6/3e6c258d7636fedbb87ba62069094291666e6a85/
+ > http://autobuild.buildroot.net/results/410/410b68afece06ddb03a00245cfdc3de4d9a4e5f1/
  > http://autobuild.buildroot.net/results/bd3/bd37ee92eeb00adb1558dbb61315465a0cdfe635/
+ > http://autobuild.buildroot.net/results/fd1/fd18c3678eded431476b4e61a10c48e160ffd51a//
+ > and many others
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/dovecot/dovecot.mk |    1 +
+ >  1 file changed, 1 insertion(+)
 
-Committed, thanks.
+ > diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+ > index fd597ee..a60dd4d 100644
+ > --- a/package/dovecot/dovecot.mk
+ > +++ b/package/dovecot/dovecot.mk
+ > @@ -90,6 +90,7 @@ DOVECOT_POST_CONFIGURE_HOOKS += DOVECOT_POST_CONFIGURE
+ >  # DOVECOT_CONFIG_SCRIPTS can not be used to rewrite paths
+ >  define DOVECOT_FIX_STAGING_DOVECOT_CONFIG
+ >  	$(SED) 's,^LIBDOVECOT_INCLUDE=.*$$,LIBDOVECOT_INCLUDE=\"-I$(STAGING_DIR)/usr/include/dovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
+ > +	$(SED) 's,^LIBDOVECOT=.*$$,LIBDOVECOT=\"-L$(STAGING_DIR)/usr/lib -ldovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
+
+Committed, thanks. It's quite a pain that we cannot use _CONFIG_SCRIPTS
+here :/
 
 -- 
 Bye, Peter Korsgaard
