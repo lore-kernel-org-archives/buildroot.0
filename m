@@ -1,37 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Nov 2014 10:39:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: Adjust LIBDOVECOT in
-	dovecot-config to STAGING_DIR
-Message-ID: <1415439548-3290-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Nov 2014 11:01:16 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.x86: drop
+ BR2_x86_generic
+In-Reply-To: <20141107185346.68E2FB2F56@busybox.osuosl.org>
+References: <20141107185346.68E2FB2F56@busybox.osuosl.org>
+Message-ID: <20141108110116.22dd9c53@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/3e6/3e6c258d7636fedbb87ba62069094291666e6a85/
-http://autobuild.buildroot.net/results/410/410b68afece06ddb03a00245cfdc3de4d9a4e5f1/
-http://autobuild.buildroot.net/results/bd3/bd37ee92eeb00adb1558dbb61315465a0cdfe635/
-http://autobuild.buildroot.net/results/fd1/fd18c3678eded431476b4e61a10c48e160ffd51a//
-and many others
+Dear Peter Korsgaard,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot/dovecot.mk |    1 +
- 1 file changed, 1 insertion(+)
+On Fri, 7 Nov 2014 19:51:06 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=80e406090893ab5a7b5d78e4d243d12fca2b22fb
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The fuzzy generic x86 variant doesn't make much sense in the context of
+> Buildroot, and the recent change to use -march instead of -mtune broke it.
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index fd597ee..a60dd4d 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -90,6 +90,7 @@ DOVECOT_POST_CONFIGURE_HOOKS += DOVECOT_POST_CONFIGURE
- # DOVECOT_CONFIG_SCRIPTS can not be used to rewrite paths
- define DOVECOT_FIX_STAGING_DOVECOT_CONFIG
- 	$(SED) 's,^LIBDOVECOT_INCLUDE=.*$$,LIBDOVECOT_INCLUDE=\"-I$(STAGING_DIR)/usr/include/dovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
-+	$(SED) 's,^LIBDOVECOT=.*$$,LIBDOVECOT=\"-L$(STAGING_DIR)/usr/lib -ldovecot\",' $(STAGING_DIR)/usr/lib/dovecot-config
- endef
- 
- DOVECOT_POST_INSTALL_STAGING_HOOKS += DOVECOT_FIX_STAGING_DOVECOT_CONFIG
+No Config.in.legacy handling?
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
