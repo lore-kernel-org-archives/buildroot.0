@@ -1,43 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 13:22:53 +0100
-Subject: [Buildroot] [git commit] arptables: needs dynamic linking support
-	for dlopen()
-Message-ID: <20141108122621.59AE1B2515@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  8 Nov 2014 14:13:29 +0100
+Subject: [Buildroot] [PATCH] package/qemu: fix specifying custom target
+	sub-set
+Message-ID: <1415452409-1500-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8a242179a446fa6f54f5da8ff6459ab1fc1afe2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The logic was wrong.
 
-Fixes:
-http://autobuild.buildroot.net/results/b96/b9642befef82e479cc50839e07114cb87314d156/
-http://autobuild.buildroot.net/results/57f/57ffebbe925391badf81f6867fdbf16975b4af6f/
-http://autobuild.buildroot.net/results/5f1/5f1966f1a7c8800846a8405b7e74f4893f3fcd14/
+Even though it was working for previous versions of QEMU, it changed in
+later versions, and thus now breaks on the version we currently package.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- package/arptables/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+Note: I did not notice so far because I always enabled a full-blown
+configure with all emulations enabled.
+---
+ package/qemu/qemu.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/arptables/Config.in b/package/arptables/Config.in
-index 414fabb..15414a0 100644
---- a/package/arptables/Config.in
-+++ b/package/arptables/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_ARPTABLES
- 	bool "arptables"
--	# needs fork()
--	depends on BR2_USE_MMU
-+	depends on BR2_USE_MMU # needs fork()
-+	depends on !BR2_PREFER_STATIC_LIB # needs dlopen()
- 	help
- 	  Tool to set up, maintain, and inspect the tables of ARP rules.
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 8182697..fe65a87 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -99,6 +99,18 @@ QEMU_VARS = \
+ 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
+ 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
  
- 	  http://ebtables.sourceforge.net
++# If we want to specify only a subset of targets, we must still enable all
++# of them, so that QEMU properly builds its list of default targets, from
++# which it then checks if the specified sub-set is valid. That's what we
++# do in the first part of the if-clause.
++# Otherwise, if we do not want to pass a sub-set of targets, we then need
++# to either enable or disable -user and/or -system emulation appropriately.
++# That's what we do in the else-clause.
++ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
++QEMU_OPTS += --enable-system --enable-linux-user
++QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
++else
 +
-+comment "arptables needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PREFER_STATIC_LIB
+ ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
+ QEMU_OPTS += --enable-system
+ else
+@@ -111,8 +123,6 @@ else
+ QEMU_OPTS += --disable-linux-user
+ endif
+ 
+-ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
+-QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+-- 
+1.9.1
