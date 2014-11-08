@@ -1,47 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 22:47:26 +0100
-Subject: [Buildroot] [git commit] lttng-tools: bump version
-Message-ID: <20141108214941.8E37CB3091@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 08 Nov 2014 22:53:04 +0100
+Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
+In-Reply-To: <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
+ (Yegor Yefremov's message of "Sat, 8 Nov 2014 19:24:48 +0100")
+References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
+ <20141108163942.GA3481@free.fr>
+ <20141108184303.1607bcb6@free-electrons.com>
+ <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
+Message-ID: <87a941s6kf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdff90929f06ca475e02c519c77b3cfac2e8b60f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-The previous releases was removed from their servers has they did a
-releases from a wrong tag, the resulting binary was wrong.
-Thanks to "Yann E. Morin" for spotting that.
+Hi,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lttng-tools/lttng-tools.hash |    2 +-
- package/lttng-tools/lttng-tools.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> Well, the kernel has this "tar-pkg" target that other packages
+ >> typically don't have. However, I'm curious to know what is the use case
+ >> for "make tar-pkg" in the kernel in the context of Buildroot.
+ >> 
+ >> Yegor?
 
-diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
-index 92a4401..fc2640e 100644
---- a/package/lttng-tools/lttng-tools.hash
-+++ b/package/lttng-tools/lttng-tools.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256  1084ce1fac0030cb5e0e3e117002444ceb9f94d6a15a6cce6607c480eca9b21b  lttng-tools-2.5.1.tar.bz2
-+sha256  1f52d342fb5b56a6675748f0b8e8557ec7c4e90732c3d8f5732bd10b920b233d  lttng-tools-2.5.2.tar.bz2
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 187b851..44b6880 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTTNG_TOOLS_VERSION = 2.5.1
-+LTTNG_TOOLS_VERSION = 2.5.2
- LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
+ > Image, you have a system/rootfs, that you've made via BR or it is
+ > Debian etc. Now you just want to update the kernel and modules. Kernel
+ > is simple, as BR compiles and copies it to output/images folder. But
+ > to install kernel modules you first need to invoke one of the make
+ > *-pkg commands, to do this you need to first export ARCH,
+ > CROSS_COMPILE etc. First then you can copy resulting image to target
+ > device and via "tar xf linux-*.tar -C /" install new kernel modules.
+ > Am I missing something and such option already exists in BR? The only
+ > one I see would be to tar output/target/lib/modules. But it still need
+ > to be made manually. I wanted to have an option to have both kernel
+ > image and modules ready for installation in output/images.
+
+That imho sounds like a quite special setup and something that could
+easily be implemented in a custom post-buid / post-image script.
+
+So I prefer to NOT add this patch.
+
+-- 
+Bye, Peter Korsgaard
