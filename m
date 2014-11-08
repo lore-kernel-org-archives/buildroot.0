@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Nov 2014 18:35:14 +0100
-Subject: [Buildroot] [git commit] arch/Config.in.x86: drop
-	BR2_x86_generic
-In-Reply-To: <87fvduue57.fsf@dell.be.48ers.dk>
-References: <20141107185346.68E2FB2F56@busybox.osuosl.org>
- <20141108110116.22dd9c53@free-electrons.com>
- <87fvduue57.fsf@dell.be.48ers.dk>
-Message-ID: <20141108183514.7d42611c@free-electrons.com>
+Date: Sat, 8 Nov 2014 18:43:03 +0100
+Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
+In-Reply-To: <20141108163942.GA3481@free.fr>
+References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
+ <20141108163942.GA3481@free.fr>
+Message-ID: <20141108184303.1607bcb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Yann, Yegor,
 
-On Sat, 08 Nov 2014 12:26:28 +0100, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Sat, 8 Nov 2014 17:39:42 +0100, Yann E. MORIN wrote:
+> Yegor, All,
 > 
->  > Dear Peter Korsgaard,
->  > On Fri, 7 Nov 2014 19:51:06 +0100, Peter Korsgaard wrote:
->  >> commit: http://git.buildroot.net/buildroot/commit/?id=80e406090893ab5a7b5d78e4d243d12fca2b22fb
->  >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->  >> 
->  >> The fuzzy generic x86 variant doesn't make much sense in the context of
->  >> Buildroot, and the recent change to use -march instead of -mtune broke it.
+> On 2014-11-08 17:32 +0100, Yegor Yefremov spake thusly:
+> > This option will invoke "make tar-pkg" in kernel's build directory
+> > and the resulting linux-*.tar will be copied to images folder.
 > 
->  > No Config.in.legacy handling?
+> Why would we want that only for the kernel?
 > 
-> It is only used in the variant choice, so kconfig will automatically
-> change to the default value (586 for i386, nocona for x86-64) and as
-> "generic" is not really well defined (see the description in the GCC
-> manual) I think that is good enough - But yeah, we should inform the
-> user about it using the legacy support.
+> If we were to add such a command, we would want to have it for all
+> packages, done in a generic way, unless there is a *really* *compelling*
+> reason to have such a linux-specific command.
 
-I agree that the default behavior after the removal of BR2_x86_generic
-is sane, but I believe it still makes sense to have Config.in.legacy
-handling to warn users about this.
+Well, the kernel has this "tar-pkg" target that other packages
+typically don't have. However, I'm curious to know what is the use case
+for "make tar-pkg" in the kernel in the context of Buildroot.
+
+Yegor?
 
 Thomas
 -- 
