@@ -1,38 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Nov 2014 12:26:28 +0100
-Subject: [Buildroot] [git commit] arch/Config.in.x86: drop
-	BR2_x86_generic
-In-Reply-To: <20141108110116.22dd9c53@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 8 Nov 2014 11:01:16 +0100")
-References: <20141107185346.68E2FB2F56@busybox.osuosl.org>
- <20141108110116.22dd9c53@free-electrons.com>
-Message-ID: <87fvduue57.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  8 Nov 2014 11:31:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 7580] Invalid filesystem in Pandaboard defconfig
+In-Reply-To: <bug-7580-163@https.bugs.busybox.net/>
+References: <bug-7580-163@https.bugs.busybox.net/>
+Message-ID: <20141108113151.76B85A3325@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=7580
 
- > Dear Peter Korsgaard,
- > On Fri, 7 Nov 2014 19:51:06 +0100, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=80e406090893ab5a7b5d78e4d243d12fca2b22fb
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> The fuzzy generic x86 variant doesn't make much sense in the context of
- >> Buildroot, and the recent change to use -march instead of -mtune broke it.
+--- Comment #3 from Lucas Verney <spam+busybox@phyks.me> 2014-11-08 11:31:50 UTC ---
+(In reply to comment #2)
+> (In reply to comment #1)
+> 
+> > In this case, I got the following error instead of the previous one :
+> > 2.331848] Waiting for root device /dev/mmcblk0p2...
+> > 2.363922] mmcblk0: mmc0:59b4 SDC   7.34 GiB
+> > 2.372253]  mmcblk0: p1 p201.
+> > 2.455871] VFS: Cannot open root device "mmcblk0p2" or unknown-block(179,2):
+> > error -19
+> > 2.464447] Please append a correct "root=" boot option; here are the available
+> > partitions:
+> > 2.473388] b300         7697408 mmcblk0  driver: mmcblkiales
+> > 2.477478]   b301           72261 mmcblk0p1 00000000-01
+> > 2.477478]   b302         7622842 mmcblk0p2 00000000-02
+> > 2.490356] Kernel panic - not syncing: VFS: Unable to mount root fs on
+> > unknown-block(179,2)
+> 
+> Did you had the "rootwait" parameter passed on the kernel command line?
 
- > No Config.in.legacy handling?
+Not sure about it. I finally got a working setup using Ubuntu 12.04 and the TI
+OMAP kernel. Though it's quite old stuff, it's the only fully working setup I
+had so far.
 
-It is only used in the variant choice, so kconfig will automatically
-change to the default value (586 for i386, nocona for x86-64) and as
-"generic" is not really well defined (see the description in the GCC
-manual) I think that is good enough - But yeah, we should inform the
-user about it using the legacy support.
+Using buildroot, I just used the defconfig file associated with pandaboard,
+which was expecting to produce a working (although minimalistic, so potentially
+without Bluetooth / wifi and that kind of stuff) image for the Pandaboard.
+Clearly, the easy way is to use this image with an ext3 partition. But using
+ext2 might requires some tweaking and this image is no longer working out of
+the bo, that's what I wanted to report.
 
-I'll add it now, thanks.
+I don't have it right now to find the exact kernel parameteres which are
+passed.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
