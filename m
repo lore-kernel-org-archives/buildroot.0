@@ -1,100 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Nov 2014 22:43:13 +0100
-Subject: [Buildroot] [git commit] opencv: superres - Fix return value
-	VideoFrameSource_GPU
-Message-ID: <20141108214405.2EB30B2EC5@busybox.osuosl.org>
+Date: Sat, 8 Nov 2014 21:59:24 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: bump to 10.3.3
+Message-ID: <20141108214404.CBC3FB2EC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1034d9f0d8e10b150a0c2ea311a95ae95fb12f77
+commit: http://git.buildroot.net/buildroot/commit/?id=1334d033ab20181a9ad7301ba277d472e017147d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-superres module fails to compile with the following error messages:
-
-[100%] Building CXX object
-modules/superres/CMakeFiles/opencv_superres.dir/src/super_resolution.cpp.o
-/opencv-2.4.10/modules/superres/src/frame_source.cpp: In function
-'cv::Ptr<cv::superres::FrameSource>
-cv::superres::createFrameSource_Video_GPU(const string&)':
-/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
-expected type-specifier before 'VideoFrameSource'
-/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
-could not convert '(int*)operator new(4ul)' from 'int*' to
-'cv::Ptr<cv::superres::FrameSource>'
-/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error:
-expected ';' before 'VideoFrameSource'
-/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:41: error:
-'VideoFrameSource' was not declared in this scope
-/opencv-2.4.10/modules/superres/src/frame_source.cpp:264:1: error:
-control reaches end of non-void function [-Werror=return-type]
-cc1plus: some warnings being treated as errors
-make[3]: ***
-[modules/superres/CMakeFiles/opencv_superres.dir/src/frame_source.cpp.o]
-Error 1
-make[3]: *** Waiting for unfinished jobs....
-
-This is caused because the return value of the
-createFrameSource_Video_GPU function should be a VideoFrameSource_GPU
-object.
-
-Backporting an upstream patch to fix this problem in Buildroot:
-  https://github.com/Itseez/opencv/commit/2e393ab83362743ba1825ad4b31d4a2925c606b4
-
-Fixes:
-  http://autobuild.buildroot.net/results/b09/b0996267197a9016d29d6070804ebc0cb7853548/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-return-type-value-VideoFrameSource_GPU.patch |   40 ++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ package/mesa3d/mesa3d.hash |    4 ++--
+ package/mesa3d/mesa3d.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch b/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
-new file mode 100644
-index 0000000..d71235d
---- /dev/null
-+++ b/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
-@@ -0,0 +1,40 @@
-+superres: Fix return value VideoFrameSource_GPU
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 2e393ab83362743ba1825ad4b31d4a2925c606b4 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 27 Oct 2014 13:39:35 +0000
-+Subject: [PATCH] superres: Fix return value VideoFrameSource_GPU
-+
-+superres module fails to compile with the following error messages:
-+
-+[100%] Building CXX object modules/superres/CMakeFiles/opencv_superres.dir/src/super_resolution.cpp.o
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp: In function 'cv::Ptr<cv::superres::FrameSource> cv::superres::createFrameSource_Video_GPU(const string&)':
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected type-specifier before 'VideoFrameSource'
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: could not convert '(int*)operator new(4ul)' from 'int*' to 'cv::Ptr<cv::superres::FrameSource>'
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected ';' before 'VideoFrameSource'
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:41: error: 'VideoFrameSource' was not declared in this scope
-+/opencv-2.4.10/modules/superres/src/frame_source.cpp:264:1: error: control reaches end of non-void function [-Werror=return-type]
-+cc1plus: some warnings being treated as errors
-+make[3]: *** [modules/superres/CMakeFiles/opencv_superres.dir/src/frame_source.cpp.o] Error 1
-+make[3]: *** Waiting for unfinished jobs....
-+
-+This is caused because the return value of the createFrameSource_Video_GPU function should be a VideoFrameSource_GPU object.
-+---
-+ modules/superres/src/frame_source.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/modules/superres/src/frame_source.cpp b/modules/superres/src/frame_source.cpp
-+index 5f59a98..c5b2e76 100644
-+--- a/modules/superres/src/frame_source.cpp
-++++ b/modules/superres/src/frame_source.cpp
-+@@ -260,7 +260,7 @@ namespace
-+ 
-+ Ptr<FrameSource> cv::superres::createFrameSource_Video_GPU(const string& fileName)
-+ {
-+-    return new VideoFrameSource(fileName);
-++    return new VideoFrameSource_GPU(fileName);
-+ }
-+ 
-+ #endif // HAVE_OPENCV_GPU
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 1c5de2d..bdcccaa 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2014-October/000116.html
+-sha256	e9849bcb9aa9acd98a753d6d46d2e7d7238d3367036e11357a60efd16de8bea3	MesaLib-10.3.2.tar.bz2
++# From http://lists.freedesktop.org/archives/mesa-announce/2014-November/000122.html
++sha256	0e4eee4a2ddf86456eed2fc44da367f95471f74249636710491e85cc256c4753	MesaLib-10.3.3.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6f1f414..4eaf07c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.3.2
++MESA3D_VERSION = 10.3.3
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
