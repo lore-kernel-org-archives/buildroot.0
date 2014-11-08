@@ -1,44 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Nov 2014 17:49:07 +0100
-Subject: [Buildroot] [RFC/PATCH v5 00/13] package/kodi: Bump version to
- 14.0b2-Helix
-In-Reply-To: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141108164907.GC7925@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 8 Nov 2014 17:34:10 +0100
+Subject: [Buildroot] [git commit] arptables: re-enable for static
+Message-ID: <20141108171552.E081EB2F3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=8133fd80086aaec83887d2b3fad1418a08023659
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-11-08 15:53 +0100, Bernd Kuhls spake thusly:
-> this patchset is a RFC and not meant to be committed to buildroot git yet.
-[--SNIP--]
->  package/alsa-utils/Config.in                     |    1 -
->  package/alsa-utils/alsa-utils-0001-libintl.patch |   23 ----
->  package/alsa-utils/alsa-utils.mk                 |   11 +-
->  package/ffmpeg/ffmpeg-0001-fminf.patch           |   47 ++++++++
->  package/lame/lame.mk                             |   13 ---
->  package/openssl/openssl.mk                       |    2 -
->  package/uclibc/0.9.33.2/uclibc-0063-fminf.patch  |  127 ----------------------
->  package/x11r7/xserver_xorg-server/Config.in      |    1 -
->  8 files changed, 48 insertions(+), 177 deletions(-)
->  delete mode 100644 package/alsa-utils/alsa-utils-0001-libintl.patch
->  create mode 100644 package/ffmpeg/ffmpeg-0001-fminf.patch
->  delete mode 100644 package/uclibc/0.9.33.2/uclibc-0063-fminf.patch
+Add a small patch to re-enable arptables for static builds.
+The dlfcn.h is a stray include for a past attempt at loadable plugins
+but the code is disabled so there's no need for it.
 
-BTW, this diffstat looks weird, as none of your patches (unless I missed
-some) do touch alsa-utils, openssl, uClibc or x11r7... :-/
+Also add hash file.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-arptables-disable-dlfcn.h-include.patch   |   32 ++++++++++++++++++++
+ package/arptables/Config.in                        |    5 ---
+ package/arptables/arptables.hash                   |    2 +
+ 3 files changed, 34 insertions(+), 5 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/arptables/0001-arptables-disable-dlfcn.h-include.patch b/package/arptables/0001-arptables-disable-dlfcn.h-include.patch
+new file mode 100644
+index 0000000..a5d56d2
+--- /dev/null
++++ b/package/arptables/0001-arptables-disable-dlfcn.h-include.patch
+@@ -0,0 +1,32 @@
++From 948a96d710f377fb0ed8d78c7fb85b299c80ef13 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Sat, 8 Nov 2014 10:12:54 -0300
++Subject: [PATCH] arptables: disable dlfcn.h include
++
++The relevant code is disabled in libarptc_incl.c so it's not required
++and breaks the ability to build it in a pure-static toolchain.
++
++Status: sent upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ arptables.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/arptables.c b/arptables.c
++index 64ac3aa..fe270bc 100644
++--- a/arptables.c
+++++ b/arptables.c
++@@ -35,7 +35,9 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <inttypes.h>
+++#if 0
++ #include <dlfcn.h>
+++#endif
++ #include <ctype.h>
++ #include <stdarg.h>
++ #include <limits.h>
++-- 
++2.0.4
++
+diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+index 15414a0..873e791 100644
+--- a/package/arptables/Config.in
++++ b/package/arptables/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_ARPTABLES
+ 	bool "arptables"
+ 	depends on BR2_USE_MMU # needs fork()
+-	depends on !BR2_PREFER_STATIC_LIB # needs dlopen()
+ 	help
+ 	  Tool to set up, maintain, and inspect the tables of ARP rules.
+ 
+ 	  http://ebtables.sourceforge.net
+-
+-comment "arptables needs a toolchain w/ dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/arptables/arptables.hash b/package/arptables/arptables.hash
+new file mode 100644
+index 0000000..95b9997
+--- /dev/null
++++ b/package/arptables/arptables.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	277985e29ecd93bd759a58242cad0e02ba9d4a6e1b7795235e3b507661bc0049	arptables-v0.0.4.tar.gz
