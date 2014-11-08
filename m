@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Nov 2014 17:34:37 +0100
-Subject: [Buildroot] [PATCH] arptables: re-enable for static
-In-Reply-To: <1415452943-11931-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 8 Nov 2014 10:22:23 -0300")
-References: <1415452943-11931-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877fz5veg2.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Nov 2014 17:35:19 +0100
+Subject: [Buildroot] [PATCH] vim: install vi symlink
+In-Reply-To: <1415454877-2710-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 8 Nov 2014 10:54:37 -0300")
+References: <1415454877-2710-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87389tveew.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Add a small patch to re-enable arptables for static builds.
- > The dlfcn.h is a stray include for a past attempt at loadable plugins
- > but the code is disabled so there's no need for it.
-
- > Also add hash file.
+ > Install a 'vi' symlink to win over busybox vi (more features) and in
+ > case busybox isn't around, for people expecting plain simple 'vi' to
+ > call the editor.
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Yeah, I didn't noticed that the code was within a #if 0 conditional when
-grepping for dlopen.
 
 Committed, thanks.
 
