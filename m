@@ -1,56 +1,54 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Sat, 8 Nov 2014 13:56:27 -0800
-Subject: [Buildroot] host ldconfig package
-In-Reply-To: <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
-References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
- <1456757.71s6JAxXJf@aquila>
- <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
-Message-ID: <CADCpmyNMs7yTdGEzurOEvpHHSPJsDVHCEv6+dMT3s1ez9tR2Pg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 08 Nov 2014 23:01:21 +0100
+Subject: [Buildroot] [PATCH v2] gst1-plugins-imx: add package
+In-Reply-To: <CADCpmyOMtq1vf9TtZJ-=JaRR67qiSQoX5k5CZ7T0jqYav2GWeA@mail.gmail.com>
+ (Gary Bisson's message of "Mon, 3 Nov 2014 14:47:48 -0800")
+References: <1414636344-8152-1-git-send-email-bisson.gary@gmail.com>
+ <5457F8C5.5000708@mind.be>
+ <CADCpmyOMtq1vf9TtZJ-=JaRR67qiSQoX5k5CZ7T0jqYav2GWeA@mail.gmail.com>
+Message-ID: <8761eps66m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeff, Jerome, All,
+>>>>> "Gary" == Gary Bisson <bisson.gary@gmail.com> writes:
 
-On Fri, Nov 7, 2014 at 9:43 AM, Jeff Horn <outforaride@gmail.com> wrote:
+Hi,
 
-> [snip]
-> > For information, I made iMX6 hardware video decoding and display work.
-> You
-> > may encounter a few difficulties:
-> >
-> >   - Xorg support for imx6 is not yet merged (and we are looking for
-> >     testers :-) )
->
-> I can help test. I have a couple different i.MX6 boards (Wand,
-> SabreSD). We are not using X11 on our board. We are using just Qt5
-> with the eglfs platform.
+ >     ?I'm sorry to return to the naming issue, but shouldn't the package be
+ >     called
+ >     gst1-imx instead of gst1-plugins-imx? We don't use 'plugins' in any other
+ >     gst
+ >     package (except the official plugin bundles), and upstream also doesn't
+ >     have
+ >     'plugins' in the name.
+
+ > ?
+ > I see your point and really changing the name doesn't bother me, we just need
+ > to agree on something. How do we organize a vote? irc? ;-) So far Peter K
+ > suggested "gstreamer1-imx", Arnout "gst1-imx" and mine "gst1-plugins-imx". As a
+ > reminder the git repo name is "gstreamer-imx" and the Yocto recipe is
+ > "gstreamer1.0-plugins-imx". Since the first version of this patch have been
+ > integrated two plugins:gst1-libav and gst1-validate which tends towards a gst1-
+ > <name> convention.
+
+Yes, so lets go with gst1-imx.
 
 
-Jerome, could you point us the patchset as well as the configuration you
-would like people to test?
+ >> +? ? ?depends on BR2_arm # Only relevant for i.MX
+ >> +? ? ?depends on BR2_TOOLCHAIN_USES_GLIBC # gpu-viv-bin-mx6q
+ >> +? ? ?depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+
+ >     ?This should be a select.
 
 
-> >
-> >   - /etc/ld.so.conf have to contains these paths:
-> >        /usr/lib/imx-mm/audio-codec
-> >        /usr/lib/imx-mm/video-codec
-> >        /usr/lib/imx-mm/parser
-> >     (I have to write a patch for this)
->
-> Yes, I saw a post about this patch and I added it to my buildroot
-> branch. I will continue to work on this to see what is happening.
->
+ > We unfortunately discussed that before and Yann came to the conclusion it
+ > wasn't possible for now [1]. Otherwise this requires reworking all the iMX
+ > platforms selections in freescale-imx packages.
 
-Jeff, could you confirm everything works fine once the library paths have
-been added to ld.so.conf?
+Ahh yes, so lets leave it as depends on (for both).
 
-Let me know if I can be of any help either writing the fix or testing it.
-
-Thanks,
-Gary
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141108/3bd70436/attachment.html>
+-- 
+Bye, Peter Korsgaard
