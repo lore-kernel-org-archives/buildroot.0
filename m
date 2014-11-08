@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Nov 2014 15:53:45 +0100
-Subject: [Buildroot] [RFC/PATCH v5 12/13] package/kodi-audioencoder-vorbis:
+Date: Sat,  8 Nov 2014 15:53:44 +0100
+Subject: [Buildroot] [RFC/PATCH v5 11/13] package/kodi-audioencoder-lame:
 	New package
 In-Reply-To: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1415458426-23645-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1415458426-23645-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1415458426-23645-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-vorbis/Config.in           |    9 +++++++++
- .../kodi-audioencoder-vorbis.mk                      |   18 ++++++++++++++++++
- package/kodi/Config.in                               |    1 +
- 3 files changed, 28 insertions(+)
- create mode 100644 package/kodi-audioencoder-vorbis/Config.in
- create mode 100644 package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+ package/kodi-audioencoder-lame/Config.in               |    8 ++++++++
+ .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk   |   16 ++++++++++++++++
+ package/kodi/Config.in                                 |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audioencoder-lame/Config.in
+ create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
 
-diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
 new file mode 100644
-index 0000000..03300f1
+index 0000000..78ec136
 --- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
-+	bool "kodi-audioencoder-vorbis"
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
++++ b/package/kodi-audioencoder-lame/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
++	bool "kodi-audioencoder-lame"
++	select BR2_PACKAGE_LAME
 +	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
 +	help
 +	  An audioencoder addon for Kodi
 +
-+	  https://github.com/xbmc/audioencoder.vorbis
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++	  https://github.com/xbmc/audioencoder.lame
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
 new file mode 100644
-index 0000000..e2d63db
+index 0000000..238a7df
 --- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -0,0 +1,18 @@
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# kodi-audioencoder-vorbis
++# kodi-audioencoder-lame
 +#
 +################################################################################
 +
-+KODI_AUDIOENCODER_VORBIS_VERSION = f75f3293b7bf8635f08243e3f10498f50c5058cd
-+KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
-+KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
-+KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis
-+KODI_AUDIOENCODER_VORBIS_CONF_OPTS += \
++KODI_AUDIOENCODER_LAME_VERSION = 46592f80d89fca56822e6ed8592fa665f14bfceb
++KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
++KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
++KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
++KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
++KODI_AUDIOENCODER_LAME_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBIS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBISENC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 11b88a5..3111f4e 100644
+index 9c37765..11b88a5 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -246,6 +246,7 @@ comment "Kodi audioencoder addons"
+@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
+ comment "Kodi audioencoder addons"
  
  source "package/kodi-audioencoder-flac/Config.in"
- source "package/kodi-audioencoder-lame/Config.in"
-+source "package/kodi-audioencoder-vorbis/Config.in"
++source "package/kodi-audioencoder-lame/Config.in"
  
  endif # BR2_PACKAGE_KODI_OPTICALDRIVE
  
