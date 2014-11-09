@@ -1,55 +1,23 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Sun,  9 Nov 2014 12:56:01 +0100
-Subject: [Buildroot] [PATCH 1/1] binutils/gcc: make it possible to use lto
-Message-ID: <1415534161-24389-1-git-send-email-syntheticpp@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Nov 2014 12:14:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 7592] Buildroot GCC: -lto requires plugin support
+	in ranlib
+In-Reply-To: <bug-7592-163@https.bugs.busybox.net/>
+References: <bug-7592-163@https.bugs.busybox.net/>
+Message-ID: <20141109121418.341D4B1670@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When -flto is used the compiler and binutils have to support lto.
-ar/ranlib needs to be called with the lto plugin, therefore use
-the wrappers provided by GCC: *-gcc-ar and *-gcc-ranlib.
+https://bugs.busybox.net/show_bug.cgi?id=7592
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
----
- package/binutils/binutils.mk | 2 ++
- package/gcc/gcc.mk           | 2 ++
- 2 files changed, 4 insertions(+)
+--- Comment #4 from syntheticpp at gmx.net 2014-11-09 12:14:18 UTC ---
+I pushed patches to the list to support lto for buildroot-clients.
+buildroot itself is still compiled without lto.
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index b8dab5d..e552abc 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -48,6 +48,7 @@ BINUTILS_DISABLE_GDB_CONF_OPTS = \
- BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
- 		--host=$(GNU_TARGET_NAME) \
- 		--target=$(GNU_TARGET_NAME) \
-+		--enable-plugins --enable-lto \
- 		--enable-install-libiberty \
- 		$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-@@ -67,6 +68,7 @@ endif
- HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
- 			--target=$(GNU_TARGET_NAME) \
- 			--disable-shared --enable-static \
-+			--enable-plugins --enable-lto \
- 			--with-sysroot=$(STAGING_DIR) \
- 			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index cdd71aa..a8853f7 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -92,6 +92,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--with-gnu-ld \
- 	--disable-libssp \
- 	--disable-multilib \
-+	--enable-plugins \
-+	--enable-lto \
- 	--with-gmp=$(HOST_DIR)/usr \
- 	--with-mpfr=$(HOST_DIR)/usr
- 
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
