@@ -1,25 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Nov 2014 11:11:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 7592] Buildroot GCC: -lto requires plugin support
-	in ranlib
-In-Reply-To: <bug-7592-163@https.bugs.busybox.net/>
-References: <bug-7592-163@https.bugs.busybox.net/>
-Message-ID: <20141109111120.74E22AEEB5@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 09 Nov 2014 08:17:36 -0300
+Subject: [Buildroot] socat version
+In-Reply-To: <874mu9tmkl.fsf@dell.be.48ers.dk>
+References: <CANxTyt5UVteo4xOJ85YfZP4J-3ZpVstGjnr8Yj4Sry93zfUqzg@mail.gmail.com>
+ <874mu9tmkl.fsf@dell.be.48ers.dk>
+Message-ID: <545F4D50.8080302@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7592
+On 11/08/2014 06:22 PM, Peter Korsgaard wrote:
 
---- Comment #3 from syntheticpp at gmx.net 2014-11-09 11:11:20 UTC ---
-The problem is that arm-linux-gcc-ar/ranlib are also wrapped by
-ext-toolchain-wrapper.
-When those tools just link to the external toolchain lto works (without
-switching to gold)
+> I don't think there's any real reason that we've gone with 2.0 series. I
+> atleast wasn't aware of the two branches. We moved from 1.4 to 2.0 a
+> long time ago (back when we used subversion), and the person doing the
+> change is no longer active.
+> 
+> commit 3fde5702db832475c4a45aa3f35aac7839c6a710
+> Author: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+> Date:   Fri Jan 2 08:29:31 2009 +0000
+> 
+>     Bump socat version, optionally add configure variables
+> 
+> Gustavo, you have recently bumped the version - Do you have anything to
+> add?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Hi.
+My bump was purely for security purposes so i kept on the same series
+that was before.
+Since i don't generally use socat feel free to switch to the 1.x series
+if that's considered better.
+Regards.
