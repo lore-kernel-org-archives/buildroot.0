@@ -1,35 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 09 Nov 2014 08:17:36 -0300
-Subject: [Buildroot] socat version
-In-Reply-To: <874mu9tmkl.fsf@dell.be.48ers.dk>
-References: <CANxTyt5UVteo4xOJ85YfZP4J-3ZpVstGjnr8Yj4Sry93zfUqzg@mail.gmail.com>
- <874mu9tmkl.fsf@dell.be.48ers.dk>
-Message-ID: <545F4D50.8080302@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Nov 2014 12:24:08 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <20141109113507.35e73f55@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 9 Nov 2014 11:35:07 +0100")
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+ <20141108184741.66cf1357@free-electrons.com>
+ <87tx29tnmw.fsf@dell.be.48ers.dk>
+ <20141109104501.3a71bc76@free-electrons.com>
+ <877fz4r7p5.fsf@dell.be.48ers.dk>
+ <20141109113507.35e73f55@free-electrons.com>
+Message-ID: <87zjc0pqg7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/2014 06:22 PM, Peter Korsgaard wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I don't think there's any real reason that we've gone with 2.0 series. I
-> atleast wasn't aware of the two branches. We moved from 1.4 to 2.0 a
-> long time ago (back when we used subversion), and the person doing the
-> change is no longer active.
-> 
-> commit 3fde5702db832475c4a45aa3f35aac7839c6a710
-> Author: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-> Date:   Fri Jan 2 08:29:31 2009 +0000
-> 
->     Bump socat version, optionally add configure variables
-> 
-> Gustavo, you have recently bumped the version - Do you have anything to
-> add?
+ > Hello,
+ > On Sun, 09 Nov 2014 11:26:14 +0100, Peter Korsgaard wrote:
 
-Hi.
-My bump was purely for security purposes so i kept on the same series
-that was before.
-Since i don't generally use socat feel free to switch to the 1.x series
-if that's considered better.
-Regards.
+ >> > Delivery to the following recipients has been delayed.
+ >> 
+ >> >               <jacmet@sunsite.dk>
+ >> 
+ >> > The reason for the problem:
+ >> > 4.1.0 - Unknown address error 451-'4.3.0 Error: queue file write error'
+ >> 
+ >> Yeah, there's a temporary issue with @sunsite.dk. Please use my
+ >> @korsgaard.com address instead.
+
+ > I did actually send your e-mail to jacmet at uclibc.org, not @sunsite.dk.
+
+.. which forwards to @sunsite.dk for historical reasons. I'll see if I
+can fix that.
+
+-- 
+Bye, Peter Korsgaard
