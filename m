@@ -1,25 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Nov 2014 22:12:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Sync with upstream to
-	fix fminf-related build error
-In-Reply-To: <1415538258-16801-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 9 Nov 2014 14:04:18 +0100")
-References: <1415538258-16801-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87a940oz6s.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 9 Nov 2014 21:45:46 +0100
+Subject: [Buildroot] [git commit] quota: rename patch to the new convention
+Message-ID: <20141109211319.A388CB3AAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0051046b4d73bd9e373393dc4cb9be155d7eb952
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - upstream fixed the fminf build error, use the backported patch now
- > - renamed patch according to new naming convention
+As a preparation to the introduction of an additional patch to quota,
+let's rename the existing patch to the new naming convention.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ynumber.patch => 01-tools-getrpcbynumber.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/quota/quota-01-tools-getrpcbynumber.patch b/package/quota/01-tools-getrpcbynumber.patch
+similarity index 100%
+rename from package/quota/quota-01-tools-getrpcbynumber.patch
+rename to package/quota/01-tools-getrpcbynumber.patch
