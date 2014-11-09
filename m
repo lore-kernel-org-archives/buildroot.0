@@ -1,119 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Nov 2014 14:30:54 +0100
-Subject: [Buildroot] [PATCHv2 3/3] quota: fix static linking
-In-Reply-To: <1415539854-25971-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1415539854-25971-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1415539854-25971-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Nov 2014 16:38:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 7580] Invalid filesystem in Pandaboard defconfig
+In-Reply-To: <bug-7580-163@https.bugs.busybox.net/>
+References: <bug-7580-163@https.bugs.busybox.net/>
+Message-ID: <20141109163816.0DA98AD815@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The aim of this patch is to fix bug #7574, i.e fix the static linking
-of the quota package. It does so by introducing a patch to the quota
-build system that generalizes the use of $(LIBS), and then changes
-quota.mk to use LIBS instead of LDFLAGS to link against intl and tirpc
-when needed.
+https://bugs.busybox.net/show_bug.cgi?id=7580
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/quota/02-fix-static-linking.patch | 55 +++++++++++++++++++++++++++++++
- package/quota/quota.mk                    |  9 +++--
- 2 files changed, 59 insertions(+), 5 deletions(-)
- create mode 100644 package/quota/02-fix-static-linking.patch
+Lucas Verney <spam+busybox@phyks.me> changed:
 
-diff --git a/package/quota/02-fix-static-linking.patch b/package/quota/02-fix-static-linking.patch
-new file mode 100644
-index 0000000..fd73f64
---- /dev/null
-+++ b/package/quota/02-fix-static-linking.patch
-@@ -0,0 +1,55 @@
-+Use $(LIBS) properly
-+
-+This patch makes sure the quota build system uses $(LIBS) where
-+appropriate, so that it can be used to link with additional libraries,
-+which is needed when linking statically.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile.in
-+===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -105,30 +105,40 @@
-+ 	-$(INSTALL) -m $(DEF_MAN_MODE) *.8 $(ROOTDIR)$(mandir)/man8
-+ 
-+ quotaon: quotaon.o quotaon_xfs.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ quotacheck: quotacheck.o quotacheck_v1.o quotacheck_v2.o quotaops.o $(LIBOBJS)
-+-	$(CC) $(LDFLAGS) -o $@ $^ $(EXT2LIBS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(EXT2LIBS) $(LIBS)
-+ 
-+ quota: quota.o quotaops.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ quotasync: quotasync.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ quot: quot.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ repquota: repquota.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ warnquota: warnquota.o $(LIBOBJS)
-+-	$(CC) $(LDFLAGS) -o $@ $^ $(LDAPLIBS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LDAPLIBS) $(LIBS)
-+ 
-+ quotastats: quotastats.o common.o pot.o
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ xqmstats: xqmstats.o common.o pot.o
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ edquota: edquota.o quotaops.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ setquota: setquota.o quotaops.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ convertquota: convertquota.o $(LIBOBJS)
-++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ rpc.rquotad: rquota_server.o rquota_svc.o svc_socket.o $(LIBOBJS)
-+ 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 0e7a2b0..332f42e 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -12,22 +12,21 @@ QUOTA_LICENSE = GPLv2+
- QUOTA_CONF_OPTS = --disable-strip-binaries
- 
- QUOTA_CFLAGS = $(TARGET_CFLAGS)
--QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- QUOTA_DEPENDENCIES += gettext
--QUOTA_LDFLAGS += -lintl
-+QUOTA_LIBS += -lintl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- QUOTA_DEPENDENCIES += libtirpc
- QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
--QUOTA_LDFLAGS += -ltirpc
-+QUOTA_LIBS += -ltirpc
- endif
- 
--QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
-+QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
- QUOTA_CONF_ENV = \
--	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
-+	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
- 
- # Package uses autoconf but not automake.
- QUOTA_INSTALL_TARGET_OPTS = \
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|WORKSFORME                  |
+
+--- Comment #5 from Lucas Verney <spam+busybox@phyks.me> 2014-11-09 16:38:15 UTC ---
+(In reply to comment #4)
+> Unfortunately, due to lack of details, it's hard to know whether this bug is
+> really a Buildroot bug, or a configuration error in the kernel arguments /
+> usage of the Buildroot image. Since there is really not much difference between
+> the process to generate an ext2 and ext3 image in Buildroot, I'm leaning
+> towards some other configuration issue done by the bug reporter when using the
+> Buildroot image.
+> 
+> I'll therefore mark this bug as "worksforme", since we're using the ext2
+> filesystem image successfully on other systems. Feel free to reopen with more
+> details (kernel version, kernel configuration, kernel argument, full kernel
+> log) if you don't agree with my conclusion.
+
+Hmmm, I think I may have missed something. Here are the *exact* steps I used to
+build the faulty image :
+
+* Clone buildroot repo
+* In this repo, `make pandaboard_defconfig`
+* Checked the settings, did *not* change anything.
+* `make`
+* Create the partitions on the SD, cf http://elinux.org/Panda_How_to_buildroot
+* Copy MLO, u-boot.bin, uImage and .dtb file to the first partition on the SD
+card.
+* `dd` the .ext2 file onto the second partition of the device.
+* Put the SD card in the Pandaboard, power it on and see what is going on over
+serial.
+
+With *nothing* else than these steps, it does *not* boot, due to the first
+error reported.
+
+After having came accross this error, I played a bit with the settings until I
+could figure out something working.
+
+
+
+I finally moved to the minimal Ubuntu 12.04 image with TI kernel, which allows
+me to use wifi / ethernet / bluetooth / ducati etc out of the box, so I did not
+do further tests. I can do some extra tests this week, if such tests are
+necessary, but I did not tweak the defconfig before building it.
+
+I may have missed something, but as far as I understood, this was supposed to
+work and the defconfig was supposed to provide a basic setup running out of the
+box on the pandaboard (although it may not have all the stuff to use all the
+devices on the Pandaboard).
+
 -- 
-2.0.0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
