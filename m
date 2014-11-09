@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Nov 2014 21:44:38 +0100
-Subject: [Buildroot] [PATCHv2 2/3] quota: remove dependency on util-linux
-In-Reply-To: <1415539854-25971-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Nov 2014 14:30:53 +0100")
+Date: Sun, 09 Nov 2014 21:52:48 +0100
+Subject: [Buildroot] [PATCHv2 3/3] quota: fix static linking
+In-Reply-To: <1415539854-25971-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 9 Nov 2014 14:30:54 +0100")
 References: <1415539854-25971-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1415539854-25971-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mw80p0i1.fsf@dell.be.48ers.dk>
+ <1415539854-25971-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ioiop04f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,37 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The dependency on util-linux is only present in Config.in, and not in
- > quota.mk, and quota indeed builds properly without util-linux. It
- > could be a runtime dependency, but there is no indication that it is
- > the case, and I don't see why quota would run-time depend on
- > util-linux utilities.
+ > The aim of this patch is to fix bug #7574, i.e fix the static linking
+ > of the quota package. It does so by introducing a patch to the quota
+ > build system that generalizes the use of $(LIBS), and then changes
+ > quota.mk to use LIBS instead of LDFLAGS to link against intl and tirpc
+ > when needed.
 
- > Looking back at when the quota package was introduced, in one of the
- > preliminary patch, he following explanation was given by the original
- > author:
-
- >   [Update: I added check for util-linux mount because
- >    it support usrquota and grpquota mount options.]
-
- > But I still don't see why usrquota and grpquota mount options would be
- > the source of a dependency of the quota utilities on util-linux. Here
- > is what the util-linux mount man page says about those two mount
- > options:
-
- >    grpquota|noquota|quota|usrquota
-
- >          These options are accepted but ignored.  (However, quota
- >          utilities may react to such strings in /etc/fstab.)
-
- > So indeed, the quota tools will look at /proc/mounts and see if those
- > options are used for certain mount points, but that doesn't create a
- > dependency of quota on util-linux.
-
- > Therefore, this commit gets rid of the dependency of quota on
- > util-linux. It allows to re-enable quota on Microblaze, since this
- > dependency was inherited from util-linux.
-
- > igned-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/quota/02-fix-static-linking.patch | 55 +++++++++++++++++++++++++++++++
+ >  package/quota/quota.mk                    |  9 +++--
+ >  2 files changed, 59 insertions(+), 5 deletions(-)
+ >  create mode 100644 package/quota/02-fix-static-linking.patch
 
-'S' missing in top line. Committed with that line removed, thanks.
+ > diff --git a/package/quota/02-fix-static-linking.patch b/package/quota/02-fix-static-linking.patch
+ > new file mode 100644
+ > index 0000000..fd73f64
+ > --- /dev/null
+ > +++ b/package/quota/02-fix-static-linking.patch
+ > @@ -0,0 +1,55 @@
+ > +Use $(LIBS) properly
+ > +
+ > +This patch makes sure the quota build system uses $(LIBS) where
+ > +appropriate, so that it can be used to link with additional libraries,
+ > +which is needed when linking statically.
+
+This patch could be simplified quite a bit if you just did s/LIBS/LDLIBS/
+so the existing implicit rules can be used, then we only need to adjust
+the explicit link rules (for quotecheck, warnquota, rpc.rquotad), but
+Ok.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
