@@ -1,71 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Nov 2014 16:38:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 7580] Invalid filesystem in Pandaboard defconfig
-In-Reply-To: <bug-7580-163@https.bugs.busybox.net/>
-References: <bug-7580-163@https.bugs.busybox.net/>
-Message-ID: <20141109163816.0DA98AD815@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Nov 2014 20:12:18 +0100
+Subject: [Buildroot] Config.in for both Qt4 and Qt5 in grantlee
+In-Reply-To: <545EC900.9030103@gmail.com>
+References: <545EC900.9030103@gmail.com>
+Message-ID: <20141109201218.1edc8117@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7580
+Hello Zoltan,
 
-Lucas Verney <spam+busybox@phyks.me> changed:
+On Sun, 09 Nov 2014 02:53:04 +0100, Zoltan Gyarmati wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WORKSFORME                  |
+> i'm trying to update the package grantlee (http://grantlee.org) in 
+> Buildroot to the current upstream version. Historically grantlee 
+> supported only Qt4 (this version is present now in Buildroot), and for a 
+> while both Qt4 and Qt5, and with the last release it dropped the Qt4 
+> support.
 
---- Comment #5 from Lucas Verney <spam+busybox@phyks.me> 2014-11-09 16:38:15 UTC ---
-(In reply to comment #4)
-> Unfortunately, due to lack of details, it's hard to know whether this bug is
-> really a Buildroot bug, or a configuration error in the kernel arguments /
-> usage of the Buildroot image. Since there is really not much difference between
-> the process to generate an ext2 and ext3 image in Buildroot, I'm leaning
-> towards some other configuration issue done by the bug reporter when using the
-> Buildroot image.
+Too bad :/
+
+>   As for one of my legacy projects i still might need the Qt4 version, i 
+> would like to keep the Qt4 support by using the last upstream version 
+> which built on Qt4 when Buildroot configured to build Qt4,  and use the 
+> newest version when build on Qt5. It's easy to implement in the .mk file 
+> with "ifeq ($(BR2_PACKAGE_QT),y)", although i'm not sure this is the 
+> most elegant solution. (qjson using this for example to distinguish the 
+> dependencies between the two Qt version, but it doesn't use 2 different 
+> upstream versions for the 2 Qt versions)
+
+Yes, for the .mk file, this is fine. At some point in the future, we'll
+drop the old version that supports qt4, but for a little while, we can
+keep both. So indeed, something like:
+
+ifeq ($(BR2_PACKAGE_QT),y)
+GRANTLE_VERSION = ...
+else ifeq ($(BR2_PACKAGE_QT5),y)
+GRANTLE_VERSION = ...
+endif
+
+>   I got into trouble in the Config.in though. Currently the grantlee.mk 
+> selects a few Qt options with the kconfig 'select' statement (namely  
+> BR2_PACKAGE_QT_STL, BR2_PACKAGE_QT_SCRIPT, BR2_PACKAGE_QT_GUI_MODULE), 
+> and it also supposed to select the corresponding Qt5 options, but i 
+> can't find any explicit trace that using conditional 'select' is 
+> possible in kconfig, nor the correct syntax to express this.
 > 
-> I'll therefore mark this bug as "worksforme", since we're using the ext2
-> filesystem image successfully on other systems. Feel free to reopen with more
-> details (kernel version, kernel configuration, kernel argument, full kernel
-> log) if you don't agree with my conclusion.
+> What is the preferred solution to handle this scenario? Would it be 
+> better to have a new grantlee package (let's say grantleeqt5) for this 
+> latest version, and enable it in the menu only for Qt5? Or is there any 
+> kconfig trick i could use here? An other option would be just to drop 
+> Qt4 support (if the upstream already did it) at least in the official 
+> Buildroot version (and i can use any nasty trick in my own Buildroot 
+> tree to support my legacy project till i'm able to port it to Qt5). Is 
+> there anybody out there who is using this lib with Qt4?
 
-Hmmm, I think I may have missed something. Here are the *exact* steps I used to
-build the faulty image :
+Just do:
 
-* Clone buildroot repo
-* In this repo, `make pandaboard_defconfig`
-* Checked the settings, did *not* change anything.
-* `make`
-* Create the partitions on the SD, cf http://elinux.org/Panda_How_to_buildroot
-* Copy MLO, u-boot.bin, uImage and .dtb file to the first partition on the SD
-card.
-* `dd` the .ext2 file onto the second partition of the device.
-* Put the SD card in the Pandaboard, power it on and see what is going on over
-serial.
+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT5_FOOBAR if BR2_PACKAGE_QT5
+	select BR2_PACKAGE_QT5_BARFOO if BR2_PACKAGE_QT5
 
-With *nothing* else than these steps, it does *not* boot, due to the first
-error reported.
+(of course, adapt the select for the qt5 case)
 
-After having came accross this error, I played a bit with the settings until I
-could figure out something working.
+Best regards,
 
-
-
-I finally moved to the minimal Ubuntu 12.04 image with TI kernel, which allows
-me to use wifi / ethernet / bluetooth / ducati etc out of the box, so I did not
-do further tests. I can do some extra tests this week, if such tests are
-necessary, but I did not tweak the defconfig before building it.
-
-I may have missed something, but as far as I understood, this was supposed to
-work and the defconfig was supposed to provide a basic setup running out of the
-box on the pandaboard (although it may not have all the stuff to use all the
-devices on the Pandaboard).
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
