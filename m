@@ -1,122 +1,81 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 10 Nov 2014 00:38:04 +0100
-Subject: [Buildroot] [PATCH 1/1] grantlee: version bump and allow building
-	with qt5
-Message-ID: <1415576284-18846-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 10 Nov 2014 00:43:43 +0100
+Subject: [Buildroot] Config.in for both Qt4 and Qt5 in grantlee
+In-Reply-To: <20141109201218.1edc8117@free-electrons.com>
+References: <545EC900.9030103@gmail.com>
+ <20141109201218.1edc8117@free-electrons.com>
+Message-ID: <545FFC2F.1010803@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/grantlee/Config.in                         | 14 ++++----
- .../grantlee-0.2.0-fix-lphread-link-error.patch    | 42 ----------------------
- package/grantlee/grantlee.mk                       | 15 ++++++--
- 3 files changed, 20 insertions(+), 51 deletions(-)
- delete mode 100644 package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
+Dear Thomas,
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index ce1342c..8f763f7 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,11 +1,13 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
--	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
--	depends on BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_STL
--	select BR2_PACKAGE_QT_SCRIPT
--	select BR2_PACKAGE_QT_GUI_MODULE
-+	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT && BR2_PACKAGE_QT) || BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
- 	help
--	  Qt implemantation of the Django template framework
-+	  Qt implementation of the Django template framework
- 
- 	  http://www.grantlee.org
-+
-diff --git a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
-deleted file mode 100644
-index 7964fd0..0000000
---- a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From d46475b6bb9d99a4c5c95489be6c14d0d219d5f8 Mon Sep 17 00:00:00 2001
--From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
--Date: Thu, 15 Nov 2012 17:00:39 +0100
--Subject: [PATCH] fix -lpthread build error
--
--Fixing linking time error with certain toolchains. The issue caused by a missing explicit linking to
--libpthread. The failed buildlog:
--Linking CXX executable testgenerictypes_exec
--/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: undefined reference to symbol 'pthread_cancel'
--/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: note: 'pthread_cancel' is defined in DSO /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker command line
--/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: could not read symbols: Invalid operation
--collect2: ld returned 1 exit status
--make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
--make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
--make[2]: *** [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
--make[2]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
--make[1]: *** [all] Error 2
--make[1]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
--make: *** [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error
--
--Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-----
-- templates/tests/CMakeLists.txt |    3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/templates/tests/CMakeLists.txt b/templates/tests/CMakeLists.txt
--index caab003..f400622 100644
----- a/templates/tests/CMakeLists.txt
--+++ b/templates/tests/CMakeLists.txt
--@@ -68,7 +68,8 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
--                   ${_testresource_rcc_src}
--     )
--     add_test(${_testname} ${_testname}_exec )
---    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
--+    find_package (Threads)
--+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${CMAKE_THREAD_LIBS_INIT}  grantlee_core )
-- 
--     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
--   endforeach(_testname)
---- 
--1.7.9.5
--
-diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-index 539578b..a300106 100644
---- a/package/grantlee/grantlee.mk
-+++ b/package/grantlee/grantlee.mk
-@@ -3,12 +3,21 @@
- # grantlee
- #
- ################################################################################
--
--GRANTLEE_VERSION = 0.2.0
-+# qt4 support dropped after 0.5.1, so we use the older version for qt4
-+ifeq ($(BR2_PACKAGE_QT),y)
-+GRANTLEE_VERSION = 0.5.1
-+else ifeq ($(BR2_PACKAGE_QT5),y)
-+GRANTLEE_VERSION = 5.0.0
-+endif
- GRANTLEE_SITE = http://downloads.grantlee.org
- GRANTLEE_INSTALL_STAGING = YES
--GRANTLEE_DEPENDENCIES = qt
- GRANTLEE_LICENSE = LGPLv2.1+
- GRANTLEE_LICENSE_FILES = COPYING.LIB
- 
-+ifeq ($(BR2_PACKAGE_QT),y)
-+GRANTLEE_DEPENDENCIES = qt
-+else ifeq ($(BR2_PACKAGE_QT5),y)
-+GRANTLEE_DEPENDENCIES += qt5base qt5script
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.1.0
+thanks for your advice! I also found the needed syntax in the kconfig 
+docs after all, when i already knew what to look for :)
+I submitted the corresponding patch, please feel free to comment.
+
+Thanks, regards
+zgyarmati
+
+On 11/09/2014 08:12 PM, Thomas Petazzoni wrote:
+> Hello Zoltan,
+>
+> On Sun, 09 Nov 2014 02:53:04 +0100, Zoltan Gyarmati wrote:
+>
+>> i'm trying to update the package grantlee (http://grantlee.org) in
+>> Buildroot to the current upstream version. Historically grantlee
+>> supported only Qt4 (this version is present now in Buildroot), and for a
+>> while both Qt4 and Qt5, and with the last release it dropped the Qt4
+>> support.
+> Too bad :/
+>
+>>    As for one of my legacy projects i still might need the Qt4 version, i
+>> would like to keep the Qt4 support by using the last upstream version
+>> which built on Qt4 when Buildroot configured to build Qt4,  and use the
+>> newest version when build on Qt5. It's easy to implement in the .mk file
+>> with "ifeq ($(BR2_PACKAGE_QT),y)", although i'm not sure this is the
+>> most elegant solution. (qjson using this for example to distinguish the
+>> dependencies between the two Qt version, but it doesn't use 2 different
+>> upstream versions for the 2 Qt versions)
+> Yes, for the .mk file, this is fine. At some point in the future, we'll
+> drop the old version that supports qt4, but for a little while, we can
+> keep both. So indeed, something like:
+>
+> ifeq ($(BR2_PACKAGE_QT),y)
+> GRANTLE_VERSION = ...
+> else ifeq ($(BR2_PACKAGE_QT5),y)
+> GRANTLE_VERSION = ...
+> endif
+>
+>>    I got into trouble in the Config.in though. Currently the grantlee.mk
+>> selects a few Qt options with the kconfig 'select' statement (namely
+>> BR2_PACKAGE_QT_STL, BR2_PACKAGE_QT_SCRIPT, BR2_PACKAGE_QT_GUI_MODULE),
+>> and it also supposed to select the corresponding Qt5 options, but i
+>> can't find any explicit trace that using conditional 'select' is
+>> possible in kconfig, nor the correct syntax to express this.
+>>
+>> What is the preferred solution to handle this scenario? Would it be
+>> better to have a new grantlee package (let's say grantleeqt5) for this
+>> latest version, and enable it in the menu only for Qt5? Or is there any
+>> kconfig trick i could use here? An other option would be just to drop
+>> Qt4 support (if the upstream already did it) at least in the official
+>> Buildroot version (and i can use any nasty trick in my own Buildroot
+>> tree to support my legacy project till i'm able to port it to Qt5). Is
+>> there anybody out there who is using this lib with Qt4?
+> Just do:
+>
+> 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+> 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+> 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+> 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+> 	select BR2_PACKAGE_QT5_FOOBAR if BR2_PACKAGE_QT5
+> 	select BR2_PACKAGE_QT5_BARFOO if BR2_PACKAGE_QT5
+>
+> (of course, adapt the select for the qt5 case)
+>
+> Best regards,
+>
+> Thomas
