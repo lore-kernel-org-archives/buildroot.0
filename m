@@ -1,76 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Nov 2014 14:30:53 +0100
-Subject: [Buildroot] [PATCHv2 2/3] quota: remove dependency on util-linux
+Date: Sun,  9 Nov 2014 14:30:54 +0100
+Subject: [Buildroot] [PATCHv2 3/3] quota: fix static linking
 In-Reply-To: <1415539854-25971-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1415539854-25971-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1415539854-25971-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1415539854-25971-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency on util-linux is only present in Config.in, and not in
-quota.mk, and quota indeed builds properly without util-linux. It
-could be a runtime dependency, but there is no indication that it is
-the case, and I don't see why quota would run-time depend on
-util-linux utilities.
+The aim of this patch is to fix bug #7574, i.e fix the static linking
+of the quota package. It does so by introducing a patch to the quota
+build system that generalizes the use of $(LIBS), and then changes
+quota.mk to use LIBS instead of LDFLAGS to link against intl and tirpc
+when needed.
 
-Looking back at when the quota package was introduced, in one of the
-preliminary patch, he following explanation was given by the original
-author:
-
-  [Update: I added check for util-linux mount because
-   it support usrquota and grpquota mount options.]
-
-But I still don't see why usrquota and grpquota mount options would be
-the source of a dependency of the quota utilities on util-linux. Here
-is what the util-linux mount man page says about those two mount
-options:
-
-   grpquota|noquota|quota|usrquota
-
-         These options are accepted but ignored.  (However, quota
-         utilities may react to such strings in /etc/fstab.)
-
-So indeed, the quota tools will look at /proc/mounts and see if those
-options are used for certain mount points, but that doesn't create a
-dependency of quota on util-linux.
-
-Therefore, this commit gets rid of the dependency of quota on
-util-linux. It allows to re-enable quota on Microblaze, since this
-dependency was inherited from util-linux.
-
-igned-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quota/Config.in | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/quota/02-fix-static-linking.patch | 55 +++++++++++++++++++++++++++++++
+ package/quota/quota.mk                    |  9 +++--
+ 2 files changed, 59 insertions(+), 5 deletions(-)
+ create mode 100644 package/quota/02-fix-static-linking.patch
 
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index 69f03af..46a6c05 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -3,11 +3,7 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
--	depends on !(BR2_microblazeel || BR2_microblazebe) # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_BINARIES
--	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -16,7 +12,7 @@ config BR2_PACKAGE_QUOTA
- 	  http://sourceforge.net/projects/linuxquota/
+diff --git a/package/quota/02-fix-static-linking.patch b/package/quota/02-fix-static-linking.patch
+new file mode 100644
+index 0000000..fd73f64
+--- /dev/null
++++ b/package/quota/02-fix-static-linking.patch
+@@ -0,0 +1,55 @@
++Use $(LIBS) properly
++
++This patch makes sure the quota build system uses $(LIBS) where
++appropriate, so that it can be used to link with additional libraries,
++which is needed when linking statically.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile.in
++===================================================================
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -105,30 +105,40 @@
++ 	-$(INSTALL) -m $(DEF_MAN_MODE) *.8 $(ROOTDIR)$(mandir)/man8
++ 
++ quotaon: quotaon.o quotaon_xfs.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ quotacheck: quotacheck.o quotacheck_v1.o quotacheck_v2.o quotaops.o $(LIBOBJS)
++-	$(CC) $(LDFLAGS) -o $@ $^ $(EXT2LIBS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(EXT2LIBS) $(LIBS)
++ 
++ quota: quota.o quotaops.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ quotasync: quotasync.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ quot: quot.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ repquota: repquota.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ warnquota: warnquota.o $(LIBOBJS)
++-	$(CC) $(LDFLAGS) -o $@ $^ $(LDAPLIBS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LDAPLIBS) $(LIBS)
++ 
++ quotastats: quotastats.o common.o pot.o
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ xqmstats: xqmstats.o common.o pot.o
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ edquota: edquota.o quotaops.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ setquota: setquota.o quotaops.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ convertquota: convertquota.o $(LIBOBJS)
+++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ rpc.rquotad: rquota_server.o rquota_svc.o svc_socket.o $(LIBOBJS)
++ 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 0e7a2b0..332f42e 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -12,22 +12,21 @@ QUOTA_LICENSE = GPLv2+
+ QUOTA_CONF_OPTS = --disable-strip-binaries
  
- comment "quota needs a toolchain w/ largefile, wchar, threads"
--	depends on BR2_USE_MMU && !(BR2_microblazeel || BR2_microblazebe)
-+	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || \
- 		!BR2_USE_WCHAR || \
- 		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+ QUOTA_CFLAGS = $(TARGET_CFLAGS)
+-QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ QUOTA_DEPENDENCIES += gettext
+-QUOTA_LDFLAGS += -lintl
++QUOTA_LIBS += -lintl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ QUOTA_DEPENDENCIES += libtirpc
+ QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-QUOTA_LDFLAGS += -ltirpc
++QUOTA_LIBS += -ltirpc
+ endif
+ 
+-QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
++QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
+ QUOTA_CONF_ENV = \
+-	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
++	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
+ 
+ # Package uses autoconf but not automake.
+ QUOTA_INSTALL_TARGET_OPTS = \
 -- 
 2.0.0
