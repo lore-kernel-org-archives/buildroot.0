@@ -1,67 +1,177 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Nov 2014 14:00:35 +0100
-Subject: [Buildroot] [PATCH 1/1] binutils/gcc: make it possible to use
- lto
-In-Reply-To: <1415534161-24389-1-git-send-email-syntheticpp@gmx.net>
-References: <1415534161-24389-1-git-send-email-syntheticpp@gmx.net>
-Message-ID: <20141109140035.3798a1c7@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  9 Nov 2014 14:04:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Sync with upstream to fix
+	fminf-related build error
+Message-ID: <1415538258-16801-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter K?mmel,
+- upstream fixed the fminf build error, use the backported patch now
+- renamed patch according to new naming convention
 
-On Sun,  9 Nov 2014 12:56:01 +0100, Peter K?mmel wrote:
-> When -flto is used the compiler and binutils have to support lto.
-> ar/ranlib needs to be called with the lto plugin, therefore use
-> the wrappers provided by GCC: *-gcc-ar and *-gcc-ranlib.
-> 
-> Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
-> ---
->  package/binutils/binutils.mk | 2 ++
->  package/gcc/gcc.mk           | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index b8dab5d..e552abc 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -48,6 +48,7 @@ BINUTILS_DISABLE_GDB_CONF_OPTS = \
->  BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
->  		--host=$(GNU_TARGET_NAME) \
->  		--target=$(GNU_TARGET_NAME) \
-> +		--enable-plugins --enable-lto \
->  		--enable-install-libiberty \
->  		$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
->  		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-> @@ -67,6 +68,7 @@ endif
->  HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
->  			--target=$(GNU_TARGET_NAME) \
->  			--disable-shared --enable-static \
-> +			--enable-plugins --enable-lto \
->  			--with-sysroot=$(STAGING_DIR) \
->  			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
->  			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index cdd71aa..a8853f7 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -92,6 +92,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
->  	--with-gnu-ld \
->  	--disable-libssp \
->  	--disable-multilib \
-> +	--enable-plugins \
-> +	--enable-lto \
->  	--with-gmp=$(HOST_DIR)/usr \
->  	--with-mpfr=$(HOST_DIR)/usr
->  
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/0001-fminf.patch        |   94 ++++++++++++++++++++++++++++++++
+ package/ffmpeg/ffmpeg-0001-fminf.patch |   47 ----------------
+ 2 files changed, 94 insertions(+), 47 deletions(-)
+ create mode 100644 package/ffmpeg/0001-fminf.patch
+ delete mode 100644 package/ffmpeg/ffmpeg-0001-fminf.patch
 
-Should we make this optional?
-
-Thomas
+diff --git a/package/ffmpeg/0001-fminf.patch b/package/ffmpeg/0001-fminf.patch
+new file mode 100644
+index 0000000..8ecd5c1
+--- /dev/null
++++ b/package/ffmpeg/0001-fminf.patch
+@@ -0,0 +1,94 @@
++Fix build error
++
++CC      libavdevice/alldevices.o
++In file included from ./libavutil/internal.h:167:0,
++                 from ./libavutil/common.h:415,
++                 from ./libavutil/avutil.h:289,
++                 from ./libavutil/log.h:25,
++                 from libavdevice/avdevice.h:46,
++                 from libavdevice/alldevices.c:22:
++./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
++ static av_always_inline av_const float fminf(float x, float y)
++                                        ^
++make: *** [libavdevice/alldevices.o] Error 1
++
++using buildroot-compiled uClibc toolchain, used defconfig:
++
++BR2_x86_64=y
++BR2_x86_corei7=y
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_FFMPEG=y
++BR2_PACKAGE_FFMPEG_GPL=y
++BR2_PACKAGE_FFMPEG_NONFREE=y
++BR2_PACKAGE_FFMPEG_FFPLAY=y
++BR2_PACKAGE_FFMPEG_FFSERVER=y
++BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
++BR2_PACKAGE_FFMPEG_POSTPROC=y
++
++Patch ported from upstream commit:
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=4436a8f44dedc83767b3d9da9beb85d1fae2ca30
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++From 4436a8f44dedc83767b3d9da9beb85d1fae2ca30 Mon Sep 17 00:00:00 2001
++From: Carl Eugen Hoyos <cehoyos@ag.or.at>
++Date: Sat, 8 Nov 2014 10:48:37 +0100
++Subject: [PATCH] Remove fminf() emulation.
++
++The emulation is unused and causes compilation trouble on systems
++where fminf() is defined in <math.h> but missing from libm.
++This should fix compilation on Debian powerpcspe.
++---
++ configure        |    2 --
++ libavutil/libm.h |   10 ----------
++ 2 files changed, 12 deletions(-)
++
++diff --git a/configure b/configure
++index 314e7ff..978ef12 100755
++--- a/configure
+++++ b/configure
++@@ -1678,7 +1678,6 @@ MATH_FUNCS="
++     exp2
++     exp2f
++     expf
++-    fminf
++     isinf
++     isnan
++     ldexpf
++@@ -4813,7 +4812,6 @@ disabled crystalhd || check_lib libcrystalhd/libcrystalhd_if.h DtsCrystalHDVersi
++ atan2f_args=2
++ ldexpf_args=2
++ powf_args=2
++-fminf_args=2
++ 
++ for func in $MATH_FUNCS; do
++     eval check_mathfunc $func \${${func}_args:-1}
++diff --git a/libavutil/libm.h b/libavutil/libm.h
++index 28d5df8..6c17b28 100644
++--- a/libavutil/libm.h
+++++ b/libavutil/libm.h
++@@ -82,16 +82,6 @@ static av_always_inline float cbrtf(float x)
++ #define exp2f(x) ((float)exp2(x))
++ #endif /* HAVE_EXP2F */
++ 
++-#if !HAVE_FMINF
++-#undef fminf
++-static av_always_inline av_const float fminf(float x, float y)
++-{
++-    //Note, the NaN special case is needed for C spec compliance, it should be
++-    //optimized away if the users compiler is configured to assume no NaN
++-    return x > y ? y : (x == x ? x : y);
++-}
++-#endif
++-
++ #if !HAVE_ISINF
++ static av_always_inline av_const int isinf(float x)
++ {
++-- 
++1.7.10.4
++
+diff --git a/package/ffmpeg/ffmpeg-0001-fminf.patch b/package/ffmpeg/ffmpeg-0001-fminf.patch
+deleted file mode 100644
+index 1e08517..0000000
+--- a/package/ffmpeg/ffmpeg-0001-fminf.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Fix build error
+-
+-CC      libavdevice/alldevices.o
+-In file included from ./libavutil/internal.h:167:0,
+-                 from ./libavutil/common.h:415,
+-                 from ./libavutil/avutil.h:289,
+-                 from ./libavutil/log.h:25,
+-                 from libavdevice/avdevice.h:46,
+-                 from libavdevice/alldevices.c:22:
+-./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
+- static av_always_inline av_const float fminf(float x, float y)
+-                                        ^
+-make: *** [libavdevice/alldevices.o] Error 1
+-
+-using buildroot-compiled uClibc toolchain, used defconfig:
+-
+-BR2_x86_64=y
+-BR2_x86_corei7=y
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-
+-diff -uNr ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h
+---- ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h	2014-07-16 20:37:20.000000000 +0200
+-+++ ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h	2014-07-17 22:58:01.781316442 +0200
+-@@ -82,16 +82,6 @@
+- #define exp2f(x) ((float)exp2(x))
+- #endif /* HAVE_EXP2F */
+- 
+--#if !HAVE_FMINF
+--#undef fminf
+--static av_always_inline av_const float fminf(float x, float y)
+--{
+--    //Note, the NaN special case is needed for C spec compliance, it should be
+--    //optimized away if the users compiler is configured to assume no NaN
+--    return x > y ? y : (x == x ? x : y);
+--}
+--#endif
+--
+- #if !HAVE_ISINF
+- static av_always_inline av_const int isinf(float x)
+- {
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
