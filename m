@@ -1,37 +1,87 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Sun,  9 Nov 2014 14:10:18 +0100
-Subject: [Buildroot] [PATCH v2] toolchain: don't wrap ar, ranlib, and nm
-Message-ID: <1415538618-15131-1-git-send-email-syntheticpp@gmx.net>
+From: Peter Kuemmel <syntheticpp@gmx.net>
+Date: Sun, 9 Nov 2014 14:16:44 +0100
+Subject: [Buildroot] [PATCH 1/1] binutils/gcc: make it possible to use
+ lto
+In-Reply-To: <20141109140035.3798a1c7@free-electrons.com>
+References: <1415534161-24389-1-git-send-email-syntheticpp@gmx.net>,
+ <20141109140035.3798a1c7@free-electrons.com>
+Message-ID: <trinity-48a9f764-face-4074-b5b3-45559b187638-1415539004288@3capp-gmx-bs34>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc prefix of the the gcc-ar/ranlib/nm did trigger
-the wrapping which breakes these tools because of the
-passed GCC options.
+> Gesendet: Sonntag, 09. November 2014 um 14:00 Uhr
+> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> An: "Peter K?mmel" <syntheticpp@gmx.net>
+> Cc: buildroot at buildroot.org
+> Betreff: Re: [Buildroot] [PATCH 1/1] binutils/gcc: make it possible to use lto
+>
+> Dear Peter K?mmel,
+> 
+> On Sun,  9 Nov 2014 12:56:01 +0100, Peter K?mmel wrote:
+> > When -flto is used the compiler and binutils have to support lto.
+> > ar/ranlib needs to be called with the lto plugin, therefore use
+> > the wrappers provided by GCC: *-gcc-ar and *-gcc-ranlib.
+> > 
+> > Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+> > ---
+> >  package/binutils/binutils.mk | 2 ++
+> >  package/gcc/gcc.mk           | 2 ++
+> >  2 files changed, 4 insertions(+)
+> > 
+> > diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> > index b8dab5d..e552abc 100644
+> > --- a/package/binutils/binutils.mk
+> > +++ b/package/binutils/binutils.mk
+> > @@ -48,6 +48,7 @@ BINUTILS_DISABLE_GDB_CONF_OPTS = \
+> >  BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
+> >  		--host=$(GNU_TARGET_NAME) \
+> >  		--target=$(GNU_TARGET_NAME) \
+> > +		--enable-plugins --enable-lto \
+> >  		--enable-install-libiberty \
+> >  		$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+> >  		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+> > @@ -67,6 +68,7 @@ endif
+> >  HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
+> >  			--target=$(GNU_TARGET_NAME) \
+> >  			--disable-shared --enable-static \
+> > +			--enable-plugins --enable-lto \
+> >  			--with-sysroot=$(STAGING_DIR) \
+> >  			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+> >  			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+> > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> > index cdd71aa..a8853f7 100644
+> > --- a/package/gcc/gcc.mk
+> > +++ b/package/gcc/gcc.mk
+> > @@ -92,6 +92,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
+> >  	--with-gnu-ld \
+> >  	--disable-libssp \
+> >  	--disable-multilib \
+> > +	--enable-plugins \
+> > +	--enable-lto \
+> >  	--with-gmp=$(HOST_DIR)/usr \
+> >  	--with-mpfr=$(HOST_DIR)/usr
+> >  
+> 
+> Should we make this optional?
+> 
 
-These tools should be called when lto is used.
+I've tested with binutils 2.24 and gcc 4.9.2.
+Also binutils 2.22 configures with this flags.
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
----
- toolchain/toolchain-external/toolchain-external.mk | 3 +++
- 1 file changed, 3 insertions(+)
+So I think it doesn't hurt to enable by default,
+at least when the buidroot compiler is used. Not
+sure about very old external GCCs, which have no lto.
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index e16fce5..2bfad55 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -634,6 +634,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
- 		base=$${i##*/}; \
- 		case "$$base" in \
-+		*-ar|*-ranlib|*-nm) \
-+			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
-+			;; \
- 		*cc|*cc-*|*++|*++-*|*cpp) \
- 			ln -sf ext-toolchain-wrapper $$base; \
- 			;; \
--- 
-1.9.1
+Peter
+
+
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
