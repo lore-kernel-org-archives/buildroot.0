@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Nov 2014 13:23:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 7562] musl buildroot-toolchain and
-	BR2_MIPS_SOFT_FLOAT break
-In-Reply-To: <bug-7562-163@https.bugs.busybox.net/>
-References: <bug-7562-163@https.bugs.busybox.net/>
-Message-ID: <20141109132358.A902AB15FD@busybox.osuosl.org>
+Date: Sun,  9 Nov 2014 13:24:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 7568] musl buildroot-toolchain does not put
+ libgcc_s.so.1 into place
+In-Reply-To: <bug-7568-163@https.bugs.busybox.net/>
+References: <bug-7568-163@https.bugs.busybox.net/>
+Message-ID: <20141109132405.F3CECB157E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7562
+https://bugs.busybox.net/show_bug.cgi?id=7568
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
