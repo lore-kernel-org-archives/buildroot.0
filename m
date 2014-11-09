@@ -1,56 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Nov 2014 11:25:18 +0100
-Subject: [Buildroot] [git commit] libv4l: fix utilities build with older
-	glibc versions
-Message-ID: <20141109102534.84219B32CE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Nov 2014 11:26:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <20141109104501.3a71bc76@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 9 Nov 2014 10:45:01 +0100")
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+ <20141108184741.66cf1357@free-electrons.com>
+ <87tx29tnmw.fsf@dell.be.48ers.dk>
+ <20141109104501.3a71bc76@free-electrons.com>
+Message-ID: <877fz4r7p5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44f89c38dc72e042d8190f4ca15b26abdb7e69b4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/9af/9af37fbf344b63b60e59ccac21e010cdf0ea219e/
-http://autobuild.buildroot.net/results/bbd/bbd34d5378354e9db7822eaae8d3c4a75a67ac23/
-http://autobuild.buildroot.net/results/ebb/ebbaa70e1a277162ba53c7bde8335ee998486703/
-http://autobuild.buildroot.net/results/2c1/2c11f4dbb7cfadcfc6fbc267679b2b4eab867221/
+ > Peter,
+ > On Sat, 08 Nov 2014 21:59:03 +0100, Peter Korsgaard wrote:
 
-And many more.
+ >> Huh, what email was that? I don't recall a recent mail from you about
+ >> that.
 
-The utilities use clock_gettime(), which was provided in librt in glibc <
-2.17, so ensure we link against -lrt.
+ > Seems like the mail never reached you, due to the following error. Not
+ > sure it's some issue on your end, or on my end:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libv4l/libv4l.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ > Delivery to the following recipients has been delayed.
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 732fad5..63dd5d2 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -17,7 +17,7 @@ LIBV4L_LICENSE_FILES = COPYING COPYING.libv4l lib/libv4l1/libv4l1-kernelcode-lic
- 
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- LIBV4L_DEPENDENCIES += argp-standalone
--LIBV4L_CONF_ENV += LIBS="-largp"
-+LIBV4L_LIBS += -largp
- endif
- 
- LIBV4L_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-@@ -38,8 +38,12 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
- LIBV4L_CONF_OPTS += --enable-v4l-utils
-+# clock_gettime is used, which is provided by librt for glibc < 2.17
-+LIBV4L_LIBS += -lrt
- else
- LIBV4L_CONF_OPTS += --disable-v4l-utils
- endif
- 
-+LIBV4L_CONF_ENV += LIBS="$(LIBV4L_LIBS)"
-+
- $(eval $(autotools-package))
+ >               <jacmet@sunsite.dk>
+
+ > The reason for the problem:
+ > 4.1.0 - Unknown address error 451-'4.3.0 Error: queue file write error'
+
+Yeah, there's a temporary issue with @sunsite.dk. Please use my
+@korsgaard.com address instead.
+
+-- 
+Bye, Peter Korsgaard
