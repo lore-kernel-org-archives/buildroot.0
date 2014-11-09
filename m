@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Nov 2014 10:45:01 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-06
-In-Reply-To: <87tx29tnmw.fsf@dell.be.48ers.dk>
-References: <20141107073016.0C55F1018AC@stock.ovh.net>
- <545C9CAE.3070303@imgtec.com>
- <20141108184741.66cf1357@free-electrons.com>
- <87tx29tnmw.fsf@dell.be.48ers.dk>
-Message-ID: <20141109104501.3a71bc76@free-electrons.com>
+Date: Sun, 9 Nov 2014 10:48:39 +0100
+Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
+In-Reply-To: <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
+References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
+ <20141108163942.GA3481@free.fr>
+ <20141108184303.1607bcb6@free-electrons.com>
+ <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
+Message-ID: <20141109104839.0e819548@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Yegor,
 
-On Sat, 08 Nov 2014 21:59:03 +0100, Peter Korsgaard wrote:
+On Sat, 8 Nov 2014 19:24:48 +0100, Yegor Yefremov wrote:
 
-> Huh, what email was that? I don't recall a recent mail from you about
-> that.
+> Image, you have a system/rootfs, that you've made via BR or it is
+> Debian etc. Now you just want to update the kernel and modules. Kernel
+> is simple, as BR compiles and copies it to output/images folder. But
+> to install kernel modules you first need to invoke one of the make
+> *-pkg commands, to do this you need to first export ARCH,
+> CROSS_COMPILE etc. First then you can copy resulting image to target
+> device and via "tar xf linux-*.tar -C /" install new kernel modules.
+> Am I missing something and such option already exists in BR? The only
+> one I see would be to tar output/target/lib/modules. But it still need
+> to be made manually. I wanted to have an option to have both kernel
+> image and modules ready for installation in output/images.
 
-Seems like the mail never reached you, due to the following error. Not
-sure it's some issue on your end, or on my end:
+This really seems like you're looking for a build system that produces
+binary packages. With your patch, you're doing something for the kernel
+specifically, but what if someone has the same need for some other
+library or application built by Buildroot?
 
-Delivery to the following recipients has been delayed.
-
-              <jacmet@sunsite.dk>
-
-The reason for the problem:
-4.1.0 - Unknown address error 451-'4.3.0 Error: queue file write error'
-
-> Did you see my reply to Vincent of yesterday?
-> 
-> http://lists.busybox.net/pipermail/buildroot/2014-November/111437.html
-> 
-> The autobuilders I run are uptodate (as of yesterday).
-
-Good, thanks!
+So like Peter, I don't think this is something we want to merge in
+Buildroot.
 
 Thomas
 -- 
