@@ -1,32 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Nov 2014 08:54:47 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: fix typo
-Message-ID: <20141109080254.B1B11B5676@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Nov 2014 10:45:01 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <87tx29tnmw.fsf@dell.be.48ers.dk>
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+ <20141108184741.66cf1357@free-electrons.com>
+ <87tx29tnmw.fsf@dell.be.48ers.dk>
+Message-ID: <20141109104501.3a71bc76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a95e98c0d4036a9b1618c1a41d928e3096631063
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sat, 08 Nov 2014 21:59:03 +0100, Peter Korsgaard wrote:
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d60f4eb..b126556 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -106,7 +106,7 @@ config BR2_x86_generic
- 	select BR2_LEGACY
- 	help
- 	  The generic x86 CPU variant has been removed. Use another
--	  CPU variant insted.
-+	  CPU variant instead.
- 
- config BR2_GCC_VERSION_4_4_X
- 	bool "gcc 4.4.x has been removed"
+> Huh, what email was that? I don't recall a recent mail from you about
+> that.
+
+Seems like the mail never reached you, due to the following error. Not
+sure it's some issue on your end, or on my end:
+
+Delivery to the following recipients has been delayed.
+
+              <jacmet@sunsite.dk>
+
+The reason for the problem:
+4.1.0 - Unknown address error 451-'4.3.0 Error: queue file write error'
+
+> Did you see my reply to Vincent of yesterday?
+> 
+> http://lists.busybox.net/pipermail/buildroot/2014-November/111437.html
+> 
+> The autobuilders I run are uptodate (as of yesterday).
+
+Good, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
