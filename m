@@ -1,55 +1,44 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 9 Nov 2014 13:33:04 +0100
-Subject: [Buildroot] socat version
-In-Reply-To: <54591B92.4030502@dest-unreach.org>
-References: <CANxTyt5UVteo4xOJ85YfZP4J-3ZpVstGjnr8Yj4Sry93zfUqzg@mail.gmail.com>
- <CAGm1_ktAVRURcLbUaD=yqbE351gNXNLJshjVL-P1RVzWa4cSqg@mail.gmail.com>
- <54591B92.4030502@dest-unreach.org>
-Message-ID: <CAGm1_ktZhn85FbtkwkegB5xGDqDYXgUvO=CCiY7SgFgoLOzWdw@mail.gmail.com>
+Date: Sun, 9 Nov 2014 13:36:12 +0100
+Subject: [Buildroot] [PATCH] linux: add option to create kernel tarball
+In-Reply-To: <20141109104839.0e819548@free-electrons.com>
+References: <1415464367-32108-1-git-send-email-yegorslists@googlemail.com>
+ <20141108163942.GA3481@free.fr> <20141108184303.1607bcb6@free-electrons.com>
+ <CAGm1_ktmu5_Bre0hVvezeJAz+v9akQhYuyouLtPdyw1dyWx-LQ@mail.gmail.com>
+ <20141109104839.0e819548@free-electrons.com>
+Message-ID: <CAGm1_kvEMD-1c1wPnqo4yPKmJ8pNJO2oD_tbTh+8yfJP8uoxuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gerhard,
+On Sun, Nov 9, 2014 at 10:48 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Yegor,
+>
+> On Sat, 8 Nov 2014 19:24:48 +0100, Yegor Yefremov wrote:
+>
+>> Image, you have a system/rootfs, that you've made via BR or it is
+>> Debian etc. Now you just want to update the kernel and modules. Kernel
+>> is simple, as BR compiles and copies it to output/images folder. But
+>> to install kernel modules you first need to invoke one of the make
+>> *-pkg commands, to do this you need to first export ARCH,
+>> CROSS_COMPILE etc. First then you can copy resulting image to target
+>> device and via "tar xf linux-*.tar -C /" install new kernel modules.
+>> Am I missing something and such option already exists in BR? The only
+>> one I see would be to tar output/target/lib/modules. But it still need
+>> to be made manually. I wanted to have an option to have both kernel
+>> image and modules ready for installation in output/images.
+>
+> This really seems like you're looking for a build system that produces
+> binary packages. With your patch, you're doing something for the kernel
+> specifically, but what if someone has the same need for some other
+> library or application built by Buildroot?
+>
+> So like Peter, I don't think this is something we want to merge in
+> Buildroot.
 
-thanks for the info. What prevents you from releasing final socat 2?
-Is it lacking feedback from other architectures, than Linux?
+OK. I think, it won't be a problem to make this via post-build script.
 
 Yegor
-
-On Tue, Nov 4, 2014 at 7:31 PM, Gerhard Rieger <gerhard@dest-unreach.org> wrote:
-> Hello,
->
-> the 3 tandem releases were all security fixes, this required parallel
-> releases of version 1 and 2.
->
-> I am planning a 2.0.0-b8 that includes all fixes up to version 1.7.2.4
-> and some version 2 specific ones.
->
-> Kind regards
-> Gerhard
->
->
-> On 11/04/2014 02:13 PM, Yegor Yefremov wrote:
->> On Tue, Nov 4, 2014 at 1:58 PM, Danomi Manchego
->> <danomimanchego123@gmail.com> wrote:
->>> All,
->>>
->>> Buildroot has been using the socat 2.0.0 series for a while.  We
->>> recently ran into a socat issue which was fixed upstream, but in a
->>> 1.7.2.4 release.  For rears, the socat people released a version 1
->>> release and a version 2 release in tandem, but for some reason, the
->>> latest release was only 1.7.2.4.  Reading about socat 2 at
->>> http://www.dest-unreach.org/socat/socat-version2.html I see it is
->>> (was?) described as "beta".
->>>
->>> So I was wondering: is buildroot on the 2.0.0 series under the
->>> normally sane presumption that 2.0 must be newer than 1.7, or is there
->>> an actual preference for the version 2 releases?
->> Adding Gerhard Rieger (socat maintainer) in CC
->>
->> Yegor
->
->
