@@ -1,75 +1,177 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Nov 2014 21:45:55 +0100
-Subject: [Buildroot] [git commit] quota: remove dependency on util-linux
-Message-ID: <20141109211319.ACD18B3AAB@busybox.osuosl.org>
+Date: Sun, 9 Nov 2014 22:07:37 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: Sync with upstream to fix
+	fminf-related build error
+Message-ID: <20141109211319.C2320B3AAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff48f5ae44e959fc704134b1cd985a715afdbd16
+commit: http://git.buildroot.net/buildroot/commit/?id=31bfff09a95a9bd8470aae71cb5b4d8cac74360f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The dependency on util-linux is only present in Config.in, and not in
-quota.mk, and quota indeed builds properly without util-linux. It
-could be a runtime dependency, but there is no indication that it is
-the case, and I don't see why quota would run-time depend on
-util-linux utilities.
+- upstream fixed the fminf build error, use the backported patch now
+- renamed patch according to new naming convention
 
-Looking back at when the quota package was introduced, in one of the
-preliminary patch, he following explanation was given by the original
-author:
-
-  [Update: I added check for util-linux mount because
-   it support usrquota and grpquota mount options.]
-
-But I still don't see why usrquota and grpquota mount options would be
-the source of a dependency of the quota utilities on util-linux. Here
-is what the util-linux mount man page says about those two mount
-options:
-
-   grpquota|noquota|quota|usrquota
-
-         These options are accepted but ignored.  (However, quota
-         utilities may react to such strings in /etc/fstab.)
-
-So indeed, the quota tools will look at /proc/mounts and see if those
-options are used for certain mount points, but that doesn't create a
-dependency of quota on util-linux.
-
-Therefore, this commit gets rid of the dependency of quota on
-util-linux. It allows to re-enable quota on Microblaze, since this
-dependency was inherited from util-linux.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quota/Config.in |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ package/ffmpeg/0001-fminf.patch        |   94 ++++++++++++++++++++++++++++++++
+ package/ffmpeg/ffmpeg-0001-fminf.patch |   47 ----------------
+ 2 files changed, 94 insertions(+), 47 deletions(-)
 
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index 69f03af..46a6c05 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -3,11 +3,7 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
--	depends on !(BR2_microblazeel || BR2_microblazebe) # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_BINARIES
--	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -16,7 +12,7 @@ config BR2_PACKAGE_QUOTA
- 	  http://sourceforge.net/projects/linuxquota/
- 
- comment "quota needs a toolchain w/ largefile, wchar, threads"
--	depends on BR2_USE_MMU && !(BR2_microblazeel || BR2_microblazebe)
-+	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || \
- 		!BR2_USE_WCHAR || \
- 		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+diff --git a/package/ffmpeg/0001-fminf.patch b/package/ffmpeg/0001-fminf.patch
+new file mode 100644
+index 0000000..8ecd5c1
+--- /dev/null
++++ b/package/ffmpeg/0001-fminf.patch
+@@ -0,0 +1,94 @@
++Fix build error
++
++CC      libavdevice/alldevices.o
++In file included from ./libavutil/internal.h:167:0,
++                 from ./libavutil/common.h:415,
++                 from ./libavutil/avutil.h:289,
++                 from ./libavutil/log.h:25,
++                 from libavdevice/avdevice.h:46,
++                 from libavdevice/alldevices.c:22:
++./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
++ static av_always_inline av_const float fminf(float x, float y)
++                                        ^
++make: *** [libavdevice/alldevices.o] Error 1
++
++using buildroot-compiled uClibc toolchain, used defconfig:
++
++BR2_x86_64=y
++BR2_x86_corei7=y
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_FFMPEG=y
++BR2_PACKAGE_FFMPEG_GPL=y
++BR2_PACKAGE_FFMPEG_NONFREE=y
++BR2_PACKAGE_FFMPEG_FFPLAY=y
++BR2_PACKAGE_FFMPEG_FFSERVER=y
++BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
++BR2_PACKAGE_FFMPEG_POSTPROC=y
++
++Patch ported from upstream commit:
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=4436a8f44dedc83767b3d9da9beb85d1fae2ca30
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++From 4436a8f44dedc83767b3d9da9beb85d1fae2ca30 Mon Sep 17 00:00:00 2001
++From: Carl Eugen Hoyos <cehoyos@ag.or.at>
++Date: Sat, 8 Nov 2014 10:48:37 +0100
++Subject: [PATCH] Remove fminf() emulation.
++
++The emulation is unused and causes compilation trouble on systems
++where fminf() is defined in <math.h> but missing from libm.
++This should fix compilation on Debian powerpcspe.
++---
++ configure        |    2 --
++ libavutil/libm.h |   10 ----------
++ 2 files changed, 12 deletions(-)
++
++diff --git a/configure b/configure
++index 314e7ff..978ef12 100755
++--- a/configure
+++++ b/configure
++@@ -1678,7 +1678,6 @@ MATH_FUNCS="
++     exp2
++     exp2f
++     expf
++-    fminf
++     isinf
++     isnan
++     ldexpf
++@@ -4813,7 +4812,6 @@ disabled crystalhd || check_lib libcrystalhd/libcrystalhd_if.h DtsCrystalHDVersi
++ atan2f_args=2
++ ldexpf_args=2
++ powf_args=2
++-fminf_args=2
++ 
++ for func in $MATH_FUNCS; do
++     eval check_mathfunc $func \${${func}_args:-1}
++diff --git a/libavutil/libm.h b/libavutil/libm.h
++index 28d5df8..6c17b28 100644
++--- a/libavutil/libm.h
+++++ b/libavutil/libm.h
++@@ -82,16 +82,6 @@ static av_always_inline float cbrtf(float x)
++ #define exp2f(x) ((float)exp2(x))
++ #endif /* HAVE_EXP2F */
++ 
++-#if !HAVE_FMINF
++-#undef fminf
++-static av_always_inline av_const float fminf(float x, float y)
++-{
++-    //Note, the NaN special case is needed for C spec compliance, it should be
++-    //optimized away if the users compiler is configured to assume no NaN
++-    return x > y ? y : (x == x ? x : y);
++-}
++-#endif
++-
++ #if !HAVE_ISINF
++ static av_always_inline av_const int isinf(float x)
++ {
++-- 
++1.7.10.4
++
+diff --git a/package/ffmpeg/ffmpeg-0001-fminf.patch b/package/ffmpeg/ffmpeg-0001-fminf.patch
+deleted file mode 100644
+index 1e08517..0000000
+--- a/package/ffmpeg/ffmpeg-0001-fminf.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Fix build error
+-
+-CC      libavdevice/alldevices.o
+-In file included from ./libavutil/internal.h:167:0,
+-                 from ./libavutil/common.h:415,
+-                 from ./libavutil/avutil.h:289,
+-                 from ./libavutil/log.h:25,
+-                 from libavdevice/avdevice.h:46,
+-                 from libavdevice/alldevices.c:22:
+-./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
+- static av_always_inline av_const float fminf(float x, float y)
+-                                        ^
+-make: *** [libavdevice/alldevices.o] Error 1
+-
+-using buildroot-compiled uClibc toolchain, used defconfig:
+-
+-BR2_x86_64=y
+-BR2_x86_corei7=y
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-
+-diff -uNr ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h
+---- ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h	2014-07-16 20:37:20.000000000 +0200
+-+++ ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h	2014-07-17 22:58:01.781316442 +0200
+-@@ -82,16 +82,6 @@
+- #define exp2f(x) ((float)exp2(x))
+- #endif /* HAVE_EXP2F */
+- 
+--#if !HAVE_FMINF
+--#undef fminf
+--static av_always_inline av_const float fminf(float x, float y)
+--{
+--    //Note, the NaN special case is needed for C spec compliance, it should be
+--    //optimized away if the users compiler is configured to assume no NaN
+--    return x > y ? y : (x == x ? x : y);
+--}
+--#endif
+--
+- #if !HAVE_ISINF
+- static av_always_inline av_const int isinf(float x)
+- {
