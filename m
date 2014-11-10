@@ -1,23 +1,37 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 10 Nov 2014 12:59:08 +0300
-Subject: [Buildroot] [PATCH 3/4] rt-tests: bump version to 0.89
+Date: Mon, 10 Nov 2014 12:59:09 +0300
+Subject: [Buildroot] [PATCH 4/4] rt-tests: allow building subset of tests
+	with non-NPTL toolchains
 In-Reply-To: <1415613549-2886-1-git-send-email-abrodkin@synopsys.com>
 References: <1415613549-2886-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1415613549-2886-4-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1415613549-2886-5-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this change we're moving to the latest version of rt-tests.
+Some architectures are still stuck with non-NPTL toolchains.
+These are for example ARC, Blackfin, Xtensa etc.
 
-Existing patches were updated so they apply on sources without errors and
-warnings.
+Still rt-tests are very good benchmarks and it would be good to enable use of
+at least selected (those that will be built) tests on those architectures.
 
-In "01-fix-build-system.patch" CFLAGS substitution was removed because
-now external CFLAGS are accepted:
-http://git.kernel.org/cgit/linux/kernel/git/clrkwllms/rt-tests.git/commit/?id=dfcef6e557b7980a33aa30b45bde196ed1780eb1
+This change makes it possible to only build subset of tests that don't require
+NPTL calls.
+
+Following tests will be built with non-NPTL toolchain:
+ * signaltest
+ * ptsematest
+ * sigwaittest
+ * svsematest
+ * sendme
+ * hackbench
+
+03-fix-non-nptl-buil.patch was submitted upstream:
+https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
+so as soon as it is accepted with the next version bump this patch should be
+removed.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -25,232 +39,116 @@ Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/rt-tests/01-fix-build-system.patch | 35 +++++++++-----
- package/rt-tests/02-uclibc.patch           | 76 ++++++++++++++++--------------
- package/rt-tests/rt-tests.mk               |  2 +-
- 3 files changed, 64 insertions(+), 49 deletions(-)
+ package/rt-tests/03-fix-non-nptl-buil.patch | 55 +++++++++++++++++++++++++++++
+ package/rt-tests/Config.in                  |  4 ---
+ package/rt-tests/rt-tests.mk                |  6 ++++
+ 3 files changed, 61 insertions(+), 4 deletions(-)
+ create mode 100644 package/rt-tests/03-fix-non-nptl-buil.patch
 
-diff --git a/package/rt-tests/01-fix-build-system.patch b/package/rt-tests/01-fix-build-system.patch
-index 9d6aa05..36af747 100644
---- a/package/rt-tests/01-fix-build-system.patch
-+++ b/package/rt-tests/01-fix-build-system.patch
-@@ -1,4 +1,7 @@
--Fix various minor issues with rt-tests build system
-+From f9a55a87af57780ea8940561d22cd6a90f461416 Mon Sep 17 00:00:00 2001
+diff --git a/package/rt-tests/03-fix-non-nptl-buil.patch b/package/rt-tests/03-fix-non-nptl-buil.patch
+new file mode 100644
+index 0000000..5c65018
+--- /dev/null
++++ b/package/rt-tests/03-fix-non-nptl-buil.patch
+@@ -0,0 +1,55 @@
++From c6920f97be02ca3fba9320b043acd578ce4c62d8 Mon Sep 17 00:00:00 2001
 +From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Mon, 10 Nov 2014 11:44:55 +0300
-+Subject: [PATCH] Fix various minor issues with rt-tests build system
- 
- The issues fixed are :
- 
-@@ -6,9 +9,6 @@ The issues fixed are :
-    architecture. This is broken when doing cross-compilation. One can
-    still set NUMA=1 if NUMA support is desired.
- 
-- * Expand the CFLAGS provided through the environment instead of
--   overriding it.
--
-  * Provide a HASPYTHON variable to tell whether the target system has
-    Python or not. Otherwise, the build system simply tests whether
-    Python is available on the host. The PYLIB variable is also changed
-@@ -16,23 +16,29 @@ The issues fixed are :
-    provide the correct Python module location for the target.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 10 Nov 2014 10:00:13 +0300
++Subject: [PATCH] Makefile: allow building selected tests with non-NPTL
++ toolchain
++
++Some architectures are still stuck with non-NPTL toolchains.
++These are for example ARC, Blackfin, Xtensa etc.
++
++Still rt-tests are very good benchmarks and it would be good to enable use of
++at least selected (those that will be built) tests on those architectures.
++
++This change makes it possible to only build subset of tests that don't require
++NPTL calls.
++
++By default behavior is not modified - all tests are built, but if one wants
++to build with non-NPTL toolchain just add "HAVE_NPTL=no" in command line
++or modify "HAVE_NPTL" variable right in Makefile and execute "make".
++
++This patch was submitted upstream:
++https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
++so as soon as it is accepted with the next version bump this patch should be
++removed.
++
 +Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+Cc: Peter Korsgaard <peter@korsgaard.com>
++Cc: Vineet Gupta <vgupta@synopsys.com>
++Cc: Clark Williams <clark.williams@gmail.com>
 +---
-+ Makefile | 10 +++-------
-+ 1 file changed, 3 insertions(+), 7 deletions(-)
- 
--Index: rt-tests/Makefile
--===================================================================
----- rt-tests.orig/Makefile
--+++ rt-tests/Makefile
--@@ -14,15 +14,11 @@
++ Makefile | 11 ++++++++---
++ 1 file changed, 8 insertions(+), 3 deletions(-)
++
 +diff --git a/Makefile b/Makefile
-+index 318a5c6..645d138 100644
++index 318a5c6..675edf7 100644
 +--- a/Makefile
 ++++ b/Makefile
-+@@ -14,17 +14,13 @@ bindir  ?= $(prefix)/bin
-  mandir	?= $(prefix)/share/man
-  srcdir	?= $(prefix)/src
-  
---machinetype = $(shell uname -m | \
---    sed -e 's/i.86/i386/' -e 's/mips.*/mips/' -e 's/ppc.*/powerpc/')
-+-machinetype = $(shell $(CC) -dumpmachine | \
-+-    sed -e 's/-.*//' -e 's/i.86/i386/' -e 's/mips.*/mips/' -e 's/ppc.*/powerpc/')
- -ifneq ($(filter x86_64 i386 ia64 mips powerpc,$(machinetype)),)
- -NUMA 	:= 1
- -endif
- -
---CFLAGS = -D_GNU_SOURCE -Wall -Wno-nonnull -Isrc/include
--+override CFLAGS += -D_GNU_SOURCE -Wall -Wno-nonnull -Isrc/include
-+ CFLAGS ?= -Wall -Wno-nonnull
-+ CPPFLAGS += -D_GNU_SOURCE -Isrc/include
-+ LDFLAGS ?=
-  
- -PYLIB  := $(shell python -c 'import distutils.sysconfig;  print distutils.sysconfig.get_python_lib()')
- +ifeq ($(HASPYTHON),1)
-@@ -41,3 +47,6 @@ Index: rt-tests/Makefile
-  
-  ifndef DEBUG
-  	CFLAGS	+= -O2
++@@ -1,8 +1,13 @@
++ VERSION_STRING = 0.89
++ 
++-sources = cyclictest.c signaltest.c pi_stress.c rt-migrate-test.c	\
++-	  ptsematest.c sigwaittest.c svsematest.c pmqtest.c sendme.c 	\
++-	  pip_stress.c hackbench.c
+++HAVE_NPTL ?= yes
+++
+++ifeq ($(HAVE_NPTL),yes)
+++sources = cyclictest.c pi_stress.c pip_stress.c pmqtest.c rt-migrate-test.c
+++endif
+++
+++sources += signaltest.c ptsematest.c sigwaittest.c svsematest.c sendme.c \
+++	  hackbench.c
++ 
++ TARGETS = $(sources:.c=)
++ 
 +-- 
 +1.9.3
 +
-diff --git a/package/rt-tests/02-uclibc.patch b/package/rt-tests/02-uclibc.patch
-index b8e1ac5..180bdf7 100644
---- a/package/rt-tests/02-uclibc.patch
-+++ b/package/rt-tests/02-uclibc.patch
-@@ -1,4 +1,7 @@
--[PATCH] fix build with uClibc
-+From 713224456f4a3242496af803413f670433f27c74 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Mon, 10 Nov 2014 11:55:27 +0300
-+Subject: [PATCH] [PATCH] fix build with uClibc
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 81e5d06..23cc284 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+-	# no _tid field in 'struct sigevent'
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -26,5 +24,3 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
  
- Fix two build issues with (modern) uClibc:
- - uClibc has clock_nanosleep() if built with UCLIBC_HAS_ADVANCED_REALTIME,
-@@ -6,20 +9,20 @@ Fix two build issues with (modern) uClibc:
- - uClibc doesn't provide utmpx.h if not built with UCLIBC_HAS_UTMPX, which
-   is included in several files (but not needed).
- 
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-- src/backfire/sendme.c         |    1 -
-- src/cyclictest/cyclictest.c   |    3 ++-
-- src/pmqtest/pmqtest.c         |    1 -
-- src/ptsematest/ptsematest.c   |    1 -
-- src/sigwaittest/sigwaittest.c |    2 --
-- src/svsematest/svsematest.c   |    1 -
-+ src/backfire/sendme.c         | 1 -
-+ src/cyclictest/cyclictest.c   | 3 ++-
-+ src/pmqtest/pmqtest.c         | 1 -
-+ src/ptsematest/ptsematest.c   | 1 -
-+ src/sigwaittest/sigwaittest.c | 2 --
-+ src/svsematest/svsematest.c   | 1 -
-  6 files changed, 2 insertions(+), 7 deletions(-)
- 
--Index: rt-tests-0.83/src/backfire/sendme.c
--===================================================================
----- rt-tests-0.83.orig/src/backfire/sendme.c
--+++ rt-tests-0.83/src/backfire/sendme.c
-+diff --git a/src/backfire/sendme.c b/src/backfire/sendme.c
-+index 8c169dd..b959951 100644
-+--- a/src/backfire/sendme.c
-++++ b/src/backfire/sendme.c
- @@ -32,7 +32,6 @@
-  #include "rt-utils.h"
-  #include "rt-get_cpu.h"
-@@ -28,11 +31,11 @@ Index: rt-tests-0.83/src/backfire/sendme.c
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <sys/time.h>
--Index: rt-tests-0.83/src/cyclictest/cyclictest.c
--===================================================================
----- rt-tests-0.83.orig/src/cyclictest/cyclictest.c
--+++ rt-tests-0.83/src/cyclictest/cyclictest.c
--@@ -23,6 +23,7 @@
-+diff --git a/src/cyclictest/cyclictest.c b/src/cyclictest/cyclictest.c
-+index 4547831..343e421 100644
-+--- a/src/cyclictest/cyclictest.c
-++++ b/src/cyclictest/cyclictest.c
-+@@ -25,6 +25,7 @@
-  #include <string.h>
-  #include <time.h>
-  #include <errno.h>
-@@ -40,7 +43,7 @@ Index: rt-tests-0.83/src/cyclictest/cyclictest.c
-  #include <limits.h>
-  #include <linux/unistd.h>
-  
--@@ -53,7 +54,7 @@
-+@@ -56,7 +57,7 @@
-  #define gettid() syscall(__NR_gettid)
-  #define sigev_notify_thread_id _sigev_un._tid
-  
-@@ -49,10 +52,10 @@ Index: rt-tests-0.83/src/cyclictest/cyclictest.c
-  #define MAKE_PROCESS_CPUCLOCK(pid, clock) \
-  	((~(clockid_t) (pid) << 3) | (clockid_t) (clock))
-  #define CPUCLOCK_SCHED          2
--Index: rt-tests-0.83/src/pmqtest/pmqtest.c
--===================================================================
----- rt-tests-0.83.orig/src/pmqtest/pmqtest.c
--+++ rt-tests-0.83/src/pmqtest/pmqtest.c
-+diff --git a/src/pmqtest/pmqtest.c b/src/pmqtest/pmqtest.c
-+index 336a8eb..2e34afe 100644
-+--- a/src/pmqtest/pmqtest.c
-++++ b/src/pmqtest/pmqtest.c
- @@ -33,7 +33,6 @@
-  #include <sys/time.h>
-  #include <sys/mman.h>
-@@ -61,10 +64,10 @@ Index: rt-tests-0.83/src/pmqtest/pmqtest.c
-  #include <mqueue.h>
-  #include "rt-utils.h"
-  #include "rt-get_cpu.h"
--Index: rt-tests-0.83/src/ptsematest/ptsematest.c
--===================================================================
----- rt-tests-0.83.orig/src/ptsematest/ptsematest.c
--+++ rt-tests-0.83/src/ptsematest/ptsematest.c
-+diff --git a/src/ptsematest/ptsematest.c b/src/ptsematest/ptsematest.c
-+index 7558a41..5358a65 100644
-+--- a/src/ptsematest/ptsematest.c
-++++ b/src/ptsematest/ptsematest.c
- @@ -33,7 +33,6 @@
-  #include <sys/time.h>
-  #include <sys/mman.h>
-@@ -72,11 +75,11 @@ Index: rt-tests-0.83/src/ptsematest/ptsematest.c
- -#include <utmpx.h>
-  #include "rt-utils.h"
-  #include "rt-get_cpu.h"
-- 
--Index: rt-tests-0.83/src/sigwaittest/sigwaittest.c
--===================================================================
----- rt-tests-0.83.orig/src/sigwaittest/sigwaittest.c
--+++ rt-tests-0.83/src/sigwaittest/sigwaittest.c
-+ #include "error.h"
-+diff --git a/src/sigwaittest/sigwaittest.c b/src/sigwaittest/sigwaittest.c
-+index 428f5ce..85c32a2 100644
-+--- a/src/sigwaittest/sigwaittest.c
-++++ b/src/sigwaittest/sigwaittest.c
- @@ -31,11 +31,9 @@
-  #include <signal.h>
-  #include <string.h>
-@@ -89,10 +92,10 @@ Index: rt-tests-0.83/src/sigwaittest/sigwaittest.c
-  #include "rt-utils.h"
-  #include "rt-get_cpu.h"
-  
--Index: rt-tests-0.83/src/svsematest/svsematest.c
--===================================================================
----- rt-tests-0.83.orig/src/svsematest/svsematest.c
--+++ rt-tests-0.83/src/svsematest/svsematest.c
-+diff --git a/src/svsematest/svsematest.c b/src/svsematest/svsematest.c
-+index c1128cc..5d02550 100644
-+--- a/src/svsematest/svsematest.c
-++++ b/src/svsematest/svsematest.c
- @@ -31,7 +31,6 @@
-  #include <sched.h>
-  #include <string.h>
-@@ -101,3 +104,6 @@ Index: rt-tests-0.83/src/svsematest/svsematest.c
-  
-  #include <linux/unistd.h>
-  
-+-- 
-+1.9.3
-+
+-comment "rt-tests needs a toolchain w/ NPTL"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index d372786..4cd99c0 100644
+index 4cd99c0..1980556 100644
 --- a/package/rt-tests/rt-tests.mk
 +++ b/package/rt-tests/rt-tests.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -13,15 +13,21 @@ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ RT_TESTS_DEPENDENCIES = python
+ endif
  
- RT_TESTS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/clrkwllms/rt-tests.git
--RT_TESTS_VERSION = v0.83
-+RT_TESTS_VERSION = v0.89
- RT_TESTS_LICENSE = GPLv2+
- RT_TESTS_LICENSE_FILES = COPYING
++ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
++RT_TESTS_HAVE_NPTL=no
++endif
++
+ define RT_TESTS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) 			\
+ 		CC="$(TARGET_CC)" 		\
++		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)	\
+ 		CFLAGS="$(TARGET_CFLAGS)"	\
+ 		prefix=/usr
+ endef
  
+ define RT_TESTS_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) 				\
++		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)		\
+ 		DESTDIR="$(TARGET_DIR)" 		\
+ 		prefix=/usr 				\
+ 		$(if $(BR2_PACKAGE_PYTHON),HASPYTHON=1 PYLIB=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/) \
 -- 
 1.9.3
