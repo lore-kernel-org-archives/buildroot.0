@@ -1,28 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Nov 2014 14:13:43 +0100
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.2.20
-In-Reply-To: <1415623681-11218-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 10 Nov 2014 09:48:01 -0300")
-References: <1415623681-11218-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k333nqpk.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 Nov 2014 14:13:20 +0100
+Subject: [Buildroot] [git commit] connman: rename patches to follow the new
+	name structure
+Message-ID: <20141110131448.CF9B1B3AA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7b640487366b2d0e0347601634f73948ac76dc27
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > CVE-2014-8564 / GNUTLS-SA-2014-5 - Sean Burford reported that the
- > encoding of elliptic curves parameters GnuTLS 3 is vulnerable to a
- > denial of service (heap corruption). It affects clients and servers
- > which print information about the peer's certificate, e.g., the key ID,
- > and can be exploited via a specially crafted X.509 certificate.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...backtrace.patch => 0001-uclibc-backtrace.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/connman/connman-000-uclibc-backtrace.patch b/package/connman/0001-uclibc-backtrace.patch
+similarity index 100%
+rename from package/connman/connman-000-uclibc-backtrace.patch
+rename to package/connman/0001-uclibc-backtrace.patch
