@@ -1,154 +1,316 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 10 Nov 2014 12:59:09 +0300
-Subject: [Buildroot] [PATCH 4/4] rt-tests: allow building subset of tests
-	with non-NPTL toolchains
-In-Reply-To: <1415613549-2886-1-git-send-email-abrodkin@synopsys.com>
-References: <1415613549-2886-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1415613549-2886-5-git-send-email-abrodkin@synopsys.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 10 Nov 2014 11:00:48 +0100 (CET)
+Subject: [Buildroot] [PATCH v4] set simple network setup via the system
+ configuration submenu
+In-Reply-To: <1414658196-4531-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <1701938268.27783162.1415613648248.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some architectures are still stuck with non-NPTL toolchains.
-These are for example ARC, Blackfin, Xtensa etc.
+any news ?
 
-Still rt-tests are very good benchmarks and it would be good to enable use of
-at least selected (those that will be built) tests on those architectures.
 
-This change makes it possible to only build subset of tests that don't require
-NPTL calls.
 
-Following tests will be built with non-NPTL toolchain:
- * signaltest
- * ptsematest
- * sigwaittest
- * svsematest
- * sendme
- * hackbench
-
-03-fix-non-nptl-buil.patch was submitted upstream:
-https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
-so as soon as it is accepted with the next version bump this patch should be
-removed.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/rt-tests/03-fix-non-nptl-buil.patch | 55 +++++++++++++++++++++++++++++
- package/rt-tests/Config.in                  |  4 ---
- package/rt-tests/rt-tests.mk                |  6 ++++
- 3 files changed, 61 insertions(+), 4 deletions(-)
- create mode 100644 package/rt-tests/03-fix-non-nptl-buil.patch
-
-diff --git a/package/rt-tests/03-fix-non-nptl-buil.patch b/package/rt-tests/03-fix-non-nptl-buil.patch
-new file mode 100644
-index 0000000..5c65018
---- /dev/null
-+++ b/package/rt-tests/03-fix-non-nptl-buil.patch
-@@ -0,0 +1,55 @@
-+From c6920f97be02ca3fba9320b043acd578ce4c62d8 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Mon, 10 Nov 2014 10:00:13 +0300
-+Subject: [PATCH] Makefile: allow building selected tests with non-NPTL
-+ toolchain
-+
-+Some architectures are still stuck with non-NPTL toolchains.
-+These are for example ARC, Blackfin, Xtensa etc.
-+
-+Still rt-tests are very good benchmarks and it would be good to enable use of
-+at least selected (those that will be built) tests on those architectures.
-+
-+This change makes it possible to only build subset of tests that don't require
-+NPTL calls.
-+
-+By default behavior is not modified - all tests are built, but if one wants
-+to build with non-NPTL toolchain just add "HAVE_NPTL=no" in command line
-+or modify "HAVE_NPTL" variable right in Makefile and execute "make".
-+
-+This patch was submitted upstream:
-+https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
-+so as soon as it is accepted with the next version bump this patch should be
-+removed.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+Cc: Vineet Gupta <vgupta@synopsys.com>
-+Cc: Clark Williams <clark.williams@gmail.com>
-+---
-+ Makefile | 11 ++++++++---
-+ 1 file changed, 8 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 318a5c6..675edf7 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,8 +1,13 @@
-+ VERSION_STRING = 0.89
-+ 
-+-sources = cyclictest.c signaltest.c pi_stress.c rt-migrate-test.c	\
-+-	  ptsematest.c sigwaittest.c svsematest.c pmqtest.c sendme.c 	\
-+-	  pip_stress.c hackbench.c
-++HAVE_NPTL ?= yes
-++
-++ifeq ($(HAVE_NPTL),yes)
-++sources = cyclictest.c pi_stress.c pip_stress.c pmqtest.c rt-migrate-test.c
-++endif
-++
-++sources += signaltest.c ptsematest.c sigwaittest.c svsematest.c sendme.c \
-++	  hackbench.c
-+ 
-+ TARGETS = $(sources:.c=)
-+ 
-+-- 
-+1.9.3
-+
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 81e5d06..23cc284 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
--	# no _tid field in 'struct sigevent'
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
-@@ -26,5 +24,3 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 
--comment "rt-tests needs a toolchain w/ NPTL"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 4cd99c0..1980556 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -13,15 +13,21 @@ ifeq ($(BR2_PACKAGE_PYTHON),y)
- RT_TESTS_DEPENDENCIES = python
- endif
- 
-+ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
-+RT_TESTS_HAVE_NPTL=no
-+endif
-+
- define RT_TESTS_BUILD_CMDS
- 	$(MAKE) -C $(@D) 			\
- 		CC="$(TARGET_CC)" 		\
-+		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)	\
- 		CFLAGS="$(TARGET_CFLAGS)"	\
- 		prefix=/usr
- endef
- 
- define RT_TESTS_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) 				\
-+		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)		\
- 		DESTDIR="$(TARGET_DIR)" 		\
- 		prefix=/usr 				\
- 		$(if $(BR2_PACKAGE_PYTHON),HASPYTHON=1 PYLIB=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/) \
--- 
-1.9.3
+----- Mail original -----
+> This patch allows the setup of simple /etc/network/interfaces (or
+> /etc/systemd/network/80-buildroot.network if networkd is enabled) via
+> the
+> configuration menus instead of using an overlay
+> 
+> * supports disabling the interface
+> * supports manual ipv4 configuration
+> * supports dhcp configuration
+> 
+> 
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> ---
+> 
+> This patch is here to avoid having to do an overlay for the most
+> common
+> cases (ipv4 with fixed IP or DHCP)
+> 
+> This is reduced to the bare minimum to cover the most common case.
+> Anything
+> more complex can be done by using overlays instead.
+> 
+> I have not added the option to (de)activate persistant naming when
+> networkd
+> is enabled because it logically belongs to the networkd package and
+> not to
+> the simple network configuration
+> ---
+> v4:
+> * correctly create /etc/systemd/networkd
+> * rework logic to simplify a bit
+> v3 :
+> * rename the script to a more generic name
+> * reorganized script to separate param verification from generation
+> * quoted params properly to protect against faulty params
+> * removed /etc/network/interfaces from skeleton
+> * reorganized options in configuration menu
+> * added networkd configuration support
+> 
+> v2 :
+> * moved to TARGET_FINALIZE
+> * removed support for lo. It should always be on.
+> * reworked default parameters
+> ---
+>  support/scripts/generate-network-config.sh | 133
+>  +++++++++++++++++++++++++++++
+>  system/Config.in                           |  60 +++++++++++++
+>  system/skeleton/etc/network/interfaces     |   4 -
+>  system/system.mk                           |   5 ++
+>  4 files changed, 198 insertions(+), 4 deletions(-)
+>  create mode 100755 support/scripts/generate-network-config.sh
+>  delete mode 100644 system/skeleton/etc/network/interfaces
+> 
+> diff --git a/support/scripts/generate-network-config.sh
+> b/support/scripts/generate-network-config.sh
+> new file mode 100755
+> index 0000000..91ff9ce
+> --- /dev/null
+> +++ b/support/scripts/generate-network-config.sh
+> @@ -0,0 +1,133 @@
+> +#!/bin/sh
+> +
+> +#extract our parameters from the config file
+> +# see comment in support/scripts/mkusers at to why we can't simply
+> source
+> +for PARAM in \
+> +	BR2_PACKAGE_SYSTEMD_NETWORKD \
+> +	BR2_SIMPLE_NETWORK_NONE \
+> +	BR2_SIMPLE_NETWORK_IPV4_DHCP \
+> +	BR2_SIMPLE_NETWORK_IPV4_MANUAL \
+> +	; do
+> +TMP=$(sed -r -e "/^$PARAM=(.*)$/!d;" -e 's//\1/;' $BR2_CONFIG)
+> +export $PARAM=$TMP
+> +done
+> +
+> +for PARAM in \
+> +	BR2_SIMPLE_NETWORK_NAME \
+> +	BR2_SIMPLE_NETWORK_IPV4_ADDRESS \
+> +	BR2_SIMPLE_NETWORK_IPV4_NETMASK \
+> +	BR2_SIMPLE_NETWORK_IPV4_BROADCAST \
+> +	BR2_SIMPLE_NETWORK_IPV4_GATEWAY \
+> +	; do
+> +TMP=$(sed -r -e "/^$PARAM=\"(.*)\"$/!d;" -e 's//\1/;' $BR2_CONFIG)
+> +export $PARAM="$TMP"
+> +done
+> +
+> +check_configuration ()
+> +{
+> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		if [ -z "$BR2_SIMPLE_NETWORK_NAME" ] ; then
+> +			echo ERROR no name specified for first network interface
+> +			exit 1
+> +		fi
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
+> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" ] ; then
+> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_ADDRESS not set 1>&2
+> +				exit 1
+> +			fi
+> +			if [ -z "$BR2_SIMPLE_NETWORK_IPV4_NETMASK" ] ; then
+> +				echo ERROR BR2_SIMPLE_NETWORK_IPV4_NETMASK not set 1>&2
+> +				exit 1
+> +			fi
+> +			OLDIFS="$IFS"; IFS=.
+> +			for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
+> +				case $dec in
+> +					255 | 254 | 252 |248 | 240 |224 | 192 | 128 | 0 );;
+> +					*) echo "Error: $BR2_SIMPLE_NETWORK_IPV4_NETMASK is not a
+> correct NETMASK" 1>&2; exit 1 ;;
+> +				esac
+> +			done
+> +			IFS="$OLDIFS"
+> +		fi
+> +	fi
+> +}
+> +
+> +do_generate_interfaces ()
+> +{
+> +	echo "# interface file auto-generated by buildroot"
+> +	echo
+> +	echo "auto lo"
+> +	echo "iface lo inet loopback"
+> +	echo
+> +
+> +	if [ -z "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		echo "auto $BR2_SIMPLE_NETWORK_NAME"
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_DHCP" ] ; then
+> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet dhcp"
+> +		elif [ "$BR2_SIMPLE_NETWORK_IPV4_MANUAL" ] ; then
+> +			echo "iface $BR2_SIMPLE_NETWORK_NAME inet static"
+> +			echo "	address $BR2_SIMPLE_NETWORK_IPV4_ADDRESS"
+> +			echo "	netmask $BR2_SIMPLE_NETWORK_IPV4_NETMASK"
+> +
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
+> +				echo "	broadcast $BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+> +			fi
+> +			if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
+> +				echo "	gateway $BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+> +			fi
+> +		fi
+> +	fi
+> +}
+> +
+> +do_generate_network_service ()
+> +{
+> +	if [ "$BR2_SIMPLE_NETWORK_NONE" ] ; then
+> +		return
+> +	fi
+> +	echo "[Match]"
+> +	echo "Name=$BR2_SIMPLE_NETWORK_NAME"
+> +	echo
+> +	echo "[Network]"
+> +	echo "Description=buildroot-configured interface"
+> +	if [ $BR2_SIMPLE_NETWORK_IPV4_DHCP ] ; then
+> +		echo "DHCP=v4"
+> +	elif [ $BR2_SIMPLE_NETWORK_IPV4_MANUAL ] && \
+> +		[ "$BR2_SIMPLE_NETWORK_IPV4_ADDRESS" != "0.0.0.0" ] ; then
+> +		nbits=0
+> +		OLDIFS="$IFS"; IFS=.
+> +		for dec in $BR2_SIMPLE_NETWORK_IPV4_NETMASK ; do
+> +			case $dec in
+> +				255) let nbits+=8;;
+> +				254) let nbits+=7;;
+> +				252) let nbits+=6;;
+> +				248) let nbits+=5;;
+> +				240) let nbits+=4;;
+> +				224) let nbits+=3;;
+> +				192) let nbits+=2;;
+> +				128) let nbits+=1;;
+> +				0);;
+> +			esac
+> +		done
+> +		IFS="$OLDIFS"
+> +
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_GATEWAY" ] ; then
+> +			echo "Gateway=$BR2_SIMPLE_NETWORK_IPV4_GATEWAY"
+> +			echo
+> +		fi
+> +		echo "[Address]"
+> +		echo "Address=$BR2_SIMPLE_NETWORK_IPV4_ADDRESS/$nbits"
+> +		if [ "$BR2_SIMPLE_NETWORK_IPV4_BROADCAST" ] ; then
+> +			echo "Broadcast=$BR2_SIMPLE_NETWORK_IPV4_BROADCAST"
+> +		fi
+> +	fi
+> +}
+> +
+> +check_configuration
+> +mkdir -p $TARGET_DIR/etc/network/
+> +rm -f -- $TARGET_DIR/etc/systemd/network/80-buildroot.network
+> +if [ "$BR2_PACKAGE_SYSTEMD_NETWORKD" ] ; then
+> +	echo > $TARGET_DIR/etc/network/interfaces
+> +	mkdir -p $TARGET_DIR/etc/systemd/network/
+> +	do_generate_network_service >
+> $TARGET_DIR/etc/systemd/network/80-buildroot.network
+> +else
+> +	do_generate_interfaces > $TARGET_DIR/etc/network/interfaces
+> +fi
+> diff --git a/system/Config.in b/system/Config.in
+> index 2465f79..3683edf 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -324,6 +324,66 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>  
+>  endif # BR2_ROOTFS_SKELETON_DEFAULT
+>  
+> +choice
+> +	prompt 'Simple network configuration'
+> +	default BR2_SIMPLE_NETWORK_NONE
+> +	help
+> +	  buildroot will create a simple network configuration for a
+> network
+> +	  interface. This will generate the corresponding lines in
+> +	  /etc/network/interfaces which is used by ifupdown.
+> +
+> +	  The simple network configuration only supports a single network
+> +	  interface using a static or DHCP-allocated IPv4 address. If you
+> +	  need something more complicate, create your own configuration
+> file
+> +	  in the BR2_ROOTFS_OVERLAY.
+> +
+> +config BR2_SIMPLE_NETWORK_NONE
+> +	bool "No configured network interface"
+> +	help
+> +	  Do not configure the network interface, only configure the
+> +	  loopback device
+> +
+> +config BR2_SIMPLE_NETWORK_IPV4_DHCP
+> +	bool "IPv4 with DHCP"
+> +	help
+> +	  Use DHCP to configure this interface using the IPv4 protocol
+> +
+> +config BR2_SIMPLE_NETWORK_IPV4_MANUAL
+> +	bool "IPv4 with static IP address"
+> +	help
+> +	  Configure IPv4 by specifying each parameter separately
+> +
+> +endchoice
+> +
+> +if !BR2_SIMPLE_NETWORK_NONE
+> +
+> +config BR2_SIMPLE_NETWORK_NAME
+> +	string "name of the physical network interface"
+> +	default "eth0"
+> +	help
+> +	  The name used to recognise the network interface as reported
+> +	  by the kernel
+> +
+> +if BR2_SIMPLE_NETWORK_IPV4_MANUAL
+> +config BR2_SIMPLE_NETWORK_IPV4_ADDRESS
+> +	string "IP Address of the network interface"
+> +	default "0.0.0.0"
+> +
+> +config BR2_SIMPLE_NETWORK_IPV4_NETMASK
+> +	string "Netmask of the network interface"
+> +	default "255.255.255.255"
+> +
+> +config BR2_SIMPLE_NETWORK_IPV4_BROADCAST
+> +	string "Broadcast Address of the network interface"
+> +
+> +config BR2_SIMPLE_NETWORK_IPV4_GATEWAY
+> +	string "Address of the gateway for the network interface"
+> +
+> +endif # BR2_SIMPLE_NETWORK_IPV4_MANUAL
+> +
+> +endif # !BR2_SIMPLE_NETWORK_NONE
+> +
+> +
+>  config BR2_TARGET_TZ_INFO
+>  	bool "Install timezone info"
+>  	# No timezone for musl; only for uClibc or (e)glibc.
+> diff --git a/system/skeleton/etc/network/interfaces
+> b/system/skeleton/etc/network/interfaces
+> deleted file mode 100644
+> index 218b82c..0000000
+> --- a/system/skeleton/etc/network/interfaces
+> +++ /dev/null
+> @@ -1,4 +0,0 @@
+> -# Configure Loopback
+> -auto lo
+> -iface lo inet loopback
+> -
+> diff --git a/system/system.mk b/system/system.mk
+> index e4a3160..bb933f6 100644
+> --- a/system/system.mk
+> +++ b/system/system.mk
+> @@ -38,6 +38,11 @@ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+>  TARGETS += host-mkpasswd
+>  endif
+>  
+> +define SIMPLE_NETWORK
+> +	$(TOPDIR)/support/scripts/generate-network-config.sh $(TARGET_DIR)
+> +endef
+> +TARGET_FINALIZE_HOOKS += SIMPLE_NETWORK
+> +
+>  ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+>  
+>  define SYSTEM_ROOT_PASSWD
+> --
+> 2.1.1
+> 
+> 
