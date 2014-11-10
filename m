@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Nov 2014 19:11:31 +0100
+Date: Mon, 10 Nov 2014 19:16:17 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-11-06
-In-Reply-To: <5460DEAB.6000303@imgtec.com>
-References: <20141107073016.0C55F1018AC@stock.ovh.net>
- <545C9CAE.3070303@imgtec.com>
- <20141108184741.66cf1357@free-electrons.com>
- <5460DEAB.6000303@imgtec.com>
-Message-ID: <20141110191131.26eae84c@free-electrons.com>
+ 2014-11-09
+In-Reply-To: <5460E0B8.1060705@imgtec.com>
+References: <20141110073015.A5296101317@stock.ovh.net>
+ <5460DF8D.6090705@imgtec.com> <5460E0B8.1060705@imgtec.com>
+Message-ID: <20141110191617.43273fde@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,38 +14,22 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Mon, 10 Nov 2014 15:50:03 +0000, Vicente Olivert Riera wrote:
-
-> > You should simply ignore such results.
+On Mon, 10 Nov 2014 15:58:48 +0000, Vicente Olivert Riera wrote:
+> On 11/10/2014 03:53 PM, Vicente Olivert Riera wrote:
+> > On 11/10/2014 07:30 AM, Thomas Petazzoni wrote:
+> >>     mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/bb8ab5ea7ed02cf17c46522903b4e46035e47f16/
+> > 
+> > I thought this was already fixed upstream... I need to report this
+> > again. It's a failure with MIPS64 n32, probably because it's not taken
+> > into account that MIPS64 n32 has 32-bit pointers and integers instead of
+> > 64-bit.
 > 
-> Do you think it would be a good idea to check the status before sending
-> the report to the mailing list? Something like this:
+> Ok, sorry. qt-4.8.6 was fixed upstream (I did it). The problem here is
+> with qt-webkit, which I already reported upstream:
 > 
-> if status == TIM
->   send_report_to_autobuilder_owner()
-> else
->   send_report_to_mailing_list()
-> endif
+> https://bugreports.qt-project.org/browse/QTBUG-39224
 
-Patches welcome :-)
-
-More seriously, I think our time would be better spent on finding ways
-to simply avoid getting those false results.
-
-> > If this is a race condition, we could switch to using $(MAKE1) for this
-> > package until the issue gets resolved upstream.
-> 
-> Good idea. Unfortunately nobody confirmed that upstream, and this
-> failure is very hard to reproduce. I have tried it lots of times without
-> success. In fact, there are no more autobuild failures...
-> 
-> I think we can just wait until upstream fixes the problem since nobody
-> else (autobuilders included) reported this problem again :P
-
-Then let's wait to see if the autobuilders see it again. If it happens
-again, then we'll try harder to fix the problem.
-
-Best regards,
+May disallow on MIPS64 n32 for the moment?
 
 Thomas
 -- 
