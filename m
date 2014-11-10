@@ -1,106 +1,105 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 10 Nov 2014 18:31:03 +0100
-Subject: [Buildroot] [PATCH v3] gst1-imx: add package
-In-Reply-To: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
-References: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <5460F657.8000301@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Nov 2014 18:30:12 +0100
+Subject: [Buildroot] [PATCH v2 13/15] erlang-p1-iconv: new package.
+In-Reply-To: <20141110163700.GE2466@free.fr>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+ <1415366931-6870-14-git-send-email-johan.oudinet@gmail.com>
+ <20141110163700.GE2466@free.fr>
+Message-ID: <20141110173012.GA22119@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary,
+Johan, All,
 
-Gary Bisson wrote:
-> Open-source GStreamer 1.0 plugins for i.MX6 platforms.
-> More info at https://github.com/Freescale/gstreamer-imx
->
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> ---
-> Modifications v2->v3:
-> - Change package name from gst1-plugins-imx to gst1-imx
-> - Remove commands unnecessary parentheses
-> - Modify package comment to clarify it is only working on i.MX6
->
-> Modifications v1->v2:
-> - Use of github helper macro
-> - Modify package comment with Peter S. original patch
-> - Add comment for eglibc dependency (due to GPU libs)
-> - Remove comments on package dependencies
->
-> This patch has been tested using an i.MX6Q SabreLite (nitrogen6x config) along
-> with the usual Tears of Steel movie in 1080p:
-> http://media.xiph.org/mango/tears_of_steel_1080p.webm
->
-> Below are the commands used to test the different sinks:
->
-> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
-> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-> matroskademux ! imxvpudec ! imxipusink
-> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-> matroskademux ! imxvpudec ! imxeglvivsink
+On 2014-11-10 17:37 +0100, Yann E. MORIN spake thusly:
+> On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
+> > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> > ---
+> >  package/Config.in                          |  1 +
+> >  package/erlang-p1-iconv/Config.in          |  6 ++++++
+> >  package/erlang-p1-iconv/erlang-p1-iconv.mk | 17 +++++++++++++++++
+> >  3 files changed, 24 insertions(+)
+> >  create mode 100644 package/erlang-p1-iconv/Config.in
+> >  create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
+> [--SNIP--]
+> 
+> While I was reviewing the other patches, I got a build failure with this
+> package (long lines may have got split in the copy-paste):
+> 
+> Compiling c_src/iconv.c
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lerl_interface
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lei
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lerl_interface
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lei
+> collect2: error: ld returned 1 exit status
+> ERROR: sh(/home/ymorin/dev/buildroot/O/host/usr/bin/armv6-rpi-linux-gnueabihf-gcc
+> c_src/iconv.o
+> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
+> -lerl_interface -lei  -shared
+> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
+> -lerl_interface -lei -o priv/lib/iconv.so)
+> failed with return code 1 and the following output:
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lerl_interface
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lei
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lerl_interface
+> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> cannot find -lei
+> collect2: error: ld returned 1 exit status
+> 
+> ERROR: compile failed while processing
+> /home/ymorin/dev/buildroot/O/build/erlang-p1-iconv-dff5ee5: rebar_abort
+> 
+> Here is my defconfig file:
+> 
+> BR2_armeb=y
+> BR2_arm1176jzf_s=y
+> BR2_ARM_EABIHF=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_PATH="/home/ymorin/x-tools/armv6-rpi-linux-gnueabihf"
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-rpi-linux-gnueabihf"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_ERLANG=y
+> BR2_PACKAGE_EJABBERD=y
 
-I tested it on i.MX6DL SABRESD (not Quad), based on
-freescale_imx6dlsabresd_defconfig, but with libc changed to glibc.
-All the three pipelines you provided work, with the first one eating up
-~30% of CPU time, while the other two ones take only 2~3% CPU only (but
-play no audio of course).
+I still get the same error with this defconfig:
 
-A couple of comments below.
+BR2_armeb=y
+BR2_cortex_a9=y
+BR2_ARM_EABIHF=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ERLANG=y
+BR2_PACKAGE_EJABBERD=y
 
-> diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-> new file mode 100644
-> index 0000000..6bdbb6c
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-imx/Config.in
-> @@ -0,0 +1,25 @@
-> +comment "gst1-imx needs an imx-specific Linux kernel to be built"
-> +	depends on BR2_arm && !BR2_LINUX_KERNEL
-> +
-> +# Required by gpu-viv-bin-mx6q
-> +comment "gst1-imx needs an (e)glibc toolchain"
-> +	depends on BR2_arm
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+But I can see the missing libs to be present, except the path to them is
+not specified in the compile line:
+    staging/usr/lib/erlang/usr/lib/liberl_interface.a
+    staging/usr/lib/erlang/usr/lib/libei.a
 
-Sorry for coming back on the comments issue, but...
+Except it seems weird to have ".../erlang/usr/lib/..." to begin with.
 
-I simulated a newbie wanting to use gst1-imx:
-  - make freescale_imx6dlsabresd_defconfig
-  - make menuconfig
-  - go to target packages -> audio/video, look for gst1
-    -> "gstreamer 1.x needs a toolchain w/ wchar, threads" is shown
-  - change toolchain settings to enable wchar
-  - go to target packages -> audio/video, enable gst1
-    -> "gst1-imx needs an (e)glibc toolchain" is shown
-  - change toolchain settings to use glibc
-  - go back to target packages -> audio/video
-    -> gst1-imx disappeared, no comments shown
-       -> user panic!
-
-Well, I don't remember exactly how we came to the conclusion that some
-of the comments should be removed, but I think they should have not.
-
-The BR2_PACKAGE_LIBFSLVPUWRAP and BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-dependencies are software packages, not architecture features, so they
-are user-selectable and thus should show a comment when not satisfied.
-
-However, to me this patch is an improvement and could be merged as-is,
-and the comments re-added later if discussions on this point does not
-settle quickly. Gary seems very responsive and willing to have a good
-support for this package, so I guess he will keep on.
-
-> +
-> +config BR2_PACKAGE_GST1_IMX
-> +	bool "gst1-imx"
-> +	depends on BR2_LINUX_KERNEL
-
-As per Arnout's suggestion on v2, there should be a # libfslvpuwrap
-here.
-
-With that fixed:
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Regards,
+Yann E. MORIN.
 
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
