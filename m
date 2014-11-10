@@ -1,87 +1,57 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Mon, 10 Nov 2014 11:43:50 -0800
-Subject: [Buildroot] [PATCH v3] gst1-imx: add package
-In-Reply-To: <5460F657.8000301@lucaceresoli.net>
-References: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
- <5460F657.8000301@lucaceresoli.net>
-Message-ID: <54611576.3000803@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Nov 2014 20:45:41 +0100
+Subject: [Buildroot] [PATCH] util-linux: re-enable libmount and binaries on
+	Microblaze
+Message-ID: <1415648741-30563-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+In commit 442aa88f95d6c4a921aa3d4de91f54d50bd0cd35 ("util-linux: bump
+version and revamp options"), Gustavo disabled util-linux libmount and
+binaries on microblaze, as it was not building properly.
 
-On 11/10/2014 09:31 AM, Luca Ceresoli wrote:
-> Dear Gary,
->
-> Gary Bisson wrote:
->> [snip]
->> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
->> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
->> matroskademux ! imxvpudec ! imxipusink
->> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
->> matroskademux ! imxvpudec ! imxeglvivsink
->
-> I tested it on i.MX6DL SABRESD (not Quad), based on
-> freescale_imx6dlsabresd_defconfig, but with libc changed to glibc.
-> All the three pipelines you provided work, with the first one eating up
-> ~30% of CPU time, while the other two ones take only 2~3% CPU only (but
-> play no audio of course).
+However, as mentionned in the comment, these options were disabled on
+Microblaze due to "libc lacks UTIME_NOW & UTIME_COMMIT for
+libmount". This was true specifically for the microblaze external
+toolchain that we were using at the time. But we are no longer using
+this external toolchain (which proved to be broken in many ways), and
+have microblaze support in our internal backend.
 
-Good to hear everything worked out. Thanks for checking CPU consumption, 
-although 30% seems high for audio handling we can clearly see the video 
-is decoded through the VPU.
+I have verified that with our internal toolchain, util-linux with
+libmount and the binaries enabled builds fine.
 
-> [snip]
-> Sorry for coming back on the comments issue, but...
->
-> I simulated a newbie wanting to use gst1-imx:
->  - make freescale_imx6dlsabresd_defconfig
->  - make menuconfig
->  - go to target packages -> audio/video, look for gst1
->    -> "gstreamer 1.x needs a toolchain w/ wchar, threads" is shown
->  - change toolchain settings to enable wchar
->  - go to target packages -> audio/video, enable gst1
->    -> "gst1-imx needs an (e)glibc toolchain" is shown
->  - change toolchain settings to use glibc
->  - go back to target packages -> audio/video
->    -> gst1-imx disappeared, no comments shown
->       -> user panic!
->
-> Well, I don't remember exactly how we came to the conclusion that some
-> of the comments should be removed, but I think they should have not.
->
-> The BR2_PACKAGE_LIBFSLVPUWRAP and BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-> dependencies are software packages, not architecture features, so they
-> are user-selectable and thus should show a comment when not satisfied.
+Those options are not selected by anything else in Buildroot, so
+there's no other package impacted by this dependency change.
 
-Yes that is exactly why I've put comments in the first place. Yann 
-wasn't a huge fan of that solution and I understand it [1]. The best 
-would be to find another approach to be able to do the select.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-> However, to me this patch is an improvement and could be merged as-is,
-> and the comments re-added later if discussions on this point does not
-> settle quickly. Gary seems very responsive and willing to have a good
-> support for this package, so I guess he will keep on.
->
->> +
->> +config BR2_PACKAGE_GST1_IMX
->> +    bool "gst1-imx"
->> +    depends on BR2_LINUX_KERNEL
->
-> As per Arnout's suggestion on v2, there should be a # libfslvpuwrap
-> here.
-
-Actually I think this should not be added as this package also needs the 
-kernel headers for IPU use (see source code under src/ipu).
-
-> With that fixed:
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Thanks,
-Gary
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-October/109264.html
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 934021a..07e1fbb 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -21,8 +21,6 @@ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	# libc lacks UTIME_NOW & UTIME_COMMIT
+-	depends on !(BR2_microblazeel || BR2_microblazebe)
+ 	depends on BR2_USE_MMU # util-linux/libblkid
+ 	bool "libmount"
+ 	help
+@@ -36,8 +34,6 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	bool "install utilities"
+ 	depends on BR2_USE_MMU # fork()
+-	# libc lacks UTIME_NOW & UTIME_COMMIT for libmount
+-	depends on !(BR2_microblazeel || BR2_microblazebe)
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-- 
+2.0.0
