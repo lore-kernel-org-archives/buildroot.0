@@ -1,49 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Nov 2014 14:12:34 +0100
-Subject: [Buildroot] [git commit] connman: disable for static builds
-Message-ID: <20141110131448.C700FB3F46@busybox.osuosl.org>
+Date: Mon, 10 Nov 2014 14:13:49 +0100
+Subject: [Buildroot] [git commit] gnutls: security bump to version 3.2.20
+Message-ID: <20141110131448.D847EB3AA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8fc293d8213593996936330ab51ba6b39fd0066e
+commit: http://git.buildroot.net/buildroot/commit/?id=caf2b2ba6b1896c6f0d5751fca84d48607497b04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It needs dlopen(), otherwise it will fail at the configure phase with a
-message like this one:
-
-checking for dlopen in -ldl... no
-configure: error: dynamic linking loader is required
-
 Fixes:
-  http://autobuild.buildroot.net/results/647/64742a1d3a07f86a7c801da5ef30892c1f760031/
+CVE-2014-8564 / GNUTLS-SA-2014-5 - Sean Burford reported that the
+encoding of elliptic curves parameters GnuTLS 3 is vulnerable to a
+denial of service (heap corruption). It affects clients and servers
+which print information about the peer's certificate, e.g., the key ID,
+and can be exploited via a specially crafted X.509 certificate.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.hash |    2 +-
+ package/gnutls/gnutls.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 8803aeb..63d50b4 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_CONNMAN
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_PREFER_STATIC_LIB # needs dlopen()
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon
- 	  for managing internet connections within embedded devices
-@@ -65,6 +66,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index ca743a8..e0124d3 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	a20d95a434a670afe5ce66430ae56151bbbe14456a0517ce775c46b1d4183dcf	gnutls-3.2.19.tar.xz
++sha256	7967057e78c3ed968e524a07ab262681219b73001ab8e75cbc4f1a506abdb598	gnutls-3.2.20.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index efc933e..06ca265 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- endif # BR2_PACKAGE_CONNMAN
- 
--comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
-+comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver, dynamic library"
- 	depends on BR2_USE_MMU && !BR2_avr32
--	depends on !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).20
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
