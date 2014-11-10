@@ -1,78 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Nov 2014 19:46:01 +0100
-Subject: [Buildroot] [PATCH v2 0/4] elfutils: version bump
-In-Reply-To: <1415637521-57583-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415637521-57583-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141110184601.GB22119@free.fr>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Mon, 10 Nov 2014 11:43:50 -0800
+Subject: [Buildroot] [PATCH v3] gst1-imx: add package
+In-Reply-To: <5460F657.8000301@lucaceresoli.net>
+References: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
+ <5460F657.8000301@lucaceresoli.net>
+Message-ID: <54611576.3000803@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+Luca, All,
 
-On 2014-11-10 16:38 +0000, Vicente Olivert Riera spake thusly:
-> Changes since v1:
-> - Don't use one single patch to rename patches and adapt them to the new 
->   version. Now it's done in two separated patches. Thanks to Yann E.
->   Morin for the advice.
-> - Don't use a hook to remove the -Werror options. Instead of that, 
->   modify the config/eu.am to make the --disable-werror configure option
->   do its job properly. Thanks to Yann E. Moring for the patch.
-> 
-> Vicente Olivert Riera (4):
->   elfutils: rename patches to follow the new name structure
->   elfutils: bump version to 0.160
->   elfutils: adapt patches to the new version
->   elfutils: really make -Werror conditional to BUILD_WERROR
+On 11/10/2014 09:31 AM, Luca Ceresoli wrote:
+> Dear Gary,
+>
+> Gary Bisson wrote:
+>> [snip]
+>> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>> matroskademux ! imxvpudec ! imxipusink
+>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>> matroskademux ! imxvpudec ! imxeglvivsink
+>
+> I tested it on i.MX6DL SABRESD (not Quad), based on
+> freescale_imx6dlsabresd_defconfig, but with libc changed to glibc.
+> All the three pipelines you provided work, with the first one eating up
+> ~30% of CPU time, while the other two ones take only 2~3% CPU only (but
+> play no audio of course).
 
-As I said in my previous review, you need to fold patches 2, 3 and 4
-into a single patch.
+Good to hear everything worked out. Thanks for checking CPU consumption, 
+although 30% seems high for audio handling we can clearly see the video 
+is decoded through the VPU.
 
-When you bump a version, you should do it as a whole:
-  - bump the version
-  - update the patches
-  - add new patches
-all in the same changeset, so that it is always possible to build at
-each step, after each patch.
+> [snip]
+> Sorry for coming back on the comments issue, but...
+>
+> I simulated a newbie wanting to use gst1-imx:
+>  - make freescale_imx6dlsabresd_defconfig
+>  - make menuconfig
+>  - go to target packages -> audio/video, look for gst1
+>    -> "gstreamer 1.x needs a toolchain w/ wchar, threads" is shown
+>  - change toolchain settings to enable wchar
+>  - go to target packages -> audio/video, enable gst1
+>    -> "gst1-imx needs an (e)glibc toolchain" is shown
+>  - change toolchain settings to use glibc
+>  - go back to target packages -> audio/video
+>    -> gst1-imx disappeared, no comments shown
+>       -> user panic!
+>
+> Well, I don't remember exactly how we came to the conclusion that some
+> of the comments should be removed, but I think they should have not.
+>
+> The BR2_PACKAGE_LIBFSLVPUWRAP and BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+> dependencies are software packages, not architecture features, so they
+> are user-selectable and thus should show a comment when not satisfied.
 
-It is posible to split (like you did) to ease review, but then state so
-in the cover letter.
+Yes that is exactly why I've put comments in the first place. Yann 
+wasn't a huge fan of that solution and I understand it [1]. The best 
+would be to find another approach to be able to do the select.
 
-Regards,
-Yann E. MORIN.
+> However, to me this patch is an improvement and could be merged as-is,
+> and the comments re-added later if discussions on this point does not
+> settle quickly. Gary seems very responsive and willing to have a good
+> support for this package, so I guess he will keep on.
+>
+>> +
+>> +config BR2_PACKAGE_GST1_IMX
+>> +    bool "gst1-imx"
+>> +    depends on BR2_LINUX_KERNEL
+>
+> As per Arnout's suggestion on v2, there should be a # libfslvpuwrap
+> here.
 
->  ...isable-progs.patch => 0001-disable-progs.patch} |   54 ++++++------
->  package/elfutils/0002-argp-support.patch           |   92 ++++++++++++++++++++
->  ...s-03-memcpy-def.patch => 0003-memcpy-def.patch} |   15 ++--
->  .../{elfutils-04-fts.patch => 0004-fts.patch}      |   69 +++++++--------
->  package/elfutils/0005-disable-po.patch             |   23 +++++
->  ...y-make-werror-conditional-to-build-werror.patch |   16 ++++
->  package/elfutils/elfutils-02-argp-support.patch    |   92 --------------------
->  package/elfutils/elfutils-05-disable-po.patch      |   22 -----
->  package/elfutils/elfutils.hash                     |    3 +
->  package/elfutils/elfutils.mk                       |    6 +-
->  10 files changed, 204 insertions(+), 188 deletions(-)
->  rename package/elfutils/{elfutils-01-disable-progs.patch => 0001-disable-progs.patch} (60%)
->  create mode 100644 package/elfutils/0002-argp-support.patch
->  rename package/elfutils/{elfutils-03-memcpy-def.patch => 0003-memcpy-def.patch} (58%)
->  rename package/elfutils/{elfutils-04-fts.patch => 0004-fts.patch} (97%)
->  create mode 100644 package/elfutils/0005-disable-po.patch
->  create mode 100644 package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
->  delete mode 100644 package/elfutils/elfutils-02-argp-support.patch
->  delete mode 100644 package/elfutils/elfutils-05-disable-po.patch
->  create mode 100644 package/elfutils/elfutils.hash
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Actually I think this should not be added as this package also needs the 
+kernel headers for IPU use (see source code under src/ipu).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> With that fixed:
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Thanks,
+Gary
+
+[1] http://lists.busybox.net/pipermail/buildroot/2014-October/109264.html
