@@ -1,81 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Nov 2014 16:29:33 +0100
-Subject: [Buildroot] [PATCH 1/2] elfutils: bump version to 0.160
-In-Reply-To: <20141110151938.GB2466@free.fr>
-References: <1415616323-58155-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMMLEwTjev99Jk626Gpsh-r7gpq9F-EB2mpda371Cuuok6w@mail.gmail.com>
- <5460BADC.9030804@imgtec.com> <20141110151938.GB2466@free.fr>
-Message-ID: <20141110152933.GC2466@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 10 Nov 2014 15:50:03 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-06
+In-Reply-To: <20141108184741.66cf1357@free-electrons.com>
+References: <20141107073016.0C55F1018AC@stock.ovh.net>	<545C9CAE.3070303@imgtec.com>
+ <20141108184741.66cf1357@free-electrons.com>
+Message-ID: <5460DEAB.6000303@imgtec.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
-
-On 2014-11-10 16:19 +0100, Yann E. MORIN spake thusly:
-> Vicente, Samuel, All,
+On 11/08/2014 05:47 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
 > 
-> On 2014-11-10 13:17 +0000, Vicente Olivert Riera spake thusly:
-> > On 11/10/2014 12:31 PM, Samuel Martin wrote:
-> > > On Mon, Nov 10, 2014 at 11:45 AM, Vicente Olivert Riera
-> > > <Vincent.Riera@imgtec.com> wrote:
-> > >> - Bump version to 0.160
-> > >> - Add a hash file
-> > >> - Add a hook to remove some -Werror options
-> > >>
-> > >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> [--SNIP--]
-> > >> +# The --disable-werror configure option does not seem to be enough. We
-> > >> +# need to remove the -Werror options from these Makefiles in order to
-> > >> +# avoid compilation failures.
-> > >> +define ELFUTILS_DISABLE_WERROR
-> > >> +       $(SED) 's/-Werror//g' $(@D)/lib/Makefile
-> > >> +       $(SED) 's/-Werror//g' $(@D)/libelf/Makefile
-> > >> +       $(SED) 's/-Werror//g' $(@D)/libdwfl/Makefile
-> > >> +endef
-> > >> +ELFUTILS_POST_CONFIGURE_HOOKS += ELFUTILS_DISABLE_WERROR
-> > > 
-> > > Since we are already reconfiguring elfutils, is it possible to patch
-> > > the Makefile.am or Makefile.in instead?
-> > 
-> > I tried it but I couldn't get rid of that by just modifying the
-> > Makefile.{am,in}, that's why I ended with that solution. If you can try
-> > it I would be very appreciated.
+> On Fri, 7 Nov 2014 10:19:26 +0000, Vicente Olivert Riera wrote:
+>> On 11/07/2014 07:30 AM, Thomas Petazzoni wrote:
+>>> Build statistics for 2014-11-06
+>>
+>>>       mipsel |                     ola-0.8.33 | TIM | http://autobuild.buildroot.net/results/edb374fba996973c21b7b4ed13d5d07c457793a0/
+>>
+>> [3m>>> ola 0.8.33 Autoreconfiguring[23m
+>> make: ***
+>> [/home/tmp/buildroot-test/instance-0/output/build/ola-0.8.33/.stamp_configured]
+>> Terminated
+>>
+>> No error message. It looks like the autobuilder stopped suddenly.
 > 
-> I managed to get it build without the hook, using that patch:
+> See the result status: it's "TIM" and not "NOK". This means that the
+> build too longer than 4 hours, so it was interrupted by the
+> autobuild-run logic.
+
+Oh, thanks! I didn't noticed about that :-)
+
+> You should simply ignore such results.
+
+Do you think it would be a good idea to check the status before sending
+the report to the mailing list? Something like this:
+
+if status == TIM
+  send_report_to_autobuilder_owner()
+else
+  send_report_to_mailing_list()
+endif
+
+>>
+>>>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/445bbbb0e6370cc2d1caf4ca66f59b8441f9dcda/
+>>>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/88b67de17d7059b2aeb41c483e4c275e5d2f2ee1/
+>>>       mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e6cb3215fcefd76805abee98b277b810366e456c/
+>>
+>> I keep reporting this every day. The autobuilder which is reporting
+>> these failures is not updated with the latest version of the
+>> autobuilder-run script.
+>>
+>> I don't know who owns this autobuilder, but please, fix it so we will
+>> not see the same useless reports gain and again.
 > 
->     infra: really make -Werror condiftional to BUILD_WERROR
->     
->     Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> The autobuild-run script has now been updated today on all autobuilders,
+> except on Peter autobuilders (I didn't receive an answer from Peter to
+> my e-mail sent to the autobuilder "maintainers").
 > 
->     diff -durN elfutils-0.160.orig/config/eu.am elfutils-0.160/config/eu.am
->     --- elfutils-0.160.orig/config/eu.am2014-11-10 16:15:26.644739769 +0100
->     ++  + elfutils-0.160/config/eu.am2014-11-10 16:15:52.745052929 +0100
->     @@ -3   5,7 +35,6 @@
->      DEFS = -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"${localedir}"'
->      AM_CPPFLAGS = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
->      AM_CFLAGS = -std=gnu99 -Wall -Wshadow \
->     -    $(if $($(*F)_no_Werror),,-We   rror) \
->             $(if $($(*F)_no_Wunused),,-Wunused $(WEXTRA)) \
->             $(if $($(*F)_no_Wformat),-Wno-format,-Wformat=2) \
->             $($(*F)_CFLAGS)
+>>>     mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+>>
+>> "Fatal error: can't create obj/esfilter.o: No such file or directory"
+>>
+>> I think this is a race condition problem due to the "obj" directory not
+>> being created in time. I have reported the issue upstream.
+>>
+>> https://code.google.com/p/tstools/issues/detail?id=29
+> 
+> If this is a race condition, we could switch to using $(MAKE1) for this
+> package until the issue gets resolved upstream.
 
-Dang.. The patch was mangled somehow...
+Good idea. Unfortunately nobody confirmed that upstream, and this
+failure is very hard to reproduce. I have tried it lots of times without
+success. In fact, there are no more autobuild failures...
 
-To make it clear what I did: I removed line 38 from config/eu.am
+I think we can just wait until upstream fixes the problem since nobody
+else (autobuilders included) reported this problem again :P
 
-You can re-use my patch description and sob when you submit your v2.
-Feel free to update as you see fit. ;-)
-
-Regards,
-Yann E. MORIN.
-
+Best regards,
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
