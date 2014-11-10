@@ -1,152 +1,115 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Mon, 10 Nov 2014 22:46:14 +0100
-Subject: [Buildroot] [PATCH] inetutils: new package
-In-Reply-To: <20141110194404.15efb715@free-electrons.com>
-References: <1414624048-37143-1-git-send-email-kaszak@gmail.com>
- <852735167.27218624.1414655605361.JavaMail.root@openwide.fr>
- <CABbD_XB2q_Vqn0cyJgHjeCPtLUrbC=rt7=VxLJhNwkX819Lu_A@mail.gmail.com>
- <20141030094018.GH1759@tarshish>
- <CABbD_XDXmwU5QgT0i=g=zs_13fBWPdv2Bn+WfFZMDU_YX8er+Q@mail.gmail.com>
- <20141030125801.GO1759@tarshish>
- <CABbD_XDu4yyqHX=0JbMg-4WpLivg7K41X62F6+BMtPT6NVS-dA@mail.gmail.com>
- <CABbD_XDjRYVSW4zLZhcOKD1asx8YMOk3+=L+d7teEr9cDhu1-A@mail.gmail.com>
- <20141101200125.509c0b89@free-electrons.com>
- <CABbD_XA35CzC9nWkUnXnidJFEnZ0=yV1wd1f8FytjPKunw=uQg@mail.gmail.com>
- <20141101213117.6673aa69@free-electrons.com>
- <CABbD_XBJzp-ibX5bMB_SfxndbPQs_R5+gqTaPrwAWJFmz5Nj5A@mail.gmail.com>
- <20141110194404.15efb715@free-electrons.com>
-Message-ID: <CABbD_XDvppfb5+m=d4ZW9VfgSrSGjkoGT4OiEHnj6VE_8VTVsw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Nov 2014 23:13:23 +0100
+Subject: [Buildroot] [PATCH v2 01/15] package/pkg-autotools.mk:
+ Factorize hooks.
+In-Reply-To: <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+ <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20141110221323.GF22119@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Johan, All,
 
-I like the idea to make every possible utility build-able, but this (as you
-mentioned) would mean that some utilities will have 3 different
-implementations to choose from in Buildroot (like ping). Of course fixing
-the paths of installed binaries should not be a problem.
-To avoid possible conflicting situations, I would like to propose to use a
-menu-like option as nginx does, to make possible for inetutils programs to
-be chosen from a'la carte. Any objections?
+On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
+> Define common macros only once (instead of as many times as
+> there are inner-autotools-package calls).
+> Factorize LIBTOOL_PATCH_HOOK and AUTORECONF_HOOK to avoid duplicated
+> code.
 
-Best regards,
-Karoly
+Sorry it takes so long to review this series. Touching the infra is not
+for the faint of heart, and reviews are really complex and time-consuming.
 
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> ---
+>  package/pkg-autotools.mk | 119 ++++++++++++++++++++++-------------------------
+>  1 file changed, 56 insertions(+), 63 deletions(-)
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 09f9412..65af6f0 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -46,6 +46,57 @@ endef
+>  #	$(call AUTOCONF_AC_CHECK_FILE_VAL,/dev/random)=yes
+>  AUTOCONF_AC_CHECK_FILE_VAL = ac_cv_file_$(subst -,_,$(subst /,_,$(subst .,_,$(1))))
+>  
+> +# Recipe that patches libtool so it works properly with
+> +# cross-compilation.
+> +define PATCH_LIBTOOL
+> +	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+> +		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+> +			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
+> +			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+> +			if test $${ltmain_version} = 1.5; then \
+> +				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+> +			elif test $${ltmain_version} = 2.2; then\
+> +				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+> +			elif test $${ltmain_version} = 2.4; then\
+> +				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+> +			fi \
+> +		done \
+> +	fi
+> +endef
+> +
+> +#
+> +# Hook to update config.sub and config.guess if needed
+> +#
+> +define UPDATE_CONFIG_HOOK
+> +	@$(call MESSAGE,"Updating config.sub and config.guess")
+> +	$(call CONFIG_UPDATE,$(@D))
+> +endef
+> +
+> +#
+> +# Hook to patch libtool to make it work properly for cross-compilation
+> +#
+> +define LIBTOOL_PATCH_HOOK
+> +	@$(call MESSAGE,"Patching libtool")
+> +	$(call PATCH_LIBTOOL)
+> +endef
 
-On Mon, Nov 10, 2014 at 7:44 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Hmm... This patch does nore than extract the definitions out of
+inner-autotools-package; it also reworks the way they are called.
 
-> Dear K?roly Kasza,
->
-> On Sun, 2 Nov 2014 13:45:19 +0100, K?roly Kasza wrote:
->
-> > I wrote a small script to analyse which files are redundant, and if they
-> > will be overwritten or not.
-> > I ran it against busybox, net-tools, iputils, rsh-redone, sysklogd and
-> > whois because I found that these
-> > packages may overlap with inetutils' tools.
-> >
-> > The same filename lines mean that an other file with the same name, but
-> > with a different path exists
-> > (the compared package's path is in the brackets).
-> > The same path lines mean that it would be overwritten at install.
-> >
-> > busybox:
-> > Found same filename /usr/bin/dnsdomainname (/bin/dnsdomainname)
-> > Found same filename /usr/bin/ping (/bin/ping)
-> > Found same filename /usr/bin/hostname (/bin/hostname)
-> > Found same filename /usr/bin/ifconfig (/sbin/ifconfig)
-> > Found same filename /usr/libexec/syslogd (/sbin/syslogd)
-> > Found same path /usr/bin/traceroute
-> > Found same path /usr/bin/tftp
-> > Found same path /usr/bin/logger
-> > Found same path /usr/bin/telnet
-> > Found same filename /usr/libexec/inetd (/usr/sbin/inetd)
-> >
-> > net-tools:
-> > Found same filename /usr/bin/dnsdomainname (/bin/dnsdomainname)
-> > Found same filename /usr/bin/hostname (/bin/hostname)
-> > Found same filename /usr/bin/ifconfig (/sbin/ifconfig)
-> > Found same path /usr/share/man/man1/dnsdomainname.1
-> > Found same path /usr/share/man/man1/hostname.1
-> >
-> > iputils:
-> > Found same filename /usr/bin/ping6 (/bin/ping6)
-> > Found same filename /usr/bin/ping (/bin/ping)
-> >
-> > rsh-redone:
-> > Found same path /usr/bin/rlogin
-> > Found same path /usr/bin/rsh
-> >
-> > sysklogd:
-> > Found same filename /usr/libexec/syslogd (/sbin/syslogd)
-> >
-> > whois:
-> > Found same path /usr/share/man/man1/whois.1
-> > Found same path /usr/bin/whois
-> >
-> > I think a solution would be to disable inetutils' redundant tools:
-> > whois, sysklogd, rlogin(d), rsh(d), ping, ping6, hostname, dnsdomainname,
-> > ifconfig, hostname.
-> >
-> > After that, the only utility, that's not overwritten would be inetd from
-> > busybox, where a post-install hook
-> > could simply alter the busybox symlink to point to inetutils' version
-> > instead.
-> >
-> > I'm waiting for your opinions!
->
-> Personally, I think we should keep all of those tools enabled, and
-> simply fix the installation path, especially since inetutils is often
-> the only one doing "weird" things, and all of the other packages agree
-> on the location for all tools
->
-> First, for the "Found same path" cases above, I believe the solution is
-> fairly easy: just make sure inetutils depends on the relevant packages
-> so that they get overriden. For busybox it's easy, we always want the
-> inetutils tools to override the busybox one. For the other packages, it
-> might need a little bit more discussion as it's not immediately clear
-> which package has the "best" implementation for each of the tools.
->
-> Now, for the "Found same filename" cases, the situation is quite clear:
->
->  * dnsdomainname: both busybox and net-tools install it to /bin,
->    inetutils is the only one to choose /usr/bin. So the solution is to
->    move it to /bin in inetutils.
->
->  * ping: both busybox and iputils install it to /bin, so same solution
->    as above.
->
->  * hostname: both busybox and net-tools install it to /bin, so same
->    solution.
->
->  * ifconfig: both busybox, and net-tools install it to /sbin, so same
->    solution.
->
->  * syslogd: both busybox and sysklogd install it to /sbin, so same
->    solution.
->
-> You can also try to pass --exec-prefix=/ in INETUTILS_CONF_OPTS and see
-> if it improves the situation.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+I'd rather we get this split in at least two patches:
+  - one that does the move proper
+  - one that reworks the calls
 
+It will be easier to review.
 
+[--SNIP--]
+> @@ -265,6 +253,11 @@ $(2)_DEPENDENCIES += host-gettext
+>  endif
+>  $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
+>  $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
+> +else
+> +# default values are not evaluated yet, so don't rely on this defaulting to YES
+> +ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+> +$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
+> +endif
+>  endif
+
+I think you got the order wrong here: we want the libtool patch to be
+applied _before_ we autoreconf.
+
+So, this last if-block should be the very first thing to do right after:
+    ifeq ($$($(2)_AUTORECONF),YES)
+
+I'll do some more in-depth review later, presumably after you split the
+patch. If you don;t have time for that, I can see to get it done
+tomorrow.
+
+Again, sorry for the delay, reviewing infra changes is really tricky...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-
-?dv,
-KK
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141110/6ea4ad6a/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
