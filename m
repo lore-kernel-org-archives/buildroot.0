@@ -1,48 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Nov 2014 15:26:24 +0000
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Nov 2014 16:29:33 +0100
 Subject: [Buildroot] [PATCH 1/2] elfutils: bump version to 0.160
 In-Reply-To: <20141110151938.GB2466@free.fr>
 References: <1415616323-58155-1-git-send-email-Vincent.Riera@imgtec.com>
  <CAHXCMMLEwTjev99Jk626Gpsh-r7gpq9F-EB2mpda371Cuuok6w@mail.gmail.com>
  <5460BADC.9030804@imgtec.com> <20141110151938.GB2466@free.fr>
-Message-ID: <5460D920.8080805@imgtec.com>
+Message-ID: <20141110152933.GC2466@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Vicente, All,
 
-On 11/10/2014 03:19 PM, Yann E. MORIN wrote:
+On 2014-11-10 16:19 +0100, Yann E. MORIN spake thusly:
 > Vicente, Samuel, All,
 > 
 > On 2014-11-10 13:17 +0000, Vicente Olivert Riera spake thusly:
->> On 11/10/2014 12:31 PM, Samuel Martin wrote:
->>> On Mon, Nov 10, 2014 at 11:45 AM, Vicente Olivert Riera
->>> <Vincent.Riera@imgtec.com> wrote:
->>>> - Bump version to 0.160
->>>> - Add a hash file
->>>> - Add a hook to remove some -Werror options
->>>>
->>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > On 11/10/2014 12:31 PM, Samuel Martin wrote:
+> > > On Mon, Nov 10, 2014 at 11:45 AM, Vicente Olivert Riera
+> > > <Vincent.Riera@imgtec.com> wrote:
+> > >> - Bump version to 0.160
+> > >> - Add a hash file
+> > >> - Add a hook to remove some -Werror options
+> > >>
+> > >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > [--SNIP--]
->>>> +# The --disable-werror configure option does not seem to be enough. We
->>>> +# need to remove the -Werror options from these Makefiles in order to
->>>> +# avoid compilation failures.
->>>> +define ELFUTILS_DISABLE_WERROR
->>>> +       $(SED) 's/-Werror//g' $(@D)/lib/Makefile
->>>> +       $(SED) 's/-Werror//g' $(@D)/libelf/Makefile
->>>> +       $(SED) 's/-Werror//g' $(@D)/libdwfl/Makefile
->>>> +endef
->>>> +ELFUTILS_POST_CONFIGURE_HOOKS += ELFUTILS_DISABLE_WERROR
->>>
->>> Since we are already reconfiguring elfutils, is it possible to patch
->>> the Makefile.am or Makefile.in instead?
->>
->> I tried it but I couldn't get rid of that by just modifying the
->> Makefile.{am,in}, that's why I ended with that solution. If you can try
->> it I would be very appreciated.
+> > >> +# The --disable-werror configure option does not seem to be enough. We
+> > >> +# need to remove the -Werror options from these Makefiles in order to
+> > >> +# avoid compilation failures.
+> > >> +define ELFUTILS_DISABLE_WERROR
+> > >> +       $(SED) 's/-Werror//g' $(@D)/lib/Makefile
+> > >> +       $(SED) 's/-Werror//g' $(@D)/libelf/Makefile
+> > >> +       $(SED) 's/-Werror//g' $(@D)/libdwfl/Makefile
+> > >> +endef
+> > >> +ELFUTILS_POST_CONFIGURE_HOOKS += ELFUTILS_DISABLE_WERROR
+> > > 
+> > > Since we are already reconfiguring elfutils, is it possible to patch
+> > > the Makefile.am or Makefile.in instead?
+> > 
+> > I tried it but I couldn't get rid of that by just modifying the
+> > Makefile.{am,in}, that's why I ended with that solution. If you can try
+> > it I would be very appreciated.
 > 
 > I managed to get it build without the hook, using that patch:
 > 
@@ -61,18 +61,21 @@ On 11/10/2014 03:19 PM, Yann E. MORIN wrote:
 >             $(if $($(*F)_no_Wunused),,-Wunused $(WEXTRA)) \
 >             $(if $($(*F)_no_Wformat),-Wno-format,-Wformat=2) \
 >             $($(*F)_CFLAGS)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 
-I will test it and re-spin a new version of the two patches, also taking
-into account your comments about the 2/2 patch :-)
+Dang.. The patch was mangled somehow...
 
-Thanks!
+To make it clear what I did: I removed line 38 from config/eu.am
+
+You can re-use my patch description and sob when you submit your v2.
+Feel free to update as you see fit. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
