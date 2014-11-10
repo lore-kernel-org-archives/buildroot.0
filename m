@@ -1,47 +1,25 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Nov 2014 11:52:27 +0000
-Subject: [Buildroot] [PATCH 1/2] connman: disable for static builds
-Message-ID: <1415620348-2754-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 10 Nov 2014 11:52:28 +0000
+Subject: [Buildroot] [PATCH 2/2] connman: rename patches to follow the new
+	name structure
+In-Reply-To: <1415620348-2754-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1415620348-2754-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1415620348-2754-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It needs dlopen(), otherwise it will fail at the configure phase with a
-message like this one:
-
-checking for dlopen in -ldl... no
-configure: error: dynamic linking loader is required
-
-Fixes:
-  http://autobuild.buildroot.net/results/647/64742a1d3a07f86a7c801da5ef30892c1f760031/
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/connman/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ ...backtrace.patch => 0001-uclibc-backtrace.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/connman/{connman-000-uclibc-backtrace.patch => 0001-uclibc-backtrace.patch} (100%)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 8803aeb..63d50b4 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_CONNMAN
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_PREFER_STATIC_LIB # needs dlopen()
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon
- 	  for managing internet connections within embedded devices
-@@ -65,6 +66,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
- 
- endif # BR2_PACKAGE_CONNMAN
- 
--comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
-+comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver, dynamic library"
- 	depends on BR2_USE_MMU && !BR2_avr32
--	depends on !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+diff --git a/package/connman/connman-000-uclibc-backtrace.patch b/package/connman/0001-uclibc-backtrace.patch
+similarity index 100%
+rename from package/connman/connman-000-uclibc-backtrace.patch
+rename to package/connman/0001-uclibc-backtrace.patch
 -- 
 1.7.1
