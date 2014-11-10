@@ -1,35 +1,157 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Nov 2014 15:58:48 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-09
-In-Reply-To: <5460DF8D.6090705@imgtec.com>
-References: <20141110073015.A5296101317@stock.ovh.net>
- <5460DF8D.6090705@imgtec.com>
-Message-ID: <5460E0B8.1060705@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Nov 2014 17:02:43 +0100
+Subject: [Buildroot] [PATCH v2 00/15] ejabberd: XMPP server
+In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20141110160243.GD2466@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/2014 03:53 PM, Vicente Olivert Riera wrote:
-> On 11/10/2014 07:30 AM, Thomas Petazzoni wrote:
->>     mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/bb8ab5ea7ed02cf17c46522903b4e46035e47f16/
+Johan, All,
+
+On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
+> Since ejabberd build system relies on rebar to download its
+> dependencies, we've packaged all of them separately and modified
+> ejabberd makefile to not download any dependency.
 > 
-> I thought this was already fixed upstream... I need to report this
-> again. It's a failure with MIPS64 n32, probably because it's not taken
-> into account that MIPS64 n32 has 32-bit pointers and integers instead of
-> 64-bit.
+> Actually, every erlang package that is introduced here rely on the
+> rebar software. Thus, we also introduce a new infrastructure to
+> simplify the development of such packages in buildroot.
+> 
+> Changes v1 -> v2:
+>   - use BR_PATH instead of an hard-coded path in pkg-rebar.mk.
+>   - update erlang-p1-iconv version to fix a link error with libiconv.
 
-Ok, sorry. qt-4.8.6 was fixed upstream (I did it). The problem here is
-with qt-webkit, which I already reported upstream:
+I'll review that series now, but first and foremost: Woot, you've done
+quite some work! :-)
 
-https://bugreports.qt-project.org/browse/QTBUG-39224
+I'll spin an ejabberd build right now, and do the review in parallel.
+
+Thanks for the huge effort in that series! :-)
 
 Regards,
+Yann E. MORIN.
+
+> Johan Oudinet (15):
+>   package/pkg-autotools.mk: Factorize hooks.
+>   package/pkg-rebar.mk: new infrastructure.
+>   erlang-goldrush: new package.
+>   erlang-lager: new package.
+>   erlang-p1-zlib: new package.
+>   erlang-p1-yaml: new package.
+>   erlang-p1-xml: new package.
+>   erlang-p1-utils: new package.
+>   erlang-p1-tls: new package.
+>   erlang-p1-stun: new package.
+>   erlang-p1-stringprep: new package.
+>   erlang-p1-sip: new package.
+>   erlang-p1-iconv: new package.
+>   erlang-p1-cache-tab: new package.
+>   ejabberd: new package.
+> 
+>  docs/manual/adding-packages-rebar.txt              | 157 ++++++++++++++
+>  docs/manual/adding-packages.txt                    |   2 +
+>  package/Config.in                                  |  17 ++
+>  package/Makefile.in                                |   1 +
+>  package/ejabberd/0001-remove-deps.patch            |  20 ++
+>  package/ejabberd/0002-disable-rebar-deps.patch     |  70 +++++++
+>  package/ejabberd/0003-disable-test.patch           |  21 ++
+>  package/ejabberd/0004-disable-version-check.patch  |  20 ++
+>  package/ejabberd/0005-fix-includes.patch           |  45 ++++
+>  package/ejabberd/0006-remove-doc.patch             |  26 +++
+>  package/ejabberd/0007-fix-init.patch               |  99 +++++++++
+>  .../ejabberd/0008-fix-install-permissions.patch    |  76 +++++++
+>  package/ejabberd/Config.in                         |  21 ++
+>  package/ejabberd/S50ejabberd                       |  35 ++++
+>  package/ejabberd/check-erlang-lib                  |  55 +++++
+>  package/ejabberd/ejabberd.mk                       |  51 +++++
+>  package/erlang-goldrush/Config.in                  |   6 +
+>  package/erlang-goldrush/erlang-goldrush.mk         |  14 ++
+>  package/erlang-lager/Config.in                     |  12 ++
+>  package/erlang-lager/erlang-lager.mk               |  14 ++
+>  package/erlang-p1-cache-tab/Config.in              |   6 +
+>  package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk |  13 ++
+>  package/erlang-p1-iconv/Config.in                  |   6 +
+>  package/erlang-p1-iconv/erlang-p1-iconv.mk         |  17 ++
+>  package/erlang-p1-sip/Config.in                    |   8 +
+>  .../erlang-p1-sip-01-fix-includes.patch            |  19 ++
+>  package/erlang-p1-sip/erlang-p1-sip.mk             |  14 ++
+>  package/erlang-p1-stringprep/Config.in             |   5 +
+>  .../erlang-p1-stringprep/erlang-p1-stringprep.mk   |  13 ++
+>  package/erlang-p1-stun/Config.in                   |   7 +
+>  package/erlang-p1-stun/erlang-p1-stun.mk           |  14 ++
+>  package/erlang-p1-tls/Config.in                    |   5 +
+>  package/erlang-p1-tls/erlang-p1-tls.mk             |  14 ++
+>  package/erlang-p1-utils/Config.in                  |   5 +
+>  package/erlang-p1-utils/erlang-p1-utils.mk         |  14 ++
+>  package/erlang-p1-xml/Config.in                    |   6 +
+>  package/erlang-p1-xml/erlang-p1-xml.mk             |  14 ++
+>  package/erlang-p1-yaml/Config.in                   |   6 +
+>  package/erlang-p1-yaml/erlang-p1-yaml.mk           |  13 ++
+>  package/erlang-p1-zlib/Config.in                   |   5 +
+>  package/erlang-p1-zlib/erlang-p1-zlib.mk           |  13 ++
+>  package/erlang-rebar/erlang-rebar.mk               |  20 ++
+>  package/pkg-autotools.mk                           | 119 +++++------
+>  package/pkg-rebar.mk                               | 229 +++++++++++++++++++++
+>  support/scripts/erlang-ei-vsn                      |  19 ++
+>  45 files changed, 1303 insertions(+), 63 deletions(-)
+>  create mode 100644 docs/manual/adding-packages-rebar.txt
+>  create mode 100644 package/ejabberd/0001-remove-deps.patch
+>  create mode 100644 package/ejabberd/0002-disable-rebar-deps.patch
+>  create mode 100644 package/ejabberd/0003-disable-test.patch
+>  create mode 100644 package/ejabberd/0004-disable-version-check.patch
+>  create mode 100644 package/ejabberd/0005-fix-includes.patch
+>  create mode 100644 package/ejabberd/0006-remove-doc.patch
+>  create mode 100644 package/ejabberd/0007-fix-init.patch
+>  create mode 100644 package/ejabberd/0008-fix-install-permissions.patch
+>  create mode 100644 package/ejabberd/Config.in
+>  create mode 100644 package/ejabberd/S50ejabberd
+>  create mode 100755 package/ejabberd/check-erlang-lib
+>  create mode 100644 package/ejabberd/ejabberd.mk
+>  create mode 100644 package/erlang-goldrush/Config.in
+>  create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
+>  create mode 100644 package/erlang-lager/Config.in
+>  create mode 100644 package/erlang-lager/erlang-lager.mk
+>  create mode 100644 package/erlang-p1-cache-tab/Config.in
+>  create mode 100644 package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+>  create mode 100644 package/erlang-p1-iconv/Config.in
+>  create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
+>  create mode 100644 package/erlang-p1-sip/Config.in
+>  create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
+>  create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
+>  create mode 100644 package/erlang-p1-stringprep/Config.in
+>  create mode 100644 package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+>  create mode 100644 package/erlang-p1-stun/Config.in
+>  create mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
+>  create mode 100644 package/erlang-p1-tls/Config.in
+>  create mode 100644 package/erlang-p1-tls/erlang-p1-tls.mk
+>  create mode 100644 package/erlang-p1-utils/Config.in
+>  create mode 100644 package/erlang-p1-utils/erlang-p1-utils.mk
+>  create mode 100644 package/erlang-p1-xml/Config.in
+>  create mode 100644 package/erlang-p1-xml/erlang-p1-xml.mk
+>  create mode 100644 package/erlang-p1-yaml/Config.in
+>  create mode 100644 package/erlang-p1-yaml/erlang-p1-yaml.mk
+>  create mode 100644 package/erlang-p1-zlib/Config.in
+>  create mode 100644 package/erlang-p1-zlib/erlang-p1-zlib.mk
+>  create mode 100644 package/erlang-rebar/erlang-rebar.mk
+>  create mode 100644 package/pkg-rebar.mk
+>  create mode 100755 support/scripts/erlang-ei-vsn
+> 
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
