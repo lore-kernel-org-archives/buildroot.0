@@ -1,105 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Nov 2014 18:30:12 +0100
-Subject: [Buildroot] [PATCH v2 13/15] erlang-p1-iconv: new package.
-In-Reply-To: <20141110163700.GE2466@free.fr>
-References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
- <1415366931-6870-14-git-send-email-johan.oudinet@gmail.com>
- <20141110163700.GE2466@free.fr>
-Message-ID: <20141110173012.GA22119@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Nov 2014 19:11:31 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-06
+In-Reply-To: <5460DEAB.6000303@imgtec.com>
+References: <20141107073016.0C55F1018AC@stock.ovh.net>
+ <545C9CAE.3070303@imgtec.com>
+ <20141108184741.66cf1357@free-electrons.com>
+ <5460DEAB.6000303@imgtec.com>
+Message-ID: <20141110191131.26eae84c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Dear Vicente Olivert Riera,
 
-On 2014-11-10 17:37 +0100, Yann E. MORIN spake thusly:
-> On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
-> > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> > ---
-> >  package/Config.in                          |  1 +
-> >  package/erlang-p1-iconv/Config.in          |  6 ++++++
-> >  package/erlang-p1-iconv/erlang-p1-iconv.mk | 17 +++++++++++++++++
-> >  3 files changed, 24 insertions(+)
-> >  create mode 100644 package/erlang-p1-iconv/Config.in
-> >  create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
-> [--SNIP--]
+On Mon, 10 Nov 2014 15:50:03 +0000, Vicente Olivert Riera wrote:
+
+> > You should simply ignore such results.
 > 
-> While I was reviewing the other patches, I got a build failure with this
-> package (long lines may have got split in the copy-paste):
+> Do you think it would be a good idea to check the status before sending
+> the report to the mailing list? Something like this:
 > 
-> Compiling c_src/iconv.c
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lerl_interface
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lei
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lerl_interface
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lei
-> collect2: error: ld returned 1 exit status
-> ERROR: sh(/home/ymorin/dev/buildroot/O/host/usr/bin/armv6-rpi-linux-gnueabihf-gcc
-> c_src/iconv.o
-> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
-> -lerl_interface -lei  -shared
-> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
-> -lerl_interface -lei -o priv/lib/iconv.so)
-> failed with return code 1 and the following output:
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lerl_interface
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lei
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lerl_interface
-> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
-> cannot find -lei
-> collect2: error: ld returned 1 exit status
+> if status == TIM
+>   send_report_to_autobuilder_owner()
+> else
+>   send_report_to_mailing_list()
+> endif
+
+Patches welcome :-)
+
+More seriously, I think our time would be better spent on finding ways
+to simply avoid getting those false results.
+
+> > If this is a race condition, we could switch to using $(MAKE1) for this
+> > package until the issue gets resolved upstream.
 > 
-> ERROR: compile failed while processing
-> /home/ymorin/dev/buildroot/O/build/erlang-p1-iconv-dff5ee5: rebar_abort
+> Good idea. Unfortunately nobody confirmed that upstream, and this
+> failure is very hard to reproduce. I have tried it lots of times without
+> success. In fact, there are no more autobuild failures...
 > 
-> Here is my defconfig file:
-> 
-> BR2_armeb=y
-> BR2_arm1176jzf_s=y
-> BR2_ARM_EABIHF=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_PATH="/home/ymorin/x-tools/armv6-rpi-linux-gnueabihf"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-rpi-linux-gnueabihf"
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_ERLANG=y
-> BR2_PACKAGE_EJABBERD=y
+> I think we can just wait until upstream fixes the problem since nobody
+> else (autobuilders included) reported this problem again :P
 
-I still get the same error with this defconfig:
+Then let's wait to see if the autobuilders see it again. If it happens
+again, then we'll try harder to fix the problem.
 
-BR2_armeb=y
-BR2_cortex_a9=y
-BR2_ARM_EABIHF=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_ERLANG=y
-BR2_PACKAGE_EJABBERD=y
+Best regards,
 
-But I can see the missing libs to be present, except the path to them is
-not specified in the compile line:
-    staging/usr/lib/erlang/usr/lib/liberl_interface.a
-    staging/usr/lib/erlang/usr/lib/libei.a
-
-Except it seems weird to have ".../erlang/usr/lib/..." to begin with.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
