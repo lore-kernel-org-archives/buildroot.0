@@ -1,81 +1,56 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 10 Nov 2014 00:43:43 +0100
-Subject: [Buildroot] Config.in for both Qt4 and Qt5 in grantlee
-In-Reply-To: <20141109201218.1edc8117@free-electrons.com>
-References: <545EC900.9030103@gmail.com>
- <20141109201218.1edc8117@free-electrons.com>
-Message-ID: <545FFC2F.1010803@gmail.com>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Mon, 10 Nov 2014 08:05:20 +0100
+Subject: [Buildroot] Howto use capes for the Beaglebone Black?
+In-Reply-To: <CADJRpt9mPFDu2gm2qMbY+ko__Ss9Y2TLpqfN3tb44++Q3iV+DA@mail.gmail.com>
+References: <CADJRpt9mPFDu2gm2qMbY+ko__Ss9Y2TLpqfN3tb44++Q3iV+DA@mail.gmail.com>
+Message-ID: <CAE4k238nAoPQLvUFGBKrLe_bOE7Rhrp+vp5KacuO-1paCvw+8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+On 5 November 2014 12:32, Ralph Koettlitz <ralph.koettlitz@gmail.com> wrote:
 
-thanks for your advice! I also found the needed syntax in the kconfig 
-docs after all, when i already knew what to look for :)
-I submitted the corresponding patch, please feel free to comment.
+> I missed the development of device tree and my last information was that I
+> should use dtb file in /lib/firmware, but the kernel from the last stable
+> version 08.2014 for Beaglebone Black doesn't has a cape manager. like the
+> starter images from beagleboard.org. Looking at the repositories of
+> Robert C. Nelson gives me the idea newer kernels have something builtin.
+>
 
-Thanks, regards
-zgyarmati
+Yes, the TI-kernels lacks cape-manager support. The reason is that adding
+dynamic reconfiguration of the DTB to the kernel, has required quite a few
+re-writes to get something that's going to be accepted upstream.
 
-On 11/09/2014 08:12 PM, Thomas Petazzoni wrote:
-> Hello Zoltan,
+The work on getting the transactional device tree support is on-going.
+There was a presentation on that at ELC-E this fall. (The slides are
+available at
+http://events.linuxfoundation.org/sites/events/files/slides/dynamic-dt-elce14.pdf
+).
+
+
+> I have a can cape and 7" lcd with touch screen and want to use them. What
+> must I do to activate them? I'm using the last stable version with the tI
+> kernel 3.12.10. Maybe I have to use a kernel from RobertCNelson?
 >
-> On Sun, 09 Nov 2014 02:53:04 +0100, Zoltan Gyarmati wrote:
->
->> i'm trying to update the package grantlee (http://grantlee.org) in
->> Buildroot to the current upstream version. Historically grantlee
->> supported only Qt4 (this version is present now in Buildroot), and for a
->> while both Qt4 and Qt5, and with the last release it dropped the Qt4
->> support.
-> Too bad :/
->
->>    As for one of my legacy projects i still might need the Qt4 version, i
->> would like to keep the Qt4 support by using the last upstream version
->> which built on Qt4 when Buildroot configured to build Qt4,  and use the
->> newest version when build on Qt5. It's easy to implement in the .mk file
->> with "ifeq ($(BR2_PACKAGE_QT),y)", although i'm not sure this is the
->> most elegant solution. (qjson using this for example to distinguish the
->> dependencies between the two Qt version, but it doesn't use 2 different
->> upstream versions for the 2 Qt versions)
-> Yes, for the .mk file, this is fine. At some point in the future, we'll
-> drop the old version that supports qt4, but for a little while, we can
-> keep both. So indeed, something like:
->
-> ifeq ($(BR2_PACKAGE_QT),y)
-> GRANTLE_VERSION = ...
-> else ifeq ($(BR2_PACKAGE_QT5),y)
-> GRANTLE_VERSION = ...
-> endif
->
->>    I got into trouble in the Config.in though. Currently the grantlee.mk
->> selects a few Qt options with the kconfig 'select' statement (namely
->> BR2_PACKAGE_QT_STL, BR2_PACKAGE_QT_SCRIPT, BR2_PACKAGE_QT_GUI_MODULE),
->> and it also supposed to select the corresponding Qt5 options, but i
->> can't find any explicit trace that using conditional 'select' is
->> possible in kconfig, nor the correct syntax to express this.
->>
->> What is the preferred solution to handle this scenario? Would it be
->> better to have a new grantlee package (let's say grantleeqt5) for this
->> latest version, and enable it in the menu only for Qt5? Or is there any
->> kconfig trick i could use here? An other option would be just to drop
->> Qt4 support (if the upstream already did it) at least in the official
->> Buildroot version (and i can use any nasty trick in my own Buildroot
->> tree to support my legacy project till i'm able to port it to Qt5). Is
->> there anybody out there who is using this lib with Qt4?
-> Just do:
->
-> 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-> 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
-> 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
-> 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-> 	select BR2_PACKAGE_QT5_FOOBAR if BR2_PACKAGE_QT5
-> 	select BR2_PACKAGE_QT5_BARFOO if BR2_PACKAGE_QT5
->
-> (of course, adapt the select for the qt5 case)
->
-> Best regards,
->
-> Thomas
+
+If you want to use cape-manager, this is likely the route you'll have to
+take (I'm assuming that  his kernels has cape-manager support).
+
+I would likely just patch the the dts-file to add support for the capes,
+and thus get the drivers to find their bindings anyway. That would means
+that you'd loose the HW-reconfigurability, though, if you're always running
+with a limited set of capes, that should/could be just fine.
+
+Cheers,
+Anders
+
+-- 
+Anders Darander
+EPO guidelines 1978: "If the contribution to the known art resides
+solely in a computer program then the subject matter is not
+patentable in whatever manner it may be presented in the claims."
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141110/d654306f/attachment.html>
