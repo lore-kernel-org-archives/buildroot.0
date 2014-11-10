@@ -1,28 +1,20 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Nov 2014 09:16:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 7574] quota-4.01 fails to build statically
-In-Reply-To: <bug-7574-163@https.bugs.busybox.net/>
-References: <bug-7574-163@https.bugs.busybox.net/>
-Message-ID: <20141110091618.6C486B59C3@busybox.osuosl.org>
+Date: Mon, 10 Nov 2014 09:17:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 7580] Invalid filesystem in Pandaboard defconfig
+In-Reply-To: <bug-7580-163@https.bugs.busybox.net/>
+References: <bug-7580-163@https.bugs.busybox.net/>
+Message-ID: <20141110091722.9BC01B15E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7574
+https://bugs.busybox.net/show_bug.cgi?id=7580
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-10 09:16:18 UTC ---
-Patch applied as of
-http://git.buildroot.net/buildroot/commit/?id=06d310e7a172a3dc61e30a4e5937e4455f6d340b,
-bug fixed.
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-10 09:17:22 UTC ---
+Please provide the *complete* boot log of the system, in both the working and
+non-working configurations. Thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
