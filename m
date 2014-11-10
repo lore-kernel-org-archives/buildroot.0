@@ -1,57 +1,44 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Nov 2014 16:38:39 +0000
-Subject: [Buildroot] [PATCH v2 2/4] elfutils: bump version to 0.160
-In-Reply-To: <1415637521-57583-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415637521-57583-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1415637521-57583-3-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 10 Nov 2014 16:38:37 +0000
+Subject: [Buildroot] [PATCH v2 0/4] elfutils: version bump
+Message-ID: <1415637521-57583-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 0.160
-- Add a hash file
+Changes since v1:
+- Don't use one single patch to rename patches and adapt them to the new 
+  version. Now it's done in two separated patches. Thanks to Yann E.
+  Morin for the advice.
+- Don't use a hook to remove the -Werror options. Instead of that, 
+  modify the config/eu.am to make the --disable-werror configure option
+  do its job properly. Thanks to Yann E. Moring for the patch.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/elfutils/elfutils.hash |    3 +++
- package/elfutils/elfutils.mk   |    6 ++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Vicente Olivert Riera (4):
+  elfutils: rename patches to follow the new name structure
+  elfutils: bump version to 0.160
+  elfutils: adapt patches to the new version
+  elfutils: really make -Werror conditional to BUILD_WERROR
+
+ ...isable-progs.patch => 0001-disable-progs.patch} |   54 ++++++------
+ package/elfutils/0002-argp-support.patch           |   92 ++++++++++++++++++++
+ ...s-03-memcpy-def.patch => 0003-memcpy-def.patch} |   15 ++--
+ .../{elfutils-04-fts.patch => 0004-fts.patch}      |   69 +++++++--------
+ package/elfutils/0005-disable-po.patch             |   23 +++++
+ ...y-make-werror-conditional-to-build-werror.patch |   16 ++++
+ package/elfutils/elfutils-02-argp-support.patch    |   92 --------------------
+ package/elfutils/elfutils-05-disable-po.patch      |   22 -----
+ package/elfutils/elfutils.hash                     |    3 +
+ package/elfutils/elfutils.mk                       |    6 +-
+ 10 files changed, 204 insertions(+), 188 deletions(-)
+ rename package/elfutils/{elfutils-01-disable-progs.patch => 0001-disable-progs.patch} (60%)
+ create mode 100644 package/elfutils/0002-argp-support.patch
+ rename package/elfutils/{elfutils-03-memcpy-def.patch => 0003-memcpy-def.patch} (58%)
+ rename package/elfutils/{elfutils-04-fts.patch => 0004-fts.patch} (97%)
+ create mode 100644 package/elfutils/0005-disable-po.patch
+ create mode 100644 package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
+ delete mode 100644 package/elfutils/elfutils-02-argp-support.patch
+ delete mode 100644 package/elfutils/elfutils-05-disable-po.patch
  create mode 100644 package/elfutils/elfutils.hash
-
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-new file mode 100644
-index 0000000..f0f4598
---- /dev/null
-+++ b/package/elfutils/elfutils.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  741b556863c069ceab2d81eb54aeda8c34f46728859704eaf9baef8503e9a9d1  elfutils-0.160.tar.bz2
-+sha256  feb307acf472598ea7af4e4b439251613a8f5d81e804b4abf9aeca195a5d4254  elfutils-portability.patch
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 4f00a27..4914b3b 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELFUTILS_VERSION = 0.155
-+ELFUTILS_VERSION = 0.160
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
- ELFUTILS_LICENSE = GPLv3 GPLv2 LGPLv3
-@@ -13,9 +13,7 @@ ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
- # The tarball does not have a generated configure script
- ELFUTILS_AUTORECONF = YES
- ELFUTILS_CONF_OPTS += --disable-werror
--ELFUTILS_PATCH = \
--	elfutils-portability.patch \
--	elfutils-robustify.patch
-+ELFUTILS_PATCH = elfutils-portability.patch
- 
- ELFUTILS_INSTALL_STAGING = YES
- 
--- 
-1.7.1
