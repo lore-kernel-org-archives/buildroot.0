@@ -1,47 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Nov 2014 10:45:31 +0100
-Subject: [Buildroot] [PATCH 1/1] binutils/gcc: make it possible to use
- lto
-In-Reply-To: <trinity-818df9f3-5f54-4f83-b594-5a2010751e0a-1415611698793@3capp-gmx-bs08>
-References: <1415534161-24389-1-git-send-email-syntheticpp@gmx.net>
- <20141109140035.3798a1c7@free-electrons.com>
- <trinity-818df9f3-5f54-4f83-b594-5a2010751e0a-1415611698793@3capp-gmx-bs08>
-Message-ID: <20141110104531.1529cf1d@free-electrons.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 10 Nov 2014 10:41:30 +0100
+Subject: [Buildroot] host ldconfig package
+In-Reply-To: <CADCpmyNMs7yTdGEzurOEvpHHSPJsDVHCEv6+dMT3s1ez9tR2Pg@mail.gmail.com>
+References: <CAM7q1LnRANa1wFbb=5o8yuyYyJrQyU_CUDqTaNwQ7tC7905L-A@mail.gmail.com>
+ <CAM7q1LnW3-XFTqh-yWBZTb9O6XEy_CKxtjZhq62GYPmrd-a-PA@mail.gmail.com>
+ <CADCpmyNMs7yTdGEzurOEvpHHSPJsDVHCEv6+dMT3s1ez9tR2Pg@mail.gmail.com>
+Message-ID: <1811944.2Ar3jhLuFu@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Kuemmel,
+Hi Gary,
 
-On Mon, 10 Nov 2014 10:28:18 +0100, Peter Kuemmel wrote:
-
-> Thought more about it: it is not necessary to make it optional.
-> Using --enable-plugins --enable-lto in binutils only allows using lto,
-> but when not used, it doesn't change anything. And these options are 
-> available in the binutils versions supported by buildroot.
+On Saturday 08 November 2014 13:56:27 Gary Bisson wrote:
+> On Fri, Nov 7, 2014 at 9:43 AM, Jeff Horn <outforaride@gmail.com> wrote:
+[...]
+> > >   - Xorg support for imx6 is not yet merged (and we are looking for
+> > >     testers :-) )
+> > 
+> > I can help test. I have a couple different i.MX6 boards (Wand,
+> > SabreSD). We are not using X11 on our board. We are using just Qt5
+> > with the eglfs platform.
 > 
-> Also all buildroot's builds of the GCC (>=4.7) support the lto flags,
-> and when -flto is not used nothing changed.
-> 
-> So in both cases optional support of lto is provided without changing
-> behavior when lto is not used.
+> Jerome, could you point us the patchset as well as the configuration you
+> would like people to test?
+The patchset is called "Add Xorg support for imx6"[1]. I have tested it with:
 
-Ok. What about older versions of gcc/binutils, such as gcc 4.2, gcc
-4.5, or binutils 2.18. We still support gcc 4.2 and binutils 2.18 for
-the AVR32 architecture (even though it's marked deprecated, we still
-haven't removed the support for this arch). We still have gcc 4.5 as
-the default for Blackfin.
+    BR2_ARM_EABIHF= both tested
+    BR2_ARM_ENABLE_NEON=y
+    BR2_ARM_FPU_NEON=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_DTS_SUPPORT=y
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_XCB=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_XORG7=y
+    BR2_PACKAGE_XSERVER_XORG_SERVER=y
+    BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+    BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+    BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
-I guess some of those older versions don't support LTO, so maybe a
-Config.in knob BR2_GCC_SUPPORTS_LTO will be needed, and ditto for
-binutils.
+You may also interested by series I posted to add Xorg support for iMX5[2]. 
+Finally, you may also have an opinion about series called "Better handling of 
+freescale self-extractible binaries"[3].
 
-Best regards,
+For my part, I have planned to test gst1-imx this week.
 
-Thomas
+[1] http://marc.info/?l=buildroot&m=141319864817617
+[2] http://marc.info/?l=buildroot&m=141537589907416
+[3] http://marc.info/?l=buildroot&m=141537622207763
+
+
+[...]
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
