@@ -1,52 +1,84 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Nov 2014 11:52:59 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-07
-In-Reply-To: <20141108073013.7C0431015EA@stock.ovh.net>
-References: <20141108073013.7C0431015EA@stock.ovh.net>
-Message-ID: <5460A71B.2010201@imgtec.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 10 Nov 2014 13:31:27 +0100
+Subject: [Buildroot] [PATCH 1/2] elfutils: bump version to 0.160
+In-Reply-To: <1415616323-58155-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1415616323-58155-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <CAHXCMMLEwTjev99Jk626Gpsh-r7gpq9F-EB2mpda371Cuuok6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/2014 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-11-07
+Hi Vicente,
 
->      powerpc |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/a35a77477e36b902717e693f49d8b3cd20895ca7/
+On Mon, Nov 10, 2014 at 11:45 AM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> - Bump version to 0.160
+> - Add a hash file
+> - Add a hook to remove some -Werror options
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/elfutils/elfutils.hash |    3 +++
+>  package/elfutils/elfutils.mk   |   16 ++++++++++++----
+>  2 files changed, 15 insertions(+), 4 deletions(-)
+>  create mode 100644 package/elfutils/elfutils.hash
+>
+> diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+> new file mode 100644
+> index 0000000..f0f4598
+> --- /dev/null
+> +++ b/package/elfutils/elfutils.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  741b556863c069ceab2d81eb54aeda8c34f46728859704eaf9baef8503e9a9d1  elfutils-0.160.tar.bz2
+> +sha256  feb307acf472598ea7af4e4b439251613a8f5d81e804b4abf9aeca195a5d4254  elfutils-portability.patch
+> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+> index 4f00a27..e8ff3fc 100644
+> --- a/package/elfutils/elfutils.mk
+> +++ b/package/elfutils/elfutils.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -ELFUTILS_VERSION = 0.155
+> +ELFUTILS_VERSION = 0.160
+>  ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+>  ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
+>  ELFUTILS_LICENSE = GPLv3 GPLv2 LGPLv3
+> @@ -13,9 +13,7 @@ ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
+>  # The tarball does not have a generated configure script
+>  ELFUTILS_AUTORECONF = YES
+>  ELFUTILS_CONF_OPTS += --disable-werror
+> -ELFUTILS_PATCH = \
+> -       elfutils-portability.patch \
+> -       elfutils-robustify.patch
+> +ELFUTILS_PATCH = elfutils-portability.patch
+>
+>  ELFUTILS_INSTALL_STAGING = YES
+>
+> @@ -68,4 +66,14 @@ else
+>  ELFUTILS_CONF_OPTS += --disable-progs
+>  endif
+>
+> +# The --disable-werror configure option does not seem to be enough. We
+> +# need to remove the -Werror options from these Makefiles in order to
+> +# avoid compilation failures.
+> +define ELFUTILS_DISABLE_WERROR
+> +       $(SED) 's/-Werror//g' $(@D)/lib/Makefile
+> +       $(SED) 's/-Werror//g' $(@D)/libelf/Makefile
+> +       $(SED) 's/-Werror//g' $(@D)/libdwfl/Makefile
+> +endef
+> +ELFUTILS_POST_CONFIGURE_HOOKS += ELFUTILS_DISABLE_WERROR
 
-Re-reported upstream:
+Since we are already reconfiguring elfutils, is it possible to patch
+the Makefile.am or Makefile.in instead?
+Also if you manage to fix the --disable-werror option, it'd be good to
+send the fix upstream.
 
-  http://lists.uclibc.org/pipermail/uclibc/2014-October/048699.html
+Regards,
 
->     mips64el | checking sys/uio.h presence... | TIM | http://autobuild.buildroot.net/results/0e6c67d1069848623ca2f62209909eadbc696d62/
 
-checking sys/uio.h presence... make: ***
-[/home/peko/autobuild/instance-2/output/build/netatalk-3.1.2/.stamp_configured]
-Terminated
-Terminated
-
-Autobuilder timeout?
-
->       mipsel |                   connman-1.26 | NOK | http://autobuild.buildroot.net/results/64742a1d3a07f86a7c801da5ef30892c1f760031/
-
-checking for dlopen in -ldl... no
-configure: error: dynamic linking loader is required
-
-Connman needs a toolchain with dynamic library. Patches sent:
-
-  http://patchwork.ozlabs.org/patch/408901/
-  http://patchwork.ozlabs.org/patch/408902/
-
->     mips64el |                  samba4-4.1.13 | TIM | http://autobuild.buildroot.net/results/d7956295a2da3208fb26bf1ab06d13cdfbaf0f36/
-
-This one looks like another autobuilder timeout.
-
-Best regards,
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Samuel
