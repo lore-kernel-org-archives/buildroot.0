@@ -1,53 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 16:10:56 +0100
-Subject: [Buildroot] [PATCH 0/4] rt-tests: patches rename & versoin bump
- & support of non-NPTL tools
-In-Reply-To: <1415718077.4122.19.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1415613549-2886-1-git-send-email-abrodkin@synopsys.com>
- <20141111154340.258edd64@free-electrons.com>
- <1415718077.4122.19.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20141111161056.52d0cee7@free-electrons.com>
+Date: Tue, 11 Nov 2014 16:17:53 +0100
+Subject: [Buildroot] Issues with Linaro and Musl external toolchains
+Message-ID: <20141111161753.4840c172@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hello,
 
-On Tue, 11 Nov 2014 15:01:17 +0000, Alexey Brodkin wrote:
+If you are using the Linaro or Musl pre-built external toolchains and
+want to see them being supported in Buildroot in the future, please
+read on.
 
-> >  * You should never resend a new version of just one patch. Always send
-> >    the complete series again, even if only one patch has changed. I was
-> >    mistaken when looking at patchwork, and originally only applied the
-> >    patch removing the NPTL dependency, because it was available
-> >    standalone, outside of any series.
-> 
-> Indeed my bad, I was not sure if I may re-send only 1 patch so I asked
-> if that's ok but never got an answer here
-> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/99171
-> 
-> Nevertheless I understand that that's my fault and I'll try to not do
-> such silly things in the future, so thanks for this comment.
+I've recently tried to update the Linaro and Musl external toolchains
+to their latest versions, but unfortunately, both projects made some
+changes that make the new pre-built toolchains they provide unsuitable
+for Buildroot:
 
-No problem! Everybody learns progressively how to do things :)
+ * The Musl pre-built toolchains provided by musl-cross, since version
+   1.1.2, have two problems: they no longer have sysroot support, and
+   the kernel headers are broken. Both issues have been reported:
 
-> >  * You should use 'git format-patch -M' to enable rename detection. It
-> >    would have made patch 1 a lot smaller, and easier to review.
-> 
-> Hm, I didn't know about this actually.
-> I did "git mv" and believed that there's nothing else I may do to
-> simplify rename changes. Will do it this way next time.
+   https://bitbucket.org/GregorR/musl-cross/issue/5/sysroot-support-needed-for-buildroot
+   https://bitbucket.org/GregorR/musl-cross/issue/6/non-standard-kernel-headers-causing-issues
 
-I must confess that I don't actually don't know precisely how git
-encodes renames. But basically, my understanding is that even if you do
-"git mv", "git format-patch" will encode a rename as a complete removal
-+ a complete addition, because that's the only way, in the traditional
-patch format, to express a rename. However, by passing -M to git
-format-patch, you tell git that it can generate a git patch, making the
-assumption that it's git that will be used to apply the patch, and not
-just the basic "patch" tool. In this case, it can encode the rename in
-a smarter way.
+   On Github (it's not clear whether the project uses Github or
+   Bitbucket), at https://github.com/GregorR/musl-cross/issues/31, the
+   maintainer of musl-cross did not seem to fully understand our need,
+   as he simply suggested us to run musl-cross with the appropriate
+   option to enable sysroot support. Which obviously doesn't make
+   sense, because we want to use the pre-built Musl toolchains. If we
+   were to build our own, we would be using the Buildroot internal
+   backend, and not musl-cross.
+
+ * The Linaro toolchains, since release 14.10, use a new build system
+   called cbuildv2 instead of crosstool-ng. And their sysroot handling
+   is completely broken, making their toolchain unusable in Buildroot.
+   I've reported the issue upstream as well:
+
+   https://bugs.linaro.org/show_bug.cgi?id=862
+
+So far, I haven't had much luck in convincing the musl-cross maintainer
+to change the Musl pre-built toolchains, and I also have some doubts
+that Linaro folks will listen positively to my comments.
+
+So, if you're using those toolchains, or interested in using them in
+Buildroot, do not hesitate to speak up in the relevant bug reports. Of
+course, if you can mention a company or product that is using Buildroot
+and one of these toolchains, it's even better, as it'll show that
+Buildroot is actually used for a number of real-world products.
+
+If no changes are made upstream on Linaro toolchains and Musl pre-built
+toolchains, the support for those will be removed in Buildroot in the
+near future.
 
 Best regards,
 
