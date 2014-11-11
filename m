@@ -1,44 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Nov 2014 21:49:37 +0100
-Subject: [Buildroot] [git commit] docs/manual: cleanup github helper docs
-Message-ID: <20141111205928.EDC56B40E9@busybox.osuosl.org>
+Date: Tue, 11 Nov 2014 21:47:21 +0100
+Subject: [Buildroot] [git commit] alsa-utils: fix linking with intl
+Message-ID: <20141111205928.E63C8B4003@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f26ffd7afdbd36d61e8d5754750af3730e69b7c4
+commit: http://git.buildroot.net/buildroot/commit/?id=48fe144111652547cf72d2bf3e8e15f36ee40b6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Explicitly state that the github helper should not be used when there is
-a release tarball.
+alsa-utils needs to link with intl if the toolchain needs gettext and
+locale is set. Otherwise we will see an error like this one:
 
-Properly render the list by separating it from the previous paragraph.
+alsamixer-cli.o: In function `main':
+cli.c:(.text.startup+0x4d): undefined reference to `libintl_textdomain'
+cli.c:(.text.startup+0xc1): undefined reference to `libintl_gettext'
+cli.c:(.text.startup+0xd5): undefined reference to `libintl_gettext'
+cli.c:(.text.startup+0xe9): undefined reference to `libintl_gettext'
+cli.c:(.text.startup+0x1fd): undefined reference to `libintl_gettext'
+cli.c:(.text.startup+0x223): undefined reference to `libintl_gettext'
 
-[Peter: fix typo as pointed out by Maxime]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Fixes:
+  http://autobuild.buildroot.net/results/707/707016a2490fc97b98d17e2b6a9c6423a56bb4a9/
+
+[Peter: correct autobuilder reference]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-tips.txt |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/alsa-utils/Config.in     |    1 +
+ package/alsa-utils/alsa-utils.mk |   10 +++++-----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 0c6018a..6f5e785 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -61,10 +61,11 @@ may be slightly different (e.g. it contains a configure script so we don't
- need to do AUTORECONF).
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 58ecf51..cc66711 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_ALSA_UTILS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  This package contains the command line utilities for the ALSA
+ 	  project.
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 208c5fc..17895c3 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -13,11 +13,6 @@ ALSA_UTILS_INSTALL_STAGING = YES
+ ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
  
- You can see on the release page if it's an uploaded tarball or a git tag:
+-# gettext support is optional
+-ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-ALSA_UTILS_DEPENDENCIES += gettext
+-endif
+-
+ ALSA_UTILS_CONF_ENV = \
+ 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+ 
+@@ -25,6 +20,11 @@ ALSA_UTILS_CONF_OPTS = \
+ 	--disable-xmlto \
+ 	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++ALSA_UTILS_DEPENDENCIES += gettext
++ALSA_UTILS_CONF_ENV += LIBS=-lintl
++endif
 +
- - If there is a green download button, like
-   https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
-   was uploaded by the maintainer and you should use the link of that button to
--  specify +FOO_SITE+.
-+  specify +FOO_SITE+, and not use the 'github' helper.
- - If there is grey download button, like
-   https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
-   automatically generated tarball and you should use the 'github' helper
+ ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+ ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
+ endif
