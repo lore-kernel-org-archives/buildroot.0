@@ -1,57 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 11 Nov 2014 12:10:50 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-09
-In-Reply-To: <20141110191617.43273fde@free-electrons.com>
-References: <20141110073015.A5296101317@stock.ovh.net>	<5460DF8D.6090705@imgtec.com>	<5460E0B8.1060705@imgtec.com>
- <20141110191617.43273fde@free-electrons.com>
-Message-ID: <5461FCCA.1000306@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Nov 2014 13:52:39 +0100
+Subject: [Buildroot] [PATCH v2 01/15] package/pkg-autotools.mk:
+ Factorize hooks.
+In-Reply-To: <20141110221323.GF22119@free.fr>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+ <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
+ <20141110221323.GF22119@free.fr>
+Message-ID: <20141111125239.GF4240@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+johan, All,
 
-On 11/10/2014 06:16 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Mon, 10 Nov 2014 15:58:48 +0000, Vicente Olivert Riera wrote:
->> On 11/10/2014 03:53 PM, Vicente Olivert Riera wrote:
->>> On 11/10/2014 07:30 AM, Thomas Petazzoni wrote:
->>>>     mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/bb8ab5ea7ed02cf17c46522903b4e46035e47f16/
->>>
->>> I thought this was already fixed upstream... I need to report this
->>> again. It's a failure with MIPS64 n32, probably because it's not taken
->>> into account that MIPS64 n32 has 32-bit pointers and integers instead of
->>> 64-bit.
->>
->> Ok, sorry. qt-4.8.6 was fixed upstream (I did it). The problem here is
->> with qt-webkit, which I already reported upstream:
->>
->> https://bugreports.qt-project.org/browse/QTBUG-39224
-> 
-> May disallow on MIPS64 n32 for the moment?
+On 2014-11-10 23:13 +0100, Yann E. MORIN spake thusly:
+> On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
+> > Define common macros only once (instead of as many times as
+> > there are inner-autotools-package calls).
+> > Factorize LIBTOOL_PATCH_HOOK and AUTORECONF_HOOK to avoid duplicated
+> > code.
+[--SNIP--]
+> I'll do some more in-depth review later, presumably after you split the
+> patch. If you don;t have time for that, I can see to get it done
+> tomorrow.
 
-hehehe... :D
+So, are you working on this, or can I go hacking this?
 
-Do you remember when we talked about finding which architectures support
-BR2_PACKAGE_QT_SCRIPT to create a new
-BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT in order to differentiate them from
-BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT? Because BR2_PACKAGE_QT_SCRIPT
-builds fine for MIPS64 n32, but it depends on
-BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT. So, if you disable
-BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT for MIPS64 n32 then you will be
-disabling BR2_PACKAGE_QT_SCRIPT as well. That's why few months ago I
-wanted to disable only BR2_PACKAGE_QT_WEBKIT for MIPS64 n32, but then
-you told me "Hey, there is something wrong here! We need to know which
-architectures support qt-script and which ones support qt-webkit".
+Regards,
+Yann E. MORIN.
 
-Best regards,
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
