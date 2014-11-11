@@ -1,113 +1,290 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Nov 2014 23:00:58 +0100
-Subject: [Buildroot] [git commit] configs/apf9328: bump to a modern kernel
-Message-ID: <20141111221026.34971B4389@busybox.osuosl.org>
+Date: Tue, 11 Nov 2014 23:08:46 +0100
+Subject: [Buildroot] [git commit] sysv init scripts: fix == bashism
+Message-ID: <20141111221026.40800B4389@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7541ec8127db2c25011b31124eaa73a6233feb08
+commit: http://git.buildroot.net/buildroot/commit/?id=5f617ffa17537d701a2f645f36895fa0d695d221
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the apf9238 support is in the mainline kernel, we can bump to
-kernel 3.17.2.
+test a == b is not available in e.g. dash.
 
-The patches can be removed because:
+Command(s) used for editing:
 
- - linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch is no
-   longer needed, since the machine number for apf9328 is now
-   upstream.
+  q=\[\"\'\]
+  operand="${q}?[$]?[a-zA-Z0-9_\?]+${q}?"  ## doesn't detect ${VAR}
+  test_expr="(\[\s+${operand}\s+)==(\s+${operand}\s+\])"
 
- - linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch is no
-   longer needed, because the MTD_CFI_INTELEXT option is selected by
-   the imx_v4_v5_defconfig.
+  find . -type f -name '[SK][0-9][0-9]*' | \
+     xargs sed -r -e "s@${test_expr}@\1=\2 at g" -i
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Andr?? Erdmann <dywi@mailerd.de>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1.1-0001-fixes_arm_mach-types_for_apf9328.patch |   26 --------------------
- ...002-add_missing_config_option_for_apf9328.patch |   16 ------------
- configs/armadeus_apf9328_defconfig                 |   10 ++++----
- 3 files changed, 5 insertions(+), 47 deletions(-)
+ package/acpid/S02acpid                   |    4 ++--
+ package/bind/S81named                    |    4 ++--
+ package/dhcp/S80dhcp-relay               |    4 ++--
+ package/dhcp/S80dhcp-server              |    4 ++--
+ package/dnsmasq/S80dnsmasq               |    4 ++--
+ package/dropbear/S50dropbear             |    4 ++--
+ package/haveged/S21haveged               |    4 ++--
+ package/inadyn/S70inadyn                 |    4 ++--
+ package/openntpd/S49ntp                  |    4 ++--
+ package/samba4/S91smb                    |   10 +++++-----
+ package/shairport-sync/S99shairport-sync |    4 ++--
+ package/xbmc/S50xbmc                     |    4 ++--
+ 12 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
-deleted file mode 100644
-index aa464a3..0000000
---- a/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 053ba505eb0d40287ac5750daf454af0aed2ce75 Mon Sep 17 00:00:00 2001
--From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
--Date: Tue, 4 Oct 2011 14:19:58 +0200
--Subject: [PATCH 1/2] [ARM] mach-types: Re-add apf9328
--
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
-----
-- arch/arm/tools/mach-types |    1 +
-- 1 files changed, 1 insertions(+), 0 deletions(-)
--
--diff --git a/arch/arm/tools/mach-types b/arch/arm/tools/mach-types
--index fff68d0..07811a7 100644
----- a/arch/arm/tools/mach-types
--+++ b/arch/arm/tools/mach-types
--@@ -188,6 +188,7 @@ omap_2430sdp		MACH_OMAP_2430SDP	OMAP_2430SDP		900
-- davinci_evm		MACH_DAVINCI_EVM	DAVINCI_EVM		901
-- palmz72			MACH_PALMZ72		PALMZ72			904
-- nxdb500			MACH_NXDB500		NXDB500			905
--+apf9328			MACH_APF9328		APF9328			906
-- palmt5			MACH_PALMT5		PALMT5			917
-- palmtc			MACH_PALMTC		PALMTC			918
-- omap_apollon		MACH_OMAP_APOLLON	OMAP_APOLLON		919
---- 
--1.7.3.4
--
-diff --git a/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
-deleted file mode 100644
-index 312b9a0..0000000
---- a/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--APF9328 needs CONFIG_MTD_CFI_INTELEXT to boot on its NOR FLASH.
--
--Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
--
--Index: linux-3.1.1/arch/arm/mach-imx/Kconfig
--===================================================================
----- linux-3.1.1.orig/arch/arm/mach-imx/Kconfig	2011-11-16 14:45:55.000000000 +0100
--+++ linux-3.1.1/arch/arm/mach-imx/Kconfig	2011-11-16 14:47:20.000000000 +0100
--@@ -84,6 +84,7 @@
-- 	bool "APF9328"
-- 	select SOC_IMX1
-- 	select IMX_HAVE_PLATFORM_IMX_UART
--+	select MTD_CFI_INTELEXT
-- 	help
-- 	  Say Yes here if you are using the Armadeus APF9328 development board
-- 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-index 048bd28..3600199 100644
---- a/configs/armadeus_apf9328_defconfig
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -15,8 +15,8 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/acpid/S02acpid b/package/acpid/S02acpid
+index c2221fc..0840305 100755
+--- a/package/acpid/S02acpid
++++ b/package/acpid/S02acpid
+@@ -4,12 +4,12 @@ case "$1" in
+ 	start)
+ 		echo -n "Starting acpid: "
+ 		start-stop-daemon -S -q -m -b -p /var/run/acpid.pid --exec /usr/sbin/acpid -- -n
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping acpid: "
+ 		start-stop-daemon -K -q -p /var/run/acpid.pid
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart)
+ 		"$0" stop
+diff --git a/package/bind/S81named b/package/bind/S81named
+index 4010886..4581eb3 100644
+--- a/package/bind/S81named
++++ b/package/bind/S81named
+@@ -16,12 +16,12 @@ case "$1" in
+ 		fi
+ 		echo -n "Starting domain name daemon: "
+ 		start-stop-daemon -S -x $DAEMON -- -c $CONFIG -u named
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping domain name daemon: "
+ 		rndc stop || start-stop-daemon -K -x $DAEMON
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart)
+ 		$0 stop || true
+diff --git a/package/dhcp/S80dhcp-relay b/package/dhcp/S80dhcp-relay
+index 2a632ef..9faa13d 100755
+--- a/package/dhcp/S80dhcp-relay
++++ b/package/dhcp/S80dhcp-relay
+@@ -30,12 +30,12 @@ case "$1" in
+ 	start)
+ 		echo -n "Starting DHCP relay: "
+ 		start-stop-daemon -S -x /usr/sbin/dhcrelay -- -q $OPTIONS $IFCMD $SERVERS
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping DHCP relay: "
+ 		start-stop-daemon -K -x /usr/sbin/dhcrelay
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart | force-reload)
+ 		$0 stop
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index 5280c31..fb99f9a 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -18,12 +18,12 @@ case "$1" in
+ 		test -d /var/lib/dhcp/ || mkdir -p /var/lib/dhcp/
+ 		test -f /var/lib/dhcp/dhcpd.leases || touch /var/lib/dhcp/dhcpd.leases
+ 		start-stop-daemon -S -x /usr/sbin/dhcpd -- -q $INTERFACES
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping DHCP server: dhcpd3"
+ 		start-stop-daemon -K -x /usr/sbin/dhcpd
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart | force-reload)
+ 		$0 stop
+diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+index 2ff0206..587751e 100755
+--- a/package/dnsmasq/S80dnsmasq
++++ b/package/dnsmasq/S80dnsmasq
+@@ -7,12 +7,12 @@ case "$1" in
+ 	start)
+ 		echo -n "Starting dnsmasq: "
+ 		start-stop-daemon -S -x /usr/sbin/dnsmasq
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping dnsmasq: "
+ 		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart|reload)
+ 		$0 stop
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index f36165a..2694931 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -13,12 +13,12 @@ start() {
+ 	umask 077
+ 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+ 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
+ 	echo -n "Stopping dropbear sshd: "
+ 	start-stop-daemon -K -q -p /var/run/dropbear.pid
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ restart() {
+ 	stop
+diff --git a/package/haveged/S21haveged b/package/haveged/S21haveged
+index f17cd29..1918b27 100755
+--- a/package/haveged/S21haveged
++++ b/package/haveged/S21haveged
+@@ -6,12 +6,12 @@ case "$1" in
+ 	start)
+ 		echo -n "Starting haveged: "
+ 		start-stop-daemon -S -x /usr/sbin/haveged -- -w 1024 -r 0
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping haveged: "
+ 		start-stop-daemon -K -x /usr/sbin/haveged
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart|reload)
+ 		$0 stop
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index 96e7532..b20048c 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -16,12 +16,12 @@ case "$1" in
+ 	start)
+ 		echo "Starting inadyn: "
+ 		start-stop-daemon -S -x /usr/bin/inadyn
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo  "Stopping inadyn: "
+ 		start-stop-daemon -q -K -x /usr/bin/inadyn
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		rm -f /var/run/inadyn/inadyn.pid
+ 		;;
+ 	restart)
+diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
+index 99e0f68..8bbe795 100755
+--- a/package/openntpd/S49ntp
++++ b/package/openntpd/S49ntp
+@@ -7,12 +7,12 @@ case "$1" in
+ 	start)
+ 		echo -n "Starting openntpd: "
+ 		start-stop-daemon -S -x /usr/sbin/ntpd
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+ 		echo -n "Stopping openntpd: "
+ 		start-stop-daemon -K -x /usr/sbin/ntpd
+-		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	restart)
+ 		"$0" stop
+diff --git a/package/samba4/S91smb b/package/samba4/S91smb
+index 0cd0057..ce14e19 100644
+--- a/package/samba4/S91smb
++++ b/package/samba4/S91smb
+@@ -7,21 +7,21 @@ mkdir -p /var/log/samba
+ start() {
+ 	echo -n "Starting SMB services: "
+ 	smbd -D
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
  
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.1.1"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+ 	echo -n "Starting NMB services: "
+ 	nmbd -D
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
  
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf9328"
-@@ -30,6 +30,6 @@ BR2_TARGET_ROOTFS_JFFS2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.1"
--BR2_LINUX_KERNEL_PATCH="board/armadeus/apf9328"
--BR2_LINUX_KERNEL_DEFCONFIG="mx1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.2"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x08008000"
+ stop() {
+ 	echo -n "Shutting down SMB services: "
+ 	kill -9 `pidof smbd`
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 
+ 	echo -n "Shutting down NMB services: "
+ 	kill -9 `pidof nmbd`
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ 
+ restart() {
+@@ -32,7 +32,7 @@ restart() {
+ reload() {
+         echo -n "Reloading smb.conf file: "
+ 	kill -HUP `pidof smbd`
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ 
+ case "$1" in
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+index 8e88c1b..31359fc 100644
+--- a/package/shairport-sync/S99shairport-sync
++++ b/package/shairport-sync/S99shairport-sync
+@@ -7,12 +7,12 @@ case "$1" in
+     start)
+ 	echo -n "Starting shairport-sync: "
+ 	start-stop-daemon -S -q -m -b -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
+ 	echo -n "Stopping shairport-sync: "
+ 	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     restart)
+ 	$0 stop
+diff --git a/package/xbmc/S50xbmc b/package/xbmc/S50xbmc
+index 312452b..80cc017 100755
+--- a/package/xbmc/S50xbmc
++++ b/package/xbmc/S50xbmc
+@@ -11,12 +11,12 @@ PIDFILE=/var/run/xbmc.pid
+ start() {
+ 	echo -n "Starting XBMC: "
+ 	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC $XBMC_ARGS
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
+ 	echo -n "Stopping XBMC: "
+ 	start-stop-daemon -K -q -p $PIDFILE
+-	[ $? == 0 ] && echo "OK" || echo "FAIL"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ restart() {
+ 	stop
