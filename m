@@ -1,40 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 10:49:57 +0100
-Subject: [Buildroot] How-to export cross-toolchain and libraries to a
- build server?
-In-Reply-To: <156048fd0d6d4325bbe2ba0ff5b6e9e0@DB3PR04MB108.eurprd04.prod.outlook.com>
-References: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
- <20141111102509.56db799d@free-electrons.com>
- <156048fd0d6d4325bbe2ba0ff5b6e9e0@DB3PR04MB108.eurprd04.prod.outlook.com>
-Message-ID: <20141111104957.251e3809@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Nov 2014 11:04:33 +0100
+Subject: [Buildroot] [PATCH v2 13/15] erlang-p1-iconv: new package.
+In-Reply-To: <CAJtjsKYuoJLEcgf0f98ud6GDKDyu4qX8zHdXoQQhDos=+uAFQg@mail.gmail.com>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+ <1415366931-6870-14-git-send-email-johan.oudinet@gmail.com>
+ <20141110163700.GE2466@free.fr> <20141110173012.GA22119@free.fr>
+ <CAJtjsKYuoJLEcgf0f98ud6GDKDyu4qX8zHdXoQQhDos=+uAFQg@mail.gmail.com>
+Message-ID: <20141111100433.GA4240@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabrice Mousset | GEOCEPT GmbH,
+On 2014-11-11 04:30 +0100, Johan Oudinet spake thusly:
+> Yann, All,
+> 
+> On Mon, Nov 10, 2014 at 6:30 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> Compiling c_src/iconv.c
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lerl_interface
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lei
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lerl_interface
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lei
+> >> collect2: error: ld returned 1 exit status
+> >> ERROR: sh(/home/ymorin/dev/buildroot/O/host/usr/bin/armv6-rpi-linux-gnueabihf-gcc
+> >> c_src/iconv.o
+> >> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
+> >> -lerl_interface -lei  -shared
+> >> -L/home/ymorin/dev/buildroot/O/target/usr/lib/erlang/lib/erl_interface-/lib
+> >> -lerl_interface -lei -o priv/lib/iconv.so)
+> >> failed with return code 1 and the following output:
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lerl_interface
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lei
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lerl_interface
+> >> /home/ymorin/x-tools/armv6-rpi-linux-gnueabihf/lib/gcc/armv6-rpi-linux-gnueabihf/4.9.1/../../../../armv6-rpi-linux-gnueabihf/bin/ld.bfd:
+> >> cannot find -lei
+> >> collect2: error: ld returned 1 exit status
+> 
+> I've seen this error few times when compiling several rebar packages.
+> As a workaround, I run `make erlang-dirclean'.
+> I'm not 100% sure of the reason for this error but I suspect that old
+> versions of rebar remove such libraries after compiling, which leads
+> to an error on the next compilation.
 
-On Tue, 11 Nov 2014 09:43:02 +0000, Fabrice Mousset | GEOCEPT GmbH
-wrote:
+Well, that error happened from a completely clean build dir, so it is
+not OK do have to rebuild erlang in this case (it might have been OK
+when doing rebuilds, but even so, we'd prefer to avoid that).
 
-> thanks a lot for your quick reply.
-> I will follow your advice and use BR2_HOST_DIR to fixe SDK location.
-> So I will have a quick solution to move the SDK to our build server.
+And now I suspect I know why it hapenned: I am building out-of-tree, so
+the comment I made on your patch 2/2 might be kicking in:
 
-Ok. Let us know if that works.
+    ---8<---
+    > +EI_VSN_FILE=output/build/erlang-$ERLANG_VSN/lib/erl_interface/vsn.mk
 
-> I will also take a closer look at the TODO list, and perhaps I could contribute to buildroot to help integrating a relocatable SDK generation, which will be a very nice and useful feature.
-> But I think, I will have to learn a lot of thinks about the internals of buildroot before.
+    That does not work for out-of-tree builds. You should use something
+    like:
+        EI_VSN_FILE="${O}/build/erlang-$ERLANG_VSN/lib/erl_interface/vsn.mk"
+    ---8<---
 
-Sure, your contributions would be very welcome! But indeed, working on
-making the SDK relocatable is clearly not the easiest thing to get
-started with the Buildroot internals.
+Anyway, I'll continue investigating this series.
 
-Best regards,
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
