@@ -1,29 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Nov 2014 22:41:11 +0100
-Subject: [Buildroot] [PATCH] tcpdump: fix static build
-In-Reply-To: <be457e188e773edcdc62c53a9237aa532b708c0e.1415701383.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 11 Nov 2014 12:23:03 +0200")
-References: <be457e188e773edcdc62c53a9237aa532b708c0e.1415701383.git.baruch@tkos.co.il>
-Message-ID: <87vbmll8js.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Nov 2014 23:01:37 +0100
+Subject: [Buildroot] [PATCH 0/3] Update armadeus_apf9328_defconfig
+In-Reply-To: <1415649026-30847-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 10 Nov 2014 20:50:23 +0100")
+References: <1415649026-30847-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87r3x9l7lq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Commit 746116d1eb2e (tcpdump: use libpcap shared library) broke static build
- > of tcpdump, because its configure script doesn't take into account indirect
- > dependencies of libpcap. Add these dependencies to the LIBS configure
- > parameter.
+ > Hello,
+ > Here is a set of patches updating armadeus_apf9328_defconfig. What
+ > prompted me to do this series is that this defconfig explicitly uses
+ > gcc 4.4.x, but gcc 4.4.x has been marked as deprecated in
+ > Buildroot. Therefore, this defconfig is now constantly failing to
+ > build in our automated Jenkins setup.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/fd231d34e4bb0306609b021e9e74eb862b7bd6bd/
+ > In addition to using the default gcc version, two other patches remove
+ > the usage of sstrip, and update the kernel to the latest stable
+ > version.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Note that I don't have the APF9328 platform, so those changes were
+ > only built tested. However, knowing that the platform uses an old
+ > ARMv4 Freescale, I doubt it's still widely used.
 
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
