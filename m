@@ -1,65 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 16:17:53 +0100
-Subject: [Buildroot] Issues with Linaro and Musl external toolchains
-Message-ID: <20141111161753.4840c172@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 11 Nov 2014 16:21:03 +0100
+Subject: [Buildroot] [PATCH] nodejs: disable ssl2 and ssl3 when openssl is
+	not built
+Message-ID: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The nodejs version 0.10.33 is compiled with SSLv2 and SSLv3 protocol
+support by default so it fails to build if the package openssl was not
+built.
 
-If you are using the Linaro or Musl pre-built external toolchains and
-want to see them being supported in Buildroot in the future, please
-read on.
+To fix this build failure disable SSLv2 and SSLv3 protcol suppport if
+the openssl package is not built.
 
-I've recently tried to update the Linaro and Musl external toolchains
-to their latest versions, but unfortunately, both projects made some
-changes that make the new pre-built toolchains they provide unsuitable
-for Buildroot:
+Fixes:
+  http://autobuild.buildroot.net/results/e1fb34818ff1167aa008b4011befb9fd14c81293
+  http://autobuild.buildroot.net/results/8b72b0c311f2f7f7430aca5f7cca1f7d82d1c213
+  http://autobuild.buildroot.net/results/e5f87dc635e0e6a6d1cc234529a433e12d810097
+  http://autobuild.buildroot.net/results/3c4a5be556cfbd0d0e632757887ebc2f1de64bba
 
- * The Musl pre-built toolchains provided by musl-cross, since version
-   1.1.2, have two problems: they no longer have sysroot support, and
-   the kernel headers are broken. Both issues have been reported:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/nodejs/nodejs.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-   https://bitbucket.org/GregorR/musl-cross/issue/5/sysroot-support-needed-for-buildroot
-   https://bitbucket.org/GregorR/musl-cross/issue/6/non-standard-kernel-headers-causing-issues
-
-   On Github (it's not clear whether the project uses Github or
-   Bitbucket), at https://github.com/GregorR/musl-cross/issues/31, the
-   maintainer of musl-cross did not seem to fully understand our need,
-   as he simply suggested us to run musl-cross with the appropriate
-   option to enable sysroot support. Which obviously doesn't make
-   sense, because we want to use the pre-built Musl toolchains. If we
-   were to build our own, we would be using the Buildroot internal
-   backend, and not musl-cross.
-
- * The Linaro toolchains, since release 14.10, use a new build system
-   called cbuildv2 instead of crosstool-ng. And their sysroot handling
-   is completely broken, making their toolchain unusable in Buildroot.
-   I've reported the issue upstream as well:
-
-   https://bugs.linaro.org/show_bug.cgi?id=862
-
-So far, I haven't had much luck in convincing the musl-cross maintainer
-to change the Musl pre-built toolchains, and I also have some doubts
-that Linaro folks will listen positively to my comments.
-
-So, if you're using those toolchains, or interested in using them in
-Buildroot, do not hesitate to speak up in the relevant bug reports. Of
-course, if you can mention a company or product that is using Buildroot
-and one of these toolchains, it's even better, as it'll show that
-Buildroot is actually used for a number of real-world products.
-
-If no changes are made upstream on Linaro toolchains and Musl pre-built
-toolchains, the support for those will be removed in Buildroot in the
-near future.
-
-Best regards,
-
-Thomas
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 312aaa9..32e19b7 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -75,7 +75,8 @@ define NODEJS_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--without-snapshot \
+ 		--shared-zlib \
+-		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
++		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,\
++			--without-ssl --without-ssl2 --without-ssl3) \
+ 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+ 		--without-dtrace \
+ 		--without-etw \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.3
