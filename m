@@ -1,39 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Nov 2014 16:11:19 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.3
-Message-ID: <1415733079-10620-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 11 Nov 2014 20:19:13 +0100
+Subject: [Buildroot] [PATCH] docs/manual: cleanup github helper docs
+In-Reply-To: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
+References: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKy896s6FWTwdwQ_zkXC_d-eOx8fTfoF73XVjjPW9+yOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, Nov 11, 2014 at 7:33 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Explicitly state that the github helper should not be used when there is
+> a release tarball.
+>
+> Properly render the list by separating it from the previous paragraph.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 0861706..3e91179 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	73f0ed6b4001628287a71d077c624a2ca8200b24e3e877b725fcbf54dfe6a108	mpd-0.19.2.tar.xz
-+sha256	fee3f3c59b5806767f23f7962621be7a62d4fcb852fff6b9ed6bbb5598a556d3	mpd-0.19.3.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 8ec3c0e..7061bdb 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).2
-+MPD_VERSION = $(MPD_VERSION_MAJOR).3
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+
+> ---
+>  docs/manual/adding-packages-tips.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+> index 0c6018a..fb7f35a 100644
+> --- a/docs/manual/adding-packages-tips.txt
+> +++ b/docs/manual/adding-packages-tips.txt
+> @@ -61,10 +61,11 @@ may be slightly different (e.g. it contains a configure script so we don't
+>  need to do AUTORECONF).
+>
+>  You can see on the release page if it's an uploaded tarball or a git tag:
+> +
+>  - If there is a green download button, like
+>    https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
+>    was uploaded by the maintainer and you should use the link of that button to
+> -  specify +FOO_SITE+.
+> +  specify +FOO_SITE+, and not use the 'github' herlper.
+>  - If there is grey download button, like
+>    https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
+>    automatically generated tarball and you should use the 'github' helper
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-2.0.4
+Samuel
