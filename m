@@ -1,59 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Nov 2014 21:33:14 +0100
-Subject: [Buildroot] [git commit] util-linux: re-enable libmount and
-	binaries on Microblaze
-Message-ID: <20141111205928.D2D29B4003@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Nov 2014 21:41:33 +0100
+Subject: [Buildroot] [PATCH] nodejs: disable ssl2 and ssl3 when openssl
+	is not built
+In-Reply-To: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Tue, 11 Nov 2014 16:21:03 +0100")
+References: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87tx25mpvm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1dab16d40edf22a80e1512b4c93c975241e64ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-In commit 442aa88f95d6c4a921aa3d4de91f54d50bd0cd35 ("util-linux: bump
-version and revamp options"), Gustavo disabled util-linux libmount and
-binaries on microblaze, as it was not building properly.
+ > The nodejs version 0.10.33 is compiled with SSLv2 and SSLv3 protocol
+ > support by default so it fails to build if the package openssl was not
+ > built.
 
-However, as mentionned in the comment, these options were disabled on
-Microblaze due to "libc lacks UTIME_NOW & UTIME_COMMIT for
-libmount". This was true specifically for the microblaze external
-toolchain that we were using at the time. But we are no longer using
-this external toolchain (which proved to be broken in many ways), and
-have microblaze support in our internal backend.
+ > To fix this build failure disable SSLv2 and SSLv3 protcol suppport if
+ > the openssl package is not built.
 
-I have verified that with our internal toolchain, util-linux with
-libmount and the binaries enabled builds fine.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/e1fb34818ff1167aa008b4011befb9fd14c81293
+ >   http://autobuild.buildroot.net/results/8b72b0c311f2f7f7430aca5f7cca1f7d82d1c213
+ >   http://autobuild.buildroot.net/results/e5f87dc635e0e6a6d1cc234529a433e12d810097
+ >   http://autobuild.buildroot.net/results/3c4a5be556cfbd0d0e632757887ebc2f1de64bba
 
-Those options are not selected by anything else in Buildroot, so
-there's no other package impacted by this dependency change.
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/util-linux/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+Committed, thanks.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 934021a..07e1fbb 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -21,8 +21,6 @@ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 
- config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
--	# libc lacks UTIME_NOW & UTIME_COMMIT
--	depends on !(BR2_microblazeel || BR2_microblazebe)
- 	depends on BR2_USE_MMU # util-linux/libblkid
- 	bool "libmount"
- 	help
-@@ -36,8 +34,6 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
- config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	bool "install utilities"
- 	depends on BR2_USE_MMU # fork()
--	# libc lacks UTIME_NOW & UTIME_COMMIT for libmount
--	depends on !(BR2_microblazeel || BR2_microblazebe)
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-- 
+Bye, Peter Korsgaard
