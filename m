@@ -1,105 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Nov 2014 22:38:49 +0100
-Subject: [Buildroot] [PATCHv2] aircrack-ng: bump to version 1.2-rc1
-In-Reply-To: <1415740631-9765-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 11 Nov 2014 18:17:11 -0300")
-References: <1415740631-9765-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zjbxl8nq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Nov 2014 22:25:28 +0100
+Subject: [Buildroot] [git commit] zeromq: security bump to version 4.0.5
+Message-ID: <20141111213945.1A954B4346@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4cefe929fa2a978b8335844ef3a89bde19c65434
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > CVE-2014-8321 - gps_tracer stack overflow
- > CVE-2014-8322 - tcp_test length parameter inconsistency
- > CVE-2014-8323 - buddy-ng missing check in data format
- > CVE-2014-8324 - net_get missing check for invalid values
+Fixes:
+CVE-2014-7202 - stream_engine.cpp in libzmq (aka ZeroMQ/C++)) 4.0.5
+before 4.0.5 allows man-in-the-middle attackers to conduct downgrade
+attacks via a crafted connection request.
+CVE-2014-7203 - libzmq (aka ZeroMQ/C++) 4.0.x before 4.0.5 does not
+ensure that nonces are unique, which allows man-in-the-middle attackers
+to conduct replay attacks via unspecified vectors.
 
- > Previous CVE patch dropped since the fix is upstream.
- > Also add hash file.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...sable-test_fork-if-fork-is-not-available.patch} |    0
+ package/zeromq/zeromq.hash                         |    2 ++
+ package/zeromq/zeromq.mk                           |    3 ++-
+ 3 files changed, 4 insertions(+), 1 deletions(-)
 
- > Drop iw runtime dep since it's only one of many required by airmon-zc (a
- > script) which require a ton of conditionals for just that tool.
- > It will tell somewhat nicely if they're missing. These would be:
-
- > awk - from busybox or gawk
- > ethtool
- > grep - from busybox or grep
- > ip or ifconfig - from busybox, iproute2 or net-tools
- > iw
- > lspci - from pciutils (needs full variant)
- > lsusb - from usbutils (needs full variant)
- > modprobe/modinfo - from busybox or kmod
- > uname - from busybox or coreutils
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Thanks, looks good except:
-
- > --- a/package/aircrack-ng/aircrack-ng.mk
- > +++ b/package/aircrack-ng/aircrack-ng.mk
- > @@ -4,33 +4,56 @@
- >  #
- >  ################################################################################
+diff --git a/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch b/package/zeromq/0001-tests-disable-test_fork-if-fork-is-not-available.patch
+similarity index 100%
+rename from package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+rename to package/zeromq/0001-tests-disable-test_fork-if-fork-is-not-available.patch
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+new file mode 100644
+index 0000000..729e7ea
+--- /dev/null
++++ b/package/zeromq/zeromq.hash
+@@ -0,0 +1,2 @@
++# Locally calculated from download (no sig, hash)
++sha256	3bc93c5f67370341428364ce007d448f4bb58a0eaabd0a60697d8086bc43342b	zeromq-4.0.5.tar.gz
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 59d276e..987c65b 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- > -AIRCRACK_NG_VERSION = 1.1
- > +AIRCRACK_NG_VERSION = 1.2-rc1
- >  AIRCRACK_NG_SITE = http://download.aircrack-ng.org
- >  AIRCRACK_NG_LICENSE = GPLv2+
- >  AIRCRACK_NG_LICENSE_FILES = LICENSE
- > -AIRCRACK_NG_DEPENDENCIES = openssl
- > +AIRCRACK_NG_DEPENDENCIES = openssl zlib host-pkgconf
- > +# Enable buddy-ng, easside-ng, tkiptun-ng, wesside-ng
- > +AIRCRACK_NG_MAKE_OPTS = unstable=true
+-ZEROMQ_VERSION = 4.0.4
++ZEROMQ_VERSION = 4.0.5
+ ZEROMQ_SITE = http://download.zeromq.org
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_LICENSE = LGPLv3+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
++# For 0001-tests-disable-test_fork-if-fork-is-not-available.patch
+ ZEROMQ_AUTORECONF = YES
  
- > -ifeq ($(BR2_PACKAGE_SQLITE),y)
- > -	AIRCRACK_NG_MAKE_OPTS = sqlite=true
- > -	AIRCRACK_NG_MAKE_OPTS += \
- > -		LIBSQL="-lsqlite3$(if $(BR2_PREFER_STATIC_LIB), -lpthread)"
- > +# Account for libpthread in static
- > +AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) \
- > +	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
-
-We unconditionally add -lpthread for static builds.
-
- 
- > -	AIRCRACK_NG_DEPENDENCIES += sqlite
- > +# libnl support has issues when building static
- > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
- > +	AIRCRACK_NG_MAKE_OPTS += libnl=false
- >  else
- > -	AIRCRACK_NG_MAKE_OPTS = sqlite=false
- > +	AIRCRACK_NG_MAKE_OPTS += libnl=true
- > +	AIRCRACK_NG_DEPENDENCIES += libnl
- >  endif
- 
- > -AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) -lz \
- > -	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
- > +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- > +	AIRCRACK_NG_DEPENDENCIES += libpcap
- > +	AIRCRACK_NG_MAKE_OPTS += HAVE_PCAP=yes \
- > +		$(if $(BR2_PREFER_STATIC_LIB),LIBPCAP="-lpcap $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)")
- > +else
- > +	AIRCRACK_NG_MAKE_OPTS += HAVE_PCAP=no
- > +endif
- > +
- > +ifeq ($(BR2_PACKAGE_PCRE),y)
- > +	AIRCRACK_NG_DEPENDENCIES += pcre
- > +	AIRCRACK_NG_MAKE_OPTS += pcre=true
- > +else
- > +	AIRCRACK_NG_MAKE_OPTS += pcre=false
- > +endif
- > +
- > +ifeq ($(BR2_PACKAGE_SQLITE),y)
- > +	AIRCRACK_NG_DEPENDENCIES += sqlite
- > +	AIRCRACK_NG_MAKE_OPTS += sqlite=true \
- > +		LIBSQL="-lsqlite3$(if $(BR2_PREFER_STATIC_LIB), -lpthread)"
-
-And here we add it again, so I've dropped it here and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ # Only tools/curve_keygen.c needs this, but it doesn't hurt to pass it
