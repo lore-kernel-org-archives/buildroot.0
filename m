@@ -1,32 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Nov 2014 23:09:41 +0100
-Subject: [Buildroot] [PATCH 1/4] sysv init scripts: fix == bashism
-In-Reply-To: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Erdmann"'s message of "Sun, 26 Oct 2014 18:41:43 +0100")
-References: <1414345306-27184-1-git-send-email-dywi@mailerd.de>
-Message-ID: <87mw7xl78a.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Nov 2014 23:00:47 +0100
+Subject: [Buildroot] [git commit] configs/apf9328: use default gcc version
+Message-ID: <20141111221026.2A7F5B4389@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Erdmann <dywi@mailerd.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ef83e9d978cace4cf260c1c3db6f4f5467f20afc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > test a == b is not available in e.g. dash.
- > Command(s) used for editing:
+The gcc 4.4 version has been deprecated recently, so we cannot use it
+anymore. Since this platform is just using a normal ARM processor with
+nothing special, we can expect the default gcc version to just work.
 
- >   q=\[\"\'\]
- >   operand="${q}?[$]?[a-zA-Z0-9_\?]+${q}?"  ## doesn't detect ${VAR}
- >   test_expr="(\[\s+${operand}\s+)==(\s+${operand}\s+\])"
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/armadeus_apf9328_defconfig |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
- >   find . -type f -name '[SK][0-9][0-9]*' | \
- >      xargs sed -r -e "s@${test_expr}@\1=\2 at g" -i
-
- > Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+index 806e9a8..048bd28 100644
+--- a/configs/armadeus_apf9328_defconfig
++++ b/configs/armadeus_apf9328_defconfig
+@@ -3,7 +3,6 @@ BR2_arm=y
+ BR2_arm920t=y
+ 
+ # Toolchain
+-BR2_GCC_VERSION_4_4_X=y
+ BR2_PACKAGE_GDB=y
+ BR2_PACKAGE_HOST_GDB=y
+ BR2_ENABLE_LOCALE_PURGE=y
