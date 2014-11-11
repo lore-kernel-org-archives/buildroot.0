@@ -1,51 +1,50 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 11 Nov 2014 16:26:04 +0100
-Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
-In-Reply-To: <CAHkwnC9pwAmFxuah1SonEhtOqHcg90ZiyN1AutJ04cYXM6sABA@mail.gmail.com>
-References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
- <20141106182725.450971c9@free-electrons.com>
- <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
- <20141106185330.659d572f@free-electrons.com>
- <CAHkwnC9pwAmFxuah1SonEhtOqHcg90ZiyN1AutJ04cYXM6sABA@mail.gmail.com>
-Message-ID: <CAHkwnC_yWXg17d_qupe8A6EqzW55BFAVLTA4SQ7Nn+2H7UaAww@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 11 Nov 2014 15:32:03 +0000
+Subject: [Buildroot] [PATCH] uclibc: respect top-level TARGET_CFLAGS
+In-Reply-To: <545B7520.3000606@zacarias.com.ar>
+References: <1415274442-24547-1-git-send-email-abrodkin@synopsys.com>
+ <545B6E5F.5090406@zacarias.com.ar>
+ <1415279058.11764.16.camel@abrodkin-8560l.internal.synopsys.com>
+ <545B7520.3000606@zacarias.com.ar>
+Message-ID: <1415719922.4122.27.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 6, 2014 at 7:03 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
-> On Thu, Nov 6, 2014 at 6:53 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Fabio Porcedda,
->>
->> On Thu, 6 Nov 2014 18:35:32 +0100, Fabio Porcedda wrote:
->>
->>> > When I look at patches 2 and 3, I must say I dislike the fact that in
->>> > one case (svn), silencing is handled in pkg-download.mk when defining
->>> > the SVN variable, while in the other case (git), it's handled in the
->>> > git-specific helper script.
->>>
->>> I would like to do the same for git but it does not work because:
->>>   git -q clone <url>
->>> does not work, but
->>>   git  clone -q <url>
->>> works, so adding the "-q" in the script is the only option.
->>>
->>> Do you have any better idea?
->>
->> Yes: handle the svn case in the download helper as well. This way,
->> we're consistent between svn and git. And maybe wget should be handled
->> this way as well.
->
-> Even the HG and SCP variables contain the "-q" option so with this
-> patch there are a total of four variables.
->
->> Yann can comment on this on whether my proposal is fine for him.
+Hi Gustavo,
 
+On Thu, 2014-11-06 at 10:18 -0300, Gustavo Zacarias wrote:
+> On 11/06/2014 10:04 AM, Alexey Brodkin wrote:
+> 
+> > Thanks for pointing to the existing bug.
+> > 
+> > In my particular case I need to tune uClibc for different HW
+> > configurations.
+> > 
+> > By default uClibc will be built for most conservative case.
+> > But we have an ability to use a particular HW accelerators - which is
+> > done by passing option to GCC.
+> 
+> Then we could add a BR2_UCLIBC_EXTRA_CFLAGS string which defaults to ""
+> and pass that to the uclibc's UCLIBC_EXTRA_CFLAGS.
+> It was mentioned in the past IIRC, however it wasn't done because
+> probably nobody felt the need for it since everybody was asking for that
+> for consistency alone.
+> Regards.
 
-Yann do you have any opinion about this?
+Makes sense. And I think I'll do a re-spin of my patch that implements
+your suggestion.
 
-BR
--- 
-Fabio Porcedda
+Even though my intention was to completely align uClibc's flags with all
+other binaries on target, probably it's enough to have this proposed
+possibility to add manually set op option to uClibc in particular.
+
+Still I think if any package gets broken due to some combination of
+compiler options passed this is definitely a problem in either package
+itself or toolchain. And either variant should be investigated and
+properly fixed. Otherwise we introduce "robustness and predictability by
+fixed setup" :)
+
+-Alexey
