@@ -1,51 +1,35 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 11 Nov 2014 11:13:45 +0000
-Subject: [Buildroot] [PATCH v3 0/2] elfutils: version bump
-In-Reply-To: <1415703637-11831-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415703637-11831-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5461EF69.907@imgtec.com>
+Date: Tue, 11 Nov 2014 11:15:20 +0000
+Subject: [Buildroot] [PATCH v2 0/2] libgtk3: version bump
+Message-ID: <1415704522-14201-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/2014 11:00 AM, Vicente Olivert Riera wrote:
-> Changes since v2:
-> - Join patches 2, 3 and 4 in a single patch, so all the patch series 
->   works at each point of the series.
-> 
-> Vicente Olivert Riera (2):
->   elfutils: rename patches to follow the new name structure
->   elfutils: bump version to 0.160
-> 
->  ...isable-progs.patch => 0001-disable-progs.patch} |   54 ++++++------
->  package/elfutils/0002-argp-support.patch           |   92 ++++++++++++++++++++
->  ...s-03-memcpy-def.patch => 0003-memcpy-def.patch} |   15 ++--
->  .../{elfutils-04-fts.patch => 0004-fts.patch}      |   69 +++++++--------
->  package/elfutils/0005-disable-po.patch             |   23 +++++
->  ...y-make-werror-conditional-to-build-werror.patch |   24 +++++
->  package/elfutils/elfutils-02-argp-support.patch    |   92 --------------------
->  package/elfutils/elfutils-05-disable-po.patch      |   22 -----
->  package/elfutils/elfutils.hash                     |    3 +
->  package/elfutils/elfutils.mk                       |    6 +-
->  10 files changed, 212 insertions(+), 188 deletions(-)
->  rename package/elfutils/{elfutils-01-disable-progs.patch => 0001-disable-progs.patch} (60%)
->  create mode 100644 package/elfutils/0002-argp-support.patch
->  rename package/elfutils/{elfutils-03-memcpy-def.patch => 0003-memcpy-def.patch} (58%)
->  rename package/elfutils/{elfutils-04-fts.patch => 0004-fts.patch} (97%)
->  create mode 100644 package/elfutils/0005-disable-po.patch
->  create mode 100644 package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
->  delete mode 100644 package/elfutils/elfutils-02-argp-support.patch
->  delete mode 100644 package/elfutils/elfutils-05-disable-po.patch
->  create mode 100644 package/elfutils/elfutils.hash
-> 
+Changes since v1:
+- Join patches 2 and 3 in a single one, so the patch series works at 
+  each point of the series.
+- Add a hash file
 
-Sorry about the *** SUBJECT HERE *** subject :-(
+Vicente Olivert Riera (2):
+  libgtk3: rename patches to follow the new name structure
+  libgtk3: bump version to 3.14.5
 
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+ ...0001-no-gtk-doc.patch => 0001-no-gtk-doc.patch} |    0
+ ...ck.patch => 0002-fix-introspection-check.patch} |    0
+ ...-bridge.patch => 0003-disable-atk-bridge.patch} |    0
+ ... 0004-Fix-undefined-reference-to-get_xkb.patch} |    0
+ ...tch => 0005-do-not-build-extract-strings.patch} |    0
+ ...lug-is-conditionally-supported-on-X11-onl.patch |   57 ++++++++++++++++++++
+ package/libgtk3/libgtk3.hash                       |    2 +
+ package/libgtk3/libgtk3.mk                         |    2 +-
+ 8 files changed, 60 insertions(+), 1 deletions(-)
+ rename package/libgtk3/{libgtk3-0001-no-gtk-doc.patch => 0001-no-gtk-doc.patch} (100%)
+ rename package/libgtk3/{libgtk3-0002-fix-introspection-check.patch => 0002-fix-introspection-check.patch} (100%)
+ rename package/libgtk3/{libgtk3-0003-disable-atk-bridge.patch => 0003-disable-atk-bridge.patch} (100%)
+ rename package/libgtk3/{libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch => 0004-Fix-undefined-reference-to-get_xkb.patch} (100%)
+ rename package/libgtk3/{libgtk3-0005-do-not-build-extract-strings.patch => 0005-do-not-build-extract-strings.patch} (100%)
+ create mode 100644 package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch
+ create mode 100644 package/libgtk3/libgtk3.hash
