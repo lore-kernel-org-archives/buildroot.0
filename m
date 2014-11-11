@@ -1,49 +1,103 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 11 Nov 2014 16:39:12 +0100
-Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
-In-Reply-To: <20141111153752.GI4240@free.fr>
-References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
- <20141106182725.450971c9@free-electrons.com>
- <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
- <20141106185330.659d572f@free-electrons.com> <20141111153752.GI4240@free.fr>
-Message-ID: <CAHkwnC-wvwaW93vGFxngb4g3qe+DniredP82c=P8SjFpTVB4ng@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Nov 2014 16:48:22 +0100
+Subject: [Buildroot] [PATCH v3 2/2] elfutils: bump version to 0.160
+In-Reply-To: <5461F7A0.2030107@mind.be>
+References: <1415703637-11831-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1415703637-11831-3-git-send-email-Vincent.Riera@imgtec.com>
+ <5461F7A0.2030107@mind.be>
+Message-ID: <20141111154822.GJ4240@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 11, 2014 at 4:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, Fabio, All,
->
-> On 2014-11-06 18:53 +0100, Thomas Petazzoni spake thusly:
->> On Thu, 6 Nov 2014 18:35:32 +0100, Fabio Porcedda wrote:
->>
->> > > When I look at patches 2 and 3, I must say I dislike the fact that in
->> > > one case (svn), silencing is handled in pkg-download.mk when defining
->> > > the SVN variable, while in the other case (git), it's handled in the
->> > > git-specific helper script.
->> >
->> > I would like to do the same for git but it does not work because:
->> >   git -q clone <url>
->> > does not work, but
->> >   git  clone -q <url>
->> > works, so adding the "-q" in the script is the only option.
->> >
->> > Do you have any better idea?
->>
->> Yes: handle the svn case in the download helper as well. This way,
->> we're consistent between svn and git. And maybe wget should be handled
->> this way as well.
->>
->> Yann can comment on this on whether my proposal is fine for him.
->
-> Sorry for the delay, still dequeuing my mails from last week...
->
-> I agree with Thomas proposal: move everything into the helper scripts.
+Arnout, Vicente, All,
 
-Ok, i will send an updated patch set.
+On 2014-11-11 12:48 +0100, Arnout Vandecappelle spake thusly:
+> On 11/11/14 12:00, Vicente Olivert Riera wrote:
+> > - Bump version to 0.160
+> > - Add a hash file
+> > - Adapt patches to the new version
+> > - Add a new patch to really make -Werror conditional to BUILD_WERROR
+> > 
+> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> [snip]
+> 
+> > diff --git a/package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch b/package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
+> > new file mode 100644
+> > index 0000000..59aae5e
+> > --- /dev/null
+> > +++ b/package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
+> > @@ -0,0 +1,24 @@
+> > +Really make -Werror conditional to BUILD_WERROR
+> 
+>  This subject is wrong, since it's not conditional on BUILD_WERROR (and
+> BUILD_WERROR isn't even defined by the configure script). So it should just be
+> "Remove -Werror from build" or something similar.
 
-BR
+Well, if you look a few lines further in config/eu.am you'll see:
+
+    if BUILD_WERROR
+    AM_CFLAGS += $(if $($(*F)_no_Werror),,-Werror)
+    endif
+
+So, this patch remove the duplicate setting of -Werror in the place
+where it is not wanted, because it is already conditional to
+BUILD_WERROR, even though it should be BUILD_WERROR_TRUE that should be
+tested.
+
+But the real automake conditional is really called BUILD_WERROR:
+
+    ./configure.ac:AM_CONDITIONAL(BUILD_WERROR, test "$enable_werror" = yes)
+
+So, IU still believe the patch title is correct, except upstream messed
+up their conditional test.
+
+Regards,
+Yann E. MORIN.
+
+> > diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+> > new file mode 100644
+> > index 0000000..f0f4598
+> > --- /dev/null
+> > +++ b/package/elfutils/elfutils.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally calculated
+> > +sha256  741b556863c069ceab2d81eb54aeda8c34f46728859704eaf9baef8503e9a9d1  elfutils-0.160.tar.bz2
+> > +sha256  feb307acf472598ea7af4e4b439251613a8f5d81e804b4abf9aeca195a5d4254  elfutils-portability.patch
+> 
+>  This one triggers an interesting bug in our download infrastructure. The
+> elfutils-portability.patch file has the same name as in the previous version,
+> but it has a different hash (of course). So when building with a pre-populated
+> download directory, it will fail the first time.
+
+Yup, it failed for me the first time, and I really wondered what
+hapenned... I fired the download again, and that time it worked...
+
+>  The ideal solution would be if we would force the version number into all
+> downloaded files. But since we have the hashes now, a much simpler solution (at
+> least conceptually, could be tricky to implement) would be to retry the download
+> once if the hash check has failed. Or alternatively, check the hash before _and_
+> after the download.
+
+Yes, befiore the download, we check if the hashes match (if already
+present, of course). If not, we remove the file, but do not fail, so we
+can download.
+
+After the download, we re-check the hash. If it does not match, we
+remove the file, and fail as done today.
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
