@@ -1,56 +1,245 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 11 Nov 2014 20:21:30 +0100
-Subject: [Buildroot] [PATCH] docs/manual: cleanup github helper docs
-In-Reply-To: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
-References: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAGduivzn2UifLJ-TQbn+9zjH_ci=WkxcFiM=4x5Hpxnft0u=GA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Nov 2014 16:42:26 -0300
+Subject: [Buildroot] [PATCH] aircrack-ng: security bump to version 1.2-rc1
+Message-ID: <1415734946-3492-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
-On Nov 11, 2014 7:34 PM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->
-> Explicitly state that the github helper should not be used when there is
-> a release tarball.
->
-> Properly render the list by separating it from the previous paragraph.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  docs/manual/adding-packages-tips.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/docs/manual/adding-packages-tips.txt
-b/docs/manual/adding-packages-tips.txt
-> index 0c6018a..fb7f35a 100644
-> --- a/docs/manual/adding-packages-tips.txt
-> +++ b/docs/manual/adding-packages-tips.txt
-> @@ -61,10 +61,11 @@ may be slightly different (e.g. it contains a
-configure script so we don't
->  need to do AUTORECONF).
->
->  You can see on the release page if it's an uploaded tarball or a git tag:
-> +
->  - If there is a green download button, like
->    https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2],
-then it
->    was uploaded by the maintainer and you should use the link of that
-button to
-> -  specify +FOO_SITE+.
-> +  specify +FOO_SITE+, and not use the 'github' herlper.
-Small typo here.
-What do you think of ' and do not use' ?
->  - If there is grey download button, like
->    https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's
-an
->    automatically generated tarball and you should use the 'github' helper
-> --
-> 1.9.1
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141111/1773e4d5/attachment.html>
+Fixes:
+CVE-2014-8321 - gps_tracer stack overflow
+CVE-2014-8322 - tcp_test length parameter inconsistency
+CVE-2014-8323 - buddy-ng missing check in data format
+CVE-2014-8324 - net_get missing check for invalid values
+
+Previous CVE patch dropped since the fix is upstream.
+Also add hash file.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...pkg-config-to-find-libpcre-it-s-more-cros.patch | 39 +++++++++++++++++
+ ...se-LIBPCAP-for-required-libpcap-libraries.patch | 33 +++++++++++++++
+ package/aircrack-ng/Config.in                      |  3 ++
+ .../aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch | 24 -----------
+ package/aircrack-ng/aircrack-ng.hash               |  3 ++
+ package/aircrack-ng/aircrack-ng.mk                 | 49 +++++++++++++++-------
+ 6 files changed, 113 insertions(+), 38 deletions(-)
+ create mode 100644 package/aircrack-ng/0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch
+ create mode 100644 package/aircrack-ng/0002-Optionally-use-LIBPCAP-for-required-libpcap-libraries.patch
+ delete mode 100644 package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
+ create mode 100644 package/aircrack-ng/aircrack-ng.hash
+
+diff --git a/package/aircrack-ng/0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch b/package/aircrack-ng/0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch
+new file mode 100644
+index 0000000..733e0c0
+--- /dev/null
++++ b/package/aircrack-ng/0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch
+@@ -0,0 +1,39 @@
++From 98149c7664e99cc8ce9c9b1abf2fa90d9cd68e0d Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 5 Nov 2014 09:38:12 -0300
++Subject: [PATCH] Makefile: use pkg-config to find libpcre, it's more
++ cross-compile friendly
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: Upstream http://trac.aircrack-ng.org/ticket/1526
++
++diff --git a/common.mak b/common.mak
++index 6e5694b..d875708 100644
++--- a/common.mak
+++++ b/common.mak
++@@ -39,7 +39,7 @@ PCRE            = true
++ endif
++ 
++ ifeq ($(PCRE), true)
++-COMMON_CFLAGS += $(shell pcre-config --cflags) -DHAVE_PCRE
+++COMMON_CFLAGS += $(shell $(PKG_CONFIG) --cflags libpcre) -DHAVE_PCRE
++ endif
++ 
++ ifeq ($(OSNAME), cygwin)
++diff --git a/src/Makefile b/src/Makefile
++index f9217f9..14350b6 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -16,7 +16,7 @@ BINFILES        = aircrack-ng$(EXE) airdecap-ng$(EXE) packetforge-ng$(EXE) \
++ 
++ LIBPCRE		=
++ ifeq ($(PCRE), true)
++-	LIBPCRE	= $(shell pcre-config --libs)
+++	LIBPCRE = $(shell $(PKG_CONFIG) --libs libpcre)
++ endif
++ 
++ ifneq ($(OSNAME), cygwin) #There is yet no libpcap support for windows, so we skip the crawler
++-- 
++2.0.4
++
+diff --git a/package/aircrack-ng/0002-Optionally-use-LIBPCAP-for-required-libpcap-libraries.patch b/package/aircrack-ng/0002-Optionally-use-LIBPCAP-for-required-libpcap-libraries.patch
+new file mode 100644
+index 0000000..c92bb8d
+--- /dev/null
++++ b/package/aircrack-ng/0002-Optionally-use-LIBPCAP-for-required-libpcap-libraries.patch
+@@ -0,0 +1,33 @@
++From 1abf7a6aad3d7931de2c01b578f62986b75de2f5 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 11 Nov 2014 16:23:42 -0300
++Subject: [PATCH] Optionally use LIBPCAP for required libpcap libraries
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: Reported http://trac.aircrack-ng.org/ticket/1528
++
++diff --git a/src/Makefile b/src/Makefile
++index 14350b6..7bd4271 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -23,6 +23,7 @@ ifneq ($(OSNAME), cygwin) #There is yet no libpcap support for windows, so we sk
++ 	HAVE_PCAP	= $(shell ld -lpcap 2> /dev/null && echo yes)
++ 	ifeq ($(HAVE_PCAP), yes) #cannot link with -lpcap, skip crawler
++ 		BINFILES	+= besside-ng-crawler$(EXE)
+++		LIBPCAP		= -lpcap
++ 	endif
++ endif
++ 
++@@ -168,7 +169,7 @@ besside-ng$(EXE): $(OBJS_BS) $(LIBOSD)
++ 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS_BS) -o $(@) $(LIBS) $(LIBSSL) -lz $(LIBPCRE)
++ 
++ besside-ng-crawler$(EXE): $(OBJS_BC)
++-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS_BC) -o $(@) -lpcap
+++	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS_BC) -o $(@) $(LIBPCAP)
++ 
++ makeivs-ng$(EXE): $(OBJS_MI)
++ 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS_MI) -o $(@) $(LDFLAGS)
++-- 
++2.0.4
++
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index 314184f..001316d 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	bool "aircrack-ng"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_MMU # uses fork()
++	# libnl has issues when linking statically
++	# they need fixing in libnl itself
++	select BR2_PACKAGE_LIBNL if !BR2_PREFER_STATIC_LIB
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_IW # runtime
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch b/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
+deleted file mode 100644
+index 634a01e..0000000
+--- a/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix for buffer overflow CVE-2010-1159.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+---- a/src/airodump-ng.c
+-+++ b/src/airodump-ng.c
+-@@ -2126,7 +2126,7 @@
+-                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
+-                             +   h80211[z + 3] + 4;
+- 
+--                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
+-+                    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
+- 					{
+- 						// Ignore the packet trying to crash us.
+-                     	goto write_packet;
+-@@ -2158,7 +2158,7 @@
+-                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
+-                             +   h80211[z + 3] + 4;
+- 
+--                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
+-+		    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
+- 					{
+- 						// Ignore the packet trying to crash us.
+-                     	goto write_packet;
+diff --git a/package/aircrack-ng/aircrack-ng.hash b/package/aircrack-ng/aircrack-ng.hash
+new file mode 100644
+index 0000000..1ed27fc
+--- /dev/null
++++ b/package/aircrack-ng/aircrack-ng.hash
+@@ -0,0 +1,3 @@
++# From http://www.aircrack-ng.org/downloads.html
++sha1	b5ff7d0fffb72095311bbe8824ab98aaac62db8f	aircrack-ng-1.2-rc1.tar.gz
++md5	c2f8648c92f7e46051c86c618d4fb0d5	aircrack-ng-1.2-rc1.tar.gz
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index b72506d..909766f 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -4,33 +4,54 @@
+ #
+ ################################################################################
+ 
+-AIRCRACK_NG_VERSION = 1.1
++AIRCRACK_NG_VERSION = 1.2-rc1
+ AIRCRACK_NG_SITE = http://download.aircrack-ng.org
+ AIRCRACK_NG_LICENSE = GPLv2+
+ AIRCRACK_NG_LICENSE_FILES = LICENSE
+-AIRCRACK_NG_DEPENDENCIES = openssl
++AIRCRACK_NG_DEPENDENCIES = openssl host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_SQLITE),y)
+-	AIRCRACK_NG_MAKE_OPTS = sqlite=true
+-	AIRCRACK_NG_MAKE_OPTS += \
+-		LIBSQL="-lsqlite3$(if $(BR2_PREFER_STATIC_LIB), -lpthread)"
++# Account for libz for openssl, and libpthread in static
++AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) -lz \
++	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
+ 
+-	AIRCRACK_NG_DEPENDENCIES += sqlite
++# libnl support has issues when building static
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	AIRCRACK_NG_MAKE_OPTS += libnl=false
+ else
+-	AIRCRACK_NG_MAKE_OPTS = sqlite=false
++	AIRCRACK_NG_MAKE_OPTS += libnl=true
++	AIRCRACK_NG_DEPENDENCIES += libnl
+ endif
+ 
+-AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) -lz \
+-	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
++ifeq ($(BR2_PACKAGE_LIBPCAP),y)
++	AIRCRACK_NG_DEPENDENCIES += libpcap
++	AIRCRACK_NG_MAKE_OPTS += HAVE_PCAP=yes \
++		$(if $(BR2_PREFER_STATIC_LIB),LIBPCAP="-lpcap $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)")
++else
++	AIRCRACK_NG_MAKE_OPTS += HAVE_PCAP=no
++endif
++
++ifeq ($(BR2_PACKAGE_PCRE),y)
++	AIRCRACK_NG_DEPENDENCIES += pcre
++	AIRCRACK_NG_MAKE_OPTS += pcre=true
++else
++	AIRCRACK_NG_MAKE_OPTS += pcre=false
++endif
++
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++	AIRCRACK_NG_DEPENDENCIES += sqlite
++	AIRCRACK_NG_MAKE_OPTS += sqlite=true \
++		LIBSQL="-lsqlite3$(if $(BR2_PREFER_STATIC_LIB), -lpthread)"
++else
++	AIRCRACK_NG_MAKE_OPTS += sqlite=false
++endif
+ 
+ define AIRCRACK_NG_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
+-		LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
+-		-C $(@D) $(AIRCRACK_NG_MAKE_OPTS) all
++	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
++	LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" $(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS)
+ endef
+ 
+ define AIRCRACK_NG_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+ 		prefix=/usr $(AIRCRACK_NG_MAKE_OPTS) install
+ endef
+ 
+-- 
+2.0.4
