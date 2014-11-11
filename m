@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 14:00:57 +0100
-Subject: [Buildroot] How-to export cross-toolchain and libraries to a
- build server?
-In-Reply-To: <20833d047f3d4434b8eb867b1a46b526@DB3PR04MB108.eurprd04.prod.outlook.com>
-References: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
- <20141111102509.56db799d@free-electrons.com>
- <156048fd0d6d4325bbe2ba0ff5b6e9e0@DB3PR04MB108.eurprd04.prod.outlook.com>
- <20141111104957.251e3809@free-electrons.com>
- <20833d047f3d4434b8eb867b1a46b526@DB3PR04MB108.eurprd04.prod.outlook.com>
-Message-ID: <20141111140057.24538411@free-electrons.com>
+Date: Tue, 11 Nov 2014 14:03:17 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-09
+In-Reply-To: <5461FCCA.1000306@imgtec.com>
+References: <20141110073015.A5296101317@stock.ovh.net>
+ <5460DF8D.6090705@imgtec.com> <5460E0B8.1060705@imgtec.com>
+ <20141110191617.43273fde@free-electrons.com>
+ <5461FCCA.1000306@imgtec.com>
+Message-ID: <20141111140317.18f56b7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Vicente Olivert Riera,
 
-On Tue, 11 Nov 2014 12:10:22 +0000, Fabrice Mousset | GEOCEPT GmbH
-wrote:
+On Tue, 11 Nov 2014 12:10:50 +0000, Vicente Olivert Riera wrote:
 
-> it works :-)
+> Do you remember when we talked about finding which architectures support
+> BR2_PACKAGE_QT_SCRIPT to create a new
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT in order to differentiate them from
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT? Because BR2_PACKAGE_QT_SCRIPT
+> builds fine for MIPS64 n32, but it depends on
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT. So, if you disable
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT for MIPS64 n32 then you will be
+> disabling BR2_PACKAGE_QT_SCRIPT as well. That's why few months ago I
+> wanted to disable only BR2_PACKAGE_QT_WEBKIT for MIPS64 n32, but then
+> you told me "Hey, there is something wrong here! We need to know which
+> architectures support qt-script and which ones support qt-webkit".
 
-Cool!
-
-> I have built my BSP with BR2_HOST_DIR (make BR2_HOST_DIR=/opt/crosstools/am335x) and made an archive of it (tar cJf am335x-sdk.tar.xz /opt/crosstools/am335x). Then expand this archive on the build server.
-> And it simply works, Jenkins is now able to build Qt5 projects for my board.
-
-Great.
-
-> The SDK is quiet big (about 57MB), but it is a simple and quick solution.
-
-57 MB are you sure? This looks very small to me, when you count the
-toolchain + all the Qt5 libraries and headers.
-
-> I will try to spend time on "relocatable SDK generation" in the next weeks to see if an easier/smarter solution is possible.
-
-Great, looking forward to see contributions in this area!
-
-Best regards,
+Well, then why don't you create BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT ?
 
 Thomas
 -- 
