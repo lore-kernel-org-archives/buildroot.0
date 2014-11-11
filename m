@@ -1,45 +1,51 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 11 Nov 2014 16:21:03 +0100
-Subject: [Buildroot] [PATCH] nodejs: disable ssl2 and ssl3 when openssl is
-	not built
-Message-ID: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Tue, 11 Nov 2014 16:26:04 +0100
+Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
+In-Reply-To: <CAHkwnC9pwAmFxuah1SonEhtOqHcg90ZiyN1AutJ04cYXM6sABA@mail.gmail.com>
+References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+ <20141106182725.450971c9@free-electrons.com>
+ <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
+ <20141106185330.659d572f@free-electrons.com>
+ <CAHkwnC9pwAmFxuah1SonEhtOqHcg90ZiyN1AutJ04cYXM6sABA@mail.gmail.com>
+Message-ID: <CAHkwnC_yWXg17d_qupe8A6EqzW55BFAVLTA4SQ7Nn+2H7UaAww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The nodejs version 0.10.33 is compiled with SSLv2 and SSLv3 protocol
-support by default so it fails to build if the package openssl was not
-built.
+On Thu, Nov 6, 2014 at 7:03 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+> On Thu, Nov 6, 2014 at 6:53 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Thu, 6 Nov 2014 18:35:32 +0100, Fabio Porcedda wrote:
+>>
+>>> > When I look at patches 2 and 3, I must say I dislike the fact that in
+>>> > one case (svn), silencing is handled in pkg-download.mk when defining
+>>> > the SVN variable, while in the other case (git), it's handled in the
+>>> > git-specific helper script.
+>>>
+>>> I would like to do the same for git but it does not work because:
+>>>   git -q clone <url>
+>>> does not work, but
+>>>   git  clone -q <url>
+>>> works, so adding the "-q" in the script is the only option.
+>>>
+>>> Do you have any better idea?
+>>
+>> Yes: handle the svn case in the download helper as well. This way,
+>> we're consistent between svn and git. And maybe wget should be handled
+>> this way as well.
+>
+> Even the HG and SCP variables contain the "-q" option so with this
+> patch there are a total of four variables.
+>
+>> Yann can comment on this on whether my proposal is fine for him.
 
-To fix this build failure disable SSLv2 and SSLv3 protcol suppport if
-the openssl package is not built.
 
-Fixes:
-  http://autobuild.buildroot.net/results/e1fb34818ff1167aa008b4011befb9fd14c81293
-  http://autobuild.buildroot.net/results/8b72b0c311f2f7f7430aca5f7cca1f7d82d1c213
-  http://autobuild.buildroot.net/results/e5f87dc635e0e6a6d1cc234529a433e12d810097
-  http://autobuild.buildroot.net/results/3c4a5be556cfbd0d0e632757887ebc2f1de64bba
+Yann do you have any opinion about this?
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/nodejs/nodejs.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 312aaa9..32e19b7 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -75,7 +75,8 @@ define NODEJS_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--without-snapshot \
- 		--shared-zlib \
--		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-+		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,\
-+			--without-ssl --without-ssl2 --without-ssl3) \
- 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
- 		--without-dtrace \
- 		--without-etw \
+BR
 -- 
-2.1.3
+Fabio Porcedda
