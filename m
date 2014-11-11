@@ -1,137 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Nov 2014 12:44:31 +0100
-Subject: [Buildroot] [PATCH v2 2/2] libgtk3: bump version to 3.14.5
-In-Reply-To: <1415704522-14201-3-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415704522-14201-1-git-send-email-Vincent.Riera@imgtec.com>
- <1415704522-14201-3-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141111114431.GE4240@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 11 Nov 2014 11:47:42 +0000
+Subject: [Buildroot] [PATCH v4 0/2] elfutils: version bump
+Message-ID: <1415706464-15288-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+Changes since v3:
+- Keep Thomas' s-o-b in their modified patches
+- Add Yann's r-b in the second patch
+- Add Yann's a-b in the first patch
 
-On 2014-11-11 11:15 +0000, Vicente Olivert Riera spake thusly:
-> - Bump version to 3.14.5
-> - Add a hash file
-> - Add a new patch to fix a regression
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Vicente Olivert Riera (2):
+  elfutils: rename patches to follow the new name structure
+  elfutils: bump version to 0.160
 
-Manually downloaded, and manually verified the hash.
-Patch indeed exactly as from upstream.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...lug-is-conditionally-supported-on-X11-onl.patch |   57 ++++++++++++++++++++
->  package/libgtk3/libgtk3.hash                       |    2 +
->  package/libgtk3/libgtk3.mk                         |    2 +-
->  3 files changed, 60 insertions(+), 1 deletions(-)
->  create mode 100644 package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch
->  create mode 100644 package/libgtk3/libgtk3.hash
-> 
-> diff --git a/package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch b/package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch
-> new file mode 100644
-> index 0000000..081cd1e
-> --- /dev/null
-> +++ b/package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch
-> @@ -0,0 +1,57 @@
-> +window: GtkPlug is conditionally supported on X11 only
-> +
-> +Apply an upstream patch to fix a build regression in 3.14.5. This patch
-> +will be included in the next 3.14.6 release, so we can remove it in the 
-> +next version bump.
-> +
-> +Error message:
-> +
-> +./.libs/libgtk-3.so: undefined reference to `GTK_IS_PLUG'
-> +
-> +Bug report:
-> +  https://bugzilla.gnome.org/show_bug.cgi?id=739885
-> +
-> +Upstream commit:
-> +  https://git.gnome.org/browse/gtk+/commit/?id=36fedb0c4b373272afc2d76a7c790d696ed48034
-> +
-> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> +
-> +From 36fedb0c4b373272afc2d76a7c790d696ed48034 Mon Sep 17 00:00:00 2001
-> +From: Emmanuele Bassi <ebassi@gnome.org>
-> +Date: Mon, 10 Nov 2014 14:08:20 +0000
-> +Subject: [PATCH] window: GtkPlug is conditionally supported on X11 only
-> +
-> +We cannot do a type check on it if we don't have the X11 backend
-> +compiled in.
-> +
-> +https://bugzilla.gnome.org/show_bug.cgi?id=739885
-> +---
-> + gtk/gtkwindow.c |    9 ++++++++-
-> + 1 files changed, 8 insertions(+), 1 deletions(-)
-> +
-> +diff --git a/gtk/gtkwindow.c b/gtk/gtkwindow.c
-> +index 0d0fb88..6cb355b 100644
-> +--- a/gtk/gtkwindow.c
-> ++++ b/gtk/gtkwindow.c
-> +@@ -1610,10 +1610,17 @@ gtk_window_constructed (GObject *object)
-> + {
-> +   GtkWindow *window = GTK_WINDOW (object);
-> +   GtkWindowPrivate *priv = window->priv;
-> ++  gboolean is_plug;
-> + 
-> +   G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
-> + 
-> +-  if (priv->type == GTK_WINDOW_TOPLEVEL && !GTK_IS_PLUG (window))
-> ++#ifdef GDK_WINDOWING_X11
-> ++  is_plug = GTK_IS_PLUG (window);
-> ++#else
-> ++  is_plug = FALSE;
-> ++#endif
-> ++
-> ++  if (priv->type == GTK_WINDOW_TOPLEVEL && !is_plug)
-> +     {
-> +       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
-> +       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-> +-- 
-> +1.7.1
-> +
-> diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-> new file mode 100644
-> index 0000000..dc5cf26
-> --- /dev/null
-> +++ b/package/libgtk3/libgtk3.hash
-> @@ -0,0 +1,2 @@
-> +# From http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.14/gtk+-3.14.5.sha256sum
-> +sha256	ba70f5ccde6646c6d8aa5a6398794b7bcf23fc45af22580a215d258f392dbbe2	gtk+-3.14.5.tar.xz
-> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-> index 540f08d..b406c09 100644
-> --- a/package/libgtk3/libgtk3.mk
-> +++ b/package/libgtk3/libgtk3.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBGTK3_VERSION_MAJOR = 3.14
-> -LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
-> +LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
->  LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
->  LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
->  LIBGTK3_LICENSE = LGPLv2+
-> -- 
-> 1.7.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ ...isable-progs.patch => 0001-disable-progs.patch} |   51 ++++++-----
+ package/elfutils/0002-argp-support.patch           |   93 ++++++++++++++++++++
+ ...s-03-memcpy-def.patch => 0003-memcpy-def.patch} |   14 ++--
+ .../{elfutils-04-fts.patch => 0004-fts.patch}      |   68 +++++++--------
+ package/elfutils/0005-disable-po.patch             |   24 +++++
+ ...y-make-werror-conditional-to-build-werror.patch |   24 +++++
+ package/elfutils/elfutils-02-argp-support.patch    |   92 -------------------
+ package/elfutils/elfutils-05-disable-po.patch      |   22 -----
+ package/elfutils/elfutils.hash                     |    3 +
+ package/elfutils/elfutils.mk                       |    6 +-
+ 10 files changed, 213 insertions(+), 184 deletions(-)
+ rename package/elfutils/{elfutils-01-disable-progs.patch => 0001-disable-progs.patch} (62%)
+ create mode 100644 package/elfutils/0002-argp-support.patch
+ rename package/elfutils/{elfutils-03-memcpy-def.patch => 0003-memcpy-def.patch} (62%)
+ rename package/elfutils/{elfutils-04-fts.patch => 0004-fts.patch} (97%)
+ create mode 100644 package/elfutils/0005-disable-po.patch
+ create mode 100644 package/elfutils/0006-really-make-werror-conditional-to-build-werror.patch
+ delete mode 100644 package/elfutils/elfutils-02-argp-support.patch
+ delete mode 100644 package/elfutils/elfutils-05-disable-po.patch
+ create mode 100644 package/elfutils/elfutils.hash
