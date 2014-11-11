@@ -1,55 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Nov 2014 18:26:05 +0100
-Subject: [Buildroot] [PATCH v2 01/15] package/pkg-autotools.mk:
- Factorize hooks.
-In-Reply-To: <54621010.6030000@mind.be>
-References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
- <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
- <20141110221323.GF22119@free.fr> <54620920.5050203@mind.be>
- <20141111131704.GG4240@free.fr> <54621010.6030000@mind.be>
-Message-ID: <20141111172605.GM4240@free.fr>
+Date: Tue, 11 Nov 2014 19:33:56 +0100
+Subject: [Buildroot] [PATCH] docs/manual: cleanup github helper docs
+Message-ID: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Johan, All,
+Explicitly state that the github helper should not be used when there is
+a release tarball.
 
-On 2014-11-11 14:33 +0100, Arnout Vandecappelle spake thusly:
-> On 11/11/14 14:17, Yann E. MORIN wrote:
-[--SNIP--]
-> > Well, both of us are partialy wrong, I think. LIBTOOL_PATCH_HOOK is a
-> > post-patch hook, while GETTEXTIZE_HOOK and AUTORECONF_HOOK are pre-configure
-> > hooks. So, the order at which they are defined is irrelevant, as it is done
-> > right now.
-> > 
-> > But I agree with Arnout, we need to rework this.
-[--SNIP--]
->  All this makes it pretty clear that reworking the call should be done in a
-> separate patch :-)
+Properly render the list by separating it from the previous paragraph.
 
-I'm mostly done with just the autotools rework. It's no longer a single
-patch, and not even two. It's a 7-patch series, now:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ docs/manual/adding-packages-tips.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-    db9396b pkg-autotools: move common macros
-    aaecaca pkg-autotools: re-order cleaning up the host dependencies
-    aaf7f5a pkg-autotools: commonalise the libtool patching code
-    54e296d pkg-autotools: move the libtool patching call out of the autoreconf hook
-    541764e pkg-autotools: remove redundant shell conditional
-    120fc9c pkg-autotools: fold the libtool patching code directly into the hook
-    77feedc pkg-autotools: only apply libtool patch at the right moment
-
-I'll post those later tonight. I still hope to have time to rework the
-pkg-rebar patch today...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 0c6018a..fb7f35a 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -61,10 +61,11 @@ may be slightly different (e.g. it contains a configure script so we don't
+ need to do AUTORECONF).
+ 
+ You can see on the release page if it's an uploaded tarball or a git tag:
++
+ - If there is a green download button, like
+   https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
+   was uploaded by the maintainer and you should use the link of that button to
+-  specify +FOO_SITE+.
++  specify +FOO_SITE+, and not use the 'github' herlper.
+ - If there is grey download button, like
+   https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
+   automatically generated tarball and you should use the 'github' helper
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
