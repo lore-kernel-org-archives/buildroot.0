@@ -1,124 +1,161 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Nov 2014 11:17:10 -0300
-Subject: [Buildroot] [PATCHv2] usbutils: bump to version 008
-Message-ID: <1415715430-6657-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Nov 2014 15:32:37 +0100
+Subject: [Buildroot] [git commit] rt-tests: allow building subset of tests
+	with non-NPTL toolchains
+Message-ID: <20141111143259.57B2AB3FF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now uses hwdb from libudev for usb information.
-Drop all redundant/obsolete dependencies and cleanup hooks.
-Don't install to staging, it's pointless, it provides no libraries at
-all and it doesn't bundle usb.ids any more.
+commit: http://git.buildroot.net/buildroot/commit/?id=143fe5b443da448c2652527cce299dab0c4fab96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Some architectures are still stuck with non-NPTL toolchains.
+These are for example ARC, Blackfin, Xtensa etc.
+
+Still rt-tests are very good benchmarks and it would be good to enable use of
+at least selected (those that will be built) tests on those architectures.
+
+This change makes it possible to only build subset of tests that don't require
+NPTL calls.
+
+Following tests will be built with non-NPTL toolchain:
+ * signaltest
+ * ptsematest
+ * sigwaittest
+ * svsematest
+ * sendme
+ * hackbench
+
+Still it's required to have a toolchain with threads support because most of
+mentioned tests use threads.
+
+03-fix-non-nptl-buil.patch was submitted upstream:
+https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
+so as soon as it is accepted with the next version bump this patch should be
+removed.
+
+[Thomas: fix the rt-tests.mk test on NPTL to use positive logic.]
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/usbutils/Config.in     | 18 +++++-------------
- package/usbutils/usbutils.hash |  2 +-
- package/usbutils/usbutils.mk   | 33 ++-------------------------------
- 3 files changed, 8 insertions(+), 45 deletions(-)
+ package/rt-tests/03-fix-non-nptl-buil.patch |   55 +++++++++++++++++++++++++++
+ package/rt-tests/Config.in                  |    7 +--
+ package/rt-tests/rt-tests.mk                |    6 +++
+ 3 files changed, 64 insertions(+), 4 deletions(-)
 
-diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
-index a64e674..3e948b7 100644
---- a/package/usbutils/Config.in
-+++ b/package/usbutils/Config.in
-@@ -1,24 +1,16 @@
- config BR2_PACKAGE_USBUTILS
- 	bool "usbutils"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
- 	select BR2_PACKAGE_LIBUSB
- 	help
- 	  USB enumeration utilities
- 
- 	  http://linux-usb.sourceforge.net/
- 
--if BR2_PACKAGE_USBUTILS
--
--config BR2_PACKAGE_USBUTILS_ZLIB
--	bool "compressed data support"
--	select BR2_PACKAGE_ZLIB
--	help
--	  Enable use of zlib for a compressed usb.ids.gz
--	  This makes the data file smaller if you're not using a compressed
--	  filesystem, but it also makes lsusb slower since it has
--	  to decompress the file every time it's run.
--
--endif
--
- comment "usbutils needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_HAS_UDEV
+diff --git a/package/rt-tests/03-fix-non-nptl-buil.patch b/package/rt-tests/03-fix-non-nptl-buil.patch
+new file mode 100644
+index 0000000..5c65018
+--- /dev/null
++++ b/package/rt-tests/03-fix-non-nptl-buil.patch
+@@ -0,0 +1,55 @@
++From c6920f97be02ca3fba9320b043acd578ce4c62d8 Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Mon, 10 Nov 2014 10:00:13 +0300
++Subject: [PATCH] Makefile: allow building selected tests with non-NPTL
++ toolchain
 +
-+comment "usbutils requires eudev or systemd to be enabled"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
-index 6023f39..37c829a 100644
---- a/package/usbutils/usbutils.hash
-+++ b/package/usbutils/usbutils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
--sha256	7593a01724bbc0fd9fe48e62bc721ceb61c76654f1d7b231b3c65f6dfbbaefa4	usbutils-007.tar.xz
-+sha256	44741af0bae9d402a0ef160a29b2fa700bb656ab5e0a4b3343d51249c2a44c8c	usbutils-008.tar.xz
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 0e9b52f..56fa0ba 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,20 +4,13 @@
- #
- ################################################################################
++Some architectures are still stuck with non-NPTL toolchains.
++These are for example ARC, Blackfin, Xtensa etc.
++
++Still rt-tests are very good benchmarks and it would be good to enable use of
++at least selected (those that will be built) tests on those architectures.
++
++This change makes it possible to only build subset of tests that don't require
++NPTL calls.
++
++By default behavior is not modified - all tests are built, but if one wants
++to build with non-NPTL toolchain just add "HAVE_NPTL=no" in command line
++or modify "HAVE_NPTL" variable right in Makefile and execute "make".
++
++This patch was submitted upstream:
++https://www.mail-archive.com/linux-kernel at vger.kernel.org/msg762958.html
++so as soon as it is accepted with the next version bump this patch should be
++removed.
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++Cc: Vineet Gupta <vgupta@synopsys.com>
++Cc: Clark Williams <clark.williams@gmail.com>
++---
++ Makefile | 11 ++++++++---
++ 1 file changed, 8 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 318a5c6..675edf7 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,8 +1,13 @@
++ VERSION_STRING = 0.89
++ 
++-sources = cyclictest.c signaltest.c pi_stress.c rt-migrate-test.c	\
++-	  ptsematest.c sigwaittest.c svsematest.c pmqtest.c sendme.c 	\
++-	  pip_stress.c hackbench.c
+++HAVE_NPTL ?= yes
+++
+++ifeq ($(HAVE_NPTL),yes)
+++sources = cyclictest.c pi_stress.c pip_stress.c pmqtest.c rt-migrate-test.c
+++endif
+++
+++sources += signaltest.c ptsematest.c sigwaittest.c svsematest.c sendme.c \
+++	  hackbench.c
++ 
++ TARGETS = $(sources:.c=)
++ 
++-- 
++1.9.3
++
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 81e5d06..34669b2 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+-	# no _tid field in 'struct sigevent'
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -26,5 +25,5 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
  
--USBUTILS_VERSION = 007
-+USBUTILS_VERSION = 008
- USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
- USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
--USBUTILS_DEPENDENCIES = host-pkgconf libusb
--USBUTILS_INSTALL_STAGING = YES
-+USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
- USBUTILS_LICENSE = GPLv2+
- USBUTILS_LICENSE_FILES = COPYING
+-comment "rt-tests needs a toolchain w/ NPTL"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++comment "rt-tests needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 94f4b1e..cc4f9cf 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -14,15 +14,21 @@ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ RT_TESTS_DEPENDENCIES = python
+ endif
  
--ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
--	USBUTILS_DEPENDENCIES += zlib
--else
--	USBUTILS_CONF_OPTS = --disable-zlib
--endif
--
- # Build after busybox since it's got a lightweight lsusb
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	USBUTILS_DEPENDENCIES += busybox
-@@ -34,30 +27,8 @@ endif
- 
- define USBUTILS_TARGET_CLEANUP
- 	rm -f $(TARGET_DIR)/usr/bin/usb-devices
--	rm -f $(TARGET_DIR)/usr/sbin/update-usbids.sh
--	rm -f $(TARGET_DIR)/usr/share/pkgconfig/usbutils.pc
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
++RT_TESTS_HAVE_NPTL=no
++endif
++
+ define RT_TESTS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) 			\
+ 		CC="$(TARGET_CC)" 		\
++		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)	\
+ 		CFLAGS="$(TARGET_CFLAGS)"	\
+ 		prefix=/usr
  endef
  
- USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_TARGET_CLEANUP
- 
--define USBUTILS_REMOVE_UNCOMPRESSED_IDS
--	rm -f $(TARGET_DIR)/usr/share/usb.ids
--endef
--
--define USBUTILS_REMOVE_COMPRESSED_IDS
--	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
--endef
--
--ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
--USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_UNCOMPRESSED_IDS
--else
--USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_COMPRESSED_IDS
--endif
--
--define USBUTILS_REMOVE_DEVFILES
--	rm -f $(TARGET_DIR)/usr/bin/libusb-config
--endef
--
--USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_DEVFILES
--
- $(eval $(autotools-package))
--- 
-2.0.4
+ define RT_TESTS_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) 				\
++		HAVE_NPTL=$(RT_TESTS_HAVE_NPTL)		\
+ 		DESTDIR="$(TARGET_DIR)" 		\
+ 		prefix=/usr 				\
+ 		$(if $(BR2_PACKAGE_PYTHON),HASPYTHON=1 PYLIB=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/) \
