@@ -1,60 +1,57 @@
-From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
-Date: Tue, 11 Nov 2014 12:10:22 +0000
-Subject: [Buildroot] How-to export cross-toolchain and libraries to a
- build server?
-In-Reply-To: <20141111104957.251e3809@free-electrons.com>
-References: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
- <20141111102509.56db799d@free-electrons.com>
- <156048fd0d6d4325bbe2ba0ff5b6e9e0@DB3PR04MB108.eurprd04.prod.outlook.com>
- <20141111104957.251e3809@free-electrons.com>
-Message-ID: <20833d047f3d4434b8eb867b1a46b526@DB3PR04MB108.eurprd04.prod.outlook.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 11 Nov 2014 12:10:50 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-09
+In-Reply-To: <20141110191617.43273fde@free-electrons.com>
+References: <20141110073015.A5296101317@stock.ovh.net>	<5460DF8D.6090705@imgtec.com>	<5460E0B8.1060705@imgtec.com>
+ <20141110191617.43273fde@free-electrons.com>
+Message-ID: <5461FCCA.1000306@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Thomas Petazzoni,
 
-it works :-)
+On 11/10/2014 06:16 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+> 
+> On Mon, 10 Nov 2014 15:58:48 +0000, Vicente Olivert Riera wrote:
+>> On 11/10/2014 03:53 PM, Vicente Olivert Riera wrote:
+>>> On 11/10/2014 07:30 AM, Thomas Petazzoni wrote:
+>>>>     mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/bb8ab5ea7ed02cf17c46522903b4e46035e47f16/
+>>>
+>>> I thought this was already fixed upstream... I need to report this
+>>> again. It's a failure with MIPS64 n32, probably because it's not taken
+>>> into account that MIPS64 n32 has 32-bit pointers and integers instead of
+>>> 64-bit.
+>>
+>> Ok, sorry. qt-4.8.6 was fixed upstream (I did it). The problem here is
+>> with qt-webkit, which I already reported upstream:
+>>
+>> https://bugreports.qt-project.org/browse/QTBUG-39224
+> 
+> May disallow on MIPS64 n32 for the moment?
 
-I have built my BSP with BR2_HOST_DIR (make BR2_HOST_DIR=/opt/crosstools/am335x) and made an archive of it (tar cJf am335x-sdk.tar.xz /opt/crosstools/am335x). Then expand this archive on the build server.
-And it simply works, Jenkins is now able to build Qt5 projects for my board.
-The SDK is quiet big (about 57MB), but it is a simple and quick solution.
-I will try to spend time on "relocatable SDK generation" in the next weeks to see if an easier/smarter solution is possible.
+hehehe... :D
 
-Thanks a lot for your support
-
-Best regards
-
-Fabrice
-
------Urspr?ngliche Nachricht-----
-Von: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Gesendet: Dienstag, 11. November 2014 10:50
-An: Fabrice Mousset | GEOCEPT GmbH
-Cc: 'buildroot at busybox.net'
-Betreff: Re: [Buildroot] How-to export cross-toolchain and libraries to a build server?
-
-Dear Fabrice Mousset | GEOCEPT GmbH,
-
-On Tue, 11 Nov 2014 09:43:02 +0000, Fabrice Mousset | GEOCEPT GmbH
-wrote:
-
-> thanks a lot for your quick reply.
-> I will follow your advice and use BR2_HOST_DIR to fixe SDK location.
-> So I will have a quick solution to move the SDK to our build server.
-
-Ok. Let us know if that works.
-
-> I will also take a closer look at the TODO list, and perhaps I could contribute to buildroot to help integrating a relocatable SDK generation, which will be a very nice and useful feature.
-> But I think, I will have to learn a lot of thinks about the internals of buildroot before.
-
-Sure, your contributions would be very welcome! But indeed, working on making the SDK relocatable is clearly not the easiest thing to get started with the Buildroot internals.
+Do you remember when we talked about finding which architectures support
+BR2_PACKAGE_QT_SCRIPT to create a new
+BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT in order to differentiate them from
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT? Because BR2_PACKAGE_QT_SCRIPT
+builds fine for MIPS64 n32, but it depends on
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT. So, if you disable
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT for MIPS64 n32 then you will be
+disabling BR2_PACKAGE_QT_SCRIPT as well. That's why few months ago I
+wanted to disable only BR2_PACKAGE_QT_WEBKIT for MIPS64 n32, but then
+you told me "Hey, there is something wrong here! We need to know which
+architectures support qt-script and which ones support qt-webkit".
 
 Best regards,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
