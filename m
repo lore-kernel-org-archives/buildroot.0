@@ -1,32 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Nov 2014 21:47:11 +0100
-Subject: [Buildroot] [PATCH] alsa-utils: fix linking with intl
-In-Reply-To: <1415721082-15809-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 11 Nov 2014 15:51:22 +0000")
-References: <1415721082-15809-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87ppctmpm8.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Nov 2014 21:50:15 +0100
+Subject: [Buildroot] [PATCH] docs/manual: cleanup github helper docs
+In-Reply-To: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 11 Nov 2014 19:33:56 +0100")
+References: <1415730836-14762-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87lhnhmph4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > alsa-utils needs to link with intl if the toolchain needs gettext and
- > locale is set. Otherwise we will see an error like this one:
+ > Explicitly state that the github helper should not be used when there is
+ > a release tarball.
 
- > option.o: In function `canonicalise_opt':
- > option.c:(.text+0x3bc): undefined reference to `libintl_gettext'
+ > Properly render the list by separating it from the previous paragraph.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/276/276581f6dbbe330799c3a7eaa26b453e38a22907/
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-That autobuild link and the error message refers to an issue with
-dnsmasq, but the patch seems OK so I've committed with a reference to
-this autobuild issue instead:
-
-http://autobuild.buildroot.net/results/707/707016a2490fc97b98d17e2b6a9c6423a56bb4a9/
+Committed with the typo pointed out by Maxime fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
