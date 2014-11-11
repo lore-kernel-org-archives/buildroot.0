@@ -1,40 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Nov 2014 13:52:39 +0100
-Subject: [Buildroot] [PATCH v2 01/15] package/pkg-autotools.mk:
- Factorize hooks.
-In-Reply-To: <20141110221323.GF22119@free.fr>
-References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
- <1415366931-6870-2-git-send-email-johan.oudinet@gmail.com>
- <20141110221323.GF22119@free.fr>
-Message-ID: <20141111125239.GF4240@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Nov 2014 14:00:57 +0100
+Subject: [Buildroot] How-to export cross-toolchain and libraries to a
+ build server?
+In-Reply-To: <20833d047f3d4434b8eb867b1a46b526@DB3PR04MB108.eurprd04.prod.outlook.com>
+References: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
+ <20141111102509.56db799d@free-electrons.com>
+ <156048fd0d6d4325bbe2ba0ff5b6e9e0@DB3PR04MB108.eurprd04.prod.outlook.com>
+ <20141111104957.251e3809@free-electrons.com>
+ <20833d047f3d4434b8eb867b1a46b526@DB3PR04MB108.eurprd04.prod.outlook.com>
+Message-ID: <20141111140057.24538411@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-johan, All,
+Hello,
 
-On 2014-11-10 23:13 +0100, Yann E. MORIN spake thusly:
-> On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
-> > Define common macros only once (instead of as many times as
-> > there are inner-autotools-package calls).
-> > Factorize LIBTOOL_PATCH_HOOK and AUTORECONF_HOOK to avoid duplicated
-> > code.
-[--SNIP--]
-> I'll do some more in-depth review later, presumably after you split the
-> patch. If you don;t have time for that, I can see to get it done
-> tomorrow.
+On Tue, 11 Nov 2014 12:10:22 +0000, Fabrice Mousset | GEOCEPT GmbH
+wrote:
 
-So, are you working on this, or can I go hacking this?
+> it works :-)
 
-Regards,
-Yann E. MORIN.
+Cool!
 
+> I have built my BSP with BR2_HOST_DIR (make BR2_HOST_DIR=/opt/crosstools/am335x) and made an archive of it (tar cJf am335x-sdk.tar.xz /opt/crosstools/am335x). Then expand this archive on the build server.
+> And it simply works, Jenkins is now able to build Qt5 projects for my board.
+
+Great.
+
+> The SDK is quiet big (about 57MB), but it is a simple and quick solution.
+
+57 MB are you sure? This looks very small to me, when you count the
+toolchain + all the Qt5 libraries and headers.
+
+> I will try to spend time on "relocatable SDK generation" in the next weeks to see if an easier/smarter solution is possible.
+
+Great, looking forward to see contributions in this area!
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
