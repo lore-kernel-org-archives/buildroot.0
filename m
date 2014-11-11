@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 10:25:09 +0100
-Subject: [Buildroot] How-to export cross-toolchain and libraries to a
- build server?
-In-Reply-To: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
-References: <7b2f2b4d2f704f70a128d64f2b6f461f@DB3PR04MB108.eurprd04.prod.outlook.com>
-Message-ID: <20141111102509.56db799d@free-electrons.com>
+Date: Tue, 11 Nov 2014 10:28:00 +0100
+Subject: [Buildroot] Linux-Kernel-Version for using RTAI
+In-Reply-To: <6d5d0cd6c3e446bdb55c50fde395b77c@dsw332.wattens.swarovski.com>
+References: <17b56e9456194f8d917cc8a5990df542@dsw332.wattens.swarovski.com>
+ <20141110192719.217adc3b@free-electrons.com>
+ <6d5d0cd6c3e446bdb55c50fde395b77c@dsw332.wattens.swarovski.com>
+Message-ID: <20141111102800.3a6a0c9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabrice Mousset | GEOCEPT GmbH,
+Dear Spielmann Werner,
 
-On Tue, 11 Nov 2014 07:28:14 +0000, Fabrice Mousset | GEOCEPT GmbH
-wrote:
+On Tue, 11 Nov 2014 09:12:14 +0000, Spielmann Werner wrote:
 
-> I have create a Buildroot BSP for the phyCORE-AM335x board based on the PTXdist BSP PD13.1.2 from Phytec.
-> This have been done on my working station.
-> Now I want to migrate the cross-toolchain, libraries and some binaries like qmake, to our build server (Jenkins).
-> What is the best way to do this?
+> > Well, what don't you look by yourself in the RTAI sources? :-)
+> 
+> :-)  Good point. Sorry, I did but I was lost within the source...  
 
-Just tar the contents of output/host. However, beware that right now
-the SDK is not relocatable, so you'll have to install it to the exact
-same location on other machines. In general, the default location in
-output/host is not very nice, so you can use the BR2_HOST_DIR
-configuration option to change where the host directory gets
-stored, and therefore put it for example in /opt/buildroot-sdk/, and
-then tar this.
+No problem. At least now you have the right pointers to look by
+yourself.
 
-Making the SDK relocatable is on our TODO list. There is a list of the
-issues to fix and some possible solutions at
-http://elinux.org/Buildroot#Core_Buildroot_infrastructure.
+> > Plus we need more details such as which platform you are interested in
+> 
+> Yes,  I didn't pay attention to the different platforms. I'm interested in the x86 architecture. 
 
-> Do I have to enable to "Eclipse support"?
+So, as you can see, with RTAI, the latest kernel version supported on
+x86 is 3.8.x.
 
-No, the Eclipse support is orthogonal to this. The Eclipse support will
-only write one line to $HOME/.buildroot-eclipse.toolchains for each
-Buildroot toolchain that has been built on the system, so that Eclipse
-cna easily show the available toolchain when the Buildroot Eclipse
-plug-in is installed.
+Xenomai has support for 3.8, 3.10 and 3.14 for the x86 architecture.
 
 Best regards,
 
