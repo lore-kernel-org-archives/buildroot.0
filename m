@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Nov 2014 21:41:13 +0100
-Subject: [Buildroot] [git commit] nodejs: disable ssl2 and ssl3 when openssl
-	is not built
-Message-ID: <20141111205928.DE2F7B3FF0@busybox.osuosl.org>
+Date: Tue, 11 Nov 2014 21:49:37 +0100
+Subject: [Buildroot] [git commit] docs/manual: cleanup github helper docs
+Message-ID: <20141111205928.EDC56B40E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e712638b4adc6e18b3ce99ab37b94530e9aa786f
+commit: http://git.buildroot.net/buildroot/commit/?id=f26ffd7afdbd36d61e8d5754750af3730e69b7c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The nodejs version 0.10.33 is compiled with SSLv2 and SSLv3 protocol
-support by default so it fails to build if the package openssl was not
-built.
+Explicitly state that the github helper should not be used when there is
+a release tarball.
 
-To fix this build failure disable SSLv2 and SSLv3 protcol suppport if
-the openssl package is not built.
+Properly render the list by separating it from the previous paragraph.
 
-Fixes:
-  http://autobuild.buildroot.net/results/e1fb34818ff1167aa008b4011befb9fd14c81293
-  http://autobuild.buildroot.net/results/8b72b0c311f2f7f7430aca5f7cca1f7d82d1c213
-  http://autobuild.buildroot.net/results/e5f87dc635e0e6a6d1cc234529a433e12d810097
-  http://autobuild.buildroot.net/results/3c4a5be556cfbd0d0e632757887ebc2f1de64bba
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[Peter: fix typo as pointed out by Maxime]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk |    3 ++-
+ docs/manual/adding-packages-tips.txt |    3 ++-
  1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 312aaa9..32e19b7 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -75,7 +75,8 @@ define NODEJS_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--without-snapshot \
- 		--shared-zlib \
--		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-+		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,\
-+			--without-ssl --without-ssl2 --without-ssl3) \
- 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
- 		--without-dtrace \
- 		--without-etw \
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 0c6018a..6f5e785 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -61,10 +61,11 @@ may be slightly different (e.g. it contains a configure script so we don't
+ need to do AUTORECONF).
+ 
+ You can see on the release page if it's an uploaded tarball or a git tag:
++
+ - If there is a green download button, like
+   https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
+   was uploaded by the maintainer and you should use the link of that button to
+-  specify +FOO_SITE+.
++  specify +FOO_SITE+, and not use the 'github' helper.
+ - If there is grey download button, like
+   https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
+   automatically generated tarball and you should use the 'github' helper
