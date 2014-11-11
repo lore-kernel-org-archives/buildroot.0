@@ -1,67 +1,94 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 11 Nov 2014 15:51:22 +0000
-Subject: [Buildroot] [PATCH] alsa-utils: fix linking with intl
-Message-ID: <1415721082-15809-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Tue, 11 Nov 2014 17:17:31 +0100
+Subject: [Buildroot] [-M] uboot: Added local directory as source of U-Boot
+	code
+Message-ID: <1415722651-9204-1-git-send-email-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-alsa-utils needs to link with intl if the toolchain needs gettext and
-locale is set. Otherwise we will see an error like this one:
+Add the option to use a local directory as the source for building U-Boot.
+This can be useful during development.
 
-option.o: In function `canonicalise_opt':
-option.c:(.text+0x3bc): undefined reference to `libintl_gettext'
-
-Fixes:
-  http://autobuild.buildroot.net/results/276/276581f6dbbe330799c3a7eaa26b453e38a22907/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/alsa-utils/Config.in     |    1 +
- package/alsa-utils/alsa-utils.mk |   10 +++++-----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ boot/uboot/Config.in | 14 ++++++++++++++
+ boot/uboot/uboot.mk  | 11 ++++++++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 58ecf51..cc66711 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_ALSA_UTILS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  This package contains the command line utilities for the ALSA
- 	  project.
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 208c5fc..17895c3 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -13,11 +13,6 @@ ALSA_UTILS_INSTALL_STAGING = YES
- ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 46d1109..ea929d9 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -34,6 +34,12 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT
+ config BR2_TARGET_UBOOT_CUSTOM_HG
+ 	bool "Custom Mercurial repository"
  
--# gettext support is optional
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--ALSA_UTILS_DEPENDENCIES += gettext
--endif
--
- ALSA_UTILS_CONF_ENV = \
- 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- 
-@@ -25,6 +20,11 @@ ALSA_UTILS_CONF_OPTS = \
- 	--disable-xmlto \
- 	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+ALSA_UTILS_DEPENDENCIES += gettext
-+ALSA_UTILS_CONF_ENV += LIBS=-lintl
-+endif
++config BR2_TARGET_UBOOT_CUSTOM_LOCAL
++	bool "Custom local directory"
++	help
++	  This option allows Buildroot to get the target U-Boot source
++	  code from a local directory.
 +
- ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
- ALSA_UTILS_CONF_OPTS += --disable-alsamixer --disable-alsatest
- endif
+ endchoice
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
+@@ -44,6 +50,13 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom U-Boot tarball"
+ 	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 
++config BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH
++	string "Path to the local directory"
++	depends on BR2_TARGET_UBOOT_CUSTOM_LOCAL
++	help
++	  Path to the local directory with the target U-Boot source
++	  code.
++
+ if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+@@ -69,6 +82,7 @@ config BR2_TARGET_UBOOT_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_LOCAL
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1f8818c..fb7ceb3 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -12,11 +12,14 @@ UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
+ 
+ UBOOT_INSTALL_IMAGES = YES
+ 
+-ifeq ($(UBOOT_VERSION),custom)
++ifeq ($(BR2_TARGET_UBOOT_CUSTOM_TARBALL),y)
+ # Handle custom U-Boot tarballs as specified by the configuration
+ UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
+ UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
+ UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
++else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_LOCAL),y)
++UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH))
++UBOOT_SITE_METHOD = local
+ else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
+ UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ UBOOT_SITE_METHOD = git
+@@ -187,6 +190,12 @@ $(error No custom U-Boot tarball specified. Check your BR2_TARGET_UBOOT_CUSTOM_T
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ endif # BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 
++ifeq ($(BR2_TARGET_UBOOT_CUSTOM_LOCAL),y)
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH)),)
++$(error No custom U-Boot local path specified. Check your BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH setting)
++endif # qstrip BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH
++endif # BR2_TARGET_UBOOT_CUSTOM_LOCAL
++
+ ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT)$(BR2_TARGET_UBOOT_CUSTOM_HG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL)),)
+ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_URL setting)
 -- 
-1.7.1
+2.1.3
