@@ -1,31 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Nov 2014 15:39:26 +0100
-Subject: [Buildroot] [PATCH v2 0/2] libgtk3: version bump
-In-Reply-To: <1415704522-14201-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415704522-14201-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141111153926.57d86de9@free-electrons.com>
+Date: Tue, 11 Nov 2014 15:40:58 +0100
+Subject: [Buildroot] [git commit] rt-tests: switch site from Debian snapshot
+	to Linux's git
+Message-ID: <20141111144147.5BA0FB40EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=764ce21cd264679f7ec1b4b8f38fdbfbaa1aee16
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Nov 2014 11:15:20 +0000, Vicente Olivert Riera wrote:
-> Changes since v1:
-> - Join patches 2 and 3 in a single one, so the patch series works at 
->   each point of the series.
-> - Add a hash file
-> 
-> Vicente Olivert Riera (2):
->   libgtk3: rename patches to follow the new name structure
->   libgtk3: bump version to 3.14.5
+Origin of "rt-tests" is:
+git://git.kernel.org/pub/scm/linux/kernel/git/clrkwllms/rt-tests.git
 
-Both patches applied, thanks.
+Switching to this new "origin" simplifies version bumping because there's
+no need in updating Debian snapshot folder as it was done already here:
+http://git.buildroot.net/buildroot/commit/package/rt-tests?id=da330e508c2d95e898ac52a2aa39426a5f6d0506
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rt-tests/rt-tests.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index cc4f9cf..caa4d35 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-RT_TESTS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/r/rt-tests
+-RT_TESTS_VERSION = 0.83
+-RT_TESTS_SOURCE = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
++RT_TESTS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/clrkwllms/rt-tests.git
++RT_TESTS_VERSION = v0.83
+ RT_TESTS_LICENSE = GPLv2+
+ RT_TESTS_LICENSE_FILES = COPYING
+ 
