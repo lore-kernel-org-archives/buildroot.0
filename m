@@ -1,35 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Nov 2014 21:41:33 +0100
-Subject: [Buildroot] [PATCH] nodejs: disable ssl2 and ssl3 when openssl
-	is not built
-In-Reply-To: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Tue, 11 Nov 2014 16:21:03 +0100")
-References: <1415719263-11506-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87tx25mpvm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Nov 2014 21:15:57 +0100
+Subject: [Buildroot] [git commit] mpd: bump to version 0.19.3
+Message-ID: <20141111205928.C96C1B3FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=528c48626f8f08e42640010e5386c8201e911765
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The nodejs version 0.10.33 is compiled with SSLv2 and SSLv3 protocol
- > support by default so it fails to build if the package openssl was not
- > built.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpd/mpd.hash |    2 +-
+ package/mpd/mpd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > To fix this build failure disable SSLv2 and SSLv3 protcol suppport if
- > the openssl package is not built.
-
- > Fixes:
- >   http://autobuild.buildroot.net/results/e1fb34818ff1167aa008b4011befb9fd14c81293
- >   http://autobuild.buildroot.net/results/8b72b0c311f2f7f7430aca5f7cca1f7d82d1c213
- >   http://autobuild.buildroot.net/results/e5f87dc635e0e6a6d1cc234529a433e12d810097
- >   http://autobuild.buildroot.net/results/3c4a5be556cfbd0d0e632757887ebc2f1de64bba
-
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 0861706..3e91179 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	73f0ed6b4001628287a71d077c624a2ca8200b24e3e877b725fcbf54dfe6a108	mpd-0.19.2.tar.xz
++sha256	fee3f3c59b5806767f23f7962621be7a62d4fcb852fff6b9ed6bbb5598a556d3	mpd-0.19.3.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 8ec3c0e..7061bdb 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).2
++MPD_VERSION = $(MPD_VERSION_MAJOR).3
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
