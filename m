@@ -1,69 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 12 Nov 2014 01:27:04 +0100
-Subject: [Buildroot] [PATCH v2] python-webpy: add new package
-Message-ID: <1415752024-9089-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 12 Nov 2014 01:28:40 +0100
+Subject: [Buildroot] [PATCH v2 00/15] ejabberd: XMPP server
+In-Reply-To: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+References: <1415366931-6870-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20141112002840.GN4240@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: add license information
+Johan, All,
 
- package/Config.in                    |  1 +
- package/python-webpy/Config.in       |  8 ++++++++
- package/python-webpy/python-webpy.mk | 13 +++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-webpy/Config.in
- create mode 100644 package/python-webpy/python-webpy.mk
+On 2014-11-07 14:28 +0100, Johan Oudinet spake thusly:
+> Since ejabberd build system relies on rebar to download its
+> dependencies, we've packaged all of them separately and modified
+> ejabberd makefile to not download any dependency.
 
-diff --git a/package/Config.in b/package/Config.in
-index 28cf703..949c7b6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "external python modules"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-webpy/Config.in"
- endmenu
- endif
- 	source "package/ruby/Config.in"
-diff --git a/package/python-webpy/Config.in b/package/python-webpy/Config.in
-new file mode 100644
-index 0000000..af27888
---- /dev/null
-+++ b/package/python-webpy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_WEBPY
-+	bool "python-webpy"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	help
-+	  web.py is a web framework for Python that is as simple as it is
-+	  powerful.
-+
-+	  http://webpy.org/
-diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
-new file mode 100644
-index 0000000..ef5b6b3
---- /dev/null
-+++ b/package/python-webpy/python-webpy.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-webpy
-+#
-+################################################################################
-+
-+PYTHON_WEBPY_VERSION = 0.37
-+PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
-+PYTHON_WEBPY_SETUP_TYPE = distutils
-+PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
-+PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
-+
-+$(eval $(python-package))
+I've pushed a new version of that series, now, so I marked this one
+as Superseded in Patchwork.
+
+Thank you for the initial hard work! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
