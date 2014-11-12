@@ -1,86 +1,124 @@
-From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Date: Wed, 12 Nov 2014 17:16:32 +0100
-Subject: [Buildroot] [PATCH V2 3/4] c-icap: new package
-In-Reply-To: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <1415808993-2394-4-git-send-email-guillaume.gardet@oliseo.fr>
+From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
+Date: Wed, 12 Nov 2014 19:01:06 +0100
+Subject: [Buildroot] [RFC/PATCH 1/1] systemd: fix remount-fs
+Message-ID: <1415815266-21733-1-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+systemd runs "/bin/mount MOUNTPOINT -o remount" for remounting
+the rootfs (and others like /usr, /proc, ...) [0]. This is supposed
+to remount the rootfs in rw/ro mode depending on /etc/fstab.
 
+busybox' mount -o remount command, however, complety ignores fstab
+and reads the mount options from /proc/mounts only (+ cmdline "-o ...") [1],
+so "mount / -o remount" is a no-op.
+
+This commit adds a patch that causes systemd's remount-fs to pass the
+options from /etc/fstab to the mount command.
+
+References:
+[0] http://cgit.freedesktop.org/systemd/systemd/tree/src/remount-fs/remount-fs.c?id=v217 (line 99)
+[1] http://git.busybox.net/busybox/tree/util-linux/mount.c?h=1_22_stable (line 2133)
+
+Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- package/Config.in        |  1 +
- package/c-icap/Config.in | 10 ++++++++++
- package/c-icap/c-icap.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/c-icap/Config.in
- create mode 100644 package/c-icap/c-icap.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 28cf703..fe0af07 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -983,6 +983,7 @@ menu "Networking applications"
- 	source "package/boa/Config.in"
- 	source "package/bridge-utils/Config.in"
- 	source "package/bwm-ng/Config.in"
-+	source "package/c-icap/Config.in"
- 	source "package/can-utils/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
+Notes:
+* selecting BR2_PACKAGE_UTIL_LINUX_MOUNT=y would also fix remounting,
+  but that also requires BR2_PACKAGE_UTIL_LINUX_BINARIES=y...
+
+* passing all options to mount rather than checking for "rw"/ro"
+  (hasmntopt(...,"ro")==NULL) makes remount-fs behave identical
+  regardless of whether util-linux' or busybox' mount is used
+  (remount-fs also remounts /proc etc.)
+
+* a systemd-based buildroot config ignores BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+  This is not changed by this commit, but the rootfs is now always rw unless
+  /etc/fstab gets replaced by a a postbuild script / rootfs overlay.
+
+By the way, I have a script for generating /etc/fstab, which could be useful
+for dealing with remount-ro/rw and systemd-specific mounts (and maybe genimages).
+Tell me if there's any interest in getting this integrated into buildroot.
+
+You can view it here 
+  https://gist.github.com/dywisor/62d41835c2dff043f794#file-mkfstab-bash-L17-L96
+(not the latest revision, but sufficient for getting an overview.)
+---
+ ...t-fs-pass-options-from-fstab-to-bin-mount.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
+
+diff --git a/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
 new file mode 100644
-index 0000000..e8ac241
+index 0000000..c6dc661
 --- /dev/null
-+++ b/package/c-icap/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_C_ICAP
-+	bool "c-icap"
-+	help
-+	  c-icap is an implementation of an ICAP server. It can be used with 
-+	  HTTP proxies that support the ICAP protocol to implement content 
-+	  adaptation and filtering services.
-+	  Most of the commercial HTTP proxies must support the ICAP protocol.
-+	  The open source Squid 3.x proxy server supports it.
++++ b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
+@@ -0,0 +1,63 @@
++From 7bc0901a00e78f22f97dbd3f85c7a19d9a78e7a1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
++Date: Wed, 12 Nov 2014 17:45:46 +0100
++Subject: [PATCH 1/1] remount-fs: pass options from fstab to /bin/mount
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+	  http://c-icap.sourceforge.net/
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-new file mode 100644
-index 0000000..8f93638
---- /dev/null
-+++ b/package/c-icap/c-icap.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# c-icap
-+#
-+################################################################################
++busybox mount -o remount reads the mount options from /proc/mounts (or mtab);
++Executing "/bin/mount / -o remount" has no effect when /bin/mount is linked
++to busybox.
 +
-+C_ICAP_VERSION = 0.3.5
-+C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
-+C_ICAP_SITE = http://downloads.sourceforge.net/c-icap/
-+C_ICAP_LICENSE = LGPLv2.1+
-+C_ICAP_LICENSE_FILES = COPYING
-+C_ICAP_INSTALL_STAGING = YES
-+C_ICAP_CONF_OPTS = --sysconfdir=/etc --with-process-mutexes=posix
-+ifeq ($(BR2_LARGEFILE),y)
-+C_ICAP_CONF_OPTS += --enable-large-files
-+else
-+C_ICAP_CONF_OPTS += --disable-large-files
-+endif
++remount-fs already reads the options from /etc/fstab,
++so simply pass them to the mount command.
 +
-+define C_ICAP_INSTALL_TARGET_CONFIGS
-+	mkdir -p $(TARGET_DIR)/var/run/c-icap/
-+	mkdir -p $(TARGET_DIR)/tmp/c-icap/
-+endef
++Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
++---
++ src/remount-fs/remount-fs.c | 11 ++++++++++-
++ 1 file changed, 10 insertions(+), 1 deletion(-)
 +
-+C_ICAP_POST_INSTALL_TARGET_HOOKS = C_ICAP_INSTALL_TARGET_CONFIGS
++diff --git a/src/remount-fs/remount-fs.c b/src/remount-fs/remount-fs.c
++index cd7cfe7..f63f009 100644
++--- a/src/remount-fs/remount-fs.c
+++++ b/src/remount-fs/remount-fs.c
++@@ -20,6 +20,7 @@
++ ***/
++ 
++ #include <unistd.h>
+++#include <stdlib.h>
++ #include <fcntl.h>
++ #include <errno.h>
++ #include <string.h>
++@@ -93,18 +94,26 @@ int main(int argc, char *argv[]) {
++                 }
++ 
++                 if (pid == 0) {
+++                        char *opts_str;
++                         const char *arguments[5];
++                         /* Child */
++ 
+++                        opts_str = strappend("remount,", me->mnt_opts);
+++                        if (opts_str == NULL) {
+++                                log_error("Failed to get remount opts");
+++                                _exit(EXIT_FAILURE);
+++                        }
+++
++                         arguments[0] = "/bin/mount";
++                         arguments[1] = me->mnt_dir;
++                         arguments[2] = "-o";
++-                        arguments[3] = "remount";
+++                        arguments[3] = opts_str;
++                         arguments[4] = NULL;
++ 
++                         execv("/bin/mount", (char **) arguments);
++ 
++                         log_error("Failed to execute /bin/mount: %m");
+++                        free(opts_str);
++                         _exit(EXIT_FAILURE);
++                 }
++ 
++-- 
++2.1.3
 +
-+$(eval $(autotools-package))
 -- 
-1.8.4.5
+2.1.3
