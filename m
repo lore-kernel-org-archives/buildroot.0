@@ -1,50 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:25:50 +0100
-Subject: [Buildroot] [PATCH 04/24 v3] pkg-autotools: move the libtool
-	patching call out of the autoreconf hook
+Date: Wed, 12 Nov 2014 01:25:51 +0100
+Subject: [Buildroot] [PATCH 05/24 v3] pkg-autotools: remove redundant shell
+	conditional
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <6ea40a37507892ad093c4a13acf3b5a9dae346c2.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <d69930346a83bdb78b40bf5caa6e00343ed730db.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Call it as a standalone hook, like is done for post-patch.
+The libtool patching function checks whether patching libtool is wanted
+before doing the actual patching.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-[yann.morin.1998 at free.fr: split the patch into semantically separate
-patches]
+This is redundant now, as all callers are now protected by a conditional
+block.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/pkg-autotools.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/pkg-autotools.mk | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 393f995..45947b0 100644
+index 45947b0..e240b95 100644
 --- a/package/pkg-autotools.mk
 +++ b/package/pkg-autotools.mk
-@@ -98,7 +98,6 @@ endef
- define AUTORECONF_HOOK
- 	@$(call MESSAGE,"Autoreconfiguring")
- 	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
--	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+@@ -44,19 +44,17 @@ endef
+ #
+ define PATCH_LIBTOOL
+ 	@$(call MESSAGE,"Patching libtool")
+-	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" ]; then \
+-		for i in `find $(1) -name ltmain.sh`; do \
+-			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-			if test $${ltmain_version} = '1.5'; then \
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-			elif test $${ltmain_version} = "2.2"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-			elif test $${ltmain_version} = "2.4"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-			fi \
+-		done \
+-	fi
++	$(Q)for i in `find $(1) -name ltmain.sh`; do \
++		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++		if test $${ltmain_version} = '1.5'; then \
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++		elif test $${ltmain_version} = "2.2"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++		elif test $${ltmain_version} = "2.4"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++		fi \
++	done
  endef
  
- ################################################################################
-@@ -260,6 +259,10 @@ $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
- $(2)_DEPENDENCIES += host-gettext
- endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
-+endif
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
- 
+ # This function generates the ac_cv_file_<foo> value for a given
 -- 
 1.9.1
