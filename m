@@ -1,34 +1,28 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 12 Nov 2014 21:50:11 +0100
-Subject: [Buildroot] [PATCH 1/4] libevdev: bump version to 1.3
-Message-ID: <1415825414-18756-1-git-send-email-ps.report@gmx.net>
+Date: Wed, 12 Nov 2014 21:50:12 +0100
+Subject: [Buildroot] [PATCH 2/4] libevdev: add hash
+In-Reply-To: <1415825414-18756-1-git-send-email-ps.report@gmx.net>
+References: <1415825414-18756-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1415825414-18756-2-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for details.
-
-[1] http://lists.freedesktop.org/archives/input-tools/2014-September/001112.html
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libevdev/libevdev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libevdev/libevdev.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libevdev/libevdev.hash
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index fde7d3c..d34307f 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.2.2
-+LIBEVDEV_VERSION = 1.3
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+new file mode 100644
+index 0000000..28cc1ec
+--- /dev/null
++++ b/package/libevdev/libevdev.hash
+@@ -0,0 +1,2 @@
++# Hash from http://lists.freedesktop.org/archives/input-tools/2014-September/001112.html
++sha256 265411ce79a592b3074e9d07fb97d462745d0c7ef178254a6f720245ed253446 libevdev-1.3.tar.xz
 -- 
 1.8.1.4
