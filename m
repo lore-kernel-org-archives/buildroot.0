@@ -1,124 +1,73 @@
-From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Wed, 12 Nov 2014 19:01:06 +0100
-Subject: [Buildroot] [RFC/PATCH 1/1] systemd: fix remount-fs
-Message-ID: <1415815266-21733-1-git-send-email-dywi@mailerd.de>
+From: Sid Bharij <sid.bharij@gmail.com>
+Date: Wed, 12 Nov 2014 12:25:45 -0600
+Subject: [Buildroot] Buildroot and kernel modules
+In-Reply-To: <20141112133418.728a5f52@free-electrons.com>
+References: <CAEk40fxcdS-gS9Q8LM-W8pKUP3=PUSkbL9Crq63kvcpG5LBf=Q@mail.gmail.com>
+ <20141112110354.1a6bcc98@free-electrons.com>
+ <A2A6A18A7161D44FBCA90D5B3AF90A2E5A5C3C97@AMEHLEX02.ehl.pri>
+ <20141112133418.728a5f52@free-electrons.com>
+Message-ID: <CAEk40fw3Kgtgq=mKdR3ib40tLtD5x4SF0sT0QJrrwKVCO_+BZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd runs "/bin/mount MOUNTPOINT -o remount" for remounting
-the rootfs (and others like /usr, /proc, ...) [0]. This is supposed
-to remount the rootfs in rw/ro mode depending on /etc/fstab.
+Thank you gentlemen!
+So I have the driver source file and makefile for it.
+Where does this part go into ? Does it go into the Config.in file or some
+top level makefile or the same makefile needed for compiling the driver
+code?
 
-busybox' mount -o remount command, however, complety ignores fstab
-and reads the mount options from /proc/mounts only (+ cmdline "-o ...") [1],
-so "mount / -o remount" is a no-op.
+KERNELMODULE_DEPENDENCIES = linux
 
-This commit adds a patch that causes systemd's remount-fs to pass the
-options from /etc/fstab to the mount command.
+define KERNELMODULE_BUILD_CMDS
+   $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+endef
 
-References:
-[0] http://cgit.freedesktop.org/systemd/systemd/tree/src/remount-fs/remount-fs.c?id=v217 (line 99)
-[1] http://git.busybox.net/busybox/tree/util-linux/mount.c?h=1_22_stable (line 2133)
+define KERNELMODULE_INSTALL_TARGET_
+CMDS
+   $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+endef
 
-Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
----
+$(eval $(generic-package))
 
-Notes:
-* selecting BR2_PACKAGE_UTIL_LINUX_MOUNT=y would also fix remounting,
-  but that also requires BR2_PACKAGE_UTIL_LINUX_BINARIES=y...
 
-* passing all options to mount rather than checking for "rw"/ro"
-  (hasmntopt(...,"ro")==NULL) makes remount-fs behave identical
-  regardless of whether util-linux' or busybox' mount is used
-  (remount-fs also remounts /proc etc.)
+On Wed, Nov 12, 2014 at 6:34 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-* a systemd-based buildroot config ignores BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-  This is not changed by this commit, but the rootfs is now always rw unless
-  /etc/fstab gets replaced by a a postbuild script / rootfs overlay.
-
-By the way, I have a script for generating /etc/fstab, which could be useful
-for dealing with remount-ro/rw and systemd-specific mounts (and maybe genimages).
-Tell me if there's any interest in getting this integrated into buildroot.
-
-You can view it here 
-  https://gist.github.com/dywisor/62d41835c2dff043f794#file-mkfstab-bash-L17-L96
-(not the latest revision, but sufficient for getting an overview.)
----
- ...t-fs-pass-options-from-fstab-to-bin-mount.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-
-diff --git a/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-new file mode 100644
-index 0000000..c6dc661
---- /dev/null
-+++ b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-@@ -0,0 +1,63 @@
-+From 7bc0901a00e78f22f97dbd3f85c7a19d9a78e7a1 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-+Date: Wed, 12 Nov 2014 17:45:46 +0100
-+Subject: [PATCH 1/1] remount-fs: pass options from fstab to /bin/mount
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+busybox mount -o remount reads the mount options from /proc/mounts (or mtab);
-+Executing "/bin/mount / -o remount" has no effect when /bin/mount is linked
-+to busybox.
-+
-+remount-fs already reads the options from /etc/fstab,
-+so simply pass them to the mount command.
-+
-+Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
-+---
-+ src/remount-fs/remount-fs.c | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/remount-fs/remount-fs.c b/src/remount-fs/remount-fs.c
-+index cd7cfe7..f63f009 100644
-+--- a/src/remount-fs/remount-fs.c
-++++ b/src/remount-fs/remount-fs.c
-+@@ -20,6 +20,7 @@
-+ ***/
-+ 
-+ #include <unistd.h>
-++#include <stdlib.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-+ #include <string.h>
-+@@ -93,18 +94,26 @@ int main(int argc, char *argv[]) {
-+                 }
-+ 
-+                 if (pid == 0) {
-++                        char *opts_str;
-+                         const char *arguments[5];
-+                         /* Child */
-+ 
-++                        opts_str = strappend("remount,", me->mnt_opts);
-++                        if (opts_str == NULL) {
-++                                log_error("Failed to get remount opts");
-++                                _exit(EXIT_FAILURE);
-++                        }
-++
-+                         arguments[0] = "/bin/mount";
-+                         arguments[1] = me->mnt_dir;
-+                         arguments[2] = "-o";
-+-                        arguments[3] = "remount";
-++                        arguments[3] = opts_str;
-+                         arguments[4] = NULL;
-+ 
-+                         execv("/bin/mount", (char **) arguments);
-+ 
-+                         log_error("Failed to execute /bin/mount: %m");
-++                        free(opts_str);
-+                         _exit(EXIT_FAILURE);
-+                 }
-+ 
-+-- 
-+2.1.3
-+
--- 
-2.1.3
+> Dear Paassen, Hiram van,
+>
+> On Wed, 12 Nov 2014 12:21:12 +0000, Paassen, Hiram van wrote:
+>
+> > As an alternative we use a buildroot package with something like this in
+> > it:
+> >
+> > KERNELMODULE_DEPENDENCIES = linux
+> >
+> > define KERNELMODULE_BUILD_CMDS
+> >    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+> > endef
+> >
+> > define KERNELMODULE_INSTALL_TARGET_CMDS
+> >    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+> > endef
+> >
+> > $(eval $(generic-package))
+> >
+> >
+> > which basically builds a normal out of tree module.
+>
+> Yes, that's what should be done if your module is out of tree, indeed.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141112/8a0808eb/attachment.html>
