@@ -1,66 +1,64 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Wed, 12 Nov 2014 11:26:00 -0800
-Subject: [Buildroot] Buildroot and kernel modules
-In-Reply-To: <20141112133418.728a5f52@free-electrons.com>
-References: <CAEk40fxcdS-gS9Q8LM-W8pKUP3=PUSkbL9Crq63kvcpG5LBf=Q@mail.gmail.com>
- <20141112110354.1a6bcc98@free-electrons.com>
- <A2A6A18A7161D44FBCA90D5B3AF90A2E5A5C3C97@AMEHLEX02.ehl.pri>
- <20141112133418.728a5f52@free-electrons.com>
-Message-ID: <CAJpxd06J7Jo8XnMPZpGN_A9pQ19aDKabzBOeDShn6zaheoTi2A@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 12 Nov 2014 20:58:28 +0100
+Subject: [Buildroot] [PATCH v4 0/9] autobuild-run improvements
+Message-ID: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I reluctantly hijack this thread to ask a very closely related question: Is
-there a way to build an out-of-tree module like this using the
-buildroot-compiled linux headers, instead of the possibly-older
-toolchain-provided linux headers?
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
+This series against the buildroot-test repo makes some improvements to the
+autobuild-run script.
 
-<><  <><  <><
-Bryce Schober
+v4:
+- rename do_send_results into upload (Peter)
 
-On Wed, Nov 12, 2014 at 4:34 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+v3:
+- introduce missing usage of do_send_results (and move patch backwards)
+- update TODO list
 
-> Dear Paassen, Hiram van,
->
-> On Wed, 12 Nov 2014 12:21:12 +0000, Paassen, Hiram van wrote:
->
-> > As an alternative we use a buildroot package with something like this in
-> > it:
-> >
-> > KERNELMODULE_DEPENDENCIES = linux
-> >
-> > define KERNELMODULE_BUILD_CMDS
-> >    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-> > endef
-> >
-> > define KERNELMODULE_INSTALL_TARGET_CMDS
-> >    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
-> > endef
-> >
-> > $(eval $(generic-package))
-> >
-> >
-> > which basically builds a normal out of tree module.
->
-> Yes, that's what should be done if your module is out of tree, indeed.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141112/6c98aabe/attachment.html>
+v2:
+- reorder patches
+- take into account comments on boolean logic in first patch
+- place docopt directly in scripts/ instead of in a subdirectory
+- remove patch adding --git (Yann, Thomas)
+- some bug fixes in the first version of the patches
+
+As you can see, this iteration still has the docopt patches. Thomas Petazzoni
+has expressed his reservations against the introduction of docopt, because the
+benefits wouldn't weigh out against the addition of an external Python module.
+Thomas told me on IRC he would have a deeper look onto this before making a
+final decision.
+
+In case the final decision is not to introduce docopt, following improvements
+could be done to the current code:
+  - save the arguments from the command-line into a dictionary instead of plain
+    variables
+  - keep the added ini_config() method to also save the options in a dictionary,
+    and use the added merge() method to merge both arguments and config options
+    into one final configuration, without needing to handle it manually.
+
+Thomas De Schampheleire (9):
+  scripts: add python module docopt
+  autobuild-run: use docopt for argument parsing
+  autobuild-run: add option --make-opts for custom Buildroot options
+  autobuild-run: use **kwargs to avoid explicit parameter passthroughs
+  autobuild-run: check-requirements does not need to know the login
+    details
+  autobuild-run: set LC_ALL=C to not use locale settings of host machine
+  autobuild-run: improve the logic to generate build-end.log
+  autobuild-run: save config.log files for failed package
+  autobuild-run: extend TODO list
+
+ scripts/autobuild-run      | 309 ++++++++++++++++--------
+ scripts/docopt.LICENSE-MIT |  23 ++
+ scripts/docopt.py          | 581 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 811 insertions(+), 102 deletions(-)
+ create mode 100644 scripts/docopt.LICENSE-MIT
+ create mode 100644 scripts/docopt.py
+
+-- 
+1.8.5.1
