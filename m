@@ -1,50 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:25:54 +0100
-Subject: [Buildroot] [PATCH 08/24 v3] package/erlang: export EI_VSN so other
-	packages can use it
+Date: Wed, 12 Nov 2014 01:25:53 +0100
+Subject: [Buildroot] [PATCH 07/24 v3] pkg-autotools: only apply libtool
+	patch at the right moment
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <a84bacc066e9efd2cd913ace4f6d777d642ebc4a.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <7b4b4c365245d98e15d65ee8ee8f73c683fc15fe.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Packages that depend on Erlang may need the Erlang Interface Version
-(aka EI_VSN), so just export it.
+Currently, we apply the libtool patch at post-patch time, always. If we
+need to autoreconf, we also apply it after autoreconf is done.
 
-We do export a static value instead of looking in the file, to avoid
-spawning a shell every time the variable is dereferenced.
+Obviously, in that second casse, we do not need to apply it at
+post-patch time. This has no impact on the result, as autoreconf will
+overwrite the just patched files, and they will be patched yet again.
+But it is not nice to the user that will see a double "Patching libtool"
+message.
+
+So, we apply the libtool patch at post-patch time only if we are not
+autoreconfiguring the package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang/erlang.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-autotools.mk | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index e6899de..f4687e4 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 924816b..ad2d1a6 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -235,12 +235,8 @@ endif
  
-+# See note below when updating Erlang
- ERLANG_VERSION = 17.3
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
-@@ -13,6 +14,10 @@ ERLANG_LICENSE = EPL
- ERLANG_LICENSE_FILES = EPLICENCE
- ERLANG_INSTALL_STAGING = YES
+ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
  
-+# Whenever updating Erlang, this value should be updated as well, to the
-+# value of EI_VSN in the file lib/erl_interface/vsn.mk
-+ERLANG_EI_VSN = 3.7.18
+-# default values are not evaluated yet, so don't rely on this defaulting to YES
+-ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+-$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
+-endif
+-
+ ifeq ($$($(2)_AUTORECONF),YES)
 +
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+ # This has to come before autoreconf
+ ifeq ($$($(2)_GETTEXTIZE),YES)
+ $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
+@@ -252,6 +248,14 @@ ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+ $(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
+ endif
+ $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
++
++else # ! AUTORECONF = YES
++
++# default values are not evaluated yet, so don't rely on this defaulting to YES
++ifneq ($$($(2)_LIBTOOL_PATCH),NO)
++$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
++endif
++
+ endif
  
+ #
 -- 
 1.9.1
