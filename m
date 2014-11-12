@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 12 Nov 2014 20:58:33 +0100
-Subject: [Buildroot] [PATCH v4 5/9] autobuild-run: check-requirements does
-	not need to know the login details
+Date: Wed, 12 Nov 2014 20:58:34 +0100
+Subject: [Buildroot] [PATCH v4 6/9] autobuild-run: set LC_ALL=C to not use
+	locale settings of host machine
 In-Reply-To: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1415822317-22500-6-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1415822317-22500-7-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,42 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-check-requirements simply has to know if the results have to be sent, so
-it can check on some extra requirements. The username and password are
-irrelevant here.
-This commit introduces a boolean variable upload to hide these details.
+If the host machine running autobuild-run happens to have set a
+non-English locale, the error messages will be displayed in that
+language too. For public results like those generated in the Buildroot
+autobuilders, this is a problem.
+
+Therefore, set LC_ALL to a fixed locale (C) at the beginning of the script.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- scripts/autobuild-run | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ scripts/autobuild-run | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 8312bfb..3f5b4cf 100755
+index 3f5b4cf..1ef3f8d 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -120,12 +120,12 @@ def check_version():
-         print "ERROR: script version too old, please upgrade."
-         sys.exit(1)
+@@ -48,8 +48,6 @@
+ #   of just using the last 500 lines of the build log, search the
+ #   start of the build of the failing package.
+ #
+-# - Add LC_ALL=C where appropriate.
+-#
+ # - Include the config.log file (when it exists) in the tarball for
+ #   failed builds when the failure occurs on an autotools package.
+ #
+@@ -602,6 +600,11 @@ def merge(dict_1, dict_2):
+                 for key in set(dict_2) | set(dict_1))
  
--def check_requirements(http_login, http_password):
-+def check_requirements(upload=False):
-     devnull = open(os.devnull, "w")
-     needed_progs = ["make", "git", "gcc", "timeout"]
-     missing_requirements = False
- 
--    if http_login and http_password:
-+    if upload:
-         needed_progs.append("curl")
- 
-     for prog in needed_progs:
-@@ -517,7 +517,7 @@ def send_results(result, **kwargs):
-         log_write(log, "ERROR: could not make results tarball")
-         sys.exit(1)
- 
--    if kwargs['http_login'] and kwargs['http_password']:
-+    if kwargs['upload']:
-         # Submit results. Yes, Python has some HTTP libraries, but
-         # none of the ones that are part of the standard library can
-         # upload a file without writing dozens of lines of code.
-@@ -612,10 +612,15 @@ def main():
-         # merge config/args, priority given to config
-         args = merge(ini_config, args)
- 
--    check_requirements(args['--http-login'], args['--http-password'])
--    if args['--http-login'] is None or args['--http-password'] is None:
-+    # http_login/password could theoretically be allowed as empty, so check
-+    # explicitly on None.
-+    upload = (args['--http-login'] is not None) \
-+                and (args['--http-password'] is not None)
-+    check_requirements(upload)
-+    if not upload:
-         print "WARN: due to the lack of http login/password details, results will not be submitted"
-         print "WARN: tarballs of results will be kept locally only"
+ def main():
 +
-     def sigterm_handler(signum, frame):
-         os.killpg(os.getpgid(os.getpid()), signal.SIGTERM)
-         sys.exit(1)
-@@ -625,7 +630,8 @@ def main():
-             'instance': i, 'njobs': args['--njobs'], 'sysinfo': sysinfo,
-             'http_login': args['--http-login'],
-             'http_password': args['--http-password'],
--            'submitter': args['--submitter'], 'make_opts': args['--make-opts']})
-+            'submitter': args['--submitter'], 'make_opts': args['--make-opts'],
-+            'upload': upload})
-         p.start()
-         processes.append(p)
-     signal.signal(signal.SIGTERM, sigterm_handler)
++    # Avoid locale settings of autobuilder machine leaking in, for example
++    # showing error messages in another language.
++    os.environ['LC_ALL'] = 'C'
++
+     check_version()
+     sysinfo = SystemInfo()
+ 
 -- 
 1.8.5.1
