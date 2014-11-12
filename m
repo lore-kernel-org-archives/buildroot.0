@@ -1,60 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Nov 2014 13:03:54 +0100
-Subject: [Buildroot] [git commit] package/shairport-sync: fix avahi
-	dependency
-Message-ID: <20141112123628.924DDB4400@busybox.osuosl.org>
+From: Jens Stimpfle <debian@jstimpfle.de>
+Date: Wed, 12 Nov 2014 13:31:44 +0000
+Subject: [Buildroot] [PATCH 1/2] Avoid misleading error output caused by
+	missing shell quotes
+Message-ID: <1415799105-27566-1-git-send-email-debian@jstimpfle.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1127b3a2ca9a88236f25dae4d83ecb3990735c94
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-shairport-sync uses mDNS to pubish its service. This task is implemented
-(among others) in avahi and tinysvcmdns.
-
-To use avahi as the mDNS backend, shairport-sync requires libavahi-client or
-libdns_sd. Both will work, but libavahi-client is sufficient.
-
-To get libavahi-client support from avahi BR2_PACKAGE_AVAHI_DAEMON and
-BR2_PACKAGE_DBUS needs to be selected. Unfortunatly this is not immediately
-obvious if you've not checked avahis configure file. A
-BR2_PACKAGE_LIBAVAHI_CLIENT config symbol may help here for clarification,
-but is not present yet.
-
-Fixes autobuild errors:
-  - http://autobuild.buildroot.net/results/a6a/a6ab7641a3cafcdaeffe11f08d5fcacbbb882d8d/
-  - http://autobuild.buildroot.net/results/cb4/cb41980f2fb416d627bea0950e1dae727eae0ca6/
-  - http://autobuild.buildroot.net/results/009/00929df01474813be576936e80e86374efdbc327/
-  - http://autobuild.buildroot.net/results/a40/a40b8cf9aaa4ade4d96524219276cfad2920104c/
-  - http://autobuild.buildroot.net/results/03f/03fff2805b3348f2557bbef73a716eadea3add03/
-
-and some more.
-
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jens Stimpfle <debian@jstimpfle.de>
 ---
- package/shairport-sync/shairport-sync.mk |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 8c345f2..da69171 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -13,8 +13,12 @@ SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libdaemon popt
- SHAIRPORT_SYNC_AUTORECONF = YES
- SHAIRPORT_SYNC_CONF_OPTS = --with-alsa # required
- 
--# Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns)
--ifeq ($(BR2_PACKAGE_AVAHI),y)
-+# Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
-+# Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
-+# and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
-+# option yet, use the avahi-daemon and dbus congig symbols to check for
-+# libavahi-client.
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
- SHAIRPORT_SYNC_DEPENDENCIES += avahi
- SHAIRPORT_SYNC_CONF_OPTS += --with-avahi
- else
+Notes:
+    When g++ is not installed, a misleading error message turns up because
+    of a bad combination of an unquoted shell variable and control flow.
+    
+    > ~/buildroot$ make
+    >
+    > You may have to install 'g++' on your build machine
+    > /home/testuser/buildroot/support/dependencies/dependencies.sh: 136: [: -lt: unexpected operator
+    
+    This is a nonintrusive workaround.
+
+ support/dependencies/dependencies.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a9c5b31..4b8991d 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -118,7 +118,6 @@ CXXCOMPILER=$(which $HOSTCXX_NOCCACHE 2> /dev/null)
+ if [ -z "$CXXCOMPILER" ] ; then
+ 	CXXCOMPILER=$(which c++ 2> /dev/null)
+ fi
+-
+ if [ -z "$CXXCOMPILER" ] ; then
+ 	echo
+ 	echo "You may have to install 'g++' on your build machine"
+@@ -130,7 +129,8 @@ if [ ! -z "$CXXCOMPILER" ] ; then
+ 		echo
+ 		echo "You may have to install 'g++' on your build machine"
+ 	fi
+-
++fi
++if [ ! -z "$CXXCOMPILER_VERSION" ] ; then
+ 	CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
+ 	CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
+ 	if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
+-- 
+2.1.1
