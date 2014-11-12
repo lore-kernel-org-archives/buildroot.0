@@ -1,45 +1,93 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 12 Nov 2014 14:42:25 +0000
-Subject: [Buildroot] [PATCH] uClibc: ARC: enable generic string
-	implementations
-In-Reply-To: <20141112151848.50fe3c21@free-electrons.com>
-References: <1415616842-7640-1-git-send-email-abrodkin@synopsys.com>
- <20141110135034.2e03b27c@free-electrons.com>
- <1415789721.10608.6.camel@abrodkin-8560l.internal.synopsys.com>
- <20141112133341.00298ed8@free-electrons.com>
- <1415800450.10304.1.camel@abrodkin-8560l.internal.synopsys.com>
- <20141112151848.50fe3c21@free-electrons.com>
-Message-ID: <1415803345.10304.3.camel@abrodkin-8560l.internal.synopsys.com>
+Date: Wed, 12 Nov 2014 18:04:44 +0300
+Subject: [Buildroot] [PATCH] uclibc: enable UCLIBC_HAS_STRING_GENERIC_OPT in
+	all configs
+Message-ID: <1415804684-17297-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Description in uClibc for this optoin is:
+--->---
+bool "Use faster (but larger) generic string functions"
+	default y
+	help
+	  Answer Y to use the (tweaked) glibc generic string functions.
 
-On Wed, 2014-11-12 at 15:18 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Wed, 12 Nov 2014 13:54:11 +0000, Alexey Brodkin wrote:
-> 
-> > > If nobody cares, then we just enable the option. And people will
-> > > complain when/if it breaks for them.
-> > 
-> > So should I wait for some time or it's time to send a patch that enables
-> > the option for everybody in uClibc-*.config?
-> 
-> I'd say yes. The uClibc Config.in help text for this option recommends
-> to enable it, and it defaults to y, so I think it's pretty safe.
+	  In general, they are faster (but 3-5K larger) than the base
+	  uClibc string functions which are optimized solely for size.
 
-Ok so will do it shortly.
+	  Many people will answer Y.
+--->---
 
-> Regarding ARC, I see that there are arch-specific optimized string
-> functions in libc/string/arc/, written in assembly. So by enabling
-> GENERIC_OPT, what you gained is that you have optimized versions for
-> those functions that don't have an ARC-specific assembly implementation?
+Additional 3-5K of size is not that important if resulting libuClibc.so is
+of size about 300k.
 
-Absolutely correct, we're getting better results for functions not
-implemented in ASM.
+But benefits in terms of performance could be pretty significant.
 
--Alexey
+For example on ARC in LMbench we see more than 3 times bump in some tests
+--->---
+libc bcopy unaligned
+...
+8.39 - 6.76  (UCLIBC_HAS_STRING_GENERIC_OPT=no)
+8.39 - 23.86 (UCLIBC_HAS_STRING_GENERIC_OPT=yes)
+--->---
+
+Also since the option in question is default in uClibc I don't expect if
+enabled back (it was silently disabled in http://git.buildroot.net/buildroot/commit/?id=cfbf8abc33d86a0cf5c1bb3e0817a22009b7f301 on introduction of NPTL in uClibc
+by Khem Raj) it to introduce problems.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Anton Kolesov <anton.kolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Khem Raj <raj.khem@gmail.com>
+---
+ package/uclibc/uClibc-0.9.31.config   | 2 +-
+ package/uclibc/uClibc-0.9.33.config   | 2 +-
+ package/uclibc/uClibc-snapshot.config | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/uclibc/uClibc-0.9.31.config b/package/uclibc/uClibc-0.9.31.config
+index 76772e8..83df7d0 100644
+--- a/package/uclibc/uClibc-0.9.31.config
++++ b/package/uclibc/uClibc-0.9.31.config
+@@ -144,7 +144,7 @@ UCLIBC_HAS_LIBNSL_STUB=y
+ #
+ # String and Stdio Support
+ #
+-# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_GENERIC_OPT=y
+ UCLIBC_HAS_STRING_ARCH_OPT=y
+ UCLIBC_HAS_CTYPE_TABLES=y
+ UCLIBC_HAS_CTYPE_SIGNED=y
+diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
+index 1b07d4a..88dc7fa 100644
+--- a/package/uclibc/uClibc-0.9.33.config
++++ b/package/uclibc/uClibc-0.9.33.config
+@@ -178,7 +178,7 @@ UCLIBC_HAS_LIBNSL_STUB=y
+ #
+ # String and Stdio Support
+ #
+-# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_GENERIC_OPT=y
+ UCLIBC_HAS_STRING_ARCH_OPT=y
+ UCLIBC_HAS_CTYPE_TABLES=y
+ UCLIBC_HAS_CTYPE_SIGNED=y
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index ffc1535..1f04561 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -183,7 +183,7 @@ UCLIBC_HAS_LIBNSL_STUB=y
+ #
+ # String and Stdio Support
+ #
+-# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_GENERIC_OPT=y
+ UCLIBC_HAS_STRING_ARCH_OPT=y
+ UCLIBC_HAS_CTYPE_TABLES=y
+ UCLIBC_HAS_CTYPE_SIGNED=y
+-- 
+1.9.3
