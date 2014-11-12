@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Nov 2014 13:33:41 +0100
-Subject: [Buildroot] [PATCH] uClibc: ARC: enable generic string
-	implementations
-In-Reply-To: <1415789721.10608.6.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1415616842-7640-1-git-send-email-abrodkin@synopsys.com>
- <20141110135034.2e03b27c@free-electrons.com>
- <1415789721.10608.6.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20141112133341.00298ed8@free-electrons.com>
+Date: Wed, 12 Nov 2014 13:34:18 +0100
+Subject: [Buildroot] Buildroot and kernel modules
+In-Reply-To: <A2A6A18A7161D44FBCA90D5B3AF90A2E5A5C3C97@AMEHLEX02.ehl.pri>
+References: <CAEk40fxcdS-gS9Q8LM-W8pKUP3=PUSkbL9Crq63kvcpG5LBf=Q@mail.gmail.com>
+ <20141112110354.1a6bcc98@free-electrons.com>
+ <A2A6A18A7161D44FBCA90D5B3AF90A2E5A5C3C97@AMEHLEX02.ehl.pri>
+Message-ID: <20141112133418.728a5f52@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Paassen, Hiram van,
 
-On Wed, 12 Nov 2014 10:55:22 +0000, Alexey Brodkin wrote:
+On Wed, 12 Nov 2014 12:21:12 +0000, Paassen, Hiram van wrote:
 
-> I agree that it's better to not have this kind of generic options
-> selected by architectures.
+> As an alternative we use a buildroot package with something like this in
+> it:
 > 
-> But the point is I don't have any real hardware except ARC and ARM
-> boards (Cubieboard2 & Wandboard Quad).
+> KERNELMODULE_DEPENDENCIES = linux
 > 
-> For ARC I do see improvements and still stable behavior of toolchain and
-> target binaries.
+> define KERNELMODULE_BUILD_CMDS
+>    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+> endef
 > 
-> For ARM I don't see any difference in LMbench because most if not all
-> string routines are already implemented in assembly, sio the option in
-> question makes no sense.
+> define KERNELMODULE_INSTALL_TARGET_CMDS
+>    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+> endef
 > 
-> But for other architectures like BlackFin, PPC, MIPS difference could be
-> in both performance and stability but this is something I cannot test.
+> $(eval $(generic-package))
 > 
-> So volunteers are more than welcome.
 > 
-> But what if nobody else cares?
+> which basically builds a normal out of tree module.
 
-If nobody cares, then we just enable the option. And people will
-complain when/if it breaks for them.
+Yes, that's what should be done if your module is out of tree, indeed.
+
+Best regards,
 
 Thomas
 -- 
