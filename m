@@ -1,50 +1,36 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 12 Nov 2014 13:54:11 +0000
-Subject: [Buildroot] [PATCH] uClibc: ARC: enable generic string
-	implementations
-In-Reply-To: <20141112133341.00298ed8@free-electrons.com>
-References: <1415616842-7640-1-git-send-email-abrodkin@synopsys.com>
- <20141110135034.2e03b27c@free-electrons.com>
- <1415789721.10608.6.camel@abrodkin-8560l.internal.synopsys.com>
- <20141112133341.00298ed8@free-electrons.com>
-Message-ID: <1415800450.10304.1.camel@abrodkin-8560l.internal.synopsys.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Wed, 12 Nov 2014 15:09:12 +0100
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20141111234919.3178e9d3@free-electrons.com>
+References: <20141111073014.AA83D101626@stock.ovh.net>
+ <20141111234919.3178e9d3@free-electrons.com>
+Message-ID: <1415801352.20520.8.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
-On Wed, 2014-11-12 at 13:33 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
+On Di, 2014-11-11 at 23:49 +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Wed, 12 Nov 2014 10:55:22 +0000, Alexey Brodkin wrote:
-> 
-> > I agree that it's better to not have this kind of generic options
-> > selected by architectures.
-> > 
-> > But the point is I don't have any real hardware except ARC and ARM
-> > boards (Cubieboard2 & Wandboard Quad).
-> > 
-> > For ARC I do see improvements and still stable behavior of toolchain and
-> > target binaries.
-> > 
-> > For ARM I don't see any difference in LMbench because most if not all
-> > string routines are already implemented in assembly, sio the option in
-> > question makes no sense.
-> > 
-> > But for other architectures like BlackFin, PPC, MIPS difference could be
-> > in both performance and stability but this is something I cannot test.
-> > 
-> > So volunteers are more than welcome.
-> > 
-> > But what if nobody else cares?
-> 
-> If nobody cares, then we just enable the option. And people will
-> complain when/if it breaks for them.
+> Yann, Gustavo, Bernd, Nathaniel, Maxime, Samuel, Peter, please read on,
+> there is some stuff for you below :-)
 
-So should I wait for some time or it's time to send a patch that enables
-the option for everybody in uClibc-*.config?
+> >         bfin | libshairplay-64d59e3087f829... | NOK | http://autobuild.buildroot.net/results/f08787c7965c5594d9560db0aa2adb7b07a65a45/
+> 
+> libshairplay_la-http_parser.o
+> dnssd.c:74:21: error: dns_sd.h: No such file or directory
+> dnssd.c:78: error: expected declaration specifiers or '...' before '*' token
+> dnssd.c:80: error: expected ')' before '*' token
+> dnssd.c:93: error: expected ')' before 'sdRef'
+> dnssd.c:96: error: expected ')' before '*' token
 
--Alexey
+libshairplay needs a mDNS library. If dynamic linkage is present through
+libdl, the library is linked at runtime. If libdl is not present, like
+in this case of a Blackfin target with FLAT binary format, a mDNS
+library has to be statically linked.
+
+Since the only mDNS library in Buildroot - avahi - needs dynamic
+linkage, libshairplay cannot be built with static linkage in Buildroot
+for now.
