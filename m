@@ -1,36 +1,42 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Wed, 12 Nov 2014 15:09:12 +0100
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <20141111234919.3178e9d3@free-electrons.com>
-References: <20141111073014.AA83D101626@stock.ovh.net>
- <20141111234919.3178e9d3@free-electrons.com>
-Message-ID: <1415801352.20520.8.camel@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Nov 2014 15:18:48 +0100
+Subject: [Buildroot] [PATCH] uClibc: ARC: enable generic string
+	implementations
+In-Reply-To: <1415800450.10304.1.camel@abrodkin-8560l.internal.synopsys.com>
+References: <1415616842-7640-1-git-send-email-abrodkin@synopsys.com>
+ <20141110135034.2e03b27c@free-electrons.com>
+ <1415789721.10608.6.camel@abrodkin-8560l.internal.synopsys.com>
+ <20141112133341.00298ed8@free-electrons.com>
+ <1415800450.10304.1.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <20141112151848.50fe3c21@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2014-11-11 at 23:49 +0100, Thomas Petazzoni wrote:
-> Hello,
+Dear Alexey Brodkin,
+
+On Wed, 12 Nov 2014 13:54:11 +0000, Alexey Brodkin wrote:
+
+> > If nobody cares, then we just enable the option. And people will
+> > complain when/if it breaks for them.
 > 
-> Yann, Gustavo, Bernd, Nathaniel, Maxime, Samuel, Peter, please read on,
-> there is some stuff for you below :-)
+> So should I wait for some time or it's time to send a patch that enables
+> the option for everybody in uClibc-*.config?
 
-> >         bfin | libshairplay-64d59e3087f829... | NOK | http://autobuild.buildroot.net/results/f08787c7965c5594d9560db0aa2adb7b07a65a45/
-> 
-> libshairplay_la-http_parser.o
-> dnssd.c:74:21: error: dns_sd.h: No such file or directory
-> dnssd.c:78: error: expected declaration specifiers or '...' before '*' token
-> dnssd.c:80: error: expected ')' before '*' token
-> dnssd.c:93: error: expected ')' before 'sdRef'
-> dnssd.c:96: error: expected ')' before '*' token
+I'd say yes. The uClibc Config.in help text for this option recommends
+to enable it, and it defaults to y, so I think it's pretty safe.
 
-libshairplay needs a mDNS library. If dynamic linkage is present through
-libdl, the library is linked at runtime. If libdl is not present, like
-in this case of a Blackfin target with FLAT binary format, a mDNS
-library has to be statically linked.
+Regarding ARC, I see that there are arch-specific optimized string
+functions in libc/string/arc/, written in assembly. So by enabling
+GENERIC_OPT, what you gained is that you have optimized versions for
+those functions that don't have an ARC-specific assembly implementation?
 
-Since the only mDNS library in Buildroot - avahi - needs dynamic
-linkage, libshairplay cannot be built with static linkage in Buildroot
-for now.
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
