@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:26:08 +0100
-Subject: [Buildroot] [PATCH 22/24 v3] erlang-p1-iconv: new package.
+Date: Wed, 12 Nov 2014 01:26:03 +0100
+Subject: [Buildroot] [PATCH 17/24 v3] erlang-p1-utils: new package.
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <2ca29fcca0b1276f76de875aa3f7bc9591ad7f32.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <cd0aaaea835d11b90eb05e84db04e814be41b0b7.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,57 +16,53 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/Config.in                          |  1 +
- package/erlang-p1-iconv/Config.in          |  6 ++++++
- package/erlang-p1-iconv/erlang-p1-iconv.mk | 17 +++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/erlang-p1-iconv/Config.in
- create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
+ package/erlang-p1-utils/Config.in          |  5 +++++
+ package/erlang-p1-utils/erlang-p1-utils.mk | 14 ++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/erlang-p1-utils/Config.in
+ create mode 100644 package/erlang-p1-utils/erlang-p1-utils.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8abd6a6..bda3674 100644
+index da13e8b..7f6fee9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-iconv/Config.in"
- 	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
- 	source "package/erlang-p1-stun/Config.in"
-diff --git a/package/erlang-p1-iconv/Config.in b/package/erlang-p1-iconv/Config.in
++	source "package/erlang-p1-utils/Config.in"
+ 	source "package/erlang-p1-xml/Config.in"
+ 	source "package/erlang-p1-yaml/Config.in"
+ 	source "package/erlang-p1-zlib/Config.in"
+diff --git a/package/erlang-p1-utils/Config.in b/package/erlang-p1-utils/Config.in
 new file mode 100644
-index 0000000..53876bf
+index 0000000..a544eed
 --- /dev/null
-+++ b/package/erlang-p1-iconv/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_P1_ICONV
-+	bool "erlang-p1-iconv"
++++ b/package/erlang-p1-utils/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_ERLANG_P1_UTILS
++	bool "erlang-p1-utils"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 +	help
-+	  Erlang interface to libiconv
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
++	  Set of small Erlang libraries
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
 new file mode 100644
-index 0000000..e810a9d
+index 0000000..23e2c63
 --- /dev/null
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-@@ -0,0 +1,17 @@
++++ b/package/erlang-p1-utils/erlang-p1-utils.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-p1-iconv
++# erlang-p1-utils
 +#
 +################################################################################
 +
-+ERLANG_P1_ICONV_VERSION = dff5ee5
-+ERLANG_P1_ICONV_SITE = $(call github,processone,eiconv,$(ERLANG_P1_ICONV_VERSION))
-+ERLANG_P1_ICONV_LICENSE = GPLv2+
-+ERLANG_P1_ICONV_LICENSE_FILES = COPYING
-+ERLANG_P1_ICONV_DEPENDENCIES = erlang
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+ERLANG_P1_ICONV_DEPENDENCIES += libiconv
-+endif
++ERLANG_P1_UTILS_VERSION = 940f42d
++ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
++ERLANG_P1_UTILS_LICENSE = GPLv2+
++ERLANG_P1_UTILS_LICENSE_FILES = COPYING
++ERLANG_P1_UTILS_DEPENDENCIES = erlang
++ERLANG_P1_UTILS_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 -- 
