@@ -1,69 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:26:09 +0100
-Subject: [Buildroot] [PATCH 23/24 v3] erlang-p1-cache-tab: new package.
-In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
-References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <be13cca154d7a9b241c9bd9720e451e44bc70285.1415751395.git.yann.morin.1998@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 12 Nov 2014 01:27:04 +0100
+Subject: [Buildroot] [PATCH v2] python-webpy: add new package
+Message-ID: <1415752024-9089-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Johan Oudinet <johan.oudinet@gmail.com>
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                                  |  1 +
- package/erlang-p1-cache-tab/Config.in              |  6 ++++++
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/erlang-p1-cache-tab/Config.in
- create mode 100644 package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+Changes:
+	v2: add license information
+
+ package/Config.in                    |  1 +
+ package/python-webpy/Config.in       |  8 ++++++++
+ package/python-webpy/python-webpy.mk | 13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-webpy/Config.in
+ create mode 100644 package/python-webpy/python-webpy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bda3674..84f919a 100644
+index 28cf703..949c7b6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-cache-tab/Config.in"
- 	source "package/erlang-p1-iconv/Config.in"
- 	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
-diff --git a/package/erlang-p1-cache-tab/Config.in b/package/erlang-p1-cache-tab/Config.in
+@@ -523,6 +523,7 @@ menu "external python modules"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
++	source "package/python-webpy/Config.in"
+ endmenu
+ endif
+ 	source "package/ruby/Config.in"
+diff --git a/package/python-webpy/Config.in b/package/python-webpy/Config.in
 new file mode 100644
-index 0000000..6d1f889
+index 0000000..af27888
 --- /dev/null
-+++ b/package/erlang-p1-cache-tab/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_P1_CACHE_TAB
-+	bool "erlang-p1-cache-tab"
-+	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
++++ b/package/python-webpy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_WEBPY
++	bool "python-webpy"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 +	help
-+	  Erlang library implementing cache tables
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
++	  web.py is a web framework for Python that is as simple as it is
++	  powerful.
++
++	  http://webpy.org/
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
 new file mode 100644
-index 0000000..0f0b637
+index 0000000..ef5b6b3
 --- /dev/null
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
++++ b/package/python-webpy/python-webpy.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-p1-cache-tab
++# python-webpy
 +#
 +################################################################################
 +
-+ERLANG_P1_CACHE_TAB_VERSION = 7b89d6a
-+ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
-+ERLANG_P1_CACHE_TAB_LICENSE = GPLv2+
-+ERLANG_P1_CACHE_TAB_LICENSE_FILES = COPYING
-+ERLANG_P1_CACHE_TAB_DEPENDENCIES = erlang erlang-p1-utils
++PYTHON_WEBPY_VERSION = 0.37
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
++PYTHON_WEBPY_SETUP_TYPE = distutils
++PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
++PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
 +
-+$(eval $(rebar-package))
++$(eval $(python-package))
 -- 
-1.9.1
+1.8.3.2
