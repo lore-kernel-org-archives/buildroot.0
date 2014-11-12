@@ -1,68 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:25:53 +0100
-Subject: [Buildroot] [PATCH 07/24 v3] pkg-autotools: only apply libtool
-	patch at the right moment
+Date: Wed, 12 Nov 2014 01:25:55 +0100
+Subject: [Buildroot] [PATCH 09/24 v3] package/erlang-rebar: new host package
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <7b4b4c365245d98e15d65ee8ee8f73c683fc15fe.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <962362f78a38edf55fac979e11915ce2be2358d0.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we apply the libtool patch at post-patch time, always. If we
-need to autoreconf, we also apply it after autoreconf is done.
+rebar is used to compile Erlang packages.
 
-Obviously, in that second casse, we do not need to apply it at
-post-patch time. This has no impact on the result, as autoreconf will
-overwrite the just patched files, and they will be patched yet again.
-But it is not nice to the user that will see a double "Patching libtool"
-message.
+We need  host variant so as to be able to provide it to Erlang packages
+that do not bundle their own version, or bundle a broken version.
 
-So, we apply the libtool patch at post-patch time only if we are not
-autoreconfiguring the package.
+Since this is a host-only package, used only internally, we do not
+provide a Kconfig option for it. Packages that need it will depend on
+it.
 
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: extract host-rebar to its own patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
----
- package/pkg-autotools.mk | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 924816b..ad2d1a6 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -235,12 +235,8 @@ endif
- 
- $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
--# default values are not evaluated yet, so don't rely on this defaulting to YES
--ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
--endif
--
- ifeq ($$($(2)_AUTORECONF),YES)
+---
+Changes v2 -> v3:
+  - fix dependencies  (Arnout)
+  - fix download location
+  - add licencing info
+  - add comments
+---
+ package/erlang-rebar/erlang-rebar.mk | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/erlang-rebar/erlang-rebar.mk
+
+diff --git a/package/erlang-rebar/erlang-rebar.mk b/package/erlang-rebar/erlang-rebar.mk
+new file mode 100644
+index 0000000..f29eb75
+--- /dev/null
++++ b/package/erlang-rebar/erlang-rebar.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# erlang-rebar
++#
++################################################################################
 +
- # This has to come before autoreconf
- ifeq ($$($(2)_GETTEXTIZE),YES)
- $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
-@@ -252,6 +248,14 @@ ifneq ($$($(2)_LIBTOOL_PATCH),NO)
- $(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
- endif
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
++ERLANG_REBAR_VERSION = 2.5.1
 +
-+else # ! AUTORECONF = YES
++# Upstream publishes a release, but we can not use it as it is a release of
++# a generated rebar script, when we want the sources. So we have to use the
++# gihub helper in this case.
++ERLANG_REBAR_SITE = $(call github,rebar,rebar,$(ERLANG_REBAR_VERSION))
 +
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
-+endif
++# Although the file LICENSE state Apache-2.0, a lot (if not all) the files
++# in src/ bear the MIT licence.
++ERLANG_LICENSE = Apache-2.0, MIT
++ERLANG_LICENSE_FILES = LICENSE
 +
- endif
- 
- #
++# We do not have a target variant, so just define the dependencies,
++# configure and build commands for the host variant.
++HOST_ERLANG_REBAR_DEPENDENCIES = host-erlang
++
++define HOST_ERLANG_REBAR_BUILD_CMDS
++	cd $(@D) && $(HOST_MAKE_ENV) $(MAKE)
++endef
++
++define HOST_ERLANG_REBAR_INSTALL_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/rebar $(HOST_DIR)/usr/bin/rebar
++endef
++
++$(eval $(host-generic-package))
 -- 
 1.9.1
