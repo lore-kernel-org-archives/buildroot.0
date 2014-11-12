@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:26:01 +0100
-Subject: [Buildroot] [PATCH 15/24 v3] erlang-p1-yaml: new package.
+Date: Wed, 12 Nov 2014 01:26:02 +0100
+Subject: [Buildroot] [PATCH 16/24 v3] erlang-p1-xml: new package.
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <e581ed4278d20bb2536bf1f76b2ee362b15a5873.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <d4d83bc422863e3ad464cf0bd8f2381f05a4b556.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +15,55 @@ From: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                        |  1 +
- package/erlang-p1-yaml/Config.in         |  6 ++++++
- package/erlang-p1-yaml/erlang-p1-yaml.mk | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/erlang-p1-yaml/Config.in
- create mode 100644 package/erlang-p1-yaml/erlang-p1-yaml.mk
+ package/Config.in                      |  1 +
+ package/erlang-p1-xml/Config.in        |  6 ++++++
+ package/erlang-p1-xml/erlang-p1-xml.mk | 14 ++++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/erlang-p1-xml/Config.in
+ create mode 100644 package/erlang-p1-xml/erlang-p1-xml.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f394e7d..bd82388 100644
+index bd82388..da13e8b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-yaml/Config.in"
++	source "package/erlang-p1-xml/Config.in"
+ 	source "package/erlang-p1-yaml/Config.in"
  	source "package/erlang-p1-zlib/Config.in"
  endmenu
- endif
-diff --git a/package/erlang-p1-yaml/Config.in b/package/erlang-p1-yaml/Config.in
+diff --git a/package/erlang-p1-xml/Config.in b/package/erlang-p1-xml/Config.in
 new file mode 100644
-index 0000000..423ef3f
+index 0000000..85fe02f
 --- /dev/null
-+++ b/package/erlang-p1-yaml/Config.in
++++ b/package/erlang-p1-xml/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_P1_YAML
-+	bool "erlang-p1-yaml"
++config BR2_PACKAGE_ERLANG_P1_XML
++	bool "erlang-p1-xml"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_LIBYAML
++	select BR2_PACKAGE_EXPAT
 +	help
-+	  Erlang wrapper for libyaml C library
-diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
++	  XML utilities for Erlang
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
 new file mode 100644
-index 0000000..990c3a7
+index 0000000..5f43ccb
 --- /dev/null
-+++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
-@@ -0,0 +1,13 @@
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-p1-yaml
++# erlang-p1-xml
 +#
 +################################################################################
 +
-+ERLANG_P1_YAML_VERSION = 236b943
-+ERLANG_P1_YAML_SITE = $(call github,processone,p1_yaml,$(ERLANG_P1_YAML_VERSION))
-+ERLANG_P1_YAML_LICENSE = Apache-2.0
-+ERLANG_P1_YAML_LICENSE_FILES = COPYING
-+ERLANG_P1_YAML_DEPENDENCIES = erlang libyaml
++ERLANG_P1_XML_VERSION = b530983
++ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
++ERLANG_P1_XML_LICENSE = GPLv2
++ERLANG_P1_XML_LICENSE_FILES = COPYING
++ERLANG_P1_XML_DEPENDENCIES = erlang expat
++ERLANG_P1_XML_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 -- 
