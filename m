@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Nov 2014 01:25:59 +0100
-Subject: [Buildroot] [PATCH 13/24 v3] erlang-lager: new package.
+Date: Wed, 12 Nov 2014 01:26:01 +0100
+Subject: [Buildroot] [PATCH 15/24 v3] erlang-p1-yaml: new package.
 In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
 References: <cover.1415751395.git.yann.morin.1998@free.fr>
-Message-ID: <3374b5e8f8224a9fa76fc7a3e230fe29d5dbf9ee.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <e581ed4278d20bb2536bf1f76b2ee362b15a5873.1415751395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,62 +15,55 @@ From: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                    |  1 +
- package/erlang-lager/Config.in       | 12 ++++++++++++
- package/erlang-lager/erlang-lager.mk | 14 ++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/erlang-lager/Config.in
- create mode 100644 package/erlang-lager/erlang-lager.mk
+ package/Config.in                        |  1 +
+ package/erlang-p1-yaml/Config.in         |  6 ++++++
+ package/erlang-p1-yaml/erlang-p1-yaml.mk | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/erlang-p1-yaml/Config.in
+ create mode 100644 package/erlang-p1-yaml/erlang-p1-yaml.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b4eaf14..c2c0381 100644
+index f394e7d..bd82388 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -394,6 +394,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
+@@ -395,6 +395,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-lager/Config.in"
++	source "package/erlang-p1-yaml/Config.in"
+ 	source "package/erlang-p1-zlib/Config.in"
  endmenu
  endif
- 	source "package/haserl/Config.in"
-diff --git a/package/erlang-lager/Config.in b/package/erlang-lager/Config.in
+diff --git a/package/erlang-p1-yaml/Config.in b/package/erlang-p1-yaml/Config.in
 new file mode 100644
-index 0000000..f83239e
+index 0000000..423ef3f
 --- /dev/null
-+++ b/package/erlang-lager/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_ERLANG_LAGER
-+	bool "erlang-lager"
++++ b/package/erlang-p1-yaml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_YAML
++	bool "erlang-p1-yaml"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_ERLANG_GOLDRUSH
++	select BR2_PACKAGE_LIBYAML
 +	help
-+	  Logging framework for Erlang.
-+	  
-+	  Lager (as in the beer) is a logging framework for
-+	  Erlang. Its purpose is to provide a more traditional way to
-+	  perform logging in an erlang application that plays nicely
-+	  with traditional UNIX logging tools like logrotate and
-+	  syslog.
-diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
++	  Erlang wrapper for libyaml C library
+diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
 new file mode 100644
-index 0000000..b530c8e
+index 0000000..990c3a7
 --- /dev/null
-+++ b/package/erlang-lager/erlang-lager.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-lager
++# erlang-p1-yaml
 +#
 +################################################################################
 +
-+ERLANG_LAGER_VERSION = 2.0.3
-+ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
-+ERLANG_LAGER_LICENSE = Apache-2.0
-+ERLANG_LAGER_LICENSE_FILES = LICENSE
-+ERLANG_LAGER_DEPENDENCIES = erlang erlang-goldrush
++ERLANG_P1_YAML_VERSION = 236b943
++ERLANG_P1_YAML_SITE = $(call github,processone,p1_yaml,$(ERLANG_P1_YAML_VERSION))
++ERLANG_P1_YAML_LICENSE = Apache-2.0
++ERLANG_P1_YAML_LICENSE_FILES = COPYING
++ERLANG_P1_YAML_DEPENDENCIES = erlang libyaml
 +
 +$(eval $(rebar-package))
-+$(eval $(host-rebar-package))
 -- 
 1.9.1
