@@ -1,49 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 16:33:08 +0100
-Subject: [Buildroot] [git commit] qt5base: unconditionally install
-	Qt5printSupport if widgets are enabled
-In-Reply-To: <20141113162635.673fe030@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 13 Nov 2014 16:26:35 +0100")
-References: <20141113144933.8E075B4453@busybox.osuosl.org>
- <20141113160320.4391cb1a@free-electrons.com>
- <87vbmji0zv.fsf@dell.be.48ers.dk>
- <20141113162635.673fe030@free-electrons.com>
-Message-ID: <87ioiji097.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Nov 2014 16:10:24 +0100
+Subject: [Buildroot] [git commit] qt5base: unconditionally install network,
+	sql, xml and test modules to target
+Message-ID: <20141113153637.C33B3B4506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=91f9a3ac1f25d4988758fa416b4fda837a486516
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Thu, 13 Nov 2014 16:17:08 +0100, Peter Korsgaard wrote:
+The qt5 build system currently unconditionally builds and installs into
+staging these libraries, so ensure they also get installed into target to
+make sure we don't end up with dynamic linker errors at runtime.
 
- >> > So why have a Config.in option for this in the first place?
- >> 
- >> Just because I wanted to make as minimal as possible a change now that
- >> we're past -rc1.
+From src.pro:
 
- > That makes sense.
+SUBDIRS += src_network src_sql src_xml src_testlib
 
-Good ;)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/Config.in |   16 ++++------------
+ 1 files changed, 4 insertions(+), 12 deletions(-)
 
- >> I don't follow qt5 development, but presumably this
- >> used to be user settable and could become so again in future qt5
- >> releases.
-
- > That however seems like a pretty weak argument :-) Do we keep or add
- > options just because they may hypothetically be useful in the future?
-
-I agree it is a bit weak ;) I basically don't really know much about
-qt5, so I wanted as minimal as possible a change.
-
-I just noticed that we have the same issue with the network, sql, xml
-and test modules, so I will make a similar change for those as well.
-
-I find it quite a pity that qt5base apparently isn't very configurable
-after all :/
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e5679be..6ea7301 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -37,9 +37,7 @@ config BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	  If unsure, say N.
+ 
+ config BR2_PACKAGE_QT5BASE_NETWORK
+-	bool "network module"
+-	help
+-	  This options enables the Qt5Network library.
++       def_bool y
+ 
+ config BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	bool "concurrent module"
+@@ -47,9 +45,7 @@ config BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	  This options enables the Qt5Concurrent library.
+ 
+ config BR2_PACKAGE_QT5BASE_SQL
+-	bool "sql module"
+-	help
+-	  This options enables the Qt5Sql library.
++       def_bool y
+ 
+ if BR2_PACKAGE_QT5BASE_SQL
+ config BR2_PACKAGE_QT5BASE_MYSQL
+@@ -101,14 +97,10 @@ endchoice
+ endif
+ 
+ config BR2_PACKAGE_QT5BASE_TEST
+-	bool "test module"
+-	help
+-	  This options enables the Qt5Test library.
++	def_bool y
+ 
+ config BR2_PACKAGE_QT5BASE_XML
+-	bool "XML module"
+-	help
+-	  This options enables the Qt5Xml library.
++	def_bool y
+ 
+ config BR2_PACKAGE_QT5BASE_GUI
+ 	bool "gui module"
