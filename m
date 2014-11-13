@@ -1,134 +1,147 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Nov 2014 20:48:13 +0100
-Subject: [Buildroot] out-of-tree kernel modules and linux header versions
-In-Reply-To: <CAJpxd07isuV8UB+d2pWCjoYsdWnG7T5XM_Hm6vxyrTJi_gz9DQ@mail.gmail.com>
-References: <CAJpxd07isuV8UB+d2pWCjoYsdWnG7T5XM_Hm6vxyrTJi_gz9DQ@mail.gmail.com>
-Message-ID: <54650AFD.8030005@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 13 Nov 2014 20:54:27 +0100
+Subject: [Buildroot] github helper is broken
+In-Reply-To: <20141113182328.GC3641@free.fr>
+References: <20141113182328.GC3641@free.fr>
+Message-ID: <CAAXf6LVZO90SpiTm-PpOxBQ3GHLHtd=WvYp96wVee59tKYd9qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/14 02:53, Bryce Schober wrote:
-> I modified the subject to break this discussion out of its previous thread.
-> Hopefully that's not too distasteful on this list...
-> 
-> On Wed, Nov 12, 2014 at 1:03 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com
-> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
-> 
->     A kernel module is never built using the linux headers provided by the
->     toolchain. The linux headers provided by the toolchain only contain the
->     userspace part of the kernel headers, and they are therefore
->     insufficient to build kernel modules (which as their name suggest,
->     contain kernel code).
-> 
->     Therefore, when you do something like:
-> 
->     > > > define KERNELMODULE_BUILD_CMDS
->     > > >    $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
->     > > > endef
-> 
->     It uses the kernel code in $(LINUX_DIR), and mainly the kernel headers
->     + kernel configuration, to build your kernel modules.
-> 
-> 
-> Has this always been the case? I'm on an old buildroot-2011.08 and using an old
-> linux 2.6.29.6 kernel, with an external toolchain built with 2.6.27 headers. I'm
-> building a vendor's kernel module using exactly the pattern shown in
-> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/99397, and I'm
-> getting compile errors directly corresponding to differences in headers between
-> the 2.6.27 and 2.6.29.6 versions.
-> 
-> To be much more verbose, RealTek's wireless driver's include/rtw_mlme.h:
-> https://github.com/pvaret/rtl8192cu-fixes/blob/master/include/rtw_mlme.h#L265
-> ...contains a snippet like this:
-> #ifdef CONFIG_IOCTL_CFG80211
-> struct cfg80211_wifidirect_info{
->     _timer                    remain_on_ch_timer;
->     u8                        restore_channel;
->     struct ieee80211_channel    remain_on_ch_channel;
->     enum nl80211_channel_type    remain_on_ch_type;
->     u64                        remain_on_ch_cookie;
->     bool is_ro_ch;
-> };
-> #endif //CONFIG_IOCTL_CFG80211
-> 
-> Drilling down through it's include structure, you can find that the
-> include/osdep_service.h includes <net/cfg80211.h>:
-> https://github.com/pvaret/rtl8192cu-fixes/blob/master/include/osdep_service.h#L793
-> 
-> When objects including the rtw_mlme.h get compiled, I get the following error:
-> In file included from
-> <snip>/buildroot/output/build/rtl8192cu-4.0.5_11249.20140422/include/drv_types.h:79,
->                  from
-> <snip>/buildroot/output/build/rtl8192cu-4.0.5_11249.20140422/core/rtw_ioctl_query.c:25:
-> <snip>/buildroot/output/build/rtl8192cu-4.0.5_11249.20140422/include/rtw_mlme.h:262:
-> error: field 'remain_on_ch_channel' has incomplete type
-> 
-> This error is complaining about not knowing what "enum nl80211_channel_type"
-> means, and that definition was added to linux/include/nl80211.h between 2.6.27
-> and 2.6.29:
-> http://lxr.free-electrons.com/diff/include/linux/nl80211.h?v=2.6.27;diffvar=v;diffval=2.6.29#L808
-> 
-> Another hint that the problem is due to getting the wrong header is that the
-> generated auto-dependency file lists some headers with an absolute path and
-> other with a relative path, including the suspicious nl80211.h header (see
-> attached .rtw_mlme.o.d).
+Hi Yann,
 
- A relative path would be the right thing, because it's relative to the Linux
-directory.
+On Thu, Nov 13, 2014 at 7:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Hello All,
+>
+> The github helper is now broken, because GitHub changed their download
+> scheme, again.
+>
+> The new scheme is:
+>     https://github.com/USER/REPO/archive/VERSION.tar.gz
 
- Can you check in your build log that you indeed do something like
+bummer!
 
-make ... -C
-/mnt/ssd/svn/gen2-dev-branch3/x86/buildroot/output/build/linux-2.6.29.6
-M=/mnt/ssd/svn/gen2-dev-branch3/x86/buildroot/overlay-common-all/build/rtl8192cu-4.0.5_11249.20140422
-modules
+>
+> What is not-so-obvious in this new scheme, is that it omits the package
+> name from the final component of the URU, so we can no longer rely on
+> the default value of the FOO_SOURCE variable to construct the URL.
 
-?
+I wonder what drives people to invent such a scheme.
+Shouldn't we (in addition to actions as discussed below) discuss the
+issue with Github? They may understand our concerns, which surely are
+present for other build systems as well.
+Of course, we cannot fight every repo hosting site. Google code also
+provides tarballs with scheme version.tar.gz, unfortunately.
 
- And that
-/mnt/ssd/svn/gen2-dev-branch3/x86/buildroot/output/build/linux-2.6.29.6/include/linux/nl80211.h
-does contain the correct enum?
+>
+> So we now have to set FOO_SOURCE explicitly, which was not needed so far,
+> and set it to $(FOO_VERSION).tar.gz
+>
+> But then, it means we would store tarballs named FOO_VERSION.tar.gz,
+> which is not so nice in the end.
+>
+> We've discussed this on IRC, and came to three main proposals:
+>
+> 1) rely on the server to pass an appropriate content-disposition header
+> with the filename.
+>
+> Unfortunately, that's not doable in Buildroot:
+>   - we need to know the filename prior to doing the download. We could
+>     use a workaround by having wget do a HEAD fetch to just get the
+>     filename;
+>   - but then this would not work for off-line builds.
+>
+> So this solution is a no-no.
+>
+> 2) differentiate upstream tarball name from local tarball name
+>
+> This introduces a new variable, like FOO_UPSTREAM_SOURCE, which besides
+> not being nice, would require quite some work in the pkg-download infra,
+> which is a bit risky that close to the release.
+>
+> 3) no longer do tarball downloads from github, but do a git clone
+>
+> This would protect us from any future change in the GitHub tarballs
+> download naming scheme. And after all, GitHub is a git hosting forge,
+> so let's use it for what it is.
+>
+> The problems with that solution are two fold:
+>   - downloads might take more time than a tarball download, since a
+>     complete repository would probably be bigger than a single tarball;
+>   - we must use the http:// scheme for the URL (because, proxies), so
+>     all packages must now specify FOO_SITE_METHOD = git
+>
+> Although the download time is not much of an issue, the way we are using
+> the github helper for now does not allow for setting more than one
+> variable.
 
- You can also run the make command with V=1, copy the actual compiler call, run
-it from the linux directory, and replace the -c with -E to get the preprocessed
-output. There you can see exactly which file is included and what its
-preprocessed contents are.
+How do you conclude that the download time is not an issue?
+Some repos may be significantly larger than the size of one revision,
+we cannot know this in advance. Moreover, the complete repo is
+complete overhead in the Buildroot case.
 
+>
+>
+> In the end, solution 3 seems the most appropriate, and would require
+> just a bit of easy modifications:
+>
+>   - tweaking the github helper to emit the repository URL instead of the
+>     tarball URL;
+>
+>   - add FOO_SITE_METHOD to all packages.
+>
+> The first one is trivial, and the second one is relatively easy with a
+> bit of 'find' and some clever 'sed' experession.
+>
+> I have all setup and ready to implement solution 3, but before I do, I'd
+> like some feedback on those proposals, and if possible new proposals
+> that are easy to implement for the release.
+>
+>
+> Notes: I thought of a few other proposals, like:
+>
+>   - define the github helper so that it emits the necessary variables:
+>         $(eval $(call github,user,repo))
+>     would expand to:
+>         FOO_SITE = https://github.com/user/repo
+>         FOO_SITE_METHOD = git
+>
+>     That would allow us to introduce new types of forges, like gitorious
+>     of bitbucket.
+>
+>     But that's not so nice, because so far we always relied on only
+>     setting variables, not generating Makefile code.
+>
+>     Also, it implies changing all packages as well.
 
- Regards,
- Arnout
+A similar strategy (for SITE/SOURCE) was discussed earlier in the
+context of gitorious, following a patch from Alexandre Belloni that
+was proposed earlier.
+See http://lists.busybox.net/pipermail/buildroot/2014-January/086309.html
+and ThomasP's reply:
+http://lists.busybox.net/pipermail/buildroot/2014-January/086495.html
 
-> 
-> I admit that the kernel module build in $(LINUX_DIR) should get its relative
-> include path also from $(LINUX_DIR), but all these coincidences make me strongly
-> suspicious that it's getting them from the 2.6.27 headers in buildroot's sysroot
-> instead. The verbose make output for rtw_mlme.o doesn't show any suspicious
-> include paths, but it doesn't show *anything* for the
-> buildroot/output/staging/usr/include, since that's coming from the toolchain
-> wrapper, right?
-> 
-> I see that there have been quite a few changes to the external toolchain wrapper
-> since 2011.08, so maybe I'll see if I can back-port it to my old buildroot...
-> 
-> <><  <><  <><
-> Bryce Schober
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>
+>   - introduce new vriables to define a new semantic for the downloads:
+>         FOO_FORGE = github
+>         FOO_FORGE_PATH = /user/repo
+>     which would be interpreted by the pkg-download infra to generate the
+>     correct URL
+>
+>     That would also allow us to add more forge-related handlers, like
+>     gitorious or bitbucket (others?), but is really diverging from the
+>     current semantics of the variables we already have.
+>
+>     Also, it implies changing all packages as well.
+>
+> So, we could not find a solution that would limit the changes to just the
+> github helper; all solutions we have for now imply touching all packages
+> hosted on GitHub.
+>
+> Comments and suggestions most welcome! ;-)
+>
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards,
+Thomas
