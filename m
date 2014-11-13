@@ -1,49 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 13 Nov 2014 07:30:43 -0300
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.2
-Message-ID: <1415874643-20150-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Nov 2014 10:36:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
+In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
+References: <bug-7646-163@https.bugs.busybox.net/>
+Message-ID: <20141113103618.39DECB445D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-8710 - SigComp UDVM buffer overflow.
-CVE-2014-8711 - AMQP crash.
-CVE-2014-8712 - NCP crashes.
-CVE-2014-8713 - NCP crashes.
-CVE-2014-8714 - TN5250 infinite loops.
+https://bugs.busybox.net/show_bug.cgi?id=7646
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--- Comment #8 from Beyonlo <beyonlo@gmail.com> 2014-11-13 10:36:17 UTC ---
+Hello, I did the tests with wcsftime. I used this example
+http://www.cplusplus.com/reference/cwchar/wcsftime/
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 00d3861..9b0c488 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,3 +1,3 @@
--# From https://www.wireshark.org/download/SIGNATURES-1.12.1.txt
--md5	14b3e3d8979d1eb27ff085bb5f400e67	wireshark-1.12.1.tar.bz2
--sha1	e1508ea25ccf077c5a7fa2af3b88f3ae199f77fb	wireshark-1.12.1.tar.bz2
-+# From https://www.wireshark.org/download/SIGNATURES-1.12.2.txt
-+md5	2f2a16be8b087227cb17733c72288ae4	wireshark-1.12.2.tar.bz2
-+sha1	0598fe285725f97045d7d08e6bde04686044b335	wireshark-1.12.2.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index ccf5a56..095050a 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 1.12.1
-+WIRESHARK_VERSION = 1.12.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+$ cat wcsftime_test1.c 
+/* wcsftime example */
+#include <wchar.h>
+#include <time.h>
+
+int main ()
+{
+  time_t rawtime;
+  struct tm * timeinfo;
+  wchar_t buffer [80];
+
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+
+  wcsftime (buffer,80,L"Now it's %I:%M%p.",timeinfo);
+  wprintf (L"%ls\n",buffer);
+
+  return 0;
+}
+
+
+Compiled and run on host:
+$ ./wcsftime_test1 
+Now it's 08:30AM.
+
+Compiled on host (using cross compile - same process used in test2.c) to run on
+target (buildroot):
+# uname -a
+Linux buildroot 3.13.5 #1 Wed Nov 12 09:42:52 BRST 2014 armv5tejl GNU/Linux
+# ./wcsftime_test1 
+# 
+
+Ps: Show nothing on buildroot.
+
 -- 
-2.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
