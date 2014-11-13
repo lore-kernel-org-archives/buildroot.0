@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 22:39:18 +0100
-Subject: [Buildroot] [git commit] ruby: security bump to version 2.1.5
-Message-ID: <20141113220634.AD4A2B4505@busybox.osuosl.org>
+Date: Thu, 13 Nov 2014 23:04:58 +0100
+Subject: [Buildroot] [git commit] docs/news.html: add link to report from
+	ELCE developers days
+Message-ID: <20141113220634.CBF7FB452F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98c1930e744e0a1d9bf147e30b89ce3983093e13
+commit: http://git.buildroot.net/buildroot/commit/?id=ffeaa18bdf1bf8f75c44a59ae13fc38cb5538a62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2014-8090 - Another Denial Of Service XML Expansion.
+And annonce the next one as well.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.hash |    4 ++--
- package/ruby/ruby.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/news.html |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 8d5d133..9d56eee 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2014/10/27/ruby-2-1-4-released/
--sha256	bf9952cdeb3a0c6a5a27745c9b4c0e5e264e92b669b2b08efb363f5156549204	ruby-2.1.4.tar.gz
-+# From https://www.ruby-lang.org/en/news/2014/11/13/ruby-2-1-5-is-released/
-+sha256	4305cc6ceb094df55210d83548dcbeb5117d74eea25196a9b14fa268d354b100	ruby-2.1.5.tar.gz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 36f6d3f..20a2a11 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/docs/news.html b/docs/news.html
+index 27791c6..d146c3b 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -9,6 +9,22 @@
  
- RUBY_VERSION_MAJOR = 2.1
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
- RUBY_VERSION_EXT = 2.1.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ <ul>
+ 
++  <li><b>13 November 2014 -- Report from Buildroot Developers Meeting</b>
++
++    <p>A report from the recent
++    <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2014">
++    Buildroot Developers Meeting</a> is now
++    <a href="http://lists.busybox.net/pipermail/buildroot/2014-October/109966.html">available</a>.</p>
++
++    <p>Once again, thanks to all the participants and to
++    <a href="http://www.mind.be">Mind</a> for sponsoring the event.</p>
++
++    <p>The next Developer Days will take place on February 2nd and 3rd
++    in Brussels, Belgium, right after <a
++    href="http://fosdem.org">FOSDEM</a>. See the <a
++    href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015">wiki<a>
++    for more details.</p>
++
+   <li><b>12 November 2014 -- 2014.11-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
