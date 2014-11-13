@@ -1,64 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Nov 2014 18:45:25 +0100
-Subject: [Buildroot] [PATCH v4 2/2] elfutils: bump version to 0.160
-In-Reply-To: <54620B25.4050306@mind.be>
-References: <1415706464-15288-1-git-send-email-Vincent.Riera@imgtec.com>
- <1415706464-15288-3-git-send-email-Vincent.Riera@imgtec.com>
- <54620B25.4050306@mind.be>
-Message-ID: <20141113174525.GB3641@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Nov 2014 20:08:11 +0200
+Subject: [Buildroot] [PATCH] dovecot: fix static build
+Message-ID: <3b0aedc38538637a502da2d96c7a5455972ef134.1415902091.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Vicente, All,
+Add a patch removing reference to MODULE_SUFFIX when it is undefined.
 
-On 2014-11-11 14:12 +0100, Arnout Vandecappelle spake thusly:
-> On 11/11/14 12:47, Vicente Olivert Riera wrote:
-> > +sha256  741b556863c069ceab2d81eb54aeda8c34f46728859704eaf9baef8503e9a9d1  elfutils-0.160.tar.bz2
-> > +sha256  feb307acf472598ea7af4e4b439251613a8f5d81e804b4abf9aeca195a5d4254  elfutils-portability.patch
-> 
->  Forgot to mention in my previous review: I verified the first hash against the
-> upstream gpg signature, and I verified the second hash against my local download.
-> 
->  I also did a simple build test. So:
-> 
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  [for -next, and if the 0006 patch subject is modified]
+Fixes:
+http://autobuild.buildroot.net/results/c68/c6844bbffff1cd4f738a5fced011d28f73c90b16/
 
-Vicente noticed I replied to the v3, not this v4, so I'll repeat it
-here, in case my explanations went un-noticed:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dovecot/0002-fix-static-build.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/dovecot/0002-fix-static-build.patch
 
-Well, if you look a few lines further in config/eu.am you'll see:
-
-    if BUILD_WERROR
-    AM_CFLAGS += $(if $($(*F)_no_Werror),,-Werror)
-    endif
-
-So, this patch remove the duplicate setting of -Werror in the place
-where it is not wanted, because it is already conditional to
-BUILD_WERROR, even though it should be BUILD_WERROR_TRUE that should be
-tested.
-
-But the real automake conditional is really called BUILD_WERROR:
-
-    ./configure.ac:AM_CONDITIONAL(BUILD_WERROR, test "$enable_werror" =
-yes)
-
-So, I still believe the patch title is correct, except upstream may have
-messed up their conditional test (and we could help them fix it, maybe).
-
-So my reviewed-by tag, which this patch already bears, still stands.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/dovecot/0002-fix-static-build.patch b/package/dovecot/0002-fix-static-build.patch
+new file mode 100644
+index 000000000000..be646bc6a46e
+--- /dev/null
++++ b/package/dovecot/0002-fix-static-build.patch
+@@ -0,0 +1,24 @@
++Fix static build
++
++MODULE_SUFFIX is undefined when building statically; don't used it.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: sent upstream
++(http://dovecot.org/pipermail/dovecot/2014-November/098694.html)
++
++diff -Nuar dovecot-2.2.15-orig/src/lib/module-dir.c dovecot-2.2.15/src/lib/module-dir.c
++--- dovecot-2.2.15-orig/src/lib/module-dir.c	2014-10-18 00:10:15.000000000 +0300
+++++ dovecot-2.2.15/src/lib/module-dir.c	2014-11-13 19:27:29.417786313 +0200
++@@ -621,7 +621,11 @@
++ 	if (*p == '_')
++ 		fname = p + 1;
++ 
+++#ifdef MODULE_SUFFIX
++ 	p = strstr(fname, MODULE_SUFFIX);
+++#else
+++	p = NULL;
+++#endif
++ 	if (p == NULL)
++ 		return fname;
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.1
