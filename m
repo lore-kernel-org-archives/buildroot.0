@@ -1,38 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Nov 2014 20:31:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
-In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
-References: <bug-7646-163@https.bugs.busybox.net/>
-Message-ID: <20141113203146.034C3B1290@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 13 Nov 2014 22:04:00 +0100
+Subject: [Buildroot] [PATCH] xbmc: use github call
+In-Reply-To: <87zjbvihez.fsf@dell.be.48ers.dk>
+References: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87d28rjysb.fsf@dell.be.48ers.dk>
+ <CAGduivyWS2GGwyQuyawojxU0-Tg1O1BDtorP9ULZ_c6o7NxcUg@mail.gmail.com>
+ <87zjbvihez.fsf@dell.be.48ers.dk>
+Message-ID: <CAGduivz=GuHan34D52nQ-OOhKY7UEX-faqrvgSR5yXu__0b2sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7646
+Hi Peter, all
 
---- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-13 20:31:45 UTC ---
-Here is a quick patch that tells Python3 to not use wcsftime() on uClibc, and
-it fixes the problem for me:
-
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 2c1ef2a..e242835 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -107,6 +107,10 @@ PYTHON3_CONF_ENV += \
-        ac_cv_file__dev_ptc=yes \
-        ac_cv_working_tzset=yes
-
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+PYTHON3_CONF_ENV += ac_cv_func_wcsftime=no
-+endif
-+
- PYTHON3_CONF_OPTS += \
-        --without-ensurepip     \
-        --without-cxx-main      \
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+On Thu, Nov 13, 2014 at 10:22 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>
+> Hi,
+>
+>  >> So what's going on?
+>  > As it appeared on IRC yesterday also, it seems that github changed
+>  > *again* their download schemes silently, so every package using the
+>  > github-helper are currently broken.
+>  > We need to devise a new github helper, or something to fix this urgently.
+>  > Keep this patch in the queue, if we keep the github-helper, it should
+>  > work then (or need some rework, depending on the solution we chose)
+>
+> Argh :/
+>
+> Did anybody ever try contacting github to ask them to not break this
+> again and again?
+As Yann told me on IRC, it seems it has been fixed on Github sides.
+None the less, we should make a contact to tell them we exist.
+Feel free to apply this patch then.
+>
+> --
+> Bye, Peter Korsgaard
