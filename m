@@ -1,98 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Nov 2014 23:31:22 +0100
-Subject: [Buildroot] [Patch v2 1/1] libgtk3: fix undefined reference to
- get_xkb()
-In-Reply-To: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20141113223122.GG3641@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Nov 2014 22:37:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
+In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
+References: <bug-7646-163@https.bugs.busybox.net/>
+Message-ID: <20141113223740.32E77B1D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+https://bugs.busybox.net/show_bug.cgi?id=7646
 
-On 2014-10-27 13:56 +0100, Eric Le Bihan spake thusly:
-> When configuring Gtk+ with --disable-xkb, the build fails because of an
-> undefined reference to get_xkb().
-> 
-> This issue as been reported upstream [1]. This patch fixes it.
-> 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/513/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
-> http://autobuild.buildroot.net/results/0c3/0c3f1df92481852622445478d2239371fc818f41/
-> 
-> [1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+--- Comment #12 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-13 22:37:39 UTC ---
+Patch to workaround the problem in Python 3 sent to Buildroot:
+http://lists.busybox.net/pipermail/buildroot/2014-November/112005.html
 
-Upstream is not very receptive of that patch, however the added conditional
-looks very much like what is donw elsewhere in that file to compile-out
-xkb-related code. So:
+uClibc bug reproduced with uClibc master, and bug reported to upstream uClibc:
+http://lists.uclibc.org/pipermail/uclibc/2014-November/048718.html.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Since I don't expect the uClibc folks to react quickly, I would propose to mark
+this bug as fixed once the Python 3 workaround is committed in Buildroot.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...3-0004-Fix-undefined-reference-to-get_xkb.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-> 
-> diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-> new file mode 100644
-> index 0000000..c2f4b4f
-> --- /dev/null
-> +++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-> @@ -0,0 +1,33 @@
-> +From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
-> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +Date: Mon, 27 Oct 2014 10:34:38 +0100
-> +Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
-> +
-> +When configuring Gtk+ with --disable-xkb, the build fails because of an
-> +undefined reference to get_xkb().
-> +
-> +This patch fixes this issue.
-> +
-> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +---
-> + gdk/x11/gdkkeys-x11.c | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
-> +index c45a971..6a5481b 100644
-> +--- a/gdk/x11/gdkkeys-x11.c
-> ++++ b/gdk/x11/gdkkeys-x11.c
-> +@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-> +   int i, j;
-> +   gboolean retval;
-> + 
-> ++#ifdef HAVE_XKB
-> +   if (KEYMAP_USE_XKB (keymap))
-> +     get_xkb (keymap_x11);
-> ++#endif
-> + 
-> +   retval = TRUE;
-> + 
-> +-- 
-> +1.9.1
-> +
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Beyonlo, can you test the Buildroot patch for Python 3, and report if it works
+for you (it works for me, so I'm pretty sure it's ok, but still). Thanks!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
