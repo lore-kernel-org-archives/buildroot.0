@@ -1,41 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Nov 2014 21:27:04 +0100
-Subject: [Buildroot] out-of-tree kernel modules and linux header versions
-In-Reply-To: <CAJpxd04tNrVAiT4AC0ojA75pH9q9TYU6XtezqyTNWNJh8LSkwg@mail.gmail.com>
-References: <CAJpxd07isuV8UB+d2pWCjoYsdWnG7T5XM_Hm6vxyrTJi_gz9DQ@mail.gmail.com>
- <CAJpxd06Luke+9Jgd7+Ka68yUwUh1Lxu93dfhJcG_-LzZ+irVqA@mail.gmail.com>
- <20141113092025.4bc7cfe2@free-electrons.com>
- <CAJpxd04tNrVAiT4AC0ojA75pH9q9TYU6XtezqyTNWNJh8LSkwg@mail.gmail.com>
-Message-ID: <20141113212704.74b96059@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Nov 2014 20:31:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
+In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
+References: <bug-7646-163@https.bugs.busybox.net/>
+Message-ID: <20141113203146.034C3B1290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bryce Schober,
+https://bugs.busybox.net/show_bug.cgi?id=7646
 
-On Thu, 13 Nov 2014 09:03:07 -0800, Bryce Schober wrote:
+--- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-13 20:31:45 UTC ---
+Here is a quick patch that tells Python3 to not use wcsftime() on uClibc, and
+it fixes the problem for me:
 
-> I would, if it *were* simple. Because my target is tied to *very* old
-> kernel and certain packages, especially Xorg, it is not at all simple. The
-> infrastructure around Xorg and opengl has changed a lot since 2011.08, and
-> backporting the extensive list of xorg and related packages would be a lot
-> of work. Or at least I think it would be... maybe I'm being too
-> pessimistic. Don't get me wrong, I'd love to spend the time to get
-> up-to-date and get all the benefits of recent development. But I'm sure you
-> know how competing priorities go...
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 2c1ef2a..e242835 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -107,6 +107,10 @@ PYTHON3_CONF_ENV += \
+        ac_cv_file__dev_ptc=yes \
+        ac_cv_working_tzset=yes
 
-Aah, yes, I now remember. Due to a proprietary graphics driver, you
-have to use an old X.org version and an old kernel. Using an old kernel
-is fairly easy, but using an old X.org version is more problematic.
-Unfortunately, that's not something for which I see an easy solution in
-Buildroot :-/
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++PYTHON3_CONF_ENV += ac_cv_func_wcsftime=no
++endif
++
+ PYTHON3_CONF_OPTS += \
+        --without-ensurepip     \
+        --without-cxx-main      \
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
