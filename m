@@ -1,39 +1,47 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Nov 2014 16:45:48 +0000
-Subject: [Buildroot] [PATCH] tcl: bump version to 8.6.3
-Message-ID: <1415897148-59149-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 13 Nov 2014 16:49:14 +0000
+Subject: [Buildroot] [PATCH 1/2] qt: Disable Script Module for old Linux
+	threads
+Message-ID: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Qt Script Module uses pthread_getattr_np() which is not implemented in
+the old Linux threads. This causes the following compilation failure:
+
+../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
+function ?void* QTJSC::currentThreadStackBase()?:
+../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
+error: ?pthread_getattr_np? was not declared in this scope
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/tcl/tcl.hash |    2 +-
- package/tcl/tcl.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index e1b3389..2d4e995 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	86f7ae5f581dd0904d04415637ab3aef5a50986c1b6d04c340e2b1b0258da9c4	tcl8.6.2-src.tar.gz
-+sha256  6ce0778de0d50daaa9c345d7c1fd1288fb658f674028812e7eeee992e3051005  tcl8.6.3-src.tar.gz
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 2440772..ef0983b 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index da159b4..8161f59 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
++	depends on !BR2_PTHREADS_OLD # needs pthread_getattr_np()
+ 	default y
+ 	help
+ 	  Build the Qt Script module.
+ 	  if unsure, say y.
  
- TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).2
-+TCL_VERSION = $(TCL_VERSION_MAJOR).3
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = tcl license
++comment "Script Module doesn't work with the old Linux threads"
++	depends on BR2_PTHREADS_OLD
++	#depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
++
+ config BR2_PACKAGE_QT_SCRIPTTOOLS
+ 	bool "Script Tools Module"
+ 	depends on BR2_PACKAGE_QT_SCRIPT
 -- 
 1.7.1
