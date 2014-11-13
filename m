@@ -1,38 +1,98 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 13 Nov 2014 23:24:35 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libevdev: bump version to 1.3.1
-Message-ID: <1415917478-24273-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Nov 2014 23:31:22 +0100
+Subject: [Buildroot] [Patch v2 1/1] libgtk3: fix undefined reference to
+ get_xkb()
+In-Reply-To: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141113223122.GG3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] and [2] for details.
+Eric, All,
 
-[1] http://lists.freedesktop.org/archives/input-tools/2014-September/001112.html
-[2] http://lists.freedesktop.org/archives/input-tools/2014-November/001123.html
+On 2014-10-27 13:56 +0100, Eric Le Bihan spake thusly:
+> When configuring Gtk+ with --disable-xkb, the build fails because of an
+> undefined reference to get_xkb().
+> 
+> This issue as been reported upstream [1]. This patch fixes it.
+> 
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/513/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
+> http://autobuild.buildroot.net/results/0c3/0c3f1df92481852622445478d2239371fc818f41/
+> 
+> [1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - bump to new version 1.3.1 instead of 1.3
----
- package/libevdev/libevdev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Upstream is not very receptive of that patch, however the added conditional
+looks very much like what is donw elsewhere in that file to compile-out
+xkb-related code. So:
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index fde7d3c..2fc8ff7 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.2.2
-+LIBEVDEV_VERSION = 1.3.1
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...3-0004-Fix-undefined-reference-to-get_xkb.patch | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> 
+> diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> new file mode 100644
+> index 0000000..c2f4b4f
+> --- /dev/null
+> +++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> @@ -0,0 +1,33 @@
+> +From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
+> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +Date: Mon, 27 Oct 2014 10:34:38 +0100
+> +Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
+> +
+> +When configuring Gtk+ with --disable-xkb, the build fails because of an
+> +undefined reference to get_xkb().
+> +
+> +This patch fixes this issue.
+> +
+> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +---
+> + gdk/x11/gdkkeys-x11.c | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
+> +index c45a971..6a5481b 100644
+> +--- a/gdk/x11/gdkkeys-x11.c
+> ++++ b/gdk/x11/gdkkeys-x11.c
+> +@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+> +   int i, j;
+> +   gboolean retval;
+> + 
+> ++#ifdef HAVE_XKB
+> +   if (KEYMAP_USE_XKB (keymap))
+> +     get_xkb (keymap_x11);
+> ++#endif
+> + 
+> +   retval = TRUE;
+> + 
+> +-- 
+> +1.9.1
+> +
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
