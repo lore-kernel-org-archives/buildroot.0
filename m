@@ -1,31 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Nov 2014 22:37:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
-In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
-References: <bug-7646-163@https.bugs.busybox.net/>
-Message-ID: <20141113223740.32E77B1D3F@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Nov 2014 23:40:13 +0100
+Subject: [Buildroot] [PATCH] python3: don't use wcsftime() on uClibc
+In-Reply-To: <1415913803-10416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 13 Nov 2014 22:23:23 +0100")
+References: <1415913803-10416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a93uiv1u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7646
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
---- Comment #12 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-13 22:37:39 UTC ---
-Patch to workaround the problem in Python 3 sent to Buildroot:
-http://lists.busybox.net/pipermail/buildroot/2014-November/112005.html
+ > As investigated in bug #7646, wcsftime() doesn't work properly with
+ > uClibc. Until it gets fixed in uClibc, let's tell Python 3 to not use
+ > it. Python 3 will fall back to strftime(), which works properly.
 
-uClibc bug reproduced with uClibc master, and bug reported to upstream uClibc:
-http://lists.uclibc.org/pipermail/uclibc/2014-November/048718.html.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Beyonlo <beyonlo@gmail.com>
 
-Since I don't expect the uClibc folks to react quickly, I would propose to mark
-this bug as fixed once the Python 3 workaround is committed in Buildroot.
+ > ---
+ >  package/python3/python3.mk | 6 ++++++
+ >  1 file changed, 6 insertions(+)
 
-Beyonlo, can you test the Buildroot patch for Python 3, and report if it works
-for you (it works for me, so I'm pretty sure it's ok, but still). Thanks!
+ > diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+ > index 2c1ef2a..0cb2630 100644
+ > --- a/package/python3/python3.mk
+ > +++ b/package/python3/python3.mk
+ > @@ -107,6 +107,12 @@ PYTHON3_CONF_ENV += \
+ >  	ac_cv_file__dev_ptc=yes \
+ >  	ac_cv_working_tzset=yes
+ 
+ > +# uClibc is now to have a broken wcsftime() implementation, so tell
+
+s/now/known/
+
+Committed with that fixed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
