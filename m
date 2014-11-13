@@ -1,48 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 23:04:58 +0100
-Subject: [Buildroot] [git commit] docs/news.html: add link to report from
-	ELCE developers days
-Message-ID: <20141113220634.CBF7FB452F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Nov 2014 23:11:39 +0100
+Subject: [Buildroot] [PATCH] xbmc: use github call
+In-Reply-To: <87d28rjysb.fsf@dell.be.48ers.dk>
+References: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87d28rjysb.fsf@dell.be.48ers.dk>
+Message-ID: <20141113221139.GF3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffeaa18bdf1bf8f75c44a59ae13fc38cb5538a62
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-And annonce the next one as well.
+On 2014-11-13 09:21 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+> 
+>  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> 
+> Yann pointed out to me on IRC last night that this was needed for
+> 2014.11 as xbmc downloads were otherwise broken, but it doesn't work for
+> me:
+[--SNIP--]
+> So what's going on?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/news.html |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+GitHub fixed their URLs handling now, so you can apply that patch, now.
 
-diff --git a/docs/news.html b/docs/news.html
-index 27791c6..d146c3b 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -9,6 +9,22 @@
- 
- <ul>
- 
-+  <li><b>13 November 2014 -- Report from Buildroot Developers Meeting</b>
-+
-+    <p>A report from the recent
-+    <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2014">
-+    Buildroot Developers Meeting</a> is now
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2014-October/109966.html">available</a>.</p>
-+
-+    <p>Once again, thanks to all the participants and to
-+    <a href="http://www.mind.be">Mind</a> for sponsoring the event.</p>
-+
-+    <p>The next Developer Days will take place on February 2nd and 3rd
-+    in Brussels, Belgium, right after <a
-+    href="http://fosdem.org">FOSDEM</a>. See the <a
-+    href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015">wiki<a>
-+    for more details.</p>
-+
-   <li><b>12 November 2014 -- 2014.11-rc1 released</b>
- 
-     <p>We have a new release candidate! Lots of changes all over the
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
