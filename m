@@ -1,86 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Nov 2014 21:15:42 +0100
-Subject: [Buildroot] [PATCH] Update github helper URL.
-In-Reply-To: <CAAXf6LWNoKjSPRrjpDROBHK6xvqC1cP6BsybRuMX64veGOTc7A@mail.gmail.com>
-References: <1415908080-19350-1-git-send-email-iawillia@us.ibm.com>
- <54650D55.9060107@mind.be>
- <CAAXf6LWNoKjSPRrjpDROBHK6xvqC1cP6BsybRuMX64veGOTc7A@mail.gmail.com>
-Message-ID: <5465116E.2070507@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Nov 2014 21:18:57 +0100
+Subject: [Buildroot] [PATCH 1/2] qt: Disable Script Module for old Linux
+ threads
+In-Reply-To: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141113211857.17e1a15c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/14 21:06, Thomas De Schampheleire wrote:
-> On Thu, Nov 13, 2014 at 8:58 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 13/11/14 20:48, Patrick Williams wrote:
->>> Github changed the URL syntax from 'archive' back to 'tarball'.
->>>
->>> Signed-off-by: Patrick Williams <iawillia@us.ibm.com>
->>> ---
->>>  package/pkg-download.mk | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
->>> index 4cfb913..03907f1 100644
->>> --- a/package/pkg-download.mk
->>> +++ b/package/pkg-download.mk
->>> @@ -56,7 +56,7 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
->>>  domainseparator=$(if $(1),$(1),/)
->>>
->>>  # github(user,package,version): returns site of GitHub repository
->>> -github = https://github.com/$(1)/$(2)/archive/$(3)
->>> +github = https://github.com/$(1)/$(2)/tarball/$(3)
->>>
->>>  ################################################################################
->>>  # The DOWNLOAD_* helpers are in charge of getting a working copy
->>>
->>
->>  Yep, that seems to work! So Yann, stop working :-)
->>
->>  I haven't tested if it's exactly the same tarball. It redirects to a URL
->> containing legacy.tar.gz instead of tar.gz, so who knows...
+Dear Vicente Olivert Riera,
+
+On Thu, 13 Nov 2014 16:49:14 +0000, Vicente Olivert Riera wrote:
+> Qt Script Module uses pthread_getattr_np() which is not implemented in
+> the old Linux threads. This causes the following compilation failure:
 > 
-> I can't follow all this madness.
+> ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
+> function ?void* QTJSC::currentThreadStackBase()?:
+> ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
+> error: ?pthread_getattr_np? was not declared in this scope
 > 
->>>> a10disp a899cc6dcf909360aac00482ede5369f3656f226 Downloading
-> --2014-11-13 20:57:54--
-> https://github.com/hglm/a10disp/archive/a899cc6dcf909360aac00482ede5369f3656f226/a10disp-a899cc6dcf909360aac00482ede5369f3656f226.tar.gz
-> Resolving github.com (github.com)... 192.30.252.129
-> Connecting to github.com (github.com)|192.30.252.129|:443... connected.
-> HTTP request sent, awaiting response... 302 Found
-> Location: https://codeload.github.com/hglm/a10disp/tar.gz/a899cc6dcf909360aac00482ede5369f3656f226
-> [following]
-> --2014-11-13 20:57:54--
-> https://codeload.github.com/hglm/a10disp/tar.gz/a899cc6dcf909360aac00482ede5369f3656f226
-> Resolving codeload.github.com (codeload.github.com)... 192.30.252.146
-> Connecting to codeload.github.com
-> (codeload.github.com)|192.30.252.146|:443... connected.
-> HTTP request sent, awaiting response... 200 OK
-> Length: unspecified [application/x-gzip]
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/qt/Config.in |    5 +++++
+>  1 files changed, 5 insertions(+), 0 deletions(-)
 > 
-> Here the original URL with 'archive' still works. So what's the fuzz about?
-> 
-> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index da159b4..8161f59 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
+>  config BR2_PACKAGE_QT_SCRIPT
+>  	bool "Script Module"
+>  	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+> +	depends on !BR2_PTHREADS_OLD # needs pthread_getattr_np()
 
- I guess someone complained to github and they reverted it...
+This does not work for external toolchains, so please use
+BR2_TOOLCHAIN_HAS_THREADS_NPTL instead.
 
- I just tried
-https://github.com/xbmc/xbmc/archive/13.2-Gotham/xbmc-13.2-Gotham.tar.gz
+Thanks,
 
-which failed for Peter this morning, and it works now.
-
- The funny thing is, it _doesn't_ redirect to the legacy...
-
-
- Regards,
- Arnout
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
