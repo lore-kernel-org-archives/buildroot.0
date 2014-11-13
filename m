@@ -1,57 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 09:21:56 +0100
-Subject: [Buildroot] [PATCH] xbmc: use github call
-In-Reply-To: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 12 Oct 2014 20:21:00 +0200")
-References: <1413138060-1146-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87d28rjysb.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Nov 2014 10:05:51 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-11-12
+In-Reply-To: <20141113073014.A7334101D3B@stock.ovh.net> (Thomas Petazzoni's
+ message of "Thu, 13 Nov 2014 08:30:14 +0100 (CET)")
+References: <20141113073014.A7334101D3B@stock.ovh.net>
+Message-ID: <878ujfjwr4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Build statistics for 2014-11-12
+ > ===============================
 
-Yann pointed out to me on IRC last night that this was needed for
-2014.11 as xbmc downloads were otherwise broken, but it doesn't work for
-me:
+ >         success : 172
+ >        failures : 48 
+ >        timeouts : 3  
+ >           TOTAL : 223
 
->>> xbmc 13.2-Gotham Downloading
---2014-11-13 09:16:48--  https://github.com/xbmc/xbmc/archive/13.2-Gotham/xbmc-13.2-Gotham.tar.gz
-Resolving github.com (github.com)... 192.30.252.129
-Connecting to github.com (github.com)|192.30.252.129|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-11-13 09:16:50 ERROR 404: Not Found.
+ > Classification of failures by reason
+ > ====================================
 
---2014-11-13 09:16:50--  http://sources.buildroot.net/xbmc-13.2-Gotham.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-11-13 09:16:50 ERROR 404: Not Found.
+ >                  schifra-0.0.1 | 17
 
-package/pkg-generic.mk:73: recipe for target '/home/peko/source/buildroot/output/build/xbmc-13.2-Gotham/.stamp_downloaded' failed
+Sigh :/
 
-Whereas the old URL did work:
-
->>> xbmc 13.2-Gotham Downloading
---2014-11-13 09:21:12--  https://github.com/xbmc/xbmc/archive/13.2-Gotham.tar.gz
-Resolving github.com (github.com)... 192.30.252.129
-Connecting to github.com (github.com)|192.30.252.129|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/xbmc/xbmc/tar.gz/13.2-Gotham [following]
---2014-11-13 09:21:13--  https://codeload.github.com/xbmc/xbmc/tar.gz/13.2-Gotham
-Resolving codeload.github.com (codeload.github.com)... 192.30.252.144
-Connecting to codeload.github.com (codeload.github.com)|192.30.252.144|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 65900491 (63M) [application/x-gzip]
-Saving to: ?/home/peko/source/buildroot/output/build/.13.2-Gotham.tar.gz.D3JP1O/output?
-
-100%[======================================================================>] 65,900,491  3.51MB/s   in 12s    
-
-So what's going on?
+I haven't heard back from upstream from my last two mails, so I'll apply
+your patch to mark scifra as broken for now.
 
 -- 
 Bye, Peter Korsgaard
