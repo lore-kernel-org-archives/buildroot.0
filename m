@@ -1,73 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 16:25:07 +0100
-Subject: [Buildroot] [git commit] libmemcached: disable sanitizer
-Message-ID: <20141113153637.CE005B444A@busybox.osuosl.org>
+Date: Thu, 13 Nov 2014 16:29:14 +0100
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.12.2
+Message-ID: <20141113153637.D7093B444A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b79587b8254091d74298d76b78b22ff0579af973
+commit: http://git.buildroot.net/buildroot/commit/?id=2689ffbd3dccac361213a25ce2047fe1c6bb406f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tests are flawed and we don't generally enable a dozen hardening
-CFLAGS automatically. Fixes:
-http://autobuild.buildroot.net/results/a84/a84ab4f0fdea6bbab971ba379e3066cddb25bfaa/
+Fixes:
+CVE-2014-8710 - SigComp UDVM buffer overflow.
+CVE-2014-8711 - AMQP crash.
+CVE-2014-8712 - NCP crashes.
+CVE-2014-8713 - NCP crashes.
+CVE-2014-8714 - TN5250 infinite loops.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-tests.patch => 0001-disable-tests.patch} |    0
- package/libmemcached/0002-disable-sanitizer.patch  |   25 ++++++++++++++++++++
- package/libmemcached/libmemcached.mk               |    2 +-
- 3 files changed, 26 insertions(+), 1 deletions(-)
+ package/wireshark/wireshark.hash |    6 +++---
+ package/wireshark/wireshark.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmemcached/libmemcached-01-disable-tests.patch b/package/libmemcached/0001-disable-tests.patch
-similarity index 100%
-rename from package/libmemcached/libmemcached-01-disable-tests.patch
-rename to package/libmemcached/0001-disable-tests.patch
-diff --git a/package/libmemcached/0002-disable-sanitizer.patch b/package/libmemcached/0002-disable-sanitizer.patch
-new file mode 100644
-index 0000000..108da22
---- /dev/null
-+++ b/package/libmemcached/0002-disable-sanitizer.patch
-@@ -0,0 +1,25 @@
-+Disable sanitizer checks, they're busted.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura libmemcached-1.0.18.orig/m4/ax_harden_compiler_flags.m4 libmemcached-1.0.18/m4/ax_harden_compiler_flags.m4
-+--- libmemcached-1.0.18.orig/m4/ax_harden_compiler_flags.m4	2014-11-13 08:07:09.011614311 -0300
-++++ libmemcached-1.0.18/m4/ax_harden_compiler_flags.m4	2014-11-13 08:07:52.406092440 -0300
-+@@ -222,8 +222,6 @@
-+ #         GCC 4.5 removed this.
-+ #         _APPEND_COMPILE_FLAGS_ERROR([-Wunreachable-code])
-+ 
-+-          _SET_SANITIZE_FLAGS
-+-
-+           AS_IF([test "x$ax_enable_debug" = xno],
-+             [AS_IF([test "x$ac_cv_vcs_checkout" = xyes],
-+               [AS_IF([test "x${host_os}" != "xmingw"],
-+@@ -337,8 +335,6 @@
-+                 _APPEND_COMPILE_FLAGS_ERROR([-fstack-protector-all])
-+                 ])])])])
-+ 
-+-          _SET_SANITIZE_FLAGS
-+-
-+           AS_IF([test "x$ac_cv_warnings_as_errors" = xyes],
-+                 [AX_APPEND_FLAG([-Werror])])
-+           AC_LANG_POP([C++])
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index daeb283..d442b3c 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -13,7 +13,7 @@ LIBMEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' \
- LIBMEMCACHED_CONF_OPTS = --disable-dtrace
- LIBMEMCACHED_INSTALL_STAGING = YES
- LIBMEMCACHED_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBEVENT),libevent)
--# For libmemcached-01-disable-tests.patch
-+# For 0001-disable-tests.patch and 0002-disable-sanitizer.patch
- LIBMEMCACHED_AUTORECONF = YES
- LIBMEMCACHED_LICENSE = BSD-3c
- LIBMEMCACHED_LICENSE_FILES = COPYING
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 00d3861..9b0c488 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,3 +1,3 @@
+-# From https://www.wireshark.org/download/SIGNATURES-1.12.1.txt
+-md5	14b3e3d8979d1eb27ff085bb5f400e67	wireshark-1.12.1.tar.bz2
+-sha1	e1508ea25ccf077c5a7fa2af3b88f3ae199f77fb	wireshark-1.12.1.tar.bz2
++# From https://www.wireshark.org/download/SIGNATURES-1.12.2.txt
++md5	2f2a16be8b087227cb17733c72288ae4	wireshark-1.12.2.tar.bz2
++sha1	0598fe285725f97045d7d08e6bde04686044b335	wireshark-1.12.2.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index ccf5a56..095050a 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.12.1
++WIRESHARK_VERSION = 1.12.2
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
