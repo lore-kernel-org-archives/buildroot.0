@@ -1,35 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Nov 2014 23:53:14 +0100
-Subject: [Buildroot] [git commit] docs/manual/resources.txt: fix patchwork
-	link
-Message-ID: <20141113225713.2218DB32D1@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Nov 2014 23:02:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 7628] Python SSL does not get built for Raspberry
+	Pi
+In-Reply-To: <bug-7628-163@https.bugs.busybox.net/>
+References: <bug-7628-163@https.bugs.busybox.net/>
+Message-ID: <20141113230255.0B6F3AEF93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4900b2c63b301445cca5f3674f83c573dfbcc0e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7628
 
-The patchwork website needs the trailing slash, otherwise it returns a 404.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-13 23:02:54 UTC ---
+Can you give your exact Buildroot .config? I've built the following defconfig
+here:
 
-Reported-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/resources.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+BR2_arm=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_SSL=y
 
-diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-index b11053e..b327f9e 100644
---- a/docs/manual/resources.txt
-+++ b/docs/manual/resources.txt
-@@ -60,7 +60,7 @@ project. Patches that have been sent to a mailing list are \'caught' by
- the system, and appear on a web page. Any comments posted that
- reference the patch are appended to the patch page too. For more
- information on Patchwork see
--http://jk.ozlabs.org/projects/patchwork[].
-+http://jk.ozlabs.org/projects/patchwork/[].
- +
- Buildroot's Patchwork website is mainly for use by Buildroot's
- maintainer to ensure patches aren't missed. It is also used by Buildroot
+And I definitely do have the _ss.cpython-34m.so library built:
+
+# find / -name '_ssl*'
+/usr/lib/python3.4/lib-dynload/_ssl.cpython-34m.so
+
+However, when I try to use the ssl module, it complains of an undefined
+instruction:
+
+# python
+Python 3.4.1 (default, Nov 13 2014, 22:55:45) 
+[GCC 4.8.3] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import ssl
+python (528): undefined instruction: pc=769e536c
+Code: 00000000 f26ee1fe e12fff1e ee190f1d (e12fff1e) 
+>>> 
+
+So there is indeed an issue, but it does not appear to be the issue you
+reported.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
