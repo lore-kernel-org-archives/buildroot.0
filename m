@@ -1,47 +1,49 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Nov 2014 16:49:14 +0000
-Subject: [Buildroot] [PATCH 1/2] qt: Disable Script Module for old Linux
+Date: Thu, 13 Nov 2014 16:49:15 +0000
+Subject: [Buildroot] [PATCH 2/2] qt: Disable Webkit Module for old Linux
 	threads
-Message-ID: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
+In-Reply-To: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1415897355-62758-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt Script Module uses pthread_getattr_np() which is not implemented in
+Qt Webkit Module uses pthread_getattr_np() which is not implemented in
 the old Linux threads. This causes the following compilation failure:
 
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
-function ?void* QTJSC::currentThreadStackBase()?:
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
-error: ?pthread_getattr_np? was not declared in this scope
+wtf/StackBounds.cpp: In member function ?void
+WTF::StackBounds::initialize()?:
+wtf/StackBounds.cpp:172:38: error: ?pthread_getattr_np? was not declared
+in this scope
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qt/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/qt/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
 diff --git a/package/qt/Config.in b/package/qt/Config.in
-index da159b4..8161f59 100644
+index 8161f59..c0ec16b 100644
 --- a/package/qt/Config.in
 +++ b/package/qt/Config.in
-@@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
- config BR2_PACKAGE_QT_SCRIPT
- 	bool "Script Module"
+@@ -375,13 +375,15 @@ config BR2_PACKAGE_QT_WEBKIT
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	depends on BR2_PACKAGE_QT_NETWORK
  	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 +	depends on !BR2_PTHREADS_OLD # needs pthread_getattr_np()
- 	default y
  	help
- 	  Build the Qt Script module.
- 	  if unsure, say y.
+ 	  Build the WebKit module.
+ 	  If unsure, say n.
  
-+comment "Script Module doesn't work with the old Linux threads"
+-comment "WebKit needs shared library/gui/network support"
++comment "WebKit needs shared library/new threads/gui/network support"
+ 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 +	depends on BR2_PTHREADS_OLD
-+	#depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+
- config BR2_PACKAGE_QT_SCRIPTTOOLS
- 	bool "Script Tools Module"
- 	depends on BR2_PACKAGE_QT_SCRIPT
+ 
+ config BR2_PACKAGE_QT_STL
+ 	bool "STL support"
 -- 
 1.7.1
