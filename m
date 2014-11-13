@@ -1,43 +1,126 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 13 Nov 2014 14:13:08 -0300
-Subject: [Buildroot] [PATCH] ruby: security bump to version 2.1.5
-Message-ID: <1415898788-28747-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 13 Nov 2014 17:38:55 +0000
+Subject: [Buildroot] [PATCH] systemd: bump version to v217
+Message-ID: <1415900335-56461-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-8090 - Another Denial Of Service XML Expansion.
+- Bump version to v217
+- Add a hash file
+- Adapt the needed patches
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...fine-the-__NR_memfd_create-macro-for-MIPS.patch |   44 +++++++------------
+ package/systemd/systemd.hash                       |    2 +
+ package/systemd/systemd.mk                         |    2 +-
+ 3 files changed, 19 insertions(+), 29 deletions(-)
+ create mode 100644 package/systemd/systemd.hash
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 8d5d133..9d56eee 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2014/10/27/ruby-2-1-4-released/
--sha256	bf9952cdeb3a0c6a5a27745c9b4c0e5e264e92b669b2b08efb363f5156549204	ruby-2.1.4.tar.gz
-+# From https://www.ruby-lang.org/en/news/2014/11/13/ruby-2-1-5-is-released/
-+sha256	4305cc6ceb094df55210d83548dcbeb5117d74eea25196a9b14fa268d354b100	ruby-2.1.5.tar.gz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 36f6d3f..20a2a11 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/systemd/0004-Properly-define-the-__NR_memfd_create-macro-for-MIPS.patch b/package/systemd/0004-Properly-define-the-__NR_memfd_create-macro-for-MIPS.patch
+index 6aca13c..9ce64c9 100644
+--- a/package/systemd/0004-Properly-define-the-__NR_memfd_create-macro-for-MIPS.patch
++++ b/package/systemd/0004-Properly-define-the-__NR_memfd_create-macro-for-MIPS.patch
+@@ -1,16 +1,16 @@
+ Properly define the __NR_memfd_create macro for MIPS
+ 
+ This is an upstream patch which has been applied to the master branch
+-and I have adapted it to make it apply to the v216 version.
++and I have adapted it to make it apply to the v217 version.
+ 
+ Upstream commit:
+   http://cgit.freedesktop.org/systemd/systemd/commit/?id=e6c019026b8cfd27a997e6e6ed1349f8f289b7e2
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+-From cdd25569e583ccfff3aef0eda175a2d07c00f859 Mon Sep 17 00:00:00 2001
++From a51496db6edc8168268c86ea55915405f95b0212 Mon Sep 17 00:00:00 2001
+ From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Date: Tue, 4 Nov 2014 10:49:58 +0000
++Date: Thu, 13 Nov 2014 17:32:52 +0000
+ Subject: [PATCH] Properly define the __NR_memfd_create macro for MIPS
+ 
+ This macro exists for MIPS since v3.17:
+@@ -18,43 +18,31 @@ This macro exists for MIPS since v3.17:
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ ---
+- src/shared/missing.h |    9 +++++++++
+- 1 files changed, 9 insertions(+), 0 deletions(-)
++ src/shared/missing.h |   11 +++++++++--
++ 1 files changed, 9 insertions(+), 2 deletions(-)
+ 
+ diff --git a/src/shared/missing.h b/src/shared/missing.h
+-index 3ff1a21..6888163 100644
++index bb4f8f2..66bedcf 100644
+ --- a/src/shared/missing.h
+ +++ b/src/shared/missing.h
+-@@ -152,6 +152,9 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
+- #    ifndef __NR_fanotify_mark
+- #      define __NR_fanotify_mark 4337
+- #    endif
+-+#    ifndef __NR_memfd_create
++@@ -125,8 +125,15 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
++ #  endif
++ #elif defined _MIPS_SIM
++ #  ifndef __NR_memfd_create
++-#    warning "__NR_memfd_create not yet defined for MIPS"
++-#    define __NR_memfd_create 0xffffffff
+++#    if _MIPS_SIM == _MIPS_SIM_ABI32
+ +#      define __NR_memfd_create 4354
+ +#    endif
+- #  elif _MIPS_SIM == _MIPS_SIM_NABI32
+- #    ifndef __NR_fanotify_init
+- #      define __NR_fanotify_init 6300
+-@@ -159,6 +162,9 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
+- #    ifndef __NR_fanotify_mark
+- #      define __NR_fanotify_mark 6301
+- #    endif
+-+#    ifndef __NR_memfd_create
+++#    if _MIPS_SIM == _MIPS_SIM_NABI32
+ +#      define __NR_memfd_create 6318
+ +#    endif
+- #  elif _MIPS_SIM == _MIPS_SIM_ABI64
+- #    ifndef __NR_fanotify_init
+- #      define __NR_fanotify_init 5295
+-@@ -166,6 +172,9 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
+- #    ifndef __NR_fanotify_mark
+- #      define __NR_fanotify_mark 5296
+- #    endif
+-+#    ifndef __NR_memfd_create
+++#    if _MIPS_SIM == _MIPS_SIM_ABI64
+ +#      define __NR_memfd_create 5314
+ +#    endif
+  #  endif
+  #else
+- #  ifndef __NR_fanotify_init
++ #  ifndef __NR_memfd_create
+ -- 
+ 1.7.1
+ 
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+new file mode 100644
+index 0000000..5b7ba7f
+--- /dev/null
++++ b/package/systemd/systemd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  a031e6fbcdc7077b37338bae8074d9428ee2fa98033beb4923a62871890f7498  systemd-217.tar.xz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 75a32f4..5362319 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.1
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
- RUBY_VERSION_EXT = 2.1.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-SYSTEMD_VERSION = 216
++SYSTEMD_VERSION = 217
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+ SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
 -- 
-2.0.4
+1.7.1
