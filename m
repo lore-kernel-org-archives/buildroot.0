@@ -1,49 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Nov 2014 16:49:15 +0000
-Subject: [Buildroot] [PATCH 2/2] qt: Disable Webkit Module for old Linux
-	threads
-In-Reply-To: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415897355-62758-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1415897355-62758-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Thu, 13 Nov 2014 09:03:07 -0800
+Subject: [Buildroot] out-of-tree kernel modules and linux header versions
+In-Reply-To: <20141113092025.4bc7cfe2@free-electrons.com>
+References: <CAJpxd07isuV8UB+d2pWCjoYsdWnG7T5XM_Hm6vxyrTJi_gz9DQ@mail.gmail.com>
+ <CAJpxd06Luke+9Jgd7+Ka68yUwUh1Lxu93dfhJcG_-LzZ+irVqA@mail.gmail.com>
+ <20141113092025.4bc7cfe2@free-electrons.com>
+Message-ID: <CAJpxd04tNrVAiT4AC0ojA75pH9q9TYU6XtezqyTNWNJh8LSkwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt Webkit Module uses pthread_getattr_np() which is not implemented in
-the old Linux threads. This causes the following compilation failure:
+On Thu, Nov 13, 2014 at 12:20 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-wtf/StackBounds.cpp: In member function ?void
-WTF::StackBounds::initialize()?:
-wtf/StackBounds.cpp:172:38: error: ?pthread_getattr_np? was not declared
-in this scope
+> Why do you simply upgrade, instead of back-porting stuff?
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/qt/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 8161f59..c0ec16b 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -375,13 +375,15 @@ config BR2_PACKAGE_QT_WEBKIT
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	depends on BR2_PACKAGE_QT_NETWORK
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	depends on !BR2_PTHREADS_OLD # needs pthread_getattr_np()
- 	help
- 	  Build the WebKit module.
- 	  If unsure, say n.
- 
--comment "WebKit needs shared library/gui/network support"
-+comment "WebKit needs shared library/new threads/gui/network support"
- 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	depends on BR2_PTHREADS_OLD
- 
- config BR2_PACKAGE_QT_STL
- 	bool "STL support"
--- 
-1.7.1
+I would, if it *were* simple. Because my target is tied to *very* old
+kernel and certain packages, especially Xorg, it is not at all simple. The
+infrastructure around Xorg and opengl has changed a lot since 2011.08, and
+backporting the extensive list of xorg and related packages would be a lot
+of work. Or at least I think it would be... maybe I'm being too
+pessimistic. Don't get me wrong, I'd love to spend the time to get
+up-to-date and get all the benefits of recent development. But I'm sure you
+know how competing priorities go...
+
+<><  <><  <><
+Bryce Schober
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141113/d8d18046/attachment.html>
