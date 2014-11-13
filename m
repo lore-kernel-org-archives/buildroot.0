@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Nov 2014 22:23:23 +0100
-Subject: [Buildroot] [PATCH] python3: don't use wcsftime() on uClibc
-Message-ID: <1415913803-10416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 13 Nov 2014 22:36:56 +0100
+Subject: [Buildroot] [PATCH] botan: disable for static builds
+Message-ID: <1415914616-26343-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As investigated in bug #7646, wcsftime() doesn't work properly with
-uClibc. Until it gets fixed in uClibc, let's tell Python 3 to not use
-it. Python 3 will fall back to strftime(), which works properly.
+it tries to include <dlfcn.h>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Beyonlo <beyonlo@gmail.com>
+see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python3/python3.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/botan/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 2c1ef2a..0cb2630 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -107,6 +107,12 @@ PYTHON3_CONF_ENV += \
- 	ac_cv_file__dev_ptc=yes \
- 	ac_cv_working_tzset=yes
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 733dc89..c82a77f 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -10,11 +10,12 @@ config BR2_PACKAGE_BOTAN
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
+ 	help
+ 	  Botan is a crypto library for C++
  
-+# uClibc is now to have a broken wcsftime() implementation, so tell
-+# Python 3 to fall back to strftime() instead.
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+PYTHON3_CONF_ENV += ac_cv_func_wcsftime=no
-+endif
-+
- PYTHON3_CONF_OPTS += \
- 	--without-ensurepip	\
- 	--without-cxx-main 	\
+ 	  http://botan.randombit.net
+ 
+-comment "botan needs a toolchain w/ C++, threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++comment "botan needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
 -- 
-2.1.0
+1.9.1
