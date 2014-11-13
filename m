@@ -1,40 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Nov 2014 16:26:35 +0100
-Subject: [Buildroot] [git commit] qt5base: unconditionally install
- Qt5printSupport if widgets are enabled
-In-Reply-To: <87vbmji0zv.fsf@dell.be.48ers.dk>
-References: <20141113144933.8E075B4453@busybox.osuosl.org>
- <20141113160320.4391cb1a@free-electrons.com>
- <87vbmji0zv.fsf@dell.be.48ers.dk>
-Message-ID: <20141113162635.673fe030@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Nov 2014 16:29:01 +0100
+Subject: [Buildroot] [PATCH] libmemcached: disable sanitizer
+In-Reply-To: <1415877117-20736-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 13 Nov 2014 08:11:57 -0300")
+References: <1415877117-20736-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r3x7i0g2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Thu, 13 Nov 2014 16:17:08 +0100, Peter Korsgaard wrote:
+ > The tests are flawed and we don't generally enable a dozen hardening
+ > CFLAGS automatically. Fixes:
+ > http://autobuild.buildroot.net/results/a84/a84ab4f0fdea6bbab971ba379e3066cddb25bfaa/
 
->  > So why have a Config.in option for this in the first place?
-> 
-> Just because I wanted to make as minimal as possible a change now that
-> we're past -rc1.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-That makes sense.
+Committed, thanks.
 
-> I don't follow qt5 development, but presumably this
-> used to be user settable and could become so again in future qt5
-> releases.
-
-That however seems like a pretty weak argument :-) Do we keep or add
-options just because they may hypothetically be useful in the future?
-
-But OK, the first argument is good enough. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
