@@ -1,53 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Nov 2014 23:28:41 +0100
-Subject: [Buildroot] [PATCH 10/10] dhcpcd: use standard installation
-In-Reply-To: <1415969096-3032-11-git-send-email-gustavo@zacarias.com.ar>
-References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
- <1415969096-3032-11-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <54668219.4090202@mind.be>
+Date: Fri, 14 Nov 2014 23:47:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: cleanup run-time files
+ in init script
+In-Reply-To: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
+References: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
+Message-ID: <5466868C.9040108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/11/14 13:44, Gustavo Zacarias wrote:
-> Drop the custom/manual install cmds and do a normal make install.
-> This gets dhcpcd-hooks installed which are useful for many accesory
-> setup functions like dns, ntp server, and so on.
-> Also install dhcpcd to /sbin since it's expected by debian ifupdown,
+On 14/11/14 22:30, J?rg Krause wrote:
+> dnsmasq does not clean its run-times its run-time files after stopping with
+> /etc/init.d/S80dnsmasq stop. Do this manually.
+> 
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> ---
+>  package/dnsmasq/S80dnsmasq | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+> index 587751e..b29fff4 100755
+> --- a/package/dnsmasq/S80dnsmasq
+> +++ b/package/dnsmasq/S80dnsmasq
+> @@ -13,6 +13,9 @@ case "$1" in
+>  		echo -n "Stopping dnsmasq: "
+>  		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
+>  		[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +		# dnsmasq does not clean its run-time files
+> +		rm -f /var/run/dnsmasq.pid
+> +		rm -f /var/run/dnsmasq.leases
 
- Same think, network-manager.mk needs to be adapted.
+ The leases file is read again by dnsmasq when it starts, so it can give the
+same addresses. So it shouldn't be removed. In fact, in my setup I even put the
+leases file in persistent storage.
+
 
  Regards,
  Arnout
 
-> For busybox ifupdown when external dhcp clients are enabled (not in the
-> default config we ship) will search the path.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/dhcpcd/dhcpcd.mk | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> index 5f7c1a6..abd871f 100644
-> --- a/package/dhcpcd/dhcpcd.mk
-> +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -35,12 +35,7 @@ define DHCPCD_BUILD_CMDS
->  endef
->  
->  define DHCPCD_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
-> -		$(TARGET_DIR)/usr/sbin/dhcpcd
-> -	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
-> -		$(TARGET_DIR)/etc/dhcpcd.conf
-> -	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
-> -		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
->  endef
->  
->  # NOTE: Even though this package has a configure script, it is not generated
+>  		;;
+>  	restart|reload)
+>  		$0 stop
 > 
 
 
