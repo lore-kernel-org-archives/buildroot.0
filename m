@@ -1,31 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 14 Nov 2014 14:58:54 +0000
-Subject: [Buildroot] [PATCH v2 4/4] evemu: add hash
-In-Reply-To: <546617C0.3040209@imgtec.com>
-References: <1415917478-24273-1-git-send-email-ps.report@gmx.net>
- <1415917478-24273-4-git-send-email-ps.report@gmx.net>
- <54661241.4010201@imgtec.com> <546617C0.3040209@imgtec.com>
-Message-ID: <546618AE.1010002@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Nov 2014 16:13:19 +0100
+Subject: [Buildroot] [PATCH] Update github helper URL.
+In-Reply-To: <20141113202234.GD3641@free.fr> (Yann E. MORIN's message of "Thu, 
+ 13 Nov 2014 21:22:34 +0100")
+References: <1415908080-19350-1-git-send-email-iawillia@us.ibm.com>
+ <54650D55.9060107@mind.be>
+ <CAAXf6LWNoKjSPRrjpDROBHK6xvqC1cP6BsybRuMX64veGOTc7A@mail.gmail.com>
+ <20141113202234.GD3641@free.fr>
+Message-ID: <87d28pg6i8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The announcement has been amended:
+Hi,
 
-http://lists.freedesktop.org/archives/input-tools/2014-November/001125.html
+ >> Here the original URL with 'archive' still works. So what's the fuzz about?
 
-and the ".sums" file has been uploaded:
+ > DAng... It works again. It surely was broken yesterday: all downlaod
+ > would fallback to using http://sources.buildroot.net
 
-http://www.freedesktop.org/software/evemu/evemu-2.1.0.sums
+ > See also the mail from Peter stating it did not work for him, too:
+ >     http://lists.busybox.net/pipermail/buildroot/2014-November/111953.html
 
-Cheers,
+ > So, they "fixed" it over-night. Sigh, that's not reliable.
+
+ > OK, so we can probably post-pone the resolution for post-release.
+
+Gaah, I lost track. Are we now keeping it like it is or do we go back to
+the /tarball/ URLs?
+
+
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Bye, Peter Korsgaard
