@@ -1,39 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Nov 2014 23:48:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 7628] Python SSL does not get built for Raspberry
-	Pi
-In-Reply-To: <bug-7628-163@https.bugs.busybox.net/>
-References: <bug-7628-163@https.bugs.busybox.net/>
-Message-ID: <20141113234808.06DD7B4466@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 13 Nov 2014 22:28:18 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.5.19
+Message-ID: <1415928498-6083-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7628
+Fixes:
+CVE-2014-3710 - fileinfo: out-of-bounds read in elf note headers.
 
---- Comment #4 from tobias.meggendorfer+buildroot at gmail.com 2014-11-13 23:48:07 UTC ---
-Apparently I can't edit my comments, so new comment: With the following changes
-to the attached config:
-
-262c262
-< BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-> BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-652,653c652,653
-< BR2_PACKAGE_PYTHON3_PY_ONLY=y
-< # BR2_PACKAGE_PYTHON3_PYC_ONLY is not set
----
-> # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
-> BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-find output/target/ -name "_ssl*" still is empty (after make clean, make)
-
-output/build/host-python3-3.4.1/build/lib.linux-x86_64-3.4/_ssl.cpython-34m.so
-(host-python ssl) gets built though (in every configuration I tried so far).
-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 6bb0d1c..7a2dd70 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-md5	3984f32985842afebe5795457e26931f	php-5.5.18.tar.xz
++md5	c63dcfd8b318d12127ba6d39ecc8a444	php-5.5.19.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 9456f1c..ae959db 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.5.18
++PHP_VERSION = 5.5.19
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.4
