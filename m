@@ -1,48 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Nov 2014 23:47:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: cleanup run-time files
- in init script
-In-Reply-To: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
-References: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
-Message-ID: <5466868C.9040108@mind.be>
+Date: Fri, 14 Nov 2014 23:50:10 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt: Script Module needs a toolchain
+ with nptl
+In-Reply-To: <1415962341-9642-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1415962341-9642-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <54668722.5010304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/11/14 22:30, J?rg Krause wrote:
-> dnsmasq does not clean its run-times its run-time files after stopping with
-> /etc/init.d/S80dnsmasq stop. Do this manually.
+On 14/11/14 11:52, Vicente Olivert Riera wrote:
+> Qt Script Module uses pthread_getattr_np() which is implemented in
+> toolchains with nptl. Otherwise the compilation will fail showing this
+> error message:
 > 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
+> function ?void* QTJSC::currentThreadStackBase()?:
+> ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
+> error: ?pthread_getattr_np? was not declared in this scope
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/dnsmasq/S80dnsmasq | 3 +++
->  1 file changed, 3 insertions(+)
+> Changes v1 -> v2
 > 
-> diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
-> index 587751e..b29fff4 100755
-> --- a/package/dnsmasq/S80dnsmasq
-> +++ b/package/dnsmasq/S80dnsmasq
-> @@ -13,6 +13,9 @@ case "$1" in
->  		echo -n "Stopping dnsmasq: "
->  		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
->  		[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +		# dnsmasq does not clean its run-time files
-> +		rm -f /var/run/dnsmasq.pid
-> +		rm -f /var/run/dnsmasq.leases
+> Depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of BR2_PTHREADS_OLD
+> 
+>  package/qt/Config.in |    5 +++++
+>  1 files changed, 5 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index da159b4..f4cb6b6 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
+>  config BR2_PACKAGE_QT_SCRIPT
+>  	bool "Script Module"
+>  	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
+>  	default y
+>  	help
+>  	  Build the Qt Script module.
+>  	  if unsure, say y.
+>  
+> +comment "Script Module needs a toolchain with nptl"
 
- The leases file is read again by dnsmasq when it starts, so it can give the
-same addresses. So it shouldn't be removed. In fact, in my setup I even put the
-leases file in persistent storage.
-
+ NPTL should be in capitals.
 
  Regards,
  Arnout
 
->  		;;
->  	restart|reload)
->  		$0 stop
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+> +
+>  config BR2_PACKAGE_QT_SCRIPTTOOLS
+>  	bool "Script Tools Module"
+>  	depends on BR2_PACKAGE_QT_SCRIPT
 > 
 
 
