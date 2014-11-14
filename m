@@ -1,41 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Nov 2014 18:02:12 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 3.17.3
-In-Reply-To: <1415998932-19975-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1415998932-19975-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415998932-19975-2-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Fri, 14 Nov 2014 22:30:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: cleanup run-time files in
+	init script
+Message-ID: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+dnsmasq does not clean its run-times its run-time files after stopping with
+/etc/init.d/S80dnsmasq stop. Do this manually.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e0d123c..1c70e5e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.17.2"
-+	bool "3.17.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.17.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/dnsmasq/S80dnsmasq | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+index 587751e..b29fff4 100755
+--- a/package/dnsmasq/S80dnsmasq
++++ b/package/dnsmasq/S80dnsmasq
+@@ -13,6 +13,9 @@ case "$1" in
+ 		echo -n "Stopping dnsmasq: "
+ 		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		# dnsmasq does not clean its run-time files
++		rm -f /var/run/dnsmasq.pid
++		rm -f /var/run/dnsmasq.leases
+ 		;;
+ 	restart|reload)
+ 		$0 stop
 -- 
-2.0.4
+2.1.3
