@@ -1,26 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Nov 2014 13:20:56 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qt5webkit: fix build failure
-In-Reply-To: <1415918970-30720-2-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Thu, 13 Nov 2014 23:49:30 +0100")
-References: <1415918970-30720-1-git-send-email-s.martin49@gmail.com>
- <1415918970-30720-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <87k32ygehj.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Nov 2014 13:20:26 +0100
+Subject: [Buildroot] [git commit] package/qt5webkit: rename patch to the new
+	convention
+Message-ID: <20141114122107.3830BB5AA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=21713340ba1f193ac13f9512f686677a3d62a118
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch fixes build failure when the host python interpreter is python3.
- > Fixes:
- >   http://autobuild.buildroot.net/results/af8/af8f3d3cc018006cee58d57cd9e8c6d8b3de3247/
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ncludepath.patch => 0001-egl-includepath.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch b/package/qt5/qt5webkit/0001-egl-includepath.patch
+similarity index 100%
+rename from package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch
+rename to package/qt5/qt5webkit/0001-egl-includepath.patch
