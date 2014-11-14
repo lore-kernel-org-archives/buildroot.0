@@ -1,54 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Nov 2014 14:56:37 +0100
-Subject: [Buildroot] [git commit] dovecot: fix static build
-Message-ID: <20141114135716.7F648B1488@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 14 Nov 2014 10:59:12 -0300
+Subject: [Buildroot] [PATCH 02/10] dash: bump to 0.5.8-2
+In-Reply-To: <87389lhoyb.fsf@dell.be.48ers.dk>
+References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>	<1415969096-3032-3-git-send-email-gustavo@zacarias.com.ar>	<20141114141548.55205c95@free-electrons.com>	<87bno9hpfv.fsf@dell.be.48ers.dk>	<20141114144256.7486638c@free-electrons.com>
+ <87389lhoyb.fsf@dell.be.48ers.dk>
+Message-ID: <54660AB0.6050905@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d4942cc41c7ca6899596e91bb3426b82defc083
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/14/2014 10:49 AM, Peter Korsgaard wrote:
 
-Add a patch removing reference to MODULE_SUFFIX when it is undefined.
+> Ok. It only updates the .hash, we already have it for -1.
+> 
+> Gustavoz, what is the reason for the bump? According to the changelog
+> the only difference is in the debian packaging (should we also pass
+> --disable-lineno?)
 
-Fixes:
-http://autobuild.buildroot.net/results/c68/c6844bbffff1cd4f738a5fced011d28f73c90b16/
+Many tiny fixes, it's not only that.
+I think we could consider it a security fix even if there's no
+know/public vulnerability yet:
+https://cygwin.com/ml/cygwin-announce/2014-09/msg00043.html
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot/0002-fix-static-build.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
-
-diff --git a/package/dovecot/0002-fix-static-build.patch b/package/dovecot/0002-fix-static-build.patch
-new file mode 100644
-index 0000000..be646bc
---- /dev/null
-+++ b/package/dovecot/0002-fix-static-build.patch
-@@ -0,0 +1,24 @@
-+Fix static build
-+
-+MODULE_SUFFIX is undefined when building statically; don't used it.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: sent upstream
-+(http://dovecot.org/pipermail/dovecot/2014-November/098694.html)
-+
-+diff -Nuar dovecot-2.2.15-orig/src/lib/module-dir.c dovecot-2.2.15/src/lib/module-dir.c
-+--- dovecot-2.2.15-orig/src/lib/module-dir.c	2014-10-18 00:10:15.000000000 +0300
-++++ dovecot-2.2.15/src/lib/module-dir.c	2014-11-13 19:27:29.417786313 +0200
-+@@ -621,7 +621,11 @@
-+ 	if (*p == '_')
-+ 		fname = p + 1;
-+ 
-++#ifdef MODULE_SUFFIX
-+ 	p = strstr(fname, MODULE_SUFFIX);
-++#else
-++	p = NULL;
-++#endif
-+ 	if (p == NULL)
-+ 		return fname;
-+ 
+Regards.
