@@ -1,29 +1,32 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Fri, 14 Nov 2014 14:49:47 +0100
-Subject: [Buildroot] [PATCH 05/10] start-stop-daemon: new package
-In-Reply-To: <546606AE.8010902@zacarias.com.ar>
-References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
- <1415969096-3032-6-git-send-email-gustavo@zacarias.com.ar>
- <CABbD_XDZaMY5-zvMrc25PuwWQZKwfyft+7CjQrhp5cCUj7xjOA@mail.gmail.com>
- <546606AE.8010902@zacarias.com.ar>
-Message-ID: <CABbD_XB7mCc-CdEQKd7Pt0r18_p73yhXYxJewWssyt0w4fjhzg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 14 Nov 2014 13:54:19 +0000
+Subject: [Buildroot] [PATCH v2 1/4] libevdev: bump version to 1.3.1
+In-Reply-To: <1415917478-24273-1-git-send-email-ps.report@gmx.net>
+References: <1415917478-24273-1-git-send-email-ps.report@gmx.net>
+Message-ID: <5466098B.8090005@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> I'm building inside lib/compat/ and utils/ later for the bare minimum,
-> which 7 binaries are you talking about?
+Dear Peter Seiderer,
 
+built successfully for MIPS architecture:
 
-You are right, I overlooked that. I tested outside buildroot, and it always
-built dpkg-deb, split & five others in src. This of course not happening if
-you only build in lib/compat & utils.
+$ file output/target/usr/lib/libevdev.so.2.1.4
+output/target/usr/lib/libevdev.so.2.1.4: ELF 32-bit MSB shared object,
+MIPS, MIPS32 rel2 version 1 (SYSV), dynamically linked, with unknown
+capability 0x41000000 = 0xf676e75, with unknown capability 0x10000 =
+0x70403, stripped
+
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Best regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141114/5c4e91e9/attachment.html>
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
