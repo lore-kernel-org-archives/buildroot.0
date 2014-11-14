@@ -1,34 +1,24 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 14 Nov 2014 11:57:37 +0000
-Subject: [Buildroot] [PATCH] php: security bump to version 5.5.19
-In-Reply-To: <1415928498-6083-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1415928498-6083-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5465EE31.1070600@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Nov 2014 13:18:07 +0100
+Subject: [Buildroot] [PATCH] dbus: security bump  to version 1.8.10
+In-Reply-To: <1415960141-32153-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 14 Nov 2014 07:15:41 -0300")
+References: <1415960141-32153-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wq6ygem8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-build for MIPS architecture with both "CGI and CLI" and "FPM and CLI"
-interfaces, plus all the options under the "Extensions" and "External
-php extensions" menus enabled.
+ > Fixes:
+ > CVE-2014-7824 - Denial of service via incomplete fix for CVE-2014-3636
 
-$ file output/target/usr/bin/php
-output/target/usr/bin/php: ELF 32-bit MSB executable, MIPS, MIPS32 rel2
-version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux
-2.6.16, with unknown capability 0x41000000 = 0xf676e75, with unknown
-capability 0x10000 = 0x70403, stripped
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Committed, thanks.
 
-Best regards,
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Bye, Peter Korsgaard
