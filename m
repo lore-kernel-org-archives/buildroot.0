@@ -1,43 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Nov 2014 07:15:41 -0300
-Subject: [Buildroot] [PATCH] dbus: security bump  to version 1.8.10
-Message-ID: <1415960141-32153-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 14 Nov 2014 10:29:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 7628] Python SSL does not get built for Raspberry
+	Pi
+In-Reply-To: <bug-7628-163@https.bugs.busybox.net/>
+References: <bug-7628-163@https.bugs.busybox.net/>
+Message-ID: <20141114102937.3BD78B0C61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-7824 - Denial of service via incomplete fix for CVE-2014-3636
+https://bugs.busybox.net/show_bug.cgi?id=7628
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dbus/dbus.hash | 2 ++
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/dbus/dbus.hash
+--- Comment #7 from tobias.meggendorfer+buildroot at gmail.com 2014-11-14 10:29:36 UTC ---
+Again, _ssl* missing in target but present in host. See line 61876, "The
+necessary bits to build these optional modules were not found:"
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-new file mode 100644
-index 0000000..516b87c
---- /dev/null
-+++ b/package/dbus/dbus.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	10bf87fdb68815edd01d53885101dbcdd80dacad7198912cca61a4fa22dfaf8e	dbus-1.8.10.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 519146c..2d5d2c8 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.8.8
-+DBUS_VERSION = 1.8.10
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
+I uploaded this compressed file to my gdrive, the uncompressed log has ~23 mb,
+which probably does not get accepted by any pastebin-ish hoster.
+https://drive (dot) google (dot)
+com/file/d/0BwB7SQYhX6MuZlIwYXdjSDZnZzA/view?usp=sharing
+
+Note: /project is a symlink to /var/data/project on my filesystem (buildroot is
+too big for my root partition). I just tried compiling after switching to the
+"real" path, just in case, but same result.
+
+I used the config mentioned in comment 4
+
 -- 
-2.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
