@@ -1,48 +1,45 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 14 Nov 2014 19:26:09 +0100
-Subject: [Buildroot] [PATCH v2 3/4] evemu: bump version to 2.1.0
-Message-ID: <trinity-888df320-8e8f-41aa-a55a-0fa45798dbbd-1415989568463@3capp-gmx-bs29>
+Date: Fri, 14 Nov 2014 19:31:12 +0100
+Subject: [Buildroot] [PATCH v3 1/4] libevdev: bump version to 1.3.1
+Message-ID: <1415989875-22535-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vicente,
+See [1] and [2] for details.
 
-On Fri, Nov 14, 2014 at 02:28:53PM +0000, Vicente Olivert Riera wrote:
-> Dear Peter Seiderer,
-> 
-> I suggest you to do this:
-> 
-> EVEMU_SITE = http://www.freedesktop.org/software/evemu
-> EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
-> 
-> That way it will download the evemu-2.1.0.tar.xz tarball and your hash
-> file will make sense.
-> 
-> Right now it downloads a evemu-2.1.0.tar.gz from
-> http://cgit.freedesktop.org/evemu/snapshot/evemu-2.1.0.tar.gz and your
-> has file is useless:
-> 
-> $ make
-> WARNING: No hash found for
-> /home/ldap/vriera/work/mips-buildroots/mips64/dl/evemu-2.1.0.tar.gz
-> 
+[1] http://lists.freedesktop.org/archives/input-tools/2014-September/001112.html
+[2] http://lists.freedesktop.org/archives/input-tools/2014-November/001123.html
 
-Sorry for the mess, believed buildroot will fail on a wrong hash value and not only
-give a warning....
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v2 -> v3:
+  - add review-by and tested-by, see [1]
 
-Will spin a new version of the patchset with your suggested changes...
+Changes v1 -> v2:
+  - bump to new version 1.3.1 instead of 1.3
 
-Regards,
-Peter
+[1] http://lists.busybox.net/pipermail/buildroot/2014-November/112085.html
+---
+ package/libevdev/libevdev.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Best regards,
-> -- 
-> Vicente Olivert Riera
-> Graduate Software Engineer, MIPS Processor IP
-> Imagination Technologies Limited
-> t: +44 (0)113 2429814
-> www.imgtec.com
-> 
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index fde7d3c..2fc8ff7 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.2.2
++LIBEVDEV_VERSION = 1.3.1
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
+-- 
+1.8.1.4
