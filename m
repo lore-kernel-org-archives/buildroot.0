@@ -1,38 +1,43 @@
-From: Mathieu Slabbinck <matty.slabbinck@gmail.com>
-Date: Fri, 14 Nov 2014 10:24:58 +0100
-Subject: [Buildroot] Source download overwrite
-Message-ID: <CAOFH_kEf-xur6tPGZb8rhA=211gK=Ww4tS0HRVpOe6KA-WEQMw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 14 Nov 2014 07:15:41 -0300
+Subject: [Buildroot] [PATCH] dbus: security bump  to version 1.8.10
+Message-ID: <1415960141-32153-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes:
+CVE-2014-7824 - Denial of service via incomplete fix for CVE-2014-3636
 
-I'm looking for a way to overwrite the internal download system of buidroot
-for a specific homebrew package.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dbus/dbus.hash | 2 ++
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/dbus/dbus.hash
 
-The goal of the package is to download multiple files and install them
-accordingly.
-LIBFOO_SITE contains the common part of the download link. For example
-ftp://myftpserver.mydomain.com/libfoo/.
-
-Then I'd like to have a pre-install hook that downloads some specific files
-from that url, for example
-- ftp://myftpserver.mydomain.com/libfoo/file1.deb
-- ftp://myftpserver.mydomain.com/libfoo/file2.rpm
-- ftp://myftpserver.mydomain.com/libfoo/file3.someExtension
-
-This all works fine, but the package still tries to fetch
-ftp://myftpserver.mydomain.com/libfoo/.tar.gz because of the internal way
-of working of buildroot.
-
-So how can I overwrite this method or disable it?
-
-Kind regards,
-
-Mathieu
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141114/a6b7c01b/attachment.html>
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+new file mode 100644
+index 0000000..516b87c
+--- /dev/null
++++ b/package/dbus/dbus.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	10bf87fdb68815edd01d53885101dbcdd80dacad7198912cca61a4fa22dfaf8e	dbus-1.8.10.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 519146c..2d5d2c8 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.8.8
++DBUS_VERSION = 1.8.10
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
+-- 
+2.0.4
