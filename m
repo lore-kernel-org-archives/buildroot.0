@@ -1,22 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Nov 2014 09:06:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 7628] Python SSL does not get built for Raspberry
-	Pi
-In-Reply-To: <bug-7628-163@https.bugs.busybox.net/>
-References: <bug-7628-163@https.bugs.busybox.net/>
-Message-ID: <20141114090630.E7FC7B05FB@busybox.osuosl.org>
+From: Mathieu Slabbinck <matty.slabbinck@gmail.com>
+Date: Fri, 14 Nov 2014 10:24:58 +0100
+Subject: [Buildroot] Source download overwrite
+Message-ID: <CAOFH_kEf-xur6tPGZb8rhA=211gK=Ww4tS0HRVpOe6KA-WEQMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7628
+Hi,
 
---- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-11-14 09:06:30 UTC ---
-Possibly related to bug #7478
+I'm looking for a way to overwrite the internal download system of buidroot
+for a specific homebrew package.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+The goal of the package is to download multiple files and install them
+accordingly.
+LIBFOO_SITE contains the common part of the download link. For example
+ftp://myftpserver.mydomain.com/libfoo/.
+
+Then I'd like to have a pre-install hook that downloads some specific files
+from that url, for example
+- ftp://myftpserver.mydomain.com/libfoo/file1.deb
+- ftp://myftpserver.mydomain.com/libfoo/file2.rpm
+- ftp://myftpserver.mydomain.com/libfoo/file3.someExtension
+
+This all works fine, but the package still tries to fetch
+ftp://myftpserver.mydomain.com/libfoo/.tar.gz because of the internal way
+of working of buildroot.
+
+So how can I overwrite this method or disable it?
+
+Kind regards,
+
+Mathieu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141114/a6b7c01b/attachment.html>
