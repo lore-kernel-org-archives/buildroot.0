@@ -1,35 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Nov 2014 08:25:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 7628] Python SSL does not get built for Raspberry
-	Pi
-In-Reply-To: <bug-7628-163@https.bugs.busybox.net/>
-References: <bug-7628-163@https.bugs.busybox.net/>
-Message-ID: <20141114082538.6D799AE30A@busybox.osuosl.org>
+Date: Fri, 14 Nov 2014 08:28:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 7646] strftime on datetime not works on python3.
+In-Reply-To: <bug-7646-163@https.bugs.busybox.net/>
+References: <bug-7646-163@https.bugs.busybox.net/>
+Message-ID: <20141114082857.0FA9DACD48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7628
+https://bugs.busybox.net/show_bug.cgi?id=7646
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-14 08:25:37 UTC ---
-Thanks for your feedback. Interesting, it clearly doesn't match what I'm seeing
-here. Can you post to some pastebin site or some other location the complete
-build log? Something like:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-  make 2>&1 | tee logfile
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-And then post 'logfile' somewhere. It would be even nicer if you could after
-the build do:
+--- Comment #13 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-11-14 08:28:56 UTC ---
+Patch work-arounding the problem for Python 3 has been applied, see
+http://git.buildroot.net/buildroot/commit/?id=5ad4ac083276b3504889c39351a56d947f172b5f.
 
-  find output/target/ | tee -a logfile
+The same problem can occur with other packages, but unfortunately, there's not
+much we can do at this point, except waiting for the uClibc folks to react.
 
-So that I can also see the full list of files in your target filesystem. I
-indeed think something in your host system might be causing the problem, we
-need to figure out what.
-
-Thanks again!
+Since the original problem related to Python 3 is now fixed, I'm closing this
+bug.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
