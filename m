@@ -1,50 +1,47 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 14 Nov 2014 14:31:29 +0000
-Subject: [Buildroot] [PATCH v2 4/4] evemu: add hash
-In-Reply-To: <1415917478-24273-4-git-send-email-ps.report@gmx.net>
-References: <1415917478-24273-1-git-send-email-ps.report@gmx.net>
- <1415917478-24273-4-git-send-email-ps.report@gmx.net>
-Message-ID: <54661241.4010201@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Nov 2014 15:33:10 +0100
+Subject: [Buildroot] Source download overwrite
+In-Reply-To: <CAOFH_kHZD-1aq31owR-D5GC_stX+zoGPiHyE1aovLGt6WZiOZw@mail.gmail.com>
+References: <CAOFH_kEf-xur6tPGZb8rhA=211gK=Ww4tS0HRVpOe6KA-WEQMw@mail.gmail.com>
+ <20141114141445.77f68c2d@free-electrons.com>
+ <CAOFH_kHZD-1aq31owR-D5GC_stX+zoGPiHyE1aovLGt6WZiOZw@mail.gmail.com>
+Message-ID: <20141114153310.354a7c24@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Mathieu Slabbinck,
 
-On 11/13/2014 10:24 PM, Peter Seiderer wrote:
-> +# Hash from http://lists.freedesktop.org/archives/input-tools/2014-November/001122.html
-> +sha256 9e66122fbb97ad8615eda629a823e08114761e9f6ff963d0f55b9e6e47832e58 evemu-2.1.0.tar.xz 
+On Fri, 14 Nov 2014 15:27:43 +0100, Mathieu Slabbinck wrote:
+> Thomas,
+> 
+> thanks for pointing this out. Was looking for this kind of variable but
+> didn't really find any docs about it.
 
-I think the upstream hashes are wrong:
+I just checked, and at
+http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems,
+under the section "16.5.2. generic-package reference", we do document
+the EXTRA_DOWNLOADS variable:
 
-$ wget http://www.freedesktop.org/software/evemu/evemu-2.1.0.tar.xz
---2014-11-14 14:28:23--
-http://www.freedesktop.org/software/evemu/evemu-2.1.0.tar.xz
-Resolving www.freedesktop.org... 131.252.210.176
-Connecting to www.freedesktop.org|131.252.210.176|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 502240 (490K) [application/x-tar]
-Saving to: ?evemu-2.1.0.tar.xz?
+"""
+LIBFOO_EXTRA_DOWNLOADS lists a number of additional files that
+Buildroot should download from LIBFOO_SITE in addition to the main
+LIBFOO_SOURCE (which usually is a tarball). Buildroot will not do
+anything with those additional files, except download files: it will be
+up to the package recipe to use them from $(BR2_DL_DIR).
+"""
 
-100%[===========================================================================>]
-502,240      218K/s   in 2.3s
+Though I agree the manual is now very long, and it is easy to overlook
+certain possibilities provided by Buildroot.
 
-2014-11-14 14:28:26 (218 KB/s) - ?evemu-2.1.0.tar.xz? saved [502240/502240]
+> Managed to get it working now.
 
-$ md5sum evemu-2.1.0.tar.xz
-006a0f3888840752bf9ce70fe14781bb  evemu-2.1.0.tar.xz
-$ sha256sum evemu-2.1.0.tar.xz
-0c87360882751356e9f977ebf7438c00fe97deb232ac725dd86e5ba78203ee97
-evemu-2.1.0.tar.xz
-$ sha1sum evemu-2.1.0.tar.xz
-4c29379a35cd770dd0d5fd6204674c45f9e4c392  evemu-2.1.0.tar.xz
+Cool!
 
-Best regards,
+Thomas
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
