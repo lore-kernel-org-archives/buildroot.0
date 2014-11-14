@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Nov 2014 09:44:48 -0300
-Subject: [Buildroot] [PATCH 02/10] dash: bump to 0.5.8-2
+Date: Fri, 14 Nov 2014 09:44:49 -0300
+Subject: [Buildroot] [PATCH 03/10] debianutils: new package
 In-Reply-To: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415969096-3032-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1415969096-3032-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dash/dash.hash | 4 ++--
- package/dash/dash.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                    |  1 +
+ package/debianutils/Config.in        |  7 +++++++
+ package/debianutils/debianutils.hash |  2 ++
+ package/debianutils/debianutils.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/debianutils/Config.in
+ create mode 100644 package/debianutils/debianutils.hash
+ create mode 100644 package/debianutils/debianutils.mk
 
-diff --git a/package/dash/dash.hash b/package/dash/dash.hash
-index 0198cd8..c4e60a4 100644
---- a/package/dash/dash.hash
-+++ b/package/dash/dash.hash
-@@ -1,3 +1,3 @@
--# From http://ftp.debian.org/debian/pool/main/d/dash/dash_0.5.8-1.dsc
-+# From http://ftp.debian.org/debian/pool/main/d/dash/dash_0.5.8-2.dsc
- sha256	c6db3a237747b02d20382a761397563d813b306c020ae28ce25a1c3915fac60f	dash_0.5.8.orig.tar.gz
--sha256	d751769cc1ef8b825a177e782f1cd3e35bde7c268107fa4febf8d235e12c64d9	dash_0.5.8-1.diff.gz
-+sha256	00168a934864c26cae9a51367fe7ea013ece2d4844ff8bd6893fc00a8fa7b38c	dash_0.5.8-2.diff.gz
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index ed8525c..13169d1 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -6,8 +6,8 @@
- 
- DASH_VERSION = 0.5.8
- DASH_SOURCE = dash_$(DASH_VERSION).orig.tar.gz
--DASH_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/d/dash
--DASH_PATCH = dash_$(DASH_VERSION)-1.diff.gz
-+DASH_SITE = http://snapshot.debian.org/archive/debian/20141022T163236Z/pool/main/d/dash
-+DASH_PATCH = dash_$(DASH_VERSION)-2.diff.gz
- DASH_LICENSE = BSD-3c, GPLv2+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
- 
+diff --git a/package/Config.in b/package/Config.in
+index 0dbb788..278134d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1199,6 +1199,7 @@ endif
+ 	source "package/cpuload/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
++	source "package/debianutils/Config.in"
+ endif
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
+new file mode 100644
+index 0000000..f865868
+--- /dev/null
++++ b/package/debianutils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DEBIANUTILS
++	bool "debianutils"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Miscellaneous utilities specific to Debian.
++
++	  https://tracker.debian.org/pkg/debianutils
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+new file mode 100644
+index 0000000..089dd42
+--- /dev/null
++++ b/package/debianutils/debianutils.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
++sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+new file mode 100644
+index 0000000..43d7cf3
+--- /dev/null
++++ b/package/debianutils/debianutils.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# debianutils
++#
++################################################################################
++
++DEBIANUTILS_VERSION = 4.4
++DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
++DEBIANUTILS_CONF_OPTS = --exec-prefix=/
++DEBIANUTILS_LICENSE = GPLv2+, SMAIL (savelog)
++DEBIANUTILS_LICENSE_FILES = debian/copyright
++
++$(eval $(autotools-package))
 -- 
 2.0.4
