@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Nov 2014 23:09:47 +0100
-Subject: [Buildroot] [PATCH 05/10] start-stop-daemon: new package
-In-Reply-To: <1415969096-3032-6-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 14 Nov 2014 23:17:22 +0100
+Subject: [Buildroot] [PATCH 07/10] dhcp: install dhclient to /sbin
+In-Reply-To: <1415969096-3032-8-git-send-email-gustavo@zacarias.com.ar>
 References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
- <1415969096-3032-6-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <54667DAB.5060503@mind.be>
+ <1415969096-3032-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <54667F72.4050009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 14/11/14 13:44, Gustavo Zacarias wrote:
+> Debian ifupdown uses an explicit call to /sbin/dhclient.
+> Busybox ifupdown uses the search path.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[snip]
-> diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-> new file mode 100644
-> index 0000000..7a699d0
-> --- /dev/null
-> +++ b/package/start-stop-daemon/start-stop-daemon.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# start-stop-daemon
-> +#
-> +################################################################################
-> +
-> +START_STOP_DAEMON_VERSION = 1.16.15
+> ---
+>  package/dhcp/dhcp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index 27fb60b..1eb6b32 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -59,7 +59,7 @@ define DHCP_INSTALL_CLIENT
+>  	mkdir -p $(TARGET_DIR)/var/lib
+>  	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+>  	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
+> -		$(TARGET_DIR)/usr/sbin/dhclient
+> +		$(TARGET_DIR)/sbin/dhclient
 
- Why not 1.17.21?
+ Then you should also update network-manager.mk:
 
-> +START_STOP_DAEMON_SOURCE = dpkg_$(START_STOP_DAEMON_VERSION).tar.xz
-> +START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20140616T044945Z/pool/main/d/dpkg
-> +START_STOP_DAEMON_CONF_OPTS = --disable-dselect --disable-update-alternatives \
-> +	--exec-prefix=/
-> +START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
-> +	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
-> +START_STOP_DAEMON_LICENSE = GPLv2+
-> +START_STOP_DAEMON_LICENSE_FILES = debian/copyright
-
- COPYING seems more appropriate/usual.
+NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/usr/sbin/dhclient
 
 
  Regards,
  Arnout
 
-> +
-> +define START_STOP_DAEMON_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/lib/compat
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/utils
-> +endef
-> +
-> +define START_STOP_DAEMON_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 -D $(@D)/utils/start-stop-daemon \
-> +		$(TARGET_DIR)/sbin/start-stop-daemon
-> +endef
-> +
-> +$(eval $(autotools-package))
+>  	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+>  		$(TARGET_DIR)/etc/dhcp/dhclient.conf
+>  	$(INSTALL) -m 0755 -D package/dhcp/dhclient-script \
 > 
 
 
