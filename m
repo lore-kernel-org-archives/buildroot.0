@@ -1,44 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Nov 2014 09:44:55 -0300
-Subject: [Buildroot] [PATCH 09/10] dhcpcd: bump to version 6.6.1
+Date: Fri, 14 Nov 2014 09:44:56 -0300
+Subject: [Buildroot] [PATCH 10/10] dhcpcd: use standard installation
 In-Reply-To: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1415969096-3032-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1415969096-3032-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Drop the custom/manual install cmds and do a normal make install.
+This gets dhcpcd-hooks installed which are useful for many accesory
+setup functions like dns, ntp server, and so on.
+Also install dhcpcd to /sbin since it's expected by debian ifupdown,
+For busybox ifupdown when external dhcp clients are enabled (not in the
+default config we ship) will search the path.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dhcpcd/dhcpcd.hash | 2 ++
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/dhcpcd/dhcpcd.hash
+ package/dhcpcd/dhcpcd.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-new file mode 100644
-index 0000000..9439e5c
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated from download (no sig, hash)
-+sha256	5d6a15fa064a91761601142232f23edb09b570555c3386e6d766759d78b8e1fe	dhcpcd-6.6.1.tar.bz2
 diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 3bb7a13..5f7c1a6 100644
+index 5f7c1a6..abd871f 100644
 --- a/package/dhcpcd/dhcpcd.mk
 +++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -35,12 +35,7 @@ define DHCPCD_BUILD_CMDS
+ endef
  
--DHCPCD_VERSION = 6.4.7
-+DHCPCD_VERSION = 6.6.1
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+ define DHCPCD_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
+-		$(TARGET_DIR)/usr/sbin/dhcpcd
+-	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
+-		$(TARGET_DIR)/etc/dhcpcd.conf
+-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
+-		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+ endef
+ 
+ # NOTE: Even though this package has a configure script, it is not generated
 -- 
 2.0.4
