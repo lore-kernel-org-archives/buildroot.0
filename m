@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Nov 2014 14:17:00 +0100
-Subject: [Buildroot] [PATCH 06/10] package/sysvinit: drop tty1/2
-In-Reply-To: <1415969096-3032-7-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 14 Nov 2014 14:19:04 +0100
+Subject: [Buildroot] [PATCH 08/10] dhcp: update dhclient-script
+In-Reply-To: <1415969096-3032-9-git-send-email-gustavo@zacarias.com.ar>
 References: <1415969096-3032-1-git-send-email-gustavo@zacarias.com.ar>
- <1415969096-3032-7-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141114141700.0e02688a@free-electrons.com>
+ <1415969096-3032-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141114141904.4bfa5f21@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,18 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Fri, 14 Nov 2014 09:44:52 -0300, Gustavo Zacarias wrote:
-> We don't do it for busybox init so do the same for consistency here.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/sysvinit/inittab | 3 ---
->  1 file changed, 3 deletions(-)
+On Fri, 14 Nov 2014 09:44:54 -0300, Gustavo Zacarias wrote:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> diff --git a/package/dhcp/dhclient-script b/package/dhcp/dhclient-script
+> index 5566aca..4afebc0 100755
+> --- a/package/dhcp/dhclient-script
+> +++ b/package/dhcp/dhclient-script
+> @@ -1,2 +1,281 @@
+>  #!/bin/sh
+> -# empty dhclient-script to keep dhclient from complaining
 
-Peter, this one should go in 2014.11.
+I think we want a comment here that tells where the script is coming
+from (URL, license, etc.).
 
 Thomas
 -- 
