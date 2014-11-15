@@ -1,92 +1,43 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Sat, 15 Nov 2014 16:03:16 +0100
-Subject: [Buildroot] [PATCH v3] binutils/gcc: add options to enable lto
-	support
-Message-ID: <1416063796-20678-1-git-send-email-syntheticpp@gmx.net>
+From: Volker Krause <volker.krause@kdab.com>
+Date: Sat, 15 Nov 2014 17:00:19 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
+Message-ID: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When -flto is used the compiler and binutils have to support lto.
-ar/ranlib needs to be called with the lto plugin. The wrappers
-*-gcc-ar and *-gcc-ranlib provided by GCC could be used as
-drop-in for makefiles without lto support.
+This is rarely needed by packages, but convenient to have when it is.
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+Signed-off-by: Volker Krause <volker.krause@kdab.com>
 ---
- package/binutils/Config.in   | 5 +++++
- package/binutils/binutils.mk | 8 ++++++++
- package/gcc/Config.in.host   | 6 ++++++
- package/gcc/gcc.mk           | 4 ++++
- 4 files changed, 23 insertions(+)
+ package/pkg-cmake.mk                | 1 +
+ support/misc/toolchainfile.cmake.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 50c38b6..f7b8f54 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -19,6 +19,11 @@ config BR2_PACKAGE_BINUTILS_TARGET
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index c8735ef..57a6d29 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -193,5 +193,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
+ 		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
+ 		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
++		-e 's:@@BR2_ARCH@@:$(BR2_ARCH):' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 4ca3d35..86ef0b4 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -11,6 +11,7 @@
+ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
  
- 	  http://www.gnu.org/software/binutils/
+ set(CMAKE_SYSTEM_NAME Linux)
++set(CMAKE_SYSTEM_PROCESSOR @@BR2_ARCH@@)
  
-+config BR2_PACKAGE_BINUTILS_ENABLE_LTO
-+	bool "Enable support for link-time-optimization"
-+	help
-+	  Enable lto support. Allows passing a lto plugin to ar and ranlib.
-+
- endif
- 
- comment "binutils needs a toolchain w/ wchar"
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index b8dab5d..5f2d0ef 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -95,5 +95,13 @@ BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- endif
- 
-+ifeq ($(BR2_PACKAGE_BINUTILS_ENABLE_LTO),y)
-+BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
-+endif
-+
-+ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index de40c63..c3e50a2 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -145,6 +145,12 @@ config BR2_GCC_ENABLE_TLS
- 	  Enable the compiler to generate code for accessing
- 	  thread local storage variables
- 
-+config BR2_GCC_ENABLE_LTO
-+	bool "Enable compiler link-time-optimization support"
-+	help
-+	  Since version 4.5 GCC supports lto. Build GCC with lto support enabled.
-+	  Needed when -flto should be used.
-+
- config BR2_GCC_ENABLE_OPENMP
- 	bool "Enable compiler OpenMP support"
- 	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc && !BR2_microblaze
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index cdd71aa..8eaa91d 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -127,6 +127,10 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --disable-tls
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+HOST_GCC_COMMON_CONF_OPTS += --enable-plugins --enable-lto
-+endif
-+
- ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
- HOST_GCC_COMMON_CONF_OPTS += --enable-libmudflap
- else
+ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+ set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
 -- 
-1.9.1
+1.8.4.5
