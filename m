@@ -1,33 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Nov 2014 12:57:30 +0100
-Subject: [Buildroot] [git commit] iputils: fix openssl select
-Message-ID: <20141115120034.E025AB5A04@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Sat, 15 Nov 2014 14:25:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: cleanup run-time files
+ in init script
+In-Reply-To: <5466868C.9040108@mind.be>
+References: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
+ <5466868C.9040108@mind.be>
+Message-ID: <1416057928.2386.2.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89f3ed6c3a432fd1fd84112a5d016e02b55f9fdf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fr, 2014-11-14 at 23:47 +0100, Arnout Vandecappelle wrote:
+> On 14/11/14 22:30, J?rg Krause wrote:
+> > dnsmasq does not clean its run-times its run-time files after stopping with
+> > /etc/init.d/S80dnsmasq stop. Do this manually.
+> > 
+> > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> > ---
+> >  package/dnsmasq/S80dnsmasq | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+> > index 587751e..b29fff4 100755
+> > --- a/package/dnsmasq/S80dnsmasq
+> > +++ b/package/dnsmasq/S80dnsmasq
+> > @@ -13,6 +13,9 @@ case "$1" in
+> >  		echo -n "Stopping dnsmasq: "
+> >  		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
+> >  		[ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +		# dnsmasq does not clean its run-time files
+> > +		rm -f /var/run/dnsmasq.pid
+> > +		rm -f /var/run/dnsmasq.leases
+> 
+>  The leases file is read again by dnsmasq when it starts, so it can give the
+> same addresses. So it shouldn't be removed. In fact, in my setup I even put the
+> leases file in persistent storage.
 
-It's BR2_PACKAGE_OPENSSL, not BR2_OPENSSL... oops!
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iputils/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index 456fddf..e9221ad 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_IPUTILS
- 	bool "iputils"
--	select BR2_OPENSSL if BR2_INET_IPV6
-+	select BR2_PACKAGE_OPENSSL if BR2_INET_IPV6
- 	depends on BR2_USE_MMU # fork()
- 	# requires dn_comp (only available in since uclibc 0.9.33)
- 	depends on !BR2_avr32
+For any reason dnsmasq duplicates the leases file. I have a copy
+in /var/lib/misc/ and one in /var/run/. Not sure why the latter one
+exists.
