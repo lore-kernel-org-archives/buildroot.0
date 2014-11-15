@@ -1,65 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Nov 2014 09:28:46 +0100
-Subject: [Buildroot] github helper is broken
-In-Reply-To: <20141113210519.GE3641@free.fr>
-References: <20141113182328.GC3641@free.fr>
- <CAAXf6LVZO90SpiTm-PpOxBQ3GHLHtd=WvYp96wVee59tKYd9qQ@mail.gmail.com>
- <20141113210519.GE3641@free.fr>
-Message-ID: <CAHXCMMJQGuK-LXU=5UHwzTSzL=GKNzNtbfj8dJnhORbXuXCjXg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 15 Nov 2014 11:58:00 +0100
+Subject: [Buildroot] [PATCH] host-qemu: fix install
+Message-ID: <1416049080-6544-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+at configure time, PREFIX is already set with $(HOST_DIR)/usr
+so, don't use DESTDIR
 
-On Thu, Nov 13, 2014 at 10:05 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2014-11-13 20:54 +0100, Thomas De Schampheleire spake thusly:
->> On Thu, Nov 13, 2014 at 7:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > The github helper is now broken, because GitHub changed their download
->> > scheme, again.
->
-> The isue has been resolved on the GitHub side: the current scheme we use
-> works again.
->
-> Still, we should strive at finding a long-term solution that is not
-> subject to such massive breakage.
->
-> [--SNIP--]
->> Shouldn't we (in addition to actions as discussed below) discuss the
->> issue with Github? They may understand our concerns, which surely are
->> present for other build systems as well.
->
-> Yes, Samuel has volunteered into contacting them, and Maxime named a
-> name. ;-)
->
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/qemu/qemu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've contacted github yesterday and got an answer in 2h! (pretty
-responsive :-]).
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index fe65a87..253b2b8 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -75,7 +75,7 @@ define HOST_QEMU_BUILD_CMDS
+ endef
 
-They suggest to use the github APIs to get the download url.
+ define HOST_QEMU_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
 
-<quote>
-  You can use the repository contents API to get a stable download
-link. However, your client will need to be able to follow 302
-redirects to use this link.
-
-  https://developer.github.com/v3/repos/contents/#get-archive-link
-
-  Let me know if you have any other questions.
-</quote>
-
-I'm not sure the github APIs match all our needs, especially WRT the
-url ending with the tarball filename...
-
-Maybe we need to extend our download framework to support such cases,
-it might be also useful for other forges.
-
-
-Regards,
-
--- 
-Samuel
+ $(eval $(host-generic-package))
+--
+2.1.0
