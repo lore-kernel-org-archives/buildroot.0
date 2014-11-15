@@ -1,47 +1,92 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Sat, 15 Nov 2014 15:05:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: cleanup run-time files
- in init script
-In-Reply-To: <1416057928.2386.2.camel@posteo.de>
-References: <1416000618-32273-1-git-send-email-jkrause@posteo.de>
- <5466868C.9040108@mind.be> <1416057928.2386.2.camel@posteo.de>
-Message-ID: <1416060335.2386.5.camel@posteo.de>
+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+Date: Sat, 15 Nov 2014 16:03:16 +0100
+Subject: [Buildroot] [PATCH v3] binutils/gcc: add options to enable lto
+	support
+Message-ID: <1416063796-20678-1-git-send-email-syntheticpp@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sa, 2014-11-15 at 14:25 +0100, J?rg Krause wrote:
-> On Fr, 2014-11-14 at 23:47 +0100, Arnout Vandecappelle wrote:
-> > On 14/11/14 22:30, J?rg Krause wrote:
-> > > dnsmasq does not clean its run-times its run-time files after stopping with
-> > > /etc/init.d/S80dnsmasq stop. Do this manually.
-> > > 
-> > > Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> > > ---
-> > >  package/dnsmasq/S80dnsmasq | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
-> > > index 587751e..b29fff4 100755
-> > > --- a/package/dnsmasq/S80dnsmasq
-> > > +++ b/package/dnsmasq/S80dnsmasq
-> > > @@ -13,6 +13,9 @@ case "$1" in
-> > >  		echo -n "Stopping dnsmasq: "
-> > >  		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
-> > >  		[ $? = 0 ] && echo "OK" || echo "FAIL"
-> > > +		# dnsmasq does not clean its run-time files
-> > > +		rm -f /var/run/dnsmasq.pid
-> > > +		rm -f /var/run/dnsmasq.leases
-> > 
-> >  The leases file is read again by dnsmasq when it starts, so it can give the
-> > same addresses. So it shouldn't be removed. In fact, in my setup I even put the
-> > leases file in persistent storage.
-> 
-> For any reason dnsmasq duplicates the leases file. I have a copy
-> in /var/lib/misc/ and one in /var/run/. Not sure why the latter one
-> exists.
+When -flto is used the compiler and binutils have to support lto.
+ar/ranlib needs to be called with the lto plugin. The wrappers
+*-gcc-ar and *-gcc-ranlib provided by GCC could be used as
+drop-in for makefiles without lto support.
 
-Ouch! /var/run and /var/lib/misc both symlinks to /tmp. That's why! So I
-will remove the removing of the leases file.
+Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+---
+ package/binutils/Config.in   | 5 +++++
+ package/binutils/binutils.mk | 8 ++++++++
+ package/gcc/Config.in.host   | 6 ++++++
+ package/gcc/gcc.mk           | 4 ++++
+ 4 files changed, 23 insertions(+)
+
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 50c38b6..f7b8f54 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -19,6 +19,11 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ 
+ 	  http://www.gnu.org/software/binutils/
+ 
++config BR2_PACKAGE_BINUTILS_ENABLE_LTO
++	bool "Enable support for link-time-optimization"
++	help
++	  Enable lto support. Allows passing a lto plugin to ar and ranlib.
++
+ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index b8dab5d..5f2d0ef 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -95,5 +95,13 @@ BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BINUTILS_ENABLE_LTO),y)
++BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
++endif
++
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index de40c63..c3e50a2 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -145,6 +145,12 @@ config BR2_GCC_ENABLE_TLS
+ 	  Enable the compiler to generate code for accessing
+ 	  thread local storage variables
+ 
++config BR2_GCC_ENABLE_LTO
++	bool "Enable compiler link-time-optimization support"
++	help
++	  Since version 4.5 GCC supports lto. Build GCC with lto support enabled.
++	  Needed when -flto should be used.
++
+ config BR2_GCC_ENABLE_OPENMP
+ 	bool "Enable compiler OpenMP support"
+ 	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc && !BR2_microblaze
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index cdd71aa..8eaa91d 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -127,6 +127,10 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --disable-tls
+ endif
+ 
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++HOST_GCC_COMMON_CONF_OPTS += --enable-plugins --enable-lto
++endif
++
+ ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-libmudflap
+ else
+-- 
+1.9.1
