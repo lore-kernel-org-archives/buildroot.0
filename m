@@ -1,67 +1,65 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 15 Nov 2014 17:29:16 +0100
-Subject: [Buildroot] [PATCH 1/9] package/*/*.mk: Fix indent
-Message-ID: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sat, 15 Nov 2014 17:29:17 +0100
+Subject: [Buildroot] [PATCH 2/9] makedevs: Rework README
+In-Reply-To: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1416068964-22529-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change LIBFOO_PERMISSIONS everywhere to be a space-separated list.
-As nothing was specified in the manual but all our lists are space
-separated, there is no reason that this one should be made an exception.
+Make all the example as a space separated list.
+The definition of the different type was modified to look like the same
+section on the manual.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
-v1 -> v2:
-   - Align busybox permissions using spaces as required by Arnout Vandecappelle
----
- package/busybox/busybox.mk | 4 ++--
- package/nginx/nginx.mk     | 2 +-
- package/sudo/sudo.mk       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/makedevs/README | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0ceaab1..f0fa851 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+diff --git a/package/makedevs/README b/package/makedevs/README
+index 6c54052..70844bf 100644
+--- a/package/makedevs/README
++++ b/package/makedevs/README
+@@ -6,7 +6,7 @@ You can do all sorts of interesting things with a device table file.
+ For example, if you want to adjust the permissions on a particular
+ file you can just add an entry like:
  
- define BUSYBOX_PERMISSIONS
--	/bin/busybox			 f 4755	0 0 - - - - -
--	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-+	/bin/busybox                     f 4755 0  0 - - - - -
-+	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
- endef
+-  /sbin/foobar        f       2755    0       0       -       -       -       -       -
++  /sbin/foobar f 2755 0 0 - - - - -
  
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5a65c52..55ae844 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -25,7 +25,7 @@ NGINX_CONF_OPTS = \
- # So, we just need to create the directories used by nginx with the right
- # ownership.
- define NGINX_PERMISSIONS
--	/var/lib/nginx	d	755	33	33	-	-	-	-	-
-+	/var/lib/nginx d 755 33 33 - - - - -
- endef
+ and (assuming the file /sbin/foobar exists) it will be made setuid
+ root (regardless of what its permissions are on the host filesystem.
+@@ -15,20 +15,20 @@ Furthermore, you can use a single table entry to create a many device
+ minors.  For example, if I wanted to create /dev/hda and
+ /dev/hda[0-15] I could just use the following two table entries:
  
- # disable external libatomic_ops because its detection fails.
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 283a40c..61635ec 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -29,7 +29,7 @@ endef
- SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+-  /dev/hda    b       640     0       0       3       0       0       0       -
+-  /dev/hda    b       640     0       0       3       1       1       1       15
++  /dev/hda b 640 0 0 3 0 0 0 -
++  /dev/hda b 640 0 0 3 1 1 1 15
  
- define SUDO_PERMISSIONS
--	/usr/bin/sudo			 f 4755	0 0 - - - - -
-+	/usr/bin/sudo f 4755 0 0 - - - - -
- endef
+ Device table entries take the form of:
  
- $(eval $(autotools-package))
+-<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
++<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
+ 
+ where name is the file name,  type can be one of:
+ 
+-      f       A regular file
+-      d       Directory
+-      c       Character special device file
+-      b       Block special device file
+-      p       Fifo (named pipe)
++      f: A regular file
++      d: Directory
++      c: Character special device file
++      b: Block special device file
++      p: Fifo (named pipe)
+ 
+ uid is the user id for the target file, gid is the group id for the
+ target file.  The rest of the entries (major, minor, etc) apply only
 -- 
 2.1.3
