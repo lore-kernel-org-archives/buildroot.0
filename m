@@ -1,30 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Nov 2014 17:19:28 +0100
-Subject: [Buildroot] [PATCH 3/4] pkg-infra: differentiate remote tarball
-	name from local filename
+Date: Sat, 15 Nov 2014 17:19:29 +0100
+Subject: [Buildroot] [PATCH 4/4] docs/manual: document the new variable
+	FOO_UPSTREAM_SOURCE
 In-Reply-To: <cover.1416068004.git.yann.morin.1998@free.fr>
 References: <cover.1416068004.git.yann.morin.1998@free.fr>
-Message-ID: <9c560fb0f335f99d5350617f0368ae591e46e837.1416068005.git.yann.morin.1998@free.fr>
+Message-ID: <51470d856dde581d14c2e20bad669cd36332ae5b.1416068005.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-Some upstreams may use a naming scheme that does not fit well in how
-Buildroot wants to handle filenames.
-
-For example, GitHub used to have a scheme like:
-    https://github.com/USER/REPO/archive/VERSION.tar.gz
-
-which means we would have a local file named VERSION.tar.gz, when we
-want to have PKG-VERSION.tar.gz
-
-Other forges are also known to have similar schemes. Google Code, for
-example, may also use similarly named files.
-
-Introduce a new variable, FOO_UPSTREAM_SOURCE, which the package may set
-in that case. If not set, it defaults to FOO_SOURCE.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -34,32 +19,30 @@ Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/pkg-generic.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 543cb60..30bce59 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -84,7 +84,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 		done ; \
- 	fi
- endif
--	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE),$($(PKG)_SOURCE)))
-+	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_UPSTREAM_SOURCE),$($(PKG)_SOURCE)))
- 	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),\
- 		$(if $(findstring ://,$(p)),\
-@@ -361,6 +361,10 @@ ifndef $(2)_SOURCE
-  endif
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 67a7453..5295681 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -211,6 +211,17 @@ information is (assuming the package name is +libfoo+) :
+   +libfoo-$(LIBFOO_VERSION).tar.gz+. +
+   Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
  
-+ifndef $(2)_UPSTREAM_SOURCE
-+  $(2)_UPSTREAM_SOURCE = $$($(2)_SOURCE)
-+endif
++* +LIBFOO_UPSTREAM_SOURCE+ may contain the name of the tarball as
++  known by upstream. If +HOST_LIBFOO_UPSTREAM_SOURCE+ is not specified,
++  it defaults to +LIBFOO_UPSTREAM_SOURCE+. If none is specified, then
++  the value is assumed to be the same as +LIBFOO_SOURCE+.
 +
- ifndef $(2)_PATCH
-  ifdef $(3)_PATCH
-   $(2)_PATCH = $$($(3)_PATCH)
++.Note
+++LIBFOO_SOURCE+ is the filename we want to save the tarball as, while
+++LIBFOO_UPSTREAM_SOURCE+ is the name by which upstream names that
++tarball. The two are usually the same, except in very rare cases, so you
++normally should not have to set +LIBFOO_UPSTREAM_SOURCE+.
++
+ * +LIBFOO_PATCH+ may contain a space-separated list of patch file
+   names, that will be downloaded from the same location as the tarball
+   indicated in +LIBFOO_SOURCE+, and then applied to the package source
 -- 
 1.9.1
