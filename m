@@ -1,88 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Nov 2014 15:20:32 +0100
-Subject: [Buildroot] [PATCH v2] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
-In-Reply-To: <1416138927-7857-1-git-send-email-volker.krause@kdab.com>
-References: <1416138927-7857-1-git-send-email-volker.krause@kdab.com>
-Message-ID: <CAHXCMMKtKeWjPLpo_DEB2Gw0xwpeH642MAD9G3_ZEXG-xaVKiw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Nov 2014 15:44:27 +0100
+Subject: [Buildroot] [PATCH] package/libv4l: needs headers >= 3.0
+Message-ID: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Volker, all,
+libv4l includes linux/media.h, which was introduced in v.2.6.39.
 
-On Sun, Nov 16, 2014 at 12:55 PM, Volker Krause <volker.krause@kdab.com> wrote:
-> This is rarely needed by packages, but convenient to have when it is.
->
-> Signed-off-by: Volker Krause <volker.krause@kdab.com>
-> ---
-> Changes v1 -> v2:
->   - added missing qstrip
->   - set the correct ARM variant as done in
->     http://patchwork.ozlabs.org/patch/408501/
->
->  package/pkg-cmake.mk                | 15 +++++++++++++++
->  support/misc/toolchainfile.cmake.in |  1 +
->  2 files changed, 16 insertions(+)
->
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index c8735ef..619da9b 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -180,6 +180,20 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
->  # Generation of the CMake toolchain file
->  ################################################################################
->
-> +# CMAKE_SYSTEM_PROCESSOR should match uname -m
-> +ifeq ($(BR2_ARM_CPU_ARMV5),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv5
+So, require at least 3.0 to be sure, since we have toolchains (like the
+Code Sourcery Powerpc 2011.03) that still use 2.6.38 headers.
 
-I'm not a big fan of the name of this variable...
-Let's see what others think about it.
+Fixes:
+    http://autobuild.buildroot.net/results/ff7/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
+    http://autobuild.buildroot.net/results/2bd/2bd30d942ec718e0a46ba2d1c043c9b6e2e6578b/
+    http://autobuild.buildroot.net/results/c37/c371f4de7ec4b959310ca8e08cf289385fa0feae/
+    ...
 
-> +endif
-> +ifeq ($(BR2_ARM_CPU_ARMV6),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv6l
-> +endif
-> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv7l
-> +endif
-> +ifndef CMAKE_SYSTEM_PROCESSOR
-> +CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
-> +endif
-> +
->  # In order to allow the toolchain to be relocated, we calculate the HOST_DIR
->  # based on the toolchainfile.cmake file's location: $(HOST_DIR)/usr/share/buildroot
->  # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
-> @@ -193,5 +207,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
->                 -e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
->                 -e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
->                 -e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
-> +               -e 's:@@CMAKE_SYSTEM_PROCESSOR@@:$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR)):' \
->                 $(TOPDIR)/support/misc/toolchainfile.cmake.in \
->                 > $@
-> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-> index 4ca3d35..816af13 100644
-> --- a/support/misc/toolchainfile.cmake.in
-> +++ b/support/misc/toolchainfile.cmake.in
-> @@ -11,6 +11,7 @@
->  string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
->
->  set(CMAKE_SYSTEM_NAME Linux)
-> +set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
->
->  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
->  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
-> --
-> 1.8.4.5
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/libv4l/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Anyway, this looks good, so:
-
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
-
-Regards,
-
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 04f0c6a..aca514a 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBV4L
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -28,6 +29,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 
+ endif
+ 
+-comment "libv4l needs a toolchain w/ largefile, threads and C++"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++comment "libv4l needs a toolchain w/ largefile, threads and C++, headers >= 3.0"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 -- 
-Samuel
+1.9.1
