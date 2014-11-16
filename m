@@ -1,51 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 23:07:59 +0100
-Subject: [Buildroot] [PATCH] package/clamav: fix build with uClibc
-In-Reply-To: <20141116215017.GD10840@free.fr> (Yann E. MORIN's message of
- "Sun, 16 Nov 2014 22:50:17 +0100")
-References: <1416155667-21771-1-git-send-email-yann.morin.1998@free.fr>
- <XnsA3E7BAAD88DC2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20141116220244.0175cc90@free-electrons.com>
- <20141116215017.GD10840@free.fr>
-Message-ID: <87389ier40.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Nov 2014 23:08:51 +0100
+Subject: [Buildroot] [PATCH] package/mutt: do not run compiled programs from
+	./configure
+Message-ID: <1416175731-31022-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+mutt's ./configure is broken for cross-compilation, because it runs
+programs to check for some features or behaviours.
 
- > Thomas, All,
- > On 2014-11-16 22:02 +0100, Thomas Petazzoni spake thusly:
- >> On Sun, 16 Nov 2014 18:21:04 +0100, Bernd Kuhls wrote:
- >> 
- >> > Please add the upstream bugtracker URL to your patch: 
- >> > https://bugzilla.clamav.net/show_bug.cgi?id=11170
- >> 
- >> I believe Yann's patch is not an appropriate upstream solution, and a
- >> configure.ac check should be added instead.
+So, we have to feed it some variables to force the checks the way they
+are supposed to be resolved for our use-case.
 
- > That's what I think, too. But see what Peter had to say about that (as
- > pointed out by Bernd):
- >     http://patchwork.ozlabs.org/patch/406336/
+Fixes:
+    http://autobuild.buildroot.net/results/58c/58c73e72e1387c7f490ad97a86666b12393917cf/
+    http://autobuild.buildroot.net/results/73b/73b8c54ca41cc475594c24a8d6176d511dcb85e6/
 
- > Now, upstream has both patches in their bug tracker: the original from
- > Bernd that adds a check in ./configure (well, rather in
- > m4/reorganization/headers.m4, but that gives a configure-time check),
- > and my patch, does just slightly expands the current test to recognise
- > uClibc.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/mutt/mutt.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Just to clarify - I don't object against a configure script, my comment
-on http://patchwork.ozlabs.org/patch/406336/ was simply that the
-existing HAVE_BACKTRACE check didn't work for uClibc and it made more
-sense to fix that than add an additional HAVE_EXECINFO_H check.
-
- > But back to Buildroot: we need a fix before the release, and that patch
- > is what Peter asked for.
-
-Yeah, and I've committed it. When upstream decides (and perhaps makes a
-new release) we can update and get rid of the patch.
-
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b245542..b4f18b0 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -41,4 +41,20 @@ else
+ MUTT_CONF_OPTS += --without-ssl
+ endif
+ 
++# Avoid running tests to check for:
++#  - target system is *BSD
++#  - C99 conformance (snprintf, vsnprintf)
++#  - behaviour of the regex library
++#  - if mail spool directory is world/group writable
++#  - we have a working libiconv
++MUTT_CONF_ENV += \
++	mutt_cv_bsdish=no \
++	mutt_cv_c99_snprintf=yes \
++	mutt_cv_c99_vsnprintf=yes \
++	mutt_cv_regex_broken=no \
++	mutt_cv_worldwrite=yes \
++	mutt_cv_groupwrite=yes \
++	mutt_cv_iconv_good=yes \
++	mutt_cv_iconv_nontrans=no
++
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.9.1
