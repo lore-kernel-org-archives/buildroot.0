@@ -1,45 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Nov 2014 12:55:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: fix build error without
- OpenSSL support
-In-Reply-To: <1416087173-21595-1-git-send-email-jkrause@posteo.de>
-References: <1416087173-21595-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141116125513.1fac7eae@free-electrons.com>
+From: Volker Krause <volker.krause@kdab.com>
+Date: Sun, 16 Nov 2014 12:55:27 +0100
+Subject: [Buildroot] [PATCH v2] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
+Message-ID: <1416138927-7857-1-git-send-email-volker.krause@kdab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+This is rarely needed by packages, but convenient to have when it is.
 
-On Sat, 15 Nov 2014 22:32:53 +0100, J?rg Krause wrote:
-> Version 0.10.33 of nodejs introduced a bug which prevents us from building
-> nodejs without OpenSSL support. The bug is reported upstream:
-> https://github.com/joyent/node/issues/8676
-> 
-> This bug caused some build errors:
->   * http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
->   * http://autobuild.buildroot.net/results/e1f/e1fb34818ff1167aa008b4011befb9fd14c81293/
-> 
-> and more...
-> 
-> nodejs can be build with shared linking to an external OpenSSL library (by
-> setting `--shared-openssl`) or with static linking to the bundled OpenSSL
-> library.
-> 
-> With this patch nodejs is build with static linking to the bundled OpenSSL
-> library in case no OpenSSL package is selected.
+Signed-off-by: Volker Krause <volker.krause@kdab.com>
+---
+Changes v1 -> v2:
+  - added missing qstrip
+  - set the correct ARM variant as done in
+    http://patchwork.ozlabs.org/patch/408501/
 
-I don't think this is the right fix. We don't want to use the bundled
-OpenSSL library, that's contrary to what we do in the rest of Buildroot.
-The proper fixes are either fixing the bug that prevents nodejs from
-building without OpenSSL, or make nodejs select unconditionally OpenSSL.
+ package/pkg-cmake.mk                | 15 +++++++++++++++
+ support/misc/toolchainfile.cmake.in |  1 +
+ 2 files changed, 16 insertions(+)
 
-Best regards,
-
-Thomas
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index c8735ef..619da9b 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -180,6 +180,20 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+ # Generation of the CMake toolchain file
+ ################################################################################
+ 
++# CMAKE_SYSTEM_PROCESSOR should match uname -m
++ifeq ($(BR2_ARM_CPU_ARMV5),y)
++CMAKE_SYSTEM_PROCESSOR = armv5
++endif
++ifeq ($(BR2_ARM_CPU_ARMV6),y)
++CMAKE_SYSTEM_PROCESSOR = armv6l
++endif
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++CMAKE_SYSTEM_PROCESSOR = armv7l
++endif
++ifndef CMAKE_SYSTEM_PROCESSOR
++CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
++endif
++
+ # In order to allow the toolchain to be relocated, we calculate the HOST_DIR
+ # based on the toolchainfile.cmake file's location: $(HOST_DIR)/usr/share/buildroot
+ # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
+@@ -193,5 +207,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
+ 		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
+ 		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
++		-e 's:@@CMAKE_SYSTEM_PROCESSOR@@:$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR)):' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 4ca3d35..816af13 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -11,6 +11,7 @@
+ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
+ 
+ set(CMAKE_SYSTEM_NAME Linux)
++set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
+ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+ set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.5
