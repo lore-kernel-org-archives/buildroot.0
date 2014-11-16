@@ -1,44 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Nov 2014 22:50:17 +0100
-Subject: [Buildroot] [PATCH] package/clamav: fix build with uClibc
-In-Reply-To: <20141116220244.0175cc90@free-electrons.com>
-References: <1416155667-21771-1-git-send-email-yann.morin.1998@free.fr>
- <XnsA3E7BAAD88DC2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20141116220244.0175cc90@free-electrons.com>
-Message-ID: <20141116215017.GD10840@free.fr>
+Date: Sun, 16 Nov 2014 22:52:50 +0100
+Subject: [Buildroot] [PATCH] package/aircrack-ng: fix static build
+In-Reply-To: <87oas6es4m.fsf@dell.be.48ers.dk>
+References: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
+ <20141116155958.GB10840@free.fr> <87oas6es4m.fsf@dell.be.48ers.dk>
+Message-ID: <20141116215250.GE10840@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Peter, All,
 
-On 2014-11-16 22:02 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 16 Nov 2014 18:21:04 +0100, Bernd Kuhls wrote:
+On 2014-11-16 22:46 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
-> > Please add the upstream bugtracker URL to your patch: 
-> > https://bugzilla.clamav.net/show_bug.cgi?id=11170
+>  > All,
+>  > On 2014-11-16 16:15 +0100, Yann E. MORIN spake thusly:
+>  >> Two fixes in one:
 > 
-> I believe Yann's patch is not an appropriate upstream solution, and a
-> configure.ac check should be added instead.
+>  > So, why did I not submit two patches?
+> 
+>  > Because both fixes are needed to fix the autobuild failures mentioned
+>  > below...
+> 
+> Talking to yourself? ;)
 
-That's what I think, too. But see what Peter had to say about that (as
-pointed out by Bernd):
-    http://patchwork.ozlabs.org/patch/406336/
+No, it was Alter talking to Ego, not me.
 
-Now, upstream has both patches in their bug tracker: the original from
-Bernd that adds a check in ./configure (well, rather in
-m4/reorganization/headers.m4, but that gives a configure-time check),
-and my patch, does just slightly expands the current test to recognise
-uClibc.
+Muhahaha! :-)
 
-It's now to upstream to decide what they want.
+> Committed, thanks.
 
-But back to Buildroot: we need a fix before the release, and that patch
-is what Peter asked for.
-
-I don't care whichever we use, though. ;-)
+Thanks!
 
 Regards,
 Yann E. MORIN.
