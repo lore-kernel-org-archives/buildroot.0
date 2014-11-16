@@ -1,55 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Nov 2014 23:23:42 +0100
-Subject: [Buildroot] [PATCH v2] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
-In-Reply-To: <1416138927-7857-1-git-send-email-volker.krause@kdab.com>
-References: <1416138927-7857-1-git-send-email-volker.krause@kdab.com>
-Message-ID: <20141116232342.2ae8cce9@free-electrons.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sun, 16 Nov 2014 23:33:59 +0100
+Subject: [Buildroot] [PATCH v2 00/13] Add Xorg support for imx6
+In-Reply-To: <CADCpmyNT+VH8==NvuJm8wOZ3xSa4Xjm6QJaRFm_TZduihhA05g@mail.gmail.com>
+References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+ <20141116083345.GA8150@n411z>
+ <CADCpmyNT+VH8==NvuJm8wOZ3xSa4Xjm6QJaRFm_TZduihhA05g@mail.gmail.com>
+Message-ID: <18420074.Oyhpzo8KGq@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Volker Krause,
+On Sunday 16 November 2014 00:37:53 Gary Bisson wrote:
+> Adding Jerome...
+> 
+> On Sun, Nov 16, 2014 at 12:33 AM, Gary Bisson <bisson.gary@gmail.com> wrote:
+> > Jerome,
+> > 
+> > I've been able to build and test this set of patches on my i.MX6Q
+> > SabreLite board (nitrogen6x defconfig).
+> > Everything is running fine although I only tried:
+> > - Starting X server
+> > - Launching xterm
+> > - Launching Vivante 3D examples
+> > 
+> > Regarding X, I've used the following configuration:
+> > https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xor
+> > g-xserver/xserver-xf86-config/mx6/xorg.conf
+> > 
+> > However I have a few questions regarding the patches:
+> > - 05/13: gpu-viv-bin-mx6q: make fb/x11 choice explicit
+> > 
+> >   - Not sure to get the use case here. Are people interested in having
+> >   fb libs on a X system?
+In fact, yes I think. During development, many developers try fb and Xorg to 
+know which one match best for theirs objectives. I think, it is easy to make a 
+mistakes without this patch. 
 
-On Sun, 16 Nov 2014 12:55:27 +0100, Volker Krause wrote:
+In add, I think I will add wayland support in future. I found easier to select 
+explicitly back-end.
 
-> +# CMAKE_SYSTEM_PROCESSOR should match uname -m
-> +ifeq ($(BR2_ARM_CPU_ARMV5),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv5
-> +endif
-> +ifeq ($(BR2_ARM_CPU_ARMV6),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv6l
-> +endif
-> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> +CMAKE_SYSTEM_PROCESSOR = armv7l
+> > - 06/13: gpu-viv-bin-mx6q: change output selection mecanism
+> > 
+> >   - s/mecanism/mechanism
+> >   - Are the symbolic links changes related to the output selection? I
+> >   would
+> >   have seen this as part of the "04/13: gpu-viv-bin-mx6q: fix GLESv2
+> >   support"
+> >   patch
 
-I believe armv6l and armv7l is only valid on little-endian ARM systems,
-not big endian ones.
+Patch 04 fix a bug, while patch 06 is a style change. However, I admit patch 
+description is not well chosen.
 
-> +endif
-> +ifndef CMAKE_SYSTEM_PROCESSOR
-> +CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
-> +endif
+> > Other than that it looks good. There's one test I haven't done yet: 
+> > rebuild a system without X making sure 3D is still working.
+[...]
 
-Are we sure that $(BR2_ARCH) is valid for all other cases?
 
-Also, please use the following construct instead:
+Thanks for the test and the review.
 
-ifeq (....)
-...
-else ifeq (....)
-...
-else ifeq (....)
-...
-else
-....
-endif
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
