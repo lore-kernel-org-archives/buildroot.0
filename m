@@ -1,50 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Nov 2014 15:44:27 +0100
-Subject: [Buildroot] [PATCH] package/libv4l: needs headers >= 3.0
-Message-ID: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 16 Nov 2014 16:15:10 +0100
+Subject: [Buildroot] [PATCH] package/aircrack-ng: fix static build
+Message-ID: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libv4l includes linux/media.h, which was introduced in v.2.6.39.
+Two fixes in one:
 
-So, require at least 3.0 to be sure, since we have toolchains (like the
-Code Sourcery Powerpc 2011.03) that still use 2.6.38 headers.
+  - openssl's libcrypto needs -lz, but because aircrack-ng does not use
+    pkg-config, it misses this dependency. The proper fix would be to
+    use pkg-config, like is done for pcre with patch
+    0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch
+    but adding -lz is much easier.
+
+  - sqlite needs -lpthread, so -lpthread must be added _after_ -lsqlite,
+    but we currently add it before. So, force -lpthread after -lsqlite
+    when we are doing a static build.
 
 Fixes:
-    http://autobuild.buildroot.net/results/ff7/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
-    http://autobuild.buildroot.net/results/2bd/2bd30d942ec718e0a46ba2d1c043c9b6e2e6578b/
-    http://autobuild.buildroot.net/results/c37/c371f4de7ec4b959310ca8e08cf289385fa0feae/
-    ...
+    http://autobuild.buildroot.net/results/1ea/1ea877851e9d2aeeaf9d320bef12321ec2925b5b/
+    http://autobuild.buildroot.net/results/cdf/cdf0203fc99d5f7e41e508f6d9edb78a0f0ea732/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libv4l/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/aircrack-ng/aircrack-ng.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 04f0c6a..aca514a 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBV4L
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
-@@ -28,6 +29,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index 30298f5..c7fcb63 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -14,7 +14,7 @@ AIRCRACK_NG_MAKE_OPTS = unstable=true
  
+ # Account for libpthread in static
+ AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) \
+-	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
++	$(if $(BR2_PREFER_STATIC_LIB),-lpthread -lz)
+ 
+ # libnl support has issues when building static
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+@@ -39,9 +39,10 @@ else
+ 	AIRCRACK_NG_MAKE_OPTS += pcre=false
  endif
  
--comment "libv4l needs a toolchain w/ largefile, threads and C++"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+comment "libv4l needs a toolchain w/ largefile, threads and C++, headers >= 3.0"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++# Duplicate -lpthread, because it is also needed by sqlite
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ 	AIRCRACK_NG_DEPENDENCIES += sqlite
+-	AIRCRACK_NG_MAKE_OPTS += sqlite=true LIBSQL="-lsqlite3"
++	AIRCRACK_NG_MAKE_OPTS += sqlite=true LIBSQL="-lsqlite3 $(if $(BR2_PREFER_STATIC_LIB),-lpthread)"
+ else
+ 	AIRCRACK_NG_MAKE_OPTS += sqlite=false
+ endif
 -- 
 1.9.1
