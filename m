@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Nov 2014 12:18:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-11-15
-In-Reply-To: <20141116105222.GC3965@free.fr>
-References: <20141116073012.7E89F101413@stock.ovh.net>
- <20141116105222.GC3965@free.fr>
-Message-ID: <20141116121859.3e6d8eaf@free-electrons.com>
+Date: Sun, 16 Nov 2014 12:22:10 +0100
+Subject: [Buildroot] [PATCH 0/4] pkg-infra: differentiate remote and
+ local tarball filenames (branch yem/download)
+In-Reply-To: <cover.1416068004.git.yann.morin.1998@free.fr>
+References: <cover.1416068004.git.yann.morin.1998@free.fr>
+Message-ID: <20141116122210.6b3651e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,39 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun, 16 Nov 2014 11:52:22 +0100, Yann E. MORIN wrote:
+On Sat, 15 Nov 2014 17:19:24 +0100, Yann E. MORIN wrote:
 
-> That's weird:
+> This series introduces a new variable, FOO_UPSTREAM_SOURCE, so as to be
+> able to differentiate remote and local tarball filenames.
 > 
->     cap_file.c: In function 'cap_get_fd':
->     cap_file.c:190:33: error: 'XATTR_NAME_CAPS' undeclared (first use in this function)
+> This is needed when upstream tarballs are not named the way we expect them
+> to be. For example, the GitHub API only provides a request like:
+>     GET /repos/:owner/:repo/:archive_format/:ref
 > 
-> XATTR_NAME_CAPS was introduced in Linux 2.6.24, and the toolchain is
-> from CodeSourcery, and uses headers from Linux 2.6.38. So
-> XATTR_NAME_CAPS ought to be present. But it is not:
+> So far, we're not using this API, and directly use a non-stable scheme
+> to retrieve the tarballs. That scheme has proven to break from time to
+> time, so we'll soon need to switch to the API, which is guaranteed to be
+> stable.
 > 
->     $ grep -r XATTR_NAME_CAPS freescale-2011.03
->     [--nothing, zilch, nada, keudale--]
+> So, we need to be able to differentiate the filename remote knows the
+> tarball by, and the local filename we want to save that tarball as.
 > 
-> Grr... :-(
-> 
-> So, I would be inclined on making libcap require headers >= 3.0 anyway.
-> But that has to be propagated to a few packages:
-> 
->     cdrkit, lxc, ofono, squid (and systemd, but it already requires
->     headers >=3.7 anyway)
-> 
-> Thoughts?
+> Changes to the GitHub helper will come in a later series, because it is
+> a bit more involved, and still needs some ironing out. Alternate forges
+> may also get added in the future, which would require such a feature.
 
-We anyway don't have any options today to distinguish between things
-added within different versions of the 2.6.x kernels. We have such
-options for each individual 3.x kernel, but we handle all 2.6.x kernels
-as just one case. Considering this, even though the CodeSourcery
-toolchain is indeed broken, I believe depending on >= 3.0 is the right
-course of action.
+Not directly related, but somewhat related: I have always though that
+our split between <foo>_SITE and <foo>_SOURCE was a bit stupid. Why
+don't we simply give a full URL instead of splitting that between SITE
+and SOURCE ?
+
+The way we do things today also forces the things in <foo>_PATCH and
+<foo>_EXTRA_DOWNLOADS to be under the exact same <foo>_SITE, which
+prevents applying patches from other locations than the original
+package site.
+
+Shouldn't we simply get rid of <pkg>_SITE, and make <pkg>_SOURCE the
+full URL to the tarball / git repo?
 
 Best regards,
 
