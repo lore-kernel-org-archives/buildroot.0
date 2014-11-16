@@ -1,41 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 23:11:09 +0100
-Subject: [Buildroot] [PATCH] package/libcap: needs headers >= 3.0
-In-Reply-To: <1416135887-27267-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 16 Nov 2014 12:04:47 +0100")
-References: <1416135887-27267-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87tx1ydcea.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Nov 2014 22:57:23 +0100
+Subject: [Buildroot] [git commit] package/libv4l: needs headers >= 3.0
+Message-ID: <20141116221147.5D6058912D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=081e9a9dc3415a486f4118849ce3cdbfecec3f36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libcap requires XATTR_NAME_CAPS, which was introduced in Linux 2.6.24.
- > However, we have some toolchains, liek the CodeSourcery PowerPC 2011.03,
- > that is missing those defines, even though it uses headers from Linux
- > 2.6.38.
+libv4l includes linux/media.h, which was introduced in v.2.6.39.
 
- > Since there is no perfect way to avoid the situation, just require
- > headers >= 3.0 to build libcap.
+So, require at least 3.0 to be sure, since we have toolchains (like the
+Code Sourcery Powerpc 2011.03) that still use 2.6.38 headers.
 
- > Propagate the new dependency to packages that select libcap.
+Fixes:
+    http://autobuild.buildroot.net/results/ff7/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
+    http://autobuild.buildroot.net/results/2bd/2bd30d942ec718e0a46ba2d1c043c9b6e2e6578b/
+    http://autobuild.buildroot.net/results/c37/c371f4de7ec4b959310ca8e08cf289385fa0feae/
+    ...
 
- > Fixes a lot of build failures, of which:
- >     http://autobuild.buildroot.net/results/e90/e909ca48ad2d1c85b19258f65e0c89a2813ac45e/
- >     http://autobuild.buildroot.net/results/23a/23aac9bb1cc48e5974bcf50256a16c67318f9ba2/
- >     http://autobuild.buildroot.net/results/597/597da58cb2fccb92d7883802c60b31264cacad08/
- >     http://autobuild.buildroot.net/results/538/538b23417c68f6c8c0c8c92dfc0e8ed314bac01b/
- >     ...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libv4l/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 04f0c6a..aca514a 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBV4L
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -28,6 +29,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 
+ endif
+ 
+-comment "libv4l needs a toolchain w/ largefile, threads and C++"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++comment "libv4l needs a toolchain w/ largefile, threads and C++, headers >= 3.0"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
