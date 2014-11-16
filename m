@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 22:48:12 +0100
-Subject: [Buildroot] [git commit] packae/duma: do not build test programs
-Message-ID: <20141116221147.43A9A8912D@busybox.osuosl.org>
+Date: Sun, 16 Nov 2014 23:03:00 +0100
+Subject: [Buildroot] [git commit] package/clamav: fix build with uClibc
+Message-ID: <20141116221147.6A2E78912D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aad7a8fa7fe516605fbd2578c25d53538b74992f
+commit: http://git.buildroot.net/buildroot/commit/?id=85101d3741991c9d447d7638005ba4d0e945e334
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building test programs fails for a static link, because duma.a redefines
-memcpy and strcpy, which are already present in the C library.
+clamav wants to use backtrace, and decides whether it can use it if it
+detects a glibc >= 2.1.
 
-Fixes quite some build failures:
-    http://autobuild.buildroot.net/results/3c7/3c7a4751c7ca71ad429c2d67f380aa225f151350/ (arm)
-    http://autobuild.buildroot.net/results/358/358293d22ae24237719f0aa27e88e87d03856973/ (x86_64)
-    http://autobuild.buildroot.net/results/947/9472d78b890639d3204e1942491f1eae62fb8a36/ (powerpc)
-    http://autobuild.buildroot.net/results/ffd/ffd2e7ab7a6045f5eeaa25cd25088ad0a5b6509a/ (i686)
+But uClibc does impersonate a glibc >= 2.1, so clamav concludes it is
+possible to use backtrace. So it includes execinfo.h, which is missing
+in our default uClibc config file.
+
+So, just extend the test so that backtrace support is disable on uClibc,
+unless it has been configured with backtrace support.
+
+A far better solution would be to add a ./configure check for backtrace,
+but this patch is sufficient enough.
+
+Fixes:
+    http://autobuild.buildroot.net/results/cff/cffa32fcedda735983d4805d6d4fa77844539b10/
+    http://autobuild.buildroot.net/results/e0a/e0a765a94a538b0b936ea512f7aba0264fac6309/
     ...
 
-Also rename patches according to the new naming scheme.
+Bugtracker: https://bugzilla.clamav.net/show_bug.cgi?id=11170
 
+[Peter: add bugtracker URL as suggested by Bernd]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tion.patch => 0001-fix-cross-compilation.patch} |    0
- package/duma/0002-no-tests.patch                   |   19 +++++++++++++++++++
- 2 files changed, 19 insertions(+), 0 deletions(-)
+ package/clamav/clamav-0003-backtrace-uClibc.patch |   22 +++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/duma/duma-01-fix-cross-compilation.patch b/package/duma/0001-fix-cross-compilation.patch
-similarity index 100%
-rename from package/duma/duma-01-fix-cross-compilation.patch
-rename to package/duma/0001-fix-cross-compilation.patch
-diff --git a/package/duma/0002-no-tests.patch b/package/duma/0002-no-tests.patch
+diff --git a/package/clamav/clamav-0003-backtrace-uClibc.patch b/package/clamav/clamav-0003-backtrace-uClibc.patch
 new file mode 100644
-index 0000000..6fe76f7
+index 0000000..82ad673
 --- /dev/null
-+++ b/package/duma/0002-no-tests.patch
-@@ -0,0 +1,19 @@
-+Do not build test programs
++++ b/package/clamav/clamav-0003-backtrace-uClibc.patch
+@@ -0,0 +1,22 @@
++mbox: do not use backtrace if using uClibc without backtrace support
 +
-+Biulding test programs does not work when we want to do a static link,
-+because duma.a redefines memcpy and strcpy, so the link fails.
++Since uClibc can be configured without support for backtrace, disable
++the backtrace if we are building with a uClibc that was built without
++backtrace.
++
++This is a bit hacky, and would greatly benefit from a test in ./configure
++instead, but does nicely as a quick fix for now.
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN duma-2.5.15.orig/GNUmakefile duma-2.5.15/GNUmakefile
-+--- duma-2.5.15.orig/GNUmakefile	2014-11-16 14:47:05.874448560 +0100
-++++ duma-2.5.15/GNUmakefile	2014-11-16 14:54:50.792048921 +0100
-+@@ -294,7 +294,7 @@
-+ SO_OBJECTS=dumapp_so.o duma_so.o sem_inc_so.o print_so.o
++diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
++--- clamav-0.98.4.orig/libclamav/mbox.c	2014-05-21 17:25:05.000000000 +0200
+++++ clamav-0.98.4/libclamav/mbox.c	2014-11-16 17:21:04.885383286 +0100
++@@ -83,7 +83,7 @@
++ #include <features.h>
++ #endif
 + 
-+ # Make all the top-level targets the makefile knows about.
-+-all:	libduma.a tstheap$(EXEPOSTFIX) dumatest$(EXEPOSTFIX) thread-test$(EXEPOSTFIX) testmt$(EXEPOSTFIX) dumatestpp$(EXEPOSTFIX) testoperators$(EXEPOSTFIX) $(DUMA_DYN_DEPS)
-++all:	libduma.a $(DUMA_DYN_DEPS)
-+ 
-+ # Perform self tests on the program this makefile builds.
-+ check test:
++-#if __GLIBC__ == 2 && __GLIBC_MINOR__ >= 1
+++#if __GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 && !defined(__UCLIBC__) || defined(__UCLIBC_HAS_BACKTRACE__)
++ #define HAVE_BACKTRACE
++ #endif
++ #endif
