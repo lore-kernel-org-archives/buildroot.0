@@ -1,61 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 22:43:35 +0100
-Subject: [Buildroot] [git commit] package/aircrack-ng: fix static build
-Message-ID: <20141116221147.3C759B5ABD@busybox.osuosl.org>
+Date: Sun, 16 Nov 2014 22:48:12 +0100
+Subject: [Buildroot] [git commit] packae/duma: do not build test programs
+Message-ID: <20141116221147.43A9A8912D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d26d6e63e02dce6323fb886b85dc4ffe669eaab6
+commit: http://git.buildroot.net/buildroot/commit/?id=aad7a8fa7fe516605fbd2578c25d53538b74992f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Two fixes in one:
+Building test programs fails for a static link, because duma.a redefines
+memcpy and strcpy, which are already present in the C library.
 
-  - openssl's libcrypto needs -lz, but because aircrack-ng does not use
-    pkg-config, it misses this dependency. The proper fix would be to
-    use pkg-config, like is done for pcre with patch
-    0001-Makefile-use-pkg-config-to-find-libpcre-it-s-more-cros.patch
-    but adding -lz is much easier.
+Fixes quite some build failures:
+    http://autobuild.buildroot.net/results/3c7/3c7a4751c7ca71ad429c2d67f380aa225f151350/ (arm)
+    http://autobuild.buildroot.net/results/358/358293d22ae24237719f0aa27e88e87d03856973/ (x86_64)
+    http://autobuild.buildroot.net/results/947/9472d78b890639d3204e1942491f1eae62fb8a36/ (powerpc)
+    http://autobuild.buildroot.net/results/ffd/ffd2e7ab7a6045f5eeaa25cd25088ad0a5b6509a/ (i686)
+    ...
 
-  - sqlite needs -lpthread, so -lpthread must be added _after_ -lsqlite,
-    but we currently add it before. So, force -lpthread after -lsqlite
-    when we are doing a static build.
-
-Fixes:
-    http://autobuild.buildroot.net/results/1ea/1ea877851e9d2aeeaf9d320bef12321ec2925b5b/
-    http://autobuild.buildroot.net/results/cdf/cdf0203fc99d5f7e41e508f6d9edb78a0f0ea732/
+Also rename patches according to the new naming scheme.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aircrack-ng/aircrack-ng.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ ...tion.patch => 0001-fix-cross-compilation.patch} |    0
+ package/duma/0002-no-tests.patch                   |   19 +++++++++++++++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-index 30298f5..c7fcb63 100644
---- a/package/aircrack-ng/aircrack-ng.mk
-+++ b/package/aircrack-ng/aircrack-ng.mk
-@@ -14,7 +14,7 @@ AIRCRACK_NG_MAKE_OPTS = unstable=true
- 
- # Account for libpthread in static
- AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) \
--	$(if $(BR2_PREFER_STATIC_LIB),-lpthread)
-+	$(if $(BR2_PREFER_STATIC_LIB),-lpthread -lz)
- 
- # libnl support has issues when building static
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
-@@ -39,9 +39,10 @@ else
- 	AIRCRACK_NG_MAKE_OPTS += pcre=false
- endif
- 
-+# Duplicate -lpthread, because it is also needed by sqlite
- ifeq ($(BR2_PACKAGE_SQLITE),y)
- 	AIRCRACK_NG_DEPENDENCIES += sqlite
--	AIRCRACK_NG_MAKE_OPTS += sqlite=true LIBSQL="-lsqlite3"
-+	AIRCRACK_NG_MAKE_OPTS += sqlite=true LIBSQL="-lsqlite3 $(if $(BR2_PREFER_STATIC_LIB),-lpthread)"
- else
- 	AIRCRACK_NG_MAKE_OPTS += sqlite=false
- endif
+diff --git a/package/duma/duma-01-fix-cross-compilation.patch b/package/duma/0001-fix-cross-compilation.patch
+similarity index 100%
+rename from package/duma/duma-01-fix-cross-compilation.patch
+rename to package/duma/0001-fix-cross-compilation.patch
+diff --git a/package/duma/0002-no-tests.patch b/package/duma/0002-no-tests.patch
+new file mode 100644
+index 0000000..6fe76f7
+--- /dev/null
++++ b/package/duma/0002-no-tests.patch
+@@ -0,0 +1,19 @@
++Do not build test programs
++
++Biulding test programs does not work when we want to do a static link,
++because duma.a redefines memcpy and strcpy, so the link fails.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN duma-2.5.15.orig/GNUmakefile duma-2.5.15/GNUmakefile
++--- duma-2.5.15.orig/GNUmakefile	2014-11-16 14:47:05.874448560 +0100
+++++ duma-2.5.15/GNUmakefile	2014-11-16 14:54:50.792048921 +0100
++@@ -294,7 +294,7 @@
++ SO_OBJECTS=dumapp_so.o duma_so.o sem_inc_so.o print_so.o
++ 
++ # Make all the top-level targets the makefile knows about.
++-all:	libduma.a tstheap$(EXEPOSTFIX) dumatest$(EXEPOSTFIX) thread-test$(EXEPOSTFIX) testmt$(EXEPOSTFIX) dumatestpp$(EXEPOSTFIX) testoperators$(EXEPOSTFIX) $(DUMA_DYN_DEPS)
+++all:	libduma.a $(DUMA_DYN_DEPS)
++ 
++ # Perform self tests on the program this makefile builds.
++ check test:
