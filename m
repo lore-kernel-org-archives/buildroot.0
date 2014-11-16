@@ -1,32 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 22:43:38 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-15
-In-Reply-To: <20141116073012.7E89F101413@stock.ovh.net> (Thomas Petazzoni's
- message of "Sun, 16 Nov 2014 08:30:12 +0100 (CET)")
-References: <20141116073012.7E89F101413@stock.ovh.net>
-Message-ID: <87sihies8l.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Nov 2014 22:46:01 +0100
+Subject: [Buildroot] [PATCH] package/aircrack-ng: fix static build
+In-Reply-To: <20141116155958.GB10840@free.fr> (Yann E. MORIN's message of
+ "Sun, 16 Nov 2014 16:59:58 +0100")
+References: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
+ <20141116155958.GB10840@free.fr>
+Message-ID: <87oas6es4m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Build statistics for 2014-11-15
- > ===============================
+ > All,
+ > On 2014-11-16 16:15 +0100, Yann E. MORIN spake thusly:
+ >> Two fixes in one:
 
- >         success : 144
- >        failures : 22 
- >        timeouts : 1  
- >           TOTAL : 167
+ > So, why did I not submit two patches?
 
-FYI, one of the reason why we have less builds is that gcc20 is having
-disk issues so the autobuilder is currently not running.
+ > Because both fixes are needed to fix the autobuild failures mentioned
+ > below...
 
-I'll look into setting up an autobuilder on another machine in the
-cluster.
+Talking to yourself? ;)
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
