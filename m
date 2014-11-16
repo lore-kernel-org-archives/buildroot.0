@@ -1,31 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 22:58:23 +0100
-Subject: [Buildroot] [PATCH] package/libv4l: needs headers >= 3.0
-In-Reply-To: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 16 Nov 2014 15:44:27 +0100")
-References: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87fvdierk0.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Nov 2014 23:01:12 +0100
+Subject: [Buildroot] [PATCH] package/clamav: fix build with uClibc
+In-Reply-To: <20141116220244.0175cc90@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 16 Nov 2014 22:02:44 +0100")
+References: <1416155667-21771-1-git-send-email-yann.morin.1998@free.fr>
+ <XnsA3E7BAAD88DC2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20141116220244.0175cc90@free-electrons.com>
+Message-ID: <87bno6erfb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > libv4l includes linux/media.h, which was introduced in v.2.6.39.
- > So, require at least 3.0 to be sure, since we have toolchains (like the
- > Code Sourcery Powerpc 2011.03) that still use 2.6.38 headers.
+ > Dear Bernd Kuhls,
+ > On Sun, 16 Nov 2014 18:21:04 +0100, Bernd Kuhls wrote:
 
- > Fixes:
- >     http://autobuild.buildroot.net/results/ff7/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
- >     http://autobuild.buildroot.net/results/2bd/2bd30d942ec718e0a46ba2d1c043c9b6e2e6578b/
- >     http://autobuild.buildroot.net/results/c37/c371f4de7ec4b959310ca8e08cf289385fa0feae/
- >     ...
+ >> Please add the upstream bugtracker URL to your patch: 
+ >> https://bugzilla.clamav.net/show_bug.cgi?id=11170
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > I believe Yann's patch is not an appropriate upstream solution, and a
+ > configure.ac check should be added instead.
 
-Committed, thanks.
+Well, you could certainly argue that a configure check would be nicer,
+but Yanns' fix is atleast in line with the upstream code (it just
+extends the existing glibc check in mbox.c).
 
 -- 
 Bye, Peter Korsgaard
