@@ -1,56 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Nov 2014 12:22:10 +0100
-Subject: [Buildroot] [PATCH 0/4] pkg-infra: differentiate remote and
- local tarball filenames (branch yem/download)
-In-Reply-To: <cover.1416068004.git.yann.morin.1998@free.fr>
-References: <cover.1416068004.git.yann.morin.1998@free.fr>
-Message-ID: <20141116122210.6b3651e0@free-electrons.com>
+From: Volker Krause <volker.krause@kdab.com>
+Date: Sun, 16 Nov 2014 12:25:02 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
+	CMAKE_SYSTEM_PROCESSOR.
+In-Reply-To: <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
+References: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
+ <546792E3.5060007@openwide.fr>
+ <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
+Message-ID: <1923063.8CRfa0qM7P@vkpc9>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi,
 
-On Sat, 15 Nov 2014 17:19:24 +0100, Yann E. MORIN wrote:
+On Saturday 15 November 2014 19:20:49 Samuel Martin wrote:
+> On Sat, Nov 15, 2014 at 6:52 PM, Romain Naour <romain.naour@openwide.fr> 
+wrote:
+> > Le 15/11/2014 18:26, Samuel Martin a ?crit :
+> >> On Sat, Nov 15, 2014 at 5:00 PM, Volker Krause <volker.krause@kdab.com> 
+wrote:
+> >>> This is rarely needed by packages, but convenient to have when it is.
+> > 
+> > There is only one package (openpowerlink) that set this variable in
+> > buildroot and the expected value is "x86" or "x86_64".
 
-> This series introduces a new variable, FOO_UPSTREAM_SOURCE, so as to be
-> able to differentiate remote and local tarball filenames.
+My use-case is packaging GammaRay (https://github.com/KDAB/GammaRay), which 
+relies on CMAKE_SYSTEM_PROCESSOR. Setting it via the cmake command line is of 
+course possible, but that didn't look like the "clean" solution.
+
+> Hmm... this is in the openpowerlink source?
+> I think it'd better do (to be more robust):
+> ---
+> string(REGEX REPLACE "i*86" "x86" CMAKE_SYSTEM_PROCESSOR
+> ${CMAKE_SYSTEM_PROCESSOR})
+> ---
+> But that's another story ;-)
+
+Right, the usual value of CMAKE_SYSTEM_PROCESSOR for x86 32bit seems to be far 
+from well defined. "i*86" is the most common one I've seen on Linux, so 
+BR2_ARCH should be fine there in general.
+
+> > Are you sure that the BR2_ARCH can be used by other packages that need
+> > CMAKE_SYSTEM_PROCESSOR ?
 > 
-> This is needed when upstream tarballs are not named the way we expect them
-> to be. For example, the GitHub API only provides a request like:
->     GET /repos/:owner/:repo/:archive_format/:ref
+> According to CMake doc [1], CMAKE_SYSTEM_PROCESSOR is set to the
+> output of the command "uname -p" (in fact it is the output of "uname
+> -m").
+> This is only true for native compilation.
 > 
-> So far, we're not using this API, and directly use a non-stable scheme
-> to retrieve the tarballs. That scheme has proven to break from time to
-> time, so we'll soon need to switch to the API, which is guaranteed to be
-> stable.
-> 
-> So, we need to be able to differentiate the filename remote knows the
-> tarball by, and the local filename we want to save that tarball as.
-> 
-> Changes to the GitHub helper will come in a later series, because it is
-> a bit more involved, and still needs some ironing out. Alternate forges
-> may also get added in the future, which would require such a feature.
+> In the case of cross-compilation, the CMake code does not set anything
+> [2], it just expects the CMAKE_SYSTEM_* variables to be set in the
+> toolchain file.
 
-Not directly related, but somewhat related: I have always though that
-our split between <foo>_SITE and <foo>_SOURCE was a bit stupid. Why
-don't we simply give a full URL instead of splitting that between SITE
-and SOURCE ?
+I'll submit an updated patch that adds qstrip, and that sets the correct arm 
+variant as shown in the x265 patch that Bernd mentioned.
 
-The way we do things today also forces the things in <foo>_PATCH and
-<foo>_EXTRA_DOWNLOADS to be under the exact same <foo>_SITE, which
-prevents applying patches from other locations than the original
-package site.
-
-Shouldn't we simply get rid of <pkg>_SITE, and make <pkg>_SOURCE the
-full URL to the tarball / git repo?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+regards,
+Volker
