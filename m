@@ -1,47 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Nov 2014 22:52:50 +0100
-Subject: [Buildroot] [PATCH] package/aircrack-ng: fix static build
-In-Reply-To: <87oas6es4m.fsf@dell.be.48ers.dk>
-References: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
- <20141116155958.GB10840@free.fr> <87oas6es4m.fsf@dell.be.48ers.dk>
-Message-ID: <20141116215250.GE10840@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Nov 2014 22:58:23 +0100
+Subject: [Buildroot] [PATCH] package/libv4l: needs headers >= 3.0
+In-Reply-To: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 16 Nov 2014 15:44:27 +0100")
+References: <1416149067-19925-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87fvdierk0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2014-11-16 22:46 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > All,
->  > On 2014-11-16 16:15 +0100, Yann E. MORIN spake thusly:
->  >> Two fixes in one:
-> 
->  > So, why did I not submit two patches?
-> 
->  > Because both fixes are needed to fix the autobuild failures mentioned
->  > below...
-> 
-> Talking to yourself? ;)
+ > libv4l includes linux/media.h, which was introduced in v.2.6.39.
+ > So, require at least 3.0 to be sure, since we have toolchains (like the
+ > Code Sourcery Powerpc 2011.03) that still use 2.6.38 headers.
 
-No, it was Alter talking to Ego, not me.
+ > Fixes:
+ >     http://autobuild.buildroot.net/results/ff7/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
+ >     http://autobuild.buildroot.net/results/2bd/2bd30d942ec718e0a46ba2d1c043c9b6e2e6578b/
+ >     http://autobuild.buildroot.net/results/c37/c371f4de7ec4b959310ca8e08cf289385fa0feae/
+ >     ...
 
-Muhahaha! :-)
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Committed, thanks.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
