@@ -1,64 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Nov 2014 20:44:25 +0100
-Subject: [Buildroot] [RFC/PATCH v6 12/17] package/kodi: New option to enable
-	support for optical drives
+Date: Sun, 16 Nov 2014 20:44:21 +0100
+Subject: [Buildroot] [RFC/PATCH v6 08/17] package/kodi-pvr-addons: Bump
+	version for Helix-compatibility
 In-Reply-To: <1416167070-27299-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1416167070-27299-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1416167070-27299-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1416167070-27299-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This also enables dvdcss support, provided by an internal library.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in |    5 +++++
- package/kodi/kodi.mk   |    7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |   15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ed89936..c153fed 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -235,6 +235,11 @@ config BR2_PACKAGE_KODI_WAVPACK
- 	  Enable WAV input support.
- 	  Select this if you want to play back WV files.
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index 5e70bb3..f6b6ec6 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_OPTICALDRIVE
-+	bool "optical drive"
-+	help
-+	  Enable support for optical drives
-+
- comment "Kodi addons"
+-# This cset is on the branch 'gotham'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
++# This cset is on the branch 'master'
++# When Kodi is released this should be updated to the corresponding branch
++KODI_PVR_ADDONS_VERSION = 06842b90a383420650bd3e5c5b61acfc3f224d83
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
+@@ -14,7 +14,7 @@ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
+ # There's no ./configure in the git tree, we need to generate it
+ KODI_PVR_ADDONS_AUTORECONF = YES
  
- source "package/kodi-addon-xvdr/Config.in"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 6ad1472..16eacd5 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -38,7 +38,6 @@ KODI_CONF_OPTS +=  \
- 	--disable-joystick \
- 	--disable-mysql \
- 	--disable-openmax \
--	--disable-optical-drive \
- 	--disable-projectm \
- 	--disable-pulse \
- 	--disable-ssh \
-@@ -190,6 +189,12 @@ else
- KODI_CONF_OPTS += --disable-vaapi
- endif
+-KODI_PVR_ADDONS_DEPENDENCIES = boost zlib
++KODI_PVR_ADDONS_DEPENDENCIES = zlib
+ # This really is a runtime dependency, but we need KODI to be installed
+ # first, since we'll install files in KODI's directories _after_ KODI has
+ # installed its own files
+@@ -24,11 +24,4 @@ KODI_PVR_ADDONS_CONF_OPTS = \
+ 	--enable-release \
+ 	--enable-addons-with-dependencies
  
-+ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
-+KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
-+else
-+KODI_CONF_OPTS += --disable-optical-drive --disable-dvdcss
-+endif
-+
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define KODI_BOOTSTRAP
- 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+-ifeq ($(BR2_PACKAGE_MYSQL),y)
+-KODI_PVR_ADDONS_CONF_OPTS += --enable-mysql
+-KODI_PVR_ADDONS_DEPENDENCIES += mysql
+-else
+-KODI_PVR_ADDONS_CONF_OPTS += --disable-mysql
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
