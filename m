@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Nov 2014 00:22:47 +0100
-Subject: [Buildroot] [git commit] libunwind: fix comment dependencies
-Message-ID: <20141116232647.9E6ACB59B5@busybox.osuosl.org>
+Date: Mon, 17 Nov 2014 00:25:01 +0100
+Subject: [Buildroot] [git commit] package/rpm: add missing dependency to
+	openssl
+Message-ID: <20141116232647.A7202B46E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a99682127b02f0d792390311956e977a2718fa2
+commit: http://git.buildroot.net/buildroot/commit/?id=8cc0bf0df086fb1bf991295639d226e4e3650706
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Comment should be shown when no threads OR not uclibc-snapshot / glibc, not
-AND.
+We forcibly enable use of an extrernal openssl in rpm, so we must depend
+on it.
 
+openssl is correctly selected from kconfig, but there is no build-time
+dependency to it.
+
+It was not an issue so far, because openssl always sorts before rpm, so
+gets built before. Unless one wants to just build rpm to debug an
+autobuilder failure, that is.
+
+Add that build-time dependency to openssl.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libunwind/Config.in |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/rpm/rpm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 1e0e192..85cb472 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -12,5 +12,4 @@ config BR2_PACKAGE_LIBUNWIND
- comment "libunwind needs a uclibc snapshot or (e)glibc toolchain w/ threads"
- 	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index af1642f..50e6d75 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -7,7 +7,7 @@
+ RPM_VERSION_MAJOR = 5.2
+ RPM_VERSION = $(RPM_VERSION_MAJOR).0
+ RPM_SITE = http://rpm5.org/files/rpm/rpm-$(RPM_VERSION_MAJOR)
+-RPM_DEPENDENCIES = zlib beecrypt neon popt
++RPM_DEPENDENCIES = zlib beecrypt neon popt openssl
+ RPM_LICENSE = LGPLv2.1
+ RPM_LICENSE_FILES = COPYING.LIB
+ 
