@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Nov 2014 20:44:21 +0100
-Subject: [Buildroot] [RFC/PATCH v6 08/17] package/kodi-pvr-addons: Bump
-	version for Helix-compatibility
+Date: Sun, 16 Nov 2014 20:44:27 +0100
+Subject: [Buildroot] [RFC/PATCH v6 14/17] package/kodi-audioencoder-flac:
+	New package
 In-Reply-To: <1416167070-27299-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1416167070-27299-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1416167070-27299-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1416167070-27299-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +14,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-addons/kodi-pvr-addons.mk |   15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ package/kodi-audioencoder-flac/Config.in              |    9 +++++++++
+ .../kodi-audioencoder-flac/kodi-audioencoder-flac.mk  |   17 +++++++++++++++++
+ package/kodi/Config.in                                |   10 +++++++++-
+ 3 files changed, 35 insertions(+), 1 deletion(-)
+ create mode 100644 package/kodi-audioencoder-flac/Config.in
+ create mode 100644 package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
 
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-index 5e70bb3..f6b6ec6 100644
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
+new file mode 100644
+index 0000000..ec8cb96
+--- /dev/null
++++ b/package/kodi-audioencoder-flac/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
++	bool "kodi-audioencoder-flac"
++	select BR2_PACKAGE_FLAC
++	select BR2_PACKAGE_LIBOGG
++	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
++	help
++	  An audioencoder addon for Kodi
++
++	  https://github.com/xbmc/audioencoder.flac
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+new file mode 100644
+index 0000000..90651a0
+--- /dev/null
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# kodi-audioencoder-flac
++#
++################################################################################
++
++KODI_AUDIOENCODER_FLAC_VERSION = ef5d3098e37a0fa9bbc48c4f51408cca0ba6222b
++KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
++KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
++KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
++KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg
++KODI_AUDIOENCODER_FLAC_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
++	-DFLAC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
++	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index c153fed..6cddbf5 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -240,7 +240,15 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	help
+ 	  Enable support for optical drives
  
--# This cset is on the branch 'gotham'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
-+# This cset is on the branch 'master'
-+# When Kodi is released this should be updated to the corresponding branch
-+KODI_PVR_ADDONS_VERSION = 06842b90a383420650bd3e5c5b61acfc3f224d83
- KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
- KODI_PVR_ADDONS_LICENSE = GPLv3+
- KODI_PVR_ADDONS_LICENSE_FILES = COPYING
-@@ -14,7 +14,7 @@ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
- # There's no ./configure in the git tree, we need to generate it
- KODI_PVR_ADDONS_AUTORECONF = YES
+-comment "Kodi addons"
++if BR2_PACKAGE_KODI_OPTICALDRIVE
++
++comment "Kodi audioencoder addons"
++
++source "package/kodi-audioencoder-flac/Config.in"
++
++endif # BR2_PACKAGE_KODI_OPTICALDRIVE
++
++comment "Kodi PVR addons"
  
--KODI_PVR_ADDONS_DEPENDENCIES = boost zlib
-+KODI_PVR_ADDONS_DEPENDENCIES = zlib
- # This really is a runtime dependency, but we need KODI to be installed
- # first, since we'll install files in KODI's directories _after_ KODI has
- # installed its own files
-@@ -24,11 +24,4 @@ KODI_PVR_ADDONS_CONF_OPTS = \
- 	--enable-release \
- 	--enable-addons-with-dependencies
- 
--ifeq ($(BR2_PACKAGE_MYSQL),y)
--KODI_PVR_ADDONS_CONF_OPTS += --enable-mysql
--KODI_PVR_ADDONS_DEPENDENCIES += mysql
--else
--KODI_PVR_ADDONS_CONF_OPTS += --disable-mysql
--endif
--
- $(eval $(autotools-package))
+ source "package/kodi-addon-xvdr/Config.in"
+ source "package/kodi-pvr-addons/Config.in"
 -- 
 1.7.10.4
