@@ -1,72 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Nov 2014 08:30:12 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-11-15
-Message-ID: <20141116073012.7E89F101413@stock.ovh.net>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sun, 16 Nov 2014 00:33:46 -0800
+Subject: [Buildroot] [PATCH v2 00/13] Add Xorg support for imx6
+In-Reply-To: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20141116083345.GA8150@n411z>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-11-15
-===============================
+Jerome,
 
-        success : 144
-       failures : 22 
-       timeouts : 1  
-          TOTAL : 167
+I've been able to build and test this set of patches on my i.MX6Q
+SabreLite board (nitrogen6x defconfig).
+Everything is running fine although I only tried:
+- Starting X server
+- Launching xterm
+- Launching Vivante 3D examples
 
-Classification of failures by reason
-====================================
+Regarding X, I've used the following configuration:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
 
-                      qt-4.8.6 | 2 
-                   libcap-2.24 | 2 
-               sdl_sound-1.0.3 | 2 
-freerdp-440916eae2e07463912... | 1 
-                gptfdisk-0.8.6 | 1 
-libshairplay-64d59e3087f829... | 1 
-               madplay-0.15.2b | 1 
-                     radvd-2.8 | 1 
-                    ola-0.8.33 | 1 
-                  thrift-0.9.1 | 1 
-                     rpm-5.2.0 | 1 
-                 omniorb-4.1.6 | 1 
-           aircrack-ng-1.2-rc1 | 1 
-ltrace-0896ce554f80afdcba81... | 1 
-                 libnss-3.17.2 | 1 
-zmqpp-36413487f05b165dfc82a... | 1 
-               mpdecimal-2.4.0 | 1 
-                 cdrkit-1.1.11 | 1 
-                 clamav-0.98.4 | 1 
-                  prboom-2.5.0 | 1 
+However I have a few questions regarding the patches:
+- 05/13: gpu-viv-bin-mx6q: make fb/x11 choice explicit
+  - Not sure to get the use case here. Are people interested in having
+  fb libs on a X system?
+- 06/13: gpu-viv-bin-mx6q: change output selection mecanism
+  - s/mecanism/mechanism
+  - Are the symbolic links changes related to the output selection? I would
+  have seen this as part of the "04/13: gpu-viv-bin-mx6q: fix GLESv2 support"
+  patch
 
-Detail of failures
-===================
+Other than that it looks good. There's one test I haven't done yet: rebuild a
+system without X making sure 3D is still working.
 
-         arm |            aircrack-ng-1.2-rc1 | NOK | http://autobuild.buildroot.net/results/1ea877851e9d2aeeaf9d320bef12321ec2925b5b/
-         arm |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/7a9eab1087069e84d90a2b2e7a91e770a27b77d3/
-         arm |                  clamav-0.98.4 | NOK | http://autobuild.buildroot.net/results/cffa32fcedda735983d4805d6d4fa77844539b10/
-         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/46f117d808f7085f5a148af68759cf7266ef428e/
-        bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/6f533bf62eec9b3a2b51398c57783a9890d32837/
-     powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/23aac9bb1cc48e5974bcf50256a16c67318f9ba2/
-     powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/597da58cb2fccb92d7883802c60b31264cacad08/
-        i686 |                  libnss-3.17.2 | NOK | http://autobuild.buildroot.net/results/7a0a9f29ae76e241ae22aaefb94fda8fcdb8033b/
-        bfin | libshairplay-64d59e3087f829... | NOK | http://autobuild.buildroot.net/results/281b799b439070e05c2afccc1e3a1279e541adb1/
-         arm | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/67fbd04d6ae187861fa1bf84d3df1877c7be6fb2/
-        bfin |                madplay-0.15.2b | NOK | http://autobuild.buildroot.net/results/3e4a875820846371f91dac41689c511b96d58cd4/
-        bfin |                mpdecimal-2.4.0 | NOK | http://autobuild.buildroot.net/results/ac7b46348d06230ad4def0072c4c3b654dea90aa/
-      x86_64 |                     ola-0.8.33 | NOK | http://autobuild.buildroot.net/results/5e23886bc1319a5d6d078b27f1d00d4b527056e7/
-        bfin |                  omniorb-4.1.6 | NOK | http://autobuild.buildroot.net/results/01f4e8a27831d6817b329fa23fe0bbabd7fd01c9/
-        bfin |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/9ece57507f70c04a0385687597b885c0c2640f7d/
-         arm |                       qt-4.8.6 | TIM | http://autobuild.buildroot.net/results/4a4495d6a88e9d55fe6597fd486b91d92e093294/
-     powerpc |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/98a81cf6510fff2da7dbaf49b4c58dd056e043d3/
-         arc |                      radvd-2.8 | NOK | http://autobuild.buildroot.net/results/3310f27f80bf3f72ddde0ab2dca6a0ef7ddb2b0e/
-         arm |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/75a3904cd15377e56c2bcab408c6ffc7d1a05b4c/
-      mipsel |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/6f5e1b782923d6e69e929466f0ddd3eeba28c6f1/
-         sh4 |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/c1b31dc37fe62cb6901edad02bf50d73072b7cf0/
-        bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/f9be12c50beeec1b4ad04c11a8900bd0a488d149/
-        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/a253879bd082343ff8502508a04443d5b46d8aa9/
+Thanks,
+Gary
 
-
--- 
-http://autobuild.buildroot.net
+On Mon, Oct 13, 2014 at 01:10:10PM +0200, J?r?me Pouiller wrote:
+> Hello,
+> 
+> Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
+> Xorg. This work is mainly adapted from Yocto.
+> 
+> v2:
+>   - Rebase on new version of mesa3d
+>   - Reorder some patches (in order to make examples I provide in commit message 
+>     functional)
+>   - Do not bump version of all freescale packages
+>   - Bump kernel version of imx6 boards
+> 
+> J?r?me Pouiller (13):
+>   mesa3d: Give possibility to external backends to enable DRI/Gallium
+>   gpu-viv-bin-mx6q: provide libopenvg
+>   gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
+>   gpu-viv-bin-mx6q: fix GLESv2 support
+>   gpu-viv-bin-mx6q: make fb/x11 choice explicit
+>   gpu-viv-bin-mx6q: change output selection mecanism
+>   libdrm: fix support for xserver with Vivante drivers
+>   qt5base: fix Vivante x11/EGL configuration
+>   xdriver_xf86-video-imx-viv: new package
+>   Vivante drivers: bump to version 3.10.17-1.0.1
+>   nitrogen6x_defconfig: bump kernel to 3.10.17_1.0.1_ga
+>   freescale_imx6*_defconfig: bump kernel to 3.10.17_1.0.1_ga
+>   qmx6_defconfig: update
+> 
+>  board/congatec/qmx6/6q_bootscript.txt              |  2 -
+>  board/congatec/qmx6/post-build.sh                  |  7 ---
+>  configs/freescale_imx6dlsabresd_defconfig          |  3 +-
+>  configs/freescale_imx6qsabresd_defconfig           |  3 +-
+>  configs/freescale_imx6sololiteevk_defconfig        |  3 +-
+>  configs/nitrogen6x_defconfig                       |  3 +-
+>  configs/qmx6_defconfig                             | 49 +++++++++++++++--
+>  package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 33 +++++++++++-
+>  package/freescale-imx/gpu-viv-bin-mx6q/egl.pc      |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc   |  2 +-
+>  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 43 +++++++--------
+>  package/freescale-imx/gpu-viv-bin-mx6q/vg.pc       |  2 +-
+>  package/libdrm/libdrm-0001-update-arm.patch        | 37 +++++++++++++
+>  package/mesa3d/mesa3d.mk                           |  4 +-
+>  .../qt5base-0001-Force_egl_visual_ID_33.patch      | 23 ++++++++
+>  .../qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch   | 63 ++++++++++++++++++++++
+>  package/x11r7/Config.in                            |  1 +
+>  package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 32 +++++++++++
+>  ...xf86-video-imx-viv-0001-Fix-LoadExtenions.patch | 15 ++++++
+>  .../xdriver_xf86-video-imx-viv.mk                  | 32 +++++++++++
+>  20 files changed, 313 insertions(+), 46 deletions(-)
+>  delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
+>  delete mode 100755 board/congatec/qmx6/post-build.sh
+>  create mode 100644 package/libdrm/libdrm-0001-update-arm.patch
+>  create mode 100644 package/qt5/qt5base/qt5base-0001-Force_egl_visual_ID_33.patch
+>  create mode 100644 package/qt5/qt5base/qt5base-0004-xcb-egl-fixes.patch
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv-0001-Fix-LoadExtenions.patch
+>  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+> 
+> -- 
+> 1.9.1
+> 
