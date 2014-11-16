@@ -1,32 +1,28 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Nov 2014 16:57:31 +0100
-Subject: [Buildroot] [PATCH] package/sdl_sound: do not enable -Werror,
- even in debug mode
-In-Reply-To: <XnsA3E7AB46367CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1416152347-760-1-git-send-email-yann.morin.1998@free.fr>
- <XnsA3E7AB46367CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141116155731.GA10840@free.fr>
+Date: Sun, 16 Nov 2014 16:59:58 +0100
+Subject: [Buildroot] [PATCH] package/aircrack-ng: fix static build
+In-Reply-To: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
+References: <1416150910-5691-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20141116155958.GB10840@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+All,
 
-On 2014-11-16 16:50 +0100, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:1416152347-760-1-git-send-email-yann.morin.1998 at free.fr:
-> 
-> > Add a patch to remove -Werror from configure.in.
-> 
-> a similar patch was rejected by Peter: 
-> http://patchwork.ozlabs.org/patch/400969/
+On 2014-11-16 16:15 +0100, Yann E. MORIN spake thusly:
+> Two fixes in one:
 
-Damned... :-(
+So, why did I not submit two patches?
 
-Thanks for pointing out, I'll mark my patch Rejected in Patchwork (but
-will keep it locally, so I remember to fix this issue).
+Because both fixes are needed to fix the autobuild failures mentioned
+below...
+
+> Fixes:
+>     http://autobuild.buildroot.net/results/1ea/1ea877851e9d2aeeaf9d320bef12321ec2925b5b/
+>     http://autobuild.buildroot.net/results/cdf/cdf0203fc99d5f7e41e508f6d9edb78a0f0ea732/
 
 Regards,
 Yann E. MORIN.
