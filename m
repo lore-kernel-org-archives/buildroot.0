@@ -1,69 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Nov 2014 23:03:00 +0100
-Subject: [Buildroot] [git commit] package/clamav: fix build with uClibc
-Message-ID: <20141116221147.6A2E78912D@busybox.osuosl.org>
+Date: Sun, 16 Nov 2014 23:09:42 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{17, 14, 10}.x series
+Message-ID: <20141116221147.74B398912D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85101d3741991c9d447d7638005ba4d0e945e334
+commit: http://git.buildroot.net/buildroot/commit/?id=2f731e402f4a0bd26497845d120ea595ddb61cf0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-clamav wants to use backtrace, and decides whether it can use it if it
-detects a glibc >= 2.1.
-
-But uClibc does impersonate a glibc >= 2.1, so clamav concludes it is
-possible to use backtrace. So it includes execinfo.h, which is missing
-in our default uClibc config file.
-
-So, just extend the test so that backtrace support is disable on uClibc,
-unless it has been configured with backtrace support.
-
-A far better solution would be to add a ./configure check for backtrace,
-but this patch is sufficient enough.
-
-Fixes:
-    http://autobuild.buildroot.net/results/cff/cffa32fcedda735983d4805d6d4fa77844539b10/
-    http://autobuild.buildroot.net/results/e0a/e0a765a94a538b0b936ea512f7aba0264fac6309/
-    ...
-
-Bugtracker: https://bugzilla.clamav.net/show_bug.cgi?id=11170
-
-[Peter: add bugtracker URL as suggested by Bernd]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav-0003-backtrace-uClibc.patch |   22 +++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/clamav/clamav-0003-backtrace-uClibc.patch b/package/clamav/clamav-0003-backtrace-uClibc.patch
-new file mode 100644
-index 0000000..82ad673
---- /dev/null
-+++ b/package/clamav/clamav-0003-backtrace-uClibc.patch
-@@ -0,0 +1,22 @@
-+mbox: do not use backtrace if using uClibc without backtrace support
-+
-+Since uClibc can be configured without support for backtrace, disable
-+the backtrace if we are building with a uClibc that was built without
-+backtrace.
-+
-+This is a bit hacky, and would greatly benefit from a test in ./configure
-+instead, but does nicely as a quick fix for now.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
-+--- clamav-0.98.4.orig/libclamav/mbox.c	2014-05-21 17:25:05.000000000 +0200
-++++ clamav-0.98.4/libclamav/mbox.c	2014-11-16 17:21:04.885383286 +0100
-+@@ -83,7 +83,7 @@
-+ #include <features.h>
-+ #endif
-+ 
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ >= 1
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 && !defined(__UCLIBC__) || defined(__UCLIBC_HAS_BACKTRACE__)
-+ #define HAVE_BACKTRACE
-+ #endif
-+ #endif
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4169d41..391088f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -165,12 +165,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.64"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.59"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.60"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.32"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.23"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.24"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+-	default "3.17.2"	if BR2_KERNEL_HEADERS_3_17
++	default "3.17.3"	if BR2_KERNEL_HEADERS_3_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
