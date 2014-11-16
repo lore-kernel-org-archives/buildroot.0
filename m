@@ -1,55 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Nov 2014 11:07:14 +0100
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <20141111234919.3178e9d3@free-electrons.com>
-References: <20141111073014.AA83D101626@stock.ovh.net>
- <20141111234919.3178e9d3@free-electrons.com>
-Message-ID: <20141116100714.GB3965@free.fr>
+Date: Sun, 16 Nov 2014 11:52:22 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-15
+In-Reply-To: <20141116073012.7E89F101413@stock.ovh.net>
+References: <20141116073012.7E89F101413@stock.ovh.net>
+Message-ID: <20141116105222.GC3965@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
-On 2014-11-11 23:49 +0100, Thomas Petazzoni spake thusly:
-> >         i486 |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/6ce1ecdf2bf1f14f1497e9960a1b6689568a3658/
-> >      powerpc |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/a990b0deb0269e91bcd7fb008eb40a2e00350114/
-> 
-> This is the same problem twice: uClibc behaving badly when vfork() is
-> used in static linking configurations. This is now fixed for the
-> internal toolchain backend. The first build failure is with an external
-> Crosstool-NG toolchain using uClibc. Yann, what would be your
-> recommendation here? Is it something you intend to fix upstream in
-> Crosstool-NG? Or should I add an exception for this toolchain to not be
-> used in static linking configurations?
+I'm looking at some build failures. One has caught my eyes:
 
-Is that fixed in Buildroot with that patch patch:
-    package/uclibc/0.9.33.2/0062-nptl-remove-duplicate-vfork-in-libpthread.patch
+On 2014-11-16 08:30 +0100, Thomas Petazzoni spake thusly:
+> Detail of failures
+>      powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/23aac9bb1cc48e5974bcf50256a16c67318f9ba2/
+>      powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/597da58cb2fccb92d7883802c60b31264cacad08/
 
-It is not in upstream uClibc yet, so I've pinged them about applying
-that patch.
+That's weird:
 
-I'm a bit warry of carrying patches in crosstool-NG, that are not
-upstream. But uClibc is, well, a special case, isn't it? ;-)
-Maybe I could just vampirise the patches from Buildroot, and be done
-with it.
+    cap_file.c: In function 'cap_get_fd':
+    cap_file.c:190:33: error: 'XATTR_NAME_CAPS' undeclared (first use in this function)
 
-> >         i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/9efc2b14a28fd21ed2ce492f41de538673d13dce/
-> >         i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/0f640d6b701bb854ada2023861a234dfe489f038/
-> >       x86_64 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/c58f7e10a416e0eaf7e49f0bb5ce9e6f85bc1559/
-> >       x86_64 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/5979559734620358a92186a6e67aea46b6034b44/
-> 
-> ERROR: fdt disabled but some requested targets require it.
->        You can turn off fdt only if you also disable all the system emulation
->        targets which need it (by specifying a cut down --target-list).
+XATTR_NAME_CAPS was introduced in Linux 2.6.24, and the toolchain is
+from CodeSourcery, and uses headers from Linux 2.6.38. So
+XATTR_NAME_CAPS ought to be present. But it is not:
 
-O...K... Well, fdt support comes later in my series, and it is a part
-that is not yet applied.
+    $ grep -r XATTR_NAME_CAPS freescale-2011.03
+    [--nothing, zilch, nada, keudale--]
 
-I'll see to re-order the series to be able to just submit the FDT part,
-before the release.
+Grr... :-(
+
+So, I would be inclined on making libcap require headers >= 3.0 anyway.
+But that has to be propagated to a few packages:
+
+    cdrkit, lxc, ofono, squid (and systemd, but it already requires
+    headers >=3.7 anyway)
+
+Thoughts?
 
 Regards,
 Yann E. MORIN.
