@@ -1,33 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Nov 2014 12:06:56 +0100
-Subject: [Buildroot] [git commit branch/next] package: add python-flask
-In-Reply-To: <CAGm1_kt07ZeBvX2td3U6gL-B4UgbQoPjtX-KpuYYrC=jS5r64w@mail.gmail.com>
- (Yegor Yefremov's message of "Mon, 17 Nov 2014 12:03:06 +0100")
-References: <20141114180459.3437FB24FE@busybox.osuosl.org>
- <CAGm1_kvTiycx_zKDVju6cRu_6H4748zBYwU-3c_i=HP97CamBA@mail.gmail.com>
- <CAGm1_ks7J8U5HHLXz5V46PiD34LBSbj=+NMAT87gh_LaVQA6EA@mail.gmail.com>
- <878ujacdp6.fsf@dell.be.48ers.dk>
- <CAGm1_kt07ZeBvX2td3U6gL-B4UgbQoPjtX-KpuYYrC=jS5r64w@mail.gmail.com>
-Message-ID: <874mtycchb.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon, 17 Nov 2014 12:41:56 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nodejs: remove config options
+	--without-ssl2 and --without-ssl3
+In-Reply-To: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
+References: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
+Message-ID: <1416224516-6065-2-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+The config options --without-ssl2 and --without-ssl3 are intended to be used if
+nodejs is build with the bundled OpenSSL library for excluding the SSL2 and 
+SSL3 features.
 
- >> 
- >> >> werkzeug itself is working, at least I can import it.
- >> 
- >> > http://jinja.pocoo.org/docs/dev/intro/#markupsafe-dependency is missing.
- >> 
- >> Ahh, thanks - I'll add it.
+Both options are actual only evaluated if --without-ssl is not set:
 
- > And while you look at this, could you also take a look at this patch:
- > http://patchwork.ozlabs.org/patch/409779/
+$ cat configure | grep configure_openssl -n -A 13 
+619:def configure_openssl(o):
+620-  o['variables']['node_use_openssl'] = b(not options.without_ssl)
+621-  o['variables']['node_shared_openssl'] = b(options.shared_openssl)
+622-  o['variables']['openssl_no_asm'] = (
+623-    1 if options.openssl_no_asm else 0)
+624- 
+625-  if options.without_ssl:
+626-    return
+627-
+628-  if options.ssl2:
+629-    o['defines'] += ['OPENSSL_NO_SSL2=1']
+630-
+631-  if options.ssl3:
+632-    o['defines'] += ['OPENSSL_NO_SSL3=1']
 
-Yes, I will.
+This patch reverts commit e712638b4adc6e18b3ce99ab37b94530e9aa786f which does
+not help to fix the build errors, eg.:
+http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
 
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/nodejs/nodejs.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 32e19b7..312aaa9 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -75,8 +75,7 @@ define NODEJS_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--without-snapshot \
+ 		--shared-zlib \
+-		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,\
+-			--without-ssl --without-ssl2 --without-ssl3) \
++		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+ 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+ 		--without-dtrace \
+ 		--without-etw \
 -- 
-Bye, Peter Korsgaard 
+2.1.3
