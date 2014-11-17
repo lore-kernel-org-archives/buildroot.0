@@ -1,45 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 17 Nov 2014 10:39:26 +0000
-Subject: [Buildroot] [PATCH] package/sdl_sound: do not enable -Werror,
- even in debug mode
-In-Reply-To: <20141116155731.GA10840@free.fr>
-References: <1416152347-760-1-git-send-email-yann.morin.1998@free.fr>
- <XnsA3E7AB46367CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20141116155731.GA10840@free.fr>
-Message-ID: <5469D05E.9090905@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Nov 2014 11:39:56 +0100
+Subject: [Buildroot] [git commit branch/next] package: add python-flask
+In-Reply-To: <CAGm1_kvTiycx_zKDVju6cRu_6H4748zBYwU-3c_i=HP97CamBA@mail.gmail.com>
+ (Yegor Yefremov's message of "Mon, 17 Nov 2014 08:53:00 +0100")
+References: <20141114180459.3437FB24FE@busybox.osuosl.org>
+ <CAGm1_kvTiycx_zKDVju6cRu_6H4748zBYwU-3c_i=HP97CamBA@mail.gmail.com>
+Message-ID: <87d28mcdqb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/16/2014 03:57 PM, Yann E. MORIN wrote:
-> Bernd, All,
-> 
-> On 2014-11-16 16:50 +0100, Bernd Kuhls spake thusly:
->> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
->> news:1416152347-760-1-git-send-email-yann.morin.1998 at free.fr:
->>
->>> Add a patch to remove -Werror from configure.in.
->>
->> a similar patch was rejected by Peter: 
->> http://patchwork.ozlabs.org/patch/400969/
-> 
-> Damned... :-(
-> 
-> Thanks for pointing out, I'll mark my patch Rejected in Patchwork (but
-> will keep it locally, so I remember to fix this issue).
-> 
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-It also was reported upstream, so, if you fix it, please consider
-sending a patch to upstream as well:
+ > Hi Peter,
+ > On Fri, Nov 14, 2014 at 7:00 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=541d9452237ba5fc00a42a0a7e4019518d7ec4ce
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
+ > when trying to import flask with at least Python 2.7.8 I get following error:
 
+ >>>> from flask import Flask
+ > Traceback (most recent call last):
+ >   File "<stdin>", line 1, in <module>
+ >   File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/flask/__init__.py",
+ > line 19, in <module>
+ >   File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/__init__.py",
+ > line 33, in <module>
+ >   File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/environment.py",
+ > line 13, in <module>
+ >   File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/nodes.py",
+ > line 18, in <module>
+ >   File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/utils.py",
+ > line 520, in <module>
+ > ImportError: No module named markupsafe
+
+ > werkzeug itself is working, at least I can import it.
+
+Sorry, I only got to runtime test the first deps, not flash. To my
+defense it was Friday afternoon :P
+
+I'll look into it.
 
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Bye, Peter Korsgaard 
