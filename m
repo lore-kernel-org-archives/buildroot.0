@@ -1,42 +1,62 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 17 Nov 2014 08:53:00 +0100
-Subject: [Buildroot] [git commit branch/next] package: add python-flask
-In-Reply-To: <20141114180459.3437FB24FE@busybox.osuosl.org>
-References: <20141114180459.3437FB24FE@busybox.osuosl.org>
-Message-ID: <CAGm1_kvTiycx_zKDVju6cRu_6H4748zBYwU-3c_i=HP97CamBA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 17 Nov 2014 10:18:15 +0200
+Subject: [Buildroot] [PATCH 2/3] live555: add support for building dynamic
+	libraries
+In-Reply-To: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
+References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
+Message-ID: <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/live555/live555.mk | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-On Fri, Nov 14, 2014 at 7:00 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=541d9452237ba5fc00a42a0a7e4019518d7ec4ce
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-when trying to import flask with at least Python 2.7.8 I get following error:
-
->>> from flask import Flask
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/flask/__init__.py",
-line 19, in <module>
-  File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/__init__.py",
-line 33, in <module>
-  File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/environment.py",
-line 13, in <module>
-  File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/nodes.py",
-line 18, in <module>
-  File "home/user/Documents/versioned/br-test/bsp/target/usr/lib/python2.7/site-packages/jinja2/utils.py",
-line 520, in <module>
-ImportError: No module named markupsafe
-
-werkzeug itself is working, at least I can import it.
-
-Any idea?
-
-Yegor
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 8c31a086559b..b923388de0fd 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -13,18 +13,30 @@ LIVE555_INSTALL_STAGING = YES
+ 
+ LIVE555_CFLAGS = $(TARGET_CFLAGS)
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++LIVE555_CONFIG_TARGET = linux
++LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
++else
++LIVE555_CONFIG_TARGET = linux-with-shared-libraries
++LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
++endif
++
+ ifndef ($(BR2_ENABLE_LOCALE),y)
+ LIVE555_CFLAGS += -DLOCALE_NOT_USED
+ endif
+ 
+ define LIVE555_CONFIGURE_CMDS
+-	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
+-	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
+-	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
+-	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
+-	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
+-	echo 'PREFIX = /usr' >> $(@D)/config.linux
+-	(cd $(@D); ./genMakefiles linux)
++	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++
++	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'PREFIX = /usr' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
++	# fails
++	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
+ endef
+ 
+ define LIVE555_BUILD_CMDS
+-- 
+2.1.3
