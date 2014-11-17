@@ -1,11 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 17 Nov 2014 18:38:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: remove config options
- --without-ssl2 and --without-ssl3
-In-Reply-To: <1416224516-6065-2-git-send-email-jkrause@posteo.de>
+Date: Mon, 17 Nov 2014 18:43:50 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: fix build error without
+ OpenSSL support
+In-Reply-To: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
 References: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
- <1416224516-6065-2-git-send-email-jkrause@posteo.de>
-Message-ID: <CAHkwnC-=E2-MdUUmu7Q7m_fJ0OH+BfwbCudwsjwPNZE_rEDdjQ@mail.gmail.com>
+Message-ID: <CAHkwnC9Ue-JTijafq76z7oCQ+Rc5GSrdxhgttxZ3UM76iT7qZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +12,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Mon, Nov 17, 2014 at 12:41 PM, J?rg Krause <jkrause@posteo.de> wrote:
-> The config options --without-ssl2 and --without-ssl3 are intended to be used if
-> nodejs is build with the bundled OpenSSL library for excluding the SSL2 and
-> SSL3 features.
+> Add a patch to fix broken build of nodejs without OpenSSL support.
 >
-> Both options are actual only evaluated if --without-ssl is not set:
+> Version 0.10.33 of nodejs introduced a bug which prevents us from building
+> nodejs without OpenSSL support. The bug is reported upstream:
+> https://github.com/joyent/node/issues/8676
 >
-> $ cat configure | grep configure_openssl -n -A 13
-> 619:def configure_openssl(o):
-> 620-  o['variables']['node_use_openssl'] = b(not options.without_ssl)
-> 621-  o['variables']['node_shared_openssl'] = b(options.shared_openssl)
-> 622-  o['variables']['openssl_no_asm'] = (
-> 623-    1 if options.openssl_no_asm else 0)
-> 624-
-> 625-  if options.without_ssl:
-> 626-    return
-> 627-
-> 628-  if options.ssl2:
-> 629-    o['defines'] += ['OPENSSL_NO_SSL2=1']
-> 630-
-> 631-  if options.ssl3:
-> 632-    o['defines'] += ['OPENSSL_NO_SSL3=1']
+> This bug caused some build errors:
+>   * http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
+>   * http://autobuild.buildroot.net/results/e1f/e1fb34818ff1167aa008b4011befb9fd14c81293/
 >
-> This patch reverts commit e712638b4adc6e18b3ce99ab37b94530e9aa786f which does
-> not help to fix the build errors, eg.:
-> http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
+> and more...
 >
 > Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Have you sent this patch upstream?
 
-My fault for sending that patch, i was sure to have tested it well.
-
-Thanks
+Thanks and BR
 -- 
 Fabio Porcedda
