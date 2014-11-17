@@ -1,44 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Nov 2014 22:48:21 +0100
-Subject: [Buildroot] [PATCH v3 1/5] Makefile: don't depend on the umask
-In-Reply-To: <546A6BA0.2000500@mind.be>
+Date: Mon, 17 Nov 2014 22:49:27 +0100
+Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
+	instead of cp
+In-Reply-To: <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
 References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-2-git-send-email-guido@vanguardiasur.com.ar>
- <20141117213645.GE12473@free.fr> <546A6BA0.2000500@mind.be>
-Message-ID: <20141117214821.GI12473@free.fr>
+ <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20141117214927.GJ12473@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Guido, All,
 
-On 2014-11-17 22:41 +0100, Arnout Vandecappelle spake thusly:
-> On 17/11/14 22:36, Yann E. MORIN wrote:
-> > On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
-[--SNIP--]
-> >> +all:
-> >> +	@umask $(UMASK) && make --no-print-directory
-[--SNIP--]
-> > I'm not too fond of --no-print-directory, because it is gonna be
-> > inherited by all sub-makes, and especially the sub-makes that actually
-> > build the packages. I don't care we have an extra "Entering directory"
-> > message.
+On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
+> in order to not depend on the previous permissions of the file
 > 
->  Note that the generated Makefile in $(O) does add --no-print-directory...
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-And guess who added that generated file?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-    # git blame support/scripts/mkmakefile
-    [...]
-    aefad531 scripts/mkmakefile         (Yann E. MORIN    2010-09-26 10:56:12 +0200 31) MAKEFLAGS += --no-print-directory
-    [...]
+But see a comment below...
 
-Ok, Ok. :-)
+> ---
+>  package/linux-fusion/linux-fusion.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+> index c5e7976..001388c 100644
+> --- a/package/linux-fusion/linux-fusion.mk
+> +++ b/package/linux-fusion/linux-fusion.mk
+> @@ -36,8 +36,8 @@ define LINUX_FUSION_INSTALL_TARGET_CMDS
+>  		$(LINUX_FUSION_MAKE_OPTS) \
+>  		INSTALL_MOD_PATH=$(TARGET_DIR) \
+>  		-C $(@D) install
+> -	mkdir -p $(LINUX_FUSION_ETC_DIR)
+> -	cp -dpf package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
+> +	$(INSTALL) -D -m 644 package/linux-fusion/40-fusion.rules \
+> +		$(LINUX_FUSION_ETC_DIR)/40-fusion.rules
+
+Here, you used a correct construct when calling isntall. ;-)
 
 Regards,
 Yann E. MORIN.
+
+>  endef
+>  
+>  $(eval $(generic-package))
+> -- 
+> 2.1.3
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
