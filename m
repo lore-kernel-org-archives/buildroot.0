@@ -1,65 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Nov 2014 23:06:05 +0100
-Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
- instead of cp
-In-Reply-To: <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <546A714D.3040402@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 17 Nov 2014 19:12:33 -0300
+Subject: [Buildroot] [PATCH] package/gcc: use correct symbol for powerpc
+	version mask
+Message-ID: <1416262353-17117-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/11/14 18:19, Guido Mart?nez wrote:
-> in order to not depend on the previous permissions of the file
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gcc/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- There are a few more suspicious cp instances:
-
-board/boundarydevices/nitrogen6x/post-build.sh
-boot/grub/grub.mk
-fs/iso9660/iso9660.mk
-
-
- Also, it would be good to document somewhere (e.g. in the intro mail) why the
-rsync in the toolchain is OK. Or even better, replace it even though it's not
-really necessary - it just feels more consistent and safe.
-
-
- Regards,
- Arnout
-
-> ---
->  package/linux-fusion/linux-fusion.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-> index c5e7976..001388c 100644
-> --- a/package/linux-fusion/linux-fusion.mk
-> +++ b/package/linux-fusion/linux-fusion.mk
-> @@ -36,8 +36,8 @@ define LINUX_FUSION_INSTALL_TARGET_CMDS
->  		$(LINUX_FUSION_MAKE_OPTS) \
->  		INSTALL_MOD_PATH=$(TARGET_DIR) \
->  		-C $(@D) install
-> -	mkdir -p $(LINUX_FUSION_ETC_DIR)
-> -	cp -dpf package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
-> +	$(INSTALL) -D -m 644 package/linux-fusion/40-fusion.rules \
-> +		$(LINUX_FUSION_ETC_DIR)/40-fusion.rules
->  endef
->  
->  $(eval $(generic-package))
-> 
-
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index de40c63..3bccf36 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -30,7 +30,7 @@ choice
+ 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
+ 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+-		depends on !BR2_power8
++		depends on !BR2_powerpc_power8
+ 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
+ 		depends on !BR2_sparc_leon3
+ 		# Broken or unsupported X86 cores
+@@ -49,7 +49,7 @@ choice
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+-		depends on !BR2_power8
++		depends on !BR2_powerpc_power8
+ 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
+ 		depends on !BR2_sparc_leon3
+ 		# Broken or unsupported x86 cores
+@@ -64,7 +64,7 @@ choice
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12
+ 		# Broken or unsupported PPC cores
+-		depends on !BR2_power8
++		depends on !BR2_powerpc_power8
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.4
