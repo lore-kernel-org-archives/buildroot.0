@@ -1,95 +1,48 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon, 17 Nov 2014 12:41:55 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: fix build error without
-	OpenSSL support
-Message-ID: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 17 Nov 2014 14:33:15 +0200
+Subject: [Buildroot] [PATCH] wireshark: remove RPATH tag
+In-Reply-To: <20141105083124.57a5d559@free-electrons.com>
+References: <0dae86e37516236d337e8433c63047504f1576f9.1415126141.git.baruch@tkos.co.il>
+ <20141105081555.5aca83e2@free-electrons.com>
+ <20141105072214.GL2358@sapphire.tkos.co.il>
+ <20141105083124.57a5d559@free-electrons.com>
+Message-ID: <20141117123315.GG2196@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix broken build of nodejs without OpenSSL support.
+Hi Thomas,
 
-Version 0.10.33 of nodejs introduced a bug which prevents us from building
-nodejs without OpenSSL support. The bug is reported upstream:
-https://github.com/joyent/node/issues/8676
+On Wed, Nov 05, 2014 at 08:31:24AM +0100, Thomas Petazzoni wrote:
+> On Wed, 5 Nov 2014 09:22:14 +0200, Baruch Siach wrote:
+> 
+> > > Isn't this problem potentially identical in many packages that use
+> > > libtool? What leads the wireshark libtool to have this specifically?
+> > 
+> > Probably. The Buildorot speex package does an almost identical edit to its own 
+> > libtool. Do you think we should enable this for all libtool users? We'll only 
+> > know if anything breaks at run time.
+> 
+> Well, not having a rpath should not break things at runtime, unless a
+> custom rpath is really necessary. But I'm pretty sure in those cases,
+> the custom rpath will be wrong as it will point to some location on the
+> build machine.
+> 
+> What would be good is to understand why in certain situations libtool
+> decides to set a rpath and not in other cases.
 
-This bug caused some build errors:
-  * http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
-  * http://autobuild.buildroot.net/results/e1f/e1fb34818ff1167aa008b4011befb9fd14c81293/
+It seems that libtool decides to set rpath based on .la files we have in 
+staging. Some of them (e.g. glib provided libs, and libnl) set either 
+'dependency_libs' (glib) or 'libdir' (libnl) to paths under output/build or 
+staging. wireshark also links its own libraries (e.g. wiretap, epan) using 
+local source tree .la files. I'm not sure how to solve this in the general 
+case. It probably requires fixing up all these .la files.
 
-and more...
+baruch
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
-Changes v1 -> v2:
-  - patch nodejs to allow building without OpenSSL support (Thomas)
-  - adapt commit log
----
- ...4-fix-build-error-without-OpenSSL-support.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/nodejs/nodejs-0004-fix-build-error-without-OpenSSL-support.patch
-
-diff --git a/package/nodejs/nodejs-0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/nodejs-0004-fix-build-error-without-OpenSSL-support.patch
-new file mode 100644
-index 0000000..9d41516
---- /dev/null
-+++ b/package/nodejs/nodejs-0004-fix-build-error-without-OpenSSL-support.patch
-@@ -0,0 +1,54 @@
-+From d9acdddb42aef48a9504368019beb1ad91c9a0c4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-+Date: Mon, 17 Nov 2014 12:34:05 +0100
-+Subject: [PATCH 1/1] src/node.cc: fix build error without OpenSSL support
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: J?rg Krause <jkrause@posteo.de>
-+---
-+ src/node.cc | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/node.cc b/src/node.cc
-+index 18c743f..cb77f08 100644
-+--- a/src/node.cc
-++++ b/src/node.cc
-+@@ -82,7 +82,6 @@ typedef int mode_t;
-+ #include "node_script.h"
-+ #include "v8_typed_array.h"
-+ 
-+-#include "node_crypto.h"
-+ #include "util.h"
-+ 
-+ using namespace v8;
-+@@ -2544,8 +2543,10 @@ static void PrintHelp() {
-+          "  --trace-deprecation  show stack traces on deprecations\n"
-+          "  --v8-options         print v8 command line options\n"
-+          "  --max-stack-size=val set max v8 stack size (bytes)\n"
-++#if HAVE_OPENSSL
-+          "  --enable-ssl2        enable ssl2\n"
-+          "  --enable-ssl3        enable ssl3\n"
-++#endif
-+          "\n"
-+          "Environment variables:\n"
-+ #ifdef _WIN32
-+@@ -2579,12 +2580,14 @@ static void ParseArgs(int argc, char **argv) {
-+       p = 1 + strchr(arg, '=');
-+       max_stack_size = atoi(p);
-+       argv[i] = const_cast<char*>("");
-++#if HAVE_OPENSSL
-+     } else if (strcmp(arg, "--enable-ssl2") == 0) {
-+       SSL2_ENABLE = true;
-+       argv[i] = const_cast<char*>("");
-+     } else if (strcmp(arg, "--enable-ssl3") == 0) {
-+       SSL3_ENABLE = true;
-+       argv[i] = const_cast<char*>("");
-++#endif
-+     } else if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
-+       PrintHelp();
-+       exit(0);
-+-- 
-+2.1.3
-+
 -- 
-2.1.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
