@@ -1,42 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Nov 2014 15:18:29 +0100
-Subject: [Buildroot] [git commit] python-werkzeug: needs python zlib support
-Message-ID: <20141201104835.8D7537FFF8@busybox.osuosl.org>
+Date: Mon, 17 Nov 2014 17:06:54 +0100
+Subject: [Buildroot] [git commit] python-webpy: add new package
+Message-ID: <20141201104835.B13C97FFFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82e23f15a11c2cd66d0f6c6397906663c9c9e1d7
+commit: http://git.buildroot.net/buildroot/commit/?id=a6f0cfa51fc5b0480779885a00d67c1a36e77947
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise import fails:
-
->>> import werkzeug
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python2.7/site-packages/werkzeug/__init__.py", line 154, in <module>
-  File "/usr/lib/python2.7/site-packages/werkzeug/exceptions.py", line 71, in <module>
-  File "/usr/lib/python2.7/site-packages/werkzeug/wrappers.py", line 35, in <module>
-  File "/usr/lib/python2.7/site-packages/werkzeug/formparser.py", line 21, in <module>
-  File "/usr/lib/python2.7/site-packages/werkzeug/wsgi.py", line 17, in <module>
-ImportError: No module named zlib
-
+[Peter: drop redundant python|python3 dependency]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-werkzeug/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in                    |    1 +
+ package/python-webpy/Config.in       |    7 +++++++
+ package/python-webpy/python-webpy.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-werkzeug/Config.in b/package/python-werkzeug/Config.in
-index 2097d6e..79e9a45 100644
---- a/package/python-werkzeug/Config.in
-+++ b/package/python-werkzeug/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_WERKZEUG
- 	bool "python-werkzeug"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  Werkzeug is a WSGI utility library for Python. It's widely
- 	  used and BSD licensed.
+diff --git a/package/Config.in b/package/Config.in
+index 92af942..1d132af 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -527,6 +527,7 @@ menu "external python modules"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
++	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
+ endmenu
+ endif
+diff --git a/package/python-webpy/Config.in b/package/python-webpy/Config.in
+new file mode 100644
+index 0000000..1e90892
+--- /dev/null
++++ b/package/python-webpy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_WEBPY
++	bool "python-webpy"
++	help
++	  web.py is a web framework for Python that is as simple as it is
++	  powerful.
++
++	  http://webpy.org/
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+new file mode 100644
+index 0000000..ef5b6b3
+--- /dev/null
++++ b/package/python-webpy/python-webpy.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-webpy
++#
++################################################################################
++
++PYTHON_WEBPY_VERSION = 0.37
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
++PYTHON_WEBPY_SETUP_TYPE = distutils
++PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
++PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
++
++$(eval $(python-package))
