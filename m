@@ -1,97 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Nov 2014 22:41:52 +0100
-Subject: [Buildroot] [PATCH v3 1/5] Makefile: don't depend on the umask
-In-Reply-To: <20141117213645.GE12473@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Nov 2014 22:44:46 +0100
+Subject: [Buildroot] [PATCH v3 4/5] package: matchbox-keyboard: use
+ install instead of cp
+In-Reply-To: <1416244750-24256-5-git-send-email-guido@vanguardiasur.com.ar>
 References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-2-git-send-email-guido@vanguardiasur.com.ar>
- <20141117213645.GE12473@free.fr>
-Message-ID: <546A6BA0.2000500@mind.be>
+ <1416244750-24256-5-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20141117214446.GH12473@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/11/14 22:36, Yann E. MORIN wrote:
-> Guido, All,
-> 
-> On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
->> Some packages and BR itself create files and directories on the target
->> with cp/mkdir/etc which depend on the umask at the time of building.
->>
->> To fix this, use a trick inside the Makefile which wraps all rules when
->> the umask is not 0022. This sets the umask at the top level, and then
->> the building process continues as usual.
->>
->> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
->> ---
->>  Makefile | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
->>
->> diff --git a/Makefile b/Makefile
->> index 471edf9..5ad8235 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -24,6 +24,19 @@
->>  # You shouldn't need to mess with anything beyond this point...
->>  #--------------------------------------------------------------
->>  
->> +# Trick for always running with a fixed umask
->> +UMASK=0022
->> +ifneq ($(shell umask),$(UMASK))
->> +.PHONY:*
->> +
->> +all:
->> +	@umask $(UMASK) && make --no-print-directory
-> 
-> You should use $(MAKE) instead of just 'make'.
-> 
-> I'm not too fond of --no-print-directory, because it is gonna be
-> inherited by all sub-makes, and especially the sub-makes that actually
-> build the packages. I don't care we have an extra "Entering directory"
-> message.
+Guido, All,
 
- Note that the generated Makefile in $(O) does add --no-print-directory...
+On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
+> in order to not depend on the previous permissions of the file
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> index ebf23e4..48a50de 100644
+> --- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> +++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> @@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+>  MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+>  
+>  define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+> -	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+> +	$(INSTALL) -m 0755 ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
 
+This should be:
 
- Regards,
- Arnout
+    $(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
+                          $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
 
-> 
-> Also, did you check how that plays with top-level parallel builds? I'm
-> not too fond of it, but some users want to use it. See the comment a bit
-> further in the Makefile.
-> 
->> +
->> +%:
->> +	@umask $(UMASK) && make --no-print-directory $@
-> 
-> Ditto.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> +else # umask
->> +
->>  # This is our default rule, so must come first
->>  all:
->>  
->> @@ -932,3 +945,5 @@ include docs/manual/manual.mk
->>  -include $(BR2_EXTERNAL)/docs/*/*.mk
->>  
->>  .PHONY: $(noconfig_targets)
->> +
->> +endif #umask
->> -- 
->> 2.1.3
->>
-> 
+That is:
+  - full path to the destination file. Otherwise, if $(TARGET_DIR)/usr/bin
+    does not exist (in case of a custom skeleton, for example),
+    'install' will create a file named "$(TARGET_DIR)/usr/bin" instead
+    of creating a directory and copying into it;
+  - the leading ./ to the source is not needed.
 
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  
+>  MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+> -- 
+> 2.1.3
+> 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
