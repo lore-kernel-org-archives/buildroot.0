@@ -1,85 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Nov 2014 00:11:51 +0100
-Subject: [Buildroot] [git commit] package/libunwind: link to libgcc_s,
-	not libgcc
-Message-ID: <20141116232647.96D119D52D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Nov 2014 08:30:11 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-11-16
+Message-ID: <20141117073011.49648100E0B@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=261d8bfcd70542da9275f401c9981c16b7290686
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Build statistics for 2014-11-16
+===============================
 
-Backport a fix from upstream to link against libgcc_s instead of libgcc.
+        success : 156
+       failures : 18 
+       timeouts : 1  
+          TOTAL : 175
 
-Fixes ltrace build failures:
-    http://autobuild.buildroot.net/results/a0c/a0c132f8cdea2c34ceff27606764a60c2853f644/
-    http://autobuild.buildroot.net/results/67f/67fbd04d6ae187861fa1bf84d3df1877c7be6fb2/
-    http://autobuild.buildroot.net/results/0ca/0ca564101b870e5953acb66ac832ce9e23198392/
-    ...
+Classification of failures by reason
+====================================
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...isable-tests.patch => 0001-disable-tests.patch} |    0
- ...dd-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch} |    0
- ...-libunwind-to-libgcc_s-rather-than-libgcc.patch |   41 ++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
+                 clamav-0.98.4 | 2 
+                   libcap-2.24 | 2 
+                   mutt-1.5.23 | 1 
+                xapp_xfs-1.1.4 | 1 
+                  libv4l-1.6.0 | 1 
+                  tstools-1_11 | 1 
+make: *** wait: No child pr... | 1 
+                inadyn-1.99.12 | 1 
+           libmemcached-1.0.18 | 1 
+                    fltk-1.3.2 | 1 
+                rt-tests-v0.89 | 1 
+ltrace-0896ce554f80afdcba81... | 1 
+                poppler-0.24.4 | 1 
+                gptfdisk-0.8.6 | 1 
+                   duma-2.5.15 | 1 
+                  python-2.7.8 | 1 
+                libcurl-7.39.0 | 1 
 
-diff --git a/package/libunwind/libunwind-01-disable-tests.patch b/package/libunwind/0001-disable-tests.patch
-similarity index 100%
-rename from package/libunwind/libunwind-01-disable-tests.patch
-rename to package/libunwind/0001-disable-tests.patch
-diff --git a/package/libunwind/libunwind-02-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch b/package/libunwind/0002-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch
-similarity index 100%
-rename from package/libunwind/libunwind-02-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch
-rename to package/libunwind/0002-Add-AO_REQUIRE_CAS-to-fix-build-on-ARM-v6.patch
-diff --git a/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch b/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch
-new file mode 100644
-index 0000000..7ea2512
---- /dev/null
-+++ b/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch
-@@ -0,0 +1,41 @@
-+From f1684379dfaf8018d5d4c1945e292a56d0fab245 Mon Sep 17 00:00:00 2001
-+From: Thierry Reding <treding@nvidia.com>
-+Date: Fri, 27 Jun 2014 08:40:33 +0200
-+Subject: [PATCH] Link libunwind to libgcc_s rather than libgcc
-+
-+For some architectures, -lgcc and -lgcc_s are not equivalent. On ARM for
-+example, libgcc_s.so.1 contains some symbols needed by libunwind which
-+are not present in libgcc.
-+
-+This causes the following link error when building the X.Org X server
-+with libunwind support:
-+
-+	  CCLD     Xorg
-+	/usr/lib/libunwind.so: undefined reference to `__aeabi_unwind_cpp_pr0'
-+	/usr/lib/libunwind.so: undefined reference to `__aeabi_unwind_cpp_pr1'
-+
-+Linking against libgcc_s explicitly solves this problem.
-+
-+Signed-off-by: Thierry Reding <treding@nvidia.com>
-+[yann.morin.1998 at free.fr: backport to libunwind 1.1]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4e2fd23..a77cf01 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -258,7 +258,7 @@ else
-+ 
-+ if test x$GCC = xyes -a x$intel_compiler != xyes; then
-+   CFLAGS="${CFLAGS} -fexceptions -Wall -Wsign-compare"
-+-  LIBCRTS="-lgcc"
-++  LIBCRTS="-lgcc_s"
-+ fi
-+ AC_MSG_RESULT([$intel_compiler])
-+ 
-+-- 
-+1.9.1
-+
+Detail of failures
+===================
+
+     powerpc |                  clamav-0.98.4 | NOK | http://autobuild.buildroot.net/results/6d09379aaba0ccddddfee9e319b84687012fd5fc/
+         arm |                  clamav-0.98.4 | NOK | http://autobuild.buildroot.net/results/d2310a2f265e7d22c025a61e064a3c29dc6213ef/
+         arm |                    duma-2.5.15 | NOK | http://autobuild.buildroot.net/results/3c7a4751c7ca71ad429c2d67f380aa225f151350/
+      x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/f8bd8ff93f16cd9ff71905f1cc995b293afa537c/
+        bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/f0c11cf454446018742a3bb29c75bc81b378f28b/
+       nios2 |                 inadyn-1.99.12 | NOK | http://autobuild.buildroot.net/results/f6542d03ae7eb379fbf2aa0c2fbed9034b338356/
+     powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/e909ca48ad2d1c85b19258f65e0c89a2813ac45e/
+     powerpc |                    libcap-2.24 | NOK | http://autobuild.buildroot.net/results/f5e504fbf9f963f5b9bb8095a36dff657db7d307/
+        bfin |                 libcurl-7.39.0 | NOK | http://autobuild.buildroot.net/results/e00796a05ac931afee9d98f6724440d91ce18833/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/9617ec299698e951c5ca50bad5d5fc898c5535b2/
+     powerpc |                   libv4l-1.6.0 | NOK | http://autobuild.buildroot.net/results/ff7977c1cea0edfd230e12b74fc2c34bac7a0e4e/
+         arm | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/a0c132f8cdea2c34ceff27606764a60c2853f644/
+    mips64el | make: *** wait: No child pr... | TIM | http://autobuild.buildroot.net/results/2c108e0c765ed9d41fc15f45770f55dde7e9e520/
+     powerpc |                    mutt-1.5.23 | NOK | http://autobuild.buildroot.net/results/73b8c54ca41cc475594c24a8d6176d511dcb85e6/
+        bfin |                 poppler-0.24.4 | NOK | http://autobuild.buildroot.net/results/f8413ed72095e254c2d322dec905cfa427061295/
+     powerpc |                   python-2.7.8 | NOK | http://autobuild.buildroot.net/results/4460bdddcc3633abb9f5f48fad1bf42917600ee3/
+        bfin |                 rt-tests-v0.89 | NOK | http://autobuild.buildroot.net/results/a8645e8c41a5f4f57ec39f472d264578f47fc5d0/
+      x86_64 |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/b13d31a8a915a740386befb018f859d3df5e9c35/
+microblazeel |                 xapp_xfs-1.1.4 | NOK | http://autobuild.buildroot.net/results/1c3fda0724689ec7321c849dc36ea104894629a8/
+
+
+-- 
+http://autobuild.buildroot.net
