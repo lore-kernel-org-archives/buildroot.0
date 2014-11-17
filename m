@@ -1,36 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Nov 2014 19:15:41 +0100
-Subject: [Buildroot] [PATCH] package/rpm: add missing kconfig dependency to
-	zlib
-Message-ID: <1416248141-10766-1-git-send-email-yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 17 Nov 2014 20:38:50 +0200
+Subject: [Buildroot] [PATCH] libgcrypt: link to a more informative homepage
+Message-ID: <560438622c9e2d6313ef31c33d56fae1208987e2.1416249530.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we build-depend on zlib, forcibly select it from kconfig.
-
-This went unnoticed so far, because we did select openssl which
-in turn selects zlib. But rpm needs zlib for itself, too.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/rpm/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libgcrypt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 2492616..620eb1a 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_RPM
- 	select BR2_PACKAGE_NEON_XML
- 	select BR2_PACKAGE_NEON_ZLIB
- 	select BR2_PACKAGE_NEON_SSL
-+	select BR2_PACKAGE_ZLIB
+diff --git a/package/libgcrypt/Config.in b/package/libgcrypt/Config.in
+index 55d2f170cd36..dd8f270116a7 100644
+--- a/package/libgcrypt/Config.in
++++ b/package/libgcrypt/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBGCRYPT
  	help
- 	  The RPM package management system.
+ 	  LibGCrypt is GNU's basic cryptographic library.
  
+-	  ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
++	  http://www.gnu.org/software/libgcrypt/
 -- 
-1.9.1
+2.1.3
