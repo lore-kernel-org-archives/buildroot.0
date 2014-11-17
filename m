@@ -1,59 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Nov 2014 22:44:46 +0100
-Subject: [Buildroot] [PATCH v3 4/5] package: matchbox-keyboard: use
- install instead of cp
-In-Reply-To: <1416244750-24256-5-git-send-email-guido@vanguardiasur.com.ar>
+Date: Mon, 17 Nov 2014 22:48:21 +0100
+Subject: [Buildroot] [PATCH v3 1/5] Makefile: don't depend on the umask
+In-Reply-To: <546A6BA0.2000500@mind.be>
 References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-5-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20141117214446.GH12473@free.fr>
+ <1416244750-24256-2-git-send-email-guido@vanguardiasur.com.ar>
+ <20141117213645.GE12473@free.fr> <546A6BA0.2000500@mind.be>
+Message-ID: <20141117214821.GI12473@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guido, All,
+Arnout, All,
 
-On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
-> in order to not depend on the previous permissions of the file
+On 2014-11-17 22:41 +0100, Arnout Vandecappelle spake thusly:
+> On 17/11/14 22:36, Yann E. MORIN wrote:
+> > On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
+[--SNIP--]
+> >> +all:
+> >> +	@umask $(UMASK) && make --no-print-directory
+[--SNIP--]
+> > I'm not too fond of --no-print-directory, because it is gonna be
+> > inherited by all sub-makes, and especially the sub-makes that actually
+> > build the packages. I don't care we have an extra "Entering directory"
+> > message.
 > 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> ---
->  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-> index ebf23e4..48a50de 100644
-> --- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-> +++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-> @@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
->  MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
->  
->  define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-> -	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
-> +	$(INSTALL) -m 0755 ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+>  Note that the generated Makefile in $(O) does add --no-print-directory...
 
-This should be:
+And guess who added that generated file?
 
-    $(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-                          $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+    # git blame support/scripts/mkmakefile
+    [...]
+    aefad531 scripts/mkmakefile         (Yann E. MORIN    2010-09-26 10:56:12 +0200 31) MAKEFLAGS += --no-print-directory
+    [...]
 
-That is:
-  - full path to the destination file. Otherwise, if $(TARGET_DIR)/usr/bin
-    does not exist (in case of a custom skeleton, for example),
-    'install' will create a file named "$(TARGET_DIR)/usr/bin" instead
-    of creating a directory and copying into it;
-  - the leading ./ to the source is not needed.
+Ok, Ok. :-)
 
 Regards,
 Yann E. MORIN.
-
->  endef
->  
->  MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-> -- 
-> 2.1.3
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
