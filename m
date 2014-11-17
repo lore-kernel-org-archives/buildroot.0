@@ -1,37 +1,51 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 17 Nov 2014 14:19:10 -0300
-Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
-	instead of cp
-In-Reply-To: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 17 Nov 2014 18:38:50 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nodejs: remove config options
+ --without-ssl2 and --without-ssl3
+In-Reply-To: <1416224516-6065-2-git-send-email-jkrause@posteo.de>
+References: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
+ <1416224516-6065-2-git-send-email-jkrause@posteo.de>
+Message-ID: <CAHkwnC-=E2-MdUUmu7Q7m_fJ0OH+BfwbCudwsjwPNZE_rEDdjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-in order to not depend on the previous permissions of the file
+On Mon, Nov 17, 2014 at 12:41 PM, J?rg Krause <jkrause@posteo.de> wrote:
+> The config options --without-ssl2 and --without-ssl3 are intended to be used if
+> nodejs is build with the bundled OpenSSL library for excluding the SSL2 and
+> SSL3 features.
+>
+> Both options are actual only evaluated if --without-ssl is not set:
+>
+> $ cat configure | grep configure_openssl -n -A 13
+> 619:def configure_openssl(o):
+> 620-  o['variables']['node_use_openssl'] = b(not options.without_ssl)
+> 621-  o['variables']['node_shared_openssl'] = b(options.shared_openssl)
+> 622-  o['variables']['openssl_no_asm'] = (
+> 623-    1 if options.openssl_no_asm else 0)
+> 624-
+> 625-  if options.without_ssl:
+> 626-    return
+> 627-
+> 628-  if options.ssl2:
+> 629-    o['defines'] += ['OPENSSL_NO_SSL2=1']
+> 630-
+> 631-  if options.ssl3:
+> 632-    o['defines'] += ['OPENSSL_NO_SSL3=1']
+>
+> This patch reverts commit e712638b4adc6e18b3ce99ab37b94530e9aa786f which does
+> not help to fix the build errors, eg.:
+> http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
+>
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
- package/linux-fusion/linux-fusion.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index c5e7976..001388c 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -36,8 +36,8 @@ define LINUX_FUSION_INSTALL_TARGET_CMDS
- 		$(LINUX_FUSION_MAKE_OPTS) \
- 		INSTALL_MOD_PATH=$(TARGET_DIR) \
- 		-C $(@D) install
--	mkdir -p $(LINUX_FUSION_ETC_DIR)
--	cp -dpf package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
-+	$(INSTALL) -D -m 644 package/linux-fusion/40-fusion.rules \
-+		$(LINUX_FUSION_ETC_DIR)/40-fusion.rules
- endef
- 
- $(eval $(generic-package))
+My fault for sending that patch, i was sure to have tested it well.
+
+Thanks
 -- 
-2.1.3
+Fabio Porcedda
