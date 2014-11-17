@@ -1,10 +1,9 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 17 Nov 2014 10:18:15 +0200
-Subject: [Buildroot] [PATCH 2/3] live555: add support for building dynamic
-	libraries
+Date: Mon, 17 Nov 2014 10:18:16 +0200
+Subject: [Buildroot] [PATCH 3/3] vlc: allow dynamically linking live555
 In-Reply-To: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
 References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
-Message-ID: <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
+Message-ID: <5411c20c81993fad4a333294c559782915eee169.1416212296.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/live555/live555.mk | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+ package/vlc/vlc.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 8c31a086559b..b923388de0fd 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -13,18 +13,30 @@ LIVE555_INSTALL_STAGING = YES
- 
- LIVE555_CFLAGS = $(TARGET_CFLAGS)
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIVE555_CONFIG_TARGET = linux
-+LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
-+else
-+LIVE555_CONFIG_TARGET = linux-with-shared-libraries
-+LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
-+endif
-+
- ifndef ($(BR2_ENABLE_LOCALE),y)
- LIVE555_CFLAGS += -DLOCALE_NOT_USED
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index e2c81d6e8959..19f1058dfa47 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -224,9 +224,7 @@ else
+ VLC_CONF_OPTS += --disable-libxml2
  endif
  
- define LIVE555_CONFIGURE_CMDS
--	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
--	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
--	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
--	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
--	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
--	echo 'PREFIX = /usr' >> $(@D)/config.linux
--	(cd $(@D); ./genMakefiles linux)
-+	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+
-+	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'PREFIX = /usr' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
-+	# fails
-+	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
- endef
- 
- define LIVE555_BUILD_CMDS
+-# live555 installs a static library only, and vlc tries to link it into a
+-# shared library - which doesn't work. So only enable live555 if static.
+-ifeq ($(BR2_PACKAGE_LIVE555)$(BR2_PREFER_STATIC_LIB),yy)
++ifeq ($(BR2_PACKAGE_LIVE555),y)
+ VLC_CONF_OPTS += --enable-live555
+ VLC_DEPENDENCIES += live555
+ VLC_CONF_ENV += \
 -- 
 2.1.3
