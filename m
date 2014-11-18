@@ -1,28 +1,78 @@
-From: Peder Alm <peder.alm@semcon.com>
-Date: Tue, 18 Nov 2014 13:43:46 +0000
-Subject: [Buildroot] Unable to boot Arm926t with big endian support
-In-Reply-To: <87389gr6pi.fsf@dell.be.48ers.dk>
-References: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>,
- <87389gr6pi.fsf@dell.be.48ers.dk>
-Message-ID: <B28B6A721CC23347BBD5566C377D30416461F23B@se-got-mb01.semcon.se>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 18 Nov 2014 07:48:21 -0600
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
+ ip tables with C++
+In-Reply-To: <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
+References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20141029223413.70abc05b@free-electrons.com>
+ <54516922.1070306@zacarias.com.ar>
+ <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
+Message-ID: <CANQCQpbLK7xeaPy4TM1GZx_+ZZUTNYhXyce3Pqof3MSNLxtN1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter
+All,
 
-> -8 is ENOEXEC, E.G. most likely invalid ELF variant.
+On Wed, Oct 29, 2014 at 7:48 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> All,
 >
-> Your kernel is running in big endian mode, right?
+> On Wed, Oct 29, 2014 at 5:24 PM, Gustavo Zacarias
+> <gustavo@zacarias.com.ar> wrote:
+>>
+>> On 10/29/2014 06:34 PM, Thomas Petazzoni wrote:
+>>
+>> > Dear Matt Weber,
+>> >
+>> > On Mon, 13 Oct 2014 14:12:43 -0500, Matt Weber wrote:
+>> >>
+>> >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> >> ---
+>> >>  ...ix-userspace-compilation-of-ip_tables_c_h.patch |   43 ++++++++++++++++++++
+>> >>  1 file changed, 43 insertions(+)
+>> >>  create mode 100644 package/iptables/iptables-03-fix-userspace-compilation-of-ip_tables_c_h.patch
+>> >
+>> > This patch apparently dates back from 2012. Why has it never been
+>> > merged upstream? Also, I don't really understand the interaction
+>> > between the kernel headers, and this include/linux/ header in iptables.
+>> >
+>> > Has the problem been reported upstream to iptables?
+>> >
+>> > Gustavo, an opinion?
+>>
+>> It was posted to lkml & linux-netdev at first, Davem told to post to
+>> netfilter-devel. That was done:
+>>
+>> http://marc.info/?t=134904906300003&r=1&w=1
+>>
+>> The logic seems right, C++ is more strict and triggers the issue.
+>> It's an issue when dealing with netfilter rules from custom C++ code.
+>>
+>> But it seems to have been rejected without much explanation:
+>> http://patchwork.ozlabs.org/patch/188216/
+>>
+>
+> Should I repost it to netfilter-devel and update my patch to reference
+> the above information plus the new submission thread?
 
-How do I know if my kernel is running in BE mode? I have just changed the settings in Buildroot configuration. I found no settings for BE mode in the Linux kernel configuration when I added support for NFS.
+I reposted on netfilter-devel and got clarification that the patch
+should probably have been a kernel patch, but the binary interface to
+iptables in the kernel has actually been replaced so this issue is
+deprecated.  I'll carry the patch in my build locally until we update
+our use of the API.
 
-I found this:
-- ELF file magic:
-- "\x7F""ELF"
-- 0x464C457F on little endian machine
-- 0x7F454C46 on big endian machine
+http://www.spinics.net/lists/netfilter-devel/msg33996.html
 
-It feels like modprobe is trying to load binfmt-464c to read the "inverted" ELF file (46='F', 4c='L').
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
