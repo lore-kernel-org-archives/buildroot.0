@@ -1,76 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 21:35:01 +0100
-Subject: [Buildroot] [PATCH v4 1/4] libatomic_ops: Add
- host-autotools-package
-In-Reply-To: <1415310486-25904-2-git-send-email-paguilar@paguilar.org>
-References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-2-git-send-email-paguilar@paguilar.org>
-Message-ID: <20141118203501.GI4333@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Nov 2014 21:38:58 +0100
+Subject: [Buildroot] [PATCH 0/4] pkg-infra: differentiate remote and
+ local tarball filenames (branch yem/download)
+In-Reply-To: <20141116122210.6b3651e0@free-electrons.com>
+References: <cover.1416068004.git.yann.morin.1998@free.fr>
+ <20141116122210.6b3651e0@free-electrons.com>
+Message-ID: <546BAE62.2020606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+On 16/11/14 12:22, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+>
+> On Sat, 15 Nov 2014 17:19:24 +0100, Yann E. MORIN wrote:
+>
+> > This series introduces a new variable, FOO_UPSTREAM_SOURCE, so as to be
+> > able to differentiate remote and local tarball filenames.
+> >
+> > This is needed when upstream tarballs are not named the way we expect them
+> > to be. For example, the GitHub API only provides a request like:
+> >     GET /repos/:owner/:repo/:archive_format/:ref
+> >
+> > So far, we're not using this API, and directly use a non-stable scheme
+> > to retrieve the tarballs. That scheme has proven to break from time to
+> > time, so we'll soon need to switch to the API, which is guaranteed to be
+> > stable.
+> >
+> > So, we need to be able to differentiate the filename remote knows the
+> > tarball by, and the local filename we want to save that tarball as.
+> >
+> > Changes to the GitHub helper will come in a later series, because it is
+> > a bit more involved, and still needs some ironing out. Alternate forges
+> > may also get added in the future, which would require such a feature.
+>
+> Not directly related, but somewhat related: I have always though that
+> our split between <foo>_SITE and <foo>_SOURCE was a bit stupid. Why
+> don't we simply give a full URL instead of splitting that between SITE
+> and SOURCE ?
+>
+> The way we do things today also forces the things in <foo>_PATCH and
+> <foo>_EXTRA_DOWNLOADS to be under the exact same <foo>_SITE, which
+> prevents applying patches from other locations than the original
+> package site.
+>
+> Shouldn't we simply get rid of <pkg>_SITE, and make <pkg>_SOURCE the
+> full URL to the tarball / git repo?
 
-Eventually, I get to review this... ;-)
+ I think there are two reasons for the split:
 
-On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
-> The host-libatomic_ops is needed by host-bdwgc that is needed
-> in turn by guile.
-> 
-> bdwgc bundles its own version of libatomic_ops, but it's prefered
-> to use the external one that is the default.
+1. _SOURCE can be dropped if it is <pkg>-<version>.tar.gz - this would be
+difficult if we only had _SITE.
 
-That sentence is not obvious for who hasn;t followed the previous
-iterations of the series. Also, it is related to bdwgc, so is not
-needed in that patch. Let;s just remove it.
+2. _PATH and _EXTRA_DOWNLOAD don't need to specify the full URL.
 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
-With the second sentence removed from the commit log:
+ In my opinion, these reasons are not strong enough to keep the split between
+_SITE and _SOURCE.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ So, +1 from me to get rid of _SOURCE.
 
-> ---
-> Changes v1 -> v2:
-> - Add host-libatomic_ops (suggested by Yann Morin)
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
-That second SoB line is superfluous, and will be ignored by git.
-Basically, all that is below the '---' line (included) gets ignored by
-git when applying a patch.
+ Regards,
+ Arnout
 
-Regards,
-Yann E. MORIN.
+>
+> Best regards,
+>
+> Thomas
+>
 
-> ---
->  package/libatomic_ops/libatomic_ops.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-> index d473901..6a26775 100644
-> --- a/package/libatomic_ops/libatomic_ops.mk
-> +++ b/package/libatomic_ops/libatomic_ops.mk
-> @@ -20,3 +20,4 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
->  LIBATOMIC_OPS_INSTALL_STAGING = YES
->  
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
