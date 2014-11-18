@@ -1,44 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Nov 2014 14:05:18 -0300
-Subject: [Buildroot] [PATCH 2/2] whois: bump to version 5.2.2
-In-Reply-To: <1416330318-5625-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1416330318-5625-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416330318-5625-2-git-send-email-gustavo@zacarias.com.ar>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 18 Nov 2014 14:06:10 -0300
+Subject: [Buildroot] [PATCH v3 4/5] package: matchbox-keyboard: use
+ install instead of cp
+In-Reply-To: <20141117214446.GH12473@free.fr>
+References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416244750-24256-5-git-send-email-guido@vanguardiasur.com.ar>
+ <20141117214446.GH12473@free.fr>
+Message-ID: <20141118170610.GC20682@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Yann, all,
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 13efa14..858eb94 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.1.dsc
--sha256	54e6b64f16e10bfaf14ac40025b4272090298f0d9d3e62cbadabf946051515e6	whois_5.2.1.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.2.dsc
-+sha256	cba874b457a6b7c4659245780d3d7321d129ab47da86103e07578ec7430fec09	whois_5.2.2.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 13c0230..63268c6 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.2.1
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/w/whois
-+WHOIS_VERSION = 5.2.2
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141112T101048Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+On Mon, Nov 17, 2014 at 10:44:46PM +0100, Yann E. MORIN wrote:
+> Guido, All,
+> 
+> On 2014-11-17 14:19 -0300, Guido Mart?nez spake thusly:
+> > in order to not depend on the previous permissions of the file
+> > 
+> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> > ---
+> >  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> > index ebf23e4..48a50de 100644
+> > --- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> > +++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> > @@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+> >  MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+> >  
+> >  define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+> > -	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+> > +	$(INSTALL) -m 0755 ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+> 
+> This should be:
+> 
+>     $(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
+>                           $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+> 
+> That is:
+>   - full path to the destination file. Otherwise, if $(TARGET_DIR)/usr/bin
+>     does not exist (in case of a custom skeleton, for example),
+>     'install' will create a file named "$(TARGET_DIR)/usr/bin" instead
+>     of creating a directory and copying into it;
+>   - the leading ./ to the source is not needed.
+Actually the trailing slash prevents the file being created as /usr/bin,
+but the build would fail anyway. I changed it to your suggestion to be
+skeleton-agnostic.
+
+Thanks!
+
 -- 
-2.0.4
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
