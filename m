@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 16:16:09 +0100
-Subject: [Buildroot] Init and Supervisor start. Help please.
-In-Reply-To: <CAEzGmjDXJ89vvGVfFBk4d3yJ3vbvjLA457yj6Gi_kYZYpct70Q@mail.gmail.com>
-References: <CAEzGmjDXJ89vvGVfFBk4d3yJ3vbvjLA457yj6Gi_kYZYpct70Q@mail.gmail.com>
-Message-ID: <20141118161609.6057089f@free-electrons.com>
+Date: Tue, 18 Nov 2014 16:20:20 +0100
+Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
+ support
+In-Reply-To: <546B5779.9010708@zacarias.com.ar>
+References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
+ <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
+ <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
+ <546B5779.9010708@zacarias.com.ar>
+Message-ID: <20141118162020.02921a54@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lennart Ramberg,
+Dear Gustavo Zacarias,
 
-On Tue, 18 Nov 2014 15:01:38 +0100, Lennart Ramberg wrote:
+On Tue, 18 Nov 2014 11:28:09 -0300, Gustavo Zacarias wrote:
 
-> How should supervisor be automatically started?
-> Is the below way to go (kiosk mode) in principle right?
+> > I'll try to give this a test when I get a chance, we currently have a
+> > e5500 target that we're building binaries for but with a e500mc
+> > toolchain (using arch compatibility mode on the processor).  Will the
+> > buildroot toolchain do multilib so that it's possible to build uboot
+> > 32/36bit and a kernel 64bit?  So far that's why we stuck with the
+> > e500mc (just 32/36bit) keeping us using a single toolchain.
 > 
-> /boot/grub/grub.cfg:
-> 
-> set default="0"
-> set timeout="5"
-> 
-> menuentry "Buildroot" {
->     linux /bzImage root=/dev/sda1 init=/usr/bin/supervisord
-> }
-> 
-> Setting init=/myprogram worked as expected. But but experimenting
-> with letting supervisord start myprogram just caused kernel panic,
-> so maybe I'm heading the wrong way?
+> We don't do proper multilib yet, so unfortunately you'll have to go with
+> separate BR projects for say kernel/bootloader (64 bit) and userland (32
+> bit).
 
-Reading from http://supervisord.org/:
+That's kind of annoying, and we have a similar problem on x86-64 when
+we need to build a 32 bits bootloader (though this might become less of
+an issue with UEFI being capable of using 64 bits bootloaders).
 
-"""
-It shares some of the same goals of programs like launchd, daemontools,
-and runit. Unlike some of these programs, it is not meant to be run as
-a substitute for init as ?process id 1?. Instead it is meant to be used
-to control processes related to a project or a customer, and is meant
-to start like any other program at boot time.
-"""
-
-So using supervisord as init doesn't seem to be the right thing to do.
-Instead, use another init (whichever you want), and then use
-supervisord to start/monitor your daemons/system services.
+Should we do something about this, and support multilib? Note that SH4
+is also broken since quite a while in the internal toolchain backend
+because it needs multilib support. The issue is how do we decide which
+multilib variants to build? Do we simply "force" a certain set of
+multilib variants for a given architecture?
 
 Best regards,
 
