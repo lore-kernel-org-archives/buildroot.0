@@ -1,44 +1,60 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Tue, 18 Nov 2014 14:17:09 -0300
-Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
-	instead of cp
-In-Reply-To: <546A714D.3040402@mind.be>
-References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
- <546A714D.3040402@mind.be>
-Message-ID: <20141118171709.GD20682@fox>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 18:46:19 +0100
+Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
+ termcap (curses) library
+In-Reply-To: <546AFC7C.1060501@gmail.com>
+References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
+ <546AFC7C.1060501@gmail.com>
+Message-ID: <20141118174618.GA4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all
+Nathaniel, All,
 
-On Mon, Nov 17, 2014 at 11:06:05PM +0100, Arnout Vandecappelle wrote:
-> On 17/11/14 18:19, Guido Mart?nez wrote:
-> > in order to not depend on the previous permissions of the file
-> > 
-> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+On 2014-11-18 15:59 +0800, Nathaniel Roach spake thusly:
+> On 18/11/14 06:33, Yann E. MORIN wrote:
+> > Cc-ing Nathaniel, as all failures happen on his build server. Thomas and
+> > Nathaniel, could you please review the setting of that autobuild server?
+> > And the others as well?
+> >
+> > It seems legit ncurses is missing on a build server, but we did not
+> notice,
+> > because we do require it for menuconfig and nconfig, so virtually everyone
+> > has it, and it is most probably installed on other autobuild servers
+> > because owners want to be able to run menuconfig on them to debug stuff.
+> >
+> > Care to have a look, please?
+> >
+> > Regards,
+> > Yann E. MORIN.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  There are a few more suspicious cp instances:
-> 
-> board/boundarydevices/nitrogen6x/post-build.sh
-> boot/grub/grub.mk
-> fs/iso9660/iso9660.mk
-I'll take a look at these, thanks.
+> I haven't installed libncurses-dev per the discussion we had a few
+> weeks/months back. (Basically only use the system's ncurses for 'make
+> *config', and in all other cases build it)
 
->  Also, it would be good to document somewhere (e.g. in the intro mail) why the
-> rsync in the toolchain is OK. Or even better, replace it even though it's not
-> really necessary - it just feels more consistent and safe.
-Yes, this sounds good. Maybe use --chmod on the toolchain and add a
-comment there? This way we should be covered in the future if someone
-uses 'rsync -a' from there.
+Ah, OK. I've overlooked that discussion, then. Thanks!
 
-Cheers!
+> I haven't heard otherwise, and this is also causing failures in
+> host-mysql (IIRC).
+> 
+> If you both believe that I should install it, I will, but I still
+> believe it is better to build host-ncurses.
+
+Yes, I fully agree with this. No need to fix your autobuild instance.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
 
 -- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
