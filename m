@@ -1,61 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 21:33:17 +0100
-Subject: [Buildroot] [PATCH] rapidjson: simplify install commands
-In-Reply-To: <1416320979-16563-1-git-send-email-eeppeliteloop@gmail.com>
-References: <1416320979-16563-1-git-send-email-eeppeliteloop@gmail.com>
-Message-ID: <546BAD0D.5090605@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 21:35:01 +0100
+Subject: [Buildroot] [PATCH v4 1/4] libatomic_ops: Add
+ host-autotools-package
+In-Reply-To: <1415310486-25904-2-git-send-email-paguilar@paguilar.org>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+ <1415310486-25904-2-git-send-email-paguilar@paguilar.org>
+Message-ID: <20141118203501.GI4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 15:29, Philippe Proulx wrote:
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Pedro, All,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (Checked that installed files are identical to the situation before this patch.)
+Eventually, I get to review this... ;-)
 
+On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
+> The host-libatomic_ops is needed by host-bdwgc that is needed
+> in turn by guile.
+> 
+> bdwgc bundles its own version of libatomic_ops, but it's prefered
+> to use the external one that is the default.
 
- Regards,
- Arnout
+That sentence is not obvious for who hasn;t followed the previous
+iterations of the series. Also, it is related to bdwgc, so is not
+needed in that patch. Let;s just remove it.
+
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+
+With the second sentence removed from the commit log:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 > ---
->  package/rapidjson/rapidjson.mk | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
->
-> diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-> index ff516c4..6658da2 100644
-> --- a/package/rapidjson/rapidjson.mk
-> +++ b/package/rapidjson/rapidjson.mk
-> @@ -12,18 +12,7 @@ RAPIDJSON_INSTALL_TARGET = NO
->  RAPIDJSON_INSTALL_STAGING = YES
->  
->  define RAPIDJSON_INSTALL_STAGING_CMDS
-> -    $(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
-> -    $(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
-> -    $(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
-> -    $(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
-> -    $(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
-> -        $(STAGING_DIR)/usr/include/rapidjson
-> -    $(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
-> -        $(STAGING_DIR)/usr/include/rapidjson/internal
-> -    $(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
-> -        $(STAGING_DIR)/usr/include/rapidjson/error
-> -    $(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
-> -        $(STAGING_DIR)/usr/include/rapidjson/msinttypes
-> +    cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include
->  endef
->  
->  $(eval $(generic-package))
->
+> Changes v1 -> v2:
+> - Add host-libatomic_ops (suggested by Yann Morin)
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
+That second SoB line is superfluous, and will be ignored by git.
+Basically, all that is below the '---' line (included) gets ignored by
+git when applying a patch.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libatomic_ops/libatomic_ops.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+> index d473901..6a26775 100644
+> --- a/package/libatomic_ops/libatomic_ops.mk
+> +++ b/package/libatomic_ops/libatomic_ops.mk
+> @@ -20,3 +20,4 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+>  LIBATOMIC_OPS_INSTALL_STAGING = YES
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
