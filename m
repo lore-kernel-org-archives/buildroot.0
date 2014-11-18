@@ -1,38 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:58:03 +0100
-Subject: [Buildroot] [RFC/PATCH 1/1] systemd: fix remount-fs (Andr?
- Erdmann)
-In-Reply-To: <CABGWzsTtJvrqWuff699x2KVeYr+PvYncCyefioqhVtUMO4h64A@mail.gmail.com>
-References: <CABGWzsTtJvrqWuff699x2KVeYr+PvYncCyefioqhVtUMO4h64A@mail.gmail.com>
-Message-ID: <20141118225803.GW4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:58:42 +0100
+Subject: [Buildroot] [git commit branch/next] package: linux-fusion: use
+	install instead of cp
+Message-ID: <20141118225911.0A133B496B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=36c84781293bda65d0374962463c1663735b8907
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2014-11-15 08:45 +0100, Eric Limpens spake thusly:
-> Hi Andre, list,
-> 
->  This is a reply to a digest mail, I hope it doesn't break stuff, but
-> the following fixes an
->  issue I ran into so I feel like I should reply with a tested by.
+in order to not depend on the previous permissions of the file
 
-Yes, it broke it. Patchwork did not catch your tested tag.
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-fusion/linux-fusion.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> Tested-by: Eric Limpens <limpens@gmail.com>
-
-If you don't mind, I'll post ot for you.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index c5e7976..001388c 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -36,8 +36,8 @@ define LINUX_FUSION_INSTALL_TARGET_CMDS
+ 		$(LINUX_FUSION_MAKE_OPTS) \
+ 		INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 		-C $(@D) install
+-	mkdir -p $(LINUX_FUSION_ETC_DIR)
+-	cp -dpf package/linux-fusion/40-fusion.rules $(LINUX_FUSION_ETC_DIR)
++	$(INSTALL) -D -m 644 package/linux-fusion/40-fusion.rules \
++		$(LINUX_FUSION_ETC_DIR)/40-fusion.rules
+ endef
+ 
+ $(eval $(generic-package))
