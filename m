@@ -1,27 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Nov 2014 11:28:09 -0300
-Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
- support
-In-Reply-To: <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>	<1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
- <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
-Message-ID: <546B5779.9010708@zacarias.com.ar>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Tue, 18 Nov 2014 09:29:39 -0500
+Subject: [Buildroot] [PATCH] rapidjson: simplify install commands
+Message-ID: <1416320979-16563-1-git-send-email-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/18/2014 10:56 AM, Matthew Weber wrote:
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ package/rapidjson/rapidjson.mk | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-> I'll try to give this a test when I get a chance, we currently have a
-> e5500 target that we're building binaries for but with a e500mc
-> toolchain (using arch compatibility mode on the processor).  Will the
-> buildroot toolchain do multilib so that it's possible to build uboot
-> 32/36bit and a kernel 64bit?  So far that's why we stuck with the
-> e500mc (just 32/36bit) keeping us using a single toolchain.
-
-We don't do proper multilib yet, so unfortunately you'll have to go with
-separate BR projects for say kernel/bootloader (64 bit) and userland (32
-bit).
-Regards.
+diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
+index ff516c4..6658da2 100644
+--- a/package/rapidjson/rapidjson.mk
++++ b/package/rapidjson/rapidjson.mk
+@@ -12,18 +12,7 @@ RAPIDJSON_INSTALL_TARGET = NO
+ RAPIDJSON_INSTALL_STAGING = YES
+ 
+ define RAPIDJSON_INSTALL_STAGING_CMDS
+-	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
+-	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
+-	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
+-	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
+-	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
+-		$(STAGING_DIR)/usr/include/rapidjson
+-	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
+-		$(STAGING_DIR)/usr/include/rapidjson/internal
+-	$(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
+-		$(STAGING_DIR)/usr/include/rapidjson/error
+-	$(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
+-		$(STAGING_DIR)/usr/include/rapidjson/msinttypes
++	cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.1.3
