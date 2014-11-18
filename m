@@ -1,41 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Nov 2014 14:01:57 -0300
-Subject: [Buildroot] [PATCH 9/9] network-manager: adjust dhclient and dhcpcd
-	directories
-In-Reply-To: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416330117-4458-10-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 18:04:05 +0100
+Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
+ support
+In-Reply-To: <546B7B23.9030004@zacarias.com.ar>
+References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
+ <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
+ <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
+ <546B5779.9010708@zacarias.com.ar>
+ <20141118162020.02921a54@free-electrons.com>
+ <546B7395.4040804@zacarias.com.ar>
+ <20141118175637.49a03275@free-electrons.com>
+ <546B7B23.9030004@zacarias.com.ar>
+Message-ID: <20141118180405.7ea733ae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dhclient and dhcpcd were moved from /usr/sbin to /sbin for busybox-less
-SysV-style init with Debian utilities, so adjust accordingly.
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/network-manager/network-manager.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, 18 Nov 2014 14:00:19 -0300, Gustavo Zacarias wrote:
+> On 11/18/2014 01:56 PM, Thomas Petazzoni wrote:
+> > What do you call the full multilib dance?
+> > 
+> > I guess if we go multilib, we should build the C library for both
+> > "variants", but then build the rest of the userspace with only one of
+> > the two variants, and keep the other variant just to build the special
+> > stuff (kernel, bootloader, etc.).
+> 
+> Building all (necessary) libraries as well to accomodate for ugly BLOBs
+> like the flash plugin or other cr^H^Hstuff like that, say i386 zlib and
+> more.
+> I don't think we want that.
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 7944254..9770cae 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -56,11 +56,11 @@ else
- endif
- 
- ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
--NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/usr/sbin/dhclient
-+NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
- endif
- 
- ifeq ($(BR2_PACKAGE_DHCPCD),y)
--NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/usr/sbin/dhcpcd
-+NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
- endif
- 
- # uClibc by default doesn't have backtrace support, so don't use it
+Unfortunately, it's typically the kind of thing that's very hard to do
+with kconfig, as it would require the ability to specify for each
+package for which multilib variant it should be built. Same issue as
+having a per-package "build this statically" or "build this with
+debugging symbol" option.
+
+Thomas
 -- 
-2.0.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
