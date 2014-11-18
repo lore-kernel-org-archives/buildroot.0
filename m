@@ -1,52 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 14:21:23 +0100
-Subject: [Buildroot] [PATCH] kmod: bump to version 19
-In-Reply-To: <1416243576-42474-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1416243576-42474-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141118142123.47e08033@free-electrons.com>
+Date: Tue, 18 Nov 2014 14:21:41 +0100
+Subject: [Buildroot] [git commit branch/next] rapidjson: bump to latest
+	GitHub master
+Message-ID: <20141118132439.87CF0B4872@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=30a208b9ef21a7b830b04e68828653407a7af1bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 17 Nov 2014 16:59:36 +0000, Vicente Olivert Riera wrote:
-> - Bump to version 19
-> - Rename 0001 patch to follow the new name convention
-> - Adapt the 0001 patch to the new version
-> - Remove the already-upstreamed 0002 patch
-> - Update the hash value
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+RapidJSON is now hosted on GitHub and its latest version
+includes many fixes and features added since 2012.
 
-Applied to next, thanks. After changing just one thing.
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rapidjson/rapidjson.mk |   17 ++++++++---------
+ 1 files changed, 8 insertions(+), 9 deletions(-)
 
-> diff --git a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch b/package/kmod/0001-fix-O_CLOEXEC.patch
-> similarity index 83%
-> rename from package/kmod/kmod-0001-fix-O_CLOEXEC.patch
-> rename to package/kmod/0001-fix-O_CLOEXEC.patch
-> index 4861c57..e09372c 100644
-> --- a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch
-> +++ b/package/kmod/0001-fix-O_CLOEXEC.patch
-> @@ -1,3 +1,7 @@
-> +Adapt this patch to version 19
-> +
-> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-I don't think this should go here, otherwise the patch isn't a proper
-git patch anymore. Instead, I modified the commit log to add the fact
-that you updated the patch to version 19, and added your SoB below
-Thomas DS one.
-
-See:
-http://git.buildroot.net/buildroot/tree/package/kmod/0001-fix-O_CLOEXEC.patch?h=next.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
+index 68e010e..ff516c4 100644
+--- a/package/rapidjson/rapidjson.mk
++++ b/package/rapidjson/rapidjson.mk
+@@ -4,27 +4,26 @@
+ #
+ ################################################################################
+ 
+-RAPIDJSON_VERSION = 0.11
+-RAPIDJSON_SOURCE = rapidjson-$(RAPIDJSON_VERSION).zip
+-RAPIDJSON_SITE = http://rapidjson.googlecode.com/files
++RAPIDJSON_VERSION = 39f5eeb764c6d1e1cbff1717410d9710bf943009
++RAPIDJSON_SITE = $(call github,miloyip,rapidjson,$(RAPIDJSON_VERSION))
+ RAPIDJSON_LICENSE = MIT
+ RAPIDJSON_LICENSE_FILES = license.txt
+ RAPIDJSON_INSTALL_TARGET = NO
+ RAPIDJSON_INSTALL_STAGING = YES
+ 
+-define RAPIDJSON_EXTRACT_CMDS
+-	$(UNZIP) -d $(@D) $(DL_DIR)/$(RAPIDJSON_SOURCE)
+-	mv $(@D)/rapidjson/* $(@D)
+-	$(RM) -r $(@D)/rapidjson
+-endef
+-
+ define RAPIDJSON_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
+ 	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
++	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
++	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
+ 	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
+ 		$(STAGING_DIR)/usr/include/rapidjson
+ 	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
+ 		$(STAGING_DIR)/usr/include/rapidjson/internal
++	$(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
++		$(STAGING_DIR)/usr/include/rapidjson/error
++	$(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
++		$(STAGING_DIR)/usr/include/rapidjson/msinttypes
+ endef
+ 
+ $(eval $(generic-package))
