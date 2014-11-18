@@ -1,41 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:38:31 +0100
-Subject: [Buildroot] [PATCH 2/2] package/openssl: rename patches to the
- new convention
-In-Reply-To: <1416146446-27060-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1416146446-27060-1-git-send-email-bernd.kuhls@t-online.de>
- <1416146446-27060-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141118233831.0fe12291@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 23:38:46 +0100
+Subject: [Buildroot] [PATCH 2/2] Unclutter standard error output while
+ feature testing for 32 bit gcc
+In-Reply-To: <1415799105-27566-2-git-send-email-debian@jstimpfle.de>
+References: <1415799105-27566-1-git-send-email-debian@jstimpfle.de>
+ <1415799105-27566-2-git-send-email-debian@jstimpfle.de>
+Message-ID: <20141118223846.GT4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Jens, All,
 
-On Sun, 16 Nov 2014 15:00:46 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2014-11-12 13:31 +0000, Jens Stimpfle spake thusly:
+> Signed-off-by: Jens Stimpfle <debian@jstimpfle.de>
 > ---
->  ...openssl-001-do-not-build-docs.patch => 001-do-not-build-docs.patch} |    0
->  ...002-dont-force-large-file.patch => 002-dont-force-large-file.patch} |    0
->  ...n.patch => 003-cryptodev-Fix-issue-with-signature-generation.patch} |    0
->  .../openssl/{openssl-004-musl-termios.patch => 004-musl-termios.patch} |    0
->  .../{openssl-005-parallel-build.patch => 005-parallel-build.patch}     |    0
->  5 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/openssl/{openssl-001-do-not-build-docs.patch => 001-do-not-build-docs.patch} (100%)
->  rename package/openssl/{openssl-002-dont-force-large-file.patch => 002-dont-force-large-file.patch} (100%)
->  rename package/openssl/{openssl-003-cryptodev-Fix-issue-with-signature-generation.patch => 003-cryptodev-Fix-issue-with-signature-generation.patch} (100%)
->  rename package/openssl/{openssl-004-musl-termios.patch => 004-musl-termios.patch} (100%)
->  rename package/openssl/{openssl-005-parallel-build.patch => 005-parallel-build.patch} (100%)
+> 
+> Notes:
+>     The screen is cluttered when we build for 32bit target and 32bit gcc
+>     missing.
+>     
+>     > ~/buildroot$ make
+>     >
+>     > You may have to install 'g++' on your build machine
+>     > /home/testuser/buildroot/support/dependencies/dependencies.sh: 136: [: -lt: unexpected operator
+>     > /usr/bin/ld: cannot find crt1.o: No such file or directory
+>     > /usr/bin/ld: cannot find crti.o: No such file or directory
+>     > /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc.a when searching for -lgcc
+>     > /usr/bin/ld: cannot find -lgcc
+>     > /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc_s.so when searching for -lgcc_s
+>     > /usr/bin/ld: cannot find -lgcc_s
+>     > /usr/bin/ld: cannot find -lc
+>     > /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc.a when searching for -lgcc
+>     > /usr/bin/ld: cannot find -lgcc
+>     > /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc_s.so when searching for -lgcc_s
+>     > /usr/bin/ld: cannot find -lgcc_s
+>     > /usr/bin/ld: cannot find crtn.o: No such file or directory
+>     > collect2: error: ld returned 1 exit status
+>     >
+>     > Your Buildroot configuration needs a compiler capable of building 32 bits binaries.
+>     [...]
+>     
+>     The final note is enough, and adding 2>/dev/null to the gcc test invocation is
+>     also more consistent with the rest of the script. The patch makes the
+>     /usr/bin/ld: and collect2: lines go away.
 
-Applied to next, thanks. Obviously, I've dropped the part of this patch
-that renames the parallel build patch, since I haven't applied PATCH
-1/2 of this series.
+Ditto, keep those explanations in the commit log.
 
-Thomas
+Otherwise, looks good.
+
+We're in feature-freeze for the upcoming release at the end of the
+month, but I think thos changes could go in. Will you resubmit those
+patches soon, so they can get applied before the release?
+
+Regards,
+Yann E. MORIN.
+
+>  support/dependencies/dependencies.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 4b8991d..dcf37f0 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -222,7 +222,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+>  fi
+>  
+>  if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+> -	if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null ; then
+> +	if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null 2>/dev/null; then
+>  		echo
+>  		echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
+>  		echo "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
+> -- 
+> 2.1.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
