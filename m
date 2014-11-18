@@ -1,38 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 22:03:30 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: fix build error without
-	OpenSSL support
-In-Reply-To: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 17 Nov 2014 12:41:55 +0100")
-References: <1416224516-6065-1-git-send-email-jkrause@posteo.de>
-Message-ID: <874mtwp6fx.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 22:03:37 +0100
+Subject: [Buildroot] [PATCH v4 3/4] libunistring: Add
+ host-autotools-package
+In-Reply-To: <1415310486-25904-4-git-send-email-paguilar@paguilar.org>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+ <1415310486-25904-4-git-send-email-paguilar@paguilar.org>
+Message-ID: <20141118210337.GK4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <jkrause@posteo.de> writes:
+Pedro, All,
 
- > Add a patch to fix broken build of nodejs without OpenSSL support.
- > Version 0.10.33 of nodejs introduced a bug which prevents us from building
- > nodejs without OpenSSL support. The bug is reported upstream:
- > https://github.com/joyent/node/issues/8676
+On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
+> The host-libunistring is needed by guile
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
- > This bug caused some build errors:
- >   * http://autobuild.buildroot.net/results/0bf/0bf17bf710db051d491123482c90f2f72810804b/
- >   * http://autobuild.buildroot.net/results/e1f/e1fb34818ff1167aa008b4011befb9fd14c81293/
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > and more...
+Regards,
+Yann E. MORIN.
 
- > Signed-off-by: J?rg Krause <jkrause@posteo.de>
- > ---
- > Changes v1 -> v2:
- >   - patch nodejs to allow building without OpenSSL support (Thomas)
- >   - adapt commit log
-
-Committed, thanks. Please don't forget to send the patch upstream.
+> ---
+> Changes v1 -> v2:
+> - Add host-libunistring (suggested by Yann Morin)
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> ---
+>  package/libunistring/libunistring.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+> index 3234ddc..fd77d12 100644
+> --- a/package/libunistring/libunistring.mk
+> +++ b/package/libunistring/libunistring.mk
+> @@ -17,3 +17,4 @@ LIBUNISTRING_CONF_OPTS += --disable-threads
+>  endif
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
