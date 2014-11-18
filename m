@@ -1,380 +1,164 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 14:08:22 +0100
-Subject: [Buildroot] [git commit] tstools: disable parallel build
-Message-ID: <20141118131512.218C0B4869@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 14:18:34 +0100
+Subject: [Buildroot] [git commit branch/next] kmod: bump to version 19
+Message-ID: <20141118131900.E9357B4873@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9187fe9013ec312f7542ea34d083f91f2764c49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=047fea1d4fa33c4c934272a05649907a59186015
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 0e8cbd5902e4 (tstools: fix build failure in parallel (-j) build) didn't
-fix, apparently, the parallel build issue. Revert this commit, and just
-disable parallel build.
+- Bump to version 19
+- Rename 0001 patch to follow the new name convention
+- Adapt the 0001 patch to the new version
+- Remove the already-upstreamed 0002 patch
+- Update the hash value
 
-Fixes:
-http://autobuild.buildroot.net/results/b13/b13d31a8a915a740386befb018f859d3df5e9c35/
-http://autobuild.buildroot.net/results/287/287249ce9d337d4efc587f833f811851cafc607a/
-http://autobuild.buildroot.net/results/e4e/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+[Thomas: adapt comment in the updated 0001 patch.]
 
-Cc: Tzu-Jung Lee <roylee17@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ools-002-build-fix-parallel-build-failure.patch |  331 --------------------
- package/tstools/tstools.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 332 deletions(-)
+ ...ix-O_CLOEXEC.patch => 0001-fix-O_CLOEXEC.patch} |   11 ++-
+ ...0002-add-backup-implementation-of-be32toh.patch |   72 --------------------
+ package/kmod/kmod.hash                             |    2 +-
+ package/kmod/kmod.mk                               |    2 +-
+ 4 files changed, 9 insertions(+), 78 deletions(-)
 
-diff --git a/package/tstools/tstools-002-build-fix-parallel-build-failure.patch b/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+diff --git a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch b/package/kmod/0001-fix-O_CLOEXEC.patch
+similarity index 83%
+rename from package/kmod/kmod-0001-fix-O_CLOEXEC.patch
+rename to package/kmod/0001-fix-O_CLOEXEC.patch
+index 4861c57..145ac34 100644
+--- a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch
++++ b/package/kmod/0001-fix-O_CLOEXEC.patch
+@@ -15,20 +15,23 @@ This problem was reported by "Ting Liu <b28495@freescale.com>"
+  - move dummy definition from libkmod-internal.h to missing.h
+  - update commit title]
+ 
++[Vicente: Adapt this patch to version 19.]
++
+ Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+ Upstream-status: rejected, suggests to add in buildroot instead [1]
+ 
+ [1] http://news.gmane.org/find-root.php?message_id=1412062906%2d27378%2d1%2dgit%2dsend%2demail%2dpatrickdepinguin%40gmail.com
+ 
+ ---
+- libkmod/missing.h |    4 ++++
++ shared/missing.h |    4 ++++
+  1 files changed, 4 insertions(+), 0 deletions(-)
+ 
+-diff --git a/libkmod/missing.h b/libkmod/missing.h
++diff --git a/shared/missing.h b/shared/missing.h
+ index 4c0d136..e123e98 100644
+---- a/libkmod/missing.h
+-+++ b/libkmod/missing.h
++--- a/shared/missing.h
+++++ b/shared/missing.h
+ @@ -19,6 +19,10 @@
+  # define __NR_finit_module -1
+  #endif
+diff --git a/package/kmod/kmod-0002-add-backup-implementation-of-be32toh.patch b/package/kmod/kmod-0002-add-backup-implementation-of-be32toh.patch
 deleted file mode 100644
-index df50747..0000000
---- a/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+index 869c569..0000000
+--- a/package/kmod/kmod-0002-add-backup-implementation-of-be32toh.patch
 +++ /dev/null
-@@ -1,331 +0,0 @@
--From 2fe4faa9d8eab6068976c7981bc166f576869b36 Mon Sep 17 00:00:00 2001
--From: Tzu-Jung Lee <tjlee@ambarella.com>
--Date: Sun, 28 Jul 2013 19:40:27 +0800
--Subject: [PATCH 1/1] build: fix parallel build failure
+@@ -1,72 +0,0 @@
+-From bda1ed2aefee23b0eedbcd9f82e73c2547908438 Mon Sep 17 00:00:00 2001
+-From: Randy MacLeod <Randy.MacLeod@windriver.com>
+-Date: Mon, 29 Sep 2014 12:32:20 +0200
+-Subject: [PATCH] Add back-up implementation of be32toh()
 -
--This is back ported from recent upstream commit
+-Older systems may not have the be32toh function defined. Check for this
+-and fall back to checking the endianness and calling bswap_32 directly
+-if needed.  This works on both old and new systems.
 -
--  0e8463ea1dc55f566a88bb3df29cf3d5f23cc326
+-[Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>:
+-address comments raised by Lucas De Marchi [1], update commit message]
 -
--Once the upstream update the download page with more
--recent source tarball, this will no longer be needed.
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 -
--Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+-Upstream-status: accepted [2]
+-
+-[1] http://www.spinics.net/lists/linux-modules/msg01129.html
+-[2] https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=9b34db1ae63427269f918b2868b4cfcb50e6259b
+-
 ----
-- Makefile | 222 +++++++++++++++++++++++++++++++++------------------------------
-- 1 file changed, 115 insertions(+), 107 deletions(-)
+- configure.ac                |    3 +++
+- libkmod/libkmod-signature.c |    1 +
+- libkmod/missing.h           |   10 ++++++++++
+- 3 files changed, 14 insertions(+), 0 deletions(-)
 -
--diff --git a/Makefile b/Makefile
--index b79a573..ad7f163 100644
----- a/Makefile
--+++ b/Makefile
--@@ -67,67 +67,49 @@ LFS_FLAGS = -D_FILE_OFFSET_BITS=64
-- # sort of thing (presumably Linux or BSD)
-- ifeq ($(shell uname -s), Darwin)
-- 	SYSTEM = "macosx"
---	ARCH_FLAGS = -arch ppc -arch i386
--+	ARCH_FLAGS =
--+	# If you're still building on a version of Mac OS X that supports powerpc,
--+	# then you may want to uncomment the next line. Obviously, this no longer
--+	# works in Lion, which doesn't support powerpc machines any more.
--+	#ARCH_FLAGS = -arch ppc -arch i386
-- else
-- 	SYSTEM = "other"
---	ARCH_FLAGS =
--+	ARCH_FLAGS = -fPIC
-- endif
+-diff --git a/configure.ac b/configure.ac
+-index 7781ce1..cd676bc 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -53,6 +53,9 @@ AC_CHECK_MEMBERS([struct stat.st_mtim], [], [], [#include <sys/stat.h>])
+- # musl 1.0 and bionic 4.4 don't have strndupa
+- AC_CHECK_DECLS_ONCE([strndupa])
 - 
-- CFLAGS = $(WARNING_FLAGS) $(OPTIMISE_FLAGS) $(LFS_FLAGS) -I. $(PROFILE_FLAGS) $(ARCH_FLAGS)
---LDFLAGS = -g -lm $(PROFILE_FLAGS) $(ARCH_FLAGS)
--+LDFLAGS = -g $(PROFILE_FLAGS) $(ARCH_FLAGS) -lm
-- 
-- # Target directories
-- OBJDIR = obj
-- LIBDIR = lib
-- BINDIR = bin
-- 
---# All of our non-program source files
---SRCS = \
--- accessunit.c \
--- ac3.c \
--- adts.c \
--- avs.c \
--- bitdata.c \
--- es.c \
--- fmtx.c \
--- h222.c \
--- h262.c \
--- audio.c \
--- l2audio.c \
--- misc.c \
--- nalunit.c \
--- ps.c \
--- pes.c \
--- pidint.c \
--- ts.c \
--- tswrite.c \
--- pcap.c 
---
-- # All of our non-program object modules
-- OBJS = \
--- accessunit.o \
--- avs.o \
--- ac3.o \
--- adts.o \
--- bitdata.o \
--- es.o \
--- filter.o \
--- fmtx.o \
--- h222.o \
--- h262.o \
--- audio.o \
--- l2audio.o \
--- misc.o \
--- nalunit.o \
--- ps.o \
--- pes.o \
--- pidint.o \
--- reverse.o \
--- ts.o \
--- tswrite.o \
--- pcap.o \
--- ethernet.o \
--- ipv4.o
--+ $(OBJDIR)/accessunit.o \
--+ $(OBJDIR)/avs.o \
--+ $(OBJDIR)/ac3.o \
--+ $(OBJDIR)/adts.o \
--+ $(OBJDIR)/bitdata.o \
--+ $(OBJDIR)/es.o \
--+ $(OBJDIR)/filter.o \
--+ $(OBJDIR)/fmtx.o \
--+ $(OBJDIR)/h222.o \
--+ $(OBJDIR)/h262.o \
--+ $(OBJDIR)/audio.o \
--+ $(OBJDIR)/l2audio.o \
--+ $(OBJDIR)/misc.o \
--+ $(OBJDIR)/nalunit.o \
--+ $(OBJDIR)/ps.o \
--+ $(OBJDIR)/pes.o \
--+ $(OBJDIR)/pidint.o \
--+ $(OBJDIR)/reverse.o \
--+ $(OBJDIR)/ts.o \
--+ $(OBJDIR)/tswrite.o \
--+ $(OBJDIR)/pcap.o \
--+ $(OBJDIR)/ethernet.o \
--+ $(OBJDIR)/ipv4.o
-- 
-- # Our program object modules
-- PROG_OBJS = \
--@@ -161,9 +143,14 @@ TEST_OBJS = \
--   $(OBJDIR)/test_es_unit_list.o
-- 
-- # Our library
---LIB = $(LIBDIR)/libtstools.a
---LIBOPTS = -L$(LIBDIR) -ltstools $(ARCH_FLAGS)
--+STATIC_LIB = $(LIBDIR)/libtstools.a
--+LIBOPTS = $(ARCH_FLAGS) $(STATIC_LIB)
-- 
--+ifeq ($(shell uname -s), Darwin)
--+SHARED_LIB = $(LIBDIR)/libtstools.xxx
--+else
--+SHARED_LIB = $(LIBDIR)/libtstools.so
--+endif
-- # All of our programs (except the testing ones)
-- PROGS = \
--   $(BINDIR)/esfilter \
--@@ -197,7 +184,7 @@ TEST_PES_PROG = $(BINDIR)/test_pes
-- TEST_PROGS = test_nal_unit_list test_es_unit_list
-- 
-- # ------------------------------------------------------------
---all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
--+all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS) $(SHARED_LIB)
-- 
-- # ts2ps is not yet an offical program, so for the moment build
-- # it separately
--@@ -205,82 +192,97 @@ all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
-- ts2ps:	$(TS2PS_PROG)
-- 
-- ifeq ($(shell uname -s), Darwin)
---# Try getting a library containing universal objects on Mac
---$(LIB): $(OBJS)
---	libtool -static $(OBJS) -o $(LIB)
--+# Make libraries containing universal objects on Mac
--+$(STATIC_LIB): $(OBJS)
--+	libtool -static $(OBJS) -o $(STATIC_LIB)
--+$(SHARED_LIB): $(OBJS)
--+	libtool -dynamic $(OBJS) -o $(SHARED_LIB)
-- else
---$(LIB): $(LIB)($(OBJS))
--+$(STATIC_LIB): $(OBJS)
--+	rm -f $(STATIC_LIB)
--+	ar rc $(STATIC_LIB) $(OBJS)
+-+# RHEL 5 and older do not have be32toh
+-+AC_CHECK_DECLS_ONCE([be32toh])
 -+
--+$(SHARED_LIB): $(OBJS)
--+	$(LD) -shared -o $(SHARED_LIB) $(OBJS) -lc
-- endif
+- # Check kernel headers
+- AC_CHECK_HEADERS_ONCE([linux/module.h])
 - 
---$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(LIB)
---		$(CC) $< -o $(BINDIR)/esfilter $(LDFLAGS) $(LIBOPTS)
--+# Build all of the utilities with the static library, so that they can
--+# be copied around, shared, etc., without having to think about it
+-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+-index a3ac15e..28f993e 100644
+---- a/libkmod/libkmod-signature.c
+-+++ b/libkmod/libkmod-signature.c
+-@@ -25,6 +25,7 @@
+- #include <stdio.h>
+- 
+- #include "libkmod-internal.h"
+-+#include "missing.h"
+- 
+- /* These types and tables were copied from the 3.7 kernel sources.
+-  * As this is just description of the signature format, it should not be
+-diff --git a/libkmod/missing.h b/libkmod/missing.h
+-index 8d47af8..4c0d136 100644
+---- a/libkmod/missing.h
+-+++ b/libkmod/missing.h
+-@@ -43,3 +43,13 @@ static inline int finit_module(int fd, const char *uargs, int flags)
+- 		memcpy(__new, __old, __len);				\
+- 	 })
+- #endif
 -+
--+$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/esfilter $(LIBOPTS) $(LDFLAGS)
--+
--+$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/ts2es $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(LIB)
---		$(CC) $< -o $(BINDIR)/ts2es $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/es2ts $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(LIB)
---		$(CC) $< -o $(BINDIR)/es2ts $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/esdots $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(LIB)
---		$(CC) $< -o $(BINDIR)/esdots $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/esmerge $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(LIB)
---		$(CC) $< -o $(BINDIR)/esmerge $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/esreport $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(LIB)
---		$(CC) $< -o $(BINDIR)/esreport $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/esreverse $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(LIB)
---		$(CC) $< -o $(BINDIR)/esreverse $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/stream_type $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(LIB)
---		$(CC) $< -o $(BINDIR)/stream_type $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/psreport $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(LIB)
---		$(CC) $< -o $(BINDIR)/psreport $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/psdots $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(LIB)
---		$(CC) $< -o $(BINDIR)/psdots $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/ps2ts $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(LIB)
---		$(CC) $< -o $(BINDIR)/ps2ts $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsinfo $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(LIB)
---		$(CC) $< -o $(BINDIR)/tsinfo $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsreport $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(LIB)
---		$(CC) $< -o $(BINDIR)/tsreport $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsserve $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(LIB)
---		$(CC) $< -o $(BINDIR)/tsserve $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/tsplay:	$(OBJDIR)/tsplay.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsplay $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/tsplay:		$(OBJDIR)/tsplay.o $(LIB)
---		$(CC) $< -o $(BINDIR)/tsplay $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/test_ps $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(LIB)
---		$(CC) $< -o $(BINDIR)/test_ps $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/ts2ps $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(LIB)
---		$(CC) $< -o $(BINDIR)/ts2ps $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(LIB)
---		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/m2ts2ts $(LIBOPTS) $(LDFLAGS)
--+$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/pcapreport $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(LIB)
---		$(CC) $< -o $(BINDIR)/m2ts2ts $(LDFLAGS) $(LIBOPTS)
---$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(LIB)
---		$(CC) $< -o $(BINDIR)/pcapreport $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/tsfilter:	$(OBJDIR)/tsfilter.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsfilter $(LIBOPTS) $(LDFLAGS)
--+$(BINDIR)/tsdvbsub:	$(OBJDIR)/tsdvbsub.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/tsdvbsub $(LIBOPTS) $(LDFLAGS)
-- 
-- 
-- 
-- 
---$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(LIB)
---		$(CC) $< -o $(BINDIR)/test_pes $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(STATIC_LIB)
--+		$(CC) $< -o $(BINDIR)/test_pes $(LIBOPTS) $(LDFLAGS)
-- 
---$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(LIB)
---			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LDFLAGS) $(LIBOPTS)
---$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(LIB)
---			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LDFLAGS) $(LIBOPTS)
--+$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(STATIC_LIB)
--+			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LIBOPTS) $(LDFLAGS)
--+$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(STATIC_LIB)
--+			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LIBOPTS) $(LDFLAGS)
-- 
-- # Some header files depend upon others, so including one requires
-- # the others as well
--@@ -299,14 +301,19 @@ REVERSE_H = reverse_fns.h reverse_defns.h
-- FILTER_H = filter_fns.h filter_defns.h $(REVERSE_H)
-- AUDIO_H = adts_fns.h l2audio_fns.h ac3_fns.h audio_fns.h audio_defns.h adts_defns.h
-- 
---# Everyone depends upon the basic configuration file
---$(LIB)($(OBJS)) $(TEST_OBJS) $(PROG_OBJS): compat.h
--+# Everyone depends upon the basic configuration file, and I assert they all
--+# want (or may want) printing...
--+$(OBJS) $(TEST_OBJS) $(PROG_OBJS): compat.h
-- 
-- # Which library modules depend on which header files is complex, so
-- # lets just be simple
---$(LIB)($(OBJS)): $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
---                 misc_fns.h $(PS_H) $(H262_H) $(TSWRITE_H) $(AVS_H) \
---                 $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
--+$(OBJS): \
--+                 $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
--+                 misc_fns.h $(PS_H) $(H262_H) \
--+                 $(TSWRITE_H) $(AVS_H) $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
--+
--+$(OBJDIR)/%.o: %.c
--+	$(CC) -c $< -o $@ $(CFLAGS)
-- 
-- $(OBJDIR)/es2ts.o:        es2ts.c $(ES_H) $(TS_H) misc_fns.h version.h
-- 	$(CC) -c $< -o $@ $(CFLAGS)
--@@ -389,7 +396,8 @@ objclean:
-- .PHONY: clean
-- clean: objclean
-- 	-rm -f $(PROGS)
---	-rm -f $(LIB)
--+	-rm -f $(STATIC_LIB)
--+	-rm -f $(SHARED_LIB)
-- 	-rm -f $(PROG_OBJS)
-- 
-- .PHONY: distclean
+-+#if !HAVE_DECL_BE32TOH
+-+#include <endian.h>
+-+#include <byteswap.h>
+-+#if __BYTE_ORDER == __LITTLE_ENDIAN
+-+#define be32toh(x) bswap_32 (x)
+-+#else
+-+#define be32toh(x) (x)
+-+#endif
+-+#endif
 --- 
--1.8.3.2
+-1.7.1
 -
-diff --git a/package/tstools/tstools.mk b/package/tstools/tstools.mk
-index a35fe0f..40920d2 100644
---- a/package/tstools/tstools.mk
-+++ b/package/tstools/tstools.mk
-@@ -11,7 +11,7 @@ TSTOOLS_LICENSE = MPL v1.1
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index 8244fd9..28f1ca1 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256	e16e57272b54acb219c465b334715cfdddb5d97ff5d8948d4830ca1a372a868e	kmod-18.tar.xz
++sha256  3e7fee6eeff5435848b2dcc852bc8959066478d687d232284d67300c071e7b14  kmod-19.tar.xz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 99ab387..cc185c8 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define TSTOOLS_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) LD="$(TARGET_CC)" $(TARGET_MAKE_ENV) \
--		$(MAKE) -C $(@D)
-+		$(MAKE1) -C $(@D)
- endef
- 
- define TSTOOLS_INSTALL_TARGET_CMDS
+-KMOD_VERSION = 18
++KMOD_VERSION = 19
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
