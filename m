@@ -1,125 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 21:59:03 +0100
-Subject: [Buildroot] [PATCH v4 2/4] bdwgc: new package
-In-Reply-To: <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
-References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
-Message-ID: <20141118205903.GJ4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 21:59:21 +0100
+Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
+ support
+In-Reply-To: <20141118183139.GO2196@tarshish>
+References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
+ <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
+ <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
+ <546B5779.9010708@zacarias.com.ar>
+ <20141118162020.02921a54@free-electrons.com>
+ <546B7395.4040804@zacarias.com.ar>
+ <20141118175637.49a03275@free-electrons.com>
+ <20141118183139.GO2196@tarshish>
+Message-ID: <20141118215921.50bf97f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+Dear Baruch Siach,
 
-On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
-> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
-> conservative garbage collector can be used as a garbage collecting
-> replacement for C 'malloc' or C++ 'new'.
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+On Tue, 18 Nov 2014 20:31:39 +0200, Baruch Siach wrote:
 
-I've had a cursory look at configure.ac, and it seems it detects C++ and
-threading model, and does not need LFS.
+> On Tue, Nov 18, 2014 at 05:56:37PM +0100, Thomas Petazzoni wrote:
+> > I guess if we go multilib, we should build the C library for both
+> > "variants", but then build the rest of the userspace with only one of
+> > the two variants, and keep the other variant just to build the special
+> > stuff (kernel, bootloader, etc.).
+> 
+> Please forgive my ignorance, but why do we need a C library to build bare 
+> metal software like the kernel and bootloaders?
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We indeed normally don't in theory. It would be interesting to see if we
+can actually build things like grub with a bare metal x86 32 bits
+toolchain. I fear that in practice things might be a bit more
+complicated, but it would be worth testing.
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v3 -> v4:
-> - Fix formatting issues
-> (Suggested by Jerzy Grzegorek)
-> 
-> Changes v2 -> v3:
-> - bdwgc belongs to Libraries/Other
-> - Fix license file name
-> - Comment options properly
-> - Fix a formatting issue
-> (All changes suggested by Arnout Vandecappelle)
-> 
-> Changes v1 -> v2:
-> - Add external default dependency on libatomic_ops
-> - Fix several formatting issues
-> (All changes suggested by Yann Morin)
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> ---
->  package/Config.in       |  1 +
->  package/bdwgc/Config.in | 10 ++++++++++
->  package/bdwgc/bdwgc.mk  | 20 ++++++++++++++++++++
->  3 files changed, 31 insertions(+)
->  create mode 100644 package/bdwgc/Config.in
->  create mode 100644 package/bdwgc/bdwgc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 28cf703..1354c27 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -848,6 +848,7 @@ menu "Other"
->  	source "package/apr-util/Config.in"
->  	source "package/argp-standalone/Config.in"
->  	source "package/armadillo/Config.in"
-> +	source "package/bdwgc/Config.in"
->  	source "package/boost/Config.in"
->  	source "package/clapack/Config.in"
->  	source "package/classpath/Config.in"
-> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-> new file mode 100644
-> index 0000000..b30c218
-> --- /dev/null
-> +++ b/package/bdwgc/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_BDWGC
-> +	bool "bdwgc"
-> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_LIBATOMIC_OPS
-> +	help
-> +	  The Boehm-Demers-Weiser conservative garbage collector can 
-> +	  be used as a garbage collecting replacement for C 'malloc'
-> +	  or C++ 'new'.
-> +
-> +	  http://www.hboehm.info/gc/
-> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-> new file mode 100644
-> index 0000000..76d4ba0
-> --- /dev/null
-> +++ b/package/bdwgc/bdwgc.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# bdwgc
-> +#
-> +################################################################################
-> +
-> +BDWGC_VERSION = 7.2f
-> +BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
-> +BDWGC_SITE = http://www.hboehm.info/gc/gc_source
-> +BDWGC_INSTALL_STAGING = YES
-> +BDWGC_LICENSE = bdwgc license
-> +BDWGC_LICENSE_FILES = README.QUICK
-> +
-> +# Patching libtool breaks build
-> +BDWGC_LIBTOOL_PATCH = NO
-> +
-> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
