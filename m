@@ -1,70 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:16:22 +0100
-Subject: [Buildroot] [PATCH 0/7] Better handling of freescale
- self-extractible binaries
-In-Reply-To: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
-References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20141118221622.GR4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:17:02 +0100
+Subject: [Buildroot] [PATCH 2/3] live555: add support for building
+ dynamic libraries
+In-Reply-To: <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
+References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
+ <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
+Message-ID: <20141118231702.6e0ebdf0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Dear Baruch Siach,
 
-On 2014-11-07 17:03 +0100, J?r?me Pouiller spake thusly:
-> This serie introduce an helper fonction for freescale self-extractible
-> binaries. 
+On Mon, 17 Nov 2014 10:18:15 +0200, Baruch Siach wrote:
 
-Thanks, that makes for a pretty nice cleanup! :-)
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +LIVE555_CONFIG_TARGET = linux
+> +LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
+> +else
+> +LIVE555_CONFIG_TARGET = linux-with-shared-libraries
+> +LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
+> +endif
+> +
+>  ifndef ($(BR2_ENABLE_LOCALE),y)
+>  LIVE555_CFLAGS += -DLOCALE_NOT_USED
+>  endif
+>  
+>  define LIVE555_CONFIGURE_CMDS
+> -	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
+> -	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
+> -	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
+> -	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
+> -	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
+> -	echo 'PREFIX = /usr' >> $(@D)/config.linux
+> -	(cd $(@D); ./genMakefiles linux)
+> +	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +
+> +	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	echo 'PREFIX = /usr' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
+> +	# fails
+> +	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+> +	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
 
-> Obviously, last 3 patches of this serie apply on top of my previous 
-> series: "Add Xorg support for imx6" and "Add support for iMX5 GPU"
+I don't understand why you need a separate config.linux and
+config.linux-with-shared-libraries. Since in Buildroot we will either
+be building with BR2_PREFER_STATIC_LIB=y, or BR2_PREFER_STATIC_LIB
+disabled, why not simply call the file config.linux, as it was called
+before this patch?
 
-I haven't reviewed the last three patches in this series.
+Of course, the LIVE555_LIBRARY_LINK think is needed, but I don't see
+why the other changes are needed.
 
-I think patches 1-4 can be applied now (barring the few comments I
-made), and then you can directly use that from your other series.
+Can you expand on this?
 
-Of course, my comments are not definitive, others may prefer the way you
-did, so my reviewed-by tags are still valid.
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
-> J?r?me Pouiller (7):
->   freescale-imx: Add helper to extract self-extractible binaries
->   firmware-imx: Use self-extractible helper
->   imx-vpu: Use self-extractible helper
->   libfsl*: Use self-extractible helper
->   gpu-viv-bin-mx6q: Use self-extractible helper
->   libz160: Use self-extractible helper
->   gpu-amd-bin-mx51: Use self-extractible helper
-> 
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 16 ++++---------
->  package/freescale-imx/freescale-imx.mk             | 21 +++++++++++++++++
->  .../gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk           | 27 ++++++++--------------
->  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 22 ++++--------------
->  package/freescale-imx/imx-vpu/imx-vpu.mk           | 22 +++++-------------
->  package/freescale-imx/libz160/libz160.mk           | 19 ++++-----------
->  package/libfslcodec/libfslcodec.mk                 | 23 ++++--------------
->  package/libfslparser/libfslparser.mk               | 23 ++++--------------
->  package/libfslvpuwrap/libfslvpuwrap.mk             | 24 ++++---------------
->  9 files changed, 62 insertions(+), 135 deletions(-)
-> 
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
