@@ -1,83 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:07:33 +0100
-Subject: [Buildroot] [PATCH next] python-certifi: add new package
-In-Reply-To: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
-References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20141118230733.3bc8209f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 23:08:25 +0100
+Subject: [Buildroot] [PATCH 1/7] freescale-imx: Add helper to extract
+ self-extractible binaries
+In-Reply-To: <1415376207-23292-2-git-send-email-jezz@sysmic.org>
+References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+ <1415376207-23292-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20141118220825.GN4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+J?r?me, All,
 
-I was going to commit this one, but...
+Coming back on that one...
 
-On Mon, 17 Nov 2014 21:20:14 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 2014-11-07 17:03 +0100, J?r?me Pouiller spake thusly:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/Config.in                        |  1 +
->  package/python-certifi/Config.in         |  6 ++++++
->  package/python-certifi/python-certifi.mk | 14 ++++++++++++++
->  3 files changed, 21 insertions(+)
->  create mode 100644 package/python-certifi/Config.in
->  create mode 100644 package/python-certifi/python-certifi.mk
+>  package/freescale-imx/freescale-imx.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index d59876f..fb46623 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -482,6 +482,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "external python modules"
->  	source "package/python-bottle/Config.in"
-> +	source "package/python-certifi/Config.in"
->  	source "package/python-cffi/Config.in"
->  	source "package/python-configobj/Config.in"
->  	source "package/python-configshell-fb/Config.in"
-> diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
-> new file mode 100644
-> index 0000000..9390b4f
-> --- /dev/null
-> +++ b/package/python-certifi/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CERTIFI
-> +	bool "python-certifi"
+> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+> index c52fc11..38774ca 100644
+> --- a/package/freescale-imx/freescale-imx.mk
+> +++ b/package/freescale-imx/freescale-imx.mk
+> @@ -7,4 +7,25 @@
+>  FREESCALE_IMX_VERSION = 3.10.17-1.0.0
+>  FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
+>  
+> +# Helper for self-extracting binaries distributed by Freescale.
+> +# The --force makes sure it doesn't fail if the source dir already exists.
+> +# The --auto-accept skips the license check - not needed for us
+> +# because we have legal-info
+> +# Since there's a EULA in the bin file, extract it
+> +# If you use this macro, don't forget to add "EULA" to LICENSE_FILES and set
+> +# REDISTRIBUTE to "NO". Indeed, this is a legal minefield:
+> +# the EULA specifies that the Board Support Package includes software
+> +# and hardware (sic!) for which a separate license is needed...
+> +define FREESCALE_IMX_EXTRACT_HELPER
+> +	awk 'BEGIN      { start = 0; } \
+> +	     /^EOEULA/  { start = 0; } \
+> +	                { if (start) print; } \
+> +	     /<<EOEULA/ { start = 1; }' \
+> +	    $(DL_DIR)/$(1) > $(@D)/EULA
 
-We need a depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 here. I
-know it's not very useful since Python packages can anyway only be
-selected when either Python or Python 3 are enabled, but we have this
-conditional for all Python packages, so we should remain consistent and
-have it there as well.
+I wonder if we would not be better off passing the full path to the
+firmware file, from the caller, i.e.:
 
-Maybe one day we'll remove this conditional on packages that support
-both Python 2 and Python 3.
+    $(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(firmware_file))
 
-But that's not the biggest problem (I added the conditional myself).
+Regards,
+Yann E. MORIN.
 
-> +PYTHON_CERTIFI_VERSION = 14.05.14
-> +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-> +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-> +PYTHON_CERTIFI_SETUP_TYPE = setuptools
-> +PYTHON_CERTIFI_LICENSE = ISC
-> +PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+> +	cd $(@D) && sh $(DL_DIR)/$(1) --force --auto-accept;
+> +	find $(@D)/$(basename $(1)) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
+> +	rmdir $(@D)/$(basename $(1))
+> +endef
+> +
+> +
+>  include $(sort $(wildcard package/freescale-imx/*/*.mk))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-The biggest problem is the licensing information. Indeed PKG-INFO
-indicates that it's licensed under the ISC, but the LICENSE file is
-pretty unclear about, it doesn't mention the ISC at all, and instead
-talks about the Mozilla Public License.
-
-So the licensing details of this package are pretty unclear. Can you
-dig a little bit, and see what is the actual license for this package?
-
-I've Cc'ed a bunch of licensing aware folks, in case they have an
-opinion.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
