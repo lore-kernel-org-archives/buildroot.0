@@ -1,40 +1,41 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Tue, 18 Nov 2014 15:59:56 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 09:31:52 +0100
 Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
  termcap (curses) library
 In-Reply-To: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
 References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <546AFC7C.1060501@gmail.com>
+Message-ID: <20141118093152.70fa0bd7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 06:33, Yann E. MORIN wrote:
+Dear Yann E. MORIN,
+
+On Mon, 17 Nov 2014 23:33:16 +0100, Yann E. MORIN wrote:
+
 > Cc-ing Nathaniel, as all failures happen on his build server. Thomas and
 > Nathaniel, could you please review the setting of that autobuild server?
 > And the others as well?
->
-> It seems legit ncurses is missing on a build server, but we did not
-notice,
-> because we do require it for menuconfig and nconfig, so virtually everyone
-> has it, and it is most probably installed on other autobuild servers
-> because owners want to be able to run menuconfig on them to debug stuff.
->
-> Care to have a look, please?
->
-> Regards,
-> Yann E. MORIN.
 
-I haven't installed libncurses-dev per the discussion we had a few
-weeks/months back. (Basically only use the system's ncurses for 'make
-*config', and in all other cases build it)
+We already discussed this on the mailing list some time ago.
+Nathaniel's build server is the only one where libncurses-dev is not
+installed in the system. And since libncurses-dev is not part of our
+mandatory dependencies (someone could very well use gconfig or xconfig
+only, for example), we thought that keeping Nathaniel's configuration
+as is was a good way of catching the cases where we have a missing
+dependency on host-ncurses.
 
-I haven't heard otherwise, and this is also causing failures in
-host-mysql (IIRC).
+I remember we even had a discussion to decide whether we should build
+host-ncurses in such cases, or whether we should make libncurses-dev a
+hard dependency of Buildroot, and Peter decided that building
+host-ncurses was the right solution.
 
-If you both believe that I should install it, I will, but I still
-believe it is better to build host-ncurses.
+Best regards,
 
-Thanks, Nathaniel.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
