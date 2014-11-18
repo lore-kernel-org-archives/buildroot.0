@@ -1,48 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 16:20:20 +0100
-Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
- support
-In-Reply-To: <546B5779.9010708@zacarias.com.ar>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
- <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
- <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
- <546B5779.9010708@zacarias.com.ar>
-Message-ID: <20141118162020.02921a54@free-electrons.com>
+From: Peder Alm <peder.alm@semcon.com>
+Date: Tue, 18 Nov 2014 15:45:45 +0000
+Subject: [Buildroot] Unable to boot Arm926t with big endian support
+In-Reply-To: <87tx1wpnii.fsf@dell.be.48ers.dk>
+References: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>
+ <87389gr6pi.fsf@dell.be.48ers.dk>
+ <B28B6A721CC23347BBD5566C377D30416461F23B@se-got-mb01.semcon.se>
+ <87y4r8pqf4.fsf@dell.be.48ers.dk>
+ <B28B6A721CC23347BBD5566C377D30416461F269@se-got-mb01.semcon.se>,
+ <87tx1wpnii.fsf@dell.be.48ers.dk>
+Message-ID: <B28B6A721CC23347BBD5566C377D30416461F28F@se-got-mb01.semcon.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+> So that means that your ARM variant doesn't have any big endian support.
 
-On Tue, 18 Nov 2014 11:28:09 -0300, Gustavo Zacarias wrote:
+> git grep ARCH_SUPPORTS_BIG_ENDIAN                                     ~/source/linux-2.6/arch/arm
+> Kconfig:        select ARCH_SUPPORTS_BIG_ENDIAN
+> mach-highbank/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+> mach-keystone/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+> mach-mvebu/Kconfig:     select ARCH_SUPPORTS_BIG_ENDIAN
+> mach-vexpress/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+> mach-zynq/Kconfig:      select ARCH_SUPPORTS_BIG_ENDIAN
 
-> > I'll try to give this a test when I get a chance, we currently have a
-> > e5500 target that we're building binaries for but with a e500mc
-> > toolchain (using arch compatibility mode on the processor).  Will the
-> > buildroot toolchain do multilib so that it's possible to build uboot
-> > 32/36bit and a kernel 64bit?  So far that's why we stuck with the
-> > e500mc (just 32/36bit) keeping us using a single toolchain.
-> 
-> We don't do proper multilib yet, so unfortunately you'll have to go with
-> separate BR projects for say kernel/bootloader (64 bit) and userland (32
-> bit).
+> So big endian is only supported for ixp4xx, highbank, keystone, mvebu, vexpress and zynq.
 
-That's kind of annoying, and we have a similar problem on x86-64 when
-we need to build a 32 bits bootloader (though this might become less of
-an issue with UEFI being capable of using 64 bits bootloaders).
+As I read the Atmel documenation for my CPU it tells me that it does support both little and big endian. Found this on at.com:
+--------------------------------------------------------------------------------------------
+Look at the bottom of page 40 in the doc6221.pdf doc,it says
+"For more details, see Chapter 2 in ARM926EJ-S TRM, ref. DDI0198B."
 
-Should we do something about this, and support multilib? Note that SH4
-is also broken since quite a while in the internal toolchain backend
-because it needs multilib support. The issue is how do we decide which
-multilib variants to build? Do we simply "force" a certain set of
-multilib variants for a given architecture?
+Looking in the "ARM926EJ-S Technical Reference Manual" on page 2-13,
+located at:
+http://www.atmel.com/dyn/resources/prod_documents/arm_926ejs_trm.pdf
 
-Best regards,
+we find:
+Table 2-11 Control bit functions register c1 (continued)
+[7] B bit Endianness: 0 = Little-endian operation 1 = Big-endian operation. Set to
+the value of BIGENDINIT on reset.
+--------------------------------------------------------------------------------------------
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+/Peder
