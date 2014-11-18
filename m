@@ -1,83 +1,25 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 21:41:22 +0100
-Subject: [Buildroot] [PATCH 1/4] pkg-infra: always specify the local
- tarball name when calling DOWNLOAD
-In-Reply-To: <08cd8e9b5df25b7cccee3d47f50f38dab19c6f02.1416068004.git.yann.morin.1998@free.fr>
-References: <cover.1416068004.git.yann.morin.1998@free.fr>
- <08cd8e9b5df25b7cccee3d47f50f38dab19c6f02.1416068004.git.yann.morin.1998@free.fr>
-Message-ID: <546BAEF2.9050608@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Nov 2014 21:49:47 +0100
+Subject: [Buildroot] [PATCH] coreutils: avoid prompt on rebuild
+In-Reply-To: <4ec5cf7dfd067f650364a485e746d1c97021e729.1416337648.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 18 Nov 2014 21:07:28 +0200")
+References: <4ec5cf7dfd067f650364a485e746d1c97021e729.1416337648.git.baruch@tkos.co.il>
+Message-ID: <87lhn8p72s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/11/14 17:19, Yann E. MORIN wrote:
-> This will be needed to be able to differentiate the upstream filename
-> from the local filename, which may differ in some cases.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/pkg-download.mk | 3 ++-
->  package/pkg-generic.mk  | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index f3409bd..7e932e9 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -245,13 +245,14 @@ endef
->  # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
->  #
->  # Argument 1 is the source location
-> +# Argument 2 is the local filename, without any path component
->  #
->  # E.G. use like this:
->  # $(call DOWNLOAD,$(FOO_SITE))
->  ################################################################################
->  
->  define DOWNLOAD
-> -    $(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
-> +    $(call DOWNLOAD_INNER,$(1),$(2))
->  endef
->  
->  define DOWNLOAD_INNER
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9643a30..543cb60 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -84,7 +84,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
->          done ; \
->      fi
->  endif
-> -    $(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-> +    $(if $($(PKG)_SOURCE),$(call
-> DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE),$($(PKG)_SOURCE)))
->      $(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call
-> DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- So, why didn't you replace this second instance of DOWNLOAD? And there are
-several others scattered around the code...
+ > The mode bits of coreutils installed binaries are 555. As a result, on
+ > rebuild mv prompts the user to confirm overwrite of non writable binaries.
+ > Force overwrite to skip this prompt.
 
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- Regards,
- Arnout
-
->      $(foreach p,$($(PKG)_PATCH),\
->          $(if $(findstring ://,$(p)),\
->
-
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
