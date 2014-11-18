@@ -1,58 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 22:59:19 +0100
-Subject: [Buildroot] [git commit] sg3_utils: bump to version 1.40
-Message-ID: <20141201104836.1E9BE7FCD8@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 23:08:04 +0100
+Subject: [Buildroot] [git commit] live555: use upstream install target for
+	staging installation
+Message-ID: <20141201104836.31A4C7FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2dbd039d8ecafd9604b3e55dc09bd7529217b3c
+commit: http://git.buildroot.net/buildroot/commit/?id=44d15563c706dce48f84b55bd299fc94c655f071
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Move include directories out of $(STAGING_DIR)/usr/include/live. This is
+upstream choice, and is consistent with e.g. Debian. Update mplayer and vlc to
+match.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sg3_utils/sg3_utils.hash |    2 ++
- package/sg3_utils/sg3_utils.mk   |   10 +++++-----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/live555/live555.mk |   21 ++-------------------
+ package/mplayer/mplayer.mk |    2 +-
+ package/vlc/vlc.mk         |    9 ++++-----
+ 3 files changed, 7 insertions(+), 25 deletions(-)
 
-diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
-new file mode 100644
-index 0000000..d3ae1a0
---- /dev/null
-+++ b/package/sg3_utils/sg3_utils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated from download (no sig, hash)
-+sha256	901ece577d797a8a3870881fe765f6eac4bb381b99a1f7311551689e9f17130b	sg3_utils-1.40.tar.xz
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index d59d26c..dca0f6b 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index e933faa..8c31a08 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -23,6 +23,7 @@ define LIVE555_CONFIGURE_CMDS
+ 	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
+ 	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
+ 	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
++	echo 'PREFIX = /usr' >> $(@D)/config.linux
+ 	(cd $(@D); ./genMakefiles linux)
+ endef
  
--SG3_UTILS_VERSION = 1.39
-+SG3_UTILS_VERSION = 1.40
- SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
- SG3_UTILS_SITE = http://sg.danny.cz/sg/p
- SG3_UTILS_LICENSE = BSD-3c
-@@ -27,10 +27,10 @@ define SG3_UTILS_REMOVE_PROGS
- 		raw rbuf rdac read readcap read_block_limits \
- 		read_buffer read_long reassign referrals \
- 		rep_zones requests reset reset_wp rmsn rtpg safte sanitize \
--		sat_identify sat_phy_event sat_set_features scan \
--		senddiag ses start stpg sync test_rwbuf turs \
--		unmap verify vpd write_buffer write_long \
--		write_same wr_mode xcopy; do \
-+		sat_identify sat_phy_event sat_read_gplog sat_set_features \
-+		scan senddiag ses ses_microcode start stpg sync test_rwbuf \
-+		turs unmap verify vpd write_buffer write_long \
-+		write_same write_verify wr_mode xcopy; do \
- 		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
- 	done
- 	for prog in \
+@@ -30,31 +31,13 @@ define LIVE555_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all
+ endef
+ 
+-LIVE555_HEADERS_TO_INSTALL = \
+-	liveMedia/include \
+-	groupsock/include \
+-	UsageEnvironment/include \
+-	BasicUsageEnvironment/include
+-
+-LIVE555_LIBS_TO_INSTALL = \
+-	liveMedia/libliveMedia.a \
+-	groupsock/libgroupsock.a \
+-	UsageEnvironment/libUsageEnvironment.a \
+-	BasicUsageEnvironment/libBasicUsageEnvironment.a
+-
+ LIVE555_FILES_TO_INSTALL-y =
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
+ 
+ define LIVE555_INSTALL_STAGING_CMDS
+-	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
+-		mkdir -p $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+-		cp -a $(@D)/$$i/* $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+-	done; \
+-	for i in $(LIVE555_LIBS_TO_INSTALL); do \
+-		$(INSTALL) -D -m 0755 $(@D)/$$i $(STAGING_DIR)/usr/lib/`basename $$i`; \
+-	done
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
+ endef
+ 
+ define LIVE555_INSTALL_TARGET_CMDS
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index dbde977..b2530e4 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -92,7 +92,7 @@ MPLAYER_DEPENDENCIES += live555
+ MPLAYER_CONF_OPTS += --enable-live
+ MPLAYER_LIVE555 = liveMedia groupsock UsageEnvironment BasicUsageEnvironment
+ MPLAYER_CFLAGS += \
+-	$(addprefix -I$(STAGING_DIR)/usr/include/live/,$(MPLAYER_LIVE555))
++	$(addprefix -I$(STAGING_DIR)/usr/include/,$(MPLAYER_LIVE555))
+ MPLAYER_LDFLAGS += $(addprefix -l,$(MPLAYER_LIVE555)) -lstdc++
+ else
+ MPLAYER_CONF_OPTS += --disable-live
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 7e81d59..e2c81d6 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -231,11 +231,10 @@ VLC_CONF_OPTS += --enable-live555
+ VLC_DEPENDENCIES += live555
+ VLC_CONF_ENV += \
+ 	LIVE555_CFLAGS="\
+-		-I$(STAGING_DIR)/usr/include/live \
+-		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
+-		-I$(STAGING_DIR)/usr/include/live/groupsock \
+-		-I$(STAGING_DIR)/usr/include/live/liveMedia \
+-		-I$(STAGING_DIR)/usr/include/live/UsageEnvironment \
++		-I$(STAGING_DIR)/usr/include/BasicUsageEnvironment \
++		-I$(STAGING_DIR)/usr/include/groupsock \
++		-I$(STAGING_DIR)/usr/include/liveMedia \
++		-I$(STAGING_DIR)/usr/include/UsageEnvironment \
+ 		" \
+ 	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
+ else
