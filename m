@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:09:46 +0100
-Subject: [Buildroot] [PATCH 2/7] firmware-imx: Use self-extractible
-	helper
-In-Reply-To: <1415376207-23292-3-git-send-email-jezz@sysmic.org>
+Date: Tue, 18 Nov 2014 23:12:00 +0100
+Subject: [Buildroot] [PATCH 3/7] imx-vpu: Use self-extractible helper
+In-Reply-To: <1415376207-23292-4-git-send-email-jezz@sysmic.org>
 References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
- <1415376207-23292-3-git-send-email-jezz@sysmic.org>
-Message-ID: <20141118220946.GO4333@free.fr>
+ <1415376207-23292-4-git-send-email-jezz@sysmic.org>
+Message-ID: <20141118221200.GP4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,43 +16,51 @@ J?r?me, All,
 On 2014-11-07 17:03 +0100, J?r?me Pouiller spake thusly:
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 16 ++++------------
->  1 file changed, 4 insertions(+), 12 deletions(-)
+>  package/freescale-imx/imx-vpu/imx-vpu.mk | 22 ++++++----------------
+>  1 file changed, 6 insertions(+), 16 deletions(-)
 > 
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index d26b31c..c0d3d44 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -7,27 +7,19 @@
->  FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
->  FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
->  FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
-> +
-> +# See freescale-imx.mk
->  FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
->  	Atheros license (ath6k)
-> -FIRMWARE_IMX_LICENSE_FILES = licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
-> -# This is a legal minefield: the EULA specifies that
-> -# the Board Support Package includes software and hardware (sic!)
-> -# for which a separate license is needed...
-> +FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
->  FIRMWARE_IMX_REDISTRIBUTE = NO
+> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> index e0292ed..b0892e1 100644
+> --- a/package/freescale-imx/imx-vpu/imx-vpu.mk
+> +++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> @@ -6,8 +6,6 @@
 >  
->  FIRMWARE_IMX_BLOBS = ath6k sdma vpu
+>  IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
+>  IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+> -IMX_VPU_LICENSE = Freescale License
+> -IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
+>  IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+>  
+>  IMX_VPU_INSTALL_STAGING = YES
+> @@ -21,21 +19,13 @@ IMX_VPU_MAKE_ENV = \
+>  	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
+>  	INCLUDE="-idirafter $(LINUX_DIR)/include"
 >  
 > -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (firmware-imx-x.y.z)
+> -# to extract in the correct directory (imx-vpu-x.y.z)
 > -# The --force makes sure it doesn't fail if the source dir already exists.
 > -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info.
->  define FIRMWARE_IMX_EXTRACT_CMDS
+> -# because we have legal-info
+> -# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
+> -#
+> +# See freescale-imx.mk
+> +IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
+> +IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
+> +IMX_VPU_REDISTRIBUTE = NO
+> +
+>  define IMX_VPU_EXTRACT_CMDS
+> -	awk 'BEGIN      { start=0; } \
+> -	     /^EOEULA/  { start = 0; } \
+> -	                { if (start) print; } \
+> -	     /<<EOEULA/ { start=1; }'\
+> -	    $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
 > -	cd $(BUILD_DIR); \
-> -	sh $(DL_DIR)/$(FIRMWARE_IMX_SOURCE) --force --auto-accept
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_SOURCE))
+> -	sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
+> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_VPU_SOURCE))
 
-Pass the full path from here.
+Ditto, pass the full path from here.
 
-Otherwise, looks good. On your v2, your can add my:
+For the v2:
 
     Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -62,10 +69,7 @@ Yann E. MORIN.
 
 >  endef
 >  
-> -
->  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/lib/firmware
->  	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+>  define IMX_VPU_BUILD_CMDS
 > -- 
 > 1.9.1
 > 
