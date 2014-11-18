@@ -1,45 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 18 Nov 2014 10:20:09 +0100
-Subject: [Buildroot] [git commit] python-tornado: add zlib run-time
-	dependency
-In-Reply-To: <20141118101306.7d6e64f8@free-electrons.com>
-References: <20141118074238.0B8DCB483D@busybox.osuosl.org>
- <20141118101306.7d6e64f8@free-electrons.com>
-Message-ID: <CAGm1_kuXVtD-RFAMiQDt+VAFVtzrjZ2czHYt=Gx5z9JAGanTSg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Nov 2014 10:16:20 +0000
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 6.9.0-0
+Message-ID: <1416305780-3302-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 18, 2014 at 10:13 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Peter Korsgaard,
->
-> On Tue, 18 Nov 2014 08:39:25 +0100, Peter Korsgaard wrote:
->> commit: http://git.buildroot.net/buildroot/commit/?id=7b1393a04aa928cc9a5d2b5efd7d83bea7f5757b
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->> ---
->>  package/python-tornado/Config.in |    1 +
->>  1 files changed, 1 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
->> index c127d0e..870a3de 100644
->> --- a/package/python-tornado/Config.in
->> +++ b/package/python-tornado/Config.in
->> @@ -1,6 +1,7 @@
->>  config BR2_PACKAGE_PYTHON_TORNADO
->>       bool "python-tornado"
->>       depends on BR2_PACKAGE_PYTHON
->> +     select BR2_PACKAGE_PYTHON_ZLIB
->
-> Shouldn't we indicate a comment here that says it's a runtime
-> dependency?
+- Bump version to 6.9.0-0
+- Update the hash value
 
-I'm working on bumping tornado to 4.x version and would add this
-comment, when I'm finished.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/imagemagick/imagemagick.hash |    4 ++--
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Yegor
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index e67e059..20bc982 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	a4cccc70179ff2c67550e063cdcb2e62907338ef3e68b45bb1c41931e515b3eb	ImageMagick-6.8.9-9.tar.xz
++# From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
++sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a1296d4..b8e5155 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.8.9-9
++IMAGEMAGICK_VERSION = 6.9.0-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
+-- 
+1.7.1
