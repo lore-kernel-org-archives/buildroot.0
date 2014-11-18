@@ -1,52 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 08:40:04 +0100
-Subject: [Buildroot] [git commit] package/gcc: use correct symbol for
-	powerpc version mask
-Message-ID: <20141118074238.15BE2B483E@busybox.osuosl.org>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Tue, 18 Nov 2014 15:59:56 +0800
+Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
+ termcap (curses) library
+In-Reply-To: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
+References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <546AFC7C.1060501@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=255193251f6f786b795a6ccfba25d754c70d18b1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/11/14 06:33, Yann E. MORIN wrote:
+> Cc-ing Nathaniel, as all failures happen on his build server. Thomas and
+> Nathaniel, could you please review the setting of that autobuild server?
+> And the others as well?
+>
+> It seems legit ncurses is missing on a build server, but we did not
+notice,
+> because we do require it for menuconfig and nconfig, so virtually everyone
+> has it, and it is most probably installed on other autobuild servers
+> because owners want to be able to run menuconfig on them to debug stuff.
+>
+> Care to have a look, please?
+>
+> Regards,
+> Yann E. MORIN.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+I haven't installed libncurses-dev per the discussion we had a few
+weeks/months back. (Basically only use the system's ncurses for 'make
+*config', and in all other cases build it)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index de40c63..3bccf36 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -30,7 +30,7 @@ choice
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
- 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
- 		# Broken or unsupported PPC cores
--		depends on !BR2_power8
-+		depends on !BR2_powerpc_power8
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported X86 cores
-@@ -49,7 +49,7 @@ choice
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_pj4
- 		# Broken or unsupported PPC cores
--		depends on !BR2_power8
-+		depends on !BR2_powerpc_power8
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported x86 cores
-@@ -64,7 +64,7 @@ choice
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12
- 		# Broken or unsupported PPC cores
--		depends on !BR2_power8
-+		depends on !BR2_powerpc_power8
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 
+I haven't heard otherwise, and this is also causing failures in
+host-mysql (IIRC).
+
+If you both believe that I should install it, I will, but I still
+believe it is better to build host-ncurses.
+
+Thanks, Nathaniel.
