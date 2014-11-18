@@ -1,42 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 08:42:11 +0100
-Subject: [Buildroot] [PATCHv3] package/sdl_sound: fix constness in debug
-	mode
-In-Reply-To: <1416257165-19798-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 17 Nov 2014 21:46:05 +0100")
-References: <1416257165-19798-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87egt1arak.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Nov 2014 08:39:25 +0100
+Subject: [Buildroot] [git commit] python-tornado: add zlib run-time
+	dependency
+Message-ID: <20141118074238.0B8DCB483D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7b1393a04aa928cc9a5d2b5efd7d83bea7f5757b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When in debug mode, ./configure forces -Werror, which uncovers a
- > constness issue in the speex decoder.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-tornado/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Add a patch to fix this.
-
- > Fixes:
- >     http://autobuild.buildroot.net/results/6f5/6f5e1b782923d6e69e929466f0ddd3eeba28c6f1/
- >     http://autobuild.buildroot.net/results/c1b/c1b31dc37fe62cb6901edad02bf50d73072b7cf0/
- >     http://autobuild.buildroot.net/results/162/162e6d77e5812060001ea22faff99055aae3122a/
- >     ...
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
- > ---
- > Changes v2 -> v3:
- >   - do not autoreconf  (Bernd)
-
- > Changes v1 -> v2:
- >   - fix the code rather than hiding the bug  (Peter, Bernd, Vicente)
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index c127d0e..870a3de 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TORNADO
+ 	bool "python-tornado"
+ 	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_ZLIB
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed at FriendFeed.
