@@ -1,104 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:08:04 +0100
-Subject: [Buildroot] [git commit] live555: use upstream install target for
-	staging installation
-Message-ID: <20141201104836.31A4C7FCD8@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 13:38:38 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump version to 6.9.0-0
+Message-ID: <20141201104835.D36AC7FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44d15563c706dce48f84b55bd299fc94c655f071
+commit: http://git.buildroot.net/buildroot/commit/?id=bcb083c2eaffbf5b28f32567b2ebf8308a2f52a0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move include directories out of $(STAGING_DIR)/usr/include/live. This is
-upstream choice, and is consistent with e.g. Debian. Update mplayer and vlc to
-match.
+- Bump version to 6.9.0-0
+- Update the hash value
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/live555/live555.mk |   21 ++-------------------
- package/mplayer/mplayer.mk |    2 +-
- package/vlc/vlc.mk         |    9 ++++-----
- 3 files changed, 7 insertions(+), 25 deletions(-)
+ package/imagemagick/imagemagick.hash |    4 ++--
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index e933faa..8c31a08 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -23,6 +23,7 @@ define LIVE555_CONFIGURE_CMDS
- 	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
- 	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
- 	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
-+	echo 'PREFIX = /usr' >> $(@D)/config.linux
- 	(cd $(@D); ./genMakefiles linux)
- endef
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index e67e059..20bc982 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	a4cccc70179ff2c67550e063cdcb2e62907338ef3e68b45bb1c41931e515b3eb	ImageMagick-6.8.9-9.tar.xz
++# From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
++sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a1296d4..b8e5155 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -30,31 +31,13 @@ define LIVE555_BUILD_CMDS
- 	$(MAKE) -C $(@D) all
- endef
- 
--LIVE555_HEADERS_TO_INSTALL = \
--	liveMedia/include \
--	groupsock/include \
--	UsageEnvironment/include \
--	BasicUsageEnvironment/include
--
--LIVE555_LIBS_TO_INSTALL = \
--	liveMedia/libliveMedia.a \
--	groupsock/libgroupsock.a \
--	UsageEnvironment/libUsageEnvironment.a \
--	BasicUsageEnvironment/libBasicUsageEnvironment.a
--
- LIVE555_FILES_TO_INSTALL-y =
- LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
- LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
- LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
- 
- define LIVE555_INSTALL_STAGING_CMDS
--	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
--		mkdir -p $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
--		cp -a $(@D)/$$i/* $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
--	done; \
--	for i in $(LIVE555_LIBS_TO_INSTALL); do \
--		$(INSTALL) -D -m 0755 $(@D)/$$i $(STAGING_DIR)/usr/lib/`basename $$i`; \
--	done
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
- endef
- 
- define LIVE555_INSTALL_TARGET_CMDS
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index dbde977..b2530e4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -92,7 +92,7 @@ MPLAYER_DEPENDENCIES += live555
- MPLAYER_CONF_OPTS += --enable-live
- MPLAYER_LIVE555 = liveMedia groupsock UsageEnvironment BasicUsageEnvironment
- MPLAYER_CFLAGS += \
--	$(addprefix -I$(STAGING_DIR)/usr/include/live/,$(MPLAYER_LIVE555))
-+	$(addprefix -I$(STAGING_DIR)/usr/include/,$(MPLAYER_LIVE555))
- MPLAYER_LDFLAGS += $(addprefix -l,$(MPLAYER_LIVE555)) -lstdc++
- else
- MPLAYER_CONF_OPTS += --disable-live
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 7e81d59..e2c81d6 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -231,11 +231,10 @@ VLC_CONF_OPTS += --enable-live555
- VLC_DEPENDENCIES += live555
- VLC_CONF_ENV += \
- 	LIVE555_CFLAGS="\
--		-I$(STAGING_DIR)/usr/include/live \
--		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
--		-I$(STAGING_DIR)/usr/include/live/groupsock \
--		-I$(STAGING_DIR)/usr/include/live/liveMedia \
--		-I$(STAGING_DIR)/usr/include/live/UsageEnvironment \
-+		-I$(STAGING_DIR)/usr/include/BasicUsageEnvironment \
-+		-I$(STAGING_DIR)/usr/include/groupsock \
-+		-I$(STAGING_DIR)/usr/include/liveMedia \
-+		-I$(STAGING_DIR)/usr/include/UsageEnvironment \
- 		" \
- 	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
- else
+-IMAGEMAGICK_VERSION = 6.8.9-9
++IMAGEMAGICK_VERSION = 6.9.0-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
