@@ -1,43 +1,380 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 18 Nov 2014 14:08:22 +0100
-Subject: [Buildroot] [git commit] coreutils: disable documentation build
-Message-ID: <20141118131512.36B92B4869@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] tstools: disable parallel build
+Message-ID: <20141118131512.218C0B4869@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fde7a1900d7221eb50805508b8e31ab6ff5121ec
+commit: http://git.buildroot.net/buildroot/commit/?id=f9187fe9013ec312f7542ea34d083f91f2764c49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The makeinfo utility may not be installed on the build machine, and we don't
-install documentation anyway.
+Commit 0e8cbd5902e4 (tstools: fix build failure in parallel (-j) build) didn't
+fix, apparently, the parallel build issue. Revert this commit, and just
+disable parallel build.
 
 Fixes:
-http://autobuild.buildroot.net/results/b42/b42ceb3128ed832f0dd901a1db8fa3dfd92ce5ef/
-http://autobuild.buildroot.net/results/94f/94fcd06b320374f46b340f516c54b7ca726041af/
-http://autobuild.buildroot.net/results/c54/c54608ac7e03f14055e2912cf06f6d41d21227c0/
+http://autobuild.buildroot.net/results/b13/b13d31a8a915a740386befb018f859d3df5e9c35/
+http://autobuild.buildroot.net/results/287/287249ce9d337d4efc587f833f811851cafc607a/
+http://autobuild.buildroot.net/results/e4e/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
 
+Cc: Tzu-Jung Lee <roylee17@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Karoly Kasza <kaszak@gmail.com>
-Acked-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ ...ools-002-build-fix-parallel-build-failure.patch |  331 --------------------
+ package/tstools/tstools.mk                         |    2 +-
+ 2 files changed, 1 insertions(+), 332 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 391d2cd..e06510e 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -51,7 +51,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	gl_getline_needs_run_time_check=no \
- 	gl_cv_have_proc_uptime=yes \
- 	utils_cv_localtime_cache=no \
--	PERL=missing
-+	PERL=missing \
-+	MAKEINFO=true
+diff --git a/package/tstools/tstools-002-build-fix-parallel-build-failure.patch b/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
+deleted file mode 100644
+index df50747..0000000
+--- a/package/tstools/tstools-002-build-fix-parallel-build-failure.patch
++++ /dev/null
+@@ -1,331 +0,0 @@
+-From 2fe4faa9d8eab6068976c7981bc166f576869b36 Mon Sep 17 00:00:00 2001
+-From: Tzu-Jung Lee <tjlee@ambarella.com>
+-Date: Sun, 28 Jul 2013 19:40:27 +0800
+-Subject: [PATCH 1/1] build: fix parallel build failure
+-
+-This is back ported from recent upstream commit
+-
+-  0e8463ea1dc55f566a88bb3df29cf3d5f23cc326
+-
+-Once the upstream update the download page with more
+-recent source tarball, this will no longer be needed.
+-
+-Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+----
+- Makefile | 222 +++++++++++++++++++++++++++++++++------------------------------
+- 1 file changed, 115 insertions(+), 107 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index b79a573..ad7f163 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -67,67 +67,49 @@ LFS_FLAGS = -D_FILE_OFFSET_BITS=64
+- # sort of thing (presumably Linux or BSD)
+- ifeq ($(shell uname -s), Darwin)
+- 	SYSTEM = "macosx"
+--	ARCH_FLAGS = -arch ppc -arch i386
+-+	ARCH_FLAGS =
+-+	# If you're still building on a version of Mac OS X that supports powerpc,
+-+	# then you may want to uncomment the next line. Obviously, this no longer
+-+	# works in Lion, which doesn't support powerpc machines any more.
+-+	#ARCH_FLAGS = -arch ppc -arch i386
+- else
+- 	SYSTEM = "other"
+--	ARCH_FLAGS =
+-+	ARCH_FLAGS = -fPIC
+- endif
+- 
+- CFLAGS = $(WARNING_FLAGS) $(OPTIMISE_FLAGS) $(LFS_FLAGS) -I. $(PROFILE_FLAGS) $(ARCH_FLAGS)
+--LDFLAGS = -g -lm $(PROFILE_FLAGS) $(ARCH_FLAGS)
+-+LDFLAGS = -g $(PROFILE_FLAGS) $(ARCH_FLAGS) -lm
+- 
+- # Target directories
+- OBJDIR = obj
+- LIBDIR = lib
+- BINDIR = bin
+- 
+--# All of our non-program source files
+--SRCS = \
+-- accessunit.c \
+-- ac3.c \
+-- adts.c \
+-- avs.c \
+-- bitdata.c \
+-- es.c \
+-- fmtx.c \
+-- h222.c \
+-- h262.c \
+-- audio.c \
+-- l2audio.c \
+-- misc.c \
+-- nalunit.c \
+-- ps.c \
+-- pes.c \
+-- pidint.c \
+-- ts.c \
+-- tswrite.c \
+-- pcap.c 
+--
+- # All of our non-program object modules
+- OBJS = \
+-- accessunit.o \
+-- avs.o \
+-- ac3.o \
+-- adts.o \
+-- bitdata.o \
+-- es.o \
+-- filter.o \
+-- fmtx.o \
+-- h222.o \
+-- h262.o \
+-- audio.o \
+-- l2audio.o \
+-- misc.o \
+-- nalunit.o \
+-- ps.o \
+-- pes.o \
+-- pidint.o \
+-- reverse.o \
+-- ts.o \
+-- tswrite.o \
+-- pcap.o \
+-- ethernet.o \
+-- ipv4.o
+-+ $(OBJDIR)/accessunit.o \
+-+ $(OBJDIR)/avs.o \
+-+ $(OBJDIR)/ac3.o \
+-+ $(OBJDIR)/adts.o \
+-+ $(OBJDIR)/bitdata.o \
+-+ $(OBJDIR)/es.o \
+-+ $(OBJDIR)/filter.o \
+-+ $(OBJDIR)/fmtx.o \
+-+ $(OBJDIR)/h222.o \
+-+ $(OBJDIR)/h262.o \
+-+ $(OBJDIR)/audio.o \
+-+ $(OBJDIR)/l2audio.o \
+-+ $(OBJDIR)/misc.o \
+-+ $(OBJDIR)/nalunit.o \
+-+ $(OBJDIR)/ps.o \
+-+ $(OBJDIR)/pes.o \
+-+ $(OBJDIR)/pidint.o \
+-+ $(OBJDIR)/reverse.o \
+-+ $(OBJDIR)/ts.o \
+-+ $(OBJDIR)/tswrite.o \
+-+ $(OBJDIR)/pcap.o \
+-+ $(OBJDIR)/ethernet.o \
+-+ $(OBJDIR)/ipv4.o
+- 
+- # Our program object modules
+- PROG_OBJS = \
+-@@ -161,9 +143,14 @@ TEST_OBJS = \
+-   $(OBJDIR)/test_es_unit_list.o
+- 
+- # Our library
+--LIB = $(LIBDIR)/libtstools.a
+--LIBOPTS = -L$(LIBDIR) -ltstools $(ARCH_FLAGS)
+-+STATIC_LIB = $(LIBDIR)/libtstools.a
+-+LIBOPTS = $(ARCH_FLAGS) $(STATIC_LIB)
+- 
+-+ifeq ($(shell uname -s), Darwin)
+-+SHARED_LIB = $(LIBDIR)/libtstools.xxx
+-+else
+-+SHARED_LIB = $(LIBDIR)/libtstools.so
+-+endif
+- # All of our programs (except the testing ones)
+- PROGS = \
+-   $(BINDIR)/esfilter \
+-@@ -197,7 +184,7 @@ TEST_PES_PROG = $(BINDIR)/test_pes
+- TEST_PROGS = test_nal_unit_list test_es_unit_list
+- 
+- # ------------------------------------------------------------
+--all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
+-+all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS) $(SHARED_LIB)
+- 
+- # ts2ps is not yet an offical program, so for the moment build
+- # it separately
+-@@ -205,82 +192,97 @@ all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
+- ts2ps:	$(TS2PS_PROG)
+- 
+- ifeq ($(shell uname -s), Darwin)
+--# Try getting a library containing universal objects on Mac
+--$(LIB): $(OBJS)
+--	libtool -static $(OBJS) -o $(LIB)
+-+# Make libraries containing universal objects on Mac
+-+$(STATIC_LIB): $(OBJS)
+-+	libtool -static $(OBJS) -o $(STATIC_LIB)
+-+$(SHARED_LIB): $(OBJS)
+-+	libtool -dynamic $(OBJS) -o $(SHARED_LIB)
+- else
+--$(LIB): $(LIB)($(OBJS))
+-+$(STATIC_LIB): $(OBJS)
+-+	rm -f $(STATIC_LIB)
+-+	ar rc $(STATIC_LIB) $(OBJS)
+-+
+-+$(SHARED_LIB): $(OBJS)
+-+	$(LD) -shared -o $(SHARED_LIB) $(OBJS) -lc
+- endif
+- 
+--$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/esfilter $(LDFLAGS) $(LIBOPTS)
+-+# Build all of the utilities with the static library, so that they can
+-+# be copied around, shared, etc., without having to think about it
+-+
+-+$(BINDIR)/esfilter:	$(OBJDIR)/esfilter.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/esfilter $(LIBOPTS) $(LDFLAGS)
+-+
+-+$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/ts2es $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/ts2es:		$(OBJDIR)/ts2es.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/ts2es $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/es2ts $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/es2ts:		$(OBJDIR)/es2ts.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/es2ts $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/esdots $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/esdots:		$(OBJDIR)/esdots.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/esdots $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/esmerge $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/esmerge:	$(OBJDIR)/esmerge.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/esmerge $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/esreport $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/esreport:	$(OBJDIR)/esreport.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/esreport $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/esreverse $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/esreverse:	$(OBJDIR)/esreverse.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/esreverse $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/stream_type $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/stream_type:	$(OBJDIR)/stream_type.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/stream_type $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/psreport $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/psreport:	$(OBJDIR)/psreport.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/psreport $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/psdots $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/psdots:	$(OBJDIR)/psdots.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/psdots $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/ps2ts $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/ps2ts:		$(OBJDIR)/ps2ts.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/ps2ts $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsinfo $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/tsinfo:		$(OBJDIR)/tsinfo.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/tsinfo $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsreport $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/tsreport:	$(OBJDIR)/tsreport.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/tsreport $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsserve $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/tsserve:	$(OBJDIR)/tsserve.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/tsserve $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/tsplay:	$(OBJDIR)/tsplay.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsplay $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/tsplay:		$(OBJDIR)/tsplay.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/tsplay $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/test_ps $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/test_ps:	$(OBJDIR)/test_ps.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/test_ps $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/ts2ps $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/ts2ps:		$(OBJDIR)/ts2ps.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/ts2ps $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/ts_packet_insert:	$(OBJDIR)/ts_packet_insert.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/ts_packet_insert $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/m2ts2ts $(LIBOPTS) $(LDFLAGS)
+-+$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/pcapreport $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/m2ts2ts:		$(OBJDIR)/m2ts2ts.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/m2ts2ts $(LDFLAGS) $(LIBOPTS)
+--$(BINDIR)/pcapreport:	$(OBJDIR)/pcapreport.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/pcapreport $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/tsfilter:	$(OBJDIR)/tsfilter.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsfilter $(LIBOPTS) $(LDFLAGS)
+-+$(BINDIR)/tsdvbsub:	$(OBJDIR)/tsdvbsub.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/tsdvbsub $(LIBOPTS) $(LDFLAGS)
+- 
+- 
+- 
+- 
+--$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(LIB)
+--		$(CC) $< -o $(BINDIR)/test_pes $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/test_pes:	$(OBJDIR)/test_pes.o $(STATIC_LIB)
+-+		$(CC) $< -o $(BINDIR)/test_pes $(LIBOPTS) $(LDFLAGS)
+- 
+--$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(LIB)
+--			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LDFLAGS) $(LIBOPTS)
+--$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(LIB)
+--			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LDFLAGS) $(LIBOPTS)
+-+$(BINDIR)/test_nal_unit_list: 	$(OBJDIR)/test_nal_unit_list.o $(STATIC_LIB)
+-+			$(CC) $< -o $(BINDIR)/test_nal_unit_list $(LIBOPTS) $(LDFLAGS)
+-+$(BINDIR)/test_es_unit_list:  	$(OBJDIR)/test_es_unit_list.o $(STATIC_LIB)
+-+			$(CC) $< -o $(BINDIR)/test_es_unit_list $(LIBOPTS) $(LDFLAGS)
+- 
+- # Some header files depend upon others, so including one requires
+- # the others as well
+-@@ -299,14 +301,19 @@ REVERSE_H = reverse_fns.h reverse_defns.h
+- FILTER_H = filter_fns.h filter_defns.h $(REVERSE_H)
+- AUDIO_H = adts_fns.h l2audio_fns.h ac3_fns.h audio_fns.h audio_defns.h adts_defns.h
+- 
+--# Everyone depends upon the basic configuration file
+--$(LIB)($(OBJS)) $(TEST_OBJS) $(PROG_OBJS): compat.h
+-+# Everyone depends upon the basic configuration file, and I assert they all
+-+# want (or may want) printing...
+-+$(OBJS) $(TEST_OBJS) $(PROG_OBJS): compat.h
+- 
+- # Which library modules depend on which header files is complex, so
+- # lets just be simple
+--$(LIB)($(OBJS)): $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
+--                 misc_fns.h $(PS_H) $(H262_H) $(TSWRITE_H) $(AVS_H) \
+--                 $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
+-+$(OBJS): \
+-+                 $(ACCESSUNIT_H) $(NALUNIT_H) $(TS_H) $(ES_H) $(PES_H) \
+-+                 misc_fns.h $(PS_H) $(H262_H) \
+-+                 $(TSWRITE_H) $(AVS_H) $(REVERSE_H) $(FILTER_H) $(AUDIO_H)
+-+
+-+$(OBJDIR)/%.o: %.c
+-+	$(CC) -c $< -o $@ $(CFLAGS)
+- 
+- $(OBJDIR)/es2ts.o:        es2ts.c $(ES_H) $(TS_H) misc_fns.h version.h
+- 	$(CC) -c $< -o $@ $(CFLAGS)
+-@@ -389,7 +396,8 @@ objclean:
+- .PHONY: clean
+- clean: objclean
+- 	-rm -f $(PROGS)
+--	-rm -f $(LIB)
+-+	-rm -f $(STATIC_LIB)
+-+	-rm -f $(SHARED_LIB)
+- 	-rm -f $(PROG_OBJS)
+- 
+- .PHONY: distclean
+--- 
+-1.8.3.2
+-
+diff --git a/package/tstools/tstools.mk b/package/tstools/tstools.mk
+index a35fe0f..40920d2 100644
+--- a/package/tstools/tstools.mk
++++ b/package/tstools/tstools.mk
+@@ -11,7 +11,7 @@ TSTOOLS_LICENSE = MPL v1.1
  
- COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
- 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+ define TSTOOLS_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) LD="$(TARGET_CC)" $(TARGET_MAKE_ENV) \
+-		$(MAKE) -C $(@D)
++		$(MAKE1) -C $(@D)
+ endef
+ 
+ define TSTOOLS_INSTALL_TARGET_CMDS
