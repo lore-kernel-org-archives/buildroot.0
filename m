@@ -1,165 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:13:46 +0100
-Subject: [Buildroot] [PATCH 4/7] libfsl*: Use self-extractible helper
-In-Reply-To: <1415376207-23292-5-git-send-email-jezz@sysmic.org>
-References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
- <1415376207-23292-5-git-send-email-jezz@sysmic.org>
-Message-ID: <20141118221346.GQ4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:08:04 +0100
+Subject: [Buildroot] [git commit branch/next] live555: use upstream install
+	target for staging installation
+Message-ID: <20141118221448.56C8DB4903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=44d15563c706dce48f84b55bd299fc94c655f071
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2014-11-07 17:03 +0100, J?r?me Pouiller spake thusly:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/libfslcodec/libfslcodec.mk     | 23 ++++-------------------
->  package/libfslparser/libfslparser.mk   | 23 ++++-------------------
->  package/libfslvpuwrap/libfslvpuwrap.mk | 24 +++++-------------------
+Move include directories out of $(STAGING_DIR)/usr/include/live. This is
+upstream choice, and is consistent with e.g. Debian. Update mplayer and vlc to
+match.
 
-Can you split this into three separate patches, please?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/live555/live555.mk |   21 ++-------------------
+ package/mplayer/mplayer.mk |    2 +-
+ package/vlc/vlc.mk         |    9 ++++-----
+ 3 files changed, 7 insertions(+), 25 deletions(-)
 
-As far as I can see, the three changes do not depend on each other, so
-can safely be splitted.
-
-Regards,
-Yann E. MORIN.
-
->  3 files changed, 13 insertions(+), 57 deletions(-)
-> 
-> diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-> index 1a364bb..7c6bed3 100644
-> --- a/package/libfslcodec/libfslcodec.mk
-> +++ b/package/libfslcodec/libfslcodec.mk
-> @@ -7,30 +7,15 @@
->  LIBFSLCODEC_VERSION = 3.0.11
->  LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
->  LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
-> +LIBFSLCODEC_INSTALL_STAGING = YES
-> +
-> +# See freescale-imx.mk
->  LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
->  LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
-> -# This is a legal minefield: the EULA in the bin file specifies that
-> -# the Board Support Package includes software and hardware (sic!)
-> -# for which a separate license is needed...
->  LIBFSLCODEC_REDISTRIBUTE = NO
->  
-> -LIBFSLCODEC_INSTALL_STAGING = YES
-> -
-> -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (libfslcodec-x.y.z)
-> -# The --force makes sure it doesn't fail if the source dir already exists.
-> -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info.
-> -# Since the EULA in the bin file differs from the one in the tar file,
-> -# extract the one from the bin file as well.
->  define LIBFSLCODEC_EXTRACT_CMDS
-> -	awk 'BEGIN      { start=0; } \
-> -	     /^EOEULA/  { start = 0; } \
-> -	                { if (start) print; } \
-> -	     /<<EOEULA/ { start=1; }'\
-> -	    $(DL_DIR)/$(LIBFSLCODEC_SOURCE) > $(@D)/EULA
-> -	cd $(BUILD_DIR); \
-> -	sh $(DL_DIR)/$(LIBFSLCODEC_SOURCE) --force --auto-accept
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(LIBFSLCODEC_SOURCE))
->  endef
->  
->  # FIXME The Makefile installs both the arm9 and arm11 versions of the
-> diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-> index d52b151..16f5587 100644
-> --- a/package/libfslparser/libfslparser.mk
-> +++ b/package/libfslparser/libfslparser.mk
-> @@ -7,30 +7,15 @@
->  LIBFSLPARSER_VERSION = 3.0.11
->  LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
->  LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
-> +LIBFSLPARSER_INSTALL_STAGING = YES
-> +
-> +# See freescale-imx.mk
->  LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
->  LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
-> -# This is a legal minefield: the EULA in the bin file specifies that
-> -# the Board Support Package includes software and hardware (sic!)
-> -# for which a separate license is needed...
->  LIBFSLPARSER_REDISTRIBUTE = NO
->  
-> -LIBFSLPARSER_INSTALL_STAGING = YES
-> -
-> -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (libfslparser-x.y.z)
-> -# The --force makes sure it doesn't fail if the source dir already exists.
-> -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info
-> -# Since the EULA in the bin file differs from the one in the tar file,
-> -# extract the one from the bin file as well.
->  define LIBFSLPARSER_EXTRACT_CMDS
-> -	awk 'BEGIN      { start=0; } \
-> -	     /^EOEULA/  { start = 0; } \
-> -	                { if (start) print; } \
-> -	     /<<EOEULA/ { start=1; }'\
-> -	    $(DL_DIR)/$(LIBFSLPARSER_SOURCE) > $(@D)/EULA
-> -	cd $(BUILD_DIR); \
-> -	sh $(DL_DIR)/$(LIBFSLPARSER_SOURCE) --force --auto-accept
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(LIBFSLPARSER_SOURCE))
->  endef
->  
->  # The Makefile installs several versions of the libraries, but we only
-> diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-> index c3a5c1c..f8c1c6c 100644
-> --- a/package/libfslvpuwrap/libfslvpuwrap.mk
-> +++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-> @@ -7,30 +7,16 @@
->  LIBFSLVPUWRAP_VERSION = 1.0.46
->  LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
->  LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
-> +LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
-> +LIBFSLVPUWRAP_INSTALL_STAGING = YES
-> +
-> +# See freescale-imx.mk
->  LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
-> -# N.B.: the content of the two license files is different
->  LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
->  LIBFSLVPUWRAP_REDISTRIBUTE = NO
->  
-> -LIBFSLVPUWRAP_INSTALL_STAGING = YES
-> -
-> -LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
-> -
-> -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (libfslvpuwrap-x.y.z)
-> -# The --force makes sure it doesn't fail if the source dir already exists.
-> -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info
-> -# Since the EULA in the bin file differs from the one in the tar file,
-> -# extract the one from the bin file as well.
->  define LIBFSLVPUWRAP_EXTRACT_CMDS
-> -	awk 'BEGIN      { start=0; } \
-> -	     /^EOEULA/  { start = 0; } \
-> -	                { if (start) print; } \
-> -	     /<<EOEULA/ { start=1; }'\
-> -	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
-> -	cd $(BUILD_DIR); \
-> -	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(LIBFSLVPUWRAP_SOURCE))
->  endef
->  
->  $(eval $(autotools-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index e933faa..8c31a08 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -23,6 +23,7 @@ define LIVE555_CONFIGURE_CMDS
+ 	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
+ 	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
+ 	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
++	echo 'PREFIX = /usr' >> $(@D)/config.linux
+ 	(cd $(@D); ./genMakefiles linux)
+ endef
+ 
+@@ -30,31 +31,13 @@ define LIVE555_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all
+ endef
+ 
+-LIVE555_HEADERS_TO_INSTALL = \
+-	liveMedia/include \
+-	groupsock/include \
+-	UsageEnvironment/include \
+-	BasicUsageEnvironment/include
+-
+-LIVE555_LIBS_TO_INSTALL = \
+-	liveMedia/libliveMedia.a \
+-	groupsock/libgroupsock.a \
+-	UsageEnvironment/libUsageEnvironment.a \
+-	BasicUsageEnvironment/libBasicUsageEnvironment.a
+-
+ LIVE555_FILES_TO_INSTALL-y =
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
+ 
+ define LIVE555_INSTALL_STAGING_CMDS
+-	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
+-		mkdir -p $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+-		cp -a $(@D)/$$i/* $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+-	done; \
+-	for i in $(LIVE555_LIBS_TO_INSTALL); do \
+-		$(INSTALL) -D -m 0755 $(@D)/$$i $(STAGING_DIR)/usr/lib/`basename $$i`; \
+-	done
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
+ endef
+ 
+ define LIVE555_INSTALL_TARGET_CMDS
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index dbde977..b2530e4 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -92,7 +92,7 @@ MPLAYER_DEPENDENCIES += live555
+ MPLAYER_CONF_OPTS += --enable-live
+ MPLAYER_LIVE555 = liveMedia groupsock UsageEnvironment BasicUsageEnvironment
+ MPLAYER_CFLAGS += \
+-	$(addprefix -I$(STAGING_DIR)/usr/include/live/,$(MPLAYER_LIVE555))
++	$(addprefix -I$(STAGING_DIR)/usr/include/,$(MPLAYER_LIVE555))
+ MPLAYER_LDFLAGS += $(addprefix -l,$(MPLAYER_LIVE555)) -lstdc++
+ else
+ MPLAYER_CONF_OPTS += --disable-live
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 7e81d59..e2c81d6 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -231,11 +231,10 @@ VLC_CONF_OPTS += --enable-live555
+ VLC_DEPENDENCIES += live555
+ VLC_CONF_ENV += \
+ 	LIVE555_CFLAGS="\
+-		-I$(STAGING_DIR)/usr/include/live \
+-		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
+-		-I$(STAGING_DIR)/usr/include/live/groupsock \
+-		-I$(STAGING_DIR)/usr/include/live/liveMedia \
+-		-I$(STAGING_DIR)/usr/include/live/UsageEnvironment \
++		-I$(STAGING_DIR)/usr/include/BasicUsageEnvironment \
++		-I$(STAGING_DIR)/usr/include/groupsock \
++		-I$(STAGING_DIR)/usr/include/liveMedia \
++		-I$(STAGING_DIR)/usr/include/UsageEnvironment \
+ 		" \
+ 	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
+ else
