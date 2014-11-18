@@ -1,31 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 21:55:31 +0100
-Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
-	termcap (curses) library
-In-Reply-To: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 17 Nov 2014 23:33:16 +0100")
-References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87d28kp6t8.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Nov 2014 21:58:04 +0100
+Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
+ instead of cp
+In-Reply-To: <20141118193804.GA8821@fox>
+References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
+ <546A714D.3040402@mind.be> <20141118171709.GD20682@fox>
+ <546B9CBF.80905@mind.be> <20141118193804.GA8821@fox>
+Message-ID: <546BB2DC.6000502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 18/11/14 20:40, Guido Mart?nez wrote:
+> On Tue, Nov 18, 2014 at 08:23:43PM +0100, Arnout Vandecappelle wrote:
+> > On 18/11/14 18:17, Guido Mart?nez wrote:
+> >> Hi Arnout, all
+> >>
+> >> On Mon, Nov 17, 2014 at 11:06:05PM +0100, Arnout Vandecappelle wrote:
+> >>> On 17/11/14 18:19, Guido Mart?nez wrote:
+> >>>> in order to not depend on the previous permissions of the file
+> >>>>
+> >>>> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> >>>
+> >>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >>>
+> >>>  There are a few more suspicious cp instances:
+> >>>
+> >>> board/boundarydevices/nitrogen6x/post-build.sh
+> >>> boot/grub/grub.mk
+> >>> fs/iso9660/iso9660.mk
+> >> I'll take a look at these, thanks.
+> >>
+> >>>  Also, it would be good to document somewhere (e.g. in the intro mail) why the
+> >>> rsync in the toolchain is OK. Or even better, replace it even though it's not
+> >>> really necessary - it just feels more consistent and safe.
+> >> Yes, this sounds good. Maybe use --chmod on the toolchain and add a
+> >> comment there? This way we should be covered in the future if someone
+> >> uses 'rsync -a' from there.
+> >
+> >  Actually the toolchain already uses --chmod=Du+w.
+> Yes, but that doesn't have any effect on files, so files under
+> output/staging can have just about any mode, and more so when the
+> toolchain is preinstalled somewhere.
+>
+> Changing it to --chmod=u=rwX,go=rX would eliminate that variablity
+> (again, we're assuming that there are no 'random' exec bits set, but
+> that's reasonable since no files are created with the exec bit set).
+>
+> This way, at any place within BR we could do 'rsync -a
+> $(STAGING_DIR)/... $(TARGET_DIR)/...' and have well-defined modes on the
+> target.
+>
+> That kind of rsync (or any other similar copy) don't exist as of now:
+> eveything is done via 'install'. So I don't have a strong opinion for
+> changing the rsync or not.
 
- > We do not need termcap (curses) support in the host variant of erlang.
- > Fixes a bunch of autobuild failures;
- >     http://autobuild.buildroot.net/results/4be/4bef658b6815929058c769037211f7e0fc8d1f9c/
- >     http://autobuild.buildroot.net/results/726/72619ed15590a3a5a41b7c398d973766ecab0a2e/
- >     http://autobuild.buildroot.net/results/366/366439438549d5f7656be72f71dae3bb5f99c6b2/
- >     ...
+ Not true: there are plenty of instances of 'cp -a' or a variant.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Nathaniel Roach <nroach44@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ That's why I think it's safer to do the chmod for the toolchain's rsync
+as well.
 
-Committed, thanks.
+
+ Regards,
+ Arnout
+
+
+>
+> What do you guys think?
+> Thanks!
+>
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
