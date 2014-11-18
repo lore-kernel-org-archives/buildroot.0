@@ -1,37 +1,78 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Nov 2014 14:01:49 -0300
-Subject: [Buildroot] [PATCH 1/9] skeleton/S40network: tweak for debian
-	ifupdown
+Date: Tue, 18 Nov 2014 14:01:50 -0300
+Subject: [Buildroot] [PATCH 2/9] debianutils: new package
 In-Reply-To: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416330117-4458-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1416330117-4458-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the S40network script create the /run/network directory for the
-debian variant of ifupdown which uses it as a lock directory.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- system/skeleton/etc/init.d/S40network | 3 +++
- 1 file changed, 3 insertions(+)
+ package/Config.in                    |  1 +
+ package/debianutils/Config.in        |  7 +++++++
+ package/debianutils/debianutils.hash |  2 ++
+ package/debianutils/debianutils.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/debianutils/Config.in
+ create mode 100644 package/debianutils/debianutils.hash
+ create mode 100644 package/debianutils/debianutils.mk
 
-diff --git a/system/skeleton/etc/init.d/S40network b/system/skeleton/etc/init.d/S40network
-index e69e613..bfdd491 100755
---- a/system/skeleton/etc/init.d/S40network
-+++ b/system/skeleton/etc/init.d/S40network
-@@ -3,6 +3,9 @@
- # Start the network....
- #
- 
-+# Debian ifupdown needs the /run/network lock directory
-+mkdir -p /run/network
+diff --git a/package/Config.in b/package/Config.in
+index 0dbb788..278134d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1199,6 +1199,7 @@ endif
+ 	source "package/cpuload/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
++	source "package/debianutils/Config.in"
+ endif
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
+new file mode 100644
+index 0000000..f865868
+--- /dev/null
++++ b/package/debianutils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DEBIANUTILS
++	bool "debianutils"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Miscellaneous utilities specific to Debian.
 +
- case "$1" in
-   start)
-  	echo "Starting network..."
++	  https://tracker.debian.org/pkg/debianutils
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+new file mode 100644
+index 0000000..089dd42
+--- /dev/null
++++ b/package/debianutils/debianutils.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
++sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+new file mode 100644
+index 0000000..43d7cf3
+--- /dev/null
++++ b/package/debianutils/debianutils.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# debianutils
++#
++################################################################################
++
++DEBIANUTILS_VERSION = 4.4
++DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
++DEBIANUTILS_CONF_OPTS = --exec-prefix=/
++DEBIANUTILS_LICENSE = GPLv2+, SMAIL (savelog)
++DEBIANUTILS_LICENSE_FILES = debian/copyright
++
++$(eval $(autotools-package))
 -- 
 2.0.4
