@@ -1,59 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 22:03:37 +0100
-Subject: [Buildroot] [PATCH v4 3/4] libunistring: Add
- host-autotools-package
-In-Reply-To: <1415310486-25904-4-git-send-email-paguilar@paguilar.org>
-References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-4-git-send-email-paguilar@paguilar.org>
-Message-ID: <20141118210337.GK4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 22:03:57 +0100
+Subject: [Buildroot] [PATCH 0/4] pkg-infra: differentiate remote and
+ local tarball filenames (branch yem/download)
+In-Reply-To: <546BAE62.2020606@mind.be>
+References: <cover.1416068004.git.yann.morin.1998@free.fr>
+ <20141116122210.6b3651e0@free-electrons.com>
+ <546BAE62.2020606@mind.be>
+Message-ID: <20141118220357.74bc954c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+Dear Arnout Vandecappelle,
 
-On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
-> The host-libunistring is needed by guile
+On Tue, 18 Nov 2014 21:38:58 +0100, Arnout Vandecappelle wrote:
+
+>  I think there are two reasons for the split:
 > 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> 1. _SOURCE can be dropped if it is <pkg>-<version>.tar.gz - this would be
+> difficult if we only had _SITE.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+True. But on the other hand, the fact that we use
+<pkg>-<version>.tar.gz by default has always confused newcomers a bit,
+and with .tar.xz becoming more and more adopted, having .tar.gz as the
+default is less obvious than it used to be.
 
-Regards,
-Yann E. MORIN.
+> 2. _PATH and _EXTRA_DOWNLOAD don't need to specify the full URL.
 
-> ---
-> Changes v1 -> v2:
-> - Add host-libunistring (suggested by Yann Morin)
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> ---
->  package/libunistring/libunistring.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-> index 3234ddc..fd77d12 100644
-> --- a/package/libunistring/libunistring.mk
-> +++ b/package/libunistring/libunistring.mk
-> @@ -17,3 +17,4 @@ LIBUNISTRING_CONF_OPTS += --disable-threads
->  endif
->  
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Well, yes, but that's specifically the issue I raised: since you don't
+specify the full URL, there's no way for the package to download
+patches or other stuff from other places than <pkg>_SITE.
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
