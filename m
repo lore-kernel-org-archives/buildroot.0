@@ -1,49 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 18:49:18 +0100
-Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
- termcap (curses) library
-In-Reply-To: <20141118093152.70fa0bd7@free-electrons.com>
-References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
- <20141118093152.70fa0bd7@free-electrons.com>
-Message-ID: <20141118174918.GB4333@free.fr>
+Date: Tue, 18 Nov 2014 18:56:10 +0100
+Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
+ ip tables with C++
+In-Reply-To: <CANQCQpbLK7xeaPy4TM1GZx_+ZZUTNYhXyce3Pqof3MSNLxtN1Q@mail.gmail.com>
+References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20141029223413.70abc05b@free-electrons.com>
+ <54516922.1070306@zacarias.com.ar>
+ <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
+ <CANQCQpbLK7xeaPy4TM1GZx_+ZZUTNYhXyce3Pqof3MSNLxtN1Q@mail.gmail.com>
+Message-ID: <20141118175610.GC4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Matthew, All,
 
-On 2014-11-18 09:31 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 17 Nov 2014 23:33:16 +0100, Yann E. MORIN wrote:
-> > Cc-ing Nathaniel, as all failures happen on his build server. Thomas and
-> > Nathaniel, could you please review the setting of that autobuild server?
-> > And the others as well?
-> 
-> We already discussed this on the mailing list some time ago.
-> Nathaniel's build server is the only one where libncurses-dev is not
-> installed in the system. And since libncurses-dev is not part of our
-> mandatory dependencies (someone could very well use gconfig or xconfig
-> only, for example), we thought that keeping Nathaniel's configuration
-> as is was a good way of catching the cases where we have a missing
-> dependency on host-ncurses.
-> 
-> I remember we even had a discussion to decide whether we should build
-> host-ncurses in such cases, or whether we should make libncurses-dev a
-> hard dependency of Buildroot, and Peter decided that building
-> host-ncurses was the right solution.
+On 2014-11-18 07:48 -0600, Matthew Weber spake thusly:
+[--SNIP--]
+> I reposted on netfilter-devel and got clarification that the patch
+> should probably have been a kernel patch, but the binary interface to
+> iptables in the kernel has actually been replaced so this issue is
+> deprecated.  I'll carry the patch in my build locally until we update
+> our use of the API.
 
-I fully back this resolution. It is very often that a build server
-(whether it is for us to do autobuilds, or a production build server)
-lacks such libraries.
+Well, the patch seems sensible. So maybe we could carry it in Buildroot?
 
-So, we have to fix such build failures by either:
-  - adding a dependency on host-ncurses, or
-  - disabling ncurses/termcap support for the host tools if it makes
-    sense and it is possible, otherwise revert to depending on
-    host-ncurses.
+> http://www.spinics.net/lists/netfilter-devel/msg33996.html
 
-Thank you!
+Still, there is a valid point in this reply: do we know of a FLOSS C++
+package that uses the iptables binary interface?
+
+If so, that would be interesting to see how they handle that situation.
+And it would be a nice shoe to stick in the door so that patch can enter
+the kernel.
 
 Regards,
 Yann E. MORIN.
