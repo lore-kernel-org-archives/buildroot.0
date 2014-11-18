@@ -1,29 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:02:38 +0100
-Subject: [Buildroot] [PATCH 2/2] whois: bump to version 5.2.2
-In-Reply-To: <1416330318-5625-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1416330318-5625-1-git-send-email-gustavo@zacarias.com.ar>
- <1416330318-5625-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141118230238.15da2884@free-electrons.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 18 Nov 2014 22:02:40 +0000 (UTC)
+Subject: [Buildroot] Unable to boot Arm926t with big endian support
+References: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>
+ <87389gr6pi.fsf@dell.be.48ers.dk>
+ <B28B6A721CC23347BBD5566C377D30416461F23B@se-got-mb01.semcon.se>
+ <87y4r8pqf4.fsf@dell.be.48ers.dk>
+ <B28B6A721CC23347BBD5566C377D30416461F269@se-got-mb01.semcon.se>
+ <87tx1wpnii.fsf@dell.be.48ers.dk>
+ <B28B6A721CC23347BBD5566C377D30416461F28F@se-got-mb01.semcon.se>
+Message-ID: <m4gflv$ovo$2@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 2014-11-18, Peder Alm <peder.alm@semcon.com> wrote:
+>> So that means that your ARM variant doesn't have any big endian support.
+>
+>> git grep ARCH_SUPPORTS_BIG_ENDIAN                                     ~/source/linux-2.6/arch/arm
+>> Kconfig:        select ARCH_SUPPORTS_BIG_ENDIAN
+>> mach-highbank/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+>> mach-keystone/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+>> mach-mvebu/Kconfig:     select ARCH_SUPPORTS_BIG_ENDIAN
+>> mach-vexpress/Kconfig:  select ARCH_SUPPORTS_BIG_ENDIAN
+>> mach-zynq/Kconfig:      select ARCH_SUPPORTS_BIG_ENDIAN
+>
+>> So big endian is only supported for ixp4xx, highbank, keystone, mvebu, vexpress and zynq.
+>
+> As I read the Atmel documenation for my CPU it tells me that it does support both little and big endian. Found this on at.com:
+> --------------------------------------------------------------------------------------------
+> Look at the bottom of page 40 in the doc6221.pdf doc,it says
+> "For more details, see Chapter 2 in ARM926EJ-S TRM, ref. DDI0198B."
+>
+> Looking in the "ARM926EJ-S Technical Reference Manual" on page 2-13,
+> located at:
+> http://www.atmel.com/dyn/resources/prod_documents/arm_926ejs_trm.pdf
+>
+> we find:
+> Table 2-11 Control bit functions register c1 (continued)
+> [7] B bit Endianness: 0 = Little-endian operation 1 = Big-endian operation. Set to
+> the value of BIGENDINIT on reset.
+> --------------------------------------------------------------------------------------------
 
-On Tue, 18 Nov 2014 14:05:18 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/whois/whois.hash | 4 ++--
->  package/whois/whois.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+The ARM926EJ-S supports bigendian operation.  I believe that the Atmel
+AT91SAM9260 does not.
 
-Thanks, applied to next, after doing a build test on ARM.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! ... he dominates the
+                                  at               DECADENT SUBWAY SCENE.
+                              gmail.com            
