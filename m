@@ -1,68 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:17:02 +0100
-Subject: [Buildroot] [PATCH 2/3] live555: add support for building
- dynamic libraries
-In-Reply-To: <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
-References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
- <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
-Message-ID: <20141118231702.6e0ebdf0@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Nov 2014 23:23:19 +0100
+Subject: [Buildroot] [PATCH next] python-certifi: add new package
+In-Reply-To: <20141118230733.3bc8209f@free-electrons.com>
+References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
+ <20141118230733.3bc8209f@free-electrons.com>
+Message-ID: <546BC6D7.5060909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 18/11/14 23:07, Thomas Petazzoni wrote:
+> Dear Yegor Yefremov,
+>
+> I was going to commit this one, but...
+>
+> On Mon, 17 Nov 2014 21:20:14 +0100, Yegor Yefremov wrote:
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  package/Config.in                        |  1 +
+> >  package/python-certifi/Config.in         |  6 ++++++
+> >  package/python-certifi/python-certifi.mk | 14 ++++++++++++++
+> >  3 files changed, 21 insertions(+)
+> >  create mode 100644 package/python-certifi/Config.in
+> >  create mode 100644 package/python-certifi/python-certifi.mk
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index d59876f..fb46623 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -482,6 +482,7 @@ endif
+> >  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> >  menu "external python modules"
+> >      source "package/python-bottle/Config.in"
+> > +    source "package/python-certifi/Config.in"
+> >      source "package/python-cffi/Config.in"
+> >      source "package/python-configobj/Config.in"
+> >      source "package/python-configshell-fb/Config.in"
+> > diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
+> > new file mode 100644
+> > index 0000000..9390b4f
+> > --- /dev/null
+> > +++ b/package/python-certifi/Config.in
+> > @@ -0,0 +1,6 @@
+> > +config BR2_PACKAGE_PYTHON_CERTIFI
+> > +    bool "python-certifi"
+>
+> We need a depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 here. I
+> know it's not very useful since Python packages can anyway only be
+> selected when either Python or Python 3 are enabled, but we have this
+> conditional for all Python packages, so we should remain consistent and
+> have it there as well.
 
-On Mon, 17 Nov 2014 10:18:15 +0200, Baruch Siach wrote:
+ Well, a quick grep in next shows that we have 8 packages without this depends,
+and 14 packages with the depends.
 
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +LIVE555_CONFIG_TARGET = linux
-> +LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
-> +else
-> +LIVE555_CONFIG_TARGET = linux-with-shared-libraries
-> +LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
-> +endif
-> +
->  ifndef ($(BR2_ENABLE_LOCALE),y)
->  LIVE555_CFLAGS += -DLOCALE_NOT_USED
->  endif
->  
->  define LIVE555_CONFIGURE_CMDS
-> -	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
-> -	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
-> -	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
-> -	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
-> -	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
-> -	echo 'PREFIX = /usr' >> $(@D)/config.linux
-> -	(cd $(@D); ./genMakefiles linux)
-> +	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +
-> +	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'PREFIX = /usr' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
-> +	# fails
-> +	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
+ However, since the python packages that have recently been added by Peter do
+not have the depends, and since he told Yegor to remove the depends in
+python-webpy, I think the rule now is _not_ to have the depends.
 
-I don't understand why you need a separate config.linux and
-config.linux-with-shared-libraries. Since in Buildroot we will either
-be building with BR2_PREFER_STATIC_LIB=y, or BR2_PREFER_STATIC_LIB
-disabled, why not simply call the file config.linux, as it was called
-before this patch?
+>
+> Maybe one day we'll remove this conditional on packages that support
+> both Python 2 and Python 3.
+>
+> But that's not the biggest problem (I added the conditional myself).
+>
+> > +PYTHON_CERTIFI_VERSION = 14.05.14
+> > +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+> > +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
+> > +PYTHON_CERTIFI_SETUP_TYPE = setuptools
+> > +PYTHON_CERTIFI_LICENSE = ISC
+> > +PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+>
+> The biggest problem is the licensing information. Indeed PKG-INFO
+> indicates that it's licensed under the ISC, but the LICENSE file is
+> pretty unclear about, it doesn't mention the ISC at all, and instead
+> talks about the Mozilla Public License.
+>
+> So the licensing details of this package are pretty unclear. Can you
+> dig a little bit, and see what is the actual license for this package?
 
-Of course, the LIVE555_LIBRARY_LINK think is needed, but I don't see
-why the other changes are needed.
+ It's pretty clear to me: the certificate database itself is MPL, the python
+code around it is ISC.
+Actually, since it's only about 5 lines of code, I doubt the python code is even
+copyrightable, but let's ignore that :-)
 
-Can you expand on this?
 
-Thanks!
+ Regards,
+ Arnout
 
-Thomas
+>
+> I've Cc'ed a bunch of licensing aware folks, in case they have an
+> opinion.
+>
+> Thanks a lot!
+>
+> Thomas
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
