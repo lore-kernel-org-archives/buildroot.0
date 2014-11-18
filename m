@@ -1,85 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 21:58:54 +0100
-Subject: [Buildroot] [git commit] package/qemu: add support for FDT
-Message-ID: <20141118210108.6BA56B48EA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Nov 2014 22:01:48 +0100
+Subject: [Buildroot] [PATCH 3/3] package/tvheadend: Remove tabs
+In-Reply-To: <1416140787-18038-3-git-send-email-bernd.kuhls@t-online.de>
+References: <1416140787-18038-1-git-send-email-bernd.kuhls@t-online.de>
+ <1416140787-18038-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <546BB3BC.50002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=645b5763fac65dd7b9817d1788784d44220ff711
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/11/14 13:26, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-FDT is the Flat Device Tree, and allows QEMU to pass DTs to the VMs.
+ This looks more like adding tabs than removing them...
 
-Fixes:
-http://autobuild.buildroot.net/results/7e8/7e8c6fecbb22e8835269171b8bfe6d5bda300dcc/
-http://autobuild.buildroot.net/results/5e0/5e0ec37894d3d88962fb0fee9a3753b83fe18b71/
-http://autobuild.buildroot.net/results/936/936c565b6dc883beea4fac47c2cb2b47d3e84f66/
-http://autobuild.buildroot.net/results/2ab/2abe26be5be5e72d6e166dd9b63b61523f63e2f5/
+ But actually:
 
-And many more.
+> ---
+>  package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index b0038c8..ac3a557 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -35,18 +35,18 @@ endif
+>  TVHEADEND_DEPENDENCIES += dtv-scan-tables
+>  
+>  define TVHEADEND_CONFIGURE_CMDS
+> -	(cd $(@D);				\
+> -	 $(TARGET_CONFIGURE_OPTS)		\
+> -	 $(TARGET_CONFIGURE_ARGS)		\
+> -	 ./configure				\
+> -	 --prefix=/usr				\
+> -	 --arch="$(ARCH)"			\
+> -	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
+> -	 --python="$(HOST_DIR)/usr/bin/python"	\
+> -	 --disable-dvbscan			\
+> -	 --enable-bundle			\
+> -	 --disable-libffmpeg_static		\
+> -	 $(TVHEADEND_CONF_OPTS)			\
+> +	(cd $(@D); \
 
-[Peter: add autobuilder references]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/Config.in |   10 ++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ Why don't you remove the redundant parenthesis and avoid one indent level?
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index ebd2684..ff11208 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -54,6 +54,7 @@ comment "... or you can select emulator families to enable, below:"
- 
- config BR2_PACKAGE_QEMU_SYSTEM
- 	bool "Enable all systems emulation"
-+	select BR2_PACKAGE_QEMU_FDT
- 	help
- 	  Say 'y' to build all system emulators/virtualisers that QEMU supports.
- 
-@@ -81,6 +82,15 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
- 
-+comment "Misc. features"
-+
-+config BR2_PACKAGE_QEMU_FDT
-+        bool "Enable FDT"
-+        select BR2_PACKAGE_DTC
-+        help
-+          Say 'y' here to have QEMU capable of constructing Device Trees,
-+          and passing them to the VMs.
-+
- endif # BR2_PACKAGE_QEMU_HAS_EMULS
- 
- endif # BR2_PACKAGE_QEMU
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 253b2b8..9cff5ed 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -133,6 +133,13 @@ else
- QEMU_OPTS += --disable-sdl
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
-+QEMU_OPTS += --enable-fdt
-+QEMU_DEPENDENCIES += dtc
-+else
-+QEMU_OPTS += --disable-fdt
-+endif
-+
- define QEMU_CONFIGURE_CMDS
- 	( cd $(@D);                                     \
- 		LIBS='$(QEMU_LIBS)'                     \
-@@ -155,7 +162,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-brlapi                \
- 			--disable-curses                \
- 			--disable-curl                  \
--			--disable-fdt                   \
- 			--disable-bluez                 \
- 			--disable-guest-base            \
- 			--disable-uuid                  \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		$(TARGET_CONFIGURE_ARGS) \
+> +		./configure \
+
+ IMHO it would be nicer if everything below would get an additional indent level.
+
+
+ Regards,
+ Arnout
+
+> +		--prefix=/usr \
+> +		--arch="$(ARCH)" \
+> +		--cpu="$(BR2_GCC_TARGET_CPU)" \
+> +		--python="$(HOST_DIR)/usr/bin/python" \
+> +		--disable-dvbscan \
+> +		--enable-bundle \
+> +		--disable-libffmpeg_static \
+> +		$(TVHEADEND_CONF_OPTS) \
+>  	)
+>  endef
+>  
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
