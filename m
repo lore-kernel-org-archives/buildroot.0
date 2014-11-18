@@ -1,102 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 20:37:00 +0100
-Subject: [Buildroot] [PATCH 2/9] debianutils: new package
-In-Reply-To: <1416330117-4458-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
- <1416330117-4458-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <546B9FDC.4070207@mind.be>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 18 Nov 2014 16:40:06 -0300
+Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
+	instead of cp
+In-Reply-To: <546B9CBF.80905@mind.be>
+References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
+ <546A714D.3040402@mind.be> <20141118171709.GD20682@fox>
+ <546B9CBF.80905@mind.be>
+Message-ID: <20141118193804.GA8821@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 18:01, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
- You didn't carry my
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-but anyway here's an
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
->  package/Config.in                    |  1 +
->  package/debianutils/Config.in        |  7 +++++++
->  package/debianutils/debianutils.hash |  2 ++
->  package/debianutils/debianutils.mk   | 14 ++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/debianutils/Config.in
->  create mode 100644 package/debianutils/debianutils.hash
->  create mode 100644 package/debianutils/debianutils.mk
+On Tue, Nov 18, 2014 at 08:23:43PM +0100, Arnout Vandecappelle wrote:
+> On 18/11/14 18:17, Guido Mart?nez wrote:
+> > Hi Arnout, all
+> > 
+> > On Mon, Nov 17, 2014 at 11:06:05PM +0100, Arnout Vandecappelle wrote:
+> >> On 17/11/14 18:19, Guido Mart?nez wrote:
+> >>> in order to not depend on the previous permissions of the file
+> >>>
+> >>> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> >>
+> >> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >>
+> >>  There are a few more suspicious cp instances:
+> >>
+> >> board/boundarydevices/nitrogen6x/post-build.sh
+> >> boot/grub/grub.mk
+> >> fs/iso9660/iso9660.mk
+> > I'll take a look at these, thanks.
+> > 
+> >>  Also, it would be good to document somewhere (e.g. in the intro mail) why the
+> >> rsync in the toolchain is OK. Or even better, replace it even though it's not
+> >> really necessary - it just feels more consistent and safe.
+> > Yes, this sounds good. Maybe use --chmod on the toolchain and add a
+> > comment there? This way we should be covered in the future if someone
+> > uses 'rsync -a' from there.
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 0dbb788..278134d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1199,6 +1199,7 @@ endif
->  	source "package/cpuload/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/dcron/Config.in"
-> +	source "package/debianutils/Config.in"
->  endif
->  	source "package/dsp-tools/Config.in"
->  	source "package/ftop/Config.in"
-> diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
-> new file mode 100644
-> index 0000000..f865868
-> --- /dev/null
-> +++ b/package/debianutils/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_DEBIANUTILS
-> +	bool "debianutils"
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  Miscellaneous utilities specific to Debian.
-> +
-> +	  https://tracker.debian.org/pkg/debianutils
-> diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-> new file mode 100644
-> index 0000000..089dd42
-> --- /dev/null
-> +++ b/package/debianutils/debianutils.hash
-> @@ -0,0 +1,2 @@
-> +# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
-> +sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
-> diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-> new file mode 100644
-> index 0000000..43d7cf3
-> --- /dev/null
-> +++ b/package/debianutils/debianutils.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# debianutils
-> +#
-> +################################################################################
-> +
-> +DEBIANUTILS_VERSION = 4.4
-> +DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
-> +DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
-> +DEBIANUTILS_CONF_OPTS = --exec-prefix=/
-> +DEBIANUTILS_LICENSE = GPLv2+, SMAIL (savelog)
-> +DEBIANUTILS_LICENSE_FILES = debian/copyright
-> +
-> +$(eval $(autotools-package))
-> 
+>  Actually the toolchain already uses --chmod=Du+w.
+Yes, but that doesn't have any effect on files, so files under
+output/staging can have just about any mode, and more so when the
+toolchain is preinstalled somewhere.
 
+Changing it to --chmod=u=rwX,go=rX would eliminate that variablity
+(again, we're assuming that there are no 'random' exec bits set, but
+that's reasonable since no files are created with the exec bit set).
+
+This way, at any place within BR we could do 'rsync -a
+$(STAGING_DIR)/... $(TARGET_DIR)/...' and have well-defined modes on the
+target.
+
+That kind of rsync (or any other similar copy) don't exist as of now:
+eveything is done via 'install'. So I don't have a strong opinion for
+changing the rsync or not.
+
+What do you guys think?
+Thanks!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
