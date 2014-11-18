@@ -1,109 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 23:23:19 +0100
-Subject: [Buildroot] [PATCH next] python-certifi: add new package
-In-Reply-To: <20141118230733.3bc8209f@free-electrons.com>
-References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
- <20141118230733.3bc8209f@free-electrons.com>
-Message-ID: <546BC6D7.5060909@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:27:50 +0100
+Subject: [Buildroot] [git commit branch/next] debianutils: new package
+Message-ID: <20141118223028.5A8CBB4941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 23:07, Thomas Petazzoni wrote:
-> Dear Yegor Yefremov,
->
-> I was going to commit this one, but...
->
-> On Mon, 17 Nov 2014 21:20:14 +0100, Yegor Yefremov wrote:
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> >  package/Config.in                        |  1 +
-> >  package/python-certifi/Config.in         |  6 ++++++
-> >  package/python-certifi/python-certifi.mk | 14 ++++++++++++++
-> >  3 files changed, 21 insertions(+)
-> >  create mode 100644 package/python-certifi/Config.in
-> >  create mode 100644 package/python-certifi/python-certifi.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index d59876f..fb46623 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -482,6 +482,7 @@ endif
-> >  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> >  menu "external python modules"
-> >      source "package/python-bottle/Config.in"
-> > +    source "package/python-certifi/Config.in"
-> >      source "package/python-cffi/Config.in"
-> >      source "package/python-configobj/Config.in"
-> >      source "package/python-configshell-fb/Config.in"
-> > diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
-> > new file mode 100644
-> > index 0000000..9390b4f
-> > --- /dev/null
-> > +++ b/package/python-certifi/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_PYTHON_CERTIFI
-> > +    bool "python-certifi"
->
-> We need a depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 here. I
-> know it's not very useful since Python packages can anyway only be
-> selected when either Python or Python 3 are enabled, but we have this
-> conditional for all Python packages, so we should remain consistent and
-> have it there as well.
+commit: http://git.buildroot.net/buildroot/commit/?id=eb50abe7cf2e7082907e5949aec8f884b5b45eb8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Well, a quick grep in next shows that we have 8 packages without this depends,
-and 14 packages with the depends.
+[Thomas: add optional dependency on Busybox, because debianutils
+installs its own version of which, so we need to override the Busybox
+one.]
 
- However, since the python packages that have recently been added by Peter do
-not have the depends, and since he told Yegor to remove the depends in
-python-webpy, I think the rule now is _not_ to have the depends.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |    1 +
+ package/debianutils/Config.in        |    7 +++++++
+ package/debianutils/debianutils.hash |    2 ++
+ package/debianutils/debianutils.mk   |   16 ++++++++++++++++
+ 4 files changed, 26 insertions(+), 0 deletions(-)
 
->
-> Maybe one day we'll remove this conditional on packages that support
-> both Python 2 and Python 3.
->
-> But that's not the biggest problem (I added the conditional myself).
->
-> > +PYTHON_CERTIFI_VERSION = 14.05.14
-> > +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-> > +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-> > +PYTHON_CERTIFI_SETUP_TYPE = setuptools
-> > +PYTHON_CERTIFI_LICENSE = ISC
-> > +PYTHON_CERTIFI_LICENSE_FILES = LICENSE
->
-> The biggest problem is the licensing information. Indeed PKG-INFO
-> indicates that it's licensed under the ISC, but the LICENSE file is
-> pretty unclear about, it doesn't mention the ISC at all, and instead
-> talks about the Mozilla Public License.
->
-> So the licensing details of this package are pretty unclear. Can you
-> dig a little bit, and see what is the actual license for this package?
-
- It's pretty clear to me: the certificate database itself is MPL, the python
-code around it is ISC.
-Actually, since it's only about 5 lines of code, I doubt the python code is even
-copyrightable, but let's ignore that :-)
-
-
- Regards,
- Arnout
-
->
-> I've Cc'ed a bunch of licensing aware folks, in case they have an
-> opinion.
->
-> Thanks a lot!
->
-> Thomas
->
-
-
--- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/Config.in b/package/Config.in
+index d59876f..a6977ce 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1204,6 +1204,7 @@ endif
+ 	source "package/cpuload/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
++	source "package/debianutils/Config.in"
+ endif
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
+new file mode 100644
+index 0000000..f865868
+--- /dev/null
++++ b/package/debianutils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DEBIANUTILS
++	bool "debianutils"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Miscellaneous utilities specific to Debian.
++
++	  https://tracker.debian.org/pkg/debianutils
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+new file mode 100644
+index 0000000..089dd42
+--- /dev/null
++++ b/package/debianutils/debianutils.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
++sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+new file mode 100644
+index 0000000..dd78774
+--- /dev/null
++++ b/package/debianutils/debianutils.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# debianutils
++#
++################################################################################
++
++DEBIANUTILS_VERSION = 4.4
++DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
++DEBIANUTILS_CONF_OPTS = --exec-prefix=/
++# Make sure we override the busybox tools, such as which
++DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++DEBIANUTILS_LICENSE = GPLv2+, SMAIL (savelog)
++DEBIANUTILS_LICENSE_FILES = debian/copyright
++
++$(eval $(autotools-package))
