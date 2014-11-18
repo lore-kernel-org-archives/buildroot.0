@@ -1,83 +1,53 @@
-From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Date: Tue, 18 Nov 2014 15:54:47 +0100
-Subject: [Buildroot] [PATCH V3 5/5] c-icap-modules: new package
-In-Reply-To: <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <1416322487-14247-6-git-send-email-guillaume.gardet@oliseo.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 16:16:09 +0100
+Subject: [Buildroot] Init and Supervisor start. Help please.
+In-Reply-To: <CAEzGmjDXJ89vvGVfFBk4d3yJ3vbvjLA457yj6Gi_kYZYpct70Q@mail.gmail.com>
+References: <CAEzGmjDXJ89vvGVfFBk4d3yJ3vbvjLA457yj6Gi_kYZYpct70Q@mail.gmail.com>
+Message-ID: <20141118161609.6057089f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Dear Lennart Ramberg,
 
----
- package/Config.in                        |  1 +
- package/c-icap-modules/Config.in         |  7 +++++++
- package/c-icap-modules/c-icap-modules.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/c-icap-modules/Config.in
- create mode 100644 package/c-icap-modules/c-icap-modules.mk
+On Tue, 18 Nov 2014 15:01:38 +0100, Lennart Ramberg wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index fe0af07..8993814 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -984,6 +984,7 @@ menu "Networking applications"
- 	source "package/bridge-utils/Config.in"
- 	source "package/bwm-ng/Config.in"
- 	source "package/c-icap/Config.in"
-+	source "package/c-icap-modules/Config.in"
- 	source "package/can-utils/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-diff --git a/package/c-icap-modules/Config.in b/package/c-icap-modules/Config.in
-new file mode 100644
-index 0000000..616456b
---- /dev/null
-+++ b/package/c-icap-modules/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_C_ICAP_MODULES
-+	bool "c-icap-modules"
-+	depends on BR2_PACKAGE_C_ICAP
-+	help
-+	  Additionals modules for c-icap server.
-+
-+	  http://c-icap.sourceforge.net/
-diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
-new file mode 100644
-index 0000000..9029b1c
---- /dev/null
-+++ b/package/c-icap-modules/c-icap-modules.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# c-icap-modules
-+#
-+################################################################################
-+
-+C_ICAP_MODULES_VERSION = 0.3.2
-+C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
-+C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
-+C_ICAP_MODULES_LICENCE = GPLv2+
-+C_ICAP_MODULES_LICENCE_FILE = COPYING
-+C_ICAP_MODULES_CONF_OPTS = --with-c-icap=$(STAGING_DIR)/usr/
-+C_ICAP_MODULES_CONF_ENV = CFLAGS="$(CFLAGS) -I$(STAGING_DIR)/usr/include/c_icap/"
-+C_ICAP_MODULES_DEPENDENCIES = c-icap
-+
-+# This sed hack is needed since values are obtained using c-icap-config script
-+define C_ICAP_MODULES_REMOVE_BROKEN_INCLUDE_PATH
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/url_check/Makefile
-+	$(SED) "s#-I/usr/include -I/usr/include/c_icap###" $(C_ICAP_MODULES_DIR)/services/virus_scan/Makefile	
-+endef
-+
-+
-+C_ICAP_MODULES_POST_CONFIGURE_HOOKS = C_ICAP_MODULES_REMOVE_BROKEN_INCLUDE_PATH
-+
-+$(eval $(autotools-package))
+> How should supervisor be automatically started?
+> Is the below way to go (kiosk mode) in principle right?
+> 
+> /boot/grub/grub.cfg:
+> 
+> set default="0"
+> set timeout="5"
+> 
+> menuentry "Buildroot" {
+>     linux /bzImage root=/dev/sda1 init=/usr/bin/supervisord
+> }
+> 
+> Setting init=/myprogram worked as expected. But but experimenting
+> with letting supervisord start myprogram just caused kernel panic,
+> so maybe I'm heading the wrong way?
+
+Reading from http://supervisord.org/:
+
+"""
+It shares some of the same goals of programs like launchd, daemontools,
+and runit. Unlike some of these programs, it is not meant to be run as
+a substitute for init as ?process id 1?. Instead it is meant to be used
+to control processes related to a project or a customer, and is meant
+to start like any other program at boot time.
+"""
+
+So using supervisord as init doesn't seem to be the right thing to do.
+Instead, use another init (whichever you want), and then use
+supervisord to start/monitor your daemons/system services.
+
+Best regards,
+
+Thomas
 -- 
-1.8.4.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
