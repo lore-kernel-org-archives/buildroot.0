@@ -1,36 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:45:06 +0100
-Subject: [Buildroot] [git commit] perl-cross: bump to version 0.9.4
-Message-ID: <20141118224956.A89E4B495B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 23:50:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: fix init script
+In-Reply-To: <1415833586-6181-1-git-send-email-jkrause@posteo.de>
+References: <1415833586-6181-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20141118225016.GV4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=530f12d29d88bdca2b4b4650ab2464e7e7920a20
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+J?rg, All,
 
-this release fixes the build when BR2_PREFER_STATIC_LIB
-see http://autobuild.buildroot.net/results/057/057a4b9976fd6b9c5cddd117a3f29de51efe719f/build-end.log
-see https://github.com/arsv/perl-cross/issues/11
+On 2014-11-13 00:06 +0100, J?rg Krause spake thusly:
+> shairport-sync uses libdaemon for running as daemon and creating the pidfile
+> which conflicts with start-stop-daemons `-b -m` options. For that reason 
+> shairport-sync does not start using /etc/init.d/S99shairport-sync start.
+> 
+> The issue is fixed by removing the background and pidfile task from
+> start-stop-daemon and add a daemon option `-d` to shairport-sync.
+> 
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl/perl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 9684668..06855ab 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -12,7 +12,7 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.9.3
-+PERL_CROSS_VERSION = 0.9.4
- PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/shairport-sync/S99shairport-sync | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+> index 31359fc..54d20ff 100644
+> --- a/package/shairport-sync/S99shairport-sync
+> +++ b/package/shairport-sync/S99shairport-sync
+> @@ -1,12 +1,12 @@
+>  #! /bin/sh
+>  
+>  # Additional options that are passed to Shairport Sync
+> -OPTIONS=""
+> +OPTIONS="-d"
+>  
+>  case "$1" in
+>      start)
+>  	echo -n "Starting shairport-sync: "
+> -	start-stop-daemon -S -q -m -b -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
+> +	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
+>  	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>  	;;
+>      stop)
+> -- 
+> 2.1.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
