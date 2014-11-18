@@ -1,76 +1,95 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 19:10:09 +0100
-Subject: [Buildroot] [PATCH v4 1/1] glmark2: new package
-In-Reply-To: <20141028220048.68d80815@free-electrons.com>
-References: <1413580298-6255-1-git-send-email-bernd.kuhls@t-online.de>
- <20141028193444.72b79a2d@free-electrons.com>
- <XnsA3D4D22AF6F3DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20141028220048.68d80815@free-electrons.com>
-Message-ID: <20141118181009.GD4333@free.fr>
+Date: Tue, 18 Nov 2014 19:14:05 +0100
+Subject: [Buildroot] [Patch v2 1/1] libgtk3: fix undefined reference to
+ get_xkb()
+In-Reply-To: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20141118181404.GE4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd,
+Eric, All,
 
-On 2014-10-28 22:00 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 28 Oct 2014 20:39:37 +0100, Bernd Kuhls wrote:
-> > [posted and mailed]
-> > 
-> > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> > @public.gmane.org> wrote in news:20141028193444.72b79a2d at free-electrons.com:
-> > 
-> > > Checking for 'wayland-egl'               : not found 
-> > 
-> > Hi,
-> > 
-> > glmark2 searches for wayland-egl.pc. Afaics the only package providing this 
-> > file is mesa3d:
-> > https://packages.debian.org/search?searchon=contents&keywords=wayland-
-> > egl.pc&mode=path&suite=stable&arch=any
-> > 
-> > According to this posting from 2012 the RPI does not provide wayland-egl:
-> > http://lists.freedesktop.org/archives/wayland-devel/2012-November/006216.html
-> > 
-> > As I do not have access to a RPI I would like to ask if this is still 
-> > correct. If yes, I need to change the dependencies.
+On 2014-10-27 13:56 +0100, Eric Le Bihan spake thusly:
+> When configuring Gtk+ with --disable-xkb, the build fails because of an
+> undefined reference to get_xkb().
 > 
-> Yann, maybe?
+> This issue as been reported upstream [1]. This patch fixes it.
 
-Indeed, the RPi EGL implementation does not provide the sepcific GL
-extension required by Wayland, so we can't do native wayland on the RPi
-(for now).
+Given we've bumped to libgtk3 3.14.5 since you reported that patch, does
+the build failure still occurs?
 
-The weston compositor has support for the RPi, but using a specific
-backend, that directly uses Broadcom's APIs.
+If so, does that patch still apply? Can you refresh it if needed and
+respin?
 
-So, the best course of actions for now is to simply depend on mesa3d.
-
-However, I was thinking a bit further about that the other day:
-
-  - having wayland stuff depend on _HAS_EGL is incorrect, because not
-    all EGL providers has the required GL extension
-
-  - on some platforms, an additional library exists, besides the EGL
-    lib, that provides the GL extension.
-
-So having Wayland stuff only depend on mesa3d is not correct either (it
-is in Buildroot for now), because it might be possible to have an EGL
-provider that has the required extension (I thing the NVidia driver has
-it), or an additional library provides it.
-
-The only solution I can see is to add a new virtual package (name to be
-discussed) BR2_PACKAGE_HAS_WAYLAND_EGL that providers could select it is
-they have that extension. It can even be a package different from the
-one that provides EGL.
-
-But, work for later. For now, packages that require the Wayland
-extension can simply depend on mesa3d.
+If the build failure no longer applies, then I'll mark this patch
+rejected in Patchwork.
 
 Regards,
 Yann E. MORIN.
+
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/513/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
+> http://autobuild.buildroot.net/results/0c3/0c3f1df92481852622445478d2239371fc818f41/
+> 
+> [1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  ...3-0004-Fix-undefined-reference-to-get_xkb.patch | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> 
+> diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> new file mode 100644
+> index 0000000..c2f4b4f
+> --- /dev/null
+> +++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+> @@ -0,0 +1,33 @@
+> +From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
+> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +Date: Mon, 27 Oct 2014 10:34:38 +0100
+> +Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
+> +
+> +When configuring Gtk+ with --disable-xkb, the build fails because of an
+> +undefined reference to get_xkb().
+> +
+> +This patch fixes this issue.
+> +
+> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +---
+> + gdk/x11/gdkkeys-x11.c | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
+> +index c45a971..6a5481b 100644
+> +--- a/gdk/x11/gdkkeys-x11.c
+> ++++ b/gdk/x11/gdkkeys-x11.c
+> +@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+> +   int i, j;
+> +   gboolean retval;
+> + 
+> ++#ifdef HAVE_XKB
+> +   if (KEYMAP_USE_XKB (keymap))
+> +     get_xkb (keymap_x11);
+> ++#endif
+> + 
+> +   retval = TRUE;
+> + 
+> +-- 
+> +1.9.1
+> +
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
