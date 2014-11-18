@@ -1,31 +1,63 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 18 Nov 2014 22:00:02 +0000 (UTC)
-Subject: [Buildroot] Unable to boot Arm926t with big endian support
-References: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>
- <20141118133630.650c534a@free-electrons.com>
- <loom.20141118T141649-194@post.gmane.org>
-Message-ID: <m4gfh2$ovo$1@ger.gmane.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Nov 2014 23:01:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/openssl: Enable parallel build
+In-Reply-To: <20141118225525.6e8b4e02@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 18 Nov 2014 22:55:25 +0100")
+References: <1416146446-27060-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141118225525.6e8b4e02@free-electrons.com>
+Message-ID: <87vbmcnp6o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-11-18, Peder Alm <peder.alm@semcon.com> wrote:
-> Dear Thomas
->
->> Thanks for the report. On which platform are you testing this? I do
->> have some ARMv7 platforms to test BE on, but not ARMv5.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I'm using the Olimex board SAM9-L9260 and XUbuntu 14.04 on my PC.
+ > Dear Bernd Kuhls,
+ > On Sun, 16 Nov 2014 15:00:45 +0100, Bernd Kuhls wrote:
+ >> Patch taken from Gentoo, tested 50+ times on buildroot with make -j80.
+ >> 
+ >> Comparison of compile duration:
+ >> 
+ >> make -j1
+ >> real    1m24.464s
+ >> user    1m8.620s
+ >> sys     0m9.661s
+ >> 
+ >> make -j80
+ >> real    0m27.774s
+ >> user    1m34.234s
+ >> sys     0m13.441s
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/openssl/openssl-005-parallel-build.patch |  363 ++++++++++++++++++++++
+ >> package/openssl/openssl.mk                       |   10 +-
+ >> 2 files changed, 368 insertions(+), 5 deletions(-)
+ >> create mode 100644 package/openssl/openssl-005-parallel-build.patch
 
-AFAIK, the AT91 family only work in little-endian mode.  The CPU core
-can be switched, but the rest of the part is designed specifically for
-little-endian mode, and many/some of the peripherals are not going to
-work right.  At least that's what the Atmel FAE told me when I
-asked....
+ > Unfortunately, this patch is a fairly large patch, which is more a
+ > feature patch than a real fix. Could we instead get it merged upstream?
+
+ > I discussed this with Yann, and I believe Peter will agree that it's a
+ > feature patch that we shouldn't take in Buildroot. The solutions are
+ > either to take this patch upstream, or in Buildroot build in parallel
+ > and then fallback to serial build if the parallel build has failed.
+
+> Something along the lines of:
+
+ > 	$(MAKE) -C $(@D) || $(MAKE1) -C $(@D)
+
+Yes, we discussed it on IRC, but I haven't gotten around to write an
+email yet.
+
+I completely agree with the above. Considering what package it is, and
+the amount of trouble other distributions (E.G. the big Debian openssl
+issue) has had with carrying openssl patches, and the fact that the
+above speedup (~1 minute in the best case) is relatively small compared
+to the typical build time, I would also reject it until it get merged
+upstream.
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! I feel like I am
-                                  at               sharing a ``CORN-DOG''
-                              gmail.com            with NIKITA KHRUSCHEV ...
+Bye, Peter Korsgaard
