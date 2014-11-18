@@ -1,44 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:00:29 +0100
-Subject: [Buildroot] [git commit] whois: bump to version 5.2.2
-Message-ID: <20141201104836.290947FCD8@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 22:59:19 +0100
+Subject: [Buildroot] [git commit] sg3_utils: bump to version 1.40
+Message-ID: <20141201104836.1E9BE7FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec52d2b7999b844f2e877dfcf43c43e25d63f895
+commit: http://git.buildroot.net/buildroot/commit/?id=a2dbd039d8ecafd9604b3e55dc09bd7529217b3c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/whois/whois.hash |    4 ++--
- package/whois/whois.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sg3_utils/sg3_utils.hash |    2 ++
+ package/sg3_utils/sg3_utils.mk   |   10 +++++-----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 13efa14..858eb94 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.1.dsc
--sha256	54e6b64f16e10bfaf14ac40025b4272090298f0d9d3e62cbadabf946051515e6	whois_5.2.1.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.2.dsc
-+sha256	cba874b457a6b7c4659245780d3d7321d129ab47da86103e07578ec7430fec09	whois_5.2.2.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 13c0230..63268c6 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
+new file mode 100644
+index 0000000..d3ae1a0
+--- /dev/null
++++ b/package/sg3_utils/sg3_utils.hash
+@@ -0,0 +1,2 @@
++# Locally calculated from download (no sig, hash)
++sha256	901ece577d797a8a3870881fe765f6eac4bb381b99a1f7311551689e9f17130b	sg3_utils-1.40.tar.xz
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index d59d26c..dca0f6b 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WHOIS_VERSION = 5.2.1
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/w/whois
-+WHOIS_VERSION = 5.2.2
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141112T101048Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+-SG3_UTILS_VERSION = 1.39
++SG3_UTILS_VERSION = 1.40
+ SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
+ SG3_UTILS_SITE = http://sg.danny.cz/sg/p
+ SG3_UTILS_LICENSE = BSD-3c
+@@ -27,10 +27,10 @@ define SG3_UTILS_REMOVE_PROGS
+ 		raw rbuf rdac read readcap read_block_limits \
+ 		read_buffer read_long reassign referrals \
+ 		rep_zones requests reset reset_wp rmsn rtpg safte sanitize \
+-		sat_identify sat_phy_event sat_set_features scan \
+-		senddiag ses start stpg sync test_rwbuf turs \
+-		unmap verify vpd write_buffer write_long \
+-		write_same wr_mode xcopy; do \
++		sat_identify sat_phy_event sat_read_gplog sat_set_features \
++		scan senddiag ses ses_microcode start stpg sync test_rwbuf \
++		turs unmap verify vpd write_buffer write_long \
++		write_same write_verify wr_mode xcopy; do \
+ 		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
+ 	done
+ 	for prog in \
