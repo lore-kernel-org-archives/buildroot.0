@@ -1,83 +1,125 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 21:58:04 +0100
-Subject: [Buildroot] [PATCH v3 5/5] package: linux-fusion: use install
- instead of cp
-In-Reply-To: <20141118193804.GA8821@fox>
-References: <1416244750-24256-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416244750-24256-6-git-send-email-guido@vanguardiasur.com.ar>
- <546A714D.3040402@mind.be> <20141118171709.GD20682@fox>
- <546B9CBF.80905@mind.be> <20141118193804.GA8821@fox>
-Message-ID: <546BB2DC.6000502@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 21:59:03 +0100
+Subject: [Buildroot] [PATCH v4 2/4] bdwgc: new package
+In-Reply-To: <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+ <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
+Message-ID: <20141118205903.GJ4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 20:40, Guido Mart?nez wrote:
-> On Tue, Nov 18, 2014 at 08:23:43PM +0100, Arnout Vandecappelle wrote:
-> > On 18/11/14 18:17, Guido Mart?nez wrote:
-> >> Hi Arnout, all
-> >>
-> >> On Mon, Nov 17, 2014 at 11:06:05PM +0100, Arnout Vandecappelle wrote:
-> >>> On 17/11/14 18:19, Guido Mart?nez wrote:
-> >>>> in order to not depend on the previous permissions of the file
-> >>>>
-> >>>> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> >>>
-> >>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> >>>
-> >>>  There are a few more suspicious cp instances:
-> >>>
-> >>> board/boundarydevices/nitrogen6x/post-build.sh
-> >>> boot/grub/grub.mk
-> >>> fs/iso9660/iso9660.mk
-> >> I'll take a look at these, thanks.
-> >>
-> >>>  Also, it would be good to document somewhere (e.g. in the intro mail) why the
-> >>> rsync in the toolchain is OK. Or even better, replace it even though it's not
-> >>> really necessary - it just feels more consistent and safe.
-> >> Yes, this sounds good. Maybe use --chmod on the toolchain and add a
-> >> comment there? This way we should be covered in the future if someone
-> >> uses 'rsync -a' from there.
-> >
-> >  Actually the toolchain already uses --chmod=Du+w.
-> Yes, but that doesn't have any effect on files, so files under
-> output/staging can have just about any mode, and more so when the
-> toolchain is preinstalled somewhere.
->
-> Changing it to --chmod=u=rwX,go=rX would eliminate that variablity
-> (again, we're assuming that there are no 'random' exec bits set, but
-> that's reasonable since no files are created with the exec bit set).
->
-> This way, at any place within BR we could do 'rsync -a
-> $(STAGING_DIR)/... $(TARGET_DIR)/...' and have well-defined modes on the
-> target.
->
-> That kind of rsync (or any other similar copy) don't exist as of now:
-> eveything is done via 'install'. So I don't have a strong opinion for
-> changing the rsync or not.
+Pedro, All,
 
- Not true: there are plenty of instances of 'cp -a' or a variant.
+On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
+> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
+> conservative garbage collector can be used as a garbage collecting
+> replacement for C 'malloc' or C++ 'new'.
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 
- That's why I think it's safer to do the chmod for the toolchain's rsync
-as well.
+I've had a cursory look at configure.ac, and it seems it detects C++ and
+threading model, and does not need LFS.
 
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
-
->
-> What do you guys think?
-> Thanks!
->
-
+> ---
+> Changes v3 -> v4:
+> - Fix formatting issues
+> (Suggested by Jerzy Grzegorek)
+> 
+> Changes v2 -> v3:
+> - bdwgc belongs to Libraries/Other
+> - Fix license file name
+> - Comment options properly
+> - Fix a formatting issue
+> (All changes suggested by Arnout Vandecappelle)
+> 
+> Changes v1 -> v2:
+> - Add external default dependency on libatomic_ops
+> - Fix several formatting issues
+> (All changes suggested by Yann Morin)
+> 
+> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> ---
+>  package/Config.in       |  1 +
+>  package/bdwgc/Config.in | 10 ++++++++++
+>  package/bdwgc/bdwgc.mk  | 20 ++++++++++++++++++++
+>  3 files changed, 31 insertions(+)
+>  create mode 100644 package/bdwgc/Config.in
+>  create mode 100644 package/bdwgc/bdwgc.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 28cf703..1354c27 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -848,6 +848,7 @@ menu "Other"
+>  	source "package/apr-util/Config.in"
+>  	source "package/argp-standalone/Config.in"
+>  	source "package/armadillo/Config.in"
+> +	source "package/bdwgc/Config.in"
+>  	source "package/boost/Config.in"
+>  	source "package/clapack/Config.in"
+>  	source "package/classpath/Config.in"
+> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+> new file mode 100644
+> index 0000000..b30c218
+> --- /dev/null
+> +++ b/package/bdwgc/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_BDWGC
+> +	bool "bdwgc"
+> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_LIBATOMIC_OPS
+> +	help
+> +	  The Boehm-Demers-Weiser conservative garbage collector can 
+> +	  be used as a garbage collecting replacement for C 'malloc'
+> +	  or C++ 'new'.
+> +
+> +	  http://www.hboehm.info/gc/
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> new file mode 100644
+> index 0000000..76d4ba0
+> --- /dev/null
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# bdwgc
+> +#
+> +################################################################################
+> +
+> +BDWGC_VERSION = 7.2f
+> +BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+> +BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+> +BDWGC_INSTALL_STAGING = YES
+> +BDWGC_LICENSE = bdwgc license
+> +BDWGC_LICENSE_FILES = README.QUICK
+> +
+> +# Patching libtool breaks build
+> +BDWGC_LIBTOOL_PATCH = NO
+> +
+> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
