@@ -1,44 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Nov 2014 14:01:56 -0300
-Subject: [Buildroot] [PATCH 8/9] dhcpcd: use standard installation
+Date: Tue, 18 Nov 2014 14:01:57 -0300
+Subject: [Buildroot] [PATCH 9/9] network-manager: adjust dhclient and dhcpcd
+	directories
 In-Reply-To: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416330117-4458-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1416330117-4458-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop the custom/manual install cmds and do a normal make install.
-This gets dhcpcd-hooks installed which are useful for many accesory
-setup functions like dns, ntp server, and so on.
-Also install dhcpcd to /sbin since it's expected by debian ifupdown,
-For busybox ifupdown when external dhcp clients are enabled (not in the
-default config we ship) will search the path.
+dhclient and dhcpcd were moved from /usr/sbin to /sbin for busybox-less
+SysV-style init with Debian utilities, so adjust accordingly.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dhcpcd/dhcpcd.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/network-manager/network-manager.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 825a345..c06002f 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -35,12 +35,7 @@ define DHCPCD_BUILD_CMDS
- endef
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 7944254..9770cae 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -56,11 +56,11 @@ else
+ endif
  
- define DHCPCD_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
--		$(TARGET_DIR)/usr/sbin/dhcpcd
--	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
--		$(TARGET_DIR)/etc/dhcpcd.conf
--	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
--		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
- endef
+ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/usr/sbin/dhclient
++NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
+ endif
  
- # NOTE: Even though this package has a configure script, it is not generated
+ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/usr/sbin/dhcpcd
++NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+ endif
+ 
+ # uClibc by default doesn't have backtrace support, so don't use it
 -- 
 2.0.4
