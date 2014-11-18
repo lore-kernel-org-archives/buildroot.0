@@ -1,47 +1,187 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 18:04:05 +0100
-Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
- support
-In-Reply-To: <546B7B23.9030004@zacarias.com.ar>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
- <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
- <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
- <546B5779.9010708@zacarias.com.ar>
- <20141118162020.02921a54@free-electrons.com>
- <546B7395.4040804@zacarias.com.ar>
- <20141118175637.49a03275@free-electrons.com>
- <546B7B23.9030004@zacarias.com.ar>
-Message-ID: <20141118180405.7ea733ae@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 18 Nov 2014 18:04:26 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/x265: New package
+Message-ID: <1416330267-10443-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Depends on http://patchwork.ozlabs.org/patch/411789/
 
-On Tue, 18 Nov 2014 14:00:19 -0300, Gustavo Zacarias wrote:
-> On 11/18/2014 01:56 PM, Thomas Petazzoni wrote:
-> > What do you call the full multilib dance?
-> > 
-> > I guess if we go multilib, we should build the C library for both
-> > "variants", but then build the rest of the userspace with only one of
-> > the two variants, and keep the other variant just to build the special
-> > stuff (kernel, bootloader, etc.).
-> 
-> Building all (necessary) libraries as well to accomodate for ugly BLOBs
-> like the flash plugin or other cr^H^Hstuff like that, say i386 zlib and
-> more.
-> I don't think we want that.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Unfortunately, it's typically the kind of thing that's very hard to do
-with kconfig, as it would require the ability to specify for each
-package for which multilib variant it should be built. Same issue as
-having a per-package "build this statically" or "build this with
-debugging symbol" option.
+--
+v2: Removed package-specific handling of CMAKE_SYSTEM_PROCESSOR
 
-Thomas
+---
+ package/Config.in           |    1 +
+ package/x265/0001-arm.patch |   71 +++++++++++++++++++++++++++++++++++++++++++
+ package/x265/Config.in      |   23 ++++++++++++++
+ package/x265/x265.mk        |   34 +++++++++++++++++++++
+ 4 files changed, 129 insertions(+)
+ create mode 100644 package/x265/0001-arm.patch
+ create mode 100644 package/x265/Config.in
+ create mode 100644 package/x265/x265.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 9a73995..0084f9b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -773,6 +773,7 @@ menu "Multimedia"
+ 	source "package/live555/Config.in"
+ 	source "package/mediastreamer/Config.in"
+ 	source "package/x264/Config.in"
++	source "package/x265/Config.in"
+ endmenu
+ 
+ menu "Networking"
+diff --git a/package/x265/0001-arm.patch b/package/x265/0001-arm.patch
+new file mode 100644
+index 0000000..69ae458
+--- /dev/null
++++ b/package/x265/0001-arm.patch
+@@ -0,0 +1,71 @@
++Fix ARM build
++
++Fetched from https://github.com/archlinuxarm/PKGBUILDs/blob/master/extra/x265/arm.patch
++and adjusted paths so patch applies with -p1.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/source/CMakeLists.txt.orig	2014-10-04 17:02:08.482815493 +0200
+++++ b/source/CMakeLists.txt	2014-10-04 17:11:52.536865262 +0200
++@@ -46,10 +46,18 @@
++         set(X64 1)
++         add_definitions(-DX86_64=1)
++     endif()
++-elseif(${SYSPROC} STREQUAL "armv6l")
++-    message(STATUS "Detected ARM target processor")
++-    set(ARM 1)
++-    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1)
+++elseif(${SYSPROC} MATCHES "armv5.*")
+++    message(STATUS "Detected ARMV5 system processor")
+++    set(ARMV5 1)
+++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=0 -DHAVE_NEON=0)
+++elseif(${SYSPROC} STREQUAL "armv6l")
+++    message(STATUS "Detected ARMV6 system processor")
+++    set(ARMV6 1)
+++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1 -DHAVE_NEON=0)
+++elseif(${SYSPROC} STREQUAL "armv7l")
+++    message(STATUS "Detected ARMV7 system processor")
+++    set(ARMV7 1)
+++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1 -DHAVE_NEON=0)
++ else()
++     message(STATUS "CMAKE_SYSTEM_PROCESSOR value `${CMAKE_SYSTEM_PROCESSOR}` is unknown")
++     message(STATUS "Please add this value near ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE}")
++@@ -127,8 +135,8 @@
++     if(X86 AND NOT X64)
++         add_definitions(-march=i686)
++     endif()
++-    if(ARM)
++-        add_definitions(-march=armv6 -mfloat-abi=hard -mfpu=vfp)
+++    if(ARMV7)
+++        add_definitions(-fPIC)
++     endif()
++     check_cxx_compiler_flag(-Wno-narrowing CC_HAS_NO_NARROWING) 
++     check_cxx_compiler_flag(-ffast-math CC_HAS_FAST_MATH) 
++--- a/source/common/cpu.cpp.orig	2014-10-04 17:13:58.507875996 +0200
+++++ b/source/common/cpu.cpp	2014-10-04 17:21:11.170912864 +0200
++@@ -37,7 +37,7 @@
++ #include <machine/cpu.h>
++ #endif
++ 
++-#if X265_ARCH_ARM && !defined(HAVE_NEON)
+++#if X265_ARCH_ARM && (!defined(HAVE_NEON) || HAVE_NEON==0)
++ #include <signal.h>
++ #include <setjmp.h>
++ static sigjmp_buf jmpbuf;
++@@ -340,7 +340,6 @@
++     }
++ 
++     canjump = 1;
++-    x265_cpu_neon_test();
++     canjump = 0;
++     signal(SIGILL, oldsig);
++ #endif // if !HAVE_NEON
++@@ -356,7 +355,7 @@
++     // which may result in incorrect detection and the counters stuck enabled.
++     // right now Apple does not seem to support performance counters for this test
++ #ifndef __MACH__
++-    flags |= x265_cpu_fast_neon_mrc_test() ? X265_CPU_FAST_NEON_MRC : 0;
+++    //flags |= x265_cpu_fast_neon_mrc_test() ? X265_CPU_FAST_NEON_MRC : 0;
++ #endif
++     // TODO: write dual issue test? currently it's A8 (dual issue) vs. A9 (fast mrc)
++ #endif // if HAVE_ARMV6
+diff --git a/package/x265/Config.in b/package/x265/Config.in
+new file mode 100644
+index 0000000..bf8bd12
+--- /dev/null
++++ b/package/x265/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_X265
++	bool "x265"
++	depends on BR2_i386 || BR2_x86_64 || BR2_arm
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  x265 is an open-source project and free application library for encoding
++	  video streams into the H.265/High Efficiency Video Coding (HEVC) format.
++
++	  http://x265.org
++
++if BR2_PACKAGE_X265
++
++config BR2_PACKAGE_X265_CLI
++	bool "CLI"
++	help
++	  Build standalone CLI application
++endif
++
++comment "x265 needs a toolchain w/ C++"
++	depends on BR2_i386 || BR2_x86_64 || BR2_arm
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+new file mode 100644
+index 0000000..026fd26
+--- /dev/null
++++ b/package/x265/x265.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# x265
++#
++################################################################################
++
++X265_VERSION = 1.4
++X265_SOURCE = $(X265_VERSION).tar.bz2
++X265_SITE = https://bitbucket.org/multicoreware/x265/get
++X265_INSTALL_STAGING = YES
++X265_LICENSE = GPLv2
++X265_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++X265_DEPENDENCIES += host-yasm
++else
++X265_CONF_OPTS += --disable-asm
++endif
++
++# CMakeLists.txt is stored in $(@D)/source/, not in $(@D)/
++define X265_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(HOST_DIR)/usr/bin/cmake -G "Unix Makefiles" source/ \
++			-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
++			-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
++			-DCMAKE_INSTALL_PREFIX="/usr" \
++			-DCMAKE_COLOR_MAKEFILE=OFF \
++		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
++		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
++		-DENABLE_CLI=$(if $(BR2_PACKAGE_X265_CLI),ON,OFF) \
++	)
++endef
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
