@@ -1,42 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Nov 2014 20:53:53 +0100
+Date: Tue, 18 Nov 2014 20:56:48 +0100
 Subject: [Buildroot] [PATCH 3/9] ifupdown: new package
-In-Reply-To: <CABbD_XBtqRu2L6rPmxjpp3TgoOMADTeVQXRpRMt4qKjRey0tdg@mail.gmail.com>
-References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>	<1416330117-4458-4-git-send-email-gustavo@zacarias.com.ar>	<CABbD_XCy1Nayf0SrA0Ae-vsFaKoM8xskE6K6UafmzN4=6aamwA@mail.gmail.com>
- <CABbD_XBtqRu2L6rPmxjpp3TgoOMADTeVQXRpRMt4qKjRey0tdg@mail.gmail.com>
-Message-ID: <546BA3D1.1040805@mind.be>
+In-Reply-To: <1416330117-4458-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
+ <1416330117-4458-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <546BA480.7050807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/14 20:42, K?roly Kasza wrote:
-> I don't know how should I propose a patch to a pending patch :)
+On 18/11/14 18:01, Gustavo Zacarias wrote:
+> +define IFUPDOWN_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
+> +endef
 
- Like you did, except:
+ The bundled install tries to symlink ifdown->ifup, without removing ifup first.
+So when it's installed a second time, or when busybox is selected, it errors out.
 
-- never attach, always send in-line;
-
-- don't top-post.
-
-
-> So here's attached a patch file, to be put into the package/ifupdown directory.
-
- Patching the debian/* files isn't necessary, we don't use them.
-
- I agree with the solution of this patch. The alternative would be to create our
-own dpkg-architecture in our HOST_DIR, but I think that's a bit too much to ask.
-
+ Adding an $(RM) $(TARGET_DIR)/sbin/ifdown solves it.
 
  Regards,
  Arnout
-
-> 
-> BR
-> Karoly
-> 
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
