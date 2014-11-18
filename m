@@ -1,128 +1,52 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 18 Nov 2014 18:02:34 -0500
-Subject: [Buildroot] [PATCH 1/1] luajit: point /usr/bin/lua to luajit if
- lua not selected
-In-Reply-To: <20141118224759.GU4333@free.fr>
-References: <1415503350-2021-1-git-send-email-danomimanchego123@gmail.com>
- <20141118224759.GU4333@free.fr>
-Message-ID: <CANxTyt6u+hcnoBG6oqA8u6NC1bK8GNoSJLOGS8jVjxohZdw6eQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Nov 2014 00:04:29 +0100
+Subject: [Buildroot] [PATCH next] python-certifi: add new package
+In-Reply-To: <546BC6D7.5060909@mind.be>
+References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
+ <20141118230733.3bc8209f@free-electrons.com>
+ <546BC6D7.5060909@mind.be>
+Message-ID: <20141119000429.65c6a8c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Arnout Vandecappelle,
 
-On Tue, Nov 18, 2014 at 5:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Danomi, All,
->
-> On 2014-11-08 22:22 -0500, Danomi Manchego spake thusly:
->> The luajit package is a provider of a lua interpreter, but does
->> not install a lua executable, as it can live side by side with lua.
->
-> That is not the case in Buildroot: since they are both providers for the
-> luainterpreter virtual package, only one of them may be enabled at a
-> time in Buildroot.
->
-> (Well, it's possible to enable both in the menuconfig, but then it will
-> fail early at build time.)
+On Tue, 18 Nov 2014 23:23:19 +0100, Arnout Vandecappelle wrote:
 
-Understood.  I was simply explaining why luajit doesn't install a
-"lua", and probably never will - because there's no reason outside of
-buildroot to think that luajit and lua are mutually exclusive.
+> > We need a depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 here. I
+> > know it's not very useful since Python packages can anyway only be
+> > selected when either Python or Python 3 are enabled, but we have this
+> > conditional for all Python packages, so we should remain consistent and
+> > have it there as well.
+> 
+>  Well, a quick grep in next shows that we have 8 packages without this depends,
+> and 14 packages with the depends.
+> 
+>  However, since the python packages that have recently been added by Peter do
+> not have the depends, and since he told Yegor to remove the depends in
+> python-webpy, I think the rule now is _not_ to have the depends.
 
+Damn, so the guy doing most of the Python maintenance, and who did
+introduce the possibility of building modules with both Python 2 and
+Python 3, doesn't have a word into such decisions? Where are we
+going? :-)
 
->> This is fine for scripts that explicitly invoke luajit, but not
->> so good for scripts that just need a lua interpreter and call lua.
->> This mod creates a lua symlink so that the non-jit-specific scripts
->> will still work.
->>
->> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->> ---
->>  package/luajit/luajit.mk |    7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
->> index 2c1f8f4..f38088c 100644
->> --- a/package/luajit/luajit.mk
->> +++ b/package/luajit/luajit.mk
->> @@ -64,6 +64,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
->>       $(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
->>  endef
->>
->> +ifneq ($(BR2_PACKAGE_LUA),y)
->> +define LUAJIT_INSTALL_SYMLINK
->> +     ln -fs luajit $(TARGET_DIR)/usr/bin/lua
->> +endef
->> +LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
->> +endif
->
-> Well, since only one of lua or luajit can be enabled at a time, there is
-> not reason for that conditional block.
->
-> Otherwise, OK for creating the symlink.
+> > So the licensing details of this package are pretty unclear. Can you
+> > dig a little bit, and see what is the actual license for this package?
+> 
+>  It's pretty clear to me: the certificate database itself is MPL, the python
+> code around it is ISC.
+> Actually, since it's only about 5 lines of code, I doubt the python code is even
+> copyrightable, but let's ignore that :-)
 
-I'm fine with taking the conditional out.  I was simply emulating a
-similar setup in python3.mk:
+So probably we need a more precise <pkg>_LICENSE data than just "ISC",
+no?
 
-  define PYTHON3_INSTALL_SYMLINK
-  ln -fs python3 $(TARGET_DIR)/usr/bin/python
-  endef
-
-  ifneq ($(BR2_PACKAGE_PYTHON),y)
-  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
-  endif
-
-Anyway, I'll wait to see if there is more feedback before generating a v2.
-
-Thanks,
-Danomi -
-
-
-
-> Note: I seem to recall you (or someone else?) already asked to be able
-> to be able to select both lua and luajit at the same time.
->
-> This is unfortunately not possible, given how we hanfdle virtual
-> packages: only one provider may be active at a time.
->
-> However, I think there might be a solution for that, but it is not
-> really clean. For example, we could do (code stripped down for
-> readability):
->
->     config BR2_PACKAGE_LUAJIT
->         bool "luajit"
->         select BR2_PACKAGE_HAS_LUAINTERPRETER if !BR2_PACKAGE_LUA
->
->     if BR2_PACKAGE_LUAJIT
->
->     config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
->         default "luajit" if !BR2_PACKAGE_LUA
->
->     endif
->
-> But I doubt we want to go down that route in Buildroot...
-> Thomas, Peter?
->
-> Regards,
-> Yann E. MORIN.
->
->>  define HOST_LUAJIT_BUILD_CMDS
->>       $(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
->>  endef
->> --
->> 1.7.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
