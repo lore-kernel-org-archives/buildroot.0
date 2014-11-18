@@ -1,47 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 17 Nov 2014 20:14:52 -0300
-Subject: [Buildroot] [PATCH 2/2] package/gcc: set e5500 and e6500 version
-	mask
-In-Reply-To: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416266092-6465-3-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Tue, 18 Nov 2014 01:00:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
+	2.1.11
+Message-ID: <1416268820-20813-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Freescale e5500 and e6500 cores are supported for versions >= 4.8
-So filter out all of the older versions to avoid build failures.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
- package/gcc/Config.in.host | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/shairport-sync/shairport-sync.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 3bccf36..a62e762 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -30,7 +30,8 @@ choice
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
- 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
- 		# Broken or unsupported PPC cores
--		depends on !BR2_powerpc_power8
-+		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
-+			!BR2_powerpc_power8
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported X86 cores
-@@ -49,7 +50,8 @@ choice
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_pj4
- 		# Broken or unsupported PPC cores
--		depends on !BR2_powerpc_power8
-+		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
-+			!BR2_powerpc_power8
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported x86 cores
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index da69171..9ae6d97 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.1.8
++SHAIRPORT_SYNC_VERSION = 2.1.11
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
 -- 
-2.0.4
+2.1.3
