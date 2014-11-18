@@ -1,46 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:34:03 +0100
-Subject: [Buildroot] [git commit branch/next] rapidjson: simplify install
-	commands
-Message-ID: <20141118223410.B4275B494B@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 23:34:30 +0100
+Subject: [Buildroot] [PATCH] rapidjson: simplify install commands
+In-Reply-To: <1416320979-16563-1-git-send-email-eeppeliteloop@gmail.com>
+References: <1416320979-16563-1-git-send-email-eeppeliteloop@gmail.com>
+Message-ID: <20141118233430.784817b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc3f5258d214d435bbe4a4f5a76caba5977421be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Philippe Proulx,
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rapidjson/rapidjson.mk |   13 +------------
- 1 files changed, 1 insertions(+), 12 deletions(-)
+On Tue, 18 Nov 2014 09:29:39 -0500, Philippe Proulx wrote:
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+> ---
+>  package/rapidjson/rapidjson.mk | 13 +------------
+>  1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index ff516c4..6658da2 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -12,18 +12,7 @@ RAPIDJSON_INSTALL_TARGET = NO
- RAPIDJSON_INSTALL_STAGING = YES
- 
- define RAPIDJSON_INSTALL_STAGING_CMDS
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/internal
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/error
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/msinttypes
-+	cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include
- endef
- 
- $(eval $(generic-package))
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
