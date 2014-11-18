@@ -1,151 +1,128 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:59:35 +0100
-Subject: [Buildroot] [RFC/PATCH 1/1] systemd: fix remount-fs
-In-Reply-To: <1415815266-21733-1-git-send-email-dywi@mailerd.de>
-References: <1415815266-21733-1-git-send-email-dywi@mailerd.de>
-Message-ID: <20141118225934.GX4333@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 18 Nov 2014 18:02:34 -0500
+Subject: [Buildroot] [PATCH 1/1] luajit: point /usr/bin/lua to luajit if
+ lua not selected
+In-Reply-To: <20141118224759.GU4333@free.fr>
+References: <1415503350-2021-1-git-send-email-danomimanchego123@gmail.com>
+ <20141118224759.GU4333@free.fr>
+Message-ID: <CANxTyt6u+hcnoBG6oqA8u6NC1bK8GNoSJLOGS8jVjxohZdw6eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+Yann,
 
-On 2014-11-12 19:01 +0100, Andr? Erdmann spake thusly:
-> systemd runs "/bin/mount MOUNTPOINT -o remount" for remounting
-> the rootfs (and others like /usr, /proc, ...) [0]. This is supposed
-> to remount the rootfs in rw/ro mode depending on /etc/fstab.
-> 
-> busybox' mount -o remount command, however, complety ignores fstab
-> and reads the mount options from /proc/mounts only (+ cmdline "-o ...") [1],
-> so "mount / -o remount" is a no-op.
-> 
-> This commit adds a patch that causes systemd's remount-fs to pass the
-> options from /etc/fstab to the mount command.
-> 
-> References:
-> [0] http://cgit.freedesktop.org/systemd/systemd/tree/src/remount-fs/remount-fs.c?id=v217 (line 99)
-> [1] http://git.busybox.net/busybox/tree/util-linux/mount.c?h=1_22_stable (line 2133)
-> 
-> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+On Tue, Nov 18, 2014 at 5:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Danomi, All,
+>
+> On 2014-11-08 22:22 -0500, Danomi Manchego spake thusly:
+>> The luajit package is a provider of a lua interpreter, but does
+>> not install a lua executable, as it can live side by side with lua.
+>
+> That is not the case in Buildroot: since they are both providers for the
+> luainterpreter virtual package, only one of them may be enabled at a
+> time in Buildroot.
+>
+> (Well, it's possible to enable both in the menuconfig, but then it will
+> fail early at build time.)
 
-Forwarding it on behalf of Eric:
-http://lists.busybox.net/pipermail/buildroot/2014-November/112134.html
+Understood.  I was simply explaining why luajit doesn't install a
+"lua", and probably never will - because there's no reason outside of
+buildroot to think that luajit and lua are mutually exclusive.
 
-Tested-by: Eric Limpens <limpens@gmail.com>
 
-Regards,
-Yann E. MORIN.
+>> This is fine for scripts that explicitly invoke luajit, but not
+>> so good for scripts that just need a lua interpreter and call lua.
+>> This mod creates a lua symlink so that the non-jit-specific scripts
+>> will still work.
+>>
+>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>> ---
+>>  package/luajit/luajit.mk |    7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+>> index 2c1f8f4..f38088c 100644
+>> --- a/package/luajit/luajit.mk
+>> +++ b/package/luajit/luajit.mk
+>> @@ -64,6 +64,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
+>>       $(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
+>>  endef
+>>
+>> +ifneq ($(BR2_PACKAGE_LUA),y)
+>> +define LUAJIT_INSTALL_SYMLINK
+>> +     ln -fs luajit $(TARGET_DIR)/usr/bin/lua
+>> +endef
+>> +LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
+>> +endif
+>
+> Well, since only one of lua or luajit can be enabled at a time, there is
+> not reason for that conditional block.
+>
+> Otherwise, OK for creating the symlink.
 
-> ---
-> 
-> Notes:
-> * selecting BR2_PACKAGE_UTIL_LINUX_MOUNT=y would also fix remounting,
->   but that also requires BR2_PACKAGE_UTIL_LINUX_BINARIES=y...
-> 
-> * passing all options to mount rather than checking for "rw"/ro"
->   (hasmntopt(...,"ro")==NULL) makes remount-fs behave identical
->   regardless of whether util-linux' or busybox' mount is used
->   (remount-fs also remounts /proc etc.)
-> 
-> * a systemd-based buildroot config ignores BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
->   This is not changed by this commit, but the rootfs is now always rw unless
->   /etc/fstab gets replaced by a a postbuild script / rootfs overlay.
-> 
-> By the way, I have a script for generating /etc/fstab, which could be useful
-> for dealing with remount-ro/rw and systemd-specific mounts (and maybe genimages).
-> Tell me if there's any interest in getting this integrated into buildroot.
-> 
-> You can view it here 
->   https://gist.github.com/dywisor/62d41835c2dff043f794#file-mkfstab-bash-L17-L96
-> (not the latest revision, but sufficient for getting an overview.)
-> ---
->  ...t-fs-pass-options-from-fstab-to-bin-mount.patch | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-> 
-> diff --git a/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-> new file mode 100644
-> index 0000000..c6dc661
-> --- /dev/null
-> +++ b/package/systemd/0005-remount-fs-pass-options-from-fstab-to-bin-mount.patch
-> @@ -0,0 +1,63 @@
-> +From 7bc0901a00e78f22f97dbd3f85c7a19d9a78e7a1 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-> +Date: Wed, 12 Nov 2014 17:45:46 +0100
-> +Subject: [PATCH 1/1] remount-fs: pass options from fstab to /bin/mount
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +busybox mount -o remount reads the mount options from /proc/mounts (or mtab);
-> +Executing "/bin/mount / -o remount" has no effect when /bin/mount is linked
-> +to busybox.
-> +
-> +remount-fs already reads the options from /etc/fstab,
-> +so simply pass them to the mount command.
-> +
-> +Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
-> +---
-> + src/remount-fs/remount-fs.c | 11 ++++++++++-
-> + 1 file changed, 10 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/remount-fs/remount-fs.c b/src/remount-fs/remount-fs.c
-> +index cd7cfe7..f63f009 100644
-> +--- a/src/remount-fs/remount-fs.c
-> ++++ b/src/remount-fs/remount-fs.c
-> +@@ -20,6 +20,7 @@
-> + ***/
-> + 
-> + #include <unistd.h>
-> ++#include <stdlib.h>
-> + #include <fcntl.h>
-> + #include <errno.h>
-> + #include <string.h>
-> +@@ -93,18 +94,26 @@ int main(int argc, char *argv[]) {
-> +                 }
-> + 
-> +                 if (pid == 0) {
-> ++                        char *opts_str;
-> +                         const char *arguments[5];
-> +                         /* Child */
-> + 
-> ++                        opts_str = strappend("remount,", me->mnt_opts);
-> ++                        if (opts_str == NULL) {
-> ++                                log_error("Failed to get remount opts");
-> ++                                _exit(EXIT_FAILURE);
-> ++                        }
-> ++
-> +                         arguments[0] = "/bin/mount";
-> +                         arguments[1] = me->mnt_dir;
-> +                         arguments[2] = "-o";
-> +-                        arguments[3] = "remount";
-> ++                        arguments[3] = opts_str;
-> +                         arguments[4] = NULL;
-> + 
-> +                         execv("/bin/mount", (char **) arguments);
-> + 
-> +                         log_error("Failed to execute /bin/mount: %m");
-> ++                        free(opts_str);
-> +                         _exit(EXIT_FAILURE);
-> +                 }
-> + 
-> +-- 
-> +2.1.3
-> +
-> -- 
-> 2.1.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I'm fine with taking the conditional out.  I was simply emulating a
+similar setup in python3.mk:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  define PYTHON3_INSTALL_SYMLINK
+  ln -fs python3 $(TARGET_DIR)/usr/bin/python
+  endef
+
+  ifneq ($(BR2_PACKAGE_PYTHON),y)
+  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+  endif
+
+Anyway, I'll wait to see if there is more feedback before generating a v2.
+
+Thanks,
+Danomi -
+
+
+
+> Note: I seem to recall you (or someone else?) already asked to be able
+> to be able to select both lua and luajit at the same time.
+>
+> This is unfortunately not possible, given how we hanfdle virtual
+> packages: only one provider may be active at a time.
+>
+> However, I think there might be a solution for that, but it is not
+> really clean. For example, we could do (code stripped down for
+> readability):
+>
+>     config BR2_PACKAGE_LUAJIT
+>         bool "luajit"
+>         select BR2_PACKAGE_HAS_LUAINTERPRETER if !BR2_PACKAGE_LUA
+>
+>     if BR2_PACKAGE_LUAJIT
+>
+>     config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+>         default "luajit" if !BR2_PACKAGE_LUA
+>
+>     endif
+>
+> But I doubt we want to go down that route in Buildroot...
+> Thomas, Peter?
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>  define HOST_LUAJIT_BUILD_CMDS
+>>       $(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
+>>  endef
+>> --
+>> 1.7.9.5
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
