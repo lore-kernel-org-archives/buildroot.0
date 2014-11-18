@@ -1,53 +1,38 @@
 From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Date: Tue, 18 Nov 2014 15:54:42 +0100
-Subject: [Buildroot] [PATCH V3 0/5] Add ICAP server support
-In-Reply-To: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
+Date: Tue, 18 Nov 2014 15:54:43 +0100
+Subject: [Buildroot] [PATCH V3 1/5] package/squid: define the log directory,
+	pidfile and swapdir
+In-Reply-To: <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
 References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
+Message-ID: <1416322487-14247-2-git-send-email-guillaume.gardet@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Changes in V3:
-  - squid: fix patch split, fix patch title (ICAP server => ICAP client),
-  add init script, remove dir creation in *.mk files.
-  - c-icap: depends on BR2_TOOLCHAIN_HAS_THREADS and !BR2_PREFER_STATIC_LIB.
-  Use zlib, bzip2 and berkeleydb, if available. Enable IPv6, if available.
-  Disable explicitly LDAP. Add init script. Remove dir creation in *.mk files.
-  - c-icap-modules: no changes
-
-* Changes in V2:
-  - squid: split patch
-  - c-icap: Fix commit message, fix new lines at end of file, remove 
-  unneeded lines/options, enable large files support if available.
-  - c-icap-modules: Fix commit message, fix indentation, new lines at end of 
-  file, remove unneeded lines/options
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
 
 ---
-Guillaume GARDET (5):
-  package/squid: define the log directory, pidfile and swapdir
-  package/squid: add init script
-  package/squid: enable ICAP client support in squid
-  c-icap: new package
-  c-icap-modules: new package
+ package/squid/squid.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- package/Config.in                        |  2 +
- package/c-icap-modules/Config.in         |  7 ++++
- package/c-icap-modules/c-icap-modules.mk | 27 ++++++++++++++
- package/c-icap/Config.in                 | 15 ++++++++
- package/c-icap/S96cicap                  | 35 +++++++++++++++++
- package/c-icap/c-icap.mk                 | 64 ++++++++++++++++++++++++++++++++
- package/squid/S97squid                   | 36 ++++++++++++++++++
- package/squid/squid.mk                   | 13 ++++++-
- 8 files changed, 198 insertions(+), 1 deletion(-)
- create mode 100644 package/c-icap-modules/Config.in
- create mode 100644 package/c-icap-modules/c-icap-modules.mk
- create mode 100644 package/c-icap/Config.in
- create mode 100644 package/c-icap/S96cicap
- create mode 100644 package/c-icap/c-icap.mk
- create mode 100644 package/squid/S97squid
-
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e8a2ccc..ed51881 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -26,7 +26,10 @@ SQUID_CONF_OPTS =	--enable-async-io=8 --enable-linux-netfilter \
+ 			--enable-auth-negotiate="wrapper" \
+ 			--enable-auth-ntlm="fake" \
+ 			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="file_userip"
++			--enable-external-acl-helpers="file_userip" \
++			--with-logdir=/var/log/squid/ \
++			--with-pidfile=/var/run/squid.pid \
++			--with-swapdir=/var/cache/squid/
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
 -- 
 1.8.4.5
