@@ -1,67 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 23:50:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: fix init script
-In-Reply-To: <1415833586-6181-1-git-send-email-jkrause@posteo.de>
-References: <1415833586-6181-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141118225016.GV4333@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:55:33 +0100
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 0.9.4
+In-Reply-To: <1415986289-22531-1-git-send-email-francois.perrad@gadz.org>
+References: <1415986289-22531-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20141118235533.141fba60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Dear Francois Perrad,
 
-On 2014-11-13 00:06 +0100, J?rg Krause spake thusly:
-> shairport-sync uses libdaemon for running as daemon and creating the pidfile
-> which conflicts with start-stop-daemons `-b -m` options. For that reason 
-> shairport-sync does not start using /etc/init.d/S99shairport-sync start.
+On Fri, 14 Nov 2014 18:31:29 +0100, Francois Perrad wrote:
+> this release fixes the build when BR2_PREFER_STATIC_LIB
+> see http://autobuild.buildroot.net/results/057/057a4b9976fd6b9c5cddd117a3f29de51efe719f/build-end.log
+> see https://github.com/arsv/perl-cross/issues/11
 > 
-> The issue is fixed by removing the background and pidfile task from
-> start-stop-daemon and add a daemon option `-d` to shairport-sync.
-> 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I tested, it indeed fixes this problem. However, specifically with this
+toolchain, it fails down the road when linking the final perl
+executable due to the uClibc bug where some symbols such as setregid()
+and others are defined in both libc.a and libpthread.a. This issue has
+nothing to do with perl and should be solved separately.
 
-Regards,
-Yann E. MORIN.
+Therefore, since your patch fixes (partly) an autobuilder issue, I've
+applied it to the master branch.
 
-> ---
->  package/shairport-sync/S99shairport-sync | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
-> index 31359fc..54d20ff 100644
-> --- a/package/shairport-sync/S99shairport-sync
-> +++ b/package/shairport-sync/S99shairport-sync
-> @@ -1,12 +1,12 @@
->  #! /bin/sh
->  
->  # Additional options that are passed to Shairport Sync
-> -OPTIONS=""
-> +OPTIONS="-d"
->  
->  case "$1" in
->      start)
->  	echo -n "Starting shairport-sync: "
-> -	start-stop-daemon -S -q -m -b -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
-> +	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  	;;
->      stop)
-> -- 
-> 2.1.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks,
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
