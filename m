@@ -1,55 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 18:46:19 +0100
+Date: Tue, 18 Nov 2014 18:49:18 +0100
 Subject: [Buildroot] [PATCH] pakage/erlang: fix host build without
  termcap (curses) library
-In-Reply-To: <546AFC7C.1060501@gmail.com>
+In-Reply-To: <20141118093152.70fa0bd7@free-electrons.com>
 References: <1416263596-11129-1-git-send-email-yann.morin.1998@free.fr>
- <546AFC7C.1060501@gmail.com>
-Message-ID: <20141118174618.GA4333@free.fr>
+ <20141118093152.70fa0bd7@free-electrons.com>
+Message-ID: <20141118174918.GB4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathaniel, All,
+Thomas, All,
 
-On 2014-11-18 15:59 +0800, Nathaniel Roach spake thusly:
-> On 18/11/14 06:33, Yann E. MORIN wrote:
+On 2014-11-18 09:31 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 17 Nov 2014 23:33:16 +0100, Yann E. MORIN wrote:
 > > Cc-ing Nathaniel, as all failures happen on his build server. Thomas and
 > > Nathaniel, could you please review the setting of that autobuild server?
 > > And the others as well?
-> >
-> > It seems legit ncurses is missing on a build server, but we did not
-> notice,
-> > because we do require it for menuconfig and nconfig, so virtually everyone
-> > has it, and it is most probably installed on other autobuild servers
-> > because owners want to be able to run menuconfig on them to debug stuff.
-> >
-> > Care to have a look, please?
-> >
-> > Regards,
-> > Yann E. MORIN.
 > 
-> I haven't installed libncurses-dev per the discussion we had a few
-> weeks/months back. (Basically only use the system's ncurses for 'make
-> *config', and in all other cases build it)
-
-Ah, OK. I've overlooked that discussion, then. Thanks!
-
-> I haven't heard otherwise, and this is also causing failures in
-> host-mysql (IIRC).
+> We already discussed this on the mailing list some time ago.
+> Nathaniel's build server is the only one where libncurses-dev is not
+> installed in the system. And since libncurses-dev is not part of our
+> mandatory dependencies (someone could very well use gconfig or xconfig
+> only, for example), we thought that keeping Nathaniel's configuration
+> as is was a good way of catching the cases where we have a missing
+> dependency on host-ncurses.
 > 
-> If you both believe that I should install it, I will, but I still
-> believe it is better to build host-ncurses.
+> I remember we even had a discussion to decide whether we should build
+> host-ncurses in such cases, or whether we should make libncurses-dev a
+> hard dependency of Buildroot, and Peter decided that building
+> host-ncurses was the right solution.
 
-Yes, I fully agree with this. No need to fix your autobuild instance.
+I fully back this resolution. It is very often that a build server
+(whether it is for us to do autobuilds, or a production build server)
+lacks such libraries.
+
+So, we have to fix such build failures by either:
+  - adding a dependency on host-ncurses, or
+  - disabling ncurses/termcap support for the host tools if it makes
+    sense and it is possible, otherwise revert to depending on
+    host-ncurses.
 
 Thank you!
 
 Regards,
 Yann E. MORIN.
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
