@@ -1,40 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 18:56:10 +0100
-Subject: [Buildroot] [PATCH 1/1] iptables: fix userspace compilation of
- ip tables with C++
-In-Reply-To: <CANQCQpbLK7xeaPy4TM1GZx_+ZZUTNYhXyce3Pqof3MSNLxtN1Q@mail.gmail.com>
-References: <1413227563-5383-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20141029223413.70abc05b@free-electrons.com>
- <54516922.1070306@zacarias.com.ar>
- <CANQCQpbOzrKC+8oi3fkO7knQ_HafbpSbnusc6_STfwnSiU+2ZA@mail.gmail.com>
- <CANQCQpbLK7xeaPy4TM1GZx_+ZZUTNYhXyce3Pqof3MSNLxtN1Q@mail.gmail.com>
-Message-ID: <20141118175610.GC4333@free.fr>
+Date: Tue, 18 Nov 2014 19:10:09 +0100
+Subject: [Buildroot] [PATCH v4 1/1] glmark2: new package
+In-Reply-To: <20141028220048.68d80815@free-electrons.com>
+References: <1413580298-6255-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141028193444.72b79a2d@free-electrons.com>
+ <XnsA3D4D22AF6F3DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20141028220048.68d80815@free-electrons.com>
+Message-ID: <20141118181009.GD4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+Thomas, Bernd,
 
-On 2014-11-18 07:48 -0600, Matthew Weber spake thusly:
-[--SNIP--]
-> I reposted on netfilter-devel and got clarification that the patch
-> should probably have been a kernel patch, but the binary interface to
-> iptables in the kernel has actually been replaced so this issue is
-> deprecated.  I'll carry the patch in my build locally until we update
-> our use of the API.
+On 2014-10-28 22:00 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 28 Oct 2014 20:39:37 +0100, Bernd Kuhls wrote:
+> > [posted and mailed]
+> > 
+> > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> > @public.gmane.org> wrote in news:20141028193444.72b79a2d at free-electrons.com:
+> > 
+> > > Checking for 'wayland-egl'               : not found 
+> > 
+> > Hi,
+> > 
+> > glmark2 searches for wayland-egl.pc. Afaics the only package providing this 
+> > file is mesa3d:
+> > https://packages.debian.org/search?searchon=contents&keywords=wayland-
+> > egl.pc&mode=path&suite=stable&arch=any
+> > 
+> > According to this posting from 2012 the RPI does not provide wayland-egl:
+> > http://lists.freedesktop.org/archives/wayland-devel/2012-November/006216.html
+> > 
+> > As I do not have access to a RPI I would like to ask if this is still 
+> > correct. If yes, I need to change the dependencies.
+> 
+> Yann, maybe?
 
-Well, the patch seems sensible. So maybe we could carry it in Buildroot?
+Indeed, the RPi EGL implementation does not provide the sepcific GL
+extension required by Wayland, so we can't do native wayland on the RPi
+(for now).
 
-> http://www.spinics.net/lists/netfilter-devel/msg33996.html
+The weston compositor has support for the RPi, but using a specific
+backend, that directly uses Broadcom's APIs.
 
-Still, there is a valid point in this reply: do we know of a FLOSS C++
-package that uses the iptables binary interface?
+So, the best course of actions for now is to simply depend on mesa3d.
 
-If so, that would be interesting to see how they handle that situation.
-And it would be a nice shoe to stick in the door so that patch can enter
-the kernel.
+However, I was thinking a bit further about that the other day:
+
+  - having wayland stuff depend on _HAS_EGL is incorrect, because not
+    all EGL providers has the required GL extension
+
+  - on some platforms, an additional library exists, besides the EGL
+    lib, that provides the GL extension.
+
+So having Wayland stuff only depend on mesa3d is not correct either (it
+is in Buildroot for now), because it might be possible to have an EGL
+provider that has the required extension (I thing the NVidia driver has
+it), or an additional library provides it.
+
+The only solution I can see is to add a new virtual package (name to be
+discussed) BR2_PACKAGE_HAS_WAYLAND_EGL that providers could select it is
+they have that extension. It can even be a package different from the
+one that provides EGL.
+
+But, work for later. For now, packages that require the Wayland
+extension can simply depend on mesa3d.
 
 Regards,
 Yann E. MORIN.
