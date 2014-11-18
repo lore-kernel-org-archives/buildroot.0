@@ -1,34 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:15:18 +0100
-Subject: [Buildroot] [PATCH 1/3] live555: use upstream install target
- for staging installation
-In-Reply-To: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
-References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
-Message-ID: <20141118231518.06b925e2@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 23:16:22 +0100
+Subject: [Buildroot] [PATCH 0/7] Better handling of freescale
+ self-extractible binaries
+In-Reply-To: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+References: <1415376207-23292-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20141118221622.GR4333@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+J?r?me, All,
 
-On Mon, 17 Nov 2014 10:18:14 +0200, Baruch Siach wrote:
-> Move include directories out of $(STAGING_DIR)/usr/include/live. This is
-> upstream choice, and is consistent with e.g. Debian. Update mplayer and vlc to
-> match.
+On 2014-11-07 17:03 +0100, J?r?me Pouiller spake thusly:
+> This serie introduce an helper fonction for freescale self-extractible
+> binaries. 
+
+Thanks, that makes for a pretty nice cleanup! :-)
+
+> Obviously, last 3 patches of this serie apply on top of my previous 
+> series: "Add Xorg support for imx6" and "Add support for iMX5 GPU"
+
+I haven't reviewed the last three patches in this series.
+
+I think patches 1-4 can be applied now (barring the few comments I
+made), and then you can directly use that from your other series.
+
+Of course, my comments are not definitive, others may prefer the way you
+did, so my reviewed-by tags are still valid.
+
+Regards,
+Yann E. MORIN.
+
+> J?r?me Pouiller (7):
+>   freescale-imx: Add helper to extract self-extractible binaries
+>   firmware-imx: Use self-extractible helper
+>   imx-vpu: Use self-extractible helper
+>   libfsl*: Use self-extractible helper
+>   gpu-viv-bin-mx6q: Use self-extractible helper
+>   libz160: Use self-extractible helper
+>   gpu-amd-bin-mx51: Use self-extractible helper
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/live555/live555.mk | 21 ++-------------------
->  package/mplayer/mplayer.mk |  2 +-
->  package/vlc/vlc.mk         |  9 ++++-----
->  3 files changed, 7 insertions(+), 25 deletions(-)
+>  package/freescale-imx/firmware-imx/firmware-imx.mk | 16 ++++---------
+>  package/freescale-imx/freescale-imx.mk             | 21 +++++++++++++++++
+>  .../gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk           | 27 ++++++++--------------
+>  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 22 ++++--------------
+>  package/freescale-imx/imx-vpu/imx-vpu.mk           | 22 +++++-------------
+>  package/freescale-imx/libz160/libz160.mk           | 19 ++++-----------
+>  package/libfslcodec/libfslcodec.mk                 | 23 ++++--------------
+>  package/libfslparser/libfslparser.mk               | 23 ++++--------------
+>  package/libfslvpuwrap/libfslvpuwrap.mk             | 24 ++++---------------
+>  9 files changed, 62 insertions(+), 135 deletions(-)
+> 
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
