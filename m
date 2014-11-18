@@ -1,43 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 18 Nov 2014 10:16:20 +0000
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 6.9.0-0
-Message-ID: <1416305780-3302-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 18 Nov 2014 12:28:36 +0200
+Subject: [Buildroot] [PATCH] coreutils: disable documentation build
+Message-ID: <6eb52607527cefc15203eb26da99044fe6c6e3cd.1416306516.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 6.9.0-0
-- Update the hash value
+The makeinfo utility may not be installed on the build machine, and we don't
+install documentation anyway.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes:
+http://autobuild.buildroot.net/results/b42/b42ceb3128ed832f0dd901a1db8fa3dfd92ce5ef/
+http://autobuild.buildroot.net/results/94f/94fcd06b320374f46b340f516c54b7ca726041af/
+http://autobuild.buildroot.net/results/c54/c54608ac7e03f14055e2912cf06f6d41d21227c0/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/imagemagick/imagemagick.hash |    4 ++--
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/coreutils/coreutils.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e67e059..20bc982 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	a4cccc70179ff2c67550e063cdcb2e62907338ef3e68b45bb1c41931e515b3eb	ImageMagick-6.8.9-9.tar.xz
-+# From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
-+sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index a1296d4..b8e5155 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 391d2cd40719..e06510e096fe 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -51,7 +51,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 	gl_getline_needs_run_time_check=no \
+ 	gl_cv_have_proc_uptime=yes \
+ 	utils_cv_localtime_cache=no \
+-	PERL=missing
++	PERL=missing \
++	MAKEINFO=true
  
--IMAGEMAGICK_VERSION = 6.8.9-9
-+IMAGEMAGICK_VERSION = 6.9.0-0
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
+ 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
 -- 
-1.7.1
+2.1.3
