@@ -1,31 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 14:00:22 +0100
-Subject: [Buildroot] [PATCH 1/2] tstools: disable parallel build
-In-Reply-To: <74fc8a8ac83ac7ebd5d81694df6b95700eeef939.1416230020.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 17 Nov 2014 15:13:39 +0200")
-References: <74fc8a8ac83ac7ebd5d81694df6b95700eeef939.1416230020.git.baruch@tkos.co.il>
-Message-ID: <87bno4r7dl.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 14:04:35 +0100
+Subject: [Buildroot] [PATCH V2 2/4] package/squid: enable ICAP server
+ support in squid
+In-Reply-To: <546B3FC5.1020008@oliseo.fr>
+References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <1415808993-2394-3-git-send-email-guillaume.gardet@oliseo.fr>
+ <20141116223804.04fc546b@free-electrons.com>
+ <546B3FC5.1020008@oliseo.fr>
+Message-ID: <20141118140435.0f58ffba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
- > Commit 0e8cbd5902e4 (tstools: fix build failure in parallel (-j) build) didn't
- > fix, apparently, the parallel build issue. Revert this commit, and just
- > disable parallel build.
+On Tue, 18 Nov 2014 13:47:01 +0100, Guillaume GARDET - Olis?o wrote:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b13/b13d31a8a915a740386befb018f859d3df5e9c35/
- > http://autobuild.buildroot.net/results/287/287249ce9d337d4efc587f833f811851cafc607a/
- > http://autobuild.buildroot.net/results/e4e/e4ee0ae40ac9d58b3182db52d5a39e6ac3692f60/
+> >   2/ Creating a directory in /var/log at build time doesn't make sense,
+> >      because /var/log in Buildroot is a symbolic link to /tmp, and /tmp
+> >      is mounted as a tmpfs so that the root filesystem can remain
+> >      read-only. Therefore, the proper solution is to create this
+> >      directory at boot time. We normally do this in the startup script
+> >      provided by the package, but squid doesn't provide one.
+> 
+> What would be the solution then?
 
- > Cc: Tzu-Jung Lee <roylee17@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+I guess the best solution is probably to add an init script to start
+Squid at boot time.
 
-Committed both, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
