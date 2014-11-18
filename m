@@ -1,100 +1,240 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Nov 2014 19:14:05 +0100
-Subject: [Buildroot] [Patch v2 1/1] libgtk3: fix undefined reference to
- get_xkb()
-In-Reply-To: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1414414576-26220-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20141118181404.GE4333@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Nov 2014 19:18:31 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/x265: New package
+In-Reply-To: <1416330267-10443-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1416330267-10443-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAHXCMMKTCvoi34vztRPGsx7MSTf=btKRVxu7Yv3hrRrJj=vDmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Hi Bernd,
 
-On 2014-10-27 13:56 +0100, Eric Le Bihan spake thusly:
-> When configuring Gtk+ with --disable-xkb, the build fails because of an
-> undefined reference to get_xkb().
-> 
-> This issue as been reported upstream [1]. This patch fixes it.
-
-Given we've bumped to libgtk3 3.14.5 since you reported that patch, does
-the build failure still occurs?
-
-If so, does that patch still apply? Can you refresh it if needed and
-respin?
-
-If the build failure no longer applies, then I'll mark this patch
-rejected in Patchwork.
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/513/513d79b97bb8ad0e5cd431c47c706b5ec87a9882/
-> http://autobuild.buildroot.net/results/0c3/0c3f1df92481852622445478d2239371fc818f41/
-> 
-> [1] https://bugzilla.gnome.org/show_bug.cgi?id=739070
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+On Tue, Nov 18, 2014 at 6:04 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Depends on http://patchwork.ozlabs.org/patch/411789/
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> --
+> v2: Removed package-specific handling of CMAKE_SYSTEM_PROCESSOR
+>
 > ---
->  ...3-0004-Fix-undefined-reference-to-get_xkb.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-> 
-> diff --git a/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
+>  package/Config.in           |    1 +
+>  package/x265/0001-arm.patch |   71 +++++++++++++++++++++++++++++++++++++++++++
+>  package/x265/Config.in      |   23 ++++++++++++++
+>  package/x265/x265.mk        |   34 +++++++++++++++++++++
+>  4 files changed, 129 insertions(+)
+>  create mode 100644 package/x265/0001-arm.patch
+>  create mode 100644 package/x265/Config.in
+>  create mode 100644 package/x265/x265.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9a73995..0084f9b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -773,6 +773,7 @@ menu "Multimedia"
+>         source "package/live555/Config.in"
+>         source "package/mediastreamer/Config.in"
+>         source "package/x264/Config.in"
+> +       source "package/x265/Config.in"
+>  endmenu
+>
+>  menu "Networking"
+> diff --git a/package/x265/0001-arm.patch b/package/x265/0001-arm.patch
 > new file mode 100644
-> index 0000000..c2f4b4f
+> index 0000000..69ae458
 > --- /dev/null
-> +++ b/package/libgtk3/libgtk3-0004-Fix-undefined-reference-to-get_xkb.patch
-> @@ -0,0 +1,33 @@
-> +From b64a04250b1f35923434158beb6ddb5726b41eac Mon Sep 17 00:00:00 2001
-> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +Date: Mon, 27 Oct 2014 10:34:38 +0100
-> +Subject: [PATCH 1/1] Fix undefined reference to get_xkb()
+> +++ b/package/x265/0001-arm.patch
+> @@ -0,0 +1,71 @@
+> +Fix ARM build
 > +
-> +When configuring Gtk+ with --disable-xkb, the build fails because of an
-> +undefined reference to get_xkb().
+> +Fetched from https://github.com/archlinuxarm/PKGBUILDs/blob/master/extra/x265/arm.patch
+> +and adjusted paths so patch applies with -p1.
 > +
-> +This patch fixes this issue.
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > +
-> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +---
-> + gdk/x11/gdkkeys-x11.c | 2 ++
-> + 1 file changed, 2 insertions(+)
+> +--- a/source/CMakeLists.txt.orig       2014-10-04 17:02:08.482815493 +0200
+> ++++ b/source/CMakeLists.txt    2014-10-04 17:11:52.536865262 +0200
+> +@@ -46,10 +46,18 @@
+> +         set(X64 1)
+> +         add_definitions(-DX86_64=1)
+> +     endif()
+> +-elseif(${SYSPROC} STREQUAL "armv6l")
+> +-    message(STATUS "Detected ARM target processor")
+> +-    set(ARM 1)
+> +-    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1)
+> ++elseif(${SYSPROC} MATCHES "armv5.*")
+> ++    message(STATUS "Detected ARMV5 system processor")
+> ++    set(ARMV5 1)
+> ++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=0 -DHAVE_NEON=0)
+> ++elseif(${SYSPROC} STREQUAL "armv6l")
+
+Is there any specific reason to not support big-endian?
+
+> ++    message(STATUS "Detected ARMV6 system processor")
+> ++    set(ARMV6 1)
+> ++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1 -DHAVE_NEON=0)
+> ++elseif(${SYSPROC} STREQUAL "armv7l")
+
+ditto
+
+> ++    message(STATUS "Detected ARMV7 system processor")
+> ++    set(ARMV7 1)
+> ++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1 -DHAVE_NEON=0)
+> + else()
+> +     message(STATUS "CMAKE_SYSTEM_PROCESSOR value `${CMAKE_SYSTEM_PROCESSOR}` is unknown")
+> +     message(STATUS "Please add this value near ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE}")
+> +@@ -127,8 +135,8 @@
+> +     if(X86 AND NOT X64)
+> +         add_definitions(-march=i686)
+> +     endif()
+> +-    if(ARM)
+> +-        add_definitions(-march=armv6 -mfloat-abi=hard -mfpu=vfp)
+> ++    if(ARMV7)
+> ++        add_definitions(-fPIC)
+
+Is this nested in a if(BUILD_SHARED_LIBS) block?
+Does this mean x265 is not available for static build? If so, update
+the "depends on" statements in the Config.in.
+
+> +     endif()
+> +     check_cxx_compiler_flag(-Wno-narrowing CC_HAS_NO_NARROWING)
+> +     check_cxx_compiler_flag(-ffast-math CC_HAS_FAST_MATH)
+> +--- a/source/common/cpu.cpp.orig       2014-10-04 17:13:58.507875996 +0200
+> ++++ b/source/common/cpu.cpp    2014-10-04 17:21:11.170912864 +0200
+> +@@ -37,7 +37,7 @@
+> + #include <machine/cpu.h>
+> + #endif
 > +
-> +diff --git a/gdk/x11/gdkkeys-x11.c b/gdk/x11/gdkkeys-x11.c
-> +index c45a971..6a5481b 100644
-> +--- a/gdk/x11/gdkkeys-x11.c
-> ++++ b/gdk/x11/gdkkeys-x11.c
-> +@@ -1498,8 +1498,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-> +   int i, j;
-> +   gboolean retval;
-> + 
-> ++#ifdef HAVE_XKB
-> +   if (KEYMAP_USE_XKB (keymap))
-> +     get_xkb (keymap_x11);
-> ++#endif
-> + 
-> +   retval = TRUE;
-> + 
-> +-- 
-> +1.9.1
+> +-#if X265_ARCH_ARM && !defined(HAVE_NEON)
+> ++#if X265_ARCH_ARM && (!defined(HAVE_NEON) || HAVE_NEON==0)
+> + #include <signal.h>
+> + #include <setjmp.h>
+> + static sigjmp_buf jmpbuf;
+> +@@ -340,7 +340,6 @@
+> +     }
 > +
-> -- 
-> 1.9.1
-> 
+> +     canjump = 1;
+> +-    x265_cpu_neon_test();
+> +     canjump = 0;
+> +     signal(SIGILL, oldsig);
+> + #endif // if !HAVE_NEON
+> +@@ -356,7 +355,7 @@
+> +     // which may result in incorrect detection and the counters stuck enabled.
+> +     // right now Apple does not seem to support performance counters for this test
+> + #ifndef __MACH__
+> +-    flags |= x265_cpu_fast_neon_mrc_test() ? X265_CPU_FAST_NEON_MRC : 0;
+> ++    //flags |= x265_cpu_fast_neon_mrc_test() ? X265_CPU_FAST_NEON_MRC : 0;
+> + #endif
+> +     // TODO: write dual issue test? currently it's A8 (dual issue) vs. A9 (fast mrc)
+> + #endif // if HAVE_ARMV6
+> diff --git a/package/x265/Config.in b/package/x265/Config.in
+> new file mode 100644
+> index 0000000..bf8bd12
+> --- /dev/null
+> +++ b/package/x265/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_X265
+> +       bool "x265"
+> +       depends on BR2_i386 || BR2_x86_64 || BR2_arm
+> +       depends on !BR2_ARM_CPU_ARMV4
+> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       help
+> +         x265 is an open-source project and free application library for encoding
+> +         video streams into the H.265/High Efficiency Video Coding (HEVC) format.
+> +
+> +         http://x265.org
+> +
+> +if BR2_PACKAGE_X265
+> +
+> +config BR2_PACKAGE_X265_CLI
+> +       bool "CLI"
+> +       help
+> +         Build standalone CLI application
+> +endif
+> +
+> +comment "x265 needs a toolchain w/ C++"
+> +       depends on BR2_i386 || BR2_x86_64 || BR2_arm
+> +       depends on !BR2_ARM_CPU_ARMV4
+> +       depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+> new file mode 100644
+> index 0000000..026fd26
+> --- /dev/null
+> +++ b/package/x265/x265.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# x265
+> +#
+> +################################################################################
+> +
+> +X265_VERSION = 1.4
+> +X265_SOURCE = $(X265_VERSION).tar.bz2
+
+hmm... not a very good name for a source tarball!
+We need to find a good solution to properly support this... Yann is
+working on it!
+
+> +X265_SITE = https://bitbucket.org/multicoreware/x265/get
+> +X265_INSTALL_STAGING = YES
+> +X265_LICENSE = GPLv2
+> +X265_LICENSE_FILES = COPYING
+> +
+> +ifeq ($(BR2_i386)$(BR2_x86_64),y)
+> +X265_DEPENDENCIES += host-yasm
+> +else
+> +X265_CONF_OPTS += --disable-asm
+> +endif
+> +
+> +# CMakeLists.txt is stored in $(@D)/source/, not in $(@D)/
+
+You could also use X265_SUBDIR = source
+
+> +define X265_CONFIGURE_CMDS
+> +       (cd $(@D); \
+> +               $(HOST_DIR)/usr/bin/cmake -G "Unix Makefiles" source/ \
+> +                       -DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> +                       -DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
+
+Already handled by the cmake infra [1]
+
+> +                       -DCMAKE_INSTALL_PREFIX="/usr" \
+
+ditto
+
+> +                       -DCMAKE_COLOR_MAKEFILE=OFF \
+
+ditto
+
+> +               -DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
+
+ditto
+
+> +               -DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
+
+ditto
+
+> +               -DENABLE_CLI=$(if $(BR2_PACKAGE_X265_CLI),ON,OFF) \
+> +       )
+> +endef
+> +
+> +$(eval $(cmake-package))
+> --
+> 1.7.10.4
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
+
+[1] http://nightly.buildroot.org/#cmake-package-reference
+
+
+Regards,
+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
