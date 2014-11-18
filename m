@@ -1,50 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 14:25:58 +0100
-Subject: [Buildroot] [PATCH] rapidjson: bump to latest GitHub master
-In-Reply-To: <1416284633-16290-1-git-send-email-eeppeliteloop@gmail.com>
-References: <1416284633-16290-1-git-send-email-eeppeliteloop@gmail.com>
-Message-ID: <20141118142558.0a692289@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Nov 2014 13:26:47 +0000
+Subject: [Buildroot] [PATCH] kmod: bump to version 19
+In-Reply-To: <20141118142123.47e08033@free-electrons.com>
+References: <1416243576-42474-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20141118142123.47e08033@free-electrons.com>
+Message-ID: <546B4917.30706@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Philippe Proulx,
+Dear Thomas Petazzoni,
 
-On Mon, 17 Nov 2014 23:23:53 -0500, Philippe Proulx wrote:
-> RapidJSON is now hosted on GitHub and its latest version
-> includes many fixes and features added since 2012.
+On 11/18/2014 01:21 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
 > 
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-> ---
->  package/rapidjson/rapidjson.mk | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
+> On Mon, 17 Nov 2014 16:59:36 +0000, Vicente Olivert Riera wrote:
+>> - Bump to version 19
+>> - Rename 0001 patch to follow the new name convention
+>> - Adapt the 0001 patch to the new version
+>> - Remove the already-upstreamed 0002 patch
+>> - Update the hash value
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> Applied to next, thanks. After changing just one thing.
+> 
+>> diff --git a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch b/package/kmod/0001-fix-O_CLOEXEC.patch
+>> similarity index 83%
+>> rename from package/kmod/kmod-0001-fix-O_CLOEXEC.patch
+>> rename to package/kmod/0001-fix-O_CLOEXEC.patch
+>> index 4861c57..e09372c 100644
+>> --- a/package/kmod/kmod-0001-fix-O_CLOEXEC.patch
+>> +++ b/package/kmod/0001-fix-O_CLOEXEC.patch
+>> @@ -1,3 +1,7 @@
+>> +Adapt this patch to version 19
+>> +
+>> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> I don't think this should go here, otherwise the patch isn't a proper
+> git patch anymore. Instead, I modified the commit log to add the fact
+> that you updated the patch to version 19, and added your SoB below
+> Thomas DS one.
+> 
+> See:
+> http://git.buildroot.net/buildroot/tree/package/kmod/0001-fix-O_CLOEXEC.patch?h=next.
 
-Applied to next, thanks. One question below, though.
+yes, I agree that's better. Thank you Thomas, I will do it in that way
+from now on :-)
 
->  define RAPIDJSON_INSTALL_STAGING_CMDS
->  	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
->  	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
-> +	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
-> +	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
->  	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
->  		$(STAGING_DIR)/usr/include/rapidjson
->  	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
->  		$(STAGING_DIR)/usr/include/rapidjson/internal
-> +	$(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
-> +		$(STAGING_DIR)/usr/include/rapidjson/error
-> +	$(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
-> +		$(STAGING_DIR)/usr/include/rapidjson/msinttypes
->  endef
-
-Do you know why we're doing all this dance instead of just copying the
-entire $(@D)/include/* tree ?
-
-Thanks,
-
-Thomas
+Cheers,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
