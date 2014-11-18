@@ -1,36 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Nov 2014 20:31:39 +0200
-Subject: [Buildroot] [PATCH 1/2] arch/powerpc: add fsl e5500 and e6500
- support
-In-Reply-To: <20141118175637.49a03275@free-electrons.com>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
- <1416266092-6465-2-git-send-email-gustavo@zacarias.com.ar>
- <CANQCQpbtbch9q-HKXFhQRkKxYpr1FD9nhebwpiaj=65O_Pm+xQ@mail.gmail.com>
- <546B5779.9010708@zacarias.com.ar>
- <20141118162020.02921a54@free-electrons.com>
- <546B7395.4040804@zacarias.com.ar>
- <20141118175637.49a03275@free-electrons.com>
-Message-ID: <20141118183139.GO2196@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Nov 2014 19:38:27 +0100
+Subject: [Buildroot] [PATCH] package/tzdata: fix installation commands
+Message-ID: <1416335907-10074-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+If the destination directory already exists (e.g. because of a re-run or
+a custom skeleton), then the zoneinfo files will be installed in a
+sub-directory of where we are trying to install them.
 
-On Tue, Nov 18, 2014 at 05:56:37PM +0100, Thomas Petazzoni wrote:
-> I guess if we go multilib, we should build the C library for both
-> "variants", but then build the rest of the userspace with only one of
-> the two variants, and keep the other variant just to build the special
-> stuff (kernel, bootloader, etc.).
+Fix that by creating the destination directory and copying the content
+of the source directory.
 
-Please forgive my ignorance, but why do we need a C library to build bare 
-metal software like the kernel and bootloaders?
+Also fix the host install commands to match what we do in the target
+install commands.
 
-baruch
+Reported-by: Martin Dorwig <dorwig@tetronik.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/tzdata/tzdata.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 47e29c0..d0aa857 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -26,8 +26,8 @@ TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
+ TZDATA_EXTRACT_CMDS =
+ 
+ define TZDATA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share
+-	cp -a $(HOST_DIR)/usr/share/zoneinfo $(TARGET_DIR)/usr/share/zoneinfo
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/zoneinfo
++	cp -a $(HOST_DIR)/usr/share/zoneinfo/* $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+ 	    ln -sfn "$${zone}" "$${zone##*/}";  \
+@@ -59,7 +59,7 @@ define HOST_TZDATA_BUILD_CMDS
+ endef
+ 
+ define HOST_TZDATA_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/usr/share/zoneinfo
++	$(INSTALL) -d -m 0755 $(HOST_DIR)/usr/share/zoneinfo
+ 	cp -a $(@D)/_output/* $(@D)/*.tab $(HOST_DIR)/usr/share/zoneinfo
+ endef
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
