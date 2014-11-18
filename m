@@ -1,22 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 07:18:58 +0100
-Subject: [Buildroot] [PATCH next] python-itsdangerous: needs python zlib
-	support
-In-Reply-To: <1416256430-6492-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Mon, 17 Nov 2014 21:33:50 +0100")
-References: <1416256430-6492-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87vbmdav59.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Nov 2014 07:18:45 +0100
+Subject: [Buildroot] [git commit branch/next] python-itsdangerous: needs
+	python zlib support
+Message-ID: <20141118062045.7B0BDB4804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=026954ca44593f717c97fe832b39d2bd867496ec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-itsdangerous/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-itsdangerous/Config.in b/package/python-itsdangerous/Config.in
+index 6670af5..39ec0b7 100644
+--- a/package/python-itsdangerous/Config.in
++++ b/package/python-itsdangerous/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_ITSDANGEROUS
+ 	bool "python-itsdangerous"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  Itsdangerous contains various helpers to pass data to
+ 	  untrusted environments and to get it back safe and sound.
