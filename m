@@ -1,62 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Nov 2014 13:24:18 +0100
-Subject: [Buildroot] [git commit] iputils: fix hang issue with ping -f
-Message-ID: <20141118122658.CFF5CB5AB7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Nov 2014 13:36:30 +0100
+Subject: [Buildroot] Unable to boot Arm926t with big endian support
+In-Reply-To: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>
+References: <B28B6A721CC23347BBD5566C377D30416461F1CA@se-got-mb01.semcon.se>
+Message-ID: <20141118133630.650c534a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0ecfd6eb7bd54b0bef6a257cba88e733be03038
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peder Alm,
 
-Patch from upstream git (git://git.linux-ipv6.org/gitroot/iputils.git). We
-should probably bump the version to a newer snapshot in the 2015.02 cycle,
-but this is a safer option for 2014.11.
+On Tue, 18 Nov 2014 11:22:19 +0000, Peder Alm wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-ping-ping6-Fix-hang-with-f-option.patch   |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+> I'm trying to NFS-boot my Buildroot build for Arm926t with big endian
+> support without success. I have tried Buildroot version 2013.05 and
+> 2014.08 with the same result. With little endian support I can boot
+> successfully for both versions. How can I fix this?
 
-diff --git a/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch b/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
-new file mode 100644
-index 0000000..fe1ab77
---- /dev/null
-+++ b/package/iputils/0001-ping-ping6-Fix-hang-with-f-option.patch
-@@ -0,0 +1,34 @@
-+From 712fddacfb5c4a8a48d9c5debe1870bc051d836c Mon Sep 17 00:00:00 2001
-+From: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
-+Date: Tue, 6 Nov 2012 02:44:12 +0900
-+Subject: [PATCH] ping,ping6: Fix hang with -f option.
-+
-+Bug was introduced by commit 8feb586c4... (ping,ping6: Check return
-+value of write(2) for stdout.).
-+
-+https://bugs.archlinux.org/task/32306
-+
-+Patch-by: Jan Synacek <jsynacek@redhat.com>
-+Reported-by: Mohammad Alsaleh <msal@tormail.org>
-+Signed-off-by: YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ ping_common.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/ping_common.h b/ping_common.h
-+index d2a2b5c..6726e1b 100644
-+--- a/ping_common.h
-++++ b/ping_common.h
-+@@ -140,7 +140,7 @@ static inline void write_stdout(const char *str, size_t len)
-+ 	do {
-+ 		cc = write(STDOUT_FILENO, str + o, len - o);
-+ 		o += cc;
-+-	} while (len >= o || cc < 0);
-++	} while (len > o || cc < 0);
-+ }
-+ 
-+ /*
-+-- 
-+2.1.3
-+
+Thanks for the report. On which platform are you testing this? I do
+have some ARMv7 platforms to test BE on, but not ARMv5.
+
+Do you know if it's possible to test ARMv5 BE under Qemu for example,
+so that we could reproduce those issues?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
