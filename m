@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 22:50:47 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: Bump version
-Message-ID: <20141201104836.06A4B7FCD8@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 23:37:21 +0100
+Subject: [Buildroot] [git commit] package/openssl: rename patches to the new
+	convention
+Message-ID: <20141201104836.514117FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eca98a10b855692d8ef041c0b95d10b1ad793e05
+commit: http://git.buildroot.net/buildroot/commit/?id=924d832cb46033a0cedb7ec32153ff705ad9f799
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Needed to add support for host-python3
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...uild-docs.patch => 001-do-not-build-docs.patch} |    0
+ ...-file.patch => 002-dont-force-large-file.patch} |    0
+ ...odev-Fix-issue-with-signature-generation.patch} |    0
+ ...4-musl-termios.patch => 004-musl-termios.patch} |    0
+ 4 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 0fd6eea..0b564f6 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = c053acd84e5cc48a3e70047f228728bf039cfacd
-+TVHEADEND_VERSION = fcd16fa0d835d7fd4f57c350ed8b76350440c68c
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+diff --git a/package/openssl/openssl-001-do-not-build-docs.patch b/package/openssl/001-do-not-build-docs.patch
+similarity index 100%
+rename from package/openssl/openssl-001-do-not-build-docs.patch
+rename to package/openssl/001-do-not-build-docs.patch
+diff --git a/package/openssl/openssl-002-dont-force-large-file.patch b/package/openssl/002-dont-force-large-file.patch
+similarity index 100%
+rename from package/openssl/openssl-002-dont-force-large-file.patch
+rename to package/openssl/002-dont-force-large-file.patch
+diff --git a/package/openssl/openssl-003-cryptodev-Fix-issue-with-signature-generation.patch b/package/openssl/003-cryptodev-Fix-issue-with-signature-generation.patch
+similarity index 100%
+rename from package/openssl/openssl-003-cryptodev-Fix-issue-with-signature-generation.patch
+rename to package/openssl/003-cryptodev-Fix-issue-with-signature-generation.patch
+diff --git a/package/openssl/openssl-004-musl-termios.patch b/package/openssl/004-musl-termios.patch
+similarity index 100%
+rename from package/openssl/openssl-004-musl-termios.patch
+rename to package/openssl/004-musl-termios.patch
