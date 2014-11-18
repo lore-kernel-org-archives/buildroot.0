@@ -1,68 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 10:01:35 +0100
-Subject: [Buildroot] [git commit] live555: add support for building dynamic
-	libraries
-Message-ID: <20141201104836.741367FCD8@busybox.osuosl.org>
+Date: Tue, 18 Nov 2014 23:27:50 +0100
+Subject: [Buildroot] [git commit] debianutils: new package
+Message-ID: <20141201104836.3B7137FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d6728ac2c42abbf3a9233fb8f473959f4d5be74
+commit: http://git.buildroot.net/buildroot/commit/?id=eb50abe7cf2e7082907e5949aec8f884b5b45eb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both config.linux and config.linux-with-shared-libraries already exist
-in upstream code. We are only appending to these files to override
-some variables. The linux-with-shared-libraries variant defines a few
-additional variables needed for dynamic linking (library version,
-installation target).
+[Thomas: add optional dependency on Busybox, because debianutils
+installs its own version of which, so we need to override the Busybox
+one.]
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/live555/live555.mk |   26 +++++++++++++++++++-------
- 1 files changed, 19 insertions(+), 7 deletions(-)
+ package/Config.in                    |    1 +
+ package/debianutils/Config.in        |    7 +++++++
+ package/debianutils/debianutils.hash |    2 ++
+ package/debianutils/debianutils.mk   |   16 ++++++++++++++++
+ 4 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 8c31a08..b923388 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -13,18 +13,30 @@ LIVE555_INSTALL_STAGING = YES
- 
- LIVE555_CFLAGS = $(TARGET_CFLAGS)
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIVE555_CONFIG_TARGET = linux
-+LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
-+else
-+LIVE555_CONFIG_TARGET = linux-with-shared-libraries
-+LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
-+endif
-+
- ifndef ($(BR2_ENABLE_LOCALE),y)
- LIVE555_CFLAGS += -DLOCALE_NOT_USED
+diff --git a/package/Config.in b/package/Config.in
+index d59876f..a6977ce 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1204,6 +1204,7 @@ endif
+ 	source "package/cpuload/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
++	source "package/debianutils/Config.in"
  endif
- 
- define LIVE555_CONFIGURE_CMDS
--	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
--	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
--	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
--	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
--	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.linux
--	echo 'PREFIX = /usr' >> $(@D)/config.linux
--	(cd $(@D); ./genMakefiles linux)
-+	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
+new file mode 100644
+index 0000000..f865868
+--- /dev/null
++++ b/package/debianutils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DEBIANUTILS
++	bool "debianutils"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Miscellaneous utilities specific to Debian.
 +
-+	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LINK_OPTS = -L. $(TARGET_LDFLAGS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'PREFIX = /usr' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
-+	# fails
-+	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
- endef
- 
- define LIVE555_BUILD_CMDS
++	  https://tracker.debian.org/pkg/debianutils
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+new file mode 100644
+index 0000000..089dd42
+--- /dev/null
++++ b/package/debianutils/debianutils.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.4.dsc
++sha256	190850cdd6b5302e0a1ba1aaed1bc7074d67d3bd8d04c613f242f7145afa53a6	debianutils_4.4.tar.gz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+new file mode 100644
+index 0000000..dd78774
+--- /dev/null
++++ b/package/debianutils/debianutils.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# debianutils
++#
++################################################################################
++
++DEBIANUTILS_VERSION = 4.4
++DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.gz
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20130728T034252Z/pool/main/d/debianutils
++DEBIANUTILS_CONF_OPTS = --exec-prefix=/
++# Make sure we override the busybox tools, such as which
++DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++DEBIANUTILS_LICENSE = GPLv2+, SMAIL (savelog)
++DEBIANUTILS_LICENSE_FILES = debian/copyright
++
++$(eval $(autotools-package))
