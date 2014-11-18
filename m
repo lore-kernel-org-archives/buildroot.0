@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:55:33 +0100
-Subject: [Buildroot] [PATCH] perl-cross: bump to version 0.9.4
-In-Reply-To: <1415986289-22531-1-git-send-email-francois.perrad@gadz.org>
-References: <1415986289-22531-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20141118235533.141fba60@free-electrons.com>
+Date: Tue, 18 Nov 2014 23:57:09 +0100
+Subject: [Buildroot] [git commit branch/next] dhcp: install dhclient to /sbin
+Message-ID: <20141118225718.5368CB4963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=38372fbbef3087d0ebf3ccd8ebd332c2565f95c2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 14 Nov 2014 18:31:29 +0100, Francois Perrad wrote:
-> this release fixes the build when BR2_PREFER_STATIC_LIB
-> see http://autobuild.buildroot.net/results/057/057a4b9976fd6b9c5cddd117a3f29de51efe719f/build-end.log
-> see https://github.com/arsv/perl-cross/issues/11
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Debian ifupdown uses an explicit call to /sbin/dhclient.
+Busybox ifupdown uses the search path.
 
-I tested, it indeed fixes this problem. However, specifically with this
-toolchain, it fails down the road when linking the final perl
-executable due to the uClibc bug where some symbols such as setregid()
-and others are defined in both libc.a and libpthread.a. This issue has
-nothing to do with perl and should be solved separately.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcp/dhcp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Therefore, since your patch fixes (partly) an autobuilder issue, I've
-applied it to the master branch.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 27fb60b..1eb6b32 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -59,7 +59,7 @@ define DHCP_INSTALL_CLIENT
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+ 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
+-		$(TARGET_DIR)/usr/sbin/dhclient
++		$(TARGET_DIR)/sbin/dhclient
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
+ 	$(INSTALL) -m 0755 -D package/dhcp/dhclient-script \
