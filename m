@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 14:04:35 +0100
-Subject: [Buildroot] [PATCH V2 2/4] package/squid: enable ICAP server
- support in squid
-In-Reply-To: <546B3FC5.1020008@oliseo.fr>
-References: <1411032426-11463-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1415808993-2394-3-git-send-email-guillaume.gardet@oliseo.fr>
- <20141116223804.04fc546b@free-electrons.com>
- <546B3FC5.1020008@oliseo.fr>
-Message-ID: <20141118140435.0f58ffba@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Nov 2014 14:08:23 +0100
+Subject: [Buildroot] [PATCH] coreutils: disable documentation build
+In-Reply-To: <6eb52607527cefc15203eb26da99044fe6c6e3cd.1416306516.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 18 Nov 2014 12:28:36 +0200")
+References: <6eb52607527cefc15203eb26da99044fe6c6e3cd.1416306516.git.baruch@tkos.co.il>
+Message-ID: <877fysr708.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Tue, 18 Nov 2014 13:47:01 +0100, Guillaume GARDET - Olis?o wrote:
+ > The makeinfo utility may not be installed on the build machine, and we don't
+ > install documentation anyway.
 
-> >   2/ Creating a directory in /var/log at build time doesn't make sense,
-> >      because /var/log in Buildroot is a symbolic link to /tmp, and /tmp
-> >      is mounted as a tmpfs so that the root filesystem can remain
-> >      read-only. Therefore, the proper solution is to create this
-> >      directory at boot time. We normally do this in the startup script
-> >      provided by the package, but squid doesn't provide one.
-> 
-> What would be the solution then?
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b42/b42ceb3128ed832f0dd901a1db8fa3dfd92ce5ef/
+ > http://autobuild.buildroot.net/results/94f/94fcd06b320374f46b340f516c54b7ca726041af/
+ > http://autobuild.buildroot.net/results/c54/c54608ac7e03f14055e2912cf06f6d41d21227c0/
 
-I guess the best solution is probably to add an init script to start
-Squid at boot time.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
