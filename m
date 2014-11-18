@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 13:44:18 +0100
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 6.9.0-0
-In-Reply-To: <1416305780-3302-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1416305780-3302-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141118134418.273c5891@free-electrons.com>
+Date: Tue, 18 Nov 2014 13:44:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/shairport-sync: bump
+	to version 2.1.11
+Message-ID: <20141118125216.A151DB4827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=0d9084ce9d38b5f6fb788a06b02e0be0278663d0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 18 Nov 2014 10:16:20 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 6.9.0-0
-> - Update the hash value
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/imagemagick/imagemagick.hash |    4 ++--
->  package/imagemagick/imagemagick.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index da69171..9ae6d97 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.1.8
++SHAIRPORT_SYNC_VERSION = 2.1.11
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
