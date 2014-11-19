@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Nov 2014 23:05:11 +0100
-Subject: [Buildroot] [PATCH 2/9] makedevs: Rework README
-In-Reply-To: <1416068964-22529-2-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Wed, 19 Nov 2014 23:10:10 +0100
+Subject: [Buildroot] [PATCH 1/9] package/*/*.mk: Fix indent
+In-Reply-To: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1416068964-22529-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141119220511.GC3779@free.fr>
+Message-ID: <20141119221010.GD3779@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,69 +13,68 @@ To: buildroot@busybox.net
 Maxime, All,
 
 On 2014-11-15 17:29 +0100, Maxime Hadjinlian spake thusly:
-> Make all the example as a space separated list.
-> The definition of the different type was modified to look like the same
-> section on the manual.
+> Change LIBFOO_PERMISSIONS everywhere to be a space-separated list.
+> As nothing was specified in the manual but all our lists are space
+> separated, there is no reason that this one should be made an exception.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-That patch has already been applied by Peter on master, a full week
-before you sent this setries.
-
-When you re-spin a series, can you rebase on-top of the master current
-at the time you send it, please, to avoid reviewers scratching their
-head wondering what went wrong?
-
-You owe me a beer at FOSDEM! :-p
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/makedevs/README | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+> v1 -> v2:
+>    - Align busybox permissions using spaces as required by Arnout Vandecappelle
+> ---
+>  package/busybox/busybox.mk | 4 ++--
+>  package/nginx/nginx.mk     | 2 +-
+>  package/sudo/sudo.mk       | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/makedevs/README b/package/makedevs/README
-> index 6c54052..70844bf 100644
-> --- a/package/makedevs/README
-> +++ b/package/makedevs/README
-> @@ -6,7 +6,7 @@ You can do all sorts of interesting things with a device table file.
->  For example, if you want to adjust the permissions on a particular
->  file you can just add an entry like:
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 0ceaab1..f0fa851 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+>  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
 >  
-> -  /sbin/foobar        f       2755    0       0       -       -       -       -       -
-> +  /sbin/foobar f 2755 0 0 - - - - -
+>  define BUSYBOX_PERMISSIONS
+> -	/bin/busybox			 f 4755	0 0 - - - - -
+> -	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
+> +	/bin/busybox                     f 4755 0  0 - - - - -
+> +	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+>  endef
 >  
->  and (assuming the file /sbin/foobar exists) it will be made setuid
->  root (regardless of what its permissions are on the host filesystem.
-> @@ -15,20 +15,20 @@ Furthermore, you can use a single table entry to create a many device
->  minors.  For example, if I wanted to create /dev/hda and
->  /dev/hda[0-15] I could just use the following two table entries:
+>  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+> index 5a65c52..55ae844 100644
+> --- a/package/nginx/nginx.mk
+> +++ b/package/nginx/nginx.mk
+> @@ -25,7 +25,7 @@ NGINX_CONF_OPTS = \
+>  # So, we just need to create the directories used by nginx with the right
+>  # ownership.
+>  define NGINX_PERMISSIONS
+> -	/var/lib/nginx	d	755	33	33	-	-	-	-	-
+> +	/var/lib/nginx d 755 33 33 - - - - -
+>  endef
 >  
-> -  /dev/hda    b       640     0       0       3       0       0       0       -
-> -  /dev/hda    b       640     0       0       3       1       1       1       15
-> +  /dev/hda b 640 0 0 3 0 0 0 -
-> +  /dev/hda b 640 0 0 3 1 1 1 15
+>  # disable external libatomic_ops because its detection fails.
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 283a40c..61635ec 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -29,7 +29,7 @@ endef
+>  SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
 >  
->  Device table entries take the form of:
+>  define SUDO_PERMISSIONS
+> -	/usr/bin/sudo			 f 4755	0 0 - - - - -
+> +	/usr/bin/sudo f 4755 0 0 - - - - -
+>  endef
 >  
-> -<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
-> +<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
->  
->  where name is the file name,  type can be one of:
->  
-> -      f       A regular file
-> -      d       Directory
-> -      c       Character special device file
-> -      b       Block special device file
-> -      p       Fifo (named pipe)
-> +      f: A regular file
-> +      d: Directory
-> +      c: Character special device file
-> +      b: Block special device file
-> +      p: Fifo (named pipe)
->  
->  uid is the user id for the target file, gid is the group id for the
->  target file.  The rest of the entries (major, minor, etc) apply only
+>  $(eval $(autotools-package))
 > -- 
 > 2.1.3
 > 
