@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 13:49:49 +0100
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.4
-In-Reply-To: <1416397474-29244-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1416397474-29244-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141119134949.203d4015@free-electrons.com>
+Date: Wed, 19 Nov 2014 13:50:44 +0100
+Subject: [Buildroot] [PATCH 1/1] tvheadend: indentation cleanup
+In-Reply-To: <1416392457-5826-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1416392457-5826-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20141119135044.17d6b5ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Jerzy Grzegorek,
 
-On Wed, 19 Nov 2014 08:44:34 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/mpd/mpd.hash | 2 +-
->  package/mpd/mpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 19 Nov 2014 11:20:56 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Applied to next, thanks.
+Should be a real e-mail, not something with a " at " in the middle.
+
+Also, this patch doesn't apply properly on the current next branch.
+
+Thanks,
 
 Thomas
 -- 
