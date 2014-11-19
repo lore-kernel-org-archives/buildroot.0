@@ -1,60 +1,42 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 19 Nov 2014 22:30:39 +0100
-Subject: [Buildroot] [PATCH v2 6/9] libfslvpuwrap: Use self-extractible
-	helper
-In-Reply-To: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
-References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1416432642-26005-7-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Nov 2014 22:40:19 +0100
+Subject: [Buildroot] [git commit branch/next] btrfs-progs: bump to version
+	3.17.2
+Message-ID: <20141119214032.B46367F8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/libfslvpuwrap/libfslvpuwrap.mk | 24 +++++-------------------
- 1 file changed, 5 insertions(+), 19 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=dd0e3ecb08d76abdcd34ec9930654022d8569e26
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index c3a5c1c..3bdab99 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -7,30 +7,16 @@
- LIBFSLVPUWRAP_VERSION = 1.0.46
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
-+LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
-+LIBFSLVPUWRAP_INSTALL_STAGING = YES
-+
-+# See freescale-imx.mk
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
--# N.B.: the content of the two license files is different
- LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/btrfs-progs/btrfs-progs.hash |    2 +-
+ package/btrfs-progs/btrfs-progs.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 0f207b2..f030c17 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	6c01579c7b858c175aaed6b3b087dadaa38efb8e590a6928f1afe86bb8faaaab	btrfs-progs-v3.17.1.tar.xz
++sha256	50ecc724a41a6ec9e37a0fbb134d336bdafd7fa24ec69de0c591c211da4456c6	btrfs-progs-v3.17.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index d16fa0d..3575168 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--LIBFSLVPUWRAP_INSTALL_STAGING = YES
--
--LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
--
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (libfslvpuwrap-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since the EULA in the bin file differs from the one in the tar file,
--# extract the one from the bin file as well.
- define LIBFSLVPUWRAP_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE))
- endef
- 
- $(eval $(autotools-package))
--- 
-1.9.1
+-BTRFS_PROGS_VERSION = 3.17.1
++BTRFS_PROGS_VERSION = 3.17.2
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
