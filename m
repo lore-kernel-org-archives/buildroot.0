@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 22:16:39 +0100
-Subject: [Buildroot] [git commit] package/squid: define the log directory,
-	pidfile and swapdir
-Message-ID: <20141201104838.2D7E17FC49@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 13:51:21 +0100
+Subject: [Buildroot] [git commit] libevdev: add hash
+Message-ID: <20141201104836.A0B8B7FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d29eb641d3e50e734496ddb2db4aed4e7d63cfbd
+commit: http://git.buildroot.net/buildroot/commit/?id=3b14aa2e7d8586e9adf8ce2d81c7392cf2378fb5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/libevdev/libevdev.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e8a2ccc..ed51881 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -26,7 +26,10 @@ SQUID_CONF_OPTS =	--enable-async-io=8 --enable-linux-netfilter \
- 			--enable-auth-negotiate="wrapper" \
- 			--enable-auth-ntlm="fake" \
- 			--disable-strict-error-checking \
--			--enable-external-acl-helpers="file_userip"
-+			--enable-external-acl-helpers="file_userip" \
-+			--with-logdir=/var/log/squid/ \
-+			--with-pidfile=/var/run/squid.pid \
-+			--with-swapdir=/var/cache/squid/
- 
- # On uClibc librt needs libpthread
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+new file mode 100644
+index 0000000..b53a4ce
+--- /dev/null
++++ b/package/libevdev/libevdev.hash
+@@ -0,0 +1,2 @@
++# Hash from http://lists.freedesktop.org/archives/input-tools/2014-November/001123.html
++sha256 4b7c76195f0087023142f26c5fd2c254b35c861880c6902d3dd9b27daeec2643 libevdev-1.3.1.tar.xz
