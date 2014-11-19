@@ -1,64 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:36:42 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: remove redundant shell
-	conditional
-Message-ID: <20141201104838.035CB7FC49@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 22:45:21 +0100
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.112
+Message-ID: <20141201104836.E06D17FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fceab73f111a9466a7fd30df5d4162e02788504
+commit: http://git.buildroot.net/buildroot/commit/?id=1d547a65d24eb87abfa86f03b8981a561c942fba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libtool patching function checks whether patching libtool is wanted
-before doing the actual patching.
+- Bump version to 2.02.112
+- Update hash value
 
-This is redundant now, as all callers are now protected by a conditional
-block.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   24 +++++++++++-------------
- 1 files changed, 11 insertions(+), 13 deletions(-)
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 45947b0..e240b95 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -44,19 +44,17 @@ endef
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 10f2905..3d02e83 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5	02487ab2a9e02d1ee76fe217183df28a	LVM2.2.02.111.tgz
++md5 1f4033b750f68b68e9bd66d3661a2c3f LVM2.2.02.112.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 76c2f82..bef22fb 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
  #
- define PATCH_LIBTOOL
- 	@$(call MESSAGE,"Patching libtool")
--	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" ]; then \
--		for i in `find $(1) -name ltmain.sh`; do \
--			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
--			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
--			if test $${ltmain_version} = '1.5'; then \
--				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
--			elif test $${ltmain_version} = "2.2"; then\
--				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
--			elif test $${ltmain_version} = "2.4"; then\
--				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
--			fi \
--		done \
--	fi
-+	$(Q)for i in `find $(1) -name ltmain.sh`; do \
-+		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
-+		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
-+		if test $${ltmain_version} = '1.5'; then \
-+			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
-+		elif test $${ltmain_version} = "2.2"; then\
-+			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
-+		elif test $${ltmain_version} = "2.4"; then\
-+			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
-+		fi \
-+	done
- endef
+ ################################################################################
  
- # This function generates the ac_cv_file_<foo> value for a given
+-LVM2_VERSION = 2.02.111
++LVM2_VERSION = 2.02.112
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
