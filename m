@@ -1,31 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 22:47:26 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump version to 3.8.7.2
-In-Reply-To: <1416406095-27255-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1416406095-27255-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141119224726.7c16b8d6@free-electrons.com>
+Date: Wed, 19 Nov 2014 22:50:19 +0100
+Subject: [Buildroot] [git commit] package/shairport-sync: fix init script
+Message-ID: <20141119215025.048957F8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=20fbed2f7148163c6ca7389f2fb0fbff00d18d23
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 19 Nov 2014 14:08:15 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 3.8.7.2
-> - Update hash value
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/sqlite/sqlite.hash |    2 +-
->  package/sqlite/sqlite.mk   |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+shairport-sync uses libdaemon for running as daemon and creating the pidfile
+which conflicts with start-stop-daemons `-b -m` options. For that reason
+shairport-sync does not start using /etc/init.d/S99shairport-sync start.
 
-Applied to next, thanks.
+The issue is fixed by removing the background and pidfile task from
+start-stop-daemon and add a daemon option `-d` to shairport-sync.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/S99shairport-sync |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+index 31359fc..54d20ff 100644
+--- a/package/shairport-sync/S99shairport-sync
++++ b/package/shairport-sync/S99shairport-sync
+@@ -1,12 +1,12 @@
+ #! /bin/sh
+ 
+ # Additional options that are passed to Shairport Sync
+-OPTIONS=""
++OPTIONS="-d"
+ 
+ case "$1" in
+     start)
+ 	echo -n "Starting shairport-sync: "
+-	start-stop-daemon -S -q -m -b -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
++	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
