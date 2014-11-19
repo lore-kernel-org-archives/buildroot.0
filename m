@@ -1,28 +1,30 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Nov 2014 14:40:05 +0000
-Subject: [Buildroot] [PATCH v4 1/2] qt: Script Module needs a toolchain with
+Date: Wed, 19 Nov 2014 14:40:06 +0000
+Subject: [Buildroot] [PATCH v4 2/2] qt: Webkit Module needs a toolchain with
 	NPTL
-Message-ID: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
+In-Reply-To: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1416408006-30928-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt Script Module uses pthread_getattr_np() which is implemented in
+Qt Webkit Module uses pthread_getattr_np() which is implemented in
 toolchains with NPTL. Otherwise the compilation will fail showing this
 error message:
 
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
-function ?void* QTJSC::currentThreadStackBase()?:
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
-error: ?pthread_getattr_np? was not declared in this scope
+wtf/StackBounds.cpp: In member function ?void
+WTF::StackBounds::initialize()?:
+wtf/StackBounds.cpp:172:38: error: ?pthread_getattr_np? was not declared
+in this scope
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
 Changes v3 -> v4
 
-Propagate dependency to grantlee package
+Nothing
 
 Changes v2 -> v3
 
@@ -30,49 +32,28 @@ Write NPTL in capitals
 
 Changes v1 -> v2
 
- package/grantlee/Config.in |    5 +++++
- package/qt/Config.in       |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/qt/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index ce1342c..365209a 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	depends on BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
-@@ -9,3 +10,7 @@ config BR2_PACKAGE_GRANTLEE
- 	  Qt implemantation of the Django template framework
- 
- 	  http://www.grantlee.org
-+
-+comment "grantlee needs a toolchain with NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 diff --git a/package/qt/Config.in b/package/qt/Config.in
-index da159b4..2a4bf4e 100644
+index 2a4bf4e..665725e 100644
 --- a/package/qt/Config.in
 +++ b/package/qt/Config.in
-@@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
- config BR2_PACKAGE_QT_SCRIPT
- 	bool "Script Module"
+@@ -375,12 +375,14 @@ config BR2_PACKAGE_QT_WEBKIT
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	depends on BR2_PACKAGE_QT_NETWORK
  	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
- 	default y
  	help
- 	  Build the Qt Script module.
- 	  if unsure, say y.
+ 	  Build the WebKit module.
+ 	  If unsure, say n.
  
-+comment "Script Module needs a toolchain with NPTL"
+-comment "WebKit needs shared library/gui/network support"
++comment "WebKit needs shared library/NPTL toolchain/gui/network support"
+ 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+
- config BR2_PACKAGE_QT_SCRIPTTOOLS
- 	bool "Script Tools Module"
- 	depends on BR2_PACKAGE_QT_SCRIPT
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 
+ config BR2_PACKAGE_QT_STL
 -- 
 1.7.1
