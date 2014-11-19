@@ -1,52 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 00:04:29 +0100
-Subject: [Buildroot] [PATCH next] python-certifi: add new package
-In-Reply-To: <546BC6D7.5060909@mind.be>
-References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
- <20141118230733.3bc8209f@free-electrons.com>
- <546BC6D7.5060909@mind.be>
-Message-ID: <20141119000429.65c6a8c3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 18 Nov 2014 21:47:39 -0300
+Subject: [Buildroot] [PATCH] ndisc6: use LIBS for libintl
+Message-ID: <1416358059-20276-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Use LIBS instead of LDFLAGS for "-lintl", otherwise LDFLAGS gets
+evaluated to the left of object files and fails to link statically
+because of incorrect symbol resolution order. Fixes:
+http://autobuild.buildroot.net/results/21b/21bf88c9dbaecc204598e60dd9c7392a85068dd6/
 
-On Tue, 18 Nov 2014 23:23:19 +0100, Arnout Vandecappelle wrote:
+Also rename patch to new naming convention.
 
-> > We need a depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3 here. I
-> > know it's not very useful since Python packages can anyway only be
-> > selected when either Python or Python 3 are enabled, but we have this
-> > conditional for all Python packages, so we should remain consistent and
-> > have it there as well.
-> 
->  Well, a quick grep in next shows that we have 8 packages without this depends,
-> and 14 packages with the depends.
-> 
->  However, since the python packages that have recently been added by Peter do
-> not have the depends, and since he told Yegor to remove the depends in
-> python-webpy, I think the rule now is _not_ to have the depends.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ace-tcp-upd-uClibc-fix.patch => 0001-trace-tcp-upd-uClibc-fix.patch} | 0
+ package/ndisc6/ndisc6.mk                                                | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/ndisc6/{ndisc6-trace-tcp-upd-uClibc-fix.patch => 0001-trace-tcp-upd-uClibc-fix.patch} (100%)
 
-Damn, so the guy doing most of the Python maintenance, and who did
-introduce the possibility of building modules with both Python 2 and
-Python 3, doesn't have a word into such decisions? Where are we
-going? :-)
-
-> > So the licensing details of this package are pretty unclear. Can you
-> > dig a little bit, and see what is the actual license for this package?
-> 
->  It's pretty clear to me: the certificate database itself is MPL, the python
-> code around it is ISC.
-> Actually, since it's only about 5 lines of code, I doubt the python code is even
-> copyrightable, but let's ignore that :-)
-
-So probably we need a more precise <pkg>_LICENSE data than just "ISC",
-no?
-
-Thomas
+diff --git a/package/ndisc6/ndisc6-trace-tcp-upd-uClibc-fix.patch b/package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
+similarity index 100%
+rename from package/ndisc6/ndisc6-trace-tcp-upd-uClibc-fix.patch
+rename to package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index b0e4caf..cd43b01 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -14,7 +14,7 @@ NDISC6_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ NDISC6_DEPENDENCIES += gettext
+-NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
++NDISC6_CONF_ENV += LIBS="-lintl"
+ endif
+ 
+ NDISC6_BIN_ += dnssort # perl script
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
