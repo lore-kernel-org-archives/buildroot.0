@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Nov 2014 08:17:13 +0100
-Subject: [Buildroot] [git commit] ndisc6: use LIBS for libintl
-Message-ID: <20141119095019.D2B71B4ED7@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 10:57:11 +0100
+Subject: [Buildroot] [PATCH next] python-certifi: add new package
+In-Reply-To: <87ioibodrx.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 19 Nov 2014 08:22:42 +0100")
+References: <1416255614-4876-1-git-send-email-yegorslists@googlemail.com>
+ <20141118230733.3bc8209f@free-electrons.com>
+ <546BC6D7.5060909@mind.be>
+ <20141119000429.65c6a8c3@free-electrons.com>
+ <87ioibodrx.fsf@dell.be.48ers.dk>
+Message-ID: <87a93no6mg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ea07d5286c00ac286615d4bc340c531fbfc5ebd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Use LIBS instead of LDFLAGS for "-lintl", otherwise LDFLAGS gets
-evaluated to the left of object files and fails to link statically
-because of incorrect symbol resolution order. Fixes:
-http://autobuild.buildroot.net/results/21b/21bf88c9dbaecc204598e60dd9c7392a85068dd6/
+Hi,
 
-Also rename patch to new naming convention.
+ >> Damn, so the guy doing most of the Python maintenance, and who did
+ >> introduce the possibility of building modules with both Python 2 and
+ >> Python 3, doesn't have a word into such decisions? Where are we
+ >> going? :-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x.patch => 0001-trace-tcp-upd-uClibc-fix.patch} |    0
- package/ndisc6/ndisc6.mk                           |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ > Everything is open for discussion, but why would you want to add it?
+ > Consistency?
 
-diff --git a/package/ndisc6/ndisc6-trace-tcp-upd-uClibc-fix.patch b/package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
-similarity index 100%
-rename from package/ndisc6/ndisc6-trace-tcp-upd-uClibc-fix.patch
-rename to package/ndisc6/0001-trace-tcp-upd-uClibc-fix.patch
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index b0e4caf..cd43b01 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -14,7 +14,7 @@ NDISC6_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- NDISC6_DEPENDENCIES += gettext
--NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+NDISC6_CONF_ENV += LIBS="-lintl"
- endif
- 
- NDISC6_BIN_ += dnssort # perl script
+ > To me it makes pretty good sense that the modules are only visible if
+ > python || python3, and the individual modules can add further
+ > restrictions if needed (only for python2 or python3, needing some other
+ > package or toolchain options).
+
+After discussing it on IRC we agreed that the extra dependencies inside
+the package Config.in doesn't make sense, but we should be consistent
+all over the tree, so I will remove the extra depends on lines in next.
+
+Thanks.
+
+-- 
+Bye, Peter Korsgaard
