@@ -1,55 +1,39 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 19 Nov 2014 11:20:56 +0100
-Subject: [Buildroot] [PATCH 1/1] tvheadend: indentation cleanup
-Message-ID: <1416392457-5826-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 19 Nov 2014 08:44:34 -0300
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.4
+Message-ID: <1416397474-29244-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-I've had already this patch ready to send.
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 0fd6eea..716818c 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -35,18 +35,18 @@ endif
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 3e91179..f8bf014 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	fee3f3c59b5806767f23f7962621be7a62d4fcb852fff6b9ed6bbb5598a556d3	mpd-0.19.3.tar.xz
++sha256	18f4af89e8b9a434da2b8678b53fc8189da97c1f32e9083512d67217166d3bd8	mpd-0.19.4.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7061bdb..1369847 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define TVHEADEND_CONFIGURE_CMDS
--	(cd $(@D);				\
--	 $(TARGET_CONFIGURE_OPTS)		\
--	 $(TARGET_CONFIGURE_ARGS)		\
--	 ./configure				\
--	 --prefix=/usr				\
--	 --arch="$(ARCH)"			\
--	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
--	 --python="$(HOST_DIR)/usr/bin/python2"	\
--	 --disable-dvbscan			\
--	 --enable-bundle			\
--	 --disable-libffmpeg_static		\
--	 $(TVHEADEND_CONF_OPTS)			\
-+	(cd $(@D);						\
-+		$(TARGET_CONFIGURE_OPTS)			\
-+		$(TARGET_CONFIGURE_ARGS)			\
-+		./configure					\
-+			--prefix=/usr				\
-+			--arch="$(ARCH)"			\
-+			--cpu="$(BR2_GCC_TARGET_CPU)"		\
-+			--python="$(HOST_DIR)/usr/bin/python2"	\
-+			--disable-dvbscan			\
-+			--enable-bundle				\
-+			--disable-libffmpeg_static		\
-+			$(TVHEADEND_CONF_OPTS)			\
- 	)
- endef
- 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).3
++MPD_VERSION = $(MPD_VERSION_MAJOR).4
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-1.7.9.5
+2.0.4
