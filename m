@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Nov 2014 23:34:03 +0100
-Subject: [Buildroot] [git commit] rapidjson: simplify install commands
-Message-ID: <20141201104836.443CD7FCD8@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 13:49:31 +0100
+Subject: [Buildroot] [git commit] mpd: bump to version 0.19.4
+Message-ID: <20141201104836.8BCF17FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc3f5258d214d435bbe4a4f5a76caba5977421be
+commit: http://git.buildroot.net/buildroot/commit/?id=d30cc67c51efe44bc2b5b7ce750dca25c06b2cb9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rapidjson/rapidjson.mk |   13 +------------
- 1 files changed, 1 insertions(+), 12 deletions(-)
+ package/mpd/mpd.hash |    2 +-
+ package/mpd/mpd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index ff516c4..6658da2 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -12,18 +12,7 @@ RAPIDJSON_INSTALL_TARGET = NO
- RAPIDJSON_INSTALL_STAGING = YES
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 3e91179..f8bf014 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	fee3f3c59b5806767f23f7962621be7a62d4fcb852fff6b9ed6bbb5598a556d3	mpd-0.19.3.tar.xz
++sha256	18f4af89e8b9a434da2b8678b53fc8189da97c1f32e9083512d67217166d3bd8	mpd-0.19.4.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7061bdb..1369847 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define RAPIDJSON_INSTALL_STAGING_CMDS
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/internal
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/error
--	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/rapidjson/msinttypes
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/internal/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/internal
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/error/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/error
--	$(INSTALL) -m 0644 $(@D)/include/rapidjson/msinttypes/*.h \
--		$(STAGING_DIR)/usr/include/rapidjson/msinttypes
-+	cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include
- endef
- 
- $(eval $(generic-package))
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).3
++MPD_VERSION = $(MPD_VERSION_MAJOR).4
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
