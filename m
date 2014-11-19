@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 20:31:35 +0100
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.113
-Message-ID: <20141201104839.18CA17FB2C@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 23:15:30 +0100
+Subject: [Buildroot] [git commit] dhcpcd: use standard installation
+Message-ID: <20141201104837.10FC47FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c65e51e303ece33442318b78a2ceee7851d5fb2
+commit: http://git.buildroot.net/buildroot/commit/?id=3c79d8adf4cd987476b02fbb1565c1848c44ffb7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 2.02.113
-- Update the hash value
+Drop the custom/manual install cmds and do a normal make install.
+This gets dhcpcd-hooks installed which are useful for many accesory
+setup functions like dns, ntp server, and so on.
+Also install dhcpcd to /sbin since it's expected by debian ifupdown,
+For busybox ifupdown when external dhcp clients are enabled (not in the
+default config we ship) will search the path.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcpcd/dhcpcd.mk |    7 +------
+ 1 files changed, 1 insertions(+), 6 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 3d02e83..adffcdb 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5 1f4033b750f68b68e9bd66d3661a2c3f LVM2.2.02.112.tgz
-+md5  f71aa8e64030f3d2a3fdabcc36e45094  LVM2.2.02.113.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index bef22fb..48a3116 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 3bb7a13..9757421 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -35,12 +35,7 @@ define DHCPCD_BUILD_CMDS
+ endef
  
--LVM2_VERSION = 2.02.112
-+LVM2_VERSION = 2.02.113
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ define DHCPCD_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
+-		$(TARGET_DIR)/usr/sbin/dhcpcd
+-	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
+-		$(TARGET_DIR)/etc/dhcpcd.conf
+-	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
+-		$(TARGET_DIR)/libexec/dhcpcd-run-hooks
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+ endef
+ 
+ # NOTE: Even though this package has a configure script, it is not generated
