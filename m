@@ -1,48 +1,49 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Wed, 19 Nov 2014 08:46:18 +0100
-Subject: [Buildroot] [PATCH 1/1] nvidia-tegra23: new package
-In-Reply-To: <20141118202246.GG4333@free.fr>
-References: <1415202733-13295-1-git-send-email-nicolas.serafini@sensefly.com>
- <20141118202246.GG4333@free.fr>
-Message-ID: <546C4ACA.6030008@sensefly.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Nov 2014 10:03:38 +0100
+Subject: [Buildroot] [PATCH 2/3] live555: add support for building
+ dynamic libraries
+In-Reply-To: <20141119055402.GA2374@sapphire.tkos.co.il>
+References: <83acc63ec240a462958adbc5bdcfea13758768d5.1416212296.git.baruch@tkos.co.il>
+ <1a9971bcf4a300fcb43f9b8b3392d3c3790c1ebf.1416212296.git.baruch@tkos.co.il>
+ <20141118231702.6e0ebdf0@free-electrons.com>
+ <20141119055402.GA2374@sapphire.tkos.co.il>
+Message-ID: <20141119100338.6daa56b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Dear Baruch Siach,
 
-Le 18. 11. 14 21:22, Yann E. MORIN a ?crit :
-> Nicolas, All,
->
-> On 2014-11-05 16:52 +0100, Nicolas Serafini spake thusly:
->> This patch adds a new package for all libraries, drivers and codecs
->> provided by Nvidia Linux 4 Tegra release 16.4.0.
->
-> I'm already working on a package for the Nvidia blobs for i386 and
-> x86_64, so I think your submision could fit in that effort.
->
-> I'll take a look at this patch and carry it in my branch to see if it
-> was posible to commonalise stuff between the Tegra and PC worlds.
->
-> Regards,
-> Yann E. MORIN.
+On Wed, 19 Nov 2014 07:54:02 +0200, Baruch Siach wrote:
 
-It's a good idea
+> > I don't understand why you need a separate config.linux and
+> > config.linux-with-shared-libraries. Since in Buildroot we will either
+> > be building with BR2_PREFER_STATIC_LIB=y, or BR2_PREFER_STATIC_LIB
+> > disabled, why not simply call the file config.linux, as it was called
+> > before this patch?
+> > 
+> > Of course, the LIVE555_LIBRARY_LINK think is needed, but I don't see
+> > why the other changes are needed.
+> > 
+> > Can you expand on this?
+> 
+> Both config.linux and config.linux-with-shared-libraries already exist in 
+> upstream code. We are only appending to these files to override some 
+> variables. The linux-with-shared-libraries variant defines a few additional 
+> variables needed for dynamic linking (library version, installation target). 
+> Aligning to upstream build procedure should be more future proof, IMO.
 
-This patch was only for Tegra2 and Tegra3 but it's possible to integrate 
-blobs for Tegra 4 and Tegra K1 too. It was my idea in a future patch update.
+Thanks for the explanation, definitely makes sense. I've added part of
+this paragraph of explanation to the commit log, and then applied both
+this patch, as well as the patch that allows VLC to link dynamically
+against live555 to the next branch.
 
-All binaries and docs can be found here
-https://developer.nvidia.com/linux-tegra
+Thanks!
 
-Let me know if I can help you for the tegra part.
-
-Best regards,
-
-Nicolas Serafini
-
-ps.
-I have removed from my response the patch because it's too big and 
-always need mailing list admin approval.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
