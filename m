@@ -1,86 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:45:00 +0100
-Subject: [Buildroot] [git commit] package/liburiparser: New package
-Message-ID: <20141201104838.E0F1680008@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 23:23:35 +0100
+Subject: [Buildroot] [git commit] package/*/*.mk: Fix indent
+Message-ID: <20141201104837.272507FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2d327d0dd3dcc661318790c1e8269c050c4ff54
+commit: http://git.buildroot.net/buildroot/commit/?id=1595d6b531600fa20eeba06c0584c383c29fe0f8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
- - put liburiparser at the right place in package/Config.in, i.e
-   sorted alphabetically
- - use positive logic for the wchar test.]
+Change LIBFOO_PERMISSIONS everywhere to be a space-separated list.
+As nothing was specified in the manual but all our lists are space
+separated, there is no reason that this one should be made an exception.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |    1 +
- package/liburiparser/Config.in         |    7 +++++++
- package/liburiparser/liburiparser.hash |    3 +++
- package/liburiparser/liburiparser.mk   |   19 +++++++++++++++++++
- 4 files changed, 30 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |    4 ++--
+ package/nginx/nginx.mk     |    2 +-
+ package/sudo/sudo.mk       |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bb5b144..b8fc7d1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -837,6 +837,7 @@ menu "Networking"
- 	source "package/libtorrent/Config.in"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnpp/Config.in"
-+	source "package/liburiparser/Config.in"
- 	source "package/libvncserver/Config.in"
- 	source "package/libwebsockets/Config.in"
- 	source "package/neon/Config.in"
-diff --git a/package/liburiparser/Config.in b/package/liburiparser/Config.in
-new file mode 100644
-index 0000000..95a6fe8
---- /dev/null
-+++ b/package/liburiparser/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBURIPARSER
-+	bool "liburiparser"
-+	help
-+	  uriparser is a strictly RFC 3986 compliant URI parsing and handling
-+	  library written in C.
-+
-+	  http://uriparser.sourceforge.net
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-new file mode 100644
-index 0000000..84340f8
---- /dev/null
-+++ b/package/liburiparser/liburiparser.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/uriparser/files/Sources/0.8.1/
-+md5	4e4c5f0ee6abb111a431c45e144247aa		uriparser-0.8.1.tar.bz2
-+sha1	4405d8baa0d9f5bc0319e6d5e68770acab67b602	uriparser-0.8.1.tar.bz2
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-new file mode 100644
-index 0000000..661fa96
---- /dev/null
-+++ b/package/liburiparser/liburiparser.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# liburiparser
-+#
-+################################################################################
-+
-+LIBURIPARSER_VERSION = 0.8.1
-+LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
-+LIBURIPARSER_SITE = http://sourceforge.net/projects/uriparser/files/Sources/$(LIBURIPARSER_VERSION)
-+LIBURIPARSER_LICENSE = BSD-3c
-+LIBURIPARSER_LICENSE_FILES = COPYING
-+LIBURIPARSER_INSTALL_STAGING = YES
-+LIBURIPARSER_CONF_OPTS = --disable-test
-+
-+ifeq ($(BR2_USE_WCHAR),)
-+LIBURIPARSER_CONF_OPTS += --disable-wchar_t
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 0ceaab1..f0fa851 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ 
+ define BUSYBOX_PERMISSIONS
+-	/bin/busybox			 f 4755	0 0 - - - - -
+-	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
++	/bin/busybox                     f 4755 0  0 - - - - -
++	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+ endef
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 5a65c52..55ae844 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -25,7 +25,7 @@ NGINX_CONF_OPTS = \
+ # So, we just need to create the directories used by nginx with the right
+ # ownership.
+ define NGINX_PERMISSIONS
+-	/var/lib/nginx	d	755	33	33	-	-	-	-	-
++	/var/lib/nginx d 755 33 33 - - - - -
+ endef
+ 
+ # disable external libatomic_ops because its detection fails.
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 283a40c..61635ec 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -29,7 +29,7 @@ endef
+ SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 
+ define SUDO_PERMISSIONS
+-	/usr/bin/sudo			 f 4755	0 0 - - - - -
++	/usr/bin/sudo f 4755 0 0 - - - - -
+ endef
+ 
+ $(eval $(autotools-package))
