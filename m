@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Nov 2014 23:10:10 +0100
-Subject: [Buildroot] [PATCH 1/9] package/*/*.mk: Fix indent
-In-Reply-To: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Wed, 19 Nov 2014 23:14:03 +0100
+Subject: [Buildroot] [PATCH 3/9] manual: Rework makedevs syntax
+In-Reply-To: <1416068964-22529-3-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141119221010.GD3779@free.fr>
+ <1416068964-22529-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141119221403.GE3779@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +14,80 @@ To: buildroot@busybox.net
 Maxime, All,
 
 On 2014-11-15 17:29 +0100, Maxime Hadjinlian spake thusly:
-> Change LIBFOO_PERMISSIONS everywhere to be a space-separated list.
-> As nothing was specified in the manual but all our lists are space
-> separated, there is no reason that this one should be made an exception.
+> State that it should be a space separated list and fix the example.
+> Also reduce the number of dash used to 4.
 > 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  docs/manual/makedev-syntax.txt | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+> index 2fd7b59..22d4c10 100644
+> --- a/docs/manual/makedev-syntax.txt
+> +++ b/docs/manual/makedev-syntax.txt
+> @@ -11,13 +11,14 @@ create and how to create them, in order to avoid calls to mknod.
+>  This syntax is derived from the makedev utility, and more complete
+>  documentation can be found in the +package/makedevs/README+ file.
+>  
+> -It takes the form of a line for each file, with the following layout:
+> +It takes the form of a space separated list of fields, one file per
+> +line; the fields are:
+>  
+>  |===========================================================
+>  |name |type |mode |uid |gid |major |minor |start |inc |count
+>  |===========================================================
+>  
+> -There are a few non-trivial blocks here:
+> +There are a few non-trivial blocks:
+>  
+>  - +name+ is the path to the file you want to create/modify
+>  - +type+ is the type of the file, being one of:
+> @@ -35,22 +36,23 @@ There are a few non-trivial blocks here:
+>  
+>  Let's say you want to change the permissions of a given file; using
+>  this syntax, you will need to put:
+> --------------------------------------------------------------------
+> -/usr/bin/foobar	f	644	0	0	-	-	-	-	-
+> --------------------------------------------------------------------
+> +
+> +----
+> +/usr/bin/foobar	f 644 0 0 - - -	- -
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+There's still a TAB between 'foobar' and 'f'
+
+I usually set tabstop=256 in vim so tabs really stand out. ;-)
+
+Otherwise, OK. So, with this fixed:
+
+    Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> v1 -> v2:
->    - Align busybox permissions using spaces as required by Arnout Vandecappelle
-> ---
->  package/busybox/busybox.mk | 4 ++--
->  package/nginx/nginx.mk     | 2 +-
->  package/sudo/sudo.mk       | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 0ceaab1..f0fa851 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
->  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+> +----
 >  
->  define BUSYBOX_PERMISSIONS
-> -	/bin/busybox			 f 4755	0 0 - - - - -
-> -	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-> +	/bin/busybox                     f 4755 0  0 - - - - -
-> +	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
->  endef
+>  On the other hand, if you want to create the device file +/dev/hda+
+>  and the corresponding 15 files for the partitions, you will need for
+>  +/dev/hda+:
 >  
->  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index 5a65c52..55ae844 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -25,7 +25,7 @@ NGINX_CONF_OPTS = \
->  # So, we just need to create the directories used by nginx with the right
->  # ownership.
->  define NGINX_PERMISSIONS
-> -	/var/lib/nginx	d	755	33	33	-	-	-	-	-
-> +	/var/lib/nginx d 755 33 33 - - - - -
->  endef
+> --------------------------------------------------------------------
+> -/dev/hda	b	640	0	0	3	0	0	0	-
+> --------------------------------------------------------------------
+> +----
+> +/dev/hda b 640 0 0 3 0 0 0 -
+> +----
 >  
->  # disable external libatomic_ops because its detection fails.
-> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-> index 283a40c..61635ec 100644
-> --- a/package/sudo/sudo.mk
-> +++ b/package/sudo/sudo.mk
-> @@ -29,7 +29,7 @@ endef
->  SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+>  and then for device files corresponding to the partitions of
+>  +/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
 >  
->  define SUDO_PERMISSIONS
-> -	/usr/bin/sudo			 f 4755	0 0 - - - - -
-> +	/usr/bin/sudo f 4755 0 0 - - - - -
->  endef
+> --------------------------------------------------------------------
+> -/dev/hda	b	640	0	0	3	1	1	1	15
+> --------------------------------------------------------------------
+> +----
+> +/dev/hda b 640 0 0 3 1 1 1 15
+> +----
 >  
->  $(eval $(autotools-package))
 > -- 
 > 2.1.3
 > 
