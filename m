@@ -1,59 +1,41 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Nov 2014 14:40:06 +0000
-Subject: [Buildroot] [PATCH v4 2/2] qt: Webkit Module needs a toolchain with
-	NPTL
-In-Reply-To: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1416408006-30928-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Nov 2014 15:17:35 +0100
+Subject: [Buildroot] [git commit] mysql: host variant needs ncurses as well
+Message-ID: <20141119144703.E1F50B5B4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt Webkit Module uses pthread_getattr_np() which is implemented in
-toolchains with NPTL. Otherwise the compilation will fail showing this
-error message:
+commit: http://git.buildroot.net/buildroot/commit/?id=d81d202e97258e440d1fc271ba5cdb7c01f7257f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wtf/StackBounds.cpp: In member function ?void
-WTF::StackBounds::initialize()?:
-wtf/StackBounds.cpp:172:38: error: ?pthread_getattr_np? was not declared
-in this scope
+Similar to the target variant.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes:
+http://autobuild.buildroot.net/results/0b8/0b8411482def8fdfba0aaaa19be01a477707d874/
+http://autobuild.buildroot.net/results/dc0/dc0dd9e878edd2b359900d02e1d53d294321c00b/
+http://autobuild.buildroot.net/results/dde/dde299d341135b547bd5c6a59edd7ba76f12ad10/
+http://autobuild.buildroot.net/results/67a/67a3fc90fc26241f0c8257d08fb44ceea07f1335/
+
+And many more.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v3 -> v4
+ package/mysql/mysql.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Nothing
-
-Changes v2 -> v3
-
-Write NPTL in capitals
-
-Changes v1 -> v2
-
- package/qt/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 2a4bf4e..665725e 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -375,12 +375,14 @@ config BR2_PACKAGE_QT_WEBKIT
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	depends on BR2_PACKAGE_QT_NETWORK
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
- 	help
- 	  Build the WebKit module.
- 	  If unsure, say n.
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 945ca18..8718193 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -43,7 +43,7 @@ endif
  
--comment "WebKit needs shared library/gui/network support"
-+comment "WebKit needs shared library/NPTL toolchain/gui/network support"
- 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
+ MYSQL_DEPENDENCIES += host-mysql host-bison
+-HOST_MYSQL_DEPENDENCIES = host-zlib
++HOST_MYSQL_DEPENDENCIES = host-zlib host-ncurses
  
- config BR2_PACKAGE_QT_STL
--- 
-1.7.1
+ HOST_MYSQL_CONF_OPTS = \
+ 	--with-embedded-server \
