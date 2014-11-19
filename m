@@ -1,42 +1,39 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 19 Nov 2014 18:51:34 +0100
-Subject: [Buildroot] [PATCH v4] Makefile: improve detection of make "-s" flag
-Message-ID: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 19 Nov 2014 16:30:22 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17.2
+Message-ID: <1416425422-10933-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because it's just checked the presence of the "s" character even a
-  make --warn-undefined-variables
-is detected as a silent build so fix this by filtering out long options.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Notes:
-    v4:
-     - split this patch from the patch set to send to muster as bugfix
-    v2:
-     - remove spurious space at the beginning of the QUIET variable (Arnout)
-
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 471edf9..6b97dc6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- TARGETS :=
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 0f207b2..f030c17 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	6c01579c7b858c175aaed6b3b087dadaa38efb8e590a6928f1afe86bb8faaaab	btrfs-progs-v3.17.1.tar.xz
++sha256	50ecc724a41a6ec9e37a0fbb134d336bdafd7fa24ec69de0c591c211da4456c6	btrfs-progs-v3.17.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index d16fa0d..3575168 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # silent mode requested?
--QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-+QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
- 
- # Strip off the annoying quoting
- ARCH := $(call qstrip,$(BR2_ARCH))
+-BTRFS_PROGS_VERSION = 3.17.1
++BTRFS_PROGS_VERSION = 3.17.2
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
 -- 
-2.1.3
+2.0.4
