@@ -1,57 +1,42 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 19 Nov 2014 14:43:56 +0100
-Subject: [Buildroot] [PATCH v2 next] tvheadend: indentation cleanup
-Message-ID: <1416404636-17197-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 19 Nov 2014 14:08:15 +0000
+Subject: [Buildroot] [PATCH] sqlite: bump version to 3.8.7.2
+Message-ID: <1416406095-27255-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+- Bump version to 3.8.7.2
+- Update hash value
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2:
- - rebase to next
- - reword Sob of Bernd
+ package/sqlite/sqlite.hash |    2 +-
+ package/sqlite/sqlite.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index b0038c8..10c9201 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -35,18 +35,18 @@ endif
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index ad1b6c5..26516c9 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
++sha1  175283383d010709f76fdd13cb0c8c3c329a1c67  sqlite-autoconf-3080702.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index ea8407c..aba788e 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define TVHEADEND_CONFIGURE_CMDS
--	(cd $(@D);				\
--	 $(TARGET_CONFIGURE_OPTS)		\
--	 $(TARGET_CONFIGURE_ARGS)		\
--	 ./configure				\
--	 --prefix=/usr				\
--	 --arch="$(ARCH)"			\
--	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
--	 --python="$(HOST_DIR)/usr/bin/python"	\
--	 --disable-dvbscan			\
--	 --enable-bundle			\
--	 --disable-libffmpeg_static		\
--	 $(TVHEADEND_CONF_OPTS)			\
-+	(cd $(@D);						\
-+		$(TARGET_CONFIGURE_OPTS)			\
-+		$(TARGET_CONFIGURE_ARGS)			\
-+		./configure					\
-+			--prefix=/usr				\
-+			--arch="$(ARCH)"			\
-+			--cpu="$(BR2_GCC_TARGET_CPU)"		\
-+			--python="$(HOST_DIR)/usr/bin/python"	\
-+			--disable-dvbscan			\
-+			--enable-bundle				\
-+			--disable-libffmpeg_static		\
-+			$(TVHEADEND_CONF_OPTS)			\
- 	)
- endef
- 
+-SQLITE_VERSION = 3080701
++SQLITE_VERSION = 3080702
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2014
+ SQLITE_LICENSE = Public domain
 -- 
-1.7.9.5
+1.7.1
