@@ -1,9 +1,9 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 19 Nov 2014 22:30:38 +0100
-Subject: [Buildroot] [PATCH v2 5/9] libfslparser: Use self-extractible helper
+Date: Wed, 19 Nov 2014 22:30:41 +0100
+Subject: [Buildroot] [PATCH v2 8/9] libz160: Use self-extractible helper
 In-Reply-To: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
 References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1416432642-26005-6-git-send-email-jezz@sysmic.org>
+Message-ID: <1416432642-26005-9-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/libfslparser/libfslparser.mk | 23 ++++-------------------
- 1 file changed, 4 insertions(+), 19 deletions(-)
+ package/freescale-imx/libz160/libz160.mk | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index d52b151..b980ba0 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -7,30 +7,15 @@
- LIBFSLPARSER_VERSION = 3.0.11
- LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
-+LIBFSLPARSER_INSTALL_STAGING = YES
-+
-+# See freescale-imx.mk
- LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
--# This is a legal minefield: the EULA in the bin file specifies that
+diff --git a/package/freescale-imx/libz160/libz160.mk b/package/freescale-imx/libz160/libz160.mk
+index d083d81..c2442d1 100644
+--- a/package/freescale-imx/libz160/libz160.mk
++++ b/package/freescale-imx/libz160/libz160.mk
+@@ -7,25 +7,14 @@ LIBZ160_VERSION = 11.09.01
+ LIBZ160_SOURCE = libz160-bin-$(LIBZ160_VERSION).bin
+ LIBZ160_SITE = $(FREESCALE_IMX_SITE)
+ LIBZ160_INSTALL_STAGING = YES
+-LIBZ160_LICENSE = Freescale Semiconductor Software License Agreement
+ 
+-# No license file is included in the archive; we could extract it from
+-# the self-extractor, but that's just too much effort.
+-# This is a legal minefield: the EULA specifies that
 -# the Board Support Package includes software and hardware (sic!)
 -# for which a separate license is needed...
- LIBFSLPARSER_REDISTRIBUTE = NO
++# See freescale-imx
++LIBZ160_LICENSE = Freescale Semiconductor Software License Agreement
++LIBZ160_LICENSE_FILES = EULA
+ LIBZ160_REDISTRIBUTE = NO
  
--LIBFSLPARSER_INSTALL_STAGING = YES
--
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (libfslparser-x.y.z)
+-# The archive is a shell-self-extractor of a bzipped tar. Output directory 
+-# depends of version of source.
 -# The --force makes sure it doesn't fail if the source dir already exists.
 -# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since the EULA in the bin file differs from the one in the tar file,
--# extract the one from the bin file as well.
- define LIBFSLPARSER_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(LIBFSLPARSER_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(LIBFSLPARSER_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLPARSER_SOURCE))
+-# because we have legal-info.
+ define LIBZ160_EXTRACT_CMDS
+-	(cd $(@D); \
+-		sh $(DL_DIR)/$(LIBZ160_SOURCE) --force --auto-accept)
+-	mv $(@D)/libz160-bin-$(LIBZ160_VERSION)/* $(@D)
+-	rmdir $(@D)/libz160-bin-$(LIBZ160_VERSION)
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBZ160_SOURCE))
  endef
  
- # The Makefile installs several versions of the libraries, but we only
+ define LIBZ160_INSTALL_STAGING_CMDS
 -- 
 1.9.1
