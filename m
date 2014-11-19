@@ -1,31 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 23:01:22 +0100
-Subject: [Buildroot] [PATCH v4 0/2] elfutils: version bump
-In-Reply-To: <1415706464-15288-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1415706464-15288-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141119230122.43ddc61b@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Nov 2014 23:05:11 +0100
+Subject: [Buildroot] [PATCH 2/9] makedevs: Rework README
+In-Reply-To: <1416068964-22529-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1416068964-22529-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141119220511.GC3779@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Maxime, All,
 
-On Tue, 11 Nov 2014 11:47:42 +0000, Vicente Olivert Riera wrote:
-> Changes since v3:
-> - Keep Thomas' s-o-b in their modified patches
-> - Add Yann's r-b in the second patch
-> - Add Yann's a-b in the first patch
+On 2014-11-15 17:29 +0100, Maxime Hadjinlian spake thusly:
+> Make all the example as a space separated list.
+> The definition of the different type was modified to look like the same
+> section on the manual.
+
+That patch has already been applied by Peter on master, a full week
+before you sent this setries.
+
+When you re-spin a series, can you rebase on-top of the master current
+at the time you send it, please, to avoid reviewers scratching their
+head wondering what went wrong?
+
+You owe me a beer at FOSDEM! :-p
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/makedevs/README | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 > 
-> Vicente Olivert Riera (2):
->   elfutils: rename patches to follow the new name structure
->   elfutils: bump version to 0.160
+> diff --git a/package/makedevs/README b/package/makedevs/README
+> index 6c54052..70844bf 100644
+> --- a/package/makedevs/README
+> +++ b/package/makedevs/README
+> @@ -6,7 +6,7 @@ You can do all sorts of interesting things with a device table file.
+>  For example, if you want to adjust the permissions on a particular
+>  file you can just add an entry like:
+>  
+> -  /sbin/foobar        f       2755    0       0       -       -       -       -       -
+> +  /sbin/foobar f 2755 0 0 - - - - -
+>  
+>  and (assuming the file /sbin/foobar exists) it will be made setuid
+>  root (regardless of what its permissions are on the host filesystem.
+> @@ -15,20 +15,20 @@ Furthermore, you can use a single table entry to create a many device
+>  minors.  For example, if I wanted to create /dev/hda and
+>  /dev/hda[0-15] I could just use the following two table entries:
+>  
+> -  /dev/hda    b       640     0       0       3       0       0       0       -
+> -  /dev/hda    b       640     0       0       3       1       1       1       15
+> +  /dev/hda b 640 0 0 3 0 0 0 -
+> +  /dev/hda b 640 0 0 3 1 1 1 15
+>  
+>  Device table entries take the form of:
+>  
+> -<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
+> +<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
+>  
+>  where name is the file name,  type can be one of:
+>  
+> -      f       A regular file
+> -      d       Directory
+> -      c       Character special device file
+> -      b       Block special device file
+> -      p       Fifo (named pipe)
+> +      f: A regular file
+> +      d: Directory
+> +      c: Character special device file
+> +      b: Block special device file
+> +      p: Fifo (named pipe)
+>  
+>  uid is the user id for the target file, gid is the group id for the
+>  target file.  The rest of the entries (major, minor, etc) apply only
+> -- 
+> 2.1.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Series applied to next, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
