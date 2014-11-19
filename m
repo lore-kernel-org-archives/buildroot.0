@@ -1,101 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:14:11 +0100
-Subject: [Buildroot] [git commit] python3: add patch to fix --includes /
-	--ldflags output of python3-config
-Message-ID: <20141201104837.753DA7FDA9@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 22:40:19 +0100
+Subject: [Buildroot] [git commit] btrfs-progs: bump to version 3.17.2
+Message-ID: <20141201104836.CE4997FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb8cbfdf4ef0be10d2e9b8e51cde98d2909a120
+commit: http://git.buildroot.net/buildroot/commit/?id=dd0e3ecb08d76abdcd34ec9930654022d8569e26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build/real prefix handling using sed breaks if build != real and the
-standard include / lib directories are used ($prefix/include and $prefix/lib).
-
-E.G.
-
-prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-
-If this gets installed with make DESTDIR="/foo" install, then we end up with
-prefix_real = prefix = "/foo/usr" as expected, but
-includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-the double sed invocation (prefix is already expanded).  Work around it by
-ensuring we only match the beginning of the string.
-
-Submitted upstream: http://bugs.python.org/issue22907
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../python3-017-python-config-include-libdir.patch |   60 ++++++++++++++++++++
- 1 files changed, 60 insertions(+), 0 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash |    2 +-
+ package/btrfs-progs/btrfs-progs.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3-017-python-config-include-libdir.patch b/package/python3/python3-017-python-config-include-libdir.patch
-new file mode 100644
-index 0000000..50a856d
---- /dev/null
-+++ b/package/python3/python3-017-python-config-include-libdir.patch
-@@ -0,0 +1,60 @@
-+From 50f34d2cac63b6bf0935294a7d63d9451714f4c4 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 20 Nov 2014 13:24:59 +0100
-+Subject: [PATCH] Misc/python-config.sh.in: ensure sed invocations only match
-+ beginning of strings
-+
-+The build/real prefix handling using sed breaks if build != real and the
-+standard include / lib directories are used ($prefix/include and $prefix/lib).
-+
-+E.G.
-+
-+prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-+
-+If this gets installed with make DESTDIR="/foo" install, then we end up with
-+prefix_real = prefix = "/foo/usr" as expected, but
-+includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-+the double sed invocation (prefix is already expanded).  Work around it by
-+ensuring we only match the beginning of the string.
-+
-+Submitted upstream: http://bugs.python.org/issue22907
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Misc/python-config.sh.in | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-+index 64c81e5..f75eec5 100644
-+--- a/Misc/python-config.sh.in
-++++ b/Misc/python-config.sh.in
-+@@ -29,12 +29,12 @@ prefix_real=$(installed_prefix "$0")
-+ 
-+ # Use sed to fix paths from their built-to locations to their installed-to
-+ # locations.
-+-prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
-++prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-+ exec_prefix_build="@exec_prefix@"
-+-exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
-+-includedir=$(echo "@includedir@" | sed "s#$prefix_build#$prefix_real#")
-+-libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
-+-CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
-++exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-++includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-++libdir=$(echo "@libdir@" | sed "s#^$prefix_build#$prefix_real#")
-++CFLAGS=$(echo "@CFLAGS@" | sed "s#^$prefix_build#$prefix_real#")
-+ VERSION="@VERSION@"
-+ LIBM="@LIBM@"
-+ LIBC="@LIBC@"
-+@@ -48,7 +48,7 @@ OPT="@OPT@"
-+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-+ LDVERSION="@LDVERSION@"
-+ LIBDEST=${prefix}/lib/python${VERSION}
-+-LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
-++LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-+ SO="@SO@"
-+ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-+ INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
-+-- 
-+2.1.3
-+
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 0f207b2..f030c17 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	6c01579c7b858c175aaed6b3b087dadaa38efb8e590a6928f1afe86bb8faaaab	btrfs-progs-v3.17.1.tar.xz
++sha256	50ecc724a41a6ec9e37a0fbb134d336bdafd7fa24ec69de0c591c211da4456c6	btrfs-progs-v3.17.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index d16fa0d..3575168 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 3.17.1
++BTRFS_PROGS_VERSION = 3.17.2
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
