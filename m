@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 22:45:58 +0100
-Subject: [Buildroot] [git commit branch/next] sqlite: bump version to 3.8.7.2
-Message-ID: <20141119214705.B632C7F8B3@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 22:47:13 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.112
+In-Reply-To: <1416418280-28409-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1416418280-28409-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141119224713.0a420e77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba992db9764a76e972f91dfd506060df6835e679
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Vicente Olivert Riera,
 
-- Bump version to 3.8.7.2
-- Update hash value
+On Wed, 19 Nov 2014 17:31:20 +0000, Vicente Olivert Riera wrote:
+> - Bump version to 2.02.112
+> - Update hash value
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/lvm2/lvm2.hash |    2 +-
+>  package/lvm2/lvm2.mk   |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ad1b6c5..26516c9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
-+sha1  175283383d010709f76fdd13cb0c8c3c329a1c67  sqlite-autoconf-3080702.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index ea8407c..aba788e 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080701
-+SQLITE_VERSION = 3080702
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
