@@ -1,42 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Nov 2014 14:08:15 +0000
-Subject: [Buildroot] [PATCH] sqlite: bump version to 3.8.7.2
-Message-ID: <1416406095-27255-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Nov 2014 15:04:50 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: fix static linking issues with
+	libintl
+Message-ID: <20141119140906.60A139D438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 3.8.7.2
-- Update hash value
+commit: http://git.buildroot.net/buildroot/commit/?id=32c2385f268bd7a2f7d1f55d712c5de648bfc657
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Util-linux (and hence libuuid) links against libintl if
+BR2_NEEDS_GETTEXT_IF_LOCALE, so e2fsprogs needs to link against it as when
+when statically linking, otherwise the configure test for libuuid (and later
+linking) fails.
+
+Fixes:
+http://autobuild.buildroot.net/results/833/8338a03028de9502be506a80bd947d80b3e50a49/
+http://autobuild.buildroot.net/results/361/361aa2e47a7561ff6624829bdfcfe66ecaddc4a6/
+http://autobuild.buildroot.net/results/4dc/4dc157bb9cd2e86b9b88ff9c1b66468fa930ede4/
+http://autobuild.buildroot.net/results/ebf/ebf02964de98f82e7d5509c68cbfacdb5bc6f87e/
+
+And many more.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ad1b6c5..26516c9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
-+sha1  175283383d010709f76fdd13cb0c8c3c329a1c67  sqlite-autoconf-3080702.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index ea8407c..aba788e 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 3961a94..8ee316a 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -29,6 +29,12 @@ ifeq ($(BR2_nios2),y)
+ E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
+ endif
  
--SQLITE_VERSION = 3080701
-+SQLITE_VERSION = 3080702
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
--- 
-1.7.1
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++# util-linux libuuid pulls in libintl if needed, so ensure we also
++# link against it, otherwise static linking fails
++E2FSPROGS_CONF_ENV += LIBS=-lintl
++endif
++
+ E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+ 
+ E2FSPROGS_MAKE_OPTS = \
