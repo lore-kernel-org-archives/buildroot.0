@@ -1,68 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 23:23:35 +0100
-Subject: [Buildroot] [git commit branch/next] package/*/*.mk: Fix indent
-Message-ID: <20141119222343.1F63F7F8B5@busybox.osuosl.org>
+Date: Wed, 19 Nov 2014 23:23:07 +0100
+Subject: [Buildroot] [PATCH 7/9] dhcpcd: bump to version 6.6.2
+In-Reply-To: <1416330117-4458-8-git-send-email-gustavo@zacarias.com.ar>
+References: <1416330117-4458-1-git-send-email-gustavo@zacarias.com.ar>
+ <1416330117-4458-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141119232307.7e4d46bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1595d6b531600fa20eeba06c0584c383c29fe0f8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Gustavo Zacarias,
 
-Change LIBFOO_PERMISSIONS everywhere to be a space-separated list.
-As nothing was specified in the manual but all our lists are space
-separated, there is no reason that this one should be made an exception.
+On Tue, 18 Nov 2014 14:01:55 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dhcpcd/dhcpcd.hash | 2 ++
+>  package/dhcpcd/dhcpcd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/dhcpcd/dhcpcd.hash
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.mk |    4 ++--
- package/nginx/nginx.mk     |    2 +-
- package/sudo/sudo.mk       |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0ceaab1..f0fa851 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -50,8 +50,8 @@ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
- define BUSYBOX_PERMISSIONS
--	/bin/busybox			 f 4755	0 0 - - - - -
--	/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-+	/bin/busybox                     f 4755 0  0 - - - - -
-+	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
- endef
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5a65c52..55ae844 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -25,7 +25,7 @@ NGINX_CONF_OPTS = \
- # So, we just need to create the directories used by nginx with the right
- # ownership.
- define NGINX_PERMISSIONS
--	/var/lib/nginx	d	755	33	33	-	-	-	-	-
-+	/var/lib/nginx d 755 33 33 - - - - -
- endef
- 
- # disable external libatomic_ops because its detection fails.
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 283a40c..61635ec 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -29,7 +29,7 @@ endef
- SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 
- define SUDO_PERMISSIONS
--	/usr/bin/sudo			 f 4755	0 0 - - - - -
-+	/usr/bin/sudo f 4755 0 0 - - - - -
- endef
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
