@@ -1,49 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Nov 2014 15:04:50 +0100
-Subject: [Buildroot] [git commit] e2fsprogs: fix static linking issues with
-	libintl
-Message-ID: <20141119140906.60A139D438@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 19 Nov 2014 14:18:03 +0000
+Subject: [Buildroot] [PATCH v3 1/2] qt: Script Module needs a toolchain with
+	NPTL
+Message-ID: <1416406684-31038-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32c2385f268bd7a2f7d1f55d712c5de648bfc657
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Qt Script Module uses pthread_getattr_np() which is implemented in
+toolchains with NPTL. Otherwise the compilation will fail showing this
+error message:
 
-Util-linux (and hence libuuid) links against libintl if
-BR2_NEEDS_GETTEXT_IF_LOCALE, so e2fsprogs needs to link against it as when
-when statically linking, otherwise the configure test for libuuid (and later
-linking) fails.
+../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
+function ?void* QTJSC::currentThreadStackBase()?:
+../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
+error: ?pthread_getattr_np? was not declared in this scope
 
-Fixes:
-http://autobuild.buildroot.net/results/833/8338a03028de9502be506a80bd947d80b3e50a49/
-http://autobuild.buildroot.net/results/361/361aa2e47a7561ff6624829bdfcfe66ecaddc4a6/
-http://autobuild.buildroot.net/results/4dc/4dc157bb9cd2e86b9b88ff9c1b66468fa930ede4/
-http://autobuild.buildroot.net/results/ebf/ebf02964de98f82e7d5509c68cbfacdb5bc6f87e/
-
-And many more.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+Changes v2 -> v3
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 3961a94..8ee316a 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -29,6 +29,12 @@ ifeq ($(BR2_nios2),y)
- E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
- endif
+Write NPTL in capitals
+
+Changes v1 -> v2
+
+Depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of BR2_PTHREADS_OLD
+
+ package/qt/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index da159b4..2a4bf4e 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
+ 	default y
+ 	help
+ 	  Build the Qt Script module.
+ 	  if unsure, say y.
  
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+# util-linux libuuid pulls in libintl if needed, so ensure we also
-+# link against it, otherwise static linking fails
-+E2FSPROGS_CONF_ENV += LIBS=-lintl
-+endif
++comment "Script Module needs a toolchain with NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 +
- E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
- 
- E2FSPROGS_MAKE_OPTS = \
+ config BR2_PACKAGE_QT_SCRIPTTOOLS
+ 	bool "Script Tools Module"
+ 	depends on BR2_PACKAGE_QT_SCRIPT
+-- 
+1.7.1
