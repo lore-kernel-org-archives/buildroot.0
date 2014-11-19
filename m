@@ -1,9 +1,9 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 19 Nov 2014 22:30:36 +0100
-Subject: [Buildroot] [PATCH v2 3/9] imx-vpu: Use self-extractible helper
+Date: Wed, 19 Nov 2014 22:30:37 +0100
+Subject: [Buildroot] [PATCH v2 4/9] libfslcodec: Use self-extractible helper
 In-Reply-To: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
 References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1416432642-26005-4-git-send-email-jezz@sysmic.org>
+Message-ID: <1416432642-26005-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +12,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/imx-vpu/imx-vpu.mk | 22 ++++++----------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+ package/libfslcodec/libfslcodec.mk | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index e0292ed..110287b 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
-@@ -6,8 +6,6 @@
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+index 1a364bb..cf943a8 100644
+--- a/package/libfslcodec/libfslcodec.mk
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -7,30 +7,15 @@
+ LIBFSLCODEC_VERSION = 3.0.11
+ LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
++LIBFSLCODEC_INSTALL_STAGING = YES
++
++# See freescale-imx.mk
+ LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
+ LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
+-# This is a legal minefield: the EULA in the bin file specifies that
+-# the Board Support Package includes software and hardware (sic!)
+-# for which a separate license is needed...
+ LIBFSLCODEC_REDISTRIBUTE = NO
  
- IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
--IMX_VPU_LICENSE = Freescale License
--IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
- IMX_VPU_INSTALL_STAGING = YES
-@@ -21,21 +19,13 @@ IMX_VPU_MAKE_ENV = \
- 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
- 	INCLUDE="-idirafter $(LINUX_DIR)/include"
- 
+-LIBFSLCODEC_INSTALL_STAGING = YES
+-
 -# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (imx-vpu-x.y.z)
+-# to extract in the correct directory (libfslcodec-x.y.z)
 -# The --force makes sure it doesn't fail if the source dir already exists.
 -# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
--#
-+# See freescale-imx.mk
-+IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
-+IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
-+IMX_VPU_REDISTRIBUTE = NO
-+
- define IMX_VPU_EXTRACT_CMDS
+-# because we have legal-info.
+-# Since the EULA in the bin file differs from the one in the tar file,
+-# extract the one from the bin file as well.
+ define LIBFSLCODEC_EXTRACT_CMDS
 -	awk 'BEGIN      { start=0; } \
 -	     /^EOEULA/  { start = 0; } \
 -	                { if (start) print; } \
 -	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
+-	    $(DL_DIR)/$(LIBFSLCODEC_SOURCE) > $(@D)/EULA
 -	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_VPU_SOURCE))
+-	sh $(DL_DIR)/$(LIBFSLCODEC_SOURCE) --force --auto-accept
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLCODEC_SOURCE))
  endef
  
- define IMX_VPU_BUILD_CMDS
+ # FIXME The Makefile installs both the arm9 and arm11 versions of the
 -- 
 1.9.1
