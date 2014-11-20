@@ -1,40 +1,30 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Nov 2014 08:24:06 -0600
-Subject: [Buildroot] [PATCH] omniorb: fix build for uclinux
-In-Reply-To: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
-References: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
-Message-ID: <CANQCQpa3VS6OTEex-8LXOvLUumy=XuPRJBv7DnFSTxkcPTh+Qg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Nov 2014 16:03:47 +0100
+Subject: [Buildroot] [PATCH] canfestival: disable static build
+In-Reply-To: <f34a48cc344f0502ef923c31ad505a07c22a70bf.1416489676.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 20 Nov 2014 15:21:16 +0200")
+References: <f34a48cc344f0502ef923c31ad505a07c22a70bf.1416489676.git.baruch@tkos.co.il>
+Message-ID: <87lhn5gbho.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Thu, Nov 20, 2014 at 12:49 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Add a patch to make configure correctly identify uclinux.
->
-> Also, disable build of shared libraries when PREFER_STATIC_LIB is set.
-> Otherwise, build for Blackfin fails further down the road.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/c60/c60d880b620c47f4aa03cdf2e1bb85a526242d54/
-> http://autobuild.buildroot.net/results/01f/01f4e8a27831d6817b329fa23fe0bbabd7fd01c9/
-> http://autobuild.buildroot.net/results/a96/a96a06b825c14dc9fdf738225db50bc1de8b901a/
->
-<snip>
+ > canfestival doesn't really support static build. The configure script accepts
+ > the --disable-dll parameter that should in theory allow a static build. In
+ > practice this options is not well tested, as it causes the build to fails in
+ > various places.
 
-Thanks for resolving this!
+ > Fixes:
+ > http://autobuild.buildroot.net/results/29f/29fd3e550937f48e2270149a3d44cfb8bcf5c16a/
 
-Acked-by: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Bye, Peter Korsgaard
