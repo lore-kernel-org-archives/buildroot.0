@@ -1,33 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Nov 2014 18:58:23 -0300
-Subject: [Buildroot] [PATCH] system/permissions: /etc/random-seed must
- be mode 600
-In-Reply-To: <1690999.xJl8MaTsPY@sagittea>
-References: <1416517694-7952-1-git-send-email-gustavo@zacarias.com.ar>
- <1690999.xJl8MaTsPY@sagittea>
-Message-ID: <546E63FF.5070503@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Nov 2014 23:10:51 +0100
+Subject: [Buildroot] [PATCH] sysvinit/inittab: adjust shutdown
+In-Reply-To: <1416511120-29954-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 20 Nov 2014 16:18:40 -0300")
+References: <1416511120-29954-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vbm9ed5g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/20/2014 06:27 PM, J?r?me Pouiller wrote:
-> Just curiosity, does it make sense to provide a random seed? I mean, it is not 
-> very random, is it?
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I have another patch that creates random-seed at build-time that i'm
-testing.
-That's not too good either since it's fixed "per firmware image" so to
-speak, but at least it's better than an easily downloadable fixed seed
-from many mirrors :)
-The problem with mode 744 (currently) is that anyone can read the seed,
-which as we know is fixed for now, but they can also read the evolved
-seed too _IF_ the box/device shutdowns properly.
-I guess it's time to write some best practices documentation, in this
-aspect we can't cover for all the varying possibilities i'm afraid.
-Ideally a separate partition/eeprom would contain the seed so as to make
-it unique to each device and firmware-independant.
-And no, using the device MAC address/serial number for this isn't that
-good :)
-Regards.
+ > The previous shutdown sequence was basically a no-op, it did't call rcK
+ > to stop anything and dumped users back into shell.
+ > So do the proper thing by calling rcK for levels 0 (halt) and 6
+ > (reboot), then swapoff, then remount ro.
+ > After that call halt for 0 and reboot for 6.
+
+ > Also make 3 the default runlevel as in normal distributions, for all
+ > intents and purposes it changes nothing except aesthetics/convention.
+
+ > And make the labels a context sequence rather than just a short form
+ > of the actions which IMHO looks horrible.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
