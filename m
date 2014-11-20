@@ -1,30 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 19:41:01 +0100
-Subject: [Buildroot] [PATCH] system/inittab: adjust shutdown
-In-Reply-To: <1416502909-5919-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 20 Nov 2014 14:01:49 -0300")
-References: <1416502909-5919-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878uj5g1fm.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Nov 2014 19:40:13 +0100
+Subject: [Buildroot] [git commit] clamav: security bump to version 0.98.5
+Message-ID: <20141120184133.3224C7FDCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=59119da778cfaacfebdb56816cba1fbf7aade4a3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop null id since that means "don't show anything" for busybox init,
- > hence the shutdown sequence (/etc/init.d/rcK) doesn't show anything
- > giving the false impression that it's not being run.
- > If someone wants a really silent console they'll need to adjust much more than
- > this anyway.
- > Also swap the root read-only remount with swapoff since the swap can be
- > a regular (loop) file in the root filesystem and make the operation fail
- > resulting in a dirty filesystem.
+Fixes:
+CVE-2013-6497 - the jwplayer.js file causes ClamAV to seg fault when
+scanned with the -a (list archived files).
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/clamav/clamav.hash |    4 ++--
+ package/clamav/clamav.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 4f21a50..dabda19 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,2 +1,2 @@
+-# From http://sourceforge.net/projects/clamav/files/clamav/0.98.4/
+-sha1	f1003d04f34efb0aede05395d3c7cc22c944e4ef	clamav-0.98.4.tar.gz
++# From http://sourceforge.net/projects/clamav/files/clamav/0.98.5/
++sha1	5f5e45735819e3ca61610899b779172a5639f70f	clamav-0.98.5.tar.gz
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index c064d4e..fb3730c 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.98.4
++CLAMAV_VERSION = 0.98.5
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
