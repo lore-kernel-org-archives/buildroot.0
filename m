@@ -1,73 +1,164 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 23:09:44 +0100
-Subject: [Buildroot] [git commit] sysvinit/inittab: adjust shutdown
-Message-ID: <20141120221343.289727F961@busybox.osuosl.org>
+From: Pedro Aguilar <paguilar@paguilar.org>
+Date: Fri, 21 Nov 2014 00:02:12 +0100
+Subject: [Buildroot] [PATCH v4 4/4] guile: new package
+In-Reply-To: <20141118211819.GL4333@free.fr>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+ <1415310486-25904-5-git-send-email-paguilar@paguilar.org>
+ <20141118211819.GL4333@free.fr>
+Message-ID: <546E72F4.5040103@paguilar.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f785130d68be3fcdaf61176ce2cb3afa699b5469
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-The previous shutdown sequence was basically a no-op, it did't call rcK
-to stop anything and dumped users back into shell.
-So do the proper thing by calling rcK for levels 0 (halt) and 6
-(reboot), then swapoff, then remount ro.
-After that call halt for 0 and reboot for 6.
+On 18/11/2014 22:18, Yann E. MORIN wrote:
+[--SNIP--]
+>> diff --git a/package/guile/Config.in b/package/guile/Config.in
+>> new file mode 100644
+>> index 0000000..85671e0
+>> --- /dev/null
+>> +++ b/package/guile/Config.in
+>> @@ -0,0 +1,15 @@
+>> +config BR2_PACKAGE_GUILE
+>> +	bool "guile"
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	select BR2_PACKAGE_LIBUNISTRING
+>> +	select BR2_PACKAGE_LIBFFI
+>> +	select BR2_PACKAGE_GMP
+>> +	select BR2_PACKAGE_BDWGC
+>
+> Since you select bdwgc, you must also inherot from its dependencies:
+>
+>      depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
 
-Also make 3 the default runlevel as in normal distributions, for all
-intents and purposes it changes nothing except aesthetics/convention.
+Ok, I'll add it below "depends on BR2_TOOLCHAIN_HAS_THREADS"
 
-And make the labels a context sequence rather than just a short form
-of the actions which IMHO looks horrible.
+[--SNIP--]
+>> diff --git a/package/guile/guile-01-fix_arm_endianness.patch b/package/guile/guile-01-fix_arm_endianness.patch
+>> new file mode 100644
+>> index 0000000..a30a241
+>> --- /dev/null
+>> +++ b/package/guile/guile-01-fix_arm_endianness.patch
+>> @@ -0,0 +1,25 @@
+>> +Fix support for ARM endianness, otherwise it gives the error
+>> +"unknown CPU endianness"
+>> +
+>> +Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+>
+> Did you try to send that patch upstream?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sysvinit/inittab |   27 ++++++++++++++++-----------
- 1 files changed, 16 insertions(+), 11 deletions(-)
+They already fixed it in git, but there isn't any stable release with 
+this fix.
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 9b3a119..fc0c9b5 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -2,21 +2,26 @@
- #
- # This inittab is a basic inittab sample for sysvinit, which mimics
- # Buildroot's default inittab for BusyBox.
--id:1:initdefault:
-+id:3:initdefault:
- 
--proc::sysinit:/bin/mount -t proc proc /proc
--rwmo::sysinit:/bin/mount -o remount,rw /
--dpts::sysinit:/bin/mkdir -p /dev/pts
--dshm::sysinit:/bin/mkdir -p /dev/shm
--moun::sysinit:/bin/mount -a
--host::sysinit:/bin/hostname -F /etc/hostname
--init::sysinit:/etc/init.d/rcS
-+si0::sysinit:/bin/mount -t proc proc /proc
-+si1::sysinit:/bin/mount -o remount,rw /
-+si2::sysinit:/bin/mkdir -p /dev/pts
-+si3::sysinit:/bin/mkdir -p /dev/shm
-+si4::sysinit:/bin/mount -a
-+si5::sysinit:/bin/hostname -F /etc/hostname
-+si6::sysinit:/etc/init.d/rcS
- 
- # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
- 
- # Stuff to do for the 3-finger salute
--rebo::ctrlaltdel:/sbin/reboot
-+ca::ctrlaltdel:/sbin/reboot
- 
- # Stuff to do before rebooting
--umou:6:wait:/bin/umount -a -r
--swap:6:wait:/sbin/swapoff -a
-+shd0:06:wait:/etc/init.d/rcK
-+shd1:06:wait:/sbin/swapoff -a
-+shd2:06:wait:/bin/umount -a -r
-+
-+# The usual halt or reboot actions
-+hlt0:0:wait:/sbin/halt -dhp
-+reb0:6:wait:/sbin/reboot
+>> +diff -Nau guile-2.0.11.orig/module/system/base/target.scm guile-2.0.11/module/system/base/target.scm
+>> +--- guile-2.0.11.orig/module/system/base/target.scm	2013-02-28 09:42:45.000000000 +0100
+>> ++++ guile-2.0.11/module/system/base/target.scm	2014-11-03 23:05:01.789338997 +0100
+>> +@@ -70,7 +70,15 @@
+>> +             ((member cpu '("sparc" "sparc64" "powerpc" "powerpc64" "spu"
+>> +                            "mips" "mips64"))
+>> +              (endianness big))
+>> +-            ((string-match "^arm.*el" cpu)
+>> ++           ((string-match "^arm.*el" cpu)
+>
+> Nit-picking: that replacement line is not properly aligned.
+
+Ok, fixed.
+
+> [--SNIP--]
+>> diff --git a/package/guile/guile-02-calculate-csqrt_manually.patch b/package/guile/guile-02-calculate-csqrt_manually.patch
+>> new file mode 100644
+>> index 0000000..98bb0b6
+>> --- /dev/null
+>> +++ b/package/guile/guile-02-calculate-csqrt_manually.patch
+>> @@ -0,0 +1,16 @@
+>> +Avoid using scm_from_complex_double(csqrt()) when building with uclibc.
+>> +
+>> +Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+>> +
+>> +diff -Nau guile-2.0.11.orig/configure.ac guile-2.0.11/configure.ac
+>> +--- guile-2.0.11.orig/configure.ac	2014-03-12 14:36:02.000000000 +0100
+>> ++++ guile-2.0.11/configure.ac	2014-11-03 23:59:51.897267207 +0100
+>> +@@ -862,7 +862,7 @@
+>> + }]])],
+>> +     [guile_cv_use_csqrt=yes],
+>> +     [guile_cv_use_csqrt="no, glibc 2.3 bug"],
+>> +-    [guile_cv_use_csqrt="yes, hopefully (cross-compiling)"])])
+>> ++    [guile_cv_use_csqrt="no (cross-compiling)"])])
+>
+> Not OK: it is possible to be cross-compiling with glibc, in which
+> case the result should be 'yes'.
+
+Using csqrt() is OK only for some versions of glib. If we use the 
+fallback code, we're sure that it will work properly even with recent 
+versions of glib.
+
+>> +   case $guile_cv_use_csqrt in
+>> +     yes*)
+>> +       AC_DEFINE([HAVE_USABLE_CSQRT], 1, [Define to 1 if csqrt is bug-free])
+>> diff --git a/package/guile/guile-03-remove_unused_funcs.patch b/package/guile/guile-03-remove_unused_funcs.patch
+>> new file mode 100644
+>> index 0000000..3d70ee9
+>> --- /dev/null
+>> +++ b/package/guile/guile-03-remove_unused_funcs.patch
+>> @@ -0,0 +1,36 @@
+>> +Remove unused static inline functions str_upcase_l() and
+>> +str_downcase_l() that cause the compilation error:
+>> +'dereferencing pointer to incomplete type'.
+>> +
+>> +Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+>
+> Indeed, those functions are never called. WTF... :-/
+
+I'll send a patch for this :)
+
+> [--SNIP--]
+>> diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+>> new file mode 100644
+>> index 0000000..e0d7e80
+>> --- /dev/null
+>> +++ b/package/guile/guile.mk
+>> @@ -0,0 +1,25 @@
+>> +################################################################################
+>> +#
+>> +# guile
+>> +#
+>> +################################################################################
+>> +
+>> +GUILE_VERSION = 2.0.11
+>> +GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+>> +GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+>> +GUILE_INSTALL_STAGING = YES
+>> +GUILE_LICENSE = LGPLv3+
+>> +GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
+>> +GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc
+>> +
+>> +HOST_GUILE_DEPENDENCIES = host-libunistring host-libffi host-gmp host-bdwgc host-flex host-libtool
+>> +
+>> +# The HAVE_GC* CFLAGS specify that we wil use internal callbacks instead
+>> +# of the ones provided by bdwgc. Eg. HAVE_GC_SET_FINALIZER_NOTIFIER specifies
+>> +# that we won't use bdwgc's GC_finalizer_notifier callback.
+>> +# Trying to use these specific bdwgc's callbacks breaks guile's building.
+>> +GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
+>> +	CFLAGS="$(TARGET_CFLAGS) -DHAVE_GC_SET_FINALIZER_NOTIFIER -DHAVE_GC_GET_HEAP_USAGE_SAFE -DHAVE_GC_GET_FREE_SPACE_DIVISOR -DHAVE_GC_SET_FINALIZE_ON_DEMAND"
+>
+> This line is overly long. What about (with tabs, not spaces):
+>
+>      GUILE_CFLAGS = \
+>          -DHAVE_GC_SET_FINALIZER_NOTIFIER \
+>          -DHAVE_GC_GET_HEAP_USAGE_SAFE \
+>          -DHAVE_GC_GET_FREE_SPACE_DIVISOR \
+>          -DHAVE_GC_SET_FINALIZE_ON_DEMAND
+>
+>      GUILE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
+
+Fixed it. I'll send the patch shortly.
+
+Thanks!
+
+Regards.
+-- 
+Pedro Aguilar
+http://paguilar.org
