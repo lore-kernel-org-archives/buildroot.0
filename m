@@ -1,32 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 14:53:28 +0100
-Subject: [Buildroot] [PATCH next 0/3] dbus-python cleanup and python3 support
-Message-ID: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
+Date: Thu, 20 Nov 2014 14:53:31 +0100
+Subject: [Buildroot] [PATCH next 3/3] dbus-python: add python3 support
+In-Reply-To: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
+References: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
+Message-ID: <1416491611-19815-4-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus-python/Config.in      |  5 +++--
+ package/dbus-python/dbus-python.mk | 17 ++++++++++++++---
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-This series cleans up the dbus-python package and adds python3 support. 
-Doing this, I noticed that python3-config currently outputs wrong data for
---includes / --ldflags, so this gets patched as well.
-
-There's currently (to my knowledge atleast) no other packages using this
-output, so we don't need to apply it to master as well.
-
- package/dbus-python/Config.in                 |  5 +-
- ...thon-0001-fix-python-configure-check.patch | 27 ---------
- package/dbus-python/dbus-python.mk            | 26 +++++---
- ...on3-017-python-config-include-libdir.patch | 60 +++++++++++++++++++
- 4 files changed, 80 insertions(+), 38 deletions(-)
-
-Peter Korsgaard (3):
-      dbus-python: cleanup package
-      python3: add patch to fix --includes / --ldflags output of python3-config
-      dbus-python: add python3 support
-
---
-Bye, Peter Korsgaard
+diff --git a/package/dbus-python/Config.in b/package/dbus-python/Config.in
+index a38d277..4b302ef 100644
+--- a/package/dbus-python/Config.in
++++ b/package/dbus-python/Config.in
+@@ -3,10 +3,11 @@ config BR2_PACKAGE_DBUS_PYTHON
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_PACKAGE_DBUS
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	# pyexpat: runtime dependency only
+-	select BR2_PACKAGE_PYTHON_PYEXPAT
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python bindings for D-Bus
+ 
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index bc57689..1637406 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -9,14 +9,25 @@ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
+ DBUS_PYTHON_LICENSE_FILES = COPYING
++DBUS_PYTHON_DEPENDENCIES = dbus-glib
++DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++DBUS_PYTHON_DEPENDENCIES += python host-python
+ 
+-DBUS_PYTHON_CONF_ENV = \
++DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
+ 	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python2-config --includes)" \
+ 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python2-config --ldflags)"
++else
++DBUS_PYTHON_DEPENDENCIES += python3 host-python3
++
++DBUS_PYTHON_CONF_ENV += \
++	PYTHON=$(HOST_DIR)/usr/bin/python3 \
++	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python3-config --includes)" \
++	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
++endif
+ 
+-DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+ 
+-DBUS_PYTHON_DEPENDENCIES = dbus-glib python host-python
+ 
+ $(eval $(autotools-package))
+-- 
+2.1.3
