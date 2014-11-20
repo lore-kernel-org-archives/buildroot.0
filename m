@@ -1,101 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 14:53:30 +0100
-Subject: [Buildroot] [PATCH next 2/3] python3: add patch to fix --includes /
-	--ldflags output of python3-config
-In-Reply-To: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
-References: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
-Message-ID: <1416491611-19815-3-git-send-email-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Nov 2014 08:24:06 -0600
+Subject: [Buildroot] [PATCH] omniorb: fix build for uclinux
+In-Reply-To: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
+References: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
+Message-ID: <CANQCQpa3VS6OTEex-8LXOvLUumy=XuPRJBv7DnFSTxkcPTh+Qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build/real prefix handling using sed breaks if build != real and the
-standard include / lib directories are used ($prefix/include and $prefix/lib).
+Baruch,
 
-E.G.
+On Thu, Nov 20, 2014 at 12:49 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Add a patch to make configure correctly identify uclinux.
+>
+> Also, disable build of shared libraries when PREFER_STATIC_LIB is set.
+> Otherwise, build for Blackfin fails further down the road.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/c60/c60d880b620c47f4aa03cdf2e1bb85a526242d54/
+> http://autobuild.buildroot.net/results/01f/01f4e8a27831d6817b329fa23fe0bbabd7fd01c9/
+> http://autobuild.buildroot.net/results/a96/a96a06b825c14dc9fdf738225db50bc1de8b901a/
+>
+<snip>
 
-prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
+Thanks for resolving this!
 
-If this gets installed with make DESTDIR="/foo" install, then we end up with
-prefix_real = prefix = "/foo/usr" as expected, but
-includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-the double sed invocation (prefix is already expanded).  Work around it by
-ensuring we only match the beginning of the string.
+Acked-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Submitted upstream: http://bugs.python.org/issue22907
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../python3-017-python-config-include-libdir.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/package/python3/python3-017-python-config-include-libdir.patch b/package/python3/python3-017-python-config-include-libdir.patch
-new file mode 100644
-index 0000000..50a856d
---- /dev/null
-+++ b/package/python3/python3-017-python-config-include-libdir.patch
-@@ -0,0 +1,60 @@
-+From 50f34d2cac63b6bf0935294a7d63d9451714f4c4 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 20 Nov 2014 13:24:59 +0100
-+Subject: [PATCH] Misc/python-config.sh.in: ensure sed invocations only match
-+ beginning of strings
-+
-+The build/real prefix handling using sed breaks if build != real and the
-+standard include / lib directories are used ($prefix/include and $prefix/lib).
-+
-+E.G.
-+
-+prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-+
-+If this gets installed with make DESTDIR="/foo" install, then we end up with
-+prefix_real = prefix = "/foo/usr" as expected, but
-+includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-+the double sed invocation (prefix is already expanded).  Work around it by
-+ensuring we only match the beginning of the string.
-+
-+Submitted upstream: http://bugs.python.org/issue22907
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Misc/python-config.sh.in | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-+index 64c81e5..f75eec5 100644
-+--- a/Misc/python-config.sh.in
-++++ b/Misc/python-config.sh.in
-+@@ -29,12 +29,12 @@ prefix_real=$(installed_prefix "$0")
-+ 
-+ # Use sed to fix paths from their built-to locations to their installed-to
-+ # locations.
-+-prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
-++prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-+ exec_prefix_build="@exec_prefix@"
-+-exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
-+-includedir=$(echo "@includedir@" | sed "s#$prefix_build#$prefix_real#")
-+-libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
-+-CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
-++exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-++includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-++libdir=$(echo "@libdir@" | sed "s#^$prefix_build#$prefix_real#")
-++CFLAGS=$(echo "@CFLAGS@" | sed "s#^$prefix_build#$prefix_real#")
-+ VERSION="@VERSION@"
-+ LIBM="@LIBM@"
-+ LIBC="@LIBC@"
-+@@ -48,7 +48,7 @@ OPT="@OPT@"
-+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-+ LDVERSION="@LDVERSION@"
-+ LIBDEST=${prefix}/lib/python${VERSION}
-+-LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
-++LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-+ SO="@SO@"
-+ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-+ INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
-+-- 
-+2.1.3
-+
 -- 
-2.1.3
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
