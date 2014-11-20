@@ -1,34 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 23:12:44 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d-demos: Fix build error
-In-Reply-To: <1416513843-26663-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Thu, 20 Nov 2014 21:04:03 +0100")
-References: <1416513843-26663-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87r3wxed2b.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Nov 2014 23:06:41 +0100
+Subject: [Buildroot] [git commit] clamav: fix bzip2 detection
+Message-ID: <20141120221343.1F6657FDBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7e1728bb05aa6fd4e571fde91fab4c082b1381c4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes
- > http://autobuild.buildroot.net/results/8f2/8f292f1151089d20f33c599320941cb5435c0199/
- > http://autobuild.buildroot.net/results/f3d/f3db50d0c5c74fecafd6b4bdd89f97e8e566d820/
- > http://autobuild.buildroot.net/results/ac0/ac0f22bf87e2b48bd2191de88999404d1c55de9b/
- > http://autobuild.buildroot.net/results/da8/da87a3e81b19ad038661f5653b544f4c8cfd389d/
- > http://autobuild.buildroot.net/results/d51/d51d22754a37f790d2de5a4836237b8eea417124/
- > http://autobuild.buildroot.net/results/347/347b2f79111548ae00f40879c1b5f3c4c1c7091e/
- > http://autobuild.buildroot.net/results/aef/aef73a3bc770c3784025642f6a2c276944117112/
- > http://autobuild.buildroot.net/results/901/90152f1cfa09ad4d37700b340204f8b75850c582/
+Configure gets confused if the host has bzip2 development headers, so force
+the results.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: Updated patch according to comments from Peter
- >     http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/99050
+Fixes:
+http://autobuild.buildroot.net/results/e73/e732d1bac8fe68fd8bba50e4e9d908be3d996c83/
+http://autobuild.buildroot.net/results/1a4/1a46e53cf892534f1b3a16c249fa710485290b5a/
+http://autobuild.buildroot.net/results/6d0/6d09379aaba0ccddddfee9e319b84687012fd5fc/
+http://autobuild.buildroot.net/results/d23/d2310a2f265e7d22c025a61e064a3c29dc6213ef/
 
-Committed, thanks.
+And many more.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/clamav/clamav.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index fb3730c..9a4063f 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -32,6 +32,10 @@ CLAMAV_CONF_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ CLAMAV_DEPENDENCIES += bzip2
++# autodetection gets confused if host has bzip2, so force it
++CLAMAV_CONF_ENV += \
++	ac_cv_libbz2_libs=-lbz2 \
++	ac_cv_libbz2_ltlibs=-lbz2
+ else
+ CLAMAV_CONF_OPTS += --disable-bzip2
+ endif
