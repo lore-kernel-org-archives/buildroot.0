@@ -1,142 +1,33 @@
-From: Pedro Aguilar <paguilar@paguilar.org>
-Date: Thu, 20 Nov 2014 22:47:00 +0100
-Subject: [Buildroot] [PATCH v4 2/4] bdwgc: new package
-In-Reply-To: <20141118205903.GJ4333@free.fr>
-References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
- <20141118205903.GJ4333@free.fr>
-Message-ID: <546E6154.6090509@paguilar.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Nov 2014 18:58:23 -0300
+Subject: [Buildroot] [PATCH] system/permissions: /etc/random-seed must
+ be mode 600
+In-Reply-To: <1690999.xJl8MaTsPY@sagittea>
+References: <1416517694-7952-1-git-send-email-gustavo@zacarias.com.ar>
+ <1690999.xJl8MaTsPY@sagittea>
+Message-ID: <546E63FF.5070503@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On 11/20/2014 06:27 PM, J?r?me Pouiller wrote:
+> Just curiosity, does it make sense to provide a random seed? I mean, it is not 
+> very random, is it?
 
-Thanks for the review :)
-
-On 18/11/2014 21:59, Yann E. MORIN wrote:
-> Pedro, All,
->
-> On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
->> bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
->> conservative garbage collector can be used as a garbage collecting
->> replacement for C 'malloc' or C++ 'new'.
->>
->> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
->
-> I've had a cursory look at configure.ac, and it seems it detects C++ and
-> threading model, and does not need LFS.
-
-It installs C++ support only with the --enable-cplusplus option that is 
-not enabled by default and not needed by Guile.
-
-Yes, it detects a threading model depending on the platform.
-Should I add to the Config.in the following?
-
-comment "bdwgc needs a toolchain w/ threads"
-     depends on BR2_TOOLCHAIN_HAS_THREADS
-
-Thanks.
+I have another patch that creates random-seed at build-time that i'm
+testing.
+That's not too good either since it's fixed "per firmware image" so to
+speak, but at least it's better than an easily downloadable fixed seed
+from many mirrors :)
+The problem with mode 744 (currently) is that anyone can read the seed,
+which as we know is fixed for now, but they can also read the evolved
+seed too _IF_ the box/device shutdowns properly.
+I guess it's time to write some best practices documentation, in this
+aspect we can't cover for all the varying possibilities i'm afraid.
+Ideally a separate partition/eeprom would contain the seed so as to make
+it unique to each device and firmware-independant.
+And no, using the device MAC address/serial number for this isn't that
+good :)
 Regards.
-
-
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->> Changes v3 -> v4:
->> - Fix formatting issues
->> (Suggested by Jerzy Grzegorek)
->>
->> Changes v2 -> v3:
->> - bdwgc belongs to Libraries/Other
->> - Fix license file name
->> - Comment options properly
->> - Fix a formatting issue
->> (All changes suggested by Arnout Vandecappelle)
->>
->> Changes v1 -> v2:
->> - Add external default dependency on libatomic_ops
->> - Fix several formatting issues
->> (All changes suggested by Yann Morin)
->>
->> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
->> ---
->>   package/Config.in       |  1 +
->>   package/bdwgc/Config.in | 10 ++++++++++
->>   package/bdwgc/bdwgc.mk  | 20 ++++++++++++++++++++
->>   3 files changed, 31 insertions(+)
->>   create mode 100644 package/bdwgc/Config.in
->>   create mode 100644 package/bdwgc/bdwgc.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 28cf703..1354c27 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -848,6 +848,7 @@ menu "Other"
->>   	source "package/apr-util/Config.in"
->>   	source "package/argp-standalone/Config.in"
->>   	source "package/armadillo/Config.in"
->> +	source "package/bdwgc/Config.in"
->>   	source "package/boost/Config.in"
->>   	source "package/clapack/Config.in"
->>   	source "package/classpath/Config.in"
->> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
->> new file mode 100644
->> index 0000000..b30c218
->> --- /dev/null
->> +++ b/package/bdwgc/Config.in
->> @@ -0,0 +1,10 @@
->> +config BR2_PACKAGE_BDWGC
->> +	bool "bdwgc"
->> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
->> +	select BR2_PACKAGE_LIBATOMIC_OPS
->> +	help
->> +	  The Boehm-Demers-Weiser conservative garbage collector can
->> +	  be used as a garbage collecting replacement for C 'malloc'
->> +	  or C++ 'new'.
->> +
->> +	  http://www.hboehm.info/gc/
->> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
->> new file mode 100644
->> index 0000000..76d4ba0
->> --- /dev/null
->> +++ b/package/bdwgc/bdwgc.mk
->> @@ -0,0 +1,20 @@
->> +################################################################################
->> +#
->> +# bdwgc
->> +#
->> +################################################################################
->> +
->> +BDWGC_VERSION = 7.2f
->> +BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
->> +BDWGC_SITE = http://www.hboehm.info/gc/gc_source
->> +BDWGC_INSTALL_STAGING = YES
->> +BDWGC_LICENSE = bdwgc license
->> +BDWGC_LICENSE_FILES = README.QUICK
->> +
->> +# Patching libtool breaks build
->> +BDWGC_LIBTOOL_PATCH = NO
->> +
->> +BDWGC_DEPENDENCIES = host-bdwgc libatomic_ops
->> +
->> +$(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
->> --
->> 1.9.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-Pedro Aguilar
-http://paguilar.org
