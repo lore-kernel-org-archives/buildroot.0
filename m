@@ -1,50 +1,44 @@
-From: Damien Lanson <damien@kal-host.com>
-Date: Thu, 20 Nov 2014 17:02:08 +0100
-Subject: [Buildroot] [PATCH 1/1] Disable sample xerces
-Message-ID: <1416499328-13083-1-git-send-email-damien@kal-host.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Nov 2014 13:31:50 -0300
+Subject: [Buildroot] [PATCH] clamav: security bump to version 0.98.5
+Message-ID: <1416501110-4513-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes:
+CVE-2013-6497 - the jwplayer.js file causes ClamAV to seg fault when
+scanned with the -a (list archived files).
 
-New try to send a patch with git send-email. This patch remove building and
-installing sample for xerces. If it's good, I have other patch to remove
-building and/or installing of sample or example or dev file in some package.
-
-Best Regards,
-
--- 
-Damien Lanson / Research and Development Engineer
-ZeeTim
-15 b rue Frederic Joliot Currie, FR 94400 Vitry-sur-Seine
-www.zeetim.com
-
-
-Signed-off-by: Damien Lanson <damien@kal-host.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/xerces/xerces.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/clamav/clamav.hash | 4 ++--
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 36955e3..1beaf21 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -11,6 +11,13 @@ XERCES_LICENSE = Apache-2.0
- XERCES_LICENSE_FILES = LICENSE
- XERCES_MAKE = $(MAKE1)
- XERCES_INSTALL_STAGING = YES
-+
-+define XERCES_DISABLE_SAMPLES
-+	$(SED) 's/ samples//' $(@D)/Makefile.in
-+endef
-+
-+XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
-+
- XERCES_CONF_OPTS = --disable-threads \
- 		  --with-gnu-ld
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 4f21a50..dabda19 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,2 +1,2 @@
+-# From http://sourceforge.net/projects/clamav/files/clamav/0.98.4/
+-sha1	f1003d04f34efb0aede05395d3c7cc22c944e4ef	clamav-0.98.4.tar.gz
++# From http://sourceforge.net/projects/clamav/files/clamav/0.98.5/
++sha1	5f5e45735819e3ca61610899b779172a5639f70f	clamav-0.98.5.tar.gz
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index c064d4e..fb3730c 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-CLAMAV_VERSION = 0.98.4
++CLAMAV_VERSION = 0.98.5
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
-1.7.10.4
+2.0.4
