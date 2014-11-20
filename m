@@ -1,31 +1,32 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Date: Thu, 20 Nov 2014 10:32:10 -0500
-Subject: [Buildroot] [PATCH] python-netifaces: allow depending on Python 3
-Message-ID: <1416497530-3035-1-git-send-email-simon.marchi@polymtl.ca>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Nov 2014 16:48:16 +0100
+Subject: [Buildroot] [PATCH] omniorb: fix build for uclinux
+In-Reply-To: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 20 Nov 2014 08:49:29 +0200")
+References: <422d20cafc39916b91202d92cd2641c58b48a301.1416466169.git.baruch@tkos.co.il>
+Message-ID: <87h9xtg9fj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.10.4 is compatible with python 3.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
----
- package/python-netifaces/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add a patch to make configure correctly identify uclinux.
+ > Also, disable build of shared libraries when PREFER_STATIC_LIB is set.
+ > Otherwise, build for Blackfin fails further down the road.
 
-diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
-index 29f9fc3..b660fdb 100644
---- a/package/python-netifaces/Config.in
-+++ b/package/python-netifaces/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_NETIFACES
- 	bool "python-netifaces"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	help
- 	  Portable access to network interfaces from Python.
- 
+ > Fixes:
+ > http://autobuild.buildroot.net/results/c60/c60d880b620c47f4aa03cdf2e1bb85a526242d54/
+ > http://autobuild.buildroot.net/results/01f/01f4e8a27831d6817b329fa23fe0bbabd7fd01c9/
+ > http://autobuild.buildroot.net/results/a96/a96a06b825c14dc9fdf738225db50bc1de8b901a/
+
+ > And many others.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.1.3
+Bye, Peter Korsgaard
