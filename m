@@ -1,43 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Nov 2014 19:40:36 +0100
-Subject: [Buildroot] [git commit] system/inittab: adjust shutdown
-Message-ID: <20141120184133.3A3687FD9D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Nov 2014 16:18:40 -0300
+Subject: [Buildroot] [PATCH] sysvinit/inittab: adjust shutdown
+Message-ID: <1416511120-29954-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1dbb7e8a822416d502095ecb2c463a5179074555
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The previous shutdown sequence was basically a no-op, it did't call rcK
+to stop anything and dumped users back into shell.
+So do the proper thing by calling rcK for levels 0 (halt) and 6
+(reboot), then swapoff, then remount ro.
+After that call halt for 0 and reboot for 6.
 
-Drop null id since that means "don't show anything" for busybox init,
-hence the shutdown sequence (/etc/init.d/rcK) doesn't show anything
-giving the false impression that it's not being run.
-If someone wants a really silent console they'll need to adjust much more than
-this anyway.
-Also swap the root read-only remount with swapoff since the swap can be
-a regular (loop) file in the root filesystem and make the operation fail
-resulting in a dirty filesystem.
+Also make 3 the default runlevel as in normal distributions, for all
+intents and purposes it changes nothing except aesthetics/convention.
+
+And make the labels a context sequence rather than just a short form
+of the actions which IMHO looks horrible.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/skeleton/etc/inittab |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ package/sysvinit/inittab | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/system/skeleton/etc/inittab b/system/skeleton/etc/inittab
-index 99d84e4..b1892c1 100644
---- a/system/skeleton/etc/inittab
-+++ b/system/skeleton/etc/inittab
-@@ -30,7 +30,6 @@ null::sysinit:/bin/hostname -F /etc/hostname
- ::ctrlaltdel:/sbin/reboot
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index 9b3a119..fc0c9b5 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -2,21 +2,26 @@
+ #
+ # This inittab is a basic inittab sample for sysvinit, which mimics
+ # Buildroot's default inittab for BusyBox.
+-id:1:initdefault:
++id:3:initdefault:
+ 
+-proc::sysinit:/bin/mount -t proc proc /proc
+-rwmo::sysinit:/bin/mount -o remount,rw /
+-dpts::sysinit:/bin/mkdir -p /dev/pts
+-dshm::sysinit:/bin/mkdir -p /dev/shm
+-moun::sysinit:/bin/mount -a
+-host::sysinit:/bin/hostname -F /etc/hostname
+-init::sysinit:/etc/init.d/rcS
++si0::sysinit:/bin/mount -t proc proc /proc
++si1::sysinit:/bin/mount -o remount,rw /
++si2::sysinit:/bin/mkdir -p /dev/pts
++si3::sysinit:/bin/mkdir -p /dev/shm
++si4::sysinit:/bin/mount -a
++si5::sysinit:/bin/hostname -F /etc/hostname
++si6::sysinit:/etc/init.d/rcS
+ 
+ # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+ 
+ # Stuff to do for the 3-finger salute
+-rebo::ctrlaltdel:/sbin/reboot
++ca::ctrlaltdel:/sbin/reboot
  
  # Stuff to do before rebooting
--null::shutdown:/etc/init.d/rcK
--null::shutdown:/bin/umount -a -r
--null::shutdown:/sbin/swapoff -a
--
-+::shutdown:/etc/init.d/rcK
-+::shutdown:/sbin/swapoff -a
-+::shutdown:/bin/umount -a -r
+-umou:6:wait:/bin/umount -a -r
+-swap:6:wait:/sbin/swapoff -a
++shd0:06:wait:/etc/init.d/rcK
++shd1:06:wait:/sbin/swapoff -a
++shd2:06:wait:/bin/umount -a -r
++
++# The usual halt or reboot actions
++hlt0:0:wait:/sbin/halt -dhp
++reb0:6:wait:/sbin/reboot
+-- 
+2.0.4
