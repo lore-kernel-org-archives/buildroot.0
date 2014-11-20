@@ -1,81 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 20 Nov 2014 20:35:27 +0100
-Subject: [Buildroot] [PATCH] support/script/scancpan: generate hash file
-Message-ID: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 20 Nov 2014 19:58:26 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-19
+In-Reply-To: <20141120094407.4b487379@free-electrons.com>
+References: <20141120073014.164A510107F@stock.ovh.net>
+ <20141120094407.4b487379@free-electrons.com>
+Message-ID: <1416513506.25116.9.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-retrieve md5&sha256 from metacpan.org, and store them in the hash file
-for each package.
+Hi Thomas,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+On Thu, 2014-11-20 at 09:44 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Quick analysis of yesterday build results. Samuel, Peter, Gustavo,
+> Bernd, Yann, Vincente, Alexey, please have a look below.
+> >          arc |                      radvd-2.8 | NOK | http://autobuild.buildroot.net/results/9b480421bd66e046ff9200963facb2663b77fd35/
+> 
+> device-linux.o: In function `check_ip6_forwarding':
+> /home/test/autobuild/instance-1/output/build/radvd-2.8/device-linux.c:189: undefined reference to `sysctl'
+> 
+> Alexey, can you have a look at this one?
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index a049e2c..e929718 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -481,6 +481,7 @@ use Pod::Usage;
- use File::Basename;
- use Module::CoreList;
- use HTTP::Tiny;
-+use Safe;
- use MetaCPAN::API::Tiny;
+This happens because for ARC in Linux kernel we don't have
+__ARCH_WANT_SYSCALL_DEPRECATED.
 
- my ($help, $man, $quiet, $force, $recommend, $test, $host);
-@@ -505,9 +506,22 @@ my %need_dlopen;        # name -> 1 if requires dynamic library
- my %deps_build;         # name -> list of host dependencies
- my %deps_runtime;       # name -> list of target dependencies
- my %license_files;      # name -> list of license files
-+my %checksum;           # author -> list of checksum
- my $mcpan = MetaCPAN::API::Tiny->new();
- my $ua = HTTP::Tiny->new();
+So a number of syscalls is not enabled in
+"include/asm-generic/unistd.h".
 
-+sub get_checksum {
-+    my ($url) = @_;
-+    my($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
-+    my($basename, $dirname) = fileparse( $path );
-+    unless ($checksum{$dirname}) {
-+        my $response = $ua->get(qq{http://cpan.metacpan.org${dirname}CHECKSUMS});
-+        $checksum{$dirname} = $response->{content};
-+    }
-+    my $chksum = Safe->new->reval($checksum{$dirname});
-+    return $chksum->{$basename}, $basename;
-+}
-+
- sub get_manifest {
-     my ($author, $distname, $version) = @_;
-     my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
-@@ -608,6 +622,7 @@ while (my ($distname, $dist) = each %dist) {
-     my $dirname = q{package/} . $fsname;
-     my $cfgname = $dirname . q{/Config.in};
-     my $mkname = $dirname . q{/} . $fsname . q{.mk};
-+    my $hashname = $dirname . q{/} . $fsname . q{.hash};
-     my $brname = brname( $fsname );
-     mkdir $dirname unless -d $dirname;
-     if ($need_target{$distname} && ($force || !-f $cfgname)) {
-@@ -675,6 +690,17 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
-         close $fh;
-     }
-+    if ($force || !-f $hashname) {
-+        my($checksum, $filename) = get_checksum($dist->{download_url});
-+        my $md5 = $checksum->{md5};
-+        my $sha256 = $checksum->{sha256};
-+        say qq{write ${hashname}} unless $quiet;
-+        open my $fh, q{>}, $hashname;
-+        say {$fh} qq{# retrieved by scancpan from http://cpan.metacpan.org/};
-+        say {$fh} qq{md5    ${md5}                                 ${filename}};
-+        say {$fh} qq{sha256 ${sha256} ${filename}};
-+        close $fh;
-+    }
- }
+From the name of this define I would assume that we should avoid using
+those syscalls. So probably "radvd" should be updated.
 
- my %pkg;
---
-2.1.0
+Any thoughts?
+
+-Alexey
