@@ -1,59 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 Nov 2014 19:37:02 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-19
-References: <20141120073014.164A510107F@stock.ovh.net>
- <20141120094407.4b487379@free-electrons.com>
-Message-ID: <XnsA3EBC78DF44F4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Nov 2014 19:40:26 +0100
+Subject: [Buildroot] [PATCH] clamav: security bump to version 0.98.5
+In-Reply-To: <1416501110-4513-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 20 Nov 2014 13:31:50 -0300")
+References: <1416501110-4513-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d28hg1gl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20141120094407.4b487379 at free-
-electrons.com:
+ > Fixes:
+ > CVE-2013-6497 - the jwplayer.js file causes ClamAV to seg fault when
+ > scanned with the -a (list archived files).
 
->>       xtensa |                  clamav-0.98.4 | NOK | 
-http://autobuild.buildroot.net/results/1a46e53cf892534f1b3a16c249fa71048529
-0b5a/
->>          arm |                  clamav-0.98.4 | NOK | 
-http://autobuild.buildroot.net/results/e732d1bac8fe68fd8bba50e4e9d908be3d99
-6c83/
-> 
->   CCLD     clamscan
-> ../libclamav/.libs/libclamav.so: undefined reference to `bzDecompress'
-> ../libclamav/.libs/libclamav.so: undefined reference to 
-`bzDecompressInit'
-> ../libclamav/.libs/libclamav.so: undefined reference to `bzDecompressEnd'
-> collect2: error: ld returned 1 exit status
-> 
-> Bernd, can you have a look?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Hi,
+Committed, thanks.
 
-I still[1] can not reproduce the bug on my machine. Apparently it happens 
-only on Peter?s autobuilder: http://autobuild.buildroot.net/?reason=clamav-
-0.98.4.
-
-@Peter: Could you please try this patch locally on your autobuilder?
-
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -16,6 +16,7 @@ CLAMAV_DEPENDENCIES = openssl zlib $(if $(BR2
-_NEEDS_GETTEXT_IF_LOCALE),gettext)
-
- # mmap cannot be detected when cross-compiling, needed for mempool support
- CLAMAV_CONF_ENV = \
-+       LIBBZ2_PREFIX=$(STAGING_DIR)/usr \
-        ac_cv_c_mmap_private=yes
-
- CLAMAV_CONF_OPTS = \
-
-
-Regards, Bernd
-
-[1] http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/98686
+-- 
+Bye, Peter Korsgaard
