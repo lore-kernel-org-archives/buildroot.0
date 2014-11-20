@@ -1,71 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Nov 2014 16:18:40 -0300
-Subject: [Buildroot] [PATCH] sysvinit/inittab: adjust shutdown
-Message-ID: <1416511120-29954-1-git-send-email-gustavo@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 20 Nov 2014 20:35:27 +0100
+Subject: [Buildroot] [PATCH] support/script/scancpan: generate hash file
+Message-ID: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous shutdown sequence was basically a no-op, it did't call rcK
-to stop anything and dumped users back into shell.
-So do the proper thing by calling rcK for levels 0 (halt) and 6
-(reboot), then swapoff, then remount ro.
-After that call halt for 0 and reboot for 6.
+retrieve md5&sha256 from metacpan.org, and store them in the hash file
+for each package.
 
-Also make 3 the default runlevel as in normal distributions, for all
-intents and purposes it changes nothing except aesthetics/convention.
-
-And make the labels a context sequence rather than just a short form
-of the actions which IMHO looks horrible.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/sysvinit/inittab | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ support/scripts/scancpan | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 9b3a119..fc0c9b5 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -2,21 +2,26 @@
- #
- # This inittab is a basic inittab sample for sysvinit, which mimics
- # Buildroot's default inittab for BusyBox.
--id:1:initdefault:
-+id:3:initdefault:
- 
--proc::sysinit:/bin/mount -t proc proc /proc
--rwmo::sysinit:/bin/mount -o remount,rw /
--dpts::sysinit:/bin/mkdir -p /dev/pts
--dshm::sysinit:/bin/mkdir -p /dev/shm
--moun::sysinit:/bin/mount -a
--host::sysinit:/bin/hostname -F /etc/hostname
--init::sysinit:/etc/init.d/rcS
-+si0::sysinit:/bin/mount -t proc proc /proc
-+si1::sysinit:/bin/mount -o remount,rw /
-+si2::sysinit:/bin/mkdir -p /dev/pts
-+si3::sysinit:/bin/mkdir -p /dev/shm
-+si4::sysinit:/bin/mount -a
-+si5::sysinit:/bin/hostname -F /etc/hostname
-+si6::sysinit:/etc/init.d/rcS
- 
- # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
- 
- # Stuff to do for the 3-finger salute
--rebo::ctrlaltdel:/sbin/reboot
-+ca::ctrlaltdel:/sbin/reboot
- 
- # Stuff to do before rebooting
--umou:6:wait:/bin/umount -a -r
--swap:6:wait:/sbin/swapoff -a
-+shd0:06:wait:/etc/init.d/rcK
-+shd1:06:wait:/sbin/swapoff -a
-+shd2:06:wait:/bin/umount -a -r
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index a049e2c..e929718 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -481,6 +481,7 @@ use Pod::Usage;
+ use File::Basename;
+ use Module::CoreList;
+ use HTTP::Tiny;
++use Safe;
+ use MetaCPAN::API::Tiny;
+
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+@@ -505,9 +506,22 @@ my %need_dlopen;        # name -> 1 if requires dynamic library
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
+ my %license_files;      # name -> list of license files
++my %checksum;           # author -> list of checksum
+ my $mcpan = MetaCPAN::API::Tiny->new();
+ my $ua = HTTP::Tiny->new();
+
++sub get_checksum {
++    my ($url) = @_;
++    my($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
++    my($basename, $dirname) = fileparse( $path );
++    unless ($checksum{$dirname}) {
++        my $response = $ua->get(qq{http://cpan.metacpan.org${dirname}CHECKSUMS});
++        $checksum{$dirname} = $response->{content};
++    }
++    my $chksum = Safe->new->reval($checksum{$dirname});
++    return $chksum->{$basename}, $basename;
++}
 +
-+# The usual halt or reboot actions
-+hlt0:0:wait:/sbin/halt -dhp
-+reb0:6:wait:/sbin/reboot
--- 
-2.0.4
+ sub get_manifest {
+     my ($author, $distname, $version) = @_;
+     my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+@@ -608,6 +622,7 @@ while (my ($distname, $dist) = each %dist) {
+     my $dirname = q{package/} . $fsname;
+     my $cfgname = $dirname . q{/Config.in};
+     my $mkname = $dirname . q{/} . $fsname . q{.mk};
++    my $hashname = $dirname . q{/} . $fsname . q{.hash};
+     my $brname = brname( $fsname );
+     mkdir $dirname unless -d $dirname;
+     if ($need_target{$distname} && ($force || !-f $cfgname)) {
+@@ -675,6 +690,17 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
+         close $fh;
+     }
++    if ($force || !-f $hashname) {
++        my($checksum, $filename) = get_checksum($dist->{download_url});
++        my $md5 = $checksum->{md5};
++        my $sha256 = $checksum->{sha256};
++        say qq{write ${hashname}} unless $quiet;
++        open my $fh, q{>}, $hashname;
++        say {$fh} qq{# retrieved by scancpan from http://cpan.metacpan.org/};
++        say {$fh} qq{md5    ${md5}                                 ${filename}};
++        say {$fh} qq{sha256 ${sha256} ${filename}};
++        close $fh;
++    }
+ }
+
+ my %pkg;
+--
+2.1.0
