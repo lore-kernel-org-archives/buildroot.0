@@ -1,44 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Nov 2014 13:31:50 -0300
-Subject: [Buildroot] [PATCH] clamav: security bump to version 0.98.5
-Message-ID: <1416501110-4513-1-git-send-email-gustavo@zacarias.com.ar>
+From: Dwayne Fontenot <dwayne.fontenot@att.net> <dwayne.fontenot@att.net>
+Date: Thu, 20 Nov 2014 08:41:16 -0800
+Subject: [Buildroot] [RFC PATCH 0/2] Add Freescale e5500 & e6500 support
+Message-ID: <1416501676.36864.YahooMailBasic@web184905.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2013-6497 - the jwplayer.js file causes ClamAV to seg fault when
-scanned with the -a (list archived files).
+Gustavo Zacarias <gustavo@...> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/clamav/clamav.hash | 4 ++--
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> This patchset enables internal toolchain builds for Freescale e5500
+> and e6500 cores.
+> It's only built-tested to generate a 32 and 64-bit toolchains
+> with a basic busybox binary and libraries.
+>
+> Feedback welcome, free kits to test as well :)
+>
+> Gustavo Zacarias (2):
+>   arch/powerpc: add fsl e5500 and e6500 support
+>   package/gcc: set e5500 and e6500 version mask
+>
+>  arch/Config.in.powerpc     | 7 +++++++
+>  package/gcc/Config.in.host | 6 ++++--
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+>
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 4f21a50..dabda19 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,2 +1,2 @@
--# From http://sourceforge.net/projects/clamav/files/clamav/0.98.4/
--sha1	f1003d04f34efb0aede05395d3c7cc22c944e4ef	clamav-0.98.4.tar.gz
-+# From http://sourceforge.net/projects/clamav/files/clamav/0.98.5/
-+sha1	5f5e45735819e3ca61610899b779172a5639f70f	clamav-0.98.5.tar.gz
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index c064d4e..fb3730c 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.98.4
-+CLAMAV_VERSION = 0.98.5
- CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
--- 
-2.0.4
+Tested-by: Dwayne Fontenot
+
+I applied the patches and built a working 64-bit rootfs for my T1040RDB (e5500) board.
+
+I also built a working 64-bit kernel using the buildroot toolchain for the same board.
+
+linuxjacques
