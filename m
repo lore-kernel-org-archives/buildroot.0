@@ -1,35 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 Nov 2014 21:07:23 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-19
-References: <20141120073014.164A510107F@stock.ovh.net>
- <20141120094407.4b487379@free-electrons.com>
-Message-ID: <XnsA3EBD6DFC8674berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Nov 2014 18:08:14 -0300
+Subject: [Buildroot] [PATCH] system/permissions: /etc/random-seed must be
+	mode 600
+Message-ID: <1416517694-7952-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20141120094407.4b487379 at free-electrons.com:
+Otherwise it's a big security risk.
 
->>          arm |             mesa3d-demos-8.2.0 | NOK | 
-http://autobuild.buildroot.net/results/92edf234780795bc2dc1aa495c492df1528204
-a1/
-> 
-> corender.c:17:19: fatal error: GL/gl.h: No such file or directory
-> 
-> Yann, Bernd? I know Yann did an analysis of the issue, but I don't
-> think we heard back from Bernd about it. Bernd, can you have a look at
-> Yann's analysis of the issue?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ system/device_table.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi,
-
-actually Peter commented on v1 of my patch to fix this bug ;)
-Just sent v2: http://patchwork.ozlabs.org/patch/412860/
-
-Yann commented on my glmark2 patch, not committed to buildroot yet, which 
-should depend on mesa3d for the time being.
-
-Regards, Bernd
+diff --git a/system/device_table.txt b/system/device_table.txt
+index e15412d..8e7dbd2 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -11,6 +11,7 @@
+ /etc					d	755	0	0	-	-	-	-	-
+ /root					d	700	0	0	-	-	-	-	-
+ /var/www				d	755	33	33	-	-	-	-	-
++/etc/random-seed			f	600	0	0	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+-- 
+2.0.4
