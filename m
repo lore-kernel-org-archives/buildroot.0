@@ -1,41 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Nov 2014 17:22:05 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 3.17.4
-In-Reply-To: <1416601325-17209-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1416601325-17209-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1416601325-17209-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Nov 2014 21:45:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: Fix symbol conflict in
+	static build with MySQL enabled
+In-Reply-To: <1416595242-11482-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Fri, 21 Nov 2014 19:40:42 +0100")
+References: <1416595242-11482-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87fvdcp9j5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1c70e5e..541b32f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.17.3"
-+	bool "3.17.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > Fixes
+ > http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 -- 
-2.0.4
+Bye, Peter Korsgaard
