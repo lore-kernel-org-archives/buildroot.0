@@ -1,53 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Nov 2014 21:45:21 +0100
-Subject: [Buildroot] [git commit] package/dovecot: Fix symbol conflict in
-	static build with MySQL enabled
-Message-ID: <20141121205146.52B1F7FE14@busybox.osuosl.org>
+Date: Fri, 21 Nov 2014 21:50:42 +0100
+Subject: [Buildroot] [git commit] toolchain: do not allow
+	BR2_GENERATE_LOCALE with musl
+Message-ID: <20141121205146.7DD447FE1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=337d40e7ad985a0f52575d809f44f2e90052a61e
+commit: http://git.buildroot.net/buildroot/commit/?id=bd0ffe2206fbd32baf7f4a1dc5fde81cfad70462
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/
+Generating locales is possible in two situations:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ - With the internal toolchain backend, when the uClibc library is
+   used. With uClibc, locales are generated at build time of the C
+   library, so with uClibc it's only possible with the internal
+   toolchain backend.
+
+ - With either the internal or external toolchain backend when the
+   glibc library is used. With glibc, locales can be generated
+   afterwards, using the host-localedef utility.
+
+Until we had the musl C library supported in the internal toolchain
+backend, the condition: BR2_TOOLCHAIN_BUILDROOT ||
+BR2_TOOLCHAIN_USES_GLIBC was correct to capture the above two
+situations. Now that we have musl support in the internal toolchain
+backend, then BR2_TOOLCHAIN_BUILDROOT is incorrect, and we should use
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC instead.
+
+Basic locale support in musl has appeared in musl 1.1.4, but we are
+not yet capable of generating the locale files for musl.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/0003-fix-static-build.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ toolchain/toolchain-common.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dovecot/0003-fix-static-build.patch b/package/dovecot/0003-fix-static-build.patch
-new file mode 100644
-index 0000000..c5dd9d1
---- /dev/null
-+++ b/package/dovecot/0003-fix-static-build.patch
-@@ -0,0 +1,24 @@
-+Fix symbol conflict in static build with MySQL enabled
-+
-+Compile error log:
-+http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/build-end.log
-+
-+Patch suggested by Timo Sirainen:
-+http://www.dovecot.org/list/dovecot/2014-November/098787.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr dovecot-2.2.15.org/src/lib/strnum.h dovecot-2.2.15/src/lib/strnum.h
-+--- dovecot-2.2.15.org/src/lib/strnum.h	2014-07-02 17:21:24.000000000 +0200
-++++ dovecot-2.2.15/src/lib/strnum.h	2014-11-21 19:26:42.316225982 +0100
-+@@ -1,6 +1,10 @@
-+ #ifndef STRNUM_H
-+ #define STRNUM_H
-+ 
-++/* libmysqlclient really should try to keep its internal stuff internal so
-++   they won't conflict with the actual programs that are trying to use it. */
-++#define str_to_time str_to_time_libmysqlclient_craps_all_over
-++
-+ /* Return TRUE if all characters in string are numbers.
-+    Stop when `end_char' is found from string. */
-+ bool str_is_numeric(const char *str, char end_char) ATTR_PURE;
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2dfaecc..683c143 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -69,7 +69,7 @@ config BR2_GENERATE_LOCALE
+ 	string "Generate locale data"
+ 	default ""
+ 	depends on \
+-		BR2_TOOLCHAIN_BUILDROOT      || \
++		BR2_TOOLCHAIN_BUILDROOT_UCLIBC || \
+ 		BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Generate support for a list of locales. Locales can be
