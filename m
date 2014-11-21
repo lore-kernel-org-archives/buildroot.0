@@ -1,99 +1,45 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 21 Nov 2014 12:02:19 +0000
-Subject: [Buildroot] [PATCH 3/4] libfm: new package
-In-Reply-To: <1416571340-3550-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1416571340-3550-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1416571340-3550-4-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Nov 2014 13:12:08 +0100
+Subject: [Buildroot] [git commit] CHANGES: Update with recent changes
+Message-ID: <20141121121220.2AAFE7FDF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/Config.in        |    1 +
- package/libfm/Config.in  |   27 +++++++++++++++++++++++++++
- package/libfm/libfm.hash |    2 ++
- package/libfm/libfm.mk   |   15 +++++++++++++++
- 4 files changed, 45 insertions(+), 0 deletions(-)
- create mode 100644 package/libfm/Config.in
- create mode 100644 package/libfm/libfm.hash
- create mode 100644 package/libfm/libfm.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=7dfba6f545c4fb282c4a3c0a812d68e0923eed92
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 56b71e4..fe9cd72 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -644,6 +644,7 @@ menu "Graphics"
- 	source "package/libdmtx/Config.in"
- 	source "package/libdrm/Config.in"
- 	source "package/libexif/Config.in"
-+	source "package/libfm/Config.in"
- 	source "package/libfm-extra/Config.in"
- 	source "package/libgail/Config.in"
- 	source "package/libgeotiff/Config.in"
-diff --git a/package/libfm/Config.in b/package/libfm/Config.in
-new file mode 100644
-index 0000000..51cdd4e
---- /dev/null
-+++ b/package/libfm/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_LIBFM
-+	bool "libfm"
-+	select BR2_PACKAGE_MENU_CACHE
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_XORG7 # libgtk2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2
-+	help
-+	  A glib/gio-based library providing some file management utilities and
-+	  related-widgets missing in gtk+/glib. This is the core of PCManFM.
-+	  The library is desktop independent (not LXDE specific) and has clean
-+	  API. It can be used to develop other applications requiring file
-+	  management functionality. For example, you can create your own file
-+	  manager with facilities provided by libfm.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 9e8c4d8..a13707b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,22 @@
++2014.11, Not yet released:
 +
-+	  http://wiki.lxde.org/en/Libfm
++	Fixes all over the tree.
 +
-+comment "libfm needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU
-+	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libfm/libfm.hash b/package/libfm/libfm.hash
-new file mode 100644
-index 0000000..5311dec
---- /dev/null
-+++ b/package/libfm/libfm.hash
-@@ -0,0 +1,2 @@
-+# From http://blog.lxde.org/?p=1280
-+sha1  c3f2f34086761d89d6aba549883610084ba00750  libfm-1.2.3.tar.xz
-diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
-new file mode 100644
-index 0000000..b498a5d
---- /dev/null
-+++ b/package/libfm/libfm.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libfm
-+#
-+################################################################################
++	Inittab tweaks for shutdown handling (busybox and sysvinit).
 +
-+LIBFM_VERSION = 1.2.3
-+LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
-+LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
-+LIBFM_DEPENDENCIES = menu-cache libgtk2 libglib2 cairo
-+LIBFM_LICENSE = GPLv2
-+LIBFM_LICENSE_FILES = COPYING
-+LIBFM_INSTALL_STAGING = YES
++	Updated/fixed packages: aircrack-ng, botan, canfestival,
++	clamav, coreutils, czmq, dbus, dovecot, duma, e2fsprogs,
++	erlang, gcc, iputils, libcap, libgcrypt, libmemcached,
++	libssh2, libunwind, libv4l, linux-headers, mesa3d-demos, mutt,
++	mysql, ndisc6, nodejs, omniorb, perl-cross, php,
++	python-tornado, python3, qemu, qt5base, qt5webkit, rpm,
++	rt-tests, ruby, schifra, sdl_sound, shairport-sync, sysvinit,
++	tstools, tzdata, wireshark, x264
 +
-+$(eval $(autotools-package))
--- 
-1.7.1
++	Issues resolved (http://bugs.uclibc.org):
++
++	#7646: strftime on datetime not works on python3
++
+ 2014.11-rc1, Released November 12th, 2014
+ 
+ 	Fixes all over the tree and new features.
