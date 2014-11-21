@@ -1,87 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Nov 2014 23:53:36 +0100
-Subject: [Buildroot] [PATCH] infra: do not append an empty LD_LIBRARY_PATH
-Message-ID: <1416610416-27914-1-git-send-email-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 Nov 2014 23:36:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 7670] Fails to build mpc-1.0.2 on latest Cygwin
+In-Reply-To: <bug-7670-163@https.bugs.busybox.net/>
+References: <bug-7670-163@https.bugs.busybox.net/>
+Message-ID: <20141121233657.4C56A7FE1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we set LD_LIBRARY_PATH when building our host tools, we append any
-pre-existing value to our custom path:
-        LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+https://bugs.busybox.net/show_bug.cgi?id=7670
 
-But then if LD_LIBRARY_PATH was previously empty, we end up with an
-LD_LIBRARY_PATH that ends with a colon.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Also, when we check that an existing LD_LIBRARY_PATH does not contain
-CWD, we previously did not look for a zero-length prefix.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|                            |WONTFIX
 
-Since 'man ld.so' says of LD_LIBRARY_PATH:
-    A colon-separated list of directories in which to search for ELF
-    libraries at execution-time. Similar to the PATH environment
-    variable.
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-11-21 23:36:55 UTC ---
+Ok, I toyed with a Win7 VM here, struggled to install it and install Cygwin.
 
-And POSIX states about PATH:
-    A zero-length prefix is a legacy feature that indicates the current
-    working directory.
+Running Buildroot git master indeed breaks for me.
 
-And bash also recognises a zero-length prefix to searh in CWD:
-    A zero-length (null) directory name in the value of PATH indicates
-    the current directory.
+As it turns out, Cygwin is horribly broken, and there is no way we can even
+remotely support this...
 
-We may thus end up on a system where a zero-length prefix in
-LD_LIBRARY_PATH is interpreted as VWD.
+So, here's how it goes:
+  - in Cygwin, it is customary to install libs at the same place executables
+are installed;
+  - so, in Cygwin, libraries are searched in ${PATH}, as well as the usual
+other places;
+  - the native compiler is linked with cygmpfr-4.dll;
+  - we build and install mpfr (dependency of mpc) which install cygmpfr-4.dll
+in $(O)/host/usr/bin/cygmpfr-4.dll ;
+  - we have $(O)/host/usr/bin is ${PATH} because, well, we need it,
+obviously...
 
-Do not append the previous LD_LIBRARY_PATH if it was empty, and check
-for a zero-length prefix when checking dependencies.
+So, when we try to run the native compiler, it tries to run-time link with
+*our* cygmpfr.dll, not the system one.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Bummer, it breaks...
 
----
-Note: I have had no bug that was due to this, but better be safe than
-sorry.
----
- package/Makefile.in                  | 4 ++--
- support/dependencies/dependencies.sh | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+OK, did I say we're not gonna support that use-case?
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index df39afd..36ecf0b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -307,11 +307,11 @@ HOST_CONFIGURE_OPTS = PATH=$(BR_PATH) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_SYSROOT_DIR="/" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
--		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
- 		INTLTOOL_PERL=$(PERL)
- 
- HOST_MAKE_ENV = PATH=$(BR_PATH) \
--		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_SYSROOT_DIR="/" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index a9c5b31..af5ce0e 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -14,8 +14,11 @@ fi
- # sanity check for CWD in LD_LIBRARY_PATH
- # try not to rely on egrep..
- if test -n "$LD_LIBRARY_PATH" ; then
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep '::' >/dev/null 2>&1 ||
- 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start:' >/dev/null 2>&1 ||
- 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':TRiGGER_end' >/dev/null 2>&1 ||
- 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
- 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
- 	if test $? = 0; then
+Better install a real Linux box; a VM might even be faster than Cygwin...
+
+Closing as WONTFIX.
+
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
