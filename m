@@ -1,54 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Nov 2014 21:50:42 +0100
-Subject: [Buildroot] [git commit] toolchain: do not allow
-	BR2_GENERATE_LOCALE with musl
-Message-ID: <20141121205146.7DD447FE1C@busybox.osuosl.org>
+Date: Fri, 21 Nov 2014 21:45:36 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{17, 14, 12,
+	10}.x series
+Message-ID: <20141121205146.5DEA87FE14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd0ffe2206fbd32baf7f4a1dc5fde81cfad70462
+commit: http://git.buildroot.net/buildroot/commit/?id=4c15d617b597254a24bd4b05307caa66500b4a79
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Generating locales is possible in two situations:
-
- - With the internal toolchain backend, when the uClibc library is
-   used. With uClibc, locales are generated at build time of the C
-   library, so with uClibc it's only possible with the internal
-   toolchain backend.
-
- - With either the internal or external toolchain backend when the
-   glibc library is used. With glibc, locales can be generated
-   afterwards, using the host-localedef utility.
-
-Until we had the musl C library supported in the internal toolchain
-backend, the condition: BR2_TOOLCHAIN_BUILDROOT ||
-BR2_TOOLCHAIN_USES_GLIBC was correct to capture the above two
-situations. Now that we have musl support in the internal toolchain
-backend, then BR2_TOOLCHAIN_BUILDROOT is incorrect, and we should use
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC instead.
-
-Basic locale support in musl has appeared in musl 1.1.4, but we are
-not yet capable of generating the locale files for musl.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-common.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 2dfaecc..683c143 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -69,7 +69,7 @@ config BR2_GENERATE_LOCALE
- 	string "Generate locale data"
- 	default ""
- 	depends on \
--		BR2_TOOLCHAIN_BUILDROOT      || \
-+		BR2_TOOLCHAIN_BUILDROOT_UCLIBC || \
- 		BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Generate support for a list of locales. Locales can be
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 391088f..d765e3a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -165,12 +165,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.64"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.104"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.60"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.61"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.32"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.33"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.24"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.25"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+-	default "3.17.3"	if BR2_KERNEL_HEADERS_3_17
++	default "3.17.4"	if BR2_KERNEL_HEADERS_3_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
