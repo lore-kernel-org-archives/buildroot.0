@@ -1,52 +1,36 @@
 From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Fri, 21 Nov 2014 13:19:01 -0300
-Subject: [Buildroot] [PATCH v4 2/9] Makefile: don't depend on current
-	skeleton/overlay permissions
+Date: Fri, 21 Nov 2014 13:19:02 -0300
+Subject: [Buildroot] [PATCH v4 3/9] toolchain/helpers.mk: use --chmod on
+	rsync
 In-Reply-To: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
 References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1416586748-12936-3-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1416586748-12936-4-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We use 'rsync -a' to copy the skeleton and overlays, so the target ends
-up with the exact same permissions as on the repo. The problem is we
-don't track these permissions, since Git doesn't allow for that (except
-for the exec bit). This means users with different umasks at the time of
-cloning could end up with different target permissions.
-
-Fix this by using --chmod on rsync calls so we don't depend on the
-current permission set for the skeleton and overlays. We do depend on
-the exec bit, but that's fine since that one is tracked by Git.
+This makes sure we don't have any weird permissions on the staging dir,
+which could affect the target.
 
 Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index eeb1412..5880bbb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -489,7 +489,7 @@ RSYNC_VCS_EXCLUSIONS = \
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=Du+w --exclude .empty --exclude '*~' \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -625,7 +625,7 @@ endif
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--			--chmod=Du+w --exclude .empty --exclude '*~' \
-+			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
- 
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3121da4..46f5f22 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -139,7 +139,7 @@ copy_toolchain_sysroot = \
+ 	SUPPORT_LIB_DIR="$(strip $5)" ; \
+ 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			rsync -au --chmod=Du+w --exclude 'usr/lib/locale' \
++			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+ 				--exclude lib --exclude lib32 --exclude lib64 \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
 -- 
 2.1.3
