@@ -1,41 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Nov 2014 21:45:38 +0100
-Subject: [Buildroot] [git commit] linux: bump default version to 3.17.4
-Message-ID: <20141121205146.651DB7FB8F@busybox.osuosl.org>
+Date: Fri, 21 Nov 2014 21:50:59 +0100
+Subject: [Buildroot] [git commit] toolchain: do not allow locale generation
+	when locale support is not available
+Message-ID: <20141121205146.863E77FE1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76d7b05b5bf0463d5633ec04679814b82a8ce285
+commit: http://git.buildroot.net/buildroot/commit/?id=cce0add500b6d701724a90468eb34e6bda6f4ae8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+When the C library being used is uClibc, the locale support can be
+disabled. In this case, it does not make sense to show the "Generate
+locales" option.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-common.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1c70e5e..541b32f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.17.3"
-+	bool "3.17.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 683c143..ad04d64 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -69,7 +69,7 @@ config BR2_GENERATE_LOCALE
+ 	string "Generate locale data"
+ 	default ""
+ 	depends on \
+-		BR2_TOOLCHAIN_BUILDROOT_UCLIBC || \
++		(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && BR2_ENABLE_LOCALE) || \
+ 		BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Generate support for a list of locales. Locales can be
