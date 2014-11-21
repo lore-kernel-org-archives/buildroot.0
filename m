@@ -1,99 +1,87 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Fri, 21 Nov 2014 23:49:39 +0100
-Subject: [Buildroot] [PATCH v2] cmake: make ctest a target package too
-Message-ID: <1416610179-15443-1-git-send-email-zinosat@tiscali.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 Nov 2014 23:53:36 +0100
+Subject: [Buildroot] [PATCH] infra: do not append an empty LD_LIBRARY_PATH
+Message-ID: <1416610416-27914-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Useful for packages shipped with a testsuite which makes use of ctest
+When we set LD_LIBRARY_PATH when building our host tools, we append any
+pre-existing value to our custom path:
+        LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+But then if LD_LIBRARY_PATH was previously empty, we end up with an
+LD_LIBRARY_PATH that ends with a colon.
+
+Also, when we check that an existing LD_LIBRARY_PATH does not contain
+CWD, we previously did not look for a zero-length prefix.
+
+Since 'man ld.so' says of LD_LIBRARY_PATH:
+    A colon-separated list of directories in which to search for ELF
+    libraries at execution-time. Similar to the PATH environment
+    variable.
+
+And POSIX states about PATH:
+    A zero-length prefix is a legacy feature that indicates the current
+    working directory.
+
+And bash also recognises a zero-length prefix to searh in CWD:
+    A zero-length (null) directory name in the value of PATH indicates
+    the current directory.
+
+We may thus end up on a system where a zero-length prefix in
+LD_LIBRARY_PATH is interpreted as VWD.
+
+Do not append the previous LD_LIBRARY_PATH if it was empty, and check
+for a zero-length prefix when checking dependencies.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+
 ---
-     - rebase
-     - use CMAKE_CONF_OPTS in place of bootstrap (Samuel Martin)
-     - use system libraries to speed up compilation [1] (Samuel Martin)
-     - install only ctest on the target (Samuel Martin)
-     - system curl and expat rely on disabled libxmlrpc (Samuel Martin)
-     - usa CMAKE_POST_INSTALL_TARGET_HOOKS
-     - specify host tools path during install [2]
-     
-[1] Using system libraries speeds up compilation of around 20%
-[2] the install rule has to be overridden because of http://public.kitware.com/Bug/view.php?id=15248
-    http://www.cmake.org/gitweb?p=stage/cmake.git;a=patch;h=15f55cca does not work for me on BR
+Note: I have had no bug that was due to this, but better be safe than
+sorry.
+---
+ package/Makefile.in                  | 4 ++--
+ support/dependencies/dependencies.sh | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
- package/Config.in       |  1 +
- package/cmake/Config.in | 10 ++++++++++
- package/cmake/cmake.mk  | 21 +++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/cmake/Config.in
-
-diff --git a/package/Config.in b/package/Config.in
-index 28cf703..bbd454d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -101,6 +101,7 @@ menu "Development tools"
- 	source "package/bison/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-+	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-new file mode 100644
-index 0000000..120efc8
---- /dev/null
-+++ b/package/cmake/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CMAKE
-+	bool "ctest"
-+	help
-+	  CTest is a testing tool distributed as a part of CMake. It
-+	  can be used to automate updating (using CVS for example),
-+	  configuring, building, testing, performing memory checking,
-+	  performing coverage, and submitting results to a CDash or
-+	  Dart dashboard system.
-+
-+	  http://www.cmake.org/
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e09fddf..d7ee974 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -11,6 +11,15 @@ CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+diff --git a/package/Makefile.in b/package/Makefile.in
+index df39afd..36ecf0b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -307,11 +307,11 @@ HOST_CONFIGURE_OPTS = PATH=$(BR_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+-		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+ 		INTLTOOL_PERL=$(PERL)
  
- HOST_CMAKE_DEPENDENCIES = host-pkgconf
-+CMAKE_DEPENDENCIES = zlib libcurl libarchive expat bzip2
-+
-+CMAKE_CONF_OPTS = \
-+		-DKWSYS_LFS_WORKS=$(if $(BR2_LARGEFILE),TRUE,FALSE) \
-+		-DKWSYS_CHAR_IS_SIGNED=TRUE \
-+		-DCMAKE_USE_SYSTEM_LIBRARIES=1 \
-+		-DCTEST_USE_XMLRPC=OFF \
-+		-DBUILD_CursesDialog=OFF \
-+		-DCMAKE_INSTALL_PREFIX="$(TARGET_DIR)/usr"
- 
- define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
-@@ -33,4 +42,16 @@ define HOST_CMAKE_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
-+define CMAKE_REMOVE_EXTRA_DATA
-+	rm $(TARGET_DIR)/usr/bin/{cmake,cpack}
-+	rm -fr $(TARGET_DIR)/usr/share/cmake-3.0
-+endef
-+
-+CMAKE_POST_INSTALL_TARGET_HOOKS += CMAKE_REMOVE_EXTRA_DATA
-+
-+define CMAKE_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_MAKE_ENV) cmake -P cmake_install.cmake)
-+endef
-+
-+$(eval $(cmake-package))
- $(eval $(host-generic-package))
+ HOST_MAKE_ENV = PATH=$(BR_PATH) \
+-		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib$(if $(LD_LIBRARY_PATH),:$(LD_LIBRARY_PATH))" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a9c5b31..af5ce0e 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -14,8 +14,11 @@ fi
+ # sanity check for CWD in LD_LIBRARY_PATH
+ # try not to rely on egrep..
+ if test -n "$LD_LIBRARY_PATH" ; then
++	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep '::' >/dev/null 2>&1 ||
+ 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
++	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start:' >/dev/null 2>&1 ||
+ 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
++	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':TRiGGER_end' >/dev/null 2>&1 ||
+ 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+ 	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+ 	if test $? = 0; then
 -- 
-2.1.3
+1.9.1
