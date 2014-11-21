@@ -1,88 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Nov 2014 19:46:36 +0100
-Subject: [Buildroot] [PATCH] support/script/scancpan: generate hash file
-In-Reply-To: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Thu, 20 Nov 2014 20:35:27 +0100")
-References: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87k32opf1v.fsf@dell.be.48ers.dk>
+From: Michael Sumulong <msumulong@gmail.com>
+Date: Fri, 21 Nov 2014 13:54:58 -0500
+Subject: [Buildroot] Patch a buildroot package's libfoo.mk file?
+Message-ID: <CABDNR163vv83d7tvOwdQoOs1AGnycts0mNde_fzvHmHvy68+YQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+I am using the avahi package that comes with buildroot but there's a
+configuration option that I'd like to use (--enable-compat-libdns_sd) that
+I don't think the whole buildroot community would need. Is it possible to
+apply a patch from a source dir (BR2_EXTERNAL) to package/avahi/avahi.mk
+using buildroot patching framework?
 
- > retrieve md5&sha256 from metacpan.org, and store them in the hash file
- > for each package.
-
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  support/scripts/scancpan | 26 ++++++++++++++++++++++++++
- >  1 file changed, 26 insertions(+)
-
- > diff --git a/support/scripts/scancpan b/support/scripts/scancpan
- > index a049e2c..e929718 100755
- > --- a/support/scripts/scancpan
- > +++ b/support/scripts/scancpan
- > @@ -481,6 +481,7 @@ use Pod::Usage;
- >  use File::Basename;
- >  use Module::CoreList;
- >  use HTTP::Tiny;
- > +use Safe;
- >  use MetaCPAN::API::Tiny;
-
- >  my ($help, $man, $quiet, $force, $recommend, $test, $host);
- > @@ -505,9 +506,22 @@ my %need_dlopen;        # name -> 1 if requires dynamic library
- >  my %deps_build;         # name -> list of host dependencies
- >  my %deps_runtime;       # name -> list of target dependencies
- >  my %license_files;      # name -> list of license files
- > +my %checksum;           # author -> list of checksum
- >  my $mcpan = MetaCPAN::API::Tiny->new();
- >  my $ua = HTTP::Tiny->new();
-
- > +sub get_checksum {
- > +    my ($url) = @_;
- > +    my($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
- > +    my($basename, $dirname) = fileparse( $path );
- > +    unless ($checksum{$dirname}) {
- > +        my $response = $ua->get(qq{http://cpan.metacpan.org${dirname}CHECKSUMS});
- > +        $checksum{$dirname} = $response->{content};
- > +    }
- > +    my $chksum = Safe->new->reval($checksum{$dirname});
- > +    return $chksum->{$basename}, $basename;
- > +}
- > +
- >  sub get_manifest {
- >      my ($author, $distname, $version) = @_;
- >      my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
- > @@ -608,6 +622,7 @@ while (my ($distname, $dist) = each %dist) {
- >      my $dirname = q{package/} . $fsname;
- >      my $cfgname = $dirname . q{/Config.in};
- >      my $mkname = $dirname . q{/} . $fsname . q{.mk};
- > +    my $hashname = $dirname . q{/} . $fsname . q{.hash};
- >      my $brname = brname( $fsname );
- >      mkdir $dirname unless -d $dirname;
- >      if ($need_target{$distname} && ($force || !-f $cfgname)) {
- > @@ -675,6 +690,17 @@ while (my ($distname, $dist) = each %dist) {
- >          say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
- >          close $fh;
- >      }
- > +    if ($force || !-f $hashname) {
- > +        my($checksum, $filename) = get_checksum($dist->{download_url});
- > +        my $md5 = $checksum->{md5};
- > +        my $sha256 = $checksum->{sha256};
- > +        say qq{write ${hashname}} unless $quiet;
- > +        open my $fh, q{>}, $hashname;
- > +        say {$fh} qq{# retrieved by scancpan from http://cpan.metacpan.org/};
- > +        say {$fh} qq{md5    ${md5}                                 ${filename}};
- > +        say {$fh} qq{sha256 ${sha256} ${filename}};
-
-I don't know perl, but is there any reason for this odd indentation in
-the .hash files? Normally we use:
-type\thash  filename
-
-(the *sum programs output 2 spaces between hash and filename)
-
--- 
-Bye, Peter Korsgaard
+Michael Sumulong
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141121/83e9df68/attachment.html>
