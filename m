@@ -1,49 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Nov 2014 13:29:56 +0100
-Subject: [Buildroot] Buildroot 2014.11-rc2 released
-Message-ID: <87oas0pwhn.fsf@dell.be.48ers.dk>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Fri, 21 Nov 2014 15:19:20 +0100
+Subject: [Buildroot] [PATCH] Bumped version number
+Message-ID: <1416579560-6740-1-git-send-email-jaap@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+---
+ package/bluez5_utils/bluez5_utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Buildroot 2014.11-rc2 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2014.11-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2014.11-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2014.11-rc1..
-    15  Peter Korsgaard
-    14  Gustavo Zacarias
-    14  Yann E. MORIN
-    10  Baruch Siach
-     3  Francois Perrad
-     3  J?rg Krause
-     2  Samuel Martin
-     2  Thomas Petazzoni
-     1  Bernd Kuhls
-     1  Yegor Yefremov
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc2
-
-Expect the final 2014.11 release by the end of the month.
-
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index f34513c..21f792c 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BLUEZ5_UTILS_VERSION = 5.21
++BLUEZ5_UTILS_VERSION = 5.25
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.1.3
