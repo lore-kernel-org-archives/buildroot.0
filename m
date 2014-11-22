@@ -1,53 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:35:58 +0100
-Subject: [Buildroot] [git commit branch/next] pkg-autotools: move the
-	libtool patching call out of the autoreconf hook
-Message-ID: <20141122195743.4051F7FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:37:01 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-autotools: fold the
+	libtool patching code directly into the hook
+Message-ID: <20141122195743.524147FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2ae901036897bd9b4a0c3b2835a70667c076bf5
+commit: http://git.buildroot.net/buildroot/commit/?id=b3b2222fa71d7ae45066257983b643542c70b636
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Call it as a standalone hook, like is done for post-patch.
+We now have only one caller of the libtool patching code, which is the
+hook itself.
 
-[Thomas: change back the author to Johan. Yann mistakenly changed it
-when submitting the patch series.]
+So, there is no longer any need to extract this code into a utility
+function, and it can be folded into the hook itself.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-[yann.morin.1998 at free.fr: split the patch into semantically separate
-patches]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/pkg-autotools.mk |   34 ++++++++++++----------------------
+ 1 files changed, 12 insertions(+), 22 deletions(-)
 
 diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 393f995..45947b0 100644
+index e240b95..924816b 100644
 --- a/package/pkg-autotools.mk
 +++ b/package/pkg-autotools.mk
-@@ -98,7 +98,6 @@ endef
- define AUTORECONF_HOOK
- 	@$(call MESSAGE,"Autoreconfiguring")
- 	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
--	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+@@ -36,27 +36,6 @@ define CONFIG_UPDATE
+ 	done
  endef
  
- ################################################################################
-@@ -260,6 +259,10 @@ $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
- $(2)_DEPENDENCIES += host-gettext
- endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
-+endif
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
+-#
+-# Utility function to patch the libtool files
+-#
+-# argument 1 : directory into which to search for libtool scripts to patch.
+-# Note that libtool scripts are searched for recursively in this directory
+-#
+-define PATCH_LIBTOOL
+-	@$(call MESSAGE,"Patching libtool")
+-	$(Q)for i in `find $(1) -name ltmain.sh`; do \
+-		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-		if test $${ltmain_version} = '1.5'; then \
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-		elif test $${ltmain_version} = "2.2"; then\
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-		elif test $${ltmain_version} = "2.4"; then\
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-		fi \
+-	done
+-endef
+-
+ # This function generates the ac_cv_file_<foo> value for a given
+ # filename. This is needed to convince configure script doing
+ # AC_CHECK_FILE() tests that the file actually exists, since such
+@@ -79,7 +58,18 @@ endef
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
++	@$(call MESSAGE,"Patching libtool")
++	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
++		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++		if test $${ltmain_version} = '1.5'; then \
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++		elif test $${ltmain_version} = "2.2"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++		elif test $${ltmain_version} = "2.4"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++		fi \
++	done
+ endef
  
+ #
