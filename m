@@ -1,55 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:19:21 +0100
-Subject: [Buildroot] [PATCH v4] gst1-validate: needs python
-In-Reply-To: <1415908952-4866-1-git-send-email-ps.report@gmx.net>
-References: <1415908952-4866-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20141122201921.1a07715a@free-electrons.com>
+Date: Sat, 22 Nov 2014 20:20:12 +0100
+Subject: [Buildroot] [git commit branch/next] grantlee: version bump and
+	allow building with qt5
+Message-ID: <20141122192021.F191D7FE29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=a65e2a9a21ac595014f729ac1d65b2d9e1aeee22
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 13 Nov 2014 21:02:32 +0100, Peter Seiderer wrote:
-> If host installed python version is < 2.7.0 gst1-validate compile will fail with
-> 
-> 	checking for a Python interpreter with version >= 2.7.0... none
-> 	configure: error: no suitable Python interpreter found
-> 
-> Fixed by adding host-python dependency.
-> 
-> Target tool /usr/bin/gst-validate-launcher is a python2 script
-> 
-> 	$ head -1 /usr/bin/gst-validate-launcher
-> 	#!/usr/bin/env python2
-> 
-> (and not easily upgradable to python3) so add python2 dependency and to fix
-> the following runtime error
-> 
-> 	$ gst-validate-launcher
-> 	Traceback (most recent call last):
-> 	  File "/usr/bin/gst-validate-launcher", line 44, in <module>
-> 	    from launcher.main import main
-> 	  File "/usr/lib/gst-validate-launcher/python/launcher/main.py", line 26, in <module>
-> 	    import reporters
-> 	  File "/usr/lib/gst-validate-launcher/python/launcher/reporters.py", line 29, in <module>
-> 	    from xml.sax import saxutils
-> 	ImportError: No module named xml.sax
-> 
-> add additional BR2_PACKAGE_PYTHON_PYEXPAT select.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/e8c/e8c27db2a0935c2daef173d5650f6a2b3a219493/
->  http://autobuild.buildroot.net/results/723/723fe3036e8f0af2a90ff9e98173387466655000/
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/grantlee/Config.in                         |   14 ++++---
+ .../grantlee-0.2.0-fix-lphread-link-error.patch    |   42 --------------------
+ package/grantlee/grantlee.mk                       |   15 ++++++-
+ 3 files changed, 20 insertions(+), 51 deletions(-)
 
-Patch applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+index ce1342c..8f763f7 100644
+--- a/package/grantlee/Config.in
++++ b/package/grantlee/Config.in
+@@ -1,11 +1,13 @@
+ config BR2_PACKAGE_GRANTLEE
+ 	bool "grantlee"
+-	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+-	depends on BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_STL
+-	select BR2_PACKAGE_QT_SCRIPT
+-	select BR2_PACKAGE_QT_GUI_MODULE
++	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT && BR2_PACKAGE_QT) || BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+ 	help
+-	  Qt implemantation of the Django template framework
++	  Qt implementation of the Django template framework
+ 
+ 	  http://www.grantlee.org
++
+diff --git a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
+deleted file mode 100644
+index 7964fd0..0000000
+--- a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From d46475b6bb9d99a4c5c95489be6c14d0d219d5f8 Mon Sep 17 00:00:00 2001
+-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+-Date: Thu, 15 Nov 2012 17:00:39 +0100
+-Subject: [PATCH] fix -lpthread build error
+-
+-Fixing linking time error with certain toolchains. The issue caused by a missing explicit linking to
+-libpthread. The failed buildlog:
+-Linking CXX executable testgenerictypes_exec
+-/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: undefined reference to symbol 'pthread_cancel'
+-/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: note: 'pthread_cancel' is defined in DSO /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker command line
+-/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: could not read symbols: Invalid operation
+-collect2: ld returned 1 exit status
+-make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
+-make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+-make[2]: *** [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
+-make[2]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+-make[1]: *** [all] Error 2
+-make[1]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+-make: *** [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error
+-
+-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+----
+- templates/tests/CMakeLists.txt |    3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/templates/tests/CMakeLists.txt b/templates/tests/CMakeLists.txt
+-index caab003..f400622 100644
+---- a/templates/tests/CMakeLists.txt
+-+++ b/templates/tests/CMakeLists.txt
+-@@ -68,7 +68,8 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
+-                   ${_testresource_rcc_src}
+-     )
+-     add_test(${_testname} ${_testname}_exec )
+--    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
+-+    find_package (Threads)
+-+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${CMAKE_THREAD_LIBS_INIT}  grantlee_core )
+- 
+-     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
+-   endforeach(_testname)
+--- 
+-1.7.9.5
+-
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index 539578b..a300106 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -3,12 +3,21 @@
+ # grantlee
+ #
+ ################################################################################
+-
+-GRANTLEE_VERSION = 0.2.0
++# qt4 support dropped after 0.5.1, so we use the older version for qt4
++ifeq ($(BR2_PACKAGE_QT),y)
++GRANTLEE_VERSION = 0.5.1
++else ifeq ($(BR2_PACKAGE_QT5),y)
++GRANTLEE_VERSION = 5.0.0
++endif
+ GRANTLEE_SITE = http://downloads.grantlee.org
+ GRANTLEE_INSTALL_STAGING = YES
+-GRANTLEE_DEPENDENCIES = qt
+ GRANTLEE_LICENSE = LGPLv2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+ 
++ifeq ($(BR2_PACKAGE_QT),y)
++GRANTLEE_DEPENDENCIES = qt
++else ifeq ($(BR2_PACKAGE_QT5),y)
++GRANTLEE_DEPENDENCIES += qt5base qt5script
++endif
++
+ $(eval $(cmake-package))
