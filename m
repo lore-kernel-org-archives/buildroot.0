@@ -1,44 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Nov 2014 19:37:45 +0100
-Subject: [Buildroot] [PATCH next 0/3] dbus-python cleanup and python3
-	support
-In-Reply-To: <20141122192456.69ad67bd@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 22 Nov 2014 19:24:56 +0100")
-References: <1416491611-19815-1-git-send-email-peter@korsgaard.com>
- <20141122192456.69ad67bd@free-electrons.com>
-Message-ID: <878uj3ulmu.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:39:24 +0100
+Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
+In-Reply-To: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141122193924.34aa21ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Vicente Olivert Riera,
 
-Hi,
+On Fri, 21 Nov 2014 15:33:07 +0000, Vicente Olivert Riera wrote:
 
- > Dear Peter Korsgaard,
- > On Thu, 20 Nov 2014 14:53:28 +0100, Peter Korsgaard wrote:
+> +LIBFM_EXTRA_VERSION = 1.2.3
+> +LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
 
- >> Peter Korsgaard (3):
- >> dbus-python: cleanup package
- >> python3: add patch to fix --includes / --ldflags output of python3-config
- >> dbus-python: add python3 support
+This is the exact same tarball as the one used for the libfm package:
 
- > Thanks, series applied to next. Probably the first time that I apply
- > some patches from you :-)
++LIBFM_VERSION = 1.2.3
++LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
++LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
 
-;)
+Why do we have two different packages? Is it because libfm full version
+needs menu-cache, and menu-cache needs libfm-extra? This really seems
+weird.
 
- > I found one minor issue: on the last patch, you forgot to update the
- > dependencies of the comment, so I added the following change to your
- > patch:
+Can you elaborate on this?
 
- >  comment "dbus-python needs a toolchain w/ wchar, threads"
- > -       depends on BR2_PACKAGE_DBUS && BR2_PACKAGE_PYTHON
- > +       depends on BR2_PACKAGE_DBUS && (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+Thanks,
 
-Ahh yes, thanks
-
+Thomas
 -- 
-Bye, Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
