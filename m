@@ -1,81 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:15:11 +0100
-Subject: [Buildroot] [git commit branch/next] dbus-python: add python3
-	support
-Message-ID: <20141122182258.2CFA57FDD5@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:23:47 +0100
+Subject: [Buildroot] [PATCH] python-netifaces: allow depending on Python
+ 3
+In-Reply-To: <1416497530-3035-1-git-send-email-simon.marchi@polymtl.ca>
+References: <1416497530-3035-1-git-send-email-simon.marchi@polymtl.ca>
+Message-ID: <20141122192347.3cb69aa3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1935562e83ef0d221929d935cf3d673435c85cb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Simon Marchi,
 
-[Thomas: update the dependencies of the comment to take into account
-that we can now also build with Python 3.]
+On Thu, 20 Nov 2014 10:32:10 -0500, Simon Marchi wrote:
+> Version 0.10.4 is compatible with python 3.
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+> ---
+>  package/python-netifaces/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
+> index 29f9fc3..b660fdb 100644
+> --- a/package/python-netifaces/Config.in
+> +++ b/package/python-netifaces/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_NETIFACES
+>  	bool "python-netifaces"
+> -	depends on BR2_PACKAGE_PYTHON
+> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dbus-python/Config.in      |    7 ++++---
- package/dbus-python/dbus-python.mk |   17 ++++++++++++++---
- 2 files changed, 18 insertions(+), 6 deletions(-)
+This is no longer necessary. Since commit
+http://git.buildroot.net/buildroot/commit/?h=next&id=cd331c1e1d15e7832f6eebc5c1e9c0a2dd34f033,
+we have decided that for packages that support both python and python3,
+it was not needed to have a dependency anymore, since this dependency
+is already in package/Config.in.
 
-diff --git a/package/dbus-python/Config.in b/package/dbus-python/Config.in
-index a38d277..3327263 100644
---- a/package/dbus-python/Config.in
-+++ b/package/dbus-python/Config.in
-@@ -3,15 +3,16 @@ config BR2_PACKAGE_DBUS_PYTHON
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_PACKAGE_DBUS
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_DBUS_GLIB
- 	# pyexpat: runtime dependency only
--	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
- 	help
- 	  Python bindings for D-Bus
- 
- 	  http://dbus.freedesktop.org/doc/dbus-python/
- 
- comment "dbus-python needs a toolchain w/ wchar, threads"
--	depends on BR2_PACKAGE_DBUS && BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_DBUS && (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index bc57689..1637406 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -9,14 +9,25 @@ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
- DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_LICENSE = MIT
- DBUS_PYTHON_LICENSE_FILES = COPYING
-+DBUS_PYTHON_DEPENDENCIES = dbus-glib
-+DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+DBUS_PYTHON_DEPENDENCIES += python host-python
- 
--DBUS_PYTHON_CONF_ENV = \
-+DBUS_PYTHON_CONF_ENV += \
- 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python2-config --includes)" \
- 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python2-config --ldflags)"
-+else
-+DBUS_PYTHON_DEPENDENCIES += python3 host-python3
-+
-+DBUS_PYTHON_CONF_ENV += \
-+	PYTHON=$(HOST_DIR)/usr/bin/python3 \
-+	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python3-config --includes)" \
-+	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
-+endif
- 
--DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
- 
--DBUS_PYTHON_DEPENDENCIES = dbus-glib python host-python
- 
- $(eval $(autotools-package))
+Patch applied to the next branch, with this change.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
