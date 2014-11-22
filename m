@@ -1,38 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Nov 2014 10:43:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 7670] Fails to build mpc-1.0.2 on latest Cygwin
-In-Reply-To: <bug-7670-163@https.bugs.busybox.net/>
-References: <bug-7670-163@https.bugs.busybox.net/>
-Message-ID: <20141122104326.C384F7FE51@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Nov 2014 12:10:33 +0100
+Subject: [Buildroot] Analysis of build results
+References: <20141111073014.AA83D101626@stock.ovh.net>
+ <20141111234919.3178e9d3@free-electrons.com>
+Message-ID: <XnsA3ED7BDB87A67berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7670
+[posted and mailed]
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-11-22 10:43:26 UTC ---
-Well, the workaround is just that, and probably the build will just fail
-further on.
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20141111234919.3178e9d3 at free-electrons.com: 
 
-And it's not just cygmpfr-4.dll that is at fault here: in my minimal Cygwin
-install, there are 101 DLLs in /bin and there is *no* DLL in /lib or /usr/lib.
-So you'd have problems one after the other anyway: after mpfr, that'll be mpc,
-and you'd have to move your host mpc DLL too. Then what?
+>>       x86_64 |                     fltk-1.3.2 | NOK |
+>>       http://autobuild.buildroot.net/results/58a36291201a848a0a11cbb2b20
+>>       0c2b39434046c/ x86_64 |                     fltk-1.3.2 | NOK |
+>>       http://autobuild.buildroot.net/results/fe53d0e9ad7c152105cb37a18e4
+>>       d712bbde3398d/ 
+> 
+> Linking fluid...
+> /home/peko/autobuild/instance-1/output/host/usr/x86_64-buildroot-linux-gn
+> u/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to
+> `xcb_get_reply_fds' 
+> /home/peko/autobuild/instance-1/output/host/usr/x86_64-buildroot-linux-gn
+> u/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to
+> `xcb_send_fd' collect2: error: ld returned 1 exit status
+> 
+> Bernd, you are our X.org expert. Can you have a look? It might be worth
+> mentioning that fltk 1.3.3 has been released on November 3rd, so we
+> could try to upgrade and see if it fixes the problem.
 
-We can not tell people to break their host system (like, moving DLLs around) to
-be able to run Buildroot. Working around this problem the way you did is just
-not sustainable in the long run.
+Hi,
 
-Cygwin is broken, we can not run on Cygwin.
+using fltk-1.3.2 I can not reproduce the problem.
 
-So, no, I'm afraid we won't accept bug reports about running Cygwin.
+Are any xcb packages installed locally on the autobuilders?
+Locally this is not the case:
 
-As I said previously: get yourself a Linux machine. A VM would do OK, and might
-even be faster than Cygwin.
+fli4l at fli4lbuild64:~/br2$ dpkg -l | grep xcb
+fli4l at fli4lbuild64:~/br2$
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards, Bernd
