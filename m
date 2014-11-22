@@ -1,68 +1,38 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 22 Nov 2014 10:46:00 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-Message-ID: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 22 Nov 2014 10:43:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 7670] Fails to build mpc-1.0.2 on latest Cygwin
+In-Reply-To: <bug-7670-163@https.bugs.busybox.net/>
+References: <bug-7670-163@https.bugs.busybox.net/>
+Message-ID: <20141122104326.C384F7FE51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: add MPL incense
+https://bugs.busybox.net/show_bug.cgi?id=7670
 
- package/Config.in                        |  1 +
- package/python-certifi/Config.in         |  6 ++++++
- package/python-certifi/python-certifi.mk | 14 ++++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/python-certifi/Config.in
- create mode 100644 package/python-certifi/python-certifi.mk
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-11-22 10:43:26 UTC ---
+Well, the workaround is just that, and probably the build will just fail
+further on.
 
-diff --git a/package/Config.in b/package/Config.in
-index a6977ce..cffa8d4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -482,6 +482,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
-new file mode 100644
-index 0000000..9390b4f
---- /dev/null
-+++ b/package/python-certifi/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CERTIFI
-+	bool "python-certifi"
-+	help
-+	  Python package for providing Mozilla's CA Bundle.
-+
-+	  https://pypi.python.org/pypi/certifi
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-new file mode 100644
-index 0000000..1458a53
---- /dev/null
-+++ b/package/python-certifi/python-certifi.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-certifi
-+#
-+################################################################################
-+
-+PYTHON_CERTIFI_VERSION = 14.05.14
-+PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-+PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-+PYTHON_CERTIFI_SETUP_TYPE = setuptools
-+PYTHON_CERTIFI_LICENSE = ISC, MPL
-+PYTHON_CERTIFI_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+And it's not just cygmpfr-4.dll that is at fault here: in my minimal Cygwin
+install, there are 101 DLLs in /bin and there is *no* DLL in /lib or /usr/lib.
+So you'd have problems one after the other anyway: after mpfr, that'll be mpc,
+and you'd have to move your host mpc DLL too. Then what?
+
+We can not tell people to break their host system (like, moving DLLs around) to
+be able to run Buildroot. Working around this problem the way you did is just
+not sustainable in the long run.
+
+Cygwin is broken, we can not run on Cygwin.
+
+So, no, I'm afraid we won't accept bug reports about running Cygwin.
+
+As I said previously: get yourself a Linux machine. A VM would do OK, and might
+even be faster than Cygwin.
+
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
