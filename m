@@ -1,127 +1,145 @@
-From: Andrew Burgess <andrew.burgess@embecosm.com>
-Date: Fri, 21 Nov 2014 23:32:36 +0000
-Subject: [Buildroot] [PATCH] binutils: Add user support for fetching from
-	git.
-References: <cover.1416611974.git.andrew.burgess@embecosm.com>
-Message-ID: <cf100033200a99097708adfd4f4c065b5e6fbe3b.1416611974.git.andrew.burgess@embecosm.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 22 Nov 2014 01:01:31 +0100
+Subject: [Buildroot] [PATCH 1/2] package/openpowerlink: do not override
+	CMAKE_SYSTEM_PROCESSOR
+Message-ID: <1416614492-25656-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds a new option "from git repository" to the list of
-available binutils versions.  Selecting this allows the user to input
-the URL of a git repository, and the version to use from the
-repository.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-The ARC target, which previously was hard coding a git URL and version
-into binutils.mk switches to this new scheme, moving the URL and
-version into Config.in.host.
-
-This is my first buildroot patch, I don't know if this is a change
-that will be useful to others, but it's been helpful for me.
-
-Feedback, comments welcome.
-
-Thanks,
-Andrew
-
-
-Signed-off-by: Andrew Burgess <andrew.burgess@embecosm.com>
 ---
- package/binutils/Config.in.host | 29 ++++++++++++++++++++++++-----
- package/binutils/binutils.mk    |  8 ++++----
- 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 45f604a..e2b8e11 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,7 +2,6 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
--	depends on !BR2_arc
- 	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
- 	default BR2_BINUTILS_VERSION_2_22
- 	help
-@@ -13,25 +12,45 @@ choice
- 		bool "binutils 2.18-avr32-1.0.1"
- 
- 	config BR2_BINUTILS_VERSION_2_22
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le && !BR2_arc
- 		bool "binutils 2.22"
- 
- 	# bfin disabled for newer binutils due to
- 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le && !BR2_arc
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
--		depends on !BR2_avr32 && !BR2_bfin
-+		depends on !BR2_avr32 && !BR2_bfin && !BR2_arc
- 		bool "binutils 2.24"
- 
-+	config BR2_BINUTILS_VERSION_GIT
-+		bool "from git repository"
+This commit must be applied after "pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR"
+http://patchwork.ozlabs.org/patch/411789/
+---
+ ...a-better-regex-for-cmake-system-processor.patch | 89 ++++++++++++++++++++++
+ package/openpowerlink/openpowerlink.mk             | 12 +--
+ 2 files changed, 90 insertions(+), 11 deletions(-)
+ create mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+
+diff --git a/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+new file mode 100644
+index 0000000..d32fa38
+--- /dev/null
++++ b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+@@ -0,0 +1,89 @@
++From 1c8eb7245abcc55d0a46181ec421a6c12df43333 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Mon, 17 Nov 2014 23:27:05 +0100
++Subject: [PATCH 1/1] [FIX] use a better regex for CMAKE_SYSTEM_PROCESSOR
 +
- endchoice
++According to CMake doc, CMAKE_SYSTEM_PROCESSOR is set to the
++output of the command "uname -p" (in fact it is the output of "uname
++-m"). This is only true for native compilation.
++
++In the case of cross-compilation, the CMake code does not set anything,
++it just expects the CMAKE_SYSTEM_* variables to be set in the
++toolchain file.
++
++Add a test matching the patern "^i.86$" and keep the old one "x86" for
++compatibility.
++
++Thanks to Samuel Martin [1]
++[1] http://lists.busybox.net/pipermail/buildroot/2014-November/112163.html
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++
++---
++ Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt         | 15 ++++-----------
++ .../X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt  | 15 ++++-----------
++ 2 files changed, 8 insertions(+), 22 deletions(-)
++
++diff --git a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
++index 271ecdc..341d54e 100644
++--- a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
+++++ b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
++@@ -154,21 +154,14 @@ SET(MODULE_SOURCE_FILES
++     ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/Objdict.c
++ )
++ 
++-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
++-
++-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
++-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
+++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
++     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
++-
++-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
++-    OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
++-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
++-
++-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++     MESSAGE(FATAL_ERROR
++             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
++-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++ 
++ SET(MODULE_FILE
++     ${MODULE_NAME}.ko
++diff --git a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
++index 1b47c76..d33ff3d 100644
++--- a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
+++++ b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
++@@ -171,21 +171,14 @@ ELSE(CFG_POWERLINK_EDRV STREQUAL "I210")
++     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/Target/X86/Linux/gnu/generic/TimerHighReskX86.c)
++ ENDIF(CFG_POWERLINK_EDRV STREQUAL "I210")
++ 
++-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
++-
++-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
++-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
+++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
++     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
++-
++-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
++-	OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
++-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
++-
++-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++     MESSAGE(FATAL_ERROR
++             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
++-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
+++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++ 
++ SET(MODULE_FILE
++     ${MODULE_NAME}.ko
++-- 
++1.9.3
++
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 7ad3eca..e3d258d 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -11,19 +11,9 @@ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+ OPENPOWERLINK_LICENSE_FILES = license.txt
+ OPENPOWERLINK_INSTALL_STAGING = YES
  
-+if BR2_BINUTILS_VERSION_GIT
-+
-+config BR2_BINUTILS_CUSTOM_REPO_URL
-+	string "URL of binutils repository"
-+	default "git://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb" if BR2_arc
-+	help
-+	  URL for git repository to use.
-+
-+config BR2_BINUTILS_CUSTOM_REPO_VERSION
-+	string "Version of binutils repository"
-+	default "arc-2014.08"	if BR2_arc
-+	help
-+	  Revision to use in the typical format used by Git/Mercurial
-+	  E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
- config BR2_BINUTILS_VERSION
- 	string
-+	default BR2_BINUTILS_CUSTOM_REPO_VERSION if BR2_BINUTILS_VERSION_GIT
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
--	default "arc-2014.08"	if BR2_arc
- 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
- 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
- 	default "2.24"		if BR2_BINUTILS_VERSION_2_24
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index b8dab5d..16c542b 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -19,10 +19,10 @@ endif
- ifeq ($(ARCH),avr32)
- BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
- endif
--ifeq ($(BR2_arc),y)
--BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
-+ifeq ($(BR2_BINUTILS_VERSION_GIT),y)
-+BINUTILS_SITE = $(call qstrip,$(BR2_BINUTILS_CUSTOM_REPO_URL))
-+BINUTILS_SITE_METHOD = git
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
--BINUTILS_FROM_GIT = y
- endif
- BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
-@@ -33,7 +33,7 @@ HOST_BINUTILS_DEPENDENCIES =
- BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
- BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+-ifeq ($(BR2_i386),y)
+-OPENPOWERLINK_ARCH = x86
+-endif
+-
+-ifeq ($(BR2_x86_64),y)
+-OPENPOWERLINK_ARCH = x86_64
+-endif
+-
+-OPENPOWERLINK_CONF_OPTS = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
+-
+ # There is no shared lib in openpowerlink,
+ # so force static lib to build libpowerlink.a
+-OPENPOWERLINK_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
++OPENPOWERLINK_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
  
--ifeq ($(BINUTILS_FROM_GIT),y)
-+ifeq ($(BR2_BINUTILS_VERSION_GIT),y)
- BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
- HOST_BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
- endif
+ OPENPOWERLINK_CONF_OPTS += -DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
+ 
 -- 
 1.9.3
