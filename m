@@ -1,36 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 17:16:15 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
-In-Reply-To: <546F6FCB.1090101@imgtec.com>
-References: <1416587791-30125-1-git-send-email-jaap@jcz.nl>
- <546F6FCB.1090101@imgtec.com>
-Message-ID: <20141122171615.7eb18494@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Nov 2014 17:54:10 +0100
+Subject: [Buildroot] [PATCH] package/erlang: disable for static builds
+Message-ID: <1416675250-30116-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+erlang wants to build shared libs, always.
 
-On Fri, 21 Nov 2014 17:00:59 +0000, Vicente Olivert Riera wrote:
+So, disable erlang when we're building static-only.
 
-> Another one. When you create the patch using "git format-patch", before
-> sending it, please edit the patch using your favourite text editor and
-> add the version number in the "Subject" line. Here is an example using
-> your own patch:
-> 
-> Subject: [PATCH v2] bluez5_utils: bumped version number to 5.25
+Fixes:
+    http://autobuild.buildroot.net/results/1ce/1ceaa6925d1ded236d01ae9feb31f5f915f6b51a/
 
-Just a quick comment: there's no need to fire up a text editor to do
-this. Just do:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/erlang/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-	git format-patch --subject-prefix="PATCHv2"
-
-Best regards,
-
-Thomas
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 06833b9..0566582 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -1,10 +1,11 @@
+-comment "erlang needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "erlang needs a toolchain w/ threads, shared library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS && BR2_PREFER_STATIC_LIB
+ 
+ config BR2_PACKAGE_ERLANG
+ 	bool "erlang"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Erlang is a programming language used to build massively scalable
+ 	  soft real-time systems with requirements on high availability.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
