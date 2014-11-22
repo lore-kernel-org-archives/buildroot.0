@@ -1,44 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 22:45:21 +0100
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.112
-Message-ID: <20141201104836.E06D17FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:35:04 +0100
+Subject: [Buildroot] [git commit] pkg-autotools: commonalise the libtool
+	patching code
+Message-ID: <20141201104837.E11C97FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d547a65d24eb87abfa86f03b8981a561c942fba
+commit: http://git.buildroot.net/buildroot/commit/?id=f2d0052f3b665d60302c95a9e0eb98741f17b3f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 2.02.112
-- Update hash value
+Currently, the heuristic to patch libtool scripts is duplicated both in
+the libtool post-patch hook and the autoreconf pre-configure hook.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Move that code into a single function that gets called from both hooks.
+
+[Thomas: change back the author to Johan. Yann mistakenly changed it
+when submitting the patch series.]
+
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: split the patch into semantically separate
+patches]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-autotools.mk |   53 +++++++++++++++++++++------------------------
+ 1 files changed, 25 insertions(+), 28 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 10f2905..3d02e83 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5	02487ab2a9e02d1ee76fe217183df28a	LVM2.2.02.111.tgz
-+md5 1f4033b750f68b68e9bd66d3661a2c3f LVM2.2.02.112.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 76c2f82..bef22fb 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 6e198ed..393f995 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -36,6 +36,29 @@ define CONFIG_UPDATE
+ 	done
+ endef
  
--LVM2_VERSION = 2.02.111
-+LVM2_VERSION = 2.02.112
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
++#
++# Utility function to patch the libtool files
++#
++# argument 1 : directory into which to search for libtool scripts to patch.
++# Note that libtool scripts are searched for recursively in this directory
++#
++define PATCH_LIBTOOL
++	@$(call MESSAGE,"Patching libtool")
++	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" ]; then \
++		for i in `find $(1) -name ltmain.sh`; do \
++			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++			if test $${ltmain_version} = '1.5'; then \
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++			elif test $${ltmain_version} = "2.2"; then\
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++			elif test $${ltmain_version} = "2.4"; then\
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++			fi \
++		done \
++	fi
++endef
++
+ # This function generates the ac_cv_file_<foo> value for a given
+ # filename. This is needed to convince configure script doing
+ # AC_CHECK_FILE() tests that the file actually exists, since such
+@@ -58,21 +81,7 @@ endef
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	@$(call MESSAGE,"Patching libtool")
+-	if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" \
+-		-a "$($(PKG)_AUTORECONF)" != "YES"; then \
+-		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+-			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-			if test $${ltmain_version} = '1.5'; then \
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-			elif test $${ltmain_version} = "2.2"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-			elif test $${ltmain_version} = "2.4"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-			fi \
+-		done \
+-	fi
++	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+ endef
+ 
+ #
+@@ -89,19 +98,7 @@ endef
+ define AUTORECONF_HOOK
+ 	@$(call MESSAGE,"Autoreconfiguring")
+ 	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+-	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+-		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+-			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-			if test $${ltmain_version} = "1.5"; then \
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-			elif test $${ltmain_version} = "2.2"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-			elif test $${ltmain_version} = "2.4"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-			fi \
+-		done \
+-	fi
++	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+ endef
+ 
+ ################################################################################
