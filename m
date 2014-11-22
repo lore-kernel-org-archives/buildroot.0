@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:47:06 +0100
-Subject: [Buildroot] [git commit] package: matchbox-keyboard: use install
-	instead of cp
-Message-ID: <20141201104837.A984F7FFF8@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:06:27 +0100
+Subject: [Buildroot] [git commit] python-netifaces: enable on Python 3
+Message-ID: <20141201104837.614B17FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0772e28dbb78b71fea444166f131b74dae22abdb
+commit: http://git.buildroot.net/buildroot/commit/?id=47667497ec2622263bbd3cacc109beed7e7bea7c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-in order to not depend on the previous permissions of the file
+Version 0.10.4 is compatible with python 3.
 
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+[Thomas: change the patch to simply remove the dependency on
+BR2_PACKAGE_PYTHON, so that the package can be seen when either python
+or python3 are used.]
+
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/python-netifaces/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index ebf23e4..bdcc32f 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
+index 29f9fc3..1f54f4b 100644
+--- a/package/python-netifaces/Config.in
++++ b/package/python-netifaces/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_NETIFACES
+ 	bool "python-netifaces"
+-	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  Portable access to network interfaces from Python.
  
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
-+	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
