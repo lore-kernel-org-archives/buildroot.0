@@ -1,44 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:11:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openssl: drop libdl from more
- pc files
-In-Reply-To: <1411835343-32736-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1411835343-32736-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141122201145.310ba234@free-electrons.com>
+Date: Sat, 22 Nov 2014 20:12:38 +0100
+Subject: [Buildroot] [git commit] manual: Rework makedevs syntax
+Message-ID: <20141122191255.4F67C7FDF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=58cb4918753dd9821a505ce42fd092013cf4fb9f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 27 Sep 2014 18:29:03 +0200, Bernd Kuhls wrote:
-> This is a follow-up patch for
-> http://git.buildroot.net/buildroot/commit/package/openssl/openssl.mk?id=c130c5d4635e2a4c7338161953152faf8fca07c4
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/358/35899961b6dc01c1522b17f63946da5ab809bff8/
-> http://autobuild.buildroot.net/results/c86/c865214e74dd3766b6343ef73c666fa89c0b5dec/
-> http://autobuild.buildroot.net/results/fc1/fc12e88fb789e2b68d427c37f39789954309b05d/
-> http://autobuild.buildroot.net/results/f4d/f4deef4e7d2e2cf5fbc9ce5f02289b4dc60cd23b/
-> http://autobuild.buildroot.net/results/dfd/dfd81f1f1f0f315317b2a85d24b286a277ac7c16/
-> http://autobuild.buildroot.net/results/918/9188fc9a63d880cac28c5a9a246ca5504dd11bb2/
-> http://autobuild.buildroot.net/results/dd1/dd1c326345f8f9c8b5838601ace19002f5360bb2/
-> http://autobuild.buildroot.net/results/27b/27b4544c59166a9f40092403ed3f530190544a82/
-> http://autobuild.buildroot.net/results/c37/c37022e334d763bad2a59f7311b93504a569b2dd/
-> http://autobuild.buildroot.net/results/e89/e89265937a6b4808b817be16bcab79bae4a9aed1/
-> http://autobuild.buildroot.net/results/4a2/4a222a40d627fda6e49714b13b4321d62c9c2e51/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openssl/openssl.mk |    2 ++
->  1 file changed, 2 insertions(+)
+State that it should be a space separated list and fix the example.
+Also reduce the number of dash used to 4.
 
-Applied to master, thanks!
+[Thomas: replace tab by space, as noted by Yann.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/makedev-syntax.txt |   24 +++++++++++++-----------
+ 1 files changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index 2fd7b59..e02b79d 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -11,13 +11,14 @@ create and how to create them, in order to avoid calls to mknod.
+ This syntax is derived from the makedev utility, and more complete
+ documentation can be found in the +package/makedevs/README+ file.
+ 
+-It takes the form of a line for each file, with the following layout:
++It takes the form of a space separated list of fields, one file per
++line; the fields are:
+ 
+ |===========================================================
+ |name |type |mode |uid |gid |major |minor |start |inc |count
+ |===========================================================
+ 
+-There are a few non-trivial blocks here:
++There are a few non-trivial blocks:
+ 
+ - +name+ is the path to the file you want to create/modify
+ - +type+ is the type of the file, being one of:
+@@ -35,22 +36,23 @@ There are a few non-trivial blocks here:
+ 
+ Let's say you want to change the permissions of a given file; using
+ this syntax, you will need to put:
+--------------------------------------------------------------------
+-/usr/bin/foobar	f	644	0	0	-	-	-	-	-
+--------------------------------------------------------------------
++
++----
++/usr/bin/foobar f 644 0 0 - - -	- -
++----
+ 
+ On the other hand, if you want to create the device file +/dev/hda+
+ and the corresponding 15 files for the partitions, you will need for
+ +/dev/hda+:
+ 
+--------------------------------------------------------------------
+-/dev/hda	b	640	0	0	3	0	0	0	-
+--------------------------------------------------------------------
++----
++/dev/hda b 640 0 0 3 0 0 0 -
++----
+ 
+ and then for device files corresponding to the partitions of
+ +/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
+ 
+--------------------------------------------------------------------
+-/dev/hda	b	640	0	0	3	1	1	1	15
+--------------------------------------------------------------------
++----
++/dev/hda b 640 0 0 3 1 1 1 15
++----
+ 
