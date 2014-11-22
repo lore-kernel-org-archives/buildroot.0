@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:46:46 +0100
-Subject: [Buildroot] [PATCH] support/script/scancpan: generate hash file
-In-Reply-To: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
-References: <1416512127-9789-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20141122194646.06094ed9@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:47:06 +0100
+Subject: [Buildroot] [git commit branch/next] package: matchbox-keyboard:
+	use install instead of cp
+Message-ID: <20141122184713.78A127FE27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=0772e28dbb78b71fea444166f131b74dae22abdb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 20 Nov 2014 20:35:27 +0100, Francois Perrad wrote:
-> retrieve md5&sha256 from metacpan.org, and store them in the hash file
-> for each package.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+in order to not depend on the previous permissions of the file
 
-Thanks, I've applied your patch to the next branch, after removing the
-odd indentation for the md5 case, as noted by Peter.
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+index ebf23e4..bdcc32f 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+@@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+ MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+ 
+ define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+-	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
++	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+ endef
+ 
+ MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
