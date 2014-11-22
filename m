@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:15:49 +0100
-Subject: [Buildroot] [PATCH 6/9] manual: Add newline before block code
-In-Reply-To: <1416068964-22529-6-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sat, 22 Nov 2014 20:15:32 +0100
+Subject: [Buildroot] [PATCH 4/9] manual: Remove trailing space
+In-Reply-To: <1416068964-22529-4-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1416068964-22529-6-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141122201549.07279bd0@free-electrons.com>
+ <1416068964-22529-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141122201532.335aeb83@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,12 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sat, 15 Nov 2014 17:29:21 +0100, Maxime Hadjinlian wrote:
-> This won't change the output, it's only a style issue.
-> 
+On Sat, 15 Nov 2014 17:29:19 +0100, Maxime Hadjinlian wrote:
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  docs/manual/adding-packages-directory.txt | 5 +++++
->  1 file changed, 5 insertions(+)
+>  docs/manual/adding-packages-autotools.txt | 2 +-
+>  docs/manual/faq-troubleshooting.txt       | 8 ++++----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
