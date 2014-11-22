@@ -1,70 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:37:52 +0100
-Subject: [Buildroot] [git commit branch/next] pkg-autotools: only apply
-	libtool patch at the right moment
-Message-ID: <20141122195743.5AC417FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:35:04 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-autotools: commonalise the
+	libtool patching code
+Message-ID: <20141122195743.3894F7FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=452c8da326a29bfbeacce7a360aa0fba3abc3108
+commit: http://git.buildroot.net/buildroot/commit/?id=f2d0052f3b665d60302c95a9e0eb98741f17b3f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we apply the libtool patch at post-patch time, always. If we
-need to autoreconf, we also apply it after autoreconf is done.
+Currently, the heuristic to patch libtool scripts is duplicated both in
+the libtool post-patch hook and the autoreconf pre-configure hook.
 
-Obviously, in that second case, we do not need to apply it at
-post-patch time. This has no impact on the result, as autoreconf will
-overwrite the just patched files, and they will be patched yet again.
-But it is not nice to the user that will see a double "Patching libtool"
-message.
+Move that code into a single function that gets called from both hooks.
 
-So, we apply the libtool patch at post-patch time only if we are not
-autoreconfiguring the package.
+[Thomas: change back the author to Johan. Yann mistakenly changed it
+when submitting the patch series.]
 
-[Thomas: fix minor typo s/casse/case/ in the commit log.]
-
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: split the patch into semantically separate
+patches]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   14 +++++++++-----
- 1 files changed, 9 insertions(+), 5 deletions(-)
+ package/pkg-autotools.mk |   53 +++++++++++++++++++++------------------------
+ 1 files changed, 25 insertions(+), 28 deletions(-)
 
 diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 924816b..ad2d1a6 100644
+index 6e198ed..393f995 100644
 --- a/package/pkg-autotools.mk
 +++ b/package/pkg-autotools.mk
-@@ -235,12 +235,8 @@ endif
+@@ -36,6 +36,29 @@ define CONFIG_UPDATE
+ 	done
+ endef
  
- $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
--# default values are not evaluated yet, so don't rely on this defaulting to YES
--ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
--endif
--
- ifeq ($$($(2)_AUTORECONF),YES)
++#
++# Utility function to patch the libtool files
++#
++# argument 1 : directory into which to search for libtool scripts to patch.
++# Note that libtool scripts are searched for recursively in this directory
++#
++define PATCH_LIBTOOL
++	@$(call MESSAGE,"Patching libtool")
++	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" ]; then \
++		for i in `find $(1) -name ltmain.sh`; do \
++			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++			if test $${ltmain_version} = '1.5'; then \
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++			elif test $${ltmain_version} = "2.2"; then\
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++			elif test $${ltmain_version} = "2.4"; then\
++				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++			fi \
++		done \
++	fi
++endef
 +
- # This has to come before autoreconf
- ifeq ($$($(2)_GETTEXTIZE),YES)
- $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
-@@ -252,6 +248,14 @@ ifneq ($$($(2)_LIBTOOL_PATCH),NO)
- $(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
- endif
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
-+
-+else # ! AUTORECONF = YES
-+
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
-+endif
-+
- endif
+ # This function generates the ac_cv_file_<foo> value for a given
+ # filename. This is needed to convince configure script doing
+ # AC_CHECK_FILE() tests that the file actually exists, since such
+@@ -58,21 +81,7 @@ endef
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	@$(call MESSAGE,"Patching libtool")
+-	if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" \
+-		-a "$($(PKG)_AUTORECONF)" != "YES"; then \
+-		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+-			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-			if test $${ltmain_version} = '1.5'; then \
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-			elif test $${ltmain_version} = "2.2"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-			elif test $${ltmain_version} = "2.4"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-			fi \
+-		done \
+-	fi
++	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+ endef
  
  #
+@@ -89,19 +98,7 @@ endef
+ define AUTORECONF_HOOK
+ 	@$(call MESSAGE,"Autoreconfiguring")
+ 	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+-	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+-		for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+-			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-			if test $${ltmain_version} = "1.5"; then \
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-			elif test $${ltmain_version} = "2.2"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-			elif test $${ltmain_version} = "2.4"; then\
+-				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-			fi \
+-		done \
+-	fi
++	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
+ endef
+ 
+ ################################################################################
