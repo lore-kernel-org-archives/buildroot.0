@@ -1,34 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 22:18:29 +0100
-Subject: [Buildroot] [git commit] package/squid: enable ICAP client support
-	in squid
-Message-ID: <20141201104838.37B627FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:14:11 +0100
+Subject: [Buildroot] [git commit] python3: add patch to fix --includes /
+	--ldflags output of python3-config
+Message-ID: <20141201104837.753DA7FDA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70f8b1d5d81e9fa68a62891f1daf4e1c3561b1eb
+commit: http://git.buildroot.net/buildroot/commit/?id=fbb8cbfdf4ef0be10d2e9b8e51cde98d2909a120
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+The build/real prefix handling using sed breaks if build != real and the
+standard include / lib directories are used ($prefix/include and $prefix/lib).
+
+E.G.
+
+prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
+
+If this gets installed with make DESTDIR="/foo" install, then we end up with
+prefix_real = prefix = "/foo/usr" as expected, but
+includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
+the double sed invocation (prefix is already expanded).  Work around it by
+ensuring we only match the beginning of the string.
+
+Submitted upstream: http://bugs.python.org/issue22907
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ .../python3-017-python-config-include-libdir.patch |   60 ++++++++++++++++++++
+ 1 files changed, 60 insertions(+), 0 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index ed51881..306b2a3 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -29,7 +29,8 @@ SQUID_CONF_OPTS =	--enable-async-io=8 --enable-linux-netfilter \
- 			--enable-external-acl-helpers="file_userip" \
- 			--with-logdir=/var/log/squid/ \
- 			--with-pidfile=/var/run/squid.pid \
--			--with-swapdir=/var/cache/squid/
-+			--with-swapdir=/var/cache/squid/ \
-+			--enable-icap-client
- 
- # On uClibc librt needs libpthread
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+diff --git a/package/python3/python3-017-python-config-include-libdir.patch b/package/python3/python3-017-python-config-include-libdir.patch
+new file mode 100644
+index 0000000..50a856d
+--- /dev/null
++++ b/package/python3/python3-017-python-config-include-libdir.patch
+@@ -0,0 +1,60 @@
++From 50f34d2cac63b6bf0935294a7d63d9451714f4c4 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Thu, 20 Nov 2014 13:24:59 +0100
++Subject: [PATCH] Misc/python-config.sh.in: ensure sed invocations only match
++ beginning of strings
++
++The build/real prefix handling using sed breaks if build != real and the
++standard include / lib directories are used ($prefix/include and $prefix/lib).
++
++E.G.
++
++prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
++
++If this gets installed with make DESTDIR="/foo" install, then we end up with
++prefix_real = prefix = "/foo/usr" as expected, but
++includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
++the double sed invocation (prefix is already expanded).  Work around it by
++ensuring we only match the beginning of the string.
++
++Submitted upstream: http://bugs.python.org/issue22907
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Misc/python-config.sh.in | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
++index 64c81e5..f75eec5 100644
++--- a/Misc/python-config.sh.in
+++++ b/Misc/python-config.sh.in
++@@ -29,12 +29,12 @@ prefix_real=$(installed_prefix "$0")
++ 
++ # Use sed to fix paths from their built-to locations to their installed-to
++ # locations.
++-prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
+++prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
++ exec_prefix_build="@exec_prefix@"
++-exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
++-includedir=$(echo "@includedir@" | sed "s#$prefix_build#$prefix_real#")
++-libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
++-CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
+++exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
+++includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
+++libdir=$(echo "@libdir@" | sed "s#^$prefix_build#$prefix_real#")
+++CFLAGS=$(echo "@CFLAGS@" | sed "s#^$prefix_build#$prefix_real#")
++ VERSION="@VERSION@"
++ LIBM="@LIBM@"
++ LIBC="@LIBC@"
++@@ -48,7 +48,7 @@ OPT="@OPT@"
++ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
++ LDVERSION="@LDVERSION@"
++ LIBDEST=${prefix}/lib/python${VERSION}
++-LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
+++LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
++ SO="@SO@"
++ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
++ INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
++-- 
++2.1.3
++
