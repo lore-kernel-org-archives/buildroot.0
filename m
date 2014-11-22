@@ -1,101 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:14:11 +0100
-Subject: [Buildroot] [git commit branch/next] python3: add patch to fix
-	--includes / --ldflags output of python3-config
-Message-ID: <20141122182258.22A357FE30@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:15:11 +0100
+Subject: [Buildroot] [git commit branch/next] dbus-python: add python3
+	support
+Message-ID: <20141122182258.2CFA57FDD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb8cbfdf4ef0be10d2e9b8e51cde98d2909a120
+commit: http://git.buildroot.net/buildroot/commit/?id=d1935562e83ef0d221929d935cf3d673435c85cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The build/real prefix handling using sed breaks if build != real and the
-standard include / lib directories are used ($prefix/include and $prefix/lib).
-
-E.G.
-
-prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-
-If this gets installed with make DESTDIR="/foo" install, then we end up with
-prefix_real = prefix = "/foo/usr" as expected, but
-includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-the double sed invocation (prefix is already expanded).  Work around it by
-ensuring we only match the beginning of the string.
-
-Submitted upstream: http://bugs.python.org/issue22907
+[Thomas: update the dependencies of the comment to take into account
+that we can now also build with Python 3.]
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../python3-017-python-config-include-libdir.patch |   60 ++++++++++++++++++++
- 1 files changed, 60 insertions(+), 0 deletions(-)
+ package/dbus-python/Config.in      |    7 ++++---
+ package/dbus-python/dbus-python.mk |   17 ++++++++++++++---
+ 2 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/package/python3/python3-017-python-config-include-libdir.patch b/package/python3/python3-017-python-config-include-libdir.patch
-new file mode 100644
-index 0000000..50a856d
---- /dev/null
-+++ b/package/python3/python3-017-python-config-include-libdir.patch
-@@ -0,0 +1,60 @@
-+From 50f34d2cac63b6bf0935294a7d63d9451714f4c4 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 20 Nov 2014 13:24:59 +0100
-+Subject: [PATCH] Misc/python-config.sh.in: ensure sed invocations only match
-+ beginning of strings
+diff --git a/package/dbus-python/Config.in b/package/dbus-python/Config.in
+index a38d277..3327263 100644
+--- a/package/dbus-python/Config.in
++++ b/package/dbus-python/Config.in
+@@ -3,15 +3,16 @@ config BR2_PACKAGE_DBUS_PYTHON
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_PACKAGE_DBUS
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	# pyexpat: runtime dependency only
+-	select BR2_PACKAGE_PYTHON_PYEXPAT
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python bindings for D-Bus
+ 
+ 	  http://dbus.freedesktop.org/doc/dbus-python/
+ 
+ comment "dbus-python needs a toolchain w/ wchar, threads"
+-	depends on BR2_PACKAGE_DBUS && BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_DBUS && (BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index bc57689..1637406 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -9,14 +9,25 @@ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
+ DBUS_PYTHON_LICENSE_FILES = COPYING
++DBUS_PYTHON_DEPENDENCIES = dbus-glib
++DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
 +
-+The build/real prefix handling using sed breaks if build != real and the
-+standard include / lib directories are used ($prefix/include and $prefix/lib).
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++DBUS_PYTHON_DEPENDENCIES += python host-python
+ 
+-DBUS_PYTHON_CONF_ENV = \
++DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON=$(HOST_DIR)/usr/bin/python2 \
+ 	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python2-config --includes)" \
+ 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python2-config --ldflags)"
++else
++DBUS_PYTHON_DEPENDENCIES += python3 host-python3
 +
-+E.G.
-+
-+prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-+
-+If this gets installed with make DESTDIR="/foo" install, then we end up with
-+prefix_real = prefix = "/foo/usr" as expected, but
-+includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-+the double sed invocation (prefix is already expanded).  Work around it by
-+ensuring we only match the beginning of the string.
-+
-+Submitted upstream: http://bugs.python.org/issue22907
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Misc/python-config.sh.in | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-+index 64c81e5..f75eec5 100644
-+--- a/Misc/python-config.sh.in
-++++ b/Misc/python-config.sh.in
-+@@ -29,12 +29,12 @@ prefix_real=$(installed_prefix "$0")
-+ 
-+ # Use sed to fix paths from their built-to locations to their installed-to
-+ # locations.
-+-prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
-++prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-+ exec_prefix_build="@exec_prefix@"
-+-exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
-+-includedir=$(echo "@includedir@" | sed "s#$prefix_build#$prefix_real#")
-+-libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
-+-CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
-++exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-++includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-++libdir=$(echo "@libdir@" | sed "s#^$prefix_build#$prefix_real#")
-++CFLAGS=$(echo "@CFLAGS@" | sed "s#^$prefix_build#$prefix_real#")
-+ VERSION="@VERSION@"
-+ LIBM="@LIBM@"
-+ LIBC="@LIBC@"
-+@@ -48,7 +48,7 @@ OPT="@OPT@"
-+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-+ LDVERSION="@LDVERSION@"
-+ LIBDEST=${prefix}/lib/python${VERSION}
-+-LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
-++LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-+ SO="@SO@"
-+ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-+ INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
-+-- 
-+2.1.3
-+
++DBUS_PYTHON_CONF_ENV += \
++	PYTHON=$(HOST_DIR)/usr/bin/python3 \
++	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python3-config --includes)" \
++	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
++endif
+ 
+-DBUS_PYTHON_CONF_OPTS = --disable-html-docs --disable-api-docs
+ 
+-DBUS_PYTHON_DEPENDENCIES = dbus-glib python host-python
+ 
+ $(eval $(autotools-package))
