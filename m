@@ -1,59 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:01:27 +0100
-Subject: [Buildroot] [git commit] fs/iso9660: use install instead of cp
-Message-ID: <20141201104837.5668B7FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:37:52 +0100
+Subject: [Buildroot] [git commit] pkg-autotools: only apply libtool patch at
+	the right moment
+Message-ID: <20141201104838.1A0797FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4273d4d9ff5b9c104d7447d96199e2cadbf790e3
+commit: http://git.buildroot.net/buildroot/commit/?id=452c8da326a29bfbeacce7a360aa0fba3abc3108
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This way we don't depend on the permissions of files under boot/ or fs/,
-which aren't tracked.
+Currently, we apply the libtool patch at post-patch time, always. If we
+need to autoreconf, we also apply it after autoreconf is done.
 
-While we're at it, change all 'cp' usages into 'install' with the
-correct mode for each file.
+Obviously, in that second case, we do not need to apply it at
+post-patch time. This has no impact on the result, as autoreconf will
+overwrite the just patched files, and they will be patched yet again.
+But it is not nice to the user that will see a double "Patching libtool"
+message.
 
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+So, we apply the libtool patch at post-patch time only if we are not
+autoreconfiguring the package.
+
+[Thomas: fix minor typo s/casse/case/ in the commit log.]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/iso9660/iso9660.mk |   16 +++++++++-------
- 1 files changed, 9 insertions(+), 7 deletions(-)
+ package/pkg-autotools.mk |   14 +++++++++-----
+ 1 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 908f0e9..5b44ba4 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -14,20 +14,22 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 924816b..ad2d1a6 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -235,12 +235,8 @@ endif
  
- $(BINARIES_DIR)/rootfs.iso9660: $(ROOTFS_ISO9660_DEPENDENCIES)
- 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
--	mkdir -p $(ISO9660_TARGET_DIR)
--	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
--	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
--	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
-+		$(ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
-+	$(INSTALL) -D -m 0644 $(ISO9660_BOOT_MENU) \
-+		$(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- ifeq ($(BR2_TARGET_GRUB_SPLASH),)
- 	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- else
--	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
-+	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
-+		$(ISO9660_TARGET_DIR)/splash.xpm.gz
+ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ 
+-# default values are not evaluated yet, so don't rely on this defaulting to YES
+-ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+-$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
+-endif
+-
+ ifeq ($$($(2)_AUTORECONF),YES)
++
+ # This has to come before autoreconf
+ ifeq ($$($(2)_GETTEXTIZE),YES)
+ $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
+@@ -252,6 +248,14 @@ ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+ $(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
  endif
--	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-+	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- 	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- else
--	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
-+	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
-+		$(ISO9660_TARGET_DIR)/initrd
+ $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
++
++else # ! AUTORECONF = YES
++
++# default values are not evaluated yet, so don't rely on this defaulting to YES
++ifneq ($$($(2)_LIBTOOL_PATCH),NO)
++$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
++endif
++
  endif
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(FAKEROOT_SCRIPT)
+ 
+ #
