@@ -1,54 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:13:43 +0100
-Subject: [Buildroot] [git commit] manual: Add newline before block code
-Message-ID: <20141122191447.D01067FBB5@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:13:16 +0100
+Subject: [Buildroot] [git commit] manual: Remove trailing space
+Message-ID: <20141122191447.BFA0C7FE25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d918e11dccaeecdfc7700ea392d739ec0b66772
+commit: http://git.buildroot.net/buildroot/commit/?id=7ffa8e4c60bad47f301281bbaaaa4c014fe8c943
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This won't change the output, it's only a style issue.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-directory.txt |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-autotools.txt |    2 +-
+ docs/manual/faq-troubleshooting.txt       |    8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index c145829..0ea03f9 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -191,15 +191,19 @@ construct rather than repeating the +depends on+ statement on the
- comment and other config options.
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index ece6c49..a041d91 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -125,7 +125,7 @@ cases, typical packages will therefore only use a few of them.
+   variables to pass to the 'autoreconf' program if
+   +LIBFOO_AUTORECONF=YES+. These are passed in the environment of
+   the 'autoreconf' command. By default, empty.
+-  
++
+ * +LIBFOO_AUTORECONF_OPTS+ to specify additional options
+   passed to the 'autoreconf' program if
+   +LIBFOO_AUTORECONF=YES+. By default, empty.
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index 693028c..b30b4ac 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -19,10 +19,10 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK
  
- The general format of a dependency +comment+ for package foo is:
-+
- --------------------------
- foo needs a toolchain w/ featA, featB, featC
- --------------------------
+ then it means that your system is running, but didn't start a shell on
+ the serial console. In order to have the system start a shell on your
+-serial console, you have to go into the Buildroot configuration, in 
+-+System configuration+, modify +Run a getty (login prompt) after boot+ 
+-and set the appropriate port and baud rate in the +getty options+ 
+-submenu. This will automatically tune the +/etc/inittab+ file of the 
++serial console, you have to go into the Buildroot configuration, in
+++System configuration+, modify +Run a getty (login prompt) after boot+
++and set the appropriate port and baud rate in the +getty options+
++submenu. This will automatically tune the +/etc/inittab+ file of the
+ generated system so that a shell starts on the correct serial port.
  
- for example:
-+
- --------------------------
- aircrack-ng needs a toolchain w/ largefile, threads
- --------------------------
-+
- or
-+
- --------------------------
- crda needs a toolchain w/ threads
- --------------------------
-@@ -283,6 +287,7 @@ foo needs a Linux kernel to be built
- 
- If there is a dependency on both toolchain options and the Linux
- kernel, use this format:
-+
- --------------------------
- foo needs a toolchain w/ featA, featB, featC and a Linux kernel to be built
- --------------------------
+ [[faq-no-compiler-on-target]]
