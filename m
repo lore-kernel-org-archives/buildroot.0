@@ -1,34 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Nov 2014 16:55:47 +0100
-Subject: [Buildroot] [git commit] python-jinja2: needs markupsafe at runtime
-Message-ID: <20141201104835.A6B6A7FFFC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Nov 2014 20:37:01 +0100
+Subject: [Buildroot] [git commit] pkg-autotools: fold the libtool patching
+	code directly into the hook
+Message-ID: <20141201104838.0E9F07FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afae45bb8340926b3043c05fe6395ebdc839b82f
+commit: http://git.buildroot.net/buildroot/commit/?id=b3b2222fa71d7ae45066257983b643542c70b636
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise import fails:
+We now have only one caller of the libtool patching code, which is the
+hook itself.
 
-ImportError: No module named markupsafe
+So, there is no longer any need to extract this code into a utility
+function, and it can be folded into the hook itself.
 
-Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-jinja2/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/pkg-autotools.mk |   34 ++++++++++++----------------------
+ 1 files changed, 12 insertions(+), 22 deletions(-)
 
-diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
-index 1d9131a..a1900e9 100644
---- a/package/python-jinja2/Config.in
-+++ b/package/python-jinja2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_JINJA2
- 	bool "python-jinja2"
-+	select BR2_PACKAGE_PYTHON_MARKUPSAFE # runtime
- 	help
- 	  Jinja2 is a template engine written in pure Python. It
- 	  provides a Django inspired non-XML syntax but supports
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index e240b95..924816b 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -36,27 +36,6 @@ define CONFIG_UPDATE
+ 	done
+ endef
+ 
+-#
+-# Utility function to patch the libtool files
+-#
+-# argument 1 : directory into which to search for libtool scripts to patch.
+-# Note that libtool scripts are searched for recursively in this directory
+-#
+-define PATCH_LIBTOOL
+-	@$(call MESSAGE,"Patching libtool")
+-	$(Q)for i in `find $(1) -name ltmain.sh`; do \
+-		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+-		if test $${ltmain_version} = '1.5'; then \
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+-		elif test $${ltmain_version} = "2.2"; then\
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+-		elif test $${ltmain_version} = "2.4"; then\
+-			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+-		fi \
+-	done
+-endef
+-
+ # This function generates the ac_cv_file_<foo> value for a given
+ # filename. This is needed to convince configure script doing
+ # AC_CHECK_FILE() tests that the file actually exists, since such
+@@ -79,7 +58,18 @@ endef
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	$(call PATCH_LIBTOOL,$($(PKG)_SRCDIR))
++	@$(call MESSAGE,"Patching libtool")
++	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
++		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++		if test $${ltmain_version} = '1.5'; then \
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++		elif test $${ltmain_version} = "2.2"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++		elif test $${ltmain_version} = "2.4"; then\
++			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++		fi \
++	done
+ endef
+ 
+ #
