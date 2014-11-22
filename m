@@ -1,28 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 18:16:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 10.3.4
-In-Reply-To: <1416657671-27910-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1416657671-27910-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141122181631.140fa4b8@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Nov 2014 18:30:40 +0100
+Subject: [Buildroot] [PATCH] package/erlang: disable for static builds
+In-Reply-To: <1416675250-30116-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 22 Nov 2014 17:54:10 +0100")
+References: <1416675250-30116-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87d28fuoqn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sat, 22 Nov 2014 13:01:11 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/mesa3d.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > erlang wants to build shared libs, always.
+ > So, disable erlang when we're building static-only.
 
-Applied to next, thanks.
+ > Fixes:
+ >     http://autobuild.buildroot.net/results/1ce/1ceaa6925d1ded236d01ae9feb31f5f915f6b51a/
 
-Thomas
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Frank Hunleth <fhunleth@troodon-software.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
