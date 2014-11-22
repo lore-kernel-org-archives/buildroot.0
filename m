@@ -1,70 +1,61 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 22 Nov 2014 01:01:32 +0100
-Subject: [Buildroot] [PATCH 2/2] package/openpowerlink: bump to version 1.8.5
-In-Reply-To: <1416614492-25656-1-git-send-email-romain.naour@openwide.fr>
-References: <1416614492-25656-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1416614492-25656-2-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 22 Nov 2014 01:14:57 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
+	CMAKE_SYSTEM_PROCESSOR.
+In-Reply-To: <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
+References: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
+ <CAHXCMM+WdJe+pHi4GNi7QT9Vd=43LoRzXhU05byPPZ5uLRT=Ww@mail.gmail.com>
+ <546792E3.5060007@openwide.fr>
+ <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
+Message-ID: <546FD581.8000206@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstream commit
+Hi Samuel, Volker,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch | 28 ----------------------
- package/openpowerlink/openpowerlink.mk             |  2 +-
- 2 files changed, 1 insertion(+), 29 deletions(-)
- delete mode 100644 package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+Le 15/11/2014 19:20, Samuel Martin a ?crit :
+> Romain, Volker,
+> 
+> On Sat, Nov 15, 2014 at 6:52 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+>> Hi Volker,
+>>
+>> Le 15/11/2014 18:26, Samuel Martin a ?crit :
+>>> Hi Volker,
+>>>
+>>> On Sat, Nov 15, 2014 at 5:00 PM, Volker Krause <volker.krause@kdab.com> wrote:
+>>>> This is rarely needed by packages, but convenient to have when it is.
+>>>>
+>>
+>> There is only one package (openpowerlink) that set this variable in buildroot
+>> and the expected value is "x86" or "x86_64".
+> 
+> Hmm... this is in the openpowerlink source?
+> I think it'd better do (to be more robust):
+> ---
+> string(REGEX REPLACE "i*86" "x86" CMAKE_SYSTEM_PROCESSOR
+> ${CMAKE_SYSTEM_PROCESSOR})
+> ---
+> But that's another story ;-)
 
-diff --git a/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch b/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
-deleted file mode 100644
-index bed878e..0000000
---- a/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From cb6c4ff053e72f7fe5954894aebe2c0d94120b2d Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Thu, 3 Oct 2013 23:22:17 +0200
--Subject: [PATCH 5/5] [FIX] Linux Powerlink user lib: add INSTALL
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
--index e67d573..40b7756 100644
----- a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
--+++ b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
--@@ -329,7 +329,9 @@ ENDIF ()
-- #
-- # Installation
-- #
---IF (WIN32)
--+IF (UNIX)
--+    INSTALL(TARGETS powerlink ARCHIVE DESTINATION lib)
--+ELSEIF (WIN32)
--     IF (CFG_X86_WINDOWS_DLL)
--         INSTALL(TARGETS openPOWERLINK RUNTIME DESTINATION bin)
--     ENDIF (CFG_X86_WINDOWS_DLL)
----
--1.8.4
--
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index e3d258d..a803977 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENPOWERLINK_VERSION = V1.08.4
-+OPENPOWERLINK_VERSION = V1.08.5
- OPENPOWERLINK_SITE = http://git.code.sf.net/p/openpowerlink/code
- OPENPOWERLINK_SITE_METHOD = git
- OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+I used "if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$")" instead, because the meaning of
+* is not the same as in shell. I had "i6x86"...
+
+I found "^i.86$" in cmake sources:
+http://www.cmake.org/gitweb?p=cmake.git;a=blob;f=Modules/FindJNI.cmake;h=3dcb0d0aaf019a69766b26db36ddbdab6aee3fa7;hb=HEAD#l46
+
+I send a patch to fix that in openpowerlink sources:
+http://patchwork.ozlabs.org/patch/413219/
+
+Best regards,
 -- 
-1.9.3
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel| 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
