@@ -1,47 +1,34 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Nov 2014 12:10:33 +0100
-Subject: [Buildroot] Analysis of build results
-References: <20141111073014.AA83D101626@stock.ovh.net>
- <20141111234919.3178e9d3@free-electrons.com>
-Message-ID: <XnsA3ED7BDB87A67berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Sat, 22 Nov 2014 13:00:44 +0100
+Subject: [Buildroot] [PATCH 2/2] package/weston: Fix wrong condition to
+	display the comment
+In-Reply-To: <1416657644-27867-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1416657644-27867-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1416657644-27867-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20141111234919.3178e9d3 at free-electrons.com: 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/weston/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>       x86_64 |                     fltk-1.3.2 | NOK |
->>       http://autobuild.buildroot.net/results/58a36291201a848a0a11cbb2b20
->>       0c2b39434046c/ x86_64 |                     fltk-1.3.2 | NOK |
->>       http://autobuild.buildroot.net/results/fe53d0e9ad7c152105cb37a18e4
->>       d712bbde3398d/ 
-> 
-> Linking fluid...
-> /home/peko/autobuild/instance-1/output/host/usr/x86_64-buildroot-linux-gn
-> u/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to
-> `xcb_get_reply_fds' 
-> /home/peko/autobuild/instance-1/output/host/usr/x86_64-buildroot-linux-gn
-> u/sysroot/usr/lib64/libxcb-shm.so.0: undefined reference to
-> `xcb_send_fd' collect2: error: ld returned 1 exit status
-> 
-> Bernd, you are our X.org expert. Can you have a look? It might be worth
-> mentioning that fltk 1.3.3 has been released on November 3rd, so we
-> could try to upgrade and see if it fixes the problem.
-
-Hi,
-
-using fltk-1.3.2 I can not reproduce the problem.
-
-Are any xcb packages installed locally on the autobuilders?
-Locally this is not the case:
-
-fli4l at fli4lbuild64:~/br2$ dpkg -l | grep xcb
-fli4l at fli4lbuild64:~/br2$
-
-Regards, Bernd
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index fafdf95..cf242d1 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -2,7 +2,7 @@ comment "weston needs udev and a toolchain w/ threads, dynamic library, headers
+ 	depends on !BR2_avr32
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || !BR2_PREFER_STATIC_LIB
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_PREFER_STATIC_LIB
+ 
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+-- 
+1.7.10.4
