@@ -1,50 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:25:47 +0100
-Subject: [Buildroot] [git commit] omniorb: bump to version 4.2.0
-Message-ID: <20141201104837.8EEA97FFF8@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:01:27 +0100
+Subject: [Buildroot] [git commit] fs/iso9660: use install instead of cp
+Message-ID: <20141201104837.5668B7FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fc94a76cc6b51ec589accfeee65bed405db028c
+commit: http://git.buildroot.net/buildroot/commit/?id=4273d4d9ff5b9c104d7447d96199e2cadbf790e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add a hash file.
+This way we don't depend on the permissions of files under boot/ or fs/,
+which aren't tracked.
 
-The release announcement
-(http://www.omniorb-support.com/pipermail/omniorb-list/2014-April/031550.html)
-mentions support for python3, but I could not make it work. Stay with python2
-for now.
+While we're at it, change all 'cp' usages into 'install' with the
+correct mode for each file.
 
-Cc: Matt Weber <mlweber1@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/omniorb/omniorb.hash |    3 +++
- package/omniorb/omniorb.mk   |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ fs/iso9660/iso9660.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/omniorb/omniorb.hash b/package/omniorb/omniorb.hash
-new file mode 100644
-index 0000000..d087d95
---- /dev/null
-+++ b/package/omniorb/omniorb.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.2.0/
-+sha1	cc52c636f4f329e0481d6bb97b1f0a4bfb21fb3d	omniORB-4.2.0.tar.bz2
-+md5	f1e104d0a2df92829c1b37a853f4805d	omniORB-4.2.0.tar.bz2
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index f336c4b..0df125e 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 908f0e9..5b44ba4 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -14,20 +14,22 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
  
--OMNIORB_VERSION = 4.1.6
-+OMNIORB_VERSION = 4.2.0
- OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
- OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
- OMNIORB_INSTALL_STAGING = YES
+ $(BINARIES_DIR)/rootfs.iso9660: $(ROOTFS_ISO9660_DEPENDENCIES)
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+-	mkdir -p $(ISO9660_TARGET_DIR)
+-	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+-	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
++		$(ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
++	$(INSTALL) -D -m 0644 $(ISO9660_BOOT_MENU) \
++		$(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+ 	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ else
+-	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
++	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
++		$(ISO9660_TARGET_DIR)/splash.xpm.gz
+ endif
+-	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
++	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ 	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ else
+-	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
++		$(ISO9660_TARGET_DIR)/initrd
+ endif
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
