@@ -1,62 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 21:59:58 +0100
-Subject: [Buildroot] [git commit] imx-vpu: Use self-extractible helper
-Message-ID: <20141201104839.3DF487FB2C@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 18:43:01 +0100
+Subject: [Buildroot] [git commit] mcelog: new package
+Message-ID: <20141201104837.3E6E97FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f0e795d75de91bc0e6082eb99d50cf165bf3d3c
+commit: http://git.buildroot.net/buildroot/commit/?id=00152b6a1fe760c1fd9ad54618af484517272f8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: remove unneeded comment about seeing freescale-imx.mk.]
+[Thomas:
+  - use "make install", which allows to remove the custom installation
+    logic in mcelog.mk.
+  - no need to explicitly pass CFLAGS and CPPFLAGS when doing the
+    build, since those definitions are already part of
+    $(TARGET_CONFIGURE_OPTS).]
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/imx-vpu/imx-vpu.mk |   21 +++++----------------
- 1 files changed, 5 insertions(+), 16 deletions(-)
+ package/Config.in        |    1 +
+ package/mcelog/Config.in |    9 +++++++++
+ package/mcelog/mcelog.mk |   21 +++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index e0292ed..ab3634d 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
-@@ -6,8 +6,6 @@
- 
- IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
--IMX_VPU_LICENSE = Freescale License
--IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
- IMX_VPU_INSTALL_STAGING = YES
-@@ -21,21 +19,12 @@ IMX_VPU_MAKE_ENV = \
- 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
- 	INCLUDE="-idirafter $(LINUX_DIR)/include"
- 
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (imx-vpu-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
--#
-+IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
-+IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
-+IMX_VPU_REDISTRIBUTE = NO
+diff --git a/package/Config.in b/package/Config.in
+index e91e95b..9188041 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -76,6 +76,7 @@ endif
+ 	source "package/lttng-babeltrace/Config.in"
+ 	source "package/lttng-modules/Config.in"
+ 	source "package/lttng-tools/Config.in"
++	source "package/mcelog/Config.in"
+ 	source "package/memstat/Config.in"
+ 	source "package/netperf/Config.in"
+ 	source "package/oprofile/Config.in"
+diff --git a/package/mcelog/Config.in b/package/mcelog/Config.in
+new file mode 100644
+index 0000000..f3ccc71
+--- /dev/null
++++ b/package/mcelog/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MCELOG
++	bool "mcelog"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_USE_MMU # fork()
++	help
++	  mcelog processes machine checks (in particular memory and CPU hardware
++	  errors) on modern x86 Linux systems.
 +
- define IMX_VPU_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_VPU_SOURCE))
- endef
- 
- define IMX_VPU_BUILD_CMDS
++	  http://www.mcelog.org/
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+new file mode 100644
+index 0000000..da338ba
+--- /dev/null
++++ b/package/mcelog/mcelog.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# mcelog
++#
++################################################################################
++
++MCELOG_VERSION = v105
++MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
++MCELOG_SITE_METHOD = git
++MCELOG_LICENSE = GPLv2
++MCELOG_LICENSE_FILES = README
++
++define MCELOG_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
++
++define MCELOG_INSTALL_TARGET_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
