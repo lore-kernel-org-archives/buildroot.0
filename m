@@ -1,61 +1,37 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 22 Nov 2014 01:14:57 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
-	CMAKE_SYSTEM_PROCESSOR.
-In-Reply-To: <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
-References: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
- <CAHXCMM+WdJe+pHi4GNi7QT9Vd=43LoRzXhU05byPPZ5uLRT=Ww@mail.gmail.com>
- <546792E3.5060007@openwide.fr>
- <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
-Message-ID: <546FD581.8000206@openwide.fr>
+Date: Sat, 22 Nov 2014 01:22:29 +0100
+Subject: [Buildroot] [PATCH v3] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
+In-Reply-To: <1416254561-12691-1-git-send-email-volker.krause@kdab.com>
+References: <1416254561-12691-1-git-send-email-volker.krause@kdab.com>
+Message-ID: <546FD745.3050004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel, Volker,
+Hi Volker,
 
-Le 15/11/2014 19:20, Samuel Martin a ?crit :
-> Romain, Volker,
+Le 17/11/2014 21:02, Volker Krause a ?crit :
+> This is rarely needed by packages, but convenient to have when it is.
 > 
-> On Sat, Nov 15, 2014 at 6:52 PM, Romain Naour <romain.naour@openwide.fr> wrote:
->> Hi Volker,
->>
->> Le 15/11/2014 18:26, Samuel Martin a ?crit :
->>> Hi Volker,
->>>
->>> On Sat, Nov 15, 2014 at 5:00 PM, Volker Krause <volker.krause@kdab.com> wrote:
->>>> This is rarely needed by packages, but convenient to have when it is.
->>>>
->>
->> There is only one package (openpowerlink) that set this variable in buildroot
->> and the expected value is "x86" or "x86_64".
+> Signed-off-by: Volker Krause <volker.krause@kdab.com>
+> ---
+> Changes v2 -> v3:
+>   - fixed endianess handling for ARM v4-v7
+>   - coding style
 > 
-> Hmm... this is in the openpowerlink source?
-> I think it'd better do (to be more robust):
-> ---
-> string(REGEX REPLACE "i*86" "x86" CMAKE_SYSTEM_PROCESSOR
-> ${CMAKE_SYSTEM_PROCESSOR})
-> ---
-> But that's another story ;-)
+> Changes v1 -> v2:
+>   - added missing qstrip
+>   - set the correct ARM variant as done in
+>     http://patchwork.ozlabs.org/patch/408501/
+> 
 
-I used "if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$")" instead, because the meaning of
-* is not the same as in shell. I had "i6x86"...
+Openpowerlink package compiled with your patch and [1] applied.
 
-I found "^i.86$" in cmake sources:
-http://www.cmake.org/gitweb?p=cmake.git;a=blob;f=Modules/FindJNI.cmake;h=3dcb0d0aaf019a69766b26db36ddbdab6aee3fa7;hb=HEAD#l46
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
-I send a patch to fix that in openpowerlink sources:
-http://patchwork.ozlabs.org/patch/413219/
+[1] http://patchwork.ozlabs.org/patch/413219/
 
 Best regards,
--- 
-Romain Naour
-
-OPEN WIDE Ing?nierie - Paris
-23/25, rue Daviel| 75013 PARIS
-http://ingenierie.openwide.fr
-
-Le blog des technologies libres et embarqu?es :
-http://www.linuxembedded.fr
+Romain
