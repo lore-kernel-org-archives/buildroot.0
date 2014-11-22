@@ -1,55 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:47:51 +0100
-Subject: [Buildroot] [git commit branch/next] tvheadend: indentation cleanup
-Message-ID: <20141122184820.3145F7FE36@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:48:14 +0100
+Subject: [Buildroot] [PATCH v2 next] tvheadend: indentation cleanup
+In-Reply-To: <1416404636-17197-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1416404636-17197-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20141122194814.50133e16@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7661580ff2c4e63e3420490b612ab5d7b9486a0a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Jerzy Grzegorek,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
- 1 files changed, 12 insertions(+), 12 deletions(-)
+On Wed, 19 Nov 2014 14:43:56 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+> Changes v1 -> v2:
+>  - rebase to next
+>  - reword Sob of Bernd
+> 
+>  package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index b0038c8..10c9201 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -35,18 +35,18 @@ endif
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
- 
- define TVHEADEND_CONFIGURE_CMDS
--	(cd $(@D);				\
--	 $(TARGET_CONFIGURE_OPTS)		\
--	 $(TARGET_CONFIGURE_ARGS)		\
--	 ./configure				\
--	 --prefix=/usr				\
--	 --arch="$(ARCH)"			\
--	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
--	 --python="$(HOST_DIR)/usr/bin/python"	\
--	 --disable-dvbscan			\
--	 --enable-bundle			\
--	 --disable-libffmpeg_static		\
--	 $(TVHEADEND_CONF_OPTS)			\
-+	(cd $(@D);						\
-+		$(TARGET_CONFIGURE_OPTS)			\
-+		$(TARGET_CONFIGURE_ARGS)			\
-+		./configure					\
-+			--prefix=/usr				\
-+			--arch="$(ARCH)"			\
-+			--cpu="$(BR2_GCC_TARGET_CPU)"		\
-+			--python="$(HOST_DIR)/usr/bin/python"	\
-+			--disable-dvbscan			\
-+			--enable-bundle				\
-+			--disable-libffmpeg_static		\
-+			$(TVHEADEND_CONF_OPTS)			\
- 	)
- endef
- 
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
