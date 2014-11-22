@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 18:15:39 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-In-Reply-To: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
-References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20141122181539.38f2a5db@free-electrons.com>
+Date: Sat, 22 Nov 2014 18:16:11 +0100
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: bump version
+	to 10.3.4
+Message-ID: <20141122171617.4CC5B7FE31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=ea469fe620db1a5a7f914b366fb4924215417d5c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 22 Nov 2014 10:46:00 +0100, Yegor Yefremov wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +PYTHON_CERTIFI_VERSION = 14.05.14
-> +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-> +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-> +PYTHON_CERTIFI_SETUP_TYPE = setuptools
-> +PYTHON_CERTIFI_LICENSE = ISC, MPL
-
-Can this be more specific, like to what part the ISC license applies,
-and to what part the MPL license applies?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4eaf07c..8dfad6c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.3.3
++MESA3D_VERSION = 10.3.4
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
