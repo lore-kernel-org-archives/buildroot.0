@@ -1,59 +1,57 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 22 Nov 2014 21:16:34 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-In-Reply-To: <20141122205900.5aa98365@free-electrons.com>
-References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
- <20141122170934.GD4295@free.fr> <20141122190852.748af912@free-electrons.com>
- <20141122185640.GE4295@free.fr> <20141122205900.5aa98365@free-electrons.com>
-Message-ID: <CAGm1_ksOF3MWdjasYp78Xw2O=nH0tbT_jddE0en_F_hnBb=NWg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Nov 2014 21:19:47 +0100
+Subject: [Buildroot] [PATCH 0/24 v3] ejabberd: XMPP server (branch
+ yem/ejabberd)
+In-Reply-To: <cover.1415751395.git.yann.morin.1998@free.fr>
+References: <cover.1415751395.git.yann.morin.1998@free.fr>
+Message-ID: <20141122211947.2d556071@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 22, 2014 at 8:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yann E. MORIN,
->
-> On Sat, 22 Nov 2014 19:56:40 +0100, Yann E. MORIN wrote:
->
->> > > sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
->> > > sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
->> >
->> > Why do we suggest to have two hashes? Isn't sha265 sufficient?
->>
->> As Gustavo said, that's because sha1 and sha256 are two different hash
->> mechanisms, and it's better to have both.
->>
->> So I was following his advice, even though I don't mind adding just the
->> sha256.
->
-> Hum. We need some decision here :)
->
->> > Also, is it necessary to align the different columns? Should it be done
->> > with tabs or spaces? I've seen different solutions being used.
->>
->> I don't mind not aligning the fields, though I find it more convenient
->> to read if they are.
->>
->> If they get aligned, I think we should use spaces; tabs do not help
->> because people may have different tabwidths.
->>
->> Also, aligning with spaces is what we are doing for _PREMISSIONS and
->> _USERS, so I think that's OK to align.
->>
->> Also, the manual states:
->>
->>     Note: the number of spaces does not matter, so one can use spaces to
->>     properly align the different fields.
->
-> And Peter, when reviewing the scancpan script, which did align things
-> with spaces, was wondering why the script was doing this weird
-> indentation.
->
-> We also need some decision here :-)
+Yann, Johan,
 
-How should I include hash for this package?
+On Wed, 12 Nov 2014 01:26:05 +0100, Yann E. MORIN wrote:
 
-Yegor
+> ----------------------------------------------------------------
+> Johan Oudinet (14):
+>       package/pkg-rebar: new infrastructure
+>       erlang-goldrush: new package.
+>       erlang-lager: new package.
+>       erlang-p1-zlib: new package.
+>       erlang-p1-yaml: new package.
+>       erlang-p1-xml: new package.
+>       erlang-p1-utils: new package.
+>       erlang-p1-tls: new package.
+>       erlang-p1-stun: new package.
+>       erlang-p1-stringprep: new package.
+>       erlang-p1-sip: new package.
+>       erlang-p1-iconv: new package.
+>       erlang-p1-cache-tab: new package.
+>       ejabberd: new package.
+> 
+> Yann E. MORIN (10):
+>       pkg-autotools: move common macros
+>       pkg-autotools: re-order cleaning up the host dependencies
+>       pkg-autotools: commonalise the libtool patching code
+>       pkg-autotools: move the libtool patching call out of the autoreconf hook
+>       pkg-autotools: remove redundant shell conditional
+>       pkg-autotools: fold the libtool patching code directly into the hook
+>       pkg-autotools: only apply libtool patch at the right moment
+
+I've applied all the pkg-autotools patches of this series. As discussed
+on IRC, I've changed back the authorship of patches 1, 3, 4 to Johan,
+who is actually the author of those patches.
+
+I haven't yet looked at the rest of the series, but at least it's 7
+less patches for you to carry in your branch.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
