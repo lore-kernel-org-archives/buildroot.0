@@ -1,205 +1,71 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Nov 2014 10:18:10 +0100
-Subject: [Buildroot] [PATCH 1/2] package/openpowerlink: do not override
-	CMAKE_SYSTEM_PROCESSOR
-In-Reply-To: <1416614492-25656-1-git-send-email-romain.naour@openwide.fr>
-References: <1416614492-25656-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAHXCMMKde_wWS7DJPW-go79Te8JmhD8GTns5Zn01LOzxtFqb8A@mail.gmail.com>
+Date: Sat, 22 Nov 2014 10:19:15 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
+	CMAKE_SYSTEM_PROCESSOR.
+In-Reply-To: <546FD581.8000206@openwide.fr>
+References: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
+ <CAHXCMM+WdJe+pHi4GNi7QT9Vd=43LoRzXhU05byPPZ5uLRT=Ww@mail.gmail.com>
+ <546792E3.5060007@openwide.fr>
+ <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
+ <546FD581.8000206@openwide.fr>
+Message-ID: <CAHXCMMJ_cpaVxZhPuwuUxVzOM4=2bYVgKcW2pJodF=FHaD92MA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain, all,
-
-On Sat, Nov 22, 2014 at 1:01 AM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+On Sat, Nov 22, 2014 at 1:14 AM, Romain Naour <romain.naour@openwide.fr> wrote:
+> Hi Samuel, Volker,
 >
-> ---
+> Le 15/11/2014 19:20, Samuel Martin a ?crit :
+>> Romain, Volker,
+>>
+>> On Sat, Nov 15, 2014 at 6:52 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+>>> Hi Volker,
+>>>
+>>> Le 15/11/2014 18:26, Samuel Martin a ?crit :
+>>>> Hi Volker,
+>>>>
+>>>> On Sat, Nov 15, 2014 at 5:00 PM, Volker Krause <volker.krause@kdab.com> wrote:
+>>>>> This is rarely needed by packages, but convenient to have when it is.
+>>>>>
+>>>
+>>> There is only one package (openpowerlink) that set this variable in buildroot
+>>> and the expected value is "x86" or "x86_64".
+>>
+>> Hmm... this is in the openpowerlink source?
+>> I think it'd better do (to be more robust):
+>> ---
+>> string(REGEX REPLACE "i*86" "x86" CMAKE_SYSTEM_PROCESSOR
+>> ${CMAKE_SYSTEM_PROCESSOR})
+>> ---
+>> But that's another story ;-)
 >
-> This commit must be applied after "pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR"
-> http://patchwork.ozlabs.org/patch/411789/
-> ---
->  ...a-better-regex-for-cmake-system-processor.patch | 89 ++++++++++++++++++++++
->  package/openpowerlink/openpowerlink.mk             | 12 +--
->  2 files changed, 90 insertions(+), 11 deletions(-)
->  create mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
->
-> diff --git a/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
-> new file mode 100644
-> index 0000000..d32fa38
-> --- /dev/null
-> +++ b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
-> @@ -0,0 +1,89 @@
-> +From 1c8eb7245abcc55d0a46181ec421a6c12df43333 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Mon, 17 Nov 2014 23:27:05 +0100
-> +Subject: [PATCH 1/1] [FIX] use a better regex for CMAKE_SYSTEM_PROCESSOR
-> +
-> +According to CMake doc, CMAKE_SYSTEM_PROCESSOR is set to the
-> +output of the command "uname -p" (in fact it is the output of "uname
-> +-m"). This is only true for native compilation.
-> +
-> +In the case of cross-compilation, the CMake code does not set anything,
-> +it just expects the CMAKE_SYSTEM_* variables to be set in the
-> +toolchain file.
-> +
-> +Add a test matching the patern "^i.86$" and keep the old one "x86" for
-> +compatibility.
-> +
+> I used "if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$")" instead, because the meaning of
+> * is not the same as in shell. I had "i6x86"...
 
-I would not have formulated this better! ;-)
-
-> +Thanks to Samuel Martin [1]
-> +[1] http://lists.busybox.net/pipermail/buildroot/2014-November/112163.html
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +
-> +---
-> + Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt         | 15 ++++-----------
-> + .../X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt  | 15 ++++-----------
-> + 2 files changed, 8 insertions(+), 22 deletions(-)
-> +
-> +diff --git a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-> +index 271ecdc..341d54e 100644
-> +--- a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-> ++++ b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-> +@@ -154,21 +154,14 @@ SET(MODULE_SOURCE_FILES
-> +     ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/Objdict.c
-> + )
-> +
-> +-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-You could condense this doing [1,2]:
---
-IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$"
---
-
-> +     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-> +-
-> +-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
-> +-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
-> ++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-
-I guess "arm" is a shortcut for "armv7l"...
-Is openpowerlink little-endian only?
-This change is only comestic, it could be strip away from this patch.
-
-Anyway, openpowerlink is disabled for all arm architecture in its
-Config.in file.
-
-> +     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
-> +-
-> +-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
-> +-    OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
-> +-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-> +-
-> +-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-ditto (x86 regex)
-
-> +     MESSAGE(FATAL_ERROR
-> +             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
-> +-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-ditto (x86 regex)
-
-> +
-> + SET(MODULE_FILE
-> +     ${MODULE_NAME}.ko
-> +diff --git a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-> +index 1b47c76..d33ff3d 100644
-> +--- a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-> ++++ b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-> +@@ -171,21 +171,14 @@ ELSE(CFG_POWERLINK_EDRV STREQUAL "I210")
-> +     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/Target/X86/Linux/gnu/generic/TimerHighReskX86.c)
-> + ENDIF(CFG_POWERLINK_EDRV STREQUAL "I210")
-> +
-> +-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-ditto (x86 regex)
-
-> +     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-> +-
-> +-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
-> +-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
-> ++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-
-ditto (arm)
-
-> +     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
-> +-
-> +-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
-> +-      OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
-> +-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-> +-
-> +-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-ditto (x86 regex)
-
-> +     MESSAGE(FATAL_ERROR
-> +             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
-> +-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-> ++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-
-ditto (x86 regex)
-
-> +
-> + SET(MODULE_FILE
-> +     ${MODULE_NAME}.ko
-> +--
-> +1.9.3
-> +
-> diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-> index 7ad3eca..e3d258d 100644
-> --- a/package/openpowerlink/openpowerlink.mk
-> +++ b/package/openpowerlink/openpowerlink.mk
-> @@ -11,19 +11,9 @@ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
->  OPENPOWERLINK_LICENSE_FILES = license.txt
->  OPENPOWERLINK_INSTALL_STAGING = YES
->
-> -ifeq ($(BR2_i386),y)
-> -OPENPOWERLINK_ARCH = x86
-> -endif
-> -
-> -ifeq ($(BR2_x86_64),y)
-> -OPENPOWERLINK_ARCH = x86_64
-> -endif
-> -
-> -OPENPOWERLINK_CONF_OPTS = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
-> -
->  # There is no shared lib in openpowerlink,
->  # so force static lib to build libpowerlink.a
-> -OPENPOWERLINK_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
-> +OPENPOWERLINK_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
-
-Well, if openpowerlink can only build static library, it'd be better
-if this could be handled directly in its CMake code, when creating
-each library using the STATIC property (see [3]).
-But that's another story... ;-)
+Good catch!
 
 >
->  OPENPOWERLINK_CONF_OPTS += -DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
+> I found "^i.86$" in cmake sources:
+> http://www.cmake.org/gitweb?p=cmake.git;a=blob;f=Modules/FindJNI.cmake;h=3dcb0d0aaf019a69766b26db36ddbdab6aee3fa7;hb=HEAD#l46
 >
+> I send a patch to fix that in openpowerlink sources:
+> http://patchwork.ozlabs.org/patch/413219/
+>
+> Best regards,
 > --
-> 1.9.3
+> Romain Naour
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> OPEN WIDE Ing?nierie - Paris
+> 23/25, rue Daviel| 75013 PARIS
+> http://ingenierie.openwide.fr
+>
+> Le blog des technologies libres et embarqu?es :
+> http://www.linuxembedded.fr
 
-[1] http://code.bulix.org/zbuo2e-87452
-[2] http://code.bulix.org/9mkyb4-87453
-[3] http://www.cmake.org/cmake/help/v3.1/command/add_library.html
 
-Regards,
 
 -- 
 Samuel
