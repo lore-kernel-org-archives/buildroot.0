@@ -1,70 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:37:52 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: only apply libtool patch at
-	the right moment
-Message-ID: <20141201104838.1A0797FC49@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:43:00 +0100
+Subject: [Buildroot] [git commit] support/scripts/scancpan: generate hash
+	file
+Message-ID: <20141201104837.9C22A7FFF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=452c8da326a29bfbeacce7a360aa0fba3abc3108
+commit: http://git.buildroot.net/buildroot/commit/?id=6199f0f8239dc69aaec0111d4d9e8f9bfc1272cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we apply the libtool patch at post-patch time, always. If we
-need to autoreconf, we also apply it after autoreconf is done.
+retrieve MD5 and SHA256 from metacpan.org, and store them in the hash
+file for each package.
 
-Obviously, in that second case, we do not need to apply it at
-post-patch time. This has no impact on the result, as autoreconf will
-overwrite the just patched files, and they will be patched yet again.
-But it is not nice to the user that will see a double "Patching libtool"
-message.
+[Thomas: remove the odd indentation of the filename for the md5 hash
+lines in the hash file.]
 
-So, we apply the libtool patch at post-patch time only if we are not
-autoreconfiguring the package.
-
-[Thomas: fix minor typo s/casse/case/ in the commit log.]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   14 +++++++++-----
- 1 files changed, 9 insertions(+), 5 deletions(-)
+ support/scripts/scancpan |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 924816b..ad2d1a6 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -235,12 +235,8 @@ endif
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index a049e2c..7ff647d 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -481,6 +481,7 @@ use Pod::Usage;
+ use File::Basename;
+ use Module::CoreList;
+ use HTTP::Tiny;
++use Safe;
+ use MetaCPAN::API::Tiny;
  
- $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+@@ -505,9 +506,22 @@ my %need_dlopen;        # name -> 1 if requires dynamic library
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
+ my %license_files;      # name -> list of license files
++my %checksum;           # author -> list of checksum
+ my $mcpan = MetaCPAN::API::Tiny->new();
+ my $ua = HTTP::Tiny->new();
  
--# default values are not evaluated yet, so don't rely on this defaulting to YES
--ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
--endif
--
- ifeq ($$($(2)_AUTORECONF),YES)
++sub get_checksum {
++    my ($url) = @_;
++    my($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
++    my($basename, $dirname) = fileparse( $path );
++    unless ($checksum{$dirname}) {
++        my $response = $ua->get(qq{http://cpan.metacpan.org${dirname}CHECKSUMS});
++        $checksum{$dirname} = $response->{content};
++    }
++    my $chksum = Safe->new->reval($checksum{$dirname});
++    return $chksum->{$basename}, $basename;
++}
 +
- # This has to come before autoreconf
- ifeq ($$($(2)_GETTEXTIZE),YES)
- $(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
-@@ -252,6 +248,14 @@ ifneq ($$($(2)_LIBTOOL_PATCH),NO)
- $(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
- endif
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
-+
-+else # ! AUTORECONF = YES
-+
-+# default values are not evaluated yet, so don't rely on this defaulting to YES
-+ifneq ($$($(2)_LIBTOOL_PATCH),NO)
-+$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
-+endif
-+
- endif
+ sub get_manifest {
+     my ($author, $distname, $version) = @_;
+     my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+@@ -608,6 +622,7 @@ while (my ($distname, $dist) = each %dist) {
+     my $dirname = q{package/} . $fsname;
+     my $cfgname = $dirname . q{/Config.in};
+     my $mkname = $dirname . q{/} . $fsname . q{.mk};
++    my $hashname = $dirname . q{/} . $fsname . q{.hash};
+     my $brname = brname( $fsname );
+     mkdir $dirname unless -d $dirname;
+     if ($need_target{$distname} && ($force || !-f $cfgname)) {
+@@ -675,6 +690,17 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
+         close $fh;
+     }
++    if ($force || !-f $hashname) {
++        my($checksum, $filename) = get_checksum($dist->{download_url});
++        my $md5 = $checksum->{md5};
++        my $sha256 = $checksum->{sha256};
++        say qq{write ${hashname}} unless $quiet;
++        open my $fh, q{>}, $hashname;
++        say {$fh} qq{# retrieved by scancpan from http://cpan.metacpan.org/};
++        say {$fh} qq{md5    ${md5} ${filename}};
++        say {$fh} qq{sha256 ${sha256} ${filename}};
++        close $fh;
++    }
+ }
  
- #
+ my %pkg;
