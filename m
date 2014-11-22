@@ -1,71 +1,68 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Nov 2014 10:19:15 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Set
-	CMAKE_SYSTEM_PROCESSOR.
-In-Reply-To: <546FD581.8000206@openwide.fr>
-References: <1416067219-30211-1-git-send-email-volker.krause@kdab.com>
- <CAHXCMM+WdJe+pHi4GNi7QT9Vd=43LoRzXhU05byPPZ5uLRT=Ww@mail.gmail.com>
- <546792E3.5060007@openwide.fr>
- <CAHXCMMKm5G9VgK4Jj5z711fcPdjLFdhbvFVO0iBaduFT8pCq1w@mail.gmail.com>
- <546FD581.8000206@openwide.fr>
-Message-ID: <CAHXCMMJ_cpaVxZhPuwuUxVzOM4=2bYVgKcW2pJodF=FHaD92MA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 22 Nov 2014 10:46:00 +0100
+Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
+Message-ID: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 22, 2014 at 1:14 AM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Hi Samuel, Volker,
->
-> Le 15/11/2014 19:20, Samuel Martin a ?crit :
->> Romain, Volker,
->>
->> On Sat, Nov 15, 2014 at 6:52 PM, Romain Naour <romain.naour@openwide.fr> wrote:
->>> Hi Volker,
->>>
->>> Le 15/11/2014 18:26, Samuel Martin a ?crit :
->>>> Hi Volker,
->>>>
->>>> On Sat, Nov 15, 2014 at 5:00 PM, Volker Krause <volker.krause@kdab.com> wrote:
->>>>> This is rarely needed by packages, but convenient to have when it is.
->>>>>
->>>
->>> There is only one package (openpowerlink) that set this variable in buildroot
->>> and the expected value is "x86" or "x86_64".
->>
->> Hmm... this is in the openpowerlink source?
->> I think it'd better do (to be more robust):
->> ---
->> string(REGEX REPLACE "i*86" "x86" CMAKE_SYSTEM_PROCESSOR
->> ${CMAKE_SYSTEM_PROCESSOR})
->> ---
->> But that's another story ;-)
->
-> I used "if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i.86$")" instead, because the meaning of
-> * is not the same as in shell. I had "i6x86"...
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: add MPL incense
 
-Good catch!
+ package/Config.in                        |  1 +
+ package/python-certifi/Config.in         |  6 ++++++
+ package/python-certifi/python-certifi.mk | 14 ++++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/python-certifi/Config.in
+ create mode 100644 package/python-certifi/python-certifi.mk
 
->
-> I found "^i.86$" in cmake sources:
-> http://www.cmake.org/gitweb?p=cmake.git;a=blob;f=Modules/FindJNI.cmake;h=3dcb0d0aaf019a69766b26db36ddbdab6aee3fa7;hb=HEAD#l46
->
-> I send a patch to fix that in openpowerlink sources:
-> http://patchwork.ozlabs.org/patch/413219/
->
-> Best regards,
-> --
-> Romain Naour
->
-> OPEN WIDE Ing?nierie - Paris
-> 23/25, rue Daviel| 75013 PARIS
-> http://ingenierie.openwide.fr
->
-> Le blog des technologies libres et embarqu?es :
-> http://www.linuxembedded.fr
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index a6977ce..cffa8d4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -482,6 +482,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "external python modules"
+ 	source "package/python-bottle/Config.in"
++	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
+new file mode 100644
+index 0000000..9390b4f
+--- /dev/null
++++ b/package/python-certifi/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CERTIFI
++	bool "python-certifi"
++	help
++	  Python package for providing Mozilla's CA Bundle.
++
++	  https://pypi.python.org/pypi/certifi
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+new file mode 100644
+index 0000000..1458a53
+--- /dev/null
++++ b/package/python-certifi/python-certifi.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-certifi
++#
++################################################################################
++
++PYTHON_CERTIFI_VERSION = 14.05.14
++PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
++PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
++PYTHON_CERTIFI_SETUP_TYPE = setuptools
++PYTHON_CERTIFI_LICENSE = ISC, MPL
++PYTHON_CERTIFI_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Samuel
+1.8.3.2
