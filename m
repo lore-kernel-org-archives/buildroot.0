@@ -1,53 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 18:45:31 +0100
-Subject: [Buildroot] [PATCH 1/1] mcelog: new package
-In-Reply-To: <1416603546-9701-1-git-send-email-romain.naour@openwide.fr>
-References: <1416603546-9701-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141122184531.606e8208@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:00:28 +0100
+Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
+In-Reply-To: <1416587791-30125-1-git-send-email-jaap@jcz.nl>
+References: <1416587791-30125-1-git-send-email-jaap@jcz.nl>
+Message-ID: <20141122190028.2c74f012@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Jaap Crezee,
 
-On Fri, 21 Nov 2014 21:59:06 +0100, Romain Naour wrote:
+On Fri, 21 Nov 2014 17:36:31 +0100, Jaap Crezee wrote:
+> ---
+>  package/bluez5_utils/bluez5_utils.hash | 3 +++
+>  package/bluez5_utils/bluez5_utils.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 package/bluez5_utils/bluez5_utils.hash
 
-> +MCELOG_TRIGGERS = cache-error-trigger \
-> +	dimm-error-trigger \
-> +	page-error-trigger \
-> +	socket-memory-error-trigger \
-> +	bus-error-trigger \
-> +	iomca-error-trigger \
-> +	unknown-error-trigger
-> +
-> +define MCELOG_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> +	CFLAGS="$(TARGET_CFLAGS)" \
-> +	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-> +	-C $(@D) all
+Your Signed-off-by line is missing in the patch.
 
-Indentation is wrong here, the continuation lines should be intended
-with one more tab.
-
-Passing CFLAGS and CPPFLAGS is useless, because those variables are
-already part of $(TARGET_CONFIGURE_OPTS).
-
-> +define MCELOG_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/mcelog $(TARGET_DIR)/usr/sbin/mcelog; \
-> +	$(INSTALL) -D -m 644 $(@D)/mcelog.conf $(TARGET_DIR)/etc/mcelog/mcelog.conf; \
-> +	for i in ${MCELOG_TRIGGERS} ; do \
-> +		$(INSTALL) -m 755 $(@D)/triggers/$$i $(TARGET_DIR)/etc/mcelog; \
-> +	done
-> +endef
-
-You should use $() instead of ${} when referencing make variables.
-However, this whole thing seems useless: the 'install' target of the
-mcelog Makefile does exactly this, so I've removed this custom stuff
-and the MCELOG_TRIGGERS, and used 'make install' instead.
-
-Committed to next with those changes.
+Can you resend after adding your SoB line?
 
 Thanks,
 
