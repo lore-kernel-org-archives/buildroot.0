@@ -1,60 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Nov 2014 19:56:40 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-In-Reply-To: <20141122190852.748af912@free-electrons.com>
-References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
- <20141122170934.GD4295@free.fr>
- <20141122190852.748af912@free-electrons.com>
-Message-ID: <20141122185640.GE4295@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:54:25 +0100
+Subject: [Buildroot] [git commit] package/openssl: drop libdl from more pc
+	files
+Message-ID: <20141122191121.64E097FDF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=b4c7db619e1b5d0193b06d4160ea6939f5176a98
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-11-22 19:08 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 22 Nov 2014 18:09:34 +0100, Yann E. MORIN wrote:
-> 
-> > Here are the hashes I computed locally, which you can add as-is to the
-> > hash file:
-> > 
-> > sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
-> > sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
-> 
-> Why do we suggest to have two hashes? Isn't sha265 sufficient?
+This is a follow-up patch for
+http://git.buildroot.net/buildroot/commit/package/openssl/openssl.mk?id=c130c5d4635e2a4c7338161953152faf8fca07c4
 
-As Gustavo said, that's because sha1 and sha256 are two different hash
-mechanisms, and it's better to have both.
+Fixes
+http://autobuild.buildroot.net/results/358/35899961b6dc01c1522b17f63946da5ab809bff8/
+http://autobuild.buildroot.net/results/c86/c865214e74dd3766b6343ef73c666fa89c0b5dec/
+http://autobuild.buildroot.net/results/fc1/fc12e88fb789e2b68d427c37f39789954309b05d/
+http://autobuild.buildroot.net/results/f4d/f4deef4e7d2e2cf5fbc9ce5f02289b4dc60cd23b/
+http://autobuild.buildroot.net/results/dfd/dfd81f1f1f0f315317b2a85d24b286a277ac7c16/
+http://autobuild.buildroot.net/results/918/9188fc9a63d880cac28c5a9a246ca5504dd11bb2/
+http://autobuild.buildroot.net/results/dd1/dd1c326345f8f9c8b5838601ace19002f5360bb2/
+http://autobuild.buildroot.net/results/27b/27b4544c59166a9f40092403ed3f530190544a82/
+http://autobuild.buildroot.net/results/c37/c37022e334d763bad2a59f7311b93504a569b2dd/
+http://autobuild.buildroot.net/results/e89/e89265937a6b4808b817be16bcab79bae4a9aed1/
+http://autobuild.buildroot.net/results/4a2/4a222a40d627fda6e49714b13b4321d62c9c2e51/
 
-So I was following his advice, even though I don't mind adding just the
-sha256.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssl/openssl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> Also, is it necessary to align the different columns? Should it be done
-> with tabs or spaces? I've seen different solutions being used.
-
-I don't mind not aligning the fields, though I find it more convenient
-to read if they are.
-
-If they get aligned, I think we should use spaces; tabs do not help
-because people may have different tabwidths.
-
-Also, aligning with spaces is what we are doing for _PREMISSIONS and
-_USERS, so I think that's OK to align.
-
-Also, the manual states:
-
-    Note: the number of spaces does not matter, so one can use spaces to
-    properly align the different fields.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 7e30cad..fe7ebf2 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -119,6 +119,8 @@ endef
+ # libdl has no business in a static build
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ define OPENSSL_FIXUP_STATIC_PKGCONFIG
++	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
++	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
+ 	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
+ endef
+ OPENSSL_POST_INSTALL_STAGING_HOOKS += OPENSSL_FIXUP_STATIC_PKGCONFIG
