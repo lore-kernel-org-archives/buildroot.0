@@ -1,61 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:00:17 +0100
-Subject: [Buildroot] [git commit] libfslvpuwrap: Use self-extractible helper
-Message-ID: <20141201104839.62E417FB2C@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 18:16:11 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: bump version to 10.3.4
+Message-ID: <20141201104837.3547C7FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c98a4de7b43a2efe85aabce1d597a99304fbe092
+commit: http://git.buildroot.net/buildroot/commit/?id=ea469fe620db1a5a7f914b366fb4924215417d5c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: remove unneeded comment.]
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslvpuwrap/libfslvpuwrap.mk |   23 ++++-------------------
- 1 files changed, 4 insertions(+), 19 deletions(-)
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index c3a5c1c..01b2999 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -7,30 +7,15 @@
- LIBFSLVPUWRAP_VERSION = 1.0.46
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
-+LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
-+LIBFSLVPUWRAP_INSTALL_STAGING = YES
-+
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
--# N.B.: the content of the two license files is different
- LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4eaf07c..8dfad6c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--LIBFSLVPUWRAP_INSTALL_STAGING = YES
--
--LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
--
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (libfslvpuwrap-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since the EULA in the bin file differs from the one in the tar file,
--# extract the one from the bin file as well.
- define LIBFSLVPUWRAP_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE))
- endef
- 
- $(eval $(autotools-package))
+-MESA3D_VERSION = 10.3.3
++MESA3D_VERSION = 10.3.4
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
