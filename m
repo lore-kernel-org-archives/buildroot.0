@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:47:06 +0100
-Subject: [Buildroot] [git commit branch/next] package: matchbox-keyboard:
-	use install instead of cp
-Message-ID: <20141122184713.78A127FE27@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 19:47:25 +0100
+Subject: [Buildroot] [PATCH v4 5/9] package: matchbox-keyboard: use
+ install instead of cp
+In-Reply-To: <1416586748-12936-6-git-send-email-guido@vanguardiasur.com.ar>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416586748-12936-6-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20141122194725.3263241a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0772e28dbb78b71fea444166f131b74dae22abdb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Guido Mart?nez,
 
-in order to not depend on the previous permissions of the file
+On Fri, 21 Nov 2014 13:19:04 -0300, Guido Mart?nez wrote:
+> in order to not depend on the previous permissions of the file
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Patch applied to the next branch, thanks.
 
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index ebf23e4..bdcc32f 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
- 
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
-+	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
