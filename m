@@ -1,52 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:13:31 +0100
-Subject: [Buildroot] [git commit] manual: Add missing vim header
-Message-ID: <20141122191447.C681A7FBB5@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:13:43 +0100
+Subject: [Buildroot] [git commit] manual: Add newline before block code
+Message-ID: <20141122191447.D01067FBB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0514265b73a513cd1f461e2a489e82ebec373923
+commit: http://git.buildroot.net/buildroot/commit/?id=9d918e11dccaeecdfc7700ea392d739ec0b66772
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This won't change the output, it's only a style issue.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-outside-br.txt |    1 +
- docs/manual/customize-patches.txt    |    1 +
- docs/manual/makeusers-syntax.txt     |    1 +
- 3 files changed, 3 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-directory.txt |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 1109843..5d63e60 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -1,4 +1,5 @@
- // -*- mode:doc -*- ;
-+// vim: set syntax=asciidoc:
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index c145829..0ea03f9 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -191,15 +191,19 @@ construct rather than repeating the +depends on+ statement on the
+ comment and other config options.
  
- [[outside-br-custom]]
- === Keeping customizations outside of Buildroot
-diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
-index a052915..e129a64 100644
---- a/docs/manual/customize-patches.txt
-+++ b/docs/manual/customize-patches.txt
-@@ -1,4 +1,5 @@
- // -*- mode:doc -*- ;
-+// vim: set syntax=asciidoc:
+ The general format of a dependency +comment+ for package foo is:
++
+ --------------------------
+ foo needs a toolchain w/ featA, featB, featC
+ --------------------------
  
- [[customize-patches]]
- === Adding project-specific patches
-diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
-index ecf3eb0..ffdb961 100644
---- a/docs/manual/makeusers-syntax.txt
-+++ b/docs/manual/makeusers-syntax.txt
-@@ -1,4 +1,5 @@
- // -*- mode:doc -*- ;
-+// vim: set syntax=asciidoc:
+ for example:
++
+ --------------------------
+ aircrack-ng needs a toolchain w/ largefile, threads
+ --------------------------
++
+ or
++
+ --------------------------
+ crda needs a toolchain w/ threads
+ --------------------------
+@@ -283,6 +287,7 @@ foo needs a Linux kernel to be built
  
- [[makeuser-syntax]]
- == Makeusers syntax documentation
+ If there is a dependency on both toolchain options and the Linux
+ kernel, use this format:
++
+ --------------------------
+ foo needs a toolchain w/ featA, featB, featC and a Linux kernel to be built
+ --------------------------
