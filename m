@@ -1,106 +1,172 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Nov 2014 18:09:34 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-In-Reply-To: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
-References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20141122170934.GD4295@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Nov 2014 18:12:22 +0100
+Subject: [Buildroot] [git commit branch/next] exiv2: new package
+Message-ID: <20141122171332.BF56C7FE31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=98c6ad3a8a30b4ace69ff3e5b6eac35c0cc71b72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2014-11-22 10:46 +0100, Yegor Yefremov spake thusly:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Add support for Exiv2 library and utility to manage image metadata
 
-Please, add a hash file to this package:
-    http://nightly.buildroot.org/#adding-packages-hash
+Exiv2 can be built in GPLv2+ or commercial version. But in commercial
+version the Nikon lens name database and the NLS support has to be
+disabled for copyright reason.
 
-Here are the hashes I computed locally, which you can add as-is to the
-hash file:
+[Thomas:
+ - switch to using the CMake build system, which works better than the
+   clunky autoconf + manual Makefile based build system.
+ - add missing toolchains dependencies: does not build in static
+   library configuration, needs C++, etc.]
 
-sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
-sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in        |    1 +
+ package/exiv2/Config.in  |   57 ++++++++++++++++++++++++++++++++++++++++++++++
+ package/exiv2/exiv2.hash |    4 +++
+ package/exiv2/exiv2.mk   |   47 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 109 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes:
-> 	v2: add MPL incense
-> 
->  package/Config.in                        |  1 +
->  package/python-certifi/Config.in         |  6 ++++++
->  package/python-certifi/python-certifi.mk | 14 ++++++++++++++
->  3 files changed, 21 insertions(+)
->  create mode 100644 package/python-certifi/Config.in
->  create mode 100644 package/python-certifi/python-certifi.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index a6977ce..cffa8d4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -482,6 +482,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "external python modules"
->  	source "package/python-bottle/Config.in"
-> +	source "package/python-certifi/Config.in"
->  	source "package/python-cffi/Config.in"
->  	source "package/python-configobj/Config.in"
->  	source "package/python-configshell-fb/Config.in"
-> diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
-> new file mode 100644
-> index 0000000..9390b4f
-> --- /dev/null
-> +++ b/package/python-certifi/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CERTIFI
-> +	bool "python-certifi"
-> +	help
-> +	  Python package for providing Mozilla's CA Bundle.
-> +
-> +	  https://pypi.python.org/pypi/certifi
-> diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-> new file mode 100644
-> index 0000000..1458a53
-> --- /dev/null
-> +++ b/package/python-certifi/python-certifi.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-certifi
-> +#
-> +################################################################################
-> +
-> +PYTHON_CERTIFI_VERSION = 14.05.14
-> +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-> +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-> +PYTHON_CERTIFI_SETUP_TYPE = setuptools
-> +PYTHON_CERTIFI_LICENSE = ISC, MPL
-> +PYTHON_CERTIFI_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> -- 
-> 1.8.3.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141122/f4d724a9/attachment.asc>
+diff --git a/package/Config.in b/package/Config.in
+index a6977ce..e91e95b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -632,6 +632,7 @@ menu "Graphics"
+ 	source "package/adwaita-icon-theme/Config.in"
+ 	source "package/atk/Config.in"
+ 	source "package/cairo/Config.in"
++	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+ 	source "package/fontconfig/Config.in"
+ 	source "package/freetype/Config.in"
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+new file mode 100644
+index 0000000..3dc7445
+--- /dev/null
++++ b/package/exiv2/Config.in
+@@ -0,0 +1,57 @@
++comment "exiv2 needs a toolchain w/ C++, dynamic library"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_EXIV2
++	bool "exiv2"
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Exiv2 is a C++ library and a command line utility to manage
++	  image metadata. It provides fast and easy read and write
++	  access to the Exif, IPTC and XMP metadata of images in
++	  various formats.
++
++	  Exiv2 is available under the GPLv2+ or under a commercial
++	  license.
++
++	  http://www.exiv2.org/
++
++if BR2_PACKAGE_EXIV2
++
++config BR2_PACKAGE_EXIV2_COMMERCIAL
++	bool "Enable commercial"
++	help
++	  Build the commercial version for closed source project.
++
++	  The Nikon lens name database and the NLS support is disabled
++	  for copyright reasons.
++
++	  A commercial license request is needed.
++	  http://www.exiv2.org/download.html#license
++
++config BR2_PACKAGE_EXIV2_PNG
++	bool "PNG image support"
++	select BR2_PACKAGE_ZLIB
++	help
++	  Build with PNG image support
++
++config BR2_PACKAGE_EXIV2_XMP
++	bool "XMP support"
++	select BR2_PACKAGE_EXPAT
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Build with XMP support
++
++comment "xmp support needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_EXIV2_LENSDATA
++	bool "Nikon lens name database"
++	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
++	help
++	  Integrate Nikon lens name database.
++
++	  This database is integrated but comes from a thirdparty:
++	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html.
++
++endif
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+new file mode 100644
+index 0000000..d4f8c60
+--- /dev/null
++++ b/package/exiv2/exiv2.hash
+@@ -0,0 +1,4 @@
++# From http://www.exiv2.org/download.html
++md5 b8a23dc56a98ede85c00718a97a8d6fc exiv2-0.24.tar.gz
++# Locally calculated
++sha256 f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e exiv2-0.24.tar.gz
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+new file mode 100644
+index 0000000..93e36f7
+--- /dev/null
++++ b/package/exiv2/exiv2.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# exiv2
++#
++################################################################################
++
++EXIV2_VERSION = 0.24
++EXIV2_SITE = http://www.exiv2.org
++EXIV2_INSTALL_STAGING = YES
++
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
++
++ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
++EXIV2_LICENSE = commercial
++# NLS support is disabled in commercial version due to the copyright
++# of the translated texts.
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON -DEXIV2_ENABLE_NLS=OFF
++else
++EXIV2_LICENSE = GPLv2+
++EXIV2_LICENSE_FILES = COPYING
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_PNG=ON
++EXIV2_DEPENDENCIES += zlib
++else
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_PNG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=ON -DEXIV2_ENABLE_LIBXMP=ON
++EXIV2_DEPENDENCIES += expat
++else
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=OFF -DEXIV2_ENABLE_LIBXMP=OFF
++endif
++
++ifeq ($(BR2_ENABLE_LOCALE),y)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=ON
++else
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_NLS=OFF
++endif
++
++$(eval $(cmake-package))
