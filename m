@@ -1,37 +1,52 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 22 Nov 2014 01:22:29 +0100
-Subject: [Buildroot] [PATCH v3] pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR.
-In-Reply-To: <1416254561-12691-1-git-send-email-volker.krause@kdab.com>
-References: <1416254561-12691-1-git-send-email-volker.krause@kdab.com>
-Message-ID: <546FD745.3050004@openwide.fr>
+From: Doug Kehn <rdkehn@yahoo.com>
+Date: Fri, 21 Nov 2014 20:14:16 -0600
+Subject: [Buildroot] [PATCH 0/1] [RFC] Reinstall Targets
+Message-ID: <1416622457-10448-1-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Volker,
+This RFC proposes adding the following targets to pkg-generic.mk:
+	<package>-clean-for-staging-reinstall
+	<package>-clean-for-target-reinstall
+	<package>-clean-for-reinstall
 
-Le 17/11/2014 21:02, Volker Krause a ?crit :
-> This is rarely needed by packages, but convenient to have when it is.
-> 
-> Signed-off-by: Volker Krause <volker.krause@kdab.com>
-> ---
-> Changes v2 -> v3:
->   - fixed endianess handling for ARM v4-v7
->   - coding style
-> 
-> Changes v1 -> v2:
->   - added missing qstrip
->   - set the correct ARM variant as done in
->     http://patchwork.ozlabs.org/patch/408501/
-> 
+These targets remove the package's .stamp_*_installed file to allow the
+<package>-install, <package>-install-staging, <package>-install-target
+targets to execute.  The only method I presently know of to reinstall a
+package is to make <package>-rebuild.  The proposed targets allow a
+package reinstall without incurring a rebuild of the package.
 
-Openpowerlink package compiled with your patch and [1] applied.
+In addition to allowing a reinstall to staging and/or target output
+directories, the proposed targets allow selected packages to be
+installed to a different 'target' directory.  For example, I attempt to
+keep software updates as small as possible; therefore, I cherry-pick
+files to include in the update package.  If I know packages foo and bar
+have been updated, the following will install those packages to a
+directory that can be further processed to generate the desired update
+package.
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+make TARGET_DIR=${PWD}/update \
+	foo-clean-for-target-reinstall \
+	foo-install-target
 
-[1] http://patchwork.ozlabs.org/patch/413219/
+make TARGET_DIR=${PWD}/update \
+	bar-clean-for-target-reinstall \
+	bar-install-target
 
-Best regards,
-Romain
+This proposal may also form the basis for the "TODO items under
+discussion" for a make target to reinstall everything to the target.
+
+* This is my first attempt at proposing a Buildroot submission.  Please
+* let me know if I'm doing it wrong and/or what I can do better.
+
+Doug Kehn (1):
+  pkg-generic.mk: -clean-for-*-reinstall targets
+
+ package/pkg-generic.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+-- 
+1.9.1
