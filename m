@@ -1,32 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:48:14 +0100
-Subject: [Buildroot] [PATCH v2 next] tvheadend: indentation cleanup
-In-Reply-To: <1416404636-17197-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1416404636-17197-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20141122194814.50133e16@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Nov 2014 19:56:40 +0100
+Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
+In-Reply-To: <20141122190852.748af912@free-electrons.com>
+References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
+ <20141122170934.GD4295@free.fr>
+ <20141122190852.748af912@free-electrons.com>
+Message-ID: <20141122185640.GE4295@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Thomas, All,
 
-On Wed, 19 Nov 2014 14:43:56 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
-> Changes v1 -> v2:
->  - rebase to next
->  - reword Sob of Bernd
+On 2014-11-22 19:08 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 22 Nov 2014 18:09:34 +0100, Yann E. MORIN wrote:
 > 
->  package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+> > Here are the hashes I computed locally, which you can add as-is to the
+> > hash file:
+> > 
+> > sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
+> > sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
+> 
+> Why do we suggest to have two hashes? Isn't sha265 sufficient?
 
-Applied to next, thanks.
+As Gustavo said, that's because sha1 and sha256 are two different hash
+mechanisms, and it's better to have both.
 
-Thomas
+So I was following his advice, even though I don't mind adding just the
+sha256.
+
+> Also, is it necessary to align the different columns? Should it be done
+> with tabs or spaces? I've seen different solutions being used.
+
+I don't mind not aligning the fields, though I find it more convenient
+to read if they are.
+
+If they get aligned, I think we should use spaces; tabs do not help
+because people may have different tabwidths.
+
+Also, aligning with spaces is what we are doing for _PREMISSIONS and
+_USERS, so I think that's OK to align.
+
+Also, the manual states:
+
+    Note: the number of spaces does not matter, so one can use spaces to
+    properly align the different fields.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
