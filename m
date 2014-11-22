@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:08:52 +0100
-Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
-In-Reply-To: <20141122170934.GD4295@free.fr>
-References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
- <20141122170934.GD4295@free.fr>
-Message-ID: <20141122190852.748af912@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:06:27 +0100
+Subject: [Buildroot] [git commit branch/next] python-netifaces: enable on
+	Python 3
+Message-ID: <20141122182258.0F92B7FDD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=47667497ec2622263bbd3cacc109beed7e7bea7c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 22 Nov 2014 18:09:34 +0100, Yann E. MORIN wrote:
+Version 0.10.4 is compatible with python 3.
 
-> Here are the hashes I computed locally, which you can add as-is to the
-> hash file:
-> 
-> sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
-> sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
+[Thomas: change the patch to simply remove the dependency on
+BR2_PACKAGE_PYTHON, so that the package can be seen when either python
+or python3 are used.]
 
-Why do we suggest to have two hashes? Isn't sha265 sufficient?
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-netifaces/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Also, is it necessary to align the different columns? Should it be done
-with tabs or spaces? I've seen different solutions being used.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
+index 29f9fc3..1f54f4b 100644
+--- a/package/python-netifaces/Config.in
++++ b/package/python-netifaces/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_NETIFACES
+ 	bool "python-netifaces"
+-	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  Portable access to network interfaces from Python.
+ 
