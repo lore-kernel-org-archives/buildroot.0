@@ -1,31 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 19:47:25 +0100
-Subject: [Buildroot] [PATCH v4 5/9] package: matchbox-keyboard: use
- install instead of cp
-In-Reply-To: <1416586748-12936-6-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416586748-12936-6-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20141122194725.3263241a@free-electrons.com>
+Date: Sat, 22 Nov 2014 19:47:51 +0100
+Subject: [Buildroot] [git commit branch/next] tvheadend: indentation cleanup
+Message-ID: <20141122184820.3145F7FE36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guido Mart?nez,
+commit: http://git.buildroot.net/buildroot/commit/?id=7661580ff2c4e63e3420490b612ab5d7b9486a0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 21 Nov 2014 13:19:04 -0300, Guido Mart?nez wrote:
-> in order to not depend on the previous permissions of the file
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> ---
->  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
 
-Patch applied to the next branch, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index b0038c8..10c9201 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -35,18 +35,18 @@ endif
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ define TVHEADEND_CONFIGURE_CMDS
+-	(cd $(@D);				\
+-	 $(TARGET_CONFIGURE_OPTS)		\
+-	 $(TARGET_CONFIGURE_ARGS)		\
+-	 ./configure				\
+-	 --prefix=/usr				\
+-	 --arch="$(ARCH)"			\
+-	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
+-	 --python="$(HOST_DIR)/usr/bin/python"	\
+-	 --disable-dvbscan			\
+-	 --enable-bundle			\
+-	 --disable-libffmpeg_static		\
+-	 $(TVHEADEND_CONF_OPTS)			\
++	(cd $(@D);						\
++		$(TARGET_CONFIGURE_OPTS)			\
++		$(TARGET_CONFIGURE_ARGS)			\
++		./configure					\
++			--prefix=/usr				\
++			--arch="$(ARCH)"			\
++			--cpu="$(BR2_GCC_TARGET_CPU)"		\
++			--python="$(HOST_DIR)/usr/bin/python"	\
++			--disable-dvbscan			\
++			--enable-bundle				\
++			--disable-libffmpeg_static		\
++			$(TVHEADEND_CONF_OPTS)			\
+ 	)
+ endef
+ 
