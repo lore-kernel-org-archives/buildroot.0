@@ -1,39 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 18:14:44 +0100
-Subject: [Buildroot] [PATCH v3] exiv2: new package
-In-Reply-To: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
-References: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
-Message-ID: <20141122181444.148d48f0@free-electrons.com>
+Date: Sat, 22 Nov 2014 18:15:39 +0100
+Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
+In-Reply-To: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
+References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20141122181539.38f2a5db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Serafini,
+Dear Yegor Yefremov,
 
-On Fri, 7 Nov 2014 11:48:14 +0100, Nicolas Serafini wrote:
-> Add support for Exiv2 library and utility to manage image metadata
-> 
-> Exiv2 can be built in GPLv2+ or commercial version. But in commercial
-> version the Nikon lens name database and the NLS support has to be
-> disabled for copyright reason.
-> 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+On Sat, 22 Nov 2014 10:46:00 +0100, Yegor Yefremov wrote:
 
-Thanks, I've applied your patch to the next branch. However, I've done
-a number of changes before applying your patch:
+> +PYTHON_CERTIFI_VERSION = 14.05.14
+> +PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+> +PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
+> +PYTHON_CERTIFI_SETUP_TYPE = setuptools
+> +PYTHON_CERTIFI_LICENSE = ISC, MPL
 
-    [Thomas:
-     - switch to using the CMake build system, which works better than the
-       clunky autoconf + manual Makefile based build system.
-     - add missing toolchains dependencies: does not build in static
-       library configuration, needs C++, etc.]
+Can this be more specific, like to what part the ISC license applies,
+and to what part the MPL license applies?
 
-If you could test the next branch, and verify that it continues to work
-in your situation, it would be great.
-
-Thanks a lot,
+Thanks,
 
 Thomas
 -- 
