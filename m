@@ -1,53 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Nov 2014 20:13:16 +0100
-Subject: [Buildroot] [git commit] manual: Remove trailing space
-Message-ID: <20141122191447.BFA0C7FE25@busybox.osuosl.org>
+Date: Sat, 22 Nov 2014 20:15:22 +0100
+Subject: [Buildroot] [PATCH 3/9] manual: Rework makedevs syntax
+In-Reply-To: <1416068964-22529-3-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1416068964-22529-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1416068964-22529-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141122201522.64251fac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ffa8e4c60bad47f301281bbaaaa4c014fe8c943
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-autotools.txt |    2 +-
- docs/manual/faq-troubleshooting.txt       |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Sat, 15 Nov 2014 17:29:18 +0100, Maxime Hadjinlian wrote:
+> State that it should be a space separated list and fix the example.
+> Also reduce the number of dash used to 4.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  docs/manual/makedev-syntax.txt | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index ece6c49..a041d91 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -125,7 +125,7 @@ cases, typical packages will therefore only use a few of them.
-   variables to pass to the 'autoreconf' program if
-   +LIBFOO_AUTORECONF=YES+. These are passed in the environment of
-   the 'autoreconf' command. By default, empty.
--  
-+
- * +LIBFOO_AUTORECONF_OPTS+ to specify additional options
-   passed to the 'autoreconf' program if
-   +LIBFOO_AUTORECONF=YES+. By default, empty.
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index 693028c..b30b4ac 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -19,10 +19,10 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK
- 
- then it means that your system is running, but didn't start a shell on
- the serial console. In order to have the system start a shell on your
--serial console, you have to go into the Buildroot configuration, in 
--+System configuration+, modify +Run a getty (login prompt) after boot+ 
--and set the appropriate port and baud rate in the +getty options+ 
--submenu. This will automatically tune the +/etc/inittab+ file of the 
-+serial console, you have to go into the Buildroot configuration, in
-++System configuration+, modify +Run a getty (login prompt) after boot+
-+and set the appropriate port and baud rate in the +getty options+
-+submenu. This will automatically tune the +/etc/inittab+ file of the
- generated system so that a shell starts on the correct serial port.
- 
- [[faq-no-compiler-on-target]]
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
