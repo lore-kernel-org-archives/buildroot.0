@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 18:02:03 +0100
-Subject: [Buildroot] [PATCH 1/4] pkg-infra: always specify the local
- tarball name when calling DOWNLOAD
-In-Reply-To: <546BAEF2.9050608@mind.be>
+Date: Sun, 23 Nov 2014 18:06:40 +0100
+Subject: [Buildroot] [PATCH 3/4] pkg-infra: differentiate remote tarball
+ name from local filename
+In-Reply-To: <546BB223.9020600@mind.be>
 References: <cover.1416068004.git.yann.morin.1998@free.fr>
- <08cd8e9b5df25b7cccee3d47f50f38dab19c6f02.1416068004.git.yann.morin.1998@free.fr>
- <546BAEF2.9050608@mind.be>
-Message-ID: <20141123170203.GA11143@free.fr>
+ <9c560fb0f335f99d5350617f0368ae591e46e837.1416068005.git.yann.morin.1998@free.fr>
+ <546BB223.9020600@mind.be>
+Message-ID: <20141123170640.GB11143@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +15,45 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2014-11-18 21:41 +0100, Arnout Vandecappelle spake thusly:
+On 2014-11-18 21:54 +0100, Arnout Vandecappelle spake thusly:
 > On 15/11/14 17:19, Yann E. MORIN wrote:
-> > This will be needed to be able to differentiate the upstream filename
-> > from the local filename, which may differ in some cases.
+> > Some upstreams may use a naming scheme that does not fit well in how
+> > Buildroot wants to handle filenames.
 > >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > Cc: Samuel Martin <s.martin49@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <jacmet@uclibc.org>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> >  package/pkg-download.mk | 3 ++-
-> >  package/pkg-generic.mk  | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > For example, GitHub used to have a scheme like:
+> >     https://github.com/USER/REPO/archive/VERSION.tar.gz
 > >
-> > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> > index f3409bd..7e932e9 100644
-> > --- a/package/pkg-download.mk
-> > +++ b/package/pkg-download.mk
-> > @@ -245,13 +245,14 @@ endef
-> >  # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
-> >  #
-> >  # Argument 1 is the source location
-> > +# Argument 2 is the local filename, without any path component
-> >  #
-> >  # E.G. use like this:
-> >  # $(call DOWNLOAD,$(FOO_SITE))
-> >  ################################################################################
-> >  
-> >  define DOWNLOAD
-> > -    $(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
-> > +    $(call DOWNLOAD_INNER,$(1),$(2))
-> >  endef
-> >  
-> >  define DOWNLOAD_INNER
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 9643a30..543cb60 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -84,7 +84,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
-> >          done ; \
-> >      fi
-> >  endif
-> > -    $(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-> > +    $(if $($(PKG)_SOURCE),$(call
-> > DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE),$($(PKG)_SOURCE)))
-> >      $(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call
-> > DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+> > which means we would have a local file named VERSION.tar.gz, when we
+> > want to have PKG-VERSION.tar.gz
+> >
+> > Other forges are also known to have similar schemes. Google Code, for
+> > example, may also use similarly named files.
+> >
+> > Introduce a new variable, FOO_UPSTREAM_SOURCE, which the package may set
+> > in that case. If not set, it defaults to FOO_SOURCE.
 > 
->  So, why didn't you replace this second instance of DOWNLOAD?
+>  Instead of this, I was thinking of the reverse approach: define FOO_LOCAL_SOURCE.
 
-The idea was that we have a different local filename only for the
-_SOURCE file, not for extra downloads or patches.
+OK, will change.
 
-Of course, this patch is obviously flawed because then we missed the
-local filename for those extra downloads or patches.
+> It could possibly even be calculated automatically in pkg-generic.mk. E.g.
+> 
+> $(2)_LOCAL_SOURCE = \
+>     $$(if $$(findstring $(3),$$($(2)_SOURCE)),
+>         $$($(2)_SOURCE),
+>         $(3)-$$($(2)_SOURCE))
+> 
+> (and something similar for adding the version, so it should probably be factored
+> into a function).
 
-Thus, in the new series, I'll keep the ability to not specify the local
-filename:
+Well, why not just simply revert what I did with _UPSTREAM_SOURCE:
 
-    define DOWNLOAD
-        $(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
-    endef
+    ifndef $(2)_LOCAL_SOURCE
+      $(2)_LOCAL_SOURCE = $$($(2)_SOURCE)
+    endif
 
-> And there are
-> several others scattered around the code...
-
-Yes, hence the reason to still default to the basename of $(1) if $(2)
-is not specified.
+That's much more readable and simple than the above, given that
+$(2)_SOURCE is already auto-computed by tje pkg-generic infra.
 
 Regards,
 Yann E. MORIN.
