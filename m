@@ -1,58 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 23:07:23 +0100
-Subject: [Buildroot] [PATCH v5 0/1] package/guile: New package
-In-Reply-To: <1416770449-4246-1-git-send-email-paguilar@paguilar.org>
-References: <1416770449-4246-1-git-send-email-paguilar@paguilar.org>
-Message-ID: <20141123220723.GK11143@free.fr>
+Date: Sun, 23 Nov 2014 23:13:23 +0100
+Subject: [Buildroot] [PATCH] xl2tp: fix static build
+In-Reply-To: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
+References: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
+Message-ID: <20141123221323.GL11143@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+Baruch, All,
 
-On 2014-11-23 20:20 +0100, Pedro Aguilar spake thusly:
-> This patch fixes the suggestion made by Yann Morin in 
-> guile:
+On 2014-11-23 12:29 +0200, Baruch Siach spake thusly:
+> Use pcap-config to list dependencies of libpcap.
 > 
-> Add "depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc"
-> Break long line GUILE_CFLAGS to improve readability
+> Fixes:
+> http://autobuild.buildroot.net/results/87f/87ff92831d265d437aa0dfcfb99e954f76597761/
+> http://autobuild.buildroot.net/results/cd5/cd5487e76259752cbe58b171f9a58970916f7bb8/
 > 
-> Pedro Aguilar (1):
->   guile: new package
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-As far as I can see, your previous patches were not applied. In that
-case, you should resend the full series.
+I was working on a similar fix, so:
 
-This is so that when looking for patches to apply, we are not confused
-by a missing dependency.
-
-For example, this patch alone is not enough, because it depends on other
-packages that are not yet present in the tree.
-
-Care to sesend the full series, please?
-
-Thanks for working on this! :-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  package/Config.in                                  |  1 +
->  package/guile/Config.in                            | 17 ++++++++++
->  package/guile/guile-01-fix_arm_endianness.patch    | 25 +++++++++++++++
->  .../guile/guile-02-calculate-csqrt_manually.patch  | 16 ++++++++++
->  package/guile/guile-03-remove_unused_funcs.patch   | 36 ++++++++++++++++++++++
->  package/guile/guile.mk                             | 31 +++++++++++++++++++
->  6 files changed, 126 insertions(+)
->  create mode 100644 package/guile/Config.in
->  create mode 100644 package/guile/guile-01-fix_arm_endianness.patch
->  create mode 100644 package/guile/guile-02-calculate-csqrt_manually.patch
->  create mode 100644 package/guile/guile-03-remove_unused_funcs.patch
->  create mode 100644 package/guile/guile.mk
+> ---
+>  package/xl2tp/xl2tp.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
+> diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+> index 0b2f7f1758f5..abed7e851fa2 100644
+> --- a/package/xl2tp/xl2tp.mk
+> +++ b/package/xl2tp/xl2tp.mk
+> @@ -10,9 +10,13 @@ XL2TP_DEPENDENCIES = libpcap openssl
+>  XL2TP_LICENSE = GPLv2
+>  XL2TP_LICENSE_FILES = LICENSE
+>  
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +XL2TP_LDLIBS = LDLIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
+> +endif
+> +
+>  define XL2TP_BUILD_CMDS
+>  	$(SED) 's/ -O2 //' $(@D)/Makefile
+> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(XL2TP_LDLIBS) -C $(@D)
+>  endef
+>  
+>  define XL2TP_INSTALL_TARGET_CMDS
 > -- 
-> 1.9.1
+> 2.1.3
 > 
 > _______________________________________________
 > buildroot mailing list
