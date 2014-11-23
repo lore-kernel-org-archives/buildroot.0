@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:39:00 +0100
-Subject: [Buildroot] [PATCH 28/51] snowball-init: use
-	<pkg>_INSTALL_INIT_SYSV mechanism
+Date: Sun, 23 Nov 2014 21:39:02 +0100
+Subject: [Buildroot] [PATCH 30/51] ndisc6: remove man page related code
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-29-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-31-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The target-finalize target takes care of removing
+$(TARGET_DIR)/usr/share/man, so there's no point in having package
+specific code doing this.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/snowball-init/snowball-init.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ndisc6/ndisc6.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
-index d71f347..40acdd6 100644
---- a/package/snowball-init/snowball-init.mk
-+++ b/package/snowball-init/snowball-init.mk
-@@ -9,7 +9,7 @@ SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
- SNOWBALL_INIT_LICENSE = BSD-4c
- SNOWBALL_INIT_LICENSE_FILES = debian/copyright
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index cd43b01..f431035 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -27,14 +27,9 @@ NDISC6_SBIN_$(BR2_PACKAGE_NDISC6_RDNSSD) += rdnssd
+ NDISC6_SBIN_$(BR2_PACKAGE_NDISC6_RLTRACEROUTE6) += rltraceroute6 tracert6
+ NDISC6_SBIN_$(BR2_PACKAGE_NDISC6_TCPTRACEROUTE6) += tcptraceroute6
  
--define SNOWBALL_INIT_INSTALL_TARGET_CMDS
-+define SNOWBALL_INIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
+-NDISC6_MAN1_ = $(addsuffix .1,$(NDISC6_BIN_))
+-NDISC6_MAN8_ = $(addsuffix .8,$(NDISC6_SBIN_))
+-
+ define NDISC6_REMOVE_UNNEEDED
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/bin/,$(NDISC6_BIN_)) \
+-		$(addprefix $(TARGET_DIR)/usr/sbin/,$(NDISC6_SBIN_)) \
+-		$(addprefix $(TARGET_DIR)/usr/share/man/man1/,$(NDISC6_MAN1_)) \
+-		$(addprefix $(TARGET_DIR)/usr/share/man/man8/,$(NDISC6_MAN8_))
++		$(addprefix $(TARGET_DIR)/usr/sbin/,$(NDISC6_SBIN_))
+ 	$(if $(BR2_PACKAGE_NDISC6_RDNSSD),,\
+ 		rm -rf $(TARGET_DIR)/etc/rdnssd $(TARGET_DIR)/var/run/rdnssd)
  endef
- 
 -- 
 2.1.0
