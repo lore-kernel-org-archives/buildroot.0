@@ -1,47 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Nov 2014 09:44:05 +0100
-Subject: [Buildroot] [git commit] heirloom-mailx: disable static build
-Message-ID: <20141123084424.55D3D7FE94@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Nov 2014 11:08:46 +0200
+Subject: [Buildroot] [PATCH] mpdecimal: disable static build
+Message-ID: <235ca63e3c273ed4feb8d39cfbb5c05b1fe50d0f.1416733726.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f1d4189b54d6366296f71f9031a426b740db3a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-heirloom-mailx implements its own version of getopt() that collides with the C
-library when linking statically.
+mpdecimal always tries to build its shared library.
 
 Fixes:
-http://autobuild.buildroot.net/results/f67/f67eb63a9a8bb25fb0c071f1aac271e9798d95d1/
-http://autobuild.buildroot.net/results/722/722f65c4fcc093d6a6a2200c06b2ecb3ee35bc06/
-http://autobuild.buildroot.net/results/1cc/1cce267cc4b0a7d6bf5ff10f5429ae7dfe96960a/
+http://autobuild.buildroot.net/results/276/2764bd8c42ba659682760ffc6afa933b7530d06c/
+http://autobuild.buildroot.net/results/3cc/3cca0aacc4d66c49b21d23681813abea5a1b32e0/
+http://autobuild.buildroot.net/results/207/20783d1448464d957862e1c70585844f86aed237/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heirloom-mailx/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/mpdecimal/Config.in | 4 ++++
+ package/python3/Config.in   | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/heirloom-mailx/Config.in b/package/heirloom-mailx/Config.in
-index ca83dc3..a2521ef 100644
---- a/package/heirloom-mailx/Config.in
-+++ b/package/heirloom-mailx/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_HEIRLOOM_MAILX
- 	bool "heirloom-mailx"
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/package/mpdecimal/Config.in b/package/mpdecimal/Config.in
+index 929d41514399..2aae520c15d9 100644
+--- a/package/mpdecimal/Config.in
++++ b/package/mpdecimal/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MPDECIMAL
+ 	bool "mpdecimal"
  	help
- 	  Heirloom mailx (previously known as nail) is a mail user
- 	  agent for Unix systems.
-@@ -13,3 +14,7 @@ config BR2_PACKAGE_HEIRLOOM_MAILX
- 	  cram-md5), SMTPS, MIME encoding of attachements, and more.
++	depends on !BR2_PREFER_STATIC_LIB
+ 	  mpdecimal is a package for correctly-rounded arbitrary
+ 	  precision decimal floating point arithmetic. Starting from
+ 	  version 2.4, mpdecimal includes only the libmpdec
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_MPDECIMAL
+ 	  exclusively on libmpdec.
  
- 	  http://heirloom.sourceforge.net/mailx.html
+ 	  http://www.bytereef.org/mpdecimal/
 +
-+comment "heirloom-mailx needs a toolchain w/ dynamic library"
++comment "mpdecimal needs a toolchain w/ dynamic library"
 +	depends on BR2_PREFER_STATIC_LIB
-+	depends on BR2_USE_MMU
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 375390fcf69d..afcb74229474 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -57,10 +57,14 @@ config BR2_PACKAGE_PYTHON3_CURSES
+ 
+ config BR2_PACKAGE_PYTHON3_DECIMAL
+ 	select BR2_PACKAGE_MPDECIMAL
++	depends on !BR2_PREFER_STATIC_LIB # mpdecimal
+ 	bool "decimal module"
+ 	help
+ 	  decimal module for Python3.
+ 
++comment "decimal module needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
++
+ config BR2_PACKAGE_PYTHON3_PYEXPAT
+ 	select BR2_PACKAGE_EXPAT
+ 	bool "pyexpat"
+-- 
+2.1.3
