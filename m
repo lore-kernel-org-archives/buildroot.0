@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:38:57 +0100
-Subject: [Buildroot] [PATCH 25/51] tinyhttpd: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
+Date: Sun, 23 Nov 2014 21:38:59 +0100
+Subject: [Buildroot] [PATCH 27/51] mpd: use <pkg>_INSTALL_INIT_SYSV mechanism
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-26-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-28-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tinyhttpd/tinyhttpd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/mpd/mpd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
-index ec47fd9..0934b71 100644
---- a/package/tinyhttpd/tinyhttpd.mk
-+++ b/package/tinyhttpd/tinyhttpd.mk
-@@ -16,9 +16,12 @@ endef
- 
- define TINYHTTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/httpd $(TARGET_DIR)/usr/sbin/tinyhttpd
-+	mkdir -p $(TARGET_DIR)/var/www
-+endef
-+
-+define TINYHTTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/tinyhttpd/S85tinyhttpd \
- 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
--	mkdir -p $(TARGET_DIR)/var/www
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7061bdb..4ab4e1f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -232,10 +232,13 @@ define MPD_INSTALL_EXTRA_FILES
+ 		$(INSTALL) -D package/mpd/mpd.conf \
+ 			$(TARGET_DIR)/etc/mpd.conf; \
+ 	fi
+-	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
+-		$(TARGET_DIR)/etc/init.d/S95mpd
  endef
  
- $(eval $(generic-package))
+ MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
+ 
++define MPD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
++		$(TARGET_DIR)/etc/init.d/S95mpd
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.1.0
