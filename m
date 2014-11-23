@@ -1,53 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 14:20:00 +0100
-Subject: [Buildroot] [PATCH 2/4] package/libtirpc: add -pthread to the
-	private libraries
+Date: Sun, 23 Nov 2014 14:20:01 +0100
+Subject: [Buildroot] [PATCH 3/4] package/nfs-utils: rename patches
 In-Reply-To: <cover.1416748649.git.yann.morin.1998@free.fr>
 References: <cover.1416748649.git.yann.morin.1998@free.fr>
-Message-ID: <3470a45d392c64e845f70994168d6bd5fc9a98d0.1416748649.git.yann.morin.1998@free.fr>
+Message-ID: <9e5535c511e512fbcbe08acba5db457b26500528.1416748649.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.net/results/17d/17d1d94e6f1617851e374f4fe9804f1e5ea9e99f/
-    http://autobuild.buildroot.net/results/c08/c08b7be40c8f208147a4f95ad897e4a1df7e108d/
-    and maybe a bunch of others...
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libtirpc/0007-needs-pthread.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/libtirpc/0007-needs-pthread.patch
+ ...tch => 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} | 0
+ ...2-Patch-taken-from-Gentoo.patch => 0002-Patch-taken-from-Gentoo.patch} | 0
+ ...of-strchr.patch => 0003-Switch-legacy-index-in-favour-of-strchr.patch} | 0
+ ...-0004-fix-build-with-uClibc.patch => 0004-fix-build-with-uClibc.patch} | 0
+ ...ch => 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch} | 0
+ ...ch => 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch} | 0
+ ...def-h-for-NULL.patch => 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} | 0
+ 7 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/nfs-utils/{nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch => 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0002-Patch-taken-from-Gentoo.patch => 0002-Patch-taken-from-Gentoo.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch => 0003-Switch-legacy-index-in-favour-of-strchr.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0004-fix-build-with-uClibc.patch => 0004-fix-build-with-uClibc.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch => 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch => 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch => 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} (100%)
 
-diff --git a/package/libtirpc/0007-needs-pthread.patch b/package/libtirpc/0007-needs-pthread.patch
-new file mode 100644
-index 0000000..59ea85d
---- /dev/null
-+++ b/package/libtirpc/0007-needs-pthread.patch
-@@ -0,0 +1,21 @@
-+pkg-config: needs pthread as private library
-+
-+libtirpc needs pthreads. This is automatically pulled in when linking
-+with the shared library, thanks to the DT_NEEDED ELF tags.
-+
-+But for a static library, there is no such mechanism to identify
-+required libraries.
-+
-+Thus, add -pthread to the private libraries in the pkg-config file.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN libtirpc-0.2.4.orig/libtirpc.pc.in libtirpc-0.2.4/libtirpc.pc.in
-+--- libtirpc-0.2.4.orig/libtirpc.pc.in	2013-12-09 21:59:51.000000000 +0100
-++++ libtirpc-0.2.4/libtirpc.pc.in	2014-11-23 14:02:58.677760108 +0100
-+@@ -8,4 +8,5 @@
-+ Requires:
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L at libdir@ -ltirpc
-++Libs.private: -pthread
-+ Cflags: -I at includedir@/tirpc
+diff --git a/package/nfs-utils/nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch b/package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
+rename to package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
+diff --git a/package/nfs-utils/nfs-utils-0002-Patch-taken-from-Gentoo.patch b/package/nfs-utils/0002-Patch-taken-from-Gentoo.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0002-Patch-taken-from-Gentoo.patch
+rename to package/nfs-utils/0002-Patch-taken-from-Gentoo.patch
+diff --git a/package/nfs-utils/nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch b/package/nfs-utils/0003-Switch-legacy-index-in-favour-of-strchr.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch
+rename to package/nfs-utils/0003-Switch-legacy-index-in-favour-of-strchr.patch
+diff --git a/package/nfs-utils/nfs-utils-0004-fix-build-with-uClibc.patch b/package/nfs-utils/0004-fix-build-with-uClibc.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0004-fix-build-with-uClibc.patch
+rename to package/nfs-utils/0004-fix-build-with-uClibc.patch
+diff --git a/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch b/package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+rename to package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+diff --git a/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch b/package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+rename to package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+diff --git a/package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch b/package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+rename to package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
 -- 
 1.9.1
