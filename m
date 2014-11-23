@@ -1,79 +1,148 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 16:29:36 +0100
-Subject: [Buildroot] [PATCH v4 4/4] guile: new package
-In-Reply-To: <546E72F4.5040103@paguilar.org>
-References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-5-git-send-email-paguilar@paguilar.org>
- <20141118211819.GL4333@free.fr> <546E72F4.5040103@paguilar.org>
-Message-ID: <20141123152936.GB4210@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Nov 2014 18:08:17 +0200
+Subject: [Buildroot] [PATCH] uemacs: bump to latest LT master
+Message-ID: <194ba09dbf60d59366091421eac61ee6accb1bdc.1416758897.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+Latest LT (Linus Torvalds) master fixes symbol collision with ncurses.
 
-On 2014-11-21 00:02 +0100, Pedro Aguilar spake thusly:
-> On 18/11/2014 22:18, Yann E. MORIN wrote:
-[--SNIP--]
-> >>diff --git a/package/guile/guile-01-fix_arm_endianness.patch b/package/guile/guile-01-fix_arm_endianness.patch
-> >>new file mode 100644
-> >>index 0000000..a30a241
-> >>--- /dev/null
-> >>+++ b/package/guile/guile-01-fix_arm_endianness.patch
-> >>@@ -0,0 +1,25 @@
-> >>+Fix support for ARM endianness, otherwise it gives the error
-> >>+"unknown CPU endianness"
-> >>+
-> >>+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> >
-> >Did you try to send that patch upstream?
-> 
-> They already fixed it in git, but there isn't any stable release with this
-> fix.
+Drop patches 01 and 02 as they are not needed anymore.
 
-Ah, so this is a patch that you back-ported from upstream, then?
+Refresh patch 03 to account for context changes, and rename to new convention.
 
-In this case, just add a pointer to the upstream patch.
+Fixes:
+http://autobuild.buildroot.net/results/6e0/6e0fb4a74f62e23cbc56482ae25f9979fa6f14f8/
+http://autobuild.buildroot.net/results/df9/df9b693d7f53daba0d25f52132ca1594dd1273fa/
+http://autobuild.buildroot.net/results/b39/b39d3997466951df078a5f47c5a75200b07dca4c/
 
-> >>+diff -Nau guile-2.0.11.orig/configure.ac guile-2.0.11/configure.ac
-> >>+--- guile-2.0.11.orig/configure.ac	2014-03-12 14:36:02.000000000 +0100
-> >>++++ guile-2.0.11/configure.ac	2014-11-03 23:59:51.897267207 +0100
-> >>+@@ -862,7 +862,7 @@
-> >>+ }]])],
-> >>+     [guile_cv_use_csqrt=yes],
-> >>+     [guile_cv_use_csqrt="no, glibc 2.3 bug"],
-> >>+-    [guile_cv_use_csqrt="yes, hopefully (cross-compiling)"])])
-> >>++    [guile_cv_use_csqrt="no (cross-compiling)"])])
-> >
-> >Not OK: it is possible to be cross-compiling with glibc, in which
-> >case the result should be 'yes'.
-> 
-> Using csqrt() is OK only for some versions of glib. If we use the fallback
-> code, we're sure that it will work properly even with recent versions of
-> glib.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ixon.patch => 01-clear-ixon-termios-flag.patch} | 15 +++++-----
+ package/uemacs/uemacs-4.0.15-lt.01.patch           | 33 ----------------------
+ package/uemacs/uemacs-4.0.15-lt.02.patch           | 16 -----------
+ package/uemacs/uemacs.mk                           |  6 ++--
+ 4 files changed, 11 insertions(+), 59 deletions(-)
+ rename package/uemacs/{uemacs-4.0.15-lt.03.ixon.patch => 01-clear-ixon-termios-flag.patch} (64%)
+ delete mode 100644 package/uemacs/uemacs-4.0.15-lt.01.patch
+ delete mode 100644 package/uemacs/uemacs-4.0.15-lt.02.patch
 
-/me gets confused...
-glib or glibc?
-
-But even if the fallback code works in all cases, I gues we still want
-to use the normal code whenever possible. That is, we want to detect
-that csqrt() is available before using it.
-
-But OK, we can live with the fallback code in Buildroot.
-
-Maybe you could try to push a patch upstream to add a check whether
-csqrt() is present and useable in the C library? That would allow us to
-drop one patch when we update guile when the next release is out.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/uemacs/uemacs-4.0.15-lt.03.ixon.patch b/package/uemacs/01-clear-ixon-termios-flag.patch
+similarity index 64%
+rename from package/uemacs/uemacs-4.0.15-lt.03.ixon.patch
+rename to package/uemacs/01-clear-ixon-termios-flag.patch
+index d0aaa79793ea..dde76420d4d0 100644
+--- a/package/uemacs/uemacs-4.0.15-lt.03.ixon.patch
++++ b/package/uemacs/01-clear-ixon-termios-flag.patch
+@@ -4,10 +4,11 @@ Otherwise ctrl-S/Q gets intercepted by the tty layer instead of
+ handled by uemacs.
+ 
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-diff -U8 em-4.0.15-lt-orig/posix.c em-4.0.15-lt/posix.c
+---- em-4.0.15-lt-orig/posix.c	1999-05-16 02:06:19.000000000 -0500
+-+++ em-4.0.15-lt/posix.c	2012-04-25 16:14:25.000000000 -0500
+-@@ -45,17 +45,17 @@
++diff --git a/posix.c b/posix.c
++index 97edd9f052b1..352c4712b689 100644
++--- a/posix.c
+++++ b/posix.c
++@@ -53,17 +53,17 @@ void ttopen(void)
+  	/*
+  	 * base new settings on old ones - don't change things
+  	 * we don't know about
+@@ -20,9 +21,9 @@ diff -U8 em-4.0.15-lt-orig/posix.c em-4.0.15-lt/posix.c
+ +			      | INPCK | INLCR | IGNCR | ICRNL | IXON);
+  
+  	/* raw CR/NR etc output handling */
+- 	ntermios.c_oflag &= ~(OPOST | ONLCR | OLCUC | OCRNL | ONOCR | ONLRET);
++ 	ntermios.c_oflag &=
++ 	    ~(OPOST | ONLCR | OLCUC | OCRNL | ONOCR | ONLRET);
+  
+  	/* No signal handling, no echo etc */
+  	ntermios.c_lflag &= ~(ISIG | ICANON | XCASE | ECHO | ECHOE | ECHOK
+- 			     | ECHONL | NOFLSH | TOSTOP | ECHOCTL | ECHOPRT
+- 			     | ECHOKE | FLUSHO | PENDIN | IEXTEN);
++ 			      | ECHONL | NOFLSH | TOSTOP | ECHOCTL |
+diff --git a/package/uemacs/uemacs-4.0.15-lt.01.patch b/package/uemacs/uemacs-4.0.15-lt.01.patch
+deleted file mode 100644
+index 855dd35103c3..000000000000
+--- a/package/uemacs/uemacs-4.0.15-lt.01.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-diff -rup em-4.0.15-lt.oorig/display.c em-4.0.15-lt/display.c
+---- em-4.0.15-lt.oorig/display.c	1994-05-21 12:40:56.000000000 +0200
+-+++ em-4.0.15-lt/display.c	2005-11-16 16:54:22.000000000 +0100
+-@@ -9,6 +9,7 @@
+-  */
+- 
+- #include        <stdio.h>
+-+#include        <errno.h>
+- #include	"estruct.h"
+- #include        "edef.h"
+- 
+-diff -rup em-4.0.15-lt.oorig/main.c em-4.0.15-lt/main.c
+---- em-4.0.15-lt.oorig/main.c	1994-05-21 12:41:03.000000000 +0200
+-+++ em-4.0.15-lt/main.c	2005-11-16 16:54:01.000000000 +0100
+-@@ -123,7 +123,7 @@ char *argv[];	/* argument strings */
+- #endif
+- 
+- #if UNIX
+--	static void emergencyexit();
+-+	void emergencyexit();
+- #ifdef SIGWINCH
+- 	extern void sizesignal();
+- #endif
+-@@ -599,7 +599,7 @@ quickexit(f, n)
+- 	return(TRUE);
+- }
+- 
+--static void emergencyexit(signr)
+-+void emergencyexit(signr)
+- int signr;
+- {
+- 	quickexit(FALSE, 0);
+-
+diff --git a/package/uemacs/uemacs-4.0.15-lt.02.patch b/package/uemacs/uemacs-4.0.15-lt.02.patch
+deleted file mode 100644
+index 946b3d5d6b75..000000000000
+--- a/package/uemacs/uemacs-4.0.15-lt.02.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+---- em-4.0.15-lt.oorig/lock.c	1999-05-16 09:04:17.000000000 +0200
+-+++ em-4.0.15-lt/lock.c	2006-03-10 15:22:16.000000000 +0100
+-@@ -152,10 +152,8 @@
+- 
+- 	strcpy(obuf, errstr);
+- 	strcat(obuf, " - ");
+--	if (errno < sys_nerr)
+--		strcat(obuf, sys_errlist[errno]);
+--	else
+--		strcat(obuf, "(can not get system error message)");
+-+	strcat(obuf, strerror(errno));
+-+
+- 	mlwrite(obuf);
+- }
+- #endif
+-
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index eeb4f26e0582..321fbde053e6 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-UEMACS_VERSION = 4.0.15-lt
+-UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.gz
+-UEMACS_SITE = $(BR2_KERNEL_MIRROR)/software/editors/uemacs
++UEMACS_VERSION = fa00fe882f719351fdf7a4c4100baf4f3eab4d61
++UEMACS_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/torvalds/uemacs.git
++UEMACS_SITE_METHOD = git
+ UEMACS_DEPENDENCIES = ncurses
+ 
+ define UEMACS_BUILD_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.3
