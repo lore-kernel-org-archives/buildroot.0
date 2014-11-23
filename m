@@ -1,109 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 19:25:43 +0100
-Subject: [Buildroot] [PATCH 5/5] radvd: add a patch to fix build failure
- on architectures without sysctl()
-In-Reply-To: <1416764163-12826-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1416764163-12826-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1416764163-12826-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141123182543.GJ11143@free.fr>
+From: Pedro Aguilar <paguilar@paguilar.org>
+Date: Sun, 23 Nov 2014 20:20:38 +0100
+Subject: [Buildroot] [PATCH v4 4/4] guile: new package
+In-Reply-To: <20141123152936.GB4210@free.fr>
+References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
+ <1415310486-25904-5-git-send-email-paguilar@paguilar.org>
+ <20141118211819.GL4333@free.fr> <546E72F4.5040103@paguilar.org>
+ <20141123152936.GB4210@free.fr>
+Message-ID: <54723386.5070700@paguilar.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Yann,
 
-On 2014-11-23 18:36 +0100, Thomas Petazzoni spake thusly:
-> Modern architectures such as ARC do not provide the sysctl() system
-> call, since it is deprecated. However, uClibc still installs
-> <sys/sysctl.h> in such cases, which defeats radvd check for the
-> availability of sysctl(). This commit adds a patch to radvd which
-> improves the sysctl() checking.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/458/4581c4220adeaebbf6761e3b923088d8de8522d5/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 23/11/2014 16:29, Yann E. MORIN wrote:
+[--SNIP--]
+>>> Did you try to send that patch upstream?
+>>
+>> They already fixed it in git, but there isn't any stable release with this
+>> fix.
+>
+> Ah, so this is a patch that you back-ported from upstream, then?
+>
+> In this case, just add a pointer to the upstream patch.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Ok, the following patch series will include the commit pointer.
 
-Regards,
-Yann E. MORIN.
+>>>> +diff -Nau guile-2.0.11.orig/configure.ac guile-2.0.11/configure.ac
+>>>> +--- guile-2.0.11.orig/configure.ac	2014-03-12 14:36:02.000000000 +0100
+>>>> ++++ guile-2.0.11/configure.ac	2014-11-03 23:59:51.897267207 +0100
+>>>> +@@ -862,7 +862,7 @@
+>>>> + }]])],
+>>>> +     [guile_cv_use_csqrt=yes],
+>>>> +     [guile_cv_use_csqrt="no, glibc 2.3 bug"],
+>>>> +-    [guile_cv_use_csqrt="yes, hopefully (cross-compiling)"])])
+>>>> ++    [guile_cv_use_csqrt="no (cross-compiling)"])])
+>>>
+>>> Not OK: it is possible to be cross-compiling with glibc, in which
+>>> case the result should be 'yes'.
+>>
+>> Using csqrt() is OK only for some versions of glib. If we use the fallback
+>> code, we're sure that it will work properly even with recent versions of
+>> glib.
+>
+> /me gets confused...
+> glib or glibc?
 
-> ---
->  ...0003-Improve-check-of-the-sysctl-function.patch | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/radvd/0003-Improve-check-of-the-sysctl-function.patch
-> 
-> diff --git a/package/radvd/0003-Improve-check-of-the-sysctl-function.patch b/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
-> new file mode 100644
-> index 0000000..3053f7b
-> --- /dev/null
-> +++ b/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
-> @@ -0,0 +1,49 @@
-> +From 4c86b3cbf52f810615d92835e98d83e9555a4d88 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Date: Sun, 23 Nov 2014 12:13:47 +0100
-> +Subject: [PATCH 3/3] Improve check of the sysctl() function
-> +
-> +Since sysctl is a deprecated system call, new architectures such as
-> +ARC don't implement it. In such cases, uClibc installs the
-> +<sys/sysctl.h> header, but dos not implement the sysctl()
-> +function. This has the annoying side effect of breaking the sysctl
-> +detection of radvd, which is purely based on the header file being
-> +present.
-> +
-> +To fix this, this commit adds a check based on the existence of the
-> +sysctl() function.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + configure.ac   | 1 +
-> + device-linux.c | 2 +-
-> + 2 files changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 5dde3b2..5518f71 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -161,6 +161,7 @@ AC_CHECK_HEADERS( \
-> + 	time.h \
-> + )
-> + AC_HEADER_TIME
-> ++AC_CHECK_FUNCS([sysctl])
-> + 
-> + dnl Checks for typedefs, structures, and compiler characteristics.
-> + AC_MSG_CHECKING(whether struct sockaddr_in6 has sin6_scope_id)
-> +diff --git a/device-linux.c b/device-linux.c
-> +index 1ecaa6b..d9b56b8 100644
-> +--- a/device-linux.c
-> ++++ b/device-linux.c
-> +@@ -183,7 +183,7 @@ int check_ip6_forwarding(void)
-> + 		value = -1;
-> + 	}
-> + 
-> +-#ifdef HAVE_SYS_SYSCTL_H
-> ++#if defined(HAVE_SYS_SYSCTL_H) && defined(HAVE_SYSCTL)
-> + 	int forw_sysctl[] = { SYSCTL_IP6_FORWARDING };
-> + 	size_t size = sizeof(value);
-> + 	if (!fp && sysctl(forw_sysctl, sizeof(forw_sysctl) / sizeof(forw_sysctl[0]), &value, &size, NULL, 0) < 0) {
-> +-- 
-> +2.1.0
-> +
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+glibc :)
+
+> But even if the fallback code works in all cases, I gues we still want
+> to use the normal code whenever possible. That is, we want to detect
+> that csqrt() is available before using it.
+>
+> But OK, we can live with the fallback code in Buildroot.
+>
+> Maybe you could try to push a patch upstream to add a check whether
+> csqrt() is present and useable in the C library? That would allow us to
+> drop one patch when we update guile when the next release is out.
+
+I'll send the patch to them shortly.
+
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Pedro Aguilar
+http://paguilar.org
