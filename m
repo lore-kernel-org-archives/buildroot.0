@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 23:13:23 +0100
-Subject: [Buildroot] [PATCH] xl2tp: fix static build
-In-Reply-To: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
-References: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
-Message-ID: <20141123221323.GL11143@free.fr>
+Date: Sun, 23 Nov 2014 23:15:18 +0100
+Subject: [Buildroot] [PATCH] mpdecimal: disable static build
+In-Reply-To: <235ca63e3c273ed4feb8d39cfbb5c05b1fe50d0f.1416733726.git.baruch@tkos.co.il>
+References: <235ca63e3c273ed4feb8d39cfbb5c05b1fe50d0f.1416733726.git.baruch@tkos.co.il>
+Message-ID: <20141123221518.GM11143@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,68 @@ To: buildroot@busybox.net
 
 Baruch, All,
 
-On 2014-11-23 12:29 +0200, Baruch Siach spake thusly:
-> Use pcap-config to list dependencies of libpcap.
+On 2014-11-23 11:08 +0200, Baruch Siach spake thusly:
+> mpdecimal always tries to build its shared library.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/87f/87ff92831d265d437aa0dfcfb99e954f76597761/
-> http://autobuild.buildroot.net/results/cd5/cd5487e76259752cbe58b171f9a58970916f7bb8/
+> http://autobuild.buildroot.net/results/276/2764bd8c42ba659682760ffc6afa933b7530d06c/
+> http://autobuild.buildroot.net/results/3cc/3cca0aacc4d66c49b21d23681813abea5a1b32e0/
+> http://autobuild.buildroot.net/results/207/20783d1448464d957862e1c70585844f86aed237/
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I was working on a similar fix, so:
+Beside the fact that Thomas P. has a fix for building static, I have a
+comment on that patch of yours...
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/mpdecimal/Config.in | 4 ++++
+>  package/python3/Config.in   | 4 ++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/mpdecimal/Config.in b/package/mpdecimal/Config.in
+> index 929d41514399..2aae520c15d9 100644
+> --- a/package/mpdecimal/Config.in
+> +++ b/package/mpdecimal/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_MPDECIMAL
+>  	bool "mpdecimal"
+>  	help
+> +	depends on !BR2_PREFER_STATIC_LIB
+>  	  mpdecimal is a package for correctly-rounded arbitrary
+>  	  precision decimal floating point arithmetic. Starting from
+>  	  version 2.4, mpdecimal includes only the libmpdec
+
+Really? This makes the "depends on" part of the help text...
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/xl2tp/xl2tp.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-> index 0b2f7f1758f5..abed7e851fa2 100644
-> --- a/package/xl2tp/xl2tp.mk
-> +++ b/package/xl2tp/xl2tp.mk
-> @@ -10,9 +10,13 @@ XL2TP_DEPENDENCIES = libpcap openssl
->  XL2TP_LICENSE = GPLv2
->  XL2TP_LICENSE_FILES = LICENSE
+> @@ -8,3 +9,6 @@ config BR2_PACKAGE_MPDECIMAL
+>  	  exclusively on libmpdec.
 >  
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +XL2TP_LDLIBS = LDLIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
-> +endif
+>  	  http://www.bytereef.org/mpdecimal/
 > +
->  define XL2TP_BUILD_CMDS
->  	$(SED) 's/ -O2 //' $(@D)/Makefile
-> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(XL2TP_LDLIBS) -C $(@D)
->  endef
+> +comment "mpdecimal needs a toolchain w/ dynamic library"
+> +	depends on BR2_PREFER_STATIC_LIB
+> diff --git a/package/python3/Config.in b/package/python3/Config.in
+> index 375390fcf69d..afcb74229474 100644
+> --- a/package/python3/Config.in
+> +++ b/package/python3/Config.in
+> @@ -57,10 +57,14 @@ config BR2_PACKAGE_PYTHON3_CURSES
 >  
->  define XL2TP_INSTALL_TARGET_CMDS
+>  config BR2_PACKAGE_PYTHON3_DECIMAL
+>  	select BR2_PACKAGE_MPDECIMAL
+> +	depends on !BR2_PREFER_STATIC_LIB # mpdecimal
+>  	bool "decimal module"
+>  	help
+>  	  decimal module for Python3.
+>  
+> +comment "decimal module needs a toolchain w/ dynamic library"
+> +	depends on BR2_PREFER_STATIC_LIB
+> +
+>  config BR2_PACKAGE_PYTHON3_PYEXPAT
+>  	select BR2_PACKAGE_EXPAT
+>  	bool "pyexpat"
 > -- 
 > 2.1.3
 > 
