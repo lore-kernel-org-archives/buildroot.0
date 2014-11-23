@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:39:03 +0100
-Subject: [Buildroot] [PATCH 31/51] tree: don't install man page
+Date: Sun, 23 Nov 2014 21:39:05 +0100
+Subject: [Buildroot] [PATCH 33/51] iostat: remove legacy code
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-32-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-34-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
+Some custom iostat-source target was mistakenly left in place when the
+iostat package was migrated to gentargets in commit
+ee77963588b09babfd71befb0b5eb9fd1e776bbc, back 4 years ago. This
+commit removes this unnecessary custom target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tree/tree.mk | 2 --
+ package/iostat/iostat.mk | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/tree/tree.mk b/package/tree/tree.mk
-index 922deb8..83ea472 100644
---- a/package/tree/tree.mk
-+++ b/package/tree/tree.mk
-@@ -16,8 +16,6 @@ endef
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index 2080e56..dd2a579 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -9,8 +9,6 @@ IOSTAT_SITE = http://www.linuxinsight.com/files
+ IOSTAT_LICENSE = GPL
+ IOSTAT_LICENSE_FILES = LICENSE
  
- define TREE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/tree $(TARGET_DIR)/usr/bin/tree
--	$(INSTALL) -D -m 0644 $(@D)/doc/tree.1 \
--		$(TARGET_DIR)/usr/share/man/man1/tree.1
+-iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
+-
+ define IOSTAT_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
  endef
- 
- $(eval $(generic-package))
 -- 
 2.1.0
