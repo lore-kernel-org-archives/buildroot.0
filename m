@@ -1,139 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:54:15 +0100
-Subject: [Buildroot] [PATCH 2/2] aufs: initial release (selects
- aufs-utils)
-In-Reply-To: <1406576065-20263-2-git-send-email-mail@steffenhoenig.com>
+Date: Sun, 23 Nov 2014 22:00:07 +0100
+Subject: [Buildroot] [PATCH 1/2] aufs-utils: initial release
+In-Reply-To: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
 References: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
- <1406576065-20263-2-git-send-email-mail@steffenhoenig.com>
-Message-ID: <20141123215415.5cc12226@free-electrons.com>
+Message-ID: <20141123220007.1e48b0ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Steffen,
+Steffen,
 
-Sorry for the very late feedback about your patches. Are you still
-interested in getting aufs merged in Buildroot?
+I believe this package depends on aufs, so this patch should be the
+second patch in the patch series, not the first one.
 
-On Mon, 28 Jul 2014 21:34:25 +0200, steffenhoenig wrote:
+Your package/aufs-utils/Config.in file should have a "select
+BR2_PACKAGE_AUFS", and therefore also a "depends on BR2_LINUX_KERNEL".
 
-> diff --git a/package/aufs/Config.in b/package/aufs/Config.in
+On Mon, 28 Jul 2014 21:34:24 +0200, steffenhoenig wrote:
+
+> diff --git a/package/aufs-utils/aufs-utils.mk b/package/aufs-utils/aufs-utils.mk
 > new file mode 100644
-> index 0000000..e7842bd
+> index 0000000..de14e81
 > --- /dev/null
-> +++ b/package/aufs/Config.in
-> @@ -0,0 +1,36 @@
-> +config BR2_PACKAGE_AUFS
-> +        bool "aufs"
-> +        select BR2_PACKAGE_AUFS_UTILS
-
-Why do you select BR2_PACKAGE_AUFS_UTILS here? My understanding is that
-the dependency is the other way around: you cannot build aufs-utils
-until the aufs package has installed the aufs_type.h header file.
-
-> +        help
-> +          Aufs3 -- advanced multi layered unification filesystem version 3.x
+> +++ b/package/aufs-utils/aufs-utils.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# aufs-utils
+> +#
+> +################################################################################
 > +
-> +comment "aufs needs a Linux kernel to be built"
-> +    depends on !BR2_LINUX_KERNEL
+> +AUFS_UTILS_VERSION = aufs3.9
 
-So there should be a "depends on BR2_LINUX_KERNEL" under the main aufs
-config option, above.
+Why not using:
+
+	$(call qstrip,$(BR2_PACKAGE_AUFS_VERSION))
+
+here, so that both aufs and aufs-utils have the same version.
+
+> +AUFS_UTILS_LICENCSE = GPLv2
+> +AUFS_UTILS_LICENSE_FILES = COPYING
+> +AUFS_UTILS_SITE = http://git.code.sf.net/p/aufs/aufs-util
+> +AUFS_UTILS_SITE_METHOD = git
+> +AUFS_UTILS_DEPENDENCIES = aufs
+
+Ah, you see, it's really aufs-utils that depends on aufs.
 
 > +
-> +if BR2_PACKAGE_AUFS
+> +AUFS_UTILS_SBIN = mount.aufs umount.aufs # auplink auibusy aumvdown
+> +AUFS_UTILS_UBIN = aubusy auchk aubrsync # auctl
 > +
-> +choice 
-> +    prompt "version"
-> +
-> +config BR2_PACKAGE_AUFS_LATEST_VERSION
-> +    bool "aufs3.15"
-> +
-> +config BR2_PACKAGE_AUFS_CUSTOM_VERSION
-> +    bool "custom version"
-> +    help
-> +      This option allows to use a specific aufs kernel patch set
-> +
-> +      Note: you need to insert the version string like aufs3.12, aufs3.9, ...
-> +
-> +endchoice
-> +
-> +config BR2_PACKAGE_AUFS_CUSTOM_VERSION_VALUE
-> +    string ""
-> +    depends on BR2_PACKAGE_AUFS_CUSTOM_VERSION
-> +
-> +config BR2_PACKAGE_AUFS_VERSION
-> +    string
-> +    default "aufs3.15" if BR2_PACKAGE_AUFS_LATEST_VERSION
-> +    default BR2_PACKAGE_AUFS_CUSTOM_VERSION_VALUE \
-> +        if BR2_PACKAGE_AUFS_CUSTOM_VERSION
-> +endif
+> +define AUFS_UTILS_BUILD_CMDS
+> +	$(MAKE) -C $(@D)/libau CPPFLAGS="-I$(STAGING_DIR)/usr/include" KDIR=$(LINUX_DIR) CC="$(TARGET_CC)" LD="$(TARGET_LD)" libau.so
+> +	$(MAKE) -C $(@D) CPPFLAGS="-I$(STAGING_DIR)/usr/include" KDIR=$(LINUX_DIR) CC="$(TARGET_CC)" LD="$(TARGET_LD)" $(AUFS_UTILS_SBIN)
 
-I don't think this complexity is necessary. Having a "latest" version
-for aufs doesn't make a lot of sense, because nobody wants the "latest"
-version: everybody wants a version that matches the kernel version
-being used.
+Any reason to have two $(MAKE) calls with specific targets here,
+instead of just using the main Makefile of the project?
 
-So I believe, you can replace that by a single "string" config option:
+Also, instead of passing CPPFLAGS, CC and LD, you should use
+$(TARGET_CONFIGURE_OPTS), i.e something like:
 
-config BR2_PACKAGE_AUFS_VERSION
-	string "version"
-	help
-	  Specify aufs3.9, aufs3.13, aufs3.17 or any other existing
-	  aufs version.
+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) KDIR=$(LINUX_DIR)
 
-> +AUFS_VERSION = $(call qstrip,$(BR2_PACKAGE_AUFS_VERSION))
-> +AUFS_LICENCSE = GPLv2
+> +define AUFS_UTILS_INSTALL_TARGET_CMDS
+> +	$(foreach p,$(AUFS_UTILS_SBIN),$(INSTALL) -D -m 0755 $(@D)/$(p) $(TARGET_DIR)/sbin/;)
+> +	$(foreach p,$(AUFS_UTILS_UBIN),$(INSTALL) -D -m 0755 $(@D)/$(p) $(TARGET_DIR)/usr/bin/;)
 
-LICENSE.
+Why not using "make install" here?
 
-> +AUFS_LICENSE_FILES = COPYING
-> +
-> +AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
-> +AUFS_SITE_METHOD = git
-> +
-> +AUFS_DEPENDENCIES = linux
-> +AUFS_INSTALL_STAGING = YES
-> +
-> +AUFS_PATCHES = kbuild base mmap standalone
-> +
-> +define AUFS_BUILD_CMDS
-> +    $(foreach p,$(AUFS_PATCHES),./support/scripts/apply-patches.sh $(LINUX_DIR) $(@D) *$(p).patch;)
-
-This cannot work, because AUFS_BUILD_CMDS will be executed *after* the
-Linux kernel has been built. So it's too late to patch the kernel.
-
-Since aufs needs to patch the kernel, you'll have to handle it as a
-"Linux kernel extension", taking example on what we've done for RTAI in
-linux/linux-ext-rtai.mk. I can help with this, but before doing too
-much work, I'd like to make sure you are still interested in aufs.
-
-> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) aufs.ko
-> +endef
-> +
-> +define AUFS_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) -f scripts/Makefile.host \
-> +		scripts/unifdef
-
-Why?
-
-> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
-
-This should be part of AUFS_BUILD_CMDS.
-
-> +	$(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h \
-> +		$(STAGING_DIR)/usr/include/linux
-> +endef
-> +
-> +define AUFS_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) install
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
