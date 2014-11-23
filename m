@@ -1,50 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 23 Nov 2014 08:02:12 +0200
-Subject: [Buildroot] [PATCH] infra: do not append an empty
-	LD_LIBRARY_PATH
-In-Reply-To: <1416610416-27914-1-git-send-email-yann.morin.1998@free.fr>
-References: <1416610416-27914-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141123060212.GG2374@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Nov 2014 08:30:11 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-11-22
+Message-ID: <20141123073011.CCE601014E6@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Build statistics for 2014-11-22
+===============================
 
-On Fri, Nov 21, 2014 at 11:53:36PM +0100, Yann E. MORIN wrote:
-> When we set LD_LIBRARY_PATH when building our host tools, we append any
-> pre-existing value to our custom path:
->         LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
-> 
-> But then if LD_LIBRARY_PATH was previously empty, we end up with an
-> LD_LIBRARY_PATH that ends with a colon.
-> 
-> Also, when we check that an existing LD_LIBRARY_PATH does not contain
-> CWD, we previously did not look for a zero-length prefix.
-> 
-> Since 'man ld.so' says of LD_LIBRARY_PATH:
->     A colon-separated list of directories in which to search for ELF
->     libraries at execution-time. Similar to the PATH environment
->     variable.
-> 
-> And POSIX states about PATH:
->     A zero-length prefix is a legacy feature that indicates the current
->     working directory.
-> 
-> And bash also recognises a zero-length prefix to searh in CWD:
->     A zero-length (null) directory name in the value of PATH indicates
->     the current directory.
-> 
-> We may thus end up on a system where a zero-length prefix in
-> LD_LIBRARY_PATH is interpreted as VWD.
+        success : 181
+       failures : 11 
+       timeouts : 2  
+          TOTAL : 194
 
-s/VWD/CWD/
+Classification of failures by reason
+====================================
 
-baruch
+                       unknown | 2 
+               qt5webkit-5.3.2 | 2 
+                   erlang-17.3 | 1 
+                 webkit-1.11.5 | 1 
+                   nginx-1.6.2 | 1 
+                     radvd-2.8 | 1 
+              uemacs-4.0.15-lt | 1 
+                  thrift-0.9.1 | 1 
+                    ruby-2.1.5 | 1 
+                  cppcms-1.0.4 | 1 
+                      qt-4.8.6 | 1 
+
+Detail of failures
+===================
+
+         arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/22512cfee28885a0733159a49696d8cb39f67ccc/
+         arm |                    erlang-17.3 | NOK | http://autobuild.buildroot.net/results/1ceaa6925d1ded236d01ae9feb31f5f915f6b51a/
+         arc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
+    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/7c11b91939030c18108ef4528453406faa47cbce/
+         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/22b6c928e8d795f950888cb3e1cdd4ad97d98e32/
+         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/5aff88b8c3fcbb21be5c96a0b0c358b1d71c3e96/
+         arc |                      radvd-2.8 | NOK | http://autobuild.buildroot.net/results/bba1ebd9bbab02adc226242c65ae46cef7240563/
+     powerpc |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/53fea641f66cfbb1fb5992cdbb9a03567ff7f442/
+        bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/8ac073a4e9c3a228dd22d80ea02b9dc3fc739164/
+        bfin |               uemacs-4.0.15-lt | NOK | http://autobuild.buildroot.net/results/df9b693d7f53daba0d25f52132ca1594dd1273fa/
+      mipsel |                        unknown | TIM | http://autobuild.buildroot.net/results/c26e0934bb45d99871a963d74f6c65ba44d7ffb7/
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/724e4197595ce1458c3a6644cb1b136c6e7e1ab5/
+         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/e259cefcb0a2258cd55cfa8250d8a2bd4011ca5b/
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
