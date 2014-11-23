@@ -1,48 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Nov 2014 09:42:42 +0100
-Subject: [Buildroot] [git commit] dillo: needs iconv
-Message-ID: <20141123084342.968B77FE3C@busybox.osuosl.org>
+Date: Sun, 23 Nov 2014 09:44:16 +0100
+Subject: [Buildroot] [PATCH] heirloom-mailx: disable static build
+In-Reply-To: <c2df27588cd0100d90c761439e48bd33c497bae4.1416731660.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 23 Nov 2014 10:34:20 +0200")
+References: <c2df27588cd0100d90c761439e48bd33c497bae4.1416731660.git.baruch@tkos.co.il>
+Message-ID: <87zjbitifz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a79bcdba81215778f67b358324e174d91e3f32e4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
- http://autobuild.buildroot.net/results/4a7/4a765a66bea1ecf4ec5e4da00b847bc931071132/
+ > heirloom-mailx implements its own version of getopt() that collides with the C
+ > library when linking statically.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dillo/Config.in |    1 +
- package/dillo/dillo.mk  |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/f67/f67eb63a9a8bb25fb0c071f1aac271e9798d95d1/
+ > http://autobuild.buildroot.net/results/722/722f65c4fcc093d6a6a2200c06b2ecb3ee35bc06/
+ > http://autobuild.buildroot.net/results/1cc/1cce267cc4b0a7d6bf5ff10f5429ae7dfe96960a/
 
-diff --git a/package/dillo/Config.in b/package/dillo/Config.in
-index 8d3cbb1..5c2cc62 100644
---- a/package/dillo/Config.in
-+++ b/package/dillo/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_DILLO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fltk fork()
- 	select BR2_PACKAGE_FLTK
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Dillo is a multi-platform graphical web browser known
- 	  for its speed and small footprint.
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index bce23b0..d6fc746 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -17,6 +17,8 @@ DILLO_DEPENDENCIES = fltk
- 
- DILLO_CONF_ENV = ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
- 
-+DILLO_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	DILLO_CONF_OPTS += --enable-ssl
- 	DILLO_DEPENDENCIES += openssl
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
