@@ -1,53 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 08:30:11 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-11-22
-Message-ID: <20141123073011.CCE601014E6@stock.ovh.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Nov 2014 10:34:20 +0200
+Subject: [Buildroot] [PATCH] heirloom-mailx: disable static build
+Message-ID: <c2df27588cd0100d90c761439e48bd33c497bae4.1416731660.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-11-22
-===============================
+heirloom-mailx implements its own version of getopt() that collides with the C
+library when linking statically.
 
-        success : 181
-       failures : 11 
-       timeouts : 2  
-          TOTAL : 194
+Fixes:
+http://autobuild.buildroot.net/results/f67/f67eb63a9a8bb25fb0c071f1aac271e9798d95d1/
+http://autobuild.buildroot.net/results/722/722f65c4fcc093d6a6a2200c06b2ecb3ee35bc06/
+http://autobuild.buildroot.net/results/1cc/1cce267cc4b0a7d6bf5ff10f5429ae7dfe96960a/
 
-Classification of failures by reason
-====================================
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/heirloom-mailx/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-                       unknown | 2 
-               qt5webkit-5.3.2 | 2 
-                   erlang-17.3 | 1 
-                 webkit-1.11.5 | 1 
-                   nginx-1.6.2 | 1 
-                     radvd-2.8 | 1 
-              uemacs-4.0.15-lt | 1 
-                  thrift-0.9.1 | 1 
-                    ruby-2.1.5 | 1 
-                  cppcms-1.0.4 | 1 
-                      qt-4.8.6 | 1 
-
-Detail of failures
-===================
-
-         arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/22512cfee28885a0733159a49696d8cb39f67ccc/
-         arm |                    erlang-17.3 | NOK | http://autobuild.buildroot.net/results/1ceaa6925d1ded236d01ae9feb31f5f915f6b51a/
-         arc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
-    mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/7c11b91939030c18108ef4528453406faa47cbce/
-         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/22b6c928e8d795f950888cb3e1cdd4ad97d98e32/
-         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/5aff88b8c3fcbb21be5c96a0b0c358b1d71c3e96/
-         arc |                      radvd-2.8 | NOK | http://autobuild.buildroot.net/results/bba1ebd9bbab02adc226242c65ae46cef7240563/
-     powerpc |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/53fea641f66cfbb1fb5992cdbb9a03567ff7f442/
-        bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/8ac073a4e9c3a228dd22d80ea02b9dc3fc739164/
-        bfin |               uemacs-4.0.15-lt | NOK | http://autobuild.buildroot.net/results/df9b693d7f53daba0d25f52132ca1594dd1273fa/
-      mipsel |                        unknown | TIM | http://autobuild.buildroot.net/results/c26e0934bb45d99871a963d74f6c65ba44d7ffb7/
-         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/724e4197595ce1458c3a6644cb1b136c6e7e1ab5/
-         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/e259cefcb0a2258cd55cfa8250d8a2bd4011ca5b/
-
-
+diff --git a/package/heirloom-mailx/Config.in b/package/heirloom-mailx/Config.in
+index ca83dc365d1e..a2521ef6639c 100644
+--- a/package/heirloom-mailx/Config.in
++++ b/package/heirloom-mailx/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_HEIRLOOM_MAILX
+ 	bool "heirloom-mailx"
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Heirloom mailx (previously known as nail) is a mail user
+ 	  agent for Unix systems.
+@@ -13,3 +14,7 @@ config BR2_PACKAGE_HEIRLOOM_MAILX
+ 	  cram-md5), SMTPS, MIME encoding of attachements, and more.
+ 
+ 	  http://heirloom.sourceforge.net/mailx.html
++
++comment "heirloom-mailx needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
++	depends on BR2_USE_MMU
 -- 
-http://autobuild.buildroot.net
+2.1.3
