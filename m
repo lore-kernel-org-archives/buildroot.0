@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:39:12 +0100
-Subject: [Buildroot] [PATCH 40/51] ebtables: add error handling to for loop
+Date: Sun, 23 Nov 2014 21:39:16 +0100
+Subject: [Buildroot] [PATCH 44/51] irda-utils: add error handling to for loop
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-41-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-45-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ebtables/ebtables.mk | 2 +-
+ package/irda-utils/irda-utils.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 578c3ae..23c4628 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -28,7 +28,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
- 		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
- 		do \
- 		$(INSTALL) -m 0755 -D $${so} \
--			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
-+			$(TARGET_DIR)/lib/ebtables/`basename $${so}` || exit 1; \
+diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+index e4958e5..2c35dff 100644
+--- a/package/irda-utils/irda-utils.mk
++++ b/package/irda-utils/irda-utils.mk
+@@ -32,7 +32,7 @@ IRDA_UTILS_SBINS- += $(IRDA_UTILS_SBINS-y)
+ 
+ define IRDA_UTILS_INSTALL_TARGET_CMDS
+ 	for i in $(IRDA_UTILS_SBINS-y); do \
+-		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i; \
++		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i || exit 1; \
  	done
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- 		$(TARGET_DIR)/sbin/ebtables
+ endef
+ 
 -- 
 2.1.0
