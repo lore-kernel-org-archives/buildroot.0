@@ -1,54 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 14:19:59 +0100
-Subject: [Buildroot] [PATCH 1/4] package/libtirpc: rename patches
+Date: Sun, 23 Nov 2014 14:20:00 +0100
+Subject: [Buildroot] [PATCH 2/4] package/libtirpc: add -pthread to the
+	private libraries
 In-Reply-To: <cover.1416748649.git.yann.morin.1998@free.fr>
 References: <cover.1416748649.git.yann.morin.1998@free.fr>
-Message-ID: <4346a7dee8f5a994789ebf27479b87c3ab5287cb.1416748649.git.yann.morin.1998@free.fr>
+Message-ID: <3470a45d392c64e845f70994168d6bd5fc9a98d0.1416748649.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+    http://autobuild.buildroot.net/results/17d/17d1d94e6f1617851e374f4fe9804f1e5ea9e99f/
+    http://autobuild.buildroot.net/results/c08/c08b7be40c8f208147a4f95ad897e4a1df7e108d/
+    and maybe a bunch of others...
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...port.patch => 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch} | 0
- ...ch => 0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch} | 0
- ...-IPv6-support-optional.patch => 0003-Make-IPv6-support-optional.patch} | 0
- ...sources.patch => 0004-Add-rpcgen-program-from-nfs-utils-sources.patch} | 0
- ...ch => 0005-Automatically-generate-XDR-header-files-from-.x-sour.patch} | 0
- ...ch => 0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} | 0
- 6 files changed, 0 insertions(+), 0 deletions(-)
- rename package/libtirpc/{libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch => 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch} (100%)
- rename package/libtirpc/{libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch => 0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch} (100%)
- rename package/libtirpc/{libtirpc-0004-Make-IPv6-support-optional.patch => 0003-Make-IPv6-support-optional.patch} (100%)
- rename package/libtirpc/{libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch => 0004-Add-rpcgen-program-from-nfs-utils-sources.patch} (100%)
- rename package/libtirpc/{libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch => 0005-Automatically-generate-XDR-header-files-from-.x-sour.patch} (100%)
- rename package/libtirpc/{libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch => 0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} (100%)
+ package/libtirpc/0007-needs-pthread.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/libtirpc/0007-needs-pthread.patch
 
-diff --git a/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-rename to package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-diff --git a/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch b/package/libtirpc/0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-rename to package/libtirpc/0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-diff --git a/package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch b/package/libtirpc/0003-Make-IPv6-support-optional.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch
-rename to package/libtirpc/0003-Make-IPv6-support-optional.patch
-diff --git a/package/libtirpc/libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0004-Add-rpcgen-program-from-nfs-utils-sources.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch
-rename to package/libtirpc/0004-Add-rpcgen-program-from-nfs-utils-sources.patch
-diff --git a/package/libtirpc/libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch
-rename to package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-diff --git a/package/libtirpc/libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch b/package/libtirpc/0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-similarity index 100%
-rename from package/libtirpc/libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-rename to package/libtirpc/0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
+diff --git a/package/libtirpc/0007-needs-pthread.patch b/package/libtirpc/0007-needs-pthread.patch
+new file mode 100644
+index 0000000..59ea85d
+--- /dev/null
++++ b/package/libtirpc/0007-needs-pthread.patch
+@@ -0,0 +1,21 @@
++pkg-config: needs pthread as private library
++
++libtirpc needs pthreads. This is automatically pulled in when linking
++with the shared library, thanks to the DT_NEEDED ELF tags.
++
++But for a static library, there is no such mechanism to identify
++required libraries.
++
++Thus, add -pthread to the private libraries in the pkg-config file.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN libtirpc-0.2.4.orig/libtirpc.pc.in libtirpc-0.2.4/libtirpc.pc.in
++--- libtirpc-0.2.4.orig/libtirpc.pc.in	2013-12-09 21:59:51.000000000 +0100
+++++ libtirpc-0.2.4/libtirpc.pc.in	2014-11-23 14:02:58.677760108 +0100
++@@ -8,4 +8,5 @@
++ Requires:
++ Version: @PACKAGE_VERSION@
++ Libs: -L at libdir@ -ltirpc
+++Libs.private: -pthread
++ Cflags: -I at includedir@/tirpc
 -- 
 1.9.1
