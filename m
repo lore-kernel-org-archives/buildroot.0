@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:38:59 +0100
-Subject: [Buildroot] [PATCH 27/51] mpd: use <pkg>_INSTALL_INIT_SYSV mechanism
+Date: Sun, 23 Nov 2014 21:39:11 +0100
+Subject: [Buildroot] [PATCH 39/51] coreutils: add error handling to for loop
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-28-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-40-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/mpd.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/coreutils/coreutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7061bdb..4ab4e1f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -232,10 +232,13 @@ define MPD_INSTALL_EXTRA_FILES
- 		$(INSTALL) -D package/mpd/mpd.conf \
- 			$(TARGET_DIR)/etc/mpd.conf; \
- 	fi
--	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
--		$(TARGET_DIR)/etc/init.d/S95mpd
- endef
- 
- MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
- 
-+define MPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
-+		$(TARGET_DIR)/etc/init.d/S95mpd
-+endef
-+
- $(eval $(autotools-package))
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index db0d8a9..8901d23 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -102,7 +102,7 @@ endif
+ define COREUTILS_POST_INSTALL
+ 	# some things go in root rather than usr
+ 	for f in $(COREUTILS_BIN_PROGS); do \
+-		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
++		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+ 	done
+ 	# link for archaic shells
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
 -- 
 2.1.0
