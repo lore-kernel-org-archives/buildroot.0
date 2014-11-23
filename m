@@ -1,148 +1,99 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 23 Nov 2014 18:08:17 +0200
-Subject: [Buildroot] [PATCH] uemacs: bump to latest LT master
-Message-ID: <194ba09dbf60d59366091421eac61ee6accb1bdc.1416758897.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Nov 2014 18:02:03 +0100
+Subject: [Buildroot] [PATCH 1/4] pkg-infra: always specify the local
+ tarball name when calling DOWNLOAD
+In-Reply-To: <546BAEF2.9050608@mind.be>
+References: <cover.1416068004.git.yann.morin.1998@free.fr>
+ <08cd8e9b5df25b7cccee3d47f50f38dab19c6f02.1416068004.git.yann.morin.1998@free.fr>
+ <546BAEF2.9050608@mind.be>
+Message-ID: <20141123170203.GA11143@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Latest LT (Linus Torvalds) master fixes symbol collision with ncurses.
+Arnout, All,
 
-Drop patches 01 and 02 as they are not needed anymore.
+On 2014-11-18 21:41 +0100, Arnout Vandecappelle spake thusly:
+> On 15/11/14 17:19, Yann E. MORIN wrote:
+> > This will be needed to be able to differentiate the upstream filename
+> > from the local filename, which may differ in some cases.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > Cc: Samuel Martin <s.martin49@gmail.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > ---
+> >  package/pkg-download.mk | 3 ++-
+> >  package/pkg-generic.mk  | 2 +-
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> > index f3409bd..7e932e9 100644
+> > --- a/package/pkg-download.mk
+> > +++ b/package/pkg-download.mk
+> > @@ -245,13 +245,14 @@ endef
+> >  # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+> >  #
+> >  # Argument 1 is the source location
+> > +# Argument 2 is the local filename, without any path component
+> >  #
+> >  # E.G. use like this:
+> >  # $(call DOWNLOAD,$(FOO_SITE))
+> >  ################################################################################
+> >  
+> >  define DOWNLOAD
+> > -    $(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
+> > +    $(call DOWNLOAD_INNER,$(1),$(2))
+> >  endef
+> >  
+> >  define DOWNLOAD_INNER
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 9643a30..543cb60 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -84,7 +84,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+> >          done ; \
+> >      fi
+> >  endif
+> > -    $(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+> > +    $(if $($(PKG)_SOURCE),$(call
+> > DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE),$($(PKG)_SOURCE)))
+> >      $(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call
+> > DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+> 
+>  So, why didn't you replace this second instance of DOWNLOAD?
 
-Refresh patch 03 to account for context changes, and rename to new convention.
+The idea was that we have a different local filename only for the
+_SOURCE file, not for extra downloads or patches.
 
-Fixes:
-http://autobuild.buildroot.net/results/6e0/6e0fb4a74f62e23cbc56482ae25f9979fa6f14f8/
-http://autobuild.buildroot.net/results/df9/df9b693d7f53daba0d25f52132ca1594dd1273fa/
-http://autobuild.buildroot.net/results/b39/b39d3997466951df078a5f47c5a75200b07dca4c/
+Of course, this patch is obviously flawed because then we missed the
+local filename for those extra downloads or patches.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ixon.patch => 01-clear-ixon-termios-flag.patch} | 15 +++++-----
- package/uemacs/uemacs-4.0.15-lt.01.patch           | 33 ----------------------
- package/uemacs/uemacs-4.0.15-lt.02.patch           | 16 -----------
- package/uemacs/uemacs.mk                           |  6 ++--
- 4 files changed, 11 insertions(+), 59 deletions(-)
- rename package/uemacs/{uemacs-4.0.15-lt.03.ixon.patch => 01-clear-ixon-termios-flag.patch} (64%)
- delete mode 100644 package/uemacs/uemacs-4.0.15-lt.01.patch
- delete mode 100644 package/uemacs/uemacs-4.0.15-lt.02.patch
+Thus, in the new series, I'll keep the ability to not specify the local
+filename:
 
-diff --git a/package/uemacs/uemacs-4.0.15-lt.03.ixon.patch b/package/uemacs/01-clear-ixon-termios-flag.patch
-similarity index 64%
-rename from package/uemacs/uemacs-4.0.15-lt.03.ixon.patch
-rename to package/uemacs/01-clear-ixon-termios-flag.patch
-index d0aaa79793ea..dde76420d4d0 100644
---- a/package/uemacs/uemacs-4.0.15-lt.03.ixon.patch
-+++ b/package/uemacs/01-clear-ixon-termios-flag.patch
-@@ -4,10 +4,11 @@ Otherwise ctrl-S/Q gets intercepted by the tty layer instead of
- handled by uemacs.
- 
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
--diff -U8 em-4.0.15-lt-orig/posix.c em-4.0.15-lt/posix.c
----- em-4.0.15-lt-orig/posix.c	1999-05-16 02:06:19.000000000 -0500
--+++ em-4.0.15-lt/posix.c	2012-04-25 16:14:25.000000000 -0500
--@@ -45,17 +45,17 @@
-+diff --git a/posix.c b/posix.c
-+index 97edd9f052b1..352c4712b689 100644
-+--- a/posix.c
-++++ b/posix.c
-+@@ -53,17 +53,17 @@ void ttopen(void)
-  	/*
-  	 * base new settings on old ones - don't change things
-  	 * we don't know about
-@@ -20,9 +21,9 @@ diff -U8 em-4.0.15-lt-orig/posix.c em-4.0.15-lt/posix.c
- +			      | INPCK | INLCR | IGNCR | ICRNL | IXON);
-  
-  	/* raw CR/NR etc output handling */
-- 	ntermios.c_oflag &= ~(OPOST | ONLCR | OLCUC | OCRNL | ONOCR | ONLRET);
-+ 	ntermios.c_oflag &=
-+ 	    ~(OPOST | ONLCR | OLCUC | OCRNL | ONOCR | ONLRET);
-  
-  	/* No signal handling, no echo etc */
-  	ntermios.c_lflag &= ~(ISIG | ICANON | XCASE | ECHO | ECHOE | ECHOK
-- 			     | ECHONL | NOFLSH | TOSTOP | ECHOCTL | ECHOPRT
-- 			     | ECHOKE | FLUSHO | PENDIN | IEXTEN);
-+ 			      | ECHONL | NOFLSH | TOSTOP | ECHOCTL |
-diff --git a/package/uemacs/uemacs-4.0.15-lt.01.patch b/package/uemacs/uemacs-4.0.15-lt.01.patch
-deleted file mode 100644
-index 855dd35103c3..000000000000
---- a/package/uemacs/uemacs-4.0.15-lt.01.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--diff -rup em-4.0.15-lt.oorig/display.c em-4.0.15-lt/display.c
----- em-4.0.15-lt.oorig/display.c	1994-05-21 12:40:56.000000000 +0200
--+++ em-4.0.15-lt/display.c	2005-11-16 16:54:22.000000000 +0100
--@@ -9,6 +9,7 @@
--  */
-- 
-- #include        <stdio.h>
--+#include        <errno.h>
-- #include	"estruct.h"
-- #include        "edef.h"
-- 
--diff -rup em-4.0.15-lt.oorig/main.c em-4.0.15-lt/main.c
----- em-4.0.15-lt.oorig/main.c	1994-05-21 12:41:03.000000000 +0200
--+++ em-4.0.15-lt/main.c	2005-11-16 16:54:01.000000000 +0100
--@@ -123,7 +123,7 @@ char *argv[];	/* argument strings */
-- #endif
-- 
-- #if UNIX
---	static void emergencyexit();
--+	void emergencyexit();
-- #ifdef SIGWINCH
-- 	extern void sizesignal();
-- #endif
--@@ -599,7 +599,7 @@ quickexit(f, n)
-- 	return(TRUE);
-- }
-- 
---static void emergencyexit(signr)
--+void emergencyexit(signr)
-- int signr;
-- {
-- 	quickexit(FALSE, 0);
--
-diff --git a/package/uemacs/uemacs-4.0.15-lt.02.patch b/package/uemacs/uemacs-4.0.15-lt.02.patch
-deleted file mode 100644
-index 946b3d5d6b75..000000000000
---- a/package/uemacs/uemacs-4.0.15-lt.02.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
----- em-4.0.15-lt.oorig/lock.c	1999-05-16 09:04:17.000000000 +0200
--+++ em-4.0.15-lt/lock.c	2006-03-10 15:22:16.000000000 +0100
--@@ -152,10 +152,8 @@
-- 
-- 	strcpy(obuf, errstr);
-- 	strcat(obuf, " - ");
---	if (errno < sys_nerr)
---		strcat(obuf, sys_errlist[errno]);
---	else
---		strcat(obuf, "(can not get system error message)");
--+	strcat(obuf, strerror(errno));
--+
-- 	mlwrite(obuf);
-- }
-- #endif
--
-diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
-index eeb4f26e0582..321fbde053e6 100644
---- a/package/uemacs/uemacs.mk
-+++ b/package/uemacs/uemacs.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--UEMACS_VERSION = 4.0.15-lt
--UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.gz
--UEMACS_SITE = $(BR2_KERNEL_MIRROR)/software/editors/uemacs
-+UEMACS_VERSION = fa00fe882f719351fdf7a4c4100baf4f3eab4d61
-+UEMACS_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/torvalds/uemacs.git
-+UEMACS_SITE_METHOD = git
- UEMACS_DEPENDENCIES = ncurses
- 
- define UEMACS_BUILD_CMDS
+    define DOWNLOAD
+        $(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
+    endef
+
+> And there are
+> several others scattered around the code...
+
+Yes, hence the reason to still default to the basename of $(1) if $(2)
+is not specified.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
