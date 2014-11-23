@@ -1,38 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 14:33:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: Fix static build
-In-Reply-To: <XnsA3EE92FA316C4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1416748839-5316-1-git-send-email-bernd.kuhls@t-online.de>
- <XnsA3EE92FA316C4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141123133350.GA4151@free.fr>
+Date: Sun, 23 Nov 2014 14:40:55 +0100
+Subject: [Buildroot] [PATCH 0/4] nfs-utils: fix static build (branch
+	yem/for-release)
+In-Reply-To: <cover.1416748649.git.yann.morin.1998@free.fr>
+References: <cover.1416748649.git.yann.morin.1998@free.fr>
+Message-ID: <20141123134055.GB4151@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All!
+All,
 
-On 2014-11-23 14:26 +0100, Bernd Kuhls spake thusly:
-> Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-> news:1416748839-5316-1-git-send-email-bernd.kuhls at t-online.de:
-> > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> > +NFS_UTILS_CONF_ENV += LIBS="-lpthread"
-> > +endif
-> 
-> lol,
+On 2014-11-23 14:19 +0100, Yann E. MORIN spake thusly:
+> This small series fixes nfs-utils for static builds.
 
-Indeed! That's pretty funny! :-)
+I forgot to say:
 
-> Yann and I had the same thought, but his patch is better, therefore I 
-> marked mine as superseded in patchworks ;)
+  - I'm going to send the libtirpc upstream. That one is pretty trivial,
+    so I do not expect much reluctance from upstream to apply it;
 
-However, your patch is much simpler, and might be considered sufficient
-for the release.
+  - we're carrying nfs-utlis 1.2.6, while 1.3.1 has been out recently;
+    1.3.1 is not yet fixed anyway;
 
-So I would not have been so prompt as to mark it in Patchwork.
-
-Peter, Thomas, what's your preference?
+  - I'll send the nfs-utils patch upstream. On that one, I expect it
+    might take some efforts to get it appplied; it might at least have
+    to go through some iterations and so we might have a patch that is
+    not exactly what upstream ends up applying, in which case I'll fix
+    when we update to an nfs-utils that has been fixed.
 
 Regards,
 Yann E. MORIN.
