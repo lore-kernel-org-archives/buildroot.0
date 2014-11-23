@@ -1,42 +1,46 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 23 Nov 2014 18:29:00 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-22
-In-Reply-To: <20141123182619.23fbfdba@free-electrons.com>
-References: <20141123073011.CCE601014E6@stock.ovh.net>
- <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
- <20141123182619.23fbfdba@free-electrons.com>
-Message-ID: <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Nov 2014 18:35:58 +0100
+Subject: [Buildroot] [PATCH 0/5] Misc autobuilder fixes
+Message-ID: <1416764163-12826-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 23, 2014 at 6:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Samuel Martin,
->
-> On Sun, 23 Nov 2014 18:24:02 +0100, Samuel Martin wrote:
->
->> Nginx failure root cause seems to be a kernel with no sysctl syscall.
->> This seems to happen only on arc.
->>
->> Anton, Alexey, is it intended that CONFIG_SYSCTL_SYSCALL is disabled
->> in the arc kernel config?
->
-> Yes, see
-> http://lists.busybox.net/pipermail/buildroot/2014-November/112629.html.
+Hello,
 
-Oh! I missed it! :-S
-Thanks.
+Here are some fixes for various autobuilder failures. Three affecting
+Blackfin, one affecting ARC.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thomas
+
+Thomas Petazzoni (5):
+  toolchain-external: fix C++ build issues with the Blackfin toolchain
+  mpdecimal: fix build on pure static library configurations
+  ushare: do not allow building in static lib situations
+  radvd: switch to new patch naming convention, use Git formatted
+    patches
+  radvd: add a patch to fix build failure on architectures without
+    sysctl()
+
+ ...-support-for-enable-disable-shared-static.patch | 101 +++++++++++++++++++++
+ package/mpdecimal/mpdecimal.mk                     |   1 +
+ ...-check-requirement-we-don-t-do-unit-tests.patch |  29 ++++++
+ ...-fstack-protector-the-toolchain-might-lac.patch |  27 ++++++
+ ...0003-Improve-check-of-the-sysctl-function.patch |  49 ++++++++++
+ package/radvd/radvd-01-drop-check.patch            |  18 ----
+ package/radvd/radvd-02-drop-stack-protector.patch  |  15 ---
+ package/radvd/radvd.mk                             |   2 +-
+ package/ushare/Config.in                           |   8 +-
+ toolchain/toolchain-external/toolchain-external.mk |   9 ++
+ 10 files changed, 223 insertions(+), 36 deletions(-)
+ create mode 100644 package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
+ create mode 100644 package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
+ create mode 100644 package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
+ create mode 100644 package/radvd/0003-Improve-check-of-the-sysctl-function.patch
+ delete mode 100644 package/radvd/radvd-01-drop-check.patch
+ delete mode 100644 package/radvd/radvd-02-drop-stack-protector.patch
 
 -- 
-Samuel
+2.1.0
