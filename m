@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:39:07 +0100
-Subject: [Buildroot] [PATCH 35/51] gnupg: don't both removing a man page
+Date: Sun, 23 Nov 2014 21:39:09 +0100
+Subject: [Buildroot] [PATCH 37/51] rp-pppoe: bail out of installation fails
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-38-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The target-finalize target in the main Makefile removes
-$(TARGET_DIR)/usr/share/man entirely, so there's no point in having
-some package specific logic to remove man pages.
+Add an "|| exit 1" in the installation loop, otherwise if one of the
+file fails to install, the build doesn't abort.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnupg/gnupg.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/rp-pppoe/rp-pppoe.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index e7c403a..c0bf88c 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -39,8 +39,7 @@ endif
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 6827628..4e17f2d 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -19,7 +19,7 @@ RP_PPPOE_CONF_ENV = \
  
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
--	rm -f $(TARGET_DIR)/usr/bin/gpgv \
--		$(TARGET_DIR)/usr/share/man/man1/gpgv.1
-+	rm -f $(TARGET_DIR)/usr/bin/gpgv
+ define RP_PPPOE_INSTALL_TARGET_CMDS
+ 	for ff in $(RP_PPPOE_TARGET_FILES); do \
+-		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
++		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+ 	done
  endef
- GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGV
- endif
+ 
 -- 
 2.1.0
