@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:38:39 +0100
-Subject: [Buildroot] [PATCH 07/51] portmap: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
+Date: Sun, 23 Nov 2014 21:38:40 +0100
+Subject: [Buildroot] [PATCH 08/51] portmap: don't install manpages
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We also switch to using a full destination path as the second argument
-of $(INSTALL).
+We no longer support having documentation on the target, so there's no
+point in carrying code to install man pages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/portmap/portmap.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/portmap/portmap.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
 diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-index 0189597..dd60809 100644
+index dd60809..d5d43bf 100644
 --- a/package/portmap/portmap.mk
 +++ b/package/portmap/portmap.mk
-@@ -30,8 +30,10 @@ define PORTMAP_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
- 	$(INSTALL) -D $(@D)/pmap_set.8 \
- 		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
--	$(INSTALL) -m 0755 package/portmap/S13portmap \
--		$(TARGET_DIR)/etc/init.d
-+endef
-+
-+define PORTMAP_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 package/portmap/S13portmap $(TARGET_DIR)/etc/init.d/S13portmap
+@@ -24,12 +24,6 @@ define PORTMAP_INSTALL_TARGET_CMDS
+ 	for sbin in $(PORTMAP_SBINS); do \
+ 		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
+ 	done
+-	$(INSTALL) -D $(@D)/portmap.man \
+-		$(TARGET_DIR)/usr/share/man/man8/portmap.8
+-	$(INSTALL) -D $(@D)/pmap_dump.8 \
+-		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
+-	$(INSTALL) -D $(@D)/pmap_set.8 \
+-		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
  endef
  
- $(eval $(generic-package))
+ define PORTMAP_INSTALL_INIT_SYSV
 -- 
 2.1.0
