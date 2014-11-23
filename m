@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:38:49 +0100
-Subject: [Buildroot] [PATCH 17/51] netatalk: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 23 Nov 2014 21:38:50 +0100
+Subject: [Buildroot] [PATCH 18/51] mongoose: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-19-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netatalk/netatalk.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/mongoose/mongoose.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 5ea55c2..a6c2e69 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -50,12 +50,10 @@ else
- 	NETATALK_CONF_OPTS += --disable-cups
- endif
- 
--define NETATALK_INSTALL_EXTRA_FILES
-+define NETATALK_INSTALL_INIT_SYSV
- 	[ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
- 		$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
- 			$(TARGET_DIR)/etc/init.d/S50netatalk
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 35e4b43..7a5d356 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -29,6 +29,9 @@ endef
+ define MONGOOSE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
+ 		$(TARGET_DIR)/usr/sbin/mongoose
++endef
++
++define MONGOOSE_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+ 		$(TARGET_DIR)/etc/init.d/S85mongoose
  endef
- 
--NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
--
- $(eval $(autotools-package))
 -- 
 2.1.0
