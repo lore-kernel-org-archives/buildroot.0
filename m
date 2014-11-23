@@ -1,70 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 18:35:59 +0100
-Subject: [Buildroot] [PATCH 1/5] toolchain-external: fix C++ build issues
-	with the Blackfin toolchain
+Date: Sun, 23 Nov 2014 18:36:01 +0100
+Subject: [Buildroot] [PATCH 3/5] ushare: do not allow building in static lib
+	situations
 In-Reply-To: <1416764163-12826-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416764163-12826-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416764163-12826-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416764163-12826-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Blackfin toolchain install some libtool .la files, which none of
-the other toolchains seem to do, and those .la files confuse libtool
-down the road, causing build failures due to incorrect library
-paths. As an example, the thrift package has been constantly failing
-to build on Blackfin due to this.
-
-To solve this issue, we simply remove the .la files installed by the
-toolchain from the staging directory.
+The ushare configure script is a custom shell script, and it is not
+designed to understand that the library order is important when doing
+static linking.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/8ac/8ac073a4e9c3a228dd22d80ea02b9dc3fc739164/
-
-And many similar occurences of the same problem.
+  http://autobuild.buildroot.org/results/32e/32ed2a521043f929cc290145c8a651e69042e104/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/ushare/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index da3718c..72acb41 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -331,14 +331,17 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CLEANUP_LA_FILES
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
- TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CLEANUP_LA_FILES
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
- TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CLEANUP_LA_FILES
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-@@ -666,6 +669,12 @@ define TOOLCHAIN_EXTERNAL_SANITIZE_KERNEL_HEADERS
- 		-e 's@#(ifndef|define|endif[ \t]*/[*])[ \t]*_UAPI@#\1 @'
- endef
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
+index 981f081..7f817d2 100644
+--- a/package/ushare/Config.in
++++ b/package/ushare/Config.in
+@@ -4,6 +4,10 @@ config BR2_PACKAGE_USHARE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+ 	select BR2_PACKAGE_LIBUPNP
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	# ushare has a completely custom configure script that does
++	# broken things with library ordering, which breaks static
++	# linking.
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
+ 	  It implements the server component that provides UPnP media devices
+@@ -11,5 +15,5 @@ config BR2_PACKAGE_USHARE
  
-+# Some toolchains have .la libtool files that actually confuse libtool
-+# down the road. Get rid of them.
-+define TOOLCHAIN_EXTERNAL_CLEANUP_LA_FILES
-+	find $(STAGING_DIR) -name '*.la' | xargs rm -f
-+endef
-+
- define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
- 	if test -f $(TARGET_CROSS)gdb ; then \
- 		$(call gen_gdbinit_file) ; \
+ 	  http://ushare.geexbox.org/
+ 
+-comment "ushare needs a toolchain w/ largefile, threads"
+-	depends on !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
++comment "ushare needs a toolchain w/ largefile, threads, dynamic library"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
 -- 
 2.1.0
