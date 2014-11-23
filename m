@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Nov 2014 16:23:54 +0100
-Subject: [Buildroot] [PATCH v4 2/4] bdwgc: new package
-In-Reply-To: <546E6154.6090509@paguilar.org>
+Date: Sun, 23 Nov 2014 16:29:36 +0100
+Subject: [Buildroot] [PATCH v4 4/4] guile: new package
+In-Reply-To: <546E72F4.5040103@paguilar.org>
 References: <1415310486-25904-1-git-send-email-paguilar@paguilar.org>
- <1415310486-25904-3-git-send-email-paguilar@paguilar.org>
- <20141118205903.GJ4333@free.fr> <546E6154.6090509@paguilar.org>
-Message-ID: <20141123152354.GA4210@free.fr>
+ <1415310486-25904-5-git-send-email-paguilar@paguilar.org>
+ <20141118211819.GL4333@free.fr> <546E72F4.5040103@paguilar.org>
+Message-ID: <20141123152936.GB4210@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,58 @@ To: buildroot@busybox.net
 
 Pedro, All,
 
-On 2014-11-20 22:47 +0100, Pedro Aguilar spake thusly:
-> On 18/11/2014 21:59, Yann E. MORIN wrote:
-> >Pedro, All,
+On 2014-11-21 00:02 +0100, Pedro Aguilar spake thusly:
+> On 18/11/2014 22:18, Yann E. MORIN wrote:
+[--SNIP--]
+> >>diff --git a/package/guile/guile-01-fix_arm_endianness.patch b/package/guile/guile-01-fix_arm_endianness.patch
+> >>new file mode 100644
+> >>index 0000000..a30a241
+> >>--- /dev/null
+> >>+++ b/package/guile/guile-01-fix_arm_endianness.patch
+> >>@@ -0,0 +1,25 @@
+> >>+Fix support for ARM endianness, otherwise it gives the error
+> >>+"unknown CPU endianness"
+> >>+
+> >>+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 > >
-> >On 2014-11-06 22:48 +0100, Pedro Aguilar spake thusly:
-> >>bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
-> >>conservative garbage collector can be used as a garbage collecting
-> >>replacement for C 'malloc' or C++ 'new'.
-> >>
-> >>Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> >Did you try to send that patch upstream?
+> 
+> They already fixed it in git, but there isn't any stable release with this
+> fix.
+
+Ah, so this is a patch that you back-ported from upstream, then?
+
+In this case, just add a pointer to the upstream patch.
+
+> >>+diff -Nau guile-2.0.11.orig/configure.ac guile-2.0.11/configure.ac
+> >>+--- guile-2.0.11.orig/configure.ac	2014-03-12 14:36:02.000000000 +0100
+> >>++++ guile-2.0.11/configure.ac	2014-11-03 23:59:51.897267207 +0100
+> >>+@@ -862,7 +862,7 @@
+> >>+ }]])],
+> >>+     [guile_cv_use_csqrt=yes],
+> >>+     [guile_cv_use_csqrt="no, glibc 2.3 bug"],
+> >>+-    [guile_cv_use_csqrt="yes, hopefully (cross-compiling)"])])
+> >>++    [guile_cv_use_csqrt="no (cross-compiling)"])])
 > >
-> >I've had a cursory look at configure.ac, and it seems it detects C++ and
-> >threading model, and does not need LFS.
+> >Not OK: it is possible to be cross-compiling with glibc, in which
+> >case the result should be 'yes'.
 > 
-> It installs C++ support only with the --enable-cplusplus option that is not
-> enabled by default and not needed by Guile.
-> 
-> Yes, it detects a threading model depending on the platform.
-> Should I add to the Config.in the following?
-> 
-> comment "bdwgc needs a toolchain w/ threads"
->     depends on BR2_TOOLCHAIN_HAS_THREADS
+> Using csqrt() is OK only for some versions of glib. If we use the fallback
+> code, we're sure that it will work properly even with recent versions of
+> glib.
 
-No, that's Ok as-is, because configure detects the presence or abscence
-of C++ and threads, so we need not depend on _HAS_THREADS or anything
-else.
+/me gets confused...
+glib or glibc?
 
-If that was wrong, the autobuilders will tell us, since they build a lot
-of different combinations.
+But even if the fallback code works in all cases, I gues we still want
+to use the normal code whenever possible. That is, we want to detect
+that csqrt() is available before using it.
+
+But OK, we can live with the fallback code in Buildroot.
+
+Maybe you could try to push a patch upstream to add a check whether
+csqrt() is present and useable in the C library? That would allow us to
+drop one patch when we update guile when the next release is out.
 
 Regards,
 Yann E. MORIN.
