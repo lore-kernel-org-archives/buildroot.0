@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 21:38:42 +0100
-Subject: [Buildroot] [PATCH 10/51] stunnel: use the <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 23 Nov 2014 21:38:44 +0100
+Subject: [Buildroot] [PATCH 12/51] proftpd: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1416775163-20215-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
-the init script, we rename it to STUNNEL_INSTALL_CONF.
+Also use a complete destination path for the $(INSTALL) command.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/proftpd/proftpd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index dc56261..ac2963e 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -18,14 +18,17 @@ else
- STUNNEL_CONF_OPTS += --disable-systemd
- endif
- 
--define STUNNEL_INSTALL_CONF_SCRIPT
--	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+define STUNNEL_INSTALL_CONF
- 	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
- 		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
- 			$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
- endef
- 
--STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
-+STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
-+
-+define STUNNEL_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index ce735bd..65dd84e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -52,7 +52,10 @@ define PROFTPD_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
+ 		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+ 	fi
+-	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d
 +endef
++
++define PROFTPD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d/S50proftpd
+ endef
  
  $(eval $(autotools-package))
 -- 
