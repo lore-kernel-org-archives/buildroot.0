@@ -1,42 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 23 Nov 2014 01:12:39 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Nov 2014 07:40:42 +0200
 Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
-Message-ID: <trinity-621b72dd-4362-44df-bbf8-d19c6ffb5953-1416701559591@3capp-gmx-bs13>
+In-Reply-To: <20141122171615.7eb18494@free-electrons.com>
+References: <1416587791-30125-1-git-send-email-jaap@jcz.nl>
+ <546F6FCB.1090101@imgtec.com>
+ <20141122171615.7eb18494@free-electrons.com>
+Message-ID: <20141123054042.GF2374@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vicente, Jaap,
+Hi Thomas, Vicente,
 
-On Fri, Nov 21, 2014 at 05:00:59PM +0000, Vicente Olivert Riera wrote:
-> Dear Jaap Crezee,
- 
-[...]
-
-> Just a few more things for the next time you send patches to Buildroot.
-> After sending a new version of a patch, we usually mark the former patch
-> as "superseded" in patchwork. To be able to do that, you need to be
-> logged in in patchwork. If you don't have an account, you can create one
-> here:
+On Sat, Nov 22, 2014 at 05:16:15PM +0100, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
 > 
-> http://patchwork.ozlabs.org/register/
+> On Fri, 21 Nov 2014 17:00:59 +0000, Vicente Olivert Riera wrote:
 > 
-
-Would be a nice patchwork feature to mark 'legacy' patches automatically
-as superseded in case a newer patch (with same subject, new version number,
-from same submitter) is detected on the mailing list?
-
-> Another one. When you create the patch using "git format-patch", before
-> sending it, please edit the patch using your favourite text editor and
-> add the version number in the "Subject" line. Here is an example using
-> your own patch:
+> > Another one. When you create the patch using "git format-patch", before
+> > sending it, please edit the patch using your favourite text editor and
+> > add the version number in the "Subject" line. Here is an example using
+> > your own patch:
+> > 
+> > Subject: [PATCH v2] bluez5_utils: bumped version number to 5.25
 > 
-> Subject: [PATCH v2] bluez5_utils: bumped version number to 5.25
+> Just a quick comment: there's no need to fire up a text editor to do
+> this. Just do:
 > 
+> 	git format-patch --subject-prefix="PATCHv2"
 
-Or use 'git format-patch --subject-prefix "PATCH v2" ...'
+Since you mentioned it I'll add that with a recent enough version of git you 
+can shorten it to
 
-Regards,
-Peter
+	git format-patch -v 2
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
