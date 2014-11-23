@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 22:18:07 +0100
-Subject: [Buildroot] [PATCH V3 2/5] package/squid: add init script
-In-Reply-To: <1416322487-14247-3-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-3-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <20141123221807.48818807@free-electrons.com>
+Date: Sun, 23 Nov 2014 22:16:39 +0100
+Subject: [Buildroot] [git commit branch/next] package/squid: define the log
+	directory, pidfile and swapdir
+Message-ID: <20141123211834.058267FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume GARDET,
+commit: http://git.buildroot.net/buildroot/commit/?id=d29eb641d3e50e734496ddb2db4aed4e7d63cfbd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 18 Nov 2014 15:54:44 +0100, Guillaume GARDET wrote:
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-> +# (Re)create log directory and give access to squid user (nobody)
-> +if [ ! -d $SQUID_LOG_DIR ]; then
-> +	mkdir -p $SQUID_LOG_DIR 
-> +	chmod 777 $SQUID_LOG_DIR
-
-Clearly, this doesn't look good. Don't we have a better option than 777
-the log directory?
-
-> +    restart | force-reload)
-> +	$0 stop
-> +	sleep 2
-
-sleep 2 really needed here?
-
-> +	$0 start
-> +	if [ "$?" != "0" ]; then
-> +		exit 1
-> +	fi
-> +	;;
-> +     *)
-> +	echo "Usage: /etc/init.d/S97squid {start|stop|restart|force-reload}"
-
-Replace /etc/init.d/S97squid by $0 maybe?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e8a2ccc..ed51881 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -26,7 +26,10 @@ SQUID_CONF_OPTS =	--enable-async-io=8 --enable-linux-netfilter \
+ 			--enable-auth-negotiate="wrapper" \
+ 			--enable-auth-ntlm="fake" \
+ 			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="file_userip"
++			--enable-external-acl-helpers="file_userip" \
++			--with-logdir=/var/log/squid/ \
++			--with-pidfile=/var/run/squid.pid \
++			--with-swapdir=/var/cache/squid/
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
