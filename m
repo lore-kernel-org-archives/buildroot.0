@@ -1,39 +1,42 @@
-From: Michael Wei <mwei@cs.ucsd.edu>
-Date: Sun, 23 Nov 2014 12:39:38 -0800
-Subject: [Buildroot] [PATCH 1/1] Fix npm module cross compilation,
-	use up-to-date npm and install modules globally
-In-Reply-To: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
-References: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
-Message-ID: <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Nov 2014 21:38:47 +0100
+Subject: [Buildroot] [PATCH 15/51] ifplugd: use <pkg>_INSTALL_INIT_SYSV
+	mechanism
+In-Reply-To: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1416775163-20215-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Wei <mwei@cs.ucsd.edu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/ifplugd/ifplugd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 312aaa9..fbcb730 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -110,11 +110,13 @@ define NODEJS_INSTALL_MODULES
- 	# npm install call below and setting npm_config_rollback=false can both
- 	# help in diagnosing the problem.
- 	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-+		$(HOST_DIR)/usr/bin/npm install -g npm --prefix=$(HOST_DIR) && \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		LD="$(TARGET_CXX)" \
- 		npm_config_arch=$(NODEJS_CPU) \
- 		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
--		$(HOST_DIR)/usr/bin/npm install \
-+		$(HOST_DIR)/usr/bin/npm install -g --target_arch=$(NODEJS_CPU) \
-+		--prefix=$(TARGET_DIR) \
- 		$(NODEJS_MODULES_LIST) \
- 	)
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 398cff4..3d0736a 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -29,12 +29,15 @@ define IFPLUGD_INSTALL_FIXUP
+ 		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+ 			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+ 	fi
++endef
++
++IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
++
++define IFPLUGD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+ 	# don't use bash for init script
+ 	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
  endef
+ 
+-IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+-
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.1.0
