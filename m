@@ -1,58 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 23 Nov 2014 18:24:02 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-22
-In-Reply-To: <20141123073011.CCE601014E6@stock.ovh.net>
-References: <20141123073011.CCE601014E6@stock.ovh.net>
-Message-ID: <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Nov 2014 18:25:18 +0100
+Subject: [Buildroot] [PATCH 0/4] pkg-infra: differentiate remote and
+ local tarball filenames (branch yem/download)
+In-Reply-To: <20141118220357.74bc954c@free-electrons.com>
+References: <cover.1416068004.git.yann.morin.1998@free.fr>
+ <20141116122210.6b3651e0@free-electrons.com>
+ <546BAE62.2020606@mind.be>
+ <20141118220357.74bc954c@free-electrons.com>
+Message-ID: <20141123172518.GD11143@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 23, 2014 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-11-22
-> ===============================
->
->         success : 181
->        failures : 11
->        timeouts : 2
->           TOTAL : 194
->
-> Classification of failures by reason
-> ====================================
->
->                        unknown | 2
->                qt5webkit-5.3.2 | 2
->                    erlang-17.3 | 1
->                  webkit-1.11.5 | 1
->                    nginx-1.6.2 | 1
->                      radvd-2.8 | 1
->               uemacs-4.0.15-lt | 1
->                   thrift-0.9.1 | 1
->                     ruby-2.1.5 | 1
->                   cppcms-1.0.4 | 1
->                       qt-4.8.6 | 1
->
-> Detail of failures
-> ===================
+Thomas, All,
 
-[...]
+On 2014-11-18 22:03 +0100, Thomas Petazzoni spake thusly:
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 18 Nov 2014 21:38:58 +0100, Arnout Vandecappelle wrote:
+> 
+> >  I think there are two reasons for the split:
+> > 
+> > 1. _SOURCE can be dropped if it is <pkg>-<version>.tar.gz - this would be
+> > difficult if we only had _SITE.
+> 
+> True. But on the other hand, the fact that we use
+> <pkg>-<version>.tar.gz by default has always confused newcomers a bit,
+> and with .tar.xz becoming more and more adopted, having .tar.gz as the
+> default is less obvious than it used to be.
+> 
+> > 2. _PATH and _EXTRA_DOWNLOAD don't need to specify the full URL.
+> 
+> Well, yes, but that's specifically the issue I raised: since you don't
+> specify the full URL, there's no way for the package to download
+> patches or other stuff from other places than <pkg>_SITE.
 
->          arc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
+Well, I still find the split worthwhile.
 
-Nginx failure root cause seems to be a kernel with no sysctl syscall.
-This seems to happen only on arc.
+Still, we could allow FOO_EXTRA_DOWNLOADS and FOO_PATCH to be
+fully-qualified URIs. If they are not, prepend FOO_SITE to generate a
+full URI.
 
-Anton, Alexey, is it intended that CONFIG_SYSCTL_SYSCALL is disabled
-in the arc kernel config?
-
-Anyway, I posted a fix for this:
-http://patchwork.ozlabs.org/patch/413440/
+Yes, I am writing a package that will download most of its files via
+_EXTRA_DOWNLOADS (don't ask why, upstream is not doing release tarballs
+for that component), and it would be *very* cumbersome to repeat the
+_SITE for all of those files.
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
