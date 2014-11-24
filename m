@@ -1,55 +1,133 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 24 Nov 2014 07:24:19 -0300
-Subject: [Buildroot] [PATCH 2/2] samba: Add support for libnss_win*.so*
- installation
-In-Reply-To: <20141122213359.2628a10e@free-electrons.com>
-References: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>	<1407176057-13180-2-git-send-email-benoit.thebaudeau@advansee.com>
- <20141122213359.2628a10e@free-electrons.com>
-Message-ID: <54730753.3030108@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 24 Nov 2014 10:44:21 +0000
+Subject: [Buildroot] Split supported architectures for Qt Script and Qt
+ Webkit
+In-Reply-To: <546DD5C9.8090600@imgtec.com>
+References: <546DD5C9.8090600@imgtec.com>
+Message-ID: <54730C05.8020308@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/22/2014 05:33 PM, Thomas Petazzoni wrote:
-
-> Hello Gustavo,
+On 11/20/2014 11:51 AM, Vicente Olivert Riera wrote:
+> Dear all,
 > 
-> Could you have a look at the below patch? It would be useful to have
-> some review from a person knowing Samba better than I do.
-
-Hi, let's see.
-
-> I must say I'm a bit skeptical about two things (about which probably
-> Beno?t can give some details) :
+> please I would like you read this email and provide some feedback before
+> I start writing a patch.
 > 
->  * The usefulness of enabling the NSS libraries in non-glibc
->    environments. Even though I agree that technically, nothing prevents
->    some program from using them, in practice, the NSS libraries are
->    basically only used by the glibc name resolution logic. So I would
->    personally prefer to make those NSS libraries visible only in glibc
->    configurations.
+> Currently in Buildroot we have a BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+> variable indicating which architectures support Qt Webkit. We also make
+> Qt Script depending on that variable, so we are assuming that Qt Script
+> is supported for exactly the same architectures which support Qt Webkit,
+> and that's not true.
+> 
+> So I have done some tests to make clear which architectures support Qt
+> Script and which ones support Qt Webkit, in order to create another
+> variable called BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT.
+> 
+> That way we will be able to fix some problems we can't fix properly
+> right now. For instance, Qt Webkit is not supported for MIPS64 when
+> using the n32 ABI, but Qt Script is actually supported. So, if we make
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT depending on !BR2_MIPS_NABI32 we
+> will also disable Qt Script, because as I said before, Qt Script depends
+> on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT, and we don't want that because
+> Qt Script works.
+> 
+> Related:
+> http://lists.busybox.net/pipermail/buildroot/2014-November/111760.html
+> 
+> I have also included Grantlee in the tests because is the only package
+> which depends on Qt Script, so at the same time I do the tests we can
+> know which architectures do support Qt Script but don't support
+> Grantlee. There isn't any package depending on Qt Webkit.
+> 
+> I have assigned a code to each kind of problem I have found, and the
+> meaning of those codes are just below the table.
+> 
+> +------------------+-----------+-----------+----------+--------------+
+> | Architecture     | Qt Script | Qt Webkit | Grantlee | Problem Code |
+> +------------------+-----------+-----------+----------+--------------+
+> | BR2_arcle        | NO        | NO        | NO       | 1            |
+> | BR2_arceb        | NO        | NO        | NO       | 1            |
+> | BR2_arm          | YES       | YES       | YES      |              |
+> | BR2_armeb        | YES       | YES       | YES      |              |
+> | BR2_aarch64      | YES       | NO        | YES      | 2            |
+> | BR2_bfin         | NO        | NO        | NO       | 1            |
+> | BR2_i386         | YES       | YES       | YES      |              |
+> | BR2_microblazeel | YES       | YES       | NO       | 3            |
+> | BR2_microblazebe | YES       | YES       | NO       | 3            |
+> | BR2_mips         | YES       | YES       | YES      |              |
+> | BR2_mipsel       | YES       | YES       | YES      |              |
+> | BR2_mips64       | YES       | YES       | YES      |              |
+> | BR2_mips64el     | YES       | YES       | YES      |              |
+> | BR2_nios2        | YES       | NO        | NO       | 4            |
+> | BR2_powerpc      | YES       | YES       | YES      |              |
+> | BR2_powerpc64    | YES       | YES       | YES      |              |
+> | BR2_powerpc64el  | YES       | YES       | YES      |              |
+> | BR2_sh           | YES       | YES       | YES      |              |
+> | BR2_sh64         | NO        | NO        | NO       | 5            |
+> | BR2_sparc        | NO        | NO        | NO       | 5            |
+> | BR2_x86_64       | YES       | YES       | YES      |              |
+> | BR2_xtensa       | NO        | NO        | NO       | 1            |
+> +------------------+-----------+-----------+----------+--------------+
+> 
+> Problem 1
+> ---------
+> There is no toolchain with NPTL for this architecture
+> 
+> Problem 2
+> ---------
+> Qt Webkit fails to compile for aarch64:
+> 
+> In file included from runtime/JSCell.h:31:0,
+>                  from runtime/JSObject.h:31,
+>                  from wtf/DateMath.cpp:79:
+> runtime/JSValueInlineMethods.h: In constructor
+> ?JSC::JSValue::JSValue(JSC::JSCell*)?:
+> runtime/JSValueInlineMethods.h:230:57: error: cast from ?JSC::JSCell*?
+> to ?int32_t {aka int}? loses precision [-fpermissive]
+>          u.asBits.payload = reinterpret_cast<int32_t>(ptr);
+>                                                          ^
+> 
+> Problem 3
+> ---------
+> Grantlee fails to link for microblaze:
+> 
+> microblaze-buildroot-linux-gnu/bin/ld: fde encoding in
+> CMakeFiles/grantlee_core.dir/engine.cpp.o(.eh_frame) prevents
+> .eh_frame_hdr table being created.
+> microblaze-buildroot-linux-gnu/4.9.2/../../../../microblaze-buildroot-linux-gnu/bin/ld:
+> fde encoding in
+> CMakeFiles/grantlee_core.dir/engine.cpp.o(.eh_framecollect2: error: ld
+> returned 1 exit status
+> microblaze-buildroot-linux-gnu/4.9.2/make[3]: ../.***
+> [textdocument/lib/libgrantlee_gui.so.0.2.0] Error 1.
+> 
+> Problem 4
+> ---------
+> Qt Gui fails to link for nios2. Both Qt Webkit and Grantlee packages
+> depend on Qt Gui:
+> 
+> linking ../../lib/libQtGui.so.4.8.6
+> /home/ldap/vriera/work/mips-buildroots/mips32/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld:
+> BFD (Sourcery CodeBench Lite 2014.05-47) 2.24.51.20140217 assertion fail
+> /scratch/sandra/nios2-linux-respin/obj/binutils-src-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu/bfd/elf32-nios2.c:1037
+> 
+> Problem 5
+> ---------
+> I'm unable to build a toolchain for this architecture, and there isn't
+> any external toolchain available.
+> 
+> Best regards,
+> 
 
-Even if they can be built they really are intended for (e)glibc so we agree.
-If you need to access/use wbclient functionality you could just use the
-wbclient (winbind) api by enabling samba install to staging, that's the
-public way of accessing it.
+Nobody? :-(
 
->  * The fact that the winbindd daemon is not actually needed on the
->    target to get libnss_wins/libnss_winbind working. My understanding
->    is that winbindd is a daemon that will answer to the name resolution
->    requests of libnss_wins/libnss_winbind, so I don't see how they can
->    work without the daemon running.
-
-AFAIK you need winbind running in order to use libwbclient and/or
-libnss_winbind/wins. I think libnss_wins has a fallback to DNS-only mode
-but it's probably not very useful.
-
-Also please note that Samba 3 is very likely going EOL as soon as Samba
-4.2.x is released which even though delayed a bit in the RC phase is
-coming along pretty soon, so adding feature to the samba3 package isn't
-very wise IMHO (it's in security-only fixes now).
-See: https://wiki.samba.org/index.php/Samba_Release_Planning
-
-Regards.
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Processor IP
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
