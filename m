@@ -1,37 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Nov 2014 20:45:51 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-23
-In-Reply-To: <87sih8u3it.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 24 Nov 2014 14:33:30 +0100")
-References: <20141124073015.9A70D1016F6@stock.ovh.net>
- <20141124130530.GA2420@tarshish> <87sih8u3it.fsf@dell.be.48ers.dk>
-Message-ID: <87fvd8tma8.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Nov 2014 20:56:52 +0100
+Subject: [Buildroot] buildroot does not copy the C++ headers to sysroot
+In-Reply-To: <349401945.53923382.1416848572340.JavaMail.root@telenet.be> (bart
+ thoelen's message of "Mon, 24 Nov 2014 18:02:52 +0100 (CET)")
+References: <1600692898.53530555.1416834863233.JavaMail.root@telenet.be>
+ <87oarwu2y3.fsf@dell.be.48ers.dk>
+ <1376091194.53675670.1416840204279.JavaMail.root@telenet.be>
+ <87k32ktzi7.fsf@dell.be.48ers.dk>
+ <349401945.53923382.1416848572340.JavaMail.root@telenet.be>
+Message-ID: <87bnnwtlrv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "bart" == bart thoelen <bart.thoelen@telenet.be> writes:
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> Hi Peter,
- >> On Mon, Nov 24, 2014 at 08:30:15AM +0100, Thomas Petazzoni wrote:
- >>> mips | ruby-2.1.5 | NOK |
- >>> http://autobuild.buildroot.net/results/13cc762085bca1b7a8ddae015661624fe34311ca/
+ > Hi,
+ > I found the problem.  It was using the -I(includedir) in the Makefile.am of the projects.
+ > This was causing the Makefile to get the headers from /usr/include.
 
- >> Can't reproduce this one here. It seems to only fail on your build machines 
- >> (http://autobuild.buildroot.net/?reason=ruby-2.1.5). Can you take a look?
+ > The hint "look at config.log" did wonders to me ;).  Thanks.  
 
- > Yes, I've started a manual build of that defconfig on gcc16 and will
- > take a look when it fails.
+Great, good to hear.
 
-.. and I can also not reproduce it. It must be related to a race
-condition as it has only triggered 4 times since the ruby version was
-bumped on the 13th.
+ >>>> nmcmdserver_CPPFLAGS = -I$(includedir) -Wall -O3 -Werror -DNMSERVER_BUILD=$(SVN_REVISION)
 
-I'll try a clean rebuild again.
+ > I did this to let the Make automatically look for headers in the
+ > install directory (looked convenient to use libraries that way).
+
+ > Now it puzzles me why this works in our custom make-file/batch-file build system.
+
+Perhaps you don't pass a custom --prefix or --includedir? Target
+packages in Buildroot are built with --prefix=/usr (and includedir
+defaults to $prefix/include), E.G. the path that it will use on the
+target, not a path on your build host. This is done as the prefix (and
+derived variables like includedir) is used at runtime for some packages
+(to find plugins, executables and so on).
+
+ > Anyway, Case closed.
+
+ > many thanks.
+
+You're welcome.
 
 -- 
-Bye, Peter Korsgaard
+Bye, Peter Korsgaard 
