@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Nov 2014 10:04:13 +0000
-Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
-In-Reply-To: <20141122171615.7eb18494@free-electrons.com>
-References: <1416587791-30125-1-git-send-email-jaap@jcz.nl>	<546F6FCB.1090101@imgtec.com>
- <20141122171615.7eb18494@free-electrons.com>
-Message-ID: <5473029D.4050103@imgtec.com>
+Date: Mon, 24 Nov 2014 10:10:50 +0000
+Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
+In-Reply-To: <20141122193924.34aa21ec@free-electrons.com>
+References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20141122193924.34aa21ec@free-electrons.com>
+Message-ID: <5473042A.8020505@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,30 @@ To: buildroot@busybox.net
 
 Dear Thomas Petazzoni,
 
-On 11/22/2014 04:16 PM, Thomas Petazzoni wrote:
+On 11/22/2014 06:39 PM, Thomas Petazzoni wrote:
 > Dear Vicente Olivert Riera,
 > 
-> On Fri, 21 Nov 2014 17:00:59 +0000, Vicente Olivert Riera wrote:
+> On Fri, 21 Nov 2014 15:33:07 +0000, Vicente Olivert Riera wrote:
 > 
->> Another one. When you create the patch using "git format-patch", before
->> sending it, please edit the patch using your favourite text editor and
->> add the version number in the "Subject" line. Here is an example using
->> your own patch:
->>
->> Subject: [PATCH v2] bluez5_utils: bumped version number to 5.25
+>> +LIBFM_EXTRA_VERSION = 1.2.3
+>> +LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
 > 
-> Just a quick comment: there's no need to fire up a text editor to do
-> this. Just do:
+> This is the exact same tarball as the one used for the libfm package:
 > 
-> 	git format-patch --subject-prefix="PATCHv2"
+> +LIBFM_VERSION = 1.2.3
+> +LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
+> +LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
 > 
-> Best regards,
-> 
-> Thomas
-> 
+> Why do we have two different packages? Is it because libfm full version
+> needs menu-cache, and menu-cache needs libfm-extra?
 
-I didn't know that. Thanks for the info :-)
+Yes, that is exactly the reason. Look for instance how is done in
+LinuxFromScratch:
+
+http://www.linuxfromscratch.org/blfs/view/svn/lxde/libfm-extra.html
+
+They build libfm-extra first, then menu-cache and then libfm. I did
+exactly the same.
 
 Cheers,
 -- 
