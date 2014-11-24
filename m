@@ -1,47 +1,96 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Nov 2014 10:10:50 +0000
-Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
-In-Reply-To: <20141122193924.34aa21ec@free-electrons.com>
-References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141122193924.34aa21ec@free-electrons.com>
-Message-ID: <5473042A.8020505@imgtec.com>
+From: James Kelly <kellyj@forsbergservices.co.uk>
+Date: Mon, 24 Nov 2014 10:10:48 +0000
+Subject: [Buildroot] Adding new Qmake package
+Message-ID: <22B0402C888FE4478287AE5975230B07EBB1@sv-exch-01.forsberg.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+I've tried to add a package to Buildroot that uses Qt and Boost. The package uses qmake to generate a Makefile, this part seems to be working, however I get an error when I build saying:
 
-On 11/22/2014 06:39 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Fri, 21 Nov 2014 15:33:07 +0000, Vicente Olivert Riera wrote:
-> 
->> +LIBFM_EXTRA_VERSION = 1.2.3
->> +LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
-> 
-> This is the exact same tarball as the one used for the libfm package:
-> 
-> +LIBFM_VERSION = 1.2.3
-> +LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
-> +LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
-> 
-> Why do we have two different packages? Is it because libfm full version
-> needs menu-cache, and menu-cache needs libfm-extra?
+Could not find qmake configuration file qws/linux-arm-g++.
+Error processing project file: MsgDisplay.pro
 
-Yes, that is exactly the reason. Look for instance how is done in
-LinuxFromScratch:
+The contents of my package is laid out like this:
+DummyPgm
+??? main.cpp
+??? MsgDisplay.pri
+??? MsgDisplay.pro
+??? MsgDisplay.pro.user
+??? MsgHandler.cpp
+??? MsgHandler.h
+??? MsgServer.cpp
+??? MsgServer.h
+??? Tcp
+?   ??? TcpAddrPort.cpp
+?   ??? TcpAddrPort.h
+?   ??? TcpServer.cpp
+?   ??? TcpServer.h
+?   ??? TcpSocket.cpp
+?   ??? TcpSocket.h
+??? Tools
+    ??? Banner.cpp
+    ??? Banner.h
+    ??? IoExt.h
+    ??? SeparateArgumentList.cpp
+    ??? SeparateArgumentList.h
+    ??? SysTypes.h
 
-http://www.linuxfromscratch.org/blfs/view/svn/lxde/libfm-extra.html
+2 directories, 20 files
 
-They build libfm-extra first, then menu-cache and then libfm. I did
-exactly the same.
+I have added a package directory, dummypgm, which contains Config.in and dummypgm.mk files. The contents of the files are:
 
-Cheers,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Config.in:
+
+config BR2_PACKAGE_DUMMYPGM
+        bool "dummypgm"
+        help
+          Foo Software.
+
+          http://www.foo.com
+
+dummypgm.mk:
+
+DUMMYPGM_VERSION = 0.1.0
+DUMMYPGM_SOURCE = DummyPgm-$(DUMMYPGM_VERSION).tar.gz
+
+define DUMMYPGM_CONFIGURE_CMDS
+    (cd $(@D); $(QT_QMAKE)  MsgDisplay.pro)
+endef
+
+define DUMMYPGM_BUILD_CMDS
+        $(MAKE) -C $(@D)
+endef
+
+
+$(eval $(generic-package))
+
+Since the package is hosted locally, I've simply put the DummyPgm-0.1.0.tar.gz in the dl directory.
+
+I've also added the following to package/Config.in:
+
+source "package/dummypgm/Config.in"
+
+I'm a little lost as to why this doesn't work, if anyone could help me I would be very grateful. Also, is there any way to call $(eval $(qmake-package)) or something?
+
+Thanks,
+James Kelly
+Software Engineer
+
+Forsberg Services Ltd
+Richmond House
+White Cross
+Lancaster LA1 4XF U.K.
+Tel: 01524 383320
+Fax: 01524 382939
+www.forsbergservices.co.uk<http://www.forsbergservices.co.uk/>
+
+VAT No: GB 470 8895 04
+Registration No:  SC104949
+Registered address:  1 East Craibstone Street, Aberdeen, AB11 6YQ
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141124/9e7566d1/attachment.html>
