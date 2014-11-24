@@ -1,39 +1,27 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 24 Nov 2014 14:04:42 +0100
-Subject: [Buildroot] [PATCH] sstrip: fix source svn repoisoty url
-Message-ID: <1416834282-30246-1-git-send-email-fabio.porcedda@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 24 Nov 2014 15:05:30 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-23
+In-Reply-To: <20141124073015.9A70D1016F6@stock.ovh.net>
+References: <20141124073015.9A70D1016F6@stock.ovh.net>
+Message-ID: <20141124130530.GA2420@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because the svn repository url was changed the command
-"make sstrip-source" give this error:
+Hi Peter,
 
-svn: E000101: Unable to connect to a repository at URL 'svn://dev.openwrt.org/openwrt/trunk/tools/sstrip'
-svn: E000101: Can't connect to host 'dev.openwrt.org': Network is unreachable
+On Mon, Nov 24, 2014 at 08:30:15AM +0100, Thomas Petazzoni wrote:
+>         mips |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/13cc762085bca1b7a8ddae015661624fe34311ca/
 
-To fix this error use the correct url "svn://svn.openwrt.org/openwrt".
+Can't reproduce this one here. It seems to only fail on your build machines 
+(http://autobuild.buildroot.net/?reason=ruby-2.1.5). Can you take a look?
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sstrip/sstrip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+baruch
 
-diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
-index deab010..fe57b3c 100644
---- a/package/sstrip/sstrip.mk
-+++ b/package/sstrip/sstrip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
-+SSTRIP_SITE = svn://svn.openwrt.org/openwrt/trunk/tools/sstrip
- SSTRIP_VERSION = 20154
- HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
- 
 -- 
-2.1.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
