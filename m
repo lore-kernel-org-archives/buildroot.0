@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Nov 2014 22:21:42 +0100
-Subject: [Buildroot] [PATCH] uemacs: bump to latest LT master
-In-Reply-To: <194ba09dbf60d59366091421eac61ee6accb1bdc.1416758897.git.baruch@tkos.co.il>
-References: <194ba09dbf60d59366091421eac61ee6accb1bdc.1416758897.git.baruch@tkos.co.il>
-Message-ID: <20141124222142.0d1811ad@free-electrons.com>
+Date: Mon, 24 Nov 2014 22:27:07 +0100
+Subject: [Buildroot] [git commit] czmq: fix static build
+Message-ID: <20141124212855.8F14E7FED7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=e9201d558f0abe4e6a299287c926a795b28af6f4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Nov 2014 18:08:17 +0200, Baruch Siach wrote:
-> Latest LT (Linus Torvalds) master fixes symbol collision with ncurses.
-> 
-> Drop patches 01 and 02 as they are not needed anymore.
-> 
-> Refresh patch 03 to account for context changes, and rename to new convention.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6e0/6e0fb4a74f62e23cbc56482ae25f9979fa6f14f8/
-> http://autobuild.buildroot.net/results/df9/df9b693d7f53daba0d25f52132ca1594dd1273fa/
-> http://autobuild.buildroot.net/results/b39/b39d3997466951df078a5f47c5a75200b07dca4c/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...ixon.patch => 01-clear-ixon-termios-flag.patch} | 15 +++++-----
->  package/uemacs/uemacs-4.0.15-lt.01.patch           | 33 ----------------------
->  package/uemacs/uemacs-4.0.15-lt.02.patch           | 16 -----------
->  package/uemacs/uemacs.mk                           |  6 ++--
->  4 files changed, 11 insertions(+), 59 deletions(-)
->  rename package/uemacs/{uemacs-4.0.15-lt.03.ixon.patch => 01-clear-ixon-termios-flag.patch} (64%)
->  delete mode 100644 package/uemacs/uemacs-4.0.15-lt.01.patch
->  delete mode 100644 package/uemacs/uemacs-4.0.15-lt.02.patch
+libstdc++ may also need -lm.
 
-Applied, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/aab/aab80285c54641fd7c217cdd45c4593e5c3a66c5/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/czmq/czmq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 9a12726..25f67d5 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -19,7 +19,7 @@ CZMQ_LICENSE_FILES = LICENSE
+ CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-CZMQ_CONF_OPTS += LIBS=-lstdc++
++CZMQ_CONF_OPTS += LIBS="-lstdc++ -lm"
+ endif
+ 
+ define CZMQ_CREATE_CONFIG_DIR
