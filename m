@@ -1,54 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Nov 2014 20:33:45 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
-In-Reply-To: <5473042A.8020505@imgtec.com>
-References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141122193924.34aa21ec@free-electrons.com>
- <5473042A.8020505@imgtec.com>
-Message-ID: <20141124203345.474d71b1@free-electrons.com>
+Date: Mon, 24 Nov 2014 20:34:53 +0100
+Subject: [Buildroot] [PATCH 2/2] samba: Add support for libnss_win*.so*
+ installation
+In-Reply-To: <54730753.3030108@zacarias.com.ar>
+References: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>
+ <1407176057-13180-2-git-send-email-benoit.thebaudeau@advansee.com>
+ <20141122213359.2628a10e@free-electrons.com>
+ <54730753.3030108@zacarias.com.ar>
+Message-ID: <20141124203453.59c5f279@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Gustavo Zacarias,
 
-On Mon, 24 Nov 2014 10:10:50 +0000, Vicente Olivert Riera wrote:
+On Mon, 24 Nov 2014 07:24:19 -0300, Gustavo Zacarias wrote:
 
-> On 11/22/2014 06:39 PM, Thomas Petazzoni wrote:
-> > Dear Vicente Olivert Riera,
+> > I must say I'm a bit skeptical about two things (about which probably
+> > Beno?t can give some details) :
 > > 
-> > On Fri, 21 Nov 2014 15:33:07 +0000, Vicente Olivert Riera wrote:
-> > 
-> >> +LIBFM_EXTRA_VERSION = 1.2.3
-> >> +LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
-> > 
-> > This is the exact same tarball as the one used for the libfm package:
-> > 
-> > +LIBFM_VERSION = 1.2.3
-> > +LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
-> > +LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
-> > 
-> > Why do we have two different packages? Is it because libfm full version
-> > needs menu-cache, and menu-cache needs libfm-extra?
+> >  * The usefulness of enabling the NSS libraries in non-glibc
+> >    environments. Even though I agree that technically, nothing prevents
+> >    some program from using them, in practice, the NSS libraries are
+> >    basically only used by the glibc name resolution logic. So I would
+> >    personally prefer to make those NSS libraries visible only in glibc
+> >    configurations.
 > 
-> Yes, that is exactly the reason. Look for instance how is done in
-> LinuxFromScratch:
+> Even if they can be built they really are intended for (e)glibc so we agree.
+> If you need to access/use wbclient functionality you could just use the
+> wbclient (winbind) api by enabling samba install to staging, that's the
+> public way of accessing it.
+
+Agreed.
+
+> >  * The fact that the winbindd daemon is not actually needed on the
+> >    target to get libnss_wins/libnss_winbind working. My understanding
+> >    is that winbindd is a daemon that will answer to the name resolution
+> >    requests of libnss_wins/libnss_winbind, so I don't see how they can
+> >    work without the daemon running.
 > 
-> http://www.linuxfromscratch.org/blfs/view/svn/lxde/libfm-extra.html
-> 
-> They build libfm-extra first, then menu-cache and then libfm. I did
-> exactly the same.
+> AFAIK you need winbind running in order to use libwbclient and/or
+> libnss_winbind/wins. I think libnss_wins has a fallback to DNS-only mode
+> but it's probably not very useful.
 
-And you didn't explain that anywhere in the commit logs? No comments
-about this in the code? If you want such non-obvious stuff to be merged
-one day, you should at least add a little bit of explanation about it.
+Ok.
 
-This all seems a bit crazy. How are the pcmanfm people building their
-stuff?
+Beno?t, can you rework your patches to take into account those comments?
 
-Thanks!
+> Also please note that Samba 3 is very likely going EOL as soon as Samba
+> 4.2.x is released which even though delayed a bit in the RC phase is
+> coming along pretty soon, so adding feature to the samba3 package isn't
+> very wise IMHO (it's in security-only fixes now).
+> See: https://wiki.samba.org/index.php/Samba_Release_Planning
+
+Ok. Still there's some chance that we will keep Samba 3 around for a
+bit of time, just like we still have libgtk2 available.
 
 Thomas
 -- 
