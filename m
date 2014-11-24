@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Nov 2014 22:29:28 +0100
-Subject: [Buildroot] [PATCH] czmq: fix static build
-In-Reply-To: <2ae14883aaaf95d9b8115ae50a2f17136c8315d1.1416754006.git.baruch@tkos.co.il>
-References: <2ae14883aaaf95d9b8115ae50a2f17136c8315d1.1416754006.git.baruch@tkos.co.il>
-Message-ID: <20141124222928.14e8c998@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Nov 2014 22:45:02 +0100
+Subject: [Buildroot] [git commit] xorg-server: needs mmu
+Message-ID: <20141124214635.AF1957FED8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=7c00cd1c31e15daa299e0adc8cab705f03f2bf67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Nov 2014 16:46:46 +0200, Baruch Siach wrote:
-> libstdc++ may also need -lm.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/aab/aab80285c54641fd7c217cdd45c4593e5c3a66c5/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/czmq/czmq.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+os/utils.c::System() unconditionally uses fork(), so it only builds on
+configurations with mmu.
 
-Applied to master, thanks.
+(Indirectly) fixes:
+http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
+http://autobuild.buildroot.net/results/d27/d279dc35bff53b7f939af02bee70b1ed3014e49b/
+http://autobuild.buildroot.net/results/84b/84b8f19221a5c841de3016959c99b92c96c57e81/
 
-I really wish all those libraries would be using pkg-config instead...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xserver_xorg-server/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 5581240..bf9f820 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -50,13 +50,14 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	depends on !BR2_avr32
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  X.Org X server
+ 
+ 	  http://xorg.freedesktop.org
+ 
+ comment "xorg-xserver is BROKEN on AVR32"
+-	depends on BR2_avr32
++	depends on BR2_avr32 && BR2_USE_MMU
+ 
+ if BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
