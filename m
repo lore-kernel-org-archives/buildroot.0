@@ -1,17 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Nov 2014 16:00:16 +0100
+From: bart.thoelen at telenet.be <bart.thoelen@telenet.be>
+Date: Mon, 24 Nov 2014 18:02:52 +0100 (CET)
 Subject: [Buildroot] buildroot does not copy the C++ headers to sysroot
-In-Reply-To: <1376091194.53675670.1416840204279.JavaMail.root@telenet.be>
- (bart thoelen's message of "Mon, 24 Nov 2014 15:43:24 +0100 (CET)")
+In-Reply-To: <87k32ktzi7.fsf@dell.be.48ers.dk>
 References: <1600692898.53530555.1416834863233.JavaMail.root@telenet.be>
  <87oarwu2y3.fsf@dell.be.48ers.dk>
  <1376091194.53675670.1416840204279.JavaMail.root@telenet.be>
-Message-ID: <87k32ktzi7.fsf@dell.be.48ers.dk>
+ <87k32ktzi7.fsf@dell.be.48ers.dk>
+Message-ID: <349401945.53923382.1416848572340.JavaMail.root@telenet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Hi,
+
+I found the problem.  It was using the -I(includedir) in the Makefile.am of the projects.
+This was causing the Makefile to get the headers from /usr/include.
+
+The hint "look at config.log" did wonders to me ;).  Thanks.  
+
+>>> nmcmdserver_CPPFLAGS = -I$(includedir) -Wall -O3 -Werror -DNMSERVER_BUILD=$(SVN_REVISION)
+
+I did this to let the Make automatically look for headers in the install directory (looked convenient to use libraries that way).
+
+Now it puzzles me why this works in our custom make-file/batch-file build system.
+
+Anyway, Case closed.
+
+many thanks.
+
+Greetz,
+
+BartT
+
+----- Original Message -----
+From: "Peter Korsgaard" <peter@korsgaard.com>
+To: "bart thoelen" <bart.thoelen@telenet.be>, buildroot at uclibc.org
+Sent: Monday, November 24, 2014 4:00:16 PM
+Subject: Re: buildroot does not copy the C++ headers to sysroot
 
 >>>>> "bart" == bart thoelen <bart.thoelen@telenet.be> writes:
 
