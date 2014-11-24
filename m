@@ -1,61 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Nov 2014 21:47:45 +0100
-Subject: [Buildroot] [PATCH 13/51] samba: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
-In-Reply-To: <20141124214500.58bd4f37@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 24 Nov 2014 21:45:00 +0100")
-References: <1416775163-20215-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1416775163-20215-14-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141124044922.GB2241@tarshish>
- <20141124214500.58bd4f37@free-electrons.com>
-Message-ID: <877fyktjf2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Nov 2014 22:02:51 +0100
+Subject: [Buildroot] [git commit] sstrip: fix source svn repository url
+Message-ID: <20141124210319.5991D7FEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8f538ec07c67e63173240eafee51b9877c317570
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Baruch Siach,
- > On Mon, 24 Nov 2014 06:49:22 +0200, Baruch Siach wrote:
- >> Hi Thomas,
- >> 
- >> On Sun, Nov 23, 2014 at 09:38:45PM +0100, Thomas Petazzoni wrote:
- >> > +define SAMBA_INSTALL_INIT_SYSV
- >> > +	# install start/stop script
- >> > +	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
- >> > +		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
- >> > +	fi
- >> > +endef
- >> 
- >> Why not install the init script unconditionally like you did in vsftpd?
+Because the svn repository url was changed the command "make
+sstrip-source" gives this error:
 
- > Well, when I saw how many packages were still installing init script
- > (and other files) conditionally, I kind of changed my mind mid-way
- > through the patch series, and therefore for the remaining patches
- > decided to keep things as they were: keep the condition when it was
- > there, and keep the direct installation with no condition when it was
- > done this way.
+svn: E000101: Unable to connect to a repository at URL 'svn://dev.openwrt.org/openwrt/trunk/tools/sstrip'
+svn: E000101: Can't connect to host 'dev.openwrt.org': Network is unreachable
 
- > We certainly need a decision about whether we want those conditions
- > everywhere. Their role is to potentially allow the users to provide a
- > custom version of those scripts (or configuration files) in the
- > filesystem skeleton. I personally believe it's not a good idea, for two
- > reasons:
+To fix this error use the correct url "svn://svn.openwrt.org/openwrt".
 
- >  * People should use a filesystem overlay and/or post-build script
- >    instead of a custom skeleton.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sstrip/sstrip.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- >  * Why would we install our own stuff conditionally, while the
- >    build system of all packages install things unconditionally, making
- >    it anyway impossible for a target skeleton to customize all files.
-
- > Peter, your call?
-
-Yes, I agree - Lets get rid of these legacy checks. Using a custom
-rootfs overlay / post-build script is a lot more flexible and robust.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+index deab010..fe57b3c 100644
+--- a/package/sstrip/sstrip.mk
++++ b/package/sstrip/sstrip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
++SSTRIP_SITE = svn://svn.openwrt.org/openwrt/trunk/tools/sstrip
+ SSTRIP_VERSION = 20154
+ HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
+ 
