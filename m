@@ -1,65 +1,56 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 24 Nov 2014 14:57:02 +0100
-Subject: [Buildroot] [PATCH v4 next 5/5] support/download: pass the quiet
-	flag to the scp download helper
-In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1416837422-1977-6-git-send-email-fabio.porcedda@gmail.com>
+Date: Mon, 24 Nov 2014 15:04:39 +0100
+Subject: [Buildroot] [PATCH v3 0/3] Improve silent builds
+In-Reply-To: <CAHkwnC-wvwaW93vGFxngb4g3qe+DniredP82c=P8SjFpTVB4ng@mail.gmail.com>
+References: <1415265217-18494-1-git-send-email-fabio.porcedda@gmail.com>
+ <20141106182725.450971c9@free-electrons.com>
+ <CAHkwnC-Ds16rDgPAASzLof_xcGgvde_Pni9Vc8Am45gnNT5_PA@mail.gmail.com>
+ <20141106185330.659d572f@free-electrons.com> <20141111153752.GI4240@free.fr>
+ <CAHkwnC-wvwaW93vGFxngb4g3qe+DniredP82c=P8SjFpTVB4ng@mail.gmail.com>
+Message-ID: <CAHkwnC_U_ndERaCC9u36=0BxnJf0rOOsXDKn+QEXi2+bVFSiKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be coherent to others download helper, instead of adding the "QUIET"
-variable to the "SCP" variable, pass the "QUIET" variable to the scp
-download helper.
+On Tue, Nov 11, 2014 at 4:39 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Tue, Nov 11, 2014 at 4:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Thomas, Fabio, All,
+>>
+>> On 2014-11-06 18:53 +0100, Thomas Petazzoni spake thusly:
+>>> On Thu, 6 Nov 2014 18:35:32 +0100, Fabio Porcedda wrote:
+>>>
+>>> > > When I look at patches 2 and 3, I must say I dislike the fact that in
+>>> > > one case (svn), silencing is handled in pkg-download.mk when defining
+>>> > > the SVN variable, while in the other case (git), it's handled in the
+>>> > > git-specific helper script.
+>>> >
+>>> > I would like to do the same for git but it does not work because:
+>>> >   git -q clone <url>
+>>> > does not work, but
+>>> >   git  clone -q <url>
+>>> > works, so adding the "-q" in the script is the only option.
+>>> >
+>>> > Do you have any better idea?
+>>>
+>>> Yes: handle the svn case in the download helper as well. This way,
+>>> we're consistent between svn and git. And maybe wget should be handled
+>>> this way as well.
+>>>
+>>> Yann can comment on this on whether my proposal is fine for him.
+>>
+>> Sorry for the delay, still dequeuing my mails from last week...
+>>
+>> I agree with Thomas proposal: move everything into the helper scripts.
+>
+> Ok, i will send an updated patch set.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
+I've sent two updated patch sets:
+- for master: http://patchwork.ozlabs.org/patch/412475/
+- for next: http://patchwork.ozlabs.org/bundle/fabio/silent-download-v4/
 
-Notes:
-    v4:
-     - add this patch
-
- package/pkg-download.mk | 5 +++--
- support/download/scp    | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 074488d..7b9e260 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -14,7 +14,7 @@ export CVS := $(call qstrip,$(BR2_CVS))
- export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
--export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
-+export SCP := $(call qstrip,$(BR2_SCP))
- SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
-@@ -175,7 +175,8 @@ define DOWNLOAD_SCP
- 	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) support/download/wrapper scp \
- 		$(DL_DIR)/$(2) \
--		'$(call stripurischeme,$(call qstrip,$(1)))' && \
-+		'$(call stripurischeme,$(call qstrip,$(1)))' \
-+		$(QUIET) && \
- 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
-diff --git a/support/download/scp b/support/download/scp
-index f3e92f3..cdcf71b 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -12,5 +12,6 @@ set -e
- 
- output="${1}"
- url="${2}"
-+quiet="${3}"
- 
--${SCP} "${url}" "${output}"
-+${SCP} ${quiet} "${url}" "${output}"
+BR
 -- 
-2.1.3
+Fabio Porcedda
