@@ -1,36 +1,45 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 24 Nov 2014 14:56:58 +0100
-Subject: [Buildroot] [PATCH v4 next 1/5] support/download: silence git if it
-	is a silent build
+Date: Mon, 24 Nov 2014 14:57:00 +0100
+Subject: [Buildroot] [PATCH v4 next 3/5] support/download: pass the quiet
+	flag to the hg download helper
 In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1416837422-1977-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1416837422-1977-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If it is a silent build (make -s -> QUIET=-q) silence the git download
-helper using "git clone -q" just like others download helpers,
-e.g. wget.
+To be coherent to others download helper, instead of adding the "QUIET"
+variable to the "HG" variable, pass the "QUIET" variable to the hg
+download helper.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
 
 Notes:
-    v3:
+    v4:
      - add this patch
 
- package/pkg-download.mk |  3 ++-
- support/download/git    | 14 ++++++++++----
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ package/pkg-download.mk | 5 +++--
+ support/download/hg     | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f3409bd..95175d6 100644
+index a8a042b..1aeea3a 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -99,7 +99,8 @@ define DOWNLOAD_GIT
+@@ -13,7 +13,7 @@ export SVN := $(call qstrip,$(BR2_SVN))
+ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
+ export GIT := $(call qstrip,$(BR2_GIT))
+-export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
++export HG := $(call qstrip,$(BR2_HG))
+ export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+@@ -194,7 +194,8 @@ define DOWNLOAD_HG
  		$(DL_DIR)/$($(PKG)_SOURCE) \
  		$($(PKG)_SITE) \
  		$($(PKG)_DL_VERSION) \
@@ -40,48 +49,22 @@ index f3409bd..95175d6 100644
  endef
  
  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-diff --git a/support/download/git b/support/download/git
-index 5d36ca4..4ce9030 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -9,6 +9,7 @@ set -e
- #   $2: git repo
- #   $3: git cset
- #   $4: package's basename (eg. foobar-1.2.3)
-+#   $5: "-q", optional quiet flag
- # And this environment:
- #   GIT      : the git command to call
- 
-@@ -16,21 +17,26 @@ output="${1}"
+diff --git a/support/download/hg b/support/download/hg
+index 66bd2ed..1047483 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -16,9 +16,10 @@ output="${1}"
  repo="${2}"
  cset="${3}"
  basename="${4}"
 +quiet="${5}"
  
- # Try to see if we can do a shallow clone, since it is faster
- # than a full clone.
- git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing shallow clone\n";
-+    fi
-+    if ${GIT} clone ${quiet} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-         git_done=1
-     else
-         printf "Shallow clone failed, falling back to doing a full clone\n"
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    ${GIT} clone --bare "${repo}" "${basename}"
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing full clone\n";
-+    fi
-+    ${GIT} clone ${quiet} --bare "${repo}" "${basename}"
- fi
+-${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
++${HG} ${quiet} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
  
- GIT_DIR="${basename}" \
+-${HG} archive --repository "${basename}" --type tgz \
++${HG} ${quiet} archive --repository "${basename}" --type tgz \
+               --prefix "${basename}" --rev "${cset}" \
+               "${output}"
 -- 
 2.1.3
