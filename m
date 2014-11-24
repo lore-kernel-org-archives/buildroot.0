@@ -1,70 +1,65 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 24 Nov 2014 14:56:59 +0100
-Subject: [Buildroot] [PATCH v4 next 2/5] support/download: silence svn if it
-	is a silent build
+Date: Mon, 24 Nov 2014 14:57:01 +0100
+Subject: [Buildroot] [PATCH v4 next 4/5] support/download: pass the quiet
+	flag to the wget download helper
 In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1416837422-1977-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1416837422-1977-5-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If it is a silent build (make -s -> QUIET=-q) silence the svn download
-helper using "svn -q" just like others download helpers, e.g. wget.
+To be coherent to others download helper, instead of adding the "QUIET"
+variable to the "WGET" variable, pass the "QUIET" variable to the wget
+download helper.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
 
 Notes:
     v4:
-    - instead of changing the "SVN" variable pass the "-q" option to the
-      download helper (Thomas P.)
-    v3:
      - add this patch
 
- package/pkg-download.mk | 3 ++-
- support/download/svn    | 4 +++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/pkg-download.mk | 5 +++--
+ support/download/wget   | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 95175d6..a8a042b 100644
+index 1aeea3a..074488d 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -156,7 +156,8 @@ define DOWNLOAD_SVN
- 		$(DL_DIR)/$($(PKG)_SOURCE) \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$(QUIET)
+@@ -8,7 +8,7 @@
+ ################################################################################
+ 
+ # Download method commands
+-export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
++export WGET := $(call qstrip,$(BR2_WGET))
+ export SVN := $(call qstrip,$(BR2_SVN))
+ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
+@@ -213,7 +213,8 @@ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) support/download/wrapper wget \
+ 		$(DL_DIR)/$(2) \
+-		'$(call qstrip,$(1))' && \
++		'$(call qstrip,$(1))' \
++		 $(QUIET) && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
  endef
  
- define SOURCE_CHECK_SVN
-diff --git a/support/download/svn b/support/download/svn
-index a960f7d..d75f306 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -9,6 +9,7 @@ set -e
- #   $2: svn repo
- #   $3: svn revision
- #   $4: package's basename (eg. foobar-1.2.3)
-+#   $5: "-q", optional quiet flag
- # And this environment:
- #   SVN      : the svn command to call
+diff --git a/support/download/wget b/support/download/wget
+index 6b73726..eaa150a 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -12,5 +12,6 @@ set -e
  
-@@ -16,7 +17,8 @@ output="${1}"
- repo="${2}"
- rev="${3}"
- basename="${4}"
-+quiet="${5}"
+ output="${1}"
+ url="${2}"
++quiet="${3}"
  
--${SVN} export "${repo}@${rev}" "${basename}"
-+${SVN} ${quiet} export "${repo}@${rev}" "${basename}"
- 
- tar czf "${output}" "${basename}"
+-${WGET} -O "${output}" "${url}"
++${WGET} ${quiet} -O "${output}" "${url}"
 -- 
 2.1.3
