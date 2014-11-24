@@ -1,72 +1,55 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Mon, 24 Nov 2014 13:10:51 +0100
-Subject: [Buildroot] [PATCH v3] exiv2: new package
-In-Reply-To: <20141122181444.148d48f0@free-electrons.com>
-References: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
- <20141122181444.148d48f0@free-electrons.com>
-Message-ID: <20141124131051.64275b80@nserafini-N550JK>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Mon, 24 Nov 2014 13:41:38 +0100
+Subject: [Buildroot] Need help getting started with X11
+Message-ID: <CAEzGmjByqb2QB4+-QDOcJYDo6zvD+UpkG9kaNmBzBHKMFaGDJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hello,
 
-On Sat, 22 Nov 2014 18:14:44 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+I need help getting started with X11.
+Is there any Buildroot tutorial about this?
 
-> Dear Nicolas Serafini,
-> 
-> On Fri, 7 Nov 2014 11:48:14 +0100, Nicolas Serafini wrote:
-> > Add support for Exiv2 library and utility to manage image metadata
-> > 
-> > Exiv2 can be built in GPLv2+ or commercial version. But in
-> > commercial version the Nikon lens name database and the NLS support
-> > has to be disabled for copyright reason.
-> > 
-> > Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-> 
-> Thanks, I've applied your patch to the next branch. However, I've done
-> a number of changes before applying your patch:
-> 
->     [Thomas:
->      - switch to using the CMake build system, which works better
-> than the clunky autoconf + manual Makefile based build system.
+Or, if anyone would be so kind, I'm stuck at the below defconfig.
+The system works in the sense that I can ssh into it, but now I want
+graphics on the console display.
+I have not yet anything in the overlays that starts or otherwise relates to
+xorg.
+My target chipset is Intel 852GM.
+For one thing, what is supposed to create an xorg.conf?
+And I suppose X should be started somehow in supervisor.d like I start sshd
+there.
 
-I started using cmake for this package, but the functionality is marked
-as "work in progress" and is expected to be 100% functional for release
-0.25. Still I just tested with several configurations and it works.
+BR2_x86_i686=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+# BR2_TARGET_GENERIC_GETTY is not set
+BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XAPP_TWM=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XWD=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_SQLITE=y
+BR2_PACKAGE_CAIRO=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_SUPERVISOR=y
+BR2_PACKAGE_NANO=y
+# BR2_PACKAGE_NANO_TINY is not set
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
+BR2_TARGET_GRUB2=y
 
->      - add missing toolchains dependencies: does not build in static
->        library configuration, needs C++, etc.]
-
-Thank you for adding toolchains dependencies. I would be careful to
-add them next time.
-
-> 
-> If you could test the next branch, and verify that it continues to
-> work in your situation, it would be great.
-
-I tested it and it works as before.
-
-Thanks for this commit
-
-Regards,
-Nicolas
-
-> 
-> Thanks a lot,
-> 
-> Thomas
-
-
-
--- 
-Nicolas Serafini
-R&D Embedded Software Engineer
-
-www.sensefly.com
-Route de Gen?ve 38
-1033 Cheseaux-Lausanne
-Switzerland
+Regards
+Lennart
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141124/a62dfc6d/attachment.html>
