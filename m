@@ -1,46 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Nov 2014 22:45:02 +0100
-Subject: [Buildroot] [git commit] xorg-server: needs mmu
-Message-ID: <20141124214635.AF1957FED8@busybox.osuosl.org>
+Date: Mon, 24 Nov 2014 23:01:33 +0100
+Subject: [Buildroot] [PATCH next v2] python-certifi: add new package
+In-Reply-To: <20141122205900.5aa98365@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 22 Nov 2014 20:59:00 +0100")
+References: <1416649560-3561-1-git-send-email-yegorslists@googlemail.com>
+ <20141122170934.GD4295@free.fr>
+ <20141122190852.748af912@free-electrons.com>
+ <20141122185640.GE4295@free.fr>
+ <20141122205900.5aa98365@free-electrons.com>
+Message-ID: <873898tg02.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c00cd1c31e15daa299e0adc8cab705f03f2bf67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-os/utils.c::System() unconditionally uses fork(), so it only builds on
-configurations with mmu.
+ > Dear Yann E. MORIN,
+ > On Sat, 22 Nov 2014 19:56:40 +0100, Yann E. MORIN wrote:
 
-(Indirectly) fixes:
-http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
-http://autobuild.buildroot.net/results/d27/d279dc35bff53b7f939af02bee70b1ed3014e49b/
-http://autobuild.buildroot.net/results/84b/84b8f19221a5c841de3016959c99b92c96c57e81/
+ >> > > sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
+ >> > > sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
+ >> > 
+ >> > Why do we suggest to have two hashes? Isn't sha265 sufficient?
+ >> 
+ >> As Gustavo said, that's because sha1 and sha256 are two different hash
+ >> mechanisms, and it's better to have both.
+ >> 
+ >> So I was following his advice, even though I don't mind adding just the
+ >> sha256.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xserver_xorg-server/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ > Hum. We need some decision here :)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 5581240..bf9f820 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -50,13 +50,14 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
- 	depends on !BR2_avr32
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  X.Org X server
- 
- 	  http://xorg.freedesktop.org
- 
- comment "xorg-xserver is BROKEN on AVR32"
--	depends on BR2_avr32
-+	depends on BR2_avr32 && BR2_USE_MMU
- 
- if BR2_PACKAGE_XSERVER_XORG_SERVER
- 
+Ehh, I don't really know. I believe we have agreed on adding an extra
+hash if upstream only publishes a weak one (E.G. md5), but requiring
+both sha1 and sha256 is imho overkill.
+
+In general, I would say lets use sha256 if we need to calculate it
+ourselves, and otherwise whatever upstream publishes (unless it is md5,
+then we add sha256 ourselves).
+
+
+>> Note: the number of spaces does not matter, so one can use spaces to
+ >> properly align the different fields.
+
+ > And Peter, when reviewing the scancpan script, which did align things
+ > with spaces, was wondering why the script was doing this weird
+ > indentation.
+
+ > We also need some decision here :-)
+
+Well, there's the spaces between the hashtype and the hash, and then
+there's the space between the hash and the filename. I find it nicer to
+read if the hashes are aligned, and I prefer to be able to use the
+output of ${foo}sum directly for the hash + filename, which I why I
+suggested:
+
+type\thash  filename
+
+(two spaces between hash and filename) during the scanpan review, so you
+can do stuff like:
+
+for i in md5 sha256; do echo -en "$i\t"; ${i}sum <file>; done > foo.hash
+
+But it is not something I feel strongly about. Consistency between the
+different packages would be good though.
+
+-- 
+Bye, Peter Korsgaard
