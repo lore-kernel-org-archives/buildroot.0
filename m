@@ -1,85 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Nov 2014 22:04:57 +0100
-Subject: [Buildroot] [git commit] radvd: add a patch to fix build failure on
-	architectures without sysctl()
-Message-ID: <20141124211428.062E87FED1@busybox.osuosl.org>
+Date: Mon, 24 Nov 2014 22:14:45 +0100
+Subject: [Buildroot] [PATCH] xl2tp: fix static build
+In-Reply-To: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
+References: <83364a11d5a70fa1d3e52a9d44ea5c118dc3a4fe.1416738599.git.baruch@tkos.co.il>
+Message-ID: <20141124221445.5b799cc0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb54da1b03f2e6d684416c614021735dfe276606
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Modern architectures such as ARC do not provide the sysctl() system
-call, since it is deprecated. However, uClibc still installs
-<sys/sysctl.h> in such cases, which defeats radvd check for the
-availability of sysctl(). This commit adds a patch to radvd which
-improves the sysctl() checking.
+On Sun, 23 Nov 2014 12:29:59 +0200, Baruch Siach wrote:
+> Use pcap-config to list dependencies of libpcap.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/87f/87ff92831d265d437aa0dfcfb99e954f76597761/
+> http://autobuild.buildroot.net/results/cd5/cd5487e76259752cbe58b171f9a58970916f7bb8/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/xl2tp/xl2tp.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Fixes:
+Applied to master, thanks.
 
-  http://autobuild.buildroot.org/results/458/4581c4220adeaebbf6761e3b923088d8de8522d5/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- ...0003-Improve-check-of-the-sysctl-function.patch |   49 ++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
-
-diff --git a/package/radvd/0003-Improve-check-of-the-sysctl-function.patch b/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
-new file mode 100644
-index 0000000..3053f7b
---- /dev/null
-+++ b/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
-@@ -0,0 +1,49 @@
-+From 4c86b3cbf52f810615d92835e98d83e9555a4d88 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 23 Nov 2014 12:13:47 +0100
-+Subject: [PATCH 3/3] Improve check of the sysctl() function
-+
-+Since sysctl is a deprecated system call, new architectures such as
-+ARC don't implement it. In such cases, uClibc installs the
-+<sys/sysctl.h> header, but dos not implement the sysctl()
-+function. This has the annoying side effect of breaking the sysctl
-+detection of radvd, which is purely based on the header file being
-+present.
-+
-+To fix this, this commit adds a check based on the existence of the
-+sysctl() function.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac   | 1 +
-+ device-linux.c | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5dde3b2..5518f71 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -161,6 +161,7 @@ AC_CHECK_HEADERS( \
-+ 	time.h \
-+ )
-+ AC_HEADER_TIME
-++AC_CHECK_FUNCS([sysctl])
-+ 
-+ dnl Checks for typedefs, structures, and compiler characteristics.
-+ AC_MSG_CHECKING(whether struct sockaddr_in6 has sin6_scope_id)
-+diff --git a/device-linux.c b/device-linux.c
-+index 1ecaa6b..d9b56b8 100644
-+--- a/device-linux.c
-++++ b/device-linux.c
-+@@ -183,7 +183,7 @@ int check_ip6_forwarding(void)
-+ 		value = -1;
-+ 	}
-+ 
-+-#ifdef HAVE_SYS_SYSCTL_H
-++#if defined(HAVE_SYS_SYSCTL_H) && defined(HAVE_SYSCTL)
-+ 	int forw_sysctl[] = { SYSCTL_IP6_FORWARDING };
-+ 	size_t size = sizeof(value);
-+ 	if (!fp && sysctl(forw_sysctl, sizeof(forw_sysctl) / sizeof(forw_sysctl[0]), &value, &size, NULL, 0) < 0) {
-+-- 
-+2.1.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
