@@ -1,43 +1,50 @@
-From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
-Date: Tue, 25 Nov 2014 22:10:51 +0100
-Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <1494741.bpddRugsWT@sagittea>
-References: <20141019163952.19c7c080@free-electrons.com>
- <20141125183017.31cb5e67@free-electrons.com>
- <20141125184429.74b70457@e6520eb.localdomain>
- <1494741.bpddRugsWT@sagittea>
-Message-ID: <20141125221051.50c9eca0@e6520eb.localdomain>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Nov 2014 22:16:28 +0100
+Subject: [Buildroot] [PATCH next] package: add python-httplib2
+In-Reply-To: <20141125202500.12884fa1@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 25 Nov 2014 20:25:00 +0100")
+References: <1416939103-18848-1-git-send-email-peter@korsgaard.com>
+ <20141125202500.12884fa1@free-electrons.com>
+Message-ID: <874mtnrnf7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Le Tue, 25 Nov 2014 12:57:00 -0800 (PST),
-J?r?me Pouiller <jezz@sysmic.org> a ?crit :
-> On Tuesday 25 November 2014 18:44:29 Eric B?nard wrote:
-> > Le Tue, 25 Nov 2014 18:30:17 +0100,
-> [...]
-> > > Also, Eric, you mention the AMD GPU libraries, but do we have packages
-> > > for those libraries in Buildroot? I know we have the ones for i.MX6,
-> > > but what about i.MX53 ?
-> > 
-> > a patch adding the AMD GPU libraries was sent earlier this month by
-> > J?r?me Pouiller : http://patchwork.ozlabs.org/patch/408174/
-> > I can't find the new version but a patch depending on this one is
-> > available so I assume a v2 will follow :
-> > http://patchwork.ozlabs.org/patch/412521/
-> They are two separate series. First one introduce iMX5 GPU driver while second 
-> one introduce a new helper function to extract FSL archives. 
-> 
-Yes that's why I wrote the second depends on the first one ;-)
+ > Dear Peter Korsgaard,
+ > On Tue, 25 Nov 2014 19:11:43 +0100, Peter Korsgaard wrote:
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/Config.in                            |  1 +
+ >> package/python-httplib2/Config.in            | 11 +++++++++++
+ >> package/python-httplib2/python-httplib2.hash |  3 +++
+ >> package/python-httplib2/python-httplib2.mk   | 14 ++++++++++++++
+ >> 4 files changed, 29 insertions(+)
+ >> create mode 100644 package/python-httplib2/Config.in
+ >> create mode 100644 package/python-httplib2/python-httplib2.hash
+ >> create mode 100644 package/python-httplib2/python-httplib2.mk
 
-> I currently do not plan to make a v2 of iMX 5 GPU series.
-> 
-v1 is marked as superseded in patchwork and doesn't seems to be in
-next : is that intended ?
+ > Thanks applied to next, after fixing the license (see below).
 
-Best regards,
-Eric
+ >> +PYTHON_HTTPLIB2_VERSION = 0.9
+ >> +PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+ >> +PYTHON_HTTPLIB2_SITE = http://pypi.python.org/packages/source/h/httplib2
+ >> +PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
+ >> +PYTHON_HTTPLIB2_LICENSE = BSD-3c
+ >> +PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
+
+ > The PKG-INFO file prominently indicates that the license is MIT, not
+ > BSD-3c. And this seems to be confirmed in the individual source files.
+
+Argh, yes - I knew that (as I filled in _LICENSE_FILES), but somehow
+forgot to update the license status.
+
+ > Committed with this fixed.
+
+Thanks!
+
+-- 
+Bye, Peter Korsgaard 
