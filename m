@@ -1,75 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 25 Nov 2014 09:52:02 +0000
-Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
-In-Reply-To: <20141124203345.474d71b1@free-electrons.com>
-References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>	<20141122193924.34aa21ec@free-electrons.com>	<5473042A.8020505@imgtec.com>
- <20141124203345.474d71b1@free-electrons.com>
-Message-ID: <54745142.7040409@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Nov 2014 11:34:12 +0100
+Subject: [Buildroot] [git commit] libshairplay: needs avahi with libdnssd
+	compat option at runtime
+Message-ID: <20141125103602.6D9087FEF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+commit: http://git.buildroot.net/buildroot/commit/?id=ec3730cbf86a1a737413f45beb6e0a8523e3196d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 11/24/2014 07:33 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Mon, 24 Nov 2014 10:10:50 +0000, Vicente Olivert Riera wrote:
-> 
->> On 11/22/2014 06:39 PM, Thomas Petazzoni wrote:
->>> Dear Vicente Olivert Riera,
->>>
->>> On Fri, 21 Nov 2014 15:33:07 +0000, Vicente Olivert Riera wrote:
->>>
->>>> +LIBFM_EXTRA_VERSION = 1.2.3
->>>> +LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
->>>
->>> This is the exact same tarball as the one used for the libfm package:
->>>
->>> +LIBFM_VERSION = 1.2.3
->>> +LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
->>> +LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
->>>
->>> Why do we have two different packages? Is it because libfm full version
->>> needs menu-cache, and menu-cache needs libfm-extra?
->>
->> Yes, that is exactly the reason. Look for instance how is done in
->> LinuxFromScratch:
->>
->> http://www.linuxfromscratch.org/blfs/view/svn/lxde/libfm-extra.html
->>
->> They build libfm-extra first, then menu-cache and then libfm. I did
->> exactly the same.
-> 
-> And you didn't explain that anywhere in the commit logs? No comments
-> about this in the code? If you want such non-obvious stuff to be merged
-> one day, you should at least add a little bit of explanation about it.
+libshairplay uses dlopen to open libdnssd at runtime (unless dlopen() isn't
+available, then static linking is used - But avahi depends on
+!BR2_PREFER_STATIC_LIB so that isn't possible), so ensure avahi is available.
 
-If you want, I don't mind to respin my patches adding more information
-about that. But please, don't say that there is zero information because
-in the "help" message of the libfm-extra package I added a short text
-saying that package is needed for menu-cache:
+Fixes http://autobuild.buildroot.net/results/54d/54de48b23439cef4cbea3b8a65b20e2a8b049f67/
 
-+	help
-+	  The libfm-extra package contains a library and other files
-+	  required by menu-cache-gen libexec of menu-cache-1.0.0
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libshairplay/Config.in |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-And also in the cover-letter:
-
-http://lists.busybox.net/pipermail/buildroot/2014-November/112652.html
-
-> This all seems a bit crazy. How are the pcmanfm people building their
-> stuff?
-
-They are building it in that way. First libfm-extra, then menu-cache,
-then libfm and finally pcmanfm.
-
-Cheers,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+diff --git a/package/libshairplay/Config.in b/package/libshairplay/Config.in
+index bcdad3f..92955ee 100644
+--- a/package/libshairplay/Config.in
++++ b/package/libshairplay/Config.in
+@@ -2,11 +2,17 @@ config BR2_PACKAGE_LIBSHAIRPLAY
+ 	bool "libshairplay"
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # avahi
++	depends on !BR2_PREFER_STATIC_LIB # avahi
++	select BR2_PACKAGE_AVAHI
++	select BR2_PACKAGE_AVAHI_DAEMON
++	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY # runtime
+ 	help
+ 	  libshairplay is a client library that emulates an airplay
+ 	  server.
+ 
+ 	  https://github.com/juhovh/shairplay
+ 
+-comment "libshairplay needs a toolchain w/ IPv6, threads"
+-	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
++comment "libshairplay needs a toolchain w/ IPv6, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
