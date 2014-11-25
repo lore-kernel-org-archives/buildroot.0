@@ -1,24 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Nov 2014 22:38:59 +0100
-Subject: [Buildroot] [PATCH] system/permissions: /etc/random-seed must
+Date: Tue, 25 Nov 2014 22:37:43 +0100
+Subject: [Buildroot] [git commit] system/permissions: /etc/random-seed must
 	be mode 600
-In-Reply-To: <1416517694-7952-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 20 Nov 2014 18:08:14 -0300")
-References: <1416517694-7952-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mw7fq7t8.fsf@dell.be.48ers.dk>
+Message-ID: <20141125213915.8E59D7FD9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=87fd1bd5ce27f1ea1e6809c0c522afe618417097
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Otherwise it's a big security risk.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Otherwise it's a big security risk.
 
-While I think we should rework the random-seed handling, that will be
-post-2014.11 - So committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/device_table.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/system/device_table.txt b/system/device_table.txt
+index e15412d..8e7dbd2 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -11,6 +11,7 @@
+ /etc					d	755	0	0	-	-	-	-	-
+ /root					d	700	0	0	-	-	-	-	-
+ /var/www				d	755	33	33	-	-	-	-	-
++/etc/random-seed			f	600	0	0	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
