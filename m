@@ -1,31 +1,58 @@
-From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
-Date: Tue, 25 Nov 2014 17:54:20 +0100
-Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
-References: <20141019163952.19c7c080@free-electrons.com>
- <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <20141125175420.7b6ff884@e6520eb.localdomain>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Nov 2014 20:22:35 +0100
+Subject: [Buildroot] [PATCH] package/clamav: fix static build
+Message-ID: <1416943355-19766-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+clamav unconditionally includes dlfcn.h which is missing on a uClibc
+that is configured as a pure-static C library.
 
-Le Tue, 25 Nov 2014 17:12:23 +0100,
-Vincent Stehl? <vincent.stehle@freescale.com> a ?crit :
+Thus, the build fails.
 
-> Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
-> 
-> While at it, switch to EABIHF.
-> 
-unless mistaken, switching to hard float prevent the usage of the AMD
-GPU libraries as these binaries are soft float only.
+But the including file does not even makes use of any function from the
+dlopen() familly, so it does not need to include dlfcn.h to start with.
 
-May you please ask inside Freescale to provide AMD GPU libraries
-compiled for hard float ? (we don't need support nor warranty, we just
-need the binaries compiled for hard float to try if that can work).
+Add a patch to clamav to not include dlfcn.h where not needed.
 
-Many thanks
-Eric
+Fixes:
+    http://autobuild.buildroot.net/results/b49/b491f4e5e1760248adb8d21b404e8aa15f7dbdd1/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/clamav/clamav-0004-fix-static-build.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/clamav/clamav-0004-fix-static-build.patch
+
+diff --git a/package/clamav/clamav-0004-fix-static-build.patch b/package/clamav/clamav-0004-fix-static-build.patch
+new file mode 100644
+index 0000000..97aac2d
+--- /dev/null
++++ b/package/clamav/clamav-0004-fix-static-build.patch
+@@ -0,0 +1,21 @@
++stats: fix static link
++
++The stats.c file does not use the dlopen() familly of functions, but
++includes dlfcn.h, which is missing on uClibc when it is configured as
++a static-only C library.
++
++Do, simply do not include dlfcn.h.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN clamav-0.98.5.orig/libclamav/stats.c clamav-0.98.5/libclamav/stats.c
++--- clamav-0.98.5.orig/libclamav/stats.c	2014-11-13 23:30:43.000000000 +0100
+++++ clamav-0.98.5/libclamav/stats.c	2014-11-25 19:57:14.344291266 +0100
++@@ -41,7 +41,6 @@
++ #include <sys/sysctl.h>
++ #endif
++ #endif
++-#include <dlfcn.h>
++ #else
++ #include <Windows.h>
++ #include <tchar.h>
+-- 
+1.9.1
