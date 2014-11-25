@@ -1,52 +1,53 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
-Date: Tue, 25 Nov 2014 19:35:36 +0100
-Subject: [Buildroot] [PATCH v3] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <20141125183017.31cb5e67@free-electrons.com>
-References: <20141125183017.31cb5e67@free-electrons.com>
-Message-ID: <1416940536-3642-1-git-send-email-vincent.stehle@freescale.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Nov 2014 19:35:34 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+In-Reply-To: <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
+References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141101144354.66e2e698@free-electrons.com>
+ <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
+ <20141102225411.0fe3d3de@free-electrons.com>
+ <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
+ <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
+ <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
+Message-ID: <20141125193534.00c099d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
+Dear Angelo Compagnucci,
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
-Cc: Eric B?nard <eric@eukrea.com>
+On Mon, 3 Nov 2014 11:33:05 +0100, Angelo Compagnucci wrote:
 
----
+> > So if you like this way, I'll update variables.less and
+> > bootswatch.less to bootstrap 3.2, then I'll recompile bootstrap, then
+> > I'll send you a zip with new files to overcome smtp problems with very
+> > long lines.
+> 
+> Attached you can find (in tar.gz format) the patch that updates
+> bootstrap, theme, and source file to re-create the bootstrap.min.css
+> file.
 
+Unfortunately it still doesn't apply on top of the latest master:
 
-Here is v3; sorry for the noise.
+thomas at skate:~/projets/buildroot (master)$ LANG=C git am -s /tmp/0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
+Applying: docs: RWD website - upgrading bootswatch theme file
+/home/thomas/projets/buildroot/.git/rebase-apply/patch:1659: trailing whitespace.
+  
+error: patch failed: docs/css/bootstrap.min.css:1
+error: docs/css/bootstrap.min.css: patch does not apply
+Patch failed at 0001 docs: RWD website - upgrading bootswatch theme file
+The copy of the patch that failed is found in:
+   /home/thomas/projets/buildroot/.git/rebase-apply/patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-Changes since v2:
-~~~~~~~~~~~~~~~~~
-- Switch back to EABI.
+Best regards,
 
-Changes since v1:
-~~~~~~~~~~~~~~~~~
-- Do not force gcc version anymore.
-- Change the title accordingly.
-- Switch to EABIHF.
-
-
- configs/mx53loco_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 942dedf..d2a2b66 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -1,6 +1,7 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a8=y
-+BR2_ARM_FPU_VFPV3=y
- 
- # System
- BR2_KERNEL_HEADERS_VERSION=y
+Thomas
 -- 
-2.1.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
