@@ -1,44 +1,48 @@
-From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
-Date: Tue, 25 Nov 2014 18:44:29 +0100
-Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <20141125183017.31cb5e67@free-electrons.com>
-References: <20141019163952.19c7c080@free-electrons.com>
- <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
- <20141125175420.7b6ff884@e6520eb.localdomain>
- <5474B65D.5010401@freescale.com>
- <20141125183017.31cb5e67@free-electrons.com>
-Message-ID: <20141125184429.74b70457@e6520eb.localdomain>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 25 Nov 2014 21:16:34 +0200
+Subject: [Buildroot] [PATCH] sqlcipher: fix openssl configure test when
+	building statically
+Message-ID: <f5e24794fa6adb5d60d830b44b0aafc1e81e875b.1416942994.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+When testing link with openssl the configure script adds another -lcrypto
+after LDFLAGS. This -lcrypto also needs -lz. Move libraries list to LIBS to
+make -lz appear at the proper place.
 
-Le Tue, 25 Nov 2014 18:30:17 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-> On Tue, 25 Nov 2014 18:03:25 +0100, Vincent Stehl? wrote:
-> 
-> > > May you please ask inside Freescale to provide AMD GPU libraries
-> > > compiled for hard float ? (we don't need support nor warranty, we just
-> > > need the binaries compiled for hard float to try if that can work).
-> > 
-> > Ok, I'll ask. No promise that you will get an answer, though :)
-> > 
-> > ...also I wonder, shall I maybe submit a "v3" of the patch, with no EABIHF?
-> 
-> I'd say yes. Is 2.6.35 the latest kernel available for this platform,
-> or could we switch to a more recent version.
-> 
-> Also, Eric, you mention the AMD GPU libraries, but do we have packages
-> for those libraries in Buildroot? I know we have the ones for i.MX6,
-> but what about i.MX53 ?
+Fixes:
+http://autobuild.buildroot.net/results/59d/59d8d7c7f3e0a205503121c1288187471c0ce80f/
+http://autobuild.buildroot.net/results/2ed/2ed2026bc5502807588a9335bd4c78e0a26c1cd3/
+http://autobuild.buildroot.net/results/cd3/cd35b24422cf7f8697e81ca7f0dd2f06dfc55997/
 
-a patch adding the AMD GPU libraries was sent earlier this month by
-J?r?me Pouiller : http://patchwork.ozlabs.org/patch/408174/
-I can't find the new version but a patch depending on this one is
-available so I assume a v2 will follow :
-http://patchwork.ozlabs.org/patch/412521/
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/sqlcipher/sqlcipher.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Eric
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 86eebb5c4c68..664e0f39ab08 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -11,14 +11,14 @@ SQLCIPHER_INSTALL_STAGING = YES
+ 
+ SQLCIPHER_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) $(SQLCIPHER_CFLAGS)" \
+-	LDFLAGS="$(TARGET_LDFLAGS) $(SQLCIPHER_LDFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(SQLCIPHER_LIBS)" \
+ 	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
+ 
+ SQLCIPHER_CONF_OPTS = \
+ 	--enable-threadsafe
+ 
+ SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
+-SQLCIPHER_LDFLAGS += -lcrypto -lz
++SQLCIPHER_LIBS += -lcrypto -lz
+ 
+ ifneq ($(BR2_LARGEFILE),y)
+ # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
+-- 
+2.1.3
