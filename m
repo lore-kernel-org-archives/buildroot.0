@@ -1,53 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Nov 2014 19:35:34 +0100
-Subject: [Buildroot] [PATCH 0/2] RWD Website
-In-Reply-To: <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
-References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141101144354.66e2e698@free-electrons.com>
- <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
- <20141102225411.0fe3d3de@free-electrons.com>
- <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
- <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
- <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
-Message-ID: <20141125193534.00c099d9@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Nov 2014 15:52:23 -0300
+Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.15
+Message-ID: <1416941543-5545-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Fixes an out-of-bounds memory access in png_user_version_check().
 
-On Mon, 3 Nov 2014 11:33:05 +0100, Angelo Compagnucci wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../libpng/{libpng-01-disable-tools.patch => 0001-disable-tools.patch} | 0
+ ...g-02-ignore-symbol-prefix.patch => 0002-ignore-symbol-prefix.patch} | 0
+ package/libpng/libpng.hash                                             | 3 +++
+ package/libpng/libpng.mk                                               | 2 +-
+ 4 files changed, 4 insertions(+), 1 deletion(-)
+ rename package/libpng/{libpng-01-disable-tools.patch => 0001-disable-tools.patch} (100%)
+ rename package/libpng/{libpng-02-ignore-symbol-prefix.patch => 0002-ignore-symbol-prefix.patch} (100%)
+ create mode 100644 package/libpng/libpng.hash
 
-> > So if you like this way, I'll update variables.less and
-> > bootswatch.less to bootstrap 3.2, then I'll recompile bootstrap, then
-> > I'll send you a zip with new files to overcome smtp problems with very
-> > long lines.
-> 
-> Attached you can find (in tar.gz format) the patch that updates
-> bootstrap, theme, and source file to re-create the bootstrap.min.css
-> file.
-
-Unfortunately it still doesn't apply on top of the latest master:
-
-thomas at skate:~/projets/buildroot (master)$ LANG=C git am -s /tmp/0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
-Applying: docs: RWD website - upgrading bootswatch theme file
-/home/thomas/projets/buildroot/.git/rebase-apply/patch:1659: trailing whitespace.
-  
-error: patch failed: docs/css/bootstrap.min.css:1
-error: docs/css/bootstrap.min.css: patch does not apply
-Patch failed at 0001 docs: RWD website - upgrading bootswatch theme file
-The copy of the patch that failed is found in:
-   /home/thomas/projets/buildroot/.git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-
-Best regards,
-
-Thomas
+diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/0001-disable-tools.patch
+similarity index 100%
+rename from package/libpng/libpng-01-disable-tools.patch
+rename to package/libpng/0001-disable-tools.patch
+diff --git a/package/libpng/libpng-02-ignore-symbol-prefix.patch b/package/libpng/0002-ignore-symbol-prefix.patch
+similarity index 100%
+rename from package/libpng/libpng-02-ignore-symbol-prefix.patch
+rename to package/libpng/0002-ignore-symbol-prefix.patch
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+new file mode 100644
+index 0000000..37f6067
+--- /dev/null
++++ b/package/libpng/libpng.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.15/
++md5	a95cb387c53215b034203b41ec57c7e5	libpng-1.6.15.tar.xz
++sha1	bddeac8ca97fbcf54d6d32c6eefed5d94b49df88	libpng-1.6.15.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 99510ca..67bf141 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.12
++LIBPNG_VERSION = 1.6.15
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
