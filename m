@@ -1,48 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 25 Nov 2014 21:40:29 +0100
-Subject: [Buildroot] Next Buildroot meeting: 2-3 February,
-	sponsored by Google
-In-Reply-To: <20141105193643.1cdd1464@free-electrons.com>
-References: <20141105193643.1cdd1464@free-electrons.com>
-Message-ID: <CAAXf6LUgBLMpjZut0kgoxduO2WqN3mUhmsMjL+woy=AhudcFaQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Nov 2014 21:42:35 +0100
+Subject: [Buildroot] [PATCH v4 0/9] autobuild-run improvements
+In-Reply-To: <CAAXf6LUt25SUGQH9cGBcr8W9xypm1=rkQPKnmT2NL06u7j5RAw@mail.gmail.com>
+References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAAXf6LUt25SUGQH9cGBcr8W9xypm1=rkQPKnmT2NL06u7j5RAw@mail.gmail.com>
+Message-ID: <20141125214235.310f84c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Wed, Nov 5, 2014 at 7:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> I'm happy to announce the official dates of the upcoming Buildroot
-> Developers meeting:
->
->         February 2nd and 3rd, 2015
->
-> Thanks to the sponsoring of Google, the meeting will take place in the
-> very nice offices of Google in Brussels, and free lunch and
-> refreshments will be provided to the participants.
->
-> People interested in attending this event are invited to register
-> themselves at http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015 or if
-> they don't have an elinux.org Wiki account, to let me know their
-> interest.
->
-> Note that this event is open to all Buildroot developers, and the
-> participation is free of charge.
->
-> Such meetings are really a great way of meeting the Buildroot
-> community, getting to know each other, and doing some very useful work
-> over two days. All regular contributors should really think about
-> attending the event, especially it is organized right after the FOSDEM
-> conference, a conference that all European open-source developers
-> should attend!
+On Tue, 25 Nov 2014 21:36:47 +0100, Thomas De Schampheleire wrote:
 
-I can only second that...
-I'll definitely be there!
+> > In case the final decision is not to introduce docopt, following improvements
+> > could be done to the current code:
+> >   - save the arguments from the command-line into a dictionary instead of plain
+> >     variables
+> >   - keep the added ini_config() method to also save the options in a dictionary,
+> >     and use the added merge() method to merge both arguments and config options
+> >     into one final configuration, without needing to handle it manually.
+> 
+> Have you made a decision regarding the use of docopt in autobuild-run,
+> and these patches in general?
 
-Best regards,
+No, not yet. It's still on my TODO-list though, but it will probably be
+done post-2014.11. Sorry for the long delay :/
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
