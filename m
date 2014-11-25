@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Nov 2014 13:57:06 +0200
-Subject: [Buildroot] [PATCH] gptfdisk: fix static build
-Message-ID: <e6d964131043e682bac06c3e59dddbfd2d0e5de0.1416916626.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Nov 2014 13:42:06 +0100
+Subject: [Buildroot] [git commit] gptfdisk: fix static build
+Message-ID: <20141125124247.4D5FE7FEF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=73d7bc535e5c40d6112ae04e95a44a67810d7bc7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 libuuid may need -lintl. Augment the existing Makefile patch to support adding
 link dependencies at build time.
@@ -17,13 +20,14 @@ http://autobuild.buildroot.net/results/f33/f3359fab166cf3627f15e59fa44cff36ee213
 http://autobuild.buildroot.net/results/ef7/ef783e3776f25c28ea0de0c082c93f7ab97db56d/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch | 8 +++++---
- package/gptfdisk/gptfdisk.mk                                   | 4 ++++
+ .../gptfdisk-001-configurable-utf16-support.patch  |    8 +++++---
+ package/gptfdisk/gptfdisk.mk                       |    4 ++++
  2 files changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
-index 2d51e6f7bf68..6d54ceae0955 100644
+index 2d51e6f..6d54cea 100644
 --- a/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
 +++ b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
 @@ -7,6 +7,8 @@ the UTF16 support or not.
@@ -57,7 +61,7 @@ index 2d51e6f7bf68..6d54ceae0955 100644
   fixparts: $(MBR_LIB_OBJS) fixparts.o
   	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
 diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 9828d4c79851..897dc77ac6eb 100644
+index 9828d4c..897dc77 100644
 --- a/package/gptfdisk/gptfdisk.mk
 +++ b/package/gptfdisk/gptfdisk.mk
 @@ -26,6 +26,10 @@ GPTFDISK_DEPENDENCIES += icu
@@ -71,5 +75,3 @@ index 9828d4c79851..897dc77ac6eb 100644
  define GPTFDISK_BUILD_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
  		$(GPTFDISK_MAKE_OPTS) $(GPTFDISK_TARGETS_y)
--- 
-2.1.3
