@@ -1,58 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Nov 2014 20:22:35 +0100
-Subject: [Buildroot] [PATCH] package/clamav: fix static build
-Message-ID: <1416943355-19766-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Nov 2014 20:22:49 +0100
+Subject: [Buildroot] [git commit branch/next] package: add python-httplib2
+Message-ID: <20141125192314.45B997FEE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-clamav unconditionally includes dlfcn.h which is missing on a uClibc
-that is configured as a pure-static C library.
+commit: http://git.buildroot.net/buildroot/commit/?id=d8ce24077b68b1fa5422154ae18ed0541be5352e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thus, the build fails.
+[Thomas: fix the license, it is MIT, not BSD-3c.]
 
-But the including file does not even makes use of any function from the
-dlopen() familly, so it does not need to include dlfcn.h to start with.
-
-Add a patch to clamav to not include dlfcn.h where not needed.
-
-Fixes:
-    http://autobuild.buildroot.net/results/b49/b491f4e5e1760248adb8d21b404e8aa15f7dbdd1/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/clamav/clamav-0004-fix-static-build.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/clamav/clamav-0004-fix-static-build.patch
+ package/Config.in                            |    1 +
+ package/python-httplib2/Config.in            |   11 +++++++++++
+ package/python-httplib2/python-httplib2.hash |    3 +++
+ package/python-httplib2/python-httplib2.mk   |   14 ++++++++++++++
+ 4 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/clamav/clamav-0004-fix-static-build.patch b/package/clamav/clamav-0004-fix-static-build.patch
+diff --git a/package/Config.in b/package/Config.in
+index a8128ff..6875d8b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -493,6 +493,7 @@ menu "external python modules"
+ 	source "package/python-dpkt/Config.in"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-httplib2/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
+diff --git a/package/python-httplib2/Config.in b/package/python-httplib2/Config.in
 new file mode 100644
-index 0000000..97aac2d
+index 0000000..e42f513
 --- /dev/null
-+++ b/package/clamav/clamav-0004-fix-static-build.patch
-@@ -0,0 +1,21 @@
-+stats: fix static link
++++ b/package/python-httplib2/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_HTTPLIB2
++	bool "python-httplib2"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
++	help
++	  httplib2 is a comprehensive HTTP client library, httplib2.py
++	  supports many features left out of other HTTP libraries.
 +
-+The stats.c file does not use the dlopen() familly of functions, but
-+includes dlfcn.h, which is missing on uClibc when it is configured as
-+a static-only C library.
++	  https://pypi.python.org/pypi/httplib2
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+new file mode 100644
+index 0000000..6b128d3
+--- /dev/null
++++ b/package/python-httplib2/python-httplib2.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=09d8e8016911fc40e2e4c58f1aa3ec24, sha256 locally computed
++md5	09d8e8016911fc40e2e4c58f1aa3ec24  httplib2-0.9.tar.gz
++sha256	39ea8c6a6d9f595c177a16134fc49a990ad8d382758cbf469c8659662f2f51ab  httplib2-0.9.tar.gz
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+new file mode 100644
+index 0000000..ec5c476
+--- /dev/null
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-httplib2
++#
++################################################################################
 +
-+Do, simply do not include dlfcn.h.
++PYTHON_HTTPLIB2_VERSION = 0.9
++PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
++PYTHON_HTTPLIB2_SITE = http://pypi.python.org/packages/source/h/httplib2
++PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
++PYTHON_HTTPLIB2_LICENSE = MIT
++PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN clamav-0.98.5.orig/libclamav/stats.c clamav-0.98.5/libclamav/stats.c
-+--- clamav-0.98.5.orig/libclamav/stats.c	2014-11-13 23:30:43.000000000 +0100
-++++ clamav-0.98.5/libclamav/stats.c	2014-11-25 19:57:14.344291266 +0100
-+@@ -41,7 +41,6 @@
-+ #include <sys/sysctl.h>
-+ #endif
-+ #endif
-+-#include <dlfcn.h>
-+ #else
-+ #include <Windows.h>
-+ #include <tchar.h>
--- 
-1.9.1
++$(eval $(python-package))
