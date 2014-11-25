@@ -1,58 +1,40 @@
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Date: Tue, 25 Nov 2014 22:09:13 +0100
-Subject: [Buildroot] [PATCH v4 9/9] autobuild-run: extend TODO list
-In-Reply-To: <1415822317-22500-10-git-send-email-patrickdepinguin@gmail.com>
+Date: Tue, 25 Nov 2014 22:10:05 +0100
+Subject: [Buildroot] [PATCH v4 0/9] autobuild-run improvements
+In-Reply-To: <20141125214235.310f84c3@free-electrons.com>
 References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
- <1415822317-22500-10-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LVgM33BfF2M4xCJebq4s+Rj8XjXzWxwU4YnJ4zotEJZ5w@mail.gmail.com>
+ <CAAXf6LUt25SUGQH9cGBcr8W9xypm1=rkQPKnmT2NL06u7j5RAw@mail.gmail.com>
+ <20141125214235.310f84c3@free-electrons.com>
+Message-ID: <CAAXf6LXbVGH3yZdp8UO-Yz3wwNfRiVRUWkx1ZyWDGPrortpwUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Wed, Nov 12, 2014 at 8:58 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Tue, Nov 25, 2014 at 9:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> Some misc. additions to the autobuild-run TODO list.
+> On Tue, 25 Nov 2014 21:36:47 +0100, Thomas De Schampheleire wrote:
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  scripts/autobuild-run | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>> > In case the final decision is not to introduce docopt, following improvements
+>> > could be done to the current code:
+>> >   - save the arguments from the command-line into a dictionary instead of plain
+>> >     variables
+>> >   - keep the added ini_config() method to also save the options in a dictionary,
+>> >     and use the added merge() method to merge both arguments and config options
+>> >     into one final configuration, without needing to handle it manually.
+>>
+>> Have you made a decision regarding the use of docopt in autobuild-run,
+>> and these patches in general?
 >
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 7fe0b00..a73ccc9 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -47,6 +47,17 @@
->  # - Instead of excluding all configurations that have
->  #   BR2_PACKAGE_CLASSPATH=y, improve the script to detect whether the
->  #   necessary host machine requirements are there to build classpath.
-> +# - Integrate method check-requirements with the SysInfo class, distinghuishing
-> +#   between required and optional dependencies.
-> +# - Extend required dependencies to subversion, mercurial, cpio, wget, python,
-> +#   etc.
-> +# - Detect selection of multiple virtual package providers and don't consider it
-> +#   a failure
-> +# - Properly handle kill of main script: stop all running children and do not
-> +#   print out stacktraces
+> No, not yet. It's still on my TODO-list though, but it will probably be
+> done post-2014.11. Sorry for the long delay :/
+>
 
-Brief update on this topic: the autobuild-run code currently kills the
-process group associated with the python process, but it turns out
-that the build jobs are not part of the same process group as the
-python process.
-As far as I can see, the subprocess class should spawn processes into
-the same process group, so maybe make is explicitly changing this?
-Further investigation is needed here, but I think that if we can make
-sure that these processes are part of the same group as the python
-parent process, then the kill of autobuild-run will automatically kill
-the children, as expected.
-
-To visualize the process groups: ps -e -o pid,user,pgid,args --sort pgid
+No problem, I've been off of buildroot development the past month
+anyway, should normally ramp up again now...
 
 Best regards,
 Thomas
