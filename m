@@ -1,36 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Nov 2014 21:42:35 +0100
-Subject: [Buildroot] [PATCH v4 0/9] autobuild-run improvements
-In-Reply-To: <CAAXf6LUt25SUGQH9cGBcr8W9xypm1=rkQPKnmT2NL06u7j5RAw@mail.gmail.com>
-References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
- <CAAXf6LUt25SUGQH9cGBcr8W9xypm1=rkQPKnmT2NL06u7j5RAw@mail.gmail.com>
-Message-ID: <20141125214235.310f84c3@free-electrons.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 25 Nov 2014 12:57:00 -0800 (PST)
+Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
+In-Reply-To: <20141125184429.74b70457@e6520eb.localdomain>
+References: <20141019163952.19c7c080@free-electrons.com>
+ <20141125183017.31cb5e67@free-electrons.com>
+ <20141125184429.74b70457@e6520eb.localdomain>
+Message-ID: <1494741.bpddRugsWT@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Eric,
 
-On Tue, 25 Nov 2014 21:36:47 +0100, Thomas De Schampheleire wrote:
-
-> > In case the final decision is not to introduce docopt, following improvements
-> > could be done to the current code:
-> >   - save the arguments from the command-line into a dictionary instead of plain
-> >     variables
-> >   - keep the added ini_config() method to also save the options in a dictionary,
-> >     and use the added merge() method to merge both arguments and config options
-> >     into one final configuration, without needing to handle it manually.
+On Tuesday 25 November 2014 18:44:29 Eric B?nard wrote:
+> Le Tue, 25 Nov 2014 18:30:17 +0100,
+[...]
+> > Also, Eric, you mention the AMD GPU libraries, but do we have packages
+> > for those libraries in Buildroot? I know we have the ones for i.MX6,
+> > but what about i.MX53 ?
 > 
-> Have you made a decision regarding the use of docopt in autobuild-run,
-> and these patches in general?
+> a patch adding the AMD GPU libraries was sent earlier this month by
+> J?r?me Pouiller : http://patchwork.ozlabs.org/patch/408174/
+> I can't find the new version but a patch depending on this one is
+> available so I assume a v2 will follow :
+> http://patchwork.ozlabs.org/patch/412521/
+They are two separate series. First one introduce iMX5 GPU driver while second 
+one introduce a new helper function to extract FSL archives. 
 
-No, not yet. It's still on my TODO-list though, but it will probably be
-done post-2014.11. Sorry for the long delay :/
+I currently do not plan to make a v2 of iMX 5 GPU series.
 
-Thomas
+
+BR,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
