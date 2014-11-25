@@ -1,48 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Nov 2014 21:16:34 +0200
-Subject: [Buildroot] [PATCH] sqlcipher: fix openssl configure test when
-	building statically
-Message-ID: <f5e24794fa6adb5d60d830b44b0aafc1e81e875b.1416942994.git.baruch@tkos.co.il>
+From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
+Date: Tue, 25 Nov 2014 17:54:20 +0100
+Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
+In-Reply-To: <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
+References: <20141019163952.19c7c080@free-electrons.com>
+ <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <20141125175420.7b6ff884@e6520eb.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When testing link with openssl the configure script adds another -lcrypto
-after LDFLAGS. This -lcrypto also needs -lz. Move libraries list to LIBS to
-make -lz appear at the proper place.
+Hi Vincent,
 
-Fixes:
-http://autobuild.buildroot.net/results/59d/59d8d7c7f3e0a205503121c1288187471c0ce80f/
-http://autobuild.buildroot.net/results/2ed/2ed2026bc5502807588a9335bd4c78e0a26c1cd3/
-http://autobuild.buildroot.net/results/cd3/cd35b24422cf7f8697e81ca7f0dd2f06dfc55997/
+Le Tue, 25 Nov 2014 17:12:23 +0100,
+Vincent Stehl? <vincent.stehle@freescale.com> a ?crit :
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/sqlcipher/sqlcipher.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
+> 
+> While at it, switch to EABIHF.
+> 
+unless mistaken, switching to hard float prevent the usage of the AMD
+GPU libraries as these binaries are soft float only.
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 86eebb5c4c68..664e0f39ab08 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -11,14 +11,14 @@ SQLCIPHER_INSTALL_STAGING = YES
- 
- SQLCIPHER_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) $(SQLCIPHER_CFLAGS)" \
--	LDFLAGS="$(TARGET_LDFLAGS) $(SQLCIPHER_LDFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(SQLCIPHER_LIBS)" \
- 	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
- 
- SQLCIPHER_CONF_OPTS = \
- 	--enable-threadsafe
- 
- SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
--SQLCIPHER_LDFLAGS += -lcrypto -lz
-+SQLCIPHER_LIBS += -lcrypto -lz
- 
- ifneq ($(BR2_LARGEFILE),y)
- # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
--- 
-2.1.3
+May you please ask inside Freescale to provide AMD GPU libraries
+compiled for hard float ? (we don't need support nor warranty, we just
+need the binaries compiled for hard float to try if that can work).
+
+Many thanks
+Eric
