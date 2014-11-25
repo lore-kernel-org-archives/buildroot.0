@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Nov 2014 15:57:11 +0100
-Subject: [Buildroot] [git commit] gd: use pkg-config to figure out png
-	linker flags
-Message-ID: <20141125145743.A71CF7FEF6@busybox.osuosl.org>
+Date: Tue, 25 Nov 2014 15:52:09 +0100
+Subject: [Buildroot] [git commit] gd: needs host-pkgconf
+Message-ID: <20141125145743.9C7277FEF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccec35e342a38537fba746a483eec063b5151d3e
+commit: http://git.buildroot.net/buildroot/commit/?id=46c644310c87e1851eb1420cae7c07f3a1a347ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So gdlib-config --libs returns the full dependency chain (-lpng16 -lz -m)
-when linking statically.
-
-Fixes http://autobuild.buildroot.net/results/dac/dac3eb950c7c27b2f09f001f9db9936f897721f9/
+configure uses PKG_CHECK_MODULES, so it needs to depend on host-pkgconf.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gd/gd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gd/gd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index d0fd572..1613464 100644
+index 927dfb2..d0fd572 100644
 --- a/package/gd/gd.mk
 +++ b/package/gd/gd.mk
-@@ -40,7 +40,7 @@ endif
+@@ -13,6 +13,7 @@ GD_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- GD_DEPENDENCIES += libpng
--GD_CONF_OPTS += --with-png=$(STAGING_DIR)/usr
-+GD_CONF_OPTS += --with-png
- else
- GD_CONF_OPTS += --without-png
- endif
+ GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPTS = --without-x --disable-rpath
++GD_DEPENDENCIES = host-pkgconf
+ 
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
