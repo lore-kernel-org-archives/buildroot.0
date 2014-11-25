@@ -1,7 +1,7 @@
 From: Davide Viti <zinosat@tiscali.it>
-Date: Wed, 26 Nov 2014 00:15:21 +0100
-Subject: [Buildroot] [PATCH v3] cmake: make ctest a target package too
-Message-ID: <1416957321-8046-1-git-send-email-zinosat@tiscali.it>
+Date: Wed, 26 Nov 2014 00:33:54 +0100
+Subject: [Buildroot] [PATCH v4] cmake: make ctest a target package too
+Message-ID: <1416958434-21658-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -37,6 +37,9 @@ the last option (3) was implemented and now ctest looks for
 CMake.cmake first and then tries to open Modules/CMake.cmake.ctest
 If both files are not found ctest issues the above error.
 
+v3->v4:
+ - fix CMAKE_REMOVE_EXTRA_DATA target
+ 
 v2->v3:
  - specify DESTDIR when installing (Samuel Martin)
  - rename Modules/CMake.cmake Modules/CMake.cmake.ctest
@@ -55,11 +58,11 @@ v1->v2:
 [2] the install rule has to be overridden because of http://public.kitware.com/Bug/view.php?id=15248
     http://www.cmake.org/gitweb?p=stage/cmake.git;a=patch;h=15f55cca does not work for me on BR
 
-package/Config.in                         |  1 +
+ package/Config.in                         |  1 +
  package/cmake/Config.in                   | 10 ++++++++++
- package/cmake/cmake.mk                    | 29 +++++++++++++++++++++++++++++
+ package/cmake/cmake.mk                    | 30 ++++++++++++++++++++++++++++++
  package/cmake/rename_cmake_rootfile.patch | 21 +++++++++++++++++++++
- 4 files changed, 61 insertions(+)
+ 4 files changed, 62 insertions(+)
  create mode 100644 package/cmake/Config.in
  create mode 100644 package/cmake/rename_cmake_rootfile.patch
 
@@ -92,7 +95,7 @@ index 0000000..120efc8
 +
 +	  http://www.cmake.org/
 diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e09fddf..6ce19c3 100644
+index e09fddf..4d4638c 100644
 --- a/package/cmake/cmake.mk
 +++ b/package/cmake/cmake.mk
 @@ -11,6 +11,14 @@ CMAKE_LICENSE = BSD-3c
@@ -110,13 +113,14 @@ index e09fddf..6ce19c3 100644
  
  define HOST_CMAKE_CONFIGURE_CMDS
  	(cd $(@D); \
-@@ -33,4 +41,25 @@ define HOST_CMAKE_INSTALL_CMDS
+@@ -33,4 +41,26 @@ define HOST_CMAKE_INSTALL_CMDS
  	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
  endef
  
 +define CMAKE_REMOVE_EXTRA_DATA
 +	rm $(TARGET_DIR)/usr/bin/{cmake,cpack}
-+	rm -fr $(TARGET_DIR)/usr/share/cmake-3.0
++	rm -fr $(TARGET_DIR)/usr/share/cmake-3.0/{completions,editors}
++	rm -fr $(TARGET_DIR)/usr/share/cmake-3.0/{Help,include}
 +endef
 +
 +define CMAKE_INSTALL_CTEST_CFG_FILE
