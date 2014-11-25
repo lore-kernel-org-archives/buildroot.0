@@ -1,177 +1,42 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Tue, 25 Nov 2014 11:50:25 +0100
-Subject: [Buildroot] Need help getting started with X11
-In-Reply-To: <20141124210722.49239966@free-electrons.com>
-References: <CAEzGmjByqb2QB4+-QDOcJYDo6zvD+UpkG9kaNmBzBHKMFaGDJg@mail.gmail.com>
- <20141124210722.49239966@free-electrons.com>
-Message-ID: <CAEzGmjCgWSX0BGBsRFG-MVpbQ67r5Dkv4Mbhj6x6FQotgQxSdg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Nov 2014 08:22:20 -0300
+Subject: [Buildroot] [PATCH] grep: bump to version 2.21
+Message-ID: <1416914540-6111-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas,
+Also add hash file.
 
-On Mon, Nov 24, 2014 at 9:07 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/grep/grep.hash | 2 ++
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/grep/grep.hash
 
-> Dear Lennart Ramberg,
->
-> On Mon, 24 Nov 2014 13:41:38 +0100, Lennart Ramberg wrote:
->
-> > Or, if anyone would be so kind, I'm stuck at the below defconfig.
-> > The system works in the sense that I can ssh into it, but now I want
-> > graphics on the console display.
-> > I have not yet anything in the overlays that starts or otherwise relates
-> to
-> > xorg.
-> > My target chipset is Intel 852GM.
-> > For one thing, what is supposed to create an xorg.conf?
->
-> These days, if you enable udev a xorg.conf is often not needed.
->
-> > And I suppose X should be started somehow in supervisor.d like I start
-> sshd
-> > there.
-> >
-> > BR2_x86_i686=y
-> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > # BR2_TARGET_GENERIC_GETTY is not set
-> > BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
-> > BR2_LINUX_KERNEL=y
-> > BR2_LINUX_KERNEL_DEFCONFIG="i386"
-> > BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> > BR2_PACKAGE_XORG7=y
-> > BR2_PACKAGE_XSERVER_XORG_SERVER=y
->
-> Make sure to also enable the Intel graphics driver, i.e.
-> BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL. Note that you need to switch the
-> "modular X.org server" variant to achieve that.
->
-> And then, start the X server by simply running "X".
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
-
-At first all was well, at least the screen went black, X was visible in top
-and I could get out with Ctrl-c.
-So far so good.
-Then I recalled that I had not done 'make'.
-So I did make, but a bug(?) stopped further advancements.
-I don't know how to file a bug report, but maybe the below is of use (I
-figure next stable release is imminent).
-
-Regards
-Lennart
-
-First my new defconfig:
-
-BR2_x86_i686=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-# BR2_TARGET_GENERIC_GETTY is not set
-BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="i386"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XAPP_TWM=y
-BR2_PACKAGE_XAPP_XINIT=y
-BR2_PACKAGE_XAPP_XWD=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
-BR2_PACKAGE_MCOOKIE=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_SQLITE=y
-BR2_PACKAGE_CAIRO=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_NTP=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_SUPERVISOR=y
-BR2_PACKAGE_NANO=y
-# BR2_PACKAGE_NANO_TINY is not set
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
-BR2_TARGET_GRUB2=y
-
-I had done a 'git pull' earlier today. Then, just now, a 'make' once before
-the below 'make':
-
-lennart at lennart-Latitude-E6520 ~/buildroot $ make
-/usr/bin/make -j1  HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++"
-silentoldconfig
-make[1]: Entering directory `/home/lennart/buildroot'
-BR2_DEFCONFIG=''
-KCONFIG_AUTOCONFIG=/home/lennart/buildroot/output/build/buildroot-config/auto.conf
-KCONFIG_AUTOHEADER=/home/lennart/buildroot/output/build/buildroot-config/autoconf.h
-KCONFIG_TRISTATE=/home/lennart/buildroot/output/build/buildroot-config/tristate.config
-BR2_CONFIG=/home/lennart/buildroot/.config
-BR2_EXTERNAL=support/dummy-external
-/home/lennart/buildroot/output/build/buildroot-config/conf
---silentoldconfig Config.in
-make[1]: Leaving directory `/home/lennart/buildroot'
->>> eudev 1.9 Building
-PATH="/home/lennart/buildroot/output/host/bin:/home/lennart/buildroot/output/host/sbin:/home/lennart/buildroot/output/host/usr/bin:/home/lennart/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-/usr/bin/make -j9  -C /home/lennart/buildroot/output/build/eudev-1.9/
-make[1]: Entering directory `/home/lennart/buildroot/output/build/eudev-1.9'
-/usr/bin/make  all-recursive
-make[2]: Entering directory `/home/lennart/buildroot/output/build/eudev-1.9'
-Making all in src
-make[3]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src'
-Making all in libudev
-make[4]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/libudev'
-make[4]: Nothing to be done for `all'.
-make[4]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/libudev'
-Making all in udev
-make[4]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
-/usr/bin/make  all-am
-make[5]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
-make[5]: Nothing to be done for `all-am'.
-make[5]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
-make[4]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
-Making all in accelerometer
-make[4]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/accelerometer'
-make[4]: Nothing to be done for `all'.
-make[4]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/accelerometer'
-Making all in ata_id
-make[4]: Entering directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/ata_id'
-  CC       ata_id.o
-ata_id.c:35:23: fatal error: scsi/scsi.h: No such file or directory
- #include <scsi/scsi.h>
-                       ^
-compilation terminated.
-make[4]: *** [ata_id.o] Error 1
-make[4]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src/ata_id'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/lennart/buildroot/output/build/eudev-1.9/src'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/home/lennart/buildroot/output/build/eudev-1.9'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/lennart/buildroot/output/build/eudev-1.9'
-make: *** [/home/lennart/buildroot/output/build/eudev-1.9/.stamp_built]
-Error 2
-lennart at lennart-Latitude-E6520 ~/buildroot $
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141125/5c65880c/attachment.html>
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+new file mode 100644
+index 0000000..d27a26a
+--- /dev/null
++++ b/package/grep/grep.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking signature
++sha256	5244a11c00dee8e7e5e714b9aaa053ac6cbfa27e104abee20d3c778e4bb0e5de	grep-2.21.tar.xz
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 2c2477c..80f6e71 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 2.20
++GREP_VERSION = 2.21
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
+-- 
+2.0.4
