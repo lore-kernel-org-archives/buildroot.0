@@ -1,63 +1,52 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
-Date: Tue, 25 Nov 2014 17:12:23 +0100
-Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <20141019163952.19c7c080@free-electrons.com>
-References: <20141019163952.19c7c080@free-electrons.com>
-Message-ID: <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 25 Nov 2014 17:14:57 +0100
+Subject: [Buildroot] [PATCH] botan: fix static build
+Message-ID: <1416932097-12474-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to VFPv3(d32), as i.MX53 Cortex-A8 supports it (MVFR0 = 0x11110222).
+see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
 
-While at it, switch to EABIHF.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
+ package/botan/Config.in | 5 ++---
+ package/botan/botan.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-
-Hi,
-
-This is v2 of an old patch for mx53loco (patchwork id 400549,
-"mx53loco_defconfig: refresh").
-
-It boots fine on an i.MX53 QSB on top of latest buildroot, commit
-ccec35e342a38537fba746a483eec063b5151d3e.
-
-Changes since v1:
-~~~~~~~~~~~~~~~~~
-- Do not force gcc version anymore.
-- Change the title accordingly.
-- Switch to EABIHF.
-
-
- configs/mx53loco_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 942dedf..6af42a7 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -1,12 +1,15 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_VFPV3=y
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index c82a77f..733dc89 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -10,12 +10,11 @@ config BR2_PACKAGE_BOTAN
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+-	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
+ 	help
+ 	  Botan is a crypto library for C++
  
- # System
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="2.6.35"
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 	  http://botan.randombit.net
  
-+
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+-comment "botan needs a toolchain w/ C++, threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
++comment "botan needs a toolchain w/ C++, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index ae0e02d..2e47eb6 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -20,7 +20,7 @@ BOTAN_CONF_OPTS = \
+ 	--cc-bin="$(TARGET_CXX)"
  
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-	BOTAN_CONF_OPTS += --disable-shared
++	BOTAN_CONF_OPTS += --disable-shared --no-autoload
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
 -- 
-2.1.3
+2.1.0
