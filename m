@@ -1,56 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Nov 2014 19:11:59 -0300
-Subject: [Buildroot] [PATCH] liboping: bump to version 1.8.0
-Message-ID: <1416953519-10092-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 25 Nov 2014 19:39:23 -0300
+Subject: [Buildroot] [PATCH] libksba: security bump to version 1.3.2
+Message-ID: <1416955163-17096-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes a buffer overflow in ksba_oid_to_str.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/liboping/Config.in     | 2 +-
- package/liboping/liboping.hash | 4 ++--
- package/liboping/liboping.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liboping/Config.in b/package/liboping/Config.in
-index ffdebbd..65e7c88 100644
---- a/package/liboping/Config.in
-+++ b/package/liboping/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBOPING
- 	  liboping is a C library to generate ICMP echo requests,
- 	  better known as "ping packets".
- 
--	  http://verplant.org/liboping/
-+	  http://noping.cc/
- 
- comment "liboping needs a toolchain w/ IPv6"
- 	depends on !BR2_INET_IPV6
-diff --git a/package/liboping/liboping.hash b/package/liboping/liboping.hash
-index 5987d7a..536f6ae 100644
---- a/package/liboping/liboping.hash
-+++ b/package/liboping/liboping.hash
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index c7d209a..3bd6ef0 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
 @@ -1,2 +1,2 @@
--# From http://verplant.org/liboping/#download
--sha256	25cf9417fe84d70c4b1bd97f1f92e597ccdc1ec2da3b7eb311f33f5e7033a70e	liboping-1.7.0.tar.gz
-+# From http://noping.cc/#download
-+sha256	824792ae7fc5e9569bacc4167b89de31f6ba8476de44760f0bc272682e894b41	liboping-1.8.0.tar.gz
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-index bb02616..aeaaa8a 100644
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -4,8 +4,8 @@
+-# Locally calculated after checking pgp signature
+-sha256	bc96b95516bd2b67f413bc8b5cc5a75a2583c6e666d24dfd0d5bcc6b1aab46f9	libksba-1.3.1.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q4/000359.html
++sha1	37d0893a587354af2b6e49f6ae701ca84f52da67	libksba-1.3.2.tar.bz2
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index aaf9b62..b48cac5 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPING_VERSION = 1.7.0
--LIBOPING_SITE = http://verplant.org/liboping/files
-+LIBOPING_VERSION = 1.8.0
-+LIBOPING_SITE = http://noping.cc/files
- LIBOPING_INSTALL_STAGING = YES
- LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
- LIBOPING_CONF_OPTS = --without-perl-bindings
+-LIBKSBA_VERSION = 1.3.1
++LIBKSBA_VERSION = 1.3.2
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
 -- 
 2.0.4
