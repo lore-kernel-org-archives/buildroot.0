@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Nov 2014 15:52:09 +0100
-Subject: [Buildroot] [git commit] gd: needs host-pkgconf
-Message-ID: <20141125145743.9C7277FEF6@busybox.osuosl.org>
+Date: Tue, 25 Nov 2014 16:52:26 +0100
+Subject: [Buildroot] buildroot-20141121 -> building RTAI => syntax error
+	near unexpected token
+In-Reply-To: <2e63bbce0d1b4475b10927b4b08aeb5c@dsw332.wattens.swarovski.com>
+ (Spielmann Werner's message of "Tue, 25 Nov 2014 14:38:42 +0000")
+References: <2e63bbce0d1b4475b10927b4b08aeb5c@dsw332.wattens.swarovski.com>
+Message-ID: <878uizs2f9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46c644310c87e1851eb1420cae7c07f3a1a347ed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Spielmann" == Spielmann Werner <Werner.Spielmann@SWAROVSKI.COM> writes:
 
-configure uses PKG_CHECK_MODULES, so it needs to depend on host-pkgconf.
+ > Hallo,
+ > here I'm back with new troubles...   ;-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gd/gd.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 927dfb2..d0fd572 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -13,6 +13,7 @@ GD_LICENSE_FILES = COPYING
- 
- GD_CONFIG_SCRIPTS = gdlib-config
- GD_CONF_OPTS = --without-x --disable-rpath
-+GD_DEPENDENCIES = host-pkgconf
- 
- # gd forgets to link utilities with -pthread even though it uses
- # pthreads, causing linking errors with static linking
+
+ > Please is there anybody out there who can give me a hint?
+
+
+
+ > I want to build the system on an Ubuntu 14.04/32 bit system - but building rtai there is aproblem I don't understand.
+
+ > It seems the sed-action failed.
+
+
+ > (SED) 's%^staging=.*%staging=/home/spiewe/svnws/buildroot-2014.11.21/output/host/usr/i686-buildroot-linux-uclibc/sysroot%' /home/spiewe/svnws/buildroot-2014.11.21/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/bin/rtai-config
+
+ > /bin/sh: -c: line 0: syntax error near unexpected token `'s%^staging=.*%staging=/home/spiewe/svnws/buildroot-2014.11.21/output/host/usr/i686-buildroot-linux-uclibc/sysroot%''
+
+Good catch! There's a dollar sign ($) missing before (SED). Please
+change it in package/rtai/rtai.mk (RTAI_POST_PATCH_FIXUP).
+
+I'll fix it in git for the upcoming 2014.11 release.
+
+-- 
+Bye, Peter Korsgaard
