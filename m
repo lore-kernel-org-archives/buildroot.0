@@ -1,66 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Nov 2014 18:42:14 +0200
-Subject: [Buildroot] [PATCH] botan: fix static build
-In-Reply-To: <1416932097-12474-1-git-send-email-francois.perrad@gadz.org>
-References: <1416932097-12474-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20141125164214.GA4690@tarshish>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Tue, 25 Nov 2014 17:53:29 +0100
+Subject: [Buildroot] Compilation flags in Buildroot
+Message-ID: <7e066711226b415908dd0805029e0c22@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Hello,
 
-On Tue, Nov 25, 2014 at 05:14:57PM +0100, Francois Perrad wrote:
-> see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
+I have some questions about Buildroot options related to compilation 
+flags.
 
-Please mention in the commit log that this reverts commit 
-84047394ed6ad08adb9f59a9022553a327eef040. Elaborating a bit on --no-autoload 
-would also be nice.
+In the first place, there is BR2_TARGET_OPTIMIZATION.
+The content of this option (usually a list of gcc flags) is used:
 
-baruch
+* in the toolchain wrapper for external toolchains
+   (buildroot/toolchain/toolchain-external/toolchain-external.mk)
+   so that the flags *always* apply (they are carried by gcc wrapper)
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/botan/Config.in | 5 ++---
->  package/botan/botan.mk  | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/botan/Config.in b/package/botan/Config.in
-> index c82a77f..733dc89 100644
-> --- a/package/botan/Config.in
-> +++ b/package/botan/Config.in
-> @@ -10,12 +10,11 @@ config BR2_PACKAGE_BOTAN
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-> -	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
->  	help
->  	  Botan is a crypto library for C++
->  
->  	  http://botan.randombit.net
->  
-> -comment "botan needs a toolchain w/ C++, threads, dynamic library"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
-> +comment "botan needs a toolchain w/ C++, threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-> index ae0e02d..2e47eb6 100644
-> --- a/package/botan/botan.mk
-> +++ b/package/botan/botan.mk
-> @@ -20,7 +20,7 @@ BOTAN_CONF_OPTS = \
->  	--cc-bin="$(TARGET_CXX)"
->  
->  ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> -	BOTAN_CONF_OPTS += --disable-shared
-> +	BOTAN_CONF_OPTS += --disable-shared --no-autoload
->  endif
->  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
+* in TARGET_CFLAGS, so that it is also forwarded to packages in a more 
+standard way,
+   and will apply *only if* the package build system takes care of 
+TARGET_CFLAGS.
+
+BR2_OPTIMIZE_x option is turned into -Ox option in TARGET_CFLAGS.
+
+BR2_ENABLE_SSP option is turned into -fstack-protector-all option in 
+TARGET_CFLAGS.
+
+I have also noticed that there have been some proposals to turn 
+BR2_TARGET_OPTIMIZATION - which
+is a toolchain option - into a build option (BR2_EXTRA_TARGET_CFLAGS):
+See:
+* http://lists.busybox.net/pipermail/buildroot/2008-December/024161.html
+* http://lists.busybox.net/pipermail/buildroot/2010-January/031518.html
+
+My questions are:
+
+* What is the proper use of BR2_TARGET_OPTIMIZATION?
+   Is it safe to use it to apply gcc flags in all packages?
+
+* If not, wouldn't it be useful to have an option in which you can 
+define whatever flag you need,
+   that would be set in TARGET_CFLAGS?
+   That seemed to be the purpose of BR2_EXTRA_TARGET_CFLAGS proposal, 
+that was obviously not
+   accepted.
+
+* What happens if my flag should not apply to the Linux kernel?
+   If I set -fPIC in BR2_TARGET_OPTIMIZATION, for user space programs, it 
+will apply to the
+   kernel as well.
+   And it seems that the kernel should not be compiled with this option. 
+With some versions
+   I believe that compilation will fail.
+   If -fPIC was set in a BR2_EXTRA_TARGET_CFLAGS option, it would not be 
+forwarded to the
+   kernel. But the drawback is that it might not be forwarded to some 
+other packages, since
+   it depends on each package build system taking TARGET_CFLAGS into 
+account or not... :)
+
+Thank you.
+Regards.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+C?dric
