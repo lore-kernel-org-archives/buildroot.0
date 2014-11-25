@@ -1,42 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Nov 2014 08:22:20 -0300
-Subject: [Buildroot] [PATCH] grep: bump to version 2.21
-Message-ID: <1416914540-6111-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 25 Nov 2014 13:57:06 +0200
+Subject: [Buildroot] [PATCH] gptfdisk: fix static build
+Message-ID: <e6d964131043e682bac06c3e59dddbfd2d0e5de0.1416916626.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+libuuid may need -lintl. Augment the existing Makefile patch to support adding
+link dependencies at build time.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/24b/24b3f707424e2dcf0158ffe93d728be98ff66701/
+http://autobuild.buildroot.net/results/f33/f3359fab166cf3627f15e59fa44cff36ee213102/
+http://autobuild.buildroot.net/results/ef7/ef783e3776f25c28ea0de0c082c93f7ab97db56d/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/grep/grep.hash | 2 ++
- package/grep/grep.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/grep/grep.hash
+ package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch | 8 +++++---
+ package/gptfdisk/gptfdisk.mk                                   | 4 ++++
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-new file mode 100644
-index 0000000..d27a26a
---- /dev/null
-+++ b/package/grep/grep.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking signature
-+sha256	5244a11c00dee8e7e5e714b9aaa053ac6cbfa27e104abee20d3c778e4bb0e5de	grep-2.21.tar.xz
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 2c2477c..80f6e71 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
+index 2d51e6f7bf68..6d54ceae0955 100644
+--- a/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
++++ b/package/gptfdisk/gptfdisk-001-configurable-utf16-support.patch
+@@ -7,6 +7,8 @@ the UTF16 support or not.
  
--GREP_VERSION = 2.20
-+GREP_VERSION = 2.21
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
+ Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[baruch: add $(LDLIBS)]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ ---
+ Index: b/Makefile
+ ===================================================================
+@@ -32,17 +34,17 @@ Index: b/Makefile
+  gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
+ -#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
+ -	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
+-+	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) $(UTF16_LIBS) -luuid -o gdisk
+++	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) $(UTF16_LIBS) -luuid $(LDLIBS) -o gdisk
+  
+  cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
+ -#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
+ -	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
+-+	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lncurses -o cgdisk
+++	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lncurses $(LDLIBS) -o cgdisk
+  
+  sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
+ -#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
+ -	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
+-+	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lpopt -o sgdisk
+++	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lpopt $(LDLIBS) -o sgdisk
+  
+  fixparts: $(MBR_LIB_OBJS) fixparts.o
+  	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 9828d4c79851..897dc77ac6eb 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -26,6 +26,10 @@ GPTFDISK_DEPENDENCIES += icu
+ GPTFDISK_MAKE_OPTS += USE_UTF16=y
+ endif
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PREFER_STATIC_LIB),yy)
++GPTFDISK_MAKE_OPTS += LDLIBS=-lintl
++endif
++
+ define GPTFDISK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		$(GPTFDISK_MAKE_OPTS) $(GPTFDISK_TARGETS_y)
 -- 
-2.0.4
+2.1.3
