@@ -1,77 +1,177 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 25 Nov 2014 11:42:29 +0100
-Subject: [Buildroot] [PATCH v4 next 0/5]  Improve silent builds
-In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <6658443.V0IJTQaiAA@aquila>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Tue, 25 Nov 2014 11:50:25 +0100
+Subject: [Buildroot] Need help getting started with X11
+In-Reply-To: <20141124210722.49239966@free-electrons.com>
+References: <CAEzGmjByqb2QB4+-QDOcJYDo6zvD+UpkG9kaNmBzBHKMFaGDJg@mail.gmail.com>
+ <20141124210722.49239966@free-electrons.com>
+Message-ID: <CAEzGmjCgWSX0BGBsRFG-MVpbQ67r5Dkv4Mbhj6x6FQotgQxSdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+Thanks Thomas,
 
-If you are interested to keep quiet builds, you may be interested by
-a tool called "reredirect"[1]. 
+On Mon, Nov 24, 2014 at 9:07 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-reredirect allows to redirect outputs of a running program. I use
-it to redirect output of make process (and its children) to log files
-(eg. build/busybox-1.22.1/busybox_extract.log, 
-build/busybox-1.22.1/busybox_build.log, etc...).
+> Dear Lennart Ramberg,
+>
+> On Mon, 24 Nov 2014 13:41:38 +0100, Lennart Ramberg wrote:
+>
+> > Or, if anyone would be so kind, I'm stuck at the below defconfig.
+> > The system works in the sense that I can ssh into it, but now I want
+> > graphics on the console display.
+> > I have not yet anything in the overlays that starts or otherwise relates
+> to
+> > xorg.
+> > My target chipset is Intel 852GM.
+> > For one thing, what is supposed to create an xorg.conf?
+>
+> These days, if you enable udev a xorg.conf is often not needed.
+>
+> > And I suppose X should be started somehow in supervisor.d like I start
+> sshd
+> > there.
+> >
+> > BR2_x86_i686=y
+> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> > # BR2_TARGET_GENERIC_GETTY is not set
+> > BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
+> > BR2_LINUX_KERNEL=y
+> > BR2_LINUX_KERNEL_DEFCONFIG="i386"
+> > BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> > BR2_PACKAGE_XORG7=y
+> > BR2_PACKAGE_XSERVER_XORG_SERVER=y
+>
+> Make sure to also enable the Intel graphics driver, i.e.
+> BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL. Note that you need to switch the
+> "modular X.org server" variant to achieve that.
+>
+> And then, start the X server by simply running "X".
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 
-To do this, I add this snippet in my local.mk :
+At first all was well, at least the screen went black, X was visible in top
+and I could get out with Ctrl-c.
+So far so good.
+Then I recalled that I had not done 'make'.
+So I did make, but a bug(?) stopped further advancements.
+I don't know how to file a bug report, but maybe the below is of use (I
+figure next stable release is imminent).
 
-define buildlog-silent
-        $(call MESSAGE,$(2))
-        if [ $(1) == start ]; then                                             \
-                reredirect -m $(@D)/$(3)_$(2).log $$PPID > $(BUILD_DIR)/restore_$$PPID.cmd; \
-        else                                                                   \
-                sh $(BUILD_DIR)/restore_$$PPID.cmd;                            \
-                rm $(BUILD_DIR)/restore_$$PPID.cmd;                            \
-        fi
-endef
-GLOBAL_INSTRUMENTATION_HOOKS += buildlog-silent
+Regards
+Lennart
 
+First my new defconfig:
 
-With that, my build only display steps names and all build output is
-redirected to log files. I have also a more complex snippet to redirect
-output to log file and to console. In this case, I use a fifo and "tee"
-in add of "reredirect".
+BR2_x86_i686=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+# BR2_TARGET_GENERIC_GETTY is not set
+BR2_ROOTFS_OVERLAY="board/eta/board1/rootfs-overlay/"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XAPP_TWM=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XWD=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+BR2_PACKAGE_MCOOKIE=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_SQLITE=y
+BR2_PACKAGE_CAIRO=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_SUPERVISOR=y
+BR2_PACKAGE_NANO=y
+# BR2_PACKAGE_NANO_TINY is not set
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
+BR2_TARGET_GRUB2=y
 
+I had done a 'git pull' earlier today. Then, just now, a 'make' once before
+the below 'make':
 
-Note 1: You may have to disable ptrace_scope in order to make reredirect work:
-   echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope    
-
-
-[1] https://github.com/jerome-pouiller/reredirect
-
-
-On Monday 24 November 2014 14:56:57 Fabio Porcedda wrote:
-> This patch set improves silent builds.
-> 
-> Silent builds are nice when top-level parallel make is being used to
-> reduce the output clutter.
-> 
-> The change logs are in each patch.
-> 
-> Best regards
-> Fabio Porcedda (5):
->   support/download: silence git if it is a silent build
->   support/download: silence svn if it is a silent build
->   support/download: pass the quiet flag to the hg download helper
->   support/download: pass the quiet flag to the wget download helper
->   support/download: pass the quiet flag to the scp download helper
-> 
->  package/pkg-download.mk | 21 +++++++++++++--------
->  support/download/git    | 14 ++++++++++----
->  support/download/hg     |  5 +++--
->  support/download/scp    |  3 ++-
->  support/download/svn    |  4 +++-
->  support/download/wget   |  3 ++-
->  6 files changed, 33 insertions(+), 17 deletions(-)
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+lennart at lennart-Latitude-E6520 ~/buildroot $ make
+/usr/bin/make -j1  HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++"
+silentoldconfig
+make[1]: Entering directory `/home/lennart/buildroot'
+BR2_DEFCONFIG=''
+KCONFIG_AUTOCONFIG=/home/lennart/buildroot/output/build/buildroot-config/auto.conf
+KCONFIG_AUTOHEADER=/home/lennart/buildroot/output/build/buildroot-config/autoconf.h
+KCONFIG_TRISTATE=/home/lennart/buildroot/output/build/buildroot-config/tristate.config
+BR2_CONFIG=/home/lennart/buildroot/.config
+BR2_EXTERNAL=support/dummy-external
+/home/lennart/buildroot/output/build/buildroot-config/conf
+--silentoldconfig Config.in
+make[1]: Leaving directory `/home/lennart/buildroot'
+>>> eudev 1.9 Building
+PATH="/home/lennart/buildroot/output/host/bin:/home/lennart/buildroot/output/host/sbin:/home/lennart/buildroot/output/host/usr/bin:/home/lennart/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+/usr/bin/make -j9  -C /home/lennart/buildroot/output/build/eudev-1.9/
+make[1]: Entering directory `/home/lennart/buildroot/output/build/eudev-1.9'
+/usr/bin/make  all-recursive
+make[2]: Entering directory `/home/lennart/buildroot/output/build/eudev-1.9'
+Making all in src
+make[3]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src'
+Making all in libudev
+make[4]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/libudev'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/libudev'
+Making all in udev
+make[4]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
+/usr/bin/make  all-am
+make[5]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
+make[5]: Nothing to be done for `all-am'.
+make[5]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
+make[4]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/udev'
+Making all in accelerometer
+make[4]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/accelerometer'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/accelerometer'
+Making all in ata_id
+make[4]: Entering directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/ata_id'
+  CC       ata_id.o
+ata_id.c:35:23: fatal error: scsi/scsi.h: No such file or directory
+ #include <scsi/scsi.h>
+                       ^
+compilation terminated.
+make[4]: *** [ata_id.o] Error 1
+make[4]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src/ata_id'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/lennart/buildroot/output/build/eudev-1.9/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/lennart/buildroot/output/build/eudev-1.9'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/lennart/buildroot/output/build/eudev-1.9'
+make: *** [/home/lennart/buildroot/output/build/eudev-1.9/.stamp_built]
+Error 2
+lennart at lennart-Latitude-E6520 ~/buildroot $
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141125/5c65880c/attachment.html>
