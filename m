@@ -1,55 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Nov 2014 15:52:23 -0300
-Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.15
-Message-ID: <1416941543-5545-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric =?UTF-8?B?QsOpbmFyZA==?= <eric@eukrea.com>
+Date: Tue, 25 Nov 2014 18:44:29 +0100
+Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
+In-Reply-To: <20141125183017.31cb5e67@free-electrons.com>
+References: <20141019163952.19c7c080@free-electrons.com>
+ <1416931943-3504-1-git-send-email-vincent.stehle@freescale.com>
+ <20141125175420.7b6ff884@e6520eb.localdomain>
+ <5474B65D.5010401@freescale.com>
+ <20141125183017.31cb5e67@free-electrons.com>
+Message-ID: <20141125184429.74b70457@e6520eb.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes an out-of-bounds memory access in png_user_version_check().
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../libpng/{libpng-01-disable-tools.patch => 0001-disable-tools.patch} | 0
- ...g-02-ignore-symbol-prefix.patch => 0002-ignore-symbol-prefix.patch} | 0
- package/libpng/libpng.hash                                             | 3 +++
- package/libpng/libpng.mk                                               | 2 +-
- 4 files changed, 4 insertions(+), 1 deletion(-)
- rename package/libpng/{libpng-01-disable-tools.patch => 0001-disable-tools.patch} (100%)
- rename package/libpng/{libpng-02-ignore-symbol-prefix.patch => 0002-ignore-symbol-prefix.patch} (100%)
- create mode 100644 package/libpng/libpng.hash
+Le Tue, 25 Nov 2014 18:30:17 +0100,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+> On Tue, 25 Nov 2014 18:03:25 +0100, Vincent Stehl? wrote:
+> 
+> > > May you please ask inside Freescale to provide AMD GPU libraries
+> > > compiled for hard float ? (we don't need support nor warranty, we just
+> > > need the binaries compiled for hard float to try if that can work).
+> > 
+> > Ok, I'll ask. No promise that you will get an answer, though :)
+> > 
+> > ...also I wonder, shall I maybe submit a "v3" of the patch, with no EABIHF?
+> 
+> I'd say yes. Is 2.6.35 the latest kernel available for this platform,
+> or could we switch to a more recent version.
+> 
+> Also, Eric, you mention the AMD GPU libraries, but do we have packages
+> for those libraries in Buildroot? I know we have the ones for i.MX6,
+> but what about i.MX53 ?
 
-diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/0001-disable-tools.patch
-similarity index 100%
-rename from package/libpng/libpng-01-disable-tools.patch
-rename to package/libpng/0001-disable-tools.patch
-diff --git a/package/libpng/libpng-02-ignore-symbol-prefix.patch b/package/libpng/0002-ignore-symbol-prefix.patch
-similarity index 100%
-rename from package/libpng/libpng-02-ignore-symbol-prefix.patch
-rename to package/libpng/0002-ignore-symbol-prefix.patch
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-new file mode 100644
-index 0000000..37f6067
---- /dev/null
-+++ b/package/libpng/libpng.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.15/
-+md5	a95cb387c53215b034203b41ec57c7e5	libpng-1.6.15.tar.xz
-+sha1	bddeac8ca97fbcf54d6d32c6eefed5d94b49df88	libpng-1.6.15.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 99510ca..67bf141 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.12
-+LIBPNG_VERSION = 1.6.15
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
--- 
-2.0.4
+a patch adding the AMD GPU libraries was sent earlier this month by
+J?r?me Pouiller : http://patchwork.ozlabs.org/patch/408174/
+I can't find the new version but a patch depending on this one is
+available so I assume a v2 will follow :
+http://patchwork.ozlabs.org/patch/412521/
+
+Eric
