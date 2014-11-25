@@ -1,54 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Nov 2014 22:33:01 +0100
-Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.15
-Message-ID: <20141125213632.6F1AD7FEF8@busybox.osuosl.org>
+Date: Tue, 25 Nov 2014 22:35:43 +0100
+Subject: [Buildroot] [git commit] package/clamav: fix static build
+Message-ID: <20141125213632.85FC57FA9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b89ce67523b6c18ded565b36fcc09876434cd026
+commit: http://git.buildroot.net/buildroot/commit/?id=a3926f3a64f299e6d5463af8ad5ed63d2c6ba5fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes an out-of-bounds memory access in png_user_version_check().
+clamav unconditionally includes dlfcn.h which is missing on a uClibc
+that is configured as a pure-static C library.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Thus, the build fails.
+
+But the including file does not even makes use of any function from the
+dlopen() familly, so it does not need to include dlfcn.h to start with.
+
+Add a patch to clamav to not include dlfcn.h where not needed.
+
+Fixes:
+    http://autobuild.buildroot.net/results/b49/b491f4e5e1760248adb8d21b404e8aa15f7dbdd1/
+
+[Peter: fix typo in patch description]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-tools.patch => 0001-disable-tools.patch} |    0
- ...refix.patch => 0002-ignore-symbol-prefix.patch} |    0
- package/libpng/libpng.hash                         |    3 +++
- package/libpng/libpng.mk                           |    2 +-
- 4 files changed, 4 insertions(+), 1 deletions(-)
+ package/clamav/clamav-0004-fix-static-build.patch |   21 +++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/0001-disable-tools.patch
-similarity index 100%
-rename from package/libpng/libpng-01-disable-tools.patch
-rename to package/libpng/0001-disable-tools.patch
-diff --git a/package/libpng/libpng-02-ignore-symbol-prefix.patch b/package/libpng/0002-ignore-symbol-prefix.patch
-similarity index 100%
-rename from package/libpng/libpng-02-ignore-symbol-prefix.patch
-rename to package/libpng/0002-ignore-symbol-prefix.patch
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+diff --git a/package/clamav/clamav-0004-fix-static-build.patch b/package/clamav/clamav-0004-fix-static-build.patch
 new file mode 100644
-index 0000000..37f6067
+index 0000000..9c7850a
 --- /dev/null
-+++ b/package/libpng/libpng.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.15/
-+md5	a95cb387c53215b034203b41ec57c7e5	libpng-1.6.15.tar.xz
-+sha1	bddeac8ca97fbcf54d6d32c6eefed5d94b49df88	libpng-1.6.15.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 99510ca..67bf141 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.12
-+LIBPNG_VERSION = 1.6.15
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
++++ b/package/clamav/clamav-0004-fix-static-build.patch
+@@ -0,0 +1,21 @@
++stats: fix static link
++
++The stats.c file does not use the dlopen() familly of functions, but
++includes dlfcn.h, which is missing on uClibc when it is configured as
++a static-only C library.
++
++so, simply do not include dlfcn.h.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN clamav-0.98.5.orig/libclamav/stats.c clamav-0.98.5/libclamav/stats.c
++--- clamav-0.98.5.orig/libclamav/stats.c	2014-11-13 23:30:43.000000000 +0100
+++++ clamav-0.98.5/libclamav/stats.c	2014-11-25 19:57:14.344291266 +0100
++@@ -41,7 +41,6 @@
++ #include <sys/sysctl.h>
++ #endif
++ #endif
++-#include <dlfcn.h>
++ #else
++ #include <Windows.h>
++ #include <tchar.h>
