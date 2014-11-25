@@ -1,12 +1,15 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Nov 2014 09:58:06 -0300
-Subject: [Buildroot] [PATCH] flac: add security patches
-Message-ID: <1416920286-16063-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Nov 2014 14:56:14 +0100
+Subject: [Buildroot] [git commit] flac: add security patches
+Message-ID: <20141125135637.2C0F27FEE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=71d3b5c10809703f92ece708558fb9324f6c1336
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 CVE-2014-9028 - Heap buffer write overflow
@@ -15,14 +18,12 @@ CVE-2014-8962 - Heap buffer read overflow
 Patches are upstream part of the upcoming 1.3.1 release.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ec-logic.patch => 0001-fix-altivec-logic.patch} |  0
- package/flac/0002-fix-CVE-2014-9028.patch          | 34 ++++++++++++++++++
- package/flac/0003-fix-CVE-2014-8962.patch          | 40 ++++++++++++++++++++++
- 3 files changed, 74 insertions(+)
- rename package/flac/{flac-01-fix-altivec-logic.patch => 0001-fix-altivec-logic.patch} (100%)
- create mode 100644 package/flac/0002-fix-CVE-2014-9028.patch
- create mode 100644 package/flac/0003-fix-CVE-2014-8962.patch
+ ...ec-logic.patch => 0001-fix-altivec-logic.patch} |    0
+ package/flac/0002-fix-CVE-2014-9028.patch          |   34 +++++++++++++++++
+ package/flac/0003-fix-CVE-2014-8962.patch          |   40 ++++++++++++++++++++
+ 3 files changed, 74 insertions(+), 0 deletions(-)
 
 diff --git a/package/flac/flac-01-fix-altivec-logic.patch b/package/flac/0001-fix-altivec-logic.patch
 similarity index 100%
@@ -114,5 +115,3 @@ index 0000000..563100e
 +-- 
 +1.7.2.5
 +
--- 
-2.0.4
