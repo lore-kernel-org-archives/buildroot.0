@@ -1,42 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Nov 2014 19:39:23 -0300
-Subject: [Buildroot] [PATCH] libksba: security bump to version 1.3.2
-Message-ID: <1416955163-17096-1-git-send-email-gustavo@zacarias.com.ar>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 25 Nov 2014 20:01:24 -0300
+Subject: [Buildroot] [PATCH v4 0/9] target permissions
+In-Reply-To: <20141122190233.314a6e48@free-electrons.com>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+ <20141122190233.314a6e48@free-electrons.com>
+Message-ID: <20141125230124.GA16987@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a buffer overflow in ksba_oid_to_str.
+On Sat, Nov 22, 2014 at 07:02:33PM +0100, Thomas Petazzoni wrote:
+> Dear Guido Mart?nez,
+> 
+> On Fri, 21 Nov 2014 13:18:59 -0300, Guido Mart?nez wrote:
+> 
+> > Guido Mart?nez (9):
+> [...]
+> >   nitrogen6x: use install instead of cp
+> >   boot/grub: use install instead of cp
+> >   fs/iso9660: use install instead of cp
+> 
+> I've applied those three patches to the next branch. The other ones are
+> more sensitive, so I'll wait to get more feedback/review, but applying
+> those three patches means you'll have less patches to carry in your
+> branch :)
+Thanks Thomas!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libksba/libksba.hash | 4 ++--
- package/libksba/libksba.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I agree the other require a bit more feedback. Even though I have been
+using them for a while with no problems, one can't be sure enough when
+touching this kind of stuff :)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index c7d209a..3bd6ef0 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	bc96b95516bd2b67f413bc8b5cc5a75a2583c6e666d24dfd0d5bcc6b1aab46f9	libksba-1.3.1.tar.bz2
-+# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q4/000359.html
-+sha1	37d0893a587354af2b6e49f6ae701ca84f52da67	libksba-1.3.2.tar.bz2
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index aaf9b62..b48cac5 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBKSBA_VERSION = 1.3.1
-+LIBKSBA_VERSION = 1.3.2
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
+BTW, patch #2 was Reviewed-by Yann on the previous patchset. It's the
+exact same patch. Same for #4 (was #3), except for a minor change in the
+commit log.
+
 -- 
-2.0.4
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
