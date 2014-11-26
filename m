@@ -1,44 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:42:39 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix npm module cross compilation,
- use up-to-date npm and install modules globally
-In-Reply-To: <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
-References: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
- <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
-Message-ID: <20141126224239.248beb17@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Nov 2014 22:44:42 +0100
+Subject: [Buildroot] [PATCH v4 next 1/5] support/download: silence git
+ if it is a silent build
+In-Reply-To: <20141126223822.6083acac@free-electrons.com>
+References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
+ <1416837422-1977-2-git-send-email-fabio.porcedda@gmail.com>
+ <20141126213534.GA4260@free.fr>
+ <20141126223822.6083acac@free-electrons.com>
+Message-ID: <20141126214442.GB4260@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael Wei,
+Thomas, Fabio, All,
 
-On Sun, 23 Nov 2014 12:39:38 -0800, Michael Wei wrote:
+On 2014-11-26 22:38 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 26 Nov 2014 22:35:34 +0100, Yann E. MORIN wrote:
+> > I am not a big fan of this.
+> > 
+> > I would prefer we pass the quiet flag through the environment, something
+> > like this, for example:
+> 
+> On my side, I'm not a big fan of the environment, I find it a too
+> hidden way to pass things.However, I find it a bit clunky to have this
+> as a fifth optional argument.
 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 312aaa9..fbcb730 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -110,11 +110,13 @@ define NODEJS_INSTALL_MODULES
->  	# npm install call below and setting npm_config_rollback=false can both
->  	# help in diagnosing the problem.
->  	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-> +		$(HOST_DIR)/usr/bin/npm install -g npm --prefix=$(HOST_DIR) && \
+Well, the fact that we relied on the fact that -q is optional so had to
+be the fifth argument is what bothered me. If we were to be adding new
+optional flags, we'd be stuck. Passing them through the environment made
+it possible to add extra optional flags (although I wonder what those
+might be).
 
-If I understand correctly, this asks npm to update itself, i.e update
-the host npm. If that's the case, then I believe this should rather go
-in the HOST_NODEJS_INSTALL_CMDS.
+> The solution I would find the cleanest
+> would be to use real arguments for the download helper scripts, using
+> getopt.
+> 
+> Like:
+> 	git -o <output> -r <repo> -c <cset> -b <basename> [-q]
 
-Also, could you explain what the "-g" option changes? I understand it
-installs modules "globally", but what means "globally" compared to what
-was done before? Sorry for the silly questions, but I'm far from being
-a NodeJS guy, so I don't really know how npm works.
+Yes, agreed.
 
-Thanks a lot,
+Let's go for getopt in all helper scripts.
 
-Thomas
+No need to recognise long options, though; shirt options are enough.
+
+Regards,
+Yann E. MORIN.
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
