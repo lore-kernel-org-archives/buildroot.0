@@ -1,51 +1,90 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 26 Nov 2014 21:49:02 +0200
-Subject: [Buildroot] [PATCH] nftables: fix static build
-Message-ID: <3e17fd6cd2d116233ebb766596c7d26254d9d698.1417031342.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 26 Nov 2014 20:56:41 +0100
+Subject: [Buildroot] [RFC/PATCH next v7 01/17] package/libcec: Bump to
+	version 2.2.0
+In-Reply-To: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417031817-31763-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnftnl needs -ljansson when built with json support.
+Kodi Helix depends on libcec >= 2.2.0
 
-Fixes:
-http://autobuild.buildroot.net/results/68a/68ab2101a0b2b7d5482aafe0d88c87a50491159f/
-http://autobuild.buildroot.net/results/87e/87ecbba5b9b16d592a48fe827fa88ef5a5c6d09b/
+Removed libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+applied upstream: https://github.com/Pulse-Eight/libcec/commit/485660f
 
-libnftl also needs -mxml when built with XML support.
+Renamed remaining patch according to new naming convention.
 
-Fixes:
-http://autobuild.buildroot.net/results/58f/58f592d823db14e4e7558134f1b479f4f8659a23/
-http://autobuild.buildroot.net/results/1cf/1cf23f2b38236f43971c65e704793b5bc762ecfe/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nftables/nftables.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ ...i-warning.patch => 0001-no-psabi-warning.patch} |    0
+ ...gistering-a-callback-that-wasn-t-register.patch |   36 --------------------
+ package/libcec/libcec.mk                           |    2 +-
+ 3 files changed, 1 insertion(+), 37 deletions(-)
+ rename package/libcec/{libcec-0002-no-psabi-warning.patch => 0001-no-psabi-warning.patch} (100%)
+ delete mode 100644 package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index b3abbc0dd9a9..16d7c6f21247 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -12,8 +12,16 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
- NFTABLES_LICENSE = GPLv2
- NFTABLES_LICENSE_FILES = COPYING
+diff --git a/package/libcec/libcec-0002-no-psabi-warning.patch b/package/libcec/0001-no-psabi-warning.patch
+similarity index 100%
+rename from package/libcec/libcec-0002-no-psabi-warning.patch
+rename to package/libcec/0001-no-psabi-warning.patch
+diff --git a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch b/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+deleted file mode 100644
+index 41d93aa..0000000
+--- a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 78e52d55d6fc079b9a96d1a663d1991d9a0f2a2b Mon Sep 17 00:00:00 2001
+-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+-Date: Wed, 7 May 2014 08:41:27 +0200
+-Subject: [PATCH] Fix unregistering a callback that wasn't register
+-
+-This patchs fixes an asserts that get's thrown when you start XBMC and thus
+-prevents it from starting.
+-The asserts you'll endup getting is:
+-assertion failure:
+-[...]/interface/vmcs_host/vc_vchi_tvservice.c:430:vc_tv_unregister_callback():done
+-
+-Found: https://github.com/raspberrypi/userland/issues/159
+-
+-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+----
+- src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-index 76c61b3..1eb6417 100644
+---- a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-+++ b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-@@ -353,7 +353,9 @@ void CRPiCECAdapterCommunication::Close(void)
+-     else
+-       return;
+-   }
+--  vc_tv_unregister_callback(rpi_tv_callback);
+-+
+-+  if (m_bInitialised)
+-+    vc_tv_unregister_callback(rpi_tv_callback);
+-
+-   UnregisterLogicalAddress();
+-
+---
+-1.9.2
+-
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 5a889b9..8bdc9ea 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+NFTABLES_LIBS = -lncurses
-+ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
-+NFTABLES_LIBS += -ljansson -lm
-+endif
-+ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_XML),yy)
-+NFTABLES_LIBS += -lmxml -lpthread
-+endif
-+
- NFTABLES_CONF_ENV = \
- 	ac_cv_prog_CONFIG_PDF=no \
--	LIBS="-lncurses"
-+	LIBS="$(NFTABLES_LIBS)"
- 
- $(eval $(autotools-package))
+-LIBCEC_VERSION = libcec-2.1.4-repack
++LIBCEC_VERSION = libcec-2.2.0-repack
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
 -- 
-2.1.3
+1.7.10.4
