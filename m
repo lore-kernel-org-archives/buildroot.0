@@ -1,53 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 23:25:01 +0100
-Subject: [Buildroot] [git commit] nftables: fix static build
-Message-ID: <20141126222614.ACDA07FF19@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 23:20:03 +0100
+Subject: [Buildroot] [git commit] libnspr: fix static build
+Message-ID: <20141126222614.A48B37FF18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30362526a081c7dcbb568e3d543fc83b8a294b56
+commit: http://git.buildroot.net/buildroot/commit/?id=05aa5b49739e528b85fcf3efbe8948a3db2ff09d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libnftnl needs -ljansson when built with json support.
+Disable shared library in a static build.
 
 Fixes:
-http://autobuild.buildroot.net/results/68a/68ab2101a0b2b7d5482aafe0d88c87a50491159f/
-http://autobuild.buildroot.net/results/87e/87ecbba5b9b16d592a48fe827fa88ef5a5c6d09b/
-
-libnftl also needs -mxml when built with XML support.
-
-Fixes:
-http://autobuild.buildroot.net/results/58f/58f592d823db14e4e7558134f1b479f4f8659a23/
-http://autobuild.buildroot.net/results/1cf/1cf23f2b38236f43971c65e704793b5bc762ecfe/
+http://autobuild.buildroot.net/results/6ff/6ffae151ec3eaca175923ab860cf42167871164c/
+http://autobuild.buildroot.net/results/cab/cab19721c43b3256dd51ae511016bc9ea440512a/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nftables/nftables.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/libnspr/libnspr.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index b3abbc0..16d7c6f 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -12,8 +12,16 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
- NFTABLES_LICENSE = GPLv2
- NFTABLES_LICENSE_FILES = COPYING
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c071d85..1930870 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -21,6 +21,12 @@ LIBNSPR_CONF_OPTS = --host=$(GNU_HOST_NAME)
+ LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
+ LIBNSPR_CONF_OPTS += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
  
-+NFTABLES_LIBS = -lncurses
-+ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
-+NFTABLES_LIBS += -ljansson -lm
-+endif
-+ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_XML),yy)
-+NFTABLES_LIBS += -lmxml -lpthread
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++LIBNSPR_MAKE_OPTS = SHARED_LIBRARY=
++LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SHARED_LIBRARY= install
++LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) SHARED_LIBRARY= install
 +endif
 +
- NFTABLES_CONF_ENV = \
- 	ac_cv_prog_CONFIG_PDF=no \
--	LIBS="-lncurses"
-+	LIBS="$(NFTABLES_LIBS)"
- 
- $(eval $(autotools-package))
+ ifeq ($(BR2_arm),y)
+ ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
+ LIBNSPR_CONF_OPTS += --enable-thumb2
