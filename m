@@ -1,85 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 09:16:24 +0100
-Subject: [Buildroot] [PATCH next] package: add python-networkmanager
-Message-ID: <1416989784-4371-1-git-send-email-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Nov 2014 10:49:18 +0200
+Subject: [Buildroot] [PATCH v2] package/network-manager: NM needs
+ ISC-DHCPC or DHCPCD
+In-Reply-To: <1416986374-24951-1-git-send-email-nroach44@gmail.com>
+References: <1416986374-24951-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20141126084918.GO2374@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                                        |  1 +
- package/python-networkmanager/Config.in                  | 15 +++++++++++++++
- package/python-networkmanager/python-networkmanager.hash |  3 +++
- package/python-networkmanager/python-networkmanager.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-networkmanager/Config.in
- create mode 100644 package/python-networkmanager/python-networkmanager.hash
- create mode 100644 package/python-networkmanager/python-networkmanager.mk
+Hi Nathaniel,
 
-diff --git a/package/Config.in b/package/Config.in
-index 6875d8b..5c27421 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -507,6 +507,7 @@ menu "external python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-netifaces/Config.in"
-+	source "package/python-networkmanager/Config.in"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-posix-ipc/Config.in"
-diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
-new file mode 100644
-index 0000000..fcbce57
---- /dev/null
-+++ b/package/python-networkmanager/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_NETWORKMANAGER
-+	bool "python-networkmanager"
-+	depends on BR2_PACKAGE_NETWORK_MANAGER # runtime
-+	depends on BR2_USE_WCHAR # dbus-python
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
-+	depends on BR2_PACKAGE_DBUS # dbus-python
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	help
-+	  python-networkmanager wraps NetworkManagers D-Bus interface
-+	  so you can be less verbose when talking to NetworkManager
-+	  from python. All interfaces have been wrapped in classes,
-+	  properties are exposed as python properties and function
-+	  calls are forwarded to the correct interface.
-+
-+	  https://pypi.python.org/pypi/python-networkmanager/
-diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-new file mode 100644
-index 0000000..6c6f697
---- /dev/null
-+++ b/package/python-networkmanager/python-networkmanager.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2cd400a7ca4dcd1ea98c864007032494, sha256 locally computed
-+md5	2cd400a7ca4dcd1ea98c864007032494  python-networkmanager-0.9.12.tar.gz
-+sha256	a4c7bbae8a1ee3cf370ff0cd2ba2e0f1fb7f8e8f99f8f48a1df624c19a11166f  python-networkmanager-0.9.12.tar.gz
-diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-new file mode 100644
-index 0000000..c043edb
---- /dev/null
-+++ b/package/python-networkmanager/python-networkmanager.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-networkmanager
-+#
-+################################################################################
-+
-+PYTHON_NETWORKMANAGER_VERSION = 0.9.12
-+PYTHON_NETWORKMANAGER_SITE = http://pypi.python.org/packages/source/p/python-networkmanager
-+PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
-+PYTHON_NETWORKMANAGER_LICENSE = GPLv3+
-+PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
-+PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
-+
-+$(eval $(python-package))
+On Wed, Nov 26, 2014 at 03:19:34PM +0800, Nathaniel Roach wrote:
+> As NM communicates with the dhcp client through DBus, it
+> doesn't support any old client.
+> 
+> Add the dependencies to Config.in, and ensure that they
+> are built beforehand.
+
+So only these two DHCP clients are supported? If so, please mention that here.
+
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+> ---
+> This adds unecessary things to static-ip configured
+> 	systems, but then again they are using NM for that
+> 	(instead of ifup/down) so maybe this is a non issue?
+> 
+> Changes v1 -> v2:
+>   - Switched to "select" from "depends on" (As recommended by
+> 	Baruch). Uses DHCPCD as default as it's the lighter
+> 	option.
+>   - Because of the above, the edit to "NM needs ..." is no
+> 	longer needed.
+> 
+> ---
+>  package/network-manager/Config.in          | 1 +
+>  package/network-manager/network-manager.mk | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+> index 0ed6ca5..a3e6e33 100644
+> --- a/package/network-manager/Config.in
+> +++ b/package/network-manager/Config.in
+> @@ -8,6 +8,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+>  	depends on BR2_USE_MMU # dbus
+>  	depends on BR2_PACKAGE_HAS_UDEV
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> +	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_DBUS_GLIB
+>  	select BR2_PACKAGE_GNUTLS
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 7944254..96bc858 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -57,10 +57,12 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+>  NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/usr/sbin/dhclient
+> +NETWORK_MANAGER_DEPENDENCIES += dhcp
+
+Are you sure this is a build time dependency?
+
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DHCPCD),y)
+>  NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/usr/sbin/dhcpcd
+> +NETWORK_MANAGER_DEPENDENCIES += dhcpcd
+
+Ditto.
+
+>  endif
+>  
+>  # uClibc by default doesn't have backtrace support, so don't use it
+
 -- 
-2.1.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
