@@ -1,82 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Nov 2014 20:22:49 +0100
-Subject: [Buildroot] [git commit] package: add python-httplib2
-Message-ID: <20141201104838.4BB187FC49@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Nov 2014 16:13:59 +0100
+Subject: [Buildroot] [git commit] liboping: bump to version 1.8.0
+Message-ID: <20141201104838.585867FDA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8ce24077b68b1fa5422154ae18ed0541be5352e
+commit: http://git.buildroot.net/buildroot/commit/?id=cfb3af459c60c7dfb6a881ef6a79771565ac0d32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: fix the license, it is MIT, not BSD-3c.]
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |    1 +
- package/python-httplib2/Config.in            |   11 +++++++++++
- package/python-httplib2/python-httplib2.hash |    3 +++
- package/python-httplib2/python-httplib2.mk   |   14 ++++++++++++++
- 4 files changed, 29 insertions(+), 0 deletions(-)
+ package/liboping/Config.in     |    2 +-
+ package/liboping/liboping.hash |    4 ++--
+ package/liboping/liboping.mk   |    4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a8128ff..6875d8b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -493,6 +493,7 @@ menu "external python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-httplib2/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
-diff --git a/package/python-httplib2/Config.in b/package/python-httplib2/Config.in
-new file mode 100644
-index 0000000..e42f513
---- /dev/null
-+++ b/package/python-httplib2/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_HTTPLIB2
-+	bool "python-httplib2"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
-+	help
-+	  httplib2 is a comprehensive HTTP client library, httplib2.py
-+	  supports many features left out of other HTTP libraries.
-+
-+	  https://pypi.python.org/pypi/httplib2
-diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
-new file mode 100644
-index 0000000..6b128d3
---- /dev/null
-+++ b/package/python-httplib2/python-httplib2.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=09d8e8016911fc40e2e4c58f1aa3ec24, sha256 locally computed
-+md5	09d8e8016911fc40e2e4c58f1aa3ec24  httplib2-0.9.tar.gz
-+sha256	39ea8c6a6d9f595c177a16134fc49a990ad8d382758cbf469c8659662f2f51ab  httplib2-0.9.tar.gz
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-new file mode 100644
-index 0000000..ec5c476
---- /dev/null
-+++ b/package/python-httplib2/python-httplib2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-httplib2
-+#
-+################################################################################
-+
-+PYTHON_HTTPLIB2_VERSION = 0.9
-+PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
-+PYTHON_HTTPLIB2_SITE = http://pypi.python.org/packages/source/h/httplib2
-+PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
-+PYTHON_HTTPLIB2_LICENSE = MIT
-+PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
-+
-+$(eval $(python-package))
+diff --git a/package/liboping/Config.in b/package/liboping/Config.in
+index ffdebbd..65e7c88 100644
+--- a/package/liboping/Config.in
++++ b/package/liboping/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBOPING
+ 	  liboping is a C library to generate ICMP echo requests,
+ 	  better known as "ping packets".
+ 
+-	  http://verplant.org/liboping/
++	  http://noping.cc/
+ 
+ comment "liboping needs a toolchain w/ IPv6"
+ 	depends on !BR2_INET_IPV6
+diff --git a/package/liboping/liboping.hash b/package/liboping/liboping.hash
+index 5987d7a..536f6ae 100644
+--- a/package/liboping/liboping.hash
++++ b/package/liboping/liboping.hash
+@@ -1,2 +1,2 @@
+-# From http://verplant.org/liboping/#download
+-sha256	25cf9417fe84d70c4b1bd97f1f92e597ccdc1ec2da3b7eb311f33f5e7033a70e	liboping-1.7.0.tar.gz
++# From http://noping.cc/#download
++sha256	824792ae7fc5e9569bacc4167b89de31f6ba8476de44760f0bc272682e894b41	liboping-1.8.0.tar.gz
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index bb02616..aeaaa8a 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBOPING_VERSION = 1.7.0
+-LIBOPING_SITE = http://verplant.org/liboping/files
++LIBOPING_VERSION = 1.8.0
++LIBOPING_SITE = http://noping.cc/files
+ LIBOPING_INSTALL_STAGING = YES
+ LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
+ LIBOPING_CONF_OPTS = --without-perl-bindings
