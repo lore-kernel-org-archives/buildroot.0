@@ -1,113 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 26 Nov 2014 20:56:47 +0100
-Subject: [Buildroot] [RFC/PATCH next v7 07/17] Rename xbmc-pvr-addons to
-	kodi-pvr-addons - part II - rename variables
+Date: Wed, 26 Nov 2014 20:56:51 +0100
+Subject: [Buildroot] [RFC/PATCH next v7 11/17] package/kodi-addon-xvdr: Bump
+	version for Helix-compatibility
 In-Reply-To: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417031817-31763-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417031817-31763-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- adjust Config.in.legacy
-
-The "Rename xbmc-pvr-addons to kodi-pvr-addons"-patch is split into
-two parts for easier review, please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                           |    7 +++++++
- package/kodi-pvr-addons/Config.in          |    6 +++---
- package/kodi-pvr-addons/kodi-pvr-addons.mk |   30 ++++++++++++++--------------
- 3 files changed, 25 insertions(+), 18 deletions(-)
+ package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
+ package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+ create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6c865e8..a642b14 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.11"
- 
-+config BR2_PACKAGE_XBMC_PVR_ADDONS
-+	bool "xbmc options have been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_PVR_ADDONS
-+	help
-+	  The XBMC media center project was renamed to Kodi entertainment center
+diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+new file mode 100644
+index 0000000..6e87b79
+--- /dev/null
++++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+@@ -0,0 +1,19 @@
++Update for Kodi
 +
- config BR2_PACKAGE_XBMC
- 	bool "xbmc options have been renamed"
- 	select BR2_LEGACY
-diff --git a/package/kodi-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
-index 27f20e3..80916c7 100644
---- a/package/kodi-pvr-addons/Config.in
-+++ b/package/kodi-pvr-addons/Config.in
-@@ -1,6 +1,6 @@
--config BR2_PACKAGE_XBMC_PVR_ADDONS
--	bool "xbmc-pvr-addons"
-+config BR2_PACKAGE_KODI_PVR_ADDONS
-+	bool "kodi-pvr-addons"
- 	help
--	  A collection of PVR backend addons for XBMC.
-+	  A collection of PVR backend addons for Kodi
- 
- 	  https://github.com/opdenkamp/xbmc-pvr-addons
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-index 4410153..5e70bb3 100644
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-@@ -1,34 +1,34 @@
- ################################################################################
- #
--# xbmc-pvr-addons
-+# kodi-pvr-addons
++Ported from OpenELEC:
++https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
++--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
+++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
++@@ -6,7 +6,7 @@
++ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
++ 
++ AC_CONFIG_AUX_DIR(autotools)
++-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
+++AC_PREFIX_DEFAULT(/usr/lib/kodi)
++ 
++ AC_CANONICAL_HOST
++ AC_CANONICAL_TARGET
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index 14b08fe..e05510c 100644
+--- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
++++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
- # This cset is on the branch 'gotham'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
--XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
--XBMC_PVR_ADDONS_LICENSE = GPLv3+
--XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
-+# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
-+KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
-+KODI_PVR_ADDONS_LICENSE = GPLv3+
-+KODI_PVR_ADDONS_LICENSE_FILES = COPYING
- 
- # There's no ./configure in the git tree, we need to generate it
--XBMC_PVR_ADDONS_AUTORECONF = YES
-+KODI_PVR_ADDONS_AUTORECONF = YES
- 
--XBMC_PVR_ADDONS_DEPENDENCIES = boost zlib
--# This really is a runtime dependency, but we need XBMC to be installed
--# first, since we'll install files in XBMC's directories _after_ XBMC has
-+KODI_PVR_ADDONS_DEPENDENCIES = boost zlib
-+# This really is a runtime dependency, but we need KODI to be installed
-+# first, since we'll install files in KODI's directories _after_ KODI has
- # installed its own files
--XBMC_PVR_ADDONS_DEPENDENCIES += kodi
-+KODI_PVR_ADDONS_DEPENDENCIES += kodi
- 
--XBMC_PVR_ADDONS_CONF_OPTS = \
-+KODI_PVR_ADDONS_CONF_OPTS = \
- 	--enable-release \
- 	--enable-addons-with-dependencies
- 
- ifeq ($(BR2_PACKAGE_MYSQL),y)
--XBMC_PVR_ADDONS_CONF_OPTS += --enable-mysql
--XBMC_PVR_ADDONS_DEPENDENCIES += mysql
-+KODI_PVR_ADDONS_CONF_OPTS += --enable-mysql
-+KODI_PVR_ADDONS_DEPENDENCIES += mysql
- else
--XBMC_PVR_ADDONS_CONF_OPTS += --disable-mysql
-+KODI_PVR_ADDONS_CONF_OPTS += --disable-mysql
- endif
- 
- $(eval $(autotools-package))
+-# This cset is on master. When a Gotham branch is made, we should
++# This cset is on master. When a Helix branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
++KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
+ KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
+ KODI_ADDON_XVDR_LICENSE = GPLv2+
+ KODI_ADDON_XVDR_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
