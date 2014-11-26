@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:56:31 +0100
+Date: Wed, 26 Nov 2014 23:01:19 +0100
 Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
-In-Reply-To: <20141122190028.2c74f012@free-electrons.com>
-References: <1416587791-30125-1-git-send-email-jaap@jcz.nl>
- <20141122190028.2c74f012@free-electrons.com>
-Message-ID: <20141126225631.740018cb@free-electrons.com>
+In-Reply-To: <trinity-621b72dd-4362-44df-bbf8-d19c6ffb5953-1416701559591@3capp-gmx-bs13>
+References: <trinity-621b72dd-4362-44df-bbf8-d19c6ffb5953-1416701559591@3capp-gmx-bs13>
+Message-ID: <20141126230119.75fb213d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Peter Seiderer,
 
-On Sat, 22 Nov 2014 19:00:28 +0100, Thomas Petazzoni wrote:
-> Dear Jaap Crezee,
-> 
-> On Fri, 21 Nov 2014 17:36:31 +0100, Jaap Crezee wrote:
-> > ---
-> >  package/bluez5_utils/bluez5_utils.hash | 3 +++
-> >  package/bluez5_utils/bluez5_utils.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/bluez5_utils/bluez5_utils.hash
-> 
-> Your Signed-off-by line is missing in the patch.
-> 
-> Can you resend after adding your SoB line?
+On Sun, 23 Nov 2014 01:12:39 +0100, Peter Seiderer wrote:
 
-Ping? Could you resend with your SoB line added? Without this, I cannot
-commit your patch.
+> > Just a few more things for the next time you send patches to Buildroot.
+> > After sending a new version of a patch, we usually mark the former patch
+> > as "superseded" in patchwork. To be able to do that, you need to be
+> > logged in in patchwork. If you don't have an account, you can create one
+> > here:
+> > 
+> > http://patchwork.ozlabs.org/register/
+> > 
+> 
+> Would be a nice patchwork feature to mark 'legacy' patches automatically
+> as superseded in case a newer patch (with same subject, new version number,
+> from same submitter) is detected on the mailing list?
 
-Thanks,
+There is a such a feature, but only if the new version of the patch
+series is sent as a reply to the previous one. And of course, it only
+works if each patch in the new version have exactly the same subject as
+in the previous version. That's why we never use it.
 
 Thomas
 -- 
