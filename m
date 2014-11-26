@@ -1,65 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 26 Nov 2014 20:56:51 +0100
-Subject: [Buildroot] [RFC/PATCH next v7 11/17] package/kodi-addon-xvdr: Bump
-	version for Helix-compatibility
-In-Reply-To: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417031817-31763-12-git-send-email-bernd.kuhls@t-online.de>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 26 Nov 2014 20:18:57 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-22
+In-Reply-To: <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
+References: <20141123073011.CCE601014E6@stock.ovh.net>
+ <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
+ <20141123182619.23fbfdba@free-electrons.com>
+ <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
+Message-ID: <1417033136.5064.8.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Samuel,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
- 2 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+On Sun, 2014-11-23 at 18:29 +0100, Samuel Martin wrote:
+> On Sun, Nov 23, 2014 at 6:26 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Dear Samuel Martin,
+> >
+> > On Sun, 23 Nov 2014 18:24:02 +0100, Samuel Martin wrote:
+> >
+> >> Nginx failure root cause seems to be a kernel with no sysctl syscall.
+> >> This seems to happen only on arc.
+> >>
+> >> Anton, Alexey, is it intended that CONFIG_SYSCTL_SYSCALL is disabled
+> >> in the arc kernel config?
+> >
+> > Yes, see
+> > http://lists.busybox.net/pipermail/buildroot/2014-November/112629.html.
+> 
+> Oh! I missed it! :-S
+> Thanks.
 
-diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
-new file mode 100644
-index 0000000..6e87b79
---- /dev/null
-+++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
-@@ -0,0 +1,19 @@
-+Update for Kodi
-+
-+Ported from OpenELEC:
-+https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
-+--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
-++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
-+@@ -6,7 +6,7 @@
-+ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
-+ 
-+ AC_CONFIG_AUX_DIR(autotools)
-+-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
-++AC_PREFIX_DEFAULT(/usr/lib/kodi)
-+ 
-+ AC_CANONICAL_HOST
-+ AC_CANONICAL_TARGET
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-index 14b08fe..e05510c 100644
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-+++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--# This cset is on master. When a Gotham branch is made, we should
-+# This cset is on master. When a Helix branch is made, we should
- # follow it, as incompatible changes in the plugins API can happen
- # on the master branch.
--KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
-+KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
- KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
- KODI_ADDON_XVDR_LICENSE = GPLv2+
- KODI_ADDON_XVDR_LICENSE_FILES = COPYING
--- 
-1.7.10.4
+Actually I'm wondering why "BR2_PACKAGE_NGINX_RTSIG_MODULE=y" is
+implemented in "package/nginx/Config.in"?
+
+As I may see from http://nginx.org/en/CHANGES sysctl was substituted
+with procfs in nginx:
+--->---
+Changes with nginx 0.3.58                                 14 Aug 2006
+...
+    *) Change: now the procfs interface instead of sysctl is used on
+Linux.
+--->---
+
+Also from here
+http://hg.nginx.org/nginx/file/2c10db908b8c/auto/os/linux#l29 I may
+conclude that rt signals were used for Linux kernels between 2.2.19 and
+2.6.17.
+
+In other words it looks like rt signals should not be used in modern
+nginx running on top of modern Linux kernel.
+
+Probably there's a real need for rt signals to be used still - I'm not
+an expert in nginx of any kind.
+
+If there's no such requirement/need for rt signals I would propose to
+remove BR2_PACKAGE_NGINX_RTSIG_MODULE completely so users don't select
+deprecated options.
+
+-Alexey
