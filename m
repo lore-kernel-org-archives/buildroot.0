@@ -1,32 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 16:11:55 +0100
-Subject: [Buildroot] [PATCH v3] package/network-manager: NM needs
+Date: Wed, 26 Nov 2014 16:12:22 +0100
+Subject: [Buildroot] [git commit] package/network-manager: NM needs
 	isc-dhcpc or dhcpcd
-In-Reply-To: <1416999055-11095-1-git-send-email-nroach44@gmail.com> (Nathaniel
- Roach's message of "Wed, 26 Nov 2014 18:50:55 +0800")
-References: <1416999055-11095-1-git-send-email-nroach44@gmail.com>
-Message-ID: <8761e2q9ms.fsf@dell.be.48ers.dk>
+Message-ID: <20141126151252.9E1737FF14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=94319c61d843df9582d1f17ed7224e510b36b141
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > NM only currently supports isc-dhcpc, dhcpcd and dhclient
- > as clients because NM communicates with the client
- > through DBus, and support for clients needs to be
- > written in. (as per files in src/dhcp-manager)
+NM only currently supports isc-dhcpc and dhcpcd as clients because NM
+communicates with the client through DBus, and support for clients needs to
+be written in.  (as per files in src/dhcp-manager)
 
- > Buildroot's default, udhcpc is not supported, and
- > dhclient is not in buildroot.
+Buildroot's default, udhcpc is not supported.
 
- > Add the dependencies to Config.in, favoring dhcpcd as
- > default due to size.
+Add the dependencies to Config.in, favoring dhcpcd as
+default due to size.
 
-Committed with the description tweaked to not refer to dhclient as
-suggested by Gustavoz, thanks.
+[Peter: drop references to dhclient, isc-dhcpc is dhclient]
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/network-manager/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 0ed6ca5..a3e6e33 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
