@@ -1,34 +1,64 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 26 Nov 2014 20:56:53 +0100
-Subject: [Buildroot] [RFC/PATCH next v7 13/17] package/kodi: Enable install
-	to STAGING_DIR, needed for audioencoder addons
+Date: Wed, 26 Nov 2014 20:56:52 +0100
+Subject: [Buildroot] [RFC/PATCH next v7 12/17] package/kodi: New option to
+	enable support for optical drives
 In-Reply-To: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417031817-31763-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417031817-31763-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This also enables dvdcss support, provided by an internal library.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/kodi.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/kodi/Config.in |    5 +++++
+ package/kodi/kodi.mk   |    7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ed89936..c153fed 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -235,6 +235,11 @@ config BR2_PACKAGE_KODI_WAVPACK
+ 	  Enable WAV input support.
+ 	  Select this if you want to play back WV files.
+ 
++config BR2_PACKAGE_KODI_OPTICALDRIVE
++	bool "optical drive"
++	help
++	  Enable support for optical drives
++
+ comment "Kodi addons"
+ 
+ source "package/kodi-addon-xvdr/Config.in"
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index acfb9ca..28ee617 100644
+index ddf9efd..acfb9ca 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -9,6 +9,8 @@ KODI_SOURCE = $(KODI_VERSION).tar.gz
- KODI_SITE = https://github.com/xbmc/xbmc/archive
- KODI_LICENSE = GPLv2
- KODI_LICENSE_FILES = LICENSE.GPL
-+# needed for audioencoder addons
-+KODI_INSTALL_STAGING = YES
- # Kodi needs host-sdl_image (and therefore host-sdl) for a host tools it builds
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
+@@ -38,7 +38,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-joystick \
+ 	--disable-mysql \
+ 	--disable-openmax \
+-	--disable-optical-drive \
+ 	--disable-projectm \
+ 	--disable-pulse \
+ 	--disable-ssh \
+@@ -190,6 +189,12 @@ else
+ KODI_CONF_OPTS += --disable-vaapi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
++KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
++else
++KODI_CONF_OPTS += --disable-optical-drive --disable-dvdcss
++endif
++
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define KODI_BOOTSTRAP
+ 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
 -- 
 1.7.10.4
