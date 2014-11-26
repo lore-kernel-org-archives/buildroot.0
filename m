@@ -1,40 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 26 Nov 2014 21:51:41 +0100
-Subject: [Buildroot] [git commit branch/next] libunistring: add wchar
-	dependency
-Message-ID: <20141126205154.9E4517FF25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libunistring:
+	host-libunistring is needed by guile
+Message-ID: <20141126205154.94B9C7FBB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8df26deab145425251fc3c6a0175a63e3fb10c0d
+commit: http://git.buildroot.net/buildroot/commit/?id=319e7ffbe8fa4a1ff7733c40ff87123bbc495f82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though libunistring itself builds fine, its library contains
-undefined references to wchar related functions, which are causing
-link failures when the library is actually linked into an application.
-
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libunistring/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libunistring/libunistring.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libunistring/Config.in b/package/libunistring/Config.in
-index ebb37d9..88fc658 100644
---- a/package/libunistring/Config.in
-+++ b/package/libunistring/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBUNISTRING
- 	bool "libunistring"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  The libunistring library provides functions for manipulating
- 	  Unicode strings and for manipulating C strings according to
- 	  the Unicode standard.
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 3234ddc..fd77d12 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -17,3 +17,4 @@ LIBUNISTRING_CONF_OPTS += --disable-threads
+ endif
  
- 	  http://www.gnu.org/software/libunistring/
-+
-+comment "libunistring needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
