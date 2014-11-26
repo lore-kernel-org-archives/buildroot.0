@@ -1,92 +1,86 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 26 Nov 2014 21:19:07 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-11-22
-In-Reply-To: <20141126220017.138c933c@free-electrons.com>
-References: <20141123073011.CCE601014E6@stock.ovh.net>
- <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
- <20141123182619.23fbfdba@free-electrons.com>
- <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
- <1417033136.5064.8.camel@abrodkin-8560l.internal.synopsys.com>
- <CAHXCMM+odCUZoAWVJPuCOvf8ic1BMTZabBZDerwy9PqPs-mJUA@mail.gmail.com>
- <1417035454.5064.12.camel@abrodkin-8560l.internal.synopsys.com>
- <20141126220017.138c933c@free-electrons.com>
-Message-ID: <1417036747.5064.19.camel@abrodkin-8560l.internal.synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Nov 2014 22:18:41 +0100
+Subject: [Buildroot] [git commit branch/next] package: add
+	python-networkmanager
+Message-ID: <20141126212022.7069A7FEF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=6c9f95305fcc3ddc11d3b1704eab874fdb37183b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 2014-11-26 at 22:00 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Wed, 26 Nov 2014 20:57:34 +0000, Alexey Brodkin wrote:
-> 
-> > For example in "radvd" I'm going to do it with simple inclusion of:
-> > --->---
-> > AC_CHECK_FUNCS(sysctl)
-> > --->---
-> > in "configure.ac".
-> 
-> Did you notice that this is already done?
-> 
-> See
-> http://git.buildroot.net/buildroot/commit/?id=cb54da1b03f2e6d684416c614021735dfe276606.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/python-networkmanager/Config.in            |   15 +++++++++++++++
+ .../python-networkmanager.hash                     |    3 +++
+ .../python-networkmanager/python-networkmanager.mk |   14 ++++++++++++++
+ 4 files changed, 33 insertions(+), 0 deletions(-)
 
-No unfortunately I didn't noticed this change.
-I don't follow mailing list regularly so it would be helpful if you add
-me explicitly in Cc if I might be interested in stuff :)
-
-And frankly I'm not sure if we need to check for a header still.
-So in your patch I would simply replace HAVE_SYS_SYSCTL_H with
-HAVE_SYSCTL in "device-linux.c".
-
-So I would implement it like this:
---->---
-diff --git a/configure.ac b/configure.ac
-index 0556805..349e4c1 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -160,7 +160,6 @@ AC_CHECK_HEADERS( \
- 	net/if_types.h \
- 	sys/param.h \
- 	sys/sockio.h \
--	sys/sysctl.h \
- 	sys/time.h \
- 	time.h \
- )
-@@ -183,6 +182,7 @@ AC_MSG_RESULT(no))
- dnl Checks for library functions.
- AC_CHECK_FUNCS(getopt_long)
- AC_CHECK_FUNCS(ppoll)
-+AC_CHECK_FUNCS(sysctl)
- 
- CONDITIONAL_SOURCES="device-${arch}.${OBJEXT} ${CONDITIONAL_SOURCES}"
- if test x${arch} = xlinux ; then
-diff --git a/device-linux.c b/device-linux.c
-index 1ecaa6b..fa7d978 100644
---- a/device-linux.c
-+++ b/device-linux.c
-@@ -183,7 +183,7 @@ int check_ip6_forwarding(void)
- 		value = -1;
- 	}
- 
--#ifdef HAVE_SYS_SYSCTL_H
-+#ifdef HAVE_SYSCTL
- 	int forw_sysctl[] = { SYSCTL_IP6_FORWARDING };
- 	size_t size = sizeof(value);
- 	if (!fp && sysctl(forw_sysctl, sizeof(forw_sysctl) /
-sizeof(forw_sysctl[0]), &value, &size, NULL, 0) < 0) {
---
---->---
-
-What do you think?
-
-Also I was going to push my change upstream in radvd and already made a
-pull-request https://github.com/reubenhwk/radvd/pull/37 but with your
-help I realized that I forgot to modify "device-linux.c".
-
--Alexey
+diff --git a/package/Config.in b/package/Config.in
+index f3b189b..bb5b144 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ menu "external python modules"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-netifaces/Config.in"
++	source "package/python-networkmanager/Config.in"
+ 	source "package/python-nfc/Config.in"
+ 	source "package/python-numpy/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
+new file mode 100644
+index 0000000..fcbce57
+--- /dev/null
++++ b/package/python-networkmanager/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_NETWORKMANAGER
++	bool "python-networkmanager"
++	depends on BR2_PACKAGE_NETWORK_MANAGER # runtime
++	depends on BR2_USE_WCHAR # dbus-python
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
++	depends on BR2_PACKAGE_DBUS # dbus-python
++	select BR2_PACKAGE_DBUS_PYTHON
++	help
++	  python-networkmanager wraps NetworkManagers D-Bus interface
++	  so you can be less verbose when talking to NetworkManager
++	  from python. All interfaces have been wrapped in classes,
++	  properties are exposed as python properties and function
++	  calls are forwarded to the correct interface.
++
++	  https://pypi.python.org/pypi/python-networkmanager/
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+new file mode 100644
+index 0000000..6c6f697
+--- /dev/null
++++ b/package/python-networkmanager/python-networkmanager.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2cd400a7ca4dcd1ea98c864007032494, sha256 locally computed
++md5	2cd400a7ca4dcd1ea98c864007032494  python-networkmanager-0.9.12.tar.gz
++sha256	a4c7bbae8a1ee3cf370ff0cd2ba2e0f1fb7f8e8f99f8f48a1df624c19a11166f  python-networkmanager-0.9.12.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+new file mode 100644
+index 0000000..c043edb
+--- /dev/null
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-networkmanager
++#
++################################################################################
++
++PYTHON_NETWORKMANAGER_VERSION = 0.9.12
++PYTHON_NETWORKMANAGER_SITE = http://pypi.python.org/packages/source/p/python-networkmanager
++PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
++PYTHON_NETWORKMANAGER_LICENSE = GPLv3+
++PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
++PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
++
++$(eval $(python-package))
