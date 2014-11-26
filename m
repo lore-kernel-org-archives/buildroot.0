@@ -1,71 +1,71 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Nov 2014 17:45:28 +0000
-Subject: [Buildroot] [PATCH] libnspr: fix static build
-In-Reply-To: <4112e251a7a4b3513c66ff30ac2f502b0aa2541c.1417022842.git.baruch@tkos.co.il>
-References: <4112e251a7a4b3513c66ff30ac2f502b0aa2541c.1417022842.git.baruch@tkos.co.il>
-Message-ID: <547611B8.2020503@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Nov 2014 19:09:10 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: fix building the wrapper on
+	MIPS
+Message-ID: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Some crazy folks use MIPS machines as build machines. ;-)
 
-On 11/26/2014 05:27 PM, Baruch Siach wrote:
-> Disable shared library in a static build.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6ff/6ffae151ec3eaca175923ab860cf42167871164c/
-> http://autobuild.buildroot.net/results/cab/cab19721c43b3256dd51ae511016bc9ea440512a/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libnspr/libnspr.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-> index c071d8591fbd..1930870a5108 100644
-> --- a/package/libnspr/libnspr.mk
-> +++ b/package/libnspr/libnspr.mk
-> @@ -21,6 +21,12 @@ LIBNSPR_CONF_OPTS = --host=$(GNU_HOST_NAME)
->  LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
->  LIBNSPR_CONF_OPTS += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
->  
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +LIBNSPR_MAKE_OPTS = SHARED_LIBRARY=
-> +LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SHARED_LIBRARY= install
-> +LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) SHARED_LIBRARY= install
-> +endif
-> +
->  ifeq ($(BR2_arm),y)
->  ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
->  LIBNSPR_CONF_OPTS += --enable-thumb2
-> 
+On MIPS, the only acceptable hash-style is 'sysv', because the MIPS ABI
+defines that the GOT ordering to be the same as the symbols ordering,
+while GNU hash requires symbols to be sorted by their hash.
 
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Looking at binutils' code, it seems that only MIPS suffers from that
+limitation.
 
-$ grep PREFER_STATIC .config
-BR2_PREFER_STATIC_LIB=y
-$ grep UCLIBC .config
-BR2_TOOLCHAIN_USES_UCLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_UCLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC=y
-# BR2_UCLIBC_VERSION_0_9_32 is not set
-$ grep LIBNSPR .config
-BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT=y
-BR2_PACKAGE_LIBNSPR=y
-$ file output/staging/usr/lib/libnspr*
-output/staging/usr/lib/libnspr4.a
+Currently, we force the toolchain wrapper to be linked with both hash
+styles, which breaks on MIPS.
 
-It also fixes this autobuild failure for MIPS:
+So, fix that but singling out MIPS, and use sysv in that case, and both
+otherwise.
 
-http://autobuild.buildroot.net/results/691/6913f5af6519463fbed39ef37b6a40ecf6a67b54/
+Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
+---
+Absolutely untested on MIPS, as I do not have any MIPS machine powerfull
+enough to do a build. Vicente will have to test it, since he is that
+crazy one using MIPS build machines! ;-)
+---
+ toolchain/toolchain-external/toolchain-external.mk | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index da3718c..51e0af5 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -625,6 +625,15 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
+ endef
+ endif
+ 
++# We use --hash-style=both to increase the compatibility of
++# the generated binary with older platforms, except for MIPS,
++# where the only acceptable hash style is 'sysv'
++ifeq ($(findstring mips,$(HOSTARCH)),mips)
++TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = sysv
++else
++TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = both
++endif
++
+ # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+ # symlinks for everything else. Skip gdb symlink when we are building our
+ # own gdb to prevent two gdb's in output/host/usr/bin.
+@@ -647,9 +656,8 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 			;; \
+ 		esac; \
+ 	done ;
+-	# We use --hash-style=both to increase the compatibility of
+-	# the generated binary with older platforms
+-	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s -Wl,--hash-style=both \
++	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) \
++		-s -Wl,--hash-style=$(TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE) \
+ 		toolchain/toolchain-external/ext-toolchain-wrapper.c \
+ 		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
+ endef
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+1.9.1
