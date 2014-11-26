@@ -1,58 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 16:13:59 +0100
-Subject: [Buildroot] [git commit branch/next] liboping: bump to version 1.8.0
-Message-ID: <20141126151535.F35527FF16@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 16:14:38 +0100
+Subject: [Buildroot] [git commit branch/next] valgrind: bump to version
+	3.10.1
+Message-ID: <20141126151536.0A8697FA40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfb3af459c60c7dfb6a881ef6a79771565ac0d32
+commit: http://git.buildroot.net/buildroot/commit/?id=067570a39f65fd44782cce887da567b521651ec3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Add hash file and switch to a non-dead homepage.
+Enable for supported architectures: powerpc64 & powerpc64le.
+Even though aarch64 is supported it's still a bit rought resulting in
+build failures so don't enable it for now.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liboping/Config.in     |    2 +-
- package/liboping/liboping.hash |    4 ++--
- package/liboping/liboping.mk   |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/valgrind/Config.in     |    9 +++++----
+ package/valgrind/valgrind.hash |    2 ++
+ package/valgrind/valgrind.mk   |    2 +-
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/liboping/Config.in b/package/liboping/Config.in
-index ffdebbd..65e7c88 100644
---- a/package/liboping/Config.in
-+++ b/package/liboping/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBOPING
- 	  liboping is a C library to generate ICMP echo requests,
- 	  better known as "ping packets".
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index b7521b0..558d5f0 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_VALGRIND
+ 	bool "valgrind"
+-	depends on BR2_i386 || BR2_x86_64 || BR2_ARM_CPU_ARMV7A || \
+-		   BR2_powerpc || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		   BR2_mips64el
++	depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
++		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64el || \
++		   BR2_x86_64
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
  
--	  http://verplant.org/liboping/
-+	  http://noping.cc/
+-	  http://valgrind.kde.org/
++	  http://valgrind.org/
  
- comment "liboping needs a toolchain w/ IPv6"
- 	depends on !BR2_INET_IPV6
-diff --git a/package/liboping/liboping.hash b/package/liboping/liboping.hash
-index 5987d7a..536f6ae 100644
---- a/package/liboping/liboping.hash
-+++ b/package/liboping/liboping.hash
-@@ -1,2 +1,2 @@
--# From http://verplant.org/liboping/#download
--sha256	25cf9417fe84d70c4b1bd97f1f92e597ccdc1ec2da3b7eb311f33f5e7033a70e	liboping-1.7.0.tar.gz
-+# From http://noping.cc/#download
-+sha256	824792ae7fc5e9569bacc4167b89de31f6ba8476de44760f0bc272682e894b41	liboping-1.8.0.tar.gz
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-index bb02616..aeaaa8a 100644
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -4,8 +4,8 @@
+ if BR2_PACKAGE_VALGRIND
+ 
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+new file mode 100644
+index 0000000..f311ea4
+--- /dev/null
++++ b/package/valgrind/valgrind.hash
+@@ -0,0 +1,2 @@
++# From http://valgrind.org/downloads/current.html
++md5	60ddae962bc79e7c95cfc4667245707f	valgrind-3.10.1.tar.bz2
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index b65e048..aaca39f 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPING_VERSION = 1.7.0
--LIBOPING_SITE = http://verplant.org/liboping/files
-+LIBOPING_VERSION = 1.8.0
-+LIBOPING_SITE = http://noping.cc/files
- LIBOPING_INSTALL_STAGING = YES
- LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
- LIBOPING_CONF_OPTS = --without-perl-bindings
+-VALGRIND_VERSION = 3.10.0
++VALGRIND_VERSION = 3.10.1
+ VALGRIND_SITE = http://valgrind.org/downloads
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPLv2 GFDLv1.2
