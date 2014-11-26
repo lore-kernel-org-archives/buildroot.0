@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 22:41:00 +0100
-Subject: [Buildroot] [git commit] git: bump version to 2.1.3
-Message-ID: <20141201104836.D68077FC49@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 22:49:23 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: Add support for
+	liburiparser
+Message-ID: <20141201104838.ECF0680009@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff9b9adb06bfd8a6db87e7df12693aac02c478d6
+commit: http://git.buildroot.net/buildroot/commit/?id=c9e2be0cd80e4318db60312bdf6abab472219048
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 2.1.3
-- Add a hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash |    2 ++
- package/git/git.mk   |    5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/tvheadend/tvheadend.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-new file mode 100644
-index 0000000..3f8db5f
---- /dev/null
-+++ b/package/git/git.hash
-@@ -0,0 +1,2 @@
-+# From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
-+sha256  fe1b06aefa73e8d86cbd352523fc0950b8904ae2ec47085b22b7880f45de6f57  git-2.1.3.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 8a69ee5..f338438 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 10c9201..f593b3f 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -32,12 +32,18 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TVHEADEND_DEPENDENCIES += libiconv
+ endif
  
--GIT_VERSION = 1.8.5.4
--GIT_SITE = http://git-core.googlecode.com/files
-+GIT_VERSION = 2.1.3
-+GIT_SOURCE = git-$(GIT_VERSION).tar.xz
-+GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_DEPENDENCIES = zlib host-gettext
++ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
++TVHEADEND_DEPENDENCIES += liburiparser
++TVHEADEND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)"
++endif
++
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ define TVHEADEND_CONFIGURE_CMDS
+ 	(cd $(@D);						\
+ 		$(TARGET_CONFIGURE_OPTS)			\
+ 		$(TARGET_CONFIGURE_ARGS)			\
++		$(TVHEADEND_CONF_ENV)				\
+ 		./configure					\
+ 			--prefix=/usr				\
+ 			--arch="$(ARCH)"			\
