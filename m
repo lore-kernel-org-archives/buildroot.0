@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:51:16 +0100
-Subject: [Buildroot] [PATCH next 2/3] package/tvheadend: Add support for
- liburiparser
-In-Reply-To: <1416772613-13447-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 26 Nov 2014 22:52:45 +0100
+Subject: [Buildroot] [PATCH next 3/3] package/tvheadend: Bump version
+In-Reply-To: <1416772613-13447-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1416772613-13447-1-git-send-email-bernd.kuhls@t-online.de>
- <1416772613-13447-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141126225116.7c0ea4c3@free-electrons.com>
+ <1416772613-13447-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141126225245.51ba2473@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +13,22 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 23 Nov 2014 20:56:52 +0100, Bernd Kuhls wrote:
+On Sun, 23 Nov 2014 20:56:53 +0100, Bernd Kuhls wrote:
 
-> +ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
-> +TVHEADEND_DEPENDENCIES += liburiparser
-> +TVHEADEND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)"
+> -TVHEADEND_VERSION = c053acd84e5cc48a3e70047f228728bf039cfacd
+> +TVHEADEND_VERSION = d6bfd1ffe62e145a6a6e18d00ee722204ee898d4
+>  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+>  TVHEADEND_LICENSE = GPLv3+
+>  TVHEADEND_LICENSE_FILES = LICENSE.md
 
-This is a little bit dangerous, because if another part of tvheadend.mk
-wants to add some stuff to the CFLAGS, it will no longer be possible.
-It would have been a bit better to do:
+This patch does not apply properly on the next branch, since tvheadend
+was bumped in the mean time. Can you check if it should still be bumped
+to d6bfd1 ?
 
-TVHEADEND_CFLAGS = $(TARGET_CFLAGS)
-ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
-TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
-endif
+I've marked this patch as Changes Requested in patchwork, so please
+resend if you something to be applied.
 
-and then:
-
->  TVHEADEND_DEPENDENCIES += dtv-scan-tables
->  
->  define TVHEADEND_CONFIGURE_CMDS
->  	(cd $(@D);				\
->  	 $(TARGET_CONFIGURE_OPTS)		\
->  	 $(TARGET_CONFIGURE_ARGS)		\
-> +	 $(TVHEADEND_CONF_ENV)			\
-
-	 CFLAGS="$(TVHEADEND_CFLAGS)"
-
-I have nonetheless committed your proposal to next, it will always be
-time to improve things later when a second condition needs to adjust
-the CFLAGS.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
