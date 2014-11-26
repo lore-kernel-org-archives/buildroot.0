@@ -1,30 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Nov 2014 10:16:16 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-11-25
-In-Reply-To: <20141126073012.94DA6102DA6@stock.ovh.net>
-References: <20141126073012.94DA6102DA6@stock.ovh.net>
-Message-ID: <5475A870.9050709@imgtec.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Wed, 26 Nov 2014 18:50:55 +0800
+Subject: [Buildroot] [PATCH v3] package/network-manager: NM needs isc-dhcpc
+	or dhcpcd
+Message-ID: <1416999055-11095-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/26/2014 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-11-25
+NM only currently supports isc-dhcpc, dhcpcd and dhclient
+as clients because NM communicates with the client
+through DBus, and support for clients needs to be
+written in. (as per files in src/dhcp-manager)
 
->       mipsel |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/77e5f95ec4f0b3284eb7a48b8152690f8bf81a2a/
+Buildroot's default, udhcpc is not supported, and
+dhclient is not in buildroot.
 
-Fixed by:
-http://git.buildroot.net/buildroot/commit/?id=c0b4c45780e4ffe23101a407e7c4cde22e27815a
+Add the dependencies to Config.in, favoring dhcpcd as
+default due to size.
 
-That external toolchain needs to be updated.
+----
+Changes v2 -> v3:
+Both as noted by Baruch
+  - The clients aren't a build time dependency, so we don't
+	need to build them first.
+  - Reworded the commit message to clarify NM's requirements.
 
-Cheers,
+Changes v1 -> v2:
+  - Switched to "select" from "depends on" (As recommended by
+	Baruch). Uses DHCPCD as default as it's the lighter
+	option.
+  - Because of the above, the edit to "NM needs ..." is no
+	longer needed.
+
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+---
+ package/network-manager/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 0ed6ca5..a3e6e33 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Processor IP
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+2.1.3
