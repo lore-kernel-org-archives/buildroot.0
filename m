@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:47:27 +0100
-Subject: [Buildroot] [PATCH next 1/3] package/liburiparser: New package
-In-Reply-To: <1416772613-13447-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1416772613-13447-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141126224727.281b35e3@free-electrons.com>
+Date: Wed, 26 Nov 2014 22:49:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/tvheadend: Add support
+	for liburiparser
+Message-ID: <20141126214933.7C30F7FE45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=c9e2be0cd80e4318db60312bdf6abab472219048
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 23 Nov 2014 20:56:51 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 796c9f9..6f32b71 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -829,6 +829,7 @@ menu "Networking"
->  	source "package/libupnpp/Config.in"
->  	source "package/libvncserver/Config.in"
->  	source "package/libwebsockets/Config.in"
-> +	source "package/liburiparser/Config.in"
-
-Alphabetic ordering issue.
-
-> +ifneq ($(BR2_USE_WCHAR),y)
-
-We prefer positive logic here: ifeq ($(BR2_USE_WCHAR),)
-
-Committed to next with those issues fixed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 10c9201..f593b3f 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -32,12 +32,18 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TVHEADEND_DEPENDENCIES += libiconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
++TVHEADEND_DEPENDENCIES += liburiparser
++TVHEADEND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)"
++endif
++
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ define TVHEADEND_CONFIGURE_CMDS
+ 	(cd $(@D);						\
+ 		$(TARGET_CONFIGURE_OPTS)			\
+ 		$(TARGET_CONFIGURE_ARGS)			\
++		$(TVHEADEND_CONF_ENV)				\
+ 		./configure					\
+ 			--prefix=/usr				\
+ 			--arch="$(ARCH)"			\
