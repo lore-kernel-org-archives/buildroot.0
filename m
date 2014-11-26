@@ -1,41 +1,31 @@
-From: Kantanu Kumar Mohapatra <kantanukumar@gmail.com>
-Date: Wed, 26 Nov 2014 20:01:50 +0530
-Subject: [Buildroot] ping and nslookup doesn't work on device
-Message-ID: <CAJO1S93csWgVZsGX_Qj5HOCgnphzS1R2A_Oaj-RVbmRohkNH7A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Nov 2014 16:08:25 +0100
+Subject: [Buildroot] [PATCH] binutils: fix xtensa trampolines search
+	code for conditional branches
+In-Reply-To: <1416992580-20071-1-git-send-email-jcmvbkbc@gmail.com> (Max
+ Filippov's message of "Wed, 26 Nov 2014 12:03:00 +0300")
+References: <1416992580-20071-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <87a93eq9sm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-I am using an ARM 926EJS target board with buildroot-2014.02 to build the
-code.
-I am running linux-2.6.39 kernel.
+ > This fixes the following build errors seen when assembling huge files
+ > produced by gcc:
+ >   Error: jump target out of range; no usable trampoline found
+ >   Error: operand 1 of 'j' has out of range value '307307'
 
-Ping and nslookup not working on my device.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/545/545168d9caf3bdb3dd3eb3bae58ba9db8a33384a/
 
-# ping google.com
-ping: *bad address 'google.com <http://google.com/>'*
+ > Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-# ping 192.168.1.104
-PING 192.168.1.104 (192.168.1.104): 56 data bytes
-64 bytes from 192.168.1.104: seq=0 ttl=64 time=3.657 ms
-64 bytes from 192.168.1.104: seq=1 ttl=64 time=0.402 ms
-64 bytes from 192.168.1.104: seq=2 ttl=64 time=0.366 ms
---- 192.168.1.104 ping statistics ---
-3 packets transmitted, 3 packets received, 0% packet loss
-round-trip min/avg/max = 0.366/1.475/3.657 ms
+Committed, thanks.
 
-# nslookup google.com
-nslookup: *can't resolve 'google.com <http://google.com/>*'
-
-Can anyone please say, what should I add in busybox-config (packages),
-linux-config and busybox-config to solve this issue.
-
-Thanks,
-Kantanu
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141126/b817be28/attachment.html>
+-- 
+Bye, Peter Korsgaard
