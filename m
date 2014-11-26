@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 21:55:42 +0100
-Subject: [Buildroot] [PATCH v5 4/4] guile: Add new package
-In-Reply-To: <1416869790-12988-5-git-send-email-paguilar@paguilar.org>
-References: <1416869790-12988-1-git-send-email-paguilar@paguilar.org>
- <1416869790-12988-5-git-send-email-paguilar@paguilar.org>
-Message-ID: <20141126215542.433523bf@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 26 Nov 2014 20:57:34 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-22
+In-Reply-To: <CAHXCMM+odCUZoAWVJPuCOvf8ic1BMTZabBZDerwy9PqPs-mJUA@mail.gmail.com>
+References: <20141123073011.CCE601014E6@stock.ovh.net>
+ <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
+ <20141123182619.23fbfdba@free-electrons.com>
+ <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
+ <1417033136.5064.8.camel@abrodkin-8560l.internal.synopsys.com>
+ <CAHXCMM+odCUZoAWVJPuCOvf8ic1BMTZabBZDerwy9PqPs-mJUA@mail.gmail.com>
+Message-ID: <1417035454.5064.12.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Pedro Aguilar,
+Hi Samuel,
 
-On Mon, 24 Nov 2014 23:56:30 +0100, Pedro Aguilar wrote:
-> Guile is an interpreter and compiler for the Scheme programming
-> language, a clean and elegant dialect of Lisp.
+On Wed, 2014-11-26 at 21:48 +0100, Samuel Martin wrote:
+
+> Well, after ringing nginx people, I got this answer [1] (wondering
+> about deprecating rtsig module).
 > 
-> The patch guile-01-fix_arm_endianness.patch is based on guile's
-> git commit ^ffd3e55cfd
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+> So, I'll cook a patch disabling rtsig module, at least for arc architecture.
 
-Applied to next, with a few changes:
+Well I'd prefer to have less arch-specific stuff in Buildroot so it's
+easier to maintain then.
 
-    [Thomas:
-     - rewrap comments and help text.
-     - add missing host-gettext dependency, since gettext.m4 is needed for
-       the package to autoreconf.
-     - add missing host-pkgconf dependency.
-     - add dependency on wchar, inherited from libunistring.]
+And probably better solution is to implement proper check in nginx
+itself instead of relying on user's preference or educated guess.
 
-Don't hesitate to test the next branch, and verify that guile is
-building fine for you.
+For example in "radvd" I'm going to do it with simple inclusion of:
+--->---
+AC_CHECK_FUNCS(sysctl)
+--->---
+in "configure.ac".
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
