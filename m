@@ -1,81 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:27:18 +0100
-Subject: [Buildroot] [git commit branch/next] rng-tools: bump to version 5
-Message-ID: <20141126212723.D00137FEF3@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 22:30:51 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-11-22
+In-Reply-To: <1417036747.5064.19.camel@abrodkin-8560l.internal.synopsys.com>
+References: <20141123073011.CCE601014E6@stock.ovh.net>
+ <CAHXCMM+JcRY090g3jcYGOzahveW2gYzKu_=QaDGmP2JTBXcRMQ@mail.gmail.com>
+ <20141123182619.23fbfdba@free-electrons.com>
+ <CAHXCMMKM4PHGDAD0SMZuXSX-ksB+j6tR_r1JPhoi7HNVGatuzA@mail.gmail.com>
+ <1417033136.5064.8.camel@abrodkin-8560l.internal.synopsys.com>
+ <CAHXCMM+odCUZoAWVJPuCOvf8ic1BMTZabBZDerwy9PqPs-mJUA@mail.gmail.com>
+ <1417035454.5064.12.camel@abrodkin-8560l.internal.synopsys.com>
+ <20141126220017.138c933c@free-electrons.com>
+ <1417036747.5064.19.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <20141126223051.1c335f25@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e987b1cd482b4a6c5c953f71674cfd1e9592279
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Alexey Brodkin,
 
-Add semi-automatic libgcrypt dependency for i386/x86_64 to use RDRAND.
-This is exclusively used by rngd for which we don't yet ship an
-initscript/service file. Even so the user can choose to disable it at
-invocation time via the --no-drng option (which must be accounted for).
+On Wed, 26 Nov 2014 21:19:07 +0000, Alexey Brodkin wrote:
 
-Also add hash file.
+> No unfortunately I didn't noticed this change.
+> I don't follow mailing list regularly so it would be helpful if you add
+> me explicitly in Cc if I might be interested in stuff :)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rng-tools/Config.in      |    2 ++
- package/rng-tools/rng-tools.hash |    3 +++
- package/rng-tools/rng-tools.mk   |   18 +++++++++++++-----
- 3 files changed, 18 insertions(+), 5 deletions(-)
+I think I had the intention of doing it, but forgot it when actually
+sending the patches. Sorry about that.
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index c50a8c0..43c5a1c 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	# For rdrand ligcrypt is required and it's not obvious to users
-+	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
- 	help
- 	  Daemon to use hardware random number generators.
- 
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-new file mode 100644
-index 0000000..09769e4
---- /dev/null
-+++ b/package/rng-tools/rng-tools.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
-+md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
-+sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 56858e7..5b89656 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,13 +4,21 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 4
-+RNG_TOOLS_VERSION = 5
- RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--RNG_TOOLS_CONF_ENV = LIBS="-largp"
--RNG_TOOLS_DEPENDENCIES = argp-standalone
--endif
- RNG_TOOLS_LICENSE = GPLv2
- RNG_TOOLS_LICENSE_FILES = COPYING
- 
-+# Work around for uClibc's lack of argp_*() functions
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+RNG_TOOLS_CONF_ENV += LIBS="-largp"
-+RNG_TOOLS_DEPENDENCIES += argp-standalone
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+RNG_TOOLS_DEPENDENCIES += libgcrypt
-+else
-+RNG_TOOLS_CONF_OPTS += --without-libgcrypt
-+endif
-+
- $(eval $(autotools-package))
+> And frankly I'm not sure if we need to check for a header still.
+> So in your patch I would simply replace HAVE_SYS_SYSCTL_H with
+> HAVE_SYSCTL in "device-linux.c".
+
+Yes, I agree this is arguable.
+
+> Also I was going to push my change upstream in radvd and already made a
+> pull-request https://github.com/reubenhwk/radvd/pull/37 but with your
+> help I realized that I forgot to modify "device-linux.c".
+
+Hehe :-)
+
+In any case, if you submit a fix upstream, next time we upgrade, we'll
+get your version.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
