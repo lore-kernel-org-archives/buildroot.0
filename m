@@ -1,84 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 26 Nov 2014 20:56:54 +0100
-Subject: [Buildroot] [RFC/PATCH next v7 14/17]
-	package/kodi-audioencoder-flac: New package
+Date: Wed, 26 Nov 2014 20:56:46 +0100
+Subject: [Buildroot] [RFC/PATCH next v7 06/17] Rename xbmc-pvr-addons to
+	kodi-pvr-addons - part I - move files
 In-Reply-To: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1417031817-31763-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417031817-31763-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417031817-31763-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In a first step to bump version to Helix move the package
+to its new directory. Because git will not recognize the moved
+files due to many upcoming changes to variable names the move
+is done in this seperate commit.
+
+The "Rename xbmc-pvr-addons to kodi-pvr-addons"-patch is split into
+two parts for easier review, please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/Config.in              |    9 +++++++++
- .../kodi-audioencoder-flac/kodi-audioencoder-flac.mk  |   17 +++++++++++++++++
- package/kodi/Config.in                                |   10 +++++++++-
- 3 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 package/kodi-audioencoder-flac/Config.in
- create mode 100644 package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+ package/{xbmc-pvr-addons => kodi-pvr-addons}/Config.in               |    0
+ .../xbmc-pvr-addons.mk => kodi-pvr-addons/kodi-pvr-addons.mk}        |    0
+ package/kodi/Config.in                                               |    2 +-
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/{xbmc-pvr-addons => kodi-pvr-addons}/Config.in (100%)
+ rename package/{xbmc-pvr-addons/xbmc-pvr-addons.mk => kodi-pvr-addons/kodi-pvr-addons.mk} (100%)
 
-diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
-new file mode 100644
-index 0000000..ec8cb96
---- /dev/null
-+++ b/package/kodi-audioencoder-flac/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
-+	bool "kodi-audioencoder-flac"
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_LIBOGG
-+	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
-+	help
-+	  An audioencoder addon for Kodi
-+
-+	  https://github.com/xbmc/audioencoder.flac
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-new file mode 100644
-index 0000000..90651a0
---- /dev/null
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-audioencoder-flac
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_FLAC_VERSION = ef5d3098e37a0fa9bbc48c4f51408cca0ba6222b
-+KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
-+KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
-+KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg
-+KODI_AUDIOENCODER_FLAC_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
-+	-DFLAC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
+diff --git a/package/xbmc-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
+similarity index 100%
+rename from package/xbmc-pvr-addons/Config.in
+rename to package/kodi-pvr-addons/Config.in
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+similarity index 100%
+rename from package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+rename to package/kodi-pvr-addons/kodi-pvr-addons.mk
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index c153fed..6cddbf5 100644
+index 2dcd8b3..c7c7f5b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -240,7 +240,15 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	help
- 	  Enable support for optical drives
+@@ -238,6 +238,6 @@ config BR2_PACKAGE_KODI_WAVPACK
+ comment "Kodi addons"
  
--comment "Kodi addons"
-+if BR2_PACKAGE_KODI_OPTICALDRIVE
-+
-+comment "Kodi audioencoder addons"
-+
-+source "package/kodi-audioencoder-flac/Config.in"
-+
-+endif # BR2_PACKAGE_KODI_OPTICALDRIVE
-+
-+comment "Kodi PVR addons"
+ source "package/xbmc-addon-xvdr/Config.in"
+-source "package/xbmc-pvr-addons/Config.in"
++source "package/kodi-pvr-addons/Config.in"
  
- source "package/kodi-addon-xvdr/Config.in"
- source "package/kodi-pvr-addons/Config.in"
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
