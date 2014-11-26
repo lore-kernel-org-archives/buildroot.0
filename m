@@ -1,37 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 07:21:26 +0100
-Subject: [Buildroot] [PATCH] botan: fix static build
-In-Reply-To: <CAB0FRsvgqpycJugj+xX4F7M=RW6OEuT9wpQOrzvONR425DAsiA@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Wed, 26 Nov 2014
- 05:20:13 +0100")
-References: <1416932097-12474-1-git-send-email-francois.perrad@gadz.org>
- <20141125164214.GA4690@tarshish>
- <CAB0FRsvgqpycJugj+xX4F7M=RW6OEuT9wpQOrzvONR425DAsiA@mail.gmail.com>
-Message-ID: <87egsqqy6x.fsf@dell.be.48ers.dk>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Wed, 26 Nov 2014 14:37:01 +0800
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: NM needs ISC-DHCPC
+	or DHCPCD
+Message-ID: <1416983821-2729-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+As NM communicates with the dhcp client through DBus, it
+doesn't support any old client.
 
- > 2014-11-25 17:42 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
- >> Hi Francois,
- >> 
- >> On Tue, Nov 25, 2014 at 05:14:57PM +0100, Francois Perrad wrote:
- >>> see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
- >> 
- >> Please mention in the commit log that this reverts commit
- >> 84047394ed6ad08adb9f59a9022553a327eef040. Elaborating a bit on --no-autoload
- >> would also be nice.
- >> 
+Add the dependencies to Config.in, and ensure that they
+are built beforehand.
+---
+Two things I'm a little wary of:
+ - The new "you need to enable x,y,z..." line is /huge/,
+	is there a nice way around this?
+ - This adds unecessary things to static-ip configured
+	systems, but then again they are using NM for that
+	(instead of ifup/down) so maybe this is a non issue?
 
- > You are right.  This patch contains a real fix in botan.mk and reverts
- > the previous commit which only disables BR2_PREFER_STATIC_LIB in
- > Config.in
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+---
+ package/network-manager/Config.in          | 6 ++++--
+ package/network-manager/network-manager.mk | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-So what does --no-autoload do?
-
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 0ed6ca5..72a2732 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on BR2_PACKAGE_DHCP_CLIENT || BR2_PACKAGE_DHCPCD
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
+@@ -52,9 +53,10 @@ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
+ 	  This option enables support for PPPD daemon
+ endif
+ 
+-comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads, headers >= 3.7"
++comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads, headers >= 3.7 and ISC DHCP client or DHCPCD"
+ 	depends on !BR2_avr32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++		!BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
++		!(BR2_PACKAGE_DHCP_CLIENT || BR2_PACKAGE_DHCPCD)
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 7944254..96bc858 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -57,10 +57,12 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+ NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/usr/sbin/dhclient
++NETWORK_MANAGER_DEPENDENCIES += dhcp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+ NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/usr/sbin/dhcpcd
++NETWORK_MANAGER_DEPENDENCIES += dhcpcd
+ endif
+ 
+ # uClibc by default doesn't have backtrace support, so don't use it
 -- 
-Bye, Peter Korsgaard
+2.1.3
