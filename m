@@ -1,43 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 23:21:41 +0100
-Subject: [Buildroot] [git commit] dhcpcd: bump to version 6.6.2
-Message-ID: <20141201104837.1EC7C7FC49@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Nov 2014 16:16:13 +0100
+Subject: [Buildroot] [git commit] network-manager: S45network-manager: don't
+	use pidof -o option
+Message-ID: <20141201104838.6C5A57FFFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cd5b136c51e7ecddbce50dbe2ac8bc84d948d73
+commit: http://git.buildroot.net/buildroot/commit/?id=7a6d8bf5d8ed299f4457276ffa994b409cb0d9ca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+The pidof -o option is only available in the Busybox applet if
+CONFIG_FEATURE_PIDOF_OMIT is enabled, and it isn't really needed here as the
+init script isn't called 'NetworkManager', so get rid of it.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpcd/dhcpcd.hash |    2 ++
- package/dhcpcd/dhcpcd.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/network-manager/S45network-manager |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-new file mode 100644
-index 0000000..c8ae064
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated from download (no sig, hash)
-+sha256	879c81febafc95ed9353909b719af765e9925c6cb06226b79da6c0dd176fe89f	dhcpcd-6.6.2.tar.bz2
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 9757421..c06002f 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
+index 7880891..5f32398 100755
+--- a/package/network-manager/S45network-manager
++++ b/package/network-manager/S45network-manager
+@@ -8,7 +8,7 @@ NETWORKMANAGER_BIN=${sbindir}/NetworkManager
  
--DHCPCD_VERSION = 6.4.7
-+DHCPCD_VERSION = 6.6.2
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+ [ -x $NETWORKMANAGER_BIN ] || exit 0
+ 
+-PID=`pidof -o %PPID NetworkManager`
++PID=`pidof NetworkManager`
+ case "$1" in
+ 	start)
+ 		echo -n "Starting NetworkManager ... "
