@@ -1,71 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Nov 2014 19:09:10 +0100
-Subject: [Buildroot] [PATCH] toolchain/external: fix building the wrapper on
-	MIPS
-Message-ID: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Nov 2014 16:01:18 -0300
+Subject: [Buildroot] [PATCH] rng-tools: bump to version 5
+Message-ID: <1417028478-21551-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some crazy folks use MIPS machines as build machines. ;-)
+Add semi-automatic libgcrypt dependency for i386/x86_64 to use RDRAND.
+This is exclusively used by rngd for which we don't yet ship an
+initscript/service file. Even so the user can choose to disable it at
+invocation time via the --no-drng option (which must be accounted for).
 
-On MIPS, the only acceptable hash-style is 'sysv', because the MIPS ABI
-defines that the GOT ordering to be the same as the symbols ordering,
-while GNU hash requires symbols to be sorted by their hash.
+Also add hash file.
 
-Looking at binutils' code, it seems that only MIPS suffers from that
-limitation.
-
-Currently, we force the toolchain wrapper to be linked with both hash
-styles, which breaks on MIPS.
-
-So, fix that but singling out MIPS, and use sysv in that case, and both
-otherwise.
-
-Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Absolutely untested on MIPS, as I do not have any MIPS machine powerfull
-enough to do a build. Vicente will have to test it, since he is that
-crazy one using MIPS build machines! ;-)
----
- toolchain/toolchain-external/toolchain-external.mk | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ package/rng-tools/Config.in      |  2 ++
+ package/rng-tools/rng-tools.hash |  3 +++
+ package/rng-tools/rng-tools.mk   | 18 +++++++++++++-----
+ 3 files changed, 18 insertions(+), 5 deletions(-)
+ create mode 100644 package/rng-tools/rng-tools.hash
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index da3718c..51e0af5 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -625,6 +625,15 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
- endef
- endif
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index c50a8c0..43c5a1c 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	# For rdrand ligcrypt is required and it's not obvious to users
++	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
+ 	help
+ 	  Daemon to use hardware random number generators.
  
-+# We use --hash-style=both to increase the compatibility of
-+# the generated binary with older platforms, except for MIPS,
-+# where the only acceptable hash style is 'sysv'
-+ifeq ($(findstring mips,$(HOSTARCH)),mips)
-+TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = sysv
-+else
-+TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = both
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+new file mode 100644
+index 0000000..09769e4
+--- /dev/null
++++ b/package/rng-tools/rng-tools.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
++md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
++sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 56858e7..5b89656 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,13 +4,21 @@
+ #
+ ################################################################################
+ 
+-RNG_TOOLS_VERSION = 4
++RNG_TOOLS_VERSION = 5
+ RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-RNG_TOOLS_CONF_ENV = LIBS="-largp"
+-RNG_TOOLS_DEPENDENCIES = argp-standalone
+-endif
+ RNG_TOOLS_LICENSE = GPLv2
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ 
++# Work around for uClibc's lack of argp_*() functions
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++RNG_TOOLS_CONF_ENV += LIBS="-largp"
++RNG_TOOLS_DEPENDENCIES += argp-standalone
 +endif
 +
- # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
- # symlinks for everything else. Skip gdb symlink when we are building our
- # own gdb to prevent two gdb's in output/host/usr/bin.
-@@ -647,9 +656,8 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 			;; \
- 		esac; \
- 	done ;
--	# We use --hash-style=both to increase the compatibility of
--	# the generated binary with older platforms
--	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s -Wl,--hash-style=both \
-+	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) \
-+		-s -Wl,--hash-style=$(TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE) \
- 		toolchain/toolchain-external/ext-toolchain-wrapper.c \
- 		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
- endef
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++RNG_TOOLS_DEPENDENCIES += libgcrypt
++else
++RNG_TOOLS_CONF_OPTS += --without-libgcrypt
++endif
++
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.0.4
