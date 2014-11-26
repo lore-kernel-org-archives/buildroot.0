@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 22:45:58 +0100
-Subject: [Buildroot] [git commit] sqlite: bump version to 3.8.7.2
-Message-ID: <20141201104836.E83AF7FC49@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 21:51:41 +0100
+Subject: [Buildroot] [git commit] libunistring: add wchar dependency
+Message-ID: <20141201104838.99D9F80001@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba992db9764a76e972f91dfd506060df6835e679
+commit: http://git.buildroot.net/buildroot/commit/?id=8df26deab145425251fc3c6a0175a63e3fb10c0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 3.8.7.2
-- Update hash value
+Even though libunistring itself builds fine, its library contains
+undefined references to wchar related functions, which are causing
+link failures when the library is actually linked into an application.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libunistring/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ad1b6c5..26516c9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	5601be1263842209d7c5dbf6128f1cc0b6bbe2e5	sqlite-autoconf-3080701.tar.gz
-+sha1  175283383d010709f76fdd13cb0c8c3c329a1c67  sqlite-autoconf-3080702.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index ea8407c..aba788e 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libunistring/Config.in b/package/libunistring/Config.in
+index ebb37d9..88fc658 100644
+--- a/package/libunistring/Config.in
++++ b/package/libunistring/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBUNISTRING
+ 	bool "libunistring"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  The libunistring library provides functions for manipulating
+ 	  Unicode strings and for manipulating C strings according to
+ 	  the Unicode standard.
  
--SQLITE_VERSION = 3080701
-+SQLITE_VERSION = 3080702
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+ 	  http://www.gnu.org/software/libunistring/
++
++comment "libunistring needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
