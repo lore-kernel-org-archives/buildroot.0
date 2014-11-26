@@ -1,81 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:27:18 +0100
-Subject: [Buildroot] [git commit] rng-tools: bump to version 5
-Message-ID: <20141201104838.C8B2680006@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 21:51:41 +0100
+Subject: [Buildroot] [git commit] bdwgc: Add new package
+Message-ID: <20141201104838.84DE87FFFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e987b1cd482b4a6c5c953f71674cfd1e9592279
+commit: http://git.buildroot.net/buildroot/commit/?id=b0476427f6c0036b7803d591a5394923c4b07142
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add semi-automatic libgcrypt dependency for i386/x86_64 to use RDRAND.
-This is exclusively used by rngd for which we don't yet ship an
-initscript/service file. Even so the user can choose to disable it at
-invocation time via the --no-drng option (which must be accounted for).
+bdwgc is a garbage collector for C and C++. The Boehm-Demers-Weiser
+conservative garbage collector can be used as a garbage collecting
+replacement for C 'malloc' or C++ 'new'.
 
-Also add hash file.
+[Thomas:
+ - drop the dependency on host-bdwgc, since it is not needed. Only
+   host-guile will need host-bdwgc, but bdwgc itself doesn't need
+   host-bdwgc.
+ - add dependency on host-pkgconf, needed to detect libatomic_ops
+ - add --with-libatomic-ops=yes to force bdwgc to use the system
+   libatomic_ops, and not the internal one.
+ - instead of using BDWGC_LIBTOOL_PATCH = NO (needed to avoid patching
+   libtool because the libtool version used by bdwgc does not have a
+   corresponding patch in Buildroot), use BDWGC_AUTORECONF = YES,
+   which generates a proper libtool (without this, some -L/usr/lib
+   flags are added by libtool).]
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rng-tools/Config.in      |    2 ++
- package/rng-tools/rng-tools.hash |    3 +++
- package/rng-tools/rng-tools.mk   |   18 +++++++++++++-----
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ package/Config.in       |    1 +
+ package/bdwgc/Config.in |   10 ++++++++++
+ package/bdwgc/bdwgc.mk  |   26 ++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index c50a8c0..43c5a1c 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	# For rdrand ligcrypt is required and it's not obvious to users
-+	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
- 	help
- 	  Daemon to use hardware random number generators.
- 
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+diff --git a/package/Config.in b/package/Config.in
+index 6875d8b..5d6d62d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -859,6 +859,7 @@ menu "Other"
+ 	source "package/apr-util/Config.in"
+ 	source "package/argp-standalone/Config.in"
+ 	source "package/armadillo/Config.in"
++	source "package/bdwgc/Config.in"
+ 	source "package/boost/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
 new file mode 100644
-index 0000000..09769e4
+index 0000000..9aa7c7d
 --- /dev/null
-+++ b/package/rng-tools/rng-tools.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
-+md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
-+sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 56858e7..5b89656 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,13 +4,21 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 4
-+RNG_TOOLS_VERSION = 5
- RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--RNG_TOOLS_CONF_ENV = LIBS="-largp"
--RNG_TOOLS_DEPENDENCIES = argp-standalone
--endif
- RNG_TOOLS_LICENSE = GPLv2
- RNG_TOOLS_LICENSE_FILES = COPYING
- 
-+# Work around for uClibc's lack of argp_*() functions
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+RNG_TOOLS_CONF_ENV += LIBS="-largp"
-+RNG_TOOLS_DEPENDENCIES += argp-standalone
-+endif
++++ b/package/bdwgc/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_BDWGC
++	bool "bdwgc"
++	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	help
++	  The Boehm-Demers-Weiser conservative garbage collector can
++	  be used as a garbage collecting replacement for C 'malloc'
++	  or C++ 'new'.
 +
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+RNG_TOOLS_DEPENDENCIES += libgcrypt
-+else
-+RNG_TOOLS_CONF_OPTS += --without-libgcrypt
-+endif
++	  http://www.hboehm.info/gc/
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+new file mode 100644
+index 0000000..3e6de1a
+--- /dev/null
++++ b/package/bdwgc/bdwgc.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# bdwgc
++#
++################################################################################
 +
- $(eval $(autotools-package))
++BDWGC_VERSION = 7.2f
++BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
++BDWGC_SITE = http://www.hboehm.info/gc/gc_source
++BDWGC_INSTALL_STAGING = YES
++BDWGC_LICENSE = bdwgc license
++BDWGC_LICENSE_FILES = README.QUICK
++BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
++
++# The libtool shipped with the package is bogus and generates some
++# -L/usr/lib flags. It uses a version not supported by Buildroot
++# libtool patches, so autoreconfiguring the packages is the easiest
++# solution.
++BDWGC_AUTORECONF = YES
++
++# Ensure we use the system libatomic_ops, and not the internal one.
++BDWGC_CONF_OPTS = --with-libatomic-ops=yes
++HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
