@@ -1,44 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 23:20:03 +0100
-Subject: [Buildroot] [git commit] libnspr: fix static build
-Message-ID: <20141126222614.A48B37FF18@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Nov 2014 00:13:55 +0100
+Subject: [Buildroot] [PATCH RFC] Makefile: from a defconfig file,
+	point to the corresponding board/ entry
+Message-ID: <1417043635-9055-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05aa5b49739e528b85fcf3efbe8948a3db2ff09d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is an RFC!
 
-Disable shared library in a static build.
+When configuring Buildroot from a defconfig files, soem users complain
+it is non-obvious that the corresponding board documentattion is to be
+found in the board/ sub-directory.
 
-Fixes:
-http://autobuild.buildroot.net/results/6ff/6ffae151ec3eaca175923ab860cf42167871164c/
-http://autobuild.buildroot.net/results/cab/cab19721c43b3256dd51ae511016bc9ea440512a/
+So, deduce the board name from the defconfig file, look for a similarly
+named sub-dir of board (first level only), and if such a directory
+exists, print a message stating extra documentation for that board is to
+be found there.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This works for only 5 of our 69 defconfig files, because:
+
+  - some boards docs are in sub-sub-dirs (count raises to 11 in that
+    case);
+
+  - most boards dirs are not directly named after the defconfig file,
+    like:
+        board/olimex/imx233_olinuxino/
+        configs/olimex_imx233_olinuxino_defconfig
+
+So, we could maybe improve this by renaming and moving our boards docs
+so there is a one-to-one mapping from the board directory to the
+corresponding defconfig file (but not necessarily the other way around).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libnspr/libnspr.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index c071d85..1930870 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -21,6 +21,12 @@ LIBNSPR_CONF_OPTS = --host=$(GNU_HOST_NAME)
- LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
- LIBNSPR_CONF_OPTS += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
+diff --git a/Makefile b/Makefile
+index b66bea0..15b75ee 100644
+--- a/Makefile
++++ b/Makefile
+@@ -783,13 +783,21 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBNSPR_MAKE_OPTS = SHARED_LIBRARY=
-+LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SHARED_LIBRARY= install
-+LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) SHARED_LIBRARY= install
-+endif
++define DEFCONFIG_BOARD_DOCS
++	if [ -d $(TOPDIR)/board/$(subst _defconfig,,$(1)) ]; then \
++		echo "Please have a look@the documentation for this board in $(TOPDIR)/board/$(subst _defconfig,,$(1))"; \
++	fi
++endef
 +
- ifeq ($(BR2_arm),y)
- ifeq ($(BR2_ARM_CPU_HAS_THUMB2),y)
- LIBNSPR_CONF_OPTS += --enable-thumb2
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
++	@$(call DEFCONFIG_BOARD_DOCS,$@)
+ 
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
++	@$(call DEFCONFIG_BOARD_DOCS,$@)
+ 
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-- 
+1.9.1
