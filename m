@@ -1,80 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Nov 2014 16:01:18 -0300
-Subject: [Buildroot] [PATCH] rng-tools: bump to version 5
-Message-ID: <1417028478-21551-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Nov 2014 21:49:02 +0200
+Subject: [Buildroot] [PATCH] nftables: fix static build
+Message-ID: <3e17fd6cd2d116233ebb766596c7d26254d9d698.1417031342.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add semi-automatic libgcrypt dependency for i386/x86_64 to use RDRAND.
-This is exclusively used by rngd for which we don't yet ship an
-initscript/service file. Even so the user can choose to disable it at
-invocation time via the --no-drng option (which must be accounted for).
+libnftnl needs -ljansson when built with json support.
 
-Also add hash file.
+Fixes:
+http://autobuild.buildroot.net/results/68a/68ab2101a0b2b7d5482aafe0d88c87a50491159f/
+http://autobuild.buildroot.net/results/87e/87ecbba5b9b16d592a48fe827fa88ef5a5c6d09b/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+libnftl also needs -mxml when built with XML support.
+
+Fixes:
+http://autobuild.buildroot.net/results/58f/58f592d823db14e4e7558134f1b479f4f8659a23/
+http://autobuild.buildroot.net/results/1cf/1cf23f2b38236f43971c65e704793b5bc762ecfe/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/rng-tools/Config.in      |  2 ++
- package/rng-tools/rng-tools.hash |  3 +++
- package/rng-tools/rng-tools.mk   | 18 +++++++++++++-----
- 3 files changed, 18 insertions(+), 5 deletions(-)
- create mode 100644 package/rng-tools/rng-tools.hash
+ package/nftables/nftables.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index c50a8c0..43c5a1c 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	# For rdrand ligcrypt is required and it's not obvious to users
-+	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
- 	help
- 	  Daemon to use hardware random number generators.
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index b3abbc0dd9a9..16d7c6f21247 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -12,8 +12,16 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
+ NFTABLES_LICENSE = GPLv2
+ NFTABLES_LICENSE_FILES = COPYING
  
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-new file mode 100644
-index 0000000..09769e4
---- /dev/null
-+++ b/package/rng-tools/rng-tools.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/gkernel/files/rng-tools/5/
-+md5	6726cdc6fae1f5122463f24ae980dd68	rng-tools-5.tar.gz
-+sha1	3092768ac45315a5dcc0170d05566d1d00dbad96	rng-tools-5.tar.gz
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 56858e7..5b89656 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,13 +4,21 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 4
-+RNG_TOOLS_VERSION = 5
- RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--RNG_TOOLS_CONF_ENV = LIBS="-largp"
--RNG_TOOLS_DEPENDENCIES = argp-standalone
--endif
- RNG_TOOLS_LICENSE = GPLv2
- RNG_TOOLS_LICENSE_FILES = COPYING
- 
-+# Work around for uClibc's lack of argp_*() functions
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+RNG_TOOLS_CONF_ENV += LIBS="-largp"
-+RNG_TOOLS_DEPENDENCIES += argp-standalone
++NFTABLES_LIBS = -lncurses
++ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
++NFTABLES_LIBS += -ljansson -lm
++endif
++ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBNFTNL_XML),yy)
++NFTABLES_LIBS += -lmxml -lpthread
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+RNG_TOOLS_DEPENDENCIES += libgcrypt
-+else
-+RNG_TOOLS_CONF_OPTS += --without-libgcrypt
-+endif
-+
+ NFTABLES_CONF_ENV = \
+ 	ac_cv_prog_CONFIG_PDF=no \
+-	LIBS="-lncurses"
++	LIBS="$(NFTABLES_LIBS)"
+ 
  $(eval $(autotools-package))
 -- 
-2.0.4
+2.1.3
