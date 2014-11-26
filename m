@@ -1,37 +1,35 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 26 Nov 2014 10:49:48 +0100
-Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
-In-Reply-To: <20141125221051.50c9eca0@e6520eb.localdomain>
-References: <20141019163952.19c7c080@free-electrons.com>
- <1494741.bpddRugsWT@sagittea> <20141125221051.50c9eca0@e6520eb.localdomain>
-Message-ID: <56694959.1cmVvOHZKd@sagittea>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Nov 2014 07:06:48 -0300
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: NM needs
+ ISC-DHCPC or DHCPCD
+In-Reply-To: <20141126065754.GN2374@sapphire.tkos.co.il>
+References: <1416983821-2729-1-git-send-email-nroach44@gmail.com>
+ <20141126064539.GM2374@sapphire.tkos.co.il> <54757952.4010007@gmail.com>
+ <20141126065754.GN2374@sapphire.tkos.co.il>
+Message-ID: <5475A638.3020005@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 25 November 2014 22:10:51 Eric B?nard wrote:
-> Hi J?r?me,
-> 
-> Le Tue, 25 Nov 2014 12:57:00 -0800 (PST),
-> 
-> J?r?me Pouiller <jezz@sysmic.org> a ?crit :
-> > On Tuesday 25 November 2014 18:44:29 Eric B?nard wrote:
-> > > Le Tue, 25 Nov 2014 18:30:17 +0100,
-> > 
-> > [...]
-[...]
-> > I currently do not plan to make a v2 of iMX 5 GPU series.
-> 
-> v1 is marked as superseded in patchwork and doesn't seems to be in
-> next : is that intended ?
-I understand better why you expected a v2 :-) . 
+On 11/26/2014 03:57 AM, Baruch Siach wrote:
 
-It seems to be a mistake. I revert statuses of iMX 5 GPU series.
+>>> We usually use 'select' for this kind of dependencies. Something like 
+>>> (untested):
+>>>
+>>> 	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+>>
+>> Ah, okay. I was wondering about that, thanks.
+>>
+>> I'll leave this version up for now as my other questions are still
+>> valid. Furthermore, is there a preference as to DHCPCD vs ISC?
+> 
+> I think we should default to the more lightweight one. I guess it's dhcpcd in 
+> this case.
 
-BR,
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
++1, the ISC DHCP 4.1.x series even though ESV (extended support) will
+EOL (end-of-life) by december, and even though i don't know which one
+will be the new ESV (likely 4.3.x) 4.2.x+ bundles bind libraries, so
+ouch for bloat.
+Regards.
