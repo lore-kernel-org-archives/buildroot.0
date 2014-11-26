@@ -1,320 +1,37 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed, 26 Nov 2014 12:03:00 +0300
-Subject: [Buildroot] [PATCH] binutils: fix xtensa trampolines search code
-	for conditional branches
-Message-ID: <1416992580-20071-1-git-send-email-jcmvbkbc@gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 26 Nov 2014 10:49:48 +0100
+Subject: [Buildroot] [PATCH v2] mx53loco_defconfig: switch to VFPv3(d32)
+In-Reply-To: <20141125221051.50c9eca0@e6520eb.localdomain>
+References: <20141019163952.19c7c080@free-electrons.com>
+ <1494741.bpddRugsWT@sagittea> <20141125221051.50c9eca0@e6520eb.localdomain>
+Message-ID: <56694959.1cmVvOHZKd@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes the following build errors seen when assembling huge files
-produced by gcc:
-  Error: jump target out of range; no usable trampoline found
-  Error: operand 1 of 'j' has out of range value '307307'
+On Tuesday 25 November 2014 22:10:51 Eric B?nard wrote:
+> Hi J?r?me,
+> 
+> Le Tue, 25 Nov 2014 12:57:00 -0800 (PST),
+> 
+> J?r?me Pouiller <jezz@sysmic.org> a ?crit :
+> > On Tuesday 25 November 2014 18:44:29 Eric B?nard wrote:
+> > > Le Tue, 25 Nov 2014 18:30:17 +0100,
+> > 
+> > [...]
+[...]
+> > I currently do not plan to make a v2 of iMX 5 GPU series.
+> 
+> v1 is marked as superseded in patchwork and doesn't seems to be in
+> next : is that intended ?
+I understand better why you expected a v2 :-) . 
 
-Fixes:
-  http://autobuild.buildroot.net/results/545/545168d9caf3bdb3dd3eb3bae58ba9db8a33384a/
+It seems to be a mistake. I revert statuses of iMX 5 GPU series.
 
-Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...ines-search-code-for-conditional-branches.patch | 90 ++++++++++++++++++++++
- ...ines-search-code-for-conditional-branches.patch | 90 ++++++++++++++++++++++
- ...ines-search-code-for-conditional-branches.patch | 90 ++++++++++++++++++++++
- 3 files changed, 270 insertions(+)
- create mode 100644 package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
- create mode 100644 package/binutils/2.23.2/905-Fix-trampolines-search-code-for-conditional-branches.patch
- create mode 100644 package/binutils/2.24/905-Fix-trampolines-search-code-for-conditional-branches.patch
-
-diff --git a/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch b/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
-new file mode 100644
-index 0000000..8aeb064
---- /dev/null
-+++ b/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
-@@ -0,0 +1,90 @@
-+From 415480d6471e67aef97c0241d451ef2423a1da9d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 25 Nov 2014 21:33:21 +0300
-+Subject: [PATCH] Fix trampolines search code for conditional branches
-+
-+For conditional branches that need more than one trampoline to reach its
-+target assembler couldn't always find suitable trampoline because
-+post-loop condition check was placed inside the loop, resulting in
-+premature loop termination. Move check outside the loop.
-+
-+This fixes the following build errors seen when assembling huge files
-+produced by gcc:
-+    Error: jump target out of range; no usable trampoline found
-+    Error: operand 1 of 'j' has out of range value '307307'
-+
-+2014-11-25  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+gas/
-+	* config/tc-xtensa.c (search_trampolines): Move post-loop
-+	condition check outside the search loop.
-+
-+gas/testsuite/
-+	* gas/xtensa/trampoline.d: Add expected output for branches.
-+	* gas/xtensa/trampoline.s: Add test case for branches.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
-+Changes to ChangeLogs are dropped.
-+
-+ gas/config/tc-xtensa.c                | 8 ++++----
-+ gas/testsuite/gas/xtensa/trampoline.d | 9 +++++++++
-+ gas/testsuite/gas/xtensa/trampoline.s | 7 +++++++
-+ 3 files changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index d11b0c7..f23ccf8 100644
-+--- a/gas/config/tc-xtensa.c
-++++ b/gas/config/tc-xtensa.c
-+@@ -9514,11 +9514,11 @@ search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
-+ 	      if (next_addr == 0 || addr - next_addr > J_RANGE)
-+ 		break;
-+ 	    }
-+-	  if (abs (addr - this_addr) < J_RANGE)
-+-	    return tf;
-+-
-+-	  return NULL;
-+ 	}
-++      if (abs (addr - this_addr) < J_RANGE)
-++	return tf;
-++
-++      return NULL;
-+     }
-+   for ( ; tf; tf = tf->next)
-+     {
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
-+index b4f65dc..5ae32a6 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.d
-++++ b/gas/testsuite/gas/xtensa/trampoline.d
-+@@ -24,3 +24,12 @@
-+ .*33462:.*j.0x49407
-+ #...
-+ .*49407:.*j.0x49407
-++.*4940a:.*beqz.n.a2,.0x4940f
-++.*4940c:.*j.0x693d1
-++#...
-++.*693d1:.*j.0x7ddd4
-++#...
-++.*7ddd4:.*j.0x927f5
-++#...
-++.*927f5:.*j.0x927f5
-++#...
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
-+index 259a3bb..4465786 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.s
-++++ b/gas/testsuite/gas/xtensa/trampoline.s
-+@@ -19,3 +19,10 @@
-+ 	.endr
-+ 3:
-+ 	j	3b
-++	bnez	a2, 4f
-++	.rep	50000
-++	and	a2, a2, a3
-++	_ret
-++	.endr
-++4:
-++	j	4b
-+-- 
-+1.8.1.4
-+
-diff --git a/package/binutils/2.23.2/905-Fix-trampolines-search-code-for-conditional-branches.patch b/package/binutils/2.23.2/905-Fix-trampolines-search-code-for-conditional-branches.patch
-new file mode 100644
-index 0000000..8aeb064
---- /dev/null
-+++ b/package/binutils/2.23.2/905-Fix-trampolines-search-code-for-conditional-branches.patch
-@@ -0,0 +1,90 @@
-+From 415480d6471e67aef97c0241d451ef2423a1da9d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 25 Nov 2014 21:33:21 +0300
-+Subject: [PATCH] Fix trampolines search code for conditional branches
-+
-+For conditional branches that need more than one trampoline to reach its
-+target assembler couldn't always find suitable trampoline because
-+post-loop condition check was placed inside the loop, resulting in
-+premature loop termination. Move check outside the loop.
-+
-+This fixes the following build errors seen when assembling huge files
-+produced by gcc:
-+    Error: jump target out of range; no usable trampoline found
-+    Error: operand 1 of 'j' has out of range value '307307'
-+
-+2014-11-25  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+gas/
-+	* config/tc-xtensa.c (search_trampolines): Move post-loop
-+	condition check outside the search loop.
-+
-+gas/testsuite/
-+	* gas/xtensa/trampoline.d: Add expected output for branches.
-+	* gas/xtensa/trampoline.s: Add test case for branches.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
-+Changes to ChangeLogs are dropped.
-+
-+ gas/config/tc-xtensa.c                | 8 ++++----
-+ gas/testsuite/gas/xtensa/trampoline.d | 9 +++++++++
-+ gas/testsuite/gas/xtensa/trampoline.s | 7 +++++++
-+ 3 files changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index d11b0c7..f23ccf8 100644
-+--- a/gas/config/tc-xtensa.c
-++++ b/gas/config/tc-xtensa.c
-+@@ -9514,11 +9514,11 @@ search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
-+ 	      if (next_addr == 0 || addr - next_addr > J_RANGE)
-+ 		break;
-+ 	    }
-+-	  if (abs (addr - this_addr) < J_RANGE)
-+-	    return tf;
-+-
-+-	  return NULL;
-+ 	}
-++      if (abs (addr - this_addr) < J_RANGE)
-++	return tf;
-++
-++      return NULL;
-+     }
-+   for ( ; tf; tf = tf->next)
-+     {
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
-+index b4f65dc..5ae32a6 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.d
-++++ b/gas/testsuite/gas/xtensa/trampoline.d
-+@@ -24,3 +24,12 @@
-+ .*33462:.*j.0x49407
-+ #...
-+ .*49407:.*j.0x49407
-++.*4940a:.*beqz.n.a2,.0x4940f
-++.*4940c:.*j.0x693d1
-++#...
-++.*693d1:.*j.0x7ddd4
-++#...
-++.*7ddd4:.*j.0x927f5
-++#...
-++.*927f5:.*j.0x927f5
-++#...
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
-+index 259a3bb..4465786 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.s
-++++ b/gas/testsuite/gas/xtensa/trampoline.s
-+@@ -19,3 +19,10 @@
-+ 	.endr
-+ 3:
-+ 	j	3b
-++	bnez	a2, 4f
-++	.rep	50000
-++	and	a2, a2, a3
-++	_ret
-++	.endr
-++4:
-++	j	4b
-+-- 
-+1.8.1.4
-+
-diff --git a/package/binutils/2.24/905-Fix-trampolines-search-code-for-conditional-branches.patch b/package/binutils/2.24/905-Fix-trampolines-search-code-for-conditional-branches.patch
-new file mode 100644
-index 0000000..8aeb064
---- /dev/null
-+++ b/package/binutils/2.24/905-Fix-trampolines-search-code-for-conditional-branches.patch
-@@ -0,0 +1,90 @@
-+From 415480d6471e67aef97c0241d451ef2423a1da9d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 25 Nov 2014 21:33:21 +0300
-+Subject: [PATCH] Fix trampolines search code for conditional branches
-+
-+For conditional branches that need more than one trampoline to reach its
-+target assembler couldn't always find suitable trampoline because
-+post-loop condition check was placed inside the loop, resulting in
-+premature loop termination. Move check outside the loop.
-+
-+This fixes the following build errors seen when assembling huge files
-+produced by gcc:
-+    Error: jump target out of range; no usable trampoline found
-+    Error: operand 1 of 'j' has out of range value '307307'
-+
-+2014-11-25  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+gas/
-+	* config/tc-xtensa.c (search_trampolines): Move post-loop
-+	condition check outside the search loop.
-+
-+gas/testsuite/
-+	* gas/xtensa/trampoline.d: Add expected output for branches.
-+	* gas/xtensa/trampoline.s: Add test case for branches.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
-+Changes to ChangeLogs are dropped.
-+
-+ gas/config/tc-xtensa.c                | 8 ++++----
-+ gas/testsuite/gas/xtensa/trampoline.d | 9 +++++++++
-+ gas/testsuite/gas/xtensa/trampoline.s | 7 +++++++
-+ 3 files changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index d11b0c7..f23ccf8 100644
-+--- a/gas/config/tc-xtensa.c
-++++ b/gas/config/tc-xtensa.c
-+@@ -9514,11 +9514,11 @@ search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
-+ 	      if (next_addr == 0 || addr - next_addr > J_RANGE)
-+ 		break;
-+ 	    }
-+-	  if (abs (addr - this_addr) < J_RANGE)
-+-	    return tf;
-+-
-+-	  return NULL;
-+ 	}
-++      if (abs (addr - this_addr) < J_RANGE)
-++	return tf;
-++
-++      return NULL;
-+     }
-+   for ( ; tf; tf = tf->next)
-+     {
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
-+index b4f65dc..5ae32a6 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.d
-++++ b/gas/testsuite/gas/xtensa/trampoline.d
-+@@ -24,3 +24,12 @@
-+ .*33462:.*j.0x49407
-+ #...
-+ .*49407:.*j.0x49407
-++.*4940a:.*beqz.n.a2,.0x4940f
-++.*4940c:.*j.0x693d1
-++#...
-++.*693d1:.*j.0x7ddd4
-++#...
-++.*7ddd4:.*j.0x927f5
-++#...
-++.*927f5:.*j.0x927f5
-++#...
-+diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
-+index 259a3bb..4465786 100644
-+--- a/gas/testsuite/gas/xtensa/trampoline.s
-++++ b/gas/testsuite/gas/xtensa/trampoline.s
-+@@ -19,3 +19,10 @@
-+ 	.endr
-+ 3:
-+ 	j	3b
-++	bnez	a2, 4f
-++	.rep	50000
-++	and	a2, a2, a3
-++	_ret
-++	.endr
-++4:
-++	j	4b
-+-- 
-+1.8.1.4
-+
+BR,
 -- 
-1.8.1.4
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
