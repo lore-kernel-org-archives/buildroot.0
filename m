@@ -1,89 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 20:20:55 +0100
-Subject: [Buildroot] [git commit] configs/p1010rdb: bump to kernel 3.17.4
-Message-ID: <20141201104839.07C487FC49@busybox.osuosl.org>
+Date: Wed, 26 Nov 2014 22:24:52 +0100
+Subject: [Buildroot] [git commit] samba: Add support for libnss_win*.so*
+	installation
+Message-ID: <20141201104838.BD81780005@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9245aef2b54f381a90c74ccdfad8aaf2ebe8e6a7
+commit: http://git.buildroot.net/buildroot/commit/?id=1144059ede54f9908f3e5cb6b41b395efb6855d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The libnss_wins and libnss_winbind libraries are required in order to
+add support for the wins and winbind sources to the Name Service Switch
+(NSS), so make it possible to install them. This is useful in order to
+resolve NetBIOS names or user and group information from a Windows NT
+server.
+
+These libraries are installed to /lib/ like the standard libnss_*
+libraries from (E)GLIBC.
+
+[Thomas: remove useless comments.]
+
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{linux-3.13.config => linux-3.17.config}       |    3 ---
- board/freescale/p1010rdb/readme.txt                |    2 +-
- configs/freescale_p1010rdb_pa_defconfig            |   10 +++++-----
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ package/samba/Config.in |   19 +++++++++++++++++++
+ package/samba/samba.mk  |   16 ++++++++++++++++
+ 2 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/board/freescale/p1010rdb/linux-3.13.config b/board/freescale/p1010rdb/linux-3.17.config
-similarity index 97%
-rename from board/freescale/p1010rdb/linux-3.13.config
-rename to board/freescale/p1010rdb/linux-3.17.config
-index b91d312..c48c4fb 100644
---- a/board/freescale/p1010rdb/linux-3.13.config
-+++ b/board/freescale/p1010rdb/linux-3.17.config
-@@ -57,11 +57,9 @@ CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_AMDSTD=y
- CONFIG_MTD_PHYSMAP_OF=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_FSL_ELBC=y
- CONFIG_MTD_NAND_FSL_IFC=y
--CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_NBD=y
- CONFIG_BLK_DEV_RAM=y
-@@ -71,7 +69,6 @@ CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_ST=y
- CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_MULTI_LUN=y
- CONFIG_SCSI_LOGGING=y
- CONFIG_ATA=y
- CONFIG_SATA_FSL=y
-diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
-index b73ef4d..b119f9a 100644
---- a/board/freescale/p1010rdb/readme.txt
-+++ b/board/freescale/p1010rdb/readme.txt
-@@ -45,7 +45,7 @@ your newly built U-Boot.
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 8dd0bf2..e2cac9e 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -240,6 +240,25 @@ config BR2_PACKAGE_SAMBA_LIBSMBCLIENT
+ 	  standards POSIX functions available for manipulating local
+ 	  files.
  
- 2. Program the DTB to NOR flash
++config BR2_PACKAGE_SAMBA_LIBNSS_WINS
++	bool "libnss_wins"
++	default y
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_SAMBA_WINBINDD
++	help
++	  libnss_wins is a library that permits the Name Service Switch
++	  to resolve NetBIOS names.
++
++config BR2_PACKAGE_SAMBA_LIBNSS_WINBIND
++	bool "libnss_winbind"
++	default y
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_SAMBA_WINBINDD
++	help
++	  libnss_winbind is a library that permits the Name Service
++	  Switch to resolve user and group information from a Windows
++	  NT server.
++
+ endmenu
  
--    => tftp $loadaddr p1010rdb.dtb
-+    => tftp $loadaddr p1010rdb-pa.dtb
-     => erase 0xee000000 +$filesize
-     => cp.b $loadaddr 0xee000000 $filesize
  
-diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
-index d3e0538..b784f39 100644
---- a/configs/freescale_p1010rdb_pa_defconfig
-+++ b/configs/freescale_p1010rdb_pa_defconfig
-@@ -11,18 +11,18 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 1957997..ec8e6ec 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -135,6 +135,22 @@ endef
  
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.17.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
- 
- # Serial port config
- BR2_TARGET_GENERIC_GETTY=y
++ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINS),y)
++define SAMBA_INSTALL_LIBNSS_WINS
++	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so
++	ln -snf libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
++endef
++SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINS
++endif
++
++ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINBIND),y)
++define SAMBA_INSTALL_LIBNSS_WINBIND
++	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so
++	ln -snf libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
++endef
++SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINBIND
++endif
++
+ define SAMBA_REMOVE_SWAT_DOCUMENTATION
+ 	# Remove the documentation
+ 	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
