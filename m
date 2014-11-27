@@ -1,60 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Nov 2014 20:51:50 -0300
-Subject: [Buildroot] [PATCH -next] flac: unbreak powerpc e500 support
-Message-ID: <1417132310-22933-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Nov 2014 00:57:55 +0100
+Subject: [Buildroot] Split supported architectures for Qt Script and Qt
+	Webkit
+In-Reply-To: <546DD5C9.8090600@imgtec.com> (Vicente Olivert Riera's message of
+ "Thu, 20 Nov 2014 11:51:37 +0000")
+References: <546DD5C9.8090600@imgtec.com>
+Message-ID: <87tx1kmc1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to avoid the enable/disable-debug options from unsetting -g
-from CFLAGS in an incorrect way which breaks -mfloat-gprs=X (translit to
--mfloatprs=X).
-It's possible to affect other less common CFLAGS with a '-g' in any
-position.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Upstream status: sent different patch (configure.ac) - to avoid
-autoreconfiguring.
+ > Dear all,
+ > please I would like you read this email and provide some feedback before
+ > I start writing a patch.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...-configure-don-t-try-to-unset-g-from-CFLAGS.txt | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
+Thanks for investigating!
 
-diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-new file mode 100644
-index 0000000..3aff5a8
---- /dev/null
-+++ b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-@@ -0,0 +1,27 @@
-+The sed expression is wrong, any flags with '-g' in any position gets
-+zapped, for example:
-+
-+-mfloat-gprs=double (for powerpc e500) -> -mfloatprs=double.
-+
-+Which gives build errors and is perfectly valid in real use scenarios to
-+switch from e500v1 (single precision) code to e500v2 (double precision) code.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura flac-1.3.1.orig/configure flac-1.3.1/configure
-+--- flac-1.3.1.orig/configure	2014-11-27 20:43:29.921303105 -0300
-++++ flac-1.3.1/configure	2014-11-27 20:45:33.460250179 -0300
-+@@ -19870,11 +19870,10 @@
-+ 
-+ if test "x$debug" = xtrue; then
-+ 	CPPFLAGS="-DDEBUG $CPPFLAGS"
-+-	CFLAGS=$(echo "$CFLAGS" | sed 's/-g//')
-+-	CFLAGS="-g $CFLAGS"
-++	CFLAGS=$(echo "-g $CFLAGS")
-+ else
-+ 	CPPFLAGS="-DNDEBUG $CPPFLAGS"
-+-	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//;s/-g//')
-++	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//')
-+ 	CFLAGS="-O3 -funroll-loops $CFLAGS"
-+ fi
-+ 
+ > I have assigned a code to each kind of problem I have found, and the
+ > meaning of those codes are just below the table.
+
+ > +------------------+-----------+-----------+----------+--------------+
+ > | Architecture     | Qt Script | Qt Webkit | Grantlee | Problem Code |
+ > +------------------+-----------+-----------+----------+--------------+
+ > | BR2_aarch64      | YES       | NO        | YES      | 2            |
+ > | BR2_nios2        | YES       | NO        | NO       | 4            |
+
+So the only ones not covered today are these two, right? What about the
+mips variant you mentioned above?
+
+The BR2_aarch64 issue will presumably be solved in future qtwebkit
+releases once the arch gets a bit more used. The nios issue is an
+internal compiler error, that is less likely to get fixed (until a new
+compiler is released atleast).
+
 -- 
-2.0.4
+Bye, Peter Korsgaard
