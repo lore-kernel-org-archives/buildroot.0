@@ -1,103 +1,70 @@
 From: Doug Kehn <rdkehn@yahoo.com>
-Date: Wed, 26 Nov 2014 22:48:46 -0600
-Subject: [Buildroot] [PATCH v2 1/2] pkg-generic.mk: reinstall targets
+Date: Wed, 26 Nov 2014 22:48:47 -0600
+Subject: [Buildroot] [PATCH v2 2/2] manual: reinstall targets
 In-Reply-To: <1417063727-4420-1-git-send-email-rdkehn@yahoo.com>
 References: <1417063727-4420-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <1417063727-4420-2-git-send-email-rdkehn@yahoo.com>
+Message-ID: <1417063727-4420-3-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add reinstall targets for host, target, staging, and images variants.
-clean-for-reinstall targets added to remove package
-.stamp_target_install file to allow package install.  Additionally, when
-OVERRIDE_SRCDIR is provided, .stamp_rsynced is removed to ensure pakcage
-is up to date before reinstalling.
+Add reinstall target information to package-make-target.txt.
 
 Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 ---
- package/pkg-generic.mk | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ docs/manual/package-make-target.txt | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9643a30..3c25778 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -480,34 +480,51 @@ $(1):			$(1)-install
+diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+index 25d3f44..35d787e 100644
+--- a/docs/manual/package-make-target.txt
++++ b/docs/manual/package-make-target.txt
+@@ -57,24 +57,38 @@ Additionally, there are some other useful make targets:
  
- ifeq ($$($(2)_TYPE),host)
- $(1)-install:	        $(1)-install-host
-+$(1)-reinstall:		$(1)-reinstall-host
- else
- $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
-+$(1)-reinstall:		$(1)-reinstall-staging $(1)-reinstall-target $(1)-reinstall-images
- endif
+ [width="90%",cols="^1,4",options="header"]
+ |===================================================
+-| command/target    | Description
++| command/target      | Description
  
- ifeq ($$($(2)_INSTALL_TARGET),YES)
--$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-install-target:			$$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-reinstall-target:			$(1)-clean-for-reinstall-target $$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-clean-for-reinstall-target:	$(1)-clean-for-reinstall
-+			rm -f $$($(2)_TARGET_INSTALL_TARGET)
- $$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
- else
- $(1)-install-target:
-+$(1)-reinstall-target:
- endif
+-| +show-depends+    | Displays the dependencies required to build the
++| +show-depends+      | Displays the dependencies required to build the
+ package
  
- ifeq ($$($(2)_INSTALL_STAGING),YES)
- $(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
-+$(1)-reinstall-staging:			$(1)-clean-for-reinstall-staging $$($(2)_TARGET_INSTALL_STAGING)
-+$(1)-clean-for-reinstall-staging:	$(1)-clean-for-reinstall
-+			rm -f $$($(2)_TARGET_INSTALL_STAGING)
- $$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
- # Some packages use install-staging stuff for install-target
- $$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
- else
- $(1)-install-staging:
-+$(1)-reinstall-staging:
- endif
+-| +graph-depends+   | Generate a dependency graph of the package, in the
++| +graph-depends+     | Generate a dependency graph of the package, in the
+ context of the current Buildroot configuration. See
+ xref:graph-depends[this section] for more details about dependency
+ graphs.
  
- ifeq ($$($(2)_INSTALL_IMAGES),YES)
--$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
--$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
-+$(1)-install-images:			$$($(2)_TARGET_INSTALL_IMAGES)
-+$(1)-reinstall-images:			$(1)-clean-for-reinstall-images $$($(2)_TARGET_INSTALL_IMAGES)
-+$(1)-clean-for-reinstall-images:	$(1)-clean-for-reinstall
-+			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
-+$$($(2)_TARGET_INSTALL_IMAGES):		$$($(2)_TARGET_BUILD)
- else
- $(1)-install-images:
-+$(1)-reinstall-images:
- endif
+-| +dirclean+        | Remove the whole package build directory
++| +dirclean+          | Remove the whole package build directory
  
- $(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
-+$(1)-reinstall-host:      	$(1)-clean-for-reinstall-host $$($(2)_TARGET_INSTALL_HOST)
-+$(1)-clean-for-reinstall-host:	$(1)-clean-for-reinstall
-+			rm -f $$($(2)_TARGET_INSTALL_HOST)
- $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+-| +rebuild+         | Re-run the compilation commands - this only makes
++| +rebuild+           | Re-run the compilation commands - this only makes
+ sense when using the +OVERRIDE_SRCDIR+ feature or when you modified a file
+ directly in the build directory
  
- $(1)-build:		$$($(2)_TARGET_BUILD)
-@@ -545,6 +562,8 @@ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+-| +reconfigure+     | Re-run the configure commands, then rebuild - this only
++| +reconfigure+       | Re-run the configure commands, then rebuild - this only
+ makes sense when using the +OVERRIDE_SRCDIR+ feature or when you modified a
+ file directly in the build directory
  
- $(1)-source:		$$($(2)_TARGET_SOURCE)
++| +reinstall-staging+ |
++*target package:* Re-run the installation of the package in the staging
++directory - this only makes sense when overriding +STAGING_DIR+
 +
-+$(1)-clean-for-reinstall:
- else
- # In the package override case, the sequence of steps
- #  source, by rsyncing
-@@ -563,6 +582,9 @@ $(1)-extract:		$(1)-rsync
- $(1)-rsync:		$$($(2)_TARGET_RSYNC)
- 
- $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
++| +reinstall-target+  |
++*target package:* Re-run the installation of the package in the target
++directory - this only makes sense when overriding +TARGET_DIR+
 +
-+$(1)-clean-for-reinstall:
-+			rm -f $$($(2)_TARGET_RSYNC)
- endif
- 
- $(1)-show-depends:
++| +reinstall+         |
++*target package:* Run the 2 previous re-installation commands
++
++*host package:* Re-run the installation of the package in the host
++directory
++
+ |===================================================
 -- 
 1.9.1
