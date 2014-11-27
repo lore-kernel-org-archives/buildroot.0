@@ -1,80 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 20:22:03 +0100
-Subject: [Buildroot] [PATCH v2 7/9] gpu-viv-bin-mx6q: Use
-	self-extractible helper
-In-Reply-To: <1416432642-26005-8-git-send-email-jezz@sysmic.org>
-References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
- <1416432642-26005-8-git-send-email-jezz@sysmic.org>
-Message-ID: <20141127192203.GL3900@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Nov 2014 20:20:55 +0100
+Subject: [Buildroot] [git commit branch/next] configs/p1010rdb: bump to
+	kernel 3.17.4
+Message-ID: <20141127192823.CA1707FF3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=9245aef2b54f381a90c74ccdfad8aaf2ebe8e6a7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2014-11-19 22:30 +0100, J?r?me Pouiller spake thusly:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../{linux-3.13.config => linux-3.17.config}       |    3 ---
+ board/freescale/p1010rdb/readme.txt                |    2 +-
+ configs/freescale_p1010rdb_pa_defconfig            |   10 +++++-----
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-Ditto the variable re-ordering...
-
-Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 22 +++++-----------------
->  1 file changed, 5 insertions(+), 17 deletions(-)
-> 
-> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-> index 85d01d2..1e731b3 100644
-> --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-> @@ -12,29 +12,17 @@ GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-sfp
->  endif
->  GPU_VIV_BIN_MX6Q_SITE = $(FREESCALE_IMX_SITE)
->  GPU_VIV_BIN_MX6Q_SOURCE = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
-> -
->  GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
-> +GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
-> +GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
->  
-> +# See freescale-imx.mk
->  GPU_VIV_BIN_MX6Q_LICENSE = Freescale Semiconductor Software License Agreement
-> -
-> -# No license file is included in the archive; we could extract it from
-> -# the self-extractor, but that's just too much effort.
-> -# This is a legal minefield: the EULA specifies that
-> -# the Board Support Package includes software and hardware (sic!)
-> -# for which a separate license is needed...
-> +GPU_VIV_BIN_MX6Q_LICENSE_FILES = EULA
->  GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
->  
-> -GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
-> -GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
-> -
-> -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (gpu-viv-bin-mx6q-x.y.z)
-> -# The --force makes sure it doesn't fail if the source dir already exists.
-> -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info.
->  define GPU_VIV_BIN_MX6Q_EXTRACT_CMDS
-> -	(cd $(BUILD_DIR); \
-> -		sh $(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE) --force --auto-accept)
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE))
->  endef
->  
->  # Instead of building, we fix up the inconsistencies that exist
-> -- 
-> 1.9.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/freescale/p1010rdb/linux-3.13.config b/board/freescale/p1010rdb/linux-3.17.config
+similarity index 97%
+rename from board/freescale/p1010rdb/linux-3.13.config
+rename to board/freescale/p1010rdb/linux-3.17.config
+index b91d312..c48c4fb 100644
+--- a/board/freescale/p1010rdb/linux-3.13.config
++++ b/board/freescale/p1010rdb/linux-3.17.config
+@@ -57,11 +57,9 @@ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_INTELEXT=y
+ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_FSL_ELBC=y
+ CONFIG_MTD_NAND_FSL_IFC=y
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_NBD=y
+ CONFIG_BLK_DEV_RAM=y
+@@ -71,7 +69,6 @@ CONFIG_BLK_DEV_SD=y
+ CONFIG_CHR_DEV_ST=y
+ CONFIG_BLK_DEV_SR=y
+ CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_MULTI_LUN=y
+ CONFIG_SCSI_LOGGING=y
+ CONFIG_ATA=y
+ CONFIG_SATA_FSL=y
+diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
+index b73ef4d..b119f9a 100644
+--- a/board/freescale/p1010rdb/readme.txt
++++ b/board/freescale/p1010rdb/readme.txt
+@@ -45,7 +45,7 @@ your newly built U-Boot.
+ 
+ 2. Program the DTB to NOR flash
+ 
+-    => tftp $loadaddr p1010rdb.dtb
++    => tftp $loadaddr p1010rdb-pa.dtb
+     => erase 0xee000000 +$filesize
+     => cp.b $loadaddr 0xee000000 $filesize
+ 
+diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
+index d3e0538..b784f39 100644
+--- a/configs/freescale_p1010rdb_pa_defconfig
++++ b/configs/freescale_p1010rdb_pa_defconfig
+@@ -11,18 +11,18 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.17.4"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.4"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.17.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
+ 
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
