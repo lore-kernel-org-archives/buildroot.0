@@ -1,34 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Nov 2014 22:52:34 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.113
-In-Reply-To: <20141127203225.354da3e1@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 27 Nov 2014 20:32:25 +0100")
-References: <1417096808-22464-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141127203225.354da3e1@free-electrons.com>
-Message-ID: <87ppc8nwf1.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Nov 2014 22:52:59 +0100
+Subject: [Buildroot] [V2] botan: fix static build
+In-Reply-To: <1417070107-20043-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Thu, 27 Nov 2014 07:35:07 +0100")
+References: <1417070107-20043-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87lhmwnwec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Dear Vicente Olivert Riera,
- > On Thu, 27 Nov 2014 14:00:08 +0000, Vicente Olivert Riera wrote:
- >> - Bump version to 2.02.113
- >> - Update the hash value
- >> 
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> ---
- >> package/lvm2/lvm2.hash |    2 +-
- >> package/lvm2/lvm2.mk   |    2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
+ > see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
+ > this commit reverts the previous commit 84047394ed6ad08adb9f59a9022553a327eef040
+ > which disables static build in Config.in
 
- > Applied, thanks.
+ > the option --no-autoload prevents the use of the function dlopen.
 
-NIT: It's handy if you explicitly state that the patches are applied to the
-next branch.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
