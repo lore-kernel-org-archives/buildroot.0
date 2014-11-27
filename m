@@ -1,42 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 27 Nov 2014 14:00:08 +0000
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.113
-Message-ID: <1417096808-22464-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 27 Nov 2014 15:05:07 +0000
+Subject: [Buildroot] [PATCH] Add a defconfig for MIPS Creator CI20
+Message-ID: <1417100707-23700-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.02.113
-- Update the hash value
+MIPS Creator CI20 is a Linux and Android development system from
+MIPS/Imagination Technologies. It incorporates an Ingenic JZ4780 SoC
+which includes a 1.2GHz dual core MIPS32 processor and Imagination
+PowerVR SGX540 GPU.
+
+More information can be found at:
+  http://elinux.org/MIPS_Creator_CI20
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/ci20_defconfig |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+ create mode 100644 configs/ci20_defconfig
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 3d02e83..adffcdb 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5 1f4033b750f68b68e9bd66d3661a2c3f LVM2.2.02.112.tgz
-+md5  f71aa8e64030f3d2a3fdabcc36e45094  LVM2.2.02.113.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index bef22fb..48a3116 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.112
-+LVM2_VERSION = 2.02.113
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+new file mode 100644
+index 0000000..88930fa
+--- /dev/null
++++ b/configs/ci20_defconfig
+@@ -0,0 +1,10 @@
++BR2_mipsel=y
++BR2_mips_32r2=y
++# BR2_MIPS_SOFT_FLOAT is not set
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/MIPS/CI20_linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ci20-v3.0.8"
++BR2_LINUX_KERNEL_DEFCONFIG="ci20"
 -- 
 1.7.1
