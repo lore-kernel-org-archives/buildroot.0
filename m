@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:30 +0100
-Subject: [Buildroot] [PATCHv2 72/74] inadyn: install configuration file
+Date: Thu, 27 Nov 2014 22:57:31 +0100
+Subject: [Buildroot] [PATCHv2 73/74] mpd: install configuration file
 	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-73-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-74-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,25 +18,24 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/inadyn/inadyn.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/mpd/mpd.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 73d95db..b002f94 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -20,10 +20,8 @@ INADYN_CONF_OPTS += --disable-ssl
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index b44285b..5176dc4 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -228,10 +228,7 @@ MPD_CONF_OPTS += --disable-wavpack
  endif
  
- define INADYN_INSTALL_SAMPLE_CONFIG
--	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
--		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
--			$(TARGET_DIR)/etc/inadyn.conf; \
+ define MPD_INSTALL_EXTRA_FILES
+-	@if [ ! -f $(TARGET_DIR)/etc/mpd.conf ]; then \
+-		$(INSTALL) -D package/mpd/mpd.conf \
+-			$(TARGET_DIR)/etc/mpd.conf; \
 -	fi
-+	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
-+		$(TARGET_DIR)/etc/inadyn.conf
++	$(INSTALL) -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
  endef
- INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
  
+ MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
 -- 
 2.1.0
