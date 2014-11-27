@@ -1,27 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Nov 2014 13:53:18 +0100
-Subject: [Buildroot] [git commit] evemu: add hash
-Message-ID: <20141201104836.B362F7FCD8@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 20:34:50 +0100
+Subject: [Buildroot] [git commit] git: bump version to 2.2.0
+Message-ID: <20141201104839.222237FB2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3784634fb9de205919a7ded9278e90761daa374b
+commit: http://git.buildroot.net/buildroot/commit/?id=46ede997d4d152d47cdd6f7af47bdc1cf4ed96b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+- Bump version to 2.2.0
+- Update the hash value
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/evemu/evemu.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-new file mode 100644
-index 0000000..99668b7
---- /dev/null
-+++ b/package/evemu/evemu.hash
-@@ -0,0 +1,2 @@
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2014-November/001125.html
-+sha256 0c87360882751356e9f977ebf7438c00fe97deb232ac725dd86e5ba78203ee97 evemu-2.1.0.tar.xz
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 3f8db5f..33fed89 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  fe1b06aefa73e8d86cbd352523fc0950b8904ae2ec47085b22b7880f45de6f57  git-2.1.3.tar.xz
++sha256  3b87774672bbf35b4d33991dc5119d4eff47c3679e27185312a2b8b36fdad314  git-2.2.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index f338438..9e931a1 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.1.3
++GIT_VERSION = 2.2.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
