@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:54 +0100
-Subject: [Buildroot] [PATCHv2 36/74] rp-pppoe: don't install man pages
+Date: Thu, 27 Nov 2014 22:56:58 +0100
+Subject: [Buildroot] [PATCHv2 40/74] ebtables: add error handling to for loop
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-37-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-41-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rp-pppoe/rp-pppoe.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/ebtables/ebtables.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index b17086b..6827628 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -21,9 +21,6 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
- 	for ff in $(RP_PPPOE_TARGET_FILES); do \
- 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 578c3ae..23c4628 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -28,7 +28,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
+ 		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
+ 		do \
+ 		$(INSTALL) -m 0755 -D $${so} \
+-			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
++			$(TARGET_DIR)/lib/ebtables/`basename $${so}` || exit 1; \
  	done
--	for ff in $(RP_PPPOE_TARGET_FILES); do \
--		$(INSTALL) -m 644 -D $(RP_PPPOE_DIR)/man/$$ff.8 $(TARGET_DIR)/usr/share/man/man8/$$ff.8; \
--	done
- endef
- 
- $(eval $(autotools-package))
+ 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
+ 		$(TARGET_DIR)/sbin/ebtables
 -- 
 2.1.0
