@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:50 +0100
-Subject: [Buildroot] [PATCHv2 32/74] iostat: don't install man page
+Date: Thu, 27 Nov 2014 22:56:57 +0100
+Subject: [Buildroot] [PATCHv2 39/74] coreutils: add error handling to for
+	loop
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-33-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-40-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iostat/iostat.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/coreutils/coreutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-index 8610f8f..2080e56 100644
---- a/package/iostat/iostat.mk
-+++ b/package/iostat/iostat.mk
-@@ -17,8 +17,6 @@ endef
- 
- define IOSTAT_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
--	$(INSTALL) -D $(IOSTAT_DIR)/iostat.8 \
--		$(TARGET_DIR)/usr/share/man/man8/iostat.8
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 391d2cd..fa2db04 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -101,7 +101,7 @@ endif
+ define COREUTILS_POST_INSTALL
+ 	# some things go in root rather than usr
+ 	for f in $(COREUTILS_BIN_PROGS); do \
+-		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
++		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+ 	done
+ 	# link for archaic shells
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
 -- 
 2.1.0
