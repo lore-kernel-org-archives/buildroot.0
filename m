@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:47 +0100
-Subject: [Buildroot] [PATCHv2 29/74] wipe: don't install man pages
+Date: Thu, 27 Nov 2014 22:56:46 +0100
+Subject: [Buildroot] [PATCHv2 28/74] snowball-init: use
+	<pkg>_INSTALL_INIT_SYSV mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-30-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-29-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wipe/wipe.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/snowball-init/snowball-init.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
-index 4deabab..ee4682c 100644
---- a/package/wipe/wipe.mk
-+++ b/package/wipe/wipe.mk
-@@ -13,7 +13,6 @@ WIPE_LICENSE_FILES = LICENSE
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+index d71f347..40acdd6 100644
+--- a/package/snowball-init/snowball-init.mk
++++ b/package/snowball-init/snowball-init.mk
+@@ -9,7 +9,7 @@ SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
+ SNOWBALL_INIT_LICENSE = BSD-4c
+ SNOWBALL_INIT_LICENSE_FILES = debian/copyright
  
- define WIPE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/wipe $(TARGET_DIR)/usr/bin/wipe
--	$(INSTALL) -D $(@D)/wipe.1 $(TARGET_DIR)/usr/share/man/man1/wipe.1
+-define SNOWBALL_INIT_INSTALL_TARGET_CMDS
++define SNOWBALL_INIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
  endef
  
- $(eval $(autotools-package))
 -- 
 2.1.0
