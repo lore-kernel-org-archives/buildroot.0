@@ -1,106 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Nov 2014 00:21:16 +0100
-Subject: [Buildroot] [PATCH v3 2/3] toolchain-helpers: factorise the
- arch sysroot symlink creation
-In-Reply-To: <1415919806-13005-3-git-send-email-romain.naour@openwide.fr>
-References: <1415919806-13005-1-git-send-email-romain.naour@openwide.fr>
- <1415919806-13005-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141127232116.GP3900@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Nov 2014 20:51:50 -0300
+Subject: [Buildroot] [PATCH -next] flac: unbreak powerpc e500 support
+Message-ID: <1417132310-22933-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Add patch to avoid the enable/disable-debug options from unsetting -g
+from CFLAGS in an incorrect way which breaks -mfloat-gprs=X (translit to
+-mfloatprs=X).
+It's possible to affect other less common CFLAGS with a '-g' in any
+position.
 
-On 2014-11-14 00:03 +0100, Romain Naour spake thusly:
-> The part of copy_toolchain_sysroot function that create the symlink in the
-> staging directory will be used in two different place in the following patch.
-> So factorize this part in a new function called
-> toolchain_create_arch_sysroot_symlink.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> ---
-> v3: no change
-> v2: new	patch
-> ---
->  toolchain/helpers.mk | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 3121da4..7d7af5f 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -83,6 +83,20 @@ copy_toolchain_lib_root = \
->  \
->  	echo -n
->  
-> +# Calculate the symlink's depth by counting the number of slashs.
-> +# Then create the symlink to arch sysroot.
-> +# $1: arch specific subdirectory in the sysroot
-> +toolchain_create_arch_sysroot_symlink = \
-> +	ARCH_SUBDIR="$(strip $1)"; \
+Upstream status: sent different patch (configure.ac) - to avoid
+autoreconfiguring.
 
-I think I have some problems parsing that...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-configure-don-t-try-to-unset-g-from-CFLAGS.txt | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
 
-  - $(strip $1) is makefile syntax,
-  - $1 is the first argument to the macro,
-  - $1 is set to literally $${ARCH_SUBDIR} at the time of the call.
-
-So, you're calling $(strip) which is evaluated by make on a shell
-variable, set in the shell to something that is already $(strip)ed.
-
-I think this assignement should just go away.
-
-Unless I'm too tired and I missed something...
-
-> +	mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-> +	relpath="./" ; \
-> +	nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
-> +	for slash in `seq 1 $${nbslashs}` ; do \
-> +		relpath=$${relpath}"../" ; \
-> +	done ; \
-> +	ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-> +	echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}"
-> +
->  #
->  # Copy the full external toolchain sysroot directory to the staging
->  # dir. The operation of this function is rendered a little bit
-> @@ -148,14 +162,7 @@ copy_toolchain_sysroot = \
->  		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
->  			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
->  		fi ; \
-> -		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-> -		relpath="./" ; \
-> -		nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
-> -		for slash in `seq 1 $${nbslashs}` ; do \
-> -			relpath=$${relpath}"../" ; \
-> -		done ; \
-> -		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-> -		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
-> +		$(call toolchain_create_arch_sysroot_symlink,$${ARCH_SUBDIR}) ; \
-
-Here you are doing the call with something that is supposed to be
-a shell variable.
-
-Care to review this part, and provide an explanation of what I missed?
-
-Regards,
-Yann E. MORIN.
-
->  	fi ; \
->  	if test -n "$${SUPPORT_LIB_DIR}" ; then \
->  		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
-> -- 
-> 1.9.3
-> 
-
+diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
+new file mode 100644
+index 0000000..3aff5a8
+--- /dev/null
++++ b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
+@@ -0,0 +1,27 @@
++The sed expression is wrong, any flags with '-g' in any position gets
++zapped, for example:
++
++-mfloat-gprs=double (for powerpc e500) -> -mfloatprs=double.
++
++Which gives build errors and is perfectly valid in real use scenarios to
++switch from e500v1 (single precision) code to e500v2 (double precision) code.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura flac-1.3.1.orig/configure flac-1.3.1/configure
++--- flac-1.3.1.orig/configure	2014-11-27 20:43:29.921303105 -0300
+++++ flac-1.3.1/configure	2014-11-27 20:45:33.460250179 -0300
++@@ -19870,11 +19870,10 @@
++ 
++ if test "x$debug" = xtrue; then
++ 	CPPFLAGS="-DDEBUG $CPPFLAGS"
++-	CFLAGS=$(echo "$CFLAGS" | sed 's/-g//')
++-	CFLAGS="-g $CFLAGS"
+++	CFLAGS=$(echo "-g $CFLAGS")
++ else
++ 	CPPFLAGS="-DNDEBUG $CPPFLAGS"
++-	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//;s/-g//')
+++	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//')
++ 	CFLAGS="-O3 -funroll-loops $CFLAGS"
++ fi
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.4
