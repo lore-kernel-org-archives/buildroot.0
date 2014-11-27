@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:36 +0100
-Subject: [Buildroot] [PATCHv2 18/74] mongoose: use <pkg>_INSTALL_INIT_SYSV
+Date: Thu, 27 Nov 2014 22:56:38 +0100
+Subject: [Buildroot] [PATCHv2 20/74] olsr: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mongoose/mongoose.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/olsr/olsr.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 35e4b43..7a5d356 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -29,6 +29,9 @@ endef
- define MONGOOSE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
- 		$(TARGET_DIR)/usr/sbin/mongoose
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 1051d18..539386d 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -31,9 +31,12 @@ define OLSR_INSTALL_TARGET_CMDS
+ 			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
+ 			prefix="/usr" install ; \
+ 	done
+-	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
+ 	test -r $(TARGET_DIR)/etc/olsrd.conf || \
+ 		$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
+ endef
+ 
++define OLSR_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
 +endef
 +
-+define MONGOOSE_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
- 		$(TARGET_DIR)/etc/init.d/S85mongoose
- endef
+ $(eval $(generic-package))
 -- 
 2.1.0
