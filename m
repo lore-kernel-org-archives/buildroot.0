@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:18 +0100
-Subject: [Buildroot] [PATCHv2 60/74] stunnel: install configuration file
-	unconditionally
+Date: Thu, 27 Nov 2014 22:57:19 +0100
+Subject: [Buildroot] [PATCHv2 61/74] input-event-daemon: install
+	configuration file unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-61-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-62-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,24 +18,24 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.mk | 5 ++---
+ package/input-event-daemon/input-event-daemon.mk | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index ac2963e..3d0596d 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -19,9 +19,8 @@ STUNNEL_CONF_OPTS += --disable-systemd
- endif
- 
- define STUNNEL_INSTALL_CONF
--	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
--		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
--			$(TARGET_DIR)/etc/stunnel/stunnel.conf
-+	$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
-+		$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index 0bafdc4..67b8cc4 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -18,9 +18,8 @@ endef
+ define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 -D $(@D)/input-event-daemon \
+ 		$(TARGET_DIR)/usr/bin/input-event-daemon
+-	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
+-		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
+-			$(TARGET_DIR)/etc/input-event-daemon.conf
++	$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
++		$(TARGET_DIR)/etc/input-event-daemon.conf
  endef
  
+ define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
 -- 
 2.1.0
