@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:42 +0100
-Subject: [Buildroot] [PATCHv2 24/74] openvpn: use <pkg>_INSTALL_INIT_SYSV
+Date: Thu, 27 Nov 2014 22:56:43 +0100
+Subject: [Buildroot] [PATCHv2 25/74] tinyhttpd: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-25-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-26-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvpn/openvpn.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/tinyhttpd/tinyhttpd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index e0dba35..68f7d97 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -50,6 +50,9 @@ endif
- define OPENVPN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
- 		$(TARGET_DIR)/usr/sbin/openvpn
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index ec47fd9..0934b71 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -16,9 +16,12 @@ endef
+ 
+ define TINYHTTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/httpd $(TARGET_DIR)/usr/sbin/tinyhttpd
++	mkdir -p $(TARGET_DIR)/var/www
 +endef
 +
-+define OPENVPN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/openvpn/S60openvpn \
- 		$(TARGET_DIR)/etc/init.d/S60openvpn
++define TINYHTTPD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/tinyhttpd/S85tinyhttpd \
+ 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
+-	mkdir -p $(TARGET_DIR)/var/www
  endef
+ 
+ $(eval $(generic-package))
 -- 
 2.1.0
