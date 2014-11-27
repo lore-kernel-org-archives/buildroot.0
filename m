@@ -1,57 +1,45 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 27 Nov 2014 07:35:07 +0100
-Subject: [Buildroot] [V2] botan: fix static build
-Message-ID: <1417070107-20043-1-git-send-email-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Nov 2014 08:44:36 +0200
+Subject: [Buildroot] [PATCH] system/device_table.txt: add /dev/null entry
+Message-ID: <0a2f80f7ceb3272bf534f85fbf5030df36cae191.1417070676.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see http://autobuild.buildroot.net/results/2d1/2d1563e253b669b45c9df449c5b3a750c04a43dc/
+/dev/null is the "console" for system startup commands listed in the default
+/etc/inittab. These commands fail when /dev/null isn't there. This breaks
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV, as /proc and /sys are not mounted when
+mdev runs, causing the following errors:
 
-this commit reverts the previous commit 84047394ed6ad08adb9f59a9022553a327eef040
-which disables static build in Config.in
+can't open /dev/null: No such file or directory
+can't open /dev/null: No such file or directory
+can't open /dev/null: No such file or directory
+can't open /dev/null: No such file or directory
+can't open /dev/null: No such file or directory
+can't open /dev/null: No such file or directory
+...
+Starting mdev...
+/etc/init.d/S10mdev: line 19: can't create /proc/sys/kernel/hotplug: nonexistent directory
+mdev: /sys/class: No such file or directory
 
-the option --no-autoload prevents the use of the function dlopen.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/botan/Config.in | 5 ++---
- package/botan/botan.mk  | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ system/device_table.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index c82a77f..733dc89 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -10,12 +10,11 @@ config BR2_PACKAGE_BOTAN
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
--	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
- 	help
- 	  Botan is a crypto library for C++
- 
- 	  http://botan.randombit.net
- 
--comment "botan needs a toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
-+comment "botan needs a toolchain w/ C++, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index ae0e02d..2e47eb6 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -20,7 +20,7 @@ BOTAN_CONF_OPTS = \
- 	--cc-bin="$(TARGET_CXX)"
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
--	BOTAN_CONF_OPTS += --disable-shared
-+	BOTAN_CONF_OPTS += --disable-shared --no-autoload
- endif
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
+diff --git a/system/device_table.txt b/system/device_table.txt
+index 8e7dbd218a2c..7b92d23b822f 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -7,6 +7,7 @@
+ #
+ # <name>				<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
+ /dev					d	755	0	0	-	-	-	-	-
++/dev/null				c	666	0	0	1	3	0	0	-
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+ /root					d	700	0	0	-	-	-	-	-
 -- 
-2.1.0
+2.1.3
