@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 23:00:29 +0100
-Subject: [Buildroot] [PATCH 1/1] openocd bump to 0.8.0
-In-Reply-To: <20141029232830.69136c03@free-electrons.com>
-References: <1412801633-3394-1-git-send-email-claudio.laurita@integrazionetotale.it>
- <20141008231040.57406af4@free-electrons.com>
- <5435C245.1090100@integrazionetotale.it>
- <20141009095735.529fd5ca@free-electrons.com>
- <543655B0.8030304@integrazionetotale.it>
- <20141009132830.77fc2c47@free-electrons.com>
- <5436A616.1090407@integrazionetotale.it>
- <20141029232830.69136c03@free-electrons.com>
-Message-ID: <20141127230029.1af39411@free-electrons.com>
+Date: Thu, 27 Nov 2014 23:01:36 +0100
+Subject: [Buildroot] [PATCH 1/2] mesa3d xa option cleanup
+In-Reply-To: <20141011231237.3789e98c@free-electrons.com>
+References: <1413040999-3426-1-git-send-email-micro1183@gmail.com>
+ <20141011231237.3789e98c@free-electrons.com>
+Message-ID: <20141127230136.2029bcf3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Claudio,
+Hello,
 
-Any news about your OpenOCD patch? A bump to 0.8.0 would be very
-welcome.
+Do you intend to resubmit an updated version of your two patches:
 
-Thanks!
+  http://patchwork.ozlabs.org/patch/398857/
+  http://patchwork.ozlabs.org/patch/398858/
+
+We are waiting for those updated versions (with a better commit log +
+Signed-off-by line with a real name) to commit your patches.
+
+Thanks a lot!
 
 Thomas
 
-On Wed, 29 Oct 2014 23:28:30 +0100, Thomas Petazzoni wrote:
-> Dear Claudio Laurita,
+On Sat, 11 Oct 2014 23:12:37 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Thu, 09 Oct 2014 17:13:26 +0200, Claudio Laurita wrote:
+> This patch needs a description. Also, we do not accept patches
+> contributed by persons only identified by pseudonyms, so please use
+> your full name to sign off the patch.
 > 
-> > I was aware of the external option, but the actual BR package script for 
-> > jimtcl suffers exactly of the same problem. No patches applied there and 
-> > no autotools-package called. A custom configure command and 
-> > generic-package management. But no way to build a static library if 
-> > --enable-shared is globally adopted.
-> > 
-> > Anyway, I collected enough information to start working on release 2. 
-> > Just need some spare hours, now.
+> The title of the patch should also have "<package>:" as the prefix, so:
 > 
-> Do you think you will have some time to work on an updated patch to
-> bump OpenOCD to 0.8.0 ?
+> 	mesa3d: cleanup the handling of the XA option
 > 
-> Thanks!
+> On Sat, 11 Oct 2014 17:23:18 +0200, lf wrote:
+> > Signed-off-by: lf <micro1183@gmail.com>
+> > ---
+> >  package/mesa3d/Config.in | 5 +++++
+> >  package/mesa3d/mesa3d.mk | 2 +-
+> >  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> Thanks,
 > 
 > Thomas
 
