@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:46 +0100
-Subject: [Buildroot] [PATCHv2 28/74] snowball-init: use
-	<pkg>_INSTALL_INIT_SYSV mechanism
+Date: Thu, 27 Nov 2014 22:56:49 +0100
+Subject: [Buildroot] [PATCHv2 31/74] tree: don't install man page
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-29-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-32-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We don't support installing documentation on the target, so there's no
+point in having explicit code to do so.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/snowball-init/snowball-init.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tree/tree.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
-index d71f347..40acdd6 100644
---- a/package/snowball-init/snowball-init.mk
-+++ b/package/snowball-init/snowball-init.mk
-@@ -9,7 +9,7 @@ SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
- SNOWBALL_INIT_LICENSE = BSD-4c
- SNOWBALL_INIT_LICENSE_FILES = debian/copyright
+diff --git a/package/tree/tree.mk b/package/tree/tree.mk
+index 922deb8..83ea472 100644
+--- a/package/tree/tree.mk
++++ b/package/tree/tree.mk
+@@ -16,8 +16,6 @@ endef
  
--define SNOWBALL_INIT_INSTALL_TARGET_CMDS
-+define SNOWBALL_INIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
+ define TREE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/tree $(TARGET_DIR)/usr/bin/tree
+-	$(INSTALL) -D -m 0644 $(@D)/doc/tree.1 \
+-		$(TARGET_DIR)/usr/share/man/man1/tree.1
  endef
  
+ $(eval $(generic-package))
 -- 
 2.1.0
