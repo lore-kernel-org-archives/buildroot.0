@@ -1,42 +1,88 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 27 Nov 2014 12:12:21 +0000
-Subject: [Buildroot] [PATCH] git: bump version to 2.2.0
-Message-ID: <1417090341-37518-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 27 Nov 2014 12:15:03 +0000
+Subject: [Buildroot] [PATCH] toolchain/external: fix building the
+	wrapper on MIPS
+In-Reply-To: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr>
+References: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <547715C7.7000304@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.2.0
-- Update the hash value
+Dear Yann E. MORIN,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 11/26/2014 06:09 PM, Yann E. MORIN wrote:
+> Some crazy folks use MIPS machines as build machines. ;-)
+> 
+> On MIPS, the only acceptable hash-style is 'sysv', because the MIPS ABI
+> defines that the GOT ordering to be the same as the symbols ordering,
+> while GNU hash requires symbols to be sorted by their hash.
+> 
+> Looking at binutils' code, it seems that only MIPS suffers from that
+> limitation.
+> 
+> Currently, we force the toolchain wrapper to be linked with both hash
+> styles, which breaks on MIPS.
+> 
+> So, fix that but singling out MIPS, and use sysv in that case, and both
+> otherwise.
+> 
+> Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> Absolutely untested on MIPS, as I do not have any MIPS machine powerfull
+> enough to do a build. Vicente will have to test it, since he is that
+> crazy one using MIPS build machines! ;-)
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index da3718c..51e0af5 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -625,6 +625,15 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
+>  endef
+>  endif
+>  
+> +# We use --hash-style=both to increase the compatibility of
+> +# the generated binary with older platforms, except for MIPS,
+> +# where the only acceptable hash style is 'sysv'
+> +ifeq ($(findstring mips,$(HOSTARCH)),mips)
+> +TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = sysv
+> +else
+> +TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = both
+> +endif
+> +
+>  # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+>  # symlinks for everything else. Skip gdb symlink when we are building our
+>  # own gdb to prevent two gdb's in output/host/usr/bin.
+> @@ -647,9 +656,8 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+>  			;; \
+>  		esac; \
+>  	done ;
+> -	# We use --hash-style=both to increase the compatibility of
+> -	# the generated binary with older platforms
+> -	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s -Wl,--hash-style=both \
+> +	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) \
+> +		-s -Wl,--hash-style=$(TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE) \
+>  		toolchain/toolchain-external/ext-toolchain-wrapper.c \
+>  		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
+>  endef
+> 
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 3f8db5f..33fed89 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  fe1b06aefa73e8d86cbd352523fc0950b8904ae2ec47085b22b7880f45de6f57  git-2.1.3.tar.xz
-+sha256  3b87774672bbf35b4d33991dc5119d4eff47c3679e27185312a2b8b36fdad314  git-2.2.0.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index f338438..9e931a1 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.1.3
-+GIT_VERSION = 2.2.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+I have tried your patch in a MIPS box and it works like a charm :-)
+
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Cheers,
 -- 
-1.7.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
