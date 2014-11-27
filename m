@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:53 +0100
-Subject: [Buildroot] [PATCHv2 35/74] gnupg: don't both removing a man page
+Date: Thu, 27 Nov 2014 22:56:50 +0100
+Subject: [Buildroot] [PATCHv2 32/74] iostat: don't install man page
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-33-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The target-finalize target in the main Makefile removes
-$(TARGET_DIR)/usr/share/man entirely, so there's no point in having
-some package specific logic to remove man pages.
+We don't support installing documentation on the target, so there's no
+point in having explicit code to do so.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnupg/gnupg.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/iostat/iostat.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index e7c403a..c0bf88c 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -39,8 +39,7 @@ endif
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index 8610f8f..2080e56 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -17,8 +17,6 @@ endef
  
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
--	rm -f $(TARGET_DIR)/usr/bin/gpgv \
--		$(TARGET_DIR)/usr/share/man/man1/gpgv.1
-+	rm -f $(TARGET_DIR)/usr/bin/gpgv
+ define IOSTAT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
+-	$(INSTALL) -D $(IOSTAT_DIR)/iostat.8 \
+-		$(TARGET_DIR)/usr/share/man/man8/iostat.8
  endef
- GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGV
- endif
+ 
+ $(eval $(generic-package))
 -- 
 2.1.0
