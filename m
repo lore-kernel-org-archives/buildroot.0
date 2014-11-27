@@ -1,61 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:00:17 +0100
-Subject: [Buildroot] [git commit branch/next] libfslparser: Use
+Date: Thu, 27 Nov 2014 21:59:58 +0100
+Subject: [Buildroot] [git commit branch/next] firmware-imx: Use
 	self-extractible helper
-Message-ID: <20141127212615.616637FF41@busybox.osuosl.org>
+Message-ID: <20141127212614.BF5ED7FF41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90a40b6bdf8af5922197d757c7b4b4422263cbef
+commit: http://git.buildroot.net/buildroot/commit/?id=1d0bbe9a6912f149b4ffb156c151c5e093cbfcc9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: remove unneeded comment.]
+[Thomas: remove useless comment about looking in freescale-imx.mk.]
 
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslparser/libfslparser.mk |   22 +++-------------------
- 1 files changed, 3 insertions(+), 19 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk |   15 +++------------
+ 1 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index d52b151..706a10e 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -7,30 +7,14 @@
- LIBFSLPARSER_VERSION = 3.0.11
- LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
-+LIBFSLPARSER_INSTALL_STAGING = YES
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index d26b31c..f5ed353 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -7,27 +7,18 @@
+ FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
 +
- LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
--# This is a legal minefield: the EULA in the bin file specifies that
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+-FIRMWARE_IMX_LICENSE_FILES = licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
+-# This is a legal minefield: the EULA specifies that
 -# the Board Support Package includes software and hardware (sic!)
 -# for which a separate license is needed...
- LIBFSLPARSER_REDISTRIBUTE = NO
++FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
+ FIRMWARE_IMX_REDISTRIBUTE = NO
  
--LIBFSLPARSER_INSTALL_STAGING = YES
--
+ FIRMWARE_IMX_BLOBS = ath6k sdma vpu
+ 
 -# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (libfslparser-x.y.z)
+-# to extract in the correct directory (firmware-imx-x.y.z)
 -# The --force makes sure it doesn't fail if the source dir already exists.
 -# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since the EULA in the bin file differs from the one in the tar file,
--# extract the one from the bin file as well.
- define LIBFSLPARSER_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(LIBFSLPARSER_SOURCE) > $(@D)/EULA
+-# because we have legal-info.
+ define FIRMWARE_IMX_EXTRACT_CMDS
 -	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(LIBFSLPARSER_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLPARSER_SOURCE))
+-	sh $(DL_DIR)/$(FIRMWARE_IMX_SOURCE) --force --auto-accept
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(FIRMWARE_IMX_SOURCE))
  endef
  
- # The Makefile installs several versions of the libraries, but we only
+-
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware
+ 	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
