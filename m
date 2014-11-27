@@ -1,75 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Nov 2014 22:13:26 +0100
-Subject: [Buildroot] [git commit] python-certifi: add new package
-Message-ID: <20141201104838.2391D7FC49@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 20:27:53 +0100
+Subject: [Buildroot] [git commit] flac: bump to version 1.3.1
+Message-ID: <20141201104839.1000C7FB2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f898daf3a17cf8d7860c23e928d55ac5957ea609
+commit: http://git.buildroot.net/buildroot/commit/?id=9739d823db6c23f35377dccfb672493b805cddab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+All patches upstream and add hash file.
+
+[Thomas: remove AUTORECONF = YES, since we no longer have any
+patches touching configure.ac/Makefile.am]
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |    1 +
- package/python-certifi/Config.in           |    6 ++++++
- package/python-certifi/python-certifi.hash |    2 ++
- package/python-certifi/python-certifi.mk   |   14 ++++++++++++++
- 4 files changed, 23 insertions(+), 0 deletions(-)
+ package/flac/flac-01-fix-altivec-logic.patch |   32 --------------------------
+ package/flac/flac.hash                       |    2 +
+ package/flac/flac.mk                         |    3 +-
+ 3 files changed, 3 insertions(+), 34 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9188041..a8128ff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -483,6 +483,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
+diff --git a/package/flac/flac-01-fix-altivec-logic.patch b/package/flac/flac-01-fix-altivec-logic.patch
+deleted file mode 100644
+index a1ac8a1..0000000
+--- a/package/flac/flac-01-fix-altivec-logic.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From d65ede3e874c79348efc85cf3a185c170046c4c8 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 4 Dec 2013 13:31:28 -0300
+-Subject: [PATCH] Fix Makefile.am altivec logic
+-
+-Besides SPE (FSL e500v? cores) there are other powerpc processors
+-that don't support altivec instructions so only enable them when it's
+-100% sure that the target has it.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Erik de Castro Lopo <erikd@mega-nerd.com>
+----
+- src/libFLAC/Makefile.am | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/src/libFLAC/Makefile.am b/src/libFLAC/Makefile.am
+-index 247e33c..258de40 100644
+---- a/src/libFLAC/Makefile.am
+-+++ b/src/libFLAC/Makefile.am
+-@@ -47,8 +47,7 @@ CPUCFLAGS = -faltivec -force_cpusubtype_ALL -DFLAC__NO_ASM
+- else
+- # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
+- CPUCFLAGS =
+--if FLaC__CPU_PPC_SPE
+--else
+-+if FLaC__USE_ALTIVEC
+- CPUCFLAGS += -maltivec -mabi=altivec
+- endif
+- #@@@ PPC optimizations temporarily disabled
+--- 
+-1.8.3.2
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
 new file mode 100644
-index 0000000..9390b4f
+index 0000000..6a0da11
 --- /dev/null
-+++ b/package/python-certifi/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CERTIFI
-+	bool "python-certifi"
-+	help
-+	  Python package for providing Mozilla's CA Bundle.
-+
-+	  https://pypi.python.org/pypi/certifi
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-new file mode 100644
-index 0000000..9277f51
---- /dev/null
-+++ b/package/python-certifi/python-certifi.hash
++++ b/package/flac/flac.hash
 @@ -0,0 +1,2 @@
-+sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
-+sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-new file mode 100644
-index 0000000..f142041
---- /dev/null
-+++ b/package/python-certifi/python-certifi.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-certifi
-+#
-+################################################################################
-+
-+PYTHON_CERTIFI_VERSION = 14.05.14
-+PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
-+PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-+PYTHON_CERTIFI_SETUP_TYPE = setuptools
-+PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
-+PYTHON_CERTIFI_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++# From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
++sha256	4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c56c	flac-1.3.1.tar.xz
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index daedd47..b819064 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-FLAC_VERSION = 1.3.0
++FLAC_VERSION = 1.3.1
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+-FLAC_AUTORECONF = YES
+ FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ FLAC_LICENSE = Xiph BSD-like (libFLAC), GPLv2+ (tools), LGPLv2.1+ (other libraries)
+ FLAC_LICENSE_FILES = COPYING.Xiph COPYING.GPL COPYING.LGPL
