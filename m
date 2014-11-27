@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:37 +0100
-Subject: [Buildroot] [PATCHv2 19/74] gpsd: use <pkg>_INSTALL_INIT_SYSV
+Date: Thu, 27 Nov 2014 22:56:39 +0100
+Subject: [Buildroot] [PATCHv2 21/74] pango: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-22-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also makes the installation init script unconditional.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gpsd/gpsd.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/pango/pango.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 7dc27e8..5092b38 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -206,10 +206,11 @@ define GPSD_INSTALL_TARGET_CMDS
- 		$(SCONS) \
- 		$(GPSD_SCONS_OPTS) \
- 		install)
--	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
--		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
--		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
--	fi
-+endef
-+
-+define GPSD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd
-+	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 6e340f4..63cfae3 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -61,11 +61,9 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXRENDER),yy)
+ 	PANGO_CONF_OPTS += --with-xft
+ endif
+ 
+-define PANGO_INSTALL_INITSCRIPT
++define PANGO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/pango/S25pango \
+ 		$(TARGET_DIR)/etc/init.d/S25pango
  endef
  
- define GPSD_INSTALL_STAGING_CMDS
+-PANGO_POST_INSTALL_TARGET_HOOKS += PANGO_INSTALL_INITSCRIPT
+-
+ $(eval $(autotools-package))
 -- 
 2.1.0
