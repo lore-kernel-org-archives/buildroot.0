@@ -1,43 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:49:23 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: Add support for
-	liburiparser
-Message-ID: <20141201104838.ECF0680009@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 20:20:55 +0100
+Subject: [Buildroot] [git commit] configs/p1010rdb: bump to kernel 3.17.4
+Message-ID: <20141201104839.07C487FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9e2be0cd80e4318db60312bdf6abab472219048
+commit: http://git.buildroot.net/buildroot/commit/?id=9245aef2b54f381a90c74ccdfad8aaf2ebe8e6a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ .../{linux-3.13.config => linux-3.17.config}       |    3 ---
+ board/freescale/p1010rdb/readme.txt                |    2 +-
+ configs/freescale_p1010rdb_pa_defconfig            |   10 +++++-----
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 10c9201..f593b3f 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -32,12 +32,18 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- TVHEADEND_DEPENDENCIES += libiconv
- endif
+diff --git a/board/freescale/p1010rdb/linux-3.13.config b/board/freescale/p1010rdb/linux-3.17.config
+similarity index 97%
+rename from board/freescale/p1010rdb/linux-3.13.config
+rename to board/freescale/p1010rdb/linux-3.17.config
+index b91d312..c48c4fb 100644
+--- a/board/freescale/p1010rdb/linux-3.13.config
++++ b/board/freescale/p1010rdb/linux-3.17.config
+@@ -57,11 +57,9 @@ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_INTELEXT=y
+ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_FSL_ELBC=y
+ CONFIG_MTD_NAND_FSL_IFC=y
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_NBD=y
+ CONFIG_BLK_DEV_RAM=y
+@@ -71,7 +69,6 @@ CONFIG_BLK_DEV_SD=y
+ CONFIG_CHR_DEV_ST=y
+ CONFIG_BLK_DEV_SR=y
+ CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_MULTI_LUN=y
+ CONFIG_SCSI_LOGGING=y
+ CONFIG_ATA=y
+ CONFIG_SATA_FSL=y
+diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
+index b73ef4d..b119f9a 100644
+--- a/board/freescale/p1010rdb/readme.txt
++++ b/board/freescale/p1010rdb/readme.txt
+@@ -45,7 +45,7 @@ your newly built U-Boot.
  
-+ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
-+TVHEADEND_DEPENDENCIES += liburiparser
-+TVHEADEND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)"
-+endif
-+
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 2. Program the DTB to NOR flash
  
- define TVHEADEND_CONFIGURE_CMDS
- 	(cd $(@D);						\
- 		$(TARGET_CONFIGURE_OPTS)			\
- 		$(TARGET_CONFIGURE_ARGS)			\
-+		$(TVHEADEND_CONF_ENV)				\
- 		./configure					\
- 			--prefix=/usr				\
- 			--arch="$(ARCH)"			\
+-    => tftp $loadaddr p1010rdb.dtb
++    => tftp $loadaddr p1010rdb-pa.dtb
+     => erase 0xee000000 +$filesize
+     => cp.b $loadaddr 0xee000000 $filesize
+ 
+diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
+index d3e0538..b784f39 100644
+--- a/configs/freescale_p1010rdb_pa_defconfig
++++ b/configs/freescale_p1010rdb_pa_defconfig
+@@ -11,18 +11,18 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.17.4"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.4"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.17.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
+ 
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
