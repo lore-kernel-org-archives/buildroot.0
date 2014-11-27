@@ -1,123 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 19:08:55 +0100
-Subject: [Buildroot] [PATCH v2 1/2] pkg-generic.mk: reinstall targets
-In-Reply-To: <1417063727-4420-2-git-send-email-rdkehn@yahoo.com>
-References: <1417063727-4420-1-git-send-email-rdkehn@yahoo.com>
- <1417063727-4420-2-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20141127180855.GE3900@free.fr>
+Date: Thu, 27 Nov 2014 19:13:23 +0100
+Subject: [Buildroot] [PATCH v2 1/9] freescale-imx: Add helper to extract
+ self-extractible binaries
+In-Reply-To: <1416432642-26005-2-git-send-email-jezz@sysmic.org>
+References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
+ <1416432642-26005-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20141127181323.GF3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doug, All,
+J?r?me, All,
 
-On 2014-11-26 22:48 -0600, Doug Kehn spake thusly:
-> Add reinstall targets for host, target, staging, and images variants.
-> clean-for-reinstall targets added to remove package
-> .stamp_target_install file to allow package install.  Additionally, when
-> OVERRIDE_SRCDIR is provided, .stamp_rsynced is removed to ensure pakcage
-> is up to date before reinstalling.
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+On 2014-11-19 22:30 +0100, J?r?me Pouiller spake thusly:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/pkg-generic.mk | 28 +++++++++++++++++++++++++---
->  1 file changed, 25 insertions(+), 3 deletions(-)
+>  package/freescale-imx/freescale-imx.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9643a30..3c25778 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -480,34 +480,51 @@ $(1):			$(1)-install
+> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+> index c52fc11..ba5a786 100644
+> --- a/package/freescale-imx/freescale-imx.mk
+> +++ b/package/freescale-imx/freescale-imx.mk
+> @@ -7,4 +7,25 @@
+>  FREESCALE_IMX_VERSION = 3.10.17-1.0.0
+>  FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
 >  
->  ifeq ($$($(2)_TYPE),host)
->  $(1)-install:	        $(1)-install-host
-> +$(1)-reinstall:		$(1)-reinstall-host
->  else
->  $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
-> +$(1)-reinstall:		$(1)-reinstall-staging $(1)-reinstall-target $(1)-reinstall-images
->  endif
->  
->  ifeq ($$($(2)_INSTALL_TARGET),YES)
-> -$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
-> +$(1)-install-target:			$$($(2)_TARGET_INSTALL_TARGET)
+> +# Helper for self-extracting binaries distributed by Freescale.
+> +# The --force makes sure it doesn't fail if the source dir already exists.
+> +# The --auto-accept skips the license check - not needed for us
+> +# because we have legal-info
+> +# Since there's a EULA in the bin file, extract it
+> +# If you use this macro, don't forget to add "EULA" to LICENSE_FILES and set
+> +# REDISTRIBUTE to "NO". Indeed, this is a legal minefield:
+> +# the EULA specifies that the Board Support Package includes software
+> +# and hardware (sic!) for which a separate license is needed...
 
-This patch is mixing style cleanups with actual new code.
-I'm not opposed to the cleanups, except they should be part of a
-seoarate patch.
+It would have been great to add to the comment the expected argument:
+
+    # $(1): full path to the archive file
+
+Otherwise:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +$(1)-reinstall-target:			$(1)-clean-for-reinstall-target $$($(2)_TARGET_INSTALL_TARGET)
-> +$(1)-clean-for-reinstall-target:	$(1)-clean-for-reinstall
-> +			rm -f $$($(2)_TARGET_INSTALL_TARGET)
->  $$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
->  else
->  $(1)-install-target:
-> +$(1)-reinstall-target:
->  endif
->  
->  ifeq ($$($(2)_INSTALL_STAGING),YES)
->  $(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
-> +$(1)-reinstall-staging:			$(1)-clean-for-reinstall-staging $$($(2)_TARGET_INSTALL_STAGING)
-> +$(1)-clean-for-reinstall-staging:	$(1)-clean-for-reinstall
-> +			rm -f $$($(2)_TARGET_INSTALL_STAGING)
->  $$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
->  # Some packages use install-staging stuff for install-target
->  $$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
->  else
->  $(1)-install-staging:
-> +$(1)-reinstall-staging:
->  endif
->  
->  ifeq ($$($(2)_INSTALL_IMAGES),YES)
-> -$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
-> -$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
-> +$(1)-install-images:			$$($(2)_TARGET_INSTALL_IMAGES)
-> +$(1)-reinstall-images:			$(1)-clean-for-reinstall-images $$($(2)_TARGET_INSTALL_IMAGES)
-> +$(1)-clean-for-reinstall-images:	$(1)-clean-for-reinstall
-> +			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
-> +$$($(2)_TARGET_INSTALL_IMAGES):		$$($(2)_TARGET_BUILD)
->  else
->  $(1)-install-images:
-> +$(1)-reinstall-images:
->  endif
->  
->  $(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
-> +$(1)-reinstall-host:      	$(1)-clean-for-reinstall-host $$($(2)_TARGET_INSTALL_HOST)
-> +$(1)-clean-for-reinstall-host:	$(1)-clean-for-reinstall
-> +			rm -f $$($(2)_TARGET_INSTALL_HOST)
->  $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
->  
->  $(1)-build:		$$($(2)_TARGET_BUILD)
-> @@ -545,6 +562,8 @@ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
->  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
->  
->  $(1)-source:		$$($(2)_TARGET_SOURCE)
+> +define FREESCALE_IMX_EXTRACT_HELPER
+> +	awk 'BEGIN      { start = 0; } \
+> +	     /^EOEULA/  { start = 0; } \
+> +	                { if (start) print; } \
+> +	     /<<EOEULA/ { start = 1; }' \
+> +	    $(1) > $(@D)/EULA
+> +	cd $(@D) && sh $(1) --force --auto-accept;
+> +	find $(@D)/$(basename $(1)) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
+> +	rmdir $(@D)/$(basename $(1))
+> +endef
 > +
-> +$(1)-clean-for-reinstall:
->  else
->  # In the package override case, the sequence of steps
->  #  source, by rsyncing
-> @@ -563,6 +582,9 @@ $(1)-extract:		$(1)-rsync
->  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->  
->  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
 > +
-> +$(1)-clean-for-reinstall:
-> +			rm -f $$($(2)_TARGET_RSYNC)
->  endif
->  
->  $(1)-show-depends:
+>  include $(sort $(wildcard package/freescale-imx/*/*.mk))
 > -- 
 > 1.9.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
