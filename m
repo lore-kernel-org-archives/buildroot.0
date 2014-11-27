@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:24 +0100
-Subject: [Buildroot] [PATCHv2 66/74] nss-mdns: install configuration file
+Date: Thu, 27 Nov 2014 22:57:25 +0100
+Subject: [Buildroot] [PATCHv2 67/74] ifplugd: install configuration files
 	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-67-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-68-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,31 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nss-mdns/nss-mdns.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/ifplugd/ifplugd.mk | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-index 9ec9c1a..9a6c5a1 100644
---- a/package/nss-mdns/nss-mdns.mk
-+++ b/package/nss-mdns/nss-mdns.mk
-@@ -10,9 +10,7 @@ NSS_MDNS_LICENSE = LGPLv2.1+
- NSS_MDNS_LICENSE_FILES = LICENSE
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 3d0736a..b24c79d 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -21,14 +21,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ endif
  
- define NSS_MDNS_INSTALL_CONFIG
--	if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
--		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
+ define IFPLUGD_INSTALL_FIXUP
+-	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+-		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+-		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
 -	fi
-+	$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
- 	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
- 		$(TARGET_DIR)/etc/nsswitch.conf
+-	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
+-		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+-			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+-	fi
++	$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
++	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
++	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
++		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
  endef
+ 
+ IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
 -- 
 2.1.0
