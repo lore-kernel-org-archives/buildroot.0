@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:15 +0100
-Subject: [Buildroot] [PATCHv2 57/74] rpcbind: install init script
-	unconditionally
+Date: Thu, 27 Nov 2014 22:57:14 +0100
+Subject: [Buildroot] [PATCHv2 56/74] lighttpd: install init script and
+	config file unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-58-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-57-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,24 +18,73 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpcbind/rpcbind.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/lighttpd/lighttpd.mk | 46 +++++++++++++++-----------------------------
+ 1 file changed, 16 insertions(+), 30 deletions(-)
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index b7c2261..55de3fc 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -17,9 +17,8 @@ RPCBIND_DEPENDENCIES += libtirpc
- RPCBIND_CONF_OPTS += --with-rpcuser=root
- 
- define RPCBIND_INSTALL_INIT_SYSV
--	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
--		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
--			$(TARGET_DIR)/etc/init.d/S30rpcbind
-+	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
-+		$(TARGET_DIR)/etc/init.d/S30rpcbind
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index ef98298..804bdd4 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -62,44 +62,30 @@ endif
+ define LIGHTTPD_INSTALL_CONFIG
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
+-			$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/modules.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
+-			$(TARGET_DIR)/etc/lighttpd/modules.conf
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
+-			$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
+-			$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
+-			$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
+-
+-	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf ] || \
+-		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
+-			$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
++		$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
++		$(TARGET_DIR)/etc/lighttpd/modules.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
++		$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
++		$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
++		$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
++	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
++		$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
  endef
  
- $(eval $(autotools-package))
+ LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
+ 
+ define LIGHTTPD_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
+-		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
+-			$(TARGET_DIR)/etc/init.d/S50lighttpd
++	$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
++		$(TARGET_DIR)/etc/init.d/S50lighttpd
+ endef
+ 
+ define LIGHTTPD_INSTALL_INIT_SYSTEMD
+-	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
+-		$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
+-			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
++	$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
++		$(TARGET_DIR)/etc/systemd/system/lighttpd.service
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 
 -- 
 2.1.0
