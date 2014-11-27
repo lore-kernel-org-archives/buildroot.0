@@ -1,79 +1,41 @@
-From: Kantanu Kumar Mohapatra <kantanukumar@gmail.com>
-Date: Thu, 27 Nov 2014 12:59:12 +0530
-Subject: [Buildroot] ping and nslookup doesn't work on device
-In-Reply-To: <20141126220110.15e1b74e@free-electrons.com>
-References: <CAJO1S93csWgVZsGX_Qj5HOCgnphzS1R2A_Oaj-RVbmRohkNH7A@mail.gmail.com>
- <20141126220110.15e1b74e@free-electrons.com>
-Message-ID: <CAJO1S93o=EXpZEAp71FeQXsKFwTshPdBfa1E4e-fopakib1ZLA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Nov 2014 08:56:40 +0100
+Subject: [Buildroot] [PATCH] system/device_table.txt: add /dev/null entry
+In-Reply-To: <0a2f80f7ceb3272bf534f85fbf5030df36cae191.1417070676.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 27 Nov 2014 08:44:36 +0200")
+References: <0a2f80f7ceb3272bf534f85fbf5030df36cae191.1417070676.git.baruch@tkos.co.il>
+Message-ID: <87fvd5oz47.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-This is resolv.conf in my device.
+ > /dev/null is the "console" for system startup commands listed in the default
+ > /etc/inittab. These commands fail when /dev/null isn't there. This breaks
+ > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV, as /proc and /sys are not mounted when
+ > mdev runs, causing the following errors:
 
-# cat /etc/resolv.conf
-; DNS configuration
-search private_domain
-nameserver 223.1.4.3
-nameserver 8.8.8.8
-#
-# ping 223.1.4.3
-PING 223.1.4.3 (223.1.4.3): 56 data bytes
-ping: sendto: Network is unreachable
-#
-# ping 8.8.8.8
-PING 8.8.8.8 (8.8.8.8): 56 data bytes
-ping: sendto: Network is unreachable
-#
+ > can't open /dev/null: No such file or directory
+ > can't open /dev/null: No such file or directory
+ > can't open /dev/null: No such file or directory
+ > can't open /dev/null: No such file or directory
+ > can't open /dev/null: No such file or directory
+ > can't open /dev/null: No such file or directory
+ > ...
 
-The resolve.conf is same for one of my buildroot-201.05 device, which is
-able to ping and do nslookup.
+Hmm, is this on a kernel without devtmpfs? Devtmpfs is expected to be
+used with mdev (and we automatically enable it if you build a kernel
+with BR).
 
-Thanks,
-Kantanu
+> Starting mdev...
+ > /etc/init.d/S10mdev: line 19: can't create /proc/sys/kernel/hotplug: nonexistent directory
+ > mdev: /sys/class: No such file or directory
 
-On Thu, Nov 27, 2014 at 2:31 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+So you don't have /proc and /sys? Is this also a custom rootfs skeleton
+/ inittab? With the default one we do a mount -a before running /etc/init.d/rcS.
 
-> Dear Kantanu Kumar Mohapatra,
->
-> On Wed, 26 Nov 2014 20:01:50 +0530, Kantanu Kumar Mohapatra wrote:
->
-> > I am using an ARM 926EJS target board with buildroot-2014.02 to build the
-> > code.
-> > I am running linux-2.6.39 kernel.
-> >
-> > Ping and nslookup not working on my device.
-> >
-> > # ping google.com
-> > ping: *bad address 'google.com <http://google.com/>'*
-> >
-> > # ping 192.168.1.104
-> > PING 192.168.1.104 (192.168.1.104): 56 data bytes
-> > 64 bytes from 192.168.1.104: seq=0 ttl=64 time=3.657 ms
-> > 64 bytes from 192.168.1.104: seq=1 ttl=64 time=0.402 ms
-> > 64 bytes from 192.168.1.104: seq=2 ttl=64 time=0.366 ms
-> > --- 192.168.1.104 ping statistics ---
-> > 3 packets transmitted, 3 packets received, 0% packet loss
-> > round-trip min/avg/max = 0.366/1.475/3.657 ms
-> >
-> > # nslookup google.com
-> > nslookup: *can't resolve 'google.com <http://google.com/>*'
->
-> Do you have valid things in /etc/resolv.conf ?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141127/5aeefe0f/attachment.html>
+-- 
+Bye, Peter Korsgaard
