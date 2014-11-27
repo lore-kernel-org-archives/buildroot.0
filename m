@@ -1,90 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 20:20:55 +0100
-Subject: [Buildroot] [git commit branch/next] configs/p1010rdb: bump to
-	kernel 3.17.4
-Message-ID: <20141127192823.CA1707FF3F@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 20:27:53 +0100
+Subject: [Buildroot] [git commit branch/next] flac: bump to version 1.3.1
+Message-ID: <20141127192823.D26A47FB1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9245aef2b54f381a90c74ccdfad8aaf2ebe8e6a7
+commit: http://git.buildroot.net/buildroot/commit/?id=9739d823db6c23f35377dccfb672493b805cddab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+All patches upstream and add hash file.
+
+[Thomas: remove AUTORECONF = YES, since we no longer have any
+patches touching configure.ac/Makefile.am]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{linux-3.13.config => linux-3.17.config}       |    3 ---
- board/freescale/p1010rdb/readme.txt                |    2 +-
- configs/freescale_p1010rdb_pa_defconfig            |   10 +++++-----
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ package/flac/flac-01-fix-altivec-logic.patch |   32 --------------------------
+ package/flac/flac.hash                       |    2 +
+ package/flac/flac.mk                         |    3 +-
+ 3 files changed, 3 insertions(+), 34 deletions(-)
 
-diff --git a/board/freescale/p1010rdb/linux-3.13.config b/board/freescale/p1010rdb/linux-3.17.config
-similarity index 97%
-rename from board/freescale/p1010rdb/linux-3.13.config
-rename to board/freescale/p1010rdb/linux-3.17.config
-index b91d312..c48c4fb 100644
---- a/board/freescale/p1010rdb/linux-3.13.config
-+++ b/board/freescale/p1010rdb/linux-3.17.config
-@@ -57,11 +57,9 @@ CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_AMDSTD=y
- CONFIG_MTD_PHYSMAP_OF=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_FSL_ELBC=y
- CONFIG_MTD_NAND_FSL_IFC=y
--CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_NBD=y
- CONFIG_BLK_DEV_RAM=y
-@@ -71,7 +69,6 @@ CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_ST=y
- CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_MULTI_LUN=y
- CONFIG_SCSI_LOGGING=y
- CONFIG_ATA=y
- CONFIG_SATA_FSL=y
-diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
-index b73ef4d..b119f9a 100644
---- a/board/freescale/p1010rdb/readme.txt
-+++ b/board/freescale/p1010rdb/readme.txt
-@@ -45,7 +45,7 @@ your newly built U-Boot.
+diff --git a/package/flac/flac-01-fix-altivec-logic.patch b/package/flac/flac-01-fix-altivec-logic.patch
+deleted file mode 100644
+index a1ac8a1..0000000
+--- a/package/flac/flac-01-fix-altivec-logic.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From d65ede3e874c79348efc85cf3a185c170046c4c8 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 4 Dec 2013 13:31:28 -0300
+-Subject: [PATCH] Fix Makefile.am altivec logic
+-
+-Besides SPE (FSL e500v? cores) there are other powerpc processors
+-that don't support altivec instructions so only enable them when it's
+-100% sure that the target has it.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Erik de Castro Lopo <erikd@mega-nerd.com>
+----
+- src/libFLAC/Makefile.am | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/src/libFLAC/Makefile.am b/src/libFLAC/Makefile.am
+-index 247e33c..258de40 100644
+---- a/src/libFLAC/Makefile.am
+-+++ b/src/libFLAC/Makefile.am
+-@@ -47,8 +47,7 @@ CPUCFLAGS = -faltivec -force_cpusubtype_ALL -DFLAC__NO_ASM
+- else
+- # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
+- CPUCFLAGS =
+--if FLaC__CPU_PPC_SPE
+--else
+-+if FLaC__USE_ALTIVEC
+- CPUCFLAGS += -maltivec -mabi=altivec
+- endif
+- #@@@ PPC optimizations temporarily disabled
+--- 
+-1.8.3.2
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+new file mode 100644
+index 0000000..6a0da11
+--- /dev/null
++++ b/package/flac/flac.hash
+@@ -0,0 +1,2 @@
++# From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
++sha256	4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c56c	flac-1.3.1.tar.xz
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index daedd47..b819064 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
- 2. Program the DTB to NOR flash
- 
--    => tftp $loadaddr p1010rdb.dtb
-+    => tftp $loadaddr p1010rdb-pa.dtb
-     => erase 0xee000000 +$filesize
-     => cp.b $loadaddr 0xee000000 $filesize
- 
-diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
-index d3e0538..b784f39 100644
---- a/configs/freescale_p1010rdb_pa_defconfig
-+++ b/configs/freescale_p1010rdb_pa_defconfig
-@@ -11,18 +11,18 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
- 
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.17.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
- 
- # Serial port config
- BR2_TARGET_GENERIC_GETTY=y
+-FLAC_VERSION = 1.3.0
++FLAC_VERSION = 1.3.1
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+-FLAC_AUTORECONF = YES
+ FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ FLAC_LICENSE = Xiph BSD-like (libFLAC), GPLv2+ (tools), LGPLv2.1+ (other libraries)
+ FLAC_LICENSE_FILES = COPYING.Xiph COPYING.GPL COPYING.LGPL
