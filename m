@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 22:28:46 +0100
-Subject: [Buildroot] [PATCH 1/4 v2] package/libtirpc: rename patches
+Date: Thu, 27 Nov 2014 22:28:48 +0100
+Subject: [Buildroot] [PATCH 3/4 v2] package/nfs-utils: rename patches
 In-Reply-To: <cover.1417123680.git.yann.morin.1998@free.fr>
 References: <cover.1417123680.git.yann.morin.1998@free.fr>
-Message-ID: <c3979d8b4c369e675dd1975ca04afb0fba0a81eb.1417123680.git.yann.morin.1998@free.fr>
+Message-ID: <20a61c88c9f634faccbe68de35df09f79078f944.1417123680.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...port.patch => 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch} | 0
- ...ch => 0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch} | 0
- ...-IPv6-support-optional.patch => 0003-Make-IPv6-support-optional.patch} | 0
- ...sources.patch => 0004-Add-rpcgen-program-from-nfs-utils-sources.patch} | 0
- ...ch => 0005-Automatically-generate-XDR-header-files-from-.x-sour.patch} | 0
- ...ch => 0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} | 0
- 6 files changed, 0 insertions(+), 0 deletions(-)
- rename package/libtirpc/{libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch => 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch} (100%)
- rename package/libtirpc/{libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch => 0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch} (100%)
- rename package/libtirpc/{libtirpc-0004-Make-IPv6-support-optional.patch => 0003-Make-IPv6-support-optional.patch} (100%)
- rename package/libtirpc/{libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch => 0004-Add-rpcgen-program-from-nfs-utils-sources.patch} (100%)
- rename package/libtirpc/{libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch => 0005-Automatically-generate-XDR-header-files-from-.x-sour.patch} (100%)
- rename package/libtirpc/{libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch => 0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} (100%)
+ ...tch => 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} | 0
+ ...2-Patch-taken-from-Gentoo.patch => 0002-Patch-taken-from-Gentoo.patch} | 0
+ ...of-strchr.patch => 0003-Switch-legacy-index-in-favour-of-strchr.patch} | 0
+ ...-0004-fix-build-with-uClibc.patch => 0004-fix-build-with-uClibc.patch} | 0
+ ...ch => 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch} | 0
+ ...ch => 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch} | 0
+ ...def-h-for-NULL.patch => 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} | 0
+ 7 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/nfs-utils/{nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch => 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0002-Patch-taken-from-Gentoo.patch => 0002-Patch-taken-from-Gentoo.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch => 0003-Switch-legacy-index-in-favour-of-strchr.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0004-fix-build-with-uClibc.patch => 0004-fix-build-with-uClibc.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch => 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch => 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch} (100%)
+ rename package/nfs-utils/{nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch => 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} (100%)
 
-diff --git a/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+diff --git a/package/nfs-utils/nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch b/package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-rename to package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-diff --git a/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch b/package/libtirpc/0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
+rename from package/nfs-utils/nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
+rename to package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
+diff --git a/package/nfs-utils/nfs-utils-0002-Patch-taken-from-Gentoo.patch b/package/nfs-utils/0002-Patch-taken-from-Gentoo.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-rename to package/libtirpc/0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-diff --git a/package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch b/package/libtirpc/0003-Make-IPv6-support-optional.patch
+rename from package/nfs-utils/nfs-utils-0002-Patch-taken-from-Gentoo.patch
+rename to package/nfs-utils/0002-Patch-taken-from-Gentoo.patch
+diff --git a/package/nfs-utils/nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch b/package/nfs-utils/0003-Switch-legacy-index-in-favour-of-strchr.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch
-rename to package/libtirpc/0003-Make-IPv6-support-optional.patch
-diff --git a/package/libtirpc/libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0004-Add-rpcgen-program-from-nfs-utils-sources.patch
+rename from package/nfs-utils/nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch
+rename to package/nfs-utils/0003-Switch-legacy-index-in-favour-of-strchr.patch
+diff --git a/package/nfs-utils/nfs-utils-0004-fix-build-with-uClibc.patch b/package/nfs-utils/0004-fix-build-with-uClibc.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch
-rename to package/libtirpc/0004-Add-rpcgen-program-from-nfs-utils-sources.patch
-diff --git a/package/libtirpc/libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
+rename from package/nfs-utils/nfs-utils-0004-fix-build-with-uClibc.patch
+rename to package/nfs-utils/0004-fix-build-with-uClibc.patch
+diff --git a/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch b/package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch
-rename to package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-diff --git a/package/libtirpc/libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch b/package/libtirpc/0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
+rename from package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+rename to package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+diff --git a/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch b/package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
 similarity index 100%
-rename from package/libtirpc/libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-rename to package/libtirpc/0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
+rename from package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+rename to package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+diff --git a/package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch b/package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+similarity index 100%
+rename from package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+rename to package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
 -- 
 1.9.1
