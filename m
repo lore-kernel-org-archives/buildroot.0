@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:57 +0100
-Subject: [Buildroot] [PATCHv2 39/74] coreutils: add error handling to for
-	loop
+Date: Thu, 27 Nov 2014 22:56:55 +0100
+Subject: [Buildroot] [PATCHv2 37/74] rp-pppoe: bail out of installation fails
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-40-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-38-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add an "|| exit 1" in the installation loop, otherwise if one of the
+file fails to install, the build doesn't abort.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/coreutils/coreutils.mk | 2 +-
+ package/rp-pppoe/rp-pppoe.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 391d2cd..fa2db04 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -101,7 +101,7 @@ endif
- define COREUTILS_POST_INSTALL
- 	# some things go in root rather than usr
- 	for f in $(COREUTILS_BIN_PROGS); do \
--		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
-+		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 6827628..4e17f2d 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -19,7 +19,7 @@ RP_PPPOE_CONF_ENV = \
+ 
+ define RP_PPPOE_INSTALL_TARGET_CMDS
+ 	for ff in $(RP_PPPOE_TARGET_FILES); do \
+-		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
++		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
  	done
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
+ endef
+ 
 -- 
 2.1.0
