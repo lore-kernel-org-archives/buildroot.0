@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:35 +0100
-Subject: [Buildroot] [PATCHv2 17/74] netatalk: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
+Date: Thu, 27 Nov 2014 22:56:32 +0100
+Subject: [Buildroot] [PATCHv2 14/74] input-event-daemon: use
+	<pkg>_INSTALL_INIT_SYSV mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,27 @@ Also makes the installation init script unconditional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netatalk/netatalk.mk | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ package/input-event-daemon/input-event-daemon.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 5ea55c2..6c1b640 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -50,12 +50,9 @@ else
- 	NETATALK_CONF_OPTS += --disable-cups
- endif
- 
--define NETATALK_INSTALL_EXTRA_FILES
--	[ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
--		$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
--			$(TARGET_DIR)/etc/init.d/S50netatalk
-+define NETATALK_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
-+		$(TARGET_DIR)/etc/init.d/S50netatalk
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index 534fe90..0bafdc4 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -21,9 +21,11 @@ define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
+ 	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
+ 		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
+ 			$(TARGET_DIR)/etc/input-event-daemon.conf
+-	[ -f $(TARGET_DIR)/etc/init.d/S99input-event-daemon ] || \
+-		$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
+-			$(TARGET_DIR)/etc/init.d/S99input-event-daemon
++endef
++
++define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
++		$(TARGET_DIR)/etc/init.d/S99input-event-daemon
  endef
  
--NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
--
- $(eval $(autotools-package))
+ $(eval $(generic-package))
 -- 
 2.1.0
