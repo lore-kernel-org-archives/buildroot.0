@@ -1,80 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Nov 2014 19:41:49 -0300
-Subject: [Buildroot] [PATCH] skeleton: make /run a proper
-	directory/filesystem
-Message-ID: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Nov 2014 23:25:40 +0100
+Subject: [Buildroot] [git commit] package/libtirpc: rename patches
+Message-ID: <20141127224642.109747FF3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Making /var/run and /run symlinks to /tmp is bad since the underlying
-tmpfs filesystem is mode 1777 which leads to possible security attack
-vectors via badly owned/mask-mode pidfiles and state files residing there.
+commit: http://git.buildroot.net/buildroot/commit/?id=5acbbad05cfccc86236657750a57157ec58b1c1b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So make /run a proper directory with /var/run symlinked to it.
-Eventually all startup scripts and state info should be pointed to /run
-directly as per the linux fhs and good practice.
-
-Add a tmpfs filesystem entry for /run so that busybox inittab, systemv
-inittab and systemd automount mounts it there to avoid breaking the
-system.
-
-While at it fix inconsistent spacing in /etc/fstab by using tabs and
-drop the "static file system information" header whatever that means.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/skeleton/etc/fstab  | 17 ++++++++---------
- system/skeleton/run        |  1 -
- system/skeleton/run/.empty |  0
- system/skeleton/var/run    |  2 +-
- 4 files changed, 9 insertions(+), 11 deletions(-)
- delete mode 120000 system/skeleton/run
- create mode 100644 system/skeleton/run/.empty
+ ...ble-parts-of-TIRPC-requiring-NIS-support.patch} |    0
+ ...ut-RPC-support-does-not-install-rpcent.h.patch} |    0
+ ...patch => 0003-Make-IPv6-support-optional.patch} |    0
+ ...dd-rpcgen-program-from-nfs-utils-sources.patch} |    0
+ ...y-generate-XDR-header-files-from-.x-sour.patch} |    0
+ ...-files-needed-to-build-rpcbind-on-top-of.patch} |    0
+ 6 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/system/skeleton/etc/fstab b/system/skeleton/etc/fstab
-index e000aad..2b418a0 100644
---- a/system/skeleton/etc/fstab
-+++ b/system/skeleton/etc/fstab
-@@ -1,9 +1,8 @@
--# /etc/fstab: static file system information.
--#
--# <file system> <mount pt>     <type>	<options>         <dump> <pass>
--/dev/root       /              ext2	rw,noauto         0      1
--proc		/proc	       proc     defaults	  0	 0
--devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
--tmpfs           /dev/shm       tmpfs    mode=0777         0      0
--tmpfs           /tmp           tmpfs    mode=1777         0      0
--sysfs		/sys	       sysfs    defaults	  0	 0
-+# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
-+/dev/root	/		ext2	rw,noauto	0	1
-+proc		/proc		proc	defaults	0	0
-+devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
-+tmpfs		/dev/shm	tmpfs	mode=0777	0	0
-+tmpfs		/tmp		tmpfs	mode=1777	0	0
-+tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
-+sysfs		/sys		sysfs	defaults	0	0
-diff --git a/system/skeleton/run b/system/skeleton/run
-deleted file mode 120000
-index 1c2f433..0000000
---- a/system/skeleton/run
-+++ /dev/null
-@@ -1 +0,0 @@
--tmp
-\ No newline at end of file
-diff --git a/system/skeleton/run/.empty b/system/skeleton/run/.empty
-new file mode 100644
-index 0000000..e69de29
-diff --git a/system/skeleton/var/run b/system/skeleton/var/run
-index 1431b0e..84ba55b 120000
---- a/system/skeleton/var/run
-+++ b/system/skeleton/var/run
-@@ -1 +1 @@
--../tmp
-\ No newline at end of file
-+../run
-\ No newline at end of file
--- 
-2.0.4
+Patch is too large, so refusing to show it
