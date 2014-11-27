@@ -1,32 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:39:11 +0100
-Subject: [Buildroot] [PATCH 3/4] gpu-amd-bin-mx51: install examples
-In-Reply-To: <1415375874-17331-4-git-send-email-jezz@sysmic.org>
-References: <1415375874-17331-1-git-send-email-jezz@sysmic.org>
- <1415375874-17331-4-git-send-email-jezz@sysmic.org>
-Message-ID: <20141127223911.1be14d24@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Nov 2014 22:47:43 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: fix building the
+	wrapper on MIPS
+In-Reply-To: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 26 Nov 2014 19:09:10 +0100")
+References: <1417025350-18199-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87tx1knwn4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Fri,  7 Nov 2014 16:57:53 +0100, J?r?me Pouiller wrote:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/freescale-imx/gpu-amd-bin-mx51/Config.in           | 5 +++++
->  package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk | 8 ++++++++
->  2 files changed, 13 insertions(+)
+ > Some crazy folks use MIPS machines as build machines. ;-)
+ > On MIPS, the only acceptable hash-style is 'sysv', because the MIPS ABI
+ > defines that the GOT ordering to be the same as the symbols ordering,
+ > while GNU hash requires symbols to be sorted by their hash.
 
-I am not sure that a separate patch is really needed for this, it could
-be part of the patch adding the package itself.
+ > Looking at binutils' code, it seems that only MIPS suffers from that
+ > limitation.
 
-Thanks,
+ > Currently, we force the toolchain wrapper to be linked with both hash
+ > styles, which breaks on MIPS.
 
-Thomas
+ > So, fix that but singling out MIPS, and use sysv in that case, and both
+
+s/but/by/
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
