@@ -1,44 +1,42 @@
-From: Andrew Parlane <andrewp@carallon.com>
-Date: Thu, 27 Nov 2014 12:05:18 +0000
-Subject: [Buildroot] Perf questions on a 3.10.17 kernel on IMX6
-Message-ID: <5477137E.4090303@carallon.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 27 Nov 2014 12:12:21 +0000
+Subject: [Buildroot] [PATCH] git: bump version to 2.2.0
+Message-ID: <1417090341-37518-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- Bump version to 2.2.0
+- Update the hash value
 
-I'm attempting to do some profiling of a QT5 application on an IMX6 
-running a 3.10.17 kernel, based of a boundary devices BSP. All built 
-through buildroot 2014.08
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Firstly to get perf to build I needed to apply a patch to 
-linux/tools/lib/lk/Makefile to get it to honour cross compiling. I found 
-the commit in the 3.12.33 branch of the kernel.org GIT. 
-https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/tools/lib/lk/Makefile?id=3c4797d46c14fa0c7cf733a77bd4b28875078b53
-
-Running "perf test -v" it doesn't look so happy. Output log here: 
-http://slexy.org/view/s21a2Nugr8
-
-I'm having problems getting debug symbols in the output. I've spent a 
-couple of days reading up on perf and trying various options. I can get 
-some kernel debug symbols, but nothing from userspace. I'm pretty sure 
-I've built my app with -Og -ggdb -fno-omit-frame-pointer -Wl,--build-id.
-
-If anyone has any suggestions, that would be useful.
-
-My other question is has anyone had any success recording on a target 
-environment and then analysing on the build machine? Allowing debug 
-symbols to be supplied only on the build machine? I got perf built for 
-the host using buildroot, it runs but I still don't see debug symbols, 
-and I can't see how to pass in a binary with debug symbols for it to use 
-(like you would using gdbserver on the target and gdb on the host).
-
-If anyone has any advice on using perf like this, it would be much 
-appreciated.
-
-Thanks,
-Andrew Parlane
-Carallon LTD.
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 3f8db5f..33fed89 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  fe1b06aefa73e8d86cbd352523fc0950b8904ae2ec47085b22b7880f45de6f57  git-2.1.3.tar.xz
++sha256  3b87774672bbf35b4d33991dc5119d4eff47c3679e27185312a2b8b36fdad314  git-2.2.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index f338438..9e931a1 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.1.3
++GIT_VERSION = 2.2.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
+-- 
+1.7.1
