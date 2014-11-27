@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:31 +0100
-Subject: [Buildroot] [PATCHv2 13/74] samba: use <pkg>_INSTALL_INIT_SYSV
+Date: Thu, 27 Nov 2014 22:56:33 +0100
+Subject: [Buildroot] [PATCHv2 15/74] ifplugd: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also makes the installation init script unconditional.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/ifplugd/ifplugd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index ec8e6ec..92bbe4e 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -176,17 +176,17 @@ ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
- SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
- endif
- 
--define SAMBA_INSTALL_INITSCRIPTS_CONFIG
--	# install start/stop script
--	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
--		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
--	fi
-+define SAMBA_INSTALL_CONFIG
- 	# install config
- 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
- 		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 398cff4..3d0736a 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -29,12 +29,15 @@ define IFPLUGD_INSTALL_FIXUP
+ 		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+ 			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
  	fi
++endef
++
++IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
++
++define IFPLUGD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+ 	# don't use bash for init script
+ 	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
  endef
  
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
-+
-+define SAMBA_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
-+endef
- 
+-IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+-
  $(eval $(autotools-package))
 -- 
 2.1.0
