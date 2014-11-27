@@ -1,39 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:29 +0100
-Subject: [Buildroot] [PATCHv2 11/74] gdk-pixbuf: use <pkg>_INSTALL_INIT_SYSV
+Date: Thu, 27 Nov 2014 22:56:31 +0100
+Subject: [Buildroot] [PATCHv2 13/74] samba: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also makes the installation init script unconditional.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/samba/samba.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 61e7ae9..0977d92 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -45,13 +45,11 @@ GDK_PIXBUF_DEPENDENCIES += \
- 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
- 	host-pkgconf libglib2
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index ec8e6ec..92bbe4e 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -176,17 +176,17 @@ ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+ endif
  
--define GDK_PIXBUF_POST_INSTALL_TWEAKS
-+define GDK_PIXBUF_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/gdk-pixbuf/S26gdk-pixbuf \
- 		$(TARGET_DIR)/etc/init.d/S26gdk-pixbuf
+-define SAMBA_INSTALL_INITSCRIPTS_CONFIG
+-	# install start/stop script
+-	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
+-		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
+-	fi
++define SAMBA_INSTALL_CONFIG
+ 	# install config
+ 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+ 		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
+ 	fi
  endef
  
--GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_POST_INSTALL_TWEAKS
--
- $(eval $(autotools-package))
+-SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
++SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
++
++define SAMBA_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
++endef
  
- HOST_GDK_PIXBUF_CONF_OPTS = \
+ $(eval $(autotools-package))
 -- 
 2.1.0
