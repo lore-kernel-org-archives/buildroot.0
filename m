@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:32 +0100
-Subject: [Buildroot] [PATCHv2 74/74] toolchain: install nssswitch.conf
-	configuration file unconditionally
-In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-75-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Nov 2014 22:58:34 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.113
+In-Reply-To: <87ppc8nwf1.fsf@dell.be.48ers.dk>
+References: <1417096808-22464-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20141127203225.354da3e1@free-electrons.com>
+ <87ppc8nwf1.fsf@dell.be.48ers.dk>
+Message-ID: <20141127225834.4495b58f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed, users should use a rootfs overlay or a post-build script
-instead of a custom skeleton to override files installed by Buildroot,
-so there is no point in having conditions when installing init scripts
-or configuration files.
+Peter,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Thu, 27 Nov 2014 22:52:34 +0100, Peter Korsgaard wrote:
 
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 3f9900b..0fb115b 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -3,12 +3,10 @@
- # TARGET_FINALIZE_HOOKS, to be applied just after all packages
- # have been built.
- 
--# Install default nsswitch.conf file if the skeleton doesn't provide it
-+# Install default nsswitch.conf file
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- define GLIBC_COPY_NSSWITCH_FILE
--	$(Q)if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
--		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
--	fi
-+	$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
- endef
- TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
- endif
+>  > Applied, thanks.
+> 
+> NIT: It's handy if you explicitly state that the patches are applied to the
+> next branch.
+
+Agreed, missed this detail in my notifications tonight, sorry about
+that.
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
