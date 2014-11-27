@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:28 +0100
-Subject: [Buildroot] [PATCHv2 10/74] stunnel: use the
-	<pkg>_INSTALL_INIT_SYSV mechanism
+Date: Thu, 27 Nov 2014 22:56:27 +0100
+Subject: [Buildroot] [PATCHv2 09/74] portmap: improve installation of
+	binaries
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
-the init script, we rename it to STUNNEL_INSTALL_CONF.
+This commit explicits the permissions with which executables are
+installed, and also makes sure that the build is aborted is one of the
+binary cannot be installed, instead of silently ignoring the error.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/portmap/portmap.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index dc56261..ac2963e 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -18,14 +18,17 @@ else
- STUNNEL_CONF_OPTS += --disable-systemd
- endif
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index d5d43bf..65ee551 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -22,7 +22,7 @@ endef
  
--define STUNNEL_INSTALL_CONF_SCRIPT
--	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+define STUNNEL_INSTALL_CONF
- 	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
- 		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
- 			$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+ define PORTMAP_INSTALL_TARGET_CMDS
+ 	for sbin in $(PORTMAP_SBINS); do \
+-		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
++		$(INSTALL) -D -m 0755 $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin || exit 1; \
+ 	done
  endef
  
--STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
-+STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
-+
-+define STUNNEL_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+endef
- 
- $(eval $(autotools-package))
 -- 
 2.1.0
