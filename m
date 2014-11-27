@@ -1,157 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Nov 2014 14:00:30 -0300
-Subject: [Buildroot] [PATCHv4 4/4] start-stop-daemon: new package
-In-Reply-To: <1417107630-14909-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417107630-14909-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1417107630-14909-5-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Nov 2014 18:46:28 +0100
+Subject: [Buildroot] [PATCH RFC] Makefile: from a defconfig file,
+ point to the corresponding board/ entry
+In-Reply-To: <1701350.dX4dIeyire@aquila>
+References: <1417043635-9055-1-git-send-email-yann.morin.1998@free.fr>
+ <1701350.dX4dIeyire@aquila>
+Message-ID: <20141127174628.GA3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't use the 1.17.x series because it has issues when
-cross-compiling.
+J?r?me, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in                                  |  3 ++
- .../0001-add-uclibc-alias-and-musl.patch           | 42 ++++++++++++++++++++++
- package/start-stop-daemon/Config.in                |  8 +++++
- package/start-stop-daemon/start-stop-daemon.hash   |  2 ++
- package/start-stop-daemon/start-stop-daemon.mk     | 36 +++++++++++++++++++
- 5 files changed, 91 insertions(+)
- create mode 100644 package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch
- create mode 100644 package/start-stop-daemon/Config.in
- create mode 100644 package/start-stop-daemon/start-stop-daemon.hash
- create mode 100644 package/start-stop-daemon/start-stop-daemon.mk
+On 2014-11-27 11:26 +0100, J?r?me Pouiller spake thusly:
+> On Thursday 27 November 2014 00:13:55 Yann E. MORIN wrote:
+> > This is an RFC!
+> > 
+> > When configuring Buildroot from a defconfig files, soem users complain
+> > it is non-obvious that the corresponding board documentattion is to be
+> > found in the board/ sub-directory.
+> > 
+> > So, deduce the board name from the defconfig file, look for a similarly
+> > named sub-dir of board (first level only), and if such a directory
+> > exists, print a message stating extra documentation for that board is to
+> > be found there.
+> 
+> What about introducing a BR2_BOARD_DIR configuration variable? This variable 
+> would have two functions:
+>    - May be used to locate other files (configs, overlays, etc...)
+>    - If defined, a help message is displayed when this defconfig is loaded.
 
-diff --git a/package/Config.in b/package/Config.in
-index ae365f0..ceda11d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1230,6 +1230,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/rsyslog/Config.in"
- endif
- 	source "package/smack/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	source "package/start-stop-daemon/Config.in"
-+endif
- 	source "package/supervisor/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/sysklogd/Config.in"
-diff --git a/package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch b/package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch
-new file mode 100644
-index 0000000..0b726d4
---- /dev/null
-+++ b/package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch
-@@ -0,0 +1,42 @@
-+Make linux-uclibcgnueabi an alias for linux-uclibceabi since it's
-+what we use in buildroot toolchains.
-+Also add support for musl libc which is a backport from 1.17.x with
-+a slight tweak for musleabi (non-hf).
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura dpkg-1.16.15.orig/ostable dpkg-1.16.15/ostable
-+--- dpkg-1.16.15.orig/ostable	2014-11-07 08:09:07.358304926 -0300
-++++ dpkg-1.16.15/ostable	2014-11-07 09:35:06.158580079 -0300
-+@@ -14,8 +14,10 @@
-+ # system part of the output of the GNU config.guess script.
-+ #
-+ # <Debian name>		<GNU name>		<config.guess regex>
-+-uclibceabi-linux	linux-uclibceabi	linux[^-]*-uclibceabi
-++uclibceabi-linux	linux-uclibceabi	linux[^-]*-uclibc.*eabi
-+ uclibc-linux		linux-uclibc		linux[^-]*-uclibc
-++musleabihf-linux	linux-musleabihf	linux[^-]*-musleabihf
-++musl-linux		linux-musl		linux[^-]*-musl[^-]*
-+ gnueabihf-linux		linux-gnueabihf		linux[^-]*-gnueabihf
-+ gnueabi-linux		linux-gnueabi		linux[^-]*-gnueabi
-+ gnuabin32-linux		linux-gnuabin32		linux[^-]*-gnuabin32
-+@@ -33,6 +35,6 @@
-+ bsd-netbsd		netbsd			netbsd[^-]*
-+ bsd-openbsd		openbsd			openbsd[^-]*
-+ sysv-solaris		solaris			solaris[^-]*
-+-uclibceabi-uclinux	uclinux-uclibceabi	uclinux[^-]*-uclibceabi
-++uclibceabi-uclinux	uclinux-uclibceabi	uclinux[^-]*-uclibc.*eabi
-+ uclibc-uclinux		uclinux-uclibc		uclinux[^-]*(-uclibc.*)?
-+ tos-mint		mint			mint[^-]*
-+diff -Nura dpkg-1.16.15.orig/triplettable dpkg-1.16.15/triplettable
-+--- dpkg-1.16.15.orig/triplettable	2014-11-07 08:09:07.345304482 -0300
-++++ dpkg-1.16.15/triplettable	2014-11-07 09:35:29.098364036 -0300
-+@@ -5,6 +5,8 @@
-+ # <Debian triplet>	<Debian arch>
-+ uclibceabi-linux-arm	uclibc-linux-armel
-+ uclibc-linux-<cpu>	uclibc-linux-<cpu>
-++musleabihf-linux-arm	musl-linux-armhf
-++musl-linux-<cpu>	musl-linux-<cpu>
-+ gnueabihf-linux-arm	armhf
-+ gnueabi-linux-arm	armel
-+ gnuabin32-linux-mips64el	mipsn32el
-diff --git a/package/start-stop-daemon/Config.in b/package/start-stop-daemon/Config.in
-new file mode 100644
-index 0000000..7d8eb34
---- /dev/null
-+++ b/package/start-stop-daemon/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_START_STOP_DAEMON
-+	bool "start-stop-daemon"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  start-stop-daemon is used to control the creation and termination
-+	  of system-level processes.
-+
-+	  https://tracker.debian.org/pkg/dpkg
-diff --git a/package/start-stop-daemon/start-stop-daemon.hash b/package/start-stop-daemon/start-stop-daemon.hash
-new file mode 100644
-index 0000000..e3ab29f
---- /dev/null
-+++ b/package/start-stop-daemon/start-stop-daemon.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.16.15.dsc
-+sha256	92bca9901ba2d9300be42f6de8dbea59b8367a918a2abeeb47d2176c9cf86b55	dpkg_1.16.15.tar.xz
-diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-new file mode 100644
-index 0000000..4e7a0da
---- /dev/null
-+++ b/package/start-stop-daemon/start-stop-daemon.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# start-stop-daemon
-+#
-+################################################################################
-+
-+# Debian start-stop-daemon is part of dpkg. Since start-stop-daemon is the only
-+# interesting tool in it, we call the buildroot package start-stop-daemon.
-+
-+START_STOP_DAEMON_VERSION = 1.16.15
-+START_STOP_DAEMON_SOURCE = dpkg_$(START_STOP_DAEMON_VERSION).tar.xz
-+START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20140616T044945Z/pool/main/d/dpkg
-+START_STOP_DAEMON_CONF_OPTS = \
-+	--disable-dselect \
-+	--disable-update-alternatives \
-+	--disable-install-info \
-+	--exec-prefix=/
-+START_STOP_DAEMON_CONF_ENV = \
-+	dpkg_cv_va_copy=yes \
-+	dpkg_cv_c99_snprintf=yes
-+START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
-+	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+START_STOP_DAEMON_LICENSE = Public Domain
-+START_STOP_DAEMON_LICENSE_FILES = utils/start-stop-daemon.c
-+
-+define START_STOP_DAEMON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/lib/compat
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/utils
-+endef
-+
-+define START_STOP_DAEMON_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/utils/start-stop-daemon \
-+		$(TARGET_DIR)/sbin/start-stop-daemon
-+endef
-+
-+$(eval $(autotools-package))
+The problem with using a Kconfig string variable is that Kconfig strgings
+that have no prompt can only take their default value, as defined in
+Config.in; if there is no default value, then the string option is not
+even stored in the .config file.
+
+If we were to have, for example, a Config.in with:
+
+    config BR2_BOARD_DIR
+        string
+
+and we were to seed it with a foo_defconfig file that has:
+
+    BR2_BOARD_DIR="$(TOP_DIR)/board/foo"
+
+then calling "make foo_defconfig" would yield an empty .config file.
+
+So, we can not use a Kconfig string variable.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
