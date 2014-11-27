@@ -1,87 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 22:28:45 +0100
-Subject: [Buildroot] [pull request v2] nfs-utils: fix static build
-Message-ID: <cover.1417123680.git.yann.morin.1998@free.fr>
+Date: Thu, 27 Nov 2014 22:28:47 +0100
+Subject: [Buildroot] [PATCH 2/4 v2] package/libtirpc: add -pthread to the
+	private libraries
+In-Reply-To: <cover.1417123680.git.yann.morin.1998@free.fr>
+References: <cover.1417123680.git.yann.morin.1998@free.fr>
+Message-ID: <0f01a72c984f64c5f60a488e5cadd233347db69a.1417123680.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Fixes:
+    http://autobuild.buildroot.net/results/17d/17d1d94e6f1617851e374f4fe9804f1e5ea9e99f/
+    http://autobuild.buildroot.net/results/c08/c08b7be40c8f208147a4f95ad897e4a1df7e108d/
+    and maybe a bunch of others...
 
-This small series fixes nfs-utils for static builds.
-Not much to say besides what the various changelogs already say.
-
-If needed, I can drop renaming the patches if it is not wanted for the
-master branch, or they can be folded each into its following changeset.
-
-
-Changes v1 -> v2:
-  - fix the nfs-utils patch to get rid of a latent bug, use the same
-    patch as sent upstream
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 3a66731b9c50e62a6768edc9f21da867a74869b9:
-
-  infra: do not append an empty LD_LIBRARY_PATH (2014-11-27 22:07:15 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/for-release
-
-for you to fetch changes up to ffb61e77dc527abadcf5c155b2163c3fcc9b9329:
-
-  package/nfs-utils: use pkg-config to find libtirpc (2014-11-27 22:25:42 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/libtirpc: rename patches
-      package/libtirpc: add -pthread to the private libraries
-      package/nfs-utils: rename patches
-      package/nfs-utils: use pkg-config to find libtirpc
-
- ...ble-parts-of-TIRPC-requiring-NIS-support.patch} |   0
- ...ut-RPC-support-does-not-install-rpcent.h.patch} |   0
- ...patch => 0003-Make-IPv6-support-optional.patch} |   0
- ...dd-rpcgen-program-from-nfs-utils-sources.patch} |   0
- ...y-generate-XDR-header-files-from-.x-sour.patch} |   0
- ...-files-needed-to-build-rpcbind-on-top-of.patch} |   0
- package/libtirpc/0007-needs-pthread.patch          |  25 +++++
- ...-AM_CONDITIONAL-in-conditional-execution.patch} |   0
- ...oo.patch => 0002-Patch-taken-from-Gentoo.patch} |   0
- ...-Switch-legacy-index-in-favour-of-strchr.patch} |   0
- ...libc.patch => 0004-fix-build-with-uClibc.patch} |   0
- ...of-getrpcbynumber-when-getrpcbynumber_r-.patch} |   0
- ...igure-script-find-getrpcbynumber-in-libt.patch} |   0
- ... 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} |   0
- package/nfs-utils/0008-tirpc-with-pkgconfig.patch  | 102 +++++++++++++++++++++
- package/nfs-utils/nfs-utils.mk                     |   2 +-
- 16 files changed, 128 insertions(+), 1 deletion(-)
- rename package/libtirpc/{libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch => 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch} (100%)
- rename package/libtirpc/{libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch => 0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch} (100%)
- rename package/libtirpc/{libtirpc-0004-Make-IPv6-support-optional.patch => 0003-Make-IPv6-support-optional.patch} (100%)
- rename package/libtirpc/{libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch => 0004-Add-rpcgen-program-from-nfs-utils-sources.patch} (100%)
- rename package/libtirpc/{libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch => 0005-Automatically-generate-XDR-header-files-from-.x-sour.patch} (100%)
- rename package/libtirpc/{libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch => 0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} (100%)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/libtirpc/0007-needs-pthread.patch | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
  create mode 100644 package/libtirpc/0007-needs-pthread.patch
- rename package/nfs-utils/{nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch => 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0002-Patch-taken-from-Gentoo.patch => 0002-Patch-taken-from-Gentoo.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch => 0003-Switch-legacy-index-in-favour-of-strchr.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0004-fix-build-with-uClibc.patch => 0004-fix-build-with-uClibc.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch => 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch => 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch} (100%)
- rename package/nfs-utils/{nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch => 0007-sockaddr-h-needs-stddef-h-for-NULL.patch} (100%)
- create mode 100644 package/nfs-utils/0008-tirpc-with-pkgconfig.patch
 
+diff --git a/package/libtirpc/0007-needs-pthread.patch b/package/libtirpc/0007-needs-pthread.patch
+new file mode 100644
+index 0000000..6cdf98a
+--- /dev/null
++++ b/package/libtirpc/0007-needs-pthread.patch
+@@ -0,0 +1,25 @@
++pkg-config: needs pthread as private library
++
++libtirpc needs pthreads. This is automatically pulled in when linking
++with the shared library, thanks to the DT_NEEDED ELF tags.
++
++But for a static library, there is no such mechanism to identify
++required libraries.
++
++Thus, add -pthread to the private libraries in the pkg-config file.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch sent upstream:
++    http://sourceforge.net/p/libtirpc/mailman/message/33072076/
++
++diff -durN libtirpc-0.2.4.orig/libtirpc.pc.in libtirpc-0.2.4/libtirpc.pc.in
++--- libtirpc-0.2.4.orig/libtirpc.pc.in	2013-12-09 21:59:51.000000000 +0100
+++++ libtirpc-0.2.4/libtirpc.pc.in	2014-11-23 14:02:58.677760108 +0100
++@@ -8,4 +8,5 @@
++ Requires:
++ Version: @PACKAGE_VERSION@
++ Libs: -L at libdir@ -ltirpc
+++Libs.private: -pthread
++ Cflags: -I at includedir@/tirpc
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
