@@ -1,91 +1,66 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Thu, 27 Nov 2014 21:46:59 +0100
-Subject: [Buildroot] [PATCH v2] samba: Add support for libnss_win*.so*
-	installation
-In-Reply-To: <20141126222607.4c57066e@free-electrons.com>
-References: <1416960016-5956-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
- <20141126222607.4c57066e@free-electrons.com>
-Message-ID: <CA+sos78dLY8ZO0oS009rQTn3LAM+ZZYGHxd0OJr-Nb1F6-=7DQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Nov 2014 22:06:15 +0100
+Subject: [Buildroot] [PATCH 4/4] package/nfs-utils: use pkg-config to
+	find libtirpc
+In-Reply-To: <11a2fb7a110021c76aeee7d6ee193932d6c5b569.1416748649.git.yann.morin.1998@free.fr>
+References: <cover.1416748649.git.yann.morin.1998@free.fr>
+ <11a2fb7a110021c76aeee7d6ee193932d6c5b569.1416748649.git.yann.morin.1998@free.fr>
+Message-ID: <20141127210615.GM3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Peter, All,
 
-On Wed, Nov 26, 2014 at 10:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Wed, 26 Nov 2014 01:00:15 +0100, Beno?t Th?baudeau wrote:
-> Applied to next. One question, though.
->
->
->> +ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINS),y)
->> +define SAMBA_INSTALL_LIBNSS_WINS
->> +     # install libnss_wins
->> +     $(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so
->> +     ln -snf libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
->
-> This dance is a bit weird. Normally, it's the opposite that is done:
-> the .so.X is the real file, and the .so is a symbolic link. Any reason
-> to do it the way you did it?
+On 2014-11-23 14:20 +0100, Yann E. MORIN spake thusly:
+> Fixes:
+>     http://autobuild.buildroot.net/results/17d/17d1d94e6f1617851e374f4fe9804f1e5ea9e99f/
+>     http://autobuild.buildroot.net/results/c08/c08b7be40c8f208147a4f95ad897e4a1df7e108d/
+>     and probably some others as well...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/nfs-utils/0008-tirpc-with-pkgconfig.patch | 71 +++++++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+> 
+> diff --git a/package/nfs-utils/0008-tirpc-with-pkgconfig.patch b/package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+> new file mode 100644
+> index 0000000..c94b380
+> --- /dev/null
+> +++ b/package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+> @@ -0,0 +1,71 @@
+> +configure: use pkg-config to find libtirpc
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +
+> +diff -durN nfs-utils-1.2.6.orig/aclocal/libtirpc.m4 nfs-utils-1.2.6/aclocal/libtirpc.m4
+> +--- nfs-utils-1.2.6.orig/aclocal/libtirpc.m4	2012-05-14 16:40:52.000000000 +0200
+> ++++ nfs-utils-1.2.6/aclocal/libtirpc.m4	2014-11-23 12:28:53.933717440 +0100
+> +@@ -11,40 +11,13 @@
+[--SNIP--]
+> ++  PKG_CHECK_MODULES([TIRPC], [libtirpc >= 0.2.4],
+> ++                    [LIBTIRPC="${TIRPC_LIBS}"
+> ++                     AM_CPPFLAGS="${AM_CPPFLAGS} ${TIRPC_CFLAGS}"
+> ++                     AC_DEFINE([HAVE_LIBTIRPC], [1],
+> ++                               [Define to 1 if you have and wish to use libtirpc.])],
+> ++                    [AS_IF([test "$enable_tirpc" != "no"], [AC_MSG_ERROR([libtirpc not found.])],
+> ++                           [LIBTIRPC=""])])
 
-I had noticed that EGLIBC's libnss files were organized in this
-unusual way in my cross-toolchain:
-/lib/libnss_<service>-<version>.so
-/lib/libnss_<service>.so.<major> -> /lib/libnss_<service>-<version>.so
+There's a latent bug hidiing in there (exercise: find it! ;-) ), and
+it's anyway not the patch I submitted upstream.
 
-That's why I decided to do something similar for winbind and wins for
-consistency, although these don't have a version in the library
-filename.
+So I'll respin the series shortly.
 
-Now that I've had a second look at it, I also see the following:
-/usr/lib/libnss_<service>.so -> /lib/libnss_<service>.so.<major>
+Regards,
+Yann E. MORIN.
 
-So I now think that changing my installation function to do the
-opposite would be better, all the more this is also what is done on a
-major OS like Ubuntu 14.10:
-/lib/x86_64-linux-gnu/libnss_compat-2.19.so
-/lib/x86_64-linux-gnu/libnss_compat.so.2 -> libnss_compat-2.19.so
-/lib/x86_64-linux-gnu/libnss_dns-2.19.so
-/lib/x86_64-linux-gnu/libnss_dns.so.2 -> libnss_dns-2.19.so
-/lib/x86_64-linux-gnu/libnss_files-2.19.so
-/lib/x86_64-linux-gnu/libnss_files.so.2 -> libnss_files-2.19.so
-/lib/x86_64-linux-gnu/libnss_hesiod-2.19.so
-/lib/x86_64-linux-gnu/libnss_hesiod.so.2 -> libnss_hesiod-2.19.so
-/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
-/lib/x86_64-linux-gnu/libnss_mdns4.so.2
-/lib/x86_64-linux-gnu/libnss_mdns6_minimal.so.2
-/lib/x86_64-linux-gnu/libnss_mdns6.so.2
-/lib/x86_64-linux-gnu/libnss_mdns_minimal.so.2
-/lib/x86_64-linux-gnu/libnss_mdns.so.2
-/lib/x86_64-linux-gnu/libnss_nis-2.19.so
-/lib/x86_64-linux-gnu/libnss_nisplus-2.19.so
-/lib/x86_64-linux-gnu/libnss_nisplus.so.2 -> libnss_nisplus-2.19.so
-/lib/x86_64-linux-gnu/libnss_nis.so.2 -> libnss_nis-2.19.so
-/lib/x86_64-linux-gnu/libnss_winbind.so -> libnss_winbind.so.2
-/lib/x86_64-linux-gnu/libnss_winbind.so.2
-/lib/x86_64-linux-gnu/libnss_wins.so -> libnss_wins.so.2
-/lib/x86_64-linux-gnu/libnss_wins.so.2
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_compat-2.19.so
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_dns-2.19.so
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_files-2.19.so
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_hesiod-2.19.so
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_nis-2.19.so
-/usr/lib/debug/lib/x86_64-linux-gnu/libnss_nisplus-2.19.so
-/usr/lib/x86_64-linux-gnu/libnss_compat.so ->
-/lib/x86_64-linux-gnu/libnss_compat.so.2
-/usr/lib/x86_64-linux-gnu/libnss_dns.so -> /lib/x86_64-linux-gnu/libnss_dns.so.2
-/usr/lib/x86_64-linux-gnu/libnss_files.so ->
-/lib/x86_64-linux-gnu/libnss_files.so.2
-/usr/lib/x86_64-linux-gnu/libnss_hesiod.so ->
-/lib/x86_64-linux-gnu/libnss_hesiod.so.2
-/usr/lib/x86_64-linux-gnu/libnss_nisplus.so ->
-/lib/x86_64-linux-gnu/libnss_nisplus.so.2
-/usr/lib/x86_64-linux-gnu/libnss_nis.so -> /lib/x86_64-linux-gnu/libnss_nis.so.2
-/usr/lib/x86_64-linux-gnu/samba/libnss_info.so.0
-
-I should send a new patch for that.
-
-Best regards,
-Beno?t
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
