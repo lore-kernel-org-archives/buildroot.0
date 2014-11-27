@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:52 +0100
-Subject: [Buildroot] [PATCHv2 34/74] pptp-linux: don't install man page
+Date: Thu, 27 Nov 2014 22:56:53 +0100
+Subject: [Buildroot] [PATCHv2 35/74] gnupg: don't both removing a man page
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-35-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-36-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
+The target-finalize target in the main Makefile removes
+$(TARGET_DIR)/usr/share/man entirely, so there's no point in having
+some package specific logic to remove man pages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pptp-linux/pptp-linux.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/gnupg/gnupg.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index dc624eb..d7edf6c 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -21,7 +21,6 @@ endef
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index e7c403a..c0bf88c 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -39,8 +39,7 @@ endif
  
- define PPTP_LINUX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/pptp $(TARGET_DIR)/usr/sbin/pptp
--	$(INSTALL) -m 0644 -D $(@D)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
+ ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
+ define GNUPG_REMOVE_GPGV
+-	rm -f $(TARGET_DIR)/usr/bin/gpgv \
+-		$(TARGET_DIR)/usr/share/man/man1/gpgv.1
++	rm -f $(TARGET_DIR)/usr/bin/gpgv
  endef
- 
- $(eval $(generic-package))
+ GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGV
+ endif
 -- 
 2.1.0
