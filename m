@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 20:28:44 +0100
-Subject: [Buildroot] [PATCH] flac: bump to version 1.3.1
-In-Reply-To: <1417106005-14032-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417106005-14032-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141127202844.23b0497c@free-electrons.com>
+Date: Thu, 27 Nov 2014 20:31:35 +0100
+Subject: [Buildroot] [git commit branch/next] lvm2: bump version to 2.02.113
+Message-ID: <20141127193214.845257FEF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=8c65e51e303ece33442318b78a2ceee7851d5fb2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 27 Nov 2014 13:33:25 -0300, Gustavo Zacarias wrote:
-> All patches upstream and add hash file.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/flac/0001-fix-altivec-logic.patch | 32 -------------------------
->  package/flac/0002-fix-CVE-2014-9028.patch | 34 --------------------------
->  package/flac/0003-fix-CVE-2014-8962.patch | 40 -------------------------------
->  package/flac/flac.hash                    |  2 ++
->  package/flac/flac.mk                      |  2 +-
->  5 files changed, 3 insertions(+), 107 deletions(-)
->  delete mode 100644 package/flac/0001-fix-altivec-logic.patch
->  delete mode 100644 package/flac/0002-fix-CVE-2014-9028.patch
->  delete mode 100644 package/flac/0003-fix-CVE-2014-8962.patch
->  create mode 100644 package/flac/flac.hash
+- Bump version to 2.02.113
+- Update the hash value
 
-Applied, thanks. I also dropped FLAC_AUTORECONF = YES, which was no
-longer necessary.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 3d02e83..adffcdb 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5 1f4033b750f68b68e9bd66d3661a2c3f LVM2.2.02.112.tgz
++md5  f71aa8e64030f3d2a3fdabcc36e45094  LVM2.2.02.113.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index bef22fb..48a3116 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.112
++LVM2_VERSION = 2.02.113
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
