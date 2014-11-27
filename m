@@ -1,62 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 18:47:54 +0100
-Subject: [Buildroot] [PATCH RFC] Makefile: from a defconfig file,
- point to the corresponding board/ entry
-In-Reply-To: <5476FFF1.8090304@zacarias.com.ar>
-References: <1417043635-9055-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LU7cF0+R=7T6RE4M3efW52a1v+JyqkjgOEJ3ZXsV+dm8g@mail.gmail.com>
- <5476FFF1.8090304@zacarias.com.ar>
-Message-ID: <20141127174754.GB3900@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Nov 2014 19:49:59 +0200
+Subject: [Buildroot] [PATCH] (e)glibc: add security patches for
+ CVE-2014-7817
+In-Reply-To: <1417101542-12008-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1417101542-12008-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141127174959.GB4690@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Hi Gustavo,
 
-On 2014-11-27 07:41 -0300, Gustavo Zacarias spake thusly:
-> On 11/27/2014 07:37 AM, Thomas De Schampheleire wrote:
+On Thu, Nov 27, 2014 at 12:19:02PM -0300, Gustavo Zacarias wrote:
 > 
-> >> So, we could maybe improve this by renaming and moving our boards docs
-> >> so there is a one-to-one mapping from the board directory to the
-> >> corresponding defconfig file (but not necessarily the other way around).
-> > 
-> > 
-> > I would like to point out that automatically detecting the board
-> > directory is fragile, because
-> > - the mapping may not be obvious, as you already found
-> > - there may be more than one 'board' directory. For example, a typical
-> > setup when having multiple more-or-less-related projects in a company
-> > is to have several layers of post-build/rootfs-overlay/..., for
-> > example:
-> > board/company/common/...
-> > board/company/project1/...
-> > board/company/project2/...
-> > In the defconfigs of both project1 and project2, the post-build and
-> > rootfs-overlay settings would contain multiple entries, being
-> > common+project1 and common+project2 respectively.
-> > There may even be more levels than that, for example (in my case)
-> > common, architecture-specific, project-family-specific,
-> > board-specific.
-> 
-> Agreed.
-> Wouldn't it be easier to define something like
-> BR2_POST_BUILD_INSTRUCTIONS (with some nicer well-thought out name)
-> that's shown when a successful build finishes which points to the proper
-> documentation and does nothing if unset? (a good old conditional 'cat').
+> diff --git a/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch b/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch
+> new file mode 100644
+> index 0000000..da2f49d
+> --- /dev/null
+> +++ b/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch
+> @@ -0,0 +1,174 @@
+> +From https://bugzilla.redhat.com/show_bug.cgi?id=1157689
+> +Modified for eglibc.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +
+> +WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
+> +EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
+> +SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
 
-As I explained to J?r?me, it is not possible to use a Kconfig string
-option; see:
-    http://lists.busybox.net/pipermail/buildroot/2014-November/113189.html
+Embargoed? Really?
 
-Regards,
-Yann E. MORIN.
+Anyway, I'm not sure leaving this comment here makes sense.
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
