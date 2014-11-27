@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:13 +0100
-Subject: [Buildroot] [PATCHv2 55/74] iucode-tool: install init script
+Date: Thu, 27 Nov 2014 22:57:12 +0100
+Subject: [Buildroot] [PATCHv2 54/74] busybox: install init script
 	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-56-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-55-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,22 +18,22 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iucode-tool/iucode-tool.mk | 5 ++---
+ package/dmraid/dmraid.mk | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index 3124c73..081b086 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -15,9 +15,8 @@ IUCODE_TOOL_LICENSE = GPLv2+
- IUCODE_TOOL_LICENSE_FILES = COPYING
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 024b9b5..a6ed57f 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -18,9 +18,8 @@ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
+ DMRAID_DEPENDENCIES = lvm2
  
- define IUCODE_TOOL_INSTALL_INIT_SYSV
--	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
--		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
--			$(TARGET_DIR)/etc/init.d/S00iucode-tool
-+	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
-+		$(TARGET_DIR)/etc/init.d/S00iucode-tool
+ define DMRAID_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
+-		$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
+-			$(TARGET_DIR)/etc/init.d/S20dmraid
++	$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
++		$(TARGET_DIR)/etc/init.d/S20dmraid
  endef
  
  $(eval $(autotools-package))
