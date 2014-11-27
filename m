@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:56:20 +0100
-Subject: [Buildroot] [PATCHv2 02/74] vsftpd: don't install manpages
+Date: Thu, 27 Nov 2014 22:56:23 +0100
+Subject: [Buildroot] [PATCHv2 05/74] thttpd: use the <pkg>_INSTALL_INIT_SYSV
+	mechanism
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Installing manpages to the target is quite useless, since we don't
-support installing documentation on the target.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vsftpd/vsftpd.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/thttpd/thttpd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 1c468ed..b94328d 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -49,10 +49,6 @@ endef
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index 70a90fd..1a028c8 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -31,8 +31,6 @@ define THTTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd_wrapper $(TARGET_DIR)/usr/sbin/thttpd_wrapper
+ 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' -e \
+ 		's:/usr/local/www:/var/www:g' $(TARGET_DIR)/usr/sbin/thttpd_wrapper
+-	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
+-	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
+ 	$(INSTALL) -d $(TARGET_DIR)/var/www/data
+ 	$(INSTALL) -d $(TARGET_DIR)/var/www/logs
+ 	echo "dir=/var/www/data" > $(TARGET_DIR)/var/www/thttpd_config
+@@ -41,4 +39,9 @@ define THTTPD_INSTALL_TARGET_CMDS
+ 	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/var/www/thttpd_config
+ endef
  
- define VSFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/vsftpd $(TARGET_DIR)/usr/sbin/vsftpd
--	$(INSTALL) -D -m 644 $(@D)/vsftpd.8 \
--		$(TARGET_DIR)/usr/share/man/man8/vsftpd.8
--	$(INSTALL) -D -m 644 $(@D)/vsftpd.conf.5 \
--		$(TARGET_DIR)/usr/share/man/man5/vsftpd.conf.5
- 	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
- 		$(INSTALL) -D -m 644 $(@D)/vsftpd.conf \
- 			$(TARGET_DIR)/etc/vsftpd.conf
++define THTTPD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
++	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.1.0
