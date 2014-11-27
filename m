@@ -1,148 +1,749 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Nov 2014 23:45:49 +0100
-Subject: [Buildroot] [git commit] package/nfs-utils: use pkg-config to find
-	libtirpc
-Message-ID: <20141127224642.354A97FF3F@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 22:52:51 +0100
+Subject: [Buildroot] [git commit] (e)glibc: add security patches for
+	CVE-2014-7817
+Message-ID: <20141127224642.001557FF3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=387bdde5df63a10f526346fe19ea78de6e2f4e94
+commit: http://git.buildroot.net/buildroot/commit/?id=bbd3d847a3ad36d867275d1eed266ba362b4a420
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-    http://autobuild.buildroot.net/results/17d/17d1d94e6f1617851e374f4fe9804f1e5ea9e99f/
-    http://autobuild.buildroot.net/results/c08/c08b7be40c8f208147a4f95ad897e4a1df7e108d/
-    and probably some others as well...
+CVE-2014-7817 - command execution in wordexp() with WRDE_NOCMD specified
 
-[Peter: correct tirpc/tirpcinclude mixmatch in patch description]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/0008-tirpc-with-pkgconfig.patch |  102 +++++++++++++++++++++
- package/nfs-utils/nfs-utils.mk                    |    2 +-
- 2 files changed, 103 insertions(+), 1 deletions(-)
+ .../2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch |  174 ++++++++++++++++++++
+ ...-accept-make4.patch => 0002-accept-make4.patch} |    0
+ .../2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch |  174 ++++++++++++++++++++
+ package/glibc/2.19/0001-CVE-2014-7817.patch        |  173 +++++++++++++++++++
+ package/glibc/2.20/0001-CVE-2014-7817.patch        |  173 +++++++++++++++++++
+ 5 files changed, 694 insertions(+), 0 deletions(-)
 
-diff --git a/package/nfs-utils/0008-tirpc-with-pkgconfig.patch b/package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+diff --git a/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch b/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch
 new file mode 100644
-index 0000000..712f710
+index 0000000..da2f49d
 --- /dev/null
-+++ b/package/nfs-utils/0008-tirpc-with-pkgconfig.patch
-@@ -0,0 +1,102 @@
-+From 1ecd1f2008bfab7bb3cd6ada135c980414a7f1ba Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 23 Nov 2014 15:53:56 +0100
-+Subject: [PATCH] configure: use pkg-config to find libtirpc
++++ b/package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch
+@@ -0,0 +1,174 @@
++From https://bugzilla.redhat.com/show_bug.cgi?id=1157689
++Modified for eglibc.
 +
-+Currently, we use a custom function to find libtirpc's headers and
-+libraries. This works fine for shared linking.
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+But for static linking, this forgets to link with -lpthread, which is
-+required by libtirpc.
++WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
++EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
++SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
 +
-+A recent patch was sent to libtirpc to add that missing -lpthread in its
-+Libs.private section of its .pc file. Thus, pkg-config will soon be able
-+to return the appropriate libraries.
++CVE-2014-7817:
 +
-+So, use pkg-config to find libtirpc.
++The function wordexp() fails to properly handle the WRDE_NOCMD
++flag when processing arithmetic inputs in the form of "$((... ``))"
++where "..." can be anything valid. The backticks in the arithmetic
++epxression are evaluated by in a shell even if WRDE_NOCMD forbade
++command substitution. This allows an attacker to attempt to pass
++dangerous commands via constructs of the above form, and bypass
++the WRDE_NOCMD flag. This patch fixes this by checking for WRDE_NOCMD
++in parse_arith(). The patch also hardens parse_backticks() and 
++parse_comm() to check for WRDE_NOCMD flag and return an error instead
++of ever running a shell.
 +
-+And for older libtirpc versions, there is no change in behaviour: we're
-+still missing the -lpthread. But once libtirpc has been fixed, we'll
-+automatically get that missing library for free! :-)
++We expand the testsuite and add 3 new regression tests of roughtly
++the same form but with a couple of nested levels. 
 +
-+Remove the --with-libirpcinclude flag as it is no longer needed: pkg-config
-+will provide us with the -I and -L flags, now.
++On top of the 3 new tests we add fork validation to the WRDE_NOCMD
++testing. If any forks are detected during the execution of a wordexp()
++call with WRDE_NOCMD, the test is marked as failed. This is slightly
++heuristic since vfork might be used, but it provides a higher level
++of assurance that no shells were executed as part of command substitution
++with WRDE_NOCMD in effect. In addition it doesn't require libpthread or
++libdl, instead we use the public implementation namespace function
++__register_atfork (already part of the public ABI for libpthread).
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Steve Dickson <steved@redhat.com>
++Tested on x86_64 with no regressions.
 +
-+---
-+Patch sent upstream:
-+    http://article.gmane.org/gmane.linux.nfs/67708
-+---
-+ aclocal/libtirpc.m4 | 68 ++++++++++-------------------------------------------
-+ 1 file changed, 13 insertions(+), 55 deletions(-)
++2014-10-27  Carlos O'Donell  <carlos@redhat.com>
 +
-+diff --git a/aclocal/libtirpc.m4 b/aclocal/libtirpc.m4
-+index b823364..4a19c1a 100644
-+--- a/aclocal/libtirpc.m4
-++++ b/aclocal/libtirpc.m4
-+@@ -2,50 +2,19 @@ dnl Checks for TI-RPC library and headers
-+ dnl
-+ AC_DEFUN([AC_LIBTIRPC], [
++	* wordexp-test.c (__dso_handle): Add prototype.
++	(__register_atfork): Likewise.
++	(__app_register_atfork): New function.
++	(registered_forks): New global.
++	(register_fork): New function.
++	(test_case): Add 3 new tests for WRDE_CMDSUB.
++	(main): Call __app_register_atfork.
++	(testit): If WRDE_NOCMD set registered_forks to zero, run test, and
++	if fork count is non-zero fail the test.
++	* posix/wordexp.c (parse_arith): Return WRDE_NOCMD if WRDE_NOCMD flag
++	is set and parsing '`'. 
++	(parse_comm): Return WRDE_NOCMD if WRDE_NOCMD flag is set.
++	(parse_backtick): Return WRDE_NOCMD if WRDE_NOCMD flag is set and
++	parsing '`'.
++
++diff --git a/posix/wordexp-test.c b/posix/wordexp-test.c
++index 4957006..5ce2a1b 100644
++--- a/libc/posix/wordexp-test.c
+++++ b/libc/posix/wordexp-test.c
++@@ -27,6 +27,25 @@
 + 
-+-  AC_ARG_WITH([tirpcinclude],
-+-              [AC_HELP_STRING([--with-tirpcinclude=DIR],
-+-                              [use TI-RPC headers in DIR])],
-+-              [tirpc_header_dir=$withval],
-+-              [tirpc_header_dir=/usr/include/tirpc])
-+-
-+-  dnl if --enable-tirpc was specifed, the following components
-+-  dnl must be present, and we set up HAVE_ macros for them.
-+-
-+-  if test "$enable_tirpc" != "no"; then
-+-
-+-    dnl look for the library
-+-    AC_CHECK_LIB([tirpc], [clnt_tli_create], [:],
-+-                 [if test "$enable_tirpc" = "yes"; then
-+-			AC_MSG_ERROR([libtirpc not found.])
-+-		  else
-+-			AC_MSG_WARN([libtirpc not found. TIRPC disabled!])
-+-			enable_tirpc="no"
-+-		  fi])
-+-  fi
-+-
-+-  if test "$enable_tirpc" != "no"; then
-+-    dnl also must have the headers installed where we expect
-+-    dnl look for headers; add -I compiler option if found
-+-    AC_CHECK_HEADERS([${tirpc_header_dir}/netconfig.h],
-+-    		      AC_SUBST([AM_CPPFLAGS], ["-I${tirpc_header_dir}"]),
-+-		      [if test "$enable_tirpc" = "yes"; then
-+-			 AC_MSG_ERROR([libtirpc headers not found.])
-+-		       else
-+-			 AC_MSG_WARN([libtirpc headers not found. TIRPC disabled!])
-+-			 enable_tirpc="no"
-+-		       fi])
-+-
-+-  fi
-+-
-+-  dnl now set $LIBTIRPC accordingly
-+-  if test "$enable_tirpc" != "no"; then
-+-    AC_DEFINE([HAVE_LIBTIRPC], 1,
-+-              [Define to 1 if you have and wish to use libtirpc.])
-+-    LIBTIRPC="-ltirpc"
-+-  else
-+-    LIBTIRPC=""
-+-  fi
-+-
-++  PKG_PROG_PKG_CONFIG([0.9.0])
-++  AS_IF(
-++    [test "$enable_tirpc" != "no"],
-++    [PKG_CHECK_MODULES([TIRPC], [libtirpc >= 0.2.4],
-++                       [LIBTIRPC="${TIRPC_LIBS}"
-++                        AM_CPPFLAGS="${AM_CPPFLAGS} ${TIRPC_CFLAGS}"
-++                        AC_DEFINE([HAVE_LIBTIRPC], [1],
-++                                  [Define to 1 if you have and wish to use libtirpc.])],
-++                       [AS_IF([test "$enable_tirpc" = "yes"],
-++                              [AC_MSG_ERROR([libtirpc not found.])],
-++                              [LIBTIRPC=""])])])
++ #define IFS " \n\t"
++ 
+++extern void *__dso_handle __attribute__ ((__weak__, __visibility__ ("hidden")));
+++extern int __register_atfork (void (*) (void), void (*) (void), void (*) (void), void *);
 ++
-++  AC_SUBST([AM_CPPFLAGS])
-+   AC_SUBST(LIBTIRPC)
+++static int __app_register_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+++{
+++  return __register_atfork (prepare, parent, child,
+++			    &__dso_handle == NULL ? NULL : __dso_handle);
+++}
+++
+++/* Number of forks seen.  */
+++static int registered_forks;
+++
+++/* For each fork increment the fork count.  */
+++static void
+++register_fork (void)
+++{
+++  registered_forks++;
+++}
+++
++ struct test_case_struct
++ {
++   int retval;
++@@ -206,6 +225,12 @@ struct test_case_struct
++     { WRDE_SYNTAX, NULL, "$((2+))", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "`", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "$((010+4+))", 0, 0, { NULL }, IFS },
+++    /* Test for CVE-2014-7817. We test 3 combinations of command
+++       substitution inside an arithmetic expression to make sure that
+++       no commands are executed and error is returned.  */
+++    { WRDE_CMDSUB, NULL, "$((`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+$((`echo 1`))))", WRDE_NOCMD, 0, { NULL, }, IFS },
 + 
-+ ])dnl
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 522e790..8b56edf 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -28,7 +28,7 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
--NFS_UTILS_CONF_OPTS += --enable-tirpc --with-tirpcinclude=$(STAGING_DIR)/usr/include/tirpc/
-+NFS_UTILS_CONF_OPTS += --enable-tirpc
- NFS_UTILS_DEPENDENCIES += libtirpc
- else
- NFS_UTILS_CONF_OPTS += --disable-tirpc
++     { -1, NULL, NULL, 0, 0, { NULL, }, IFS },
++   };
++@@ -258,6 +283,15 @@ main (int argc, char *argv[])
++ 	  return -1;
++     }
++ 
+++  /* If we are not allowed to do command substitution, we install
+++     fork handlers to verify that no forks happened.  No forks should
+++     happen at all if command substitution is disabled.  */
+++  if (__app_register_atfork (register_fork, NULL, NULL) != 0)
+++    {
+++      printf ("Failed to register fork handler.\n");
+++      return -1;
+++    }
+++
++   for (test = 0; test_case[test].retval != -1; test++)
++     if (testit (&test_case[test]))
++       ++fail;
++@@ -367,6 +401,9 @@ testit (struct test_case_struct *tc)
++ 
++   printf ("Test %d (%s): ", ++tests, tc->words);
++ 
+++  if (tc->flags & WRDE_NOCMD)
+++    registered_forks = 0;
+++
++   if (tc->flags & WRDE_APPEND)
++     {
++       /* initial wordexp() call, to be appended to */
++@@ -378,6 +415,13 @@ testit (struct test_case_struct *tc)
++     }
++   retval = wordexp (tc->words, &we, tc->flags);
++ 
+++  if ((tc->flags & WRDE_NOCMD)
+++      && (registered_forks > 0))
+++    {
+++      printf ("FAILED fork called for WRDE_NOCMD\n");
+++      return 1;
+++    }
+++
++   if (tc->flags & WRDE_DOOFFS)
++       start_offs = sav_we.we_offs;
++ 
++diff --git a/posix/wordexp.c b/posix/wordexp.c
++index b6b65dd..d6a158f 100644
++--- a/libc/posix/wordexp.c
+++++ b/libc/posix/wordexp.c
++@@ -693,6 +693,12 @@ parse_arith (char **word, size_t *word_length, size_t *max_length,
++ 	  break;
++ 
++ 	case '`':
+++	   if (flags & WRDE_NOCMD)
+++	     {
+++	       free (expr);
+++	       return WRDE_NOCMD;
+++	     }
+++
++ 	  (*offset)++;
++ 	  error = parse_backtick (&expr, &expr_length, &expr_maxlen,
++ 				  words, offset, flags, NULL, NULL, NULL);
++@@ -1144,6 +1150,10 @@ parse_comm (char **word, size_t *word_length, size_t *max_length,
++   size_t comm_maxlen;
++   char *comm = w_newword (&comm_length, &comm_maxlen);
++ 
+++  /* Do nothing if command substitution should not succeed.  */
+++  if (flags & WRDE_NOCMD)
+++    return WRDE_CMDSUB;
+++
++   for (; words[*offset]; ++(*offset))
++     {
++       switch (words[*offset])
++@@ -2121,6 +2131,9 @@ parse_backtick (char **word, size_t *word_length, size_t *max_length,
++       switch (words[*offset])
++ 	{
++ 	case '`':
+++	  if (flags & WRDE_NOCMD)
+++	    return WRDE_NOCMD;
+++
++ 	  /* Go -- give the script to the shell */
++ 	  error = exec_comm (comm, word, word_length, max_length, flags,
++ 			     pwordexp, ifs, ifs_white);
+diff --git a/package/glibc/2.18-svnr23787/glibc-0001-accept-make4.patch b/package/glibc/2.18-svnr23787/0002-accept-make4.patch
+similarity index 100%
+rename from package/glibc/2.18-svnr23787/glibc-0001-accept-make4.patch
+rename to package/glibc/2.18-svnr23787/0002-accept-make4.patch
+diff --git a/package/glibc/2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch b/package/glibc/2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch
+new file mode 100644
+index 0000000..da2f49d
+--- /dev/null
++++ b/package/glibc/2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch
+@@ -0,0 +1,174 @@
++From https://bugzilla.redhat.com/show_bug.cgi?id=1157689
++Modified for eglibc.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
++EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
++SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
++
++CVE-2014-7817:
++
++The function wordexp() fails to properly handle the WRDE_NOCMD
++flag when processing arithmetic inputs in the form of "$((... ``))"
++where "..." can be anything valid. The backticks in the arithmetic
++epxression are evaluated by in a shell even if WRDE_NOCMD forbade
++command substitution. This allows an attacker to attempt to pass
++dangerous commands via constructs of the above form, and bypass
++the WRDE_NOCMD flag. This patch fixes this by checking for WRDE_NOCMD
++in parse_arith(). The patch also hardens parse_backticks() and 
++parse_comm() to check for WRDE_NOCMD flag and return an error instead
++of ever running a shell.
++
++We expand the testsuite and add 3 new regression tests of roughtly
++the same form but with a couple of nested levels. 
++
++On top of the 3 new tests we add fork validation to the WRDE_NOCMD
++testing. If any forks are detected during the execution of a wordexp()
++call with WRDE_NOCMD, the test is marked as failed. This is slightly
++heuristic since vfork might be used, but it provides a higher level
++of assurance that no shells were executed as part of command substitution
++with WRDE_NOCMD in effect. In addition it doesn't require libpthread or
++libdl, instead we use the public implementation namespace function
++__register_atfork (already part of the public ABI for libpthread).
++
++Tested on x86_64 with no regressions.
++
++2014-10-27  Carlos O'Donell  <carlos@redhat.com>
++
++	* wordexp-test.c (__dso_handle): Add prototype.
++	(__register_atfork): Likewise.
++	(__app_register_atfork): New function.
++	(registered_forks): New global.
++	(register_fork): New function.
++	(test_case): Add 3 new tests for WRDE_CMDSUB.
++	(main): Call __app_register_atfork.
++	(testit): If WRDE_NOCMD set registered_forks to zero, run test, and
++	if fork count is non-zero fail the test.
++	* posix/wordexp.c (parse_arith): Return WRDE_NOCMD if WRDE_NOCMD flag
++	is set and parsing '`'. 
++	(parse_comm): Return WRDE_NOCMD if WRDE_NOCMD flag is set.
++	(parse_backtick): Return WRDE_NOCMD if WRDE_NOCMD flag is set and
++	parsing '`'.
++
++diff --git a/posix/wordexp-test.c b/posix/wordexp-test.c
++index 4957006..5ce2a1b 100644
++--- a/libc/posix/wordexp-test.c
+++++ b/libc/posix/wordexp-test.c
++@@ -27,6 +27,25 @@
++ 
++ #define IFS " \n\t"
++ 
+++extern void *__dso_handle __attribute__ ((__weak__, __visibility__ ("hidden")));
+++extern int __register_atfork (void (*) (void), void (*) (void), void (*) (void), void *);
+++
+++static int __app_register_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+++{
+++  return __register_atfork (prepare, parent, child,
+++			    &__dso_handle == NULL ? NULL : __dso_handle);
+++}
+++
+++/* Number of forks seen.  */
+++static int registered_forks;
+++
+++/* For each fork increment the fork count.  */
+++static void
+++register_fork (void)
+++{
+++  registered_forks++;
+++}
+++
++ struct test_case_struct
++ {
++   int retval;
++@@ -206,6 +225,12 @@ struct test_case_struct
++     { WRDE_SYNTAX, NULL, "$((2+))", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "`", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "$((010+4+))", 0, 0, { NULL }, IFS },
+++    /* Test for CVE-2014-7817. We test 3 combinations of command
+++       substitution inside an arithmetic expression to make sure that
+++       no commands are executed and error is returned.  */
+++    { WRDE_CMDSUB, NULL, "$((`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+$((`echo 1`))))", WRDE_NOCMD, 0, { NULL, }, IFS },
++ 
++     { -1, NULL, NULL, 0, 0, { NULL, }, IFS },
++   };
++@@ -258,6 +283,15 @@ main (int argc, char *argv[])
++ 	  return -1;
++     }
++ 
+++  /* If we are not allowed to do command substitution, we install
+++     fork handlers to verify that no forks happened.  No forks should
+++     happen at all if command substitution is disabled.  */
+++  if (__app_register_atfork (register_fork, NULL, NULL) != 0)
+++    {
+++      printf ("Failed to register fork handler.\n");
+++      return -1;
+++    }
+++
++   for (test = 0; test_case[test].retval != -1; test++)
++     if (testit (&test_case[test]))
++       ++fail;
++@@ -367,6 +401,9 @@ testit (struct test_case_struct *tc)
++ 
++   printf ("Test %d (%s): ", ++tests, tc->words);
++ 
+++  if (tc->flags & WRDE_NOCMD)
+++    registered_forks = 0;
+++
++   if (tc->flags & WRDE_APPEND)
++     {
++       /* initial wordexp() call, to be appended to */
++@@ -378,6 +415,13 @@ testit (struct test_case_struct *tc)
++     }
++   retval = wordexp (tc->words, &we, tc->flags);
++ 
+++  if ((tc->flags & WRDE_NOCMD)
+++      && (registered_forks > 0))
+++    {
+++      printf ("FAILED fork called for WRDE_NOCMD\n");
+++      return 1;
+++    }
+++
++   if (tc->flags & WRDE_DOOFFS)
++       start_offs = sav_we.we_offs;
++ 
++diff --git a/posix/wordexp.c b/posix/wordexp.c
++index b6b65dd..d6a158f 100644
++--- a/libc/posix/wordexp.c
+++++ b/libc/posix/wordexp.c
++@@ -693,6 +693,12 @@ parse_arith (char **word, size_t *word_length, size_t *max_length,
++ 	  break;
++ 
++ 	case '`':
+++	   if (flags & WRDE_NOCMD)
+++	     {
+++	       free (expr);
+++	       return WRDE_NOCMD;
+++	     }
+++
++ 	  (*offset)++;
++ 	  error = parse_backtick (&expr, &expr_length, &expr_maxlen,
++ 				  words, offset, flags, NULL, NULL, NULL);
++@@ -1144,6 +1150,10 @@ parse_comm (char **word, size_t *word_length, size_t *max_length,
++   size_t comm_maxlen;
++   char *comm = w_newword (&comm_length, &comm_maxlen);
++ 
+++  /* Do nothing if command substitution should not succeed.  */
+++  if (flags & WRDE_NOCMD)
+++    return WRDE_CMDSUB;
+++
++   for (; words[*offset]; ++(*offset))
++     {
++       switch (words[*offset])
++@@ -2121,6 +2131,9 @@ parse_backtick (char **word, size_t *word_length, size_t *max_length,
++       switch (words[*offset])
++ 	{
++ 	case '`':
+++	  if (flags & WRDE_NOCMD)
+++	    return WRDE_NOCMD;
+++
++ 	  /* Go -- give the script to the shell */
++ 	  error = exec_comm (comm, word, word_length, max_length, flags,
++ 			     pwordexp, ifs, ifs_white);
+diff --git a/package/glibc/2.19/0001-CVE-2014-7817.patch b/package/glibc/2.19/0001-CVE-2014-7817.patch
+new file mode 100644
+index 0000000..cd20c42
+--- /dev/null
++++ b/package/glibc/2.19/0001-CVE-2014-7817.patch
+@@ -0,0 +1,173 @@
++Patch from https://bugzilla.redhat.com/show_bug.cgi?id=1157689
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
++EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
++SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
++
++CVE-2014-7817:
++
++The function wordexp() fails to properly handle the WRDE_NOCMD
++flag when processing arithmetic inputs in the form of "$((... ``))"
++where "..." can be anything valid. The backticks in the arithmetic
++epxression are evaluated by in a shell even if WRDE_NOCMD forbade
++command substitution. This allows an attacker to attempt to pass
++dangerous commands via constructs of the above form, and bypass
++the WRDE_NOCMD flag. This patch fixes this by checking for WRDE_NOCMD
++in parse_arith(). The patch also hardens parse_backticks() and 
++parse_comm() to check for WRDE_NOCMD flag and return an error instead
++of ever running a shell.
++
++We expand the testsuite and add 3 new regression tests of roughtly
++the same form but with a couple of nested levels. 
++
++On top of the 3 new tests we add fork validation to the WRDE_NOCMD
++testing. If any forks are detected during the execution of a wordexp()
++call with WRDE_NOCMD, the test is marked as failed. This is slightly
++heuristic since vfork might be used, but it provides a higher level
++of assurance that no shells were executed as part of command substitution
++with WRDE_NOCMD in effect. In addition it doesn't require libpthread or
++libdl, instead we use the public implementation namespace function
++__register_atfork (already part of the public ABI for libpthread).
++
++Tested on x86_64 with no regressions.
++
++2014-10-27  Carlos O'Donell  <carlos@redhat.com>
++
++	* wordexp-test.c (__dso_handle): Add prototype.
++	(__register_atfork): Likewise.
++	(__app_register_atfork): New function.
++	(registered_forks): New global.
++	(register_fork): New function.
++	(test_case): Add 3 new tests for WRDE_CMDSUB.
++	(main): Call __app_register_atfork.
++	(testit): If WRDE_NOCMD set registered_forks to zero, run test, and
++	if fork count is non-zero fail the test.
++	* posix/wordexp.c (parse_arith): Return WRDE_NOCMD if WRDE_NOCMD flag
++	is set and parsing '`'. 
++	(parse_comm): Return WRDE_NOCMD if WRDE_NOCMD flag is set.
++	(parse_backtick): Return WRDE_NOCMD if WRDE_NOCMD flag is set and
++	parsing '`'.
++
++diff --git a/posix/wordexp-test.c b/posix/wordexp-test.c
++index 4957006..5ce2a1b 100644
++--- a/posix/wordexp-test.c
+++++ b/posix/wordexp-test.c
++@@ -27,6 +27,25 @@
++ 
++ #define IFS " \n\t"
++ 
+++extern void *__dso_handle __attribute__ ((__weak__, __visibility__ ("hidden")));
+++extern int __register_atfork (void (*) (void), void (*) (void), void (*) (void), void *);
+++
+++static int __app_register_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+++{
+++  return __register_atfork (prepare, parent, child,
+++			    &__dso_handle == NULL ? NULL : __dso_handle);
+++}
+++
+++/* Number of forks seen.  */
+++static int registered_forks;
+++
+++/* For each fork increment the fork count.  */
+++static void
+++register_fork (void)
+++{
+++  registered_forks++;
+++}
+++
++ struct test_case_struct
++ {
++   int retval;
++@@ -206,6 +225,12 @@ struct test_case_struct
++     { WRDE_SYNTAX, NULL, "$((2+))", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "`", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "$((010+4+))", 0, 0, { NULL }, IFS },
+++    /* Test for CVE-2014-7817. We test 3 combinations of command
+++       substitution inside an arithmetic expression to make sure that
+++       no commands are executed and error is returned.  */
+++    { WRDE_CMDSUB, NULL, "$((`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+$((`echo 1`))))", WRDE_NOCMD, 0, { NULL, }, IFS },
++ 
++     { -1, NULL, NULL, 0, 0, { NULL, }, IFS },
++   };
++@@ -258,6 +283,15 @@ main (int argc, char *argv[])
++ 	  return -1;
++     }
++ 
+++  /* If we are not allowed to do command substitution, we install
+++     fork handlers to verify that no forks happened.  No forks should
+++     happen at all if command substitution is disabled.  */
+++  if (__app_register_atfork (register_fork, NULL, NULL) != 0)
+++    {
+++      printf ("Failed to register fork handler.\n");
+++      return -1;
+++    }
+++
++   for (test = 0; test_case[test].retval != -1; test++)
++     if (testit (&test_case[test]))
++       ++fail;
++@@ -367,6 +401,9 @@ testit (struct test_case_struct *tc)
++ 
++   printf ("Test %d (%s): ", ++tests, tc->words);
++ 
+++  if (tc->flags & WRDE_NOCMD)
+++    registered_forks = 0;
+++
++   if (tc->flags & WRDE_APPEND)
++     {
++       /* initial wordexp() call, to be appended to */
++@@ -378,6 +415,13 @@ testit (struct test_case_struct *tc)
++     }
++   retval = wordexp (tc->words, &we, tc->flags);
++ 
+++  if ((tc->flags & WRDE_NOCMD)
+++      && (registered_forks > 0))
+++    {
+++      printf ("FAILED fork called for WRDE_NOCMD\n");
+++      return 1;
+++    }
+++
++   if (tc->flags & WRDE_DOOFFS)
++       start_offs = sav_we.we_offs;
++ 
++diff --git a/posix/wordexp.c b/posix/wordexp.c
++index b6b65dd..d6a158f 100644
++--- a/posix/wordexp.c
+++++ b/posix/wordexp.c
++@@ -693,6 +693,12 @@ parse_arith (char **word, size_t *word_length, size_t *max_length,
++ 	  break;
++ 
++ 	case '`':
+++	   if (flags & WRDE_NOCMD)
+++	     {
+++	       free (expr);
+++	       return WRDE_NOCMD;
+++	     }
+++
++ 	  (*offset)++;
++ 	  error = parse_backtick (&expr, &expr_length, &expr_maxlen,
++ 				  words, offset, flags, NULL, NULL, NULL);
++@@ -1144,6 +1150,10 @@ parse_comm (char **word, size_t *word_length, size_t *max_length,
++   size_t comm_maxlen;
++   char *comm = w_newword (&comm_length, &comm_maxlen);
++ 
+++  /* Do nothing if command substitution should not succeed.  */
+++  if (flags & WRDE_NOCMD)
+++    return WRDE_CMDSUB;
+++
++   for (; words[*offset]; ++(*offset))
++     {
++       switch (words[*offset])
++@@ -2121,6 +2131,9 @@ parse_backtick (char **word, size_t *word_length, size_t *max_length,
++       switch (words[*offset])
++ 	{
++ 	case '`':
+++	  if (flags & WRDE_NOCMD)
+++	    return WRDE_NOCMD;
+++
++ 	  /* Go -- give the script to the shell */
++ 	  error = exec_comm (comm, word, word_length, max_length, flags,
++ 			     pwordexp, ifs, ifs_white);
+diff --git a/package/glibc/2.20/0001-CVE-2014-7817.patch b/package/glibc/2.20/0001-CVE-2014-7817.patch
+new file mode 100644
+index 0000000..cd20c42
+--- /dev/null
++++ b/package/glibc/2.20/0001-CVE-2014-7817.patch
+@@ -0,0 +1,173 @@
++Patch from https://bugzilla.redhat.com/show_bug.cgi?id=1157689
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
++EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
++SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
++
++CVE-2014-7817:
++
++The function wordexp() fails to properly handle the WRDE_NOCMD
++flag when processing arithmetic inputs in the form of "$((... ``))"
++where "..." can be anything valid. The backticks in the arithmetic
++epxression are evaluated by in a shell even if WRDE_NOCMD forbade
++command substitution. This allows an attacker to attempt to pass
++dangerous commands via constructs of the above form, and bypass
++the WRDE_NOCMD flag. This patch fixes this by checking for WRDE_NOCMD
++in parse_arith(). The patch also hardens parse_backticks() and 
++parse_comm() to check for WRDE_NOCMD flag and return an error instead
++of ever running a shell.
++
++We expand the testsuite and add 3 new regression tests of roughtly
++the same form but with a couple of nested levels. 
++
++On top of the 3 new tests we add fork validation to the WRDE_NOCMD
++testing. If any forks are detected during the execution of a wordexp()
++call with WRDE_NOCMD, the test is marked as failed. This is slightly
++heuristic since vfork might be used, but it provides a higher level
++of assurance that no shells were executed as part of command substitution
++with WRDE_NOCMD in effect. In addition it doesn't require libpthread or
++libdl, instead we use the public implementation namespace function
++__register_atfork (already part of the public ABI for libpthread).
++
++Tested on x86_64 with no regressions.
++
++2014-10-27  Carlos O'Donell  <carlos@redhat.com>
++
++	* wordexp-test.c (__dso_handle): Add prototype.
++	(__register_atfork): Likewise.
++	(__app_register_atfork): New function.
++	(registered_forks): New global.
++	(register_fork): New function.
++	(test_case): Add 3 new tests for WRDE_CMDSUB.
++	(main): Call __app_register_atfork.
++	(testit): If WRDE_NOCMD set registered_forks to zero, run test, and
++	if fork count is non-zero fail the test.
++	* posix/wordexp.c (parse_arith): Return WRDE_NOCMD if WRDE_NOCMD flag
++	is set and parsing '`'. 
++	(parse_comm): Return WRDE_NOCMD if WRDE_NOCMD flag is set.
++	(parse_backtick): Return WRDE_NOCMD if WRDE_NOCMD flag is set and
++	parsing '`'.
++
++diff --git a/posix/wordexp-test.c b/posix/wordexp-test.c
++index 4957006..5ce2a1b 100644
++--- a/posix/wordexp-test.c
+++++ b/posix/wordexp-test.c
++@@ -27,6 +27,25 @@
++ 
++ #define IFS " \n\t"
++ 
+++extern void *__dso_handle __attribute__ ((__weak__, __visibility__ ("hidden")));
+++extern int __register_atfork (void (*) (void), void (*) (void), void (*) (void), void *);
+++
+++static int __app_register_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+++{
+++  return __register_atfork (prepare, parent, child,
+++			    &__dso_handle == NULL ? NULL : __dso_handle);
+++}
+++
+++/* Number of forks seen.  */
+++static int registered_forks;
+++
+++/* For each fork increment the fork count.  */
+++static void
+++register_fork (void)
+++{
+++  registered_forks++;
+++}
+++
++ struct test_case_struct
++ {
++   int retval;
++@@ -206,6 +225,12 @@ struct test_case_struct
++     { WRDE_SYNTAX, NULL, "$((2+))", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "`", 0, 0, { NULL, }, IFS },
++     { WRDE_SYNTAX, NULL, "$((010+4+))", 0, 0, { NULL }, IFS },
+++    /* Test for CVE-2014-7817. We test 3 combinations of command
+++       substitution inside an arithmetic expression to make sure that
+++       no commands are executed and error is returned.  */
+++    { WRDE_CMDSUB, NULL, "$((`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+++    { WRDE_CMDSUB, NULL, "$((1+$((`echo 1`))))", WRDE_NOCMD, 0, { NULL, }, IFS },
++ 
++     { -1, NULL, NULL, 0, 0, { NULL, }, IFS },
++   };
++@@ -258,6 +283,15 @@ main (int argc, char *argv[])
++ 	  return -1;
++     }
++ 
+++  /* If we are not allowed to do command substitution, we install
+++     fork handlers to verify that no forks happened.  No forks should
+++     happen at all if command substitution is disabled.  */
+++  if (__app_register_atfork (register_fork, NULL, NULL) != 0)
+++    {
+++      printf ("Failed to register fork handler.\n");
+++      return -1;
+++    }
+++
++   for (test = 0; test_case[test].retval != -1; test++)
++     if (testit (&test_case[test]))
++       ++fail;
++@@ -367,6 +401,9 @@ testit (struct test_case_struct *tc)
++ 
++   printf ("Test %d (%s): ", ++tests, tc->words);
++ 
+++  if (tc->flags & WRDE_NOCMD)
+++    registered_forks = 0;
+++
++   if (tc->flags & WRDE_APPEND)
++     {
++       /* initial wordexp() call, to be appended to */
++@@ -378,6 +415,13 @@ testit (struct test_case_struct *tc)
++     }
++   retval = wordexp (tc->words, &we, tc->flags);
++ 
+++  if ((tc->flags & WRDE_NOCMD)
+++      && (registered_forks > 0))
+++    {
+++      printf ("FAILED fork called for WRDE_NOCMD\n");
+++      return 1;
+++    }
+++
++   if (tc->flags & WRDE_DOOFFS)
++       start_offs = sav_we.we_offs;
++ 
++diff --git a/posix/wordexp.c b/posix/wordexp.c
++index b6b65dd..d6a158f 100644
++--- a/posix/wordexp.c
+++++ b/posix/wordexp.c
++@@ -693,6 +693,12 @@ parse_arith (char **word, size_t *word_length, size_t *max_length,
++ 	  break;
++ 
++ 	case '`':
+++	   if (flags & WRDE_NOCMD)
+++	     {
+++	       free (expr);
+++	       return WRDE_NOCMD;
+++	     }
+++
++ 	  (*offset)++;
++ 	  error = parse_backtick (&expr, &expr_length, &expr_maxlen,
++ 				  words, offset, flags, NULL, NULL, NULL);
++@@ -1144,6 +1150,10 @@ parse_comm (char **word, size_t *word_length, size_t *max_length,
++   size_t comm_maxlen;
++   char *comm = w_newword (&comm_length, &comm_maxlen);
++ 
+++  /* Do nothing if command substitution should not succeed.  */
+++  if (flags & WRDE_NOCMD)
+++    return WRDE_CMDSUB;
+++
++   for (; words[*offset]; ++(*offset))
++     {
++       switch (words[*offset])
++@@ -2121,6 +2131,9 @@ parse_backtick (char **word, size_t *word_length, size_t *max_length,
++       switch (words[*offset])
++ 	{
++ 	case '`':
+++	  if (flags & WRDE_NOCMD)
+++	    return WRDE_NOCMD;
+++
++ 	  /* Go -- give the script to the shell */
++ 	  error = exec_comm (comm, word, word_length, max_length, flags,
++ 			     pwordexp, ifs, ifs_white);
