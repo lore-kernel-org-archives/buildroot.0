@@ -1,81 +1,139 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Nov 2014 19:20:54 +0100
-Subject: [Buildroot] [PATCH v2 6/9] libfslvpuwrap: Use self-extractible
-	helper
-In-Reply-To: <1416432642-26005-7-git-send-email-jezz@sysmic.org>
-References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
- <1416432642-26005-7-git-send-email-jezz@sysmic.org>
-Message-ID: <20141127182054.GK3900@free.fr>
+From: Doug Kehn <rdkehn@yahoo.com>
+Date: Thu, 27 Nov 2014 12:32:14 -0600
+Subject: [Buildroot] [PATCH v2 1/2] pkg-generic.mk: reinstall targets
+In-Reply-To: <20141127180855.GE3900@free.fr>
+References: <1417063727-4420-1-git-send-email-rdkehn@yahoo.com>
+ <1417063727-4420-2-git-send-email-rdkehn@yahoo.com>
+ <20141127180855.GE3900@free.fr>
+Message-ID: <20141127183214.GA5348@xUbuntu-64>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Hi Yann, All,
 
-On 2014-11-19 22:30 +0100, J?r?me Pouiller spake thusly:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-
-Ditto the variable re-ordering...
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libfslvpuwrap/libfslvpuwrap.mk | 24 +++++-------------------
->  1 file changed, 5 insertions(+), 19 deletions(-)
+On Thu, Nov 27, 2014 at 07:08:55PM +0100, Yann E. MORIN wrote:
+> Doug, All,
 > 
-> diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-> index c3a5c1c..3bdab99 100644
-> --- a/package/libfslvpuwrap/libfslvpuwrap.mk
-> +++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-> @@ -7,30 +7,16 @@
->  LIBFSLVPUWRAP_VERSION = 1.0.46
->  LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
->  LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
-> +LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
-> +LIBFSLVPUWRAP_INSTALL_STAGING = YES
-> +
-> +# See freescale-imx.mk
->  LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
-> -# N.B.: the content of the two license files is different
->  LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
->  LIBFSLVPUWRAP_REDISTRIBUTE = NO
->  
-> -LIBFSLVPUWRAP_INSTALL_STAGING = YES
-> -
-> -LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
-> -
-> -# The archive is a shell-self-extractor of a bzipped tar. It happens
-> -# to extract in the correct directory (libfslvpuwrap-x.y.z)
-> -# The --force makes sure it doesn't fail if the source dir already exists.
-> -# The --auto-accept skips the license check - not needed for us
-> -# because we have legal-info
-> -# Since the EULA in the bin file differs from the one in the tar file,
-> -# extract the one from the bin file as well.
->  define LIBFSLVPUWRAP_EXTRACT_CMDS
-> -	awk 'BEGIN      { start=0; } \
-> -	     /^EOEULA/  { start = 0; } \
-> -	                { if (start) print; } \
-> -	     /<<EOEULA/ { start=1; }'\
-> -	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
-> -	cd $(BUILD_DIR); \
-> -	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE))
->  endef
->  
->  $(eval $(autotools-package))
+> On 2014-11-26 22:48 -0600, Doug Kehn spake thusly:
+> > Add reinstall targets for host, target, staging, and images variants.
+> > clean-for-reinstall targets added to remove package
+> > .stamp_target_install file to allow package install.  Additionally, when
+> > OVERRIDE_SRCDIR is provided, .stamp_rsynced is removed to ensure pakcage
+> > is up to date before reinstalling.
+> > 
+> > Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> > ---
+> >  package/pkg-generic.mk | 28 +++++++++++++++++++++++++---
+> >  1 file changed, 25 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 9643a30..3c25778 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -480,34 +480,51 @@ $(1):			$(1)-install
+> >  
+> >  ifeq ($$($(2)_TYPE),host)
+> >  $(1)-install:	        $(1)-install-host
+> > +$(1)-reinstall:		$(1)-reinstall-host
+> >  else
+> >  $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+> > +$(1)-reinstall:		$(1)-reinstall-staging $(1)-reinstall-target $(1)-reinstall-images
+> >  endif
+> >  
+> >  ifeq ($$($(2)_INSTALL_TARGET),YES)
+> > -$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
+> > +$(1)-install-target:			$$($(2)_TARGET_INSTALL_TARGET)
+> 
+> This patch is mixing style cleanups with actual new code.
+> I'm not opposed to the cleanups, except they should be part of a
+> seoarate patch.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+I apologize, I did not know that style cleanup needed to be in a
+separate patch.  I will resubmit.
+
+Thanks and regards,
+...doug
+
+> > +$(1)-reinstall-target:			$(1)-clean-for-reinstall-target $$($(2)_TARGET_INSTALL_TARGET)
+> > +$(1)-clean-for-reinstall-target:	$(1)-clean-for-reinstall
+> > +			rm -f $$($(2)_TARGET_INSTALL_TARGET)
+> >  $$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+> >  else
+> >  $(1)-install-target:
+> > +$(1)-reinstall-target:
+> >  endif
+> >  
+> >  ifeq ($$($(2)_INSTALL_STAGING),YES)
+> >  $(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
+> > +$(1)-reinstall-staging:			$(1)-clean-for-reinstall-staging $$($(2)_TARGET_INSTALL_STAGING)
+> > +$(1)-clean-for-reinstall-staging:	$(1)-clean-for-reinstall
+> > +			rm -f $$($(2)_TARGET_INSTALL_STAGING)
+> >  $$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
+> >  # Some packages use install-staging stuff for install-target
+> >  $$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+> >  else
+> >  $(1)-install-staging:
+> > +$(1)-reinstall-staging:
+> >  endif
+> >  
+> >  ifeq ($$($(2)_INSTALL_IMAGES),YES)
+> > -$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
+> > -$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+> > +$(1)-install-images:			$$($(2)_TARGET_INSTALL_IMAGES)
+> > +$(1)-reinstall-images:			$(1)-clean-for-reinstall-images $$($(2)_TARGET_INSTALL_IMAGES)
+> > +$(1)-clean-for-reinstall-images:	$(1)-clean-for-reinstall
+> > +			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+> > +$$($(2)_TARGET_INSTALL_IMAGES):		$$($(2)_TARGET_BUILD)
+> >  else
+> >  $(1)-install-images:
+> > +$(1)-reinstall-images:
+> >  endif
+> >  
+> >  $(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
+> > +$(1)-reinstall-host:      	$(1)-clean-for-reinstall-host $$($(2)_TARGET_INSTALL_HOST)
+> > +$(1)-clean-for-reinstall-host:	$(1)-clean-for-reinstall
+> > +			rm -f $$($(2)_TARGET_INSTALL_HOST)
+> >  $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+> >  
+> >  $(1)-build:		$$($(2)_TARGET_BUILD)
+> > @@ -545,6 +562,8 @@ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+> >  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+> >  
+> >  $(1)-source:		$$($(2)_TARGET_SOURCE)
+> > +
+> > +$(1)-clean-for-reinstall:
+> >  else
+> >  # In the package override case, the sequence of steps
+> >  #  source, by rsyncing
+> > @@ -563,6 +582,9 @@ $(1)-extract:		$(1)-rsync
+> >  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+> >  
+> >  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+> > +
+> > +$(1)-clean-for-reinstall:
+> > +			rm -f $$($(2)_TARGET_RSYNC)
+> >  endif
+> >  
+> >  $(1)-show-depends:
+> > -- 
+> > 1.9.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > -- 
-> 1.9.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
