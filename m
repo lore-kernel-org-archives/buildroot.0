@@ -1,85 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Nov 2014 22:18:41 +0100
-Subject: [Buildroot] [git commit] package: add python-networkmanager
-Message-ID: <20141201104838.B109D80004@busybox.osuosl.org>
+Date: Thu, 27 Nov 2014 22:00:17 +0100
+Subject: [Buildroot] [git commit] libfslvpuwrap: Use self-extractible helper
+Message-ID: <20141201104839.62E417FB2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c9f95305fcc3ddc11d3b1704eab874fdb37183b
+commit: http://git.buildroot.net/buildroot/commit/?id=c98a4de7b43a2efe85aabce1d597a99304fbe092
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+[Thomas: remove unneeded comment.]
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/python-networkmanager/Config.in            |   15 +++++++++++++++
- .../python-networkmanager.hash                     |    3 +++
- .../python-networkmanager/python-networkmanager.mk |   14 ++++++++++++++
- 4 files changed, 33 insertions(+), 0 deletions(-)
+ package/libfslvpuwrap/libfslvpuwrap.mk |   23 ++++-------------------
+ 1 files changed, 4 insertions(+), 19 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f3b189b..bb5b144 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -508,6 +508,7 @@ menu "external python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-netifaces/Config.in"
-+	source "package/python-networkmanager/Config.in"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-posix-ipc/Config.in"
-diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
-new file mode 100644
-index 0000000..fcbce57
---- /dev/null
-+++ b/package/python-networkmanager/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_NETWORKMANAGER
-+	bool "python-networkmanager"
-+	depends on BR2_PACKAGE_NETWORK_MANAGER # runtime
-+	depends on BR2_USE_WCHAR # dbus-python
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
-+	depends on BR2_PACKAGE_DBUS # dbus-python
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	help
-+	  python-networkmanager wraps NetworkManagers D-Bus interface
-+	  so you can be less verbose when talking to NetworkManager
-+	  from python. All interfaces have been wrapped in classes,
-+	  properties are exposed as python properties and function
-+	  calls are forwarded to the correct interface.
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index c3a5c1c..01b2999 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -7,30 +7,15 @@
+ LIBFSLVPUWRAP_VERSION = 1.0.46
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
++LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
++LIBFSLVPUWRAP_INSTALL_STAGING = YES
 +
-+	  https://pypi.python.org/pypi/python-networkmanager/
-diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-new file mode 100644
-index 0000000..6c6f697
---- /dev/null
-+++ b/package/python-networkmanager/python-networkmanager.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2cd400a7ca4dcd1ea98c864007032494, sha256 locally computed
-+md5	2cd400a7ca4dcd1ea98c864007032494  python-networkmanager-0.9.12.tar.gz
-+sha256	a4c7bbae8a1ee3cf370ff0cd2ba2e0f1fb7f8e8f99f8f48a1df624c19a11166f  python-networkmanager-0.9.12.tar.gz
-diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-new file mode 100644
-index 0000000..c043edb
---- /dev/null
-+++ b/package/python-networkmanager/python-networkmanager.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-networkmanager
-+#
-+################################################################################
-+
-+PYTHON_NETWORKMANAGER_VERSION = 0.9.12
-+PYTHON_NETWORKMANAGER_SITE = http://pypi.python.org/packages/source/p/python-networkmanager
-+PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
-+PYTHON_NETWORKMANAGER_LICENSE = GPLv3+
-+PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
-+PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
-+
-+$(eval $(python-package))
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+-# N.B.: the content of the two license files is different
+ LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
+ 
+-LIBFSLVPUWRAP_INSTALL_STAGING = YES
+-
+-LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
+-
+-# The archive is a shell-self-extractor of a bzipped tar. It happens
+-# to extract in the correct directory (libfslvpuwrap-x.y.z)
+-# The --force makes sure it doesn't fail if the source dir already exists.
+-# The --auto-accept skips the license check - not needed for us
+-# because we have legal-info
+-# Since the EULA in the bin file differs from the one in the tar file,
+-# extract the one from the bin file as well.
+ define LIBFSLVPUWRAP_EXTRACT_CMDS
+-	awk 'BEGIN      { start=0; } \
+-	     /^EOEULA/  { start = 0; } \
+-	                { if (start) print; } \
+-	     /<<EOEULA/ { start=1; }'\
+-	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
+-	cd $(BUILD_DIR); \
+-	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE))
+ endef
+ 
+ $(eval $(autotools-package))
