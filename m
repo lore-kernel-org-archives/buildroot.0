@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:20 +0100
-Subject: [Buildroot] [PATCHv2 62/74] fluxbox: install session file
+Date: Thu, 27 Nov 2014 22:57:21 +0100
+Subject: [Buildroot] [PATCHv2 63/74] proftpd: install configuration file
 	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-63-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-64-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,25 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/proftpd/proftpd.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 21901d6..a0f9367 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -24,8 +24,8 @@ FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 65dd84e..ce31276 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -48,10 +48,8 @@ PROFTPD_MAKE = $(MAKE1)
  
- define FLUXBOX_INSTALL_XSESSION_FILE
--	[ -f $(TARGET_DIR)/root/.xsession ] || $(INSTALL) -m 0755 -D \
--		package/fluxbox/xsession $(TARGET_DIR)/root/.xsession
-+	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
-+		$(TARGET_DIR)/root/.xsession
+ define PROFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+-	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
+-		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
+-		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+-	fi
++	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
++	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
  endef
  
- FLUXBOX_POST_INSTALL_TARGET_HOOKS += FLUXBOX_INSTALL_XSESSION_FILE
+ define PROFTPD_INSTALL_INIT_SYSV
 -- 
 2.1.0
