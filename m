@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:29 +0100
-Subject: [Buildroot] [PATCHv2 71/74] php: install configuration file
+Date: Thu, 27 Nov 2014 22:57:30 +0100
+Subject: [Buildroot] [PATCHv2 72/74] inadyn: install configuration file
 	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-72-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-73-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,25 +18,25 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.mk | 6 ++----
+ package/inadyn/inadyn.mk | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 9456f1c..caaf548 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -238,10 +238,8 @@ PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
- define PHP_INSTALL_FIXUP
- 	rm -rf $(TARGET_DIR)/usr/lib/php
- 	rm -f $(TARGET_DIR)/usr/bin/phpize
--	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
--		$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
--			$(TARGET_DIR)/etc/php.ini; \
--	fi
-+	$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
-+		$(TARGET_DIR)/etc/php.ini
- endef
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 73d95db..b002f94 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -20,10 +20,8 @@ INADYN_CONF_OPTS += --disable-ssl
+ endif
  
- PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
+ define INADYN_INSTALL_SAMPLE_CONFIG
+-	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
+-		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+-			$(TARGET_DIR)/etc/inadyn.conf; \
+-	fi
++	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
++		$(TARGET_DIR)/etc/inadyn.conf
+ endef
+ INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
+ 
 -- 
 2.1.0
