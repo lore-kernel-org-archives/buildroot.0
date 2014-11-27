@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:11 +0100
-Subject: [Buildroot] [PATCHv2 53/74] busybox: install init script and config
-	file unconditionally
+Date: Thu, 27 Nov 2014 22:57:13 +0100
+Subject: [Buildroot] [PATCHv2 55/74] iucode-tool: install init script
+	unconditionally
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-54-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-56-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,72 +18,24 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk | 30 ++++++++++++------------------
- 1 file changed, 12 insertions(+), 18 deletions(-)
+ package/iucode-tool/iucode-tool.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index eb2f3f1..ae60ac1 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -57,14 +57,12 @@ endef
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
- define BUSYBOX_INSTALL_MDEV_SCRIPT
--	[ -f $(TARGET_DIR)/etc/init.d/S10mdev ] || \
--		$(INSTALL) -D -m 0755 package/busybox/S10mdev \
--			$(TARGET_DIR)/etc/init.d/S10mdev
-+	$(INSTALL) -D -m 0755 package/busybox/S10mdev \
-+		$(TARGET_DIR)/etc/init.d/S10mdev
- endef
- define BUSYBOX_INSTALL_MDEV_CONF
--	[ -f $(TARGET_DIR)/etc/mdev.conf ] || \
--		$(INSTALL) -D -m 0644 package/busybox/mdev.conf \
--			$(TARGET_DIR)/etc/mdev.conf
-+	$(INSTALL) -D -m 0644 package/busybox/mdev.conf \
-+		$(TARGET_DIR)/etc/mdev.conf
- endef
- define BUSYBOX_SET_MDEV
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
-@@ -165,9 +163,8 @@ endif
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 3124c73..081b086 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -15,9 +15,8 @@ IUCODE_TOOL_LICENSE = GPLv2+
+ IUCODE_TOOL_LICENSE_FILES = COPYING
  
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
--		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
--			$(INSTALL) -m 0755 -D package/busybox/S01logging \
--				$(TARGET_DIR)/etc/init.d/S01logging; \
-+		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-+			$(TARGET_DIR)/etc/init.d/S01logging; \
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ define IUCODE_TOOL_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
+-		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+-			$(TARGET_DIR)/etc/init.d/S00iucode-tool
++	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
++		$(TARGET_DIR)/etc/init.d/S00iucode-tool
  endef
  
-@@ -176,11 +173,10 @@ define BUSYBOX_SET_WATCHDOG
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
- endef
- define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
--	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
--		$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
--			$(TARGET_DIR)/etc/init.d/S15watchdog && \
--		$(SED) s/PERIOD/$(call qstrip,$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD))/ \
--			$(TARGET_DIR)/etc/init.d/S15watchdog
-+	$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
-+		$(TARGET_DIR)/etc/init.d/S15watchdog && \
-+	$(SED) s/PERIOD/$(call qstrip,$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD))/ \
-+		$(TARGET_DIR)/etc/init.d/S15watchdog
- endef
- endif
- 
-@@ -214,10 +210,8 @@ endef
- 
- define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
--	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
--		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
--			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
--	fi
-+	$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-+		$(TARGET_DIR)/usr/share/udhcpc/default.script
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- endef
- 
+ $(eval $(autotools-package))
 -- 
 2.1.0
