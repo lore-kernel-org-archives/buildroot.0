@@ -1,44 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Nov 2014 07:41:53 -0300
-Subject: [Buildroot] [PATCH RFC] Makefile: from a defconfig file,
- point to the corresponding board/ entry
-In-Reply-To: <CAAXf6LU7cF0+R=7T6RE4M3efW52a1v+JyqkjgOEJ3ZXsV+dm8g@mail.gmail.com>
-References: <1417043635-9055-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LU7cF0+R=7T6RE4M3efW52a1v+JyqkjgOEJ3ZXsV+dm8g@mail.gmail.com>
-Message-ID: <5476FFF1.8090304@zacarias.com.ar>
+From: Andrew Parlane <andrewp@carallon.com>
+Date: Thu, 27 Nov 2014 12:05:18 +0000
+Subject: [Buildroot] Perf questions on a 3.10.17 kernel on IMX6
+Message-ID: <5477137E.4090303@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/27/2014 07:37 AM, Thomas De Schampheleire wrote:
+Hi,
 
->> So, we could maybe improve this by renaming and moving our boards docs
->> so there is a one-to-one mapping from the board directory to the
->> corresponding defconfig file (but not necessarily the other way around).
-> 
-> 
-> I would like to point out that automatically detecting the board
-> directory is fragile, because
-> - the mapping may not be obvious, as you already found
-> - there may be more than one 'board' directory. For example, a typical
-> setup when having multiple more-or-less-related projects in a company
-> is to have several layers of post-build/rootfs-overlay/..., for
-> example:
-> board/company/common/...
-> board/company/project1/...
-> board/company/project2/...
-> In the defconfigs of both project1 and project2, the post-build and
-> rootfs-overlay settings would contain multiple entries, being
-> common+project1 and common+project2 respectively.
-> There may even be more levels than that, for example (in my case)
-> common, architecture-specific, project-family-specific,
-> board-specific.
+I'm attempting to do some profiling of a QT5 application on an IMX6 
+running a 3.10.17 kernel, based of a boundary devices BSP. All built 
+through buildroot 2014.08
 
-Agreed.
-Wouldn't it be easier to define something like
-BR2_POST_BUILD_INSTRUCTIONS (with some nicer well-thought out name)
-that's shown when a successful build finishes which points to the proper
-documentation and does nothing if unset? (a good old conditional 'cat').
-Regards.
+Firstly to get perf to build I needed to apply a patch to 
+linux/tools/lib/lk/Makefile to get it to honour cross compiling. I found 
+the commit in the 3.12.33 branch of the kernel.org GIT. 
+https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/tools/lib/lk/Makefile?id=3c4797d46c14fa0c7cf733a77bd4b28875078b53
+
+Running "perf test -v" it doesn't look so happy. Output log here: 
+http://slexy.org/view/s21a2Nugr8
+
+I'm having problems getting debug symbols in the output. I've spent a 
+couple of days reading up on perf and trying various options. I can get 
+some kernel debug symbols, but nothing from userspace. I'm pretty sure 
+I've built my app with -Og -ggdb -fno-omit-frame-pointer -Wl,--build-id.
+
+If anyone has any suggestions, that would be useful.
+
+My other question is has anyone had any success recording on a target 
+environment and then analysing on the build machine? Allowing debug 
+symbols to be supplied only on the build machine? I got perf built for 
+the host using buildroot, it runs but I still don't see debug symbols, 
+and I can't see how to pass in a binary with debug symbols for it to use 
+(like you would using gdbserver on the target and gdb on the host).
+
+If anyone has any advice on using perf like this, it would be much 
+appreciated.
+
+Thanks,
+Andrew Parlane
+Carallon LTD.
