@@ -1,88 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Nov 2014 15:14:06 -0300
-Subject: [Buildroot] [PATCH] configs/p1010rdb: bump to kernel 3.17.4
-Message-ID: <1417112046-11926-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Nov 2014 19:16:20 +0100
+Subject: [Buildroot] [PATCH v2 3/9] imx-vpu: Use self-extractible helper
+In-Reply-To: <1416432642-26005-4-git-send-email-jezz@sysmic.org>
+References: <1416432642-26005-1-git-send-email-jezz@sysmic.org>
+ <1416432642-26005-4-git-send-email-jezz@sysmic.org>
+Message-ID: <20141127181620.GH3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../p1010rdb/{linux-3.13.config => linux-3.17.config}          |  3 ---
- board/freescale/p1010rdb/readme.txt                            |  2 +-
- configs/freescale_p1010rdb_pa_defconfig                        | 10 +++++-----
- 3 files changed, 6 insertions(+), 9 deletions(-)
- rename board/freescale/p1010rdb/{linux-3.13.config => linux-3.17.config} (97%)
+J?r?me, All,
 
-diff --git a/board/freescale/p1010rdb/linux-3.13.config b/board/freescale/p1010rdb/linux-3.17.config
-similarity index 97%
-rename from board/freescale/p1010rdb/linux-3.13.config
-rename to board/freescale/p1010rdb/linux-3.17.config
-index b91d312..c48c4fb 100644
---- a/board/freescale/p1010rdb/linux-3.13.config
-+++ b/board/freescale/p1010rdb/linux-3.17.config
-@@ -57,11 +57,9 @@ CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_AMDSTD=y
- CONFIG_MTD_PHYSMAP_OF=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_FSL_ELBC=y
- CONFIG_MTD_NAND_FSL_IFC=y
--CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_NBD=y
- CONFIG_BLK_DEV_RAM=y
-@@ -71,7 +69,6 @@ CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_ST=y
- CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_MULTI_LUN=y
- CONFIG_SCSI_LOGGING=y
- CONFIG_ATA=y
- CONFIG_SATA_FSL=y
-diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
-index b73ef4d..b119f9a 100644
---- a/board/freescale/p1010rdb/readme.txt
-+++ b/board/freescale/p1010rdb/readme.txt
-@@ -45,7 +45,7 @@ your newly built U-Boot.
- 
- 2. Program the DTB to NOR flash
- 
--    => tftp $loadaddr p1010rdb.dtb
-+    => tftp $loadaddr p1010rdb-pa.dtb
-     => erase 0xee000000 +$filesize
-     => cp.b $loadaddr 0xee000000 $filesize
- 
-diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
-index d3e0538..b784f39 100644
---- a/configs/freescale_p1010rdb_pa_defconfig
-+++ b/configs/freescale_p1010rdb_pa_defconfig
-@@ -11,18 +11,18 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
- 
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.17.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.17.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
- 
- # Serial port config
- BR2_TARGET_GENERIC_GETTY=y
+On 2014-11-19 22:30 +0100, J?r?me Pouiller spake thusly:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/freescale-imx/imx-vpu/imx-vpu.mk | 22 ++++++----------------
+>  1 file changed, 6 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> index e0292ed..110287b 100644
+> --- a/package/freescale-imx/imx-vpu/imx-vpu.mk
+> +++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> @@ -6,8 +6,6 @@
+>  
+>  IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
+>  IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+> -IMX_VPU_LICENSE = Freescale License
+> -IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
+>  IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+>  
+>  IMX_VPU_INSTALL_STAGING = YES
+> @@ -21,21 +19,13 @@ IMX_VPU_MAKE_ENV = \
+>  	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
+>  	INCLUDE="-idirafter $(LINUX_DIR)/include"
+>  
+> -# The archive is a shell-self-extractor of a bzipped tar. It happens
+> -# to extract in the correct directory (imx-vpu-x.y.z)
+> -# The --force makes sure it doesn't fail if the source dir already exists.
+> -# The --auto-accept skips the license check - not needed for us
+> -# because we have legal-info
+> -# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
+> -#
+> +# See freescale-imx.mk
+> +IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
+> +IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
+> +IMX_VPU_REDISTRIBUTE = NO
+> +
+>  define IMX_VPU_EXTRACT_CMDS
+> -	awk 'BEGIN      { start=0; } \
+> -	     /^EOEULA/  { start = 0; } \
+> -	                { if (start) print; } \
+> -	     /<<EOEULA/ { start=1; }'\
+> -	    $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
+> -	cd $(BUILD_DIR); \
+> -	sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
+> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_VPU_SOURCE))
+>  endef
+>  
+>  define IMX_VPU_BUILD_CMDS
+> -- 
+> 1.9.1
+> 
+
 -- 
-2.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
