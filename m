@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:57:07 +0100
-Subject: [Buildroot] [PATCHv2 49/74] qtuio: add error handling to for loop
+Date: Thu, 27 Nov 2014 22:57:09 +0100
+Subject: [Buildroot] [PATCHv2 51/74] xenomai: add error handling to for loop
 In-Reply-To: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417125452-18705-50-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417125452-18705-52-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qtuio/qtuio.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/xenomai/xenomai.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-index 9925f84..9af0136 100644
---- a/package/qtuio/qtuio.mk
-+++ b/package/qtuio/qtuio.mk
-@@ -19,7 +19,7 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_CONFIGURE_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
-+		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
- 	done
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 740a40b..ccbae35 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -99,7 +99,7 @@ XENOMAI_DEPENDENCIES += udev
+ define XENOMAI_INSTALL_UDEV_RULES
+ 	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
+ 		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
+-			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ ; \
++			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ || exit 1 ; \
+ 		done ; \
+ 	fi;
  endef
- endif
-@@ -32,7 +32,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_BUILD_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(MAKE) -C $(@D)/examples/$${example}) ; \
-+		($(MAKE) -C $(@D)/examples/$${example}) || exit 1; \
- 	done
- endef
- endif
-@@ -46,7 +46,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_INSTALL_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-+		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1) ; \
- 	done
- endef
- endif
 -- 
 2.1.0
