@@ -1,60 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Nov 2014 22:00:17 +0100
-Subject: [Buildroot] [git commit] libfslcodec: Use self-extractible helper
-Message-ID: <20141201104839.4A3587FB2C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Nov 2014 21:14:39 +0100
+Subject: [Buildroot] [git commit] mpd: bump to version 0.19.5
+Message-ID: <20141201104839.9AAC07FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=349dfdd4fae14f83daf71dbb7d620451253cab93
+commit: http://git.buildroot.net/buildroot/commit/?id=b7e79b839a4ab19b1bda3d136100432999c5b09f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: remove unneeded comment.]
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfslcodec/libfslcodec.mk |   22 +++-------------------
- 1 files changed, 3 insertions(+), 19 deletions(-)
+ package/mpd/mpd.hash |    2 +-
+ package/mpd/mpd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index 1a364bb..fe6f0ba 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
-@@ -7,30 +7,14 @@
- LIBFSLCODEC_VERSION = 3.0.11
- LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
-+LIBFSLCODEC_INSTALL_STAGING = YES
-+
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
- LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
--# This is a legal minefield: the EULA in the bin file specifies that
--# the Board Support Package includes software and hardware (sic!)
--# for which a separate license is needed...
- LIBFSLCODEC_REDISTRIBUTE = NO
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index f8bf014..f8dc05f 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	18f4af89e8b9a434da2b8678b53fc8189da97c1f32e9083512d67217166d3bd8	mpd-0.19.4.tar.xz
++sha256	e621e05e7d0e92690f7a1b6ee6f1e502a4d009c69caa4907519282ca571f72cf	mpd-0.19.5.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 1369847..5448251 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--LIBFSLCODEC_INSTALL_STAGING = YES
--
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (libfslcodec-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info.
--# Since the EULA in the bin file differs from the one in the tar file,
--# extract the one from the bin file as well.
- define LIBFSLCODEC_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(LIBFSLCODEC_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(LIBFSLCODEC_SOURCE) --force --auto-accept
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLCODEC_SOURCE))
- endef
- 
- # FIXME The Makefile installs both the arm9 and arm11 versions of the
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).4
++MPD_VERSION = $(MPD_VERSION_MAJOR).5
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
