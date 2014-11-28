@@ -1,53 +1,37 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 28 Nov 2014 07:35:34 +0200
-Subject: [Buildroot] [PATCHv2 19/74] gpsd: use <pkg>_INSTALL_INIT_SYSV
- mechanism
-In-Reply-To: <1417125452-18705-20-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417125452-18705-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417125452-18705-20-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141128053534.GG4690@tarshish>
+Date: Fri, 28 Nov 2014 09:18:12 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: fix static build
+Message-ID: <2de1279dcd485fe0a9dda147272221766bb7e187.1417159092.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+libuuid needs -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is set.
 
-On Thu, Nov 27, 2014 at 10:56:37PM +0100, Thomas Petazzoni wrote:
-> Also makes the installation init script unconditional.
+Fixes:
+http://autobuild.buildroot.net/results/9f1/9f182cd5955d724750135bcd6cb7e315fb28334f/
 
-Same here.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/btrfs-progs/btrfs-progs.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-baruch
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gpsd/gpsd.mk | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> index 7dc27e8..5092b38 100644
-> --- a/package/gpsd/gpsd.mk
-> +++ b/package/gpsd/gpsd.mk
-> @@ -206,10 +206,11 @@ define GPSD_INSTALL_TARGET_CMDS
->  		$(SCONS) \
->  		$(GPSD_SCONS_OPTS) \
->  		install)
-> -	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
-> -		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
-> -		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
-> -	fi
-> +endef
-> +
-> +define GPSD_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd
-> +	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
->  endef
->  
->  define GPSD_INSTALL_STAGING_CMDS
-
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index d16fa0d9aa6f..7122df1b0e76 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -17,6 +17,10 @@ BTRFS_PROGS_LICENSE_FILES = COPYING
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ BTRFS_PROGS_MAKE_TARGET = static
+ BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++# Add -lintl for libuuid
++BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
++endif
+ else
+ BTRFS_PROGS_MAKE_TARGET = all
+ BTRFS_PROGS_MAKE_INSTALL_TARGET = install
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.3
