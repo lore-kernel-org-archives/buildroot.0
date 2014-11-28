@@ -1,111 +1,47 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 28 Nov 2014 16:43:29 +0000
-Subject: [Buildroot] [PATCH v3] Add a defconfig for MIPS Creator CI20
-Message-ID: <1417193009-65132-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 28 Nov 2014 18:23:43 +0100
+Subject: [Buildroot] [PATCH] perl-gd: fix configure/build
+Message-ID: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MIPS Creator CI20 is a Linux and Android development system from
-MIPS/Imagination Technologies. It incorporates an Ingenic JZ4780 SoC
-which includes a 1.2GHz dual core MIPS32 processor and Imagination
-PowerVR SGX540 GPU.
+see http://autobuild.buildroot.net/results/e74/e74efded899744d757cb798c44f096b54898f95a/
 
-More information can be found at:
-  http://elinux.org/MIPS_Creator_CI20
+this new patch prevents the use of a host gdlib-config
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-Changes v2 -> v3
- - The v2 patch was wrong because it was made having the v1 applied.
-   This one has been made from scratch.
-Changes v1 -> v2
- - Clone the kernel repository using a commit hash value instead of a
-   branch name, so we can do reproducible builds.
- - Fix the kernel headers version to 3.0.8.
- - Clone the kernel repository using https:// instead of git:// to avoid
-   problems for people who is behind a firewall.
- - Add a readme.txt file.
+ package/perl-gd/perl-gd-04-no-autoconfig.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/perl-gd/perl-gd-04-no-autoconfig.patch
 
- board/ci20/readme.txt  |   42 ++++++++++++++++++++++++++++++++++++++++++
- configs/ci20_defconfig |   18 ++++++++++++++++++
- 2 files changed, 60 insertions(+), 0 deletions(-)
- create mode 100644 board/ci20/readme.txt
- create mode 100644 configs/ci20_defconfig
-
-diff --git a/board/ci20/readme.txt b/board/ci20/readme.txt
+diff --git a/package/perl-gd/perl-gd-04-no-autoconfig.patch b/package/perl-gd/perl-gd-04-no-autoconfig.patch
 new file mode 100644
-index 0000000..ca7bb52
+index 0000000..c067d41
 --- /dev/null
-+++ b/board/ci20/readme.txt
-@@ -0,0 +1,42 @@
-+*********************
-+* MIPS Creator CI20 *
-+*********************
++++ b/package/perl-gd/perl-gd-04-no-autoconfig.patch
+@@ -0,0 +1,19 @@
++prevents the use of gdlib-config in a cross-compilation environment
 +
-+The 'ci20_defconfig' will create a root filesystem and a kernel image
-+under the 'output/images/' directory. This document will try to explain how
-+to use them in order to run Buildroot in the MIPS Creator CI20 board.
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+Assuming you are at the U-Boot prompt of the MIPS Creator CI20, you have to
-+load the generated kernel image by using the 'tftpboot' command. In
-+order to do that, you will need to get the network working. Here you
-+have the instructions to set the ip address, netmask and gateway:
++Index: b/Makefile.PL
++===================================================================
++--- a/Makefile.PL
+++++ b/Makefile.PL
++@@ -272,6 +272,7 @@
++ exit 0;
 +
-+  setenv ipaddr x.x.x.x
-+  setenv netmask x.x.x.x
-+  setenv gatewayip x.x.x.x
++ sub try_to_autoconfigure {
+++  return; # hack for BR
++   my ($options,$lib_gd_path,$INC,$LIBPATH,$LIBS) = @_;
++   my $config = `gdlib-config --all`;
++   return unless $config;
++--
++2.1.0
 +
-+Now you have to set the ip for the TFTP server you are going to load the
-+kernel image from, and also the name of the kernel image file (we use
-+'uImage' as a filename in this example):
-+
-+  setenv serverip x.x.x.x
-+  setenv bootfile uImage
-+
-+And finally load the kernel image:
-+
-+  tftpboot
-+
-+Now you have to extract the generated root filesystem into a USB drive
-+or SD-Card. Here you have the instructions to boot from the two of them.
-+You have to choose the one your prefer:
-+
-+From USB
-+  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
-+mem=768M at 0x30000000 root=/dev/sda1
-+
-+From SD-Card
-+  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
-+mem=768M at 0x30000000 root=/dev/mmcblk0p1
-+
-+And finally run this command to boot the board:
-+  bootm
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-new file mode 100644
-index 0000000..7f1bf87
---- /dev/null
-+++ b/configs/ci20_defconfig
-@@ -0,0 +1,18 @@
-+# architecture
-+BR2_mipsel=y
-+BR2_mips_32r2=y
-+# BR2_MIPS_SOFT_FLOAT is not set
-+
-+# system
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.0.8"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba11adc7ac8792b0eb7415a1cc9c0968604a6fac"
-+BR2_LINUX_KERNEL_DEFCONFIG="ci20"
 -- 
-1.7.1
+2.1.0
