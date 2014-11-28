@@ -1,39 +1,28 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 28 Nov 2014 19:36:10 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/xapp_bdftopcf: Fix linking
-	error
-Message-ID: <1417199770-6206-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 28 Nov 2014 19:38:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_bdftopcf: Fix
+	linking error
+References: <1417035000-22176-1-git-send-email-bernd.kuhls@t-online.de>
+ <87d288nv8o.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA3F3C7B8B7566berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/242/24297c948c0eee684e868ad4bd12f11c3a759248/
-http://autobuild.buildroot.net/results/464/464fdc71690a437c1782dd8e4c75d78195bf8bfd/
-http://autobuild.buildroot.net/results/77c/77c26d14c8906b44f7c3fa1b3d759556c7318a7e/
-and many others ( http://autobuild.buildroot.net/?reason=xapp_bdftopcf-1.0.4 )
+Peter Korsgaard <peter@korsgaard.com> wrote in 
+news:87d288nv8o.fsf at dell.be.48ers.dk:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Change LDFLAGS to LIBS (Peter)
+> > +# needed for linking against libXfont
+> > +XAPP_BDFTOPCF_MAKE_OPTS += LDFLAGS+=-ldl
+> 
+> Does this end up at the very back of the linker command line? Why not
+> XAPP_BDFTOPCF_CONF_ENV += LIBS=-ldl like we do elsewhere?
 
- package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk |    3 +++
- 1 file changed, 3 insertions(+)
+Hi Peter,
 
-diff --git a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-index 950d988..64c2103 100644
---- a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-+++ b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-@@ -11,5 +11,8 @@ XAPP_BDFTOPCF_LICENSE = MIT
- XAPP_BDFTOPCF_LICENSE_FILES = COPYING
- XAPP_BDFTOPCF_DEPENDENCIES = xlib_libXfont
- 
-+# needed for linking against libXfont
-+XAPP_BDFTOPCF_MAKE_OPTS += LIBS=-ldl
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-1.7.10.4
+I had no particular reason for my choice, it works as good as your proposal, 
+so I sent v2: http://patchwork.ozlabs.org/patch/415933/
+
+Regards, Bernd
