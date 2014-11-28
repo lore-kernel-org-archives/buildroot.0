@@ -1,63 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 21:44:53 +0100
-Subject: [Buildroot] [PATCH] perl-gd: fix configure/build
-In-Reply-To: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Fri, 28 Nov 2014 18:23:43 +0100")
-References: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <8761dzkqbe.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 28 Nov 2014 21:46:39 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/x11r7/xserver_xorg-server:
+	bump version to 1.16.2
+Message-ID: <1417207599-32743-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > see http://autobuild.buildroot.net/results/e74/e74efded899744d757cb798c44f096b54898f95a/
- > this new patch prevents the use of a host gdlib-config
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  package/perl-gd/perl-gd-04-no-autoconfig.patch | 19 +++++++++++++++++++
- >  1 file changed, 19 insertions(+)
- >  create mode 100644 package/perl-gd/perl-gd-04-no-autoconfig.patch
-
- > diff --git a/package/perl-gd/perl-gd-04-no-autoconfig.patch b/package/perl-gd/perl-gd-04-no-autoconfig.patch
- > new file mode 100644
- > index 0000000..c067d41
- > --- /dev/null
- > +++ b/package/perl-gd/perl-gd-04-no-autoconfig.patch
- > @@ -0,0 +1,19 @@
- > +prevents the use of gdlib-config in a cross-compilation environment
- > +
- > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > +
- > +Index: b/Makefile.PL
- > +===================================================================
- > +--- a/Makefile.PL
- > ++++ b/Makefile.PL
- > +@@ -272,6 +272,7 @@
- > + exit 0;
- > +
- > + sub try_to_autoconfigure {
- > ++  return; # hack for BR
-
-But does that do the right thing?
-
-This is what our gdlib-config returns when E.G. building with png and
-jpeg support:
-
-./staging/usr/bin/gdlib-config --all                                         ~/source/buildroot/outputgd
-GD library  2.1.0
-includedir: /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
-cflags:     -I/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
-ldflags:     -pthread
-libs:       -ljpeg -lz -lm  -L/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib -lpng16  
-libdir:     /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
-features:   GD_JPEG GD_PNG GD_GIF GD_GIFANIM GD_OPENPOLYGON
-
-As far as I can see it doesn't end up linking with those libraries /
-using -pthread. Does it work for you? (it might, when using shared linking).
-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index f118ef2..4db8b09 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 1.16.1
++XSERVER_XORG_SERVER_VERSION = 1.16.2
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
