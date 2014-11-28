@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 28 Nov 2014 16:33:05 +0000
-Subject: [Buildroot] [PATCH v2] Add a defconfig for MIPS Creator CI20
-Message-ID: <1417192385-64530-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 28 Nov 2014 16:43:29 +0000
+Subject: [Buildroot] [PATCH v3] Add a defconfig for MIPS Creator CI20
+Message-ID: <1417193009-65132-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,6 +18,9 @@ More information can be found at:
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v2 -> v3
+ - The v2 patch was wrong because it was made having the v1 applied.
+   This one has been made from scratch.
 Changes v1 -> v2
  - Clone the kernel repository using a commit hash value instead of a
    branch name, so we can do reproducible builds.
@@ -27,9 +30,10 @@ Changes v1 -> v2
  - Add a readme.txt file.
 
  board/ci20/readme.txt  |   42 ++++++++++++++++++++++++++++++++++++++++++
- configs/ci20_defconfig |   12 ++++++++++--
- 2 files changed, 52 insertions(+), 2 deletions(-)
+ configs/ci20_defconfig |   18 ++++++++++++++++++
+ 2 files changed, 60 insertions(+), 0 deletions(-)
  create mode 100644 board/ci20/readme.txt
+ create mode 100644 configs/ci20_defconfig
 
 diff --git a/board/ci20/readme.txt b/board/ci20/readme.txt
 new file mode 100644
@@ -80,29 +84,28 @@ index 0000000..ca7bb52
 +And finally run this command to boot the board:
 +  bootm
 diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 88930fa..7f1bf87 100644
---- a/configs/ci20_defconfig
+new file mode 100644
+index 0000000..7f1bf87
+--- /dev/null
 +++ b/configs/ci20_defconfig
-@@ -1,10 +1,18 @@
+@@ -0,0 +1,18 @@
 +# architecture
- BR2_mipsel=y
- BR2_mips_32r2=y
- # BR2_MIPS_SOFT_FLOAT is not set
++BR2_mipsel=y
++BR2_mips_32r2=y
++# BR2_MIPS_SOFT_FLOAT is not set
 +
 +# system
 +BR2_KERNEL_HEADERS_VERSION=y
 +BR2_DEFAULT_KERNEL_VERSION="3.0.8"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
 +
 +# kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/MIPS/CI20_linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ci20-v3.0.8"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
 +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
 +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba11adc7ac8792b0eb7415a1cc9c0968604a6fac"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
++BR2_LINUX_KERNEL_DEFCONFIG="ci20"
 -- 
 1.7.1
