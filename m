@@ -1,53 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 14:00:06 +0100
-Subject: [Buildroot] Buildroot 2014.11-rc3 released
-Message-ID: <87r3wnlbu1.fsf@dell.be.48ers.dk>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 28 Nov 2014 14:10:05 +0100
+Subject: [Buildroot] [PATCH v4] Makefile: improve detection of make "-s"
+	flag
+In-Reply-To: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC-FM6NHzXPD3rNuTwpf_aY_Lf0m3ew8KX3pKy18YW6RWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Nov 19, 2014 at 6:51 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> Because it's just checked the presence of the "s" character even a
+>   make --warn-undefined-variables
+> is detected as a silent build so fix this by filtering out long options.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>
+> Notes:
+>     v4:
+>      - split this patch from the patch set to send to muster as bugfix
+>     v2:
+>      - remove spurious space at the beginning of the QUIET variable (Arnout)
+>
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Buildroot 2014.11-rc3 is released - Go download it at:
+ping?
 
-http://buildroot.net/downloads/buildroot-2014.11-rc3.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2014.11-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2014.11-rc2..
-
-    11  Gustavo Zacarias
-    11  Peter Korsgaard
-     8  Baruch Siach
-     8  Thomas Petazzoni
-     7  Yann E. MORIN
-     4  Bernd Kuhls
-     4  Maxime Hadjinlian
-     2  Peter Seiderer
-     2  Vicente Olivert Riera
-     1  Fabio Porcedda
-     1  Francois Perrad
-     1  Max Filippov
-     1  Nathaniel Roach
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc3
-
-Expect the final 2014.11 release by the end of the week.
-
+BR
 -- 
-Bye, Peter Korsgaard
+Fabio Porcedda
