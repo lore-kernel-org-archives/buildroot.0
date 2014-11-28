@@ -1,54 +1,100 @@
 From: Doug Kehn <rdkehn@yahoo.com>
-Date: Fri, 28 Nov 2014 09:25:03 -0600
-Subject: [Buildroot] [PATCH v3 0/3] [RFC] Reinstall Targets
-Message-ID: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
+Date: Fri, 28 Nov 2014 09:25:04 -0600
+Subject: [Buildroot] [PATCH v3 1/3] pkg-generic.mk: reinstall targets
+In-Reply-To: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
+References: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <1417188306-9035-2-git-send-email-rdkehn@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This RFC proposes adding the following targets to pkg-generic.mk:
-    <package>-reinstall
-    <package>-reinstall-target
-    <package>-reinstall-staging
-    <package>-reinstall-images
-    <package>-reinstall-host
+Add reinstall targets for host, target, staging, and images variants.
+clean-for-reinstall targets added to remove package
+.stamp_target_install file to allow package install.  Additionally, when
+OVERRIDE_SRCDIR is provided, .stamp_rsynced is removed to ensure pakcage
+is up to date before reinstalling.
 
-These targets remove the package's .stamp_*_installed file to allow the
-reinstall to execute.  The only method I presently know of to reinstall a
-package is to make <package>-rebuild.  The proposed targets allow a package
-reinstall without, unnecessarily incurring a rebuild of the package.
-
-In addition to allowing a reinstall to staging and/or target output
-directories, the proposed targets allow selected packages to be
-installed to a different 'target' directory.  For example, I attempt to
-keep software updates as small as possible; therefore, I cherry-pick
-files to include in the update package.  If I know packages foo and bar
-have been updated, the following will install those packages to a
-directory that can be further processed to generate the desired update
-package.
-
-make TARGET_DIR=${PWD}/update foo-reinstall-target
-
-make TARGET_DIR=${PWD}/update bar-reinstall-target
-
-Doug Kehn (3):
-  pkg-generic.mk: reinstall targets
-  manual: reinstall targets
-  manual: style update
-
- docs/manual/package-make-target.txt | 26 ++++++++++++++++++++------
- package/pkg-generic.mk              | 22 ++++++++++++++++++++++
- 2 files changed, 42 insertions(+), 6 deletions(-)
-
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 ---
-Changes v2 -> v3:
-  - Move style updates to separate patch (requested by Thomos)
+ package/pkg-generic.mk | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Changes v1 -> v2:
-  - Reworked to include reinstall target (requested by Thomas)
-  - Updated documentation
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9643a30..0fe7059 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -480,34 +480,51 @@ $(1):			$(1)-install
+ 
+ ifeq ($$($(2)_TYPE),host)
+ $(1)-install:	        $(1)-install-host
++$(1)-reinstall:		$(1)-reinstall-host
+ else
+ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
++$(1)-reinstall:		$(1)-reinstall-staging $(1)-reinstall-target $(1)-reinstall-images
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+ $(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
++$(1)-reinstall-target:		$(1)-clean-for-reinstall-target $$($(2)_TARGET_INSTALL_TARGET)
++$(1)-clean-for-reinstall-target:$(1)-clean-for-reinstall
++			rm -f $$($(2)_TARGET_INSTALL_TARGET)
+ $$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+ else
+ $(1)-install-target:
++$(1)-reinstall-target:
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+ $(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
++$(1)-reinstall-staging:			$(1)-clean-for-reinstall-staging $$($(2)_TARGET_INSTALL_STAGING)
++$(1)-clean-for-reinstall-staging:	$(1)-clean-for-reinstall
++			rm -f $$($(2)_TARGET_INSTALL_STAGING)
+ $$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
+ # Some packages use install-staging stuff for install-target
+ $$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+ else
+ $(1)-install-staging:
++$(1)-reinstall-staging:
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_IMAGES),YES)
+ $(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
++$(1)-reinstall-images:		$(1)-clean-for-reinstall-images $$($(2)_TARGET_INSTALL_IMAGES)
++$(1)-clean-for-reinstall-images:$(1)-clean-for-reinstall
++			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+ $$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+ else
+ $(1)-install-images:
++$(1)-reinstall-images:
+ endif
+ 
+ $(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
++$(1)-reinstall-host:      	$(1)-clean-for-reinstall-host $$($(2)_TARGET_INSTALL_HOST)
++$(1)-clean-for-reinstall-host:	$(1)-clean-for-reinstall
++			rm -f $$($(2)_TARGET_INSTALL_HOST)
+ $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+ 
+ $(1)-build:		$$($(2)_TARGET_BUILD)
+@@ -545,6 +562,8 @@ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
+ $(1)-source:		$$($(2)_TARGET_SOURCE)
++
++$(1)-clean-for-reinstall:
+ else
+ # In the package override case, the sequence of steps
+ #  source, by rsyncing
+@@ -563,6 +582,9 @@ $(1)-extract:		$(1)-rsync
+ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+ 
+ $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
++
++$(1)-clean-for-reinstall:
++			rm -f $$($(2)_TARGET_RSYNC)
+ endif
+ 
+ $(1)-show-depends:
 -- 
 1.9.1
