@@ -1,106 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Nov 2014 07:25:45 -0300
-Subject: [Buildroot] [PATCH] tcpdump: add 3 security patches
-Message-ID: <1417170345-10871-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Nov 2014 12:11:06 +0100
+Subject: [Buildroot] [PATCH] bind: not available for static builds
+In-Reply-To: <1417170327-10829-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 28 Nov 2014 07:25:27 -0300")
+References: <1417170327-10829-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mtjmvg5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-8767 - denial of service in verbose mode using malformed OLSR
-payload
-OLSR payload
-CVE-2014-8768 - denial of service in verbose mode using malformed Geonet
-payload
-CVE-2014-8769 - unreliable output using malformed AOVD payload
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/tcpdump/0002-fix-CVE-2014-8767.patch | 20 ++++++++++++++++++++
- package/tcpdump/0003-fix-CVE-2014-8768.patch | 19 +++++++++++++++++++
- package/tcpdump/0004-fix-CVE-2014-8769.patch | 19 +++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 package/tcpdump/0002-fix-CVE-2014-8767.patch
- create mode 100644 package/tcpdump/0003-fix-CVE-2014-8768.patch
- create mode 100644 package/tcpdump/0004-fix-CVE-2014-8769.patch
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e27/e27111f484f72c77d2179fa1a29ea7b5271ff9fa/
 
-diff --git a/package/tcpdump/0002-fix-CVE-2014-8767.patch b/package/tcpdump/0002-fix-CVE-2014-8767.patch
-new file mode 100644
-index 0000000..a88efdf
---- /dev/null
-+++ b/package/tcpdump/0002-fix-CVE-2014-8767.patch
-@@ -0,0 +1,20 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165160
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump-4.6/print-olsr.c	2014-10-23 14:07:12.000000000 +0700
-++++ tcpdump-4.6.2/print-olsr.c	2014-11-21 14:56:18.205542679 +0700
-+@@ -234,6 +234,13 @@
-+     ND_PRINT((ndo, "\n\t      neighbor\n\t\t"));
-+     neighbor = 1;
-+ 
-++    u_int caplength;
-++
-++    /* Checking length of available data before print */
-++    caplength = (ndo->ndo_snapend >= msg_data) ? ndo->ndo_snapend - msg_data : 0;
-++    if (hello_len > caplength)
-++        hello_len = caplength;
-++
-+     while (hello_len >= sizeof(struct in_addr)) {
-+ 
-+         /* print 4 neighbors per line */
-diff --git a/package/tcpdump/0003-fix-CVE-2014-8768.patch b/package/tcpdump/0003-fix-CVE-2014-8768.patch
-new file mode 100644
-index 0000000..a8b82cf
---- /dev/null
-+++ b/package/tcpdump/0003-fix-CVE-2014-8768.patch
-@@ -0,0 +1,19 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165161
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump_4.5/print-geonet.c	2014-02-17 05:58:41.000000000 +0700
-++++ print-geonet.c	2014-11-21 10:06:58.590217933 +0700
-+@@ -237,6 +237,12 @@
-+ 		printf("Malformed (small) ");
-+ 	}
-+ 
-++	/* Checking length before print */
-++	u_int caplength;
-++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
-++	if (length > caplength)
-++		length = caplength;
-++
-+ 	/* Print user data part */
-+ 	if (ndo->ndo_vflag)
-+ 		default_print(bp, length);
-diff --git a/package/tcpdump/0004-fix-CVE-2014-8769.patch b/package/tcpdump/0004-fix-CVE-2014-8769.patch
-new file mode 100644
-index 0000000..38eaf12
---- /dev/null
-+++ b/package/tcpdump/0004-fix-CVE-2014-8769.patch
-@@ -0,0 +1,19 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165162
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump-4.6/print-udp.c	2014-11-21 13:53:05.757690197 +0700
-++++ tcpdump-4.6.2/print-udp.c	2014-11-21 13:50:58.077695164 +0700
-+@@ -357,6 +357,12 @@
-+ #ifdef INET6
-+ 	register const struct ip6_hdr *ip6;
-+ #endif
-++	u_int caplength;
-++
-++	/* Checking length of available data before print */
-++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
-++	if (length > caplength)
-++		length = caplength;
-+ 
-+ 	if (ep > ndo->ndo_snapend)
-+ 		ep = ndo->ndo_snapend;
+ > While at it rename patches to new convention.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.0.4
+Bye, Peter Korsgaard
