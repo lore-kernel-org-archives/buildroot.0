@@ -1,58 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Nov 2014 16:13:59 +0100
-Subject: [Buildroot] [git commit] liboping: bump to version 1.8.0
-Message-ID: <20141201104838.585867FDA9@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 23:36:29 +0100
+Subject: [Buildroot] [git commit] Add a defconfig for MIPS Creator CI20
+Message-ID: <20141201104839.AF56D7FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfb3af459c60c7dfb6a881ef6a79771565ac0d32
+commit: http://git.buildroot.net/buildroot/commit/?id=51a95551159461e52f204cf6153ca52954438b4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+MIPS Creator CI20 is a Linux and Android development system from
+MIPS/Imagination Technologies. It incorporates an Ingenic JZ4780 SoC
+which includes a 1.2GHz dual core MIPS32 processor and Imagination
+PowerVR SGX540 GPU.
+
+More information can be found at:
+  http://elinux.org/MIPS_Creator_CI20
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liboping/Config.in     |    2 +-
- package/liboping/liboping.hash |    4 ++--
- package/liboping/liboping.mk   |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ board/ci20/readme.txt  |   42 ++++++++++++++++++++++++++++++++++++++++++
+ configs/ci20_defconfig |   18 ++++++++++++++++++
+ 2 files changed, 60 insertions(+), 0 deletions(-)
 
-diff --git a/package/liboping/Config.in b/package/liboping/Config.in
-index ffdebbd..65e7c88 100644
---- a/package/liboping/Config.in
-+++ b/package/liboping/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBOPING
- 	  liboping is a C library to generate ICMP echo requests,
- 	  better known as "ping packets".
- 
--	  http://verplant.org/liboping/
-+	  http://noping.cc/
- 
- comment "liboping needs a toolchain w/ IPv6"
- 	depends on !BR2_INET_IPV6
-diff --git a/package/liboping/liboping.hash b/package/liboping/liboping.hash
-index 5987d7a..536f6ae 100644
---- a/package/liboping/liboping.hash
-+++ b/package/liboping/liboping.hash
-@@ -1,2 +1,2 @@
--# From http://verplant.org/liboping/#download
--sha256	25cf9417fe84d70c4b1bd97f1f92e597ccdc1ec2da3b7eb311f33f5e7033a70e	liboping-1.7.0.tar.gz
-+# From http://noping.cc/#download
-+sha256	824792ae7fc5e9569bacc4167b89de31f6ba8476de44760f0bc272682e894b41	liboping-1.8.0.tar.gz
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-index bb02616..aeaaa8a 100644
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBOPING_VERSION = 1.7.0
--LIBOPING_SITE = http://verplant.org/liboping/files
-+LIBOPING_VERSION = 1.8.0
-+LIBOPING_SITE = http://noping.cc/files
- LIBOPING_INSTALL_STAGING = YES
- LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
- LIBOPING_CONF_OPTS = --without-perl-bindings
+diff --git a/board/ci20/readme.txt b/board/ci20/readme.txt
+new file mode 100644
+index 0000000..ca7bb52
+--- /dev/null
++++ b/board/ci20/readme.txt
+@@ -0,0 +1,42 @@
++*********************
++* MIPS Creator CI20 *
++*********************
++
++The 'ci20_defconfig' will create a root filesystem and a kernel image
++under the 'output/images/' directory. This document will try to explain how
++to use them in order to run Buildroot in the MIPS Creator CI20 board.
++
++Assuming you are at the U-Boot prompt of the MIPS Creator CI20, you have to
++load the generated kernel image by using the 'tftpboot' command. In
++order to do that, you will need to get the network working. Here you
++have the instructions to set the ip address, netmask and gateway:
++
++  setenv ipaddr x.x.x.x
++  setenv netmask x.x.x.x
++  setenv gatewayip x.x.x.x
++
++Now you have to set the ip for the TFTP server you are going to load the
++kernel image from, and also the name of the kernel image file (we use
++'uImage' as a filename in this example):
++
++  setenv serverip x.x.x.x
++  setenv bootfile uImage
++
++And finally load the kernel image:
++
++  tftpboot
++
++Now you have to extract the generated root filesystem into a USB drive
++or SD-Card. Here you have the instructions to boot from the two of them.
++You have to choose the one your prefer:
++
++From USB
++  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
++mem=768M at 0x30000000 root=/dev/sda1
++
++From SD-Card
++  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
++mem=768M at 0x30000000 root=/dev/mmcblk0p1
++
++And finally run this command to boot the board:
++  bootm
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+new file mode 100644
+index 0000000..7f1bf87
+--- /dev/null
++++ b/configs/ci20_defconfig
+@@ -0,0 +1,18 @@
++# architecture
++BR2_mipsel=y
++BR2_mips_32r2=y
++# BR2_MIPS_SOFT_FLOAT is not set
++
++# system
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.0.8"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba11adc7ac8792b0eb7415a1cc9c0968604a6fac"
++BR2_LINUX_KERNEL_DEFCONFIG="ci20"
