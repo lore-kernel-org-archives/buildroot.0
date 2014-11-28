@@ -1,105 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 12:08:27 +0100
-Subject: [Buildroot] [git commit] tcpdump: add 3 security patches
-Message-ID: <20141128111938.EABAF7FF70@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 12:36:51 +0100
+Subject: [Buildroot] [PATCHv4 1/4] dhcp: update dhclient-script
+In-Reply-To: <1417107630-14909-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 27 Nov 2014 14:00:27 -0300")
+References: <1417107630-14909-1-git-send-email-gustavo@zacarias.com.ar>
+ <1417107630-14909-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vblzlfos.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=489848b1fa2ea47638635c2e1ef266ddac172319
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes:
-CVE-2014-8767 - denial of service in verbose mode using malformed OLSR
-payload
-OLSR payload
-CVE-2014-8768 - denial of service in verbose mode using malformed Geonet
-payload
-CVE-2014-8769 - unreliable output using malformed AOVD payload
+ > The previous no-op dhclient-script is useless and in fact can lead
+ > users to believe things will work.
+ > dhclient-script is supposed to, among many other things, bring the
+ > interface up for dhclient to pump an address, set the interface
+ > address, set resolv.conf appropiately and set the default gateway.
+ > It's a complex script since it has to deal with a lot of details so
+ > let's just use the best fit which is the OpenWRT one since it uses the
+ > "legacy" tools (ifconfig, route, ...) which can be easily provided by
+ > busybox and/or net-tools.
+ > There are newer and more feature-complete versions around but they
+ > require full iproute2 ip and wouldn't fit as well with the busybox-only
+ > approach.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tcpdump/0002-fix-CVE-2014-8767.patch |   20 ++++++++++++++++++++
- package/tcpdump/0003-fix-CVE-2014-8768.patch |   19 +++++++++++++++++++
- package/tcpdump/0004-fix-CVE-2014-8769.patch |   19 +++++++++++++++++++
- 3 files changed, 58 insertions(+), 0 deletions(-)
+ > License: likely GPLv2+
+ > Source:
+ > http://git.openwrt.org/?p=packages.git;a=blob;f=net/isc-dhcp/files/dhclient-script;h=4afebc0ad20ebac51c5baae5ed01c6713e3a0fd0;hb=HEAD
 
-diff --git a/package/tcpdump/0002-fix-CVE-2014-8767.patch b/package/tcpdump/0002-fix-CVE-2014-8767.patch
-new file mode 100644
-index 0000000..a88efdf
---- /dev/null
-+++ b/package/tcpdump/0002-fix-CVE-2014-8767.patch
-@@ -0,0 +1,20 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165160
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump-4.6/print-olsr.c	2014-10-23 14:07:12.000000000 +0700
-++++ tcpdump-4.6.2/print-olsr.c	2014-11-21 14:56:18.205542679 +0700
-+@@ -234,6 +234,13 @@
-+     ND_PRINT((ndo, "\n\t      neighbor\n\t\t"));
-+     neighbor = 1;
-+ 
-++    u_int caplength;
-++
-++    /* Checking length of available data before print */
-++    caplength = (ndo->ndo_snapend >= msg_data) ? ndo->ndo_snapend - msg_data : 0;
-++    if (hello_len > caplength)
-++        hello_len = caplength;
-++
-+     while (hello_len >= sizeof(struct in_addr)) {
-+ 
-+         /* print 4 neighbors per line */
-diff --git a/package/tcpdump/0003-fix-CVE-2014-8768.patch b/package/tcpdump/0003-fix-CVE-2014-8768.patch
-new file mode 100644
-index 0000000..a8b82cf
---- /dev/null
-+++ b/package/tcpdump/0003-fix-CVE-2014-8768.patch
-@@ -0,0 +1,19 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165161
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump_4.5/print-geonet.c	2014-02-17 05:58:41.000000000 +0700
-++++ print-geonet.c	2014-11-21 10:06:58.590217933 +0700
-+@@ -237,6 +237,12 @@
-+ 		printf("Malformed (small) ");
-+ 	}
-+ 
-++	/* Checking length before print */
-++	u_int caplength;
-++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
-++	if (length > caplength)
-++		length = caplength;
-++
-+ 	/* Print user data part */
-+ 	if (ndo->ndo_vflag)
-+ 		default_print(bp, length);
-diff --git a/package/tcpdump/0004-fix-CVE-2014-8769.patch b/package/tcpdump/0004-fix-CVE-2014-8769.patch
-new file mode 100644
-index 0000000..38eaf12
---- /dev/null
-+++ b/package/tcpdump/0004-fix-CVE-2014-8769.patch
-@@ -0,0 +1,19 @@
-+From https://bugzilla.redhat.com/show_bug.cgi?id=1165162
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- tcpdump-tcpdump-4.6/print-udp.c	2014-11-21 13:53:05.757690197 +0700
-++++ tcpdump-4.6.2/print-udp.c	2014-11-21 13:50:58.077695164 +0700
-+@@ -357,6 +357,12 @@
-+ #ifdef INET6
-+ 	register const struct ip6_hdr *ip6;
-+ #endif
-++	u_int caplength;
-++
-++	/* Checking length of available data before print */
-++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
-++	if (length > caplength)
-++		length = caplength;
-+ 
-+ 	if (ep > ndo->ndo_snapend)
-+ 		ep = ndo->ndo_snapend;
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
