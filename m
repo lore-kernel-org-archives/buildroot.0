@@ -1,48 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Nov 2014 15:15:17 -0300
-Subject: [Buildroot] [PATCH branch/next] libgpg-error: bump version to
- 1.17
-In-Reply-To: <1417190105-22992-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1417190105-22992-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5478BBB5.7090604@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 28 Nov 2014 19:36:10 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/xapp_bdftopcf: Fix linking
+	error
+Message-ID: <1417199770-6206-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/28/2014 12:55 PM, Vicente Olivert Riera wrote:
+Fixes
+http://autobuild.buildroot.net/results/242/24297c948c0eee684e868ad4bd12f11c3a759248/
+http://autobuild.buildroot.net/results/464/464fdc71690a437c1782dd8e4c75d78195bf8bfd/
+http://autobuild.buildroot.net/results/77c/77c26d14c8906b44f7c3fa1b3d759556c7318a7e/
+and many others ( http://autobuild.buildroot.net/?reason=xapp_bdftopcf-1.0.4 )
 
-> - Bump version to 1.17
-> - Add a hash file
-> - Add a hook to fix cross-compilation
-> - Fix license and license files
-> - Remove unnecessary <pkg>_CONFIG_SCRIPTS option
-> - Add a positive 'depends on' for supported architectures
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libgpg-error/Config.in         |    5 ++
->  package/libgpg-error/libgpg-error.hash |    2 +
->  package/libgpg-error/libgpg-error.mk   |   73 ++++++++++++++++++++++++++++++--
->  3 files changed, 76 insertions(+), 4 deletions(-)
->  create mode 100644 package/libgpg-error/libgpg-error.hash
-> 
-> diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-> index 8287f98..2b46ffd 100644
-> --- a/package/libgpg-error/Config.in
-> +++ b/package/libgpg-error/Config.in
-> @@ -1,5 +1,10 @@
->  config BR2_PACKAGE_LIBGPG_ERROR
->  	bool "libgpg-error"
-> +	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
-> +		BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> +		BR2_mk68 || BR2_powerpc || BR2_powerpc64 || \
-> +		BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || BR2_sh4a || \
-> +		BR2_sh4aeb || BR2_sparc || BR2_x86_64
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Change LDFLAGS to LIBS (Peter)
 
-Aaand you're not propagating the new depends to all of the packages that
-use libgpg-error... which may not be too wise unless the bump is really
-necessary IMHO.
-Also ... BR2_mk68, who's that? ;)
-Regards.
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
+index 950d988..64c2103 100644
+--- a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
++++ b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
+@@ -11,5 +11,8 @@ XAPP_BDFTOPCF_LICENSE = MIT
+ XAPP_BDFTOPCF_LICENSE_FILES = COPYING
+ XAPP_BDFTOPCF_DEPENDENCIES = xlib_libXfont
+ 
++# needed for linking against libXfont
++XAPP_BDFTOPCF_MAKE_OPTS += LIBS=-ldl
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+1.7.10.4
