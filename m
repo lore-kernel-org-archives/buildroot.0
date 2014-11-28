@@ -1,37 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 28 Nov 2014 09:18:12 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: fix static build
-Message-ID: <2de1279dcd485fe0a9dda147272221766bb7e187.1417159092.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Nov 2014 08:26:34 +0100
+Subject: [Buildroot] [PATCH v4 1/2] qt: Script Module needs a toolchain
+	with NPTL
+In-Reply-To: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 19 Nov 2014 14:40:05 +0000")
+References: <1416408006-30928-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87ppc7n5ud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libuuid needs -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is set.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/9f1/9f182cd5955d724750135bcd6cb7e315fb28334f/
+ > Qt Script Module uses pthread_getattr_np() which is implemented in
+ > toolchains with NPTL. Otherwise the compilation will fail showing this
+ > error message:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/btrfs-progs/btrfs-progs.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
+ > function ?void* QTJSC::currentThreadStackBase()?:
+ > ../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
+ > error: ?pthread_getattr_np? was not declared in this scope
 
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index d16fa0d9aa6f..7122df1b0e76 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -17,6 +17,10 @@ BTRFS_PROGS_LICENSE_FILES = COPYING
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- BTRFS_PROGS_MAKE_TARGET = static
- BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+# Add -lintl for libuuid
-+BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
-+endif
- else
- BTRFS_PROGS_MAKE_TARGET = all
- BTRFS_PROGS_MAKE_INSTALL_TARGET = install
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ > Changes v3 -> v4
+ 
+ > Propagate dependency to grantlee package
+
+Committed, thanks.
+
 -- 
-2.1.3
+Bye, Peter Korsgaard
