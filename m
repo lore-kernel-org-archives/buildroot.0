@@ -1,70 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 08:25:58 +0100
-Subject: [Buildroot] [git commit] qt: Script Module needs a toolchain with
-	NPTL
-Message-ID: <20141128072657.9A22A7FF07@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Nov 2014 08:30:10 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-11-27
+Message-ID: <20141128073010.C02491017B8@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89207cc06d2952741ffe391260e0a73a126da6fe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Build statistics for 2014-11-27
+===============================
 
-Qt Script Module uses pthread_getattr_np() which is implemented in
-toolchains with NPTL. Otherwise the compilation will fail showing this
-error message:
+        success : 203
+       failures : 13 
+       timeouts : 2  
+          TOTAL : 218
 
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp: In
-function ???void* QTJSC::currentThreadStackBase()???:
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:692:42:
-error: ???pthread_getattr_np??? was not declared in this scope
+Classification of failures by reason
+====================================
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/grantlee/Config.in |    5 +++++
- package/qt/Config.in       |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+                    fltk-1.3.2 | 2 
+                minidlna-1.1.4 | 2 
+             alsa-utils-1.0.28 | 1 
+                  perl-gd-2.53 | 1 
+            btrfs-progs-3.17.1 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+                 mpg123-1.21.0 | 1 
+checking if snprintf needs ... | 1 
+freerdp-440916eae2e07463912... | 1 
+                   perl-5.20.1 | 1 
+                     vlc-2.1.5 | 1 
+            host-heimdal-1.5.3 | 1 
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index ce1342c..365209a 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	depends on BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
-@@ -9,3 +10,7 @@ config BR2_PACKAGE_GRANTLEE
- 	  Qt implemantation of the Django template framework
- 
- 	  http://www.grantlee.org
-+
-+comment "grantlee needs a toolchain with NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index da159b4..2a4bf4e 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -402,11 +402,16 @@ config BR2_PACKAGE_QT_OPENSSL
- config BR2_PACKAGE_QT_SCRIPT
- 	bool "Script Module"
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
- 	default y
- 	help
- 	  Build the Qt Script module.
- 	  if unsure, say y.
- 
-+comment "Script Module needs a toolchain with NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+
- config BR2_PACKAGE_QT_SCRIPTTOOLS
- 	bool "Script Tools Module"
- 	depends on BR2_PACKAGE_QT_SCRIPT
+Detail of failures
+===================
+
+         arc |              alsa-utils-1.0.28 | NOK | http://autobuild.buildroot.net/results/7f6150a06e9bc526dd318e9526f8b126114d9291/
+         sh4 |             btrfs-progs-3.17.1 | NOK | http://autobuild.buildroot.net/results/9f182cd5955d724750135bcd6cb7e315fb28334f/
+     powerpc | checking if snprintf needs ... | TIM | http://autobuild.buildroot.net/results/1be786a90a3fa349be9b665c6e306a6b8835d98b/
+      x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/9bc82aa8c687f8f8744d7cc53204c5ea7af1e015/
+      x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/ae6c4be9d7e0644224a9076c91b0e2d7119dc820/
+         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/b60591fc6ba3fff3c3fccc91368430a81b0e0271/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/62570f69e9f75b74040887c064edfb72e438a96b/
+     powerpc |             host-heimdal-1.5.3 | TIM | http://autobuild.buildroot.net/results/9c333cb5345a2f3365df427d90cce3ff819271ab/
+       nios2 |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/79cbae4dab3ad712bc20c752fdd91e168eade9fe/
+      x86_64 |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/6bd8c009056beb67092abd6d18064500302dcecb/
+       nios2 |                  mpg123-1.21.0 | NOK | http://autobuild.buildroot.net/results/437f408122d7f21420a7cdc9758caf0ab1ba877d/
+         arm |                    perl-5.20.1 | NOK | http://autobuild.buildroot.net/results/c0854e49720ce1934daebaf7d85d55383dd0a959/
+         arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/e74efded899744d757cb798c44f096b54898f95a/
+         arm |                      vlc-2.1.5 | NOK | http://autobuild.buildroot.net/results/ee3fbed47a69446f1907690cf0a8dccbf9717f84/
+        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/91ddd6b131bb26f5c2d3cdf0a33fbe470b4e632c/
+
+
+-- 
+http://autobuild.buildroot.net
