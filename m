@@ -1,55 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 12:07:52 +0100
-Subject: [Buildroot] [git commit] bind: not available for static builds
-Message-ID: <20141128111938.DF1E37FF67@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 12:08:27 +0100
+Subject: [Buildroot] [git commit] tcpdump: add 3 security patches
+Message-ID: <20141128111938.EABAF7FF70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6045904752b06a8b8e52ba8fc2e49a8548964e8d
+commit: http://git.buildroot.net/buildroot/commit/?id=489848b1fa2ea47638635c2e1ef266ddac172319
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/e27/e27111f484f72c77d2179fa1a29ea7b5271ff9fa/
-
-While at it rename patches to new convention.
+CVE-2014-8767 - denial of service in verbose mode using malformed OLSR
+payload
+OLSR payload
+CVE-2014-8768 - denial of service in verbose mode using malformed Geonet
+payload
+CVE-2014-8769 - unreliable output using malformed AOVD payload
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-tests.patch => 0001-disable-tests.patch} |    0
- .../bind/{bind-02-cross.patch => 0002-cross.patch} |    0
- package/bind/Config.in                             |    5 +++--
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ package/tcpdump/0002-fix-CVE-2014-8767.patch |   20 ++++++++++++++++++++
+ package/tcpdump/0003-fix-CVE-2014-8768.patch |   19 +++++++++++++++++++
+ package/tcpdump/0004-fix-CVE-2014-8769.patch |   19 +++++++++++++++++++
+ 3 files changed, 58 insertions(+), 0 deletions(-)
 
-diff --git a/package/bind/bind-01-disable-tests.patch b/package/bind/0001-disable-tests.patch
-similarity index 100%
-rename from package/bind/bind-01-disable-tests.patch
-rename to package/bind/0001-disable-tests.patch
-diff --git a/package/bind/bind-02-cross.patch b/package/bind/0002-cross.patch
-similarity index 100%
-rename from package/bind/bind-02-cross.patch
-rename to package/bind/0002-cross.patch
-diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 4f65e1c..8e3b824 100644
---- a/package/bind/Config.in
-+++ b/package/bind/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_BIND
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  BIND (Berkeley Internet Name Domain) is an implementation of
- 	  the Domain Name System (DNS) protocols and provides an openly
-@@ -38,6 +39,6 @@ config BR2_PACKAGE_BIND_TOOLS
- 
- endif
- 
--comment "bind needs a toolchain w/ largefile, IPv6"
-+comment "bind needs a toolchain w/ largefile, IPv6, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_LARGEFILE || BR2_INET_IPV6)
-+	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || BR2_PREFER_STATIC_LIB
+diff --git a/package/tcpdump/0002-fix-CVE-2014-8767.patch b/package/tcpdump/0002-fix-CVE-2014-8767.patch
+new file mode 100644
+index 0000000..a88efdf
+--- /dev/null
++++ b/package/tcpdump/0002-fix-CVE-2014-8767.patch
+@@ -0,0 +1,20 @@
++From https://bugzilla.redhat.com/show_bug.cgi?id=1165160
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- tcpdump-tcpdump-4.6/print-olsr.c	2014-10-23 14:07:12.000000000 +0700
+++++ tcpdump-4.6.2/print-olsr.c	2014-11-21 14:56:18.205542679 +0700
++@@ -234,6 +234,13 @@
++     ND_PRINT((ndo, "\n\t      neighbor\n\t\t"));
++     neighbor = 1;
++ 
+++    u_int caplength;
+++
+++    /* Checking length of available data before print */
+++    caplength = (ndo->ndo_snapend >= msg_data) ? ndo->ndo_snapend - msg_data : 0;
+++    if (hello_len > caplength)
+++        hello_len = caplength;
+++
++     while (hello_len >= sizeof(struct in_addr)) {
++ 
++         /* print 4 neighbors per line */
+diff --git a/package/tcpdump/0003-fix-CVE-2014-8768.patch b/package/tcpdump/0003-fix-CVE-2014-8768.patch
+new file mode 100644
+index 0000000..a8b82cf
+--- /dev/null
++++ b/package/tcpdump/0003-fix-CVE-2014-8768.patch
+@@ -0,0 +1,19 @@
++From https://bugzilla.redhat.com/show_bug.cgi?id=1165161
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- tcpdump-tcpdump_4.5/print-geonet.c	2014-02-17 05:58:41.000000000 +0700
+++++ print-geonet.c	2014-11-21 10:06:58.590217933 +0700
++@@ -237,6 +237,12 @@
++ 		printf("Malformed (small) ");
++ 	}
++ 
+++	/* Checking length before print */
+++	u_int caplength;
+++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
+++	if (length > caplength)
+++		length = caplength;
+++
++ 	/* Print user data part */
++ 	if (ndo->ndo_vflag)
++ 		default_print(bp, length);
+diff --git a/package/tcpdump/0004-fix-CVE-2014-8769.patch b/package/tcpdump/0004-fix-CVE-2014-8769.patch
+new file mode 100644
+index 0000000..38eaf12
+--- /dev/null
++++ b/package/tcpdump/0004-fix-CVE-2014-8769.patch
+@@ -0,0 +1,19 @@
++From https://bugzilla.redhat.com/show_bug.cgi?id=1165162
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- tcpdump-tcpdump-4.6/print-udp.c	2014-11-21 13:53:05.757690197 +0700
+++++ tcpdump-4.6.2/print-udp.c	2014-11-21 13:50:58.077695164 +0700
++@@ -357,6 +357,12 @@
++ #ifdef INET6
++ 	register const struct ip6_hdr *ip6;
++ #endif
+++	u_int caplength;
+++
+++	/* Checking length of available data before print */
+++	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
+++	if (length > caplength)
+++		length = caplength;
++ 
++ 	if (ep > ndo->ndo_snapend)
++ 		ep = ndo->ndo_snapend;
