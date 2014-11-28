@@ -1,34 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 10:43:43 +0100
-Subject: [Buildroot] [git commit] mpg123: needs host-pkgconf
-Message-ID: <20141128094513.B7A697FF73@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 10:47:47 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.113
+In-Reply-To: <547843C2.4010207@imgtec.com> (Vicente Olivert Riera's message of
+ "Fri, 28 Nov 2014 09:43:30 +0000")
+References: <1417096808-22464-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20141127203225.354da3e1@free-electrons.com>
+ <87ppc8nwf1.fsf@dell.be.48ers.dk>
+ <20141127225834.4495b58f@free-electrons.com>
+ <547843C2.4010207@imgtec.com>
+Message-ID: <878uivmzb0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43f86236969f028a9009d6558c25dd612a1d4f16
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-SDL detection is done using pkg-config.
+Hi,
 
-Fixes http://autobuild.buildroot.net/results/437/437f408122d7f21420a7cdc9758caf0ab1ba877d/
+>>> NIT: It's handy if you explicitly state that the patches are applied to the
+ >>> next branch.
+ >> 
+ >> Agreed, missed this detail in my notifications tonight, sorry about
+ >> that.
+ >> 
+ >> Thomas
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpg123/mpg123.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > sorry guys, I will add that information to my commit messages in future
+ > patches for the next branch.
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index de21ec0..0341ed9 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -11,6 +11,7 @@ MPG123_CONF_OPTS = --disable-lfs-alias
- MPG123_INSTALL_STAGING = YES
- MPG123_LICENSE = LGPLv2.1
- MPG123_LICENSE_FILES = COPYING
-+MPG123_DEPENDENCIES = host-pkgconf
- 
- MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
- 
+Thanks, but my comment was actually to Thomas that he should make it
+clear to you (and others) that he has applied the patch to the next
+branch, not to master.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
