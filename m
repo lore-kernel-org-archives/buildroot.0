@@ -1,37 +1,39 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 28 Nov 2014 14:10:05 +0100
-Subject: [Buildroot] [PATCH v4] Makefile: improve detection of make "-s"
-	flag
-In-Reply-To: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC-FM6NHzXPD3rNuTwpf_aY_Lf0m3ew8KX3pKy18YW6RWg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 28 Nov 2014 10:59:02 -0300
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.5
+Message-ID: <1417183142-10943-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 19, 2014 at 6:51 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Because it's just checked the presence of the "s" character even a
->   make --warn-undefined-variables
-> is detected as a silent build so fix this by filtering out long options.
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->
-> Notes:
->     v4:
->      - split this patch from the patch set to send to muster as bugfix
->     v2:
->      - remove spurious space at the beginning of the QUIET variable (Arnout)
->
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-ping?
-
-BR
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index f8bf014..f8dc05f 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	18f4af89e8b9a434da2b8678b53fc8189da97c1f32e9083512d67217166d3bd8	mpd-0.19.4.tar.xz
++sha256	e621e05e7d0e92690f7a1b6ee6f1e502a4d009c69caa4907519282ca571f72cf	mpd-0.19.5.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 1369847..5448251 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).4
++MPD_VERSION = $(MPD_VERSION_MAJOR).5
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-Fabio Porcedda
+2.0.4
