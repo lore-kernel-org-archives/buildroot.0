@@ -1,45 +1,40 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 28 Nov 2014 22:32:47 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Nov 2014 22:34:54 +0100
 Subject: [Buildroot] buildroot 2014.11-rc3 mono fails
-In-Reply-To: <20141128211656.GA4188@free.fr>
+In-Reply-To: <CA+TH9V=Y7vf6r1nWmYcK3exEyDP7W=5N-VtaUae9sWs-UB3ZJQ@mail.gmail.com>
 References: <612310928.432121.1417205315374.JavaMail.open-xchange@oxbaltgw06.schlund.de>
  <CA+TH9V=Y7vf6r1nWmYcK3exEyDP7W=5N-VtaUae9sWs-UB3ZJQ@mail.gmail.com>
- <20141128211656.GA4188@free.fr>
-Message-ID: <CA+TH9V=BJOOczW2J_cvB-n-HhRt2N-GAaK6dc=W-_agM5e-jrw@mail.gmail.com>
+Message-ID: <20141128223454.4a2cf327@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Dear Angelo Compagnucci,
 
-> Then that's a problem for Buildroot.
->
-> It would be nice to find a solution so that an existing native mono
-> compiler does not break the build.
+On Fri, 28 Nov 2014 21:59:56 +0100, Angelo Compagnucci wrote:
 
-This is the way mono compilation or cross compilation works. Probably
-messing around with makefile could force to always use the internal
-mono compiler.
+> Probably you have a mono compiler installed on your machine and this
+> mono compiler is not compatible with the latest mono version.
+> 
+> Mono uses the install wide mcs/gmcs compiler if it's present to
+> compile itself,  also if not compatible.
+> 
+> Try to remove that mono compiler so mono cross compilation can use the
+> internal one.
+> If you are on Ubuntu/Debian you can remove mono-mcs package.
 
-I'll try to take a look in week end.
+This is not an acceptable answer. Buildroot should be able to build
+mono regardless of whether a mono compiler is installed on the machine
+or not.
 
-Sincerely, Angelo
+Could you work on a fix for this problem?
 
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Thanks,
 
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
