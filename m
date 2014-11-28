@@ -1,43 +1,108 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 28 Nov 2014 16:13:37 +0000
-Subject: [Buildroot] [PATCH branch/next] libgpgme: bump verstion to 1.5.2
-Message-ID: <1417191218-64014-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 28 Nov 2014 16:33:05 +0000
+Subject: [Buildroot] [PATCH v2] Add a defconfig for MIPS Creator CI20
+Message-ID: <1417192385-64530-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 1.5.2
-- Add a hash file
+MIPS Creator CI20 is a Linux and Android development system from
+MIPS/Imagination Technologies. It incorporates an Ingenic JZ4780 SoC
+which includes a 1.2GHz dual core MIPS32 processor and Imagination
+PowerVR SGX540 GPU.
+
+More information can be found at:
+  http://elinux.org/MIPS_Creator_CI20
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libgpgme/libgpgme.hash |    2 ++
- package/libgpgme/libgpgme.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
- create mode 100644 package/libgpgme/libgpgme.hash
+Changes v1 -> v2
+ - Clone the kernel repository using a commit hash value instead of a
+   branch name, so we can do reproducible builds.
+ - Fix the kernel headers version to 3.0.8.
+ - Clone the kernel repository using https:// instead of git:// to avoid
+   problems for people who is behind a firewall.
+ - Add a readme.txt file.
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+ board/ci20/readme.txt  |   42 ++++++++++++++++++++++++++++++++++++++++++
+ configs/ci20_defconfig |   12 ++++++++++--
+ 2 files changed, 52 insertions(+), 2 deletions(-)
+ create mode 100644 board/ci20/readme.txt
+
+diff --git a/board/ci20/readme.txt b/board/ci20/readme.txt
 new file mode 100644
-index 0000000..fda2e7d
+index 0000000..ca7bb52
 --- /dev/null
-+++ b/package/libgpgme/libgpgme.hash
-@@ -0,0 +1,2 @@
-+# From https://www.gnupg.org/download/integrity_check.html
-+sha1  cb550ea09314a362aa895f1ca92da6ba73fb512a  gpgme-1.5.2.tar.bz2
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 17271ad..fd25532 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPGME_VERSION = 1.5.1
-+LIBGPGME_VERSION = 1.5.2
- LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPLv2.1+
++++ b/board/ci20/readme.txt
+@@ -0,0 +1,42 @@
++*********************
++* MIPS Creator CI20 *
++*********************
++
++The 'ci20_defconfig' will create a root filesystem and a kernel image
++under the 'output/images/' directory. This document will try to explain how
++to use them in order to run Buildroot in the MIPS Creator CI20 board.
++
++Assuming you are at the U-Boot prompt of the MIPS Creator CI20, you have to
++load the generated kernel image by using the 'tftpboot' command. In
++order to do that, you will need to get the network working. Here you
++have the instructions to set the ip address, netmask and gateway:
++
++  setenv ipaddr x.x.x.x
++  setenv netmask x.x.x.x
++  setenv gatewayip x.x.x.x
++
++Now you have to set the ip for the TFTP server you are going to load the
++kernel image from, and also the name of the kernel image file (we use
++'uImage' as a filename in this example):
++
++  setenv serverip x.x.x.x
++  setenv bootfile uImage
++
++And finally load the kernel image:
++
++  tftpboot
++
++Now you have to extract the generated root filesystem into a USB drive
++or SD-Card. Here you have the instructions to boot from the two of them.
++You have to choose the one your prefer:
++
++From USB
++  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
++mem=768M at 0x30000000 root=/dev/sda1
++
++From SD-Card
++  setenv bootargs console=ttyS4,115200 console=tty0 mem=256M at 0x0
++mem=768M at 0x30000000 root=/dev/mmcblk0p1
++
++And finally run this command to boot the board:
++  bootm
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 88930fa..7f1bf87 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -1,10 +1,18 @@
++# architecture
+ BR2_mipsel=y
+ BR2_mips_32r2=y
+ # BR2_MIPS_SOFT_FLOAT is not set
++
++# system
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.0.8"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
++
++# kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/MIPS/CI20_linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ci20-v3.0.8"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba11adc7ac8792b0eb7415a1cc9c0968604a6fac"
+ BR2_LINUX_KERNEL_DEFCONFIG="ci20"
 -- 
 1.7.1
