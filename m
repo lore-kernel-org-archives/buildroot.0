@@ -1,39 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 08:59:44 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: fix static build
-Message-ID: <20141128082652.016E07FE3E@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Fri, 28 Nov 2014 09:52:27 +0100
+Subject: [Buildroot] [PATCH RFC] Makefile: from a defconfig file,
+	point to the corresponding board/ entry
+In-Reply-To: <20141127174628.GA3900@free.fr>
+References: <1417043635-9055-1-git-send-email-yann.morin.1998@free.fr>
+ <1701350.dX4dIeyire@aquila> <20141127174628.GA3900@free.fr>
+Message-ID: <67490309.d6XZUb5mJs@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba3821bcf75a85e2d35e9d96b736f0eb585f53f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yann,
 
-libuuid needs -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is set.
+On Thursday 27 November 2014 18:46:28 Yann E. MORIN wrote:
+> J?r?me, All,
+> 
+> On 2014-11-27 11:26 +0100, J?r?me Pouiller spake thusly:
+> > On Thursday 27 November 2014 00:13:55 Yann E. MORIN wrote:
+> > > This is an RFC!
+> > > 
+> > > When configuring Buildroot from a defconfig files, soem users complain
+> > > it is non-obvious that the corresponding board documentattion is to be
+> > > found in the board/ sub-directory.
+> > > 
+> > > So, deduce the board name from the defconfig file, look for a similarly
+> > > named sub-dir of board (first level only), and if such a directory
+> > > exists, print a message stating extra documentation for that board is to
+> > > be found there.
+> > 
+> > What about introducing a BR2_BOARD_DIR configuration variable? This
+> > variable> 
+> > would have two functions:
+> >    - May be used to locate other files (configs, overlays, etc...)
+> >    - If defined, a help message is displayed when this defconfig is
+> >    loaded.
+> 
+> The problem with using a Kconfig string variable is that Kconfig strgings
+> that have no prompt can only take their default value, as defined in
+> Config.in; if there is no default value, then the string option is not
+> even stored in the .config file.
+Why should we hide this configuration variable?
 
-Fixes:
-http://autobuild.buildroot.net/results/9f1/9f182cd5955d724750135bcd6cb7e315fb28334f/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/btrfs-progs/btrfs-progs.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index d16fa0d..7122df1 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -17,6 +17,10 @@ BTRFS_PROGS_LICENSE_FILES = COPYING
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- BTRFS_PROGS_MAKE_TARGET = static
- BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+# Add -lintl for libuuid
-+BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
-+endif
- else
- BTRFS_PROGS_MAKE_TARGET = all
- BTRFS_PROGS_MAKE_INSTALL_TARGET = install
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
