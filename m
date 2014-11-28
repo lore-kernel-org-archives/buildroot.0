@@ -1,326 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 12:34:55 +0100
-Subject: [Buildroot] [git commit] dhcp: update dhclient-script
-Message-ID: <20141128113859.4DB0F7FF06@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 13:23:38 +0100
+Subject: [Buildroot] [git commit] Update for 2014.11-rc3
+Message-ID: <20141128122426.778FA7FF41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cd15cb15a15c0538f772d1b862e2565e51a014b
+commit: http://git.buildroot.net/buildroot/commit/?id=f30e54eb92b0fecd539b1719784c80c20c6dab23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The previous no-op dhclient-script is useless and in fact can lead
-users to believe things will work.
-dhclient-script is supposed to, among many other things, bring the
-interface up for dhclient to pump an address, set the interface
-address, set resolv.conf appropiately and set the default gateway.
-It's a complex script since it has to deal with a lot of details so
-let's just use the best fit which is the OpenWRT one since it uses the
-"legacy" tools (ifconfig, route, ...) which can be easily provided by
-busybox and/or net-tools.
-There are newer and more feature-complete versions around but they
-require full iproute2 ip and wouldn't fit as well with the busybox-only
-approach.
-
-License: likely GPLv2+
-Source:
-http://git.openwrt.org/?p=packages.git;a=blob;f=net/isc-dhcp/files/dhclient-script;h=4afebc0ad20ebac51c5baae5ed01c6713e3a0fd0;hb=HEAD
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcp/dhclient-script |  284 +++++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 283 insertions(+), 1 deletions(-)
+ CHANGES            |   23 +++++++++++++++++++++++
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   12 ++++++++++++
+ 4 files changed, 41 insertions(+), 6 deletions(-)
 
-diff --git a/package/dhcp/dhclient-script b/package/dhcp/dhclient-script
-index 5566aca..cb292b6 100755
---- a/package/dhcp/dhclient-script
-+++ b/package/dhcp/dhclient-script
-@@ -1,2 +1,284 @@
- #!/bin/sh
--# empty dhclient-script to keep dhclient from complaining
+diff --git a/CHANGES b/CHANGES
+index 85c1439..5c8ce1b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,26 @@
++2014.11-rc3, Released November 28th, 2014
 +
-+# dhclient-script from OpenWRT project
-+# http://git.openwrt.org/?p=packages.git;a=blob;f=net/isc-dhcp/files/dhclient-script;h=4afebc0ad20ebac51c5baae5ed01c6713e3a0fd0;hb=HEAD
++	Fixes all over the tree.
 +
-+make_resolv_conf() {
-+  if [ x"$new_domain_name_servers" != x ]; then
-+    cat /dev/null > /etc/resolv.conf.dhclient
-+    chmod 644 /etc/resolv.conf.dhclient
-+    if [ x"$new_domain_search" != x ]; then
-+      echo search $new_domain_search >> /etc/resolv.conf.dhclient
-+    elif [ x"$new_domain_name" != x ]; then
-+      # Note that the DHCP 'Domain Name Option' is really just a domain
-+      # name, and that this practice of using the domain name option as
-+      # a search path is both nonstandard and deprecated.
-+      echo search $new_domain_name >> /etc/resolv.conf.dhclient
-+    fi
-+    for nameserver in $new_domain_name_servers; do
-+      echo nameserver $nameserver >>/etc/resolv.conf.dhclient
-+    done
++	System: File permissions of /etc/random-seed made more
++	restrictive.
 +
-+  elif [ "x${new_dhcp6_name_servers}" != x ] ; then
-+    cat /dev/null > /etc/resolv.conf.dhclient6
-+    chmod 644 /etc/resolv.conf.dhclient6
++	Toolchain: Various fixes related to locale handling, a fix for
++	building the toolchain wrapper on MIPS.
 +
-+    if [ "x${new_dhcp6_domain_search}" != x ] ; then
-+      echo search ${new_dhcp6_domain_search} >> /etc/resolv.conf.dhclient6
-+    fi
-+    for nameserver in ${new_dhcp6_name_servers} ; do
-+      echo nameserver ${nameserver} >> /etc/resolv.conf.dhclient6
-+    done
-+  fi
++	Updated/fixed packages: bind, binutils. botan, btrfsprogs,
++	clamav, czmq, dhcp, dillo, dovecot, erlang, flac, gd, glibc,
++	gptfdisk, gst1-validate, heirloom-mailx, lame, libksba,
++	libllcp, libnspr, libpng, libshairplay, libtirpc, linux,
++	linux-headers, mpdecimal, mpg123, network-manager, nfstables,
++	nfs-utils, openssl, pcituils, qt, radvd, rtai, sqlcipher,
++	sstrip, tcpdump, uclibc, uemacs, ushare, wayland, weston,
++	xl2tp, xserver_xorg-server
 +
-+  # if both v4 and v6 clients are running, concatenate results
-+  cat /etc/resolv.conf.* > /etc/resolv.conf
-+}
++	Issues resolved (http://bugs.uclibc.org):
 +
-+# Must be used on exit.   Invokes the local dhcp client exit hooks, if any.
-+exit_with_hooks() {
-+  exit_status=$1
-+  if [ -f /etc/dhclient-exit-hooks ]; then
-+    . /etc/dhclient-exit-hooks
-+  fi
-+# probably should do something with exit status of the local script
-+  exit $exit_status
-+}
++	#7670: Fails to build mpc-1.0.2 on latest Cygwin
 +
-+# Invoke the local dhcp client enter hooks, if they exist.
-+if [ -f /etc/dhclient-enter-hooks ]; then
-+  exit_status=0
-+  . /etc/dhclient-enter-hooks
-+  # allow the local script to abort processing of this state
-+  # local script must set exit_status variable to nonzero.
-+  if [ $exit_status -ne 0 ]; then
-+    exit $exit_status
-+  fi
-+fi
+ 2014.11-rc2, Released November 21st, 2014
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index b66bea0..e219d33 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2014.11-rc2
++export BR2_VERSION := 2014.11-rc3
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+diff --git a/docs/download.html b/docs/download.html
+index 4614749..7c06bc7 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -18,14 +18,14 @@ or
+ 
+ <p>
+ 
+-The latest release candidate is <b>2014.11-rc2</b>, which can be
++The latest release candidate is <b>2014.11-rc3</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2014.11-rc2.tar.gz">buildroot-2014.11-rc2.tar.gz</a>
+-(<a href="/downloads/buildroot-2014.11-rc2.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2014.11-rc3.tar.gz">buildroot-2014.11-rc3.tar.gz</a>
++(<a href="/downloads/buildroot-2014.11-rc3.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2014.11-rc2.tar.bz2">buildroot-2014.11-rc2.tar.bz2</a>
+-(<a href="/downloads/buildroot-2014.11-rc2.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2014.11-rc3.tar.bz2">buildroot-2014.11-rc3.tar.bz2</a>
++(<a href="/downloads/buildroot-2014.11-rc3.tar.bz2.sign">PGP signature</a>).
+ <p>
+ 
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+diff --git a/docs/news.html b/docs/news.html
+index 9a8aab5..3d0e1d6 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -9,6 +9,18 @@
+ 
+ <ul>
+ 
++  <li><b>28 November 2014 -- 2014.11-rc3 released</b>
 +
-+###
-+### DHCPv4 Handlers
-+###
++    <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc3">CHANGES</a>
++    file for details.</p>
 +
-+if [ x$new_broadcast_address != x ]; then
-+  new_broadcast_arg="broadcast $new_broadcast_address"
-+fi
-+if [ x$new_subnet_mask != x ]; then
-+  new_subnet_arg="netmask $new_subnet_mask"
-+fi
-+if [ x$alias_subnet_mask != x ]; then
-+  alias_subnet_arg="netmask $alias_subnet_mask"
-+fi
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2014.11-rc3.tar.bz2">2014.11-rc3
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
 +
-+if [ x$reason = xMEDIUM ]; then
-+  # Linux doesn't do mediums (ok, ok, media).
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xPREINIT ]; then
-+  if [ x$alias_ip_address != x ]; then
-+    # Bring down alias interface. Its routes will disappear too.
-+    ifconfig $interface:0- 0.0.0.0
-+  fi
-+  ifconfig $interface 0.0.0.0 up
-+
-+  # We need to give the kernel some time to get the interface up.
-+  sleep 1
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xARPCHECK ] || [ x$reason = xARPSEND ]; then
-+  exit_with_hooks 0
-+fi
-+  
-+if [ x$reason = xBOUND ] || [ x$reason = xRENEW ] || \
-+   [ x$reason = xREBIND ] || [ x$reason = xREBOOT ]; then
-+  current_hostname=`hostname`
-+  if [ x$current_hostname = x ] || \
-+     [ x$current_hostname = x$old_host_name ]; then
-+    if [ x$current_hostname = x ] || \
-+       [ x$new_host_name != x$old_host_name ]; then
-+      hostname $new_host_name
-+    fi
-+  fi
-+    
-+  if [ x$old_ip_address != x ] && [ x$alias_ip_address != x ] && \
-+		[ x$alias_ip_address != x$old_ip_address ]; then
-+    # Possible new alias. Remove old alias.
-+    ifconfig $interface:0- 0.0.0.0
-+  fi
-+  if [ x$old_ip_address != x ] && [ x$old_ip_address != x$new_ip_address ]; then
-+    # IP address changed. Bringing down the interface will delete all routes,
-+    # and clear the ARP cache.
-+    ifconfig $interface 0.0.0.0 down
-+
-+  fi
-+  if [ x$old_ip_address = x ] || [ x$old_ip_address != x$new_ip_address ] || \
-+     [ x$reason = xBOUND ] || [ x$reason = xREBOOT ]; then
-+
-+    ifconfig $interface $new_ip_address $new_subnet_arg \
-+							$new_broadcast_arg
-+    for router in $new_routers; do
-+      if [ "x$new_subnet_mask" = "x255.255.255.255" ] ; then
-+	route add -host $router dev $interface
-+      fi
-+      route add default gw $router
-+    done
-+  fi
-+  if [ x$new_ip_address != x$alias_ip_address ] && [ x$alias_ip_address != x ];
-+   then
-+    ifconfig $interface:0- 0.0.0.0
-+    ifconfig $interface:0 $alias_ip_address $alias_subnet_arg
-+    route add -host $alias_ip_address $interface:0
-+  fi
-+  make_resolv_conf
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xEXPIRE ] || [ x$reason = xFAIL ] || [ x$reason = xRELEASE ] \
-+   || [ x$reason = xSTOP ]; then
-+  if [ x$alias_ip_address != x ]; then
-+    # Turn off alias interface.
-+    ifconfig $interface:0- 0.0.0.0
-+  fi
-+  if [ x$old_ip_address != x ]; then
-+    # Shut down interface, which will delete routes and clear arp cache.
-+    ifconfig $interface 0.0.0.0 down
-+  fi
-+  if [ x$alias_ip_address != x ]; then
-+    ifconfig $interface:0 $alias_ip_address $alias_subnet_arg
-+    route add -host $alias_ip_address $interface:0
-+  fi
-+
-+  # remove v4 dns configuration for this interface
-+  rm /etc/resolv.conf.dhclient
-+  cat /etc/resolv.conf.* > /etc/resolv.conf
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xTIMEOUT ]; then
-+  if [ x$alias_ip_address != x ]; then
-+    ifconfig $interface:0- 0.0.0.0
-+  fi
-+  ifconfig $interface $new_ip_address $new_subnet_arg \
-+					$new_broadcast_arg
-+  set $new_routers
-+  if ping -q -c 1 $1; then
-+    if [ x$new_ip_address != x$alias_ip_address ] && \
-+			[ x$alias_ip_address != x ]; then
-+      ifconfig $interface:0 $alias_ip_address $alias_subnet_arg
-+      route add -host $alias_ip_address dev $interface:0
-+    fi
-+    for router in $new_routers; do
-+      if [ "x$new_subnet_mask" = "x255.255.255.255" ] ; then
-+	route add -host $router dev $interface
-+      fi
-+      route add default gw $router
-+    done
-+    make_resolv_conf
-+    exit_with_hooks 0
-+  fi
-+  ifconfig $interface 0.0.0.0 down
-+  exit_with_hooks 1
-+fi
-+
-+###
-+### DHCPv6 Handlers
-+###
-+
-+if [ x$reason = xPREINIT6 ]; then
-+  # Ensure interface is up.
-+  ifconfig ${interface} up
-+
-+  # Remove any stale addresses from aborted clients.
-+  ip -f inet6 addr flush dev ${interface} scope global
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x${old_ip6_prefix} != x ] || [ x${new_ip6_prefix} != x ] ; then
-+    echo Prefix ${reason} old=${old_ip6_prefix} new=${new_ip6_prefix}
-+
-+    exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xBOUND6 ]; then
-+  if [ x${new_ip6_address} = x ] || [ x${new_ip6_prefixlen} = x ] ; then
-+    exit_with_hooks 2;
-+  fi
-+
-+  ifconfig ${interface} add ${new_ip6_address}/${new_ip6_prefixlen}
-+
-+  # Check for nameserver options.
-+  make_resolv_conf
-+
-+### <<
-+  # Set up softwire tunnel
-+  if [ x${new_dhcp6_softwire} != x ] ; then
-+    /etc/init.d/dhclient stop
-+    ifconfig ${interface} 0.0.0.0
-+    ip -6 tunnel add tun0 mode ipip6 \
-+	remote ${new_dhcp6_softwire} \
-+	local ${new_ip6_address} \
-+	dev ${interface} encaplimit none
-+    ip link set tun0 up
-+    ip route add default dev tun0
-+  fi
-+### >>
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xRENEW6 ] || [ x$reason = xREBIND6 ]; then
-+  if [ x${new_ip6_address} = x ] || [ x${new_ip6_prefixlen} = x ] ; then
-+    exit_with_hooks 2;
-+  fi
-+
-+  ifconfig ${interface} add ${new_ip6_address}/${new_ip6_prefixlen}
-+
-+  # Make sure nothing has moved around on us.
-+
-+  # Nameservers/domains/etc.
-+  if [ "x${new_dhcp6_name_servers}" != "x${old_dhcp6_name_servers}" ] ||
-+     [ "x${new_dhcp6_domain_search}" != "x${old_dhcp6_domain_search}" ] ; then
-+    make_resolv_conf
-+  fi
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xDEPREF6 ]; then
-+  if [ x${new_ip6_address} = x ] ; then
-+    exit_with_hooks 2;
-+  fi
-+
-+  # Busybox ifconfig has no way to communicate this to the kernel, so ignore it
-+
-+  exit_with_hooks 0
-+fi
-+
-+if [ x$reason = xEXPIRE6 -o x$reason = xRELEASE6 -o x$reason = xSTOP6 ]; then
-+  if [ x${old_ip6_address} = x ] || [ x${old_ip6_prefixlen} = x ] ; then
-+    exit_with_hooks 2;
-+  fi
-+
-+  ifconfig ${interface} del ${old_ip6_address}/${old_ip6_prefixlen}
-+
-+  # remove v6 dns configuration for this interface
-+  rm /etc/resolv.conf.dhclient6
-+  cat /etc/resolv.conf.* > /etc/resolv.conf
-+
-+### <<
-+  # Tear down softwire tunnel
-+  if [ x${old_dhcp6_softwire} != x ] ; then
-+    ip link set tun0 down
-+    ip tunnel del tun0
-+  fi
-+### >>
-+
-+  exit_with_hooks 0
-+fi
-+
-+exit_with_hooks 0
+   <li><b>21 November 2014 -- 2014.11-rc2 released</b>
+ 
+     <p>Another week, another release candidate with more cleanups and
