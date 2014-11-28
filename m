@@ -1,61 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Nov 2014 21:14:14 +0100
-Subject: [Buildroot] [git commit] flac: unbreak powerpc e500 support
-Message-ID: <20141201104839.900CE7FC49@busybox.osuosl.org>
+Date: Fri, 28 Nov 2014 21:14:51 +0100
+Subject: [Buildroot] [git commit] dhcpcd: bump to version 6.6.4
+Message-ID: <20141201104839.A53C57FC49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1c6a7a6cda96709fde7510515d386b39b3d4db0
+commit: http://git.buildroot.net/buildroot/commit/?id=8e1295017cc20bb8beba993a9a82c85cec58fefb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add patch to avoid the enable/disable-debug options from unsetting -g
-from CFLAGS in an incorrect way which breaks -mfloat-gprs=X (translit to
--mfloatprs=X).
-It's possible to affect other less common CFLAGS with a '-g' in any
-position.
-
-Upstream status: sent different patch (configure.ac) - to avoid
-autoreconfiguring.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-configure-don-t-try-to-unset-g-from-CFLAGS.txt |   27 ++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ package/dhcpcd/dhcpcd.hash |    2 +-
+ package/dhcpcd/dhcpcd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-new file mode 100644
-index 0000000..3aff5a8
---- /dev/null
-+++ b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-@@ -0,0 +1,27 @@
-+The sed expression is wrong, any flags with '-g' in any position gets
-+zapped, for example:
-+
-+-mfloat-gprs=double (for powerpc e500) -> -mfloatprs=double.
-+
-+Which gives build errors and is perfectly valid in real use scenarios to
-+switch from e500v1 (single precision) code to e500v2 (double precision) code.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura flac-1.3.1.orig/configure flac-1.3.1/configure
-+--- flac-1.3.1.orig/configure	2014-11-27 20:43:29.921303105 -0300
-++++ flac-1.3.1/configure	2014-11-27 20:45:33.460250179 -0300
-+@@ -19870,11 +19870,10 @@
-+ 
-+ if test "x$debug" = xtrue; then
-+ 	CPPFLAGS="-DDEBUG $CPPFLAGS"
-+-	CFLAGS=$(echo "$CFLAGS" | sed 's/-g//')
-+-	CFLAGS="-g $CFLAGS"
-++	CFLAGS=$(echo "-g $CFLAGS")
-+ else
-+ 	CPPFLAGS="-DNDEBUG $CPPFLAGS"
-+-	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//;s/-g//')
-++	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//')
-+ 	CFLAGS="-O3 -funroll-loops $CFLAGS"
-+ fi
-+ 
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index c8ae064..851849b 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	879c81febafc95ed9353909b719af765e9925c6cb06226b79da6c0dd176fe89f	dhcpcd-6.6.2.tar.bz2
++sha256	67ba7cfe96089150da8e12badbcc5853daefce39417364887984948bad0a37d0	dhcpcd-6.6.4.tar.bz2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index c06002f..dc663a8 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.6.2
++DHCPCD_VERSION = 6.6.4
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
