@@ -1,39 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Nov 2014 19:56:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: disable on nios2
-Message-ID: <1417287381-5045-1-git-send-email-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 29 Nov 2014 21:00:29 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: fix static build
+In-Reply-To: <20141128224117.7a3f2f95@free-electrons.com>
+References: <2de1279dcd485fe0a9dda147272221766bb7e187.1417159092.git.baruch@tkos.co.il>
+ <20141128224117.7a3f2f95@free-electrons.com>
+Message-ID: <20141129190029.GF2204@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-minidlna triggers the _gp bug:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/77875/
+Hi Thomas,
 
-"Fixes"
-http://autobuild.buildroot.net/results/712/71230ee530a41b3611cd4526f0f010f9c2ef25eb/
-http://autobuild.buildroot.net/results/79c/79cbae4dab3ad712bc20c752fdd91e168eade9fe/
-http://autobuild.buildroot.net/results/df7/df7da91985a7bf2b05093bae7379ef22362a44fc/
-and many others
+On Fri, Nov 28, 2014 at 10:41:17PM +0100, Thomas Petazzoni wrote:
+> On Fri, 28 Nov 2014 09:18:12 +0200, Baruch Siach wrote:
+> > diff --git a/package/btrfs-progs/btrfs-progs.mk 
+> > b/package/btrfs-progs/btrfs-progs.mk
+> > index d16fa0d9aa6f..7122df1b0e76 100644
+> > --- a/package/btrfs-progs/btrfs-progs.mk
+> > +++ b/package/btrfs-progs/btrfs-progs.mk
+> > @@ -17,6 +17,10 @@ BTRFS_PROGS_LICENSE_FILES = COPYING
+> >  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> >  BTRFS_PROGS_MAKE_TARGET = static
+> >  BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
+> > +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+> > +# Add -lintl for libuuid
+> > +BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
+> > +endif
+> 
+> This is really ugly and not maintainable, we are doing this all over
+> the place to solve static linking issues, and it's going to be a
+> never-ending story. 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/minidlna/Config.in |    2 ++
- 1 file changed, 2 insertions(+)
+I agree it is ugly. The thing is that this list of libraries is copied 
+verbatim from btrfs-progs Makefile (except -lintl). I found no way to specify 
+additional library dependencies.
 
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index 5c5306d..c0620d5 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_MINIDLNA
- 	select BR2_PACKAGE_LIBJPEG
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	# Triggers the _gp link issue
-+	depends on !BR2_nios2
- 	help
- 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
- 	  fully compliant with DLNA/UPnP-AV clients.
+> If the package doesn't use pkg-config, can't we at
+> least use it here, like:
+> 
+> 	lib_LIBS="$(shell pkg-config ...)"
+> 
+>  ?
+
+uuid.pc does not list -lintl because this is something we add locally since 
+commit a8273c4272b1b8 (util-linux: fix libintl linking if present). Yann has 
+proposed a patch (http://patchwork.ozlabs.org/patch/416000/) adding -lintl to 
+uuid.pc when applicable. We'll still need to repeat the rest of the list,
+something like:
+
+	lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. $(shell pkg-config ...)"
+
+so I'm not sure it buy us much.
+
+baruch
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
