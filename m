@@ -1,118 +1,85 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 29 Nov 2014 10:35:26 +0100
-Subject: [Buildroot] [PATCH v3 14/14] qmx6_defconfig: update
-In-Reply-To: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
-References: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1417253726-14395-15-git-send-email-jezz@sysmic.org>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
+Date: Sat, 29 Nov 2014 10:50:59 +0100
+Subject: [Buildroot] [PATCH] perl-gd: fix configure/build
+In-Reply-To: <8761dzkqbe.fsf@dell.be.48ers.dk>
+References: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
+ <8761dzkqbe.fsf@dell.be.48ers.dk>
+Message-ID: <CAGhdn56p-WpX1w6A5hxos+DjSdaHVzZGHUsi0342xnBBXZDSKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update kernel
-- Add u-boot configuration
-- 6q_bootscript.txt is no more needed by new version of u-boot
-- Add support for graphical drivers
-- Enable Qt5 (eglfs) since many of users will enable it with this
-  configuration. Sure, this is subject to debate. It depends
-  if we want to provide demo configurations.
+2014-11-28 21:44 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- board/congatec/qmx6/6q_bootscript.txt |  2 --
- board/congatec/qmx6/post-build.sh     |  7 -----
- configs/qmx6_defconfig                | 49 ++++++++++++++++++++++++++++++++---
- 3 files changed, 45 insertions(+), 13 deletions(-)
- delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
- delete mode 100755 board/congatec/qmx6/post-build.sh
+> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > see
+> http://autobuild.buildroot.net/results/e74/e74efded899744d757cb798c44f096b54898f95a/
+>  > this new patch prevents the use of a host gdlib-config
+>
+>  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>  > ---
+>  >  package/perl-gd/perl-gd-04-no-autoconfig.patch | 19 +++++++++++++++++++
+>  >  1 file changed, 19 insertions(+)
+>  >  create mode 100644 package/perl-gd/perl-gd-04-no-autoconfig.patch
+>
+>  > diff --git a/package/perl-gd/perl-gd-04-no-autoconfig.patch
+> b/package/perl-gd/perl-gd-04-no-autoconfig.patch
+>  > new file mode 100644
+>  > index 0000000..c067d41
+>  > --- /dev/null
+>  > +++ b/package/perl-gd/perl-gd-04-no-autoconfig.patch
+>  > @@ -0,0 +1,19 @@
+>  > +prevents the use of gdlib-config in a cross-compilation environment
+>  > +
+>  > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>  > +
+>  > +Index: b/Makefile.PL
+>  > +===================================================================
+>  > +--- a/Makefile.PL
+>  > ++++ b/Makefile.PL
+>  > +@@ -272,6 +272,7 @@
+>  > + exit 0;
+>  > +
+>  > + sub try_to_autoconfigure {
+>  > ++  return; # hack for BR
+>
+> But does that do the right thing?
+>
+>
+with this patch, gdlib-config is never called, the configure step uses only
+values from PERL_GD_CONF_OPTS.
 
-diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
-deleted file mode 100644
-index 1382220..0000000
---- a/board/congatec/qmx6/6q_bootscript.txt
-+++ /dev/null
-@@ -1,2 +0,0 @@
--set bootargs console=ttymxc1,115200 root=/dev/mmcblk0p1 rootwait consoleblank=0
--${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
-diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
-deleted file mode 100755
-index 92251a5..0000000
---- a/board/congatec/qmx6/post-build.sh
-+++ /dev/null
-@@ -1,7 +0,0 @@
--#!/bin/sh
--
--TARGET_DIR=$1
--BOARD_DIR="$(dirname $0)"
--
--mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" \
--    -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-index 143e058..22c6e15 100644
---- a/configs/qmx6_defconfig
-+++ b/configs/qmx6_defconfig
-@@ -1,16 +1,57 @@
-+# architecture
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.0.101"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-+
-+# kernel
-+# Notice you need a recent version of u-boot (with DT support) to be able
-+# to boot this kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-+# Last version of branch cgt_imx_3.10.17_1.0.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
- BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Graphics drivers
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB=y
-+
-+# Enable Qt5
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-+BR2_PACKAGE_QT5BASE_PNG=y
-+
-+# u-boot
-+# Change boardname depending of your product number
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
-+
-+# Images
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_3=y
-+
-+# Usefull host packages
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-1.9.1
+Fran?ois
+
+
+> This is what our gdlib-config returns when E.G. building with png and
+> jpeg support:
+>
+> ./staging/usr/bin/gdlib-config --all
+>    ~/source/buildroot/outputgd
+> GD library  2.1.0
+> includedir:
+> /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+> cflags:
+>  -I/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+> ldflags:     -pthread
+> libs:       -ljpeg -lz -lm
+> -L/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
+> -lpng16
+> libdir:
+>  /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
+> features:   GD_JPEG GD_PNG GD_GIF GD_GIFANIM GD_OPENPOLYGON
+>
+> As far as I can see it doesn't end up linking with those libraries /
+> using -pthread. Does it work for you? (it might, when using shared
+> linking).
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/7248051e/attachment.html>
