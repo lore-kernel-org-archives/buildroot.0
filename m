@@ -1,76 +1,61 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 28 Nov 2014 20:52:15 -0800
-Subject: [Buildroot] [PATCH v3] gst1-imx: add package
-In-Reply-To: <5461D367.3050005@lucaceresoli.net>
-References: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
- <5460F657.8000301@lucaceresoli.net> <54611576.3000803@gmail.com>
- <5461D367.3050005@lucaceresoli.net>
-Message-ID: <CADCpmyPecpzsdbDNp0H3YchvCGqcuVNEtu3Od0kGVnGfJiXx9Q@mail.gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sat, 29 Nov 2014 00:14:05 -0600
+Subject: [Buildroot] [PATCH] ffprobe: V1.0 Add ffprobe option to ffmpeg
+	package
+In-Reply-To: <54796318.7010207@ou.edu>
+References: <54796318.7010207@ou.edu>
+Message-ID: <5479642D.1030408@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+[Buildroot][PATCH] ffprobe: V1.0 Add ffprobe option to ffmpeg package
 
-On Tue, Nov 11, 2014 at 1:14 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Dear Gary,
->
-> Gary Bisson wrote:
->>
->> Luca, All,
->>
->> On 11/10/2014 09:31 AM, Luca Ceresoli wrote:
->>>
->>> Dear Gary,
->>>
->>> Gary Bisson wrote:
->>>>
->>>> [snip]
->>>> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
->>>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
->>>> matroskademux ! imxvpudec ! imxipusink
->>>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
->>>> matroskademux ! imxvpudec ! imxeglvivsink
->>>
->>>
->>> I tested it on i.MX6DL SABRESD (not Quad), based on
->>> freescale_imx6dlsabresd_defconfig, but with libc changed to glibc.
->>> All the three pipelines you provided work, with the first one eating up
->>> ~30% of CPU time, while the other two ones take only 2~3% CPU only (but
->>> play no audio of course).
->>
->>
->> Good to hear everything worked out. Thanks for checking CPU consumption,
->> although 30% seems high for audio handling we can clearly see the video
->> is decoded through the VPU.
->
->
-> Isn't the first pipeline simply not using the hardware decoder?
->
+I found I needed ffprobe on the target so this adds
+BR2_PACKAGE_FFMPEG_FFPROBE to make it an option
+Patch mailed to myself, reapplied with "patch -up1 <../ffpatch.eml" to a fresh buildroot-2014.08 and build tested
 
-No, decoding both 1080p video plus audio in software would be using
-even more CPU. Plus the traces suggest the use of imxvpudec.
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+diff -ru buildroot-2014.08.clean/package/ffmpeg/Config.in buildroot-2014.08.mod/package/ffmpeg/Config.in
+--- buildroot-2014.08.clean/package/ffmpeg/Config.in	2014-09-01 06:20:56.000000000 -0500
++++ buildroot-2014.08.mod/package/ffmpeg/Config.in	2014-11-28 00:14:42.642463528 -0600
+@@ -49,6 +49,12 @@
+ 	help
+ 	  FFserver is a streaming server for both audio and video.
 
->>>> +
->>>> +config BR2_PACKAGE_GST1_IMX
->>>> +    bool "gst1-imx"
->>>> +    depends on BR2_LINUX_KERNEL
->>>
->>>
->>> As per Arnout's suggestion on v2, there should be a # libfslvpuwrap
->>> here.
->>
->>
->> Actually I think this should not be added as this package also needs the
->> kernel headers for IPU use (see source code under src/ipu).
->
->
-> I see. Thanks for the clarification.
->
++config BR2_PACKAGE_FFMPEG_FFPROBE
++	bool "Build ffprobe"
++	help
++	  FFprobe is a utility to determine the audio and video
++	  characteristics of a container file.
++
+ config BR2_PACKAGE_FFMPEG_POSTPROC
+ 	bool "Build libpostproc"
+ 	depends on BR2_PACKAGE_FFMPEG_GPL
+diff -ru buildroot-2014.08.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.08.mod/package/ffmpeg/ffmpeg.mk
+--- buildroot-2014.08.clean/package/ffmpeg/ffmpeg.mk	2014-09-01 06:20:56.000000000 -0500
++++ buildroot-2014.08.mod/package/ffmpeg/ffmpeg.mk	2014-11-28 00:14:48.802463646 -0600
+@@ -25,7 +25,6 @@
+ 	--disable-pic \
+ 	--enable-optimizations \
+ 	--disable-extra-warnings \
+-	--disable-ffprobe \
+ 	--enable-avdevice \
+ 	--enable-avcodec \
+ 	--enable-avformat \
+@@ -103,6 +102,12 @@
+ FFMPEG_CONF_OPT += --disable-ffserver
+ endif
 
-Let me know if there's any modification you'd like on this patch.
-
-Thanks,
-Gary
++ifeq ($(BR2_PACKAGE_FFMPEG_FFPROBE),y)
++FFMPEG_CONF_OPT += --enable-ffprobe
++else
++FFMPEG_CONF_OPT += --disable-ffprobe
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPT += --enable-postproc
+ else
