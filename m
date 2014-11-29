@@ -1,38 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 29 Nov 2014 18:48:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 7676] New: Package procps-ng installs binaries to
- nonsensical folder.
-Message-ID: <bug-7676-163@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Nov 2014 19:56:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: disable on nios2
+Message-ID: <1417287381-5045-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7676
+minidlna triggers the _gp bug:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/77875/
 
-           Summary: Package procps-ng installs binaries to nonsensical
-                    folder.
-           Product: buildroot
-           Version: 2014.08
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: kwrzalik at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+"Fixes"
+http://autobuild.buildroot.net/results/712/71230ee530a41b3611cd4526f0f010f9c2ef25eb/
+http://autobuild.buildroot.net/results/79c/79cbae4dab3ad712bc20c752fdd91e168eade9fe/
+http://autobuild.buildroot.net/results/df7/df7da91985a7bf2b05093bae7379ef22362a44fc/
+and many others
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/minidlna/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Some of the files this package installs land in /usr/usr/bin directory, which I
-guess is not what we need. Adding --exec-prefix=/ to PROCPS_NG_CONF_OPT in
-procps-ng.mk seems to resolve this problem (or at least it installs programs
-like pgrep pkill free to /usr/bin).
-
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 5c5306d..c0620d5 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_MINIDLNA
+ 	select BR2_PACKAGE_LIBJPEG
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	# Triggers the _gp link issue
++	depends on !BR2_nios2
+ 	help
+ 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
+ 	  fully compliant with DLNA/UPnP-AV clients.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
