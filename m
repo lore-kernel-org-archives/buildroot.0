@@ -1,11 +1,10 @@
 From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 29 Nov 2014 14:20:41 +0100
-Subject: [Buildroot] [PATCHv4 2/4] skeleton/S40network: tweak for debian
-	ifupdown
-In-Reply-To: <1417107630-14909-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 29 Nov 2014 14:20:46 +0100
+Subject: [Buildroot] [PATCHv4 3/4] ifupdown: new package
+In-Reply-To: <1417107630-14909-4-git-send-email-gustavo@zacarias.com.ar>
 References: <1417107630-14909-1-git-send-email-gustavo@zacarias.com.ar>
- <1417107630-14909-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CABbD_XDqPegrvugdMnioLx8PuCx=E+56-xFXBuePeqO40s6a9g@mail.gmail.com>
+ <1417107630-14909-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CABbD_XC84BFj8BpfNVhdT6p5EJjvmrArY5hRq5sKuCwCZy5OCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +16,19 @@ Hello,
 On Thu, Nov 27, 2014 at 6:00 PM, Gustavo Zacarias <gustavo@zacarias.com.ar>
 wrote:
 
-> Make the S40network script create the /run/network directory for the
-> debian variant of ifupdown which uses it as a lock directory.
->
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  system/skeleton/etc/init.d/S40network | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/Config.in                                  |  3 +++
+>  .../ifupdown/0001-dont-use-dpkg-architecture.patch | 17 ++++++++++++++
+>  package/ifupdown/Config.in                         | 17 ++++++++++++++
+>  package/ifupdown/ifupdown.hash                     |  2 ++
+>  package/ifupdown/ifupdown.mk                       | 26
+> ++++++++++++++++++++++
+>  5 files changed, 65 insertions(+)
+>  create mode 100644 package/ifupdown/0001-dont-use-dpkg-architecture.patch
+>  create mode 100644 package/ifupdown/Config.in
+>  create mode 100644 package/ifupdown/ifupdown.hash
+>  create mode 100644 package/ifupdown/ifupdown.mk
 >
 
 Tested-by: Karoly Kasza <kaszak@gmail.com>
@@ -36,4 +41,4 @@ Regards,
 Karoly
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/e45d943e/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/b420b3c1/attachment.html>
