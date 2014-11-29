@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 29 Nov 2014 14:20:46 +0100
-Subject: [Buildroot] [PATCHv4 3/4] ifupdown: new package
-In-Reply-To: <1417107630-14909-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 29 Nov 2014 14:20:50 +0100
+Subject: [Buildroot] [PATCHv4 4/4] start-stop-daemon: new package
+In-Reply-To: <1417107630-14909-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1417107630-14909-1-git-send-email-gustavo@zacarias.com.ar>
- <1417107630-14909-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CABbD_XC84BFj8BpfNVhdT6p5EJjvmrArY5hRq5sKuCwCZy5OCA@mail.gmail.com>
+ <1417107630-14909-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CABbD_XB5EH92r=0K6pjWuAOMSRdK5B4f_wro=XxbeJS=_LHEHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,27 @@ Hello,
 On Thu, Nov 27, 2014 at 6:00 PM, Gustavo Zacarias <gustavo@zacarias.com.ar>
 wrote:
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                                  |  3 +++
->  .../ifupdown/0001-dont-use-dpkg-architecture.patch | 17 ++++++++++++++
->  package/ifupdown/Config.in                         | 17 ++++++++++++++
->  package/ifupdown/ifupdown.hash                     |  2 ++
->  package/ifupdown/ifupdown.mk                       | 26
-> ++++++++++++++++++++++
->  5 files changed, 65 insertions(+)
->  create mode 100644 package/ifupdown/0001-dont-use-dpkg-architecture.patch
->  create mode 100644 package/ifupdown/Config.in
->  create mode 100644 package/ifupdown/ifupdown.hash
->  create mode 100644 package/ifupdown/ifupdown.mk
+> We don't use the 1.17.x series because it has issues when
+> cross-compiling.
 >
-
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/Config.in                                  |  3 ++
+>  .../0001-add-uclibc-alias-and-musl.patch           | 42
+> ++++++++++++++++++++++
+>  package/start-stop-daemon/Config.in                |  8 +++++
+>  package/start-stop-daemon/start-stop-daemon.hash   |  2 ++
+>  package/start-stop-daemon/start-stop-daemon.mk     | 36
+> +++++++++++++++++++
+>  5 files changed, 91 insertions(+)
+>  create mode 100644
+> package/start-stop-daemon/0001-add-uclibc-alias-and-musl.patch
+>  create mode 100644 package/start-stop-daemon/Config.in
+>  create mode 100644 package/start-stop-daemon/start-stop-daemon.hash
+>  create mode 100644 package/start-stop-daemon/start-stop-daemon.mk
+>
+>
 Tested-by: Karoly Kasza <kaszak@gmail.com>
 Reviewed-by: Karoly Kasza <kaszak@gmail.com>
 
@@ -41,4 +47,4 @@ Regards,
 Karoly
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/b420b3c1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/544be6d8/attachment.html>
