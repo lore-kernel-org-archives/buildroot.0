@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Nov 2014 17:56:52 +0100
-Subject: [Buildroot] [PATCH 2/2] package/parted: fix static link
-In-Reply-To: <4431396aaa3e810c5ef599e341858e8849d530e1.1417276704.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 29 Nov 2014 16:59:58 +0100")
-References: <cover.1417276704.git.yann.morin.1998@free.fr>
- <4431396aaa3e810c5ef599e341858e8849d530e1.1417276704.git.yann.morin.1998@free.fr>
-Message-ID: <87fvd2j67f.fsf@dell.be.48ers.dk>
+From: Rainer Berns <rainer.berns@berns-online.de>
+Date: Sat, 29 Nov 2014 18:25:12 +0100 (CET)
+Subject: [Buildroot] buildroot 2014.11-rc3 mono fails
+In-Reply-To: <CA+TH9Vn33sHoT3hju_mAMBDDJLfz5w7EVgutJrzPvTW=Wsti9A@mail.gmail.com>
+References: <612310928.432121.1417205315374.JavaMail.open-xchange@oxbaltgw06.schlund.de>
+ <CA+TH9V=Y7vf6r1nWmYcK3exEyDP7W=5N-VtaUae9sWs-UB3ZJQ@mail.gmail.com>
+ <20141128223454.4a2cf327@free-electrons.com>
+ <CA+TH9Vn33sHoT3hju_mAMBDDJLfz5w7EVgutJrzPvTW=Wsti9A@mail.gmail.com>
+Message-ID: <1937789234.449812.1417281912237.JavaMail.open-xchange@oxbaltgw09.schlund.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+HI,
+ 
+removing of the external mono enviroment in ubuntu "fixes" the problem.
+After using the latest git version with the  patch "force host-mono to use
+internal mono bootstrap compiler "and reinstalled mono envirmoment  the
+following error occured:
+ 
+Mono.Http/NtlmClient.cs(99,26): error CS1502: The best overloaded method match
+for `Mono.Security.Protocol.Ntlm.Type3Message.Type3Message(byte[])' has some
+invalid arguments
+/usr/lib/mono/2.0/Mono.Security.dll (Location of the symbol related to previous
+error)
+Mono.Http/NtlmClient.cs(99,44): error CS1503: Argument `#1' cannot convert
+`Mono.Security.Protocol.Ntlm.Type2Message' expression to type `byte[]'
 
- > libuuid needs to be linked with -lintl when gettext is needed (with
- > locales).
-
- > For a static build, this is solved with the DT_NEEDED ELF tags, but for
-
-s/static/shared/
-
-> a static link, it is not pulled in automatically.
-
- > Use pkg-config to find libuuid, instead of AC_CHECK_LIB().
-
- > Second part at fixing:
- >     http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  .../parted/parted-003-fix-static-link-uuid.patch    | 21 +++++++++++++++++++++
- >  1 file changed, 21 insertions(+)
- >  create mode 100644 package/parted/parted-003-fix-static-link-uuid.patch
-
- > diff --git a/package/parted/parted-003-fix-static-link-uuid.patch b/package/parted/parted-003-fix-static-link-uuid.patch
- > new file mode 100644
- > index 0000000..e281b6f
- > --- /dev/null
- > +++ b/package/parted/parted-003-fix-static-link-uuid.patch
- > @@ -0,0 +1,21 @@
-
-You forgot the patch description + signed-off-by.
-
-Otherwise it looks good. Please don't forget to send it upstream.
-
-
--- 
-Bye, Peter Korsgaard
+Regards
+Rainer
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/68d0b95a/attachment.html>
