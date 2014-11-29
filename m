@@ -1,58 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Nov 2014 16:59:54 +0100
-Subject: [Buildroot] [PATCH 0/2] parted: fix static link (branch
-	yem/for-release)
-Message-ID: <cover.1417276704.git.yann.morin.1998@free.fr>
+Date: Sat, 29 Nov 2014 16:59:57 +0100
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: libuuid needs -lintl
+In-Reply-To: <cover.1417276704.git.yann.morin.1998@free.fr>
+References: <cover.1417276704.git.yann.morin.1998@free.fr>
+Message-ID: <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+When gettext is needed (with locales), libuuid needs to be linked
+against -lintl.
 
-This seriesis an RFC to fix building parted in static links.
+In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
+static links, it does not get pulled in automatically.
 
-I have no good idea on how to properly fix the libuuid .pc file, so I
-did it iwth a conditional post-install hook. I'm sure this is not the
-best option, but I can't think of anything better (yet).
+fix that by adding a Libs.private section to uid.pc, but only if
+it needed.
 
-Of course, the parted patch is dependent on the preceding util-linux
-patch, but can still be applied without it, because at worst it would
-leave us in the same situation as we ar today.
+First part at fixing:
+    http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
 
-Still, this is just an RFC to see what you guys think about it.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit fcd082a0c3f78381ecdf41d487405434fabd09b0:
-
-  package/libwebsockets: fiux static build (2014-11-29 15:47:28 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/for-release
-
-for you to fetch changes up to 4431396aaa3e810c5ef599e341858e8849d530e1:
-
-  package/parted: fix static link (2014-11-29 16:57:56 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/util-linux: libuuid needs -lintl
-      package/parted: fix static link
-
- .../parted/parted-003-fix-static-link-uuid.patch    | 21 +++++++++++++++++++++
- package/util-linux/util-linux.mk                    |  8 ++++++++
- 2 files changed, 29 insertions(+)
- create mode 100644 package/parted/parted-003-fix-static-link-uuid.patch
-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 6ecd16d..dc10193 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -128,6 +128,14 @@ endif
+ 
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
++define UTIL_LINUX_TWEAK_UUID_PC
++	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
++	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
++endef
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
