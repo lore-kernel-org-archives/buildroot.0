@@ -1,10 +1,10 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 29 Nov 2014 10:35:24 +0100
-Subject: [Buildroot] [PATCH v3 12/14] nitrogen6x_defconfig: bump kernel to
-	3.10.17_1.0.1_ga
+Date: Sat, 29 Nov 2014 10:35:23 +0100
+Subject: [Buildroot] [PATCH v3 11/14] Vivante drivers: bump to version
+	3.10.17-1.0.1
 In-Reply-To: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
 References: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1417253726-14395-13-git-send-email-jezz@sysmic.org>
+Message-ID: <1417253726-14395-12-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- configs/nitrogen6x_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 5 +++--
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index e56bd60..d75f780 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -26,7 +26,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/898627a/linux-imx6-898627a.tar.gz"
-+# Last version of branch boundary-imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/ea957c5/linux-imx6-ea957c5.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 501b124..e07e5ca 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
++GPU_VIV_BIN_MX6Q_BASE_VERSION = 3.10.17-1.0.1
+ ifeq ($(BR2_ARM_EABIHF),y)
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-hfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-hfp
+ else
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-sfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-sfp
+ endif
+ GPU_VIV_BIN_MX6Q_SITE = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 0a62110..f5a5477 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
 -- 
 1.9.1
