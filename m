@@ -1,10 +1,9 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 29 Nov 2014 20:04:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package/util-linux: libuuid needs -lintl
-In-Reply-To: <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
-References: <cover.1417276704.git.yann.morin.1998@free.fr>
- <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
-Message-ID: <20141129180448.GB2204@tarshish>
+Date: Sat, 29 Nov 2014 20:10:16 +0200
+Subject: [Buildroot] [PATCH] package/shairport-sync: fix static builds
+In-Reply-To: <1417268097-29884-1-git-send-email-yann.morin.1998@free.fr>
+References: <1417268097-29884-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20141129181016.GC2204@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +12,29 @@ To: buildroot@busybox.net
 
 Hi Yann,
 
-On Sat, Nov 29, 2014 at 04:59:57PM +0100, Yann E. MORIN wrote:
-> When gettext is needed (with locales), libuuid needs to be linked
-> against -lintl.
+On Sat, Nov 29, 2014 at 02:34:57PM +0100, Yann E. MORIN wrote:
+> Because shairport-sync uses AC_CHECK_LIB to find some of the needed
+> libraries (opensl, alsa, popt...), it fails to bring in the dependencies
+> of those libraries; for example, -lssl requires -lz.
 > 
-> In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
-> static links, it does not get pulled in automatically.
+> When doing a dynamically-linked build, those dependent libraries are
+> pulled in thansk to the DT_NEEDED ELF tags, but those are not available
+> in static libraries.
 > 
-> fix that by adding a Libs.private section to uid.pc, but only if
-
-s/uid/uuid/
-
-baruch
-
-> it needed.
+> Use PKG_CHECK_MODULES instead of AC_CHECK_LIB, and emulate the results
+> of AC_CJECK_LIB (i.e. set the HAVE_LIBxxx and the LIBS variable
+> appropriately) to minimise the amount of code touched.
 > 
-> First part at fixing:
->     http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
+> This should fix:
+>     http://autobuild.buildroot.net/results/1a5/1a56dbff3583bed0d693508dfc16859086846ecd/
+>     http://autobuild.buildroot.net/results/6d5/6d5a8157592f7a2c9469bf71b0453796ef982ab1/
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/util-linux/util-linux.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 6ecd16d..dc10193 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -128,6 +128,14 @@ endif
->  
->  UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
->  
-> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
-> +define UTIL_LINUX_TWEAK_UUID_PC
-> +	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
-> +	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
-> +endef
-> +UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> Cc: J?rg Krause <jkrause@posteo.de>
+
+SHAIRPORT_SYNC_DEPENDENCIES should now include host-pkgconf, I believe.
+
+baruch
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
