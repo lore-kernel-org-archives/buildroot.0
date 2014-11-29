@@ -1,33 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Nov 2014 10:01:01 +0100
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xserver_xorg-server: bump version to 1.16.2
-Message-ID: <20141129090328.4C7B67FE47@busybox.osuosl.org>
+Date: Sat, 29 Nov 2014 10:04:12 +0100
+Subject: [Buildroot] [PATCH] package/mono: force host-mono to use
+	internal mono bootstrap compiler
+In-Reply-To: <1417216758-17468-1-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Sat, 29 Nov 2014 00:19:18 +0100")
+References: <1417216758-17468-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87oarqjs37.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b47f40bb29d9be34afabfb423bab0ad45cbc11f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > This patch forces the use of internal compiler for building mono,
+ > for more information please refer to mono official documentation
+ > (README.md)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f118ef2..4db8b09 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.16.1
-+XSERVER_XORG_SERVER_VERSION = 1.16.2
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
