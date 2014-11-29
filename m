@@ -1,56 +1,76 @@
 From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 28 Nov 2014 20:48:17 -0800
-Subject: [Buildroot] [PATCH v2 00/13] Add Xorg support for imx6
-In-Reply-To: <18420074.Oyhpzo8KGq@sagittea>
-References: <1413198623-22373-1-git-send-email-jezz@sysmic.org>
- <20141116083345.GA8150@n411z>
- <CADCpmyNT+VH8==NvuJm8wOZ3xSa4Xjm6QJaRFm_TZduihhA05g@mail.gmail.com>
- <18420074.Oyhpzo8KGq@sagittea>
-Message-ID: <CADCpmyP+F36SF4Jy7L+hJ9h3NVzDx-JvqgC50deeXmDgRQVspQ@mail.gmail.com>
+Date: Fri, 28 Nov 2014 20:52:15 -0800
+Subject: [Buildroot] [PATCH v3] gst1-imx: add package
+In-Reply-To: <5461D367.3050005@lucaceresoli.net>
+References: <1415506111-21818-1-git-send-email-bisson.gary@gmail.com>
+ <5460F657.8000301@lucaceresoli.net> <54611576.3000803@gmail.com>
+ <5461D367.3050005@lucaceresoli.net>
+Message-ID: <CADCpmyPecpzsdbDNp0H3YchvCGqcuVNEtu3Od0kGVnGfJiXx9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerome, all,
+Luca, All,
 
-On Sun, Nov 16, 2014 at 2:33 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
->> > [snip]
->> > However I have a few questions regarding the patches:
->> > - 05/13: gpu-viv-bin-mx6q: make fb/x11 choice explicit
->> >
->> >   - Not sure to get the use case here. Are people interested in having
->> >   fb libs on a X system?
-> In fact, yes I think. During development, many developers try fb and Xorg to
-> know which one match best for theirs objectives. I think, it is easy to make a
-> mistakes without this patch.
+On Tue, Nov 11, 2014 at 1:14 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Dear Gary,
 >
-> In add, I think I will add wayland support in future. I found easier to select
-> explicitly back-end.
+> Gary Bisson wrote:
+>>
+>> Luca, All,
+>>
+>> On 11/10/2014 09:31 AM, Luca Ceresoli wrote:
+>>>
+>>> Dear Gary,
+>>>
+>>> Gary Bisson wrote:
+>>>>
+>>>> [snip]
+>>>> $ gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+>>>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>>>> matroskademux ! imxvpudec ! imxipusink
+>>>> $ gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>>>> matroskademux ! imxvpudec ! imxeglvivsink
+>>>
+>>>
+>>> I tested it on i.MX6DL SABRESD (not Quad), based on
+>>> freescale_imx6dlsabresd_defconfig, but with libc changed to glibc.
+>>> All the three pipelines you provided work, with the first one eating up
+>>> ~30% of CPU time, while the other two ones take only 2~3% CPU only (but
+>>> play no audio of course).
+>>
+>>
+>> Good to hear everything worked out. Thanks for checking CPU consumption,
+>> although 30% seems high for audio handling we can clearly see the video
+>> is decoded through the VPU.
+>
+>
+> Isn't the first pipeline simply not using the hardware decoder?
 >
 
-Ok I now get it.
+No, decoding both 1080p video plus audio in software would be using
+even more CPU. Plus the traces suggest the use of imxvpudec.
 
->> > - 06/13: gpu-viv-bin-mx6q: change output selection mecanism
->> >
->> >   - s/mecanism/mechanism
->> >   - Are the symbolic links changes related to the output selection? I
->> >   would
->> >   have seen this as part of the "04/13: gpu-viv-bin-mx6q: fix GLESv2
->> >   support"
->> >   patch
+>>>> +
+>>>> +config BR2_PACKAGE_GST1_IMX
+>>>> +    bool "gst1-imx"
+>>>> +    depends on BR2_LINUX_KERNEL
+>>>
+>>>
+>>> As per Arnout's suggestion on v2, there should be a # libfslvpuwrap
+>>> here.
+>>
+>>
+>> Actually I think this should not be added as this package also needs the
+>> kernel headers for IPU use (see source code under src/ipu).
 >
-> Patch 04 fix a bug, while patch 06 is a style change. However, I admit patch
-> description is not well chosen.
 >
->> > Other than that it looks good. There's one test I haven't done yet:
->> > rebuild a system without X making sure 3D is still working.
+> I see. Thanks for the clarification.
+>
 
-Sorry for the delay but I've finally tested your patchset without X
-(fb mode) and everything works fine!
-Let me know if there's more testing to be done, it'd be great to have
-the latest GPU libs merged asap.
+Let me know if there's any modification you'd like on this patch.
 
 Thanks,
 Gary
