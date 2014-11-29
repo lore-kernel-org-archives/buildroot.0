@@ -1,65 +1,38 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Sat, 29 Nov 2014 22:54:20 +0100
-Subject: [Buildroot] toolchain/helpers.mk: check_musl fails
-Message-ID: <1417298060.18257.12.camel@posteo.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Nov 2014 23:10:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
+	libunwind support is broken on mips64
+Message-ID: <1417299035-17050-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes
+http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
+http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
+http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
 
-I've build an internal Buildroot toolchain with the latest musl C
-library. Now I want to use this toolchain as an external toolchain. I've
-copied output/host/usr/ to a new place and changed the KConfig menu
-entry to external toolchain.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-make fails with the following error:
-        Incorrect selection of the C library
-
-toolchain/helpers.mk/check-musl is:
-        check_musl = \
-        	SYSROOT_DIR="$(strip $1)"; \
-        	if test ! -f $${SYSROOT_DIR}/lib/libc.so -o -e
-        $${SYSROOT_DIR}/lib/libm.so ; then \
-        		echo "Incorrect selection of the C library" ; \
-        		exit -1; \
-        	fi
-
-I've checked the SYSROOT_DIR variable in helpers.mk/check-musl:
-        SYSROOT_DIR: /home/joerg/Development/toolchain/musl-gcc/usr/arm-buildroot-linux-musleabi/sysroot/
-        
-
-[joerg at nzxt sysroot]$ cd /home/joerg/Development/toolchain/musl-gcc/usr/arm-buildroot-linux-musleabi/sysroot/
-[joerg at nzxt sysroot]$ ls -l lib
-total 1344
-lrwxrwxrwx 1 joerg joerg      16 25. Nov 19:19 ld-musl-arm.so.1 -> /usr/lib/libc.so
--rw-r--r-- 1 joerg joerg     132 25. Nov 19:19 libgcc_s.so
--rw-r--r-- 1 joerg joerg 1368741 25. Nov 19:19 libgcc_s.so.1
-[joerg at nzxt sysroot]$ ls -l usr/lib
-total 14180
--rw-r--r-- 1 joerg joerg     920 25. Nov 19:19 crt1.o
--rw-r--r-- 1 joerg joerg     832 25. Nov 19:19 crti.o
--rw-r--r-- 1 joerg joerg     812 25. Nov 19:19 crtn.o
--rw-r--r-- 1 joerg joerg 1893224 25. Nov 19:19 libc.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libcrypt.a
--rwxr-xr-x 1 joerg joerg  737808 25. Nov 19:19 libc.so
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libdl.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libm.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libpthread.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libresolv.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 librt.a
--rw-r--r-- 1 joerg joerg 7812470 25. Nov 19:19 libstdc++.a
-lrwxrwxrwx 1 joerg joerg      19 25. Nov 19:19 libstdc++.so -> libstdc++.so.6.0.20
-lrwxrwxrwx 1 joerg joerg      19 25. Nov 19:19 libstdc++.so.6 -> libstdc++.so.6.0.20
--rwxr-xr-x 1 joerg joerg 4013497 25. Nov 19:19 libstdc++.so.6.0.20
--rw-r--r-- 1 joerg joerg    2419 25. Nov 19:19 libstdc++.so.6.0.20-gdb.py
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libutil.a
--rw-r--r-- 1 joerg joerg       8 25. Nov 19:19 libxnet.a
--rw-r--r-- 1 joerg joerg     992 25. Nov 19:19 Scrt1.o
-
-Any ideas or suggestions?
-
-Best regards
-J?rg
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4db8b09..cae06e6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++# libunwind support is broken on mips64
++# https://www.libreoffice.org/bugzilla/show_bug.cgi?id=79939
++ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_mips64el),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+-- 
+1.7.10.4
