@@ -1,36 +1,62 @@
-From: Rainer Berns <rainer.berns@berns-online.de>
-Date: Sat, 29 Nov 2014 18:25:12 +0100 (CET)
-Subject: [Buildroot] buildroot 2014.11-rc3 mono fails
-In-Reply-To: <CA+TH9Vn33sHoT3hju_mAMBDDJLfz5w7EVgutJrzPvTW=Wsti9A@mail.gmail.com>
-References: <612310928.432121.1417205315374.JavaMail.open-xchange@oxbaltgw06.schlund.de>
- <CA+TH9V=Y7vf6r1nWmYcK3exEyDP7W=5N-VtaUae9sWs-UB3ZJQ@mail.gmail.com>
- <20141128223454.4a2cf327@free-electrons.com>
- <CA+TH9Vn33sHoT3hju_mAMBDDJLfz5w7EVgutJrzPvTW=Wsti9A@mail.gmail.com>
-Message-ID: <1937789234.449812.1417281912237.JavaMail.open-xchange@oxbaltgw09.schlund.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 29 Nov 2014 20:04:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: libuuid needs -lintl
+In-Reply-To: <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
+References: <cover.1417276704.git.yann.morin.1998@free.fr>
+ <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
+Message-ID: <20141129180448.GB2204@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI,
- 
-removing of the external mono enviroment in ubuntu "fixes" the problem.
-After using the latest git version with the  patch "force host-mono to use
-internal mono bootstrap compiler "and reinstalled mono envirmoment  the
-following error occured:
- 
-Mono.Http/NtlmClient.cs(99,26): error CS1502: The best overloaded method match
-for `Mono.Security.Protocol.Ntlm.Type3Message.Type3Message(byte[])' has some
-invalid arguments
-/usr/lib/mono/2.0/Mono.Security.dll (Location of the symbol related to previous
-error)
-Mono.Http/NtlmClient.cs(99,44): error CS1503: Argument `#1' cannot convert
-`Mono.Security.Protocol.Ntlm.Type2Message' expression to type `byte[]'
+Hi Yann,
 
-Regards
-Rainer
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/68d0b95a/attachment.html>
+On Sat, Nov 29, 2014 at 04:59:57PM +0100, Yann E. MORIN wrote:
+> When gettext is needed (with locales), libuuid needs to be linked
+> against -lintl.
+> 
+> In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
+> static links, it does not get pulled in automatically.
+> 
+> fix that by adding a Libs.private section to uid.pc, but only if
+
+s/uid/uuid/
+
+baruch
+
+> it needed.
+> 
+> First part at fixing:
+>     http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/util-linux/util-linux.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 6ecd16d..dc10193 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -128,6 +128,14 @@ endif
+>  
+>  UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+>  
+> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
+> +define UTIL_LINUX_TWEAK_UUID_PC
+> +	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+> +	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+> +endef
+> +UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
