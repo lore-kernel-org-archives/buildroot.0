@@ -1,85 +1,51 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Sat, 29 Nov 2014 10:50:59 +0100
-Subject: [Buildroot] [PATCH] perl-gd: fix configure/build
-In-Reply-To: <8761dzkqbe.fsf@dell.be.48ers.dk>
-References: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
- <8761dzkqbe.fsf@dell.be.48ers.dk>
-Message-ID: <CAGhdn56p-WpX1w6A5hxos+DjSdaHVzZGHUsi0342xnBBXZDSKw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Nov 2014 11:55:56 +0100
+Subject: [Buildroot] [PATCH] package/mutt: specify the mailpath
+Message-ID: <1417258556-16797-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-11-28 21:44 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+mutt's ./configure looks for different paths for where to look for
+incoming mails.
 
-> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
->
->  > see
-> http://autobuild.buildroot.net/results/e74/e74efded899744d757cb798c44f096b54898f95a/
->  > this new patch prevents the use of a host gdlib-config
->
->  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->  > ---
->  >  package/perl-gd/perl-gd-04-no-autoconfig.patch | 19 +++++++++++++++++++
->  >  1 file changed, 19 insertions(+)
->  >  create mode 100644 package/perl-gd/perl-gd-04-no-autoconfig.patch
->
->  > diff --git a/package/perl-gd/perl-gd-04-no-autoconfig.patch
-> b/package/perl-gd/perl-gd-04-no-autoconfig.patch
->  > new file mode 100644
->  > index 0000000..c067d41
->  > --- /dev/null
->  > +++ b/package/perl-gd/perl-gd-04-no-autoconfig.patch
->  > @@ -0,0 +1,19 @@
->  > +prevents the use of gdlib-config in a cross-compilation environment
->  > +
->  > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->  > +
->  > +Index: b/Makefile.PL
->  > +===================================================================
->  > +--- a/Makefile.PL
->  > ++++ b/Makefile.PL
->  > +@@ -272,6 +272,7 @@
->  > + exit 0;
->  > +
->  > + sub try_to_autoconfigure {
->  > ++  return; # hack for BR
->
-> But does that do the right thing?
->
->
-with this patch, gdlib-config is never called, the configure step uses only
-values from PERL_GD_CONF_OPTS.
+This is absolutely worng in the case of cross-compilation, because the
+path it may find on the host may not exist on the target.
 
-Fran?ois
+Not only that, but some host may not even have any of the paths
+./configure looks for.
 
+Fix that by specifying the mailpath, and set it to the value documented
+in the FHS [0]
 
-> This is what our gdlib-config returns when E.G. building with png and
-> jpeg support:
->
-> ./staging/usr/bin/gdlib-config --all
->    ~/source/buildroot/outputgd
-> GD library  2.1.0
-> includedir:
-> /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
-> cflags:
->  -I/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
-> ldflags:     -pthread
-> libs:       -ljpeg -lz -lm
-> -L/home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
-> -lpng16
-> libdir:
->  /home/peko/source/buildroot/outputgd/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib
-> features:   GD_JPEG GD_PNG GD_GIF GD_GIFANIM GD_OPENPOLYGON
->
-> As far as I can see it doesn't end up linking with those libraries /
-> using -pthread. Does it work for you? (it might, when using shared
-> linking).
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141129/7248051e/attachment.html>
+Since Buildroot only guarantees /tmp to be writable, make /var/mail a
+symlink to /tmp .
+
+[0] http://refspecs.linuxfoundation.org/FHS_2.3/fhs-2.3.html#VARMAILUSERMAILBOXFILES
+
+Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/mutt/mutt.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b4f18b0..92457a1 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -57,4 +57,11 @@ MUTT_CONF_ENV += \
+ 	mutt_cv_iconv_good=yes \
+ 	mutt_cv_iconv_nontrans=no
+ 
++MUTT_CONF_OPTS += --with-mailpath=/var/mail
++
++define MUTT_VAR_MAIL
++	ln -sf /tmp $(TARGET_DIR)/var/mail
++endef
++MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
++
+ $(eval $(autotools-package))
+-- 
+1.9.1
