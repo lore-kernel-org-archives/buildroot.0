@@ -1,51 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Nov 2014 11:55:56 +0100
-Subject: [Buildroot] [PATCH] package/mutt: specify the mailpath
-Message-ID: <1417258556-16797-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Nov 2014 12:25:34 +0100
+Subject: [Buildroot] [PATCH] perl-gd: fix configure/build
+In-Reply-To: <CAGhdn56p-WpX1w6A5hxos+DjSdaHVzZGHUsi0342xnBBXZDSKw@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Sat, 29 Nov 2014
+ 10:50:59 +0100")
+References: <1417195423-17839-1-git-send-email-francois.perrad@gadz.org>
+ <8761dzkqbe.fsf@dell.be.48ers.dk>
+ <CAGhdn56p-WpX1w6A5hxos+DjSdaHVzZGHUsi0342xnBBXZDSKw@mail.gmail.com>
+Message-ID: <87k32ejljl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mutt's ./configure looks for different paths for where to look for
-incoming mails.
+>>>>> "Fran?ois" == Fran?ois Perrad <fperrad@gmail.com> writes:
 
-This is absolutely worng in the case of cross-compilation, because the
-path it may find on the host may not exist on the target.
+Hi,
 
-Not only that, but some host may not even have any of the paths
-./configure looks for.
+ >> > + sub try_to_autoconfigure {
+ >> > ++  return; # hack for BR
+ >> 
+ >> But does that do the right thing?
+ >> 
+ > with this patch, gdlib-config is never called, the configure step uses only
+ > values from PERL_GD_CONF_OPTS.
 
-Fix that by specifying the mailpath, and set it to the value documented
-in the FHS [0]
+Yes, exactly. Does it end up linking with the right libraries flags
+(-pthread -ljpeg -lz -lm)?
 
-Since Buildroot only guarantees /tmp to be writable, make /var/mail a
-symlink to /tmp .
-
-[0] http://refspecs.linuxfoundation.org/FHS_2.3/fhs-2.3.html#VARMAILUSERMAILBOXFILES
-
-Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/mutt/mutt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index b4f18b0..92457a1 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -57,4 +57,11 @@ MUTT_CONF_ENV += \
- 	mutt_cv_iconv_good=yes \
- 	mutt_cv_iconv_nontrans=no
- 
-+MUTT_CONF_OPTS += --with-mailpath=/var/mail
-+
-+define MUTT_VAR_MAIL
-+	ln -sf /tmp $(TARGET_DIR)/var/mail
-+endef
-+MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
-+
- $(eval $(autotools-package))
 -- 
-1.9.1
+Venlig hilsen,
+Peter Korsgaard 
