@@ -1,38 +1,215 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Nov 2014 23:10:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
-	libunwind support is broken on mips64
-Message-ID: <1417299035-17050-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 29 Nov 2014 23:45:20 +0100
+Subject: [Buildroot] [PATCH v2 next 1/1] package/flac: bump version to 1.3.1
+Message-ID: <1417301120-25392-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
-http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
-http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
+- all patches were applied upstream:
+  http://xiph.org/flac/changelog.html
+- added hash
+- added patch to fix cmopilation with BR2_DEBUG_2=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+v2: added patch to fix cmopilation with BR2_DEBUG_2=y
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 4db8b09..cae06e6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += freetype
- endif
+ package/flac/0001-cflags.patch            |   30 ++++++++++++++++++++++
+ package/flac/0001-fix-altivec-logic.patch |   32 -----------------------
+ package/flac/0002-fix-CVE-2014-9028.patch |   34 ------------------------
+ package/flac/0003-fix-CVE-2014-8962.patch |   40 -----------------------------
+ package/flac/flac.hash                    |    2 ++
+ package/flac/flac.mk                      |    2 +-
+ 6 files changed, 33 insertions(+), 107 deletions(-)
+ create mode 100644 package/flac/0001-cflags.patch
+ delete mode 100644 package/flac/0001-fix-altivec-logic.patch
+ delete mode 100644 package/flac/0002-fix-CVE-2014-9028.patch
+ delete mode 100644 package/flac/0003-fix-CVE-2014-8962.patch
+ create mode 100644 package/flac/flac.hash
+
+diff --git a/package/flac/0001-cflags.patch b/package/flac/0001-cflags.patch
+new file mode 100644
+index 0000000..5553f10
+--- /dev/null
++++ b/package/flac/0001-cflags.patch
+@@ -0,0 +1,30 @@
++Respect CFLAGS
++
++ported from Gentoo
++http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-libs/flac/files/flac-1.3.1-cflags.patch?view=markup
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- flac-1.3.1/configure.ac
+++++ flac-1.3.1/configure.ac
++@@ -348,12 +348,8 @@
++ 
++ if test "x$debug" = xtrue; then
++ 	CPPFLAGS="-DDEBUG $CPPFLAGS"
++-	CFLAGS=$(echo "$CFLAGS" | sed 's/-g//')
++-	CFLAGS="-g $CFLAGS"
++ else
++ 	CPPFLAGS="-DNDEBUG $CPPFLAGS"
++-	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//;s/-g//')
++-	CFLAGS="-O3 -funroll-loops $CFLAGS"
++ fi
++ 
++ XIPH_GCC_VERSION
++@@ -363,7 +359,6 @@
++ 	CXXFLAGS="$CXXFLAGS -Wall -Wextra -Wcast-align -Wshadow -Wwrite-strings -Wctor-dtor-privacy -Wnon-virtual-dtor -Wreorder -Wsign-promo -Wundef -Wunreachable-code " # -Wcast-qual -Wbad-function-cast -Wwrite-strings -Woverloaded-virtual -Wmissing-declarations
++ 
++ 	XIPH_ADD_CFLAGS([-Wdeclaration-after-statement])
++-	XIPH_ADD_CFLAGS([-D_FORTIFY_SOURCE=2])
++ 
++ 	AC_LANG_PUSH([C++])
++ 	XIPH_ADD_CXXFLAGS([-Weffc++])
+diff --git a/package/flac/0001-fix-altivec-logic.patch b/package/flac/0001-fix-altivec-logic.patch
+deleted file mode 100644
+index a1ac8a1..0000000
+--- a/package/flac/0001-fix-altivec-logic.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From d65ede3e874c79348efc85cf3a185c170046c4c8 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 4 Dec 2013 13:31:28 -0300
+-Subject: [PATCH] Fix Makefile.am altivec logic
+-
+-Besides SPE (FSL e500v? cores) there are other powerpc processors
+-that don't support altivec instructions so only enable them when it's
+-100% sure that the target has it.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Erik de Castro Lopo <erikd@mega-nerd.com>
+----
+- src/libFLAC/Makefile.am | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/src/libFLAC/Makefile.am b/src/libFLAC/Makefile.am
+-index 247e33c..258de40 100644
+---- a/src/libFLAC/Makefile.am
+-+++ b/src/libFLAC/Makefile.am
+-@@ -47,8 +47,7 @@ CPUCFLAGS = -faltivec -force_cpusubtype_ALL -DFLAC__NO_ASM
+- else
+- # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
+- CPUCFLAGS =
+--if FLaC__CPU_PPC_SPE
+--else
+-+if FLaC__USE_ALTIVEC
+- CPUCFLAGS += -maltivec -mabi=altivec
+- endif
+- #@@@ PPC optimizations temporarily disabled
+--- 
+-1.8.3.2
+-
+diff --git a/package/flac/0002-fix-CVE-2014-9028.patch b/package/flac/0002-fix-CVE-2014-9028.patch
+deleted file mode 100644
+index 5a25ecf..0000000
+--- a/package/flac/0002-fix-CVE-2014-9028.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From fcf0ba06ae12ccd7c67cee3c8d948df15f946b85 Mon Sep 17 00:00:00 2001
+-From: Erik de Castro Lopo <erikd@mega-nerd.com>
+-Date: Wed, 19 Nov 2014 19:35:59 -0800
+-Subject: [PATCH] src/libFACL/stream_decoder.c : Fail safely to avoid a heap overflow.
+-
+-A file provided by the reporters caused the stream decoder to write to
+-un-allocated heap space resulting in a segfault. The solution is to
+-error out (by returning false from read_residual_partitioned_rice_())
+-instead of trying to continue to decode.
+-
+-Fixes: CVE-2014-9028
+-Reported-by: Michele Spagnuolo,
+-             Google Security Team <mikispag@google.com>
+----
+- src/libFLAC/stream_decoder.c |    3 ++-
+- 1 files changed, 2 insertions(+), 1 deletions(-)
+-
+-diff --git a/src/libFLAC/stream_decoder.c b/src/libFLAC/stream_decoder.c
+-index 88a656d..54e84d4 100644
+---- a/src/libFLAC/stream_decoder.c
+-+++ b/src/libFLAC/stream_decoder.c
+-@@ -2736,7 +2736,8 @@ FLAC__bool read_residual_partitioned_rice_(FLAC__StreamDecoder *decoder, unsigne
+- 		if(decoder->private_->frame.header.blocksize < predictor_order) {
+- 			send_error_to_client_(decoder, FLAC__STREAM_DECODER_ERROR_STATUS_LOST_SYNC);
+- 			decoder->protected_->state = FLAC__STREAM_DECODER_SEARCH_FOR_FRAME_SYNC;
+--			return true;
+-+			/* We have received a potentially malicious bt stream. All we can do is error out to avoid a heap overflow. */
+-+			return false;
+- 		}
+- 	}
+- 	else {
+--- 
+-1.7.2.5
+-
+diff --git a/package/flac/0003-fix-CVE-2014-8962.patch b/package/flac/0003-fix-CVE-2014-8962.patch
+deleted file mode 100644
+index 563100e..0000000
+--- a/package/flac/0003-fix-CVE-2014-8962.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 5b3033a2b355068c11fe637e14ac742d273f076e Mon Sep 17 00:00:00 2001
+-From: Erik de Castro Lopo <erikd@mega-nerd.com>
+-Date: Tue, 18 Nov 2014 07:20:25 -0800
+-Subject: [PATCH] src/libFLAC/stream_decoder.c : Fix buffer read overflow.
+-
+-This is CVE-2014-8962.
+-
+-Reported-by: Michele Spagnuolo,
+-             Google Security Team <mikispag@google.com>
+----
+- src/libFLAC/stream_decoder.c |    6 +++++-
+- 1 files changed, 5 insertions(+), 1 deletions(-)
+-
+-diff --git a/src/libFLAC/stream_decoder.c b/src/libFLAC/stream_decoder.c
+-index cb66fe2..88a656d 100644
+---- a/src/libFLAC/stream_decoder.c
+-+++ b/src/libFLAC/stream_decoder.c
+-@@ -71,7 +71,7 @@ FLAC_API int FLAC_API_SUPPORTS_OGG_FLAC =
+-  *
+-  ***********************************************************************/
+- 
+--static FLAC__byte ID3V2_TAG_[3] = { 'I', 'D', '3' };
+-+static const FLAC__byte ID3V2_TAG_[3] = { 'I', 'D', '3' };
+- 
+- /***********************************************************************
+-  *
+-@@ -1361,6 +1361,10 @@ FLAC__bool find_metadata_(FLAC__StreamDecoder *decoder)
+- 			id = 0;
+- 			continue;
+- 		}
+-+
+-+		if(id >= 3)
+-+			return false;
+-+
+- 		if(x == ID3V2_TAG_[id]) {
+- 			id++;
+- 			i = 0;
+--- 
+-1.7.2.5
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+new file mode 100644
+index 0000000..b5389fc
+--- /dev/null
++++ b/package/flac/flac.hash
+@@ -0,0 +1,2 @@
++# http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
++sha256	4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c56c	flac-1.3.1.tar.xz
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index daedd47..2f8c9c3 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+# libunwind support is broken on mips64
-+# https://www.libreoffice.org/bugzilla/show_bug.cgi?id=79939
-+ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_mips64el),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
- else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+-FLAC_VERSION = 1.3.0
++FLAC_VERSION = 1.3.1
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
 -- 
 1.7.10.4
