@@ -1,85 +1,75 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 29 Nov 2014 10:35:12 +0100
-Subject: [Buildroot] [PATCH v3 00/14] Add Xorg support for iMX6
-Message-ID: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+Date: Sat, 29 Nov 2014 10:35:16 +0100
+Subject: [Buildroot] [PATCH v3 04/14] gpu-viv-bin-mx6q: fix GLESv2 support
+In-Reply-To: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+References: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1417253726-14395-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Tested with:
+    QMX6 board +
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_EGLFS=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
-Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
-Xorg. This work is mainly adapted from Yocto.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-v3:
-  - Respin on next
-  - Add patch to use self-extractible helper function
-  - Remove 'See freescale-imx.mk' comment
-  - Reword patch "gpu-viv-bin-mx6q: change output selection mecanisms"
-  - libdrm: Apply new patch naming policy
-  - xdriver_xf86-video-imx-viv: Apply new patch naming policy
-  - xdriver_xf86-video-imx-viv: Does not depends directly on glibc
-  - qt5base: Apply new patch naming policy
-  - qmx6_defconfig: Use internal toochain
-
-v2:
-  - Rebase on new version of mesa3d
-  - Reorder some patches (in order to make examples I provide in commit message 
-    functional)
-  - Do not bump version of all freescale packages
-  - Bump kernel version of imx6 boards
-
-J?r?me Pouiller (14):
-  mesa3d: Give possibility to external backends to enable DRI/Gallium
-  gpu-viv-bin-mx6q: use self-extractible helper
-  gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
-  gpu-viv-bin-mx6q: fix GLESv2 support
-  gpu-viv-bin-mx6q: make fb/x11 choice explicit
-  gpu-viv-bin-mx6q: change output selection mechanism
-  xdriver_xf86-video-imx-viv: new package
-  libdrm: fix support for xserver with Vivante drivers
-  qt5base: apply new patch naming policy
-  qt5base: fix Vivante x11/EGL configuration
-  Vivante drivers: bump to version 3.10.17-1.0.1
-  nitrogen6x_defconfig: bump kernel to 3.10.17_1.0.1_ga
-  freescale_imx6*_defconfig: bump kernel to 3.10.17_1.0.1_ga
-  qmx6_defconfig: update
-
- board/congatec/qmx6/6q_bootscript.txt              |  2 -
- board/congatec/qmx6/post-build.sh                  |  7 ---
- configs/freescale_imx6dlsabresd_defconfig          |  3 +-
- configs/freescale_imx6qsabresd_defconfig           |  3 +-
- configs/freescale_imx6sololiteevk_defconfig        |  3 +-
- configs/nitrogen6x_defconfig                       |  3 +-
- configs/qmx6_defconfig                             | 49 +++++++++++++++--
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 29 +++++++++-
- package/freescale-imx/gpu-viv-bin-mx6q/egl.pc      |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc   |  2 +-
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 56 ++++++++-----------
- package/freescale-imx/gpu-viv-bin-mx6q/vg.pc       |  2 +-
- package/libdrm/0001-update-arm.patch               | 37 +++++++++++++
- package/mesa3d/mesa3d.mk                           |  4 +-
- .../qt5/qt5base/0001-Force_egl_visual_ID_33.patch  | 23 ++++++++
- ...kspecs-files.patch => 0002-mkspecs-files.patch} |  0
- ...clibc-no-lfs.patch => 0003-uclibc-no-lfs.patch} |  0
- package/qt5/qt5base/0004-xcb-egl-fixes.patch       | 63 ++++++++++++++++++++++
- package/x11r7/Config.in                            |  1 +
- .../0001-Fix-LoadExtenions.patch                   | 15 ++++++
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 27 ++++++++++
- .../xdriver_xf86-video-imx-viv.mk                  | 32 +++++++++++
- 22 files changed, 306 insertions(+), 57 deletions(-)
- delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
- delete mode 100755 board/congatec/qmx6/post-build.sh
- create mode 100644 package/libdrm/0001-update-arm.patch
- create mode 100644 package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
- rename package/qt5/qt5base/{qt5base-0002-mkspecs-files.patch => 0002-mkspecs-files.patch} (100%)
- rename package/qt5/qt5base/{qt5base-0003-uclibc-no-lfs.patch => 0003-uclibc-no-lfs.patch} (100%)
- create mode 100644 package/qt5/qt5base/0004-xcb-egl-fixes.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 1158e42..eb54b80 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -37,12 +37,13 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+ 			$(@D)/usr/lib/lib$${lib}.so; \
+ 	done
+-	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+@@ -73,7 +74,7 @@ endif
+ define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
+ 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
+ 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
 -- 
 1.9.1
