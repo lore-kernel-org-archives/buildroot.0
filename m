@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:06:07 +0100
-Subject: [Buildroot] [PATCHv3 32/74] iostat: don't install man page
-In-Reply-To: <1417357142-14307-33-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:07:08 +0100
+Subject: [Buildroot] [PATCHv3 33/74] iostat: remove legacy code
+In-Reply-To: <1417357142-14307-34-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-33-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130170606.GL4124@free.fr>
+ <1417357142-14307-34-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130170708.GM4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,14 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> We don't support installing documentation on the target, so there's no
-> point in having explicit code to do so.
+> Some custom iostat-source target was mistakenly left in place when the
+> iostat package was migrated to gentargets in commit
+> ee77963588b09babfd71befb0b5eb9fd1e776bbc, back 4 years ago. This
+> commit removes this unnecessary custom target.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+That is a really hard forensic work you've been doing in this series!
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -29,18 +33,18 @@ Yann E. MORIN.
 >  1 file changed, 2 deletions(-)
 > 
 > diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-> index 8610f8f..2080e56 100644
+> index 2080e56..dd2a579 100644
 > --- a/package/iostat/iostat.mk
 > +++ b/package/iostat/iostat.mk
-> @@ -17,8 +17,6 @@ endef
+> @@ -9,8 +9,6 @@ IOSTAT_SITE = http://www.linuxinsight.com/files
+>  IOSTAT_LICENSE = GPL
+>  IOSTAT_LICENSE_FILES = LICENSE
 >  
->  define IOSTAT_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
-> -	$(INSTALL) -D $(IOSTAT_DIR)/iostat.8 \
-> -		$(TARGET_DIR)/usr/share/man/man8/iostat.8
+> -iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
+> -
+>  define IOSTAT_BUILD_CMDS
+>  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
 >  endef
->  
->  $(eval $(generic-package))
 > -- 
 > 2.1.0
 > 
