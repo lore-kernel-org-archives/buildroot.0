@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 15:56:52 +0100
-Subject: [Buildroot] [PATCHv3 07/74] portmap: use
- <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 15:57:22 +0100
+Subject: [Buildroot] [PATCHv3 08/74] portmap: don't install manpages
+In-Reply-To: <1417357142-14307-9-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130145652.GL4124@free.fr>
+ <1417357142-14307-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130145722.GM4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +14,37 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
-> We also switch to using a full destination path as the second argument
-> of $(INSTALL).
+> We no longer support having documentation on the target, so there's no
+> point in carrying code to install man pages.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/portmap/portmap.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-> index 0189597..dd60809 100644
-> --- a/package/portmap/portmap.mk
-> +++ b/package/portmap/portmap.mk
-> @@ -30,8 +30,10 @@ define PORTMAP_INSTALL_TARGET_CMDS
->  		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
->  	$(INSTALL) -D $(@D)/pmap_set.8 \
->  		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
-> -	$(INSTALL) -m 0755 package/portmap/S13portmap \
-> -		$(TARGET_DIR)/etc/init.d
-> +endef
-> +
-> +define PORTMAP_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 package/portmap/S13portmap $(TARGET_DIR)/etc/init.d/S13portmap
 
-Missing -D option.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/portmap/portmap.mk | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+> index dd60809..d5d43bf 100644
+> --- a/package/portmap/portmap.mk
+> +++ b/package/portmap/portmap.mk
+> @@ -24,12 +24,6 @@ define PORTMAP_INSTALL_TARGET_CMDS
+>  	for sbin in $(PORTMAP_SBINS); do \
+>  		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
+>  	done
+> -	$(INSTALL) -D $(@D)/portmap.man \
+> -		$(TARGET_DIR)/usr/share/man/man8/portmap.8
+> -	$(INSTALL) -D $(@D)/pmap_dump.8 \
+> -		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
+> -	$(INSTALL) -D $(@D)/pmap_set.8 \
+> -		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
 >  endef
 >  
->  $(eval $(generic-package))
+>  define PORTMAP_INSTALL_INIT_SYSV
 > -- 
 > 2.1.0
 > 
