@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:06:50 +0100
-Subject: [Buildroot] [PATCHv3 67/74] ifplugd: install configuration
- files unconditionally
-In-Reply-To: <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 19:07:27 +0100
+Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration
+ file unconditionally
+In-Reply-To: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130180650.GW4124@free.fr>
+ <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130180727.GX4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,41 +24,30 @@ On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-But see a comment, below...
-
-> ---
->  package/ifplugd/ifplugd.mk | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-> index 3d0736a..b24c79d 100644
-> --- a/package/ifplugd/ifplugd.mk
-> +++ b/package/ifplugd/ifplugd.mk
-> @@ -21,14 +21,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->  endif
->  
->  define IFPLUGD_INSTALL_FIXUP
-> -	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
-> -		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-> -		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-> -	fi
-> -	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
-> -		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
-> -			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
-> -	fi
-> +	$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-
-Maybe it would be nice to enforce -m 644 on that file, no?
-
 Regards,
 Yann E. MORIN.
 
-> +	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-> +	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
-> +		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+> ---
+>  package/sysklogd/sysklogd.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+> index 2b60b45..1e8652d 100644
+> --- a/package/sysklogd/sysklogd.mk
+> +++ b/package/sysklogd/sysklogd.mk
+> @@ -21,10 +21,8 @@ endef
+>  define SYSKLOGD_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m 0500 $(@D)/syslogd $(TARGET_DIR)/sbin/syslogd
+>  	$(INSTALL) -D -m 0500 $(@D)/klogd $(TARGET_DIR)/sbin/klogd
+> -	if [ ! -f $(TARGET_DIR)/etc/syslog.conf ]; then \
+> -		$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+> -			$(TARGET_DIR)/etc/syslog.conf; \
+> -	fi
+> +	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+> +		$(TARGET_DIR)/etc/syslog.conf; \
 >  endef
 >  
->  IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+>  define SYSKLOGD_INSTALL_INIT_SYSV
 > -- 
 > 2.1.0
 > 
