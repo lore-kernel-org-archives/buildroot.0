@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:40 +0100
-Subject: [Buildroot] [PATCHv3 52/74] aiccu: install init script and config
-	file unconditionally
+Date: Sun, 30 Nov 2014 15:18:45 +0100
+Subject: [Buildroot] [PATCHv3 57/74] rpcbind: install init script
+	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-53-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-58-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,29 +18,24 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/aiccu/aiccu.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/rpcbind/rpcbind.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
-index 4413f86..faa861c 100644
---- a/package/aiccu/aiccu.mk
-+++ b/package/aiccu/aiccu.mk
-@@ -28,14 +28,12 @@ endef
- define AICCU_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu \
- 		$(TARGET_DIR)/usr/sbin/aiccu
--	[ -f $(TARGET_DIR)/etc/aiccu.conf ] || \
--		$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
-+	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
- 		$(TARGET_DIR)/etc/aiccu.conf
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index b7c2261..55de3fc 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -17,9 +17,8 @@ RPCBIND_DEPENDENCIES += libtirpc
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
+ 
+ define RPCBIND_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
+-		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+-			$(TARGET_DIR)/etc/init.d/S30rpcbind
++	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
++		$(TARGET_DIR)/etc/init.d/S30rpcbind
  endef
  
- define AICCU_INSTALL_INIT_SYSV
--	[ -f $(TARGET_DIR)/etc/init.d/S50aiccu ] || \
--		$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
-+	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
- 		$(TARGET_DIR)/etc/init.d/S50aiccu
- endef
- 
+ $(eval $(autotools-package))
 -- 
 2.1.0
