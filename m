@@ -1,50 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:37 +0100
-Subject: [Buildroot] [PATCHv3 49/74] qtuio: add error handling to for loop
+Date: Sun, 30 Nov 2014 15:18:43 +0100
+Subject: [Buildroot] [PATCHv3 55/74] iucode-tool: install init script
+	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-50-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-56-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As discussed, users should use a rootfs overlay or a post-build script
+instead of a custom skeleton to override files installed by Buildroot,
+so there is no point in having conditions when installing init scripts
+or configuration files.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qtuio/qtuio.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/iucode-tool/iucode-tool.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-index 9925f84..9af0136 100644
---- a/package/qtuio/qtuio.mk
-+++ b/package/qtuio/qtuio.mk
-@@ -19,7 +19,7 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_CONFIGURE_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
-+		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
- 	done
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 3124c73..081b086 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -15,9 +15,8 @@ IUCODE_TOOL_LICENSE = GPLv2+
+ IUCODE_TOOL_LICENSE_FILES = COPYING
+ 
+ define IUCODE_TOOL_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
+-		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+-			$(TARGET_DIR)/etc/init.d/S00iucode-tool
++	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
++		$(TARGET_DIR)/etc/init.d/S00iucode-tool
  endef
- endif
-@@ -32,7 +32,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_BUILD_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(MAKE) -C $(@D)/examples/$${example}) ; \
-+		($(MAKE) -C $(@D)/examples/$${example}) || exit 1; \
- 	done
- endef
- endif
-@@ -46,7 +46,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_INSTALL_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-+		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1) ; \
- 	done
- endef
- endif
+ 
+ $(eval $(autotools-package))
 -- 
 2.1.0
