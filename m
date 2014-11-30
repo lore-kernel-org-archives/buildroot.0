@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 16:11:09 +0100
-Subject: [Buildroot] [PATCHv3 14/74] input-event-daemon: use
+Date: Sun, 30 Nov 2014 16:13:33 +0100
+Subject: [Buildroot] [PATCHv3 15/74] ifplugd: use
  <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-15-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-16-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-15-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130151109.GS4124@free.fr>
+ <1417357142-14307-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130151333.GT4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,6 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> Also makes the installation of the init script unconditional.
-> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -25,28 +23,31 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/input-event-daemon/input-event-daemon.mk | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  package/ifplugd/ifplugd.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
-> index 534fe90..0bafdc4 100644
-> --- a/package/input-event-daemon/input-event-daemon.mk
-> +++ b/package/input-event-daemon/input-event-daemon.mk
-> @@ -21,9 +21,11 @@ define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
->  	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
->  		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
->  			$(TARGET_DIR)/etc/input-event-daemon.conf
-> -	[ -f $(TARGET_DIR)/etc/init.d/S99input-event-daemon ] || \
-> -		$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
-> -			$(TARGET_DIR)/etc/init.d/S99input-event-daemon
+> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+> index 398cff4..3d0736a 100644
+> --- a/package/ifplugd/ifplugd.mk
+> +++ b/package/ifplugd/ifplugd.mk
+> @@ -29,12 +29,15 @@ define IFPLUGD_INSTALL_FIXUP
+>  		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+>  			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+>  	fi
 > +endef
 > +
-> +define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
-> +		$(TARGET_DIR)/etc/init.d/S99input-event-daemon
+> +IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+> +
+> +define IFPLUGD_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+>  		$(TARGET_DIR)/etc/init.d/S45ifplugd
+>  	# don't use bash for init script
+>  	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
 >  endef
 >  
->  $(eval $(generic-package))
+> -IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+> -
+>  $(eval $(autotools-package))
 > -- 
 > 2.1.0
 > 
