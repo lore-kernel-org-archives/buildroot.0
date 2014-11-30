@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:17:57 +0100
-Subject: [Buildroot] [PATCHv3 09/74] portmap: improve installation of
-	binaries
+Date: Sun, 30 Nov 2014 15:17:59 +0100
+Subject: [Buildroot] [PATCHv3 11/74] gdk-pixbuf: use <pkg>_INSTALL_INIT_SYSV
+	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit explicits the permissions with which executables are
-installed, and also makes sure that the build is aborted is one of the
-binary cannot be installed, instead of silently ignoring the error.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/portmap/portmap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-index d5d43bf..65ee551 100644
---- a/package/portmap/portmap.mk
-+++ b/package/portmap/portmap.mk
-@@ -22,7 +22,7 @@ endef
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 61e7ae9..0977d92 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -45,13 +45,11 @@ GDK_PIXBUF_DEPENDENCIES += \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	host-pkgconf libglib2
  
- define PORTMAP_INSTALL_TARGET_CMDS
- 	for sbin in $(PORTMAP_SBINS); do \
--		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
-+		$(INSTALL) -D -m 0755 $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin || exit 1; \
- 	done
+-define GDK_PIXBUF_POST_INSTALL_TWEAKS
++define GDK_PIXBUF_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/gdk-pixbuf/S26gdk-pixbuf \
+ 		$(TARGET_DIR)/etc/init.d/S26gdk-pixbuf
  endef
  
+-GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_POST_INSTALL_TWEAKS
+-
+ $(eval $(autotools-package))
+ 
+ HOST_GDK_PIXBUF_CONF_OPTS = \
 -- 
 2.1.0
