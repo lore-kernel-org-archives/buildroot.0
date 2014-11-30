@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:53:16 +0100
-Subject: [Buildroot] [PATCHv3 64/74] samba: install configuration file
- unconditionally
-In-Reply-To: <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:54:20 +0100
+Subject: [Buildroot] [PATCHv3 65/74] logrotate: install configuration
+ file unconditionally
+In-Reply-To: <1417357142-14307-66-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130175316.GT4124@free.fr>
+ <1417357142-14307-66-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130175420.GU4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,25 +28,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/samba/samba.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  package/logrotate/logrotate.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-> index 92bbe4e..0e4db95 100644
-> --- a/package/samba/samba.mk
-> +++ b/package/samba/samba.mk
-> @@ -177,10 +177,7 @@ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
->  endif
+> diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+> index 2e49feb..dc26d85 100644
+> --- a/package/logrotate/logrotate.mk
+> +++ b/package/logrotate/logrotate.mk
+> @@ -17,9 +17,7 @@ endef
 >  
->  define SAMBA_INSTALL_CONFIG
-> -	# install config
-> -	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
-> -		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
+>  define LOGROTATE_INSTALL_TARGET_CMDS
+>  	$(MAKE) PREFIX=$(TARGET_DIR) -C $(@D) install
+> -	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
+> -		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
 > -	fi
-> +	$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf
+> +	$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf
+>  	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
 >  endef
 >  
->  SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
 > -- 
 > 2.1.0
 > 
