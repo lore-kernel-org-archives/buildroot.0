@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:43:59 +0100
-Subject: [Buildroot] [PATCHv3 57/74] rpcbind: install init script
- unconditionally
-In-Reply-To: <1417357142-14307-58-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:45:16 +0100
+Subject: [Buildroot] [PATCHv3 58/74] rsyslog: install init script and
+ config file unconditionally
+In-Reply-To: <1417357142-14307-59-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-58-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130174359.GM4124@free.fr>
+ <1417357142-14307-59-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130174516.GN4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,10 @@ On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > so there is no point in having conditions when installing init scripts
 > or configuration files.
 > 
+> Also, we take this opportunity to rename RSYSLOG_INSTALL_CONF_SCRIPT
+> to RSYSLOG_INSTALL_CONF because it is no longer installing an init
+> script.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -28,23 +32,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/rpcbind/rpcbind.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  package/rsyslog/rsyslog.mk | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-> index b7c2261..55de3fc 100644
-> --- a/package/rpcbind/rpcbind.mk
-> +++ b/package/rpcbind/rpcbind.mk
-> @@ -17,9 +17,8 @@ RPCBIND_DEPENDENCIES += libtirpc
->  RPCBIND_CONF_OPTS += --with-rpcuser=root
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index d7dc930..6b72bb5 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -39,18 +39,16 @@ else
+>  endif
 >  
->  define RPCBIND_INSTALL_INIT_SYSV
-> -	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
-> -		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
-> -			$(TARGET_DIR)/etc/init.d/S30rpcbind
-> +	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
-> +		$(TARGET_DIR)/etc/init.d/S30rpcbind
+>  define RSYSLOG_INSTALL_INIT_SYSV
+> -	[ -f $(TARGET_DIR)/etc/init.d/S01rsyslog ] || \
+> -		$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslog \
+> -			$(TARGET_DIR)/etc/init.d/S01rsyslog
+> +	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslog \
+> +		$(TARGET_DIR)/etc/init.d/S01rsyslog
 >  endef
+>  
+> -define RSYSLOG_INSTALL_CONF_SCRIPT
+> -	[ -f $(TARGET_DIR)/etc/rsyslog.conf ] || \
+> -		$(INSTALL) -m 0644 -D $(@D)/platform/redhat/rsyslog.conf \
+> -			$(TARGET_DIR)/etc/rsyslog.conf
+> +define RSYSLOG_INSTALL_CONF
+> +	$(INSTALL) -m 0644 -D $(@D)/platform/redhat/rsyslog.conf \
+> +		$(TARGET_DIR)/etc/rsyslog.conf
+>  	mkdir -p $(TARGET_DIR)/etc/rsyslog.d
+>  endef
+>  
+> -RSYSLOG_POST_INSTALL_TARGET_HOOKS += RSYSLOG_INSTALL_CONF_SCRIPT
+> +RSYSLOG_POST_INSTALL_TARGET_HOOKS += RSYSLOG_INSTALL_CONF
 >  
 >  $(eval $(autotools-package))
 > -- 
