@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 16:45:05 +0100
-Subject: [Buildroot] [PATCHv3 24/74] openvpn: use
+Date: Sun, 30 Nov 2014 16:46:33 +0100
+Subject: [Buildroot] [PATCHv3 25/74] tinyhttpd: use
  <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-25-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-26-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-25-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130154505.GC4124@free.fr>
+ <1417357142-14307-26-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130154633.GD4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,37 +16,34 @@ Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/openvpn/openvpn.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-> index e0dba35..68f7d97 100644
-> --- a/package/openvpn/openvpn.mk
-> +++ b/package/openvpn/openvpn.mk
-> @@ -50,6 +50,9 @@ endif
->  define OPENVPN_INSTALL_TARGET_CMDS
->  	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
->  		$(TARGET_DIR)/usr/sbin/openvpn
-> +endef
-> +
-> +define OPENVPN_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 755 -D package/openvpn/S60openvpn \
-
-Suddenly, I realise that some packages use 755 while others use 0755.
-
-I don't care which we use (even though I have a slight preference for
-0755), but we should have some coherence across all packages.
-
-Anyway, not directly related to your patch, so:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  		$(TARGET_DIR)/etc/init.d/S60openvpn
+> ---
+>  package/tinyhttpd/tinyhttpd.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+> index ec47fd9..0934b71 100644
+> --- a/package/tinyhttpd/tinyhttpd.mk
+> +++ b/package/tinyhttpd/tinyhttpd.mk
+> @@ -16,9 +16,12 @@ endef
+>  
+>  define TINYHTTPD_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -m 0755 -D $(@D)/httpd $(TARGET_DIR)/usr/sbin/tinyhttpd
+> +	mkdir -p $(TARGET_DIR)/var/www
+> +endef
+> +
+> +define TINYHTTPD_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/tinyhttpd/S85tinyhttpd \
+>  		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
+> -	mkdir -p $(TARGET_DIR)/var/www
 >  endef
+>  
+>  $(eval $(generic-package))
 > -- 
 > 2.1.0
 > 
