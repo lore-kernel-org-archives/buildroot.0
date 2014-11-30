@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:17:53 +0100
-Subject: [Buildroot] [PATCHv3 05/74] thttpd: use the <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 15:17:54 +0100
+Subject: [Buildroot] [PATCHv3 06/74] busybox: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/thttpd/thttpd.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index 70a90fd..1a028c8 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -31,8 +31,6 @@ define THTTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd_wrapper $(TARGET_DIR)/usr/sbin/thttpd_wrapper
- 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' -e \
- 		's:/usr/local/www:/var/www:g' $(TARGET_DIR)/usr/sbin/thttpd_wrapper
--	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
--	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
- 	$(INSTALL) -d $(TARGET_DIR)/var/www/data
- 	$(INSTALL) -d $(TARGET_DIR)/var/www/logs
- 	echo "dir=/var/www/data" > $(TARGET_DIR)/var/www/thttpd_config
-@@ -41,4 +39,9 @@ define THTTPD_INSTALL_TARGET_CMDS
- 	echo "pidfile=/var/run/thttpd.pid" >> $(TARGET_DIR)/var/www/thttpd_config
- endef
- 
-+define THTTPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
-+	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index f0fa851..eb2f3f1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -218,8 +218,11 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+ 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+ 	fi
+-	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
 +endef
 +
- $(eval $(autotools-package))
++define BUSYBOX_INSTALL_INIT_SYSV
++	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ endef
 -- 
 2.1.0
