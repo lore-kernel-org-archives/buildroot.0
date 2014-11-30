@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:18:38 +0100
-Subject: [Buildroot] [PATCHv3 51/74] xenomai: add error handling to for
- loop
-In-Reply-To: <1417357142-14307-52-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:23:18 +0100
+Subject: [Buildroot] [PATCHv3 06/74] busybox: use
+ <pkg>_INSTALL_INIT_SYSV mechanism
+In-Reply-To: <20141130145506.GK4124@free.fr>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-52-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130171838.GE4124@free.fr>
+ <1417357142-14307-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141130145506.GK4124@free.fr>
+Message-ID: <20141130172317.GF4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +15,37 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 2014-11-30 15:55 +0100, Yann E. MORIN spake thusly:
+> On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/busybox/busybox.mk | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> > index f0fa851..eb2f3f1 100644
+> > --- a/package/busybox/busybox.mk
+> > +++ b/package/busybox/busybox.mk
+> > @@ -218,8 +218,11 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+> >  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+> >  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+> >  	fi
+> > -	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+> >  	$(BUSYBOX_INSTALL_MDEV_CONF)
+> > +endef
+> > +
+> > +define BUSYBOX_INSTALL_INIT_SYSV
+> > +	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+> 
+> The installation of the script is stil conditional:
+[--SNIP--]
+
+OK, I saw you added a fix for that latter in the series. So:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/xenomai/xenomai.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index 740a40b..ccbae35 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -99,7 +99,7 @@ XENOMAI_DEPENDENCIES += udev
->  define XENOMAI_INSTALL_UDEV_RULES
->  	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
->  		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
-> -			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ ; \
-> +			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ || exit 1 ; \
->  		done ; \
->  	fi;
->  endef
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
