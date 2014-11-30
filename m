@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:11:24 +0100
-Subject: [Buildroot] [PATCHv3 39/74] coreutils: add error handling to
- for loop
-In-Reply-To: <1417357142-14307-40-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:12:15 +0100
+Subject: [Buildroot] [PATCHv3 40/74] ebtables: add error handling to for
+ loop
+In-Reply-To: <1417357142-14307-41-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-40-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130171124.GS4124@free.fr>
+ <1417357142-14307-41-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130171215.GT4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,22 +23,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/coreutils/coreutils.mk | 2 +-
+>  package/ebtables/ebtables.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index 391d2cd..fa2db04 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -101,7 +101,7 @@ endif
->  define COREUTILS_POST_INSTALL
->  	# some things go in root rather than usr
->  	for f in $(COREUTILS_BIN_PROGS); do \
-> -		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
-> +		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+> diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+> index 578c3ae..23c4628 100644
+> --- a/package/ebtables/ebtables.mk
+> +++ b/package/ebtables/ebtables.mk
+> @@ -28,7 +28,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
+>  		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
+>  		do \
+>  		$(INSTALL) -m 0755 -D $${so} \
+> -			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
+> +			$(TARGET_DIR)/lib/ebtables/`basename $${so}` || exit 1; \
 >  	done
->  	# link for archaic shells
->  	ln -fs test $(TARGET_DIR)/usr/bin/[
+>  	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
+>  		$(TARGET_DIR)/sbin/ebtables
 > -- 
 > 2.1.0
 > 
