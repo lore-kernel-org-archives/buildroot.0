@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:07 +0100
-Subject: [Buildroot] [PATCHv3 19/74] gpsd: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 15:18:08 +0100
+Subject: [Buildroot] [PATCHv3 20/74] olsr: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also makes the installation of the init script unconditional.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gpsd/gpsd.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/olsr/olsr.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 7dc27e8..5092b38 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -206,10 +206,11 @@ define GPSD_INSTALL_TARGET_CMDS
- 		$(SCONS) \
- 		$(GPSD_SCONS_OPTS) \
- 		install)
--	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
--		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
--		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
--	fi
-+endef
-+
-+define GPSD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd
-+	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 1051d18..539386d 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -31,9 +31,12 @@ define OLSR_INSTALL_TARGET_CMDS
+ 			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
+ 			prefix="/usr" install ; \
+ 	done
+-	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
+ 	test -r $(TARGET_DIR)/etc/olsrd.conf || \
+ 		$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
  endef
  
- define GPSD_INSTALL_STAGING_CMDS
++define OLSR_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
++endef
++
+ $(eval $(generic-package))
 -- 
 2.1.0
