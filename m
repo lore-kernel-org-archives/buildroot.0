@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:16:41 +0100
-Subject: [Buildroot] [PATCHv3 72/74] inadyn: install configuration file
+Date: Sun, 30 Nov 2014 19:18:06 +0100
+Subject: [Buildroot] [PATCHv3 73/74] mpd: install configuration file
  unconditionally
-In-Reply-To: <1417357142-14307-73-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-73-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130181641.GB4124@free.fr>
+ <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130181806.GC4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,30 +24,34 @@ On 2014-11-30 15:19 +0100, Thomas Petazzoni spake thusly:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+But see a comment below...
+
+> ---
+>  package/mpd/mpd.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index 1eedcbc..ba3bd59 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -228,10 +228,7 @@ MPD_CONF_OPTS += --disable-wavpack
+>  endif
+>  
+>  define MPD_INSTALL_EXTRA_FILES
+> -	@if [ ! -f $(TARGET_DIR)/etc/mpd.conf ]; then \
+> -		$(INSTALL) -D package/mpd/mpd.conf \
+> -			$(TARGET_DIR)/etc/mpd.conf; \
+> -	fi
+> +	$(INSTALL) -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
+
+Maybe nice to make the access rights explicit with -m 0644, no?
+
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/inadyn/inadyn.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-> index 73d95db..b002f94 100644
-> --- a/package/inadyn/inadyn.mk
-> +++ b/package/inadyn/inadyn.mk
-> @@ -20,10 +20,8 @@ INADYN_CONF_OPTS += --disable-ssl
->  endif
->  
->  define INADYN_INSTALL_SAMPLE_CONFIG
-> -	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
-> -		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
-> -			$(TARGET_DIR)/etc/inadyn.conf; \
-> -	fi
-> +	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
-> +		$(TARGET_DIR)/etc/inadyn.conf
 >  endef
->  INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
 >  
+>  MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
 > -- 
 > 2.1.0
 > 
