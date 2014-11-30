@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Nov 2014 21:40:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
-	libunwind support is broken on mips64
-In-Reply-To: <1417299035-17050-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sat, 29 Nov 2014 23:10:35 +0100")
-References: <1417299035-17050-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87bnnojub1.fsf@dell.be.48ers.dk>
+Date: Sun, 30 Nov 2014 22:03:52 +0100
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xserver_xorg-server: Fix
+	blackfin build
+In-Reply-To: <1417296232-29343-2-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 29 Nov 2014 22:23:52 +0100")
+References: <1417296232-29343-1-git-send-email-bernd.kuhls@t-online.de>
+ <1417296232-29343-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <877fycjt8n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +16,53 @@ To: buildroot@busybox.net
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
  > Fixes
- > http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
- > http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
- > http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
+ > http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
+ > http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
+ > http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
+
+These are all the same URL?
+
+ > Upstream bug report was updated:
+ > https://bugs.freedesktop.org/show_bug.cgi?id=83582
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  > ---
- >  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    4 +++-
- >  1 file changed, 3 insertions(+), 1 deletion(-)
+ >  package/x11r7/xserver_xorg-server/0003-image-byte-order.patch |    4 ++--
+ >  1 file changed, 2 insertions(+), 2 deletions(-)
 
- > diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
- > b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
- > index 4db8b09..cae06e6 100644
- > --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
- > +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
- > @@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- >  XSERVER_XORG_SERVER_DEPENDENCIES += freetype
- >  endif
- > -ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- > +# libunwind support is broken on mips64
- > +# https://www.libreoffice.org/bugzilla/show_bug.cgi?id=79939
+ > diff --git a/package/x11r7/xserver_xorg-server/0003-image-byte-order.patch b/package/x11r7/xserver_xorg-server/0003-image-byte-order.patch
+ > index b99b669..59e8177 100644
+ > --- a/package/x11r7/xserver_xorg-server/0003-image-byte-order.patch
+ > +++ b/package/x11r7/xserver_xorg-server/0003-image-byte-order.patch
+ > @@ -1,4 +1,4 @@
+ > -xserver_xorg-server: Fix compile error for microblaze
+ > +xserver_xorg-server: Fix compile error for microblaze/blackfin
+ 
+ >  Fixes
+ >  mipushpxl.c: In function 'miPushPixels':
+ > @@ -16,7 +16,7 @@ diff -uNr xorg-server-1.16.0.glyph/include/servermd.h xorg-server-1.16.0/include
+  
+ >   #endif                          /* mips */
+  
+ > -+#if defined(__microblaze__) || defined(microblaze)
+ > ++#if defined(__microblaze__) || defined(microblaze) || defined(BFIN)
 
-This doesn't have anything to do with libreoffice. That URL is
-apparently an alias for bugs.freedesktop.org (the official bugtracker
-for xorg), so I've used that as URL instead.
+But xserver_xorg-server depends on !BR2_USE_MMU since 7c00cd:
 
+    xorg-server: needs mmu
+    
+    os/utils.c::System() unconditionally uses fork(), so it only builds on
+    configurations with mmu.
+    
+    (Indirectly) fixes:
+    http://autobuild.buildroot.net/results/497/4970352598a68d7af89acbb33cdf69d656e23f4d/
+    http://autobuild.buildroot.net/results/d27/d279dc35bff53b7f939af02bee70b1ed3014e49b/
+    http://autobuild.buildroot.net/results/84b/84b8f19221a5c841de3016959c99b92c96c57e81/
+    
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > +ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_mips64el),y)
- >  XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
-
-That's not good as builds on mips64el WITHOUT libunwind now ends up
-pulling in libunwind (and breaking the build).
-
-We need to match on LIBUNWIND and !mips64el, so there needs so be a
-seperator in between, like:
-
-ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_mips64el),y-)
-
-Even if it looks a bit odd.
-
-Committed with those fixes, thanks.
+Which even lists the same autobuilder issue you listed about. So what is
+the point?
 
 -- 
 Bye, Peter Korsgaard
