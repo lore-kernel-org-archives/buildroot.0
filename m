@@ -1,56 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 23:31:36 +0100
-Subject: [Buildroot] [PATCH 1/2 v2] package/util-linux: libuuid needs -lintl
-In-Reply-To: <cover.1417386541.git.yann.morin.1998@free.fr>
-References: <cover.1417386541.git.yann.morin.1998@free.fr>
-Message-ID: <cb66bb193b20ce08d5184a4eae854e9a0fa384f6.1417386541.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Nov 2014 23:31:01 +0100
+Subject: [Buildroot] [git commit] package/gd: fix build when libiconv is
+	enabled
+Message-ID: <20141130223144.BE26B7FD3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When gettext is needed (with locales), libuuid needs to be linked
-against -lintl.
+commit: http://git.buildroot.net/buildroot/commit/?id=0eb957758b9c0b5f6cdcb3d3ba3bfe84806f18a5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
-static links, it does not get pulled in automatically.
+First of two patches to fix
+http://autobuild.buildroot.net/results/238/2386edb7f95920e84a35811a33f4333ee0a7a860/
 
-Fix that by adding a Libs.private section to uuid.pc, but only if
-it needed.
+gd links against libiconv if it is already built, depend on libiconv
+to get reproducable builds.
 
-First part at fixing:
-    http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
+readelf output without libiconv present:
+$ output/host/opt/ext-toolchain/bfin-linux-uclibc/bin/bfin-linux-uclibc-readelf \
+  -a output/staging/usr/lib/libgd.a | grep iconv
+    15: 00000000    12 FUNC    GLOBAL HIDDEN     1 _iconv_open
+    16: 0000000c    12 FUNC    GLOBAL HIDDEN     1 _iconv
+    17: 00000018    12 FUNC    GLOBAL HIDDEN     1 _iconv_close
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+readelf output with libiconv present:
+$ output/host/opt/ext-toolchain/bfin-linux-uclibc/bin/bfin-linux-uclibc-readelf \
+  -a output/staging/usr/lib/libgd.a | grep iconv
+000000e4  0000100a R_BFIN_PCREL24    00000000   _libiconv_open + 0
+00000140  0000140a R_BFIN_PCREL24    00000000   _libiconv + 0
+0000019a  0000160a R_BFIN_PCREL24    00000000   _libiconv_close + 0
+    16: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv_open
+    20: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv
+    22: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv_close
 
+[Peter: also add to LIBS so it ends up in gdlib-config --libs output]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - typo  (Baruch)
----
- package/util-linux/util-linux.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/gd/gd.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 6ecd16d..dc10193 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -128,6 +128,14 @@ endif
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 1613464..868b45e 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -33,6 +33,13 @@ else
+ GD_CONF_OPTS += --without-freetype
+ endif
  
- UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
-+define UTIL_LINUX_TWEAK_UUID_PC
-+	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
-+	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
-+endef
-+UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++GD_DEPENDENCIES += libiconv
++# not strictly needed for gd, but ensures -liconv ends up in
++# gdlib-config --libs output
++GD_CONF_ENV += LIBS="-liconv"
 +endif
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
--- 
-1.9.1
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ GD_DEPENDENCIES += jpeg
+ GD_CONF_OPTS += --with-jpeg
