@@ -1,76 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 12:44:14 +0100
-Subject: [Buildroot] [PATCH] package/libwebsockets: fix static build
-Message-ID: <1417347854-27983-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 30 Nov 2014 12:57:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: libuuid needs -lintl
+In-Reply-To: <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
+References: <cover.1417276704.git.yann.morin.1998@free.fr>
+ <16c19005f9076a857c9082f1f6fbe6617a1ec9a6.1417276704.git.yann.morin.1998@free.fr>
+Message-ID: <20141130115742.GC4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the version was bumped, the existing patch to fix static linking
-was not proprerly tested, and was missing three new locations to be
-fixed.
+Thomas, Peter, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Sagaert Johan <sagaert.johan@skynet.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+On 2014-11-29 16:59 +0100, Yann E. MORIN spake thusly:
+> When gettext is needed (with locales), libuuid needs to be linked
+> against -lintl.
+> 
+> In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
+> static links, it does not get pulled in automatically.
+> 
+> fix that by adding a Libs.private section to uid.pc, but only if
+> it needed.
+> 
+> First part at fixing:
+>     http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/util-linux/util-linux.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 6ecd16d..dc10193 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -128,6 +128,14 @@ endif
+>  
+>  UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+>  
+> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
+> +define UTIL_LINUX_TWEAK_UUID_PC
+> +	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+> +	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
+> +endef
+> +UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
+> +endif
 
----
-Changes v1 -> v2:
-  - remove spurious hunk
-  - fix typoes  (Baruch, Samuel)
----
- ...le-shared-library-build-when-BUILD_SHARED.patch | 32 ++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 3 deletions(-)
+We've been discussing this on IRC, that we should come up with a patch
+that could be upstreamable. Unfortunately, I have no idea on how to do
+that...
 
-diff --git a/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-index 50e9a4e..95d1ad8 100644
---- a/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-+++ b/package/libwebsockets/libwebsockets-0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch
-@@ -9,6 +9,8 @@ updating libwebsockets.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-+[yann.morin.1998 at free.fr: further fix after the version bumped]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  CMakeLists.txt | 17 ++++++++++++-----
-  1 file changed, 12 insertions(+), 5 deletions(-)
-@@ -76,6 +78,30 @@ index 7978845..89853ce 100644
-  	target_link_libraries(${lib} ${LIB_LIST})
-  endforeach()
-  
---- 
--2.1.2
--
-+@@ -793,7 +800,7 @@
-+ set(LWS_INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
-+ 
-+ # Export targets (This is used for other CMake projects to easily find the libraries and include files).
-+-export(TARGETS websockets websockets_shared
-++export(TARGETS ${_libs_websockets}
-+         FILE "${PROJECT_BINARY_DIR}/LibwebsocketsTargets.cmake")
-+ export(PACKAGE libwebsockets)
-+ 
-+@@ -829,7 +835,7 @@
-+                 ${PROJECT_BINARY_DIR}/LibwebsocketsConfigVersion.cmake 
-+                 @ONLY)
-+ 
-+-set_target_properties(websockets websockets_shared 
-++set_target_properties(${_libs_websockets}
-+ 					PROPERTIES PUBLIC_HEADER "${HDR_PUBLIC}")
-+ 
-+ #
-+@@ -837,7 +843,7 @@
-+ #
-+ 
-+ # Install libs and headers.
-+-install(TARGETS websockets websockets_shared
-++install(TARGETS ${_libs_websockets}
-+ 		EXPORT LibwebsocketsTargets
-+ 		LIBRARY DESTINATION "${LWS_INSTALL_LIB_DIR}${LIB_SUFFIX}" COMPONENT libraries
-+ 		ARCHIVE DESTINATION "${LWS_INSTALL_LIB_DIR}${LIB_SUFFIX}" COMPONENT libraries
+It all boils down to util-linux not using the standard expansion
+mechanism of autoconf (i.e. to replace @VARIABLE@ in .in files with the
+value detected by ./configure).
+
+Also, the way they are checking for gettext is way beyond my
+understanding (well, I think I grasped most of it), and they have no
+variable that expressly states whether -lintl is needed, just a LIBINTL
+variable that contains whatever must be used to link with the
+gettext-providing library.
+
+The amount of work to fix that is way above the time left before our
+release, so I believe we should go with that patch for now, and revisit
+it later when we have some more time.
+
+Opinions?
+
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+>  
+> -- 
+> 1.9.1
+> 
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
