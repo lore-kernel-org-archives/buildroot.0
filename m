@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:23 +0100
-Subject: [Buildroot] [PATCHv3 35/74] gnupg: don't both removing a man page
+Date: Sun, 30 Nov 2014 15:18:27 +0100
+Subject: [Buildroot] [PATCHv3 39/74] coreutils: add error handling to for
+	loop
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-40-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The target-finalize target in the main Makefile removes
-$(TARGET_DIR)/usr/share/man entirely, so there's no point in having
-some package specific logic to remove man pages.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnupg/gnupg.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/coreutils/coreutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index e7c403a..c0bf88c 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -39,8 +39,7 @@ endif
- 
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
--	rm -f $(TARGET_DIR)/usr/bin/gpgv \
--		$(TARGET_DIR)/usr/share/man/man1/gpgv.1
-+	rm -f $(TARGET_DIR)/usr/bin/gpgv
- endef
- GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGV
- endif
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 391d2cd..fa2db04 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -101,7 +101,7 @@ endif
+ define COREUTILS_POST_INSTALL
+ 	# some things go in root rather than usr
+ 	for f in $(COREUTILS_BIN_PROGS); do \
+-		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
++		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+ 	done
+ 	# link for archaic shells
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
 -- 
 2.1.0
