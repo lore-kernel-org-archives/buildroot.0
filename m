@@ -1,18 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:13:34 +0100
-Subject: [Buildroot] [PATCHv3 43/74] gptfdisk: add error handling to for
- loop
-In-Reply-To: <1417357142-14307-44-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:14:00 +0100
+Subject: [Buildroot] [PATCHv3 44/74] irda-utils: add error handling to
+ for loop
+In-Reply-To: <1417357142-14307-45-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-44-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130171334.GW4124@free.fr>
+ <1417357142-14307-45-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130171400.GX4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, Alll,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -23,19 +23,19 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/gptfdisk/gptfdisk.mk | 2 +-
+>  package/irda-utils/irda-utils.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-> index 9828d4c..4c6af56 100644
-> --- a/package/gptfdisk/gptfdisk.mk
-> +++ b/package/gptfdisk/gptfdisk.mk
-> @@ -33,7 +33,7 @@ endef
+> diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+> index e4958e5..2c35dff 100644
+> --- a/package/irda-utils/irda-utils.mk
+> +++ b/package/irda-utils/irda-utils.mk
+> @@ -32,7 +32,7 @@ IRDA_UTILS_SBINS- += $(IRDA_UTILS_SBINS-y)
 >  
->  define GPTFDISK_INSTALL_TARGET_CMDS
->  	for i in $(GPTFDISK_TARGETS_y); do \
-> -		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/sbin/$$i; \
-> +		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/sbin/$$i || exit 1; \
+>  define IRDA_UTILS_INSTALL_TARGET_CMDS
+>  	for i in $(IRDA_UTILS_SBINS-y); do \
+> -		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i; \
+> +		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i || exit 1; \
 >  	done
 >  endef
 >  
