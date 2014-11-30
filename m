@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:19 +0100
-Subject: [Buildroot] [PATCHv3 31/74] tree: don't install man page
+Date: Sun, 30 Nov 2014 15:18:20 +0100
+Subject: [Buildroot] [PATCHv3 32/74] iostat: don't install man page
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-32-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-33-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +15,19 @@ point in having explicit code to do so.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tree/tree.mk | 2 --
+ package/iostat/iostat.mk | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/tree/tree.mk b/package/tree/tree.mk
-index 922deb8..83ea472 100644
---- a/package/tree/tree.mk
-+++ b/package/tree/tree.mk
-@@ -16,8 +16,6 @@ endef
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index 8610f8f..2080e56 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -17,8 +17,6 @@ endef
  
- define TREE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/tree $(TARGET_DIR)/usr/bin/tree
--	$(INSTALL) -D -m 0644 $(@D)/doc/tree.1 \
--		$(TARGET_DIR)/usr/share/man/man1/tree.1
+ define IOSTAT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
+-	$(INSTALL) -D $(IOSTAT_DIR)/iostat.8 \
+-		$(TARGET_DIR)/usr/share/man/man8/iostat.8
  endef
  
  $(eval $(generic-package))
