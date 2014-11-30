@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:00 +0100
-Subject: [Buildroot] [PATCHv3 12/74] proftpd: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 15:18:01 +0100
+Subject: [Buildroot] [PATCHv3 13/74] samba: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also use a complete destination path for the $(INSTALL) command.
+Also makes the installation of the init script unconditional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/proftpd/proftpd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/samba/samba.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index ce735bd..65dd84e 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -52,7 +52,10 @@ define PROFTPD_INSTALL_TARGET_CMDS
- 		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
- 		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index ec8e6ec..92bbe4e 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -176,17 +176,17 @@ ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+ endif
+ 
+-define SAMBA_INSTALL_INITSCRIPTS_CONFIG
+-	# install start/stop script
+-	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
+-		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
+-	fi
++define SAMBA_INSTALL_CONFIG
+ 	# install config
+ 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+ 		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
  	fi
--	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d
-+endef
-+
-+define PROFTPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d/S50proftpd
  endef
+ 
+-SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
++SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
++
++define SAMBA_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
++endef
  
  $(eval $(autotools-package))
 -- 
