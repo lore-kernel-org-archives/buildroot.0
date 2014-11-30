@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:52:33 +0100
-Subject: [Buildroot] [PATCHv3 63/74] proftpd: install configuration file
+Date: Sun, 30 Nov 2014 18:53:16 +0100
+Subject: [Buildroot] [PATCHv3 64/74] samba: install configuration file
  unconditionally
-In-Reply-To: <1417357142-14307-64-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-64-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130175233.GS4124@free.fr>
+ <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130175316.GT4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,26 +28,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/proftpd/proftpd.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  package/samba/samba.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-> index 65dd84e..ce31276 100644
-> --- a/package/proftpd/proftpd.mk
-> +++ b/package/proftpd/proftpd.mk
-> @@ -48,10 +48,8 @@ PROFTPD_MAKE = $(MAKE1)
+> diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+> index 92bbe4e..0e4db95 100644
+> --- a/package/samba/samba.mk
+> +++ b/package/samba/samba.mk
+> @@ -177,10 +177,7 @@ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+>  endif
 >  
->  define PROFTPD_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
-> -	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
-> -		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
-> -		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+>  define SAMBA_INSTALL_CONFIG
+> -	# install config
+> -	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+> -		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
 > -	fi
-> +	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
-> +	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+> +	$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf
 >  endef
 >  
->  define PROFTPD_INSTALL_INIT_SYSV
+>  SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
 > -- 
 > 2.1.0
 > 
