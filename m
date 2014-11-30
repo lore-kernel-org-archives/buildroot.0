@@ -1,42 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:59 +0100
-Subject: [Buildroot] [PATCHv3 71/74] php: install configuration file
-	unconditionally
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Nov 2014 16:30:29 +0200
+Subject: [Buildroot] [PATCHv3 00/74] Misc package improvements
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-72-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130143029.GX2374@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed, users should use a rootfs overlay or a post-build script
-instead of a custom skeleton to override files installed by Buildroot,
-so there is no point in having conditions when installing init scripts
-or configuration files.
+Hi Thomas,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Sun, Nov 30, 2014 at 03:17:48PM +0100, Thomas Petazzoni wrote:
+> Changes since v2:
+> 
+>  - Fix commit title of the commit making the dmraid init script
+>    installation unconditional, it was referring to busybox while the
+>    commit is about dmraid. Noticed by Baruch.
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 9456f1c..caaf548 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -238,10 +238,8 @@ PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
- define PHP_INSTALL_FIXUP
- 	rm -rf $(TARGET_DIR)/usr/lib/php
- 	rm -f $(TARGET_DIR)/usr/bin/phpize
--	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
--		$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
--			$(TARGET_DIR)/etc/php.ini; \
--	fi
-+	$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
-+		$(TARGET_DIR)/etc/php.ini
- endef
- 
- PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
+Just for the record, this was noticed by Danomi Manchego 
+(http://lists.busybox.net/pipermail/buildroot/2014-November/113339.html).
+
+baruch
+
 -- 
-2.1.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
