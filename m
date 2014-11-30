@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 15:57:22 +0100
-Subject: [Buildroot] [PATCHv3 08/74] portmap: don't install manpages
-In-Reply-To: <1417357142-14307-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 15:59:28 +0100
+Subject: [Buildroot] [PATCHv3 09/74] portmap: improve installation of
+ binaries
+In-Reply-To: <1417357142-14307-10-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130145722.GM4124@free.fr>
+ <1417357142-14307-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130145928.GN4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +15,18 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
-> We no longer support having documentation on the target, so there's no
-> point in carrying code to install man pages.
-> 
+> This commit explicits the permissions with which executables are
+> installed, and also makes sure that the build is aborted is one of the
+                                                           ^^
+s/is/if/
+
+> binary cannot be installed, instead of silently ignoring the error.
+
+binaries
+
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Otherwise:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -25,26 +34,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/portmap/portmap.mk | 6 ------
->  1 file changed, 6 deletions(-)
+>  package/portmap/portmap.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-> index dd60809..d5d43bf 100644
+> index d5d43bf..65ee551 100644
 > --- a/package/portmap/portmap.mk
 > +++ b/package/portmap/portmap.mk
-> @@ -24,12 +24,6 @@ define PORTMAP_INSTALL_TARGET_CMDS
+> @@ -22,7 +22,7 @@ endef
+>  
+>  define PORTMAP_INSTALL_TARGET_CMDS
 >  	for sbin in $(PORTMAP_SBINS); do \
->  		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
+> -		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
+> +		$(INSTALL) -D -m 0755 $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin || exit 1; \
 >  	done
-> -	$(INSTALL) -D $(@D)/portmap.man \
-> -		$(TARGET_DIR)/usr/share/man/man8/portmap.8
-> -	$(INSTALL) -D $(@D)/pmap_dump.8 \
-> -		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
-> -	$(INSTALL) -D $(@D)/pmap_set.8 \
-> -		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
 >  endef
 >  
->  define PORTMAP_INSTALL_INIT_SYSV
 > -- 
 > 2.1.0
 > 
