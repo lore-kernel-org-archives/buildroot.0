@@ -1,18 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:14:00 +0100
-Subject: [Buildroot] [PATCHv3 44/74] irda-utils: add error handling to
- for loop
-In-Reply-To: <1417357142-14307-45-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:14:35 +0100
+Subject: [Buildroot] [PATCHv3 45/74] jimtcl: add error handling to for
+ loop
+In-Reply-To: <1417357142-14307-46-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-45-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130171400.GX4124@free.fr>
+ <1417357142-14307-46-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130171435.GY4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Alll,
+Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -23,22 +23,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/irda-utils/irda-utils.mk | 2 +-
+>  package/jimtcl/jimtcl.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
-> index e4958e5..2c35dff 100644
-> --- a/package/irda-utils/irda-utils.mk
-> +++ b/package/irda-utils/irda-utils.mk
-> @@ -32,7 +32,7 @@ IRDA_UTILS_SBINS- += $(IRDA_UTILS_SBINS-y)
+> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+> index 27f43f0..add61d6 100644
+> --- a/package/jimtcl/jimtcl.mk
+> +++ b/package/jimtcl/jimtcl.mk
+> @@ -51,7 +51,7 @@ endef
 >  
->  define IRDA_UTILS_INSTALL_TARGET_CMDS
->  	for i in $(IRDA_UTILS_SBINS-y); do \
-> -		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i; \
-> +		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i || exit 1; \
->  	done
->  endef
->  
+>  define JIMTCL_INSTALL_STAGING_CMDS
+>  	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+> -		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
+> +		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ || exit 1 ; \
+>  	done; \
+>  	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
+>  	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
 > -- 
 > 2.1.0
 > 
