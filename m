@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:50 +0100
-Subject: [Buildroot] [PATCHv3 62/74] fluxbox: install session file
+Date: Sun, 30 Nov 2014 15:18:42 +0100
+Subject: [Buildroot] [PATCHv3 54/74] dmraid: install init script
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-55-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,24 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dmraid/dmraid.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 21901d6..a0f9367 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -24,8 +24,8 @@ FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 024b9b5..a6ed57f 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -18,9 +18,8 @@ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
+ DMRAID_DEPENDENCIES = lvm2
  
- define FLUXBOX_INSTALL_XSESSION_FILE
--	[ -f $(TARGET_DIR)/root/.xsession ] || $(INSTALL) -m 0755 -D \
--		package/fluxbox/xsession $(TARGET_DIR)/root/.xsession
-+	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
-+		$(TARGET_DIR)/root/.xsession
+ define DMRAID_INSTALL_INIT_SYSV
+-	[ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
+-		$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
+-			$(TARGET_DIR)/etc/init.d/S20dmraid
++	$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
++		$(TARGET_DIR)/etc/init.d/S20dmraid
  endef
  
- FLUXBOX_POST_INSTALL_TARGET_HOOKS += FLUXBOX_INSTALL_XSESSION_FILE
+ $(eval $(autotools-package))
 -- 
 2.1.0
