@@ -1,67 +1,79 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Nov 2014 16:59:46 +0200
-Subject: [Buildroot] [PATCH] bluez5_utils: bumped version number to 5.25
-In-Reply-To: <547B2D0F.6080904@jcz.nl>
-References: <1417358256-3782-1-git-send-email-jaap@jcz.nl>
- <20141130144053.GY2374@sapphire.tkos.co.il>
- <547B2D0F.6080904@jcz.nl>
-Message-ID: <20141130145945.GZ2374@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Nov 2014 16:04:33 +0100
+Subject: [Buildroot] [PATCHv3 10/74] stunnel: use the
+ <pkg>_INSTALL_INIT_SYSV mechanism
+In-Reply-To: <1417357142-14307-11-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417357142-14307-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130150433.GO4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jaap,
+Thomas, All,
 
-On Sun, Nov 30, 2014 at 03:43:27PM +0100, Jaap Crezee wrote:
-> On 11/30/14 15:40, Baruch Siach wrote:
-> > From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
+On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
+> Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
+> the init script, we rename it to STUNNEL_INSTALL_CONF.
 > 
-> Like this?
-
-Yes. This is better. But please send the patch inline like you did with the 
-previous one. When doing so please add '-v 2' to your 'git format-patch' or 
-'git send-email' command to have 'v2' appended to the [PATCH] subject prefix.
-
-Thanks,
-baruch
-
-> From 50a00f68bbd0bc18217c8e9883c4a20a598ea0b9 Mon Sep 17 00:00:00 2001
-> From: Jaap Crezee <jaap@jcz.nl>
-> Date: Sun, 30 Nov 2014 15:35:31 +0100
-> Subject: [PATCH] bluez5_utils: bumped version number to 5.25
-> 
-> Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/bluez5_utils/bluez5_utils.hash | 2 ++
->  package/bluez5_utils/bluez5_utils.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/bluez5_utils/bluez5_utils.hash
+>  package/stunnel/stunnel.mk | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-> new file mode 100644
-> index 0000000..c8295f9
-> --- /dev/null
-> +++ b/package/bluez5_utils/bluez5_utils.hash
-> @@ -0,0 +1,2 @@
-> +# From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
-> +sha256  5ca62f3f45e2638a0f7a81658d6c8813ee01487436ae8e53e9fe395e23d1fd30    bluez-5.25.tar.xz
-> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-> index f34513c..21f792c 100644
-> --- a/package/bluez5_utils/bluez5_utils.mk
-> +++ b/package/bluez5_utils/bluez5_utils.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+> index dc56261..ac2963e 100644
+> --- a/package/stunnel/stunnel.mk
+> +++ b/package/stunnel/stunnel.mk
+> @@ -18,14 +18,17 @@ else
+>  STUNNEL_CONF_OPTS += --disable-systemd
+>  endif
 >  
-> -BLUEZ5_UTILS_VERSION = 5.21
-> +BLUEZ5_UTILS_VERSION = 5.25
->  BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
->  BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
->  BLUEZ5_UTILS_INSTALL_STAGING = YES
+> -define STUNNEL_INSTALL_CONF_SCRIPT
+> -	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
+> +define STUNNEL_INSTALL_CONF
+>  	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
+
+What is the stance on removing those conditional installs? I thought we
+wanted to get rid oif all of them, in favour of using a post-build
+script or rootfs-overlay.
+
+Can be done in a separate patch, maybe.
+
+Otherwise, loks good:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
+>  			$(TARGET_DIR)/etc/stunnel/stunnel.conf
+>  	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+>  endef
+>  
+> -STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
+> +STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
+> +
+> +define STUNNEL_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
+> +endef
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
