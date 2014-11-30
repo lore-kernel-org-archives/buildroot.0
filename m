@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:13 +0100
-Subject: [Buildroot] [PATCHv3 25/74] tinyhttpd: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 15:18:14 +0100
+Subject: [Buildroot] [PATCHv3 26/74] at: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-26-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-27-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tinyhttpd/tinyhttpd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/at/at.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
-index ec47fd9..0934b71 100644
---- a/package/tinyhttpd/tinyhttpd.mk
-+++ b/package/tinyhttpd/tinyhttpd.mk
-@@ -16,9 +16,12 @@ endef
+diff --git a/package/at/at.mk b/package/at/at.mk
+index 851a05b..1504e32 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -21,10 +21,8 @@ AT_CONF_OPTS = \
+ 	--with-daemon_groupname=root \
+ 	SENDMAIL=/usr/sbin/sendmail
  
- define TINYHTTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/httpd $(TARGET_DIR)/usr/sbin/tinyhttpd
-+	mkdir -p $(TARGET_DIR)/var/www
-+endef
-+
-+define TINYHTTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/tinyhttpd/S85tinyhttpd \
- 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
--	mkdir -p $(TARGET_DIR)/var/www
+-define AT_INSTALL_INITSCRIPT
++define AT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
  endef
  
- $(eval $(generic-package))
+-AT_POST_INSTALL_TARGET_HOOKS += AT_INSTALL_INITSCRIPT
+-
+ $(eval $(autotools-package))
 -- 
 2.1.0
