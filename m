@@ -1,83 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 23:41:13 +0100
-Subject: [Buildroot] [PATCH] package/mono: fixing wrong monolite library
- path
-In-Reply-To: <1417383666-23165-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1417383666-23165-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20141130224113.GE4124@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Nov 2014 23:49:31 +0100
+Subject: [Buildroot] [PATCH] package/libwebsockets: fix static build
+In-Reply-To: <1417347854-27983-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 30 Nov 2014 12:44:14 +0100")
+References: <1417347854-27983-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87tx1gi9s4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, Rainer, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2014-11-30 22:41 +0100, Angelo Compagnucci spake thusly:
-> Due to a bug in makefile logic, monolite libraries path will not
-> be selected when EXTERNAL_MCS parameter is specified.
-> Setting EXTERNAL_MCS to a non existent binary, makes the internal logic
-> to fallback to monolite, setting correctly both binary and
-> library paths.
-> This has the benefit to force host-mono to always use monolite as
-> bootstrap compiler also in case a mono compiler is already installed
-> on the system.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/fc00952bef03cf3b4785be1a0d9c08dc84aa3f54/
-> 
-> 
+ > When the version was bumped, the existing patch to fix static linking
+ > was not proprerly tested, and was missing three new locations to be
+ > fixed.
 
-Angelo, it is customary to add a reported-by tag to credit the person
-that reported a bug. It's done like so:
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Sagaert Johan <sagaert.johan@skynet.be>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
 
-Reported-by: Rainer Berns <rainer.berns@berns-online.de>
+ > ---
+ > Changes v1 -> v2:
+ >   - remove spurious hunk
+ >   - fix typoes  (Baruch, Samuel)
 
-It is also customary to put the reporter in Cc: so he gets a proposed
-fix and gets to test it.
-
-Rainer, care to test this patch, please? If it works, can you reply to
-this mail and add your tested-by tag?
-
-It's done like so: Tested-by Your NAME <you@there>
-
-Thank you both! :-)
-
-/me is feeling like being educative tonight. Hihi! ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/mono/mono.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-> index df67c33..d4beb5f 100644
-> --- a/package/mono/mono.mk
-> +++ b/package/mono/mono.mk
-> @@ -55,7 +55,7 @@ HOST_MONO_CONF_OPTS += \
->  	--with-profile4=$(if $(BR2_PACKAGE_MONO_40),yes,no) \
->  	--with-profile4_5=$(if $(BR2_PACKAGE_MONO_45),yes,no)
->  
-> -HOST_MONO_MAKE_OPTS += EXTERNAL_MCS="$(@D)/mcs/class/lib/monolite/basic.exe"
-> +HOST_MONO_MAKE_OPTS += EXTERNAL_MCS=false 
->  
->  HOST_MONO_DEPENDENCIES = host-monolite host-gettext
->  
-> -- 
-> 2.2.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed with autobuild references added, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
