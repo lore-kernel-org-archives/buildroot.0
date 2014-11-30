@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:35:17 +0100
-Subject: [Buildroot] [PATCHv3 54/74] dmraid: install init script
+Date: Sun, 30 Nov 2014 18:35:45 +0100
+Subject: [Buildroot] [PATCHv3 55/74] iucode-tool: install init script
  unconditionally
-In-Reply-To: <1417357142-14307-55-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-56-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-55-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130173517.GJ4124@free.fr>
+ <1417357142-14307-56-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130173545.GK4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,22 +28,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/dmraid/dmraid.mk | 5 ++---
+>  package/iucode-tool/iucode-tool.mk | 5 ++---
 >  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-> index 024b9b5..a6ed57f 100644
-> --- a/package/dmraid/dmraid.mk
-> +++ b/package/dmraid/dmraid.mk
-> @@ -18,9 +18,8 @@ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
->  DMRAID_DEPENDENCIES = lvm2
+> diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+> index 3124c73..081b086 100644
+> --- a/package/iucode-tool/iucode-tool.mk
+> +++ b/package/iucode-tool/iucode-tool.mk
+> @@ -15,9 +15,8 @@ IUCODE_TOOL_LICENSE = GPLv2+
+>  IUCODE_TOOL_LICENSE_FILES = COPYING
 >  
->  define DMRAID_INSTALL_INIT_SYSV
-> -	[ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
-> -		$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
-> -			$(TARGET_DIR)/etc/init.d/S20dmraid
-> +	$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
-> +		$(TARGET_DIR)/etc/init.d/S20dmraid
+>  define IUCODE_TOOL_INSTALL_INIT_SYSV
+> -	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
+> -		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+> -			$(TARGET_DIR)/etc/init.d/S00iucode-tool
+> +	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+> +		$(TARGET_DIR)/etc/init.d/S00iucode-tool
 >  endef
 >  
 >  $(eval $(autotools-package))
