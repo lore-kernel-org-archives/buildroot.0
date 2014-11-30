@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 16:28:01 +0100
-Subject: [Buildroot] [PATCHv3 16/74] nfs-utils: use
+Date: Sun, 30 Nov 2014 16:28:45 +0100
+Subject: [Buildroot] [PATCHv3 17/74] netatalk: use
  <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-17-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-18-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-17-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130152801.GU4124@free.fr>
+ <1417357142-14307-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130152845.GV4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,39 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> Also move back the NFS_UTILS_INSTALL_FIXUP hook registration right
-> after the hook definition.
+> Also makes the installation of the init script unconditional.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/nfs-utils/nfs-utils.mk | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index 522e790..aef051c 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -35,17 +35,20 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
->  endif
->  
->  define NFS_UTILS_INSTALL_FIXUP
-> +	rm -f $(NFS_UTILS_TARGETS_)
-> +endef
-> +
-> +NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
-> +
-> +define NFS_UTILS_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
 
-Missing -D option.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  		$(TARGET_DIR)/etc/init.d/S60nfs
-> -	rm -f $(NFS_UTILS_TARGETS_)
+> ---
+>  package/netatalk/netatalk.mk | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+> index 5ea55c2..6c1b640 100644
+> --- a/package/netatalk/netatalk.mk
+> +++ b/package/netatalk/netatalk.mk
+> @@ -50,12 +50,9 @@ else
+>  	NETATALK_CONF_OPTS += --disable-cups
+>  endif
+>  
+> -define NETATALK_INSTALL_EXTRA_FILES
+> -	[ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
+> -		$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
+> -			$(TARGET_DIR)/etc/init.d/S50netatalk
+> +define NETATALK_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
+> +		$(TARGET_DIR)/etc/init.d/S50netatalk
 >  endef
 >  
->  define NFS_UTILS_REMOVE_NFSIOSTAT
->  	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
->  endef
->  
-> -NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+> -NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
 > -
->  # nfsiostat is interpreted python, so remove it unless it's in the target
->  NFS_UTILS_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_PYTHON),,NFS_UTILS_REMOVE_NFSIOSTAT)
->  
+>  $(eval $(autotools-package))
 > -- 
 > 2.1.0
 > 
