@@ -1,40 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 00:20:16 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] package/parted: fix static link
-In-Reply-To: <fa1b00debbe3293a7617c2c7829e9acead92dc19.1417386541.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 30 Nov 2014 23:31:37 +0100")
-References: <cover.1417386541.git.yann.morin.1998@free.fr>
- <fa1b00debbe3293a7617c2c7829e9acead92dc19.1417386541.git.yann.morin.1998@free.fr>
-Message-ID: <878uisi8cv.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Dec 2014 00:12:46 +0100
+Subject: [Buildroot] [git commit] package/util-linux: libuuid needs -lintl
+Message-ID: <20141130232035.65F637FF9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a535a0eada223a0eb8b2421ebe4a4246bb714b74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libuuid needs to be linked with -lintl when gettext is needed (with
- > locales).
+When gettext is needed (with locales), libuuid needs to be linked
+against -lintl.
 
- > For a shared build, this is solved with the DT_NEEDED ELF tags, but for
- > a static link, it is not pulled in automatically.
+In dynamic link, this is solved via the DT_NEEDED ELF tag, but for
+static links, it does not get pulled in automatically.
 
- > Use pkg-config to find libuuid, instead of AC_CHECK_LIB().
+Fix that by adding a Libs.private section to uuid.pc, but only if
+it needed.
 
- > Second part at fixing:
- >     http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
+First part at fixing:
+    http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
- > ---
- > Changes v1 -> v2:
- >   - typoes  (Peter)
-
-You forgot to add host-pkgconf to the _DEPENDENCIES lines
-(target/host). Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 6ecd16d..dc10193 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -128,6 +128,14 @@ endif
+ 
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
++define UTIL_LINUX_TWEAK_UUID_PC
++	$(SED) '/Libs\.private: .*/d' $(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
++	printf "Libs.private: -lintl\n" >>$(STAGING_DIR)/usr/lib/pkgconfig/uuid.pc
++endef
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_TWEAK_UUID_PC
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
