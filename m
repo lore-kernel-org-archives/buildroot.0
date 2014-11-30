@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:25:32 +0100
-Subject: [Buildroot] [PATCHv3 10/74] stunnel: use the
- <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <20141130150433.GO4124@free.fr>
+Date: Sun, 30 Nov 2014 18:30:52 +0100
+Subject: [Buildroot] [PATCHv3 52/74] aiccu: install init script and
+ config file unconditionally
+In-Reply-To: <1417357142-14307-53-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141130150433.GO4124@free.fr>
-Message-ID: <20141130172532.GG4124@free.fr>
+ <1417357142-14307-53-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130173052.GH4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +14,51 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-11-30 16:04 +0100, Yann E. MORIN spake thusly:
-> On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
-> > Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
-> > the init script, we rename it to STUNNEL_INSTALL_CONF.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  package/stunnel/stunnel.mk | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-> > index dc56261..ac2963e 100644
-> > --- a/package/stunnel/stunnel.mk
-> > +++ b/package/stunnel/stunnel.mk
-> > @@ -18,14 +18,17 @@ else
-> >  STUNNEL_CONF_OPTS += --disable-systemd
-> >  endif
-> >  
-> > -define STUNNEL_INSTALL_CONF_SCRIPT
-> > -	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-> > +define STUNNEL_INSTALL_CONF
-> >  	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
+On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
+> As discussed, users should use a rootfs overlay or a post-build script
+> instead of a custom skeleton to override files installed by Buildroot,
+> so there is no point in having conditions when installing init scripts
+> or configuration files.
 > 
-> What is the stance on removing those conditional installs? I thought we
-> wanted to get rid oif all of them, in favour of using a post-build
-> script or rootfs-overlay.
-> 
-> Can be done in a separate patch, maybe.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Seen it is done later in the series. Good! :-)
-
-> Otherwise, loks good:
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Still valid! ;-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/aiccu/aiccu.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+> index 4413f86..faa861c 100644
+> --- a/package/aiccu/aiccu.mk
+> +++ b/package/aiccu/aiccu.mk
+> @@ -28,14 +28,12 @@ endef
+>  define AICCU_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu \
+>  		$(TARGET_DIR)/usr/sbin/aiccu
+> -	[ -f $(TARGET_DIR)/etc/aiccu.conf ] || \
+> -		$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
+> +	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
+>  		$(TARGET_DIR)/etc/aiccu.conf
+>  endef
+>  
+>  define AICCU_INSTALL_INIT_SYSV
+> -	[ -f $(TARGET_DIR)/etc/init.d/S50aiccu ] || \
+> -		$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
+> +	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
+>  		$(TARGET_DIR)/etc/init.d/S50aiccu
+>  endef
+>  
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
