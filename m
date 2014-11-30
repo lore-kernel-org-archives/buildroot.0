@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:56 +0100
-Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration file
+Date: Sun, 30 Nov 2014 15:18:55 +0100
+Subject: [Buildroot] [PATCHv3 67/74] ifplugd: install configuration files
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,25 +18,31 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysklogd/sysklogd.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/ifplugd/ifplugd.mk | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 2b60b45..1e8652d 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -21,10 +21,8 @@ endef
- define SYSKLOGD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0500 $(@D)/syslogd $(TARGET_DIR)/sbin/syslogd
- 	$(INSTALL) -D -m 0500 $(@D)/klogd $(TARGET_DIR)/sbin/klogd
--	if [ ! -f $(TARGET_DIR)/etc/syslog.conf ]; then \
--		$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
--			$(TARGET_DIR)/etc/syslog.conf; \
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 3d0736a..b24c79d 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -21,14 +21,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ endif
+ 
+ define IFPLUGD_INSTALL_FIXUP
+-	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+-		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+-		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
 -	fi
-+	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
-+		$(TARGET_DIR)/etc/syslog.conf; \
+-	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
+-		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+-			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+-	fi
++	$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
++	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
++	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
++		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
  endef
  
- define SYSKLOGD_INSTALL_INIT_SYSV
+ IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
 -- 
 2.1.0
