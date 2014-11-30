@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:53 +0100
-Subject: [Buildroot] [PATCHv3 65/74] logrotate: install configuration file
+Date: Sun, 30 Nov 2014 15:19:00 +0100
+Subject: [Buildroot] [PATCHv3 72/74] inadyn: install configuration file
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-66-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-73-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,25 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/logrotate/logrotate.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/inadyn/inadyn.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index 2e49feb..dc26d85 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -17,9 +17,7 @@ endef
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 73d95db..b002f94 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -20,10 +20,8 @@ INADYN_CONF_OPTS += --disable-ssl
+ endif
  
- define LOGROTATE_INSTALL_TARGET_CMDS
- 	$(MAKE) PREFIX=$(TARGET_DIR) -C $(@D) install
--	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
--		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
+ define INADYN_INSTALL_SAMPLE_CONFIG
+-	@if [ ! -f $(TARGET_DIR)/etc/inadyn.conf ]; then \
+-		$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+-			$(TARGET_DIR)/etc/inadyn.conf; \
 -	fi
-+	$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
++	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
++		$(TARGET_DIR)/etc/inadyn.conf
  endef
+ INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
  
 -- 
 2.1.0
