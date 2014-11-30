@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:54 +0100
-Subject: [Buildroot] [PATCHv3 66/74] nss-mdns: install configuration file
+Date: Sun, 30 Nov 2014 15:18:59 +0100
+Subject: [Buildroot] [PATCHv3 71/74] php: install configuration file
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-67-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-72-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,25 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nss-mdns/nss-mdns.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/php/php.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-index 9ec9c1a..9a6c5a1 100644
---- a/package/nss-mdns/nss-mdns.mk
-+++ b/package/nss-mdns/nss-mdns.mk
-@@ -10,9 +10,7 @@ NSS_MDNS_LICENSE = LGPLv2.1+
- NSS_MDNS_LICENSE_FILES = LICENSE
- 
- define NSS_MDNS_INSTALL_CONFIG
--	if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
--		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 9456f1c..caaf548 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -238,10 +238,8 @@ PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
+ define PHP_INSTALL_FIXUP
+ 	rm -rf $(TARGET_DIR)/usr/lib/php
+ 	rm -f $(TARGET_DIR)/usr/bin/phpize
+-	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
+-		$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
+-			$(TARGET_DIR)/etc/php.ini; \
 -	fi
-+	$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
- 	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
- 		$(TARGET_DIR)/etc/nsswitch.conf
++	$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
++		$(TARGET_DIR)/etc/php.ini
  endef
+ 
+ PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
 -- 
 2.1.0
