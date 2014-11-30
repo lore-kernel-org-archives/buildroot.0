@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:22 +0100
-Subject: [Buildroot] [PATCHv3 34/74] pptp-linux: don't install man page
+Date: Sun, 30 Nov 2014 15:18:24 +0100
+Subject: [Buildroot] [PATCHv3 36/74] rp-pppoe: don't install man pages
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-35-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-37-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,22 @@ point in having explicit code to do so.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pptp-linux/pptp-linux.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/rp-pppoe/rp-pppoe.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index dc624eb..d7edf6c 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -21,7 +21,6 @@ endef
- 
- define PPTP_LINUX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/pptp $(TARGET_DIR)/usr/sbin/pptp
--	$(INSTALL) -m 0644 -D $(@D)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index b17086b..6827628 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -21,9 +21,6 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
+ 	for ff in $(RP_PPPOE_TARGET_FILES); do \
+ 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
+ 	done
+-	for ff in $(RP_PPPOE_TARGET_FILES); do \
+-		$(INSTALL) -m 644 -D $(RP_PPPOE_DIR)/man/$$ff.8 $(TARGET_DIR)/usr/share/man/man8/$$ff.8; \
+-	done
  endef
  
- $(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
 2.1.0
