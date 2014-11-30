@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:14:35 +0100
-Subject: [Buildroot] [PATCHv3 45/74] jimtcl: add error handling to for
+Date: Sun, 30 Nov 2014 18:14:56 +0100
+Subject: [Buildroot] [PATCHv3 46/74] live555: add error handling to for
  loop
-In-Reply-To: <1417357142-14307-46-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-47-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-46-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130171435.GY4124@free.fr>
+ <1417357142-14307-47-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130171456.GZ4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,22 +23,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/jimtcl/jimtcl.mk | 2 +-
+>  package/live555/live555.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-> index 27f43f0..add61d6 100644
-> --- a/package/jimtcl/jimtcl.mk
-> +++ b/package/jimtcl/jimtcl.mk
-> @@ -51,7 +51,7 @@ endef
+> diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+> index b923388..7dbded3 100644
+> --- a/package/live555/live555.mk
+> +++ b/package/live555/live555.mk
+> @@ -54,7 +54,7 @@ endef
 >  
->  define JIMTCL_INSTALL_STAGING_CMDS
->  	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
-> -		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ ; \
-> +		cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ || exit 1 ; \
->  	done; \
->  	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
->  	ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
+>  define LIVE555_INSTALL_TARGET_CMDS
+>  	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
+> -		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i`; \
+> +		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1 \
+>  	done
+>  endef
+>  
 > -- 
 > 2.1.0
 > 
