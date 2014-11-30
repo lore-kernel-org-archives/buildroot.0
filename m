@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Nov 2014 11:21:55 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/minidlna: disable broken
+Date: Sun, 30 Nov 2014 11:24:50 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/minidlna: disable broken
 	toolchains on nios2
-Message-ID: <1417342915-11153-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417343090-11192-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,9 @@ and many others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v3: added changelog
+v2: disable only the affected toolchains, not the whole platform (Thomas)
+
  package/minidlna/Config.in |    3 +++
  1 file changed, 3 insertions(+)
 
