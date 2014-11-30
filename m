@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:07:30 +0100
-Subject: [Buildroot] [PATCHv3 34/74] pptp-linux: don't install man page
-In-Reply-To: <1417357142-14307-35-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:08:40 +0100
+Subject: [Buildroot] [PATCHv3 35/74] gnupg: don't both removing a man
+	page
+In-Reply-To: <1417357142-14307-36-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-35-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130170730.GN4124@free.fr>
+ <1417357142-14307-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130170840.GO4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +15,15 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> We don't support installing documentation on the target, so there's no
-> point in having explicit code to do so.
+> The target-finalize target in the main Makefile removes
+> $(TARGET_DIR)/usr/share/man entirely, so there's no point in having
+> some package specific logic to remove man pages.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+In title:  s/both/bother/
+
+Otherwise:
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -25,21 +31,23 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/pptp-linux/pptp-linux.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  package/gnupg/gnupg.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-> index dc624eb..d7edf6c 100644
-> --- a/package/pptp-linux/pptp-linux.mk
-> +++ b/package/pptp-linux/pptp-linux.mk
-> @@ -21,7 +21,6 @@ endef
+> diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+> index e7c403a..c0bf88c 100644
+> --- a/package/gnupg/gnupg.mk
+> +++ b/package/gnupg/gnupg.mk
+> @@ -39,8 +39,7 @@ endif
 >  
->  define PPTP_LINUX_INSTALL_TARGET_CMDS
->  	$(INSTALL) -m 0755 -D $(@D)/pptp $(TARGET_DIR)/usr/sbin/pptp
-> -	$(INSTALL) -m 0644 -D $(@D)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
+>  ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
+>  define GNUPG_REMOVE_GPGV
+> -	rm -f $(TARGET_DIR)/usr/bin/gpgv \
+> -		$(TARGET_DIR)/usr/share/man/man1/gpgv.1
+> +	rm -f $(TARGET_DIR)/usr/bin/gpgv
 >  endef
->  
->  $(eval $(generic-package))
+>  GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGV
+>  endif
 > -- 
 > 2.1.0
 > 
