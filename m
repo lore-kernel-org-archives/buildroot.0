@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Nov 2014 23:11:29 +0100
-Subject: [Buildroot] [git commit] luajit: point /usr/bin/lua to luajit if
-	lua not selected
-Message-ID: <20141130221326.2EFD07FFB2@busybox.osuosl.org>
+Date: Sun, 30 Nov 2014 21:39:54 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
+	libunwind support is broken on mips64
+Message-ID: <20141130221326.234227FFB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=754a3cf860c1e5f398a76a61177f3acae91a999c
+commit: http://git.buildroot.net/buildroot/commit/?id=93d0c5e0aa4a0bda5957a35acc407fdb778a25aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The luajit package is a provider of a lua interpreter, but does not install a
-lua executable.  This is fine for scripts that explicitly invoke luajit, but
-not so good for scripts that just need a lua interpreter and call lua.  This
-mod creates a lua symlink so that the non-jit-specific scripts will still work.
+Fixes
+http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
+http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
+http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+[Peter: use official bugtracker URL, fix check]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/luajit.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 2c1f8f4..85e9f15 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -64,6 +64,11 @@ define LUAJIT_INSTALL_TARGET_CMDS
- 	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
- endef
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index f118ef2..f8037b4 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+ endif
  
-+define LUAJIT_INSTALL_SYMLINK
-+	ln -fs luajit $(TARGET_DIR)/usr/bin/lua
-+endef
-+LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
-+
- define HOST_LUAJIT_BUILD_CMDS
- 	$(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
- endef
+-ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++# libunwind support is broken on mips64
++# https://bugs.freedesktop.org/show_bug.cgi?id=79939
++ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_mips64el),y-)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
