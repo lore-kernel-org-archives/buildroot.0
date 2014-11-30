@@ -1,38 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 30 Nov 2014 17:41:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 7682] New: Missing dependencies for NFS
-Message-ID: <bug-7682-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Nov 2014 18:43:59 +0100
+Subject: [Buildroot] [PATCHv3 57/74] rpcbind: install init script
+ unconditionally
+In-Reply-To: <1417357142-14307-58-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417357142-14307-58-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130174359.GM4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7682
+Thomas, All,
 
-           Summary: Missing dependencies for NFS
-           Product: buildroot
-           Version: 2014.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mfld.fr at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
+> As discussed, users should use a rootfs overlay or a post-build script
+> instead of a custom skeleton to override files installed by Buildroot,
+> so there is no point in having conditions when installing init scripts
+> or configuration files.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Selecting nfs-utils package does not automatically select the rpcbind package
-(needed at runtime by rpc.statd) and does not check for RPC support in uclibc
-(needed at buildtime by rpcbind).
+Regards,
+Yann E. MORIN.
 
-NFS on embedded device ? Yeah, I need it on my BeagleBoneBlack for a cheap NAS
-:-)
+> ---
+>  package/rpcbind/rpcbind.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+> index b7c2261..55de3fc 100644
+> --- a/package/rpcbind/rpcbind.mk
+> +++ b/package/rpcbind/rpcbind.mk
+> @@ -17,9 +17,8 @@ RPCBIND_DEPENDENCIES += libtirpc
+>  RPCBIND_CONF_OPTS += --with-rpcuser=root
+>  
+>  define RPCBIND_INSTALL_INIT_SYSV
+> -	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
+> -		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+> -			$(TARGET_DIR)/etc/init.d/S30rpcbind
+> +	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+> +		$(TARGET_DIR)/etc/init.d/S30rpcbind
+>  endef
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
