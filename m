@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 15:55:06 +0100
-Subject: [Buildroot] [PATCHv3 06/74] busybox: use
+Date: Sun, 30 Nov 2014 15:56:52 +0100
+Subject: [Buildroot] [PATCHv3 07/74] portmap: use
  <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-7-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130145506.GK4124@free.fr>
+ <1417357142-14307-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130145652.GL4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +15,37 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:17 +0100, Thomas Petazzoni spake thusly:
+> We also switch to using a full destination path as the second argument
+> of $(INSTALL).
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/busybox/busybox.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/portmap/portmap.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index f0fa851..eb2f3f1 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -218,8 +218,11 @@ define BUSYBOX_INSTALL_TARGET_CMDS
->  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
->  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
->  	fi
-> -	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
->  	$(BUSYBOX_INSTALL_MDEV_CONF)
+> diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+> index 0189597..dd60809 100644
+> --- a/package/portmap/portmap.mk
+> +++ b/package/portmap/portmap.mk
+> @@ -30,8 +30,10 @@ define PORTMAP_INSTALL_TARGET_CMDS
+>  		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
+>  	$(INSTALL) -D $(@D)/pmap_set.8 \
+>  		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
+> -	$(INSTALL) -m 0755 package/portmap/S13portmap \
+> -		$(TARGET_DIR)/etc/init.d
 > +endef
 > +
-> +define BUSYBOX_INSTALL_INIT_SYSV
-> +	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+> +define PORTMAP_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 package/portmap/S13portmap $(TARGET_DIR)/etc/init.d/S13portmap
 
-The installation of the script is stil conditional:
-
-    define BUSYBOX_INSTALL_MDEV_SCRIPT
-        [ -f $(TARGET_DIR)/etc/init.d/S10mdev ] || \
-            $(INSTALL) -D -m 0755 package/busybox/S10mdev \
-                $(TARGET_DIR)/etc/init.d/S10mdev
-    endef
-
-So maybe this could be fixed at the same time, like you did in the
-previous patches?
-
-Also, what would be the reason for installing the mdev configuration
-out-side the _INIT_SYSV hook?
-
-It can be a separate macro, sure, for the day we have systemd support
-for mdev, but then we can just duplicate the call to that macro in the
-_INIT_SYSTEMD hook.
-
-And BTW, the installation of the mdev configuration is also still
-conditional.
+Missing -D option.
 
 Regards,
 Yann E. MORIN.
 
->  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
->  	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
 >  endef
+>  
+>  $(eval $(generic-package))
 > -- 
 > 2.1.0
 > 
