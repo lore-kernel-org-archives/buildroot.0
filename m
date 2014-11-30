@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:18:06 +0100
-Subject: [Buildroot] [PATCHv3 73/74] mpd: install configuration file
- unconditionally
-In-Reply-To: <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 19:19:51 +0100
+Subject: [Buildroot] [PATCHv3 74/74] toolchain: install nssswitch.conf
+ configuration file unconditionally
+In-Reply-To: <1417357142-14307-75-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130181806.GC4124@free.fr>
+ <1417357142-14307-75-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130181951.GD4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,37 +21,39 @@ On 2014-11-30 15:19 +0100, Thomas Petazzoni spake thusly:
 > or configuration files.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-But see a comment below...
-
 > ---
->  package/mpd/mpd.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  toolchain/toolchain.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> index 1eedcbc..ba3bd59 100644
-> --- a/package/mpd/mpd.mk
-> +++ b/package/mpd/mpd.mk
-> @@ -228,10 +228,7 @@ MPD_CONF_OPTS += --disable-wavpack
->  endif
+> diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+> index 3f9900b..0fb115b 100644
+> --- a/toolchain/toolchain.mk
+> +++ b/toolchain/toolchain.mk
+> @@ -3,12 +3,10 @@
+>  # TARGET_FINALIZE_HOOKS, to be applied just after all packages
+>  # have been built.
 >  
->  define MPD_INSTALL_EXTRA_FILES
-> -	@if [ ! -f $(TARGET_DIR)/etc/mpd.conf ]; then \
-> -		$(INSTALL) -D package/mpd/mpd.conf \
-> -			$(TARGET_DIR)/etc/mpd.conf; \
+> -# Install default nsswitch.conf file if the skeleton doesn't provide it
+> +# Install default nsswitch.conf file
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>  define GLIBC_COPY_NSSWITCH_FILE
+> -	$(Q)if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
+> -		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
 > -	fi
-> +	$(INSTALL) -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
+> +	$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
 
-Maybe nice to make the access rights explicit with -m 0644, no?
+As much as I am tempted to Ack this patch, I think we should revisit the
+way we handle nsswitch.conf, especially in the light of my comments on
+your previous patch about nss-mdns.
+
+So, Can we get those two patches out of the series for now?
 
 Regards,
 Yann E. MORIN.
 
 >  endef
->  
->  MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
+>  TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
+>  endif
 > -- 
 > 2.1.0
 > 
