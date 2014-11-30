@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:11 +0100
-Subject: [Buildroot] [PATCHv3 23/74] tftpd: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 15:18:10 +0100
+Subject: [Buildroot] [PATCHv3 22/74] xapp_xdm: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-24-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-23-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also make sure we use a full path for the destination of the
-$(INSTALL) command.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tftpd/tftpd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/x11r7/xapp_xdm/xapp_xdm.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 816a25e..2f746d0 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -21,7 +21,10 @@ endif
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
- 	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
--	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
-+endef
-+
-+define TFTPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
+diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
+index 428f473..955dc1c 100644
+--- a/package/x11r7/xapp_xdm/xapp_xdm.mk
++++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+@@ -14,11 +14,9 @@ XAPP_XDM_DEPENDENCIES = xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libX
+ XAPP_XDM_CONF_OPTS = --with-utmp-file=/var/adm/utmpx \
+ 		    --with-wtmp-file=/var/adm/wtmpx
+ 
+-define XAPP_XDM_INSTALL_STARTUP_SCRIPT
++define XAPP_XDM_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/x11r7/xapp_xdm/S99xdm \
+ 		$(TARGET_DIR)/etc/init.d/S99xdm
  endef
  
+-XAPP_XDM_POST_INSTALL_TARGET_HOOKS += XAPP_XDM_INSTALL_STARTUP_SCRIPT
+-
  $(eval $(autotools-package))
 -- 
 2.1.0
