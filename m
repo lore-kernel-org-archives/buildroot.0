@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:04:39 +0100
-Subject: [Buildroot] [PATCHv3 66/74] nss-mdns: install configuration
- file unconditionally
-In-Reply-To: <1417357142-14307-67-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 19:06:50 +0100
+Subject: [Buildroot] [PATCHv3 67/74] ifplugd: install configuration
+ files unconditionally
+In-Reply-To: <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-67-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130180439.GV4124@free.fr>
+ <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130180650.GW4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,51 +21,44 @@ On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > or configuration files.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+But see a comment, below...
+
 > ---
->  package/nss-mdns/nss-mdns.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  package/ifplugd/ifplugd.mk | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-> index 9ec9c1a..9a6c5a1 100644
-> --- a/package/nss-mdns/nss-mdns.mk
-> +++ b/package/nss-mdns/nss-mdns.mk
-> @@ -10,9 +10,7 @@ NSS_MDNS_LICENSE = LGPLv2.1+
->  NSS_MDNS_LICENSE_FILES = LICENSE
+> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+> index 3d0736a..b24c79d 100644
+> --- a/package/ifplugd/ifplugd.mk
+> +++ b/package/ifplugd/ifplugd.mk
+> @@ -21,14 +21,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  endif
 >  
->  define NSS_MDNS_INSTALL_CONFIG
-> -	if [ ! -f "$(TARGET_DIR)/etc/nsswitch.conf" ]; then \
-> -		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
+>  define IFPLUGD_INSTALL_FIXUP
+> -	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+> -		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+> -		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
 > -	fi
-> +	$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
+> -	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
+> -		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+> -			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+> -	fi
+> +	$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
 
-In fact, this case is a bit different: nsswitch.conf is not coming from
-the skeleton, but from the glibc package.
-
-But then, when using an external toolchain, we only install
-nsswitch.conf as a target-finalise hook, which is too late for nss-mdns
-to sed it.
-
-That was worked-around by Peter about a month ago, by addind that very
-conditional code:
-    c7c0ca2: nss-mdns: unbreak after e1eba3d97 (system/skeleton: make
-             nsswitch install conditional)
-
-The correct fix would be to make the following sed expression a
-TARGET_FINALIZE hook, as Peter said in the commit log above.
-
-However, that would leave us in an uncomofrtable position, in that we
-would have to ensure that the hook provided my nss-mdns gets called
-agfter the hook that install nsswitch.conf, or we'd be back to square
-one...
-
-Sp: NAK.
+Maybe it would be nice to enforce -m 644 on that file, no?
 
 Regards,
 Yann E. MORIN.
 
->  	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
->  		$(TARGET_DIR)/etc/nsswitch.conf
+> +	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+> +	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+> +		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
 >  endef
+>  
+>  IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
 > -- 
 > 2.1.0
 > 
