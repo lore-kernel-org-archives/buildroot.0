@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:51 +0100
-Subject: [Buildroot] [PATCHv3 63/74] proftpd: install configuration file
+Date: Sun, 30 Nov 2014 15:18:58 +0100
+Subject: [Buildroot] [PATCHv3 70/74] usbmount: install configuration file
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-64-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-71-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,25 +18,23 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/proftpd/proftpd.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/usbmount/usbmount.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 65dd84e..ce31276 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -48,10 +48,8 @@ PROFTPD_MAKE = $(MAKE1)
+diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
+index cc25e4b..76c027f 100644
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -20,9 +20,7 @@ define USBMOUNT_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/etc/usbmount/usbmount.d/00_remove_model_symlink
  
- define PROFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
--	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
--		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
--		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
+ 	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
+-	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
+-	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
 -	fi
-+	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
-+	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
- endef
++        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf
  
- define PROFTPD_INSTALL_INIT_SYSV
+ 	mkdir -p $(addprefix $(TARGET_DIR)/media/usb,0 1 2 3 4 5 6 7)
+ endef
 -- 
 2.1.0
