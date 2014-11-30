@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 16:39:06 +0100
-Subject: [Buildroot] [PATCHv3 20/74] olsr: use <pkg>_INSTALL_INIT_SYSV
+Date: Sun, 30 Nov 2014 16:39:38 +0100
+Subject: [Buildroot] [PATCHv3 21/74] pango: use <pkg>_INSTALL_INIT_SYSV
  mechanism
-In-Reply-To: <1417357142-14307-21-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-22-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-21-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130153906.GY4124@free.fr>
+ <1417357142-14307-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130153938.GZ4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,27 +23,26 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/olsr/olsr.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/pango/pango.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-> index 1051d18..539386d 100644
-> --- a/package/olsr/olsr.mk
-> +++ b/package/olsr/olsr.mk
-> @@ -31,9 +31,12 @@ define OLSR_INSTALL_TARGET_CMDS
->  			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
->  			prefix="/usr" install ; \
->  	done
-> -	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
->  	test -r $(TARGET_DIR)/etc/olsrd.conf || \
->  		$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
+> diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+> index 6e340f4..63cfae3 100644
+> --- a/package/pango/pango.mk
+> +++ b/package/pango/pango.mk
+> @@ -61,11 +61,9 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXRENDER),yy)
+>  	PANGO_CONF_OPTS += --with-xft
+>  endif
+>  
+> -define PANGO_INSTALL_INITSCRIPT
+> +define PANGO_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 755 -D package/pango/S25pango \
+>  		$(TARGET_DIR)/etc/init.d/S25pango
 >  endef
 >  
-> +define OLSR_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
-> +endef
-> +
->  $(eval $(generic-package))
+> -PANGO_POST_INSTALL_TARGET_HOOKS += PANGO_INSTALL_INITSCRIPT
+> -
+>  $(eval $(autotools-package))
 > -- 
 > 2.1.0
 > 
