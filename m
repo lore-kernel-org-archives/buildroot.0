@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:28 +0100
-Subject: [Buildroot] [PATCHv3 40/74] ebtables: add error handling to for loop
+Date: Sun, 30 Nov 2014 15:18:29 +0100
+Subject: [Buildroot] [PATCHv3 41/74] flot: add error handling to for loop
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-41-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-42-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ebtables/ebtables.mk | 2 +-
+ package/flot/flot.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 578c3ae..23c4628 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -28,7 +28,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
- 		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
- 		do \
- 		$(INSTALL) -m 0755 -D $${so} \
--			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
-+			$(TARGET_DIR)/lib/ebtables/`basename $${so}` || exit 1; \
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index 79bdf1f..58e3ff1 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
+@@ -27,7 +27,7 @@ FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
+ 
+ define FLOT_INSTALL_TARGET_CMDS
+ 	for i in $(FLOT_FILES); do \
+-		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js; \
++		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js || exit 1; \
  	done
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- 		$(TARGET_DIR)/sbin/ebtables
+ endef
+ 
 -- 
 2.1.0
