@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:47 +0100
-Subject: [Buildroot] [PATCHv3 59/74] transmission: install init script
+Date: Sun, 30 Nov 2014 15:18:56 +0100
+Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration file
 	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-60-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,24 +18,25 @@ or configuration files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/transmission/transmission.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/sysklogd/sysklogd.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 27ad9d9..b8a5c42 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -37,9 +37,8 @@ ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
- 	TRANSMISSION_CONF_OPTS += --enable-daemon
- 
- define TRANSMISSION_INSTALL_INIT_SYSV
--	[ -f $(TARGET_DIR)/etc/init.d/S92transmission ] || \
--		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
--			$(TARGET_DIR)/etc/init.d/S92transmission
-+	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-+		$(TARGET_DIR)/etc/init.d/S92transmission
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 2b60b45..1e8652d 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -21,10 +21,8 @@ endef
+ define SYSKLOGD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0500 $(@D)/syslogd $(TARGET_DIR)/sbin/syslogd
+ 	$(INSTALL) -D -m 0500 $(@D)/klogd $(TARGET_DIR)/sbin/klogd
+-	if [ ! -f $(TARGET_DIR)/etc/syslog.conf ]; then \
+-		$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+-			$(TARGET_DIR)/etc/syslog.conf; \
+-	fi
++	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
++		$(TARGET_DIR)/etc/syslog.conf; \
  endef
  
- else
+ define SYSKLOGD_INSTALL_INIT_SYSV
 -- 
 2.1.0
