@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:17:58 +0100
-Subject: [Buildroot] [PATCHv3 10/74] stunnel: use the
-	<pkg>_INSTALL_INIT_SYSV mechanism
+Date: Sun, 30 Nov 2014 15:18:04 +0100
+Subject: [Buildroot] [PATCHv3 16/74] nfs-utils: use <pkg>_INSTALL_INIT_SYSV
+	mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
-the init script, we rename it to STUNNEL_INSTALL_CONF.
+Also move back the NFS_UTILS_INSTALL_FIXUP hook registration right
+after the hook definition.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.mk | 9 ++++++---
+ package/nfs-utils/nfs-utils.mk | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index dc56261..ac2963e 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -18,14 +18,17 @@ else
- STUNNEL_CONF_OPTS += --disable-systemd
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 522e790..aef051c 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -35,17 +35,20 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
  endif
  
--define STUNNEL_INSTALL_CONF_SCRIPT
--	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+define STUNNEL_INSTALL_CONF
- 	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
- 		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
- 			$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+ define NFS_UTILS_INSTALL_FIXUP
++	rm -f $(NFS_UTILS_TARGETS_)
++endef
++
++NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
++
++define NFS_UTILS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
+ 		$(TARGET_DIR)/etc/init.d/S60nfs
+-	rm -f $(NFS_UTILS_TARGETS_)
  endef
  
--STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
-+STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
-+
-+define STUNNEL_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+endef
+ define NFS_UTILS_REMOVE_NFSIOSTAT
+ 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
+ endef
  
- $(eval $(autotools-package))
+-NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+-
+ # nfsiostat is interpreted python, so remove it unless it's in the target
+ NFS_UTILS_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_PYTHON),,NFS_UTILS_REMOVE_NFSIOSTAT)
+ 
 -- 
 2.1.0
