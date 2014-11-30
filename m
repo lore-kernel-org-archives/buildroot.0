@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:04 +0100
-Subject: [Buildroot] [PATCHv3 16/74] nfs-utils: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
+Date: Sun, 30 Nov 2014 15:18:02 +0100
+Subject: [Buildroot] [PATCHv3 14/74] input-event-daemon: use
+	<pkg>_INSTALL_INIT_SYSV mechanism
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also move back the NFS_UTILS_INSTALL_FIXUP hook registration right
-after the hook definition.
+Also makes the installation of the init script unconditional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/nfs-utils.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/input-event-daemon/input-event-daemon.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 522e790..aef051c 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -35,17 +35,20 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
- endif
- 
- define NFS_UTILS_INSTALL_FIXUP
-+	rm -f $(NFS_UTILS_TARGETS_)
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index 534fe90..0bafdc4 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -21,9 +21,11 @@ define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
+ 	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
+ 		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
+ 			$(TARGET_DIR)/etc/input-event-daemon.conf
+-	[ -f $(TARGET_DIR)/etc/init.d/S99input-event-daemon ] || \
+-		$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
+-			$(TARGET_DIR)/etc/init.d/S99input-event-daemon
 +endef
 +
-+NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
-+
-+define NFS_UTILS_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
- 		$(TARGET_DIR)/etc/init.d/S60nfs
--	rm -f $(NFS_UTILS_TARGETS_)
++define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
++		$(TARGET_DIR)/etc/init.d/S99input-event-daemon
  endef
  
- define NFS_UTILS_REMOVE_NFSIOSTAT
- 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
- endef
- 
--NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
--
- # nfsiostat is interpreted python, so remove it unless it's in the target
- NFS_UTILS_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_PYTHON),,NFS_UTILS_REMOVE_NFSIOSTAT)
- 
+ $(eval $(generic-package))
 -- 
 2.1.0
