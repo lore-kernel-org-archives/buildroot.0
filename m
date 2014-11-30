@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:48 +0100
-Subject: [Buildroot] [PATCHv3 60/74] stunnel: install configuration file
-	unconditionally
+Date: Sun, 30 Nov 2014 15:18:38 +0100
+Subject: [Buildroot] [PATCHv3 50/74] sound-theme-borealis: add error
+	handling to for loop
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-61-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-51-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed, users should use a rootfs overlay or a post-build script
-instead of a custom skeleton to override files installed by Buildroot,
-so there is no point in having conditions when installing init scripts
-or configuration files.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/sound-theme-borealis/sound-theme-borealis.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index ac2963e..3d0596d 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -19,9 +19,8 @@ STUNNEL_CONF_OPTS += --disable-systemd
- endif
+diff --git a/package/sound-theme-borealis/sound-theme-borealis.mk b/package/sound-theme-borealis/sound-theme-borealis.mk
+index a2f29a9..9242837 100644
+--- a/package/sound-theme-borealis/sound-theme-borealis.mk
++++ b/package/sound-theme-borealis/sound-theme-borealis.mk
+@@ -11,7 +11,7 @@ SOUND_THEME_BOREALIS_SOURCE = \
  
- define STUNNEL_INSTALL_CONF
--	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
--		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
--			$(TARGET_DIR)/etc/stunnel/stunnel.conf
-+	$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
-+		$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+ define SOUND_THEME_BOREALIS_INSTALL_TARGET_CMDS
+ 	for f in $(@D)/*.ogg ; do \
+-		$(INSTALL) -D -m 0644 $$f $(TARGET_DIR)/usr/share/sounds/borealis/stereo/`basename $$f` ; \
++		$(INSTALL) -D -m 0644 $$f $(TARGET_DIR)/usr/share/sounds/borealis/stereo/`basename $$f` || exit 1; \
+ 	done
  endef
  
 -- 
