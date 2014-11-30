@@ -1,51 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Nov 2014 17:48:54 +0100
-Subject: [Buildroot] [PATCH 3/3] package/lxc: disable broken toolchains on
-	nios2
-In-Reply-To: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417366134-2098-3-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Nov 2014 17:57:32 +0100
+Subject: [Buildroot] [PATCHv3 26/74] at: use <pkg>_INSTALL_INIT_SYSV
+ mechanism
+In-Reply-To: <1417357142-14307-27-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417357142-14307-27-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130165732.GF4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed with Thomas
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/100998
-only the current toolchains are broken:
-"it's better to blacklist the individual toolchains that are known
-to be broken, so that if we add another toolchain, we will be able
-to see if the same bug happens as well or not."
+Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/lxc/Config.in |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index cf85712..a90e58e 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -6,7 +6,9 @@ config BR2_PACKAGE_LXC
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_avr32 # no timerfd
--	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
-+	# the toolchain doesn't support setns syscall
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	help
- 	  Linux Containers (LXC), provides the ability to group and isolate
-@@ -18,6 +20,7 @@ config BR2_PACKAGE_LXC
- comment "lxc needs a toolchain w/ IPv6, threads, largefile, headers >= 3.0"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_avr32 # no timerfd
--	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS \
-                 || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/at/at.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/at/at.mk b/package/at/at.mk
+> index 851a05b..1504e32 100644
+> --- a/package/at/at.mk
+> +++ b/package/at/at.mk
+> @@ -21,10 +21,8 @@ AT_CONF_OPTS = \
+>  	--with-daemon_groupname=root \
+>  	SENDMAIL=/usr/sbin/sendmail
+>  
+> -define AT_INSTALL_INITSCRIPT
+> +define AT_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
+>  endef
+>  
+> -AT_POST_INSTALL_TARGET_HOOKS += AT_INSTALL_INITSCRIPT
+> -
+>  $(eval $(autotools-package))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
