@@ -1,75 +1,47 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 31 Dec 2014 23:50:54 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: fix indentation and change file
-	permissions
-Message-ID: <1420066254-5483-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Dec 2014 00:11:55 +0100
+Subject: [Buildroot] [PATCH] package/shairport-sync: fix static builds
+In-Reply-To: <1417347776-25907-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 30 Nov 2014 12:42:56 +0100")
+References: <1417347776-25907-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87h9xgi8qs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/wpa_supplicant/wpa_supplicant.mk | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 10b2c0a..682cb4c 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -82,18 +82,18 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
- define WPA_SUPPLICANT_INSTALL_DBUS_OLD
--	$(INSTALL) -D \
--	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
--	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
-+		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
--	$(INSTALL) -D \
--	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
--	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
-+		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
- endef
- endif
- 
-@@ -115,10 +115,10 @@ endif
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
- 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
--	       $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
--	       $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
--	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
--	       $(WPA_SUPPLICANT_CONFIG)
-+		$(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-+		$(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-+		$(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
-+		$(WPA_SUPPLICANT_CONFIG)
- endef
- 
- # LIBS for wpa_supplicant, LIBS_c for wpa_cli, LIBS_p for wpa_passphrase
-@@ -146,9 +146,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- define WPA_SUPPLICANT_INSTALL_DBUS
--	$(INSTALL) -D \
--	  $(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
--	  $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
-+		$(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
- 	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
- 	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
- endef
+ > Because shairport-sync uses AC_CHECK_LIB to find some of the needed
+ > libraries (opensl, alsa, popt...), it fails to bring in the dependencies
+ > of those libraries; for example, -lssl requires -lz.
+
+ > When doing a dynamically-linked build, those dependent libraries are
+ > pulled in thansk to the DT_NEEDED ELF tags, but those are not available
+ > in static libraries.
+
+ > Use PKG_CHECK_MODULES instead of AC_CHECK_LIB, and emulate the results
+ > of AC_CJECK_LIB (i.e. set the HAVE_LIBxxx and the LIBS variable
+ > appropriately) to minimise the amount of code touched.
+
+ > This should fix:
+ >     http://autobuild.buildroot.net/results/1a5/1a56dbff3583bed0d693508dfc16859086846ecd/
+ >     http://autobuild.buildroot.net/results/6d5/6d5a8157592f7a2c9469bf71b0453796ef982ab1/
+
+ > At the same time, remove a comment at the end of a variable assignment,
+ > since this has proven to cause some problems.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: J?rg Krause <jkrause@posteo.de>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add missing host-pkgconf  (Baruch)
+ >   - remove end-of-line comment
+
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
