@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 16:28:45 +0100
-Subject: [Buildroot] [PATCHv3 17/74] netatalk: use
+Date: Sun, 30 Nov 2014 16:29:37 +0100
+Subject: [Buildroot] [PATCHv3 18/74] mongoose: use
  <pkg>_INSTALL_INIT_SYSV mechanism
-In-Reply-To: <1417357142-14307-18-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417357142-14307-19-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-18-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130152845.GV4124@free.fr>
+ <1417357142-14307-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130152937.GW4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,6 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> Also makes the installation of the init script unconditional.
-> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -25,29 +23,23 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/netatalk/netatalk.mk | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  package/mongoose/mongoose.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-> index 5ea55c2..6c1b640 100644
-> --- a/package/netatalk/netatalk.mk
-> +++ b/package/netatalk/netatalk.mk
-> @@ -50,12 +50,9 @@ else
->  	NETATALK_CONF_OPTS += --disable-cups
->  endif
->  
-> -define NETATALK_INSTALL_EXTRA_FILES
-> -	[ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
-> -		$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
-> -			$(TARGET_DIR)/etc/init.d/S50netatalk
-> +define NETATALK_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
-> +		$(TARGET_DIR)/etc/init.d/S50netatalk
+> diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+> index 35e4b43..7a5d356 100644
+> --- a/package/mongoose/mongoose.mk
+> +++ b/package/mongoose/mongoose.mk
+> @@ -29,6 +29,9 @@ endef
+>  define MONGOOSE_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m 755 $(@D)/examples/web_server/web_server \
+>  		$(TARGET_DIR)/usr/sbin/mongoose
+> +endef
+> +
+> +define MONGOOSE_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+>  		$(TARGET_DIR)/etc/init.d/S85mongoose
 >  endef
->  
-> -NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
-> -
->  $(eval $(autotools-package))
 > -- 
 > 2.1.0
 > 
