@@ -1,36 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:24 +0100
-Subject: [Buildroot] [PATCHv3 36/74] rp-pppoe: don't install man pages
-In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-37-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Nov 2014 15:25:51 +0100
+Subject: [Buildroot] [PATCH] package/mutt: specify the mailpath
+In-Reply-To: <20141130151515.3af7e775@free-electrons.com>
+References: <1417258556-16797-1-git-send-email-yann.morin.1998@free.fr>
+ <20141130151515.3af7e775@free-electrons.com>
+Message-ID: <20141130142551.GE4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
+Thomas, All,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rp-pppoe/rp-pppoe.mk | 3 ---
- 1 file changed, 3 deletions(-)
+On 2014-11-30 15:15 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 29 Nov 2014 11:55:56 +0100, Yann E. MORIN wrote:
+> > mutt's ./configure looks for different paths for where to look for
+> > incoming mails.
+> > 
+> > This is absolutely worng in the case of cross-compilation, because the
+> > path it may find on the host may not exist on the target.
+> > 
+> > Not only that, but some host may not even have any of the paths
+> > ./configure looks for.
+> > 
+> > Fix that by specifying the mailpath, and set it to the value documented
+> > in the FHS [0]
+> > 
+> > Since Buildroot only guarantees /tmp to be writable, make /var/mail a
+> > symlink to /tmp .
+> > 
+> > [0] http://refspecs.linuxfoundation.org/FHS_2.3/fhs-2.3.html#VARMAILUSERMAILBOXFILES
+> > 
+> > Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/mutt/mutt.mk | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> 
+> At this point, I'm not sure if this is still material for master
+> (2014.11) or for next.
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index b17086b..6827628 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -21,9 +21,6 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
- 	for ff in $(RP_PPPOE_TARGET_FILES); do \
- 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
- 	done
--	for ff in $(RP_PPPOE_TARGET_FILES); do \
--		$(INSTALL) -m 644 -D $(RP_PPPOE_DIR)/man/$$ff.8 $(TARGET_DIR)/usr/share/man/man8/$$ff.8; \
--	done
- endef
- 
- $(eval $(autotools-package))
+I don;'t realy care either. It fixes a relatively rare occurence of a
+build failure, which happens only in very tightly controlled systems,
+and we have had only one report of it since we've been packaging mutt
+(that is, the past 7 years!), so I think it can well go in -next.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
