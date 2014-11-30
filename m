@@ -1,115 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:38:35 +0100
-Subject: [Buildroot] [PATCHv3 56/74] lighttpd: install init script and
- config file unconditionally
-In-Reply-To: <1417357142-14307-57-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-57-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130173835.GL4124@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 30 Nov 2014 17:41:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 7682] New: Missing dependencies for NFS
+Message-ID: <bug-7682-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=7682
 
-On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
-> As discussed, users should use a rootfs overlay or a post-build script
-> instead of a custom skeleton to override files installed by Buildroot,
-> so there is no point in having conditions when installing init scripts
-> or configuration files.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/lighttpd/lighttpd.mk | 46 +++++++++++++++-----------------------------
->  1 file changed, 16 insertions(+), 30 deletions(-)
-> 
-> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-> index ef98298..804bdd4 100644
-> --- a/package/lighttpd/lighttpd.mk
-> +++ b/package/lighttpd/lighttpd.mk
-> @@ -62,44 +62,30 @@ endif
->  define LIGHTTPD_INSTALL_CONFIG
->  	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
->  	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/modules.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/modules.conf
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
-> -
-> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf ] || \
-> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
-> -			$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/modules.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
-> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
-> +		$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
+           Summary: Missing dependencies for NFS
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mfld.fr at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Config files installed 755, really? Can you fix that too, please?
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Selecting nfs-utils package does not automatically select the rpcbind package
+(needed at runtime by rpc.statd) and does not check for RPC support in uclibc
+(needed at buildtime by rpcbind).
 
-Regards,
-Yann E. MORIN.
-
->  endef
->  
->  LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
->  
->  define LIGHTTPD_INSTALL_INIT_SYSV
-> -	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
-> -		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
-> -			$(TARGET_DIR)/etc/init.d/S50lighttpd
-> +	$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
-> +		$(TARGET_DIR)/etc/init.d/S50lighttpd
->  endef
->  
->  define LIGHTTPD_INSTALL_INIT_SYSTEMD
-> -	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
-> -		$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
-> -			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
-> +	$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
-> +		$(TARGET_DIR)/etc/systemd/system/lighttpd.service
->  
->  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->  
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+NFS on embedded device ? Yeah, I need it on my BeagleBoneBlack for a cheap NAS
+:-)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
