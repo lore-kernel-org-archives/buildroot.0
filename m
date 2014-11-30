@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:35:45 +0100
-Subject: [Buildroot] [PATCHv3 55/74] iucode-tool: install init script
- unconditionally
-In-Reply-To: <1417357142-14307-56-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:38:35 +0100
+Subject: [Buildroot] [PATCHv3 56/74] lighttpd: install init script and
+ config file unconditionally
+In-Reply-To: <1417357142-14307-57-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-56-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130173545.GK4124@free.fr>
+ <1417357142-14307-57-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130173835.GL4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,32 +21,83 @@ On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > or configuration files.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/lighttpd/lighttpd.mk | 46 +++++++++++++++-----------------------------
+>  1 file changed, 16 insertions(+), 30 deletions(-)
+> 
+> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+> index ef98298..804bdd4 100644
+> --- a/package/lighttpd/lighttpd.mk
+> +++ b/package/lighttpd/lighttpd.mk
+> @@ -62,44 +62,30 @@ endif
+>  define LIGHTTPD_INSTALL_CONFIG
+>  	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
+>  	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/modules.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/modules.conf
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
+> -
+> -	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf ] || \
+> -		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
+> -			$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/modules.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
+> +	$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Config files installed 755, really? Can you fix that too, please?
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/iucode-tool/iucode-tool.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-> index 3124c73..081b086 100644
-> --- a/package/iucode-tool/iucode-tool.mk
-> +++ b/package/iucode-tool/iucode-tool.mk
-> @@ -15,9 +15,8 @@ IUCODE_TOOL_LICENSE = GPLv2+
->  IUCODE_TOOL_LICENSE_FILES = COPYING
->  
->  define IUCODE_TOOL_INSTALL_INIT_SYSV
-> -	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
-> -		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
-> -			$(TARGET_DIR)/etc/init.d/S00iucode-tool
-> +	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
-> +		$(TARGET_DIR)/etc/init.d/S00iucode-tool
 >  endef
 >  
->  $(eval $(autotools-package))
+>  LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
+>  
+>  define LIGHTTPD_INSTALL_INIT_SYSV
+> -	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
+> -		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
+> -			$(TARGET_DIR)/etc/init.d/S50lighttpd
+> +	$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
+> +		$(TARGET_DIR)/etc/init.d/S50lighttpd
+>  endef
+>  
+>  define LIGHTTPD_INSTALL_INIT_SYSTEMD
+> -	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
+> -		$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
+> -			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
+> +	$(INSTALL) -D -m 644 package/lighttpd/lighttpd.service \
+> +		$(TARGET_DIR)/etc/systemd/system/lighttpd.service
+>  
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>  
 > -- 
 > 2.1.0
 > 
