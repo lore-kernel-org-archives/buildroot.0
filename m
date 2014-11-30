@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 18:48:04 +0100
-Subject: [Buildroot] [PATCHv3 61/74] input-event-daemon: install
- configuration file unconditionally
-In-Reply-To: <1417357142-14307-62-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 18:49:03 +0100
+Subject: [Buildroot] [PATCHv3 62/74] fluxbox: install session file
+ unconditionally
+In-Reply-To: <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-62-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130174804.GQ4124@free.fr>
+ <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130174903.GR4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,25 +28,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/input-event-daemon/input-event-daemon.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  package/fluxbox/fluxbox.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
-> index 0bafdc4..67b8cc4 100644
-> --- a/package/input-event-daemon/input-event-daemon.mk
-> +++ b/package/input-event-daemon/input-event-daemon.mk
-> @@ -18,9 +18,8 @@ endef
->  define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
->  	$(INSTALL) -m 755 -D $(@D)/input-event-daemon \
->  		$(TARGET_DIR)/usr/bin/input-event-daemon
-> -	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
-> -		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
-> -			$(TARGET_DIR)/etc/input-event-daemon.conf
-> +	$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
-> +		$(TARGET_DIR)/etc/input-event-daemon.conf
+> diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+> index 21901d6..a0f9367 100644
+> --- a/package/fluxbox/fluxbox.mk
+> +++ b/package/fluxbox/fluxbox.mk
+> @@ -24,8 +24,8 @@ FLUXBOX_CONF_OPTS += --disable-imlib2
+>  endif
+>  
+>  define FLUXBOX_INSTALL_XSESSION_FILE
+> -	[ -f $(TARGET_DIR)/root/.xsession ] || $(INSTALL) -m 0755 -D \
+> -		package/fluxbox/xsession $(TARGET_DIR)/root/.xsession
+> +	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
+> +		$(TARGET_DIR)/root/.xsession
 >  endef
 >  
->  define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
+>  FLUXBOX_POST_INSTALL_TARGET_HOOKS += FLUXBOX_INSTALL_XSESSION_FILE
 > -- 
 > 2.1.0
 > 
