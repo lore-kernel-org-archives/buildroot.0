@@ -1,44 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 12:20:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: disable on nios2
-In-Reply-To: <20141130094300.256d43e0@free-electrons.com>
-References: <1417287381-5045-1-git-send-email-bernd.kuhls@t-online.de>
- <20141130094300.256d43e0@free-electrons.com>
-Message-ID: <20141130112049.GA4124@free.fr>
+Date: Sun, 30 Nov 2014 12:35:57 +0100
+Subject: [Buildroot] [PATCH] package/shairport-sync: fix static builds
+In-Reply-To: <1417268097-29884-1-git-send-email-yann.morin.1998@free.fr>
+References: <1417268097-29884-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20141130113557.GB4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
-On 2014-11-30 09:43 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 29 Nov 2014 19:56:21 +0100, Bernd Kuhls wrote:
-> > diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-> > index 5c5306d..c0620d5 100644
-> > --- a/package/minidlna/Config.in
-> > +++ b/package/minidlna/Config.in
-> > @@ -14,6 +14,8 @@ config BR2_PACKAGE_MINIDLNA
-> >  	select BR2_PACKAGE_LIBJPEG
-> >  	select BR2_PACKAGE_SQLITE
-> >  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-> > +	# Triggers the _gp link issue
-> > +	depends on !BR2_nios2
+On 2014-11-29 14:34 +0100, Yann E. MORIN spake thusly:
+> Because shairport-sync uses AC_CHECK_LIB to find some of the needed
+> libraries (opensl, alsa, popt...), it fails to bring in the dependencies
+> of those libraries; for example, -lssl requires -lz.
 > 
-> Can we instead please blacklist only the specific NIOS II toolchain
-> causing the problem?
+> When doing a dynamically-linked build, those dependent libraries are
+> pulled in thansk to the DT_NEEDED ELF tags, but those are not available
+> in static libraries.
+> 
+> Use PKG_CHECK_MODULES instead of AC_CHECK_LIB, and emulate the results
+> of AC_CJECK_LIB (i.e. set the HAVE_LIBxxx and the LIBS variable
+> appropriately) to minimise the amount of code touched.
+> 
+> This should fix:
+>     http://autobuild.buildroot.net/results/1a5/1a56dbff3583bed0d693508dfc16859086846ecd/
+>     http://autobuild.buildroot.net/results/6d5/6d5a8157592f7a2c9469bf71b0453796ef982ab1/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: J?rg Krause <jkrause@posteo.de>
+> 
+> ---
+> Note: I was not able to rproduce the build failures: the popt check was
+> sucessfull for me, but failed in the following checks for ssl and alsa.
+> The fix to popt is just a generalisation of the fix to the other two
+> libraries.
+> ---
+>  .../0001-fix-static-link-openssl.patch             | 37 ++++++++++++++++++++++
+>  .../shairport-sync/0002-fix-static-link-alsa.patch | 23 ++++++++++++++
+>  .../shairport-sync/0003-fix-static-link-popt.patch | 21 ++++++++++++
 
-Well, as Bernd says, both toolchains we support exhibit that bug.
+All three patches applied upstream:
+    https://github.com/mikebrady/shairport-sync/commit/2a430ec434674ed8c1959698c061662bb7abc1a1
+    https://github.com/mikebrady/shairport-sync/commit/e5a74a3ff08134a2b11f07bd850659d7816fb03d
+    https://github.com/mikebrady/shairport-sync/commit/1f759e57e8c0682613eaaf89a46fdf6db4c6b5cd
 
-And you already did two similar patches, where you just did what Bernd
-submitted for minidlna:
-  - f287f0aa crda: disable on NIOS II
-  - 50d36731 aiccu: not available on NIOS II
+There is now a new release with those three patches, but that would make
+us bump pass a few releases, from 2.1.8 to 2.1.13, with some new
+features along the lines.
 
-So I think it is a bit too much to ask to just blacklist the affected
-toolchains, especially since they all are affected, and we can not build
-our own.
+So, for the release, I suggest we just apply those three patches, and
+I'll send a version bump after the release has been cut.
+
+Is that OK?
 
 Regards,
 Yann E. MORIN.
