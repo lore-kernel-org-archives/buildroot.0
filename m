@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:07:27 +0100
-Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration
- file unconditionally
-In-Reply-To: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 19:08:11 +0100
+Subject: [Buildroot] [PATCHv3 69/74] screen: install configuration file
+ unconditionally
+In-Reply-To: <1417357142-14307-70-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130180727.GX4124@free.fr>
+ <1417357142-14307-70-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130180811.GY4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,26 +28,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/sysklogd/sysklogd.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  package/screen/screen.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-> index 2b60b45..1e8652d 100644
-> --- a/package/sysklogd/sysklogd.mk
-> +++ b/package/sysklogd/sysklogd.mk
-> @@ -21,10 +21,8 @@ endef
->  define SYSKLOGD_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m 0500 $(@D)/syslogd $(TARGET_DIR)/sbin/syslogd
->  	$(INSTALL) -D -m 0500 $(@D)/klogd $(TARGET_DIR)/sbin/klogd
-> -	if [ ! -f $(TARGET_DIR)/etc/syslog.conf ]; then \
-> -		$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
-> -			$(TARGET_DIR)/etc/syslog.conf; \
+> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+> index 461bce2..827e776 100644
+> --- a/package/screen/screen.mk
+> +++ b/package/screen/screen.mk
+> @@ -15,9 +15,7 @@ SCREEN_MAKE = $(MAKE1)
+>  SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+>  
+>  define SCREEN_INSTALL_SCREENRC
+> -	if [ ! -f $(TARGET_DIR)/etc/screenrc ]; then \
+> -		$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc; \
 > -	fi
-> +	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
-> +		$(TARGET_DIR)/etc/syslog.conf; \
+> +	$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc
 >  endef
 >  
->  define SYSKLOGD_INSTALL_INIT_SYSV
+>  SCREEN_POST_INSTALL_TARGET_HOOKS += SCREEN_INSTALL_SCREENRC
 > -- 
 > 2.1.0
 > 
