@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:36 +0100
-Subject: [Buildroot] [PATCHv3 48/74] qt5base: add error handling to for loop
+Date: Sun, 30 Nov 2014 15:18:50 +0100
+Subject: [Buildroot] [PATCHv3 62/74] fluxbox: install session file
+	unconditionally
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-49-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As discussed, users should use a rootfs overlay or a post-build script
+instead of a custom skeleton to override files installed by Buildroot,
+so there is no point in having conditions when installing init scripts
+or configuration files.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fluxbox/fluxbox.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 57ea1c8..788b2d7 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -211,7 +211,7 @@ endef
+diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+index 21901d6..a0f9367 100644
+--- a/package/fluxbox/fluxbox.mk
++++ b/package/fluxbox/fluxbox.mk
+@@ -24,8 +24,8 @@ FLUXBOX_CONF_OPTS += --disable-imlib2
+ endif
  
- define QT5BASE_INSTALL_TARGET_LIBS
- 	for lib in $(QT5BASE_INSTALL_LIBS_y); do \
--		cp -dpf $(STAGING_DIR)/usr/lib/lib$${lib}.so.* $(TARGET_DIR)/usr/lib ; \
-+		cp -dpf $(STAGING_DIR)/usr/lib/lib$${lib}.so.* $(TARGET_DIR)/usr/lib || exit 1 ; \
- 	done
+ define FLUXBOX_INSTALL_XSESSION_FILE
+-	[ -f $(TARGET_DIR)/root/.xsession ] || $(INSTALL) -m 0755 -D \
+-		package/fluxbox/xsession $(TARGET_DIR)/root/.xsession
++	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
++		$(TARGET_DIR)/root/.xsession
  endef
  
+ FLUXBOX_POST_INSTALL_TARGET_HOOKS += FLUXBOX_INSTALL_XSESSION_FILE
 -- 
 2.1.0
