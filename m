@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Nov 2014 15:18:42 +0100
-Subject: [Buildroot] [PATCHv3 54/74] dmraid: install init script
-	unconditionally
+Date: Sun, 30 Nov 2014 15:18:34 +0100
+Subject: [Buildroot] [PATCHv3 46/74] live555: add error handling to for loop
 In-Reply-To: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417357142-14307-55-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417357142-14307-47-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed, users should use a rootfs overlay or a post-build script
-instead of a custom skeleton to override files installed by Buildroot,
-so there is no point in having conditions when installing init scripts
-or configuration files.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dmraid/dmraid.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/live555/live555.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 024b9b5..a6ed57f 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -18,9 +18,8 @@ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
- DMRAID_DEPENDENCIES = lvm2
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index b923388..7dbded3 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -54,7 +54,7 @@ endef
  
- define DMRAID_INSTALL_INIT_SYSV
--	[ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
--		$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
--			$(TARGET_DIR)/etc/init.d/S20dmraid
-+	$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
-+		$(TARGET_DIR)/etc/init.d/S20dmraid
+ define LIVE555_INSTALL_TARGET_CMDS
+ 	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
+-		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i`; \
++		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1 \
+ 	done
  endef
  
- $(eval $(autotools-package))
 -- 
 2.1.0
