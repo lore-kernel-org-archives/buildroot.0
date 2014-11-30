@@ -1,41 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Nov 2014 21:39:54 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
-	libunwind support is broken on mips64
-Message-ID: <20141130221326.234227FFB2@busybox.osuosl.org>
+Date: Sun, 30 Nov 2014 23:27:13 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gd: fix build when libiconv is
+	enabled
+In-Reply-To: <1417294477-12145-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 29 Nov 2014 21:54:36 +0100")
+References: <1417294477-12145-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87y4qsiata.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93d0c5e0aa4a0bda5957a35acc407fdb778a25aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
-http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
-http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
+ > First of two patches to fix
+ > http://autobuild.buildroot.net/results/238/2386edb7f95920e84a35811a33f4333ee0a7a860/
 
-[Peter: use official bugtracker URL, fix check]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ > gd links against libiconv if it is already built, depend on libiconv
+ > to get reproducable builds.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f118ef2..f8037b4 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += freetype
- endif
+ > readelf output without libiconv present:
+ > $ output/host/opt/ext-toolchain/bfin-linux-uclibc/bin/bfin-linux-uclibc-readelf \
+ >   -a output/staging/usr/lib/libgd.a | grep iconv
+ >     15: 00000000    12 FUNC    GLOBAL HIDDEN     1 _iconv_open
+ >     16: 0000000c    12 FUNC    GLOBAL HIDDEN     1 _iconv
+ >     17: 00000018    12 FUNC    GLOBAL HIDDEN     1 _iconv_close
+
+ > readelf output with libiconv present:
+ > $ output/host/opt/ext-toolchain/bfin-linux-uclibc/bin/bfin-linux-uclibc-readelf \
+ >   -a output/staging/usr/lib/libgd.a | grep iconv
+ > 000000e4  0000100a R_BFIN_PCREL24    00000000   _libiconv_open + 0
+ > 00000140  0000140a R_BFIN_PCREL24    00000000   _libiconv + 0
+ > 0000019a  0000160a R_BFIN_PCREL24    00000000   _libiconv_close + 0
+ >     16: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv_open
+ >     20: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv
+ >     22: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND _libiconv_close
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/gd/gd.mk |    4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+ > index 1613464..50737e5 100644
+ > --- a/package/gd/gd.mk
+ > +++ b/package/gd/gd.mk
+ > @@ -33,6 +33,10 @@ else
+ >  GD_CONF_OPTS += --without-freetype
+ >  endif
  
--ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+# libunwind support is broken on mips64
-+# https://bugs.freedesktop.org/show_bug.cgi?id=79939
-+ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_mips64el),y-)
- XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
- else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+ > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ > +GD_DEPENDENCIES += libiconv
+
+If we also add GD_CONF_ENV += LIBS="-liconv" then -liconv gets added to
+the gdlib-config --libs output, and we don't need change anything in
+gnuplot.mk (or any other packages using gdlib-config).
+
+So committed with that change (and the gnuplot change dropped), thanks.
+
+-- 
+Bye, Peter Korsgaard
