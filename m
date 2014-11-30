@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 19:10:04 +0100
-Subject: [Buildroot] [PATCHv3 70/74] usbmount: install configuration
- file unconditionally
-In-Reply-To: <1417357142-14307-71-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 19:11:03 +0100
+Subject: [Buildroot] [PATCHv3 71/74] php: install configuration file
+ unconditionally
+In-Reply-To: <1417357142-14307-72-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-71-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141130181004.GZ4124@free.fr>
+ <1417357142-14307-72-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141130181103.GA4124@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,31 +21,33 @@ On 2014-11-30 15:18 +0100, Thomas Petazzoni spake thusly:
 > or configuration files.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/usbmount/usbmount.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
-> index cc25e4b..76c027f 100644
-> --- a/package/usbmount/usbmount.mk
-> +++ b/package/usbmount/usbmount.mk
-> @@ -20,9 +20,7 @@ define USBMOUNT_INSTALL_TARGET_CMDS
->  		$(TARGET_DIR)/etc/usbmount/usbmount.d/00_remove_model_symlink
->  
->  	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
-> -	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
-> -	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
-> -	fi
-> +        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf
 
-Leading tabs, not spaces. ;-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  
->  	mkdir -p $(addprefix $(TARGET_DIR)/media/usb,0 1 2 3 4 5 6 7)
+> ---
+>  package/php/php.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 9456f1c..caaf548 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -238,10 +238,8 @@ PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
+>  define PHP_INSTALL_FIXUP
+>  	rm -rf $(TARGET_DIR)/usr/lib/php
+>  	rm -f $(TARGET_DIR)/usr/bin/phpize
+> -	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
+> -		$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
+> -			$(TARGET_DIR)/etc/php.ini; \
+> -	fi
+> +	$(INSTALL) -m 0755  $(PHP_DIR)/php.ini-production \
+> +		$(TARGET_DIR)/etc/php.ini
 >  endef
+>  
+>  PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
 > -- 
 > 2.1.0
 > 
