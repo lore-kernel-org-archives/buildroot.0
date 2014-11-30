@@ -1,56 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Nov 2014 14:48:03 +0100
-Subject: [Buildroot] [PATCH] package/shairport-sync: fix static builds
-In-Reply-To: <1417349351.882.7.camel@posteo.de>
-References: <1417268097-29884-1-git-send-email-yann.morin.1998@free.fr>
- <20141130113557.GB4124@free.fr> <1417349351.882.7.camel@posteo.de>
-Message-ID: <20141130134803.GD4124@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Nov 2014 14:55:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: disable on nios2
+In-Reply-To: <20141130112049.GA4124@free.fr>
+References: <1417287381-5045-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141130094300.256d43e0@free-electrons.com>
+ <20141130112049.GA4124@free.fr>
+Message-ID: <20141130145524.3fce8153@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Dear Yann E. MORIN,
 
-On 2014-11-30 13:09 +0100, J?rg Krause spake thusly:
-> On So, 2014-11-30 at 12:35 +0100, Yann E. MORIN wrote:
-> > 
-> > All three patches applied upstream:
-> >     https://github.com/mikebrady/shairport-sync/commit/2a430ec434674ed8c1959698c061662bb7abc1a1
-> >     https://github.com/mikebrady/shairport-sync/commit/e5a74a3ff08134a2b11f07bd850659d7816fb03d
-> >     https://github.com/mikebrady/shairport-sync/commit/1f759e57e8c0682613eaaf89a46fdf6db4c6b5cd
-> > 
-> > There is now a new release with those three patches, but that would make
-> > us bump pass a few releases, from 2.1.8 to 2.1.13, with some new
-> > features along the lines.
-> > 
-> > So, for the release, I suggest we just apply those three patches, and
-> > I'll send a version bump after the release has been cut.
-> > 
-> > Is that OK?
+On Sun, 30 Nov 2014 12:20:49 +0100, Yann E. MORIN wrote:
+
+> > Can we instead please blacklist only the specific NIOS II toolchain
+> > causing the problem?
 > 
-> First, many thanks for your work! I had a look at the autobuild errors,
-> but it was beyond my knowledge.
+> Well, as Bernd says, both toolchains we support exhibit that bug.
 > 
-> Version 2.1.9 to 2.1.13 include several bugfixes, so I would suggest to
-> update the package. I can make a run-time test tomorrow.
+> And you already did two similar patches, where you just did what Bernd
+> submitted for minidlna:
+>   - f287f0aa crda: disable on NIOS II
+>   - 50d36731 aiccu: not available on NIOS II
+> 
+> So I think it is a bit too much to ask to just blacklist the affected
+> toolchains, especially since they all are affected, and we can not build
+> our own.
 
-We are too close to the (Buildroot!) release to do a version bump, which
-is due today (last day of the month). And the new shairport-sync release
-with those three patches included is not yet available (code has been
-updated, but no tg or tarball is available yet).
+I agree that we may not be doing this properly in other packages.
+However, I still believe in such situations that it's better to
+blacklist the individual toolchains that are known to be broken, so
+that if we add another toolchain, we will be able to see if the same
+bug happens as well or not.
 
-I plan on doing a version bump right after both the Buildroot and
-shairport-sync releases are out, though.
+Ideally, we should report such bugs to Mentor, but so far, they have
+never seem to be really interested by bug reports we could make about
+their toolchains.
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
