@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 22:59:53 +0100
-Subject: [Buildroot] [PATCHv3 20/74] olsr: use <pkg>_INSTALL_INIT_SYSV
+Date: Mon, 01 Dec 2014 23:00:11 +0100
+Subject: [Buildroot] [PATCHv3 21/74] pango: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
-In-Reply-To: <1417357142-14307-21-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:08 +0100")
+In-Reply-To: <1417357142-14307-22-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:09 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-21-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a937c9pi.fsf@dell.be.48ers.dk>
+ <1417357142-14307-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8761dvc9p0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
