@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:35:05 +0100
-Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration
-	file unconditionally
-In-Reply-To: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:56 +0100")
+Date: Tue, 02 Dec 2014 00:36:53 +0100
+Subject: [Buildroot] [PATCHv3 69/74] screen: install configuration file
+	unconditionally
+In-Reply-To: <1417357142-14307-70-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:57 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87iohv3pw6.fsf@dell.be.48ers.dk>
+ <1417357142-14307-70-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87egsj3pt6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
