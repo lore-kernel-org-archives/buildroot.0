@@ -1,41 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  1 Dec 2014 22:42:06 +0200
-Subject: [Buildroot] [PATCH] exiv2: XMP support needs largefile
-Message-ID: <bed23382a22ff4672c36ac53805589eaef4399b1.1417466526.git.baruch@tkos.co.il>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 01 Dec 2014 21:43:55 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding package janus-gateway and
+	dependencies
+In-Reply-To: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
+References: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
+Message-ID: <2182524.TZM3QkmlQx@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-XMP code enables largefile unconditionally.
+Hello Gregory,
 
-Fixes:
-http://autobuild.buildroot.net/results/116/1166068a64733d22a2f891849177ad826347dc9f/
+On Monday 01 December 2014 19:37:23 Gregory Dymarek wrote:
+> This is a set of packages that are needed to compile janus-gateway:
+> ding-libs
+> gengetopt
+> janus-gateway
+> libnice
+> libsrtp
+> libwebsock
+> sofia-sip
+Thank you for your contribution. Can you place each new package in a separate 
+commit?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/exiv2/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-index 3dc74459a78c..b2e2ac83d095 100644
---- a/package/exiv2/Config.in
-+++ b/package/exiv2/Config.in
-@@ -39,11 +39,12 @@ config BR2_PACKAGE_EXIV2_XMP
- 	bool "XMP support"
- 	select BR2_PACKAGE_EXPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
- 	help
- 	  Build with XMP support
- 
--comment "xmp support needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xmp support needs a toolchain w/ threads, and largefile"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
- 
- config BR2_PACKAGE_EXIV2_LENSDATA
- 	bool "Nikon lens name database"
 -- 
-2.1.3
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
