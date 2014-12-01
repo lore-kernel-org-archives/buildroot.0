@@ -1,75 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 10:48:36 -0000
-Subject: [Buildroot] [git commit] package: add python-werkzeug
-Message-ID: <20141201104835.62A7F7FCD8@busybox.osuosl.org>
+Date: Mon, 01 Dec 2014 10:48:37 -0000
+Subject: [Buildroot] [git commit] package: add python-jinja2
+Message-ID: <20141201104835.6B5017FCD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=deb7dcd48707f4e65774b45d7fbaf21b5dc58ec0
+commit: http://git.buildroot.net/buildroot/commit/?id=b534b5aaca63fd0c981ea421999bcd4b562fecda
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                            |    1 +
- package/python-werkzeug/Config.in            |    7 +++++++
- package/python-werkzeug/python-werkzeug.hash |    3 +++
- package/python-werkzeug/python-werkzeug.mk   |   14 ++++++++++++++
- 4 files changed, 25 insertions(+), 0 deletions(-)
+ package/Config.in                        |    1 +
+ package/python-jinja2/Config.in          |    8 ++++++++
+ package/python-jinja2/python-jinja2.hash |    3 +++
+ package/python-jinja2/python-jinja2.mk   |   14 ++++++++++++++
+ 4 files changed, 26 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 28cf703..ace08e0 100644
+index ace08e0..4e89447 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "external python modules"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-werkzeug/Config.in"
- endmenu
- endif
- 	source "package/ruby/Config.in"
-diff --git a/package/python-werkzeug/Config.in b/package/python-werkzeug/Config.in
+@@ -493,6 +493,7 @@ menu "external python modules"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
++	source "package/python-jinja2/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
 new file mode 100644
-index 0000000..2097d6e
+index 0000000..1d9131a
 --- /dev/null
-+++ b/package/python-werkzeug/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_WERKZEUG
-+	bool "python-werkzeug"
++++ b/package/python-jinja2/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JINJA2
++	bool "python-jinja2"
 +	help
-+	  Werkzeug is a WSGI utility library for Python. It's widely
-+	  used and BSD licensed.
++	  Jinja2 is a template engine written in pure Python. It
++	  provides a Django inspired non-XML syntax but supports
++	  inline expressions and an optional sandboxed environment.
 +
-+	  http://werkzeug.pocoo.org/
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
++	  http://jinja.pocoo.org/
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
 new file mode 100644
-index 0000000..38f622a
+index 0000000..6e8c160
 --- /dev/null
-+++ b/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-jinja2/python-jinja2.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
-+md5	f7afcadc03b0f2267bdc156c34586043  Werkzeug-0.9.6.tar.gz
-+sha256	7f11e7e2e73eb22677cac1b11113eb6106f66cedef13d140e83cf6563c90b79c  Werkzeug-0.9.6.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
++md5	b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
++sha256	2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
 new file mode 100644
-index 0000000..8902d17
+index 0000000..49625e3
 --- /dev/null
-+++ b/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-jinja2/python-jinja2.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-werkzeug
++# python-jinja2
 +#
 +################################################################################
 +
-+PYTHON_WERKZEUG_VERSION = 0.9.6
-+PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
-+PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
-+PYTHON_WERKZEUG_SETUP_TYPE = setuptools
-+PYTHON_WERKZEUG_LICENSE = BSD-3c
-+PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
++PYTHON_JINJA2_VERSION = 2.7.3
++PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
++PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
++PYTHON_JINJA2_SETUP_TYPE = setuptools
++PYTHON_JINJA2_LICENSE = BSD-3c
++PYTHON_JINJA2_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
