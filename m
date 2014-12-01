@@ -1,35 +1,55 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 1 Dec 2014 11:05:20 +0100 (CET)
-Subject: [Buildroot] buildroot-submodule 2014.11 released
-Message-ID: <1493931193.28631961.1417428320327.JavaMail.root@openwide.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 1 Dec 2014 10:14:19 +0000
+Subject: [Buildroot] [PATCH v3] Add a defconfig for MIPS Creator CI20
+In-Reply-To: <87wq6ejtsz.fsf@dell.be.48ers.dk>
+References: <1417193009-65132-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87wq6ejtsz.fsf@dell.be.48ers.dk>
+Message-ID: <547C3F7B.3060804@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody,
+Dear Peter Korsgaard,
 
-I have tagged a version 2014.11 of buildroot submodule, in sync with the latest buildroot release.
+On 11/29/2014 08:27 AM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+>  > MIPS Creator CI20 is a Linux and Android development system from
+>  > MIPS/Imagination Technologies. It incorporates an Ingenic JZ4780 SoC
+>  > which includes a 1.2GHz dual core MIPS32 processor and Imagination
+>  > PowerVR SGX540 GPU.
+> 
+>  > More information can be found at:
+>  >   http://elinux.org/MIPS_Creator_CI20
+> 
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> Committed to next, thanks.
 
-As a reminder, buildroot-submodule is a simple make infrastructure that allows to save all your local buildroot configuration and recipies in a git repository while cloning the main buildroot git as a submodule.
+Thanks :-)
 
-This greatly ease configuration management and synchronization with upstream.
+> I do have one question though:
+> 
+>> +# system
+>  > +BR2_KERNEL_HEADERS_VERSION=y
+>  > +BR2_DEFAULT_KERNEL_VERSION="3.0.8"
+>  > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+>  > +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> 
+> Is mdev in any way required? We normally only enable the basic stuff
+> needed to get a booting system in the defconfigs.
 
-you can get buildroot-submodule here : https://github.com/Openwide-Ingenierie/buildroot-submodule
+I have added mdev to the defconfig in order to get it working out of the
+box, because the kernel defconfig we are using doesn't have
+DEVTMPFS_MOUNT support, so if you rely on the default /dev management
+option (Dynamic using devtmpfs only) it will not work.
 
-
-
-Cordialement 
-
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
-
-fight key loggers : write some perl using vim 
-
-
-Open Wide Ingenierie
-
-23, rue Daviel
-75013 Paris - France
-www.openwide.fr
+Cheers,
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
