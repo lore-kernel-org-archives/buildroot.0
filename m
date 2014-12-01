@@ -1,33 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:25:08 +0100
-Subject: [Buildroot] [git commit] alsa-utils: add error handling to for loop
-Message-ID: <20141201223450.8097280048@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:29:03 +0100
+Subject: [Buildroot] [git commit] coreutils: add error handling to for loop
+Message-ID: <20141201223450.8A66080048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b5f3b16f4b3280b014d171f3f5b81b6340c75df
+commit: http://git.buildroot.net/buildroot/commit/?id=5e7c3648724b1f77e03f5730b7371d2d42df54ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-utils/alsa-utils.mk |    2 +-
+ package/coreutils/coreutils.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 17895c3..a599af8 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -46,7 +46,7 @@ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST) += usr/bin/speaker-tes
- define ALSA_UTILS_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/var/lib/alsa
- 	for i in $(ALSA_UTILS_TARGETS_y); do \
--		$(INSTALL) -D -m 755 $(STAGING_DIR)/$$i $(TARGET_DIR)/$$i; \
-+		$(INSTALL) -D -m 755 $(STAGING_DIR)/$$i $(TARGET_DIR)/$$i || exit 1; \
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index db0d8a9..8901d23 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -102,7 +102,7 @@ endif
+ define COREUTILS_POST_INSTALL
+ 	# some things go in root rather than usr
+ 	for f in $(COREUTILS_BIN_PROGS); do \
+-		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
++		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
  	done
- 	if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ]; then \
- 		mkdir -p $(TARGET_DIR)/usr/share/alsa/speaker-test; \
+ 	# link for archaic shells
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
