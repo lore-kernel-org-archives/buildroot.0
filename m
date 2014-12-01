@@ -1,41 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 11:19:22 +0100
-Subject: [Buildroot] [PATCH v3] Add a defconfig for MIPS Creator CI20
-In-Reply-To: <547C3F7B.3060804@imgtec.com> (Vicente Olivert Riera's message of
- "Mon, 1 Dec 2014 10:14:19 +0000")
-References: <1417193009-65132-1-git-send-email-Vincent.Riera@imgtec.com>
- <87wq6ejtsz.fsf@dell.be.48ers.dk> <547C3F7B.3060804@imgtec.com>
-Message-ID: <87zjb7hdud.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 1 Dec 2014 10:23:57 +0000
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
+ libunwind support is broken on mips64
+In-Reply-To: <87bnnojub1.fsf@dell.be.48ers.dk>
+References: <1417299035-17050-1-git-send-email-bernd.kuhls@t-online.de>
+ <87bnnojub1.fsf@dell.be.48ers.dk>
+Message-ID: <547C41BD.3020300@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Dear Bernd Kuhls, Peter Korsgaard,
 
-Hi,
+On 11/30/2014 08:40 PM, Peter Korsgaard wrote:
+>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+> 
+>  > Fixes
+>  > http://autobuild.buildroot.net/results/e8f/e8f68163802f31359cee15fa3ca52547e06d1f27/
+>  > http://autobuild.buildroot.net/results/994/9947222da8682a358f81f8ac924c12596fd09ee8/
+>  > http://autobuild.buildroot.net/results/df9/df92d9b682976b77d9e1e4c39afca52b7512d847/
+> 
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  > ---
+>  >  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    4 +++-
+>  >  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+>  > diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+>  > b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+>  > index 4db8b09..cae06e6 100644
+>  > --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+>  > +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+>  > @@ -144,7 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+>  >  XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+>  >  endif
+>  > -ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+>  > +# libunwind support is broken on mips64
+>  > +# https://www.libreoffice.org/bugzilla/show_bug.cgi?id=79939
+> 
+> This doesn't have anything to do with libreoffice. That URL is
+> apparently an alias for bugs.freedesktop.org (the official bugtracker
+> for xorg), so I've used that as URL instead.
+> 
+> 
+>  > +ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_mips64el),y)
+>  >  XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
+> 
+> That's not good as builds on mips64el WITHOUT libunwind now ends up
+> pulling in libunwind (and breaking the build).
+> 
+> We need to match on LIBUNWIND and !mips64el, so there needs so be a
+> seperator in between, like:
+> 
+> ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_mips64el),y-)
+> 
+> Even if it looks a bit odd.
+> 
+> Committed with those fixes, thanks.
+> 
 
->> I do have one question though:
- >> 
- >>> +# system
- >> > +BR2_KERNEL_HEADERS_VERSION=y
- >> > +BR2_DEFAULT_KERNEL_VERSION="3.0.8"
- >> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
- >> > +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- >> 
- >> Is mdev in any way required? We normally only enable the basic stuff
- >> needed to get a booting system in the defconfigs.
+as you may see in the bug report, I'm the one who reported the bug.
 
- > I have added mdev to the defconfig in order to get it working out of the
- > box, because the kernel defconfig we are using doesn't have
- > DEVTMPFS_MOUNT support, so if you rely on the default /dev management
- > option (Dynamic using devtmpfs only) it will not work.
+https://bugs.freedesktop.org/show_bug.cgi?id=79939
 
-But when you build a kernel with Buildroot it will automatically enable
-DEVTMPFS_MOUNT when needed (E.G. when the system isn't configured for a
-static /dev), so that shouldn't be an issue?
+Xorg with libunwind support is broken for MIPS64 n32, but MIPS64 n64 is
+ok, so disabing libunwind support for mips64el is wrong.
 
+Also, I'm trying to fix the problem in libunwind. I reported the bug and
+sent a patch which we are discussing right now:
+
+https://savannah.nongnu.org/bugs/?43695
+
+Cheers,
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
