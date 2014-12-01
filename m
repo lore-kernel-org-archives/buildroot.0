@@ -1,76 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Dec 2014 10:48:37 -0000
-Subject: [Buildroot] [git commit] package: add python-jinja2
-Message-ID: <20141201104835.6B5017FCD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: add python-flask
+Message-ID: <20141201104835.83E277F898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b534b5aaca63fd0c981ea421999bcd4b562fecda
+commit: http://git.buildroot.net/buildroot/commit/?id=541d9452237ba5fc00a42a0a7e4019518d7ec4ce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                        |    1 +
- package/python-jinja2/Config.in          |    8 ++++++++
- package/python-jinja2/python-jinja2.hash |    3 +++
- package/python-jinja2/python-jinja2.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/python-flask/Config.in         |   10 ++++++++++
+ package/python-flask/python-flask.hash |    3 +++
+ package/python-flask/python-flask.mk   |   15 +++++++++++++++
+ 4 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index ace08e0..4e89447 100644
+index ba97db7..3e5ad39 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -493,6 +493,7 @@ menu "external python modules"
+@@ -489,6 +489,7 @@ menu "external python modules"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dpkt/Config.in"
++	source "package/python-flask/Config.in"
+ 	source "package/python-flup/Config.in"
  	source "package/python-id3/Config.in"
  	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
-+	source "package/python-jinja2/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
-diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
+diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
 new file mode 100644
-index 0000000..1d9131a
+index 0000000..4a955c4
 --- /dev/null
-+++ b/package/python-jinja2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_JINJA2
-+	bool "python-jinja2"
++++ b/package/python-flask/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_FLASK
++	bool "python-flask"
++	select BR2_PACKAGE_PYTHON_WERKZEUG
++	select BR2_PACKAGE_PYTHON_JINJA2
++	select BR2_PACKAGE_PYTHON_ITSDANGEROUS
 +	help
-+	  Jinja2 is a template engine written in pure Python. It
-+	  provides a Django inspired non-XML syntax but supports
-+	  inline expressions and an optional sandboxed environment.
++	  Flask is a microframework for Python based on Werkzeug,
++	  Jinja 2 and good intentions.
 +
-+	  http://jinja.pocoo.org/
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
++	  http://flask.pocoo.org/
+diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
 new file mode 100644
-index 0000000..6e8c160
+index 0000000..55d0a5c
 --- /dev/null
-+++ b/package/python-jinja2/python-jinja2.hash
++++ b/package/python-flask/python-flask.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
-+md5	b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
-+sha256	2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=378670fe456957eb3c27ddaef60b2b24, sha256 locally computed
++md5	378670fe456957eb3c27ddaef60b2b24  Flask-0.10.1.tar.gz
++sha256	4c83829ff83d408b5e1d4995472265411d2c414112298f2eb4b359d9e4563373  Flask-0.10.1.tar.gz
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
 new file mode 100644
-index 0000000..49625e3
+index 0000000..d7e3d1f
 --- /dev/null
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-flask/python-flask.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-jinja2
++# python-flask
 +#
 +################################################################################
 +
-+PYTHON_JINJA2_VERSION = 2.7.3
-+PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
-+PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
-+PYTHON_JINJA2_SETUP_TYPE = setuptools
-+PYTHON_JINJA2_LICENSE = BSD-3c
-+PYTHON_JINJA2_LICENSE_FILES = LICENSE
++PYTHON_FLASK_VERSION = 0.10.1
++PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
++PYTHON_FLASK_SITE = http://pypi.python.org/packages/source/F/Flask
++PYTHON_FLASK_SETUP_TYPE = setuptools
++PYTHON_FLASK_LICENSE = BSD-3c
++PYTHON_FLASK_LICENSE_FILES = LICENSE
++PYTHON_FLASH_DEPENDENCIES = python-werkzeug python-jinja2 python-itsdangerous
 +
 +$(eval $(python-package))
