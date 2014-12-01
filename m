@@ -1,40 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 13:08:10 +0100
-Subject: [Buildroot] [git commit] lame: also disable debug handling on xtensa
-Message-ID: <20141201121110.E95E67FF6F@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 1 Dec 2014 12:24:26 +0000
+Subject: [Buildroot] [PATCH] xserver_xorg-server: libunwind support is
+	broken on MIPS64 n32
+Message-ID: <1417436666-54652-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b2375e3e0fa68d2f04a723179ccb0a8765daaa4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Amend the former commit and disable xorg-server with libunwind support
+only for MIPS64 n32, as stated in the bug report:
 
-Similar to the other architectures we have disabled it for. At the same time
-also adjust the comment as we now do this for several other architectures.
+https://bugs.freedesktop.org/show_bug.cgi?id=79939
 
-Fixes http://autobuild.buildroot.net/results/b7e/b7e466580561e32fb584399e5914cd61a37bf7e9/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lame/lame.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lame/lame.mk b/package/lame/lame.mk
-index e9d5d73..7eb9e2f 100644
---- a/package/lame/lame.mk
-+++ b/package/lame/lame.mk
-@@ -17,9 +17,9 @@ LAME_LICENSE_FILES = COPYING
- # Building lame with debug symbols needs the following macros to be
- # defined: _FPU_MASK_IM, _FPU_MASK_ZM, _FPU_MASK_OM.
- # So, if BR2_ENABLE_DEBUG is selected, then we have force lame to be
--# built without debug symbols for Aarch64 and MIPS because these
--# architectures don't have those macros defined.
--ifeq ($(BR2_ENABLE_DEBUG)$(BR2_aarch64)$(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),yy)
-+# built without debug symbols because these architectures don't have
-+# those macros defined.
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_aarch64)$(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_xtensa),yy)
- LAME_CONF_OPTS += --disable-debug
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4e06d5f..4164ccf 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -144,9 +144,9 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
  endif
  
+-# libunwind support is broken on mips64
++# libunwind support is broken on MIPS64 n32
+ # https://bugs.freedesktop.org/show_bug.cgi?id=79939
+-ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_mips64el),y-)
++ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_MIPS_NABI32),y-)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+-- 
+1.7.1
