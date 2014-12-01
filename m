@@ -1,32 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 20:09:02 +0100
-Subject: [Buildroot] [PATCH] ci20_defconfig: remove
-	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-In-Reply-To: <1417448260-23029-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 1 Dec 2014 15:37:40 +0000")
-References: <1417448260-23029-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87sigzfar5.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Dec 2014 20:05:52 +0100
+Subject: [Buildroot] [git commit] linux-headers: mark EOL versions deprecated
+Message-ID: <20141201190932.52D867FFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f61e0a1fc8d1a0a0b088aa6f350c3f4b232000eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We had this option in the defconfig because the kernel defconfig we
- > provide doesn't have CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT, so a
- > /dev management which creates the devices dynamically using only
- > devtmpfs would not work. However, CONFIG_DEVTMPFS and
- > CONFIG_DEVTMPFS_MOUNT are automatically added to the kernel config when
- > you build the kernel using Buildroot, except when you choose
- > BR2_ROOTFS_DEVICE_CREATION_STATIC as a /dev management. This is handled
- > by linux/linux.mk.
+Follow the upstream EOL cycle and mark 3.16 as deprecated for 2015.02.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d765e3a..7e48309 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -56,6 +56,7 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_3_16
+ 		bool "Linux 3.16.x kernel headers"
++		depends on BR2_DEPRECATED_SINCE_2015_02
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+ 
+ 	config BR2_KERNEL_HEADERS_3_17
