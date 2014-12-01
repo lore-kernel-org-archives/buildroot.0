@@ -1,42 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 22:56:11 +0100
-Subject: [Buildroot] [git commit] gpsd: use <pkg>_INSTALL_INIT_SYSV mechanism
-Message-ID: <20141201221140.DB78F8002F@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:00:26 +0100
+Subject: [Buildroot] [git commit] xapp_xdm: use <pkg>_INSTALL_INIT_SYSV
+	mechanism
+Message-ID: <20141201221140.F20598002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbacf1cf2af80960484aead4ae6b012301be6a6e
+commit: http://git.buildroot.net/buildroot/commit/?id=b9d848871aaa212b6a5633180f74c60929c8ae10
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also makes the installation of the init script unconditional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gpsd/gpsd.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_xdm/xapp_xdm.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 7dc27e8..5092b38 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -206,10 +206,11 @@ define GPSD_INSTALL_TARGET_CMDS
- 		$(SCONS) \
- 		$(GPSD_SCONS_OPTS) \
- 		install)
--	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
--		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
--		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
--	fi
-+endef
-+
-+define GPSD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd
-+	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
+index 428f473..955dc1c 100644
+--- a/package/x11r7/xapp_xdm/xapp_xdm.mk
++++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+@@ -14,11 +14,9 @@ XAPP_XDM_DEPENDENCIES = xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libX
+ XAPP_XDM_CONF_OPTS = --with-utmp-file=/var/adm/utmpx \
+ 		    --with-wtmp-file=/var/adm/wtmpx
+ 
+-define XAPP_XDM_INSTALL_STARTUP_SCRIPT
++define XAPP_XDM_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/x11r7/xapp_xdm/S99xdm \
+ 		$(TARGET_DIR)/etc/init.d/S99xdm
  endef
  
- define GPSD_INSTALL_STAGING_CMDS
+-XAPP_XDM_POST_INSTALL_TARGET_HOOKS += XAPP_XDM_INSTALL_STARTUP_SCRIPT
+-
+ $(eval $(autotools-package))
