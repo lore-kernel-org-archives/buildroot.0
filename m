@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:15:45 +0100
-Subject: [Buildroot] [PATCHv3 52/74] aiccu: install init script and
+Date: Tue, 02 Dec 2014 00:19:09 +0100
+Subject: [Buildroot] [PATCHv3 53/74] busybox: install init script and
 	config file unconditionally
-In-Reply-To: <1417357142-14307-53-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:40 +0100")
+In-Reply-To: <1417357142-14307-54-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:41 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-53-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k32b6jxa.fsf@dell.be.48ers.dk>
+ <1417357142-14307-54-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvcz6jrm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed, thanks.
+Committed with the && conditional removed as noted by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
