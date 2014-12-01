@@ -1,23 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 23:32:59 +0100
-Subject: [Buildroot] [PATCHv3 47/74] lockfile-progs: add error handling
-	to for loop
-In-Reply-To: <1417357142-14307-48-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:35 +0100")
-References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-48-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87sigz6lwk.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Dec 2014 23:15:55 +0100
+Subject: [Buildroot] [git commit] iostat: don't install man page
+Message-ID: <20141201223450.3BE8A80048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9260501fb8b34756ac1f40ea1b4b39e06ce01217
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+We don't support installing documentation on the target, so there's no
+point in having explicit code to do so.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iostat/iostat.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index 8610f8f..2080e56 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -17,8 +17,6 @@ endef
+ 
+ define IOSTAT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
+-	$(INSTALL) -D $(IOSTAT_DIR)/iostat.8 \
+-		$(TARGET_DIR)/usr/share/man/man8/iostat.8
+ endef
+ 
+ $(eval $(generic-package))
