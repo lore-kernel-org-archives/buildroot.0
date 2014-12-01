@@ -1,37 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 20:05:36 +0100
-Subject: [Buildroot] [git commit] Add BR2_DEPRECATED_SINCE_2015_02
-Message-ID: <20141201190932.49B727FFF2@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 20:06:55 +0100
+Subject: [Buildroot] [git commit] Remove BR2_DEPRECATED_SINCE_2013_11
+Message-ID: <20141201190932.6ED3D7FFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=683eedd3a86a369c847b0a02e195691b023a6564
+commit: http://git.buildroot.net/buildroot/commit/?id=9125f60722ac3ac89ea6e60d5c9ac0a40b997945
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the deprecation of certain features in 2015.02, add
-the BR2_DEPRECATED_SINCE_2015_02 symbol.
+The symbol is unused so remove it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index 8d7081f..e2d3dfd 100644
+index e2d3dfd..1aa1080 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -314,6 +314,10 @@ config BR2_DEPRECATED_SINCE_2014_08
+@@ -298,10 +298,6 @@ config BR2_DEPRECATED
+ 
+ if BR2_DEPRECATED
+ 
+-config BR2_DEPRECATED_SINCE_2013_11
+-	bool
+-	default y
+-
+ config BR2_DEPRECATED_SINCE_2014_02
  	bool
  	default y
- 
-+config BR2_DEPRECATED_SINCE_2015_02
-+	bool
-+	default y
-+
- endif
- 
- config BR2_ENABLE_DEBUG
