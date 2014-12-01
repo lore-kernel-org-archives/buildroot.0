@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 20:08:32 +0100
-Subject: [Buildroot] [git commit] ci20_defconfig: remove
-	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-Message-ID: <20141201190932.7EAE47FFE7@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 20:07:57 +0100
+Subject: [Buildroot] [git commit] samba4: bump to version 4.1.14
+Message-ID: <20141201190932.773197FFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d627b3632f4b212f6ebe66813e7135a734c54ea
+commit: http://git.buildroot.net/buildroot/commit/?id=af3d4b7d2afb64ca236c03a3e57e2b31b929c2f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We had this option in the defconfig because the kernel defconfig we
-provide doesn't have CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT, so a
-/dev management which creates the devices dynamically using only
-devtmpfs would not work. However, CONFIG_DEVTMPFS and
-CONFIG_DEVTMPFS_MOUNT are automatically added to the kernel config when
-you build the kernel using Buildroot, except when you choose
-BR2_ROOTFS_DEVICE_CREATION_STATIC as a /dev management. This is handled
-by linux/linux.mk.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/ci20_defconfig |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/samba4/samba4.hash |    2 +-
+ package/samba4/samba4.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 7f1bf87..a7b7622 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -7,7 +7,6 @@ BR2_mips_32r2=y
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="3.0.8"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index b263bd8..e6990bd 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	737907f4ed3a71f6ec12638387aff7cda4764f8c2eb18deeca16e2fb7ed66c9f	samba-4.1.13.tar.gz
++sha256	5ea14baaca997292355d368918879e3d639def92b54efef2279cf5abe8db2cba	samba-4.1.14.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c4613f1..3ac0325 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # kernel
+-SAMBA4_VERSION = 4.1.13
++SAMBA4_VERSION = 4.1.14
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
