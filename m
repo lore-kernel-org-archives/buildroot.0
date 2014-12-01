@@ -1,47 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Dec 2014 19:16:54 +0100
-Subject: [Buildroot] [PATCH] package/bdwgc: only enable on supported
- architectures
-In-Reply-To: <20141201181354.GR2204@tarshish>
-References: <1417457426-2621-1-git-send-email-yann.morin.1998@free.fr>
- <20141201181354.GR2204@tarshish>
-Message-ID: <20141201181654.GB4150@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Dec 2014 20:07:46 +0100
+Subject: [Buildroot] [PATCH 1/5] Add BR2_DEPRECATED_SINCE_2015_02
+In-Reply-To: <1417443420-31985-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 1 Dec 2014 11:16:56 -0300")
+References: <1417443420-31985-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871tojgpdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2014-12-01 20:13 +0200, Baruch Siach spake thusly:
-> On Mon, Dec 01, 2014 at 07:10:26PM +0100, Yann E. MORIN wrote:
-> > diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-> > index 9aa7c7d..277b6e4 100644
-> > --- a/package/bdwgc/Config.in
-> > +++ b/package/bdwgc/Config.in
-> > @@ -1,5 +1,12 @@
-> > +config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
-> > +	default y
-> > +	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
-> > +		|| BR2_mips || BR2_MIPSEL || BR2_powerpc || BR2_sh \
-> 
-> s/BR2_MIPSEL/BR2_mipsel/
+ > In preparation for the deprecation of certain features in 2015.02, add
+ > the BR2_DEPRECATED_SINCE_2015_02 symbol.
 
-Damned, I forgot to lowercase that one...
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-How easy it is to read just what one expects, not what is really
-written... Cognitive bias? :-]
-
-Thanks.
-
-Regards,
-Yann E. MORIN.
+Committed all 5, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
