@@ -1,37 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 01 Dec 2014 18:32:29 -0300
-Subject: [Buildroot] [PATCH 1/2] skeleton: make /run a directory
-In-Reply-To: <CAGrucu0UjiXt22U-CFKda+Da8fNMjhszXbh=yixZLTMJ5uTN1Q@mail.gmail.com>
-References: <1417106898-14444-1-git-send-email-gustavo@zacarias.com.ar>	<CAGrucu1AtrSqG8_9Z6J0u4dR-Des_9W4xHH-HwguLpoen3vY3A@mail.gmail.com>	<CAHXCMM+J7M99tGUykrxi8MrruVsb34qa3CjHMTsf9XpesHS5vw@mail.gmail.com>	<547CD9A3.3080603@zacarias.com.ar>
- <CAGrucu0UjiXt22U-CFKda+Da8fNMjhszXbh=yixZLTMJ5uTN1Q@mail.gmail.com>
-Message-ID: <547CDE6D.8040303@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Dec 2014 22:34:09 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding package janus-gateway and
+ dependencies
+In-Reply-To: <20141201204722.GC4150@free.fr>
+References: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
+ <20141201204722.GC4150@free.fr>
+Message-ID: <20141201223409.7cd48798@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/01/2014 06:19 PM, Andr? Erdmann wrote:
+Hello,
 
-> There are already tmpfiles.d rules for that, /usr/lib/tmpfiles.d/legacy.conf:
+On Mon, 1 Dec 2014 21:47:22 +0100, Yann E. MORIN wrote:
+> Gregory, All,
 > 
-> d /run/lock 0755 root root -
-> L /var/lock - - - - ../run/lock
+> On 2014-12-01 19:37 +0000, Gregory Dymarek spake thusly:
+> > This is a set of packages that are needed to compile janus-gateway:
+> > ding-libs
+> > gengetopt
+> > janus-gateway
+> > libnice
+> > libsrtp
+> > libwebsock
+> > sofia-sip
+> > 
+> > Signed-off-by: gregd <gregd72002@gmail.com>
 > 
-> To make it work properly for systemd, /var/lock needs to be removed
-> from the skeleton or point to /run/lock (or replace the "L" with "L+"
-> in the tmpfiles.d rule).
+> I already started discussing this patch with Gregory on IRC:
+> 
+>   - this patch is broken because the mailer warped long lines.
+> 
+>   - it should have been split in different patches, one for each new
+>     package
+> 
+>   - indentation is incorrect in the help texts (spaces vs. tabs)
+> 
+> Gregory is resending this patch as-is so I can apply it and further work
+> on it.
+> 
+> More comments on this patch can be done in the followup respin. ;-)
 
-Sure, but as i explained to Samuel on IRC this is just the tip of a
-general cleanup regarding the base files.
-Even though systemd ships that doing more symlinks won't help the
-sysv-aspect of the cleanup since /run/lock won't exist whereas now lock
-is still /tmp hence no breakage until the other patches are sent/applied.
-The idea is to make a script to handle something similar to tmpfiles.d
-for sysv-style so we can drop all the symlink hackery which is pointless
-for systemd but necessary for sysv, we just stick is as S01basefiles or
-some other preferred name.
-And also to really move out all of the remaining files that make no
-sense for systemd and/or sysv into a basefiles (or other nifty name)
-package to avoid noise.
-Regards.
+While I certainly do appreciate a lot the fact that you're willing to
+take over the work of Gregory and do the final polishing, wouldn't it
+be better to teach people how to fish rather than fish for them? I.e
+make the comments, and let Gregory rework the patch series until it is
+OK for merging. Of course, this is only true if Gregory is
+willing/interested in pushing this set of patches up to the point where
+it becomes acceptable upstream.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
