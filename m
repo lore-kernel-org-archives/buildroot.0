@@ -1,148 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Dec 2014 18:48:30 +0100
-Subject: [Buildroot] [PATCH] package: add python-gobject
-Message-ID: <1417456110-5417-1-git-send-email-peter@korsgaard.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 1 Dec 2014 18:51:28 +0100
+Subject: [Buildroot] [PATCH v4 next 0/5] Improve silent builds
+In-Reply-To: <6658443.V0IJTQaiAA@aquila>
+References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
+ <6658443.V0IJTQaiAA@aquila>
+Message-ID: <CAHkwnC9B8ndR6hyzejBMzia7EfYo3BedpYM7CRhL4d_71grudA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                                  |  1 +
- .../0001-add-PYTHON_INCLUDES-override.patch        | 32 ++++++++++++++++++
- package/python-gobject/Config.in                   | 14 ++++++++
- package/python-gobject/python-gobject.hash         |  2 ++
- package/python-gobject/python-gobject.mk           | 39 ++++++++++++++++++++++
- 5 files changed, 88 insertions(+)
- create mode 100644 package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
- create mode 100644 package/python-gobject/Config.in
- create mode 100644 package/python-gobject/python-gobject.hash
- create mode 100644 package/python-gobject/python-gobject.mk
+On Tue, Nov 25, 2014 at 11:42 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Hello Fabio,
+>
+> If you are interested to keep quiet builds, you may be interested by
+> a tool called "reredirect"[1].
+>
+> reredirect allows to redirect outputs of a running program. I use
+> it to redirect output of make process (and its children) to log files
+> (eg. build/busybox-1.22.1/busybox_extract.log,
+> build/busybox-1.22.1/busybox_build.log, etc...).
+>
+> To do this, I add this snippet in my local.mk :
+>
+> define buildlog-silent
+>         $(call MESSAGE,$(2))
+>         if [ $(1) == start ]; then                                             \
+>                 reredirect -m $(@D)/$(3)_$(2).log $$PPID > $(BUILD_DIR)/restore_$$PPID.cmd; \
+>         else                                                                   \
+>                 sh $(BUILD_DIR)/restore_$$PPID.cmd;                            \
+>                 rm $(BUILD_DIR)/restore_$$PPID.cmd;                            \
+>         fi
+> endef
+> GLOBAL_INSTRUMENTATION_HOOKS += buildlog-silent
+>
+>
+> With that, my build only display steps names and all build output is
+> redirected to log files. I have also a more complex snippet to redirect
+> output to log file and to console. In this case, I use a fifo and "tee"
+> in add of "reredirect".
+>
+>
+> Note 1: You may have to disable ptrace_scope in order to make reredirect work:
+>    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+>
+>
+> [1] https://github.com/jerome-pouiller/reredirect
 
-diff --git a/package/Config.in b/package/Config.in
-index b8fc7d1..a8010d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ menu "external python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-gobject/Config.in"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-ipy/Config.in"
-diff --git a/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch b/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
-new file mode 100644
-index 0000000..d883f60
---- /dev/null
-+++ b/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
-@@ -0,0 +1,32 @@
-+[PATCH] m4/python.m4: add PYTHON_INCLUDES override for cross compilation
-+
-+As the configure script mixes up host/target python. Equivalent to the
-+similar code in dbus-python.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ m4/python.m4 |    4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+Index: python-gobject-2.28.6/m4/python.m4
-+===================================================================
-+--- python-gobject-2.28.6.orig/m4/python.m4
-++++ python-gobject-2.28.6/m4/python.m4
-+@@ -43,6 +43,9 @@
-+ [AC_REQUIRE([AM_PATH_PYTHON])
-+ AC_MSG_CHECKING(for headers required to compile python extensions)
-+ dnl deduce PYTHON_INCLUDES
-++if test "${PYTHON_INCLUDES+set}" = set; then
-++  AC_MSG_NOTICE([PYTHON_INCLUDES overridden to: $PYTHON_INCLUDES])
-++else
-+ py_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
-+ py_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
-+ PYTHON_CONFIG=`which $PYTHON`-config
-+@@ -54,6 +57,7 @@
-+   PYTHON_INCLUDES="$PYTHON_INCLUDES -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
-+ fi
-+ fi
-++fi
-+ AC_SUBST(PYTHON_INCLUDES)
-+ dnl check if the headers exist:
-+ save_CPPFLAGS="$CPPFLAGS"
-diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
-new file mode 100644
-index 0000000..475ff25
---- /dev/null
-+++ b/package/python-gobject/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_GOBJECT
-+	bool "python-gobject"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Python bindings for the GLib/GObject library
-+
-+	  https://wiki.gnome.org/action/show/Projects/PyGObject
-+
-+comment "python-gobject needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-new file mode 100644
-index 0000000..024419e
---- /dev/null
-+++ b/package/python-gobject/python-gobject.hash
-@@ -0,0 +1,2 @@
-+# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.sha256sum
-+sha256	fb8a1d4f665130a125011659bd347c7339c944232163dbb9a34fd0686577adb8  pygobject-2.28.6.tar.xz
-diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-new file mode 100644
-index 0000000..c47954c
---- /dev/null
-+++ b/package/python-gobject/python-gobject.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# python-gobject
-+#
-+################################################################################
-+
-+PYTHON_GOBJECT_VERSION_MAJOR = 2.28
-+PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).6
-+PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
-+PYTHON_GOBJECT_SITE = http://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
-+PYTHON_GOBJECT_LICENSE = LGPLv2.1+
-+PYTHON_GOBJECT_LICENSE_FILES = COPYING
-+PYTHON_GOBJECT_DEPENDENCIES = host-pkgconf libglib2
-+PYTHON_GOBJECT_CONF_OPTS = --disable-introspection
-+# for 0001-add-PYTHON_INCLUDES-override.patch
-+PYTHON_GOBJECT_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_GOBJECT_DEPENDENCIES += python host-python
-+
-+PYTHON_GOBJECT_CONF_ENV = \
-+	PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python2-config --includes)"
-+else
-+PYTHON_GOBJECT_DEPENDENCIES += python3 host-python3
-+
-+PYTHON_GOBJECT_CONF_ENV = \
-+	PYTHON=$(HOST_DIR)/usr/bin/python3 \
-+	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python3-config --includes)"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBFFI),y)
-+PYTHON_GOBJECT_CONF_OPTS += --with-ffi
-+PYTHON_GOBJECT_DEPENDENCIES += libffi
-+else
-+PYTHON_GOBJECT_CONF_OPTS += --without-ffi
-+endif
-+
-+$(eval $(autotools-package))
+Nice tool, thanks for letting me know about it.
+
+BR
 -- 
-2.1.3
+Fabio Porcedda
