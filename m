@@ -1,55 +1,38 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 1 Dec 2014 18:51:28 +0100
-Subject: [Buildroot] [PATCH v4 next 0/5] Improve silent builds
-In-Reply-To: <6658443.V0IJTQaiAA@aquila>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
- <6658443.V0IJTQaiAA@aquila>
-Message-ID: <CAHkwnC9B8ndR6hyzejBMzia7EfYo3BedpYM7CRhL4d_71grudA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Dec 2014 18:59:18 +0100
+Subject: [Buildroot] [PATCH v5 4/4] guile: Add new package
+In-Reply-To: <547B9A19.6060705@paguilar.org>
+References: <1416869790-12988-1-git-send-email-paguilar@paguilar.org>
+ <1416869790-12988-5-git-send-email-paguilar@paguilar.org>
+ <20141126215542.433523bf@free-electrons.com>
+ <547B9A19.6060705@paguilar.org>
+Message-ID: <20141201175918.GA4150@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 25, 2014 at 11:42 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> Hello Fabio,
->
-> If you are interested to keep quiet builds, you may be interested by
-> a tool called "reredirect"[1].
->
-> reredirect allows to redirect outputs of a running program. I use
-> it to redirect output of make process (and its children) to log files
-> (eg. build/busybox-1.22.1/busybox_extract.log,
-> build/busybox-1.22.1/busybox_build.log, etc...).
->
-> To do this, I add this snippet in my local.mk :
->
-> define buildlog-silent
->         $(call MESSAGE,$(2))
->         if [ $(1) == start ]; then                                             \
->                 reredirect -m $(@D)/$(3)_$(2).log $$PPID > $(BUILD_DIR)/restore_$$PPID.cmd; \
->         else                                                                   \
->                 sh $(BUILD_DIR)/restore_$$PPID.cmd;                            \
->                 rm $(BUILD_DIR)/restore_$$PPID.cmd;                            \
->         fi
-> endef
-> GLOBAL_INSTRUMENTATION_HOOKS += buildlog-silent
->
->
-> With that, my build only display steps names and all build output is
-> redirected to log files. I have also a more complex snippet to redirect
-> output to log file and to console. In this case, I use a fifo and "tee"
-> in add of "reredirect".
->
->
-> Note 1: You may have to disable ptrace_scope in order to make reredirect work:
->    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
->
->
-> [1] https://github.com/jerome-pouiller/reredirect
+Pedro, All,
 
-Nice tool, thanks for letting me know about it.
+On 2014-11-30 23:28 +0100, Pedro Aguilar spake thusly:
+> I confirm you that guile is building and running fine for me, I used an
+> Atmel SAMA5 processor.
 
-BR
+I already noticed at least one build failure with bdwgc:
+    http://autobuild.buildroot.net/results/529/529b0b6dd47744c13f56e59a4c669a3f5d56530d/
+
+;-p
+
+I have a fix I'll be sending sonish.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
