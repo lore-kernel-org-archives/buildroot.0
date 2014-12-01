@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:34:40 +0100
-Subject: [Buildroot] [PATCHv3 67/74] ifplugd: install configuration
-	files unconditionally
-In-Reply-To: <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:55 +0100")
+Date: Tue, 02 Dec 2014 00:35:05 +0100
+Subject: [Buildroot] [PATCHv3 68/74] sysklogd: install configuration
+	file unconditionally
+In-Reply-To: <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:56 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-68-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mw773pwv.fsf@dell.be.48ers.dk>
+ <1417357142-14307-69-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87iohv3pw6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed with the -m 0644 addition suggested by Yann, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
