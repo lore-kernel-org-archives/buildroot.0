@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:08:21 +0100
-Subject: [Buildroot] [git commit] wipe: don't install man pages
-Message-ID: <20141201221141.33CC28002F@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:07:41 +0100
+Subject: [Buildroot] [git commit] snowball-init: use <pkg>_INSTALL_INIT_SYSV
+	mechanism
+Message-ID: <20141201221141.2C4088002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c254d121b6d880d4e87f1a2512ccae0268e6d09f
+commit: http://git.buildroot.net/buildroot/commit/?id=754014693733d821a6a80a3206a446f549d39d6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We don't support installing documentation on the target, so there's no
-point in having explicit code to do so.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wipe/wipe.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/snowball-init/snowball-init.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
-index 4deabab..ee4682c 100644
---- a/package/wipe/wipe.mk
-+++ b/package/wipe/wipe.mk
-@@ -13,7 +13,6 @@ WIPE_LICENSE_FILES = LICENSE
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+index d71f347..40acdd6 100644
+--- a/package/snowball-init/snowball-init.mk
++++ b/package/snowball-init/snowball-init.mk
+@@ -9,7 +9,7 @@ SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
+ SNOWBALL_INIT_LICENSE = BSD-4c
+ SNOWBALL_INIT_LICENSE_FILES = debian/copyright
  
- define WIPE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/wipe $(TARGET_DIR)/usr/bin/wipe
--	$(INSTALL) -D $(@D)/wipe.1 $(TARGET_DIR)/usr/share/man/man1/wipe.1
+-define SNOWBALL_INIT_INSTALL_TARGET_CMDS
++define SNOWBALL_INIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
  endef
  
- $(eval $(autotools-package))
