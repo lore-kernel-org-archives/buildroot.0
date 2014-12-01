@@ -1,459 +1,87 @@
-From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Mon, 1 Dec 2014 19:37:23 +0000
-Subject: [Buildroot] [PATCH 1/1] Adding package janus-gateway and
-	dependencies
-Message-ID: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
+From: Rainer Berns <rainer.berns@berns-online.de>
+Date: Mon, 1 Dec 2014 20:50:10 +0100 (CET)
+Subject: [Buildroot] [PATCH] package/mono: fixing wrong monolite library path
+Message-ID: <1107172282.388978.1417463410889.JavaMail.open-xchange@oxbaltgw02.schlund.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a set of packages that are needed to compile janus-gateway:
-ding-libs
-gengetopt
-janus-gateway
-libnice
-libsrtp
-libwebsock
-sofia-sip
+Angelo 
 
-Signed-off-by: gregd <gregd72002@gmail.com>
----
- package/Config.in                                  |  7 ++++++
- package/Config.in.host                             |  1 +
- package/ding-libs/Config.in                        |  9 ++++++++
- package/ding-libs/ding-libs.mk                     | 17 ++++++++++++++
- package/gengetopt/Config.in                        |  6 +++++
- package/gengetopt/Config.in.host                   |  6 +++++
- package/gengetopt/gengetopt.mk                     | 16 +++++++++++++
- package/janus-gateway/Config.in                    | 13 +++++++++++
- .../janus-gateway-0001-disable-ssp.patch           | 12 ++++++++++
- package/janus-gateway/janus-gateway.mk             | 27 ++++++++++++++++++++++
- package/libnice/Config.in                          |  6 +++++
- .../libnice/libnice-0001-build-IPV6_RECVERR.patch  | 20 ++++++++++++++++
- package/libnice/libnice.mk                         | 11 +++++++++
- package/libsrtp/Config.in                          |  5 ++++
- package/libsrtp/libsrtp.mk                         | 13 +++++++++++
- package/libwebsock/Config.in                       |  6 +++++
- package/libwebsock/libwebsock.mk                   | 22 ++++++++++++++++++
- package/sofia-sip/Config.in                        |  5 ++++
- package/sofia-sip/sofia-sip.mk                     | 17 ++++++++++++++
- 19 files changed, 219 insertions(+)
- create mode 100644 package/ding-libs/Config.in
- create mode 100644 package/ding-libs/ding-libs.mk
- create mode 100644 package/gengetopt/Config.in
- create mode 100644 package/gengetopt/Config.in.host
- create mode 100644 package/gengetopt/gengetopt.mk
- create mode 100644 package/janus-gateway/Config.in
- create mode 100644 package/janus-gateway/janus-gateway-0001-disable-ssp.patch
- create mode 100644 package/janus-gateway/janus-gateway.mk
- create mode 100644 package/libnice/Config.in
- create mode 100644 package/libnice/libnice-0001-build-IPV6_RECVERR.patch
- create mode 100644 package/libnice/libnice.mk
- create mode 100644 package/libsrtp/Config.in
- create mode 100644 package/libsrtp/libsrtp.mk
- create mode 100644 package/libwebsock/Config.in
- create mode 100644 package/libwebsock/libwebsock.mk
- create mode 100644 package/sofia-sip/Config.in
- create mode 100644 package/sofia-sip/sofia-sip.mk
+building mono in buildroot-2014.11 is now ok.
+Thanks
 
-diff --git a/package/Config.in b/package/Config.in
-index b8fc7d1..d9ad7f5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -115,6 +115,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-        source "package/gawk/Config.in"
- endif
-+       source "package/gengetopt/Config.in"
-        source "package/gettext/Config.in"
-        source "package/git/Config.in"
-        source "package/gperf/Config.in"
-@@ -814,6 +815,7 @@ menu "Networking"
-        source "package/libmnl/Config.in"
-        source "package/libmodbus/Config.in"
-        source "package/libndp/Config.in"
-+       source "package/libnice/Config.in"
-        source "package/libnetfilter_acct/Config.in"
-        source "package/libnetfilter_conntrack/Config.in"
-        source "package/libnetfilter_cthelper/Config.in"
-@@ -832,6 +834,7 @@ menu "Networking"
-        source "package/libshairplay/Config.in"
-        source "package/libshout/Config.in"
-        source "package/libsoup/Config.in"
-+       source "package/libsrtp/Config.in"
-        source "package/libstrophe/Config.in"
-        source "package/libtirpc/Config.in"
-        source "package/libtorrent/Config.in"
-@@ -839,6 +842,7 @@ menu "Networking"
-        source "package/libupnpp/Config.in"
-        source "package/liburiparser/Config.in"
-        source "package/libvncserver/Config.in"
-+       source "package/libwebsock/Config.in"
-        source "package/libwebsockets/Config.in"
-        source "package/neon/Config.in"
-        source "package/nss-mdns/Config.in"
-@@ -849,6 +853,7 @@ menu "Networking"
-        source "package/rtmpdump/Config.in"
-        source "package/slirp/Config.in"
-        source "package/snmppp/Config.in"
-+       source "package/sofia-sip/Config.in"
-        source "package/thrift/Config.in"
-        source "package/usbredir/Config.in"
-        source "package/wvstreams/Config.in"
-@@ -867,6 +872,7 @@ menu "Other"
-        source "package/clapack/Config.in"
-        source "package/classpath/Config.in"
-        source "package/cppcms/Config.in"
-+       source "package/ding-libs/Config.in"
-        source "package/eigen/Config.in"
-        source "package/elfutils/Config.in"
-        source "package/fftw/Config.in"
-@@ -1040,6 +1046,7 @@ endif
-        source "package/iptraf-ng/Config.in"
-        source "package/iputils/Config.in"
-        source "package/iw/Config.in"
-+       source "package/janus-gateway/Config.in"
-        source "package/kismet/Config.in"
-        source "package/knock/Config.in"
-        source "package/leafnode2/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 185dcbc..c7fcfe5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -8,6 +8,7 @@ menu "Host utilities"
-        source "package/e2tools/Config.in.host"
-        source "package/genext2fs/Config.in.host"
-        source "package/genimage/Config.in.host"
-+       source "package/gengetopt/Config.in.host"
-        source "package/genpart/Config.in.host"
-        source "package/lpc3250loader/Config.in.host"
-        source "package/mtd/Config.in.host"
-diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
-new file mode 100644
-index 0000000..7c7a17f
---- /dev/null
-+++ b/package/ding-libs/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DING_LIBS
-+       bool "ding-libs"
-+#      depends on BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+       select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+       help
-+       Adds ding-libs
-+       https://git.fedorahosted.org/git/ding-libs.git
-+
-diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
-new file mode 100644
-index 0000000..582b9be
---- /dev/null
-+++ b/package/ding-libs/ding-libs.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# ding-libs
-+#
-+#############################################################
-+DING_LIBS_VERSION = 0_4_0
-+DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
-+DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
-+#DING_LIBS_DEPENDENCIES = BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+DING_LIBS_DEPENDENCIES = $(if !$(BR2_ENABLE_LOCALE),libiconv) $(if
-$(BR2_NEEDS_GETTEXT),gettext)
-+DING_LIBS_AUTORECONF = YES
-+DING_LIBS_INSTALL_STAGING = YES
-+DING_LIBS_LICENSE = GPLv3
-+DING_LIBS_LICENSE_FILES = COPYING
-+DING_LIBS_MAKE=$(MAKE1)
-+
-+$(eval $(autotools-package))
-diff --git a/package/gengetopt/Config.in b/package/gengetopt/Config.in
-new file mode 100644
-index 0000000..41d9f75
---- /dev/null
-+++ b/package/gengetopt/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_GENGETOPT
-+       bool "gengetopt"
-+       help
-+       Adds GNU Gengetopt
-+       Gengetopt is a tool to write command line option parsing code
-for C programs.
-+       http://www.gnu.org/software/gengetopt/gengetopt.html
-diff --git a/package/gengetopt/Config.in.host b/package/gengetopt/Config.in.host
-new file mode 100644
-index 0000000..5be8312
---- /dev/null
-+++ b/package/gengetopt/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_GENGETOPT
-+       bool "host gengetopt"
-+       help
-+       Adds GNU Gengetopt
-+       Gengetopt is a tool to write command line option parsing code
-for C programs.
-+       http://www.gnu.org/software/gengetopt/gengetopt.html
-diff --git a/package/gengetopt/gengetopt.mk b/package/gengetopt/gengetopt.mk
-new file mode 100644
-index 0000000..692dfe1
---- /dev/null
-+++ b/package/gengetopt/gengetopt.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# gengetopt
-+#
-+#############################################################
-+GENGETOPT_VERSION = 2.22.6
-+GENGETOPT_SITE = ftp://ftp.gnu.org/gnu/gengetopt/
-+GENGETOPT_AUTORECONF = YES
-+GENGETOPT_LICENSE = GPLv3
-+GENGETOPT_LICENSE_FILES = COPYING
-+
-+GENGETOPT_MAKE=$(MAKE1)
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-+
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-new file mode 100644
-index 0000000..3a201ba
---- /dev/null
-+++ b/package/janus-gateway/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_JANUS_GATEWAY
-+       bool "janus-gateway"
-+       select BR2_PACKAGE_LIBMICROHTTPD
-+       select BR2_PACKAGE_JANSSON
-+       select BR2_PACKAGE_LIBNICE
-+       select BR2_PACKAGE_SOFIA_SIP
-+       select BR2_PACKAGE_LIBSRTP
-+       select BR2_PACKAGE_DING_LIBS
-+       select BR2_PACKAGE_LIBWEBSOCK
-+       select BR2_PACKAGE_HOST_GENGETOPT
-+       help
-+       Adds janusgateway:
-+       https://github.com/meetecho/janus-gateway
-diff --git a/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
-b/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
-new file mode 100644
-index 0000000..5de8b3b
---- /dev/null
-+++ b/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
-@@ -0,0 +1,12 @@
-+diff -rupN janus-gateway-master.orig/Makefile.am
-janus-gateway-master/Makefile.am
-+--- janus-gateway-master.orig/Makefile.am      2014-11-27
-14:36:31.000000000 +0000
-++++ janus-gateway-master/Makefile.am   2014-12-01 16:39:50.551935028 +0000
-+@@ -14,7 +14,7 @@ AM_CFLAGS += -Wredundant-decls  # sophia
-+ # some fairly big refactoring though, which can wait.
-+ # AM_CFLAGS += -Wshadow -Wstrict-aliasing=2
-+
-+-AM_CFLAGS += -fstack-protector-all -g -ggdb -fPIC -rdynamic
-++AM_CFLAGS += -g -ggdb -fPIC -rdynamic
-+
-+ # FIXME: make docs work with distcheck
-+ DISTCHECK_CONFIGURE_FLAGS = --disable-docs --enable-post-processing
-diff --git a/package/janus-gateway/janus-gateway.mk
-b/package/janus-gateway/janus-gateway.mk
-new file mode 100644
-index 0000000..f03a3cb
---- /dev/null
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -0,0 +1,27 @@
-+#############################################################
-+#
-+# janus-gateway
-+#
-+#############################################################
-+JANUS_GATEWAY_VERSION = master
-+JANUS_GATEWAY_SITE_METHOD = git
-+JANUS_GATEWAY_SITE = https://github.com/meetecho/janus-gateway.git
-+JANUS_GATEWAY_LICENSE = GPLv3
-+JANUS_GATEWAY_LICENSE_FILES = COPYING
-+
-+JANUS_GATEWAY_DEPENDENCIES = host-pkgconf libmicrohttpd jansson
-libnice sofia-sip libsrtp ding-libs libwebsock host-gengetopt
-+
-+# Straight out of the repository, no ./configure
-+JANUS_GATEWAY_AUTORECONF = YES
-+
-+define JANUS_GATEWAY_M4
-+        mkdir -p $(@D)/m4
-+endef
-+JANUS_GATEWAY_POST_PATCH_HOOKS += JANUS_GATEWAY_M4
-+
-+JANUS_GATEWAY_CONF_OPTS = --disable-data-channels \
-+                               --disable-rabbitmq
-+
-+JANUS_GATEWAY_MAKE=$(MAKE1)
-+
-+$(eval $(autotools-package))
-diff --git a/package/libnice/Config.in b/package/libnice/Config.in
-new file mode 100644
-index 0000000..1ff8560
---- /dev/null
-+++ b/package/libnice/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBNICE
-+       bool "libnice"
-+       select BR2_PACKAGE_LIBGLIB2
-+       help
-+       Adds libnice - The GLib ICE implementation
-+       http://nice.freedesktop.org/wiki/
-diff --git a/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
-b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
-new file mode 100644
-index 0000000..39ef617
---- /dev/null
-+++ b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
-@@ -0,0 +1,20 @@
-+diff -rupN libnice-0.1.8.orig/stun/usages/bind.c
-libnice-0.1.8/stun/usages/bind.c
-+--- libnice-0.1.8.orig/stun/usages/bind.c      2014-09-22
-18:01:28.000000000 +0100
-++++ libnice-0.1.8/stun/usages/bind.c   2014-12-01 13:28:32.144707407 +0000
-+@@ -257,12 +257,16 @@ static int stun_socket (int family, int
-+     int yes = 1;
-+     switch (family)
-+     {
-++#ifdef IP_RECVERR
-+       case AF_INET:
-+         setsockopt (fd, SOL_IP, IP_RECVERR, &yes, sizeof (yes));
-++#endif
-+         break;
-++#ifdef IPV6_RECVERR
-+       case AF_INET6:
-+         setsockopt (fd, SOL_IPV6, IPV6_RECVERR, &yes, sizeof (yes));
-+         break;
-++#endif
-+       default:
-+         /* Nothing to do. */
-+         break;
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-new file mode 100644
-index 0000000..dd7f7a4
---- /dev/null
-+++ b/package/libnice/libnice.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# libnice
-+#
-+#############################################################
-+LIBNICE_VERSION = 0.1.8
-+LIBNICE_SITE = http://nice.freedesktop.org/releases/
-+LIBNICE_DEPENDENCIES = libglib2
-+LIBNICE_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
-diff --git a/package/libsrtp/Config.in b/package/libsrtp/Config.in
-new file mode 100644
-index 0000000..b81e9cf
---- /dev/null
-+++ b/package/libsrtp/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_LIBSRTP
-+       bool "libsrtp"
-+       help
-+       Adds libsrtp
-+       https://github.com/cisco/libsrtp
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-new file mode 100644
-index 0000000..b1e56eb
---- /dev/null
-+++ b/package/libsrtp/libsrtp.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# libsrtp
-+#
-+#############################################################
-+LIBSRTP_VERSION = v1.5.0
-+LIBSRTP_SITE_METHOD = git
-+LIBSRTP_SITE = https://github.com/cisco/libsrtp/
-+LIBSRTP_AUTORECONF = YES
-+LIBSRTP_INSTALL_STAGING = YES
-+LIBSRTP_LICENSE = BSD-3c
-+
-+$(eval $(autotools-package))
-diff --git a/package/libwebsock/Config.in b/package/libwebsock/Config.in
-new file mode 100644
-index 0000000..427b3fd
---- /dev/null
-+++ b/package/libwebsock/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBWEBSOCK
-+       bool "libwebsock"
-+       select BR2_PACKAGE_LIBEVENT
-+       help
-+       Adds libwebsock
-+       https://github.com/payden/libwebsock
-diff --git a/package/libwebsock/libwebsock.mk b/package/libwebsock/libwebsock.mk
-new file mode 100644
-index 0000000..f82b553
---- /dev/null
-+++ b/package/libwebsock/libwebsock.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# libwebsock
-+#
-+#############################################################
-+LIBWEBSOCK_VERSION = 3c1615eeadb0b582b63851073bfe3e5132f31ebc
-+LIBWEBSOCK_SITE_METHOD = git
-+LIBWEBSOCK_SITE = https://github.com/payden/libwebsock.git
-+LIBWEBSOCK_DEPENDENCIES = libevent
-+LIBWEBSOCK_AUTORECONF = YES
-+LIBWEBSOCK_INSTALL_STAGING = YES
-+LIBWEBSOCK_LICENSE = LGPLv3
-+LIBWEBSOCK_LICENSE_FILES = COPYING
-+
-+LIBWEBSOCK_CFLAGS = $(TARGET_CFLAGS)
-+LIBWEBSOCK_LIBS += -lpthread -levent
-+
-+LIBWEBSOCK_CONF_ENV += \
-+        CFLAGS="$(LIBWEBSOCK_CFLAGS)" \
-+        LIBS="$(LIBWEBSOCK_LIBS)"
-+
-+$(eval $(autotools-package))
-diff --git a/package/sofia-sip/Config.in b/package/sofia-sip/Config.in
-new file mode 100644
-index 0000000..d9045b5
---- /dev/null
-+++ b/package/sofia-sip/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_SOFIA_SIP
-+       bool "sofia-sip"
-+       help
-+       Adds Sofia-SIP Library
-+       http://sofia-sip.sourceforge.net
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-new file mode 100644
-index 0000000..0539453
---- /dev/null
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# sofiasip
-+#
-+#############################################################
-+SOFIA_SIP_VERSION = 1.12.11
-+SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION).tar.gz
-+SOFIA_SIP_SITE =
-http://downloads.sourceforge.net/project/sofia-sip/sofia-sip/$(SOFIA_SIP_VERSION)
-+SOFIA_SIP_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
-+else
-+       SOFIA_SIP_CONF_OPTS = --disable-ip6
-+endif
-+
-+
-+$(eval $(autotools-package))
---
-1.9.1
+Tested-by: Rainer Berns <Rainer.Berns@berns-online.de>
+
+Angelo, Rainer, All,
+
+On 2014-11-30 22:41 +0100, Angelo Compagnucci spake thusly:
+> Due to a bug in makefile logic, monolite libraries path will not
+> be selected when EXTERNAL_MCS parameter is specified.
+> Setting EXTERNAL_MCS to a non existent binary, makes the internal logic
+> to fallback to monolite, setting correctly both binary and
+> library paths.
+> This has the benefit to force host-mono to always use monolite as
+> bootstrap compiler also in case a mono compiler is already installed
+> on the system.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/fc00952bef03cf3b4785be1a0d9c08dc84aa3f54/
+> 
+> 
+
+Angelo, it is customary to add a reported-by tag to credit the person
+that reported a bug. It's done like so:
+
+Reported-by: Rainer Berns <rainer.berns@berns-online.de>
+
+It is also customary to put the reporter in Cc: so he gets a proposed
+fix and gets to test it.
+
+Rainer, care to test this patch, please? If it works, can you reply to
+this mail and add your tested-by tag?
+
+It's done like so: Tested-by Your NAME <you@there>
+
+Thank you both! :-)
+
+/me is feeling like being educative tonight. Hihi! ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/mono/mono.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index df67c33..d4beb5f 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -55,7 +55,7 @@ HOST_MONO_CONF_OPTS += \
+>  	--with-profile4=$(if $(BR2_PACKAGE_MONO_40),yes,no) \
+>  	--with-profile4_5=$(if $(BR2_PACKAGE_MONO_45),yes,no)
+>  
+> -HOST_MONO_MAKE_OPTS += EXTERNAL_MCS="$(@D)/mcs/class/lib/monolite/basic.exe"
+> +HOST_MONO_MAKE_OPTS += EXTERNAL_MCS=false 
+>  
+>  HOST_MONO_DEPENDENCIES = host-monolite host-gettext
+>  
+> -- 
+> 2.2.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
