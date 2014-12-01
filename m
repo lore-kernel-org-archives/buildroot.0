@@ -1,41 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 22:35:55 +0100
-Subject: [Buildroot] [git commit] radvd: use <pkg>_INSTALL_INIT_SYSV
-Message-ID: <20141201221140.42F4E8002F@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 22:46:13 +0100
+Subject: [Buildroot] [git commit] stunnel: use the <pkg>_INSTALL_INIT_SYSV
+	mechanism
+Message-ID: <20141201221140.82BD18002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f21c9fdacb48fd43075e6dbe447171ec84b6b10
+commit: http://git.buildroot.net/buildroot/commit/?id=cbe34dd655f456393979588aeb8372d417164022
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit changes the radvd to use the <pkg>_INSTALL_INIT_SYSV
-mechanism instead of using a post install target hook. We also use a
-full destination path when calling $(INSTALL).
+Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
+the init script, we rename it to STUNNEL_INSTALL_CONF.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/radvd/radvd.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/stunnel/stunnel.mk |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index bd2086d..cc50ce4 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -12,10 +12,8 @@ RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- # We're patching configure.ac/Makefile.am.
- RADVD_AUTORECONF = YES
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index dc56261..ac2963e 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -18,14 +18,17 @@ else
+ STUNNEL_CONF_OPTS += --disable-systemd
+ endif
  
--define RADVD_INSTALL_INITSCRIPT
--	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
-+define RADVD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d/S50radvd
+-define STUNNEL_INSTALL_CONF_SCRIPT
+-	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
++define STUNNEL_INSTALL_CONF
+ 	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
+ 		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
+ 			$(TARGET_DIR)/etc/stunnel/stunnel.conf
+ 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
  endef
  
--RADVD_POST_INSTALL_TARGET_HOOKS += RADVD_INSTALL_INITSCRIPT
--
+-STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
++STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
++
++define STUNNEL_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
++endef
+ 
  $(eval $(autotools-package))
