@@ -1,35 +1,28 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 1 Dec 2014 12:33:42 +0000
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Dec 2014 13:38:07 +0100
 Subject: [Buildroot] [PATCH] xserver_xorg-server: libunwind support is
- broken on MIPS64 n32
+	broken on MIPS64 n32
 In-Reply-To: <1417436666-54652-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 1 Dec 2014 12:24:26 +0000")
 References: <1417436666-54652-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <547C6026.2080501@imgtec.com>
+Message-ID: <87egsjh7f4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, the former patch was a bit weird. In the commit log you said you
-wanted to disable libunwind support for MIPS64, but you only did it for
-MIPS64 Little Endian (BR2_mips64el). Why only the little endian variant
-and not both big and little endian variants?
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Anyway, this is not related to the endianess or the bitness. It's
-related to the ABI. In the bug report is explained that it fails only
-for the n32 ABI because libunwind assumes a 64bit word size for all
-MIPS64 variants, which is wrong. MIPS64 n32 has a 32bit word size. Then,
-xorg-server tries to do a conversion of a 64bit variable provided by
-libunwind into a (void *), which is 32bit in MIPS64 n32, and it fails
-with a message like this one:
+ > Amend the former commit and disable xorg-server with libunwind support
+ > only for MIPS64 n32, as stated in the bug report:
 
-backtrace.c:90:20: error: cast to pointer from integer of different size
-[-Werror=int-to-pointer-cast]
+ > https://bugs.freedesktop.org/show_bug.cgi?id=79939
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
 
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Venlig hilsen,
+Peter Korsgaard 
