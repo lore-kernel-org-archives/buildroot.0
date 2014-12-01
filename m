@@ -1,53 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 22:53:34 +0100
-Subject: [Buildroot] [git commit] nfs-utils: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
-Message-ID: <20141201221140.BCAA18002F@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 22:44:35 +0100
+Subject: [Buildroot] [git commit] portmap: improve installation of binaries
+Message-ID: <20141201221140.757C18002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e28cb103ab6944d51547266ddb58997897988cc8
+commit: http://git.buildroot.net/buildroot/commit/?id=f763f74422024780d23c0f0ffb2aa71b9b4a2e25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also move back the NFS_UTILS_INSTALL_FIXUP hook registration right
-after the hook definition.
+This commit explicits the permissions with which executables are
+installed, and also makes sure that the build is aborted if one of the
+binaries cannot be installed, instead of silently ignoring the error.
 
-[Peter: use install -D as noted by Yann]
+[Peter: fixop typos in commit message as noted by Yann]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/nfs-utils.mk |   11 +++++++----
- 1 files changed, 7 insertions(+), 4 deletions(-)
+ package/portmap/portmap.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 8b56edf..91a1baf 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -35,17 +35,20 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
- endif
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index a410443..5caf54c 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -22,7 +22,7 @@ endef
  
- define NFS_UTILS_INSTALL_FIXUP
--	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
--		$(TARGET_DIR)/etc/init.d/S60nfs
- 	rm -f $(NFS_UTILS_TARGETS_)
+ define PORTMAP_INSTALL_TARGET_CMDS
+ 	for sbin in $(PORTMAP_SBINS); do \
+-		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
++		$(INSTALL) -D -m 0755 $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin || exit 1; \
+ 	done
  endef
- 
-+NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
-+
-+define NFS_UTILS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
-+		$(TARGET_DIR)/etc/init.d/S60nfs
-+endef
-+
- define NFS_UTILS_REMOVE_NFSIOSTAT
- 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
- endef
- 
--NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
--
- # nfsiostat is interpreted python, so remove it unless it's in the target
- NFS_UTILS_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_PYTHON),,NFS_UTILS_REMOVE_NFSIOSTAT)
  
