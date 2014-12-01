@@ -1,36 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  1 Dec 2014 11:17:00 -0300
-Subject: [Buildroot] [PATCH 5/5] Remove BR2_DEPRECATED_SINCE_2013_11
-In-Reply-To: <1417443420-31985-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417443420-31985-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1417443420-31985-5-git-send-email-gustavo@zacarias.com.ar>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Mon,  1 Dec 2014 22:18:16 +0800
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: Only install the relevant
+	unit file
+Message-ID: <1417443496-9198-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The symbol is unused so remove it.
+Previous to this patch, if BR2_PACKAGE_DHCP_CLIENT was selected,
+dhcpd.service was installed to the target on systemd systems.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On the resultant system, this would mean that systemctl would
+show an error starting dhcpd.service, as the requisite files
+do not exist. This does not cause issue on sysvinit systems
+as the init scripts silently error when the files aren't found.
+
+Fix this by adding a conditional check to the install define.
+
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 ---
- Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/dhcp/dhcp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index e2d3dfd..1aa1080 100644
---- a/Config.in
-+++ b/Config.in
-@@ -298,10 +298,6 @@ config BR2_DEPRECATED
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 1eb6b32..2aa690f 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -75,6 +75,7 @@ define DHCP_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
+ endef
  
- if BR2_DEPRECATED
++ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+ define DHCP_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dhcp/dhcpd.service \
+ 		$(TARGET_DIR)/lib/systemd/system/dhcpd.service
+@@ -89,6 +90,7 @@ define DHCP_INSTALL_INIT_SYSTEMD
+ 	echo "f /var/lib/dhcp/dhcpd.leases - - - - -" >> \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/dhcpd.conf
+ endef
++endif
  
--config BR2_DEPRECATED_SINCE_2013_11
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2014_02
- 	bool
- 	default y
+ define DHCP_INSTALL_TARGET_CMDS
+ 	$(DHCP_INSTALL_RELAY)
 -- 
-2.0.4
+2.1.3
