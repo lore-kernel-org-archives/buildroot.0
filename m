@@ -1,33 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:31:31 +0100
-Subject: [Buildroot] [git commit] irda-utils: add error handling to for loop
-Message-ID: <20141201223450.C41C280048@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:33:14 +0100
+Subject: [Buildroot] [git commit] qt5base: add error handling to for loop
+Message-ID: <20141201223450.EA8FC80048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0b663ce9617d0ba53e6e8c15ab3feebdd4564d4
+commit: http://git.buildroot.net/buildroot/commit/?id=1af2db0f77cc98d57012f238afbceb203b9b739b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irda-utils/irda-utils.mk |    2 +-
+ package/qt5/qt5base/qt5base.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
-index e4958e5..2c35dff 100644
---- a/package/irda-utils/irda-utils.mk
-+++ b/package/irda-utils/irda-utils.mk
-@@ -32,7 +32,7 @@ IRDA_UTILS_SBINS- += $(IRDA_UTILS_SBINS-y)
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 57ea1c8..788b2d7 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -211,7 +211,7 @@ endef
  
- define IRDA_UTILS_INSTALL_TARGET_CMDS
- 	for i in $(IRDA_UTILS_SBINS-y); do \
--		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i; \
-+		$(INSTALL) -m 0755 -D $(@D)/$$i/$$i $(TARGET_DIR)/usr/sbin/$$i || exit 1; \
+ define QT5BASE_INSTALL_TARGET_LIBS
+ 	for lib in $(QT5BASE_INSTALL_LIBS_y); do \
+-		cp -dpf $(STAGING_DIR)/usr/lib/lib$${lib}.so.* $(TARGET_DIR)/usr/lib ; \
++		cp -dpf $(STAGING_DIR)/usr/lib/lib$${lib}.so.* $(TARGET_DIR)/usr/lib || exit 1 ; \
  	done
  endef
  
