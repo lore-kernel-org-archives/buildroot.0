@@ -1,84 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 20:06:32 +0100
-Subject: [Buildroot] [git commit] arch/mips: remove deprecated mips1/2/3/4
-	support
-Message-ID: <20141201190932.66DB97FFE7@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 20:08:32 +0100
+Subject: [Buildroot] [git commit] ci20_defconfig: remove
+	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+Message-ID: <20141201190932.7EAE47FFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd45fe0efb678a8a674330ad46b7641a3284dff9
+commit: http://git.buildroot.net/buildroot/commit/?id=1d627b3632f4b212f6ebe66813e7135a734c54ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove the support for generating mips1/2/3/4 code since it has been
-deprecated for more than a year now.
-Also remove the unnecessary kludges in packages for it.
+We had this option in the defconfig because the kernel defconfig we
+provide doesn't have CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT, so a
+/dev management which creates the devices dynamically using only
+devtmpfs would not work. However, CONFIG_DEVTMPFS and
+CONFIG_DEVTMPFS_MOUNT are automatically added to the kernel config when
+you build the kernel using Buildroot, except when you choose
+BR2_ROOTFS_DEVICE_CREATION_STATIC as a /dev management. This is handled
+by linux/linux.mk.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.mips       |   12 ------------
- package/fdk-aac/Config.in |    4 ----
- package/uclibc/Config.in  |    4 ----
- 3 files changed, 0 insertions(+), 20 deletions(-)
+ configs/ci20_defconfig |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 18138de..7630503 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -9,18 +9,6 @@ choice
- 	  64bit cabable: 3, 4, 64, 64r2
- 	  non-64bit capable: 1, 2, 32, 32r2
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 7f1bf87..a7b7622 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -7,7 +7,6 @@ BR2_mips_32r2=y
+ BR2_KERNEL_HEADERS_VERSION=y
+ BR2_DEFAULT_KERNEL_VERSION="3.0.8"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
  
--config BR2_mips_1
--	bool "mips I (generic)"
--	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED_SINCE_2013_11
--config BR2_mips_2
--	bool "mips II"
--	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED_SINCE_2013_11
--config BR2_mips_3
--	bool "mips III"
--	depends on BR2_DEPRECATED_SINCE_2013_11
--config BR2_mips_4
--	bool "mips IV"
--	depends on BR2_DEPRECATED_SINCE_2013_11
- config BR2_mips_32
- 	bool "mips 32"
- 	depends on !BR2_ARCH_IS_64
-diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
-index 7922364..1ec59e1 100644
---- a/package/fdk-aac/Config.in
-+++ b/package/fdk-aac/Config.in
-@@ -5,9 +5,6 @@ config BR2_PACKAGE_FDK_AAC
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
- 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_sh || BR2_sh64
--	# fdk-aac uses the 'msub' instruction whis is available only in
--	# mips32 and mips64 ISAs
--	depends on !(BR2_mips_1 || BR2_mips_2 || BR2_mips_3 || BR2_mips_4)
- 
- 	help
- 	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
-@@ -21,4 +18,3 @@ comment "fdk-aac needs a toolchain w/ C++"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
- 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_sh || BR2_sh64
--	depends on !(BR2_mips_1 || BR2_mips_2 || BR2_mips_3 || BR2_mips_4)
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 37f398a..290f19b 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -216,10 +216,6 @@ config BR2_UCLIBC_MIPS_ABI
- config BR2_UCLIBC_MIPS_ISA
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
--	default 1 if BR2_mips_1
--	default 2 if BR2_mips_2
--	default 3 if BR2_mips_3
--	default 4 if BR2_mips_4
- 	default MIPS32 if BR2_mips_32
- 	default MIPS32R2 if BR2_mips_32r2
- 	default MIPS64 if BR2_mips_64
+ # kernel
