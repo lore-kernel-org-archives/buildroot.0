@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:28:46 +0100
-Subject: [Buildroot] [PATCHv3 63/74] proftpd: install configuration file
+Date: Tue, 02 Dec 2014 00:29:20 +0100
+Subject: [Buildroot] [PATCHv3 64/74] samba: install configuration file
 	unconditionally
-In-Reply-To: <1417357142-14307-64-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:51 +0100")
+In-Reply-To: <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:52 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-64-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87zjb73q6p.fsf@dell.be.48ers.dk>
+ <1417357142-14307-65-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vblv3q5r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
