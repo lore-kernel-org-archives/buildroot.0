@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  1 Dec 2014 22:55:04 +0100
-Subject: [Buildroot] [PATCHv2 03/12] binutils/2.23: add patch to warn about
-	unsafe library paths
+Date: Mon,  1 Dec 2014 22:55:06 +0100
+Subject: [Buildroot] [PATCHv2 05/12] binutils/arc-4.8-R3: add patch to warn
+	about unsafe library paths
 In-Reply-To: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417470913-1280-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417470913-1280-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,28 @@ To: buildroot@busybox.net
 
 This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
 that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
-etc.). The patch was adapted to binutils 2.23, and modified to support
-the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
-instead of just warn when unsafe paths are used. Even though erroring
-out can be chosen by passing --error-poison-system-directories, we are
-not sure this option in LDFLAGS will always be passed, so having an
-environment variable guarantees it will always be passed, and also
-allows to have an identical behavior to the external toolchain
-wrapper.
+etc.). The patch was adapted to binutils arc-4.8-R3, and modified to
+support the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to
+error out instead of just warn when unsafe paths are used. Even though
+erroring out can be chosen by passing
+--error-poison-system-directories, we are not sure this option in
+LDFLAGS will always be passed, so having an environment variable
+guarantees it will always be passed, and also allows to have an
+identical behavior to the external toolchain wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../2.23.2/600-poison-system-directories.patch     | 279 +++++++++++++++++++++
+ .../arc-4.8-R3/600-poison-system-directories.patch | 279 +++++++++++++++++++++
  1 file changed, 279 insertions(+)
- create mode 100644 package/binutils/2.23.2/600-poison-system-directories.patch
+ create mode 100644 package/binutils/arc-4.8-R3/600-poison-system-directories.patch
 
-diff --git a/package/binutils/2.23.2/600-poison-system-directories.patch b/package/binutils/2.23.2/600-poison-system-directories.patch
+diff --git a/package/binutils/arc-4.8-R3/600-poison-system-directories.patch b/package/binutils/arc-4.8-R3/600-poison-system-directories.patch
 new file mode 100644
-index 0000000..780e48e
+index 0000000..8a3bdc6
 --- /dev/null
-+++ b/package/binutils/2.23.2/600-poison-system-directories.patch
++++ b/package/binutils/arc-4.8-R3/600-poison-system-directories.patch
 @@ -0,0 +1,279 @@
-+Patch adapted to binutils 2.23.2 and extended to use
++Patch adapted to binutils arc-4.8-R3 and extended to use
 +BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -232,7 +232,7 @@ index 0000000..780e48e
 +===================================================================
 +--- a/ld/ld.texinfo
 ++++ b/ld/ld.texinfo
-+@@ -2154,6 +2154,18 @@
++@@ -2156,6 +2156,18 @@
 + 
 + Passing @code{none} for @var{style} disables the setting from any
 + @code{--build-id} options earlier on the command line.
