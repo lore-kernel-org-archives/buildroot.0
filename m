@@ -1,40 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:01:19 +0100
-Subject: [Buildroot] [git commit] tftpd: use <pkg>_INSTALL_INIT_SYSV
+Date: Mon, 1 Dec 2014 23:06:22 +0100
+Subject: [Buildroot] [git commit] tinyhttpd: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
-Message-ID: <20141201221141.063348002F@busybox.osuosl.org>
+Message-ID: <20141201221141.146018002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac1c9a2af8bea0a5b5604fdff26a70f363a64fc0
+commit: http://git.buildroot.net/buildroot/commit/?id=577a1b2072ce4cc00c7bf7b8b966bb61fd98293a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also make sure we use a full path for the destination of the
-$(INSTALL) command.
-
-[Peter: use install -m as noted by Yann]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tftpd/tftpd.mk |    5 ++++-
+ package/tinyhttpd/tinyhttpd.mk |    5 ++++-
  1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 816a25e..778d45f 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -21,7 +21,10 @@ endif
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
- 	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
--	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index ec47fd9..0934b71 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -16,9 +16,12 @@ endef
+ 
+ define TINYHTTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/httpd $(TARGET_DIR)/usr/sbin/tinyhttpd
++	mkdir -p $(TARGET_DIR)/var/www
 +endef
 +
-+define TFTPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
++define TINYHTTPD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/tinyhttpd/S85tinyhttpd \
+ 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
+-	mkdir -p $(TARGET_DIR)/var/www
  endef
  
- $(eval $(autotools-package))
+ $(eval $(generic-package))
