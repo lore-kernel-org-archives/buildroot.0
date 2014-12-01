@@ -1,146 +1,148 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 1 Dec 2014 16:36:26 +0000
-Subject: [Buildroot] [PATCH] ffmpeg: bump version to 2.4.4
-Message-ID: <1417451786-13519-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  1 Dec 2014 18:48:30 +0100
+Subject: [Buildroot] [PATCH] package: add python-gobject
+Message-ID: <1417456110-5417-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.4.4.
-- Remove upstreamed patch
-- Add a hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/0001-fminf.patch |   94 ---------------------------------------
- package/ffmpeg/ffmpeg.hash      |    2 +
- package/ffmpeg/ffmpeg.mk        |    2 +-
- 3 files changed, 3 insertions(+), 95 deletions(-)
- delete mode 100644 package/ffmpeg/0001-fminf.patch
- create mode 100644 package/ffmpeg/ffmpeg.hash
+ package/Config.in                                  |  1 +
+ .../0001-add-PYTHON_INCLUDES-override.patch        | 32 ++++++++++++++++++
+ package/python-gobject/Config.in                   | 14 ++++++++
+ package/python-gobject/python-gobject.hash         |  2 ++
+ package/python-gobject/python-gobject.mk           | 39 ++++++++++++++++++++++
+ 5 files changed, 88 insertions(+)
+ create mode 100644 package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
+ create mode 100644 package/python-gobject/Config.in
+ create mode 100644 package/python-gobject/python-gobject.hash
+ create mode 100644 package/python-gobject/python-gobject.mk
 
-diff --git a/package/ffmpeg/0001-fminf.patch b/package/ffmpeg/0001-fminf.patch
-deleted file mode 100644
-index 8ecd5c1..0000000
---- a/package/ffmpeg/0001-fminf.patch
-+++ /dev/null
-@@ -1,94 +0,0 @@
--Fix build error
--
--CC      libavdevice/alldevices.o
--In file included from ./libavutil/internal.h:167:0,
--                 from ./libavutil/common.h:415,
--                 from ./libavutil/avutil.h:289,
--                 from ./libavutil/log.h:25,
--                 from libavdevice/avdevice.h:46,
--                 from libavdevice/alldevices.c:22:
--./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
-- static av_always_inline av_const float fminf(float x, float y)
--                                        ^
--make: *** [libavdevice/alldevices.o] Error 1
--
--using buildroot-compiled uClibc toolchain, used defconfig:
--
--BR2_x86_64=y
--BR2_x86_corei7=y
--BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
--BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
--BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
--BR2_PACKAGE_FFMPEG=y
--BR2_PACKAGE_FFMPEG_GPL=y
--BR2_PACKAGE_FFMPEG_NONFREE=y
--BR2_PACKAGE_FFMPEG_FFPLAY=y
--BR2_PACKAGE_FFMPEG_FFSERVER=y
--BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
--BR2_PACKAGE_FFMPEG_POSTPROC=y
--
--Patch ported from upstream commit:
--http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=4436a8f44dedc83767b3d9da9beb85d1fae2ca30
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From 4436a8f44dedc83767b3d9da9beb85d1fae2ca30 Mon Sep 17 00:00:00 2001
--From: Carl Eugen Hoyos <cehoyos@ag.or.at>
--Date: Sat, 8 Nov 2014 10:48:37 +0100
--Subject: [PATCH] Remove fminf() emulation.
--
--The emulation is unused and causes compilation trouble on systems
--where fminf() is defined in <math.h> but missing from libm.
--This should fix compilation on Debian powerpcspe.
-----
-- configure        |    2 --
-- libavutil/libm.h |   10 ----------
-- 2 files changed, 12 deletions(-)
--
--diff --git a/configure b/configure
--index 314e7ff..978ef12 100755
----- a/configure
--+++ b/configure
--@@ -1678,7 +1678,6 @@ MATH_FUNCS="
--     exp2
--     exp2f
--     expf
---    fminf
--     isinf
--     isnan
--     ldexpf
--@@ -4813,7 +4812,6 @@ disabled crystalhd || check_lib libcrystalhd/libcrystalhd_if.h DtsCrystalHDVersi
-- atan2f_args=2
-- ldexpf_args=2
-- powf_args=2
---fminf_args=2
-- 
-- for func in $MATH_FUNCS; do
--     eval check_mathfunc $func \${${func}_args:-1}
--diff --git a/libavutil/libm.h b/libavutil/libm.h
--index 28d5df8..6c17b28 100644
----- a/libavutil/libm.h
--+++ b/libavutil/libm.h
--@@ -82,16 +82,6 @@ static av_always_inline float cbrtf(float x)
-- #define exp2f(x) ((float)exp2(x))
-- #endif /* HAVE_EXP2F */
-- 
---#if !HAVE_FMINF
---#undef fminf
---static av_always_inline av_const float fminf(float x, float y)
---{
---    //Note, the NaN special case is needed for C spec compliance, it should be
---    //optimized away if the users compiler is configured to assume no NaN
---    return x > y ? y : (x == x ? x : y);
---}
---#endif
---
-- #if !HAVE_ISINF
-- static av_always_inline av_const int isinf(float x)
-- {
---- 
--1.7.10.4
--
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+diff --git a/package/Config.in b/package/Config.in
+index b8fc7d1..a8010d3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -494,6 +494,7 @@ menu "external python modules"
+ 	source "package/python-dpkt/Config.in"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-gobject/Config.in"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-ipy/Config.in"
+diff --git a/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch b/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
 new file mode 100644
-index 0000000..4363ce1
+index 0000000..d883f60
 --- /dev/null
-+++ b/package/ffmpeg/ffmpeg.hash
++++ b/package/python-gobject/0001-add-PYTHON_INCLUDES-override.patch
+@@ -0,0 +1,32 @@
++[PATCH] m4/python.m4: add PYTHON_INCLUDES override for cross compilation
++
++As the configure script mixes up host/target python. Equivalent to the
++similar code in dbus-python.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ m4/python.m4 |    4 ++++
++ 1 file changed, 4 insertions(+)
++
++Index: python-gobject-2.28.6/m4/python.m4
++===================================================================
++--- python-gobject-2.28.6.orig/m4/python.m4
+++++ python-gobject-2.28.6/m4/python.m4
++@@ -43,6 +43,9 @@
++ [AC_REQUIRE([AM_PATH_PYTHON])
++ AC_MSG_CHECKING(for headers required to compile python extensions)
++ dnl deduce PYTHON_INCLUDES
+++if test "${PYTHON_INCLUDES+set}" = set; then
+++  AC_MSG_NOTICE([PYTHON_INCLUDES overridden to: $PYTHON_INCLUDES])
+++else
++ py_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
++ py_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
++ PYTHON_CONFIG=`which $PYTHON`-config
++@@ -54,6 +57,7 @@
++   PYTHON_INCLUDES="$PYTHON_INCLUDES -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
++ fi
++ fi
+++fi
++ AC_SUBST(PYTHON_INCLUDES)
++ dnl check if the headers exist:
++ save_CPPFLAGS="$CPPFLAGS"
+diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
+new file mode 100644
+index 0000000..475ff25
+--- /dev/null
++++ b/package/python-gobject/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_GOBJECT
++	bool "python-gobject"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Python bindings for the GLib/GObject library
++
++	  https://wiki.gnome.org/action/show/Projects/PyGObject
++
++comment "python-gobject needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+new file mode 100644
+index 0000000..024419e
+--- /dev/null
++++ b/package/python-gobject/python-gobject.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 9ad041c0201fb8b2605c5c5c0259c373c793c32cfc96f7315fca67e900494afc ffmpeg-2.4.4.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 1a68fa0..22577e6 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.4.3
-+FFMPEG_VERSION = 2.4.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
++# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.sha256sum
++sha256	fb8a1d4f665130a125011659bd347c7339c944232163dbb9a34fd0686577adb8  pygobject-2.28.6.tar.xz
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+new file mode 100644
+index 0000000..c47954c
+--- /dev/null
++++ b/package/python-gobject/python-gobject.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# python-gobject
++#
++################################################################################
++
++PYTHON_GOBJECT_VERSION_MAJOR = 2.28
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).6
++PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
++PYTHON_GOBJECT_SITE = http://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
++PYTHON_GOBJECT_LICENSE = LGPLv2.1+
++PYTHON_GOBJECT_LICENSE_FILES = COPYING
++PYTHON_GOBJECT_DEPENDENCIES = host-pkgconf libglib2
++PYTHON_GOBJECT_CONF_OPTS = --disable-introspection
++# for 0001-add-PYTHON_INCLUDES-override.patch
++PYTHON_GOBJECT_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_GOBJECT_DEPENDENCIES += python host-python
++
++PYTHON_GOBJECT_CONF_ENV = \
++	PYTHON=$(HOST_DIR)/usr/bin/python2 \
++	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python2-config --includes)"
++else
++PYTHON_GOBJECT_DEPENDENCIES += python3 host-python3
++
++PYTHON_GOBJECT_CONF_ENV = \
++	PYTHON=$(HOST_DIR)/usr/bin/python3 \
++	PYTHON_INCLUDES="$(shell $(STAGING_DIR)/usr/bin/python3-config --includes)"
++endif
++
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++PYTHON_GOBJECT_CONF_OPTS += --with-ffi
++PYTHON_GOBJECT_DEPENDENCIES += libffi
++else
++PYTHON_GOBJECT_CONF_OPTS += --without-ffi
++endif
++
++$(eval $(autotools-package))
 -- 
-1.7.1
+2.1.3
