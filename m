@@ -1,67 +1,35 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  1 Dec 2014 23:04:56 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/nginx: remove rtsig module
-	support
-In-Reply-To: <1417471496-7391-1-git-send-email-s.martin49@gmail.com>
-References: <1417471496-7391-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1417471496-7391-2-git-send-email-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Dec 2014 23:05:47 +0100
+Subject: [Buildroot] [PATCHv3 24/74] openvpn: use
+	<pkg>_INSTALL_INIT_SYSV mechanism
+In-Reply-To: <20141130154505.GC4124@free.fr> (Yann E. MORIN's message of "Sun, 
+ 30 Nov 2014 16:45:05 +0100")
+References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417357142-14307-25-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141130154505.GC4124@free.fr>
+Message-ID: <87sigzauv8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtsig module uses the deprecated sysctl syscall, which is not
-implemented on some recent architecture (such as arc).
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Also, rtsig module is almost consider as deprecated by some nginx
-developers [1].
+Hi,
 
-So, just remove this option.
+ > Suddenly, I realise that some packages use 755 while others use 0755.
 
-Fixes:
-  http://autobuild.buildroot.org/results/730/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
+ > I don't care which we use (even though I have a slight preference for
+ > 0755), but we should have some coherence across all packages.
 
-[1] http://mailman.nginx.org/pipermail/nginx-devel/2014-November/006295.html
+I also prefer 0755, and that's what we mostly do:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+git grep -l '\-m 755' **/*.mk|wc -l
+55
 
----
-changes v1 -> v2:
-- rebase
-- just remove rtsig option (instead of adding sysctl check in nginx)
----
- package/nginx/Config.in | 5 -----
- package/nginx/nginx.mk  | 1 -
- 2 files changed, 6 deletions(-)
+git grep -l '\-m 0755' **/*.mk|wc -l
+158
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index ddab0ca..c2a6af1 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -309,11 +309,6 @@ endif #BR2_PACKAGE_NGINX_MAIL
- 
- comment "misc. modules"
- 
--config BR2_PACKAGE_NGINX_RTSIG_MODULE
--	bool "ngx_rtsig_module"
--	help
--	  Enable ngx_rtsig_module
--
- config BR2_PACKAGE_NGINX_SELECT_MODULE
- 	bool "ngx_select_module"
- 	help
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 55ae844..06f1312 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -88,7 +88,6 @@ endif
- 
- # misc. modules
- NGINX_CONF_OPTS += \
--	$(if $(BR2_PACKAGE_NGINX_RTSIG_MODULE),--with-rtsig_module) \
- 	$(if $(BR2_PACKAGE_NGINX_SELECT_MODULE),--with-select_module,--without-select_module) \
- 	$(if $(BR2_PACKAGE_NGINX_POLL_MODULE),--with-poll_module,--without-poll_module)
- 
 -- 
-2.1.3
+Bye, Peter Korsgaard
