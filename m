@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 22:46:13 +0100
-Subject: [Buildroot] [git commit] stunnel: use the <pkg>_INSTALL_INIT_SYSV
+Date: Mon, 1 Dec 2014 22:54:13 +0100
+Subject: [Buildroot] [git commit] netatalk: use <pkg>_INSTALL_INIT_SYSV
 	mechanism
-Message-ID: <20141201221140.82BD18002F@busybox.osuosl.org>
+Message-ID: <20141201221140.C42AF8002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbe34dd655f456393979588aeb8372d417164022
+commit: http://git.buildroot.net/buildroot/commit/?id=9b552430a3a52999d9adfb381561b0f0bd397d25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the existing STUNNEL_INSTALL_CONF_SCRIPT hook no longer installs
-the init script, we rename it to STUNNEL_INSTALL_CONF.
+Also makes the installation of the init script unconditional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.mk |    9 ++++++---
- 1 files changed, 6 insertions(+), 3 deletions(-)
+ package/netatalk/netatalk.mk |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index dc56261..ac2963e 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -18,14 +18,17 @@ else
- STUNNEL_CONF_OPTS += --disable-systemd
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 5ea55c2..6c1b640 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -50,12 +50,9 @@ else
+ 	NETATALK_CONF_OPTS += --disable-cups
  endif
  
--define STUNNEL_INSTALL_CONF_SCRIPT
--	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+define STUNNEL_INSTALL_CONF
- 	[ -f $(TARGET_DIR)/etc/stunnel/stunnel.conf ] || \
- 		$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf \
- 			$(TARGET_DIR)/etc/stunnel/stunnel.conf
- 	rm -f $(TARGET_DIR)/etc/stunnel/stunnel.conf-sample
+-define NETATALK_INSTALL_EXTRA_FILES
+-	[ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
+-		$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
+-			$(TARGET_DIR)/etc/init.d/S50netatalk
++define NETATALK_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
++		$(TARGET_DIR)/etc/init.d/S50netatalk
  endef
  
--STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
-+STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF
-+
-+define STUNNEL_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
-+endef
- 
+-NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
+-
  $(eval $(autotools-package))
