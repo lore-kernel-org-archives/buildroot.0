@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  1 Dec 2014 22:55:05 +0100
-Subject: [Buildroot] [PATCHv2 04/12] binutils/2.22: add patch to warn about
+Date: Mon,  1 Dec 2014 22:55:04 +0100
+Subject: [Buildroot] [PATCHv2 03/12] binutils/2.23: add patch to warn about
 	unsafe library paths
 In-Reply-To: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417470913-1280-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417470913-1280-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
 that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
-etc.). The patch was adapted to binutils 2.22, and modified to support
+etc.). The patch was adapted to binutils 2.23, and modified to support
 the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
 instead of just warn when unsafe paths are used. Even though erroring
 out can be chosen by passing --error-poison-system-directories, we are
@@ -24,16 +24,16 @@ wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../2.22/600-poison-system-directories.patch       | 274 +++++++++++++++++++++
- 1 file changed, 274 insertions(+)
- create mode 100644 package/binutils/2.22/600-poison-system-directories.patch
+ .../2.23.2/600-poison-system-directories.patch     | 279 +++++++++++++++++++++
+ 1 file changed, 279 insertions(+)
+ create mode 100644 package/binutils/2.23.2/600-poison-system-directories.patch
 
-diff --git a/package/binutils/2.22/600-poison-system-directories.patch b/package/binutils/2.22/600-poison-system-directories.patch
+diff --git a/package/binutils/2.23.2/600-poison-system-directories.patch b/package/binutils/2.23.2/600-poison-system-directories.patch
 new file mode 100644
-index 0000000..b9ff8be
+index 0000000..780e48e
 --- /dev/null
-+++ b/package/binutils/2.22/600-poison-system-directories.patch
-@@ -0,0 +1,274 @@
++++ b/package/binutils/2.23.2/600-poison-system-directories.patch
+@@ -0,0 +1,279 @@
 +Patch adapted to binutils 2.23.2 and extended to use
 +BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
 +
@@ -97,7 +97,7 @@ index 0000000..b9ff8be
 +===================================================================
 +--- a/ld/config.in
 ++++ b/ld/config.in
-+@@ -4,6 +4,9 @@
++@@ -11,6 +11,9 @@
 +    language is requested. */
 + #undef ENABLE_NLS
 + 
@@ -119,7 +119,7 @@ index 0000000..b9ff8be
 + enable_gold
 + enable_got
 + enable_werror
-+@@ -1427,6 +1428,8 @@
++@@ -1428,6 +1429,8 @@
 + 			  (and sometimes confusing) to the casual installer
 +   --enable-targets        alternative target configurations
 +   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
@@ -128,7 +128,7 @@ index 0000000..b9ff8be
 +   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
 +   --enable-got=<type>     GOT handling scheme (target, single, negative,
 +                           multigot)
-+@@ -4336,7 +4339,18 @@
++@@ -4338,7 +4341,18 @@
 + fi
 + 
 + 
@@ -172,26 +172,27 @@ index 0000000..b9ff8be
 +===================================================================
 +--- a/ld/ldfile.c
 ++++ b/ld/ldfile.c
-+@@ -126,6 +126,22 @@
-+       new_dirs->name = xstrdup (name);
-+       new_dirs->sysrooted = is_sysrooted_pathname (name, FALSE);
-+     }
++@@ -116,6 +116,23 @@
++     new_dirs->name = concat (ld_sysroot, name + 1, (const char *) NULL);
++   else
++     new_dirs->name = xstrdup (name);
 ++
 ++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
 ++  if (command_line.poison_system_directories
-++      && ((!strncmp (name, "/lib", 4))
-++	  || (!strncmp (name, "/usr/lib", 8))
-++	  || (!strncmp (name, "/usr/local/lib", 14))
-++	  || (!strncmp (name, "/usr/X11R6/lib", 14))))
-++    {
-++      if (command_line.error_poison_system_directories)
-++	einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
-++		 "cross-compilation\n"), name);
-++      else
-++	einfo (_("%P: warning: library search path \"%s\" is unsafe for "
-++		 "cross-compilation\n"), name);
-++    }
+++  && ((!strncmp (name, "/lib", 4))
+++      || (!strncmp (name, "/usr/lib", 8))
+++      || (!strncmp (name, "/usr/local/lib", 14))
+++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+++   {
+++     if (command_line.error_poison_system_directories)
+++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++     else
+++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++   }
 ++#endif
+++
 + }
 + 
 + /* Try to open a BFD for a lang_input_statement.  */
@@ -218,7 +219,7 @@ index 0000000..b9ff8be
 +===================================================================
 +--- a/ld/ldmain.c
 ++++ b/ld/ldmain.c
-+@@ -259,6 +259,8 @@
++@@ -265,6 +265,8 @@
 +   command_line.warn_search_mismatch = TRUE;
 +   command_line.check_section_addresses = -1;
 +   command_line.disable_target_specific_optimizations = -1;
@@ -231,7 +232,7 @@ index 0000000..b9ff8be
 +===================================================================
 +--- a/ld/ld.texinfo
 ++++ b/ld/ld.texinfo
-+@@ -2147,6 +2147,18 @@
++@@ -2154,6 +2154,18 @@
 + 
 + Passing @code{none} for @var{style} disables the setting from any
 + @code{--build-id} options earlier on the command line.
@@ -254,16 +255,7 @@ index 0000000..b9ff8be
 +===================================================================
 +--- a/ld/lexsup.c
 ++++ b/ld/lexsup.c
-+@@ -176,6 +176,8 @@
-+ #endif /* ENABLE_PLUGINS */
-+   OPTION_DEFAULT_SCRIPT,
-+   OPTION_PRINT_OUTPUT_FORMAT,
-++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
-++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
-+ };
-+ 
-+ /* The long options.  This structure is used for both the option
-+@@ -612,6 +614,14 @@
++@@ -498,6 +498,14 @@
 +     TWO_DASHES },
 +   { {"wrap", required_argument, NULL, OPTION_WRAP},
 +     '\0', N_("SYMBOL"), N_("Use wrapper functions for SYMBOL"), TWO_DASHES },
@@ -278,7 +270,7 @@ index 0000000..b9ff8be
 + };
 + 
 + #define OPTION_COUNT ARRAY_SIZE (ld_options)
-+@@ -624,6 +634,7 @@
++@@ -510,6 +518,7 @@
 +   int ingroup = 0;
 +   char *default_dirlist = NULL;
 +   char *shortopts;
@@ -286,7 +278,7 @@ index 0000000..b9ff8be
 +   struct option *longopts;
 +   struct option *really_longopts;
 +   int last_optind;
-+@@ -1541,9 +1552,21 @@
++@@ -1427,9 +1436,21 @@
 +               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
 +           }
 +           break;
@@ -308,5 +300,18 @@ index 0000000..b9ff8be
 +   while (ingroup)
 +     {
 +       lang_leave_group ();
++Index: b/ld/ldlex.h
++===================================================================
++--- a/ld/ldlex.h
+++++ b/ld/ldlex.h
++@@ -136,6 +136,8 @@
++ #endif /* ENABLE_PLUGINS */
++   OPTION_DEFAULT_SCRIPT,
++   OPTION_PRINT_OUTPUT_FORMAT,
+++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
++ };
++ 
++ /* The initial parser states.  */
 -- 
 2.1.0
