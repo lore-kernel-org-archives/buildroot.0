@@ -1,104 +1,260 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  1 Dec 2014 22:41:38 +0100
-Subject: [Buildroot] [PATCHv2 2/4] pkg-generic: add step_pkg_size global
-	instrumentation hook
+Date: Mon,  1 Dec 2014 22:41:39 +0100
+Subject: [Buildroot] [PATCHv2 3/4] support/scripts: add size-stats script
 In-Reply-To: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1417470100-32657-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a global instrumentation hook that collects the list
-of files installed in $(TARGET_DIR) by each package, and stores this
-list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
-later be used to determine the size contribution of each package to
-the target root filesystem.
-
-Note that in order to detect if a file installed by one package is
-later overriden by another package, we calculate the md5 of installed
-files and compare them at each installation of a new package.
-
-This commit also adds a Config.in option to enable the collection of
-this data, as calculating the md5 of all installed files at the
-beginning and end of the installation of each package can be
-considered a time-consuming process which maybe some users will not be
-willing to suffer from.
+This new script uses the data collected by the step_pkg_size
+instrumentation hook to generate a pie chart of the size contribution
+of each package to the target root filesystem, and two CSV files with
+statistics about the package size and file size. To achieve this, it
+looks at each file in $(TARGET_DIR), and using the
+packages-file-list.txt information collected by the step_pkg_size
+hook, it determines to which package the file belongs. It is therefore
+able to give the size installed by each package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in              |  9 +++++++++
- package/pkg-generic.mk | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+ support/scripts/size-stats | 225 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 225 insertions(+)
+ create mode 100755 support/scripts/size-stats
 
-diff --git a/Config.in b/Config.in
-index 1aa1080..328654c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -569,6 +569,15 @@ config BR2_GLOBAL_PATCH_DIR
- 	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
- 	  then all *.patch files in the directory will be applied.
- 
-+config BR2_COLLECT_FILE_SIZE_STATS
-+	bool "collect statistics about installed file size"
-+	help
-+	  Enable this option to let Buildroot collect data about the
-+	  installed files. When this option is enabled, you will be
-+	  able to use the 'size-stats' make target, which will
-+	  generate a graph and CSV files giving statistics about the
-+	  installed size of each file and each package.
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+new file mode 100755
+index 0000000..7dc28a0
+--- /dev/null
++++ b/support/scripts/size-stats
+@@ -0,0 +1,225 @@
++#!/usr/bin/env python
 +
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9643a30..82f8ff8 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -55,6 +55,42 @@ define step_time
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_time
- 
-+# Hooks to collect statistics about installed files
-+ifeq ($(BR2_COLLECT_FILE_SIZE_STATS),y)
++# Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+# This hook will be called before the target installation of a
-+# package. We store in a file named $(1).filelist_before the list of
-+# files currently installed in the target. Note that the MD5 is also
-+# stored, in order to identify if the files are overwritten.
-+define step_pkg_size_start
-+	(cd $(TARGET_DIR) ; find . -type f | xargs md5sum) | sort > \
-+		$(BUILD_DIR)/$(1).filelist_before
-+endef
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 +
-+# This hook will be called after the target installation of a
-+# package. We store in a file named $(1).filelist_after the list
-+# of files (and their MD5) currently installed in the target. We then
-+# do a diff with the $(1).filelist_before to compute the list of
-+# files installed by this package.
-+define step_pkg_size_end
-+	(cd $(TARGET_DIR); find . -type f | xargs md5sum) | sort > \
-+		$(BUILD_DIR)/$(1).filelist_after
-+	comm -13 $(BUILD_DIR)/$(1).filelist_before $(BUILD_DIR)/$(1).filelist_after | \
-+		while read hash file ; do \
-+			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-+		done
-+	$(RM) -f $(BUILD_DIR)/$(1).filelist_before \
-+		$(BUILD_DIR)/$(1).filelist_after
-+endef
++import sys
++import os
++import os.path
++import argparse
++import csv
 +
-+define step_pkg_size
-+	$(if $(filter install-target,$(2)),\
-+		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
-+		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-+endef
-+GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
-+endif
++try:
++    import matplotlib.font_manager as fm
++    import matplotlib.pyplot as plt
++except ImportError:
++    sys.stderr.write("You need python-matplotlib to generate the size graph\n")
++    exit(1)
 +
- # User-supplied script
- ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
- define step_user
++colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
++          '#0068b5', '#f28e00', '#940084', '#97c000']
++
++#
++# This function returns a dict containing as keys the files present in
++# the filesystem skeleton, and as value, the string "skeleton". It is
++# used to simulate a fake "skeleton" package, to assign the files from
++# the skeleton to some package.
++#
++# builddir: path to the Buildroot output directory
++#
++def build_skeleton_dict(builddir):
++    skeleton_files = {}
++    for root, _, files in os.walk("system/skeleton"):
++        for f in files:
++            if f == ".empty":
++                continue
++            frelpath = os.path.relpath(os.path.join(root, f), "system/skeleton")
++            # Get the real size of the installed file
++            targetpath = os.path.join(builddir, "target", frelpath)
++            if os.path.islink(targetpath):
++                continue
++            sz = os.stat(targetpath).st_size
++            skeleton_files[frelpath] = { 'pkg': "skeleton", 'size': sz }
++    return skeleton_files
++
++#
++# This function returns a dict where each key is the path of a file in
++# the root filesystem, and the value is a dict containing two
++# elements: the name of the package to which this file belongs (key:
++# pkg) and the size of the file (key: size).
++#
++# builddir: path to the Buildroot output directory
++#
++def build_package_dict(builddir):
++    pkgdict = {}
++    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
++        for l in filelistf.readlines():
++            f = l.split(",")
++            fpath = f[1].strip().replace("./", "")
++            fullpath = os.path.join(builddir, "target", fpath)
++            if not os.path.exists(fullpath):
++                continue
++            pkg = f[0]
++            sz = os.stat(fullpath).st_size
++            pkgdict[fpath] = { 'pkg': pkg, 'size': sz }
++    pkgdict.update(build_skeleton_dict(builddir))
++    return pkgdict
++
++#
++# This function builds a dictionary that contains the name of a
++# package as key, and the size of the files installed by this package
++# as the value.
++#
++# pkgdict: dictionary with the name of the files as key, and as value
++# a dict containing the name of the package to which the files
++# belongs, and the size of the file. As returned by
++# build_package_dict.
++#
++# builddir: path to the Buildroot output directory
++#
++def build_package_size(pkgdict, builddir):
++    pkgsize = {}
++
++    for root, _, files in os.walk(os.path.join(builddir, "target")):
++        for f in files:
++            fpath = os.path.join(root, f)
++            if os.path.islink(fpath):
++                continue
++            frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
++            if not frelpath in pkgdict:
++                print("WARNING: %s is not part of any package" % frelpath)
++                pkg = "unknown"
++            else:
++                pkg = pkgdict[frelpath]["pkg"]
++
++            if pkg in pkgsize:
++                pkgsize[pkg] += os.path.getsize(fpath)
++            else:
++                pkgsize[pkg] = os.path.getsize(fpath)
++
++    return pkgsize
++
++#
++# Given a dict returned by build_package_size(), this function
++# generates a pie chart of the size installed by each package.
++#
++# pkgsize: dictionary with the name of the package as a key, and the
++# size as the value, as returned by build_package_size.
++#
++# outputf: output file for the graph
++#
++def draw_graph(pkgsize, outputf):
++    total = 0
++    for (p, sz) in pkgsize.items():
++        total += sz
++    labels = []
++    values = []
++    other_value = 0
++    for (p, sz) in pkgsize.items():
++        if sz < (total * 0.01):
++            other_value += sz
++        else:
++            labels.append("%s (%d kB)" % (p, sz / 1000.))
++            values.append(sz)
++    labels.append("Other (%d kB)" % (other_value / 1000.))
++    values.append(other_value)
++
++    plt.figure()
++    patches, texts, autotexts = plt.pie(values, labels=labels,
++                                        autopct='%1.1f%%', shadow=True,
++                                        colors=colors)
++    # Reduce text size
++    proptease = fm.FontProperties()
++    proptease.set_size('xx-small')
++    plt.setp(autotexts, fontproperties=proptease)
++    plt.setp(texts, fontproperties=proptease)
++
++    plt.title('Size per package')
++    plt.savefig(outputf)
++
++#
++# Generate a CSV file with statistics about the size of each file, its
++# size contribution to the package and to the overall system.
++#
++# pkgdict: dictionary with the name of the files as key, and as value
++# a dict containing the name of the package to which the files
++# belongs, and the size of the file. As returned by
++# build_package_dict.
++#
++# pkgsize: dictionary with the name of the package as a key, and the
++# size as the value, as returned by build_package_size.
++#
++# outputf: output CSV file
++#
++def gen_files_csv(pkgdict, pkgsizes, outputf):
++    total = 0
++    for (p, sz) in pkgsizes.items():
++        total += sz
++    with open(outputf, 'w') as csvfile:
++        wr = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
++        wr.writerow(["File name",
++                     "Package name",
++                     "File size",
++                     "Package size",
++                     "File size in package (%)",
++                     "File size in system (%)"])
++        for (f, info) in pkgdict.items():
++            pkgname = info["pkg"]
++            filesize = info["size"]
++            pkgsize = pkgsizes[pkgname]
++            wr.writerow([f, pkgname, filesize, pkgsize, "%.4f" % (float(filesize) / pkgsize * 100), "%.4f" % (float(filesize) / total * 100)])
++
++
++#
++# Generate a CSV file with statistics about the size of each package,
++# and their size contribution to the overall system.
++#
++# pkgsize: dictionary with the name of the package as a key, and the
++# size as the value, as returned by build_package_size.
++#
++# outputf: output CSV file
++#
++def gen_packages_csv(pkgsizes, outputf):
++    total = 0
++    for (p, sz) in pkgsizes.items():
++        total += sz
++    with open(outputf, 'w') as csvfile:
++        wr = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
++        wr.writerow(["Package name", "Package size", "Package size in system (%)"])
++        for (pkg, size) in pkgsizes.items():
++            wr.writerow([pkg, size, "%.4f" % (float(size) / total * 100)])
++
++parser = argparse.ArgumentParser(description='Draw build time graphs')
++
++parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
++                    help="Buildroot output directory")
++parser.add_argument("--graph", '-g', metavar="GRAPH",
++                    help="Graph output file (.pdf or .png extension)")
++parser.add_argument("--file-size-csv", '-f', metavar="FILE_SIZE_CSV",
++                    help="CSV output file with file size statistics")
++parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
++                    help="CSV output file with package size statistics")
++args = parser.parse_args()
++
++pkgdict = build_package_dict(args.builddir)
++pkgsize = build_package_size(pkgdict, args.builddir)
++
++if args.graph:
++    draw_graph(pkgsize, args.graph)
++if args.file_size_csv:
++    gen_files_csv(pkgdict, pkgsize, args.file_size_csv)
++if args.package_size_csv:
++    gen_packages_csv(pkgsize, args.package_size_csv)
 -- 
 2.1.0
