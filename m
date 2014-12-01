@@ -1,22 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 01 Dec 2014 18:34:08 -0300
-Subject: [Buildroot] [PATCH] openvpn: CVE-2014-8104: bump to version
-	2.3.6
-In-Reply-To: <1417469189-26783-1-git-send-email-architekt@coding4coffee.org>
-References: <1417469189-26783-1-git-send-email-architekt@coding4coffee.org>
-Message-ID: <547CDED0.9050305@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Dec 2014 22:35:06 +0100
+Subject: [Buildroot] [PATCHv3 01/74] vsftpd: use <pkg>_INSTALL_INIT_SYSV
+	and rename init script
+In-Reply-To: <1417357142-14307-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:17:49 +0100")
+References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417357142-14307-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87oarnf3zp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/01/2014 06:26 PM, Fabian Mewes wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> see
-> https://community.openvpn.net/openvpn/wiki/SecurityAnnouncement-97597e732b
+ > This commit changes the vsftpd package to use the
+ > <pkg>_INSTALL_INIT_SYSV mechanism to install its init script, and
+ > renames the init script in the Buildroot source tree to match how it's
+ > named on the target.
 
-Hi.
-Can you send a v2 patch that updates the hash file as well?
-Thanks.
-Regards.
+ > Also, the init script is now installed unconditionally, as is done in
+ > most packages.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
