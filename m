@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:27:47 +0100
-Subject: [Buildroot] [PATCHv3 61/74] input-event-daemon: install
-	configuration file unconditionally
-In-Reply-To: <1417357142-14307-62-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:49 +0100")
+Date: Tue, 02 Dec 2014 00:28:22 +0100
+Subject: [Buildroot] [PATCHv3 62/74] fluxbox: install session file
+	unconditionally
+In-Reply-To: <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:18:50 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-62-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878uir54ss.fsf@dell.be.48ers.dk>
+ <1417357142-14307-63-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874mtf54rt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
