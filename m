@@ -1,75 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Dec 2014 22:41:18 +0100
-Subject: [Buildroot] [PATCH 1/1] Adding package janus-gateway and
- dependencies
-In-Reply-To: <20141201223409.7cd48798@free-electrons.com>
-References: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
- <20141201204722.GC4150@free.fr>
- <20141201223409.7cd48798@free-electrons.com>
-Message-ID: <20141201214118.GD4150@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  1 Dec 2014 22:41:36 +0100
+Subject: [Buildroot] [PATCHv2 0/4] Generate package size statistics
+Message-ID: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2014-12-01 22:34 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 1 Dec 2014 21:47:22 +0100, Yann E. MORIN wrote:
-> > On 2014-12-01 19:37 +0000, Gregory Dymarek spake thusly:
-> > > This is a set of packages that are needed to compile janus-gateway:
-> > > ding-libs
-> > > gengetopt
-> > > janus-gateway
-> > > libnice
-> > > libsrtp
-> > > libwebsock
-> > > sofia-sip
-> > > 
-> > > Signed-off-by: gregd <gregd72002@gmail.com>
-> > 
-> > I already started discussing this patch with Gregory on IRC:
-> > 
-> >   - this patch is broken because the mailer warped long lines.
-> > 
-> >   - it should have been split in different patches, one for each new
-> >     package
-> > 
-> >   - indentation is incorrect in the help texts (spaces vs. tabs)
-> > 
-> > Gregory is resending this patch as-is so I can apply it and further work
-> > on it.
-> > 
-> > More comments on this patch can be done in the followup respin. ;-)
-> 
-> While I certainly do appreciate a lot the fact that you're willing to
-> take over the work of Gregory and do the final polishing, wouldn't it
-> be better to teach people how to fish rather than fish for them? I.e
-> make the comments, and let Gregory rework the patch series until it is
-> OK for merging. Of course, this is only true if Gregory is
-> willing/interested in pushing this set of patches up to the point where
-> it becomes acceptable upstream.
+Buildroot currently doesn't provide any tool to help users analyze the
+size contribution of the different files and packages to the overall
+size of the filesystem. For people having tight system size
+requirements, providing such tools could be useful.
 
-I agree with you.
+This set of four patches implement tools that allow to generate a pie
+chart graph of the size contribution of each package, plus CSV files
+giving the detailed size statistics per-package and per-file.
 
-However, Gregory has done the base work, and that's nice. He already
-incorporated comments I made earlier on IRC (in the past few days).
+In sequence:
 
-So, I was just gonna put the series in shape and fix the obvious that
-does not take too much time, and respin so Gregory can take back the
-work on its own.
+ - The first patch changes the external toolchain logic to separate
+   staging installation from target installation. Currently, target
+   files are installed in the staging installation step, which is
+   wrong and defeats the logic used in the following patches.
 
-Basically, a kind of reward for him to do the base work, and entice him
-to continue on the series. ;-)
+ - The second patch adds a new pkg_step hook which collects information
+   about which file was installed by which package. The file size is
+   not collected at this point, since binary stripping takes place at
+   the very end of the build. This hook is conditionally enabled
+   depending on a new Config.in option, because the hook calculates
+   the md5 of all installed files at the beginning and end of each
+   package installation, which can be considered time consuming.
 
-Regards,
-Yann E. MORIN.
+   The information about which files are installed by which packages
+   is stored in $(O)/build/packages-file-list.txt.
+
+ - The third patch adds a Python script responsible for reading the
+   data in $(O)/build/packages-file-list.txt, looking at the size of
+   installed files, and generating the graph and CSV files.
+
+ - The fourth patch creates a new 'size-stats' make target to allow
+   users to easily generate the graph and CSV files.
+
+Changes since v1:
+
+ - Improve the logic to properly take into account packages that
+   overwrite files installed by other packages.
+
+ - Make the new pkg_step hook optional.
+
+ - Extend the facility to not only generate a graph, but also CSV
+   files. As a consequence, everything was renamed from 'graph-size'
+   to 'size-stats'.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (4):
+  toolchain-external: split target installation from staging
+    installation
+  pkg-generic: add step_pkg_size global instrumentation hook
+  support/scripts: add size-stats script
+  Makefile: implement a size-stats target
+
+ Config.in                                          |   9 +
+ Makefile                                           |  11 +
+ package/pkg-generic.mk                             |  36 ++++
+ support/scripts/size-stats                         | 225 +++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  36 +++-
+ 5 files changed, 310 insertions(+), 7 deletions(-)
+ create mode 100755 support/scripts/size-stats
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.0
