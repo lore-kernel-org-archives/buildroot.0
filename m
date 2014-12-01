@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 00:41:33 +0100
-Subject: [Buildroot] [PATCHv3 72/74] inadyn: install configuration file
+Date: Tue, 02 Dec 2014 00:43:05 +0100
+Subject: [Buildroot] [PATCHv3 73/74] mpd: install configuration file
 	unconditionally
-In-Reply-To: <1417357142-14307-73-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:19:00 +0100")
+In-Reply-To: <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 30 Nov 2014 15:19:01 +0100")
 References: <1417357142-14307-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417357142-14307-73-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871toj3ple.fsf@dell.be.48ers.dk>
+ <1417357142-14307-74-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wq6b2aye.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed, thanks.
+Committed with -m 0644 as noted by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
