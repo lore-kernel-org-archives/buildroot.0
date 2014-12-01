@@ -1,38 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Dec 2014 18:59:18 +0100
-Subject: [Buildroot] [PATCH v5 4/4] guile: Add new package
-In-Reply-To: <547B9A19.6060705@paguilar.org>
-References: <1416869790-12988-1-git-send-email-paguilar@paguilar.org>
- <1416869790-12988-5-git-send-email-paguilar@paguilar.org>
- <20141126215542.433523bf@free-electrons.com>
- <547B9A19.6060705@paguilar.org>
-Message-ID: <20141201175918.GA4150@free.fr>
+Date: Mon,  1 Dec 2014 19:10:26 +0100
+Subject: [Buildroot] [PATCH] package/bdwgc: only enable on supported
+	architectures
+Message-ID: <1417457426-2621-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+bdwgc has support for a sub-set of the architectures we support.
 
-On 2014-11-30 23:28 +0100, Pedro Aguilar spake thusly:
-> I confirm you that guile is building and running fine for me, I used an
-> Atmel SAMA5 processor.
+Since there is roughly a 50-50 split of our architectures that have
+support in bdwgc vs. those that do not, use a positive dependency logic,
+rather than a negative one.
 
-I already noticed at least one build failure with bdwgc:
+The list was constructed by visual inspection of the source code of
+bdwgc, but the header doing the check is, to say it politely, a bit
+difficult to read...
+
+So, some working archotectures may be missing. Users needing it may
+investigate if their architectures are indeed supported.
+
+Fixes;
     http://autobuild.buildroot.net/results/529/529b0b6dd47744c13f56e59a4c669a3f5d56530d/
 
-;-p
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
+---
+ package/bdwgc/Config.in | 7 +++++++
+ package/bdwgc/bdwgc.mk  | 2 ++
+ package/guile/Config.in | 1 +
+ 3 files changed, 10 insertions(+)
 
-I have a fix I'll be sending sonish.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+index 9aa7c7d..277b6e4 100644
+--- a/package/bdwgc/Config.in
++++ b/package/bdwgc/Config.in
+@@ -1,5 +1,12 @@
++config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
++	default y
++	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
++		|| BR2_mips || BR2_MIPSEL || BR2_powerpc || BR2_sh \
++		|| BR2_sparc || BR2_x86_64
++
+ config BR2_PACKAGE_BDWGC
+ 	bool "bdwgc"
++	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	help
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 3e6de1a..b408947 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
+ 
++# When bumping the version number, check if the list of supported architectures
++# is still valid; see Config.log.
+ BDWGC_VERSION = 7.2f
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+diff --git a/package/guile/Config.in b/package/guile/Config.in
+index 009dbdf..8f86e9f 100644
+--- a/package/guile/Config.in
++++ b/package/guile/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GUILE
+ 	bool "guile"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS # bdwgc
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
+ 	depends on BR2_USE_WCHAR # libunistring
+ 	select BR2_PACKAGE_LIBUNISTRING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
