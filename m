@@ -1,19 +1,19 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Dec 2014 21:47:22 +0100
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 1 Dec 2014 21:56:30 +0100
 Subject: [Buildroot] [PATCH 1/1] Adding package janus-gateway and
 	dependencies
 In-Reply-To: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
 References: <CAEbDrgmtDX9uRt2yrA7ZBVZstog_vSt4AMAEO1D0zJVLFE_Zxg@mail.gmail.com>
-Message-ID: <20141201204722.GC4150@free.fr>
+Message-ID: <CAHXCMMLUwmH-_4TeWcNgJ3LdKWLgB_XnyBVooH8eYgL1ZKZ3vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gregory, All,
+Hi Gregory,
 
-On 2014-12-01 19:37 +0000, Gregory Dymarek spake thusly:
+On Mon, Dec 1, 2014 at 8:37 PM, Gregory Dymarek <gregd72002@gmail.com> wrote:
 > This is a set of packages that are needed to compile janus-gateway:
 > ding-libs
 > gengetopt
@@ -22,26 +22,11 @@ On 2014-12-01 19:37 +0000, Gregory Dymarek spake thusly:
 > libsrtp
 > libwebsock
 > sofia-sip
-> 
+
+Please, make one package per patch.
+
+>
 > Signed-off-by: gregd <gregd72002@gmail.com>
-
-I already started discussing this patch with Gregory on IRC:
-
-  - this patch is broken because the mailer warped long lines.
-
-  - it should have been split in different patches, one for each new
-    package
-
-  - indentation is incorrect in the help texts (spaces vs. tabs)
-
-Gregory is resending this patch as-is so I can apply it and further work
-on it.
-
-More comments on this patch can be done in the followup respin. ;-)
-
-Regards,
-Yann E. MORIN.
-
 > ---
 >  package/Config.in                                  |  7 ++++++
 >  package/Config.in.host                             |  1 +
@@ -80,7 +65,7 @@ Yann E. MORIN.
 >  create mode 100644 package/libwebsock/libwebsock.mk
 >  create mode 100644 package/sofia-sip/Config.in
 >  create mode 100644 package/sofia-sip/sofia-sip.mk
-> 
+>
 > diff --git a/package/Config.in b/package/Config.in
 > index b8fc7d1..d9ad7f5 100644
 > --- a/package/Config.in
@@ -162,12 +147,24 @@ Yann E. MORIN.
 > +config BR2_PACKAGE_DING_LIBS
 > +       bool "ding-libs"
 > +#      depends on BR2_TOOLCHAIN_BUILDROOT_LOCALE
+
+Why is this commented?
+
 > +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 > +       select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 > +       help
 > +       Adds ding-libs
 > +       https://git.fedorahosted.org/git/ding-libs.git
+
+Help message should:
+- breifly describe what the package is;
+- be indented with 1 tab+2 spaces;
+- be separated with a blank line from the package/project url
+
 > +
+
+Remove the trailing blank line
+
 > diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
 > new file mode 100644
 > index 0000000..582b9be
@@ -183,9 +180,15 @@ Yann E. MORIN.
 > +DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
 > +DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
 > +#DING_LIBS_DEPENDENCIES = BR2_TOOLCHAIN_BUILDROOT_LOCALE
+
+Why is this commented? if not needed, just remove it.
+
 > +DING_LIBS_DEPENDENCIES = $(if !$(BR2_ENABLE_LOCALE),libiconv) $(if
 > $(BR2_NEEDS_GETTEXT),gettext)
 > +DING_LIBS_AUTORECONF = YES
+
+Please add a comment why autoreconf is needed, if this is really needed.
+
 > +DING_LIBS_INSTALL_STAGING = YES
 > +DING_LIBS_LICENSE = GPLv3
 > +DING_LIBS_LICENSE_FILES = COPYING
@@ -205,6 +208,9 @@ Yann E. MORIN.
 > +       Gengetopt is a tool to write command line option parsing code
 > for C programs.
 > +       http://www.gnu.org/software/gengetopt/gengetopt.html
+
+ditto (help text)
+
 > diff --git a/package/gengetopt/Config.in.host b/package/gengetopt/Config.in.host
 > new file mode 100644
 > index 0000000..5be8312
@@ -218,6 +224,10 @@ Yann E. MORIN.
 > +       Gengetopt is a tool to write command line option parsing code
 > for C programs.
 > +       http://www.gnu.org/software/gengetopt/gengetopt.html
+
+Usually, we don't add host tools, except if this is a program for used
+for generating the images.
+
 > diff --git a/package/gengetopt/gengetopt.mk b/package/gengetopt/gengetopt.mk
 > new file mode 100644
 > index 0000000..692dfe1
@@ -232,6 +242,9 @@ Yann E. MORIN.
 > +GENGETOPT_VERSION = 2.22.6
 > +GENGETOPT_SITE = ftp://ftp.gnu.org/gnu/gengetopt/
 > +GENGETOPT_AUTORECONF = YES
+
+Why is it needed? add a comment.
+
 > +GENGETOPT_LICENSE = GPLv3
 > +GENGETOPT_LICENSE_FILES = COPYING
 > +
@@ -240,6 +253,9 @@ Yann E. MORIN.
 > +$(eval $(autotools-package))
 > +$(eval $(host-autotools-package))
 > +
+
+Remove the trailing blank line.
+
 > diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
 > new file mode 100644
 > index 0000000..3a201ba
@@ -249,6 +265,10 @@ Yann E. MORIN.
 > +config BR2_PACKAGE_JANUS_GATEWAY
 > +       bool "janus-gateway"
 > +       select BR2_PACKAGE_LIBMICROHTTPD
+
+libmicrohttpd depends on BR2_TOOLCHAIN_HAS_THREADS, you should repeat
+this dependency here.
+
 > +       select BR2_PACKAGE_JANSSON
 > +       select BR2_PACKAGE_LIBNICE
 > +       select BR2_PACKAGE_SOFIA_SIP
@@ -256,9 +276,16 @@ Yann E. MORIN.
 > +       select BR2_PACKAGE_DING_LIBS
 > +       select BR2_PACKAGE_LIBWEBSOCK
 > +       select BR2_PACKAGE_HOST_GENGETOPT
+
+This 'select' on host-gengetopt package is not needed here, just add
+it to the dependency list in the *.mk file.
+
 > +       help
 > +       Adds janusgateway:
 > +       https://github.com/meetecho/janus-gateway
+
+ditto (help text)
+
 > diff --git a/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
 > b/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
 > new file mode 100644
@@ -277,9 +304,20 @@ Yann E. MORIN.
 > +
 > +-AM_CFLAGS += -fstack-protector-all -g -ggdb -fPIC -rdynamic
 > ++AM_CFLAGS += -g -ggdb -fPIC -rdynamic
+
+The -g -ggdb should be sensitive to BR2_DEBUG, or just removed.
+
+Hmm... -fPIC ?? Does this mean that janus-gateway is not available on
+static build? If so, add 'depends on !BR2_PREFER_STATIC_LIBS' in the
+Config.in.
+
 > +
 > + # FIXME: make docs work with distcheck
 > + DISTCHECK_CONFIGURE_FLAGS = --disable-docs --enable-post-processing
+
+Package patch should have a description and your sob line, and the
+fetched-from url if found on the www.
+
 > diff --git a/package/janus-gateway/janus-gateway.mk
 > b/package/janus-gateway/janus-gateway.mk
 > new file mode 100644
@@ -293,8 +331,15 @@ Yann E. MORIN.
 > +#
 > +#############################################################
 > +JANUS_GATEWAY_VERSION = master
+
+Use a unique version (tag or commit sha1), not a branch name whichh
+badly breaks build reproducibility.
+
 > +JANUS_GATEWAY_SITE_METHOD = git
 > +JANUS_GATEWAY_SITE = https://github.com/meetecho/janus-gateway.git
+
+Cannot the github helper be used here?
+
 > +JANUS_GATEWAY_LICENSE = GPLv3
 > +JANUS_GATEWAY_LICENSE_FILES = COPYING
 > +
@@ -324,8 +369,15 @@ Yann E. MORIN.
 > +config BR2_PACKAGE_LIBNICE
 > +       bool "libnice"
 > +       select BR2_PACKAGE_LIBGLIB2
+
+MIssing 'depends on' from libglib2 (iirc: wchar, mmu and threads).
+
 > +       help
 > +       Adds libnice - The GLib ICE implementation
+
+What does ICE stand for?
+Hint: you can copy/paste a 1 sentence description from the project page. ;-)
+
 > +       http://nice.freedesktop.org/wiki/
 > diff --git a/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
 > b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
@@ -356,6 +408,9 @@ Yann E. MORIN.
 > +       default:
 > +         /* Nothing to do. */
 > +         break;
+
+ditto (patch desc.)
+
 > diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
 > new file mode 100644
 > index 0000000..dd7f7a4
@@ -371,6 +426,9 @@ Yann E. MORIN.
 > +LIBNICE_SITE = http://nice.freedesktop.org/releases/
 > +LIBNICE_DEPENDENCIES = libglib2
 > +LIBNICE_INSTALL_STAGING = YES
+
+Missing _LICENSE and _LICENSE_FILES vars.
+
 > +
 > +$(eval $(autotools-package))
 > diff --git a/package/libsrtp/Config.in b/package/libsrtp/Config.in
@@ -384,6 +442,9 @@ Yann E. MORIN.
 > +       help
 > +       Adds libsrtp
 > +       https://github.com/cisco/libsrtp
+
+ditto (help text)
+
 > diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
 > new file mode 100644
 > index 0000000..b1e56eb
@@ -398,9 +459,18 @@ Yann E. MORIN.
 > +LIBSRTP_VERSION = v1.5.0
 > +LIBSRTP_SITE_METHOD = git
 > +LIBSRTP_SITE = https://github.com/cisco/libsrtp/
+
+Cannot the github helper (so a tarball) be used here?
+
 > +LIBSRTP_AUTORECONF = YES
+
+autoreconf comment
+
 > +LIBSRTP_INSTALL_STAGING = YES
 > +LIBSRTP_LICENSE = BSD-3c
+
+No _LICENSE_FILES?
+
 > +
 > +$(eval $(autotools-package))
 > diff --git a/package/libwebsock/Config.in b/package/libwebsock/Config.in
@@ -415,6 +485,9 @@ Yann E. MORIN.
 > +       help
 > +       Adds libwebsock
 > +       https://github.com/payden/libwebsock
+
+ditto (help text)
+
 > diff --git a/package/libwebsock/libwebsock.mk b/package/libwebsock/libwebsock.mk
 > new file mode 100644
 > index 0000000..f82b553
@@ -429,6 +502,9 @@ Yann E. MORIN.
 > +LIBWEBSOCK_VERSION = 3c1615eeadb0b582b63851073bfe3e5132f31ebc
 > +LIBWEBSOCK_SITE_METHOD = git
 > +LIBWEBSOCK_SITE = https://github.com/payden/libwebsock.git
+
+github helper (and tarball) cannot be used here?
+
 > +LIBWEBSOCK_DEPENDENCIES = libevent
 > +LIBWEBSOCK_AUTORECONF = YES
 > +LIBWEBSOCK_INSTALL_STAGING = YES
@@ -436,10 +512,16 @@ Yann E. MORIN.
 > +LIBWEBSOCK_LICENSE_FILES = COPYING
 > +
 > +LIBWEBSOCK_CFLAGS = $(TARGET_CFLAGS)
+
+Not needed since you don't add any cflag.
+
 > +LIBWEBSOCK_LIBS += -lpthread -levent
 > +
 > +LIBWEBSOCK_CONF_ENV += \
 > +        CFLAGS="$(LIBWEBSOCK_CFLAGS)" \
+
+Already handled by the autotools infra.
+
 > +        LIBS="$(LIBWEBSOCK_LIBS)"
 > +
 > +$(eval $(autotools-package))
@@ -454,6 +536,9 @@ Yann E. MORIN.
 > +       help
 > +       Adds Sofia-SIP Library
 > +       http://sofia-sip.sourceforge.net
+
+ditto (help text)
+
 > diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
 > new file mode 100644
 > index 0000000..0539453
@@ -467,24 +552,42 @@ Yann E. MORIN.
 > +#############################################################
 > +SOFIA_SIP_VERSION = 1.12.11
 > +SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION).tar.gz
+
+Not needed, this is the default tarball filename.
+
 > +SOFIA_SIP_SITE =
 > http://downloads.sourceforge.net/project/sofia-sip/sofia-sip/$(SOFIA_SIP_VERSION)
+
+Broken patch! wrapped line :-/
+
+Missing _LICENSE and _LICENSE_FILES.
+
+
 > +SOFIA_SIP_INSTALL_STAGING = YES
 > +
 > +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
+
+keep things as symetrical as possible, so explicitly add:
+SOFIA_SIP_CONF_OPTS = --enable-ip6
+
 > +else
 > +       SOFIA_SIP_CONF_OPTS = --disable-ip6
 > +endif
 > +
 > +
+
+Remove extra blank line.
+
 > +$(eval $(autotools-package))
 > --
 > 1.9.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+Regards,
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
