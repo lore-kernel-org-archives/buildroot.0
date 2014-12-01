@@ -1,23 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  1 Dec 2014 08:03:00 -0300
-Subject: [Buildroot] [PATCH] flac: drop CVE patches
-Message-ID: <1417431780-18603-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Dec 2014 12:20:01 +0100
+Subject: [Buildroot] [git commit] flac: drop CVE patches
+Message-ID: <20141201112125.1A75F7FFF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Something failed in the merge between master from the 2014.11 cycle and
-next leaving the CVE patches behind, so remove them.
+commit: http://git.buildroot.net/buildroot/commit/?id=c8fbd1f82a93089b24361ee4830507b165af0f8f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+These are alredy included in 1.3.1, and should have been dropped when I
+merged next.
+
+Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flac/0002-fix-CVE-2014-9028.patch | 34 --------------------------
- package/flac/0003-fix-CVE-2014-8962.patch | 40 -------------------------------
- 2 files changed, 74 deletions(-)
- delete mode 100644 package/flac/0002-fix-CVE-2014-9028.patch
- delete mode 100644 package/flac/0003-fix-CVE-2014-8962.patch
+ package/flac/0002-fix-CVE-2014-9028.patch |   34 ------------------------
+ package/flac/0003-fix-CVE-2014-8962.patch |   40 -----------------------------
+ 2 files changed, 0 insertions(+), 74 deletions(-)
 
 diff --git a/package/flac/0002-fix-CVE-2014-9028.patch b/package/flac/0002-fix-CVE-2014-9028.patch
 deleted file mode 100644
@@ -105,5 +107,3 @@ index 563100e..0000000
 --- 
 -1.7.2.5
 -
--- 
-2.0.4
