@@ -1,33 +1,41 @@
-From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
-Date: Mon, 1 Dec 2014 21:39:51 +0100
-Subject: [Buildroot] [PATCH 1/2] skeleton: make /run a directory
-In-Reply-To: <1417106898-14444-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417106898-14444-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAGrucu1AtrSqG8_9Z6J0u4dR-Des_9W4xHH-HwguLpoen3vY3A@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  1 Dec 2014 22:42:06 +0200
+Subject: [Buildroot] [PATCH] exiv2: XMP support needs largefile
+Message-ID: <bed23382a22ff4672c36ac53805589eaef4399b1.1417466526.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+XMP code enables largefile unconditionally.
 
-2014-11-27 17:48 GMT+01:00 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> Using a /tmp symlink makes it racy (mode 1777 for /tmp proper) and ugly.
-> While at it also point /var/run to /run until everything is moved there like
-> it should be.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  system/skeleton/run        | 1 -
->  system/skeleton/run/.empty | 0
->  system/skeleton/var/run    | 2 +-
->  3 files changed, 1 insertion(+), 2 deletions(-)
->  delete mode 120000 system/skeleton/run
->  create mode 100644 system/skeleton/run/.empty
->
+Fixes:
+http://autobuild.buildroot.net/results/116/1166068a64733d22a2f891849177ad826347dc9f/
 
-Shouldn't we link /var/lock to (../)run/lock then?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/exiv2/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 3dc74459a78c..b2e2ac83d095 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -39,11 +39,12 @@ config BR2_PACKAGE_EXIV2_XMP
+ 	bool "XMP support"
+ 	select BR2_PACKAGE_EXPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Build with XMP support
+ 
+-comment "xmp support needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "xmp support needs a toolchain w/ threads, and largefile"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+ 
+ config BR2_PACKAGE_EXIV2_LENSDATA
+ 	bool "Nikon lens name database"
 -- 
-Andr?
+2.1.3
