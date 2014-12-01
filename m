@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:24:27 +0100
-Subject: [Buildroot] [git commit] rp-pppoe: bail out if installation fails
-Message-ID: <20141201223450.76C9F80048@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:17:20 +0100
+Subject: [Buildroot] [git commit] iostat: remove legacy code
+Message-ID: <20141201223450.4E2A880048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c39422a10399878a6400ccab565f98ad25e94928
+commit: http://git.buildroot.net/buildroot/commit/?id=ffe945be4b705871b3497b2b70db8415cf67b95d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an "|| exit 1" in the installation loop, otherwise if one of the
-file fails to install, the build doesn't abort.
+Some custom iostat-source target was mistakenly left in place when the
+iostat package was migrated to gentargets in commit
+ee77963588b09babfd71befb0b5eb9fd1e776bbc, back 4 years ago. This
+commit removes this unnecessary custom target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rp-pppoe/rp-pppoe.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/iostat/iostat.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 6827628..4e17f2d 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -19,7 +19,7 @@ RP_PPPOE_CONF_ENV = \
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index d19a15a..d28dc1b 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -9,8 +9,6 @@ IOSTAT_SITE = http://www.linuxinsight.com/files
+ IOSTAT_LICENSE = GPL
+ IOSTAT_LICENSE_FILES = LICENSE
  
- define RP_PPPOE_INSTALL_TARGET_CMDS
- 	for ff in $(RP_PPPOE_TARGET_FILES); do \
--		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff; \
-+		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
- 	done
+-iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
+-
+ define IOSTAT_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
  endef
- 
