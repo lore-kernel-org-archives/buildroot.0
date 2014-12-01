@@ -1,46 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Dec 2014 15:13:35 +0100
-Subject: [Buildroot] [PATCH v3] Add a defconfig for MIPS Creator CI20
-In-Reply-To: <547C75C4.2070204@imgtec.com> (Vicente Olivert Riera's message of
- "Mon, 1 Dec 2014 14:05:56 +0000")
-References: <1417193009-65132-1-git-send-email-Vincent.Riera@imgtec.com>
- <87wq6ejtsz.fsf@dell.be.48ers.dk> <547C3F7B.3060804@imgtec.com>
- <87zjb7hdud.fsf@dell.be.48ers.dk> <547C4367.2070207@imgtec.com>
- <87vblvhd4j.fsf@dell.be.48ers.dk> <547C75C4.2070204@imgtec.com>
-Message-ID: <8761dvh300.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  1 Dec 2014 11:16:56 -0300
+Subject: [Buildroot] [PATCH 1/5] Add BR2_DEPRECATED_SINCE_2015_02
+Message-ID: <1417443420-31985-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+In preparation for the deprecation of certain features in 2015.02, add
+the BR2_DEPRECATED_SINCE_2015_02 symbol.
 
- >> Exactly: We do some minimal config tweaks to ensure you have a working
- >> setup. See the logic in linux/linux.mk (LINUX_CONFIGURE_CMDS).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > I have seen that file and I found this snippet:
-
- > $(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
- >   $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
- >   $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-
- > It adds those two options to the kernel config only if
- > BR2_ROOTFS_DEVICE_CREATION_STATIC has been selected. I think this is
- > also needed for BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS. I'm going
- > to test it right now to make sure.
-
-No, notice the 2x ",". The syntax of the $(if ) construct is $(if
-<condition>,<command-of-nonempty>,<command-if-empty>), so this is done
-for everything but the static /dev case.
-
- > Also, could you tell me why that if statement has two comma (,,) instead
- > of one? What's the different with having only one comma?
-
-See above or:
-
-https://www.gnu.org/software/make/manual/html_node/Conditional-Functions.html#index-if
-
+diff --git a/Config.in b/Config.in
+index 8d7081f..e2d3dfd 100644
+--- a/Config.in
++++ b/Config.in
+@@ -314,6 +314,10 @@ config BR2_DEPRECATED_SINCE_2014_08
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_02
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.0.4
