@@ -1,38 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 23:00:03 +0100
-Subject: [Buildroot] [git commit] pango: use <pkg>_INSTALL_INIT_SYSV
-	mechanism
-Message-ID: <20141201221140.E9D598002F@busybox.osuosl.org>
+Date: Mon, 1 Dec 2014 23:07:12 +0100
+Subject: [Buildroot] [git commit] mpd: use <pkg>_INSTALL_INIT_SYSV mechanism
+Message-ID: <20141201221141.23AA58002F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a285f61a882a4bd9eaa1de82ef702cc6af8c5d0b
+commit: http://git.buildroot.net/buildroot/commit/?id=acb268f78f81f7ecab00e9d335075925d4efd40c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pango/pango.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/mpd/mpd.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 6e340f4..63cfae3 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -61,11 +61,9 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXRENDER),yy)
- 	PANGO_CONF_OPTS += --with-xft
- endif
- 
--define PANGO_INSTALL_INITSCRIPT
-+define PANGO_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/pango/S25pango \
- 		$(TARGET_DIR)/etc/init.d/S25pango
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 5448251..1eedcbc 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -232,10 +232,13 @@ define MPD_INSTALL_EXTRA_FILES
+ 		$(INSTALL) -D package/mpd/mpd.conf \
+ 			$(TARGET_DIR)/etc/mpd.conf; \
+ 	fi
+-	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
+-		$(TARGET_DIR)/etc/init.d/S95mpd
  endef
  
--PANGO_POST_INSTALL_TARGET_HOOKS += PANGO_INSTALL_INITSCRIPT
--
+ MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
+ 
++define MPD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
++		$(TARGET_DIR)/etc/init.d/S95mpd
++endef
++
  $(eval $(autotools-package))
