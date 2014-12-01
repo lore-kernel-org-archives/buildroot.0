@@ -1,36 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 09:38:10 +0100
-Subject: [Buildroot] [git commit] gdb: unbreak host-gdb with python support
-	if python3 is enabled
-Message-ID: <20141201083953.213D17FFF3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Dec 2014 10:03:23 +0100
+Subject: [Buildroot] [PATCH v5 4/4] guile: Add new package
+In-Reply-To: <547B9A19.6060705@paguilar.org>
+References: <1416869790-12988-1-git-send-email-paguilar@paguilar.org>
+ <1416869790-12988-5-git-send-email-paguilar@paguilar.org>
+ <20141126215542.433523bf@free-electrons.com>
+ <547B9A19.6060705@paguilar.org>
+Message-ID: <20141201100323.6213fec9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3fa9141827999d1482dab2323507d2d0d2729c8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Pedro Aguilar,
 
-Fixes http://autobuild.buildroot.net/results/ef4/ef487b495e57f098af0fe9508d430b56b0750339/
+On Sun, 30 Nov 2014 23:28:41 +0100, Pedro Aguilar wrote:
 
-Explicitly pass the path to host-python to ensure it gets used.
+> Thanks for helping me to fix and apply the patches!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/gdb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+You're welcome! Contributions are definitely welcome, and for a first
+contribution, packaging guile was not the easiest task to tackle!
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 8d0f76d..dbec760 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -146,7 +146,7 @@ else
- endif
- 
- ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON),y)
--	HOST_GDB_CONF_OPTS += --with-python
-+	HOST_GDB_CONF_OPTS += --with-python=$(HOST_DIR)/usr/bin/python2
- 	HOST_GDB_DEPENDENCIES += host-python
- else
- 	HOST_GDB_CONF_OPTS += --without-python
+> I confirm you that guile is building and running fine for me, I used an 
+> Atmel SAMA5 processor.
+
+Thanks for testing again!
+
+> Btw, do you use any script/tool for catching some of the missed things 
+> such as adding the wchar dependency to libunistring because it uses 
+> functions like wctomb()?
+> 
+> I would like to detect and fix these things before sending a patch so 
+> you don't have to check it again.
+
+I simply use the toolchain configurations available at
+http://autobuild.buildroot.org/toolchains/configs/, which offer a
+variety of configurations. Not all possible situations, but a few of
+them, which allow to find certain problematic cases.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
