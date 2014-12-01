@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 00:27:58 +0100
-Subject: [Buildroot] [git commit] fluxbox: install session file
-	unconditionally
-Message-ID: <20141201233009.76CE880051@busybox.osuosl.org>
+Date: Tue, 2 Dec 2014 00:27:39 +0100
+Subject: [Buildroot] [git commit] input-event-daemon: install configuration
+	file unconditionally
+Message-ID: <20141201233009.6E31380051@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82f82117eeebb2694565d26c1d76019823c7c057
+commit: http://git.buildroot.net/buildroot/commit/?id=19c8fa96b5a1396c49abe21efda8a31b9a743816
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 As discussed, users should use a rootfs overlay or a post-build script
@@ -21,21 +21,22 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluxbox/fluxbox.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/input-event-daemon/input-event-daemon.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 21901d6..a0f9367 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -24,8 +24,8 @@ FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
- 
- define FLUXBOX_INSTALL_XSESSION_FILE
--	[ -f $(TARGET_DIR)/root/.xsession ] || $(INSTALL) -m 0755 -D \
--		package/fluxbox/xsession $(TARGET_DIR)/root/.xsession
-+	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
-+		$(TARGET_DIR)/root/.xsession
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index 0bafdc4..67b8cc4 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -18,9 +18,8 @@ endef
+ define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 -D $(@D)/input-event-daemon \
+ 		$(TARGET_DIR)/usr/bin/input-event-daemon
+-	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
+-		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
+-			$(TARGET_DIR)/etc/input-event-daemon.conf
++	$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
++		$(TARGET_DIR)/etc/input-event-daemon.conf
  endef
  
- FLUXBOX_POST_INSTALL_TARGET_HOOKS += FLUXBOX_INSTALL_XSESSION_FILE
+ define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
