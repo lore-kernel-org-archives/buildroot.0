@@ -1,180 +1,123 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  2 Dec 2014 10:59:05 +0100
-Subject: [Buildroot] [PATCH v4 07/14] xdriver_xf86-video-imx-viv: new package
+Date: Tue,  2 Dec 2014 10:59:08 +0100
+Subject: [Buildroot] [PATCH v4 10/14] qt5base: fix Vivante x11/EGL
+	configuration
 In-Reply-To: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
 References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1417514352-8825-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1417514352-8825-11-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xorg driver for imx6. Inspired from Yocto project.
-
-I did not find any problem, but notice Yocto project force Xorg xserver
-1.14.4 while we use 1.16.
-
-Notice Vivante driver should be able to provide Desktop OpenGL implementation.
-However, this feature seems broken for a while. Yocto use Mesa3D/swraster
-to provide Desktop OpenGL API.
-
-Tested with:
-    subsequent qt5base and libdrm fixes +
-    QMX6 board +
-    BR2_ARM_EABIHF= both tested
-    BR2_ARM_ENABLE_NEON=y
-    BR2_ARM_FPU_NEON=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_CUSTOM_GIT=y
-    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-    BR2_LINUX_KERNEL_DTS_SUPPORT=y
-    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
-    BR2_PACKAGE_QT5=y
-    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-    BR2_PACKAGE_QT5BASE_EXAMPLES=y
-    BR2_PACKAGE_QT5BASE_OPENGL_ES2=y
-    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-    BR2_PACKAGE_QT5BASE_XCB=y
-    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
-    BR2_PACKAGE_QT5BASE_GIF=y
-    BR2_PACKAGE_QT5BASE_JPEG=y
-    BR2_PACKAGE_QT5BASE_PNG=y
-    BR2_PACKAGE_QT5QUICKCONTROLS=y
-    BR2_PACKAGE_XORG7=y
-    BR2_PACKAGE_XSERVER_XORG_SERVER=y
-    BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-    BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-    BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV=y
-    BR2_PACKAGE_FREESCALE_IMX=y
-    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
+Fix compilation with Vivante headers and bug at runtime.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/x11r7/Config.in                            |  1 +
- .../0001-Fix-LoadExtenions.patch                   | 15 ++++++++++
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 31 +++++++++++++++++++++
- .../xdriver_xf86-video-imx-viv.mk                  | 32 ++++++++++++++++++++++
- 4 files changed, 79 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+ .../qt5/qt5base/0001-Force_egl_visual_ID_33.patch  | 23 ++++++++
+ package/qt5/qt5base/0004-xcb-egl-fixes.patch       | 63 ++++++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
+ create mode 100644 package/qt5/qt5base/0004-xcb-egl-fixes.patch
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 357d4b4..987f979 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -160,6 +160,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-glide/Config.in
- 		source package/x11r7/xdriver_xf86-video-glint/Config.in
- 		source package/x11r7/xdriver_xf86-video-i128/Config.in
-+		source package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- 		source package/x11r7/xdriver_xf86-video-intel/Config.in
- 		source package/x11r7/xdriver_xf86-video-mach64/Config.in
- 		source package/x11r7/xdriver_xf86-video-mga/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
+diff --git a/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch b/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
 new file mode 100644
-index 0000000..3e2d47c
+index 0000000..b0be292
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-@@ -0,0 +1,15 @@
-+Fix compilation with Xorg xserver 1.16.
++++ b/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
+@@ -0,0 +1,23 @@
++Workaround EGL initialization failure due visual mismatch
 +
++Error:
++
++Warning: EGL suggested using X Visual ID 33 (RGB888) for EGL config 28 (RGB444), but this is incompatable
++Unable to find an X11 visual which matches EGL config 28
++Could not initialize EGL
++Aborted
++
++Upstream-Status: Inappropriate [workaround]
++
++Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
++
++diff -Naur qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp
++--- qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:08:42.163895341 -0800
+++++ qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:09:37.207893799 -0800
++@@ -180,5 +180,5 @@
++     }
++ 
++     qWarning("Unable to find an X11 visual which matches EGL config %d", configId);
++-    return (VisualID)0;
+++    return (VisualID)33;
++ }
+diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+new file mode 100644
+index 0000000..2bbd849
+--- /dev/null
++++ b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+@@ -0,0 +1,63 @@
++The vivante headers pull in X11 defines which break eglconvenience
++
++* Adds a missing include to qeglplatformcontext.cpp
++* Fix namespace collision on CursorShape, pulled in from X11/X.h
++* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++
++[based on patch from Yocto project]
 +Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 +
-+--- a/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-07-25 15:38:24.000000000 +0200
-++++ b/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-10-02 21:00:58.755409342 +0200
-+@@ -261,7 +261,7 @@
-+         setupDone = TRUE;
-+         xf86AddDriver(&FBDEV, module, HaveDriverFuncs);
-+         if(gVivFb)
-+-            LoadExtension(&VIVExt, FALSE);
-++            LoadExtensionList(&VIVExt, 1, FALSE);
-+ 		return (pointer)1;
-+     } else {
-+         if (errmaj) *errmaj = LDR_ONCEONLY;
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-new file mode 100644
-index 0000000..d91ba79
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-@@ -0,0 +1,31 @@
 +
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
-+	bool "xf86-video-imx-viv"
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	help
-+	  X.Org driver for iMX6 GPU (Vivante)
-+
-+	  Notice EGL and GLes2 APIs are correctly supported. This driver should
-+	  also be able to provide Desktop OpenGL implementation but, this 
-+	  feature seems broken for a while.
-+
-+	  To use this driver, add correct configuration to your
-+	  /etc/X11/xorg.conf:
-+
-+	  Section "Device"
-+	    [...]
-+	    Driver          "vivante"
-+	    Option          "vivante_fbdev" "/dev/fbX"
-+	  EndSection
-+
-+	  Don't forget to load galcore.ko and create /dev/galcore before to
-+	  use this driver (else, Xorg will exit with an obscur message
-+	  like "Segmentation fault at address 0xc").
-+
-+comment "xf86-video-imx-viv depends on gpu-viv-bin-mx6q with X11 output"
-+	depends on BR2_arm
-+	depends on (!BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11)
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-new file mode 100644
-index 0000000..0a62110
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# xdriver_xf86-video-imx-viv
-+#
-+################################################################################
-+
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
-+XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
-+XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
-+XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
-+	xproto_xproto xproto_xf86driproto
-+XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
-+XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
-+
-+define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
-+		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
-+		CFLAGS+="$(TARGET_CFLAGS) -I$(@D)/DRI_1.10.4/src"
-+endef
-+
-+define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(STAGING_DIR)/usr install
-+	$(INSTALL) -m 644 $(@D)/EXA/src/vivante_gal/vivante_priv.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -m 644 $(@D)/EXA/src/vivante_gal/vivante_gal.h $(STAGING_DIR)/usr/include
-+endef
-+
-+define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_TARGET_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
-+
++diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
++@@ -30,8 +30,10 @@
++         }
++     }
++ 
++-    # Avoid X11 header collision
++-    DEFINES += MESA_EGL_NO_X11_HEADERS
+++    !contains(QT_CONFIG,xcb) {
+++        # Avoid X11 header collision
+++        DEFINES += MESA_EGL_NO_X11_HEADERS
+++    }
++ 
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
++--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
++@@ -39,6 +39,7 @@
++ **
++ ****************************************************************************/
++ 
+++#include <qtextstream.h>
++ #include "qeglplatformcontext_p.h"
++ #include "qeglconvenience_p.h"
++ #include "qeglpbuffer_p.h"
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
++@@ -42,6 +42,11 @@
++ #ifndef QEGLPLATFORMCURSOR_H
++ #define QEGLPLATFORMCURSOR_H
++ 
+++// avoid namespace collision with X11/X.h
+++#ifdef CursorShape
+++#undef CursorShape
+++#endif
+++
++ #include <qpa/qplatformcursor.h>
++ #include <qpa/qplatformscreen.h>
++ 
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
++@@ -49,8 +49,8 @@
++ 
++ #include <QtPlatformSupport/private/qdevicediscovery_p.h>
++ 
++-#include "qeglplatformcursor_p.h"
++ #include "qeglplatformintegration_p.h"
+++#include "qeglplatformcursor_p.h"
++ 
++ QT_BEGIN_NAMESPACE
++ 
 -- 
 1.9.1
