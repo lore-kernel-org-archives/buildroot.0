@@ -1,28 +1,24 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 02 Dec 2014 14:40:31 +0100
-Subject: [Buildroot] [PATCHv2 2/4] pkg-generic: add step_pkg_size global
-	instrumentation hook
-In-Reply-To: <1584811.M4fI97sQSe@aquila>
-References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141202132349.5a02a3a4@free-electrons.com> <1584811.M4fI97sQSe@aquila>
-Message-ID: <2051768.FyKtzhdtK4@aquila>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 2 Dec 2014 08:48:38 -0600
+Subject: [Buildroot] qemu_microblazeel_mmu_defconfig: booting issue
+Message-ID: <CANQCQpaZmxDtd+vVuvcPF9GDQjqNKOdJ5ddy3kX4wSuxbZf=kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 02 December 2014 14:22:11 J?r?me Pouiller wrote:
-> On Tuesday 02 December 2014 13:23:49 Thomas Petazzoni wrote:
-[...]
-> I just noticed another thing. To make this feature compatible to 
-> BR2_JLEVEL, we just need to manage a mutex in step_pkg_size hook. Do 
-  ^^^^^^^^^^
-Sure, I meant "top-level parallel make".
+I grabbed the 2014.11 release and did a build using the
+qemu_microblazeel_mmu_defconfig.  I tried to execute it with "QEMU
+emulator version 2.0.0 (Debian 2.0.0+dfsg-2ubuntu1.7)" using the
+command provided in the "board/qemu/microblazeel-mmu/readme.txt".
 
-> you planned to add one?
+Spenser, what was the last kernel version you've successfully tested a
+build against?  I noticed there have been a few sweeping bumps of
+kernel versions that included this defconfig.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
