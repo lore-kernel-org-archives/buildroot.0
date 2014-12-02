@@ -1,41 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 09:39:14 +0100
-Subject: [Buildroot] [git commit] ifplugd: remove spurious newline escape
-Message-ID: <20141202084355.84F8180078@busybox.osuosl.org>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Tue,  2 Dec 2014 16:53:39 +0800
+Subject: [Buildroot] [PATCH v2] package/network-manager: Enable service
+	under systemd
+Message-ID: <1417510419-9400-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d1ab19be4b63c210eede7fef9ee61d1a9ddde3a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Previously NetworkManager had to be enabled and started on the
+first boot manually or by a script.
 
-Commit 5ad5d55924bcc (ifplugd: install configuration files unconditionally)
-removed the conditional configuration file install, but left an redundant
-newline escape, causing the following error:
+Add install define with the commands to setup the required
+service files for automatic start.
 
-package/ifplugd/ifplugd.mk:23: *** missing 'endef', unterminated 'define'.  Stop.
-
-Fix this.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 ---
- package/ifplugd/ifplugd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Changes v1 -> v2
+  - Corrected the symlinks so they point to the correct files,
+	ensuring the dispatcher service works
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 03ed8cd..6b6141e 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -24,7 +24,7 @@ define IFPLUGD_INSTALL_FIXUP
- 	$(INSTALL) -D -m 0644 $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- 	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
--		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
-+		$(TARGET_DIR)/etc/ifplugd/ifplugd.action
+ package/network-manager/network-manager.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 9770cae..3f6512c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -72,4 +72,17 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/network-manager/S45network-manager $(TARGET_DIR)/etc/init.d/S45network-manager
  endef
  
- IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
++define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -sf /usr/lib/systemd/system/NetworkManager.service \
++		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
++
++	ln -sf /usr/lib/systemd/system/NetworkManager.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
++
++	ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
++		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
++endef
++
+ $(eval $(autotools-package))
+-- 
+2.1.3
