@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2014 13:23:49 +0100
-Subject: [Buildroot] [PATCHv2 2/4] pkg-generic: add step_pkg_size global
- instrumentation hook
-In-Reply-To: <1929636.NnvGLL6rO5@aquila>
+Date: Tue, 2 Dec 2014 13:28:44 +0100
+Subject: [Buildroot] [PATCHv2 3/4] support/scripts: add size-stats script
+In-Reply-To: <1429484.vXm9l0Ysfx@aquila>
 References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470100-32657-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <1929636.NnvGLL6rO5@aquila>
-Message-ID: <20141202132349.5a02a3a4@free-electrons.com>
+ <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1429484.vXm9l0Ysfx@aquila>
+Message-ID: <20141202132844.6288543a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +14,67 @@ To: buildroot@busybox.net
 
 Dear J?r?me Pouiller,
 
-On Tue, 02 Dec 2014 12:00:51 +0100, J?r?me Pouiller wrote:
+On Tue, 02 Dec 2014 12:01:11 +0100, J?r?me Pouiller wrote:
 
-> > +# This hook will be called before the target installation of a
-> > +# package. We store in a file named $(1).filelist_before the list of
-> > +# files currently installed in the target. Note that the MD5 is also
-> > +# stored, in order to identify if the files are overwritten.
-> > +define step_pkg_size_start
-> > +	(cd $(TARGET_DIR) ; find . -type f | xargs md5sum) | sort > \
-> > +		$(BUILD_DIR)/$(1).filelist_before
-> > +endef
-> I think this does not work if filename contains spaces.
+> Is it possible to rely on Kconfiglib in order to support customized skeleton
+> and overlays? Or you think skeleton and overlays (and post-build scripts) 
+> should be managed by package infra (like https://patchwork.ozlabs.org/patch/399413/)?
 
-Hum, yes, very possible. But is Buildroot really working fine as a
-whole if some file in the target filesystem has some spaces?
+Ultimately, yes, I think the skeleton should be a package. Regarding
+overlays, maybe not, since we want overlays to be copied on each "make"
+invocation, to make them easy to install. So it would indeed be
+necessary to add some support for overlays, and post-build script as
+well.
 
-> > +# This hook will be called after the target installation of a
-> > +# package. We store in a file named $(1).filelist_after the list
-> > +# of files (and their MD5) currently installed in the target. We then
-> > +# do a diff with the $(1).filelist_before to compute the list of
-> > +# files installed by this package.
-> > +define step_pkg_size_end
-> > +	(cd $(TARGET_DIR); find . -type f | xargs md5sum) | sort > \
-> > +		$(BUILD_DIR)/$(1).filelist_after
-> > +	comm -13 $(BUILD_DIR)/$(1).filelist_before $(BUILD_DIR)/$(1).filelist_after | \
-> > +		while read hash file ; do \
-> > +			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-> > +		done
-> Does it would make sense if we also record removed lines? We may wrote 
-> another script that detect if a file was in conflict between two packages.
+I guess we could consider this a follow-up improvement, but I'm willing
+to work on this topic once the basic stuff is merged.
 
-I'm not sure to follow you here. We already take care of packages
-installing the same file, that's the whole point of storing the MD5 of
-each file. By using comm -13, we keep only the lines that are unique in
-the second file (compared to the first file). So we keep lines for
-either new files added by this package, or files already installed but
-overwritten by the package (detected using the MD5).
+> > +#
+> > +# This function returns a dict where each key is the path of a file in
+> > +# the root filesystem, and the value is a dict containing two
+> > +# elements: the name of the package to which this file belongs (key:
+> > +# pkg) and the size of the file (key: size).
+> > +#
+> > +# builddir: path to the Buildroot output directory
+> > +#
+> > +def build_package_dict(builddir):
+> > +    pkgdict = {}
+> > +    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
+> > +        for l in filelistf.readlines():
+> > +            f = l.split(",")
+> > +            fpath = f[1].strip().replace("./", "")
+> > +            fullpath = os.path.join(builddir, "target", fpath)
+> > +            if not os.path.exists(fullpath):
+> > +                continue
+> It means the file was remove by another package. You may emit a warning
+> there?
 
-Thanks,
+Hum, indeed, emitting a warning here seems useful.
+
+> > +            pkg = f[0]
+> > +            sz = os.stat(fullpath).st_size
+> > +            pkgdict[fpath] = { 'pkg': pkg, 'size': sz }
+> If pkgdict[fpath] is already defined, it means:
+>   a. pkg == pkgdict[fpath].pkg -> Package was reinstalled
+>   b. pkg != pkgdict[fpath].pkg -> File was overwritten by another package
+> 
+> You may emit a warning is second case?
+
+Well, it depends on whether we consider overwritten files as normal or
+not. For now, the main case where we overwrite things in Buildroot is
+when a package such as coreutils, installs some commands that are
+"better" than the Busybox ones, in which case coreutils wins over
+Busybox. But since Busybox installs symlinks, and this tool doesn't
+track symlinks, we don't consider this as a file being overwritten.
+
+So maybe I could have a warning here.
+
+Regarding "package was reinstalled", this entire script/logic is meant
+to be used after a "make clean all" cycle. I don't think it is worth
+bothering with supporting package re-installation and other crazy things
+that can happen outside of a normal "make clean all" cycle.
+
+Thanks for the review!
 
 Thomas
 -- 
