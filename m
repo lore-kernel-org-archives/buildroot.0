@@ -1,63 +1,87 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 01 Dec 2014 18:55:35 -0600
-Subject: [Buildroot] [PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg
- package
-In-Reply-To: <5479642D.1030408@ou.edu>
-References: <54796318.7010207@ou.edu> <5479642D.1030408@ou.edu>
-Message-ID: <547D0E07.2070502@ou.edu>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Mon, 01 Dec 2014 19:05:01 -0800
+Subject: [Buildroot] [PATCH v3 00/14] Add Xorg support for iMX6
+In-Reply-To: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+References: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+Message-ID: <547D2C5D.8070006@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/29/2014 12:14 AM, Steve Kenton wrote:
-V2.0 updated for buildroot 2014.11
+Jerome, All,
 
-[Buildroot][PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg package
+On 11/29/2014 01:35 AM, J?r?me Pouiller wrote:
+> Hello,
+>
+> Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
+> Xorg. This work is mainly adapted from Yocto.
+>
+> v3:
+>    - Respin on next
+>    - Add patch to use self-extractible helper function
+>    - Remove 'See freescale-imx.mk' comment
+>    - Reword patch "gpu-viv-bin-mx6q: change output selection mecanisms"
+>    - libdrm: Apply new patch naming policy
+>    - xdriver_xf86-video-imx-viv: Apply new patch naming policy
+>    - xdriver_xf86-video-imx-viv: Does not depends directly on glibc
+>    - qt5base: Apply new patch naming policy
+>    - qmx6_defconfig: Use internal toochain
+>
+> v2:
+>    - Rebase on new version of mesa3d
+>    - Reorder some patches (in order to make examples I provide in commit message
+>      functional)
+>    - Do not bump version of all freescale packages
+>    - Bump kernel version of imx6 boards
+>
+> J?r?me Pouiller (14):
+>    mesa3d: Give possibility to external backends to enable DRI/Gallium
+>    gpu-viv-bin-mx6q: use self-extractible helper
+>    gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
+>    gpu-viv-bin-mx6q: fix GLESv2 support
+>    gpu-viv-bin-mx6q: make fb/x11 choice explicit
+>    gpu-viv-bin-mx6q: change output selection mechanism
+>    xdriver_xf86-video-imx-viv: new package
+>    libdrm: fix support for xserver with Vivante drivers
+>    qt5base: apply new patch naming policy
+>    qt5base: fix Vivante x11/EGL configuration
+>    Vivante drivers: bump to version 3.10.17-1.0.1
+>    nitrogen6x_defconfig: bump kernel to 3.10.17_1.0.1_ga
+>    freescale_imx6*_defconfig: bump kernel to 3.10.17_1.0.1_ga
+>    qmx6_defconfig: update
+First, I have been able to apply and build everything fine based on the 
+next branch.
+It is to be noted that I am using a SabreLite instead of the QMX6, 
+therefore I've modified the kernel and bootloader versions.
 
-I found I needed ffprobe on the target so this adds
-BR2_PACKAGE_FFMPEG_FFPROBE to make it an option
+X is working well just like the graphics. As a FYI, xorg.conf used 
+during my testing is coming from Yocto:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+Then I've tried to start X, xterm and the Vivante example which are all 
+running fine.
 
-Signed-off-by Stephen M. Kenton <skenton@ou.edu>
----
-diff -ru buildroot-2014.11.clean/package/ffmpeg/Config.in buildroot-2014.11/package/ffmpeg/Config.in
---- buildroot-2014.11.clean/package/ffmpeg/Config.in	2014-12-01 03:19:00.000000000 -0600
-+++ buildroot-2014.11/package/ffmpeg/Config.in	2014-12-01 10:41:51.550502361 -0600
-@@ -49,6 +49,12 @@
- 	help
- 	  FFserver is a streaming server for both audio and video.
+There is only one thing I am unclear on which is the Qt5 changes and how 
+to test them.
+Looking at the configuration it looks like we should have some examples 
+installed but I can't seem to run them as I get the following error:
+# qmlscene TestCase.qml
+Could not initialize GLX
+Aborted
 
-+config BR2_PACKAGE_FFMPEG_FFPROBE
-+	bool "Build ffprobe"
-+	help
-+	  FFprobe is a utility to determine the audio and video
-+	  characteristics of a container file.
-+
- config BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	bool "Build libavresample"
- 	help
-diff -ru buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11/package/ffmpeg/ffmpeg.mk
---- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk	2014-12-01 03:19:00.000000000 -0600
-+++ buildroot-2014.11/package/ffmpeg/ffmpeg.mk	2014-12-01 10:31:58.950490993 -0600
-@@ -23,7 +23,6 @@
- 	--enable-logging \
- 	--enable-optimizations \
- 	--disable-extra-warnings \
--	--disable-ffprobe \
- 	--enable-avdevice \
- 	--enable-avcodec \
- 	--enable-avformat \
-@@ -104,6 +103,12 @@
- FFMPEG_CONF_OPTS += --disable-avresample
- endif
+I might do something wrong here but it looks like GL isn't configured 
+properly. By looking at the configuration again I've realized that we 
+have the following option by default:
+BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP=y
+# BR2_PACKAGE_QT5BASE_OPENGL_ES2 is not set
+Where it might make sense to have:
+# BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP is not set
+BR2_PACKAGE_QT5BASE_OPENGL_ES2=y
 
-+ifeq ($(BR2_PACKAGE_FFMPEG_FFPROBE),y)
-+FFMPEG_CONF_OPTS += --enable-ffprobe
-+else
-+FFMPEG_CONF_OPTS += --disable-ffprobe
-+endif
-+
- ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
- FFMPEG_CONF_OPTS += --enable-postproc
- else
+Should we specify the QT5BASE_OPENGL_ES2 in the configuration provided 
+in your patches or does it behave differently on your side?
+Could you send you entire configuration file for comparison?
+
+Thanks,
+Gary
