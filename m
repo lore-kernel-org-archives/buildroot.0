@@ -1,19 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 13:01:22 +0100
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.4.x series
-In-Reply-To: <1417515167-20254-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 2 Dec 2014 07:12:47 -0300")
-References: <1417515167-20254-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87h9xe1crx.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Dec 2014 13:05:02 +0100
+Subject: [Buildroot] [PATCH] tcpdump: add security fix patch
+In-Reply-To: <5857a4fa9ec8b0047b0b8e41af168a24b4bab243.1417518976.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 2 Dec 2014 13:16:16 +0200")
+References: <5857a4fa9ec8b0047b0b8e41af168a24b4bab243.1417518976.git.baruch@tkos.co.il>
+Message-ID: <87d2821clt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Fixes CVE-2014-9140, PPP dissector vulnerability.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
