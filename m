@@ -1,51 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 2 Dec 2014 09:00:24 +0200
-Subject: [Buildroot] [PATCH] ifplugd: remove spurious newline excape
-In-Reply-To: <fb06c6bb75e7486b104103ed0de58d64fa3f2058.1417503529.git.baruch@tkos.co.il>
-References: <fb06c6bb75e7486b104103ed0de58d64fa3f2058.1417503529.git.baruch@tkos.co.il>
-Message-ID: <20141202070024.GA2263@tarshish>
+Date: Tue,  2 Dec 2014 09:10:38 +0200
+Subject: [Buildroot] [PATCH] proftpd: remove redundant newline escape
+Message-ID: <6760a4decd5ac702345eb2dde6d3ac410ef72993.1417504238.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Broken since 0e18b0a4e12e7 (proftpd: install configuration file
+unconditionally). Fixes the following make error:
 
-On Tue, Dec 02, 2014 at 08:58:49AM +0200, Baruch Siach wrote:
-> Commit 5ad5d55924bcc (ifplugd: install configuration files unconditionally)
-> removed the conditional configuration file install, but left an redundant
-> newline escape, causing the following error:
-> 
-> package/ifplugd/ifplugd.mk:23: *** missing 'endef', unterminated 'define'.  Stop.
-> 
-> Fix this.
+package/proftpd/proftpd.mk:49: *** missing 'endef', unterminated 'define'.  Stop.
 
-In subject: s/excape/escape/
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/proftpd/proftpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-baruch
-
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ifplugd/ifplugd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-> index 03ed8cdf33a2..6b6141e7b8b3 100644
-> --- a/package/ifplugd/ifplugd.mk
-> +++ b/package/ifplugd/ifplugd.mk
-> @@ -24,7 +24,7 @@ define IFPLUGD_INSTALL_FIXUP
->  	$(INSTALL) -D -m 0644 $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
->  	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
->  	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
-> -		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
-> +		$(TARGET_DIR)/etc/ifplugd/ifplugd.action
->  endef
->  
->  IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
-
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 0fd8cc866222..b79abe45e8b5 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -49,7 +49,7 @@ PROFTPD_MAKE = $(MAKE1)
+ define PROFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+ 	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
+-	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
++	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;)
+ endef
+ 
+ define PROFTPD_INSTALL_INIT_SYSV
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.3
