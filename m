@@ -1,42 +1,68 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue,  2 Dec 2014 15:21:03 -0800
-Subject: [Buildroot] [PATCH 2/2] rp-pppoe: install helper scripts
-In-Reply-To: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
-References: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
-Message-ID: <1417562463-26561-2-git-send-email-bluemrp9@gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed, 03 Dec 2014 00:56:08 +0100
+Subject: [Buildroot] [PATCH 1/1] lighttpd: install fastcgi config for php
+In-Reply-To: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+References: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+Message-ID: <547E5198.90208@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/rp-pppoe/rp-pppoe.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On 12/02/2014 11:35 PM, Ryan Coe wrote:
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>   package/lighttpd/fastcgi.conf |  7 +++++++
+>   package/lighttpd/lighttpd.mk  | 11 +++++++++++
+>   2 files changed, 18 insertions(+)
+>   create mode 100644 package/lighttpd/fastcgi.conf
+>
+> diff --git a/package/lighttpd/fastcgi.conf b/package/lighttpd/fastcgi.conf
+> new file mode 100644
+> index 0000000..2ed8bea
+> --- /dev/null
+> +++ b/package/lighttpd/fastcgi.conf
+> @@ -0,0 +1,7 @@
+> +server.modules += ( "mod_fastcgi" )
+> +
+> +fastcgi.server = ( ".php" => ((
+> +                     "bin-path" => "/usr/bin/php-cgi",
+> +                     "socket" => "/tmp/php.socket"
+> +                 )))
+> +
+> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+> index 8f34561..e4a3020 100644
+> --- a/package/lighttpd/lighttpd.mk
+> +++ b/package/lighttpd/lighttpd.mk
+> @@ -78,6 +78,17 @@ endef
+>   
+>   LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
+>   
+> +define LIGHTTPD_INSTALL_PHP_CONFIG
+> +	$(INSTALL) -D -m 0644 package/lighttpd/fastcgi.conf \
+> +		$(TARGET_DIR)/etc/lighttpd/conf.d/fastcgi.conf
+> +	$(SED) 's/#include \"conf.d\/fastcgi.conf\"/include \"conf.d\/fastcgi.conf\"/' \
+> +		$(TARGET_DIR)/etc/lighttpd/modules.conf
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_PHP_SAPI_CLI_CGI)$(BR2_PACKAGE_PHP_SAPI_CGI),y)
+> +	LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_PHP_CONFIG
+> +endif
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 70b4437..9c3e3e4 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -11,6 +11,8 @@ RP_PPPOE_LICENSE_FILES = doc/LICENSE
- RP_PPPOE_DEPENDENCIES = pppd
- RP_PPPOE_SUBDIR = src
- RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
-+RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
-+	pppoe-stop
- RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
- RP_PPPOE_CONF_OPTS = --disable-debugging
- RP_PPPOE_CONF_ENV = \
-@@ -23,6 +25,9 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
- 	for ff in $(RP_PPPOE_TARGET_FILES); do \
- 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
- 	done
-+	for ff in $(RP_PPPOE_TARGET_SCRIPTS); do \
-+		$(INSTALL) -m 0755 $(@D)/scripts/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
-+	done
- endef
- 
- $(eval $(autotools-package))
--- 
-2.2.0
+You are making the assumption here that if someone selects the CGI SAPI, 
+he wants to use the FastCGI interface.
+Personally I would prefer plain old regular CGI above FastCGI.
+
+Problem with the FastCGI implementation is that it creates a fixed 
+number of PHP processes.
+Consumes memory even when the webserver isn't executing any PHP script.
+And doesn't work too well with PHP scripts that perform blocking 
+operations or depend on any external server. If all PHP processes are 
+occupied executing a script, the webserver cannot process any additional 
+requests until a process becomes available again.
+
+
+Yours sincerely,
+
+Floris Bos
