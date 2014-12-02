@@ -1,35 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  2 Dec 2014 09:10:38 +0200
-Subject: [Buildroot] [PATCH] proftpd: remove redundant newline escape
-Message-ID: <6760a4decd5ac702345eb2dde6d3ac410ef72993.1417504238.git.baruch@tkos.co.il>
+Date: Tue,  2 Dec 2014 09:13:08 +0200
+Subject: [Buildroot] [PATCH] sysklogd: fix redundant newline escape
+Message-ID: <85c2022d971aa5071bb3749addae8808cce2763f.1417504388.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Broken since 0e18b0a4e12e7 (proftpd: install configuration file
-unconditionally). Fixes the following make error:
+Broken since 428f1e7e70c6b (sysklogd: install configuration file
+unconditionally). Fixes:
 
-package/proftpd/proftpd.mk:49: *** missing 'endef', unterminated 'define'.  Stop.
+package/sysklogd/sysklogd.mk:21: *** missing 'endef', unterminated 'define'.  Stop.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/proftpd/proftpd.mk | 2 +-
+ package/sysklogd/sysklogd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 0fd8cc866222..b79abe45e8b5 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -49,7 +49,7 @@ PROFTPD_MAKE = $(MAKE1)
- define PROFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
- 	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
--	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
-+	$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;)
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 1e8652d1a56f..de2edf409e57 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -22,7 +22,7 @@ define SYSKLOGD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0500 $(@D)/syslogd $(TARGET_DIR)/sbin/syslogd
+ 	$(INSTALL) -D -m 0500 $(@D)/klogd $(TARGET_DIR)/sbin/klogd
+ 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+-		$(TARGET_DIR)/etc/syslog.conf; \
++		$(TARGET_DIR)/etc/syslog.conf
  endef
  
- define PROFTPD_INSTALL_INIT_SYSV
+ define SYSKLOGD_INSTALL_INIT_SYSV
 -- 
 2.1.3
