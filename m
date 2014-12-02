@@ -1,54 +1,89 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  2 Dec 2014 10:59:00 +0100
-Subject: [Buildroot] [PATCH v4 02/14] gpu-viv-bin-mx6q: use self-extractible
-	helper
+Date: Tue,  2 Dec 2014 10:59:01 +0100
+Subject: [Buildroot] [PATCH v4 03/14] gpu-viv-bin-mx6q: fix compiling issues
+	with EGL_API_FB
 In-Reply-To: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
 References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1417514352-8825-3-git-send-email-jezz@sysmic.org>
+Message-ID: <1417514352-8825-4-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+To compile with Vivante header and use framebuffer, it is necessary to
+pass option -DEGL_API_FB. This option is declared in pkg-config file of
+Vivante library. But many packages (especialy qt5 components) does not
+consider these flags.
+
+So instead of patching every packages that use EGL, it is more
+convenient to patch Vivante headers.
+
+This commit add #define EGL_API_FB on top of eglvivante.h when
+necessary.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- .../freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk    | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
+ package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
+ package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
+ 4 files changed, 9 insertions(+), 7 deletions(-)
 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+index c984247..d1d09a0 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+@@ -7,4 +7,4 @@ Name: egl
+ Description: Freescale gpu-viv-bin-mx6q implementation of EGL
+ Version: 1.0
+ Libs: -L${libdir} -lGAL -lEGL
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+index 7cfb5e7..74ce792 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+@@ -7,4 +7,4 @@ Name: glesv2
+ Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
+ Version: 2.0
+ Libs: -L${libdir} -lGAL -lEGL -lGLESv2
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index aef16a3..bc44e38 100644
+index bc44e38..1158e42 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -15,12 +15,7 @@ GPU_VIV_BIN_MX6Q_SOURCE = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
- GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
+@@ -47,14 +47,16 @@ endef
  
- GPU_VIV_BIN_MX6Q_LICENSE = Freescale Semiconductor Software License Agreement
--
--# No license file is included in the archive; we could extract it from
--# the self-extractor, but that's just too much effort.
--# This is a legal minefield: the EULA specifies that
--# the Board Support Package includes software and hardware (sic!)
--# for which a separate license is needed...
-+GPU_VIV_BIN_MX6Q_LICENSE_FILES = EULA
- GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
- 
- GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
-@@ -33,14 +28,8 @@ else
- GPU_VIV_BIN_MX6Q_LIB_TARGET = fb
- endif
- 
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (gpu-viv-bin-mx6q-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info.
- define GPU_VIV_BIN_MX6Q_EXTRACT_CMDS
--	(cd $(BUILD_DIR); \
--		sh $(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE) --force --auto-accept)
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE))
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
++	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
++		$(SED) '/#define EGLAPIENTRY/ a \
++			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
++			#define EGL_API_FB \n\
++			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
++	fi
+ 	for lib in egl glesv2 vg; do \
+ 		$(INSTALL) -m 0644 -D \
+ 			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
+ 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+-		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
+-			$(SED) "s/-DEGL_API_FB=1//" \
+-				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+-		fi; \
+ 	done
  endef
  
- # Instead of building, we fix up the inconsistencies that exist
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+index fb14005..677a7ee 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+@@ -7,4 +7,4 @@ Name: vg
+ Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
+ Version: 1.1
+ Libs: -L${libdir} -lGAL -lEGL -lOpenVG
+-Cflags: -I${includedir}/ -DEGL_API_FB=1
++Cflags: -I${includedir}/
 -- 
 1.9.1
