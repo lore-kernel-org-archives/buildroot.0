@@ -1,11 +1,10 @@
 From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 02 Dec 2014 12:00:51 +0100
-Subject: [Buildroot] [PATCHv2 2/4] pkg-generic: add step_pkg_size global
-	instrumentation hook
-In-Reply-To: <1417470100-32657-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 02 Dec 2014 12:01:11 +0100
+Subject: [Buildroot] [PATCHv2 3/4] support/scripts: add size-stats script
+In-Reply-To: <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470100-32657-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1929636.NnvGLL6rO5@aquila>
+ <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1429484.vXm9l0Ysfx@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,102 +13,92 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Monday 01 December 2014 22:41:38 Thomas Petazzoni wrote:
-> This patch adds a global instrumentation hook that collects the list
-> of files installed in $(TARGET_DIR) by each package, and stores this
-> list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
-> later be used to determine the size contribution of each package to
-> the target root filesystem.
-> 
-> Note that in order to detect if a file installed by one package is
-> later overriden by another package, we calculate the md5 of installed
-> files and compare them at each installation of a new package.
-> 
-> This commit also adds a Config.in option to enable the collection of
-> this data, as calculating the md5 of all installed files at the
-> beginning and end of the installation of each package can be
-> considered a time-consuming process which maybe some users will not be
-> willing to suffer from.
+I have a few comments below.
+
+On Monday 01 December 2014 22:41:39 Thomas Petazzoni wrote:
+> This new script uses the data collected by the step_pkg_size
+> instrumentation hook to generate a pie chart of the size contribution
+> of each package to the target root filesystem, and two CSV files with
+> statistics about the package size and file size. To achieve this, it
+> looks at each file in $(TARGET_DIR), and using the
+> packages-file-list.txt information collected by the step_pkg_size
+> hook, it determines to which package the file belongs. It is therefore
+> able to give the size installed by each package.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  Config.in              |  9 +++++++++
->  package/pkg-generic.mk | 36 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 45 insertions(+)
+>  support/scripts/size-stats | 225 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 225 insertions(+)
+>  create mode 100755 support/scripts/size-stats
 > 
-> diff --git a/Config.in b/Config.in
-> index 1aa1080..328654c 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -569,6 +569,15 @@ config BR2_GLOBAL_PATCH_DIR
->  	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
->  	  then all *.patch files in the directory will be applied.
->  
-> +config BR2_COLLECT_FILE_SIZE_STATS
-> +	bool "collect statistics about installed file size"
-> +	help
-> +	  Enable this option to let Buildroot collect data about the
-> +	  installed files. When this option is enabled, you will be
-> +	  able to use the 'size-stats' make target, which will
-> +	  generate a graph and CSV files giving statistics about the
-> +	  installed size of each file and each package.
-> +
->  endmenu
->  
->  source "toolchain/Config.in"
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9643a30..82f8ff8 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -55,6 +55,42 @@ define step_time
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  
-> +# Hooks to collect statistics about installed files
-> +ifeq ($(BR2_COLLECT_FILE_SIZE_STATS),y)
-> +
-> +# This hook will be called before the target installation of a
-> +# package. We store in a file named $(1).filelist_before the list of
-> +# files currently installed in the target. Note that the MD5 is also
-> +# stored, in order to identify if the files are overwritten.
-> +define step_pkg_size_start
-> +	(cd $(TARGET_DIR) ; find . -type f | xargs md5sum) | sort > \
-> +		$(BUILD_DIR)/$(1).filelist_before
-> +endef
-I think this does not work if filename contains spaces.
+> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+> new file mode 100755
+> index 0000000..7dc28a0
+> --- /dev/null
+> +++ b/support/scripts/size-stats
+> @@ -0,0 +1,225 @@
+> +#!/usr/bin/env python
+[...]
+> +#
+> +# This function returns a dict containing as keys the files present in
+> +# the filesystem skeleton, and as value, the string "skeleton". It is
+> +# used to simulate a fake "skeleton" package, to assign the files from
+> +# the skeleton to some package.
+> +#
+> +# builddir: path to the Buildroot output directory
+> +#
+> +def build_skeleton_dict(builddir):
+> +    skeleton_files = {}
+> +    for root, _, files in os.walk("system/skeleton"):
+> +        for f in files:
+> +            if f == ".empty":
+> +                continue
+> +            frelpath = os.path.relpath(os.path.join(root, f), "system/skeleton")
+> +            # Get the real size of the installed file
+> +            targetpath = os.path.join(builddir, "target", frelpath)
+> +            if os.path.islink(targetpath):
+> +                continue
+> +            sz = os.stat(targetpath).st_size
+> +            skeleton_files[frelpath] = { 'pkg': "skeleton", 'size': sz }
+> +    return skeleton_files
+Is it possible to rely on Kconfiglib in order to support customized skeleton
+and overlays? Or you think skeleton and overlays (and post-build scripts) 
+should be managed by package infra (like https://patchwork.ozlabs.org/patch/399413/)?
+
+> +#
+> +# This function returns a dict where each key is the path of a file in
+> +# the root filesystem, and the value is a dict containing two
+> +# elements: the name of the package to which this file belongs (key:
+> +# pkg) and the size of the file (key: size).
+> +#
+> +# builddir: path to the Buildroot output directory
+> +#
+> +def build_package_dict(builddir):
+> +    pkgdict = {}
+> +    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
+> +        for l in filelistf.readlines():
+> +            f = l.split(",")
+> +            fpath = f[1].strip().replace("./", "")
+> +            fullpath = os.path.join(builddir, "target", fpath)
+> +            if not os.path.exists(fullpath):
+> +                continue
+It means the file was remove by another package. You may emit a warning
+there?
+
+> +            pkg = f[0]
+> +            sz = os.stat(fullpath).st_size
+> +            pkgdict[fpath] = { 'pkg': pkg, 'size': sz }
+If pkgdict[fpath] is already defined, it means:
+  a. pkg == pkgdict[fpath].pkg -> Package was reinstalled
+  b. pkg != pkgdict[fpath].pkg -> File was overwritten by another package
+
+You may emit a warning is second case?
 
 
-> +# This hook will be called after the target installation of a
-> +# package. We store in a file named $(1).filelist_after the list
-> +# of files (and their MD5) currently installed in the target. We then
-> +# do a diff with the $(1).filelist_before to compute the list of
-> +# files installed by this package.
-> +define step_pkg_size_end
-> +	(cd $(TARGET_DIR); find . -type f | xargs md5sum) | sort > \
-> +		$(BUILD_DIR)/$(1).filelist_after
-> +	comm -13 $(BUILD_DIR)/$(1).filelist_before $(BUILD_DIR)/$(1).filelist_after | \
-> +		while read hash file ; do \
-> +			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-> +		done
-Does it would make sense if we also record removed lines? We may wrote 
-another script that detect if a file was in conflict between two packages.
-
-> +	$(RM) -f $(BUILD_DIR)/$(1).filelist_before \
-> +		$(BUILD_DIR)/$(1).filelist_after
-> +endef
+> +    pkgdict.update(build_skeleton_dict(builddir))
+> +    return pkgdict
 > +
-> +define step_pkg_size
-> +	$(if $(filter install-target,$(2)),\
-> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
-> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
-> +endif
-> +
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
->  define step_user
-> 
+[...]
 
 -- 
 J?r?me Pouiller, Sysmic
