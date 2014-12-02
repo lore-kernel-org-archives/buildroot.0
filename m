@@ -1,40 +1,27 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 2 Dec 2014 18:50:53 +0100
-Subject: [Buildroot] [PATCH 0/2] RWD Website
-In-Reply-To: <20141125193534.00c099d9@free-electrons.com>
-References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
- <20141101144354.66e2e698@free-electrons.com>
- <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
- <20141102225411.0fe3d3de@free-electrons.com>
- <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
- <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
- <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
- <20141125193534.00c099d9@free-electrons.com>
-Message-ID: <CA+TH9VkoEEmrniPTjYcd6_=3LGoS2RCyhP2qJV4GN_6u4kULSQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue,  2 Dec 2014 21:42:09 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dejavu: add hashes from project site
+Message-ID: <1417552930-26836-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/dejavu/dejavu.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Unfortunately it still doesn't apply on top of the latest master:
->
-> thomas at skate:~/projets/buildroot (master)$ LANG=C git am -s /tmp/0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
-> Applying: docs: RWD website - upgrading bootswatch theme file
-> /home/thomas/projets/buildroot/.git/rebase-apply/patch:1659: trailing whitespace.
-
-Attached you can find a patch that apply to the latest master, I
-verified both with git am and git apply after a git pull.
-
-Probably I sent a wrong .patch file, please ignore it.
-
-Sincerely, Angelo.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch.tar.gz
-Type: application/x-gzip
-Size: 46893 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141202/6c0dde36/attachment.bin>
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index 11e0d1c..282d68f 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
+@@ -1,2 +1,5 @@
++# From http://dejavu-fonts.org/wiki/Download
++md5 161462de16e2ca79873bc2b0d2e6c74c dejavu-fonts-ttf-2.34.tar.bz2
++sha256 d0a72c3ae99f5b8d7470daf091ec43f78dc942795aed5c996ab1aa678702eb5d dejavu-fonts-ttf-2.34.tar.bz2
+ # Locally computed
+ sha1 33fa825aa1dd44ce23a11af92b3078e978ff513d dejavu-fonts-ttf-2.34.tar.bz2
+-- 
+2.1.3
