@@ -1,40 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 12:58:39 +0100
-Subject: [Buildroot] [git commit] live555: fix test programs target
-	installation
-Message-ID: <20141202120522.B931B80077@busybox.osuosl.org>
+Date: Tue, 2 Dec 2014 12:57:18 +0100
+Subject: [Buildroot] [git commit] live555: fix shared library build on x86
+Message-ID: <20141202120522.AF13080075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a569400fc355f5a709398b7ac6c1133f7b8ec20c
+commit: http://git.buildroot.net/buildroot/commit/?id=2d782490a5f99422335406b7230e726b68833ac8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 43ebd93e1fcb (live555: add error handling to for loop) removed the
-shell command delimiter. Add it back.
+-fPIC is required for shared libraries on x86.
 
 Fixes:
-http://autobuild.buildroot.net/results/00f/00f26fa3b6fc8c707009f44ede7b680849f18d5f/
+http://autobuild.buildroot.net/results/6e7/6e78d3e29856c25d233f1629c31bc15f7ecb2f89/
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/live555/live555.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/live555/live555.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 0644505..46fca5b 100644
+index 7dbded3..0644505 100644
 --- a/package/live555/live555.mk
 +++ b/package/live555/live555.mk
-@@ -55,7 +55,7 @@ endef
+@@ -19,6 +19,7 @@ LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
+ else
+ LIVE555_CONFIG_TARGET = linux-with-shared-libraries
+ LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
++LIVE555_CFLAGS += -fPIC
+ endif
  
- define LIVE555_INSTALL_TARGET_CMDS
- 	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
--		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1 \
-+		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1; \
- 	done
- endef
- 
+ ifndef ($(BR2_ENABLE_LOCALE),y)
