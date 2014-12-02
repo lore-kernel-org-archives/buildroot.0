@@ -1,82 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Dec 2014 13:56:25 +0100
-Subject: [Buildroot] [PATCH] package: add python-ipaddr
-Message-ID: <1417524985-22499-1-git-send-email-peter@korsgaard.com>
+From: Ja Bi <Bi.Ja@seznam.cz>
+Date: Tue, 02 Dec 2014 14:05:40 +0100 (CET)
+Subject: [Buildroot] Crypto algorithms in buildroot
+References: <lb1.NaXB.3cxqHjbWLxJ.1KVPDw@seznam.cz>
+ <547DA34A.6080909@zacarias.com.ar>
+Message-ID: <moN.NaWF.1NQamTY5FuN.1KVRaa@seznam.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The functionality is included in python3 as the ipaddress module, so make it
-python2 only.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                        |  1 +
- package/python-ipaddr/Config.in          |  9 +++++++++
- package/python-ipaddr/python-ipaddr.hash |  3 +++
- package/python-ipaddr/python-ipaddr.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-ipaddr/Config.in
- create mode 100644 package/python-ipaddr/python-ipaddr.hash
- create mode 100644 package/python-ipaddr/python-ipaddr.mk
+Hm, but when installed, there are some, aren't they? (ssl as i wrote, ssh, 
+kernel, and maybe more)?
 
-diff --git a/package/Config.in b/package/Config.in
-index b8fc7d1..1826adf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -496,6 +496,7 @@ menu "external python modules"
- 	source "package/python-flup/Config.in"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-id3/Config.in"
-+	source "package/python-ipaddr/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-diff --git a/package/python-ipaddr/Config.in b/package/python-ipaddr/Config.in
-new file mode 100644
-index 0000000..cce67c1
---- /dev/null
-+++ b/package/python-ipaddr/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_IPADDR
-+       depends on BR2_PACKAGE_PYTHON # included since python3.3
-+       bool "python-ipaddr"
-+	help
-+	  An IPv4/IPv6 manipulation library in Python. This library is
-+	  used to create/poke/manipulate IPv4 and IPv6 addresses and
-+	  prefixes.
-+
-+	  https://code.google.com/p/ipaddr-py/
-diff --git a/package/python-ipaddr/python-ipaddr.hash b/package/python-ipaddr/python-ipaddr.hash
-new file mode 100644
-index 0000000..99e1ca9
---- /dev/null
-+++ b/package/python-ipaddr/python-ipaddr.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f2c7852f95862715f92e7d089dc3f2cf, sha256 locally computed
-+md5	f2c7852f95862715f92e7d089dc3f2cf  ipaddr-2.1.11.tar.gz
-+sha256	1b555b8a8800134fdafe32b7d0cb52f5bdbfdd093707c3dd484c5ea59f1d98b7  ipaddr-2.1.11.tar.gz
-diff --git a/package/python-ipaddr/python-ipaddr.mk b/package/python-ipaddr/python-ipaddr.mk
-new file mode 100644
-index 0000000..8bfb543
---- /dev/null
-+++ b/package/python-ipaddr/python-ipaddr.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-ipaddr
-+#
-+################################################################################
-+
-+PYTHON_IPADDR_VERSION = 2.1.11
-+PYTHON_IPADDR_SOURCE = ipaddr-$(PYTHON_IPADDR_VERSION).tar.gz
-+PYTHON_IPADDR_SITE = http://pypi.python.org/packages/source/i/ipaddr
-+PYTHON_IPADDR_SETUP_TYPE = distutils
-+PYTHON_IPADDR_LICENSE = Apache-2.0
-+PYTHON_IPADDR_LICENSE_FILES = COPYING
-+
-+$(eval $(python-package))
--- 
-2.1.3
+
+
+
+
+I dont need it from ehm...any technicals reasons, but for bureaucracy :(?
+
+
+
+Thank you very much for reply.
+Jan
+
+
+
+---------- P?vodn? zpr?va ----------
+Od: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Komu: Ja Bi <Bi.Ja@seznam.cz>, buildroot at busybox.net
+Datum: 2. 12. 2014 12:42:11
+P?edm?t: Re: [Buildroot] Crypto algorithms in buildroot
+
+"On 12/02/2014 07:24 AM, Ja Bi wrote:
+
+> Hi guys,
+> 
+> I would like to know which cryptography algorithms are used
+> in buildroot? There is some version of openssl but not the binary
+> openssl that i could use to ask.
+> And other thing is kernel cryptography algorithms. Is it only in
+> /proc/crypto (and unloaded modules)?
+> 
+> Are there any others? sshd?
+> 
+> thank you very much
+> 
+> Jan
+> 
+> PS: I post it again because ehm... i forgot to fill in subject...:(
+
+Hi.
+Buildroot doesn't use any crypto algorithms by itself except to check
+hashes of downloaded files for integrity.
+Your question sounds a little bit vague, what are you trying to say/do?
+It seems to be related to the target rather than buildroot itself.
+Regards."
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141202/e01d6160/attachment.html>
