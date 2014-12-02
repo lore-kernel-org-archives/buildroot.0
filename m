@@ -1,100 +1,42 @@
-From: Pedro Aguilar <paguilar@paguilar.org>
-Date: Tue, 02 Dec 2014 22:58:21 +0100
-Subject: [Buildroot] [PATCH v2] package/bdwgc: only enable on supported
-	architectures
-In-Reply-To: <1417475601-3688-1-git-send-email-yann.morin.1998@free.fr>
-References: <1417475601-3688-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <547E35FD.9020303@paguilar.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 2 Dec 2014 18:36:16 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+In-Reply-To: <20141125193534.00c099d9@free-electrons.com>
+References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141101144354.66e2e698@free-electrons.com>
+ <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
+ <20141102225411.0fe3d3de@free-electrons.com>
+ <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
+ <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
+ <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
+ <20141125193534.00c099d9@free-electrons.com>
+Message-ID: <CA+TH9Vk45BkAzT8sZq5urCW6cqtzm6Dy+6s44hmSOJqS4f_ZXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Dear Thomas,
 
-Thanks for checking this. I had a look at the not-easy-to-read source 
-code and I confirm that the archs you added should be right.
+> Unfortunately it still doesn't apply on top of the latest master:
+>
+> thomas at skate:~/projets/buildroot (master)$ LANG=C git am -s /tmp/0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
+> Applying: docs: RWD website - upgrading bootswatch theme file
+> /home/thomas/projets/buildroot/.git/rebase-apply/patch:1659: trailing whitespace.
 
-I've tested it successfully under arm.
+Attached you can find a patch that apply to the latest master, I
+verified both with git am and git apply after a git pull.
 
-Regards.
-
-On 02/12/2014 00:13, Yann E. MORIN wrote:
-> bdwgc has support for a sub-set of the architectures we support.
->
-> Since there is roughly a 50-50 split of our architectures that have
-> support in bdwgc vs. those that do not, use a positive dependency logic,
-> rather than a negative one.
->
-> The list was constructed by visual inspection of the source code of
-> bdwgc, but the header doing the check is, to say it politely, a bit
-> difficult to read...
->
-> So, some working archotectures may be missing. Users needing it may
-> investigate if their architectures are indeed supported.
->
-> Fixes;
->      http://autobuild.buildroot.net/results/529/529b0b6dd47744c13f56e59a4c669a3f5d56530d/
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Pedro Aguilar <paguilar@paguilar.org>
-> Cc: Baruch Siach <baruch@tkos.co.il>
->
-> ---
-> Changes v1 -> v2:
->    - fix case for mipsel  (Baruch)
-> ---
->   package/bdwgc/Config.in | 7 +++++++
->   package/bdwgc/bdwgc.mk  | 2 ++
->   package/guile/Config.in | 1 +
->   3 files changed, 10 insertions(+)
->
-> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-> index 9aa7c7d..215c54d 100644
-> --- a/package/bdwgc/Config.in
-> +++ b/package/bdwgc/Config.in
-> @@ -1,5 +1,12 @@
-> +config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
-> +	default y
-> +	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
-> +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_sh \
-> +		|| BR2_sparc || BR2_x86_64
-> +
->   config BR2_PACKAGE_BDWGC
->   	bool "bdwgc"
-> +	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
->   	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
->   	select BR2_PACKAGE_LIBATOMIC_OPS
->   	help
-> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-> index 3e6de1a..b408947 100644
-> --- a/package/bdwgc/bdwgc.mk
-> +++ b/package/bdwgc/bdwgc.mk
-> @@ -4,6 +4,8 @@
->   #
->   ################################################################################
->
-> +# When bumping the version number, check if the list of supported architectures
-> +# is still valid; see Config.log.
->   BDWGC_VERSION = 7.2f
->   BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
->   BDWGC_SITE = http://www.hboehm.info/gc/gc_source
-> diff --git a/package/guile/Config.in b/package/guile/Config.in
-> index 009dbdf..8f86e9f 100644
-> --- a/package/guile/Config.in
-> +++ b/package/guile/Config.in
-> @@ -1,6 +1,7 @@
->   config BR2_PACKAGE_GUILE
->   	bool "guile"
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS # bdwgc
->   	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
->   	depends on BR2_USE_WCHAR # libunistring
->   	select BR2_PACKAGE_LIBUNISTRING
->
+Sincerely, Angelo.
 
 
 -- 
-Pedro Aguilar
-http://paguilar.org
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
+Type: text/x-patch
+Size: 272212 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141202/257ea1ed/attachment-0001.bin>
