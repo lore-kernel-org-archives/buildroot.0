@@ -1,106 +1,85 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 02 Dec 2014 12:01:11 +0100
-Subject: [Buildroot] [PATCHv2 3/4] support/scripts: add size-stats script
-In-Reply-To: <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470100-32657-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1429484.vXm9l0Ysfx@aquila>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  2 Dec 2014 13:16:16 +0200
+Subject: [Buildroot] [PATCH] tcpdump: add security fix patch
+Message-ID: <5857a4fa9ec8b0047b0b8e41af168a24b4bab243.1417518976.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes CVE-2014-9140, PPP dissector vulnerability.
 
-I have a few comments below.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/tcpdump/0005-fix-CVE-2014-9140.patch | 59 ++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/tcpdump/0005-fix-CVE-2014-9140.patch
 
-On Monday 01 December 2014 22:41:39 Thomas Petazzoni wrote:
-> This new script uses the data collected by the step_pkg_size
-> instrumentation hook to generate a pie chart of the size contribution
-> of each package to the target root filesystem, and two CSV files with
-> statistics about the package size and file size. To achieve this, it
-> looks at each file in $(TARGET_DIR), and using the
-> packages-file-list.txt information collected by the step_pkg_size
-> hook, it determines to which package the file belongs. It is therefore
-> able to give the size installed by each package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/size-stats | 225 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 225 insertions(+)
->  create mode 100755 support/scripts/size-stats
-> 
-> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-> new file mode 100755
-> index 0000000..7dc28a0
-> --- /dev/null
-> +++ b/support/scripts/size-stats
-> @@ -0,0 +1,225 @@
-> +#!/usr/bin/env python
-[...]
-> +#
-> +# This function returns a dict containing as keys the files present in
-> +# the filesystem skeleton, and as value, the string "skeleton". It is
-> +# used to simulate a fake "skeleton" package, to assign the files from
-> +# the skeleton to some package.
-> +#
-> +# builddir: path to the Buildroot output directory
-> +#
-> +def build_skeleton_dict(builddir):
-> +    skeleton_files = {}
-> +    for root, _, files in os.walk("system/skeleton"):
-> +        for f in files:
-> +            if f == ".empty":
-> +                continue
-> +            frelpath = os.path.relpath(os.path.join(root, f), "system/skeleton")
-> +            # Get the real size of the installed file
-> +            targetpath = os.path.join(builddir, "target", frelpath)
-> +            if os.path.islink(targetpath):
-> +                continue
-> +            sz = os.stat(targetpath).st_size
-> +            skeleton_files[frelpath] = { 'pkg': "skeleton", 'size': sz }
-> +    return skeleton_files
-Is it possible to rely on Kconfiglib in order to support customized skeleton
-and overlays? Or you think skeleton and overlays (and post-build scripts) 
-should be managed by package infra (like https://patchwork.ozlabs.org/patch/399413/)?
-
-> +#
-> +# This function returns a dict where each key is the path of a file in
-> +# the root filesystem, and the value is a dict containing two
-> +# elements: the name of the package to which this file belongs (key:
-> +# pkg) and the size of the file (key: size).
-> +#
-> +# builddir: path to the Buildroot output directory
-> +#
-> +def build_package_dict(builddir):
-> +    pkgdict = {}
-> +    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
-> +        for l in filelistf.readlines():
-> +            f = l.split(",")
-> +            fpath = f[1].strip().replace("./", "")
-> +            fullpath = os.path.join(builddir, "target", fpath)
-> +            if not os.path.exists(fullpath):
-> +                continue
-It means the file was remove by another package. You may emit a warning
-there?
-
-> +            pkg = f[0]
-> +            sz = os.stat(fullpath).st_size
-> +            pkgdict[fpath] = { 'pkg': pkg, 'size': sz }
-If pkgdict[fpath] is already defined, it means:
-  a. pkg == pkgdict[fpath].pkg -> Package was reinstalled
-  b. pkg != pkgdict[fpath].pkg -> File was overwritten by another package
-
-You may emit a warning is second case?
-
-
-> +    pkgdict.update(build_skeleton_dict(builddir))
-> +    return pkgdict
-> +
-[...]
-
+diff --git a/package/tcpdump/0005-fix-CVE-2014-9140.patch b/package/tcpdump/0005-fix-CVE-2014-9140.patch
+new file mode 100644
+index 000000000000..86365d0b796d
+--- /dev/null
++++ b/package/tcpdump/0005-fix-CVE-2014-9140.patch
+@@ -0,0 +1,59 @@
++From 0f95d441e4b5d7512cc5c326c8668a120e048eda Mon Sep 17 00:00:00 2001
++From: Guy Harris <guy@alum.mit.edu>
++Date: Wed, 22 Oct 2014 12:31:21 -0700
++Subject: [PATCH] Do bounds checking when unescaping PPP.
++
++Clean up a const issue while we're at it.
++
++Upstream commit 0f95d441e4b5d.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ print-ppp.c | 16 ++++++++--------
++ 1 file changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/print-ppp.c b/print-ppp.c
++index 8e098f05a953..9a983e6179cd 100644
++--- a/print-ppp.c
+++++ b/print-ppp.c
++@@ -1351,14 +1351,15 @@ static void
++ ppp_hdlc(netdissect_options *ndo,
++          const u_char *p, int length)
++ {
++-	u_char *b, *s, *t, c;
+++	u_char *b, *t, c;
+++	const u_char *s;
++ 	int i, proto;
++ 	const void *se;
++ 
++         if (length <= 0)
++                 return;
++ 
++-	b = (uint8_t *)malloc(length);
+++	b = (u_char *)malloc(length);
++ 	if (b == NULL)
++ 		return;
++ 
++@@ -1367,14 +1368,13 @@ ppp_hdlc(netdissect_options *ndo,
++ 	 * Do this so that we dont overwrite the original packet
++ 	 * contents.
++ 	 */
++-	for (s = (u_char *)p, t = b, i = length; i > 0; i--) {
+++	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
++ 		c = *s++;
++ 		if (c == 0x7d) {
++-			if (i > 1) {
++-				i--;
++-				c = *s++ ^ 0x20;
++-			} else
++-				continue;
+++			if (i <= 1 || !ND_TTEST(*s))
+++				break;
+++			i--;
+++			c = *s++ ^ 0x20;
++ 		}
++ 		*t++ = c;
++ 	}
++-- 
++2.1.3
++
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.1.3
