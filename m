@@ -1,85 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  2 Dec 2014 13:16:16 +0200
-Subject: [Buildroot] [PATCH] tcpdump: add security fix patch
-Message-ID: <5857a4fa9ec8b0047b0b8e41af168a24b4bab243.1417518976.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 02 Dec 2014 08:32:26 -0300
+Subject: [Buildroot] Crypto algorithms in buildroot
+In-Reply-To: <lb1.NaXB.3cxqHjbWLxJ.1KVPDw@seznam.cz>
+References: <lb1.NaXB.3cxqHjbWLxJ.1KVPDw@seznam.cz>
+Message-ID: <547DA34A.6080909@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-9140, PPP dissector vulnerability.
+On 12/02/2014 07:24 AM, Ja Bi wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/tcpdump/0005-fix-CVE-2014-9140.patch | 59 ++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 package/tcpdump/0005-fix-CVE-2014-9140.patch
+> Hi guys,
+> 
+> I would like to know which cryptography algorithms are used
+> in buildroot? There is some version of openssl but not the binary
+> openssl that i could use to ask.
+> And other thing is kernel cryptography algorithms. Is it only in
+> /proc/crypto (and unloaded modules)?
+> 
+> Are there any others? sshd?
+> 
+> thank you very much
+> 
+> Jan
+> 
+> PS: I post it again because ehm... i forgot to fill in subject...:(
 
-diff --git a/package/tcpdump/0005-fix-CVE-2014-9140.patch b/package/tcpdump/0005-fix-CVE-2014-9140.patch
-new file mode 100644
-index 000000000000..86365d0b796d
---- /dev/null
-+++ b/package/tcpdump/0005-fix-CVE-2014-9140.patch
-@@ -0,0 +1,59 @@
-+From 0f95d441e4b5d7512cc5c326c8668a120e048eda Mon Sep 17 00:00:00 2001
-+From: Guy Harris <guy@alum.mit.edu>
-+Date: Wed, 22 Oct 2014 12:31:21 -0700
-+Subject: [PATCH] Do bounds checking when unescaping PPP.
-+
-+Clean up a const issue while we're at it.
-+
-+Upstream commit 0f95d441e4b5d.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ print-ppp.c | 16 ++++++++--------
-+ 1 file changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/print-ppp.c b/print-ppp.c
-+index 8e098f05a953..9a983e6179cd 100644
-+--- a/print-ppp.c
-++++ b/print-ppp.c
-+@@ -1351,14 +1351,15 @@ static void
-+ ppp_hdlc(netdissect_options *ndo,
-+          const u_char *p, int length)
-+ {
-+-	u_char *b, *s, *t, c;
-++	u_char *b, *t, c;
-++	const u_char *s;
-+ 	int i, proto;
-+ 	const void *se;
-+ 
-+         if (length <= 0)
-+                 return;
-+ 
-+-	b = (uint8_t *)malloc(length);
-++	b = (u_char *)malloc(length);
-+ 	if (b == NULL)
-+ 		return;
-+ 
-+@@ -1367,14 +1368,13 @@ ppp_hdlc(netdissect_options *ndo,
-+ 	 * Do this so that we dont overwrite the original packet
-+ 	 * contents.
-+ 	 */
-+-	for (s = (u_char *)p, t = b, i = length; i > 0; i--) {
-++	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
-+ 		c = *s++;
-+ 		if (c == 0x7d) {
-+-			if (i > 1) {
-+-				i--;
-+-				c = *s++ ^ 0x20;
-+-			} else
-+-				continue;
-++			if (i <= 1 || !ND_TTEST(*s))
-++				break;
-++			i--;
-++			c = *s++ ^ 0x20;
-+ 		}
-+ 		*t++ = c;
-+ 	}
-+-- 
-+2.1.3
-+
--- 
-2.1.3
+Hi.
+Buildroot doesn't use any crypto algorithms by itself except to check
+hashes of downloaded files for integrity.
+Your question sounds a little bit vague, what are you trying to say/do?
+It seems to be related to the target rather than buildroot itself.
+Regards.
