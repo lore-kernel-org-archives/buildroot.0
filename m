@@ -1,82 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Dec 2014 15:57:32 +0100
-Subject: [Buildroot] [PATCH] package: add python-enum34
-Message-ID: <1417532252-26186-1-git-send-email-peter@korsgaard.com>
+Date: Tue, 2 Dec 2014 13:07:33 +0100
+Subject: [Buildroot] [git commit] exiv2: XMP support needs largefile
+Message-ID: <20141202145823.6174C80076@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=156397e6fbfe1a4cfdca71f954603b68d23049e3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+XMP code enables largefile unconditionally.
+
+Fixes:
+http://autobuild.buildroot.net/results/116/1166068a64733d22a2f891849177ad826347dc9f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                        |  1 +
- package/python-enum34/Config.in          | 12 ++++++++++++
- package/python-enum34/python-enum34.hash |  3 +++
- package/python-enum34/python-enum34.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-enum34/Config.in
- create mode 100644 package/python-enum34/python-enum34.hash
- create mode 100644 package/python-enum34/python-enum34.mk
+ package/exiv2/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b8fc7d1..91f5ddb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -492,6 +492,7 @@ menu "external python modules"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-dpkt/Config.in"
-+	source "package/python-enum34/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-enum34/Config.in b/package/python-enum34/Config.in
-new file mode 100644
-index 0000000..2511a35
---- /dev/null
-+++ b/package/python-enum34/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_ENUM34
-+	bool "python-enum34"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python 3.4 Enum backported to 2.x.
-+
-+	  An enumeration is a set of symbolic names (members) bound to
-+	  unique, constant values. Within an enumeration, the members
-+	  can be compared by identity, and the enumeration itself can
-+	  be iterated over.
-+
-+	  https://pypi.python.org/pypi/enum34
-diff --git a/package/python-enum34/python-enum34.hash b/package/python-enum34/python-enum34.hash
-new file mode 100644
-index 0000000..dd6ce34
---- /dev/null
-+++ b/package/python-enum34/python-enum34.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ac80f432ac9373e7d162834b264034b6, sha256 locally computed
-+md5	ac80f432ac9373e7d162834b264034b6  enum34-1.0.4.tar.gz
-+sha256	d3c19f26a6a34629c18c775f59dfc5dd595764c722b57a2da56ebfb69b94e447  enum34-1.0.4.tar.gz
-diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
-new file mode 100644
-index 0000000..9d50e95
---- /dev/null
-+++ b/package/python-enum34/python-enum34.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-enum34
-+#
-+################################################################################
-+
-+PYTHON_ENUM34_VERSION = 1.0.4
-+PYTHON_ENUM34_SOURCE =enum34-$(PYTHON_ENUM34_VERSION).tar.gz
-+PYTHON_ENUM34_SITE = http://pypi.python.org/packages/source/e/enum34
-+PYTHON_ENUM34_SETUP_TYPE = distutils
-+PYTHON_ENUM34_LICENSE = BSD-3c
-+PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
-+
-+$(eval $(python-package))
--- 
-2.1.3
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 3dc7445..b2e2ac8 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -39,11 +39,12 @@ config BR2_PACKAGE_EXIV2_XMP
+ 	bool "XMP support"
+ 	select BR2_PACKAGE_EXPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Build with XMP support
+ 
+-comment "xmp support needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "xmp support needs a toolchain w/ threads, and largefile"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+ 
+ config BR2_PACKAGE_EXIV2_LENSDATA
+ 	bool "Nikon lens name database"
