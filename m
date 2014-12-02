@@ -1,44 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 13:07:33 +0100
-Subject: [Buildroot] [git commit] exiv2: XMP support needs largefile
-Message-ID: <20141202145823.6174C80076@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Dec 2014 16:31:23 +0100
+Subject: [Buildroot] qemu_microblazeel_mmu_defconfig: booting issue
+In-Reply-To: <CANQCQpaZmxDtd+vVuvcPF9GDQjqNKOdJ5ddy3kX4wSuxbZf=kw@mail.gmail.com>
+References: <CANQCQpaZmxDtd+vVuvcPF9GDQjqNKOdJ5ddy3kX4wSuxbZf=kw@mail.gmail.com>
+Message-ID: <20141202163123.786d02c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=156397e6fbfe1a4cfdca71f954603b68d23049e3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Matthew Weber,
 
-XMP code enables largefile unconditionally.
+On Tue, 2 Dec 2014 08:48:38 -0600, Matthew Weber wrote:
+> I grabbed the 2014.11 release and did a build using the
+> qemu_microblazeel_mmu_defconfig.  I tried to execute it with "QEMU
+> emulator version 2.0.0 (Debian 2.0.0+dfsg-2ubuntu1.7)" using the
+> command provided in the "board/qemu/microblazeel-mmu/readme.txt".
+> 
+> Spenser, what was the last kernel version you've successfully tested a
+> build against?  I noticed there have been a few sweeping bumps of
+> kernel versions that included this defconfig.
 
-Fixes:
-http://autobuild.buildroot.net/results/116/1166068a64733d22a2f891849177ad826347dc9f/
+It was bumped by Gustavo recently, and I know Gustavo always boot
+tests the Qemu defconfigs when doing the bumps. As written in
+readme.txt, you should use Qemu 2.1.2, not Qemu 2.0.0. That's most
+likely the problem.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/exiv2/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+Best regards,
 
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-index 3dc7445..b2e2ac8 100644
---- a/package/exiv2/Config.in
-+++ b/package/exiv2/Config.in
-@@ -39,11 +39,12 @@ config BR2_PACKAGE_EXIV2_XMP
- 	bool "XMP support"
- 	select BR2_PACKAGE_EXPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
- 	help
- 	  Build with XMP support
- 
--comment "xmp support needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xmp support needs a toolchain w/ threads, and largefile"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
- 
- config BR2_PACKAGE_EXIV2_LENSDATA
- 	bool "Nikon lens name database"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
