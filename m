@@ -1,26 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Dec 2014 10:30:43 +0100
-Subject: [Buildroot] [PATCH v2] openvpn: CVE-2014-8104: bump to version
+Date: Tue, 2 Dec 2014 10:30:19 +0100
+Subject: [Buildroot] [git commit] openvpn: CVE-2014-8104: bump to version
 	2.3.6
-In-Reply-To: <1417470611-27172-1-git-send-email-architekt@coding4coffee.org>
- (Fabian Mewes's message of "Mon, 1 Dec 2014 22:50:11 +0100")
-References: <547CDED0.9050305@zacarias.com.ar>
- <1417470611-27172-1-git-send-email-architekt@coding4coffee.org>
-Message-ID: <87388y2ybg.fsf@dell.be.48ers.dk>
+Message-ID: <20141202093111.BDC4480069@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabian" == Fabian Mewes <architekt@coding4coffee.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=82141883194dc42e612c4ff1fee87278e3932a10
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > see
- > https://community.openvpn.net/openvpn/wiki/SecurityAnnouncement-97597e732b
+see
+https://community.openvpn.net/openvpn/wiki/SecurityAnnouncement-97597e732b
 
- > Signed-off-by: Fabian Mewes <architekt@coding4coffee.org>
+Signed-off-by: Fabian Mewes <architekt@coding4coffee.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openvpn/openvpn.hash |    2 +-
+ package/openvpn/openvpn.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 4e1911a..38579ab 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7ac286f09ed4981358ce01907993dc29f69b34d3652de2b70ca9b8b2a056b684	openvpn-2.3.5.tar.xz
++sha256	adae2ef34c9225347a844683b88caa87cde0979b7f2390fd1776db0eb51510ed 	openvpn-2.3.6.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 68f7d97..ac18f75 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.3.5
++OPENVPN_VERSION = 2.3.6
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
