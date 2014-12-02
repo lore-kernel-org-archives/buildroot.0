@@ -1,63 +1,36 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 2 Dec 2014 11:40:43 +0100
-Subject: [Buildroot] [PATCH] exiv2: XMP support needs largefile
-In-Reply-To: <bed23382a22ff4672c36ac53805589eaef4399b1.1417466526.git.baruch@tkos.co.il>
-References: <bed23382a22ff4672c36ac53805589eaef4399b1.1417466526.git.baruch@tkos.co.il>
-Message-ID: <20141202114043.406039d5@nserafini-N550JK>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 02 Dec 2014 12:00:50 +0100
+Subject: [Buildroot] [PATCHv2 1/4] toolchain-external: split target
+	installation from staging installation
+In-Reply-To: <1417470100-32657-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417470100-32657-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5888091.zWNFtSVGpv@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Monday 01 December 2014 22:41:37 Thomas Petazzoni wrote:
+> Currently, all the installation work of the toolchain-external package
+> is done during the install-staging step. However, in order to be able
+> to properly collect the size added by each package to the target
+> filesystem, we need to make sure that toolchain-external installs its
+> files to $(TARGET_DIR) during the install-target step.
+Great, this also fix:
 
-On Mon, 1 Dec 2014 22:42:06 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+   rm -r target build/*/.stamp_target_installed && make
 
-> XMP code enables largefile unconditionally.
+Tested-by: J?r?me Pouiller <jezz@sysmic.org>
+
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/116/1166068a64733d22a2f891849177ad826347dc9f/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/exiv2/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-> index 3dc74459a78c..b2e2ac83d095 100644
-> --- a/package/exiv2/Config.in
-> +++ b/package/exiv2/Config.in
-> @@ -39,11 +39,12 @@ config BR2_PACKAGE_EXIV2_XMP
->  	bool "XMP support"
->  	select BR2_PACKAGE_EXPAT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_LARGEFILE
->  	help
->  	  Build with XMP support
->  
-> -comment "xmp support needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "xmp support needs a toolchain w/ threads, and largefile"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
->  
->  config BR2_PACKAGE_EXIV2_LENSDATA
->  	bool "Nikon lens name database"
-Tested-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-
-Tested with the config from 116/1166068a without largefile and
-with my config ARM arch, external toolchain Linaro
-ARM 2014.08 with largefile.
-
-Regards,
-Nicolas
+>  toolchain/toolchain-external/toolchain-external.mk | 36 +++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 7 deletions(-)
 
 -- 
-Nicolas Serafini
-R&D Embedded Software Engineer
-
-www.sensefly.com
-Route de Gen?ve 38
-1033 Cheseaux-Lausanne
-Switzerland
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
