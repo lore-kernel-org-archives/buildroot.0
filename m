@@ -1,29 +1,100 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  2 Dec 2014 21:42:10 +0100
-Subject: [Buildroot] [PATCH 2/2] package/flac: fix patch file extension
-In-Reply-To: <1417552930-26836-1-git-send-email-s.martin49@gmail.com>
-References: <1417552930-26836-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1417552930-26836-2-git-send-email-s.martin49@gmail.com>
+From: Pedro Aguilar <paguilar@paguilar.org>
+Date: Tue, 02 Dec 2014 22:58:21 +0100
+Subject: [Buildroot] [PATCH v2] package/bdwgc: only enable on supported
+	architectures
+In-Reply-To: <1417475601-3688-1-git-send-email-yann.morin.1998@free.fr>
+References: <1417475601-3688-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <547E35FD.9020303@paguilar.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.org/results/c22/c22f29fd787a3d12d86cc3cd3e2d9c8688d2f65d/
-  http://autobuild.buildroot.org/results/1f8/1f824e3aa17fb17e7efe3e4c1636974fea79c1f9/
-  http://autobuild.buildroot.org/results/8ad/8ad965fbc19e22d3f43899cb5efb42626fa2f55e/
+Hi Yann,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- ...m-CFLAGS.txt => 0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/flac/{0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt => 0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch} (100%)
+Thanks for checking this. I had a look at the not-easy-to-read source 
+code and I confirm that the archs you added should be right.
 
-diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
-similarity index 100%
-rename from package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-rename to package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
+I've tested it successfully under arm.
+
+Regards.
+
+On 02/12/2014 00:13, Yann E. MORIN wrote:
+> bdwgc has support for a sub-set of the architectures we support.
+>
+> Since there is roughly a 50-50 split of our architectures that have
+> support in bdwgc vs. those that do not, use a positive dependency logic,
+> rather than a negative one.
+>
+> The list was constructed by visual inspection of the source code of
+> bdwgc, but the header doing the check is, to say it politely, a bit
+> difficult to read...
+>
+> So, some working archotectures may be missing. Users needing it may
+> investigate if their architectures are indeed supported.
+>
+> Fixes;
+>      http://autobuild.buildroot.net/results/529/529b0b6dd47744c13f56e59a4c669a3f5d56530d/
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Pedro Aguilar <paguilar@paguilar.org>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+>
+> ---
+> Changes v1 -> v2:
+>    - fix case for mipsel  (Baruch)
+> ---
+>   package/bdwgc/Config.in | 7 +++++++
+>   package/bdwgc/bdwgc.mk  | 2 ++
+>   package/guile/Config.in | 1 +
+>   3 files changed, 10 insertions(+)
+>
+> diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+> index 9aa7c7d..215c54d 100644
+> --- a/package/bdwgc/Config.in
+> +++ b/package/bdwgc/Config.in
+> @@ -1,5 +1,12 @@
+> +config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
+> +	default y
+> +	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
+> +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_sh \
+> +		|| BR2_sparc || BR2_x86_64
+> +
+>   config BR2_PACKAGE_BDWGC
+>   	bool "bdwgc"
+> +	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
+>   	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+>   	select BR2_PACKAGE_LIBATOMIC_OPS
+>   	help
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> index 3e6de1a..b408947 100644
+> --- a/package/bdwgc/bdwgc.mk
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -4,6 +4,8 @@
+>   #
+>   ################################################################################
+>
+> +# When bumping the version number, check if the list of supported architectures
+> +# is still valid; see Config.log.
+>   BDWGC_VERSION = 7.2f
+>   BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+>   BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+> diff --git a/package/guile/Config.in b/package/guile/Config.in
+> index 009dbdf..8f86e9f 100644
+> --- a/package/guile/Config.in
+> +++ b/package/guile/Config.in
+> @@ -1,6 +1,7 @@
+>   config BR2_PACKAGE_GUILE
+>   	bool "guile"
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS # bdwgc
+>   	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
+>   	depends on BR2_USE_WCHAR # libunistring
+>   	select BR2_PACKAGE_LIBUNISTRING
+>
+
+
 -- 
-2.1.3
+Pedro Aguilar
+http://paguilar.org
