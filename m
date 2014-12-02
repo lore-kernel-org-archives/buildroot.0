@@ -1,82 +1,146 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 10:29:23 +0100
-Subject: [Buildroot] [git commit] package/bdwgc: only enable on supported
-	architectures
-Message-ID: <20141202093111.B3F5880063@busybox.osuosl.org>
+Date: Tue, 2 Dec 2014 10:27:45 +0100
+Subject: [Buildroot] [git commit] ffmpeg: bump version to 2.4.4
+Message-ID: <20141202093111.ABEAE80057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5ac570e13b453a4af7dd34568fd679e64c03720
+commit: http://git.buildroot.net/buildroot/commit/?id=c7739084b9a171152c830a1bd168dbb2a2ab043d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bdwgc has support for a sub-set of the architectures we support.
+- Bump version to 2.4.4.
+- Remove upstreamed patch
+- Add a hash file
 
-Since there is roughly a 50-50 split of our architectures that have
-support in bdwgc vs. those that do not, use a positive dependency logic,
-rather than a negative one.
-
-The list was constructed by visual inspection of the source code of
-bdwgc, but the header doing the check is, to say it politely, a bit
-difficult to read...
-
-So, some working archotectures may be missing. Users needing it may
-investigate if their architectures are indeed supported.
-
-Fixes;
-    http://autobuild.buildroot.net/results/529/529b0b6dd47744c13f56e59a4c669a3f5d56530d/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Pedro Aguilar <paguilar@paguilar.org>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bdwgc/Config.in |    7 +++++++
- package/bdwgc/bdwgc.mk  |    2 ++
- package/guile/Config.in |    1 +
- 3 files changed, 10 insertions(+), 0 deletions(-)
+ package/ffmpeg/0001-fminf.patch |   94 ---------------------------------------
+ package/ffmpeg/ffmpeg.hash      |    2 +
+ package/ffmpeg/ffmpeg.mk        |    2 +-
+ 3 files changed, 3 insertions(+), 95 deletions(-)
 
-diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-index 9aa7c7d..215c54d 100644
---- a/package/bdwgc/Config.in
-+++ b/package/bdwgc/Config.in
-@@ -1,5 +1,12 @@
-+config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
-+	default y
-+	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
-+		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_sh \
-+		|| BR2_sparc || BR2_x86_64
-+
- config BR2_PACKAGE_BDWGC
- 	bool "bdwgc"
-+	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBATOMIC_OPS
- 	help
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 3e6de1a..b408947 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -4,6 +4,8 @@
+diff --git a/package/ffmpeg/0001-fminf.patch b/package/ffmpeg/0001-fminf.patch
+deleted file mode 100644
+index 8ecd5c1..0000000
+--- a/package/ffmpeg/0001-fminf.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-Fix build error
+-
+-CC      libavdevice/alldevices.o
+-In file included from ./libavutil/internal.h:167:0,
+-                 from ./libavutil/common.h:415,
+-                 from ./libavutil/avutil.h:289,
+-                 from ./libavutil/log.h:25,
+-                 from libavdevice/avdevice.h:46,
+-                 from libavdevice/alldevices.c:22:
+-./libavutil/libm.h:87:40: error: static declaration of 'fminf' follows non-static declaration
+- static av_always_inline av_const float fminf(float x, float y)
+-                                        ^
+-make: *** [libavdevice/alldevices.o] Error 1
+-
+-using buildroot-compiled uClibc toolchain, used defconfig:
+-
+-BR2_x86_64=y
+-BR2_x86_corei7=y
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-BR2_PACKAGE_FFMPEG=y
+-BR2_PACKAGE_FFMPEG_GPL=y
+-BR2_PACKAGE_FFMPEG_NONFREE=y
+-BR2_PACKAGE_FFMPEG_FFPLAY=y
+-BR2_PACKAGE_FFMPEG_FFSERVER=y
+-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
+-BR2_PACKAGE_FFMPEG_POSTPROC=y
+-
+-Patch ported from upstream commit:
+-http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=4436a8f44dedc83767b3d9da9beb85d1fae2ca30
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-
+-From 4436a8f44dedc83767b3d9da9beb85d1fae2ca30 Mon Sep 17 00:00:00 2001
+-From: Carl Eugen Hoyos <cehoyos@ag.or.at>
+-Date: Sat, 8 Nov 2014 10:48:37 +0100
+-Subject: [PATCH] Remove fminf() emulation.
+-
+-The emulation is unused and causes compilation trouble on systems
+-where fminf() is defined in <math.h> but missing from libm.
+-This should fix compilation on Debian powerpcspe.
+----
+- configure        |    2 --
+- libavutil/libm.h |   10 ----------
+- 2 files changed, 12 deletions(-)
+-
+-diff --git a/configure b/configure
+-index 314e7ff..978ef12 100755
+---- a/configure
+-+++ b/configure
+-@@ -1678,7 +1678,6 @@ MATH_FUNCS="
+-     exp2
+-     exp2f
+-     expf
+--    fminf
+-     isinf
+-     isnan
+-     ldexpf
+-@@ -4813,7 +4812,6 @@ disabled crystalhd || check_lib libcrystalhd/libcrystalhd_if.h DtsCrystalHDVersi
+- atan2f_args=2
+- ldexpf_args=2
+- powf_args=2
+--fminf_args=2
+- 
+- for func in $MATH_FUNCS; do
+-     eval check_mathfunc $func \${${func}_args:-1}
+-diff --git a/libavutil/libm.h b/libavutil/libm.h
+-index 28d5df8..6c17b28 100644
+---- a/libavutil/libm.h
+-+++ b/libavutil/libm.h
+-@@ -82,16 +82,6 @@ static av_always_inline float cbrtf(float x)
+- #define exp2f(x) ((float)exp2(x))
+- #endif /* HAVE_EXP2F */
+- 
+--#if !HAVE_FMINF
+--#undef fminf
+--static av_always_inline av_const float fminf(float x, float y)
+--{
+--    //Note, the NaN special case is needed for C spec compliance, it should be
+--    //optimized away if the users compiler is configured to assume no NaN
+--    return x > y ? y : (x == x ? x : y);
+--}
+--#endif
+--
+- #if !HAVE_ISINF
+- static av_always_inline av_const int isinf(float x)
+- {
+--- 
+-1.7.10.4
+-
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+new file mode 100644
+index 0000000..4363ce1
+--- /dev/null
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 9ad041c0201fb8b2605c5c5c0259c373c793c32cfc96f7315fca67e900494afc ffmpeg-2.4.4.tar.bz2
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 1a68fa0..22577e6 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# When bumping the version number, check if the list of supported architectures
-+# is still valid; see Config.log.
- BDWGC_VERSION = 7.2f
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
- BDWGC_SITE = http://www.hboehm.info/gc/gc_source
-diff --git a/package/guile/Config.in b/package/guile/Config.in
-index 009dbdf..8f86e9f 100644
---- a/package/guile/Config.in
-+++ b/package/guile/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GUILE
- 	bool "guile"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS # bdwgc
- 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
- 	depends on BR2_USE_WCHAR # libunistring
- 	select BR2_PACKAGE_LIBUNISTRING
+-FFMPEG_VERSION = 2.4.3
++FFMPEG_VERSION = 2.4.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
