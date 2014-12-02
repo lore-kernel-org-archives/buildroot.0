@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2014 09:26:36 +0100
-Subject: [Buildroot] [PATCH 1/4] pkg-download: check for already
- downloaded file in the download wrapper
-In-Reply-To: <936ed487d76e1dd36230de9a26d57da908680d79.1417475935.git.yann.morin.1998@free.fr>
+Date: Tue, 2 Dec 2014 09:29:04 +0100
+Subject: [Buildroot] [PATCH 3/4] pkg-download: verify the hashes from
+ the download wrapper
+In-Reply-To: <eb25ccfd009955fcd6be60822a8c22985aca199d.1417475935.git.yann.morin.1998@free.fr>
 References: <cover.1417475935.git.yann.morin.1998@free.fr>
- <936ed487d76e1dd36230de9a26d57da908680d79.1417475935.git.yann.morin.1998@free.fr>
-Message-ID: <20141202092636.4bbfea66@free-electrons.com>
+ <eb25ccfd009955fcd6be60822a8c22985aca199d.1417475935.git.yann.morin.1998@free.fr>
+Message-ID: <20141202092904.7b6ce375@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,36 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Tue,  2 Dec 2014 00:24:06 +0100, Yann E. MORIN wrote:
-> Instead of repeating the same test again and again in all our download
-> rules, just delegate the check for an already downloaded file to the
-> download wrapper.
+On Tue,  2 Dec 2014 00:24:08 +0100, Yann E. MORIN wrote:
+> Instead of repeating the check in our download rules, delegate the check
+> of the hashes to the download wrapper.
 > 
-> This clears up the path for doing the hash checks on a cached file
-> before the download.
+> This needs three different changes:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>   - add a new argument to the download wrapper, that is the full path to
+>     the hash file; if the hash file does not exist, that does not change
+>     the current behaviour, as the existence of the hash file is done by
+>     the check-hash script;
 
-It has the consequence of doing another fork+exec of a shell script for
-all files, even if they have already been downloaded. I don't know if
-this is really measurable compared to the overall build time, though,
-except maybe on some cases like "make source". So maybe this is OK.
+It is really time to use getopt in the download wrapper scripts, as we
+have discussed with Fabio recently regarding the fully silent build
+thing.
 
-Best regards,
+>   - add a third argument to the check-hash script, to be the basename of
+>     the file to check; this is required because we no longer check the
+>     final file with the finale filename, but anintermediate file with a
+
+finale -> final
+
+anintermediate -> an intermediate
+
+>     temporary filename;
+> 
+>   - do the actual cal to the check-hash script form within the download
+
+cal?
+
+form -> from.
 
 Thomas
 -- 
