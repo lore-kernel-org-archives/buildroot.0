@@ -1,50 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Dec 2014 00:34:10 +0100
-Subject: [Buildroot] [git commit] ifplugd: install configuration files
-	unconditionally
-Message-ID: <20141201234334.70E717FA62@busybox.osuosl.org>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 01 Dec 2014 18:55:35 -0600
+Subject: [Buildroot] [PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg
+ package
+In-Reply-To: <5479642D.1030408@ou.edu>
+References: <54796318.7010207@ou.edu> <5479642D.1030408@ou.edu>
+Message-ID: <547D0E07.2070502@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ad5d55924bcc7086f834a28db9c227371728470
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/29/2014 12:14 AM, Steve Kenton wrote:
+V2.0 updated for buildroot 2014.11
 
-As discussed, users should use a rootfs overlay or a post-build script
-instead of a custom skeleton to override files installed by Buildroot,
-so there is no point in having conditions when installing init scripts
-or configuration files.
+[Buildroot][PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg package
 
-[Peter: use install -m as noted by Yann]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+I found I needed ffprobe on the target so this adds
+BR2_PACKAGE_FFMPEG_FFPROBE to make it an option
+
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- package/ifplugd/ifplugd.mk |   12 ++++--------
- 1 files changed, 4 insertions(+), 8 deletions(-)
+diff -ru buildroot-2014.11.clean/package/ffmpeg/Config.in buildroot-2014.11/package/ffmpeg/Config.in
+--- buildroot-2014.11.clean/package/ffmpeg/Config.in	2014-12-01 03:19:00.000000000 -0600
++++ buildroot-2014.11/package/ffmpeg/Config.in	2014-12-01 10:41:51.550502361 -0600
+@@ -49,6 +49,12 @@
+ 	help
+ 	  FFserver is a streaming server for both audio and video.
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 3d0736a..03ed8cd 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -21,14 +21,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++config BR2_PACKAGE_FFMPEG_FFPROBE
++	bool "Build ffprobe"
++	help
++	  FFprobe is a utility to determine the audio and video
++	  characteristics of a container file.
++
+ config BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	bool "Build libavresample"
+ 	help
+diff -ru buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11/package/ffmpeg/ffmpeg.mk
+--- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk	2014-12-01 03:19:00.000000000 -0600
++++ buildroot-2014.11/package/ffmpeg/ffmpeg.mk	2014-12-01 10:31:58.950490993 -0600
+@@ -23,7 +23,6 @@
+ 	--enable-logging \
+ 	--enable-optimizations \
+ 	--disable-extra-warnings \
+-	--disable-ffprobe \
+ 	--enable-avdevice \
+ 	--enable-avcodec \
+ 	--enable-avformat \
+@@ -104,6 +103,12 @@
+ FFMPEG_CONF_OPTS += --disable-avresample
  endif
- 
- define IFPLUGD_INSTALL_FIXUP
--	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
--		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
--		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
--	fi
--	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
--		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
--			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
--	fi
-+	$(INSTALL) -D -m 0644 $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-+	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
-+	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
-+		$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
- endef
- 
- IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
+
++ifeq ($(BR2_PACKAGE_FFMPEG_FFPROBE),y)
++FFMPEG_CONF_OPTS += --enable-ffprobe
++else
++FFMPEG_CONF_OPTS += --disable-ffprobe
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPTS += --enable-postproc
+ else
