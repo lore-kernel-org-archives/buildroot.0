@@ -1,46 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Dec 2014 17:15:01 +0100
-Subject: [Buildroot] [PATCH] avahi: add optional dbus-python support
-Message-ID: <1417536901-29177-1-git-send-email-peter@korsgaard.com>
+From: Ja Bi <Bi.Ja@seznam.cz>
+Date: Tue, 02 Dec 2014 17:24:41 +0100 (CET)
+Subject: [Buildroot] Crypto algorithms in buildroot
+References: <lb1.NaXB.3cxqHjbWLxJ.1KVPDw@seznam.cz>
+ <547DA34A.6080909@zacarias.com.ar>
+Message-ID: <o7v.NaZt.2WB7vfT4NPt.1KVUV9@seznam.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this, the python support doesn't do anything.
+Aha, so it is a bit like gentoo-linux? (but build cc inside that chain?)?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/avahi.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 4e5dbc6..e42f78d 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -71,7 +71,6 @@ AVAHI_CONF_OPTS = \
- 		--disable-qt3 \
- 		--disable-qt4 \
- 		--disable-gdbm \
--		--disable-python-dbus \
- 		--disable-pygtk \
- 		--disable-mono \
- 		--disable-monodoc \
-@@ -144,6 +143,14 @@ else
- AVAHI_CONF_OPTS += --disable-python
- endif
- 
-+ifeq ($(BR2_PACKAGE_DBUS_PYTHON),y)
-+AVAHI_CONF_OPTS += --enable-python-dbus
-+AVAHI_CONF_ENV  += py_cv_mod_dbus_=yes
-+AVAHI_DEPENDENCIES += dbus-python
-+else
-+AVAHI_CONF_OPTS += --disable-python-dbus
-+endif
-+
- AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
- 
- define AVAHI_USERS
--- 
-2.1.3
+
+So if i install openssl, there is package downloaded from openssl cc-
+compiled and installed to that new root?
+
+
+
+
+thanks a lot
+
+Jan
+
+---------- P?vodn? zpr?va ----------
+Od: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Komu: Ja Bi <Bi.Ja@seznam.cz>, buildroot at busybox.net
+Datum: 2. 12. 2014 12:42:11
+P?edm?t: Re: [Buildroot] Crypto algorithms in buildroot
+
+"On 12/02/2014 07:24 AM, Ja Bi wrote:
+
+> Hi guys,
+> 
+> I would like to know which cryptography algorithms are used
+> in buildroot? There is some version of openssl but not the binary
+> openssl that i could use to ask.
+> And other thing is kernel cryptography algorithms. Is it only in
+> /proc/crypto (and unloaded modules)?
+> 
+> Are there any others? sshd?
+> 
+> thank you very much
+> 
+> Jan
+> 
+> PS: I post it again because ehm... i forgot to fill in subject...:(
+
+Hi.
+Buildroot doesn't use any crypto algorithms by itself except to check
+hashes of downloaded files for integrity.
+Your question sounds a little bit vague, what are you trying to say/do?
+It seems to be related to the target rather than buildroot itself.
+Regards."
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141202/29a95a3f/attachment.html>
