@@ -1,54 +1,82 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue,  2 Dec 2014 14:35:24 -0800
-Subject: [Buildroot] [PATCH 1/1] lighttpd: install fastcgi config for php
-Message-ID: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Dec 2014 23:56:44 +0100
+Subject: [Buildroot] [PATCH] package: add python-alsaaudio
+Message-ID: <1417561004-27170-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lighttpd/fastcgi.conf |  7 +++++++
- package/lighttpd/lighttpd.mk  | 11 +++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/lighttpd/fastcgi.conf
+ package/Config.in                              |  1 +
+ package/python-alsaaudio/Config.in             | 12 ++++++++++++
+ package/python-alsaaudio/python-alsaaudio.hash |  2 ++
+ package/python-alsaaudio/python-alsaaudio.mk   | 15 +++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-alsaaudio/Config.in
+ create mode 100644 package/python-alsaaudio/python-alsaaudio.hash
+ create mode 100644 package/python-alsaaudio/python-alsaaudio.mk
 
-diff --git a/package/lighttpd/fastcgi.conf b/package/lighttpd/fastcgi.conf
+diff --git a/package/Config.in b/package/Config.in
+index b8fc7d1..acf7b58 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ endif
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "external python modules"
++	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+diff --git a/package/python-alsaaudio/Config.in b/package/python-alsaaudio/Config.in
 new file mode 100644
-index 0000000..2ed8bea
+index 0000000..c9a91c9
 --- /dev/null
-+++ b/package/lighttpd/fastcgi.conf
-@@ -0,0 +1,7 @@
-+server.modules += ( "mod_fastcgi" )
++++ b/package/python-alsaaudio/Config.in
+@@ -0,0 +1,12 @@
++comment "python-alsaaudio needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
-+fastcgi.server = ( ".php" => ((
-+                     "bin-path" => "/usr/bin/php-cgi",
-+                     "socket" => "/tmp/php.socket"
-+                 )))
++config BR2_PACKAGE_PYTHON_ALSAAUDIO
++	bool "python-alsaaudio"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  The PyAlsaAudio package contains bindings for the ALSA sound
++	  API.
 +
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 8f34561..e4a3020 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -78,6 +78,17 @@ endef
- 
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
- 
-+define LIGHTTPD_INSTALL_PHP_CONFIG
-+	$(INSTALL) -D -m 0644 package/lighttpd/fastcgi.conf \
-+		$(TARGET_DIR)/etc/lighttpd/conf.d/fastcgi.conf
-+	$(SED) 's/#include \"conf.d\/fastcgi.conf\"/include \"conf.d\/fastcgi.conf\"/' \
-+		$(TARGET_DIR)/etc/lighttpd/modules.conf
-+endef
++	  http://pyalsaaudio.sourceforge.net/
+diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
+new file mode 100644
+index 0000000..d805710
+--- /dev/null
++++ b/package/python-alsaaudio/python-alsaaudio.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	bbd5a9eb351def673800707f48e64680685f397e29da72ea4c9355e1a2b2a0fd  pyalsaaudio-0.7.tar.gz
+diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
+new file mode 100644
+index 0000000..e64ddb4
+--- /dev/null
++++ b/package/python-alsaaudio/python-alsaaudio.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-alsaaudio
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_PHP_SAPI_CLI_CGI)$(BR2_PACKAGE_PHP_SAPI_CGI),y)
-+	LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_PHP_CONFIG
-+endif
++PYTHON_ALSAAUDIO_VERSION = 0.7
++PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
++PYTHON_ALSAAUDIO_SITE = http://downloads.sourceforge.net/project/pyalsaaudio
++PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
++PYTHON_ALSAAUDIO_LICENSE = Python software foundation license v2
++PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
++PYTHON_ALSAAUDIO_DEPENDENCIES = alsa-lib
 +
- define LIGHTTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/lighttpd/S50lighttpd \
- 		$(TARGET_DIR)/etc/init.d/S50lighttpd
++$(eval $(python-package))
 -- 
-2.2.0
+2.1.3
