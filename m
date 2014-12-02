@@ -1,34 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  2 Dec 2014 09:48:41 +0200
-Subject: [Buildroot] [PATCH] live555: fix shared library build on x86
-Message-ID: <bb64ba65fded8d92e398aa63b022707ae673782d.1417506520.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Dec 2014 09:26:36 +0100
+Subject: [Buildroot] [PATCH 1/4] pkg-download: check for already
+ downloaded file in the download wrapper
+In-Reply-To: <936ed487d76e1dd36230de9a26d57da908680d79.1417475935.git.yann.morin.1998@free.fr>
+References: <cover.1417475935.git.yann.morin.1998@free.fr>
+ <936ed487d76e1dd36230de9a26d57da908680d79.1417475935.git.yann.morin.1998@free.fr>
+Message-ID: <20141202092636.4bbfea66@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--fPIC is required for shared libraries on x86.
+Dear Yann E. MORIN,
 
-Fixes:
-http://autobuild.buildroot.net/results/6e7/6e78d3e29856c25d233f1629c31bc15f7ecb2f89/
+On Tue,  2 Dec 2014 00:24:06 +0100, Yann E. MORIN wrote:
+> Instead of repeating the same test again and again in all our download
+> rules, just delegate the check for an already downloaded file to the
+> download wrapper.
+> 
+> This clears up the path for doing the hash checks on a cached file
+> before the download.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/live555/live555.mk | 1 +
- 1 file changed, 1 insertion(+)
+It has the consequence of doing another fork+exec of a shell script for
+all files, even if they have already been downloaded. I don't know if
+this is really measurable compared to the overall build time, though,
+except maybe on some cases like "make source". So maybe this is OK.
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 7dbded3522cd..064450546fc2 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -19,6 +19,7 @@ LIVE555_LIBRARY_LINK = $(TARGET_AR) cr
- else
- LIVE555_CONFIG_TARGET = linux-with-shared-libraries
- LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
-+LIVE555_CFLAGS += -fPIC
- endif
- 
- ifndef ($(BR2_ENABLE_LOCALE),y)
+Best regards,
+
+Thomas
 -- 
-2.1.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
