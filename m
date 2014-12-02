@@ -1,139 +1,40 @@
-From: Andrew Burgess <andrew.burgess@embecosm.com>
-Date: Tue, 2 Dec 2014 16:02:50 +0000
-Subject: [Buildroot] [PATCH] binutils: Add user support for fetching
-	from git.
-In-Reply-To: <cf100033200a99097708adfd4f4c065b5e6fbe3b.1416611974.git.andrew.burgess@embecosm.com>
-References: <cover.1416611974.git.andrew.burgess@embecosm.com>
- <cf100033200a99097708adfd4f4c065b5e6fbe3b.1416611974.git.andrew.burgess@embecosm.com>
-Message-ID: <20141202160250.GH16267@embecosm.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 2 Dec 2014 18:50:53 +0100
+Subject: [Buildroot] [PATCH 0/2] RWD Website
+In-Reply-To: <20141125193534.00c099d9@free-electrons.com>
+References: <1414770651-23358-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20141101144354.66e2e698@free-electrons.com>
+ <CA+TH9VmauW8nHEy86AH-dU11f4cVceMk=1MVXMdEkjx_41HQSQ@mail.gmail.com>
+ <20141102225411.0fe3d3de@free-electrons.com>
+ <CA+TH9VmVC8N2-k_mUvf8b_gtMyXk+cgw0Wv+2Z0sM=+1SdVfRQ@mail.gmail.com>
+ <CA+TH9Vm2PPd7WaTdtK0u_PF=sxhtFn=ztqMrtedT4z_mFXMPzw@mail.gmail.com>
+ <CA+TH9Vm556YroUf1zQWbaRRb63ruDLWpK5RjpTxZhUpvXKn9Xw@mail.gmail.com>
+ <20141125193534.00c099d9@free-electrons.com>
+Message-ID: <CA+TH9VkoEEmrniPTjYcd6_=3LGoS2RCyhP2qJV4GN_6u4kULSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping! I don't know if there's any interest in adding this feature.
-I've found it pretty useful, but I understand that there might not be
-a desire to allow random versions to be fetched from version control.
+Dear Thomas,
 
-Thanks,
-Andrew
+> Unfortunately it still doesn't apply on top of the latest master:
+>
+> thomas at skate:~/projets/buildroot (master)$ LANG=C git am -s /tmp/0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch
+> Applying: docs: RWD website - upgrading bootswatch theme file
+> /home/thomas/projets/buildroot/.git/rebase-apply/patch:1659: trailing whitespace.
 
-* Andrew Burgess <andrew.burgess@embecosm.com> [2014-11-21 23:32:36 +0000]:
+Attached you can find a patch that apply to the latest master, I
+verified both with git am and git apply after a git pull.
 
-> This change adds a new option "from git repository" to the list of
-> available binutils versions.  Selecting this allows the user to input
-> the URL of a git repository, and the version to use from the
-> repository.
-> 
-> The ARC target, which previously was hard coding a git URL and version
-> into binutils.mk switches to this new scheme, moving the URL and
-> version into Config.in.host.
-> 
-> This is my first buildroot patch, I don't know if this is a change
-> that will be useful to others, but it's been helpful for me.
-> 
-> Feedback, comments welcome.
-> 
-> Thanks,
-> Andrew
-> 
-> 
-> Signed-off-by: Andrew Burgess <andrew.burgess@embecosm.com>
-> ---
->  package/binutils/Config.in.host | 29 ++++++++++++++++++++++++-----
->  package/binutils/binutils.mk    |  8 ++++----
->  2 files changed, 28 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-> index 45f604a..e2b8e11 100644
-> --- a/package/binutils/Config.in.host
-> +++ b/package/binutils/Config.in.host
-> @@ -2,7 +2,6 @@ comment "Binutils Options"
->  
->  choice
->  	prompt "Binutils Version"
-> -	depends on !BR2_arc
->  	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
->  	default BR2_BINUTILS_VERSION_2_22
->  	help
-> @@ -13,25 +12,45 @@ choice
->  		bool "binutils 2.18-avr32-1.0.1"
->  
->  	config BR2_BINUTILS_VERSION_2_22
-> -		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
-> +		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le && !BR2_arc
->  		bool "binutils 2.22"
->  
->  	# bfin disabled for newer binutils due to
->  	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
->  	config BR2_BINUTILS_VERSION_2_23_2
-> -		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
-> +		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le && !BR2_arc
->  		bool "binutils 2.23.2"
->  
->  	config BR2_BINUTILS_VERSION_2_24
-> -		depends on !BR2_avr32 && !BR2_bfin
-> +		depends on !BR2_avr32 && !BR2_bfin && !BR2_arc
->  		bool "binutils 2.24"
->  
-> +	config BR2_BINUTILS_VERSION_GIT
-> +		bool "from git repository"
-> +
->  endchoice
->  
-> +if BR2_BINUTILS_VERSION_GIT
-> +
-> +config BR2_BINUTILS_CUSTOM_REPO_URL
-> +	string "URL of binutils repository"
-> +	default "git://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb" if BR2_arc
-> +	help
-> +	  URL for git repository to use.
-> +
-> +config BR2_BINUTILS_CUSTOM_REPO_VERSION
-> +	string "Version of binutils repository"
-> +	default "arc-2014.08"	if BR2_arc
-> +	help
-> +	  Revision to use in the typical format used by Git/Mercurial
-> +	  E.G. a sha id, a tag, branch, ..
-> +
-> +endif
-> +
->  config BR2_BINUTILS_VERSION
->  	string
-> +	default BR2_BINUTILS_CUSTOM_REPO_VERSION if BR2_BINUTILS_VERSION_GIT
->  	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
-> -	default "arc-2014.08"	if BR2_arc
->  	default "2.22"		if BR2_BINUTILS_VERSION_2_22
->  	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
->  	default "2.24"		if BR2_BINUTILS_VERSION_2_24
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index b8dab5d..16c542b 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -19,10 +19,10 @@ endif
->  ifeq ($(ARCH),avr32)
->  BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
->  endif
-> -ifeq ($(BR2_arc),y)
-> -BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
-> +ifeq ($(BR2_BINUTILS_VERSION_GIT),y)
-> +BINUTILS_SITE = $(call qstrip,$(BR2_BINUTILS_CUSTOM_REPO_URL))
-> +BINUTILS_SITE_METHOD = git
->  BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-> -BINUTILS_FROM_GIT = y
->  endif
->  BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
->  BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
-> @@ -33,7 +33,7 @@ HOST_BINUTILS_DEPENDENCIES =
->  BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
->  BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
->  
-> -ifeq ($(BINUTILS_FROM_GIT),y)
-> +ifeq ($(BR2_BINUTILS_VERSION_GIT),y)
->  BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
->  HOST_BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
->  endif
-> -- 
-> 1.9.3
-> 
+Probably I sent a wrong .patch file, please ignore it.
+
+Sincerely, Angelo.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-docs-RWD-website-upgrading-bootswatch-theme-file.patch.tar.gz
+Type: application/x-gzip
+Size: 46893 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141202/6c0dde36/attachment.bin>
