@@ -1,44 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2014 10:30:21 +0100
-Subject: [Buildroot] [PATCH 4/4] pkg-download: check hasahes for locally
- cached files
-In-Reply-To: <87fvcy2yhi.fsf@dell.be.48ers.dk>
-References: <cover.1417475935.git.yann.morin.1998@free.fr>
- <e1cc728a60b6a250ea395ee429dba7f470b1f8a8.1417475935.git.yann.morin.1998@free.fr>
- <20141202093148.1a1f7db7@free-electrons.com>
- <87fvcy2yhi.fsf@dell.be.48ers.dk>
-Message-ID: <20141202103021.6e75224a@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  2 Dec 2014 10:59:02 +0100
+Subject: [Buildroot] [PATCH v4 04/14] gpu-viv-bin-mx6q: fix GLESv2 support
+In-Reply-To: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
+References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1417514352-8825-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Tested with:
+    QMX6 board +
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_EGLFS=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
-On Tue, 02 Dec 2014 10:27:05 +0100, Peter Korsgaard wrote:
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
->  > So in essence, from now on, at each build, we are re-checking the
->  > hashes, while previously they were checked only when the file was
->  > downloaded. Not that great for build time, but well, again maybe the
->  > time to check the hashes is negligible compared to the build time. And
->  > we can assume that a big tarball, which takes a certain time to hash,
->  > will also contain a lot of source code to build, so the time to
->  > calculate the hash is proportional to the build time of the package. So
->  > if you're ready to spend several minutes to build Qt, you're probably
->  > ready to wait a few more seconds to calculate the hash of the Qt
->  > tarball each time.
-> 
-> I doubt it adds any significant time. Probably the hash and extract
-> steps are largely I/O bound, so "pre-heating" the page cache by
-> calculating a hash on the tarball before extracting it shouldn't matter
-> much.
-
-True. Anyway, my comment really wasn't rejecting the idea, just
-pointing out the additional stuff we are doing.
-
-Thomas
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 1158e42..eb54b80 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -37,12 +37,13 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+ 			$(@D)/usr/lib/lib$${lib}.so; \
+ 	done
+-	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+@@ -73,7 +74,7 @@ endif
+ define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
+ 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
+ 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
