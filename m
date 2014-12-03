@@ -1,36 +1,45 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  3 Dec 2014 19:05:37 +0100
-Subject: [Buildroot] [PATCH] support/script/scancpan: fix corelist check
-Message-ID: <1417629937-27137-1-git-send-email-francois.perrad@gadz.org>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Wed, 3 Dec 2014 15:07:40 -0300
+Subject: [Buildroot] [PATCH v4 0/9] target permissions
+In-Reply-To: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20141203180740.GA18880@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-module could be removed of the core,
-so check if the module is currently in the core,
-but not if the module was once time included in the core.
+Hi everyone,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Nov 21, 2014 at 01:18:59PM -0300, Guido Mart?nez wrote:
+>[...]
+> Guido Mart?nez (9):
+>   Makefile: don't depend on the umask
+>   Makefile: don't depend on current skeleton/overlay permissions
+>   toolchain/helpers.mk: use --chmod on rsync
+>   pkg-generic.mk: don't depend on external package permissions
+>   package: matchbox-keyboard: use install instead of cp
+>   scripts: mkmakefile: set umask before calling BR's makefile
+>   nitrogen6x: use install instead of cp
+>   boot/grub: use install instead of cp
+>   fs/iso9660: use install instead of cp
+> 
+>  Makefile                                              | 19 +++++++++++++++++--
+>  board/boundarydevices/nitrogen6x/post-build.sh        |  6 +++---
+>  boot/grub/grub.mk                                     | 14 +++++++-------
+>  fs/iso9660/iso9660.mk                                 | 16 +++++++++-------
+>  .../matchbox/matchbox-keyboard/matchbox-keyboard.mk   |  2 +-
+>  package/pkg-generic.mk                                |  2 +-
+>  support/scripts/mkmakefile                            |  2 +-
+>  toolchain/helpers.mk                                  |  2 +-
+>  8 files changed, 40 insertions(+), 23 deletions(-)
+> 
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 7ff647d..0eac132 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -569,8 +569,8 @@ sub fetch {
-             next if $modname eq q{perl};
-             next if $modname =~ m|^Alien|;
-             next if $modname =~ m|^Win32|;
--            next if !$test && $modname =~ m|^Test|; 
--            next if Module::CoreList::first_release( $modname );
-+            next if !$test && $modname =~ m|^Test|;
-+            next if Module::CoreList::is_core( $modname, undef, $] );
-             # we could use the host Module::CoreList data, because host perl and
-             # target perl have the same major version
-             next if ${$dep}{phase} eq q{develop};
+Any comments on this? Has anyone tested/reviewed the new set?
+
+Cheers!
+
 -- 
-2.1.0
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
