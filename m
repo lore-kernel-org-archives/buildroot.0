@@ -1,66 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Dec 2014 19:17:01 +0100
-Subject: [Buildroot] [PATCH v4] Makefile: improve detection of make "-s"
- flag
-In-Reply-To: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20141203181701.GA4152@free.fr>
+Date: Wed, 3 Dec 2014 19:30:02 +0100
+Subject: [Buildroot] [PATCH 1/3] package/aiccu: disable broken
+ toolchains on nios2
+In-Reply-To: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141203183002.GB4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Bernd, All,
 
-On 2014-11-19 18:51 +0100, Fabio Porcedda spake thusly:
-> Because it's just checked the presence of the "s" character even a
->   make --warn-undefined-variables
-> is detected as a silent build so fix this by filtering out long options.
+On 2014-11-30 17:48 +0100, Bernd Kuhls spake thusly:
+> As discussed with Thomas
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/100998
+> only the current toolchains are broken:
+> "it's better to blacklist the individual toolchains that are known
+> to be broken, so that if we add another toolchain, we will be able
+> to see if the same bug happens as well or not."
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
-> 
-> Notes:
->     v4:
->      - split this patch from the patch set to send to muster as bugfix
->     v2:
->      - remove spurious space at the beginning of the QUIET variable (Arnout)
-> 
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 471edf9..6b97dc6 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
->  TARGETS :=
->  
->  # silent mode requested?
-> -QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-> +QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Please, do not add a space after the comma when calling a macro. This
-should be:
-
-    QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
-
-Yes, that's slightly less readable. But make really cuts on commas, and
-the sapce is then part of the values, so we do not want it (it has no
-impact in your case, though, but: consistency! ;-) )
-
-Otherwise, looks good to me.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  
->  # Strip off the annoying quoting
->  ARCH := $(call qstrip,$(BR2_ARCH))
+> ---
+>  package/aiccu/Config.in |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+> index 51e5fb7..ce5cea6 100644
+> --- a/package/aiccu/Config.in
+> +++ b/package/aiccu/Config.in
+> @@ -11,7 +11,8 @@ config BR2_PACKAGE_AICCU
+>  	# toolchains.
+>  	depends on !BR2_avr32
+>  	# Triggers the _gp link issue
+> -	depends on !BR2_nios2
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+>  	select BR2_PACKAGE_GNUTLS
+>  	help
+>  	  SixXS Automatic IPv6 Connectivity Client Utility
+> @@ -31,4 +32,5 @@ comment "aiccu needs a toolchain w/ IPv6, wchar, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+>  	depends on !BR2_avr32
+> -	depends on !BR2_nios2
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
 > -- 
-> 2.1.3
+> 1.7.10.4
 > 
 > _______________________________________________
 > buildroot mailing list
