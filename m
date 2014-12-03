@@ -1,28 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Dec 2014 09:23:06 +0100
-Subject: [Buildroot] [git commit] package/flac: fix patch file extension
-Message-ID: <20141203082334.AC7EE8007B@busybox.osuosl.org>
+Date: Wed, 3 Dec 2014 09:22:45 +0100
+Subject: [Buildroot] [git commit] package/dejavu: add hashes from project
+	site
+Message-ID: <20141203082334.A288580057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce49c7c852d74a24967e491db10d9135a1fd6b70
+commit: http://git.buildroot.net/buildroot/commit/?id=435e95d809ae346b8b995000a1894adcf8048baf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.org/results/c22/c22f29fd787a3d12d86cc3cd3e2d9c8688d2f65d/
-  http://autobuild.buildroot.org/results/1f8/1f824e3aa17fb17e7efe3e4c1636974fea79c1f9/
-  http://autobuild.buildroot.org/results/8ad/8ad965fbc19e22d3f43899cb5efb42626fa2f55e/
-
+[Peter: drop locally computed sha1sum]
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nfigure-don-t-try-to-unset-g-from-CFLAGS.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+ package/dejavu/dejavu.hash |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
-similarity index 100%
-rename from package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.txt
-rename to package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index 11e0d1c..df851d7 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
+@@ -1,2 +1,3 @@
+-# Locally computed
+-sha1 33fa825aa1dd44ce23a11af92b3078e978ff513d dejavu-fonts-ttf-2.34.tar.bz2
++# From http://dejavu-fonts.org/wiki/Download
++md5 161462de16e2ca79873bc2b0d2e6c74c dejavu-fonts-ttf-2.34.tar.bz2
++sha256 d0a72c3ae99f5b8d7470daf091ec43f78dc942795aed5c996ab1aa678702eb5d dejavu-fonts-ttf-2.34.tar.bz2
