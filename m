@@ -1,69 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Dec 2014 19:31:12 +0100
-Subject: [Buildroot] [PATCH 3/3] package/lxc: disable broken toolchains
- on nios2
-In-Reply-To: <1417366134-2098-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
- <1417366134-2098-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141203183112.GD4152@free.fr>
+Date: Wed, 3 Dec 2014 19:43:40 +0100
+Subject: [Buildroot] [PATCH 1/4] pkg-download: check for already
+ downloaded file in the download wrapper
+In-Reply-To: <20141202092636.4bbfea66@free-electrons.com>
+References: <cover.1417475935.git.yann.morin.1998@free.fr>
+ <936ed487d76e1dd36230de9a26d57da908680d79.1417475935.git.yann.morin.1998@free.fr>
+ <20141202092636.4bbfea66@free-electrons.com>
+Message-ID: <20141203184340.GE4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Thomas, All,
 
-On 2014-11-30 17:48 +0100, Bernd Kuhls spake thusly:
-> As discussed with Thomas
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/100998
-> only the current toolchains are broken:
-> "it's better to blacklist the individual toolchains that are known
-> to be broken, so that if we add another toolchain, we will be able
-> to see if the same bug happens as well or not."
+On 2014-12-02 09:26 +0100, Thomas Petazzoni spake thusly:
+> On Tue,  2 Dec 2014 00:24:06 +0100, Yann E. MORIN wrote:
+> > Instead of repeating the same test again and again in all our download
+> > rules, just delegate the check for an already downloaded file to the
+> > download wrapper.
+> > 
+> > This clears up the path for doing the hash checks on a cached file
+> > before the download.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> It has the consequence of doing another fork+exec of a shell script for
+> all files, even if they have already been downloaded. I don't know if
+> this is really measurable compared to the overall build time, though,
+> except maybe on some cases like "make source". So maybe this is OK.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Well, if I remember correctly, make is smart enough to detect simple
+commands and not spawn a shell for them, and just does the fork-exec
+itself rather than calling system().
+
+So, when counting the fork+exec you'd get:
+
+  - simple command (program arg arg arg): make does a fork()+exec() to
+    the script, the kernel sees the she-bang and the exec is a call to
+    the shell to interpret the script
+
+  - command lists (command1 || command2), make does a system(), which in
+    turn does a fork()+exec() to the shell to interpret the command
+    list.
+
+So we're breaking even in that case. We even gain a call to system(), so
+we should be a little tiny bit faster! ;-p
+
+And anyway, a fork+exec is not that costly nowaday. Probably, on a
+cache-cold system, the IOs will largely over-shadow the fork+exec pair I
+am afraid... ;-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/lxc/Config.in |    7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-> index cf85712..a90e58e 100644
-> --- a/package/lxc/Config.in
-> +++ b/package/lxc/Config.in
-> @@ -6,7 +6,9 @@ config BR2_PACKAGE_LXC
->  	depends on BR2_LARGEFILE
->  	depends on BR2_USE_MMU # fork()
->  	depends on !BR2_avr32 # no timerfd
-> -	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
-> +	# the toolchain doesn't support setns syscall
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
->  	help
->  	  Linux Containers (LXC), provides the ability to group and isolate
-> @@ -18,6 +20,7 @@ config BR2_PACKAGE_LXC
->  comment "lxc needs a toolchain w/ IPv6, threads, largefile, headers >= 3.0"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_avr32 # no timerfd
-> -	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
->  	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS \
->                  || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
