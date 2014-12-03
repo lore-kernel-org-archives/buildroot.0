@@ -1,44 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Dec 2014 13:31:51 +0100
-Subject: [Buildroot] [git commit] package/nginx: rename patch to new
-	convention
-Message-ID: <20141203123322.1F6B57FFA0@busybox.osuosl.org>
+Date: Wed, 3 Dec 2014 13:32:21 +0100
+Subject: [Buildroot] [git commit] package/nginx: remove rtsig module support
+Message-ID: <20141203123322.25F8E7FF9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed961f1128b7495616d70681253070bfda9ebc9d
+commit: http://git.buildroot.net/buildroot/commit/?id=b11cbd9bba9e94dddd4f1bd068af3c889b098497
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+rtsig module uses the deprecated sysctl syscall, which is not
+implemented on some recent architecture (such as arc).
+
+Also, rtsig module is almost considered as deprecated by some nginx
+developers [1].
+
+So, just remove this option.
+
+Fixes:
+  http://autobuild.buildroot.org/results/730/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
+
+[1] http://mailman.nginx.org/pipermail/nginx-devel/2014-November/006295.html
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...zeof-rework-autotest-to-be-cross-compila.patch} |    0
- ...-add-mechanism-allowing-to-force-feature.patch} |    0
- ..._feature_run_force_result-for-each-featu.patch} |    0
- ...xslt-conf-allow-to-override-ngx_feature_.patch} |    0
- ...ix-make-sys_nerr-guessing-cross-friendly.patch} |    0
- 5 files changed, 0 insertions(+), 0 deletions(-)
+ package/nginx/Config.in |    5 -----
+ package/nginx/nginx.mk  |    1 -
+ 2 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/nginx/nginx-0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch b/package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-similarity index 100%
-rename from package/nginx/nginx-0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-rename to package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-diff --git a/package/nginx/nginx-0002-auto-feature-add-mechanism-allowing-to-force-feature.patch b/package/nginx/0002-auto-feature-add-mechanism-allowing-to-force-feature.patch
-similarity index 100%
-rename from package/nginx/nginx-0002-auto-feature-add-mechanism-allowing-to-force-feature.patch
-rename to package/nginx/0002-auto-feature-add-mechanism-allowing-to-force-feature.patch
-diff --git a/package/nginx/nginx-0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch b/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-similarity index 100%
-rename from package/nginx/nginx-0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-rename to package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-diff --git a/package/nginx/nginx-0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch b/package/nginx/0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch
-similarity index 100%
-rename from package/nginx/nginx-0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch
-rename to package/nginx/0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch
-diff --git a/package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-similarity index 100%
-rename from package/nginx/nginx-0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-rename to package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index ddab0ca..c2a6af1 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -309,11 +309,6 @@ endif #BR2_PACKAGE_NGINX_MAIL
+ 
+ comment "misc. modules"
+ 
+-config BR2_PACKAGE_NGINX_RTSIG_MODULE
+-	bool "ngx_rtsig_module"
+-	help
+-	  Enable ngx_rtsig_module
+-
+ config BR2_PACKAGE_NGINX_SELECT_MODULE
+ 	bool "ngx_select_module"
+ 	help
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 55ae844..06f1312 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -88,7 +88,6 @@ endif
+ 
+ # misc. modules
+ NGINX_CONF_OPTS += \
+-	$(if $(BR2_PACKAGE_NGINX_RTSIG_MODULE),--with-rtsig_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_SELECT_MODULE),--with-select_module,--without-select_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_POLL_MODULE),--with-poll_module,--without-poll_module)
+ 
