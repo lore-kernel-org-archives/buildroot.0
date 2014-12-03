@@ -1,45 +1,76 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Wed, 3 Dec 2014 15:07:40 -0300
-Subject: [Buildroot] [PATCH v4 0/9] target permissions
-In-Reply-To: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20141203180740.GA18880@fox>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Dec 2014 19:17:01 +0100
+Subject: [Buildroot] [PATCH v4] Makefile: improve detection of make "-s"
+ flag
+In-Reply-To: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1416419494-14916-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20141203181701.GA4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Fabio, All,
 
-On Fri, Nov 21, 2014 at 01:18:59PM -0300, Guido Mart?nez wrote:
->[...]
-> Guido Mart?nez (9):
->   Makefile: don't depend on the umask
->   Makefile: don't depend on current skeleton/overlay permissions
->   toolchain/helpers.mk: use --chmod on rsync
->   pkg-generic.mk: don't depend on external package permissions
->   package: matchbox-keyboard: use install instead of cp
->   scripts: mkmakefile: set umask before calling BR's makefile
->   nitrogen6x: use install instead of cp
->   boot/grub: use install instead of cp
->   fs/iso9660: use install instead of cp
+On 2014-11-19 18:51 +0100, Fabio Porcedda spake thusly:
+> Because it's just checked the presence of the "s" character even a
+>   make --warn-undefined-variables
+> is detected as a silent build so fix this by filtering out long options.
 > 
->  Makefile                                              | 19 +++++++++++++++++--
->  board/boundarydevices/nitrogen6x/post-build.sh        |  6 +++---
->  boot/grub/grub.mk                                     | 14 +++++++-------
->  fs/iso9660/iso9660.mk                                 | 16 +++++++++-------
->  .../matchbox/matchbox-keyboard/matchbox-keyboard.mk   |  2 +-
->  package/pkg-generic.mk                                |  2 +-
->  support/scripts/mkmakefile                            |  2 +-
->  toolchain/helpers.mk                                  |  2 +-
->  8 files changed, 40 insertions(+), 23 deletions(-)
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
 > 
+> Notes:
+>     v4:
+>      - split this patch from the patch set to send to muster as bugfix
+>     v2:
+>      - remove spurious space at the beginning of the QUIET variable (Arnout)
+> 
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 471edf9..6b97dc6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -303,7 +303,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+>  TARGETS :=
+>  
+>  # silent mode requested?
+> -QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
+> +QUIET := $(if $(findstring s, $(filter-out --%, $(MAKEFLAGS))),-q)
 
-Any comments on this? Has anyone tested/reviewed the new set?
+Please, do not add a space after the comma when calling a macro. This
+should be:
 
-Cheers!
+    QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+
+Yes, that's slightly less readable. But make really cuts on commas, and
+the sapce is then part of the values, so we do not want it (it has no
+impact in your case, though, but: consistency! ;-) )
+
+Otherwise, looks good to me.
+
+Regards,
+Yann E. MORIN.
+
+>  
+>  # Strip off the annoying quoting
+>  ARCH := $(call qstrip,$(BR2_ARCH))
+> -- 
+> 2.1.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
