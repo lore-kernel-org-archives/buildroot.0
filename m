@@ -1,44 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Dec 2014 23:18:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Add patch to
- fix build error with musl
-In-Reply-To: <1417644227-16408-1-git-send-email-jkrause@posteo.de>
-References: <1417644227-16408-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141203231804.7101c099@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Dec 2014 23:20:34 +0100
+Subject: [Buildroot] [PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg
+	package
+In-Reply-To: <547D0E07.2070502@ou.edu> (Steve Kenton's message of "Mon, 01 Dec
+ 2014 18:55:35 -0600")
+References: <54796318.7010207@ou.edu> <5479642D.1030408@ou.edu>
+ <547D0E07.2070502@ou.edu>
+Message-ID: <877fy8xtn1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+>>>>> "Steve" == Steve Kenton <skenton@ou.edu> writes:
 
-On Wed,  3 Dec 2014 23:03:47 +0100, J?rg Krause wrote:
-> Add a patch to allow building wpa_supplicant with the musl C library.
-> 
-> Building wpa_supplicant with the musl C library fails since musl does not
-> define type names such as '__uint32_t'. To support building wpa_supplicant
-> with the musl C library use the integer types declared in the ISO C standard
-> header file <stdint.h>.
-> 
-> Patch is sent upstream:
-> http://lists.shmoo.com/pipermail/hostap/2014-December/031464.html
-> 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  .../wpa_supplicant-0001-fix-musl-build-error.patch | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/wpa_supplicant/wpa_supplicant-0001-fix-musl-build-error.patch
+ > On 11/29/2014 12:14 AM, Steve Kenton wrote:
+ > V2.0 updated for buildroot 2014.11
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > [Buildroot][PATCH] ffprobe: V2.0 Add ffprobe option to ffmpeg package
 
-wpa_supplicant indeed doesn't build with musl without this patch, and
-builds fine with this patch applied. And the patch looks sane.
+ > I found I needed ffprobe on the target so this adds
+ > BR2_PACKAGE_FFMPEG_FFPROBE to make it an option
 
-Thanks,
+ > Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 
-Thomas
+Committed with the description tweaked a bit, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
