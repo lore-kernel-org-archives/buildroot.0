@@ -1,64 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Dec 2014 19:51:57 +0100
-Subject: [Buildroot] [PATCH 4/4] pkg-download: check hasahes for locally
-	cached files
-In-Reply-To: <20141202093148.1a1f7db7@free-electrons.com>
-References: <cover.1417475935.git.yann.morin.1998@free.fr>
- <e1cc728a60b6a250ea395ee429dba7f470b1f8a8.1417475935.git.yann.morin.1998@free.fr>
- <20141202093148.1a1f7db7@free-electrons.com>
-Message-ID: <20141203185157.GG4152@free.fr>
+Date: Wed, 3 Dec 2014 20:04:59 +0100
+Subject: [Buildroot] [PATCH] binutils: Add user support for fetching
+ from git.
+In-Reply-To: <cf100033200a99097708adfd4f4c065b5e6fbe3b.1416611974.git.andrew.burgess@embecosm.com>
+References: <cover.1416611974.git.andrew.burgess@embecosm.com>
+ <cf100033200a99097708adfd4f4c065b5e6fbe3b.1416611974.git.andrew.burgess@embecosm.com>
+Message-ID: <20141203190459.GH4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Andrew, All,
 
-On 2014-12-02 09:31 +0100, Thomas Petazzoni spake thusly:
-> On Tue,  2 Dec 2014 00:24:09 +0100, Yann E. MORIN wrote:
-> > In some cases, upstream just update their releases in-place, without
-> > renaming them. When that package is updated in Buildroot, a new hash to
-> > match the new upstream release is included in the corresponding .hash
-> > file.
-> > 
-> > As a consequence, users who previously downloaded that package's tarball
-> > with an older version of Buildroot, will get stuck with an old archive
-> > for that package, and after updating their Buildroot copy, will be greeted
-> > with a failed download, due to the local file not matching the new
-> > hashes.
-> > 
-> > So, to avoid this situation, check the hashes prior to doing the
-> > download. If the hashes match, consider the locally cached file genuine,
-> > and do not download it. However, if the locally cached file does not
-> > match the known hashes we have for it, it is promptly removed, and a
-> > download is re-attempted.
+On 2014-11-21 23:32 +0000, Andrew Burgess spake thusly:
+> This change adds a new option "from git repository" to the list of
+> available binutils versions.  Selecting this allows the user to input
+> the URL of a git repository, and the version to use from the
+> repository.
 > 
-> So in essence, from now on, at each build, we are re-checking the
-> hashes, while previously they were checked only when the file was
-> downloaded. Not that great for build time, but well, again maybe the
-> time to check the hashes is negligible compared to the build time. And
-> we can assume that a big tarball, which takes a certain time to hash,
-> will also contain a lot of source code to build, so the time to
-> calculate the hash is proportional to the build time of the package. So
-> if you're ready to spend several minutes to build Qt, you're probably
-> ready to wait a few more seconds to calculate the hash of the Qt
-> tarball each time.
+> The ARC target, which previously was hard coding a git URL and version
+> into binutils.mk switches to this new scheme, moving the URL and
+> version into Config.in.host.
 
-I just hashed a 231MiB tarball (qt-everywhere-opensource-src-4.8.6.tar.gz)
-and it takes (wall-clock time, core-i5 @2.5GHz):
-  - cache-cold sha1  : 1.914s
-  - cache-hot  sha1  : 0.762s
-  - cache-hot  sha256: 1.270s
+Thank you for your contribution, and sorry for the delay in answering.
 
-(cache-cold sha256 is not easily done, I'd have to either umount /home
-or reboot...)
+The fact that we need a git revision for arc is just happenstance, we
+could well point to a tarball of that tag instead of getting it from
+git; we do not use a tarball because none is available to our knowledge,
+and thus we have to use the git tree.
 
-Needless to say this is negligible when compared to the build time of Qt
-(I do not have the numbers available for now, but I doubt it would be
-less than 30 seconds on my machine).
+However, this is creating an imbalance between binutils and gcc/glibc/...
+and basically all other packages (except very few critical ones) for
+which we do not offer a choice to use a random git tree or commit.
 
-I will add those numbers in the commit log next time I respin.
+Moreover, we believe this situation is better served by using the
+_OVERRIDE_SRCDIR feature, see:
+    http://nightly.buildroot.org/#_advanced_usage
+
+    8.11.6. Using Buildroot during development
+
+    [...] Buildroot provides a specific mechanism for this use case: the
+    <pkg>_OVERRIDE_SRCDIR mechanism. Buildroot reads an override file,
+    which allows the user to tell Buildroot the location of the source
+    for certain packages.
+
+In this case, you would have to provide:
+
+    HOST_BINUTILS_OVERRIDE_SRCDIR=/path/to/your/arc-binutils
 
 Regards,
 Yann E. MORIN.
