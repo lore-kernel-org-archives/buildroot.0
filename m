@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Dec 2014 13:32:57 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/nginx: rename patch to new
-	convention
-In-Reply-To: <1417471496-7391-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Mon, 1 Dec 2014 23:04:55 +0100")
+Date: Wed, 03 Dec 2014 13:33:09 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/nginx: remove rtsig module
+	support
+In-Reply-To: <1417471496-7391-2-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Mon, 1 Dec 2014 23:04:56 +0100")
 References: <1417471496-7391-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87d280zzeu.fsf@dell.be.48ers.dk>
+ <1417471496-7391-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <878uiozzei.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +15,12 @@ To: buildroot@busybox.net
 
 >>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- > ---
- > changes v1 -> v2:
- > - rebase
+ > rtsig module uses the deprecated sysctl syscall, which is not
+ > implemented on some recent architecture (such as arc).
+
+ > Also, rtsig module is almost consider as deprecated by some nginx
+
+s/consider/considered/
 
 Committed, thanks.
 
