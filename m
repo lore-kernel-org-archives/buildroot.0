@@ -1,211 +1,117 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 3 Dec 2014 16:52:25 +0000
-Subject: [Buildroot] [PATCH v2 2/2] toolchain-external: add CodeSourcery
-	MIPS 2014.11, remove 2013.05
-In-Reply-To: <1417625545-54608-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1417625545-54608-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1417625545-54608-2-git-send-email-Vincent.Riera@imgtec.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Wed, 3 Dec 2014 18:10:53 +0100
+Subject: [Buildroot] [PATCH] fs: allow to specify compression options
+Message-ID: <1417626653-13516-1-git-send-email-vincent.stehle@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add CodeSourcery MIPS 2014.11 toolchain
-- Remove CodeSourcery MIPS 2013.05 toolchain
-- Update the hash file
+Add $BR2_TARGET_ROOTFS_xxx_OPTS options to allow changing the rootfs
+compression options.
 
-Toolchain datasheet:
-  https://sourcery.mentor.com/GNUToolchain/release2935?@template=datasheet
+This allows to trade compression ratio versus compression speed for example.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+We default to the previous settings.
+
+Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2: minor cosmetic fixes
 
- toolchain/toolchain-external/Config.in             |   52 ++++++--------------
- .../toolchain-external/toolchain-external.hash     |    4 +-
- toolchain/toolchain-external/toolchain-external.mk |    6 +-
- 3 files changed, 21 insertions(+), 41 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 9034952..66166dd 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -188,8 +188,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+Hi,
+
+I would like to propose this patch, to allow specifying rootfs compression
+options. I use it to reduce lzop compression level for faster rootfs
+compression.
+
+Best regards,
+
+V.
+
+
+ fs/Config.in | 34 ++++++++++++++++++++++++++++++++++
+ fs/common.mk | 10 +++++-----
+ 2 files changed, 39 insertions(+), 5 deletions(-)
+
+diff --git a/fs/Config.in b/fs/Config.in
+index 5853113..9bd70e0 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -13,4 +13,38 @@ source "fs/tar/Config.in"
+ source "fs/ubifs/Config.in"
+ source "fs/yaffs2/Config.in"
  
- 	  This toolchain uses software-floating point.
++menu "Filesystem compression options"
++
++config BR2_TARGET_ROOTFS_GZIP_OPTS
++	string "Gzip options"
++	default "-9"
++	help
++	  Options to use when compressing the root filesystem with gzip.
++
++config BR2_TARGET_ROOTFS_BZIP2_OPTS
++	string "Bzip2 options"
++	default "-9"
++	help
++	  Options to use when compressing the root filesystem with bzip2.
++
++config BR2_TARGET_ROOTFS_LZMA_OPTS
++	string "Lzma options"
++	default "-9"
++	help
++	  Options to use when compressing the root filesystem with lzma.
++
++config BR2_TARGET_ROOTFS_LZOP_OPTS
++	string "Lzop options"
++	default "-9"
++	help
++	  Options to use when compressing the root filesystem with lzop.
++
++config BR2_TARGET_ROOTFS_XZ_OPTS
++	string "Xz options"
++	default "-9 -C crc32"
++	help
++	  Options to use when compressing the root filesystem with xz.
++
++endmenu
++
+ endmenu
+diff --git a/fs/common.mk b/fs/common.mk
+index d40f5ae..c8a71d6 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -45,25 +45,25 @@ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
--	bool "Sourcery CodeBench MIPS 2014.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
-+	bool "Sourcery CodeBench MIPS 2014.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -198,11 +198,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
-+	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
-+	  2.20, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.16.2. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -273,8 +273,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+-ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
++ROOTFS_$(2)_COMPRESS_CMD = gzip $$(call qstrip,$$(BR2_TARGET_ROOTFS_GZIP_OPTS)) -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .bz2
+-ROOTFS_$(2)_COMPRESS_CMD = bzip2 -9 -c
++ROOTFS_$(2)_COMPRESS_CMD = bzip2 $$(call qstrip,$$(BR2_TARGET_ROOTFS_BZIP2_OPTS)) -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+ ROOTFS_$(2)_DEPENDENCIES += host-lzma
+ ROOTFS_$(2)_COMPRESS_EXT = .lzma
+-ROOTFS_$(2)_COMPRESS_CMD = $$(LZMA) -9 -c
++ROOTFS_$(2)_COMPRESS_CMD = $$(LZMA) $$(call qstrip,$$(BR2_TARGET_ROOTFS_LZMA_OPTS)) -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZO),y)
+ ROOTFS_$(2)_DEPENDENCIES += host-lzop
+ ROOTFS_$(2)_COMPRESS_EXT = .lzo
+-ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
++ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) $$(call qstrip,$$(BR2_TARGET_ROOTFS_LZOP_OPTS)) -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .xz
+-ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
++ROOTFS_$(2)_COMPRESS_CMD = xz $$(call qstrip,$$(BR2_TARGET_ROOTFS_XZ_OPTS)) -c
+ endif
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
--	bool "Sourcery CodeBench MIPS 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	bool "Sourcery CodeBench MIPS 2014.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -283,11 +283,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers 3.11. It
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -358,8 +358,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
--	bool "Sourcery CodeBench MIPS 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-+	bool "Sourcery CodeBench MIPS 2013.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -368,20 +368,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
--	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers 3.8.2. It
-+	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers 3.11. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mnan=2008
--	    - MIPS32r2 - Big-Endian, 2008 NaN, O32, MIPS16
--	      Select MIPS (big endian) core
--	      Disable BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mnan=2008 -mips16
- 	    - MIPS32r2 - Big-Endian, O32
- 	      Select MIPS (big endian) core
- 	      Disable BR2_SOFT_FLOAT
-@@ -389,10 +385,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	      Select MIPS (big endian) core
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mips16
--	    - MIPS32r2 - Big-Endian, O32, microMIPS
--	      Select MIPS (big endian) core
--	      Disable BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mmicromips
- 	    - MIPS32r2 - Big-Endian, Soft-Float, O32
- 	      Select MIPS (big endian) core
- 	      Select BR2_SOFT_FLOAT
-@@ -400,18 +392,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	      Select MIPS (big endian) core
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mips16
--	    - MIPS32r2 - Big-Endian, Soft-Float, O32, microMIPS
--	      Select MIPS (big endian) core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mmicromips
- 	    - MIPS32r2 - Little-Endian, 2008 NaN, O32
- 	      Select MIPS (little endian) core
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mnan=2008
--	    - MIPS32r2 - Little-Endian, 2008 NaN, O32, MIPS16
--	      Select MIPS (little endian) core
--	      Disable BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mnan=2008 -mips16
- 	    - MIPS32r2 - Little-Endian, O32
- 	      Select MIPS (little endian) core
- 	      Disable BR2_SOFT_FLOAT
-@@ -419,10 +403,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	      Select MIPS (little endian) core
- 	      Disable BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mips16
--	    - MIPS32r2 - Little-Endian, O32, microMIPS
--	      Select MIPS (little endian) core
--	      Disable BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mmicromips
- 	    - MIPS32r2 - Little-Endian, Soft-Float, O32
- 	      Select MIPS (little endian) core
- 	      Select BR2_SOFT_FLOAT
-@@ -992,9 +972,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 0d75005..7e64d4f 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -1,7 +1,7 @@
- # Sourcery CodeBench Lite for MIPS
-+# From: https://sourcery.mentor.com/GNUToolchain/release2935
-+md5  ad4a66e4791606c5df70f48c4a97b0ec  mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2791
- md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2640
- md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
--# From: https://sourcery.mentor.com/GNUToolchain/release2554
--md5  937a383ab2aa5b154aa90fbc5d7b334e  mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 51e0af5..992d0cb 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -278,15 +278,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
 -- 
-1.7.1
+2.1.3
