@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Dec 2014 14:46:04 +0100
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Wed, 3 Dec 2014 15:10:27 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-12-02
-In-Reply-To: <547F12F3.70505@imgtec.com> (Vicente Olivert Riera's message of
- "Wed, 3 Dec 2014 13:41:07 +0000")
+ 2014-12-02
+In-Reply-To: <20141203073017.2AC17100ADA@stock.ovh.net>
 References: <20141203073017.2AC17100ADA@stock.ovh.net>
- <547F12F3.70505@imgtec.com>
-Message-ID: <87vblsyhgj.fsf@dell.be.48ers.dk>
+Message-ID: <20141203151027.696ae024@nserafini-N550JK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > On 12/03/2014 07:30 AM, Thomas Petazzoni wrote:
- >> Build statistics for 2014-12-02
+On Wed, 3 Dec 2014 08:30:16 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- >> mips | xlib_libXau-1.0.8 | NOK |
- >> http://autobuild.buildroot.net/results/b8474b85315a0424870fc655dc89324bb1193d44/
+> Build statistics for 2014-12-02
+> bfin | exiv2-0.24 |NOK|http://autobuild.buildroot.net/results/09d9b525eeee458247e10a7948070c00bbabb964/
 
- > I cannot reproduce this even using the same .config file. However I have
- > found that xlibx_libXau also needs to have host-pkgconf on its
- > dependences. Otherwise it would fail with an error like this one:
+I have reproduced this error that is created by the inclusion of
+"link.h" in src/version.cpp line 119.
 
- > checking for XAU... configure: error: in
- > `/br/output/build/xlib_libXau-1.0.8':
- > configure: error: The pkg-config script could not be found or is too
- > old.  Make sure it
- > is in your PATH or set the PKG_CONFIG environment variable to the full
- > path to pkg-config.
+Perhaps there is a problem in the toolchain too because the error comes
+from another included file in "link.h" but for the package it seems that
+without this inclusion the build work fine on the bfin arch and on ARM
+arch with linaro 2014.09.
 
- > I will send a patch today.
+I have opened an issue on exiv2 project and I'm waiting for a response.
+http://dev.exiv2.org/issues/1007
 
-Thanks. Judging from the error message, that is most likely the reason
-for the failure.
+
+Regards,
+Nicolas
 
 -- 
-Bye, Peter Korsgaard
+Nicolas Serafini
+R&D Embedded Software Engineer
+
+www.sensefly.com
+Route de Gen?ve 38
+1033 Cheseaux-Lausanne
+Switzerland
