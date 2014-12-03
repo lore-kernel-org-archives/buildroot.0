@@ -1,290 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  3 Dec 2014 22:41:27 +0100
-Subject: [Buildroot] [PATCH 0/8] Improving static/shared library selection
-Message-ID: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed,  3 Dec 2014 22:41:28 +0100
+Subject: [Buildroot] [PATCH 1/8] docs: fix typo in cmake-package
+	documentation
+In-Reply-To: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1417642895-29606-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The cmake-package documentation was referring to
+BR2_PREFER_STATIC_LIBS, while the option is actually named
+BR2_PREFER_STATIC_LIB. This commit fixes this mistake.
 
-The goal of this patch series is to improve/clarify our handling of
-shared vs. static library handling. The current naming of the option
-used for static linking, BR2_PREFER_STATIC_LIB, is misleading as it
-suggests it's only a preference, even though we have move towards
-changing the semantic of this option to "build everything statically".
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-cmake.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Moreover, on most architectures, we currently build both shared and
-static libraries, even though the static libraries are generally not
-used. This patch series proposes to switch to a three options choice:
-static only, static+shared and shared only, and to use the latter
-option by default on platforms that support shared libraries.
-
- - PATCH 1 is just a preliminary fix to the documentation, it can be
-   applied right now, regardless of the decision on the rest of the
-   patch series.
-
- - PATCH 2 renames BR2_PREFER_STATIC_LIB to BR2_STATIC_LIBS. With the
-   exception of the addition of the Config.in.legacy fragment, the
-   rest of the patch is a pure mechanical change.
-
- - PATCH 3 to 5 adjust arch/Config.in to improve the selection of
-   binary format and expressing which binary formats supports shared
-   libraries.
-
- - PATCH 6 makes a small build time improvement to ncurses by
-   disabling static library on the host variant.
-
- - PATCH 7 adds the choice with the three options: static only, static
-   and shared, shared only, leaving the current default unchanged.
-
- - PATCH 8 changes the default to be "shared only" (of course on
-   platforms that support shared libraries).
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (8):
-  docs: fix typo in cmake-package documentation
-  Rename BR2_PREFER_STATIC_LIB to BR2_STATIC_LIBS
-  arch: FDPIC is not supported on m68k
-  arch: ensure BR2_BINFMT_ELF is really used
-  arch: introduce BR2_BINFMT_SUPPORTS_SHARED
-  ncurses: speed up host build by disabling static library building
-  Turn the static lib option into a choice with more options
-  Build shared libraries only as the default
-
- Config.in                                          | 41 +++++++++----
- Config.in.legacy                                   | 12 ++++
- arch/Config.in                                     | 15 +++--
- docs/manual/adding-packages-cmake.txt              |  2 +-
- docs/manual/adding-packages-directory.txt          |  2 +-
- package/Config.in                                  |  6 +-
- package/Makefile.in                                |  6 +-
- package/agentpp/Config.in                          |  4 +-
- package/aiccu/aiccu.mk                             |  2 +-
- package/aircrack-ng/Config.in                      |  2 +-
- package/aircrack-ng/aircrack-ng.mk                 |  8 +--
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- package/am335x-pru-package/am335x-pru-package.mk   |  6 +-
- package/apr-util/Config.in                         |  4 +-
- package/apr/Config.in                              |  4 +-
- package/avahi/Config.in                            |  2 +-
- package/avrdude/Config.in                          |  4 +-
- package/bash/bash.mk                               |  2 +-
- package/bellagio/Config.in                         |  4 +-
- package/bind/Config.in                             |  4 +-
- package/bluez5_utils/Config.in                     |  4 +-
- package/bluez_utils/Config.in                      |  4 +-
- package/bmon/bmon.mk                               |  2 +-
- package/boost/boost.mk                             |  4 +-
- package/botan/botan.mk                             |  2 +-
- package/btrfs-progs/btrfs-progs.mk                 |  2 +-
- package/bustle/bustle.mk                           |  2 +-
- package/busybox/busybox.mk                         |  2 +-
- package/bzip2/bzip2.mk                             |  6 +-
- package/canfestival/Config.in                      |  4 +-
- package/ccid/Config.in                             |  4 +-
- package/cegui06/Config.in                          |  4 +-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- package/cjson/Config.in                            |  2 +-
- package/collectd/Config.in                         |  8 +--
- package/connman/Config.in                          |  4 +-
- package/cppcms/Config.in                           |  4 +-
- package/cppdb/Config.in                            |  4 +-
- package/cppunit/Config.in                          |  4 +-
- package/crda/Config.in                             |  4 +-
- package/crda/crda.mk                               |  2 +-
- package/cryptsetup/Config.in                       |  4 +-
- package/curlftpfs/Config.in                        |  4 +-
- package/cwiid/Config.in                            |  2 +-
- package/czmq/czmq.mk                               |  2 +-
- package/dbus/dbus.mk                               |  2 +-
- package/dhcpcd/dhcpcd.mk                           |  2 +-
- package/dhcpdump/dhcpdump.mk                       |  2 +-
- package/directfb/Config.in                         |  8 +--
- package/directfb/directfb.mk                       |  2 +-
- package/dmraid/Config.in                           |  4 +-
- package/dnsmasq/dnsmasq.mk                         |  4 +-
- package/dropbear/dropbear.mk                       |  2 +-
- package/dtc/Config.in                              |  4 +-
- package/dvb-apps/dvb-apps.mk                       |  2 +-
- package/e2fsprogs/e2fsprogs.mk                     |  2 +-
- package/ebtables/ebtables.mk                       |  4 +-
- package/efl/libedbus/Config.in                     |  4 +-
- package/elfutils/Config.in                         |  4 +-
- package/erlang/Config.in                           |  4 +-
- package/eudev/Config.in                            |  4 +-
- package/exfat/Config.in                            |  4 +-
- package/exim/exim.mk                               |  2 +-
- package/exiv2/Config.in                            |  4 +-
- package/faifa/Config.in                            |  4 +-
- package/fbv/fbv.mk                                 |  2 +-
- package/ffmpeg/ffmpeg.mk                           |  2 +-
- package/flann/Config.in                            |  4 +-
- package/fswebcam/Config.in                         |  4 +-
- package/gawk/Config.in                             |  4 +-
- package/gcc/gcc-final/gcc-final.mk                 |  4 +-
- package/giblib/Config.in                           |  4 +-
- package/gpm/Config.in                              |  4 +-
- package/gptfdisk/gptfdisk.mk                       |  2 +-
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  2 +-
- package/gstreamer1/gst1-plugins-bad/Config.in      |  2 +-
- package/gstreamer1/gst1-plugins-ugly/Config.in     |  4 +-
- package/haserl/haserl.mk                           |  2 +-
- package/heirloom-mailx/Config.in                   |  4 +-
- package/hostapd/Config.in                          |  4 +-
- package/hostapd/hostapd.mk                         |  4 +-
- package/iftop/iftop.mk                             |  2 +-
- package/imlib2/Config.in                           |  4 +-
- package/inadyn/Config.in                           |  4 +-
- package/ipsec-tools/ipsec-tools.mk                 |  2 +-
- package/iptables/iptables.mk                       |  2 +-
- package/iw/iw.mk                                   |  2 +-
- package/jimtcl/jimtcl.mk                           |  2 +-
- package/kexec-lite/Config.in                       |  4 +-
- package/keyutils/keyutils.mk                       |  2 +-
- package/kmod/Config.in                             |  2 +-
- package/knock/knock.mk                             |  2 +-
- package/lftp/lftp.mk                               |  2 +-
- package/libarchive/libarchive.mk                   |  4 +-
- package/libbluray/Config.in                        |  4 +-
- package/libcap/libcap.mk                           |  2 +-
- package/libcec/Config.in                           |  4 +-
- package/libcgi/libcgi.mk                           |  2 +-
- package/libdvdnav/Config.in                        |  4 +-
- package/libdvdread/Config.in                       |  4 +-
- package/libebml/libebml.mk                         |  2 +-
- package/libesmtp/Config.in                         |  4 +-
- package/libfreefare/libfreefare.mk                 |  2 +-
- package/libfuse/Config.in                          |  4 +-
- package/libjson/libjson.mk                         |  4 +-
- package/libmatroska/libmatroska.mk                 |  2 +-
- package/libnl/Config.in                            |  4 +-
- package/libnspr/libnspr.mk                         |  2 +-
- package/libphidget/Config.in                       |  4 +-
- package/libpthread-stubs/libpthread-stubs.mk       |  2 +-
- package/libsepol/libsepol.mk                       |  2 +-
- package/libshairplay/Config.in                     |  4 +-
- package/libubox/Config.in                          |  4 +-
- package/libuci/Config.in                           |  4 +-
- package/libva-intel-driver/Config.in               |  4 +-
- package/libva/Config.in                            |  4 +-
- package/linux-pam/Config.in                        |  4 +-
- package/live555/live555.mk                         |  2 +-
- package/lm-sensors/lm-sensors.mk                   |  2 +-
- package/lockdev/lockdev.mk                         |  6 +-
- package/log4cxx/Config.in                          |  4 +-
- package/ltrace/Config.in                           |  4 +-
- package/lua/lua.mk                                 |  2 +-
- package/luajit/luajit.mk                           |  2 +-
- package/lvm2/Config.in                             |  4 +-
- package/lz4/lz4.mk                                 |  2 +-
- package/mesa3d/Config.in                           |  6 +-
- package/mesa3d/mesa3d.mk                           |  2 +-
- package/minidlna/minidlna.mk                       |  2 +-
- package/mpd/Config.in                              |  4 +-
- package/msmtp/msmtp.mk                             |  2 +-
- package/ncurses/ncurses.mk                         | 16 +++--
- package/ne10/ne10.mk                               |  4 +-
- package/netsnmp/netsnmp.mk                         |  2 +-
- package/nftables/nftables.mk                       |  4 +-
- package/ngrep/ngrep.mk                             |  2 +-
- package/omniorb/omniorb.mk                         |  2 +-
- package/openobex/Config.in                         |  4 +-
- package/openssl/openssl.mk                         | 10 ++--
- package/openvmtools/Config.in                      |  4 +-
- package/openvpn/openvpn.mk                         |  2 +-
- package/p11-kit/Config.in                          |  4 +-
- package/parted/parted.mk                           |  2 +-
- package/pciutils/pciutils.mk                       |  2 +-
- package/pcsc-lite/Config.in                        |  4 +-
- package/perl-gd/Config.in                          |  4 +-
- package/perl-gdgraph/Config.in                     |  4 +-
- package/perl-io-socket-ssl/Config.in               |  4 +-
- package/perl-net-ssleay/Config.in                  |  4 +-
- package/perl-xml-libxml/Config.in                  |  4 +-
- package/perl/perl.mk                               |  2 +-
- package/phidgetwebservice/Config.in                |  4 +-
- package/php/php.mk                                 |  2 +-
- package/pkg-cmake.mk                               |  2 +-
- package/pkgconf/pkgconf.mk                         |  2 +-
- package/pppd/Config.in                             |  4 +-
- package/proxychains-ng/Config.in                   |  4 +-
- package/ptpd2/ptpd2.mk                             |  2 +-
- package/pure-ftpd/pure-ftpd.mk                     |  2 +-
- package/qdecoder/Config.in                         |  2 +-
- package/qhull/Config.in                            |  4 +-
- package/qlibc/Config.in                            |  4 +-
- package/qt/Config.in                               |  2 +-
- package/qt5/qt5base/Config.in                      |  4 +-
- package/qt5/qt5base/qt5base.mk                     |  4 +-
- package/qt5/qt5connectivity/Config.in              |  4 +-
- package/qt5/qt5declarative/qt5declarative.mk       |  2 +-
- package/qt5/qt5enginio/qt5enginio.mk               |  2 +-
- package/qt5/qt5imageformats/qt5imageformats.mk     |  2 +-
- package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +-
- package/qt5/qt5quick1/Config.in                    |  4 +-
- package/qt5/qt5script/qt5script.mk                 |  2 +-
- package/qt5/qt5sensors/qt5sensors.mk               |  2 +-
- package/qt5/qt5serialport/qt5serialport.mk         |  2 +-
- package/qt5/qt5svg/qt5svg.mk                       |  2 +-
- package/qt5/qt5webkit/Config.in                    |  2 +-
- package/qt5/qt5websockets/qt5websockets.mk         |  2 +-
- package/qt5/qt5x11extras/qt5x11extras.mk           |  2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  2 +-
- package/rsh-redone/Config.in                       |  8 +--
- package/rtmpdump/rtmpdump.mk                       |  2 +-
- package/ruby/Config.in                             |  4 +-
- package/sconeserver/Config.in                      |  4 +-
- package/smack/Config.in                            |  4 +-
- package/snmppp/Config.in                           |  4 +-
- package/snowball-hdmiservice/Config.in             |  4 +-
- package/snowball-init/Config.in                    |  4 +-
- package/spice/Config.in                            |  4 +-
- package/sqlite/sqlite.mk                           |  2 +-
- package/sshfs/Config.in                            |  4 +-
- package/stress/stress.mk                           |  4 +-
- package/strongswan/Config.in                       |  2 +-
- package/subversion/Config.in                       |  2 +-
- package/systemd/Config.in                          |  2 +-
- package/tcpdump/tcpdump.mk                         |  2 +-
- package/thrift/thrift.mk                           |  2 +-
- package/tinyalsa/Config.in                         |  4 +-
- package/trace-cmd/Config.in                        |  4 +-
- package/tslib/Config.in                            |  4 +-
- package/uclibc/uclibc.mk                           |  4 +-
- package/udisks/Config.in                           |  4 +-
- package/ulogd/Config.in                            |  4 +-
- package/unionfs/Config.in                          |  4 +-
- package/ushare/Config.in                           |  4 +-
- package/ussp-push/Config.in                        |  4 +-
- package/util-linux/Config.in                       |  8 +--
- package/vde2/Config.in                             |  4 +-
- package/vlc/vlc.mk                                 |  2 +-
- package/wayland/Config.in                          |  4 +-
- package/weston/Config.in                           |  4 +-
- package/wireless_tools/Config.in                   |  2 +-
- package/wpa_supplicant/wpa_supplicant.mk           |  4 +-
- package/wvstreams/wvstreams.mk                     |  2 +-
- package/x11r7/Config.in                            |  4 +-
- package/x11r7/xdriver_xf86-input-tslib/Config.in   |  4 +-
- package/x264/x264.mk                               |  2 +-
- package/xbmc/Config.in                             | 14 ++---
- package/xl2tp/xl2tp.mk                             |  2 +-
- package/xmlstarlet/xmlstarlet.mk                   |  2 +-
- package/zeromq/zeromq.mk                           |  2 +-
- package/zlib/zlib.mk                               |  2 +-
- package/zlog/Config.in                             |  4 +-
- support/scripts/scancpan                           |  4 +-
- system/Config.in                                   |  6 +-
- toolchain/toolchain-buildroot/Config.in            |  6 +-
- toolchain/toolchain-external/Config.in             | 68 +++++++++++-----------
- toolchain/toolchain-external/toolchain-external.mk |  2 +-
- 227 files changed, 473 insertions(+), 423 deletions(-)
-
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index 02f1dbb..097cf63 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -102,7 +102,7 @@ typical packages will therefore only use a few of them.
+ 
+ ** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
+ ** +CMAKE_INSTALL_PREFIX+;
+-** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIBS+;
++** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIB+;
+ ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
+ ** +BUILD_EXAMPLE+, +BUILD_EXAMPLES+ are disabled;
+ ** +BUILD_TEST+, +BUILD_TESTS+, +BUILD_TESTING+ are disabled.
 -- 
 2.1.0
