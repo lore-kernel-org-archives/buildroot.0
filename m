@@ -1,62 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Dec 2014 23:20:37 +0100
-Subject: [Buildroot] [git commit] ffmpeg: Add ffprobe option
-Message-ID: <20141203222237.B14317FBBB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Dec 2014 23:26:25 +0100
+Subject: [Buildroot] [PATCH 2/2] rp-pppoe: install helper scripts
+In-Reply-To: <1417562463-26561-2-git-send-email-bluemrp9@gmail.com>
+References: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
+ <1417562463-26561-2-git-send-email-bluemrp9@gmail.com>
+Message-ID: <20141203232625.0ce7b9a5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b3b4f23317cf6b2bab4cc12a0bce9b2ceb27fdf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Ryan Coe,
 
-Signed-off-by Stephen M. Kenton <skenton@ou.edu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/Config.in |    6 ++++++
- package/ffmpeg/ffmpeg.mk |    7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+On Tue,  2 Dec 2014 15:21:03 -0800, Ryan Coe wrote:
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/rp-pppoe/rp-pppoe.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+> index 70b4437..9c3e3e4 100644
+> --- a/package/rp-pppoe/rp-pppoe.mk
+> +++ b/package/rp-pppoe/rp-pppoe.mk
+> @@ -11,6 +11,8 @@ RP_PPPOE_LICENSE_FILES = doc/LICENSE
+>  RP_PPPOE_DEPENDENCIES = pppd
+>  RP_PPPOE_SUBDIR = src
+>  RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
+> +RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
+> +	pppoe-stop
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 6fde46e..5f86f52 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -49,6 +49,12 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
- 	help
- 	  FFserver is a streaming server for both audio and video.
- 
-+config BR2_PACKAGE_FFMPEG_FFPROBE
-+	bool "Build ffprobe"
-+	help
-+	  FFprobe is a utility to determine the audio and video
-+	  characteristics of a container file.
-+
- config BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	bool "Build libavresample"
- 	help
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 22577e6..784d8b3 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -23,7 +23,6 @@ FFMPEG_CONF_OPTS = \
- 	--enable-logging \
- 	--enable-optimizations \
- 	--disable-extra-warnings \
--	--disable-ffprobe \
- 	--enable-avdevice \
- 	--enable-avcodec \
- 	--enable-avformat \
-@@ -104,6 +103,12 @@ else
- FFMPEG_CONF_OPTS += --disable-avresample
- endif
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_FFPROBE),y)
-+FFMPEG_CONF_OPTS += --enable-ffprobe
-+else
-+FFMPEG_CONF_OPTS += --disable-ffprobe
-+endif
-+
- ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
- FFMPEG_CONF_OPTS += --enable-postproc
- else
+Any reason why we need a new variable instead of adding new values to
+RP_PPPOE_TARGET_FILES ?
+
+> @@ -23,6 +25,9 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
+>  	for ff in $(RP_PPPOE_TARGET_FILES); do \
+>  		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+>  	done
+> +	for ff in $(RP_PPPOE_TARGET_SCRIPTS); do \
+> +		$(INSTALL) -m 0755 $(@D)/scripts/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+> +	done
+
+Both variables do the same thing.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
