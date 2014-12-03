@@ -1,42 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Dec 2014 23:45:22 +0100
-Subject: [Buildroot] [PATCH 2/2] rp-pppoe: install helper scripts
-In-Reply-To: <20141203233939.1b8a856a@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 3 Dec 2014 23:39:39 +0100")
-References: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
- <1417562463-26561-2-git-send-email-bluemrp9@gmail.com>
- <20141203232625.0ce7b9a5@free-electrons.com>
- <87tx1cwejb.fsf@dell.be.48ers.dk>
- <20141203233832.4499c590@free-electrons.com>
- <20141203233939.1b8a856a@free-electrons.com>
-Message-ID: <87ppc0wdx9.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Thu,  4 Dec 2014 00:13:59 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fix check-musl
+Message-ID: <1417648439-10146-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+check_musl works fine for the external musl 1.1.1 toolchain which is downloaded
+and installed, but fails for a musl toolchain which, in a first step is build
+by the internal toolchain backend of Buildroot, and in a second step is copied
+to an external directory and imported as an custom external toolchain (in a new
+configuration).
 
-Hi,
+In case of the downloaded musl 1.1.1 toolchain the libc.so and libm.a files
+reside in the sysroot/lib directory and sysroot/usr/lib is a symlink to
+sysroot/lib.
 
- > On a second thought, we could do:
+In case of the custom musl toolchain build by Buildroot the files reside in
+sysroot/usr/lib which is not a symlink.
 
- > RP_PPPOE_TARGET_FILES = src/foo src/bar scripts/baz scripts/bleh
+To let check_musl detect the custom musl toolchain correctly test for libc.so
+and lib.m in sysroot/usr/lib which works in both cases.
 
- > and then do:
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > 	for ff in $(RP_PPPOE_TARGET_FILES); do \
- > 		$(INSTALL) -m 0755 $(@D)/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
- > 	done
-
-Then you whould need to strip the directory part of $$ff for the
-destination to not end up in $(TARGET_DIR)/usr/sbin/src/foo.
-
- > Not sure it matters much, though.
-
-I think keeping it in two loops is a bit more readable.
-
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3121da4..425a448 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -229,7 +229,7 @@ check_glibc = \
+ # $1: sysroot directory
+ check_musl = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if test ! -f $${SYSROOT_DIR}/lib/libc.so -o -e $${SYSROOT_DIR}/lib/libm.so ; then \
++	if test ! -f $${SYSROOT_DIR}/usr/lib/libc.so -o -e $${SYSROOT_DIR}/usr/lib/libm.so ; then \
+ 		echo "Incorrect selection of the C library" ; \
+ 		exit -1; \
+ 	fi
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.1.3
