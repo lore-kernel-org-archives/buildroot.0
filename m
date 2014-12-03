@@ -1,40 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 3 Dec 2014 14:18:42 +0000
-Subject: [Buildroot] [PATCH] xlib_libXau: add host-pkgconf its dependencies
-Message-ID: <1417616322-41875-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 3 Dec 2014 09:03:51 -0600
+Subject: [Buildroot] [PATCH 1/2] rp-pppoe: install default conf file
+In-Reply-To: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
+References: <1417562463-26561-1-git-send-email-bluemrp9@gmail.com>
+Message-ID: <CANQCQpZrTOqGw4r0jU7T45fCwwJ7-pV36Sm9nXT5eDtNpczZ9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xlib_libXau needs pkg-config during the configure phase. Otherwise it
-will fail with an error like this one:
+Ryan,
 
-checking for XAU... configure: error: in
-`/br/output/build/xlib_libXau-1.0.8':
-configure: error: The pkg-config script could not be found or is too
-old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
+On Tue, Dec 2, 2014 at 5:21 PM, Ryan Coe <bluemrp9@gmail.com> wrote:
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/rp-pppoe/rp-pppoe.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+> index 4e17f2d..70b4437 100644
+> --- a/package/rp-pppoe/rp-pppoe.mk
+> +++ b/package/rp-pppoe/rp-pppoe.mk
+> @@ -18,6 +18,8 @@ RP_PPPOE_CONF_ENV = \
+>         PPPD_H=$(PPPD_DIR)/pppd/pppd.h
+>
+>  define RP_PPPOE_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 0644 $(@D)/configs/pppoe.conf \
+> +               $(TARGET_DIR)/etc/ppp/pppoe.conf
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/x11r7/xlib_libXau/xlib_libXau.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Acked-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index 720c62c..8ef48e4 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-@@ -10,7 +10,7 @@ XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAU_LICENSE = MIT
- XLIB_LIBXAU_LICENSE_FILES = COPYING
- XLIB_LIBXAU_INSTALL_STAGING = YES
--XLIB_LIBXAU_DEPENDENCIES = xutil_util-macros xproto_xproto
-+XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+>         for ff in $(RP_PPPOE_TARGET_FILES); do \
+>                 $(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+>         done
+> --
+> 2.2.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.7.1
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
