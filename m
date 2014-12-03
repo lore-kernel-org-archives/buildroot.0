@@ -1,61 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Dec 2014 13:32:21 +0100
-Subject: [Buildroot] [git commit] package/nginx: remove rtsig module support
-Message-ID: <20141203123322.25F8E7FF9D@busybox.osuosl.org>
+Date: Wed, 03 Dec 2014 14:12:50 +0100
+Subject: [Buildroot] [PATCH 39/51] yajl: bump version
+In-Reply-To: <CAGduivzPrJ1y9MNDw-t_OnYx_R0u-G2==LM_bSU4EsbBePXAxA@mail.gmail.com>
+ (Maxime Hadjinlian's message of "Fri, 7 Nov 2014 11:29:59 +0100")
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-39-git-send-email-maxime.hadjinlian@gmail.com>
+ <87egtfxxaf.fsf@dell.be.48ers.dk>
+ <CAGduivzPrJ1y9MNDw-t_OnYx_R0u-G2==LM_bSU4EsbBePXAxA@mail.gmail.com>
+Message-ID: <87zjb4yizx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b11cbd9bba9e94dddd4f1bd068af3c889b098497
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-rtsig module uses the deprecated sysctl syscall, which is not
-implemented on some recent architecture (such as arc).
+Hi,
 
-Also, rtsig module is almost considered as deprecated by some nginx
-developers [1].
+>> > The patches have been refreshed and their name have been changed.
+ >> > The patches were not sent upstream, they will be sent shortly.
+ >> 
+ >> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ >> 
+ >> Strike that, it doesn't build here on uClibc:
+ >> 
+ >> [ 76%] Linking C executable gen-extra-close
+ >> make[3]: Entering directory '/home/peko/source/buildroot/output/build/yajl-2.1.0'
+ >> Building C object verify/CMakeFiles/json_verify.dir/json_verify.c.o
+ >> [ 80%] [ 84%] Building C object test/parsing/CMakeFiles/yajl_test.dir/yajl_test.c.o
+ >> [ 88%] Building C object reformatter/CMakeFiles/json_reformat.dir/json_reformat.c.o
+ >> Building C object example/CMakeFiles/parse_config.dir/parse_config.c.o
+ >> ../../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isnan'
+ >> ../../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isinf'
+ >> collect2: error: ld returned 1 exit status
+ >> test/api/CMakeFiles/gen-extra-close.dir/build.make:86: recipe for target 'test/api/gen-extra-close' failed
+ >> make[3]: *** [test/api/gen-extra-close] Error 1
+ >> make[3]: Leaving directory '/home/peko/source/buildroot/output/build/yajl-2.1.0'
+ >> 
+ >> Either we need to extend the 'fix-json_reformat linking on uClibc' patch
+ >> or disable the tests.
+ >> 
+ >> Care to take a look?
+ > Added to my todo, will look at that either tonight or this week end.
+ > Thanks for spotting that.
 
-So, just remove this option.
+Any news on this? I'll mark the patch as changes requested for now.
 
-Fixes:
-  http://autobuild.buildroot.org/results/730/730105fc0a89b381b3b29192d07f28ef1f13cbb3/
-
-[1] http://mailman.nginx.org/pipermail/nginx-devel/2014-November/006295.html
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nginx/Config.in |    5 -----
- package/nginx/nginx.mk  |    1 -
- 2 files changed, 0 insertions(+), 6 deletions(-)
-
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index ddab0ca..c2a6af1 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -309,11 +309,6 @@ endif #BR2_PACKAGE_NGINX_MAIL
- 
- comment "misc. modules"
- 
--config BR2_PACKAGE_NGINX_RTSIG_MODULE
--	bool "ngx_rtsig_module"
--	help
--	  Enable ngx_rtsig_module
--
- config BR2_PACKAGE_NGINX_SELECT_MODULE
- 	bool "ngx_select_module"
- 	help
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 55ae844..06f1312 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -88,7 +88,6 @@ endif
- 
- # misc. modules
- NGINX_CONF_OPTS += \
--	$(if $(BR2_PACKAGE_NGINX_RTSIG_MODULE),--with-rtsig_module) \
- 	$(if $(BR2_PACKAGE_NGINX_SELECT_MODULE),--with-select_module,--without-select_module) \
- 	$(if $(BR2_PACKAGE_NGINX_POLL_MODULE),--with-poll_module,--without-poll_module)
- 
+-- 
+Bye, Peter Korsgaard
