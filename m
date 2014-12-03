@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Dec 2014 19:30:52 +0100
-Subject: [Buildroot] [PATCH 2/3] package/crda: disable broken toolchains
+Date: Wed, 3 Dec 2014 19:31:12 +0100
+Subject: [Buildroot] [PATCH 3/3] package/lxc: disable broken toolchains
  on nios2
-In-Reply-To: <1417366134-2098-2-git-send-email-bernd.kuhls@t-online.de>
+In-Reply-To: <1417366134-2098-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1417366134-2098-1-git-send-email-bernd.kuhls@t-online.de>
- <1417366134-2098-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141203183052.GC4152@free.fr>
+ <1417366134-2098-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141203183112.GD4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,30 +30,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/crda/Config.in |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/lxc/Config.in |    7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/crda/Config.in b/package/crda/Config.in
-> index f67ea77..4d01530 100644
-> --- a/package/crda/Config.in
-> +++ b/package/crda/Config.in
-> @@ -7,7 +7,8 @@ config BR2_PACKAGE_CRDA
->  	# regdb is a runtime dependency
->  	select BR2_PACKAGE_WIRELESS_REGDB
->  	# Triggers the _gp link issue
-> -	depends on !BR2_nios2
+> diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+> index cf85712..a90e58e 100644
+> --- a/package/lxc/Config.in
+> +++ b/package/lxc/Config.in
+> @@ -6,7 +6,9 @@ config BR2_PACKAGE_LXC
+>  	depends on BR2_LARGEFILE
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on !BR2_avr32 # no timerfd
+> -	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
+> +	# the toolchain doesn't support setns syscall
 > +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
 > +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
 >  	help
->  	  Central Regulatory Domain Agent.
->  
-> @@ -20,4 +21,5 @@ config BR2_PACKAGE_CRDA
->  
->  comment "crda needs a toolchain w/ threads, dynamic library"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
-> -	depends on !BR2_nios2
+>  	  Linux Containers (LXC), provides the ability to group and isolate
+> @@ -18,6 +20,7 @@ config BR2_PACKAGE_LXC
+>  comment "lxc needs a toolchain w/ IPv6, threads, largefile, headers >= 3.0"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_avr32 # no timerfd
+> -	depends on !BR2_nios2 # the toolchain doesn't support setns syscall
 > +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
 > +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+>  	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS \
+>                  || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 > -- 
 > 1.7.10.4
 > 
