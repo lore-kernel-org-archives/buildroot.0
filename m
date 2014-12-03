@@ -1,51 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Dec 2014 14:12:50 +0100
-Subject: [Buildroot] [PATCH 39/51] yajl: bump version
-In-Reply-To: <CAGduivzPrJ1y9MNDw-t_OnYx_R0u-G2==LM_bSU4EsbBePXAxA@mail.gmail.com>
- (Maxime Hadjinlian's message of "Fri, 7 Nov 2014 11:29:59 +0100")
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-39-git-send-email-maxime.hadjinlian@gmail.com>
- <87egtfxxaf.fsf@dell.be.48ers.dk>
- <CAGduivzPrJ1y9MNDw-t_OnYx_R0u-G2==LM_bSU4EsbBePXAxA@mail.gmail.com>
-Message-ID: <87zjb4yizx.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 3 Dec 2014 13:41:07 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-12-02
+In-Reply-To: <20141203073017.2AC17100ADA@stock.ovh.net>
+References: <20141203073017.2AC17100ADA@stock.ovh.net>
+Message-ID: <547F12F3.70505@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+On 12/03/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-12-02
 
-Hi,
+>         mips |              xlib_libXau-1.0.8 | NOK | http://autobuild.buildroot.net/results/b8474b85315a0424870fc655dc89324bb1193d44/
 
->> > The patches have been refreshed and their name have been changed.
- >> > The patches were not sent upstream, they will be sent shortly.
- >> 
- >> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- >> 
- >> Strike that, it doesn't build here on uClibc:
- >> 
- >> [ 76%] Linking C executable gen-extra-close
- >> make[3]: Entering directory '/home/peko/source/buildroot/output/build/yajl-2.1.0'
- >> Building C object verify/CMakeFiles/json_verify.dir/json_verify.c.o
- >> [ 80%] [ 84%] Building C object test/parsing/CMakeFiles/yajl_test.dir/yajl_test.c.o
- >> [ 88%] Building C object reformatter/CMakeFiles/json_reformat.dir/json_reformat.c.o
- >> Building C object example/CMakeFiles/parse_config.dir/parse_config.c.o
- >> ../../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isnan'
- >> ../../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isinf'
- >> collect2: error: ld returned 1 exit status
- >> test/api/CMakeFiles/gen-extra-close.dir/build.make:86: recipe for target 'test/api/gen-extra-close' failed
- >> make[3]: *** [test/api/gen-extra-close] Error 1
- >> make[3]: Leaving directory '/home/peko/source/buildroot/output/build/yajl-2.1.0'
- >> 
- >> Either we need to extend the 'fix-json_reformat linking on uClibc' patch
- >> or disable the tests.
- >> 
- >> Care to take a look?
- > Added to my todo, will look at that either tonight or this week end.
- > Thanks for spotting that.
+I cannot reproduce this even using the same .config file. However I have
+found that xlibx_libXau also needs to have host-pkgconf on its
+dependences. Otherwise it would fail with an error like this one:
 
-Any news on this? I'll mark the patch as changes requested for now.
+checking for XAU... configure: error: in
+`/br/output/build/xlib_libXau-1.0.8':
+configure: error: The pkg-config script could not be found or is too
+old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
+I will send a patch today.
+
+Cheers,
 -- 
-Bye, Peter Korsgaard
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
