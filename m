@@ -1,26 +1,36 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 3 Dec 2014 17:20:19 +0000
-Subject: [Buildroot] [PATCH v2] openocd 0.8.0
-In-Reply-To: <1417379718-8575-1-git-send-email-claudio.laurita@integrazionetotale.it>
-References: <1417379718-8575-1-git-send-email-claudio.laurita@integrazionetotale.it>
-Message-ID: <547F4653.2080700@imgtec.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  3 Dec 2014 19:05:37 +0100
+Subject: [Buildroot] [PATCH] support/script/scancpan: fix corelist check
+Message-ID: <1417629937-27137-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Claudio Laurita,
+module could be removed of the core,
+so check if the module is currently in the core,
+but not if the module was once time included in the core.
 
-I think your patch does too many changes to have an empty git log.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ support/scripts/scancpan | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Also, could you state in the title that you are bumping the version?
-Something like "openocd: bump version to 0.8.0" for instance.
-
-Best regards,
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 7ff647d..0eac132 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -569,8 +569,8 @@ sub fetch {
+             next if $modname eq q{perl};
+             next if $modname =~ m|^Alien|;
+             next if $modname =~ m|^Win32|;
+-            next if !$test && $modname =~ m|^Test|; 
+-            next if Module::CoreList::first_release( $modname );
++            next if !$test && $modname =~ m|^Test|;
++            next if Module::CoreList::is_core( $modname, undef, $] );
+             # we could use the host Module::CoreList data, because host perl and
+             # target perl have the same major version
+             next if ${$dep}{phase} eq q{develop};
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+2.1.0
