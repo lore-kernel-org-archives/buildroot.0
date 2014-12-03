@@ -1,7 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  3 Dec 2014 16:12:17 +0100
-Subject: [Buildroot] [PATCH] package: add python-pam
-Message-ID: <1417619537-31377-1-git-send-email-peter@korsgaard.com>
+Date: Wed,  3 Dec 2014 17:12:31 +0100
+Subject: [Buildroot] [PATCHv2] package: add python-pam
+Message-ID: <1417623151-1895-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,18 @@ Fedora.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+v1 missed dealloc patch.
+
  package/Config.in                                  |   1 +
- package/python-pam/0001-nofree.patch               |  68 +++++++++++
- .../0002-memory-errors-CVE2012-1502.patch          | 136 +++++++++++++++++++++
+ package/python-pam/0001-dealloc.patch              |  25 ++++
+ package/python-pam/0002-nofree.patch               |  68 +++++++++++
+ .../0003-memory-errors-CVE2012-1502.patch          | 136 +++++++++++++++++++++
  package/python-pam/Config.in                       |  15 +++
  package/python-pam/python-pam.mk                   |  16 +++
- 5 files changed, 236 insertions(+)
- create mode 100644 package/python-pam/0001-nofree.patch
- create mode 100644 package/python-pam/0002-memory-errors-CVE2012-1502.patch
+ 6 files changed, 261 insertions(+)
+ create mode 100644 package/python-pam/0001-dealloc.patch
+ create mode 100644 package/python-pam/0002-nofree.patch
+ create mode 100644 package/python-pam/0003-memory-errors-CVE2012-1502.patch
  create mode 100644 package/python-pam/Config.in
  create mode 100644 package/python-pam/python-pam.mk
 
@@ -36,11 +40,42 @@ index b8fc7d1..f4f0998 100644
  	source "package/python-posix-ipc/Config.in"
  	source "package/python-protobuf/Config.in"
  	source "package/python-pyasn/Config.in"
-diff --git a/package/python-pam/0001-nofree.patch b/package/python-pam/0001-nofree.patch
+diff --git a/package/python-pam/0001-dealloc.patch b/package/python-pam/0001-dealloc.patch
+new file mode 100644
+index 0000000..dd4f961
+--- /dev/null
++++ b/package/python-pam/0001-dealloc.patch
+@@ -0,0 +1,25 @@
++[PATCH] fix two bugs in the PAM object deallocation
++
++Fixes https://bugzilla.redhat.com/show_bug.cgi?id=658955
++
++Downloaded from:
++http://pkgs.fedoraproject.org/cgit/PyPAM.git/plain/PyPAM-0.5.0-dealloc.patch
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++diff -up PyPAM-0.5.0/PAMmodule.c.dealloc PyPAM-0.5.0/PAMmodule.c
++--- PyPAM-0.5.0/PAMmodule.c.dealloc	2011-01-17 22:48:22.000000000 +0100
+++++ PyPAM-0.5.0/PAMmodule.c	2011-01-18 21:24:59.000000000 +0100
++@@ -538,10 +538,11 @@ static void PyPAM_dealloc(PyPAMObject *s
++     free(self->service);
++     free(self->user);
++     free(self->conv);
++-    pam_end(self->pamh, PAM_SUCCESS);
+++    if (self->pamh)
+++        pam_end(self->pamh, PAM_SUCCESS);
++     dlclose(self->dlh2);
++     dlclose(self->dlh1);
++-    PyMem_DEL(self);
+++    PyObject_Del(self);
++ }
++ 
++ static PyObject * PyPAM_getattr(PyPAMObject *self, char *name)
+diff --git a/package/python-pam/0002-nofree.patch b/package/python-pam/0002-nofree.patch
 new file mode 100644
 index 0000000..7de8801
 --- /dev/null
-+++ b/package/python-pam/0001-nofree.patch
++++ b/package/python-pam/0002-nofree.patch
 @@ -0,0 +1,68 @@
 +[PATCH] deallocate the conversation response only in case of error
 +
@@ -110,11 +145,11 @@ index 0000000..7de8801
 +     Py_INCREF(Py_None);
 +     p->user_data = Py_None;
 +     
-diff --git a/package/python-pam/0002-memory-errors-CVE2012-1502.patch b/package/python-pam/0002-memory-errors-CVE2012-1502.patch
+diff --git a/package/python-pam/0003-memory-errors-CVE2012-1502.patch b/package/python-pam/0003-memory-errors-CVE2012-1502.patch
 new file mode 100644
 index 0000000..62405db
 --- /dev/null
-+++ b/package/python-pam/0002-memory-errors-CVE2012-1502.patch
++++ b/package/python-pam/0003-memory-errors-CVE2012-1502.patch
 @@ -0,0 +1,136 @@
 +[PATCH] Fix Double Free Corruption (CVE2012-1502)
 +
