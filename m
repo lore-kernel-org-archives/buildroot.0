@@ -1,57 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  3 Dec 2014 23:05:44 +0100
-Subject: [Buildroot] [PATCHv2] qtuio: add error handling to for loop
-Message-ID: <1417644344-3116-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Dec 2014 23:11:29 +0100
+Subject: [Buildroot] [PATCH 1/8] docs: fix typo in cmake-package
+ documentation
+In-Reply-To: <1417642895-29606-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417642895-29606-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141203221129.GK4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove unneeded sub-shell usage in the build and installation
-steps. It is kept for the configure step as it is actually useful, and
-works fine because "|| exit 1" is outside the sub-shell.
+Thomas, All,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes v1 -> v2:
- * Remove unneeded sub-shell usage, noticed by Yann E. Morin.
+On 2014-12-03 22:41 +0100, Thomas Petazzoni spake thusly:
+> The cmake-package documentation was referring to
+> BR2_PREFER_STATIC_LIBS, while the option is actually named
+> BR2_PREFER_STATIC_LIB. This commit fixes this mistake.
+> 
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qtuio/qtuio.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-index 9925f84..5fa10a7 100644
---- a/package/qtuio/qtuio.mk
-+++ b/package/qtuio/qtuio.mk
-@@ -19,7 +19,7 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_CONFIGURE_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
-+		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
- 	done
- endef
- endif
-@@ -32,7 +32,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_BUILD_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(MAKE) -C $(@D)/examples/$${example}) ; \
-+		$(MAKE) -C $(@D)/examples/$${example} || exit 1; \
- 	done
- endef
- endif
-@@ -46,7 +46,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_INSTALL_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-+		$(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1 ; \
- 	done
- endef
- endif
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/adding-packages-cmake.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+> index 02f1dbb..097cf63 100644
+> --- a/docs/manual/adding-packages-cmake.txt
+> +++ b/docs/manual/adding-packages-cmake.txt
+> @@ -102,7 +102,7 @@ typical packages will therefore only use a few of them.
+>  
+>  ** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
+>  ** +CMAKE_INSTALL_PREFIX+;
+> -** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIBS+;
+> +** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIB+;
+>  ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
+>  ** +BUILD_EXAMPLE+, +BUILD_EXAMPLES+ are disabled;
+>  ** +BUILD_TEST+, +BUILD_TESTS+, +BUILD_TESTING+ are disabled.
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
