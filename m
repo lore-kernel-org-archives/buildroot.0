@@ -1,56 +1,188 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  4 Dec 2014 23:01:14 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] fs/ext2: add option to specify a
-	filesystem label
+Date: Thu,  4 Dec 2014 23:01:13 +0100
+Subject: [Buildroot] [PATCH 2/3 v2] fs/ext2: use the new mke2img host package
 In-Reply-To: <cover.1417730349.git.yann.morin.1998@free.fr>
 References: <cover.1417730349.git.yann.morin.1998@free.fr>
-Message-ID: <d98afa0b717cf9585358913fd3d97ba6101d2a2b.1417730349.git.yann.morin.1998@free.fr>
+Message-ID: <386e8bf861789f27e2001bb8a4206b6a115ef2db.1417730349.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Filesystems of the ext familly can carry a filesystem label.
-Add an option for the user to specify such a label.
+And get rid of the old genext2fs.sh wrapper.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/ext2/Config.in | 3 +++
- fs/ext2/ext2.mk   | 6 ++++++
- 2 files changed, 9 insertions(+)
+ fs/ext2/ext2.mk      |  13 +++---
+ fs/ext2/genext2fs.sh | 121 ---------------------------------------------------
+ 2 files changed, 5 insertions(+), 129 deletions(-)
+ delete mode 100755 fs/ext2/genext2fs.sh
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index adba6f3..65828f2 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -42,6 +42,9 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- 	default 0   if BR2_TARGET_ROOTFS_EXT2_2r0
- 	default 1   if !BR2_TARGET_ROOTFS_EXT2_2r0
- 
-+config BR2_TARGET_ROOTFS_EXT2_LABEL
-+	string "filesystem label"
-+
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "size in blocks (leave at 0 for auto calculation)"
- 	default 0
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 96b7a4a..758b967 100644
+index 425f7bf..96b7a4a 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -18,6 +18,12 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+@@ -4,27 +4,24 @@
+ #
+ ################################################################################
+ 
+-EXT2_OPTS :=
++EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+ 
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+ EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
  endif
  
-+# Not qstrip-ing the variable, because it may contain spaces,
-+# but we must qstrip it when checking.
-+ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
-+EXT2_OPTS += -l $(BR2_TARGET_ROOTFS_EXT2_LABEL)
-+endif
-+
- ROOTFS_EXT2_DEPENDENCIES = host-mke2img
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
+-EXT2_OPTS += -N $(BR2_TARGET_ROOTFS_EXT2_INODES)
++EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
+ endif
+ 
+ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
+-EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
++EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+ endif
+ 
+-ROOTFS_EXT2_DEPENDENCIES = host-genext2fs host-e2fsprogs
+-
+-EXT2_ENV = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
+-EXT2_ENV += REV=$(BR2_TARGET_ROOTFS_EXT2_REV)
++ROOTFS_EXT2_DEPENDENCIES = host-mke2img
  
  define ROOTFS_EXT2_CMD
+-	PATH=$(BR_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
++	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
+ endef
+ 
+ rootfs-ext2-symlink:
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+deleted file mode 100755
+index 6f7b075..0000000
+--- a/fs/ext2/genext2fs.sh
++++ /dev/null
+@@ -1,121 +0,0 @@
+-#!/bin/sh
+-# genext2fs wrapper calculating needed blocks/inodes values if not specified
+-set -e
+-
+-export LC_ALL=C
+-
+-CALC_BLOCKS=1
+-CALC_INODES=1
+-EXT_OPTS=
+-EXT_OPTS_O=
+-
+-while getopts x:d:D:b:i:N:m:g:e:zfqUPhVv f
+-do
+-    case $f in
+-	b) CALC_BLOCKS=0 ;;
+-	N) CALC_INODES=0; INODES=$OPTARG ;;
+-	d) TARGET_DIR=$OPTARG ;;
+-    esac
+-done
+-eval IMG="\"\${${OPTIND}}\""
+-
+-# calculate needed inodes
+-if [ $CALC_INODES -eq 1 ];
+-then
+-    INODES=$(find $TARGET_DIR | wc -l)
+-    INODES=$(expr $INODES + 400)
+-    set -- $@ -N $INODES
+-fi
+-
+-# calculate needed blocks
+-if [ $CALC_BLOCKS -eq 1 ];
+-then
+-    # size ~= superblock, block+inode bitmaps, inodes (8 per block), blocks
+-    # we scale inodes / blocks with 10% to compensate for bitmaps size + slack
+-    BLOCKS=$(du -s -c -k $TARGET_DIR | grep total | sed -e "s/total//")
+-    BLOCKS=$(expr 500 + \( $BLOCKS + $INODES / 8 \) \* 11 / 10)
+-    # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks) for
+-    # the journal if ext3/4
+-    # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
+-    if [ ${GEN} -ge 3 ]; then
+-        BLOCKS=$(expr 1300 + $BLOCKS )
+-    fi
+-    set -- $@ -b $BLOCKS
+-fi
+-
+-e2tunefsck() {
+-    # genext2fs does not generate a UUID, but fsck will whine if one is
+-    # is missing, so we need to add a UUID.
+-    # Of course, this has to happend _before_ we run fsck.
+-    # Also, some ext4 metadata are based on the UUID, so we must
+-    # set it before we can convert the filesystem to ext4.
+-    # Although a random UUID may seem bad for reproducibility, there
+-    # already are so many things that are not reproducible in a
+-    # filesystem: file dates, file ordering, content of the files...
+-    tune2fs -U random "${IMG}"
+-
+-    # Upgrade the filesystem
+-    if [ $# -ne 0 ]; then
+-        tune2fs "$@" "${IMG}"
+-    fi
+-
+-    # After changing filesystem options, running fsck is required
+-    # (see: man tune2fs). Running e2fsck in other cases will ensure
+-    # coherency of the filesystem, although it is not required.
+-    # 'e2fsck -pDf' means:
+-    #  - automatically repair
+-    #  - optimise and check for duplicate entries
+-    #  - force checking
+-    # Sending output to oblivion, as e2fsck can be *very* verbose,
+-    # especially with filesystems generated by genext2fs.
+-    # Exit codes 1 & 2 are OK, it means fs errors were successfully
+-    # corrected, hence our little trick with $ret.
+-    ret=0
+-    e2fsck -pDf "${IMG}" >/dev/null || ret=$?
+-    case ${ret} in
+-       0|1|2) ;;
+-       *)   exit ${ret};;
+-    esac
+-    printf "\ne2fsck was successfully run on '%s' (ext%d)\n\n"  \
+-           "${IMG##*/}" "${GEN}"
+-
+-    # Remove count- and time-based checks, they are not welcome
+-    # on embedded devices, where they can cause serious boot-time
+-    # issues by tremendously slowing down the boot.
+-    tune2fs -c 0 -i 0 "${IMG}"
+-}
+-
+-# Check we know what generation to generate
+-case "${GEN}:${REV}" in
+-    2:0|2:1|3:1|4:1)
+-	;;
+-    *)
+-	printf "%s: unknown ext generation '%s' and/or revision '%s'\n" \
+-	       "${0##*/}" "${GEN}" "${REV}" >&2
+-	exit 1
+-	;;
+-esac
+-
+-# Upgrade to rev1 if needed
+-if [ ${REV} -ge 1 ]; then
+-    EXT_OPTS_O="${EXT_OPTS_O},filetype"
+-fi
+-
+-# Add a journal for ext3 and above
+-if [ ${GEN} -ge 3 ]; then
+-    EXT_OPTS="${EXT_OPTS} -j -J size=1"
+-fi
+-
+-# Add ext4 specific features
+-if [ ${GEN} -ge 4 ]; then
+-    EXT_OPTS_O="${EXT_OPTS_O},extents,uninit_bg,dir_index"
+-fi
+-
+-# Add our -O options (there will be at most one leading comma, remove it)
+-if [ -n "${EXT_OPTS_O}" ]; then
+-    EXT_OPTS="${EXT_OPTS} -O ${EXT_OPTS_O#,}"
+-fi
+-
+-# Generate and upgrade the filesystem
+-genext2fs "$@"
+-e2tunefsck ${EXT_OPTS}
 -- 
 1.9.1
