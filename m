@@ -1,59 +1,233 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  4 Dec 2014 23:01:10 +0100
-Subject: [Buildroot] [PATCH 0/3 v2] fs/ext2: misc enhancements (branch
-	yem/fs-vol-id)
-Message-ID: <cover.1417730349.git.yann.morin.1998@free.fr>
+Date: Thu,  4 Dec 2014 23:01:12 +0100
+Subject: [Buildroot] [PATCH 1/3 v2] package/mke2img: new package
+In-Reply-To: <cover.1417730349.git.yann.morin.1998@free.fr>
+References: <cover.1417730349.git.yann.morin.1998@free.fr>
+Message-ID: <d34cfab4137e386aad07e144f2fa08c3bba5dd1f.1417730349.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, we are using a shell script called genext2fs, that
+impersonates the real genext2fs. But that script does much more than
+just call genextfs: it also calls tune2fs and e2fsck.
 
-This series enhances the fs/ext2 generation.
-Not much to say beside the individual commit logs... ;-)
+Because it impersonates genext2fs, we can not easily add new options,
+and are constrained by the genext2fs options.
 
-Changes v1 -> v2:
-  - move our genext2fs.sh wrapper and make it a proper host package,
-    with extensive tweaks to the code  (Thomas)
+But it turns out that, of all the options supported by the real
+genext2fs, we only really care for a subset, namely:
+  - number of blocks
+  - number of inodes
+  - percentage of blocks reeserved to root
+  - the root directory which to generate the image from
 
-Regards,
-Yann E. MORIN.
+So, we introduce a new host package, mke2img, that is intended to
+eventually replace genext2fs.sh.
 
+This new script is highly modeled from the existing genext2fs.sh, but
+was slightly refreshed, and a new, supposedly sane set of options has
+been choosen for the features we need -b -i -r -d; a new option, -o, has
+been added to specify the output file, rather than rely on the ordering
+of arguments.
 
-The following changes since commit c5f0e93d2cc6107cce249e1f11158aeccb4a3449:
+Since the upstream e2fsprogs are expected to release a new mke2fs that
+will be able to generate a filesystem image from a directory, we then
+will be able to replace all the logic in mke2img, to use mke2fs instead
+of the (relatively fragile) combination of the three tools we currently
+use.
 
-  rp-pppoe: install default conf file (2014-12-03 23:26:21 +0100)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/fs-vol-id
-
-for you to fetch changes up to d98afa0b717cf9585358913fd3d97ba6101d2a2b:
-
-  fs/ext2: add option to specify a filesystem label (2014-12-04 22:48:55 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/mke2img: new package
-      fs/ext2: use the new mke2img host package
-      fs/ext2: add option to specify a filesystem label
-
- fs/ext2/Config.in          |   3 +
- fs/ext2/ext2.mk            |  17 +++---
- fs/ext2/genext2fs.sh       | 121 ------------------------------------
+---
+Note: there is no way to use that tool for now. There is no menuconfig
+option in "Host utilities", and nothing depends on it yet. In the
+following patches, we'll convert fs/ext2/ext2.mk over to using that
+tool, so it will be automatically enabled as a dependency of the ext2
+filesystem type.
+---
  package/mke2img/mke2img    | 148 +++++++++++++++++++++++++++++++++++++++++++++
  package/mke2img/mke2img.mk |  14 +++++
- 5 files changed, 175 insertions(+), 128 deletions(-)
- delete mode 100755 fs/ext2/genext2fs.sh
+ 2 files changed, 162 insertions(+)
  create mode 100755 package/mke2img/mke2img
  create mode 100644 package/mke2img/mke2img.mk
 
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+new file mode 100755
+index 0000000..98ac7e6
+--- /dev/null
++++ b/package/mke2img/mke2img
+@@ -0,0 +1,148 @@
++#!/bin/bash
++
++# Buildroot wrapper to the collection of ext2/3/4 filesystem tools:
++# - genext2fs, to generate ext2 filesystem images
++# - tune2fs, to modify an ext2/3/4 filesystem (possibly in an image file)
++# - e2fsck, to check and fix an ext2/3/4 filesystem (possibly in an image file)
++
++set -e
++
++main() {
++    local OPT OPTARG
++    local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
++    local -a genext2fs_opts
++    local -a tune2fs_opts
++    local tune2fs_O_opts
++
++    while getopts :b:i:r:d:o:G:R:l:u: OPT; do
++        case "${OPT}" in
++        b)  nb_blocks=${OPTARG};;
++        i)  nb_inodes=${OPTARG};;
++        r)  nb_res_blocks=${OPTARG};;
++        d)  root_dir="${OPTARG}";;
++        o)  image="${OPTARG}";;
++        G)  gen=${OPTARG};;
++        R)  rev=${OPTARG};;
++        l)  label="${OPTARG}";;
++        u)  uuid="${OPTARG}";;
++        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
++        \?) error "unknown option '%s'\n" "${OPTARG}";;
++        esac
++    done
++
++    # Sanity checks
++    if [ -z "${root_dir}" ]; then
++        error "you must specify a root directory with '-d'\n"
++    fi
++    if [ -z "${image}" ]; then
++        error "you must specify an output image file with '-o'\n"
++    fi
++    case "${gen}:${rev}" in
++    2:0|2:1|3:1|4:1)    ;;
++    *)  error "unknown ext generation '%s' and/or revision '%s'\n" \
++               "${gen}" "${rev}"
++        ;;
++    esac
++
++    # calculate needed inodes
++    if [ -z "${nb_inodes}" ]; then
++        nb_inodes=$(find "${root_dir}" | wc -l)
++        nb_inodes=$((nb_inodes+400))
++    fi
++
++    # calculate needed blocks
++    if [ -z "${nb_blocks}" ]; then
++        # size ~= superblock, block+inode bitmaps, inodes (8 per block),
++        # blocks; we scale inodes / blocks with 10% to compensate for
++        # bitmaps size + slack
++        nb_blocks=$(du -s -k "${root_dir}" |sed -r -e 's/[[:space:]]+.*$//')
++        nb_blocks=$((500+(nb_blocks+nb_inodes/8)*11/10))
++    fi
++
++    # Upgrade to rev1 if needed
++    if [ ${rev} -ge 1 ]; then
++        tune2fs_O_opts+=",filetype"
++    fi
++
++    # Add a journal for ext3 and above
++    if [ ${gen} -ge 3 ]; then
++        tune2fs_opts+=( -j -J size=1 )
++        # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks)
++        # for the journal
++        # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
++        nb_blocks=$((nb_blocks+1300))
++    fi
++
++    # Add ext4 specific features
++    if [ ${gen} -ge 4 ]; then
++        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
++    fi
++
++    # Add our -O options (there will be at most one leading comma, remove it)
++    if [ -n "${tune2fs_O_opts}" ]; then
++        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
++    fi
++
++    # Add the label if specified
++    if [ -n "${label}" ]; then
++        tune2fs_opts+=( -L "${label}" )
++    fi
++
++    # Generate the filesystem
++    genext2fs_opts=( -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
++    if [ -n "${nb_res_blocks}" ]; then
++        genext2fs_opts+=( -m ${nb_res_blocks} )
++    fi
++    genext2fs "${genext2fs_opts[@]}" "${image}"
++
++    # genext2fs does not generate a UUID, but fsck will whine if one is
++    # is missing, so we need to add a UUID.
++    # Of course, this has to happend _before_ we run fsck.
++    # Also, some ext4 metadata are based on the UUID, so we must
++    # set it before we can convert the filesystem to ext4.
++    # If the user did not specify a UUID, we generate a random one.
++    # Although a random UUID may seem bad for reproducibility, there
++    # already are so many things that are not reproducible in a
++    # filesystem: file dates, file ordering, content of the files...
++    tune2fs -U "${uuid:-random}" "${image}"
++
++    # Upgrade the filesystem
++    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
++        tune2fs "${tune2fs_opts[@]}" "${image}"
++    fi
++
++    # After changing filesystem options, running fsck is required
++    # (see: man tune2fs). Running e2fsck in other cases will ensure
++    # coherency of the filesystem, although it is not required.
++    # 'e2fsck -pDf' means:
++    #  - automatically repair
++    #  - optimise and check for duplicate entries
++    #  - force checking
++    # Sending output to oblivion, as e2fsck can be *very* verbose,
++    # especially with filesystems generated by genext2fs.
++    # Exit codes 1 & 2 are OK, it means fs errors were successfully
++    # corrected, hence our little trick with $ret.
++    ret=0
++    e2fsck -pDf "${image}" >/dev/null || ret=$?
++    case ${ret} in
++       0|1|2) ;;
++       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
++                   "${image}" ${gen}
++    esac
++    printf "\n"
++    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
++    printf "\n"
++
++    # Remove count- and time-based checks, they are not welcome
++    # on embedded devices, where they can cause serious boot-time
++    # issues by tremendously slowing down the boot.
++    tune2fs -c 0 -i 0 "${image}"
++}
++
++trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
++warn()   { trace "${@}" >&2; }
++errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
++error()  { errorN 1 "${@}"; }
++
++my_name="${0##*/}"
++main "$@"
+diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+new file mode 100644
+index 0000000..04aaa8f
+--- /dev/null
++++ b/package/mke2img/mke2img.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# mke2img
++#
++################################################################################
++
++HOST_MKE2IMG_SOURCE =
++HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
++
++define HOST_MKE2IMG_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
++endef
++
++$(eval $(host-generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
