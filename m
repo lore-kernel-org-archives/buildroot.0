@@ -1,13 +1,17 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  5 Dec 2014 22:04:30 +0100
-Subject: [Buildroot] [PATCH] libv4l: bump to version 1.6.2
-Message-ID: <1417813470-11576-1-git-send-email-ps.report@gmx.net>
+Date: Fri,  5 Dec 2014 22:09:53 +0100
+Subject: [Buildroot] [PATCH v2] libv4l: bump to version 1.6.2
+Message-ID: <1417813793-15030-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - add Signed-off-by
 ---
  package/libv4l/libv4l.hash | 3 +--
  package/libv4l/libv4l.mk   | 2 +-
