@@ -1,50 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Dec 2014 09:15:30 +0100
-Subject: [Buildroot] [PATCH v4 9/9] autobuild-run: extend TODO list
-In-Reply-To: <CAAXf6LU07xn6QoE9Np72W_hwy_W3Rh9uozSA1+QX7=TL-_f04g@mail.gmail.com>
-References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
- <1415822317-22500-10-git-send-email-patrickdepinguin@gmail.com>
- <CAAXf6LVgM33BfF2M4xCJebq4s+Rj8XjXzWxwU4YnJ4zotEJZ5w@mail.gmail.com>
- <20141125222025.1ce56775@free-electrons.com>
- <CAAXf6LU07xn6QoE9Np72W_hwy_W3Rh9uozSA1+QX7=TL-_f04g@mail.gmail.com>
-Message-ID: <20141205091530.0ca014e5@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 5 Dec 2014 11:17:02 +0000
+Subject: [Buildroot] [PATCH] xserver_xorg-server: disable libunwind on MIPS
+	with 32-bit pointers
+Message-ID: <1417778222-19910-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+libunwind support in xorg-server is not only broken for MIPS64 n32 but
+for all MIPS variants with 32-bit pointers. The reason is exactly the
+same one. libunwind defines a uint64 variable to store the words. Then,
+xorg-server casts that variable (64-bit) into a pointer (32-bit), and
+the compilation fails:
 
-On Thu, 4 Dec 2014 21:41:24 +0100, Thomas De Schampheleire wrote:
+backtrace.c:98:13: error: cast to pointer from integer of different size
+[-Werror=int-to-pointer-cast]
 
-> > Thanks for this investigation. It would indeed be really nice to be
-> > able to kill just autobuild-run, and be sure that it stops all
-> > underlying builds. We could also catch the signal in autobuild-run, and
-> > kill the build jobs, if we are able to record the necessary information
-> > about them.
-> 
-> Brief update: the piece of the puzzle that is causing a new process
-> group to be spawned is the 'timeout' command. Everything started under
-> the timeout command runs in its own process group, different than the
-> one of the python process. Therefore, killing the python process group
-> does not kill the timeout+make command.
-> 
-> The solution is to use subprocess.Popen instead of subprocess.call so
-> we can obtain the pid of the timeout call, and change the signal
-> handler to explicitly kill this second process group too.
-> 
-> I still have to make the changes in autobuild-run (currently worked on
-> a simple test program), and will submit patches when ready...
+Related:
+  https://bugs.freedesktop.org/show_bug.cgi?id=79939
 
-Ok, great. Another approach maybe would be to not use timeout, and
-instead make the Python script itself monitor the duration of the build
-it starts, and kill them if they took too long.
+Fixes:
+  http://autobuild.buildroot.net/results/87b/87be2c95957f9925c1258812e536df72689fc5da/
 
-Thanks again for the investigation!
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4164ccf..91b4f03 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -144,10 +144,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+ endif
+ 
+-# libunwind support is broken on MIPS64 n32
++# libunwind support is broken on all MIPS variants with 32-bit pointers
+ # https://bugs.freedesktop.org/show_bug.cgi?id=79939
+-ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_MIPS_NABI32),y-)
++ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_MIPS_OABI32)-$(BR2_MIPS_NABI32),y--)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-libunwind
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
