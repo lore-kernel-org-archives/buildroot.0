@@ -1,67 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Dec 2014 23:44:31 +0100
-Subject: [Buildroot] [PATCH v4 00/14] Add Xorg support for iMX6
-In-Reply-To: <2300509.9auvbGzPAa@sagittea>
-References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
- <2598910.830VmRFfsL@aquila> <5480B48A.8060705@gmail.com>
- <2300509.9auvbGzPAa@sagittea>
-Message-ID: <20141205234431.101f3141@free-electrons.com>
+Date: Fri, 5 Dec 2014 23:45:59 +0100
+Subject: [Buildroot] [PATCH] package: add python-alsaaudio
+In-Reply-To: <1417561004-27170-1-git-send-email-peter@korsgaard.com>
+References: <1417561004-27170-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20141205234559.663b39c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Peter Korsgaard,
 
-On Thu, 04 Dec 2014 22:19:13 +0100, J?r?me Pouiller wrote:
+On Tue,  2 Dec 2014 23:56:44 +0100, Peter Korsgaard wrote:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/Config.in                              |  1 +
+>  package/python-alsaaudio/Config.in             | 12 ++++++++++++
+>  package/python-alsaaudio/python-alsaaudio.hash |  2 ++
+>  package/python-alsaaudio/python-alsaaudio.mk   | 15 +++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/python-alsaaudio/Config.in
+>  create mode 100644 package/python-alsaaudio/python-alsaaudio.hash
+>  create mode 100644 package/python-alsaaudio/python-alsaaudio.mk
 
-> It looks like you enabled EGLFS in Qt5. EGLFS need framebuffer version of gpu-
-> viv-bin-mx6q. If you want to use X11, you have to enable xcb in qt5 (as in 
-> example in commit log of "07/14 xdriver_xf86-video-imx-viv").
-> 
-> I do not see any simple generic solution to prevent user to choose EGLFS in Qt 
-> if X11 backend is selected in gpu-viv-bin-mx6q :-(
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Well, we could always imagine something like:
+ (code reviewed, license checked, built and runtime tested on
+ ARM/uClibc)
 
-config BR2_PACKAGE_QT5BASE_XCB
-        bool "X.org XCB support"
-        depends on BR2_PACKAGE_XORG7
-        select BR2_PACKAGE_XLIB_LIBX11
-        select BR2_PACKAGE_LIBXCB
-        select BR2_PACKAGE_XCB_UTIL_IMAGE
-        select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-        select BR2_PACKAGE_XCB_UTIL_WM
-        select BR2_PACKAGE_LIBXKBCOMMON
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11 if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-
-comment "X.org XCB backend available if X.org is enabled"
-        depends on !BR2_PACKAGE_XORG7
-
-+comment "X11 backend of gpu-viv-bin-mx6q needed to enable XCB"
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q && !BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-
-config BR2_PACKAGE_QT5BASE_EGLFS
-        bool "eglfs support"
-        select BR2_PACKAGE_QT5BASE_OPENGL
-        depends on BR2_PACKAGE_HAS_LIBEGL
-        depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-
-+comment "FB backend of gpu-viv-bin-mx6q needed to enable EGLFS"
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q && !BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-
-comment "eglfs backend available if OpenGL and EGL are enabled"
-        depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_QT5_GL_AVAILABLE
-
-For sure, it's not very generic, but at least it lets the user know
-about this dependency, which is not very obvious.
-
-But I am wondering, for the X11 output to work, don't you also need the
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV option ?
-
-Best regards,
+Note however that the commit title for package additions should
+normally be "<pkg>: new package", but it can be fixed while applying,
+of course :-)
 
 Thomas
 -- 
