@@ -1,52 +1,39 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 05 Dec 2014 12:49:16 -0800
-Subject: [Buildroot] [PATCH v4 00/14] Add Xorg support for iMX6
-In-Reply-To: <5480D628.1070303@gmail.com>
-References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
- <2598910.830VmRFfsL@aquila> <5480B48A.8060705@gmail.com>
- <2300509.9auvbGzPAa@sagittea> <5480D628.1070303@gmail.com>
-Message-ID: <54821A4C.2080002@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  5 Dec 2014 22:04:30 +0100
+Subject: [Buildroot] [PATCH] libv4l: bump to version 1.6.2
+Message-ID: <1417813470-11576-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerome, All,
+---
+ package/libv4l/libv4l.hash | 3 +--
+ package/libv4l/libv4l.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-On 12/04/2014 01:46 PM, Gary Bisson wrote:
-> [snip]
->> It looks like you enabled EGLFS in Qt5. EGLFS need framebuffer 
->> version of gpu-
->> viv-bin-mx6q. If you want to use X11, you have to enable xcb in qt5 
->> (as in
->> example in commit log of "07/14 xdriver_xf86-video-imx-viv").
->>
->> I do not see any simple generic solution to prevent user to choose 
->> EGLFS in Qt
->> if X11 backend is selected in gpu-viv-bin-mx6q :-(
->>
->> You will find below configuration I use for X11:
->>     https://gist.github.com/jerome-pouiller/a35bcd4a65a49d5683d1
->
-> That might be the case yes although I don't remember specifying EGLFS 
-> but I might have mixed up different configs. I'll try building the 
-> your config for X11 and let you know.
-
-Using your X11 config + adding the Qt worked fine. Here are the demo 
-apps tested:
-- tutorial7 from Vivante examples (to make sure 3D acceleration is 
-working fine
-- hellogl_es2 from Qt5 examples
-
-Tested-by: Gary Bisson <bisson.gary@gmail.com>
-
-As for the review, everything looks good to me apart from the 
-qmx6_defconfig which I think should be split in 2 (one qmx6_defconfig 
-minimalistic, one qmx6_qt5_demo_defconfig).
-
-Thanks,
-Gary
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141205/e42a95e3/attachment.html>
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 80e677a..609cfbc 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha1	e0b74818e6f4a4b8974e152f4c00bec6c62265e5  v4l-utils-1.6.0.tar.bz2
+-sha256	6054d3120c67a1524993e699b3b02036c817bb000b742c332682163966dc7605  v4l-utils-1.6.0.tar.bz2
++sha256 d3d6eb1f0204fb11f3d318bfca35d5f73cc077f88fac7665a47856a16496be7d  v4l-utils-1.6.2.tar.bz2
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 63dd5d2..94c7031 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBV4L_VERSION = 1.6.0
++LIBV4L_VERSION = 1.6.2
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+-- 
+2.1.2
