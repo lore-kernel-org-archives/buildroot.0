@@ -1,34 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Dec 2014 23:49:28 +0100
-Subject: [Buildroot] [PATCH] libevdev: bump version to 1.3.2
-In-Reply-To: <1417814115-18470-1-git-send-email-ps.report@gmx.net>
-References: <1417814115-18470-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20141205234928.69395255@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 6 Dec 2014 00:03:17 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-12-04
+Message-ID: <trinity-62b0922a-850c-4492-9ed3-b2bce5458e94-1417820596925@3capp-gmx-bs34>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Hello,
 
-On Fri,  5 Dec 2014 22:15:15 +0100, Peter Seiderer wrote:
-> See [1] for details.
-> 
-> [1] http://lists.freedesktop.org/archives/input-tools/2014-December/001132.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libevdev/libevdev.hash | 4 ++--
->  package/libevdev/libevdev.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, Dec 05, 2014 at 08:30:16AM +0100, Thomas Petazzoni wrote:
+> Build statistics for 2014-12-04
+> ===============================
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>          arm |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/c94fef5d2cfb00a336905ae3c110d7680f6d5416/
+>          arm |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/4375cb1e325a336dbf59f22f975be9165ad0648a/
 
-Built tested on ARM/uClibc, hash verified to be the same here.
+From http://autobuild.buildroot.net/results/437/4375cb1e325a336dbf59f22f975be9165ad0648a/build-end.log
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+...
+gcc version 4.9.2 20140904 (prerelease) (crosstool-NG linaro-1.13.1-4.9-2014.09 - Linaro GCC 4.9-2014.09) 
+config.status: creating arm-linux-gnueabihf-fake.rb
+rbconfig.rb updated
+generating enc.mk
+compiling dln.c
+compiling localeinit.c
+compiling loadpath.c
+loadpath.c:30:2: error: #error RUBY_EXEC_PREFIX must be defined
+ #error RUBY_EXEC_PREFIX must be defined
+  ^
+loadpath.c:41:50: error: ???RUBY_LIB_VERSION??? undeclared here (not in a function)
+ typedef char ruby_lib_version_string[(int)sizeof(RUBY_LIB_VERSION) - 2];
+                                                  ^
+loadpath.c:59:33: error: ???RUBY_EXEC_PREFIX??? undeclared here (not in a function)
+ const char ruby_exec_prefix[] = RUBY_EXEC_PREFIX;
+                                 ^
+loadpath.c:68:5: error: invalid initializer
+     RUBY_SITE_LIB2 "\0"
+     ^
+loadpath.c:32:41: error: expected ???,??? or ???;??? before string constant
+ #define RUBY_LIB_PREFIX RUBY_EXEC_PREFIX"/lib/ruby"
+                                         ^
+loadpath.c:35:23: note: in expansion of macro ???RUBY_LIB_PREFIX???
+ #define RUBY_SITE_LIB RUBY_LIB_PREFIX"/site_ruby"
+                       ^
+loadpath.c:46:37: note: in expansion of macro ???RUBY_SITE_LIB???
+ #define RUBY_SITE_LIB2              RUBY_SITE_LIB    "/"RUBY_LIB_VERSION
+                                     ^
+loadpath.c:68:5: note: in expansion of macro ???RUBY_SITE_LIB2???
+     RUBY_SITE_LIB2 "\0"
+     ^
+make[1]: *** [loadpath.o] Error 1
+make[1]: Leaving directory `/home/peko/autobuild/instance-1/output/build/ruby-2.1.5'
+...
+
+
+File loadpath.c includes verconf.h where (on a normal build) all the missing tokens are defined.
+
+A suitable verconf.h should be created on buildtime just before compiling loadpath.c, see log
+of a normal build:
+
+gcc version 4.8.3 (Buildroot 2015.02-git-00219-gc5f0e93)
+config.status: creating arm-linux-gnueabi-fake.rb
+rbconfig.rb updated
+generating enc.mk
+compiling dln.c
+compiling localeinit.c
+creating verconf.h
+compiling loadpath.c
+copying dummy probes.h
+
+
+The line 'creating verconf.h' is missing from the log of the failed build.
+
+While the configure step an empty verconf.h file is genereated by the the following code
+from configure.in (linbe 3764):
+
+3746 AC_ARG_WITH(ruby-version,
+3747             AS_HELP_STRING([--with-ruby-version=STR], [ruby version string for version specific directories [[full]] (full|minor|STR)]),
+3748             [ruby_version=$withval],
+3749             [ruby_version=full])
+3750 unset RUBY_LIB_VERSION
+3751 unset RUBY_LIB_VERSION_STYLE
+3752 AS_CASE(["$ruby_version"],
+3753   [full],  [RUBY_LIB_VERSION_STYLE='3   /* full */'],
+3754   [minor], [RUBY_LIB_VERSION_STYLE='2   /* minor */'])
+3755 if test ${RUBY_LIB_VERSION_STYLE+set}; then
+3756     {
+3757     echo "#define RUBY_LIB_VERSION_STYLE $RUBY_LIB_VERSION_STYLE"
+3758     echo '#define STRINGIZE(x) x'
+3759     test -f revision.h -o -f "${srcdir}/revision.h" || echo '#define RUBY_REVISION 0'
+3760     echo '#include "verconf.h"'
+3761     echo '#include "version.h"'
+3762     echo 'ruby_version=RUBY_LIB_VERSION'
+3763     } > conftest.c
+3764     test -f verconf.h || > verconf.h
+3765     ruby_version="`$CPP -I. -I"${srcdir}" -I"${srcdir}/include" conftest.c | sed '/^ruby_version=/!d;s/ //g'`"
+3766     eval $ruby_version
+3767 elif test -z "${ruby_version}"; then
+3768     AC_MSG_ERROR([No ruby version, No place for bundled libraries])
+3769 else
+3770     RUBY_LIB_VERSION="\"${ruby_version}\""
+3771 fi
+3772 AC_SUBST(RUBY_LIB_VERSION_STYLE)
+3773 AC_SUBST(RUBY_LIB_VERSION)
+
+
+From common.mk:
+
+ 774 loadpath.$(OBJEXT): {$(VPATH)}loadpath.c $(RUBY_H_INCLUDES) \
+ 775   $(srcdir)/include/ruby/version.h $(srcdir)/version.h {$(VPATH)}config.h \
+ 776   verconf.h
+
+loadpath.o depends on verconf.h, should be generated by:
+
+ 846 verconf.h: $(srcdir)/template/verconf.h.in $(srcdir)/tool/generic_erb.rb $(RBCONFIG)
+ 847         $(ECHO) creating $@
+ 848         $(Q) $(MINIRUBY) "$(srcdir)/tool/generic_erb.rb" $(srcdir)/template/verconf.h.in > $@
+
+which depends on $(RBCONFIG), defined as '.rbconfig.time' in Makefile:17, which should be generated by:
+
+ 542 $(RBCONFIG): $(srcdir)/tool/mkconfig.rb config.status $(srcdir)/version.h $(PREP)
+ 543         $(Q)$(MINIRUBY) $(srcdir)/tool/mkconfig.rb -timestamp=$@ \
+ 544                 -install_name=$(RUBY_INSTALL_NAME) \
+ 545                 -so_name=$(RUBY_SO_NAME) rbconfig.rb
+
+
+Something in this chain of dependencies seems to fail (timestamp problems?, race condition?)....
+
+Maybe deleting the configure created empty version of the verconf.h file works?
+
+The only two files including verconf.h are:
+
+ loadpath.c:12:#include "verconf.h"
+ nacl/pepper_main.c:29:#include "verconf.h"
+
+Regards,
+Peter
