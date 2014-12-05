@@ -1,41 +1,53 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 5 Dec 2014 12:21:21 +0000
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17.3
-In-Reply-To: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5481A341.50201@imgtec.com>
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Date: Fri, 5 Dec 2014 13:42:04 +0100
+Subject: [Buildroot] [PATCH v4 9/9] autobuild-run: extend TODO list
+In-Reply-To: <20141205091530.0ca014e5@free-electrons.com>
+References: <1415822317-22500-1-git-send-email-patrickdepinguin@gmail.com>
+ <1415822317-22500-10-git-send-email-patrickdepinguin@gmail.com>
+ <CAAXf6LVgM33BfF2M4xCJebq4s+Rj8XjXzWxwU4YnJ4zotEJZ5w@mail.gmail.com>
+ <20141125222025.1ce56775@free-electrons.com>
+ <CAAXf6LU07xn6QoE9Np72W_hwy_W3Rh9uozSA1+QX7=TL-_f04g@mail.gmail.com>
+ <20141205091530.0ca014e5@free-electrons.com>
+Message-ID: <CAAXf6LV=8A8UhNDX8ui1RHywQHZSb-g8e8z+2edBspOQmBPZ4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Fri, Dec 5, 2014 at 9:15 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 4 Dec 2014 21:41:24 +0100, Thomas De Schampheleire wrote:
+>
+>> > Thanks for this investigation. It would indeed be really nice to be
+>> > able to kill just autobuild-run, and be sure that it stops all
+>> > underlying builds. We could also catch the signal in autobuild-run, and
+>> > kill the build jobs, if we are able to record the necessary information
+>> > about them.
+>>
+>> Brief update: the piece of the puzzle that is causing a new process
+>> group to be spawned is the 'timeout' command. Everything started under
+>> the timeout command runs in its own process group, different than the
+>> one of the python process. Therefore, killing the python process group
+>> does not kill the timeout+make command.
+>>
+>> The solution is to use subprocess.Popen instead of subprocess.call so
+>> we can obtain the pid of the timeout call, and change the signal
+>> handler to explicitly kill this second process group too.
+>>
+>> I still have to make the changes in autobuild-run (currently worked on
+>> a simple test program), and will submit patches when ready...
+>
+> Ok, great. Another approach maybe would be to not use timeout, and
+> instead make the Python script itself monitor the duration of the build
+> it starts, and kill them if they took too long.
+>
 
-built fine for MIPS and checked the binaries are in place and built for
-the right architecture:
+The multiprocessing.Process class we're already using to spawn
+instances, supports timeout in the join() function. So one way is to
+spawn a Process for the make call (which in itself calls
+subprocess.call, as today), then joining it with the timeout.
 
-$ file output/target/usr/bin/btrfs
-output/target/usr/bin/btrfs: ELF 32-bit MSB executable, MIPS, MIPS32
-rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
-GNU/Linux 2.6.16, with unknown capability 0x41000000 = 0xf676e75, with
-unknown capability 0x10000 = 0x70403, stripped
-
-$ ls output/target/usr/bin/btrfs*
-output/target/usr/bin/btrfs             output/target/usr/bin/btrfs-image
-output/target/usr/bin/btrfsck
-output/target/usr/bin/btrfs-map-logical
-output/target/usr/bin/btrfs-convert
-output/target/usr/bin/btrfs-show-super
-output/target/usr/bin/btrfs-debug-tree  output/target/usr/bin/btrfstune
-output/target/usr/bin/btrfs-find-root   output/target/usr/bin/btrfs-zero-log
-
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Best regards,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+I will try that out, thanks for the hint...
