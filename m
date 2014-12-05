@@ -1,59 +1,41 @@
-From: =?iso-8859-1?Q?C=E9dric?= HEYMAN <c.heyman@til-technologies.fr>
-Date: Fri, 05 Dec 2014 13:11:12 +0100
-Subject: [Buildroot] Float error on SAMA5D3 Xplained using nodejs
-Message-ID: <WC20141205121112.0100A6@til-technologies.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 5 Dec 2014 12:21:21 +0000
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17.3
+In-Reply-To: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5481A341.50201@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gustavo Zacarias,
 
-Trying to use nodejs's npm (built with buildroot 2014.11) on SAMA5D3 
-Xplained returns following error : 'ERROR: Binary compiled with 
--mfloat-abi=hard but without -DUSE_EABI_HARDFLOAT'
+built fine for MIPS and checked the binaries are in place and built for
+the right architecture:
 
-Looking in nodejs.mk shows that : 
-'....
-NODEJS_CPU = arm
-# V8 needs to know what floating point ABI the target is using.  There's 
-also
-# a 'hard' option which we're not exposing here at the moment, because
-# buildroot itself doesn't really support it at present.
-ifeq ($(BR2_SOFT_FLOAT),y)
-NODEJS_ARM_FP = soft
-else
-NODEJS_ARM_FP = softfp
-endif
-....'
+$ file output/target/usr/bin/btrfs
+output/target/usr/bin/btrfs: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.16, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70403, stripped
 
-It seems there is no support for 'hard' floating point for now.
+$ ls output/target/usr/bin/btrfs*
+output/target/usr/bin/btrfs             output/target/usr/bin/btrfs-image
+output/target/usr/bin/btrfsck
+output/target/usr/bin/btrfs-map-logical
+output/target/usr/bin/btrfs-convert
+output/target/usr/bin/btrfs-show-super
+output/target/usr/bin/btrfs-debug-tree  output/target/usr/bin/btrfstune
+output/target/usr/bin/btrfs-find-root   output/target/usr/bin/btrfs-zero-log
 
-To solve that, I intend to force '-DUSE_EABI_HARDFLOAT' in nodejs 
-compilation package, but I don't know the way to do that; any advice ?
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Another way to solve the problem could be to use 'soft' or 'softfp' floating 
-point strategy but menuconfig does not propose this tuning, maybe...
-
-Regards,
-  	
-C?dric HEYMAN
-Ing?nieur en D?veloppement embarqu?
-
-T?l : 04.42.37.17.10| Fax : 04.42.24.28.98
-Si?ge social : 350 rue de la Lauzi?re - Parc du Golf B?t 43 - CS 60481 - 
-13592 AIX-EN-PROVENCE CEDEX 3
-
-
-
-<font face="Tahoma" size="1" color="#575F5E">
-<a href="http://www.til-technologies.fr/bandeau_signature/redirection.html" target="_blank">
-<img src="http://www.til-technologies.fr/bandeau_signature/bandeau.jpg" width="600" height="80" border="0" alt="Plus d'actualit?s sur www.til-technologies.fr" />
-</a>
-<br>
-Les informations pr?c?dentes peuvent ?tre confidentielles ou privil?gi?es. Si vous n'?tes pas le destinataire pr?vu de ce mail, veuillez en notifier l'exp?diteur en r?pondant ? ce message puis supprimez-en toute trace de vos syst?mes.
-</font>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141205/3bd701ab/attachment.html>
+Best regards,
+-- 
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
