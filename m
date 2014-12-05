@@ -1,44 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  5 Dec 2014 22:15:15 +0100
-Subject: [Buildroot] [PATCH] libevdev: bump version to 1.3.2
-Message-ID: <1417814115-18470-1-git-send-email-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Dec 2014 23:39:02 +0100
+Subject: [Buildroot] [PATCH v4 00/14] Add Xorg support for iMX6
+In-Reply-To: <5480B48A.8060705@gmail.com>
+References: <1417514352-8825-1-git-send-email-jezz@sysmic.org>
+ <547F63A4.9070007@gmail.com> <2598910.830VmRFfsL@aquila>
+ <5480B48A.8060705@gmail.com>
+Message-ID: <20141205233902.1981e3a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for details.
+Dear Gary Bisson,
 
-[1] http://lists.freedesktop.org/archives/input-tools/2014-December/001132.html
+On Thu, 04 Dec 2014 11:22:50 -0800, Gary Bisson wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> My understanding of it is to create a demo config like 
+> qmx6_qt5_demo_defconfig whereas a qmx6_defconfig would stay minimal but 
+> I might be wrong.
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index b53a4ce..83b5bdd 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2014-November/001123.html
--sha256 4b7c76195f0087023142f26c5fd2c254b35c861880c6902d3dd9b27daeec2643 libevdev-1.3.1.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2014-December/001132.html
-+sha256 a4317de9e818093dc131cc2bb96cdfc0cebd631e4be5c5244e1e373ce1536eed libevdev-1.3.2.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 2fc8ff7..56247be 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.3.1
-+LIBEVDEV_VERSION = 1.3.2
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+That's correct. I believe we want to continue to have minimal
+defconfig, but we don't mind having bigger "demo" defconfigs. The
+naming you proposed looks good to me.
+
+Best regards,
+
+Thomas
 -- 
-2.1.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
