@@ -1,44 +1,42 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Fri, 05 Dec 2014 19:58:25 -0600
-Subject: [Buildroot] [PATCH] ffmpeg: V1.0 configure ffmpeg with
- --enable-libfreetype if libfreetype package is enabled
-Message-ID: <548262C1.7080000@ou.edu>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri,  5 Dec 2014 22:42:38 -0800
+Subject: [Buildroot] [PATCH v2] rp-pppoe: install helper scripts
+Message-ID: <1417848158-5198-1-git-send-email-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Buildroot][PATCH] ffmpeg: V1.0 configure ffmpeg with --enable-libfreetype if libfreetype package is enabled
-
-I needed ffmpeg on the target configured using --enable-libfreetype and using "Additional parameters for ./configure" missed the dependency.
-Modeled on the blocks above and below it in ffmpeg.mk - let me know if the order is important and I need to move it somewhere else.
-
-Signed-off-by Stephen M. Kenton <skenton@ou.edu>
-
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
-diff -ru buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11/package/ffmpeg/ffmpeg.mk
---- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk
-+++ buildroot-2014.11/package/ffmpeg/ffmpeg.mk
-@@ -50,7 +50,6 @@
- 	--disable-libopencv \
- 	--disable-libdc1394 \
- 	--disable-libfaac \
--	--disable-libfreetype \
- 	--disable-libgsm \
- 	--disable-libmp3lame \
- 	--disable-libnut \
-@@ -229,6 +228,13 @@
- FFMPEG_CONF_OPTS += --disable-libvpx
- endif
+Changes v1 -> v2:
+  - add missing pppoe-status script to install list
+ package/rp-pppoe/rp-pppoe.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+FFMPEG_CONF_OPTS += --enable-libfreetype
-+FFMPEG_DEPENDENCIES += freetype
-+else
-+FFMPEG_CONF_OPTS += --disable-libfreetype
-+endif
-+
- ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
- FFMPEG_CONF_OPTS += --enable-libx264
- FFMPEG_DEPENDENCIES += x264
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 70b4437..5cb4960 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -11,6 +11,8 @@ RP_PPPOE_LICENSE_FILES = doc/LICENSE
+ RP_PPPOE_DEPENDENCIES = pppd
+ RP_PPPOE_SUBDIR = src
+ RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
++RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
++	pppoe-status pppoe-stop
+ RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
+ RP_PPPOE_CONF_OPTS = --disable-debugging
+ RP_PPPOE_CONF_ENV = \
+@@ -23,6 +25,9 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
+ 	for ff in $(RP_PPPOE_TARGET_FILES); do \
+ 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+ 	done
++	for ff in $(RP_PPPOE_TARGET_SCRIPTS); do \
++		$(INSTALL) -m 0755 $(@D)/scripts/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
++	done
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+2.2.0
