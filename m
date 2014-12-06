@@ -1,39 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Dec 2014 16:19:00 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnss: need dynamic library
- support
-In-Reply-To: <1417871738-13421-2-git-send-email-s.martin49@gmail.com>
-References: <1417871738-13421-1-git-send-email-s.martin49@gmail.com>
- <1417871738-13421-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20141206161900.77525f04@free-electrons.com>
+Date: Sat, 6 Dec 2014 16:23:23 +0100
+Subject: [Buildroot] [PATCH 1/1] Added mpd-mpc, mpc client to mpd
+In-Reply-To: <1417876929-21438-1-git-send-email-tbultel@free.fr>
+References: <1417876929-21438-1-git-send-email-tbultel@free.fr>
+Message-ID: <20141206162323.6f20ce60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Thierry Bultel,
 
-On Sat,  6 Dec 2014 14:15:38 +0100, Samuel Martin wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/e01733c4b8c23f62e2081f0c4aadc16e22c4a2c4/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/libnss/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-> index 690f928..d57c7a2 100644
-> --- a/package/libnss/Config.in
-> +++ b/package/libnss/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
->  	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
-> +	depends on !BR2_PREFER_STATIC_LIB
+On Sat,  6 Dec 2014 15:42:09 +0100, Thierry Bultel wrote:
 
-What about the reverse dependencies, such as ecryptfs-utils?
+> diff --git a/package/mpd-mpc/Config.in b/package/mpd-mpc/Config.in
+> new file mode 100644
+> index 0000000..a56e2a6
+> --- /dev/null
+> +++ b/package/mpd-mpc/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_MPD_MPC
+> +	bool "mpd-mpc"
+> +	select BR2_PACKAGE_MPD
+> +	select BR2_PACKAGE_LIBMPDCLIENT
+
+When you select a package, you must replicate the dependencies of this
+package. So if you select BR2_PACKAGE_MPD, you should add:
+
+        depends on BR2_INSTALL_LIBSTDCPP # mpd
+        depends on BR2_LARGEFILE # mpd -> boost
+        depends on BR2_USE_WCHAR # mpd -> libglib2, flac
+        depends on BR2_TOOLCHAIN_HAS_THREADS # mpd -> libglib2
+        depends on BR2_USE_MMU # mpd-> libglib2
+        # avr32, sparc & CS powerpc gcc are too old for mpd
+        depends on !(BR2_avr32 || BR2_sparc)
+        depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+
+However, are you sure "mpd" is really a build dependency? To me, it
+seems like only mpdclient is needed to build mpc. And you could imagine
+having to build only the client on a given system, where the mpd server
+would run on another system, no?
+
+> +MPD_MPC_VERSION = 0.26
+> +MPD_MPC_SITE = http://www.musicpd.org/download/mpc/0
+> +MPD_MPC_SOURCE=mpc-$(MPD_MPC_VERSION).tar.xz
+
+Spaces before and after = sign.
+
+> +MPD_MPC_DEPENDENCIES = mpd libmpdclient
+
+mpd dependency really needed?
+
+You should also include MPD_MPC_LICENSE and MPD_MPC_LICENSE_FILES.
+
+These days, we also like to have the hash file for new packages. See
+http://buildroot.org/downloads/manual/manual.html#adding-packages-hash
+for details.
+
+Thanks!
 
 Thomas
 -- 
