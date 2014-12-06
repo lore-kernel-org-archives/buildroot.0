@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Dec 2014 16:00:33 +0100
-Subject: [Buildroot] [PATCH 3/3] package/tvheadend: Bump version
+Date: Sat,  6 Dec 2014 16:00:32 +0100
+Subject: [Buildroot] [PATCH 2/3] package/tvheadend: Fix inclusion of DVB
+	frequency tables in bundled build
 In-Reply-To: <1417878033-29169-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1417878033-29169-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1417878033-29169-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1417878033-29169-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/tvheadend.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tvheadend/tvheadend.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 7d0ae08..ebbca81 100644
+index e0ce160..7d0ae08 100644
 --- a/package/tvheadend/tvheadend.mk
 +++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -58,6 +58,9 @@ define TVHEADEND_CONFIGURE_CMDS
+ endef
  
--TVHEADEND_VERSION = fcd16fa0d835d7fd4f57c350ed8b76350440c68c
-+TVHEADEND_VERSION = 5ba389bd863cf144bdbdfc0e543a7c73470f0610
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+ define TVHEADEND_BUILD_CMDS
++	$(INSTALL) -d $(@D)/data/dvb-scan
++	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
++	touch $(@D)/data/dvb-scan/.stamp
+ 	$(MAKE) -C $(@D)
+ endef
+ 
 -- 
 1.7.10.4
