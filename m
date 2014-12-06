@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Dec 2014 12:13:58 +0100
-Subject: [Buildroot] [PATCH 8/9 v2] packages: switch to using the gitorious
-	forge
+Date: Sat,  6 Dec 2014 12:13:56 +0100
+Subject: [Buildroot] [PATCH 6/9 v2] docs/manual: document the new forges we
+	support: github and gitorious
 In-Reply-To: <cover.1417863715.git.yann.morin.1998@free.fr>
 References: <cover.1417863715.git.yann.morin.1998@free.fr>
-Message-ID: <e3eacdc768b7db5f470cc98f805e32b29415732a.1417863715.git.yann.morin.1998@free.fr>
+Message-ID: <9208dd6f3e12ac06908f93f459103ad77dd95f5d.1417863715.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +13,126 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- boot/xloader/xloader.mk                | 3 ++-
- package/can-utils/can-utils.mk         | 3 ++-
- package/lpc3250loader/lpc3250loader.mk | 3 ++-
- package/qhull/qhull.mk                 | 3 ++-
- package/ti-uim/ti-uim.mk               | 3 ++-
- 5 files changed, 10 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-generic.txt | 15 ++++++++--
+ docs/manual/adding-packages-tips.txt    | 50 +++++++++++++++++++++++++--------
+ 2 files changed, 51 insertions(+), 14 deletions(-)
 
-diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
-index 90d5fa2..a9319b1 100644
---- a/boot/xloader/xloader.mk
-+++ b/boot/xloader/xloader.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 69d1cfa..260144b 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -239,9 +239,7 @@ not have to set +LIBFOO_UPSTREAM_SOURCE+.
+   URL or a local filesystem path. HTTP, FTP and SCP are supported URL
+   types for retrieving package tarballs. Git, Subversion, Mercurial,
+   and Bazaar are supported URL types for retrieving packages directly
+-  from source code management systems. There is a helper function to make
+-  it easier to download source tarballs from GitHub (refer to
+-  xref:github-download-url[] for details). A filesystem path may be used
++  from source code management systems. A filesystem path may be used
+   to specify either a tarball or a directory containing the package
+   source code. See +LIBFOO_SITE_METHOD+ below for more details on how
+   retrieval works. +
+@@ -258,6 +256,17 @@ not have to set +LIBFOO_UPSTREAM_SOURCE+.
+     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
  
- XLOADER_VERSION = 6f3a26101303051e0f91b6213735b68ce804e94e
--XLOADER_SITE = git://gitorious.org/x-loader/x-loader.git
-+XLOADER_FORGE = gitorious
-+XLOADER_FORGE_PATH = x-loader/x-loader
- XLOADER_BOARD_NAME = $(call qstrip,$(BR2_TARGET_XLOADER_BOARDNAME))
++* +LIBFOO_FORGE+ and +LIBFOO_FORGE_PATH+ may be used instead of
++  +LIBFOO_SITE+, when +libfoo+ is hosted to a well known forge:
++  GitHub of Gitorious. In such a case, +LIBFOO_VERSION+,
++  +LIBFOO_UPSTREAM_SOURCE+ and +LIBFOO_SITE+ must be set to special
++  values. This is conveniently done with +LIBFOO_FORGE+.
++  +LIBFOO_FORGE+ should be set to the lowercase name of the forge,
++  while +LIBFOO_FORGE_PATH+ should be set to the +/+-separated tuple
++  +USER/REPOS+. If +LIBFOO_FORGE+ is set, then +LIBFOO_SITE+ must
++  *not* be used. See xref:forge-download[] for the known forges, and
++  special cases for when to use it or not.
++
+ * +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
+   Buildroot should download from +LIBFOO_SITE+ in addition to the main
+   +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 6f5e785..71a3330 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -33,40 +33,68 @@ using the following rules:
+   +FOO_BAR_BOO_VERSION+).
  
- XLOADER_LICENSE = GPLv2+
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 44713cf..3bdbf15 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -5,7 +5,8 @@
- ################################################################################
  
- CAN_UTILS_VERSION = 111f8d3acf6f6b30bf208fd9c98399c5fb9d29de
--CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
-+CAN_UTILS_FORGE = gitorious
-+CAN_UTILS_FORGE_PATH = linux-can/can-utils
- CAN_UTILS_AUTORECONF = YES
+-[[github-download-url]]
+-==== How to add a package from GitHub
++[[forge-download]]
++==== How to add a package from a forge
++
++===== GitHub
  
- $(eval $(autotools-package))
-diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
-index d13ab40..ff0cedf 100644
---- a/package/lpc3250loader/lpc3250loader.mk
-+++ b/package/lpc3250loader/lpc3250loader.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+ Packages on GitHub often don't have a download area with release tarballs.
+ However, it is possible to download tarballs directly from the repository
+ on GitHub. As GitHub is known to have changed download mechanisms in the
+-past, the 'github' helper function should be used as shown below.
++past, the 'github' forge should be used as shown below.
  
--HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
-+HOST_LPC3250LOADER_FORGE = gitorious
-+HOST_LPC3250LOADER_FORGE_PATH = lpc3250loader/lpc3250loader
- HOST_LPC3250LOADER_VERSION = 1.0
- LPC3250LOADER_LICENSE = GPLv2+
- LPC3250LOADER_LICENSE_FILES = LPC3250loader.py
-diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
-index 6992d71..9de72fc 100644
---- a/package/qhull/qhull.mk
-+++ b/package/qhull/qhull.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+ ------------------------
+-FOO_VERSION = v1.0 # tag or full commit ID
+-FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
++FOO_VERSION = v1.0
++FOO_FORGE = github
++FOO_FORGE_PATH = user/foo
+ ------------------------
  
- QHULL_VERSION = 60d55819729d7b49391dde0271e15a56c70992b9
--QHULL_SITE = git://gitorious.org/qhull/qhull.git
-+QHULL_FORGE = gitorious
-+QHULL_FORGE_PATH = qhull/qhull
- QHULL_INSTALL_STAGING = YES
- QHULL_LICENSE = BSD-Style
- QHULL_LICENSE_FILES = COPYING.txt
-diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-index b498180..381fbe0 100644
---- a/package/ti-uim/ti-uim.mk
-+++ b/package/ti-uim/ti-uim.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+-.Notes
+-- The FOO_VERSION can either be a tag or a commit ID.
++.Note
++- The +FOO_VERSION+ can be either a tag or a commit ID.
+ - The tarball name generated by github matches the default one from
+   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
+   so it is not necessary to specify it in the +.mk+ file.
+ - When using a commit ID as version, you should use the full 40 hex characters.
++- 'user' is the name of the GitHub user to whom the 'foo' repository belongs.
  
- TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
--TI_UIM_SITE = git://gitorious.org/uim/uim.git
-+TI_UIM_FORGE = gitorious
-+TI_UIM_FORGE_PATH = uim/uim
- TI_UIM_LICENSE = GPLv2+
+ If the package you wish to add does have a release section on GitHub, the
+ maintainer may have uploaded a release tarball, or the release may just point
+ to the automatically generated tarball from the git tag. If there is a
+ release tarball uploaded by the maintainer, we prefer to use that since it
+ may be slightly different (e.g. it contains a configure script so we don't
+-need to do AUTORECONF).
++need to do AUTORECONF), and thus you should not use +FOO_FORGE+ in that case.
  
- define TI_UIM_BUILD_CMDS
+ You can see on the release page if it's an uploaded tarball or a git tag:
+ 
+ - If there is a green download button, like
+   https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
+   was uploaded by the maintainer and you should use the link of that button to
+-  specify +FOO_SITE+, and not use the 'github' helper.
++  specify +FOO_SITE+, and not use the 'github' forge.
+ - If there is grey download button, like
+   https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
+-  automatically generated tarball and you should use the 'github' helper
+-  function.
++  automatically generated tarball and you should use the 'github' forge.
++
++===== Gitorious
++
++Gitorious does not offer a download area for packages to put their
++releases on. However, it offers a way to download tarballs from any
++tag or sha1 changeset, but the naming scheme it uses for the tarballs'
++basename does not contain the package name, only the version string.
++
++Buildroot allows you to easily specify that a package should be
++downloaded from Gitorious. Like for GitHub (above), we recognise
++'gitorious' as a forge; it should be used as shown below.
++
++----
++FOO_VERSION = v1.0
++FOO_FORGE = gitorious
++FOO_FORGE_PATH = user/foo
++----
++
++.Note
++- The +FOO_VERSION+ can be either a tag or a commit ID.
++- The tarball name generated by gitorious matches the default one from
++  Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
++  so it is not necessary to specify it in the +.mk+ file.
++- When using a commit ID as version, you should use the full 40 hex characters.
++- 'user' is the name of the Gitorious user to whom the 'foo' repository belongs.
 -- 
 1.9.1
