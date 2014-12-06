@@ -1,11 +1,10 @@
 From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 6 Dec 2014 12:59:42 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] fs/ext2: add option to specify a
- filesystem label
-In-Reply-To: <d98afa0b717cf9585358913fd3d97ba6101d2a2b.1417730349.git.yann.morin.1998@free.fr>
+Date: Sat, 6 Dec 2014 12:59:46 +0100
+Subject: [Buildroot] [PATCH 1/3 v2] package/mke2img: new package
+In-Reply-To: <d34cfab4137e386aad07e144f2fa08c3bba5dd1f.1417730349.git.yann.morin.1998@free.fr>
 References: <cover.1417730349.git.yann.morin.1998@free.fr>
- <d98afa0b717cf9585358913fd3d97ba6101d2a2b.1417730349.git.yann.morin.1998@free.fr>
-Message-ID: <CABbD_XBqeKXndB6LSPqwrOe=xQazQXPVrW4ujK_XP_qsXDSQAA@mail.gmail.com>
+ <d34cfab4137e386aad07e144f2fa08c3bba5dd1f.1417730349.git.yann.morin.1998@free.fr>
+Message-ID: <CABbD_XAYmouXWr=CDX3RHOE=pRPXMPQN=LG4idC=0d6Z4D1wTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,21 @@ To: buildroot@busybox.net
 
 Hi Yann, Thomas, list,
 
---- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -18,6 +18,12 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
->  EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
->  endif
->
-> +# Not qstrip-ing the variable, because it may contain spaces,
-> +# but we must qstrip it when checking.
-> +ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
-> +EXT2_OPTS += -l $(BR2_TARGET_ROOTFS_EXT2_LABEL)
->
 
-Unfortunately this won't work with labels with spaces in them.
-I recommend using escaped quotation marks like this:
-
-+EXT2_OPTS += -l \"$(BR2_TARGET_ROOTFS_EXT2_LABEL)\"
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
 
 ---
+> Note: there is no way to use that tool for now. There is no menuconfig
+> option in "Host utilities", and nothing depends on it yet. In the
+> following patches, we'll convert fs/ext2/ext2.mk over to using that
+> tool, so it will be automatically enabled as a dependency of the ext2
+> filesystem type.
+>
+
+Tested-by: Karoly Kasza <kaszak@gmail.com>
+Reviewed-by: Karoly Kasza <kaszak@gmail.com>
 
 Tested the whole series of 3 together, successfully built different
 rootfs.ext images and booted them.
@@ -43,4 +38,4 @@ Regards,
 Karoly
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141206/7beb7270/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141206/5cb49738/attachment.html>
