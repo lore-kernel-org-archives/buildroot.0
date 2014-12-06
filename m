@@ -1,34 +1,65 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Sat, 6 Dec 2014 15:15:59 +0100
-Subject: [Buildroot] [PATCH 3/3 v3] fs/ext2: add option to specify a
-	filesystem label
-In-Reply-To: <0244e2c2f1c3933e110df8478544efafe66c7e5c.1417868913.git.yann.morin.1998@free.fr>
-References: <cover.1417868913.git.yann.morin.1998@free.fr>
- <0244e2c2f1c3933e110df8478544efafe66c7e5c.1417868913.git.yann.morin.1998@free.fr>
-Message-ID: <CABbD_XDpzzHs_cHmnyOGjEURG3y+EcjkmvmiXPVeWdEEzrTtEQ@mail.gmail.com>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Sat,  6 Dec 2014 15:42:09 +0100
+Subject: [Buildroot] [PATCH 1/1] Added mpd-mpc, mpc client to mpd
+Message-ID: <1417876929-21438-1-git-send-email-tbultel@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Thomas, list,
+Signed-off-by: Thierry Bultel <tbultel@free.fr>
+---
+ package/Config.in          |  1 +
+ package/mpd-mpc/Config.in  |  8 ++++++++
+ package/mpd-mpc/mpd-mpc.mk | 12 ++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/mpd-mpc/Config.in
+ create mode 100644 package/mpd-mpc/mpd-mpc.mk
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: K?roly Kasza <kaszak@gmail.com>
->
-
-Tested-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: Karoly Kasza <kaszak@gmail.com>
-
-Tested the whole series of 3 together (v3), successfully built different
-rootfs.ext images and booted them.
-Tested with master branch, x86_64 arch in QEMU, internal toolchain GCC
-4.9.2 w/ uclibc, Linux 3.17.4.
-
-Regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141206/dd6f609b/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index a8010d3..19eef96 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -19,6 +19,7 @@ menu "Audio and video applications"
+ 	source "package/madplay/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
++	source "package/mpd-mpc/Config.in"
+ 	source "package/mpg123/Config.in"
+ 	source "package/mplayer/Config.in"
+ 	source "package/musepack/Config.in"
+diff --git a/package/mpd-mpc/Config.in b/package/mpd-mpc/Config.in
+new file mode 100644
+index 0000000..a56e2a6
+--- /dev/null
++++ b/package/mpd-mpc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MPD_MPC
++	bool "mpd-mpc"
++	select BR2_PACKAGE_MPD
++	select BR2_PACKAGE_LIBMPDCLIENT
++	help
++	  A minimalist command line interface to MPD.
++
++	  http://www.musicpd.org/clients/mpc/
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+new file mode 100644
+index 0000000..3950a1e
+--- /dev/null
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# mpc
++#
++################################################################################
++
++MPD_MPC_VERSION = 0.26
++MPD_MPC_SITE = http://www.musicpd.org/download/mpc/0
++MPD_MPC_SOURCE=mpc-$(MPD_MPC_VERSION).tar.xz
++MPD_MPC_DEPENDENCIES = mpd libmpdclient
++
++$(eval $(autotools-package))
+-- 
+1.9.1
