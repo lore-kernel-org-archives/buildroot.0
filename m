@@ -1,43 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  6 Dec 2014 00:23:35 +0100
-Subject: [Buildroot] [PATCH] ruby: fix verconf.h related build failure
-Message-ID: <1417821815-9924-1-git-send-email-ps.report@gmx.net>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 05 Dec 2014 19:58:25 -0600
+Subject: [Buildroot] [PATCH] ffmpeg: V1.0 configure ffmpeg with
+ --enable-libfreetype if libfreetype package is enabled
+Message-ID: <548262C1.7080000@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for failure analysis.
+[Buildroot][PATCH] ffmpeg: V1.0 configure ffmpeg with --enable-libfreetype if libfreetype package is enabled
 
-Fixes:
-   http://autobuild.buildroot.net/results/c94fef5d2cfb00a336905ae3c110d7680f6d5416/
-   http://autobuild.buildroot.net/results/4375cb1e325a336dbf59f22f975be9165ad0648a/
+I needed ffmpeg on the target configured using --enable-libfreetype and using "Additional parameters for ./configure" missed the dependency.
+Modeled on the blocks above and below it in ffmpeg.mk - let me know if the order is important and I need to move it somewhere else.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-December/114273.html
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/ruby/ruby.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 20a2a11..00a785c 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -64,6 +64,13 @@ else
- 	RUBY_CONF_OPTS += --without-gmp
+diff -ru buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11/package/ffmpeg/ffmpeg.mk
+--- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk
++++ buildroot-2014.11/package/ffmpeg/ffmpeg.mk
+@@ -50,7 +50,6 @@
+ 	--disable-libopencv \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+-	--disable-libfreetype \
+ 	--disable-libgsm \
+ 	--disable-libmp3lame \
+ 	--disable-libnut \
+@@ -229,6 +228,13 @@
+ FFMPEG_CONF_OPTS += --disable-libvpx
  endif
- 
-+# workaround for amazing build failure, see
-+# http://lists.busybox.net/pipermail/buildroot/2014-December/114273.html
-+define RUBY_REMOVE_VERCONF_H
-+	rm -f $(@D)/verconf.h
-+endef
-+RUBY_POST_CONFIGURE_HOOKS += RUBY_REMOVE_VERCONF_H
+
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++FFMPEG_CONF_OPTS += --enable-libfreetype
++FFMPEG_DEPENDENCIES += freetype
++else
++FFMPEG_CONF_OPTS += --disable-libfreetype
++endif
 +
- # Remove rubygems and friends, as they need extensions that aren't
- # built and a target compiler.
- RUBY_EXTENSIONS_REMOVE = rake* rdoc* rubygems*
--- 
-2.1.2
+ ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
+ FFMPEG_CONF_OPTS += --enable-libx264
+ FFMPEG_DEPENDENCIES += x264
